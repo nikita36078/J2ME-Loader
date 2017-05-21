@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="converting_wait">Конвертация JAR...</string>
+    <string name="convert_complete">Завершено</string>
+	<string name="author">Автор: </string>
+	<string name="version">Версия: </string>
+    <string name="no_data_for_display">Нет данных</string>
+
+    <string formatted="false" name="PREF_SCREEN_OPTIONS">Параметры экрана</string>
+    <string formatted="false" name="PREF_SCALE_TO_FIT">Масштабировать</string>
+    <string formatted="false" name="PREF_KEEP_ASPECT_RATIO">Сохранять пропорции</string>
+    <string formatted="false" name="PREF_FILTER">Фильтрация</string>
+    <string formatted="false" name="PREF_FONT_OPTIONS">Параметры шрифтов</string>
+    <string formatted="false" name="PREF_WIDTH">Ширина</string>
+    <string formatted="false" name="PREF_HEIGHT">Высота</string>
+    <string formatted="false" name="PREF_FONT_SMALL">Малый</string>
+    <string formatted="false" name="PREF_FONT_MEDIUM">Средний</string>
+    <string formatted="false" name="PREF_FONT_LARGE">Большой</string>
+    <string formatted="false" name="PREF_FONT_SIZE_IN_SP">Значения в масш. пикселях</string>
+    <string formatted="false" name="PREF_BACKGROUND">Фон</string>
+    <string formatted="false" name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуальная клавиатура</string>
+    <string formatted="false" name="PREF_VK_BACK">Кнопки</string>
+    <string formatted="false" name="PREF_VK_FORE">Надписи</string>
+    <string formatted="false" name="PREF_VK_OUTLINE">Обводка</string>
+    <string formatted="false" name="PREF_COLOR_HINT">RGB</string>
+    <string formatted="false" name="PREF_VK_ALPHA">Прозрачность: </string>
+    <string formatted="false" name="PREF_VK_HIDE_DELAY">Скрывать через </string>
+    <string formatted="false" name="PREF_UNIT_MS">мс</string>
+    <string formatted="false" name="PREF_CUSTOMIZE_VK_LAYOUT">Настройка раскладки: </string>
+    <string formatted="false" name="START_CMD">Пуск</string>
+    <string formatted="false" name="CANCEL_CMD">Отмена</string>
+    <string formatted="false" name="PREF_VK_SEL_FORE">Надписи (Н)</string>
+    <string formatted="false" name="PREF_VK_SEL_BACK">Кнопки (Н)</string>
+    <string formatted="false" name="PREF_VK_KEY_SIZES">Размеры клавиш</string>
+    <string formatted="false" name="PREF_VK_NAV_KEYS">Джойстик: </string>
+    <string formatted="false" name="PREF_VK_SOFT_KEYS">Софт-кл.: </string>
+    <string formatted="false" name="PREF_VK_NUM_KEYS">Цифры: </string>
+    <string formatted="false" name="PREF_VK_FIRE_KEY">Огонь: </string>
+    <string formatted="false" name="PREF_VK_SIZE_HINT">Разм.</string>
+    <string formatted="false" name="RESET_CMD">Сброс</string>
+    <string formatted="false" name="SIZE_PRESETS">Предустановки</string>
+    <string formatted="false" name="PREF_KEY_CODE_HINT">Код кл.</string>
+    <string formatted="false" name="PREF_LANGUAGE">Язык: %A</string>
+    <string formatted="false" name="PREF_MISC">Прочие параметры</string>
+    <string formatted="false" name="EDIT_MANIFEST_CMD">Редакт. манифест</string>
+    <string formatted="false" name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
+    <string formatted="false" name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
+    <string formatted="false" name="YES_CMD">Да</string>
+    <string formatted="false" name="NO_CMD">Нет</string>
+    <string name="open_jar">Открыть jar</string>
+    <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
+    <string name="exit">Выход</string>
+    <string name="action_settings">Настройки</string>
+	<string name="action_restart">Перезапуск</string>
+    <string name="converting_message">Обработка...</string>
+    <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
+</resources>

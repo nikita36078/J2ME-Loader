@@ -1,0 +1,8 @@
+.gradle/
+.idea/
+gradle/
+J2meLoader-master.iml
+gradlew
+gradlew.bat
+local.properties
+app/app.iml

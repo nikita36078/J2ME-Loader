@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ua.naiksoftware.j2meloader.MainActivity">
+
+    <item
+        android:id="@+id/action_exit_app"
+        android:title="@string/exit"
+        android:showAsAction="withText|ifRoom"/>
+    <item
+        android:id="@+id/action_restart"
+        android:orderInCategory="100"
+        android:title="@string/action_restart"
+        android:showAsAction="never"/>
+
+</menu>
