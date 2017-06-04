@@ -17,8 +17,8 @@ public abstract class FullCanvas extends Canvas {
 
     protected FullCanvas() {
         super.setFullScreenMode(true);
-        super.addCommand(new ButtonCommand(-6, 4));
-        super.addCommand(new ButtonCommand(-7, 2));
+        super.addCommand(new ButtonCommand(KEY_SOFTKEY1,Command.OK));
+        super.addCommand(new ButtonCommand(KEY_SOFTKEY2,Command.BACK));
         super.setCommandListener(new CommandHandler(this));
     }
 

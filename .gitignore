@@ -6,3 +6,5 @@ gradlew
 gradlew.bat
 local.properties
 app/app.iml
+J2meLoader.iml
+build/

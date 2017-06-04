@@ -12,6 +12,6 @@ final class CommandHandler implements CommandListener {
     }
 
     public final void commandAction(Command command, Displayable displayable) {
-        this.canvas.processKeyCommand(((ButtonCommand) command).key);
+        canvas.processKeyCommand(((ButtonCommand) command).key);
     }
 }
