@@ -463,7 +463,6 @@ public class ConfigActivity extends Activity implements
 				}
 			}
 		};
-		// FIX ???
 		vk.setLayoutListener(listener);
 		ContextHolder.setVk(vk);
 	}
@@ -493,6 +492,11 @@ public class ConfigActivity extends Activity implements
 					finish();
 				} catch (Throwable t) {
 					t.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(R.string.error)
+                            .setMessage(t.getMessage());
+                    builder.show();
 				}
 
 				break;

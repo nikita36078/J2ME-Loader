@@ -61,5 +61,6 @@
     <string name="converting_message">Processing...</string>
 	<string name="action_restart">Restart</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
+    <string name="error">Error</string>
 
 </resources>

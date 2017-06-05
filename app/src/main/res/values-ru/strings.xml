@@ -54,4 +54,5 @@
 	<string name="action_restart">Перезапуск</string>
     <string name="converting_message">Обработка...</string>
     <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
+    <string name="error">Ошибка</string>
 </resources>
