@@ -23,9 +23,10 @@ import javax.microedition.util.ContextHolder;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+
+import ua.naiksoftware.util.FileUtils;
 
 public class MIDlet {
 
@@ -36,6 +37,7 @@ public class MIDlet {
 	private static boolean destroyAppCalled = false;
 
 	public void start() {
+        FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 		startApp();
 	}
 

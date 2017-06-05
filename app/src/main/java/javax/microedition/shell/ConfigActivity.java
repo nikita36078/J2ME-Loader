@@ -688,5 +688,4 @@ public class ConfigActivity extends Activity implements
 		}
 		return midlet;
 	}
-
 }
