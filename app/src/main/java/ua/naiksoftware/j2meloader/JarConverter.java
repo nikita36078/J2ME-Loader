@@ -49,6 +49,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
         try {
             AndroidProducer.processJar(tmp, tmp2, true);
         } catch (IOException e) {
+            e.printStackTrace();
             err = "Can't convert";
             tmp2.delete();
             FileUtils.deleteDirectory(dirTmp);

@@ -117,8 +117,8 @@ public class DirectGraphicsImp implements DirectGraphics {
             throw new IllegalArgumentException();
     }
 
-    public void drawPixels(int[] iArr, boolean z, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
-        throw new IllegalArgumentException("TODO drawPixels(int pix[], boolean transparency, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format)");
+    public void drawPixels(int pix[], boolean transparency, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+        System.err.println("TODO drawPixels(int pix[], boolean transparency, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format)");
     }
 
     public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
@@ -178,7 +178,7 @@ public class DirectGraphicsImp implements DirectGraphics {
     }
 
     public void fillTriangle(int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-        graphics.setARGBColor(i7);
+        setARGBColor(i7);
         graphics.fillTriangle(i, i2, i3, i4, i5, i6);
     }
 
@@ -190,12 +190,12 @@ public class DirectGraphicsImp implements DirectGraphics {
         return TYPE_BYTE_1_GRAY;
     }
 
-    public void getPixels(byte[] bArr, byte[] bArr2, int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-        throw new IllegalArgumentException("public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
+    public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+        System.err.println("public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
     }
 
-    public void getPixels(int[] iArr, int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-        throw new IllegalArgumentException("!!!public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
+    public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+        System.err.println("!!!public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
     }
 
     public void getPixels(short[] sArr, int i, int i2, int i3, int i4, int i5, int i6, int i7) {

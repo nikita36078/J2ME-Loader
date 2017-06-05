@@ -194,12 +194,6 @@ public class Graphics
         return path;
     }
 
-	public void setARGBColor(int i)
-	{
-		setColor(i);
-		// TODO: Implement this method
-	}
-
 	public void setCanvas(Canvas canvas)
 	{
 		this.canvas = canvas;
