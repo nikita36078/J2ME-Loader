@@ -157,12 +157,6 @@ public class MicroActivity extends Activity
 	}
 
 	@Override
-	public void onBackPressed()
-	{
-		//Ничего не делать
-	}
-	
-	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			event.startTracking();
@@ -171,7 +165,16 @@ public class MicroActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
+    @Override
+    public boolean onKeyUp( int keyCode, KeyEvent event ) {
+        if( keyCode == KeyEvent.KEYCODE_BACK ) {
+            return true;
+        }
+        return super.onKeyUp( keyCode, event );
+    }
+
+
+    @Override
 	public boolean onKeyLongPress(int keyCode, KeyEvent event)
 	{
 		if(keyCode == KeyEvent.KEYCODE_BACK)
@@ -197,6 +200,7 @@ public class MicroActivity extends Activity
 								}
 
 								ContextHolder.notifyDestroyed();
+                                System.exit(1);
 							}
 						};
 
