@@ -588,7 +588,9 @@ public class Graphics
 		}
 
 		drawPaint.setAntiAlias(textAntiAlias);
+		drawPaint.setStyle(Paint.Style.FILL);
 		canvas.drawText(data, offset, length, x, y, drawPaint);
+		drawPaint.setStyle(Paint.Style.STROKE);
 		drawPaint.setAntiAlias(drawAntiAlias);
 	}
 
@@ -627,8 +629,10 @@ public class Graphics
 
 		drawPaint.setAntiAlias(textAntiAlias);
 
-		canvas.drawText(text, x, y, drawPaint);
-		drawPaint.setAntiAlias(drawAntiAlias);
+        drawPaint.setStyle(Paint.Style.FILL);
+        canvas.drawText(text, x, y, drawPaint);
+        drawPaint.setStyle(Paint.Style.STROKE);
+        drawPaint.setAntiAlias(drawAntiAlias);
 	}
 
 	public void drawImage(Image image, int x, int y, int anchor)
@@ -689,8 +693,10 @@ public class Graphics
 			newx -= drawPaint.measureText(str);
 		}
 
+        drawPaint.setStyle(Paint.Style.FILL);
         canvas.drawText(str, offset, len + offset, newx, newy, drawPaint);
-	}
+        drawPaint.setStyle(Paint.Style.STROKE);
+    }
 
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor)
 	{
