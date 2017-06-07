@@ -84,7 +84,7 @@ public class TextBox extends Screen
 		return getString().length();
 	}
 	
-	public void setMaxSize(int maxSize)
+	public int setMaxSize(int maxSize)
 	{
 		if(maxSize <= 0)
 		{
@@ -97,6 +97,8 @@ public class TextBox extends Screen
 		{
 			textview.setFilters(new InputFilter[] { new InputFilter.LengthFilter(maxSize) });
 		}
+
+		return maxSize;
 	}
 	
 	public int getMaxSize()
