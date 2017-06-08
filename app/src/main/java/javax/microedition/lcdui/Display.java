@@ -103,8 +103,7 @@ public class Display
 	private static Vibrator vibrator;
 	
 	private AlertAdvancer advancer;
-	private Overlay overlay;
-	
+
 	public static Display getDisplay(MIDlet midlet)
 	{
 		if(instance == null)
@@ -311,32 +310,27 @@ public class Display
         return Integer.MAX_VALUE;
     }
 
-    public static int getBestImageHeight(int imageType)
+    public int getBestImageHeight(int imageType)
 	{
 		return 0;
 	}
 	
-	public static int getBestImageWidth(int imageType)
+	public int getBestImageWidth(int imageType)
 	{
 		return 0;
 	}
 	
-	public static int getBorderStyle(boolean highlighted)
+	public int getBorderStyle(boolean highlighted)
 	{
 		return highlighted ? Graphics.SOLID : Graphics.DOTTED;
 	}
 	
-	public static int getColor(int colorSpecifier)
+	public int getColor(int colorSpecifier)
 	{
 		return COLORS[colorSpecifier];
 	}
 	
-	public static void setColor(int colorSpecifier, int color)
-	{
-		COLORS[colorSpecifier] = color;
-	}
-	
-	public static boolean isColor()
+	public boolean isColor()
 	{
 		return true;
 	}
