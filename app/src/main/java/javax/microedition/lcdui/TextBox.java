@@ -172,7 +172,7 @@ public class TextBox extends Screen
 		}
 	}
 	
-	public int getConstrants()
+	public int getConstraints()
 	{
 		return constraints;
 	}

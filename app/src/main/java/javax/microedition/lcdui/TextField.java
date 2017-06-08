@@ -197,7 +197,7 @@ public class TextField extends Item
 		}
 	}
 	
-	public int getConstrants()
+	public int getConstraints()
 	{
 		return constraints;
 	}
