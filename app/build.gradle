@@ -10,6 +10,7 @@ android {
         targetSdkVersion 22
         versionCode 4
         versionName "1.1.5"
+        setProperty("archivesBaseName", "J2ME_Loader-$versionName")
     }
     buildTypes {
         release {
