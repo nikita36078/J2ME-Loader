@@ -3,7 +3,6 @@ package javax.microedition.lcdui.game;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import javax.microedition.shell.MyClassLoader;
 
 public class GameCanvas extends Canvas {
 
