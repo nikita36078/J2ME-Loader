@@ -22,11 +22,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.graphics.Xfermode;
 
 public class Graphics
 {
@@ -40,44 +38,6 @@ public class Graphics
 
 	public static final int SOLID		= 0;
 	public static final int DOTTED		= 1;
-
-	public static final int NONE		= -1;
-	public static final int CLEAR		= 0;
-	public static final int DARKEN		= 1;
-	public static final int DST			= 2;
-	public static final int DST_ATOP	= 3;
-	public static final int DST_IN		= 4;
-	public static final int DST_OUT		= 5;
-	public static final int DST_OVER	= 6;
-	public static final int LIGHTEN		= 7;
-	public static final int MULTIPLY	= 8;
-	public static final int SCREEN		= 9;
-	public static final int SRC			= 10;
-	public static final int SRC_ATOP	= 11;
-	public static final int SRC_IN		= 12;
-	public static final int SRC_OUT		= 13;
-	public static final int SRC_OVER	= 14;
-	public static final int XOR			= 15;
-
-	private static final PorterDuffXfermode[] XFERMODES =
-	{
-		new PorterDuffXfermode(PorterDuff.Mode.CLEAR),    // 0
-		new PorterDuffXfermode(PorterDuff.Mode.DARKEN),   // 1
-		new PorterDuffXfermode(PorterDuff.Mode.DST),      // 2
-		new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP), // 3
-		new PorterDuffXfermode(PorterDuff.Mode.DST_IN),   // 4
-		new PorterDuffXfermode(PorterDuff.Mode.DST_OUT),  // 5
-		new PorterDuffXfermode(PorterDuff.Mode.DST_OVER), // 6
-		new PorterDuffXfermode(PorterDuff.Mode.LIGHTEN),  // 7
-		new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY), // 8
-		new PorterDuffXfermode(PorterDuff.Mode.SCREEN),   // 9
-		new PorterDuffXfermode(PorterDuff.Mode.SRC),      // 10
-		new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP), // 11
-		new PorterDuffXfermode(PorterDuff.Mode.SRC_IN),   // 12
-		new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT),  // 13
-		new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER), // 14
-		new PorterDuffXfermode(PorterDuff.Mode.XOR)       // 15
-	};
 
 	private Canvas canvas;
 
@@ -220,11 +180,6 @@ public class Graphics
 		fillPaint.setColor(color);
 	}
 
-	public void setColor(int color, int alpha)
-	{
-		setColorAlpha((color & 0xFFFFFF) | ((alpha & 0xFF) << 24));
-	}
-
 	public void setColor(int r, int g, int b)
 	{
 		setColor(255, r, g, b);
@@ -306,35 +261,6 @@ public class Graphics
 	public void setAntiAliasText(boolean aa)
 	{
 		textAntiAlias = aa;
-	}
-
-	public void setMode(int mode)
-	{
-		if(mode >= 0 && mode < XFERMODES.length)
-		{
-			drawPaint.setXfermode(XFERMODES[mode]);
-			fillPaint.setXfermode(XFERMODES[mode]);
-		}
-		else
-		{
-			drawPaint.setXfermode(null);
-			fillPaint.setXfermode(null);
-		}
-	}
-
-	public int getMode()
-	{
-		Xfermode mode = drawPaint.getXfermode();
-
-		for(int i = 0; i < XFERMODES.length; i++)
-		{
-			if(XFERMODES[i] == mode)
-			{
-				return i;
-			}
-		}
-
-		return NONE;
 	}
 
 	public void setFont(Font font)
