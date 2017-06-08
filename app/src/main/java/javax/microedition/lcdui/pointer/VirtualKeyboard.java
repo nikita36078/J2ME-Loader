@@ -1089,6 +1089,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
     }
 
     public void setLayoutEditKey(int keyCode) {
-        layoutEditKeyCode = keyCode;
+        layoutEditKeyCode = Canvas.convertAndroidKeyCode(keyCode);
     }
 }

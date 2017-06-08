@@ -307,8 +307,7 @@ public class ConfigActivity extends Activity implements
 		tfVKHideDelay.setText(Integer.toString(params.getInt(
 				"VirtualKeyboardDelay", -1)));
 		tfVKLayoutKeyCode.setText(Integer.toString(params.getInt(
-				"VirtualKeyboardLayoutKeyCode",
-				Canvas.convertAndroidKeyCode(KeyEvent.KEYCODE_MENU))));
+				"VirtualKeyboardLayoutKeyCode", KeyEvent.KEYCODE_MENU)));
 		tfVKBack.setText(Integer.toHexString(
 				params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0))
 				.toUpperCase());
@@ -519,8 +518,7 @@ public class ConfigActivity extends Activity implements
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		if (v == tfVKLayoutKeyCode
 				&& (event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == 0) {
-			tfVKLayoutKeyCode.setText(Integer.toString(Canvas
-					.convertAndroidKeyCode(keyCode)));
+			tfVKLayoutKeyCode.setText(Integer.toString(keyCode));
 			return true;
 		}
 

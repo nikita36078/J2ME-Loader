@@ -34,7 +34,7 @@
     <string formatted="false" name="PREF_VK_ALPHA">Opacity: </string>
     <string formatted="false" name="PREF_VK_HIDE_DELAY">Hide delay: </string>
     <string formatted="false" name="PREF_UNIT_MS">ms</string>
-    <string formatted="false" name="PREF_CUSTOMIZE_VK_LAYOUT">Layout customization: </string>
+    <string formatted="false" name="PREF_CUSTOMIZE_VK_LAYOUT">Keycode for the layout customization launch: </string>
     <string formatted="false" name="START_CMD">Start</string>
     <string formatted="false" name="CANCEL_CMD">Cancel</string>
     <string formatted="false" name="PREF_VK_SEL_FORE">Labels (P)</string>

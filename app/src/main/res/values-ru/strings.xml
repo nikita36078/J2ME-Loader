@@ -26,7 +26,7 @@
     <string formatted="false" name="PREF_VK_ALPHA">Прозрачность: </string>
     <string formatted="false" name="PREF_VK_HIDE_DELAY">Скрывать через </string>
     <string formatted="false" name="PREF_UNIT_MS">мс</string>
-    <string formatted="false" name="PREF_CUSTOMIZE_VK_LAYOUT">Настройка раскладки: </string>
+    <string formatted="false" name="PREF_CUSTOMIZE_VK_LAYOUT">Код кнопки для настройки раскладки: </string>
     <string formatted="false" name="START_CMD">Пуск</string>
     <string formatted="false" name="CANCEL_CMD">Отмена</string>
     <string formatted="false" name="PREF_VK_SEL_FORE">Надписи (Н)</string>
