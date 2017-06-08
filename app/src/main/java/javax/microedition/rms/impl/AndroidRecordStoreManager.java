@@ -29,13 +29,10 @@ package javax.microedition.rms.impl;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.microedition.lcdui.MicroActivity;
 import javax.microedition.rms.InvalidRecordIDException;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
@@ -45,7 +42,6 @@ import javax.microedition.rms.RecordStoreNotOpenException;
 import javax.microedition.shell.MyClassLoader;
 import javax.microedition.util.ContextHolder;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -70,28 +66,6 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
     public String getName() {
         return "Android record store";
-    }
-
-    public FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
-        return new FileOutputStream(getFileByName(name));
-    }
-
-    public FileInputStream openFileInput(String name) throws FileNotFoundException {
-        return new FileInputStream(getFileByName(name));
-    }
-
-    public boolean deleteFile(String name) {
-        return getFileByName(name).delete();
-    }
-
-
-    public File getFileByName(String name) {
-        File dir = new File(activity.getFilesDir() + MyClassLoader.getName());
-        if(!dir.exists()){
-            dir.mkdir();
-        }
-        File file = new File(dir, name);
-        return file;
     }
 
     private synchronized void initializeIfNecessary()
@@ -127,7 +101,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
         RecordStoreImpl recordStoreImpl;
         try {
-            DataInputStream dis = new DataInputStream(openFileInput(getHeaderFileName(recordStoreName)));
+            DataInputStream dis = new DataInputStream(ContextHolder.openFileInput(getHeaderFileName(recordStoreName)));
             recordStoreImpl = new RecordStoreImpl(this);
             recordStoreImpl.readHeader(dis);
             dis.close();
@@ -139,10 +113,10 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
         recordStoreImpl.setOpen(true);
         RecordEnumeration re = recordStoreImpl.enumerateRecords(null, null, false);
         while (re.hasNextElement()) {
-            deleteFile(getRecordFileName(recordStoreName, re.nextRecordId()));
+            ContextHolder.deleteFile(getRecordFileName(recordStoreName, re.nextRecordId()));
         }
         recordStoreImpl.setOpen(false);
-        deleteFile(getHeaderFileName(recordStoreName));
+        ContextHolder.deleteFile(getHeaderFileName(recordStoreName));
 
         recordStores.remove(recordStoreName);
 
@@ -157,7 +131,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
         RecordStoreImpl recordStoreImpl;
         try {
             DataInputStream dis = new DataInputStream(
-                    openFileInput(getHeaderFileName(recordStoreName)));
+                    ContextHolder.openFileInput(getHeaderFileName(recordStoreName)));
             recordStoreImpl = new RecordStoreImpl(this);
             recordStoreImpl.readHeader(dis);
             recordStoreImpl.setOpen(true);
@@ -206,7 +180,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
     {
         try {
             DataInputStream dis = new DataInputStream(
-                    openFileInput(getRecordFileName(recordStoreImpl.getName(), recordId)));
+                    ContextHolder.openFileInput(getRecordFileName(recordStoreImpl.getName(), recordId)));
             recordStoreImpl.readRecord(dis);
             dis.close();
         } catch (FileNotFoundException e) {
@@ -243,7 +217,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
     {
         try {
             DataOutputStream dos = new DataOutputStream(
-                    openFileOutput(getHeaderFileName(recordStore.getName()), Context.MODE_PRIVATE));
+                    ContextHolder.openFileOutput(getHeaderFileName(recordStore.getName()), Context.MODE_PRIVATE));
             recordStore.writeHeader(dos);
             dos.close();
         } catch (IOException e) {
@@ -251,7 +225,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
             throw new RecordStoreException(e.getMessage());
         }
 
-        deleteFile(getRecordFileName(recordStore.getName(), recordId));
+        ContextHolder.deleteFile(getRecordFileName(recordStore.getName(), recordId));
     }
 
     /**
@@ -262,7 +236,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
     {
         try {
             DataOutputStream dos = new DataOutputStream(
-                    openFileOutput(getHeaderFileName(recordStore.getName()), Context.MODE_PRIVATE));
+                    ContextHolder.openFileOutput(getHeaderFileName(recordStore.getName()), Context.MODE_PRIVATE));
             recordStore.writeHeader(dos);
             dos.close();
         } catch (IOException e) {
@@ -273,7 +247,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
         if (recordId != -1) {
             try {
                 DataOutputStream dos = new DataOutputStream(
-                        openFileOutput(getRecordFileName(recordStore.getName(), recordId), Context.MODE_PRIVATE));
+                        ContextHolder.openFileOutput(getRecordFileName(recordStore.getName(), recordId), Context.MODE_PRIVATE));
                 recordStore.writeRecord(dos, recordId);
                 dos.close();
             } catch (IOException e) {

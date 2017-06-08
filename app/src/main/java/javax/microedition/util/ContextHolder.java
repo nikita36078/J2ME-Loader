@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,8 +36,6 @@ import javax.microedition.lcdui.MicroActivity;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
 import javax.microedition.shell.MyClassLoader;
-
-import static android.R.attr.mode;
 
 public class ContextHolder {
     private static final String tag = "ContextHolder";
@@ -129,20 +126,6 @@ public class ContextHolder {
         return currentActivity;
     }
 
-    public static boolean hasCurrentActivity() {
-        return currentActivity != null;
-    }
-
-    public static void addActivityResultListener(ActivityResultListener listener) {
-        if (!resultListeners.contains(listener)) {
-            resultListeners.add(listener);
-        }
-    }
-
-    public static void removeActivityResultListener(ActivityResultListener listener) {
-        resultListeners.remove(listener);
-    }
-
     public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
         for (ActivityResultListener listener : resultListeners) {
             listener.onActivityResult(requestCode, resultCode, data);
@@ -161,16 +144,33 @@ public class ContextHolder {
         }
     }
 
+    public static FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
+        return new FileOutputStream(getFileByName(name));
+    }
+
+    public static FileInputStream openFileInput(String name) throws FileNotFoundException {
+        return new FileInputStream(getFileByName(name));
+    }
+
+    public static boolean deleteFile(String name) {
+        return getFileByName(name).delete();
+    }
+
+    public static File getFileByName(String name) {
+        File dir = new File(context.getFilesDir() + MyClassLoader.getName());
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        File file = new File(dir, name);
+        return file;
+    }
+
     public static File getCacheDir() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return getContext().getExternalCacheDir();
         } else {
             return getContext().getCacheDir();
         }
-    }
-
-    public static int getRequestCode(String requestString) {
-        return requestString.hashCode() & 0x7FFFFFFF;
     }
 
     /**

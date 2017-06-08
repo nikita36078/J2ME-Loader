@@ -432,8 +432,7 @@ public class ConfigActivity extends Activity implements
 		vk.setLayoutEditKey(vkLayoutKeyCode);
 
 		try {
-			DataInputStream dis = new DataInputStream(ContextHolder
-					.getContext().openFileInput("VirtualKeyboardLayout"));
+			DataInputStream dis = new DataInputStream(ContextHolder.openFileInput("VirtualKeyboardLayout"));
 			vk.readLayout(dis);
 			dis.close();
 		} catch (FileNotFoundException fnfe) {
@@ -452,8 +451,7 @@ public class ConfigActivity extends Activity implements
 		VirtualKeyboard.LayoutListener listener = new VirtualKeyboard.LayoutListener() {
 			public void layoutChanged(VirtualKeyboard vk) {
 				try {
-					DataOutputStream dos = new DataOutputStream(ContextHolder
-							.getContext().openFileOutput(
+					DataOutputStream dos = new DataOutputStream(ContextHolder.openFileOutput(
 									"VirtualKeyboardLayout",
 									Context.MODE_PRIVATE));
 					vk.writeLayout(dos);
