@@ -102,6 +102,13 @@
             android:checked="true"
             android:text="@string/PREF_FILTER" />
 
+        <CheckBox
+            android:id="@+id/cxImmediate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/PREF_IMMEDIATE" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"

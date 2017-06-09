@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TreeMap;
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.EventQueue;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
@@ -62,6 +63,7 @@ public class ConfigActivity extends Activity implements
 	protected CheckBox cxScaleToFit;
 	protected CheckBox cxKeepAspectRatio;
 	protected CheckBox cxFilter;
+	protected CheckBox cxImmediate;
 
 	protected EditText tfFontSizeSmall;
 	protected EditText tfFontSizeMedium;
@@ -148,6 +150,7 @@ public class ConfigActivity extends Activity implements
 		cxScaleToFit = (CheckBox) findViewById(R.id.cxScaleToFit);
 		cxKeepAspectRatio = (CheckBox) findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = (CheckBox) findViewById(R.id.cxFilter);
+		cxImmediate = (CheckBox) findViewById(R.id.cxImmediate);
 
 		tfFontSizeSmall = (EditText) findViewById(R.id.tfFontSizeSmall);
 		tfFontSizeMedium = (EditText) findViewById(R.id.tfFontSizeMedium);
@@ -292,6 +295,7 @@ public class ConfigActivity extends Activity implements
 		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio",
 				true));
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", true));
+		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
 
 		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall",
 				18)));
@@ -340,6 +344,7 @@ public class ConfigActivity extends Activity implements
 			editor.putBoolean("ScreenKeepAspectRatio",
 					cxKeepAspectRatio.isChecked());
 			editor.putBoolean("ScreenFilter", cxFilter.isChecked());
+			editor.putBoolean("ImmediateMode", cxImmediate.isChecked());
 
 			editor.putInt("FontSizeSmall",
 					Integer.parseInt(tfFontSizeSmall.getText().toString()));
@@ -392,6 +397,7 @@ public class ConfigActivity extends Activity implements
 			boolean screenScaleToFit = cxScaleToFit.isChecked();
 			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			boolean screenFilter = cxFilter.isChecked();
+			boolean immediateMode = cxImmediate.isChecked();
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
 			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
@@ -401,6 +407,7 @@ public class ConfigActivity extends Activity implements
 			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
 					screenKeepAspectRatio);
 			Canvas.setFilterBitmap(screenFilter);
+			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);
 
 		} catch (Throwable t) {

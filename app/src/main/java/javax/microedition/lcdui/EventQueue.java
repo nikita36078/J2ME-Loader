@@ -35,8 +35,8 @@ public class EventQueue implements Runnable
 	
 	protected boolean isrunning;
 	protected boolean continuerun;
-	
-	protected boolean immediate;
+
+	protected static boolean immediate;
 	
 	public EventQueue()
 	{
@@ -59,18 +59,9 @@ public class EventQueue implements Runnable
 	 * 
 	 * @param value должен ли быть включен неотложный режим
 	 */
-	public void setImmediate(boolean value)
+	public static void setImmediate(boolean value)
 	{
 		immediate = value;
-	}
-	
-	/**
-	 * Проверить, включен ли неотложный режим обработки.
-	 * @return
-	 */
-	public boolean isImmediate()
-	{
-		return immediate;
 	}
 	
 	/**

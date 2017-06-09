@@ -55,4 +55,5 @@
     <string name="converting_message">Обработка...</string>
     <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
     <string name="error">Ошибка</string>
+    <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
 </resources>
