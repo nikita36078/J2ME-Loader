@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "ua.naiksoftware.j2meloader"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 4
         versionName "1.1.5"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")

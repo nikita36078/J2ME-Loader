@@ -45,7 +45,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
                 + pathConverted);
         dirTmp.mkdir();
         File tmp = new File(pathToJar);
-        File tmp2 = new File(pathToJar + ".jar");
+        File tmp2 = new File(dirTmp, tmp.getName() + ".jar");
         try {
             AndroidProducer.processJar(tmp, tmp2, true);
         } catch (IOException e) {

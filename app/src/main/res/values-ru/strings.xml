@@ -56,4 +56,5 @@
     <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
     <string name="error">Ошибка</string>
     <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
+    <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
 </resources>
