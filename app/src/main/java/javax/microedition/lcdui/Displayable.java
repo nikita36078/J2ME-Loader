@@ -58,16 +58,9 @@ public abstract class Displayable
 	{
 		if(parent == null)
 		{
-			throw new IllegalStateException("call setParentActivity() before calling getParentActivity()");
+            return ContextHolder.getCurrentActivity();
 		}
-		//TODO fix illegal state
-		//return ContextHolder.getCurrentActivity();
 		return parent;
-	}
-	
-	public boolean hasParentActivity()
-	{
-		return parent != null;
 	}
 	
 	public void setTitle(String title)
