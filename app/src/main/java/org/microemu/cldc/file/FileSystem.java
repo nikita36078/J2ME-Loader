@@ -51,8 +51,6 @@ import org.microemu.microedition.ImplementationInitialization;
 
 public class FileSystem implements ImplementationInitialization {
 
-	public static final String detectionProperty = "microedition.io.file.FileConnection.version";
-
 	public static final String fsRootConfigProperty = "fsRoot";
 
 	/**
@@ -74,11 +72,9 @@ public class FileSystem implements ImplementationInitialization {
 		this.impl = new FileSystemConnectorImpl(fsRoot);
 		ImplFactory.registerGCF("file", this.impl);
 		ImplFactory.register(FileSystemRegistryDelegate.class, new FileSystemRegistryImpl(fsRoot, fsSingle));
-		System.setProperty(detectionProperty, "1.0");
 	}
 
 	protected static void unregisterImplementation(FileSystemConnectorImpl impl) {
-		System.clearProperty(detectionProperty);
 		ImplFactory.unregistedGCF("file", impl);
 		ImplFactory.unregister(FileSystemRegistryDelegate.class, FileSystemRegistryImpl.class);
 	}
