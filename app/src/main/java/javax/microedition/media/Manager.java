@@ -199,10 +199,16 @@ public class Manager
 		}
 	}
 	
-	public static String[] getSupportedContentTypes(String str) {
+	public static String[] getSupportedContentTypes(String str)
+    {
         return new String[]{"audio/*", "video/*", "audio/wav", "audio/x-tone-seq", "audio/x-wav", "audio/midi", "audio/x-midi", "audio/mpeg", "audio/amr", "audio/amr-wb", "audio/mp3", "audio/mp4", "video/mpeg", "video/mp4", "video/mpeg4", "video/3gpp"};
 	}
-	
+
+	public static String[] getSupportedProtocols(String str)
+    {
+		return new String[]{"device", "file", "http"};
+	}
+
 	public synchronized static void playTone(int frequency, int time, int volume)
 	throws MediaException 
 	{
