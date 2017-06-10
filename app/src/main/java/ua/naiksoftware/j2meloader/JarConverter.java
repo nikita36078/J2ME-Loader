@@ -93,6 +93,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		{
 			e.printStackTrace();
 		}
+        tmp2.delete();
         // Extract other resources from jar.
         FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir
                 + ConfigActivity.MIDLET_RES_DIR, new FilenameFilter() {
@@ -107,7 +108,6 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
         FileUtils.deleteDirectory(dirTmp);
         File dexTemp = new File(context.getApplicationInfo().dataDir, ConfigActivity.MIDLET_DEX_FILE);
         dexTemp.delete();
-        tmp2.delete();
         FileUtils.deleteDirectory(dirTmp);
         return true;
     }
