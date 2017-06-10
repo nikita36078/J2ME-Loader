@@ -309,4 +309,10 @@ public class Font
 	{
 		return index & 7;
 	}
+
+	public boolean isBold(){ return style == STYLE_BOLD; }
+
+	public boolean isPlain(){ return style == STYLE_PLAIN; }
+
+	public boolean isItalic(){ return style == STYLE_ITALIC; }
 }
