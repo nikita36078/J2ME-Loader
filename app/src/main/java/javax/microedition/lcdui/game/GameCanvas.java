@@ -21,7 +21,7 @@ public class GameCanvas extends Canvas {
 
     public GameCanvas(boolean suppressCommands) {
         super();
-        image = Image.createImage(getWidth(), getHeight());
+        image = Image.createImage(super.getWidth(), super.getHeight());
         graphics = image.getGraphics();
     }
 
