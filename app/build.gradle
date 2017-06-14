@@ -24,5 +24,6 @@ dependencies {
     compile 'com.android.support:support-core-ui:25.3.1'
     compile 'com.google.android.tools:dx:1.7'
     compile 'com.github.yukuku:ambilwarna:2.0.1'
+    compile group: 'org.ow2.asm', name: 'asm-tree', version: '5.2'
     compile fileTree(include: ['*.jar', '*.so'], dir: 'libs')
 }

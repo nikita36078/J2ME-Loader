@@ -31,7 +31,7 @@ import java.util.HashMap;
 
 import org.objectweb.asm.*;
 
-public class FirstPassVisitor implements ClassVisitor
+public class FirstPassVisitor extends ClassVisitor
 {
 	private HashMap<String, ArrayList<String>> classesHierarchy;
 	private HashMap<String, ArrayList<String>> methodTranslations;
@@ -40,6 +40,7 @@ public class FirstPassVisitor implements ClassVisitor
 
 	public FirstPassVisitor(HashMap<String, ArrayList<String>> classesHierarchy, HashMap<String, ArrayList<String>> methodTranslations)
 	{
+		super(Opcodes.ASM5);
 		this.classesHierarchy = classesHierarchy;
 		this.methodTranslations = methodTranslations;
 	}

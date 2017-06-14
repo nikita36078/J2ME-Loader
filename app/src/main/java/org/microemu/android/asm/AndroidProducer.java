@@ -87,7 +87,7 @@ public class AndroidProducer {
 			byte[] buffer = new byte[1024];
 			JarEntry jarEntry;
 			while ((jarEntry = jis.getNextJarEntry()) != null) {
-				if (jarEntry.isDirectory() == false) {
+				if (!jarEntry.isDirectory()) {
 					String name = jarEntry.getName();
 					int size = 0;
 					int read;
