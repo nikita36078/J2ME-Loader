@@ -52,17 +52,20 @@ public class AndroidProducer {
 	
 	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations = 
 			new HashMap<String, TreeMap<FieldNodeExt, String>>();
+
+	private static HashMap<String, ArrayList<String>> methodTranslations =
+			new HashMap<String, ArrayList<String>>();
 	
 	private static void analyze(String className, final InputStream classInputStream) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
-		FirstPassVisitor cv = new FirstPassVisitor(classesHierarchy);
+		FirstPassVisitor cv = new FirstPassVisitor(classesHierarchy, methodTranslations);
 		cr.accept(cv, 0);
   }
 
 	private static byte[] instrument(String name, final InputStream classInputStream, boolean isMidlet) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
 		ClassWriter cw = new ClassWriter(0);
-		ClassVisitor cv = new AndroidClassVisitor(cw, isMidlet, classesHierarchy, fieldTranslations);
+		ClassVisitor cv = new AndroidClassVisitor(cw, isMidlet, classesHierarchy, fieldTranslations, methodTranslations);
 		cr.accept(cv, 0);
 
 		return cw.toByteArray();

@@ -30,29 +30,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.objectweb.asm.*;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
 public class FirstPassVisitor implements ClassVisitor
 {
-
-	private static final String TRANSLATED_PREFIX = "zz";
-	
-	private HashMap<String, MethodNodeExt> methodTranslations = new HashMap<String, MethodNodeExt>(); 
-
-	private int methodTranslationsCounter = 0;
-
 	private HashMap<String, ArrayList<String>> classesHierarchy;
+	private HashMap<String, ArrayList<String>> methodTranslations;
+	private String name;
+	private ArrayList<String> methods = new ArrayList<>();
 
-	public FirstPassVisitor(HashMap<String, ArrayList<String>> classesHierarchy)
+	public FirstPassVisitor(HashMap<String, ArrayList<String>> classesHierarchy, HashMap<String, ArrayList<String>> methodTranslations)
 	{
 		this.classesHierarchy = classesHierarchy;
+		this.methodTranslations = methodTranslations;
 	}
 
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
 	{		
 //		System.out.println("class: " + name +" + "+ superName);
 		ArrayList<String> list = new ArrayList<String>();
+		this.name = name;
 		list.add(name);
 		list.add(superName);
 		classesHierarchy.put(name, list);
@@ -72,8 +68,7 @@ public class FirstPassVisitor implements ClassVisitor
 
 	public void visitEnd()
 	{
-		// TODO Auto-generated method stub
-
+		methodTranslations.put(name, methods);
 	}
 
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value)
@@ -89,16 +84,8 @@ public class FirstPassVisitor implements ClassVisitor
 
 	public MethodVisitor visitMethod(final int access, final String name, String desc, final String signature, final String[] exceptions)
 	{
-		if (methodTranslations.get(name) == null || name.equals("<init>"))
-		{
-			methodTranslations.put(name, 
-								   new MethodNodeExt(null));
-		}
-		else
-		{
-			methodTranslations.put((TRANSLATED_PREFIX + name + methodTranslationsCounter++),
-								   new MethodNodeExt(new MethodNode(access, name, desc, signature, exceptions)));
-			//System.out.println("visitMethod: " + name + " > " + (TRANSLATED_PREFIX + name + methodTranslationsCounter));
+		if(!name.equals("<init>") && (access & Opcodes.ACC_PRIVATE) == 0){
+			methods.add(name + desc);
 		}
 		return null;
 	}
