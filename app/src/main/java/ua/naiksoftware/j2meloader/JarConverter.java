@@ -76,15 +76,11 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
         appConverted.mkdirs();
         Log.d(tag, "appConverted=" + appConverted.getPath());
         Main.main(new String[]{
-                "--dex",
+                "--dex", "--no-optimize",
                 "--output=" + appConverted.getPath()
                         + ConfigActivity.MIDLET_DEX_FILE,
                 /* dirForJAssist.getPath() */pathToJar});
         File conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
-        if (!conf.exists()) {
-            err = "Manifest not exists: " + conf.getPath();
-            return false;
-        }
         try
 		{
 			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_CONF_FILE));
