@@ -151,7 +151,8 @@ public class AndroidClassVisitor extends ClassVisitor {
                         return;
                     }
                 }
-                if (opcode == Opcodes.INVOKESPECIAL && methodTranslations.get(className).contains(name + desc)) {
+                ArrayList<String> methods = methodTranslations.get(owner);
+                if (methods != null && opcode == Opcodes.INVOKESPECIAL && methods.contains(name + desc)) {
                     mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
                     return;
                 }
