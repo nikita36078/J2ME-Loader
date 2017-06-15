@@ -27,13 +27,13 @@
 package org.microemu.android.asm;
 
 import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
-public abstract class PatternMethodAdapter extends MethodAdapter {
+public abstract class PatternMethodAdapter extends MethodVisitor {
 
 	public PatternMethodAdapter(MethodVisitor mv) {
-		super(mv);
+		super(Opcodes.ASM5, mv);
 	}
 	
 	protected abstract void visitInsn();
@@ -81,9 +81,9 @@ public abstract class PatternMethodAdapter extends MethodAdapter {
 	}
 
 	@Override
-	public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 		visitInsn();
-		super.visitMethodInsn(opcode, owner, name, desc);
+		super.visitMethodInsn(opcode, owner, name, desc, itf);
 	}
 
 	@Override

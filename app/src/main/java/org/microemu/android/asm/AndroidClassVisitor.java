@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
@@ -38,7 +37,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.FieldNode;
 
-public class AndroidClassVisitor extends ClassAdapter {
+public class AndroidClassVisitor extends ClassVisitor {
 
     private static boolean enhanceCatchBlock = false;
 
@@ -49,6 +48,8 @@ public class AndroidClassVisitor extends ClassAdapter {
     private HashMap<String, ArrayList<String>> classesHierarchy;
 
     private HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations;
+
+    private HashMap<String, ArrayList<String>> methodTranslations;
 
     private HashMap<Label, CatchInformation> catchInfo;
 
@@ -141,16 +142,22 @@ public class AndroidClassVisitor extends ClassAdapter {
             mv.visitInsn(opcode);
         }
 
-        public void visitMethodInsn(int opcode, String owner, String name, String desc) {
+        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
             visitInsn();
-            if (isMidlet && opcode == Opcodes.INVOKEVIRTUAL) {
-                if ((name.equals("getResourceAsStream")) && (owner.equals("java/lang/Class"))) {
-                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name, "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;");
+            if(isMidlet) {
+                if (opcode == Opcodes.INVOKEVIRTUAL) {
+                    if ((name.equals("getResourceAsStream")) && (owner.equals("java/lang/Class"))) {
+                        mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name, "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
+                        return;
+                    }
+                }
+                ArrayList<String> methods = methodTranslations.get(owner);
+                if (methods != null && opcode == Opcodes.INVOKESPECIAL && methods.contains(name + desc)) {
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
                     return;
                 }
             }
-
-            mv.visitMethodInsn(opcode, owner, name, desc);
+            mv.visitMethodInsn(opcode, owner, name, desc, itf);
         }
 
 
@@ -172,12 +179,14 @@ public class AndroidClassVisitor extends ClassAdapter {
 
     }
 
-    public AndroidClassVisitor(ClassVisitor cv, boolean isMidlet, HashMap<String, ArrayList<String>> classesHierarchy, HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations) {
-        super(cv);
+    public AndroidClassVisitor(ClassVisitor cv, boolean isMidlet, HashMap<String, ArrayList<String>> classesHierarchy, HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations,
+                               HashMap<String, ArrayList<String>> methodTranslations) {
+        super(Opcodes.ASM5, cv);
 
         this.isMidlet = isMidlet;
         this.classesHierarchy = classesHierarchy;
         this.fieldTranslations = fieldTranslations;
+        this.methodTranslations = methodTranslations;
     }
 
     @Override
@@ -192,7 +201,7 @@ public class AndroidClassVisitor extends ClassAdapter {
 
     }
 
-    public MethodVisitor visitMethod(final int access, final String name, String desc, final String signature, final String[] exceptions) {
+    public MethodVisitor visitMethod(int access, final String name, String desc, final String signature, final String[] exceptions) {
         return new AndroidMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions));
     }
 
