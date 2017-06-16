@@ -136,7 +136,7 @@ public class ContextHolder {
         System.err.println("CUSTOM GET RES CALLED WITH PATH: " + resName);
         Log.d(tag, "CUSTOM GET RES CALLED WITH PATH: " + resName);
         try {
-            return new FileInputStream(new File(MyClassLoader.getResFolder(), resName));
+            return new MIDletResourceInputStream(new File(MyClassLoader.getResFolder(), resName));
         } catch (FileNotFoundException e) {
             System.err.println("Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
             Log.d(tag, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
