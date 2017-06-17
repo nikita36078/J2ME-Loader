@@ -24,6 +24,7 @@ import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.PanControl;
 import javax.microedition.media.control.VolumeControl;
+import javax.microedition.media.protocol.DataSource;
 
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;

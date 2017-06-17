@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
-import javax.microedition.io.file.FileConnection;
+import javax.microedition.media.protocol.DataSource;
 import javax.microedition.util.ContextHolder;
 
 import android.webkit.MimeTypeMap;
@@ -57,6 +57,11 @@ public class Manager
 	public static Player createPlayer(String locator) throws IOException
 	{
 		return new MicroPlayer(new DataSource(locator));
+	}
+
+	public static Player createPlayer(DataSource source) throws IOException
+	{
+		return new MicroPlayer(source);
 	}
 	
 	public static Player createPlayer(final InputStream stream, String type) throws IOException

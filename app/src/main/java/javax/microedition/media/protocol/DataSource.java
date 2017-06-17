@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package javax.microedition.media;
+package javax.microedition.media.protocol;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -31,23 +31,23 @@ public class DataSource
 {
 	protected String locator;
 	protected File file;
-	
+
 	protected FileInputStream stream;
 	protected AssetFileDescriptor asset;
 	protected FileDescriptor descriptor;
 	protected long offset;
 	protected long length;
-	
+
 	public DataSource(String locator)
 	{
 		this.locator = locator;
 	}
-	
+
 	public DataSource(File file)
 	{
 		this.file = file;
 	}
-	
+
 	public void open() throws IOException
 	{
 		if(descriptor == null)
@@ -58,26 +58,26 @@ public class DataSource
 				{
 					locator = locator.substring(1);
 				}
-				
+
 				asset = ContextHolder.getContext().getAssets().openFd(locator);
-				
+
 				descriptor = asset.getFileDescriptor();
-				
+
 				offset = asset.getStartOffset();
 				length = asset.getLength();
 			}
 			else if(file != null)
 			{
 				stream = new FileInputStream(file);
-				
+
 				descriptor = stream.getFD();
-				
+
 				offset = 0;
 				length = file.length();
 			}
 		}
 	}
-	
+
 	public void close()
 	{
 		if(stream != null)
@@ -89,10 +89,10 @@ public class DataSource
 			catch(IOException e)
 			{
 			}
-			
+
 			stream = null;
 		}
-		
+
 		if(asset != null)
 		{
 			try
@@ -102,13 +102,13 @@ public class DataSource
 			catch(IOException e)
 			{
 			}
-			
+
 			asset = null;
 		}
-		
+
 		descriptor = null;
 	}
-	
+
 	public String getURL()
 	{
 		if(locator != null)
@@ -120,11 +120,11 @@ public class DataSource
 			return "file://" + file.getAbsolutePath();
 		}
 	}
-	
+
 	public void setFor(MediaPlayer player) throws IOException
 	{
 		open();
-		
+
 		if(descriptor != null)
 		{
 			player.setDataSource(descriptor, offset, length);
@@ -134,11 +134,11 @@ public class DataSource
 			player.setDataSource(locator);
 		}
 	}
-	
+
 	public void setFor(MediaMetadataRetriever retriever) throws IOException
 	{
 		open();
-		
+
 		if(descriptor != null)
 		{
 			retriever.setDataSource(descriptor, 0, length);
