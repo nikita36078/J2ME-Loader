@@ -42,8 +42,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.EventQueue;
@@ -673,7 +673,7 @@ public class ConfigActivity extends Activity implements
 
     private MIDlet loadMIDlet() {
         MIDlet midlet = null;
-        TreeMap<String, String> params = FileUtils.loadManifest(new File(
+        LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(
                 pathToMidletDir + MIDLET_CONF_FILE));
         MIDlet.initProps(params);
         String dex = pathToMidletDir + ConfigActivity.MIDLET_DEX_FILE;

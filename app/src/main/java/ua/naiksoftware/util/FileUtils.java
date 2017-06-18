@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
-import java.util.TreeMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -109,8 +111,8 @@ public class FileUtils {
         }
     }
 
-    public static TreeMap<String, String> loadManifest(File mf) {
-        TreeMap<String, String> params = new TreeMap<String, String>();
+    public static LinkedHashMap<String, String> loadManifest(File mf) {
+        LinkedHashMap<String, String> params = new LinkedHashMap<String, String>();
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mf)));
             String line;
@@ -119,6 +121,14 @@ public class FileUtils {
                 index = line.indexOf(':');
                 if (index > 0) {
                     params.put(line.substring(0, index).trim(), line.substring(index + 1).trim());
+                }
+                if (line.length() > 0 && Character.isWhitespace(line.charAt(0))) {
+					Iterator<Map.Entry<String, String>> iter = params.entrySet().iterator();
+					Map.Entry<String,String> entry = null;
+					while(iter.hasNext()) {
+						entry = iter.next();
+					}
+					params.put(entry.getKey(), entry.getValue() + line.substring(1));
                 }
             }
             br.close();

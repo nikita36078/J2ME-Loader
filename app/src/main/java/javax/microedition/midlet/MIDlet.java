@@ -15,7 +15,7 @@
  */
 package javax.microedition.midlet;
 
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.util.ContextHolder;
@@ -31,7 +31,7 @@ import ua.naiksoftware.util.FileUtils;
 public class MIDlet {
 
 	private static Context context;
-	private static TreeMap<String, String> properties;
+	private static LinkedHashMap<String, String> properties;
 
 	private static boolean pauseAppCalled = false;
 	private static boolean destroyAppCalled = false;
@@ -50,7 +50,7 @@ public class MIDlet {
 		return context;
 	}
 
-	public static void initProps(TreeMap<String, String> p) {
+	public static void initProps(LinkedHashMap<String, String> p) {
 		properties = p;
 	}
 

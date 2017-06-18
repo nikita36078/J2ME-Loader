@@ -7,7 +7,6 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import javax.microedition.shell.ConfigActivity;
 
@@ -156,7 +155,7 @@ public class MainActivity extends Activity implements
             for (String appFolder : appFolders) {
                 File temp = new File(pathConverted + appFolder);
                 if (temp.list().length > 0) {
-                    TreeMap<String, String> params = FileUtils
+                    LinkedHashMap<String, String> params = FileUtils
                             .loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
                     item = new AppItem(getIcon(params.get("MIDlet-1")),
                             params.get("MIDlet-Name"),
