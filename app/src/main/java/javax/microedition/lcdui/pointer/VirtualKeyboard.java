@@ -52,7 +52,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
         protected boolean selected;
 
         public VirtualKey(int keyCode) {
-            this(keyCode, Canvas.getKeyNameOrig(keyCode));
+            this(keyCode, target.getKeyName(keyCode));
         }
 
         public VirtualKey(int keyCode, String label) {
