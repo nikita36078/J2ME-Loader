@@ -26,6 +26,12 @@ public class Transform {
 		mtx.getMatrixRows(matrix);
 	}
 
+	public void invert() {
+		if (!mtx.invertMatrix()) {
+			throw new ArithmeticException("matrix can not be inverted");
+		}
+	}
+
 	public void set(float[] matrix) {
 		if (matrix == null)
 			throw new NullPointerException("matrix can not be null");
