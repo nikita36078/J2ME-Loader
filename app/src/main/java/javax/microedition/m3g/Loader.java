@@ -8,6 +8,7 @@ import java.io.PushbackInputStream;
 import java.util.Vector;
 
 import javax.microedition.lcdui.Image;
+import javax.microedition.util.ContextHolder;
 
 import java.util.zip.Inflater;
 
@@ -22,7 +23,7 @@ public class Loader {
 
 		InputStream is;
 		if (name.startsWith("/")) {
-			is = Loader.class.getResourceAsStream(name);
+			is = ContextHolder.getResourceAsStream(Loader.class, name);
 		} else {
 			// TODO
 			is = null;
