@@ -104,6 +104,11 @@ public class CompositingMode extends Object3D {
 		return depthOffsetUnits;
 	}
 
+	public void setDepthOffset(float depthOffsetFactor, float depthOffsetUnits) {
+		this.depthOffsetFactor = depthOffsetFactor;
+		this.depthOffsetUnits = depthOffsetUnits;
+	}
+
 	void setupGL(GL10 gl, boolean depthBufferEnabled) {
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 
