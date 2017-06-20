@@ -67,7 +67,6 @@ public abstract class Canvas extends Displayable {
 	public static final int GAME_D = 12;
 
 	private static HashMap<Integer, Integer> androidToMIDP;
-	private static HashMap<Integer, Integer> midpToAndroid;
 	private static HashMap<Integer, Integer> keyCodeToGameAction;
 	private static HashMap<Integer, Integer> gameActionToKeyCode;
 	private static HashMap<Integer, String> keyCodeToKeyName;
@@ -75,7 +74,6 @@ public abstract class Canvas extends Displayable {
 	static
 	{
 		androidToMIDP = new HashMap();
-		midpToAndroid = new HashMap();
 		keyCodeToGameAction = new HashMap();
 		gameActionToKeyCode = new HashMap();
 		keyCodeToKeyName = new HashMap();
@@ -116,8 +114,6 @@ public abstract class Canvas extends Displayable {
 
 	private static void mapKeyCode(int androidKeyCode, int midpKeyCode, int gameAction, String keyName) {
 		androidToMIDP.put(androidKeyCode, midpKeyCode);
-		midpToAndroid.put(midpKeyCode, androidKeyCode);
-
 		keyCodeToGameAction.put(midpKeyCode, gameAction);
 		keyCodeToKeyName.put(midpKeyCode, keyName);
 	}
@@ -129,7 +125,6 @@ public abstract class Canvas extends Displayable {
 
 	public static int convertAndroidKeyCode(int keyCode) {
 		Integer res = androidToMIDP.get(keyCode);
-
 		if (res != null) {
 			return res;
 		} else {
@@ -138,11 +133,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getKeyCode(int gameAction) {
-		return getKeyCodeOrig(gameAction);
-	}
-	public static int getKeyCodeOrig(int gameAction) {
 		Integer res = gameActionToKeyCode.get(gameAction);
-
 		if (res != null) {
 			return res;
 		} else {
@@ -151,11 +142,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getGameAction(int keyCode) {
-		return getGameActionOrig(keyCode);
-	}
-	public static int getGameActionOrig(int keyCode) {
 		Integer res = keyCodeToGameAction.get(keyCode);
-
 		if (res != null) {
 			return res;
 		} else {
@@ -164,9 +151,6 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public String getKeyName(int keyCode) {
-		return getKeyNameOrig(keyCode);
-	}
-	public static String getKeyNameOrig(int keyCode) {
 		return keyCodeToKeyName.get(keyCode);
 	}
 
@@ -346,8 +330,6 @@ public abstract class Canvas extends Displayable {
 						holder.unlockCanvasAndPost(graphics.getCanvas());
 					}
 				}
-
-				continuepaint = true;
 			}
 		}
 
@@ -357,76 +339,33 @@ public abstract class Canvas extends Displayable {
 		public int enqueued = 0;
 
 		public void enterQueue() {
-			//System.out.println("enterQueue from " + enqueued);
 			enqueued++;
-			//System.out.println("enterQueue now " + enqueued);
 		}
 
 		public void leaveQueue() {
-			//System.out.println("leaveQueue from " + enqueued);
 			enqueued--;
-			//System.out.println("leaveQueue now " + enqueued);
 		}
 
 		/**
 		 * В очереди должно быть не более двух перерисовок.
-		 * 
+		 *
 		 * Одна не обеспечит плавности, а если делать больше двух,
 		 * то как определить, насколько именно больше двух их нужно сделать?
 		 */
 		public boolean placeableAfter(Event event) {
-			//System.out.println("placeableAfter from " + enqueued);
 			return enqueued < 2;
-
-//			if(event == this)
-//			{
-//				if(continuepaint)			// если предыдущая перерисовка закончилась
-//				{
-//					continuepaint = false;
-//					return true;			// можно ставить в очередь новую
-//				}
-//				else
-//				{
-//					return false;
-//				}
-//			}
-//			
-//			return true;
 		}
 
 		public boolean accept(Event event) {
 			return event == this;
 		}
-
-//		public String toString()
-//		{
-//			return "repaint()";
-//		}
 	}
 
-	private SimpleEvent initViewEvent = new SimpleEvent()
-	{
-		public void process() {
-			view = new InnerView(getParentActivity());
-
-			holder = view.getHolder();
-			holder.addCallback(new SurfaceCallback());
-
-			view.setFocusableInTouchMode(true);
-
-			synchronized (waiter) {
-				waiter.notifyAll();
-			}
-		}
-	};
-
-	private final Object waiter = new Object();
 	private final Object paintsync = new Object();
 
 	private PaintEvent paintEvent = new PaintEvent();
 
 	private boolean surfacevalid = false;
-	private boolean continuepaint = true;
 
 	private InnerView view;
 	private SurfaceHolder holder;
@@ -671,11 +610,11 @@ public abstract class Canvas extends Displayable {
 		return overlay == null;
 	}
 
-	public static boolean hasRepeatEvents() {
+	public boolean hasRepeatEvents() {
 		return true;
 	}
 
-	public static boolean isDoubleBuffered() {
+	public boolean isDoubleBuffered() {
 		return true;
 	}
 
