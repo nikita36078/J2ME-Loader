@@ -371,7 +371,7 @@ public abstract class Canvas extends Displayable {
 	private SurfaceHolder holder;
 	private Graphics graphics = new Graphics();
 
-	private int width, height;
+	public static int width, height;
 
 	private int displayWidth;
 	private int displayHeight;
