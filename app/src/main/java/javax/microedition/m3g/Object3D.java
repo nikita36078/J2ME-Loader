@@ -1,6 +1,7 @@
 package javax.microedition.m3g;
 
 import java.util.Vector;
+import java.util.Enumeration;
 
 public abstract class Object3D {
 
@@ -15,7 +16,7 @@ public abstract class Object3D {
 	int applyAnimation(int time) {
 		int validity = 0x7FFFFFFF;
 
-		if (animationTracks == null)
+		if (animationTracks.isEmpty())
 			return validity;
 
 		int numTracks = animationTracks.size();
@@ -28,7 +29,7 @@ public abstract class Object3D {
 			int property = track.property;
 			int nextProperty;
 
-			int sumWeights = 0;
+			float sumWeights = 0;
 			float[] sumValues = new float[components];
 
 			for (int i = 0; i < components; i++) sumValues[i] = 0;
@@ -69,7 +70,14 @@ public abstract class Object3D {
 	}
 
 	public final Object3D duplicate() {
-		return duplicateImpl();
+		Object3D copy = duplicateImpl();
+		copy.userID = userID;
+		copy.userObject = userObject;
+		copy.animationTracks = new Vector();
+		Enumeration e = animationTracks.elements();
+		while (e.hasMoreElements())
+			copy.animationTracks.add(e.nextElement());
+		return copy;
 	}
 
 	abstract Object3D duplicateImpl();

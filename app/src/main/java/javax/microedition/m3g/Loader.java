@@ -24,6 +24,7 @@ public class Loader {
 		InputStream is;
 		if (name.startsWith("/")) {
 			is = ContextHolder.getResourceAsStream(Loader.class, name);
+
 		} else {
 			// TODO
 			is = null;
@@ -705,12 +706,9 @@ public class Loader {
 		{
 			int zTarget = readByte();
 			int yTarget = readByte();
-			// Alignment is buggy for now
-			//Node zReference = (Node) getObject(readInt());
-			//Node yReference = (Node) getObject(readInt());
-			//node.setAlignment(zReference, zTarget, yReference, yTarget);
-			readInt();
-			readInt();
+			Node zReference = (Node) getObject(readInt());
+			Node yReference = (Node) getObject(readInt());
+			node.setAlignment(zReference, zTarget, yReference, yTarget);
 		}
 	}
 
@@ -721,100 +719,3 @@ public class Loader {
 			group.addChild((Node) getObject(readInt()));
 	}
 }
-/*
-class PushbackInputStream extends InputStream {
-	private static final int DEFAULT_BUFFER_SIZE = 1;
-	protected byte[] buf;
-	protected int pos;
-
-	public PushbackInputStream(InputStream in) {
-		this(in, DEFAULT_BUFFER_SIZE);
-	}
-
-	public PushbackInputStream(InputStream in, int size) {
-		super(in);
-		if (size < 0)
-			throw new IllegalArgumentException();
-		buf = new byte[size];
-		pos = buf.length;
-	}
-
-	public int available() throws IOException {
-                try {
-                        return (buf.length - pos) + super.available();
-                } catch (NullPointerException npe) {
-                        throw new IOException("Stream closed");
-                }
-        }
-
-	public synchronized void close() throws IOException {
-                buf = null;
-                super.close();
-        }
-
-	public boolean markSupported() {
-                return false;
-        }
-
-	public void reset() throws IOException {
-                throw new IOException("Mark not supported in this class");
-        }
-
-	public synchronized int read() throws IOException {
-                if (pos < buf.length)
-                        return ((int) buf[pos++]) & 0xFF;
-
-                return super.read();
-        }
-
-	public synchronized int read(byte[] b, int off, int len) throws IOException {
-                int numBytes = Math.min(buf.length - pos, len);
-
-                if (numBytes > 0) {
-                        System.arraycopy(buf, pos, b, off, numBytes);
-                        pos += numBytes;
-                        len -= numBytes;
-                        off += numBytes;
-                }
-
-                if (len > 0) {
-                        len = super.read(b, off, len);
-                        if (len == -1) //EOF
-                                return numBytes > 0 ? numBytes : -1;
-                        numBytes += len;
-                }
-                return numBytes;
-        }
-
-	public synchronized void unread(int b) throws IOException {
-                if (pos <= 0)
-                        throw new IOException("Insufficient space in pushback buffer");
-
-                buf[--pos] = (byte) b;
-        }
-
-	public synchronized void unread(byte[] b) throws IOException {
-                unread(b, 0, b.length);
-        }
-
-	public synchronized void unread(byte[] b, int off, int len) throws IOException {
-                if (pos < len)
-                        throw new IOException("Insufficient space in pushback buffer");
-                System.arraycopy(b, off, buf, pos - len, len);
-                pos -= len;
-        }
-
-	public synchronized long skip(long n) throws IOException {
-                final long origN = n;
-
-                if (n > 0L) {
-                        int numread = (int) Math.min((long) (buf.length - pos), n);
-                        pos += numread;
-                        n -= numread;
-                        if (n > 0)
-                                n -= super.skip(n);
-                }
-
-                return origN - n;
-        }
-}*/

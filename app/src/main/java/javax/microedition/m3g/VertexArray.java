@@ -17,7 +17,6 @@ public class VertexArray extends Object3D {
 	int stride;
 
 	private Buffer buffer;
-	private FloatBuffer floatBuffer;
 	
 	private ByteBuffer argbBuffer;
 	
@@ -45,8 +44,6 @@ public class VertexArray extends Object3D {
 			buffer = ByteBuffer.allocateDirect(numElements * 2).order(ByteOrder.nativeOrder()).asShortBuffer();
 			this.stride = numComponents * 2;
 		}
-
-		floatBuffer = ByteBuffer.allocateDirect(numElements * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
 	}
 
 	public void set(int firstVertex, int numVertices, short[] values) {
@@ -59,11 +56,6 @@ public class VertexArray extends Object3D {
 		for (int count = numElements; count > 0; count--)
 			shortBuffer.put(values[index++]);
 		shortBuffer.position(0);
-
-		floatBuffer.position(firstVertex);
-		for (int i = 0; i < numElements; i++)
-			floatBuffer.put((float) values[i]);
-
 	}
 
 	public void set(int firstVertex, int numVertices, byte[] values) {
@@ -80,10 +72,6 @@ public class VertexArray extends Object3D {
 			byteBuffer.put((elementSize == 4) ? values[index++] : (byte)0xFF);
 		}
 		byteBuffer.position(0);
-
-		floatBuffer.position(firstVertex);
-		for (int i = 0; i < numElements; i++)
-			floatBuffer.put((float) values[i]);
 	}
 	
 	Object3D duplicateImpl() {
@@ -92,7 +80,6 @@ public class VertexArray extends Object3D {
 		copy.elementSize = elementSize;
 		copy.elementType = elementType;
 		copy.numElements = numElements;
-		copy.floatBuffer = ByteBuffer.allocateDirect(floatBuffer.remaining()).order(ByteOrder.nativeOrder()).asFloatBuffer().put(floatBuffer);
 		copy.argbBuffer =  ByteBuffer.allocateDirect(argbBuffer.remaining()).order(ByteOrder.nativeOrder()).put(argbBuffer);
 		return copy;
 	}
@@ -163,11 +150,6 @@ public class VertexArray extends Object3D {
 		return buffer;
 	}
 
-	FloatBuffer getFloatBuffer() {
-		return floatBuffer;
-	}
-
-	
 	ByteBuffer getARGBBuffer() {
 		return argbBuffer;
 	}
