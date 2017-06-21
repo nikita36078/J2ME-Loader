@@ -91,6 +91,9 @@ public final class Graphics3D {
 
 	private int width, height;
 
+	private int clipX0, clipY0, clipX1, clipY1;
+	private int scissorX, scissorY, scissorWidth, scissorHeight;
+
 	private Graphics3D() {
 		initGLES();
 		populateProperties();
@@ -104,8 +107,6 @@ public final class Graphics3D {
 	}
 
 	private void initGLES() {
-		System.out.println("INIT");
-
 		// Create EGL context
 		this.egl = (EGL10) EGLContext.getEGL();
 
@@ -133,6 +134,7 @@ public final class Graphics3D {
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, null);
 		EGL_ASSERT(eglContext != EGL10.EGL_NO_CONTEXT);
 
+		// Create an offscreen surface
 		Displayable disp = ContextHolder.getCurrentActivity().getCurrent();
 		if (disp != null && disp instanceof Canvas) {
 			width = ((Canvas) disp).getWidth();
@@ -157,11 +159,6 @@ public final class Graphics3D {
 
 		this.gl = (GL10) eglContext.getGL();
 
-		// Create an offscreen surface
-		/*
-		EGLSurface tmpSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, null);
-		EGL_ASSERT(tmpSurface != EGL10.EGL_NO_SURFACE);
-		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, tmpSurface, tmpSurface, eglContext));*/
 		// Get parameters from the GL instance
 		int[] params = new int[2];
 		gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_UNITS, params, 0);
@@ -174,11 +171,14 @@ public final class Graphics3D {
 		maxViewportHeight = params[1];
 		gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, params, 0);
 		maxTextureSize = params[0];
-		/* Destroy the offscreen surface
-		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
-		EGL_ASSERT(egl.eglDestroySurface(eglDisplay, tmpSurface));
-		*/
 
+		// Set default clipping rectangle
+		clipX0 = 0;
+		clipY0 = 0;
+		clipX1 = width;
+		clipY1 = height;
+		gl.glEnable(GL10.GL_SCISSOR_TEST);
+		gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
 	}
 
 	private void populateProperties() {
@@ -240,12 +240,6 @@ public final class Graphics3D {
 			}*/
 		}
 
-		// Make the context current on this thread
-		//EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
-
-		// Wait before any rendering operation
-		//EGL_ASSERT(egl.eglWaitNative(EGL10.EGL_CORE_NATIVE_ENGINE, target));
-		
 		int[] w = new int[1];
 		EGL_ASSERT(egl.eglQuerySurface(eglDisplay, eglWindowSurface, EGL10.EGL_WIDTH, w));
 		int[] h = new int[1];
@@ -281,7 +275,6 @@ public final class Graphics3D {
 	}
 
 	public void clear(Background background) {
-
 		/*if (!targetBound) {
 			throw new IllegalStateException("Graphics3D does not have a rendering target");
 		}*/
@@ -346,25 +339,6 @@ public final class Graphics3D {
 		return (Light) lights.elementAt(index);
 	}
 
-	private void applyLights() {
-		if (lightHasChanged) {
-			for (int i = 0; i < maxLights; i++) {
-				if (lightFlags[i]) {
-					Light light = (Light) lights.elementAt(i);
-					Transform transform = (Transform) lightTransforms.elementAt(i);
-					gl.glEnable(GL10.GL_LIGHT0 + i);
-					gl.glPushMatrix();
-					transform.multGL(gl);
-					light.setupGL(gl, GL10.GL_LIGHT0 + i);
-					gl.glPopMatrix();
-				} else {
-					gl.glDisable(GL10.GL_LIGHT0 + i);
-				}
-			}
-			lightHasChanged = false;
-		}
-	}
-
 	public int getHints() {
 		return hints;
 	}
@@ -383,6 +357,20 @@ public final class Graphics3D {
 		this.viewportY = y;
 		this.viewportWidth = width;
 		this.viewportHeight = height;
+
+		int sx0 = Math.max(viewportX, clipX0);
+		int sy0 = Math.max(viewportY, clipY0);
+		int sx1 = Math.min(viewportX + viewportWidth, clipX1);
+		int sy1 = Math.min(viewportY + viewportHeight, clipY1);
+
+		scissorX = sx0;
+		scissorY = sy0;
+
+		if (sx0 < sx1 && sy0 < sy1) {
+			scissorWidth = sx1 - sx0;
+			scissorHeight = sy1 - sy0;
+		} else
+			scissorWidth = scissorHeight = 0;
 
 		gl.glViewport(x, y, width, height);
 	}
@@ -404,7 +392,6 @@ public final class Graphics3D {
 	}
 
 	public void setDepthRange(float near, float far) {
-
 		if ((near < 0) || (near > 1) || (far < 0) || (far > 1)) {
 			throw new IllegalArgumentException("Bad depth range");
 		}
@@ -413,13 +400,6 @@ public final class Graphics3D {
 			depthRangeNear = near;
 			depthRangeFar = far;
 			depthRangeHasChanged = true;
-		}
-	}
-
-	private void applyDepthRange() {
-		if (depthRangeHasChanged) {
-			gl.glDepthRangef(depthRangeNear, depthRangeFar);
-			depthRangeHasChanged = false;
 		}
 	}
 
@@ -451,23 +431,6 @@ public final class Graphics3D {
 		cameraHasChanged = true;
 	}
 
-	private void applyCamera() {
-		if (cameraHasChanged) {
-			Transform t = new Transform();
-
-			gl.glMatrixMode(GL10.GL_PROJECTION);
-			camera.getProjection(t);
-			t.setGL(gl);
-
-			gl.glMatrixMode(GL10.GL_MODELVIEW);
-			t.set(cameraTransform);
-			//t.mtx.invertMatrix();
-			t.setGL(gl);
-
-			cameraHasChanged = false;
-		}
-	}
-
 	public Camera getCamera(Transform transform) {
 		if (transform != null)
 			transform.set(this.cameraTransform);
@@ -476,7 +439,6 @@ public final class Graphics3D {
 
 	// TODO: Optimization
 	public void render(Node node, Transform transform) {
-
 		/*if (!targetBound)
 			throw new IllegalStateException("Graphics3D does not have a rendering target");*/
 		if (camera == null)
@@ -488,12 +450,10 @@ public final class Graphics3D {
 		}
 
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Apply Graphics3D settings to the OpenGL pipeline
-		applyCamera();
-		applyDepthRange();
-		applyLights();
+		initRender();
 
 		if ((node instanceof Mesh) || (node instanceof Sprite3D) || (node instanceof Group)) {
 			renderNode(node, transform);
@@ -522,8 +482,48 @@ public final class Graphics3D {
 		EGL_ASSERT(egl.eglSwapBuffers(eglDisplay, eglWindowSurface));
 	}
 
-	public void render(VertexBuffer vertices, IndexBuffer triangles, Appearance appearance, Transform transform) {
+	private void initRender() {
+		if (cameraHasChanged) {
+			Transform t = new Transform();
 
+			gl.glMatrixMode(GL10.GL_PROJECTION);
+			camera.getProjection(t);
+			t.setGL(gl);
+
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
+			t.set(cameraTransform);
+			//t.mtx.invertMatrix();
+			t.setGL(gl);
+
+			gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+			gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);
+			cameraHasChanged = false;
+		}
+
+		if (lightHasChanged) {
+			for (int i = 0; i < maxLights; i++) {
+				if (lightFlags[i]) {
+					Light light = (Light) lights.elementAt(i);
+					Transform transform = (Transform) lightTransforms.elementAt(i);
+					gl.glEnable(GL10.GL_LIGHT0 + i);
+					gl.glPushMatrix();
+					transform.multGL(gl);
+					light.setupGL(gl, GL10.GL_LIGHT0 + i);
+					gl.glPopMatrix();
+				} else {
+					gl.glDisable(GL10.GL_LIGHT0 + i);
+				}
+			}
+			lightHasChanged = false;
+		}
+
+		if (depthRangeHasChanged) {
+			gl.glDepthRangef(depthRangeNear, depthRangeFar);
+			depthRangeHasChanged = false;
+		}
+	}
+
+	public void render(VertexBuffer vertices, IndexBuffer triangles, Appearance appearance, Transform transform) {
 		if (vertices == null)
 			throw new NullPointerException("vertices == null");
 		if (triangles == null)
@@ -542,9 +542,7 @@ public final class Graphics3D {
 		}
 
 		// Apply Graphics3D settings to the OpenGL pipeline
-		applyCamera();
-		applyDepthRange();
-		applyLights();
+		initRender();
 
 		// Vertices
 		float[] scaleBias = new float[4];
@@ -564,22 +562,18 @@ public final class Graphics3D {
 		// Normals
 		VertexArray normals = vertices.getNormals();
 		if (normals != null) {
-			//FloatBuffer norm = normals.getFloatBuffer();
+			gl.glEnable(GL10.GL_NORMALIZE);
 			if (normals.getComponentType() == 1) {
 				ByteBuffer norm = (ByteBuffer) normals.getBuffer();
 				norm.position(0);
-				gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-				gl.glNormalPointer(GL10.GL_BYTE, 0, norm);
+				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+				gl.glNormalPointer(GL10.GL_BYTE, 4, norm);
 			} else {
 				ShortBuffer norm = (ShortBuffer) normals.getBuffer();
 				norm.position(0);
-				gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 				gl.glNormalPointer(GL10.GL_SHORT, normals.stride, norm);
 			}
-			/*norm.position(0);
-			gl.glEnable(GL10.GL_NORMALIZE);
-			gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, norm);*/
 		} else {
 			gl.glDisable(GL10.GL_NORMALIZE);
 			gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
@@ -609,15 +603,12 @@ public final class Graphics3D {
 			if ((texcoords != null) && (appearance.getTexture(i) != null)) {
 				// Enable the texture coordinate array 
 				gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-				//FloatBuffer tex = texcoords.getFloatBuffer();
-				//tex.position(0);
 
 				// Activate the texture unit
 				gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
 				appearance.getTexture(i).setupGL(gl, texScaleBias);
 
 				// Set the texture coordinates
-				//gl.glTexCoordPointer(texcoords.getComponentCount(), GL10.GL_FLOAT, 0, tex);
 				if (texcoords.getComponentType() == 1) {
 					ByteBuffer buffer = (ByteBuffer) texcoords.getBuffer();
 					buffer.position(0);
@@ -647,11 +638,7 @@ public final class Graphics3D {
 		// Draw
 		ShortBuffer indices = triangles.getBuffer();
 		indices.position(0);
-		/*if (triangles instanceof TriangleStripArray) {
-			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, triangles.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
-		} else {*/
-			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, triangles.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
-		//}
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, triangles.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
 
 		gl.glPopMatrix();
 	}
@@ -681,15 +668,10 @@ public final class Graphics3D {
 
 		// Camera
 		setCamera(c, t);
-		applyCamera();
-
-		// Depth range
-		applyDepthRange();
-
-		// Setup lights
+		initRender();
 		resetLights();
 		populateLights(world, world);
-		applyLights();
+		initRender();
 
 		// Begin traversal of scene graph
 		renderDescendants(world, world);
@@ -733,7 +715,7 @@ public final class Graphics3D {
 	}
 
 	private void drawMesh(VertexBuffer vb, IndexBuffer ib, Appearance app, Transform modelTransform) {
-		applyLights();
+		initRender();
 		if (modelTransform != null) {
 			float transform[] = new float[16];
 			modelTransform.mtx.getMatrixColumns(transform);
@@ -773,12 +755,12 @@ public final class Graphics3D {
 			if (normals.getComponentType() == 1) {
 				ByteBuffer norm = (ByteBuffer) normals.getBuffer();
 				norm.position(0);
-				gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 				gl.glNormalPointer(GL10.GL_BYTE, 4, norm);
 			} else {
 				ShortBuffer norm = (ShortBuffer) normals.getBuffer();
 				norm.position(0);
-				gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 				gl.glNormalPointer(GL10.GL_SHORT, normals.stride, norm);
 			}
 			/*norm.position(0);
@@ -881,7 +863,8 @@ public final class Graphics3D {
 			int subMeshes = mesh.getSubmeshCount();
 			VertexBuffer vertices = mesh.getVertexBuffer();
 			for (int i = 0; i < subMeshes; ++i)
-				/*drawMesh*/render(vertices, mesh.getIndexBuffer(i), mesh.getAppearance(i), transform);
+				if (mesh.getAppearance(i) != null)
+					/*drawMesh*/render(vertices, mesh.getIndexBuffer(i), mesh.getAppearance(i), transform);
 		} else if (node instanceof Sprite3D) {
 			Sprite3D sprite = (Sprite3D) node;
 			sprite.render(gl, transform);

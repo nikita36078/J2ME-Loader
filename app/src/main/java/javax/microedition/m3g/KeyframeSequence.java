@@ -28,7 +28,7 @@ public class KeyframeSequence extends Object3D {
 	private QVec4[] b;
 	
 	private KeyframeSequence() {
-		dirty = true;
+		//dirty = true;
 	}
 
 	public KeyframeSequence(int numKeyframes, int numComponents, int interpolation) {
@@ -76,31 +76,42 @@ public class KeyframeSequence extends Object3D {
 	}
 	
 	Object3D duplicateImpl() {
-		KeyframeSequence copy = new KeyframeSequence();
+		KeyframeSequence copy = new KeyframeSequence(keyframeCount, componentCount, interpolationType);
 		copy.repeatMode = repeatMode;
 		copy.duration = duration;
 		copy.validRangeFirst = validRangeFirst;
 		copy.validRangeLast = validRangeLast;
-		copy.interpolationType = interpolationType;
-		copy.keyframeCount = keyframeCount;
-		copy.componentCount = componentCount;
-		copy.probablyNext = probablyNext;
-		copy.dirty = dirty;
+		//copy.interpolationType = interpolationType;
+		//copy.keyframeCount = keyframeCount;
+		//copy.componentCount = componentCount;
+		//copy.probablyNext = probablyNext;
+		
 		copy.keyFrames = new float[keyFrames.length][keyFrames[0].length];
 		for (int i = 0; i < keyFrames.length; i++)
 			System.arraycopy(keyFrames[i], 0, copy.keyFrames[i], 0, keyFrames[i].length);
 		copy.keyFrameTimes = new int[keyFrameTimes.length];
 		System.arraycopy(keyFrameTimes, 0, copy.keyFrameTimes, 0, keyFrameTimes.length);
-		if (a != null) {
-			copy.a = new QVec4[a.length];
-			for (int i = 0; i < a.length; i++)
-				copy.a[i].assign(a[i]);
-		}
-		if (b != null) {
-			copy.b = new QVec4[b.length];
-			for (int i = 0; i < a.length; i++)
-				copy.b[i].assign(b[i]);
-		}
+
+		if (!dirty) {
+			copy.dirty = false;
+			if (inTangents != null) {
+				copy.inTangents = new float[inTangents.length][inTangents[0].length];
+				for (int i = 0; i < inTangents.length; i++)
+					System.arraycopy(inTangents[i], 0, copy.inTangents[i], 0, inTangents[i].length);
+				copy.outTangents = new float[outTangents.length][outTangents[0].length];
+				for (int i = 0; i < outTangents.length; i++)
+					System.arraycopy(outTangents[i], 0, copy.outTangents[i], 0, inTangents[i].length);
+			}
+			if (a != null) {
+				copy.a = new QVec4[a.length];
+				for (int i = 0; i < a.length; i++)
+					copy.a[i].assign(a[i]);
+				copy.b = new QVec4[b.length];
+				for (int i = 0; i < b.length; i++)
+					copy.b[i].assign(b[i]);
+			}
+		} else
+			copy.dirty = true;
 		return copy;
 	}
 
@@ -424,20 +435,18 @@ public class KeyframeSequence extends Object3D {
 		keyFrameTimes[index] = time;
 		if (interpolationType == SLERP || interpolationType == SQUAD) {
 			QVec4 q = new QVec4();
-			q.setQuat(keyframeAt(index));
-			q.normalizeQuat();
 			float[] kf = keyframeAt(index);
+			q.setQuat(kf);
+			q.normalizeQuat();
 			kf[0] = q.x;
 			kf[1] = q.y;
 			kf[2] = q.z;
 			kf[3] = q.w;
 		}
 		dirty = true;
-
 	}
 
 	public int getKeyframe(int index, float[] value) {
-		
 		if ((index < 0) || (index >= keyframeCount)) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -469,7 +478,6 @@ public class KeyframeSequence extends Object3D {
 	}
 
 	public void setValidRange(int first, int last) {
-
 		if ((first < 0) || (first >= keyframeCount) || (last < 0) || (last >= keyframeCount)) {
 			throw new IndexOutOfBoundsException("Invalid range");
 		}

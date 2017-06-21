@@ -82,7 +82,7 @@ public class AnimationTrack extends Object3D {
 	void getContribution(int time, float[] accumSamples, float[] weight, int[] validity) {
 		if (this.controller == null || !controller.isActive(time)) {
 			weight[0] = 0;
-			validity[0] = (controller != null ? controller.timeToActivation(time) : 0x7FFFFFFF);
+			validity[0] = ((controller != null) ? controller.timeToActivation(time) : 0x7FFFFFFF);
 			if (validity[0] < 1)
 				validity[0] = 1;
 			return;
@@ -100,6 +100,7 @@ public class AnimationTrack extends Object3D {
 
 		int sampleTime = (int) controller.getPosition(time);
 		int sampleValidity = sequence.getSample(sampleTime, sample);
+		validity[0] = sampleValidity;
 
 		if (sampleValidity > 0) {
 			sampleValidity = controller.timeToDeactivation(time);

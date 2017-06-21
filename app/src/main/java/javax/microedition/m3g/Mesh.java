@@ -11,6 +11,28 @@ public class Mesh extends Node {
 	private Mesh() {
 	}
 
+	@Override
+	int applyAnimation(int time) {
+		int minValidity = super.applyAnimation(time);
+		int validity;
+		if (vertices != null && minValidity > 0) {
+			validity = vertices.applyAnimation(time);
+			minValidity = Math.min(validity, minValidity);
+		}
+
+		if (!appearances.isEmpty()) {
+			for (int i = 0; i < submeshes.size() && minValidity > 0; i++) {
+				Appearance app = (Appearance) appearances.elementAt(i);
+				if (app != null) {
+					validity = app.applyAnimation(time);
+					minValidity = Math.min(validity, minValidity);
+				}
+			}
+		}
+
+		return minValidity;
+	}
+
 	public Mesh(VertexBuffer vertices, IndexBuffer submesh, Appearance appearance) {
 		if ((vertices == null) || (submesh == null)) {
 			throw new NullPointerException();

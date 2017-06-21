@@ -180,22 +180,22 @@ public abstract class Node extends Transformable {
 		if (zTarget == NONE && yTarget == NONE)
 			return true;
 
-		if (zRef != null && isChildOf(this, zRef) || zRef.getRoot() != root)
+		if (zRef != null && (isChildOf(this, zRef) || zRef.getRoot() != root))
 			return false;
-		if (yRef != null && isChildOf(this, yRef) || yRef.getRoot() != root)
+		if (yRef != null && (isChildOf(this, yRef) || yRef.getRoot() != root))
 			return false;
 
 		if (this.zTarget != NONE) {
 			if (zRef == null && refNode == this)
 				return false;
-			if (!computeAlignmentRotation(new Vector3(0, 0, 1), zRef != null ? zRef : refNode, zTarget, NONE))
+			if (!computeAlignmentRotation(new Vector3(0, 0, 1), (zRef != null) ? zRef : refNode, zTarget, NONE))
 				return false;
 		}
 		
 		if (this.yTarget != NONE) {
 			if (yRef == null && refNode == this)
 				return false;
-			if (!computeAlignmentRotation(new Vector3(0, 1, 0), yRef != null ? yRef : refNode, yTarget, zTarget != NONE ? Z_AXIS : NONE))
+			if (!computeAlignmentRotation(new Vector3(0, 1, 0), (yRef != null) ? yRef : refNode, yTarget, (zTarget != NONE) ? Z_AXIS : NONE))
 				return false;
 		}
 		
