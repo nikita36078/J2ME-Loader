@@ -46,12 +46,12 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.EventQueue;
+import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
-import javax.microedition.param.DataContainer;
-import javax.microedition.param.SharedPreferencesContainer;
+import javax.microedition.util.param.DataContainer;
+import javax.microedition.util.param.SharedPreferencesContainer;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;

@@ -23,6 +23,9 @@ import javax.microedition.lcdui.event.CommandActionEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import javax.microedition.lcdui.event.Event;
+import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.util.ContextHolder;
 
 public abstract class Displayable

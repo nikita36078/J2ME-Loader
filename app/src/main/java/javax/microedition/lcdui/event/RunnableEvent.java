@@ -16,7 +16,6 @@
 
 package javax.microedition.lcdui.event;
 
-import javax.microedition.lcdui.Event;
 import javax.microedition.util.ArrayStack;
 
 public class RunnableEvent extends Event

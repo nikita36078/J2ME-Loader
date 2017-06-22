@@ -2,7 +2,6 @@ package ua.naiksoftware.j2meloader;
 
 import android.app.AlertDialog;
 import android.app.ListFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,13 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.microedition.param.DataContainer;
-import javax.microedition.param.SharedPreferencesContainer;
 import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;

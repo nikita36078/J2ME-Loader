@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-package javax.microedition.lcdui;
+package javax.microedition.util.param;
 
-public interface EventFilter
+public interface DataEditor
 {
-	public boolean accept(Event event);
+	public DataEditor clear();
+	public DataEditor remove(String key);
+	
+	public DataEditor putBoolean(String key, boolean value);
+	public DataEditor putFloat(String key, float value);
+	public DataEditor putInt(String key, int value);
+	public DataEditor putLong(String key, long value);
+	public DataEditor putString(String key, String value);
+	
+	public void apply();
+	public boolean commit();
+	
+	public void close();
 }

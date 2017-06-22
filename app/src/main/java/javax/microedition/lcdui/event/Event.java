@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package javax.microedition.lcdui;
+package javax.microedition.lcdui.event;
 
 /**
  * Базовый класс для всех событий.
  */
 public abstract class Event implements Runnable
 {
-//	private static int count = 0;
-//	private int id = count++;
-//	
-//	public int getID()
-//	{
-//		return id;
-//	}
-	
 	/**
 	 * Обработка события.
 	 * Именно здесь нужно выполнять требуемые действия.
