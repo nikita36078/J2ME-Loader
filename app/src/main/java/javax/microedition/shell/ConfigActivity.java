@@ -39,6 +39,7 @@ import filelog.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -443,10 +444,10 @@ public class ConfigActivity extends Activity implements
         vk.setLayoutEditKey(vkLayoutKeyCode);
 
         try {
-            DataInputStream dis = new DataInputStream(ContextHolder.openFileInput("VirtualKeyboardLayout"));
+            FileInputStream fis = new FileInputStream(new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout"));
+            DataInputStream dis = new DataInputStream(fis);
             vk.readLayout(dis);
-            dis.close();
-        } catch (FileNotFoundException fnfe) {
+            fis.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
