@@ -262,42 +262,22 @@ public abstract class Canvas extends Displayable {
 				if (!surfacevalid || holder == null) {
 					return;
 				}
-				if (useOffscreen) {
-					graphics.setCanvas(offscreen.getCanvas());
-					try {
-						paint(graphics);
-					} catch (Throwable t) {
-						t.printStackTrace();
-						graphics.resetTranslation();
-						graphics.resetClip();
+				graphics.setCanvas(offscreen.getCanvas());
+				try {
+					paint(graphics);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					graphics.resetTranslation();
+					graphics.resetClip();
+				}
+				graphics.setCanvas(holder.lockCanvas());
+				if (graphics.hasCanvas()) {
+					graphics.clear(backgroundColor);
+					graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
+					if (overlay != null) {
+						overlay.paint(graphics);
 					}
-					graphics.setCanvas(holder.lockCanvas());
-					if (graphics.hasCanvas()) {
-						graphics.clear(backgroundColor);
-						graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
-						if (overlay != null) {
-							overlay.paint(graphics);
-						}
-						holder.unlockCanvasAndPost(graphics.getCanvas());
-					}
-				} else {
-					graphics.setCanvas(holder.lockCanvas());
-					if (graphics.hasCanvas()) {
-						graphics.clear(backgroundColor);
-						graphics.setWindow(onX, onY, onWidth, onHeight);
-						try {
-							paint(graphics);
-						} catch (Throwable t) {
-							t.printStackTrace();
-							graphics.resetTranslation();
-							graphics.resetClip();
-						}
-						graphics.resetWindow();
-						if (overlay != null) {
-							overlay.paint(graphics);
-						}
-						holder.unlockCanvasAndPost(graphics.getCanvas());
-					}
+					holder.unlockCanvasAndPost(graphics.getCanvas());
 				}
 			}
 		}
@@ -355,7 +335,6 @@ public abstract class Canvas extends Displayable {
 
 	private Image offscreen;
 	private int onX, onY, onWidth, onHeight;
-	private boolean useOffscreen;
 
 	private Overlay overlay;
 
@@ -491,14 +470,13 @@ public abstract class Canvas extends Displayable {
 
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
-		useOffscreen = true; // onWidth != width || onHeight != height;
 
 		if (post) {
 			/*
 			 * проверяем, нужно ли создавать новую картинку для двойной буферизации,
 			 * или сгодится старая
 			 */
-			if (useOffscreen && (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height)) {
+			if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
 				offscreen = Image.createImage(width, height);
 			}
 			postEvent(CanvasEvent.getInstance(this, CanvasEvent.SIZE_CHANGED, width, height));
