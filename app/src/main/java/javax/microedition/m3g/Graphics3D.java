@@ -275,6 +275,9 @@ public final class Graphics3D {
 			}
 			((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
 			targetBound = false;
+			gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+
 		}
 	}
 
@@ -452,9 +455,6 @@ public final class Graphics3D {
 		if (transform == null) {
 			transform = new Transform();
 		}
-
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Apply Graphics3D settings to the OpenGL pipeline
 		initRender();
