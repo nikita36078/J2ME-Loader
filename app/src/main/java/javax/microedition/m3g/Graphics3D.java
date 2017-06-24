@@ -240,12 +240,8 @@ public final class Graphics3D {
 			}*/
 		}
 
-		int[] w = new int[1];
-		EGL_ASSERT(egl.eglQuerySurface(eglDisplay, eglWindowSurface, EGL10.EGL_WIDTH, w));
-		int[] h = new int[1];
-		EGL_ASSERT(egl.eglQuerySurface(eglDisplay, eglWindowSurface, EGL10.EGL_HEIGHT, h));
 		this.gl = (GL10) eglContext.getGL();
-		setViewport(0, 0, w[0],  h[0]);
+		setViewport(0, 0, width, height);
 	}
 	
 	private static void EGL_ASSERT(boolean val) {
