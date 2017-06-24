@@ -514,6 +514,8 @@ public class ConfigActivity extends Activity implements
                         ConfigActivity.this);
                 params.edit().clear().commit();
                 params.close();
+                File layoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
+                layoutFile.delete();
                 loadParams(params);
                 break;
             case android.R.id.home:
