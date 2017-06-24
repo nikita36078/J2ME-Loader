@@ -256,18 +256,26 @@ public final class Graphics3D {
 	}
 
 	public void releaseTarget() {
-		/*try {
-			throw new Exception();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		if (targetBound) {
-			EGL_ASSERT(egl.eglWaitGL());
-			// Release the context
-			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
+			int b[]=new int[width*height];
+			int bt[]=new int[width*height];
+			IntBuffer ib=IntBuffer.wrap(b);
+			ib.position(0);
+			gl.glFinish();
+			gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
+
+			for(int i=0; i<height; i++) {
+				for(int j=0; j<width; j++) {
+					int pix=b[i*width+j];
+					int pb=(pix>>>16)&0xff;
+					int pr=(pix<<16)&0x00ff0000;
+					int pix1=(pix&0xff00ff00) | pr | pb;
+					bt[(height-i-1)*width+j]=pix1;
+				}
+			}
+			((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
 			targetBound = false;
-		}*/
+		}
 	}
 
 	public void clear(Background background) {
@@ -456,26 +464,6 @@ public final class Graphics3D {
 		} else {
 			throw new IllegalArgumentException("Node is not a Sprite3D, Mesh, or Group");
 		}
-
-		// TODO: Use surface for output
-		int b[]=new int[width*height];
-		int bt[]=new int[width*height];
-		IntBuffer ib=IntBuffer.wrap(b);
-		ib.position(0);
-		gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
-
-		for(int i=0; i<height; i++) {
-			for(int j=0; j<width; j++) {
-				int pix=b[i*width+j];
-				int pb=(pix>>>16)&0xff;
-				int pr=(pix<<16)&0x00ff0000;
-				int pix1=(pix&0xff00ff00) | pr | pb;
-				bt[(height-i-1)*width+j]=pix1;
-			}
-		}
-		//Bitmap sb=Bitmap.createBitmap(bt, width, height, true);
-		((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
-		EGL_ASSERT(egl.eglSwapBuffers(eglDisplay, eglWindowSurface));
 	}
 
 	private void initRender() {
