@@ -19,7 +19,9 @@ package javax.microedition.lcdui;
 import java.util.HashMap;
 
 import javax.microedition.lcdui.event.CanvasEvent;
-import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.event.Event;
+import javax.microedition.lcdui.event.EventFilter;
+import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.util.ContextHolder;
 
 import android.content.Context;
@@ -154,14 +156,15 @@ public abstract class Canvas extends Displayable {
 		return keyCodeToKeyName.get(keyCode);
 	}
 
-	private class InnerView extends SurfaceView {
+	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {
 		public InnerView(Context context) {
 			super(context);
+			getHolder().addCallback(this);
+			setFocusableInTouchMode(true);
 		}
 
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
-
 			if (event.getRepeatCount() == 0) {
 				if (overlay == null || !overlay.keyPressed(keyCode)) {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_PRESSED, keyCode));
@@ -171,17 +174,14 @@ public abstract class Canvas extends Displayable {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_REPEATED, keyCode));
 				}
 			}
-
 			return super.onKeyDown(keyCode, event);
 		}
 
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
-
 			if (overlay == null || !overlay.keyReleased(keyCode)) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_RELEASED, keyCode));
 			}
-
 			return super.onKeyUp(keyCode, event);
 		}
 
@@ -191,22 +191,15 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.show();
 					}
-
 				case MotionEvent.ACTION_POINTER_DOWN:
 					int index = event.getActionIndex();
-
 					if (overlay == null || !overlay.pointerPressed(index, event.getX(index), event.getY(index))) {
 						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, index, convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
-
 					break;
-
 				case MotionEvent.ACTION_MOVE:
 					int pointerCount = event.getPointerCount();
 					int historySize = event.getHistorySize();
-
-					//System.out.println("Pointer moved, historySize = " + historySize);
-
 					for (int h = 0; h < historySize; h++) {
 						for (int p = 0; p < pointerCount; p++) {
 							if (overlay == null || !overlay.pointerDragged(p, event.getHistoricalX(p, h), event.getHistoricalY(p, h))) {
@@ -214,51 +207,39 @@ public abstract class Canvas extends Displayable {
 							}
 						}
 					}
-
 					for (int p = 0; p < pointerCount; p++) {
 						if (overlay == null || !overlay.pointerDragged(p, event.getX(p), event.getY(p))) {
 							postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p, convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
 						}
 					}
-
-					//System.out.println("Pointer event processed");
-
 					break;
-
 				case MotionEvent.ACTION_UP:
 					if (overlay != null) {
 						overlay.hide();
 					}
-
 				case MotionEvent.ACTION_POINTER_UP:
 					index = event.getActionIndex();
-
 					if (overlay == null || !overlay.pointerReleased(index, event.getX(index), event.getY(index))) {
 						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, index, convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
-
 					break;
-
 				default:
 					return super.onTouchEvent(event);
 			}
-
 			return true;
 		}
-	}
 
-	private class SurfaceCallback implements SurfaceHolder.Callback {
+		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int newwidth, int newheight) {
 			synchronized (paintsync) {
 				displayWidth = newwidth;
 				displayHeight = newheight;
-
 				updateSize(true);
 			}
-
 			postEvent(paintEvent);
 		}
 
+		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			synchronized (paintsync) {
 				surfacevalid = true;
@@ -266,6 +247,7 @@ public abstract class Canvas extends Displayable {
 			}
 		}
 
+		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
 			synchronized (paintsync) {
 				surfacevalid = false;
@@ -280,55 +262,22 @@ public abstract class Canvas extends Displayable {
 				if (!surfacevalid || holder == null) {
 					return;
 				}
-
-				if (useOffscreen) {
-					graphics.setCanvas(offscreen.getCanvas());
-
-					try {
-						paint(graphics);
-					} catch (Throwable t) {
-						t.printStackTrace();
-
-						graphics.resetTranslation();
-						graphics.resetClip();
+				graphics.setCanvas(offscreen.getCanvas());
+				try {
+					paint(graphics);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					graphics.resetTranslation();
+					graphics.resetClip();
+				}
+				graphics.setCanvas(holder.lockCanvas());
+				if (graphics.hasCanvas()) {
+					graphics.clear(backgroundColor);
+					graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
+					if (overlay != null) {
+						overlay.paint(graphics);
 					}
-
-					graphics.setCanvas(holder.lockCanvas());
-
-					if (graphics.hasCanvas()) {
-						graphics.clear(backgroundColor);
-						graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
-
-						if (overlay != null) {
-							overlay.paint(graphics);
-						}
-
-						holder.unlockCanvasAndPost(graphics.getCanvas());
-					}
-				} else {
-					graphics.setCanvas(holder.lockCanvas());
-
-					if (graphics.hasCanvas()) {
-						graphics.clear(backgroundColor);
-						graphics.setWindow(onX, onY, onWidth, onHeight);
-
-						try {
-							paint(graphics);
-						} catch (Throwable t) {
-							t.printStackTrace();
-
-							graphics.resetTranslation();
-							graphics.resetClip();
-						}
-
-						graphics.resetWindow();
-
-						if (overlay != null) {
-							overlay.paint(graphics);
-						}
-
-						holder.unlockCanvasAndPost(graphics.getCanvas());
-					}
+					holder.unlockCanvasAndPost(graphics.getCanvas());
 				}
 			}
 		}
@@ -371,7 +320,7 @@ public abstract class Canvas extends Displayable {
 	private SurfaceHolder holder;
 	private Graphics graphics = new Graphics();
 
-	private int width, height;
+	public static int width, height;
 
 	private int displayWidth;
 	private int displayHeight;
@@ -386,7 +335,6 @@ public abstract class Canvas extends Displayable {
 
 	private Image offscreen;
 	private int onX, onY, onWidth, onHeight;
-	private boolean useOffscreen;
 
 	private Overlay overlay;
 
@@ -418,11 +366,9 @@ public abstract class Canvas extends Displayable {
 		if (overlay != null) {
 			overlay.setTarget(null);
 		}
-
 		if (ov != null) {
 			ov.setTarget(this);
 		}
-
 		overlay = ov;
 	}
 
@@ -440,13 +386,11 @@ public abstract class Canvas extends Displayable {
 		 * чтобы получившийся холст имел то же соотношение сторон,
 		 * что и реальный экран устройства.
 		 */
-
 		if (virtualWidth < 0) {
 			if (virtualHeight < 0) {
 				/*
 				 * не задано ничего - холст размером в экран
 				 */
-
 				width = displayWidth;
 				height = displayHeight;
 			} else {
@@ -454,7 +398,6 @@ public abstract class Canvas extends Displayable {
 				 * задана только высота холста
 				 * ширина подбирается по соотношению сторон реального экрана
 				 */
-
 				width = displayWidth * virtualHeight / displayHeight;
 				height = virtualHeight;
 			}
@@ -463,38 +406,31 @@ public abstract class Canvas extends Displayable {
 			 * задана только ширина холста
 			 * высота подбирается по соотношению сторон реального экрана
 			 */
-
 			width = virtualWidth;
 			height = displayHeight * virtualWidth / displayWidth;
 		} else {
 			/*
 			 * ширина и высота холста жестко заданы
 			 */
-
 			width = virtualWidth;
 			height = virtualHeight;
 		}
-
 		/*
 		 * Превращаем размеры холста в размер картинки,
 		 * которая будет отображаться на экране устройсва.
 		 */
-
 		if (scaleToFit) {
 			if (keepAspectRatio) {
 				/*
 				 * пробуем вписать по ширине
 				 */
-
 				onWidth = displayWidth;
 				onHeight = height * displayWidth / width;
-
 				if (onHeight > displayHeight) {
 					/*
 					 * если при этом не влезли по высоте,
 					 * то вписываем по высоте
 					 */
-
 					onHeight = displayHeight;
 					onWidth = width * displayHeight / height;
 				}
@@ -503,7 +439,6 @@ public abstract class Canvas extends Displayable {
 				 * масштабирование без сохранения соотношения сторон:
 				 * просто растягиваем картинку на весь экран
 				 */
-
 				onWidth = displayWidth;
 				onHeight = displayHeight;
 			}
@@ -511,7 +446,6 @@ public abstract class Canvas extends Displayable {
 			/*
 			 * без масштабирования
 			 */
-
 			onWidth = width;
 			onHeight = height;
 		}
@@ -522,7 +456,6 @@ public abstract class Canvas extends Displayable {
 			 * то скорее всего мы держим его за левый и правый края.
 			 * Размещаем экран мидлета в центре.
 			 */
-
 			onX = (displayWidth - onWidth) / 2;
 			onY = (displayHeight - onHeight) / 2;
 		} else {
@@ -531,7 +464,6 @@ public abstract class Canvas extends Displayable {
 			 * то скорее всего мы держим его за нижний край.
 			 * Сдвигаем экран мидлета к верхнему краю.
 			 */
-
 			onX = (displayWidth - onWidth) / 2;
 			onY = 0;
 		}
@@ -539,21 +471,16 @@ public abstract class Canvas extends Displayable {
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
 
-		useOffscreen = true; // onWidth != width || onHeight != height;
-
 		if (post) {
 			/*
 			 * проверяем, нужно ли создавать новую картинку для двойной буферизации,
 			 * или сгодится старая
 			 */
-
-			if (useOffscreen && (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height)) {
+			if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
 				offscreen = Image.createImage(width, height);
 			}
-
 			postEvent(CanvasEvent.getInstance(this, CanvasEvent.SIZE_CHANGED, width, height));
 		}
-
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
 		}
@@ -582,13 +509,8 @@ public abstract class Canvas extends Displayable {
 	public View getDisplayableView() {
 		if (view == null) {
 			view = new InnerView(getParentActivity());
-
 			holder = view.getHolder();
-			holder.addCallback(new SurfaceCallback());
-
-			view.setFocusableInTouchMode(true);
 		}
-
 		return view;
 	}
 

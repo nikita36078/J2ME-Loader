@@ -38,8 +38,8 @@ public class Mesh extends Node {
 			throw new NullPointerException();
 		}
 		this.vertices = vertices;
-		this.submeshes.addElement(submesh);
-		this.appearances.addElement(appearance);
+		this.submeshes.add(submesh);
+		this.appearances.add(appearance);
 	}
 
 	public Mesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances) {
@@ -51,9 +51,9 @@ public class Mesh extends Node {
 		}
 		this.vertices = vertices;
 		for (int i = 0; i < submeshes.length; ++i)
-			this.submeshes.addElement(submeshes[i]);
+			this.submeshes.add(submeshes[i]);
 		for (int i = 0; i < appearances.length; ++i)
-			this.appearances.addElement(appearances[i]);
+			this.appearances.add(appearances[i]);
 	}
 
 	Object3D duplicateImpl() {
@@ -85,7 +85,7 @@ public class Mesh extends Node {
 	}
 
 	public void setAppearance(int index, Appearance appearance) {
-		appearances.setElementAt(appearance, index);
+		appearances.set(index, appearance);
 	}
 
 	@Override

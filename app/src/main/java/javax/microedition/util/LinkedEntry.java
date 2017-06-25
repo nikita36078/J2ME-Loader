@@ -27,14 +27,6 @@ public class LinkedEntry<E>
 	
 	private E element;
 	
-//	private static int counter = 0;
-//	private int id;
-//	
-//	public LinkedEntry()
-//	{
-//		id = ++counter;
-//	}
-	
 	/**
 	 * Присвоить элементу значение.
 	 * @param element новое значение
@@ -138,41 +130,4 @@ public class LinkedEntry<E>
 		
 		updateLinks();		// доносим эти изменения до наших новых соседей
 	}
-	
-//	public String toString()
-//	{
-//		StringBuilder buf = new StringBuilder();
-//		
-//		buf.append("LinkedEntry(");
-//		
-//		if(prev != null)
-//		{
-//			buf.append(prev.id);
-//		}
-//		else
-//		{
-//			buf.append(-1);
-//		}
-//		
-//		buf.append(", ");
-//		
-//		buf.append(id);
-//		buf.append(", ");
-//		
-//		if(next != null)
-//		{
-//			buf.append(next.id);
-//		}
-//		else
-//		{
-//			buf.append(-1);
-//		}
-//		
-//		buf.append(", ");
-//		buf.append(element);
-//		
-//		buf.append(")");
-//		
-//		return buf.toString();
-//	}
 }

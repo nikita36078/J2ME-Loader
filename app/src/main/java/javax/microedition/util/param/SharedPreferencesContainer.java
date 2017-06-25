@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package javax.microedition.param;
-
-import javax.microedition.util.ContextHolder;
+package javax.microedition.util.param;
 
 import android.content.SharedPreferences;
 import android.content.Context;
@@ -30,12 +28,7 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor
 	{
 		prefs = context.getSharedPreferences(name, mode);
 	}
-	
-	public SharedPreferencesContainer(SharedPreferences prefs)
-	{
-		this.prefs = prefs;
-	}
-	
+
 	public DataEditor edit()
 	{
 		if(editor == null)

@@ -47,13 +47,6 @@ public class ArrayStack<E>
 			return null;
 		}
 		
-//		if(index + (DELTA << 1) <= data.length - 1)
-//		{
-//			Object[] temp = new Object[data.length - DELTA];
-//			System.arraycopy(data, 0, temp, 0, temp.length);
-//			data = temp;
-//		}
-		
 		return (E)data[index--];
 	}
 	
@@ -61,10 +54,5 @@ public class ArrayStack<E>
 	{
 		data = new Object[0];
 		index = -1;
-	}
-	
-	public boolean empty()
-	{
-		return index < 0;
 	}
 }

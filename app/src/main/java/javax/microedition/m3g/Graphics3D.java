@@ -13,13 +13,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
-import javax.microedition.util.ContextHolder;
-import javax.microedition.lcdui.MicroActivity;
-import javax.microedition.lcdui.Displayable;
-import android.view.View;
-import android.view.SurfaceView;
-import android.view.SurfaceHolder;
-import android.graphics.Bitmap;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 
@@ -135,27 +128,14 @@ public final class Graphics3D {
 		EGL_ASSERT(eglContext != EGL10.EGL_NO_CONTEXT);
 
 		// Create an offscreen surface
-		Displayable disp = ContextHolder.getCurrentActivity().getCurrent();
-		if (disp != null && disp instanceof Canvas) {
-			width = ((Canvas) disp).getWidth();
-			height = ((Canvas) disp).getHeight();
-			int[] s_surfaceAttribs = {
+		width = Canvas.width;
+		height = Canvas.height;
+		int[] s_surfaceAttribs = {
 				EGL10.EGL_WIDTH, width,
 				EGL10.EGL_HEIGHT, height,
 				EGL10.EGL_NONE };
-			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
-			/*SurfaceView sv = (SurfaceView) disp.getDisplayableView();
-			SurfaceHolder holder = sv.getHolder();
-			while (holder == null) {
-				try {
-					Thread.sleep(50);
-				} catch (Exception e) {
-				}
-				holder = sv.getHolder();
-			}
-			this.eglWindowSurface = egl.eglCreateWindowSurface(eglDisplay, eglConfig, holder, s_surfaceAttribs);*/
-			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
-		}
+		this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
+		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
 
 		this.gl = (GL10) eglContext.getGL();
 
@@ -179,6 +159,8 @@ public final class Graphics3D {
 		clipY1 = height;
 		gl.glEnable(GL10.GL_SCISSOR_TEST);
 		gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 
 	private void populateProperties() {
@@ -208,6 +190,14 @@ public final class Graphics3D {
 			throw new NullPointerException("Rendering target must not be null");
 		}
 
+		// Depth buffer
+		depthBufferEnabled = depthBuffer;
+		if (depthBuffer)
+			gl.glEnable(GL10.GL_DEPTH_TEST);
+		else
+			gl.glDisable(GL10.GL_DEPTH_TEST);
+		this.hints = hints;
+
 		// A target should not be already bound
 		if (targetBound) {
 			//throw new IllegalStateException("Graphics3D already has a rendering target");
@@ -215,10 +205,6 @@ public final class Graphics3D {
 		}
 		// Now bind the target
 		targetBound = true;
-
-		// Depth buffer
-		depthBufferEnabled = depthBuffer;
-		this.hints = hints;
 
 		// Create a new window surface if the target changes (i.e, for MIDP2, the target Canvas changed)
 		if (target != renderTarget) {
@@ -261,6 +247,7 @@ public final class Graphics3D {
 			int bt[]=new int[width*height];
 			IntBuffer ib=IntBuffer.wrap(b);
 			ib.position(0);
+
 			gl.glFinish();
 			gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
 
@@ -269,7 +256,7 @@ public final class Graphics3D {
 					int pix=b[i*width+j];
 					int pb=(pix>>>16)&0xff;
 					int pr=(pix<<16)&0x00ff0000;
-					int pix1=(pix&0xff00ff00) | pr | pb;
+					int pix1=(pix&0xff00ff00) | pr | pb | (((pix & 0xff000000) == 0) ? 0 : 0xff000000);
 					bt[(height-i-1)*width+j]=pix1;
 				}
 			}
@@ -444,7 +431,6 @@ public final class Graphics3D {
 		return camera;
 	}
 
-	// TODO: Optimization
 	public void render(Node node, Transform transform) {
 		/*if (!targetBound)
 			throw new IllegalStateException("Graphics3D does not have a rendering target");*/
@@ -838,8 +824,6 @@ public final class Graphics3D {
 			gl.glPopMatrix();
 	}
 
-
-
 	private void renderNode(Node node, Transform transform) {
 
 		if (node instanceof Mesh) {
@@ -889,6 +873,7 @@ public final class Graphics3D {
 		} else {
 			defaultCompositioningMode.setupGL(gl, depthBufferEnabled);
 		}
+
 	}
 
 	int getTextureUnitCount() {

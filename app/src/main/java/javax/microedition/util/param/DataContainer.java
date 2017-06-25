@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package javax.microedition.param;
+package javax.microedition.util.param;
 
-public interface DataEditor
+public interface DataContainer
 {
-	public DataEditor clear();
-	public DataEditor remove(String key);
+	public DataEditor edit();
 	
-	public DataEditor putBoolean(String key, boolean value);
-	public DataEditor putFloat(String key, float value);
-	public DataEditor putInt(String key, int value);
-	public DataEditor putLong(String key, long value);
-	public DataEditor putString(String key, String value);
+	public boolean contains(String key);
 	
-	public void apply();
-	public boolean commit();
+	public boolean getBoolean(String key, boolean defValue);
+	public float getFloat(String key, float defValue);
+	public int getInt(String key, int defValue);
+	public long getLong(String key, long defValue);
+	public String getString(String key, String defValue);
 	
-	public void close();
+	public boolean getBoolean(String key);
+	public float getFloat(String key);
+	public int getInt(String key);
+	public long getLong(String key);
+	public String getString(String key);
 }
