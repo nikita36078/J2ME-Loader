@@ -43,7 +43,7 @@ public class Texture2D extends Transformable {
 	}
 
 	public void setBlendColor(int blendColor) {
-		this.blendColor = blendColor;
+		this.blendColor = blendColor & 0xFFFFFF;
 	}
 
 	public int getBlendColor() {
@@ -57,11 +57,11 @@ public class Texture2D extends Transformable {
 		case FUNC_DECAL:
 		case FUNC_BLEND:
 		case FUNC_ADD:
+			this.blending = blending;
 			break;
 		default:
 			throw new IllegalArgumentException("Bad blending function");
 		}
-		this.blending = blending;
 	}
 
 	public int getBlending() {
@@ -144,15 +144,15 @@ public class Texture2D extends Transformable {
 		}
 
 		// Set filtering. 
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, getGLFilter()); // Linear Filtering
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, getGLFilter()); // Linear Filtering
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, getGLFilter()); // Linear Filtering
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, getGLFilter()); // Linear Filtering
 
 		// Set wrap mode
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, getGLWrap(this.wrappingS));
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, getGLWrap(this.wrappingT));
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, getGLWrap(this.wrappingS));
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, getGLWrap(this.wrappingT));
 
 		// Set blendmode
-		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, getGLBlend());
+		gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, getGLBlend());
 		gl.glTexEnvfv(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_COLOR, Color.intToFloatArray(blendColor), 0);
 
 		// set texture scale

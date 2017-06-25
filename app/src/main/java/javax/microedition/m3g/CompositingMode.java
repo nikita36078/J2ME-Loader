@@ -15,16 +15,12 @@ public class CompositingMode extends Object3D {
 	private boolean depthWriteEnabled = true; 
 	private boolean colorWriteEnabled = true; 
 	private boolean alphaWriteEnabled = true;
-	private int blending = REPLACE;
+	private int blending = ALPHA;
 	private float alphaThreshold = 0.0f; 
 	private float depthOffsetFactor = 0.0f;
 	private float depthOffsetUnits = 0.0f;
 
 	public CompositingMode() {
-		depthTestEnabled = true;
-		depthWriteEnabled = true;
-		colorWriteEnabled = true;
-		alphaWriteEnabled = true;
 	}
 	
 	Object3D duplicateImpl() {
@@ -73,7 +69,17 @@ public class CompositingMode extends Object3D {
 	}
 
 	public void setBlending(int blending) {
-		this.blending = blending;
+		switch (blending) {
+			case ALPHA:
+			case ALPHA_ADD:
+			case MODULATE:
+			case MODULATE_X2:
+			case REPLACE:
+				this.blending = blending;
+				break;
+			default:
+				throw new IllegalArgumentException("Blending is not specified constant");	
+		}
 	}
 
 	public int getBlending() {
@@ -110,13 +116,13 @@ public class CompositingMode extends Object3D {
 	}
 
 	void setupGL(GL10 gl, boolean depthBufferEnabled) {
-		gl.glDepthFunc(GL10.GL_LEQUAL);
-
+		gl.glDepthFunc(depthTestEnabled ? GL10.GL_LEQUAL : GL10.GL_ALWAYS);
+/*
 		// Setup depth testing		
 		if (depthBufferEnabled && depthTestEnabled)
 			gl.glEnable(GL10.GL_DEPTH_TEST);
 		else
-			gl.glDisable(GL10.GL_DEPTH_TEST);
+			gl.glDisable(GL10.GL_DEPTH_TEST);*/
 
 		// Setup depth and color writes
 		gl.glDepthMask(depthWriteEnabled);
@@ -132,17 +138,20 @@ public class CompositingMode extends Object3D {
 		// Setup blending
 		if (blending != REPLACE) {
 			switch (blending) {
-			case ALPHA_ADD:
-				gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
-				break;
 			case ALPHA:
 				gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 				break;
+			case ALPHA_ADD:
+				gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
+				break;
 			case MODULATE:
-				gl.glBlendFunc(GL10.GL_DST_COLOR, GL10.GL_ZERO);
+				gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_COLOR);
 				break;
 			case MODULATE_X2:
 				gl.glBlendFunc(GL10.GL_DST_COLOR, GL10.GL_SRC_COLOR);
+				break;
+			default:
+				gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ZERO);
 			}
 			gl.glEnable(GL10.GL_BLEND);
 		} else

@@ -179,6 +179,8 @@ public final class Graphics3D {
 		clipY1 = height;
 		gl.glEnable(GL10.GL_SCISSOR_TEST);
 		gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 
 	private void populateProperties() {
@@ -208,6 +210,14 @@ public final class Graphics3D {
 			throw new NullPointerException("Rendering target must not be null");
 		}
 
+		// Depth buffer
+		depthBufferEnabled = depthBuffer;
+		if (depthBuffer)
+			gl.glEnable(GL10.GL_DEPTH_TEST);
+		else
+			gl.glDisable(GL10.GL_DEPTH_TEST);
+		this.hints = hints;
+
 		// A target should not be already bound
 		if (targetBound) {
 			//throw new IllegalStateException("Graphics3D already has a rendering target");
@@ -215,10 +225,6 @@ public final class Graphics3D {
 		}
 		// Now bind the target
 		targetBound = true;
-
-		// Depth buffer
-		depthBufferEnabled = depthBuffer;
-		this.hints = hints;
 
 		// Create a new window surface if the target changes (i.e, for MIDP2, the target Canvas changed)
 		if (target != renderTarget) {
@@ -261,6 +267,7 @@ public final class Graphics3D {
 			int bt[]=new int[width*height];
 			IntBuffer ib=IntBuffer.wrap(b);
 			ib.position(0);
+
 			gl.glFinish();
 			gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
 
@@ -269,7 +276,7 @@ public final class Graphics3D {
 					int pix=b[i*width+j];
 					int pb=(pix>>>16)&0xff;
 					int pr=(pix<<16)&0x00ff0000;
-					int pix1=(pix&0xff00ff00) | pr | pb;
+					int pix1=(pix&0xff00ff00) | pr | pb | (((pix & 0xff000000) == 0) ? 0 : 0xff000000);
 					bt[(height-i-1)*width+j]=pix1;
 				}
 			}
@@ -444,7 +451,6 @@ public final class Graphics3D {
 		return camera;
 	}
 
-	// TODO: Optimization
 	public void render(Node node, Transform transform) {
 		/*if (!targetBound)
 			throw new IllegalStateException("Graphics3D does not have a rendering target");*/
@@ -838,8 +844,6 @@ public final class Graphics3D {
 			gl.glPopMatrix();
 	}
 
-
-
 	private void renderNode(Node node, Transform transform) {
 
 		if (node instanceof Mesh) {
@@ -889,6 +893,7 @@ public final class Graphics3D {
 		} else {
 			defaultCompositioningMode.setupGL(gl, depthBufferEnabled);
 		}
+
 	}
 
 	int getTextureUnitCount() {
