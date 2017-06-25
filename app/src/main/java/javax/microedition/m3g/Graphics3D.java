@@ -176,7 +176,7 @@ public final class Graphics3D {
 				maxViewportHeight)));
 		implementationProperties.put(PROPERTY_MAX_TEXTURE_DIMENSION, new Integer(maxTextureSize));
 		implementationProperties.put(PROPERTY_MAX_SPRITE_CROP_DIMENSION, new Integer(maxTextureSize));
-		implementationProperties.put(PROPERTY_MAX_TRANSFORM_PER_VERTEX, new Boolean(false));
+		implementationProperties.put(PROPERTY_MAX_TRANSFORM_PER_VERTEX, new Integer(4));
 		implementationProperties.put(PROPERTY_MAX_TEXTURE_UNITS, new Integer(2));
 	}
 
