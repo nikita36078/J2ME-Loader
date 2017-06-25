@@ -39,6 +39,7 @@ import filelog.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,12 +47,12 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.EventQueue;
+import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
-import javax.microedition.param.DataContainer;
-import javax.microedition.param.SharedPreferencesContainer;
+import javax.microedition.util.param.DataContainer;
+import javax.microedition.util.param.SharedPreferencesContainer;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;
@@ -443,10 +444,10 @@ public class ConfigActivity extends Activity implements
         vk.setLayoutEditKey(vkLayoutKeyCode);
 
         try {
-            DataInputStream dis = new DataInputStream(ContextHolder.openFileInput("VirtualKeyboardLayout"));
+            FileInputStream fis = new FileInputStream(new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout"));
+            DataInputStream dis = new DataInputStream(fis);
             vk.readLayout(dis);
-            dis.close();
-        } catch (FileNotFoundException fnfe) {
+            fis.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -513,6 +514,8 @@ public class ConfigActivity extends Activity implements
                         ConfigActivity.this);
                 params.edit().clear().commit();
                 params.close();
+                File layoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
+                layoutFile.delete();
                 loadParams(params);
                 break;
             case android.R.id.home:

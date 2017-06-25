@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package javax.microedition.lcdui;
+package javax.microedition.lcdui.event;
 
 import javax.microedition.util.LinkedEntry;
 import javax.microedition.util.LinkedList;
@@ -341,12 +341,4 @@ public class EventQueue implements Runnable
 			}
 		}
 	}
-
-//	public void uncaughtException(Thread thread, Throwable ex)
-//	{
-//		System.err.println("Uncaught exception while processing event " + (event != null ? event.getID() : "null"));
-//		ex.printStackTrace();
-//		
-//		System.exit(1);
-//	}
 }

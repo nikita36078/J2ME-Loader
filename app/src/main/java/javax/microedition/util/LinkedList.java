@@ -258,22 +258,4 @@ public class LinkedList<E>
 		
 		return element;
 	}
-	
-//	public void dump(PrintStream ps)
-//	{
-//		LinkedEntry<E> entry = head;
-//		ps.println("Beginning list dump...");
-//		
-//		while(true)
-//		{
-//			ps.println(entry);
-//			entry = entry.nextEntry();
-//			
-//			if(entry == tail)
-//			{
-//				ps.println(entry);
-//				break;
-//			}
-//		}
-//	}
 }

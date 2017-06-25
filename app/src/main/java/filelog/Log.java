@@ -13,7 +13,7 @@ public class Log {
     private static final long MAX_LEN = 300 * 1024;//50 Kb
 
     public static void d(String tag, String message) {
-        try {
+        /*try {
             boolean noClear;
             File file = new File(Environment.getExternalStorageDirectory(), "log_j2meloader.txt");
             if (file.length() > MAX_LEN) {
@@ -28,6 +28,6 @@ public class Log {
             fw.close();
         } catch (IOException e) {
             android.util.Log.e("L", "err in logging", e);
-        }
+        }*/
     }
 }

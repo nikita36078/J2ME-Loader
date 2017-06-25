@@ -13,13 +13,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
-import javax.microedition.util.ContextHolder;
-import javax.microedition.lcdui.MicroActivity;
-import javax.microedition.lcdui.Displayable;
-import android.view.View;
-import android.view.SurfaceView;
-import android.view.SurfaceHolder;
-import android.graphics.Bitmap;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 
@@ -135,27 +128,14 @@ public final class Graphics3D {
 		EGL_ASSERT(eglContext != EGL10.EGL_NO_CONTEXT);
 
 		// Create an offscreen surface
-		Displayable disp = ContextHolder.getCurrentActivity().getCurrent();
-		if (disp != null && disp instanceof Canvas) {
-			width = ((Canvas) disp).getWidth();
-			height = ((Canvas) disp).getHeight();
-			int[] s_surfaceAttribs = {
+		width = Canvas.width;
+		height = Canvas.height;
+		int[] s_surfaceAttribs = {
 				EGL10.EGL_WIDTH, width,
 				EGL10.EGL_HEIGHT, height,
 				EGL10.EGL_NONE };
-			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
-			/*SurfaceView sv = (SurfaceView) disp.getDisplayableView();
-			SurfaceHolder holder = sv.getHolder();
-			while (holder == null) {
-				try {
-					Thread.sleep(50);
-				} catch (Exception e) {
-				}
-				holder = sv.getHolder();
-			}
-			this.eglWindowSurface = egl.eglCreateWindowSurface(eglDisplay, eglConfig, holder, s_surfaceAttribs);*/
-			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
-		}
+		this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
+		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
 
 		this.gl = (GL10) eglContext.getGL();
 

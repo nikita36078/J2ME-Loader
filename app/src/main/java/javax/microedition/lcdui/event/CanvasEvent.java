@@ -16,7 +16,6 @@
 package javax.microedition.lcdui.event;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Event;
 import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
@@ -163,45 +162,8 @@ public class CanvasEvent extends Event {
                 case KEY_REPEATED:
                 case POINTER_DRAGGED:
                     return enqueued[eventType] < 2;
-                // return ((CanvasEvent)event).eventType != eventType;
             }
         }
-
         return true;
     }
-
-//	public String toString()
-//	{
-//		switch(eventType)
-//		{
-//			case KEY_PRESSED:
-//				return "keyPressed(" + keyCode + ")";
-//				
-//			case KEY_REPEATED:
-//				return "keyRepeated(" + keyCode + ")";
-//				
-//			case KEY_RELEASED:
-//				return "keyReleased(" + keyCode + ")";
-//				
-//			case POINTER_PRESSED:
-//				return "pointerPressed(" + pointer + ", " + x + ", " + y + ")";
-//				
-//			case POINTER_DRAGGED:
-//				return "pointerDragged(" + pointer + ", " + x + ", " + y + ")";
-//				
-//			case POINTER_RELEASED:
-//				return "pointerReleased(" + pointer + ", " + x + ", " + y + ")";
-//				
-//			case SHOW_NOTIFY:
-//				return "showNotify()";
-//				
-//			case HIDE_NOTIFY:
-//				return "hideNotify()";
-//				
-//			case SIZE_CHANGED:
-//				return "sizeChanged(" + width + ", " + height + ")";
-//		}
-//		
-//		return "CanvasEvent(" + eventType + ")";
-//	}
 }
