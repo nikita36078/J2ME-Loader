@@ -25,6 +25,7 @@ import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.util.ContextHolder;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -263,6 +264,11 @@ public abstract class Canvas extends Displayable {
 					return;
 				}
 				graphics.setCanvas(offscreen.getCanvas());
+				if (clearBuffer) {
+					graphics.setColor(Color.TRANSPARENT);
+					graphics.setClip(onX, onY, onWidth, onHeight);
+					graphics.fillRect(onX, onY, onWidth, onHeight);
+				}
 				try {
 					paint(graphics);
 				} catch (Throwable t) {
@@ -331,6 +337,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean scaleToFit;
 	private static boolean keepAspectRatio;
 	private static boolean filter;
+	private static boolean clearBuffer;
 	private static int backgroundColor;
 
 	private Image offscreen;
@@ -360,6 +367,10 @@ public abstract class Canvas extends Displayable {
 
 	public static void setFilterBitmap(boolean filter) {
 		Canvas.filter = filter;
+	}
+
+	public static void setClearBuffer(boolean clearBuffer) {
+		Canvas.clearBuffer = clearBuffer;
 	}
 
 	public void setOverlay(Overlay ov) {

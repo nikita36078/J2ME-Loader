@@ -40,7 +40,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -69,6 +68,7 @@ public class ConfigActivity extends Activity implements
     protected CheckBox cxKeepAspectRatio;
     protected CheckBox cxFilter;
     protected CheckBox cxImmediate;
+    protected CheckBox cxClearBuffer;
 
     protected EditText tfFontSizeSmall;
     protected EditText tfFontSizeMedium;
@@ -157,6 +157,7 @@ public class ConfigActivity extends Activity implements
         cxKeepAspectRatio = (CheckBox) findViewById(R.id.cxKeepAspectRatio);
         cxFilter = (CheckBox) findViewById(R.id.cxFilter);
         cxImmediate = (CheckBox) findViewById(R.id.cxImmediate);
+        cxClearBuffer = (CheckBox) findViewById(R.id.cxClearBuffer);
 
         tfFontSizeSmall = (EditText) findViewById(R.id.tfFontSizeSmall);
         tfFontSizeMedium = (EditText) findViewById(R.id.tfFontSizeMedium);
@@ -302,6 +303,7 @@ public class ConfigActivity extends Activity implements
                 true));
         cxFilter.setChecked(params.getBoolean("ScreenFilter", true));
         cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
+        cxClearBuffer.setChecked(params.getBoolean("ClearBuffer", false));
 
         tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall",
                 18)));
@@ -351,6 +353,7 @@ public class ConfigActivity extends Activity implements
                     cxKeepAspectRatio.isChecked());
             editor.putBoolean("ScreenFilter", cxFilter.isChecked());
             editor.putBoolean("ImmediateMode", cxImmediate.isChecked());
+            editor.putBoolean("ClearBuffer", cxClearBuffer.isChecked());
 
             editor.putInt("FontSizeSmall",
                     Integer.parseInt(tfFontSizeSmall.getText().toString()));
@@ -404,6 +407,7 @@ public class ConfigActivity extends Activity implements
             boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
             boolean screenFilter = cxFilter.isChecked();
             boolean immediateMode = cxImmediate.isChecked();
+            boolean clearBuffer = cxClearBuffer.isChecked();
 
             Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
             Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
@@ -415,6 +419,7 @@ public class ConfigActivity extends Activity implements
             Canvas.setFilterBitmap(screenFilter);
             EventQueue.setImmediate(immediateMode);
             Canvas.setBackgroundColor(screenBackgroundColor);
+            Canvas.setClearBuffer(clearBuffer);
 
         } catch (Throwable t) {
             t.printStackTrace();

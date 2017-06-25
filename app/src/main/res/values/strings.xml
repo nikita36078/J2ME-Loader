@@ -64,5 +64,6 @@
     <string name="error">Error</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
+    <string name="PREF_CLEAR_BUFFER">Draw buffer clearing</string>
 
 </resources>

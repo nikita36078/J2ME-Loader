@@ -109,6 +109,13 @@
             android:checked="false"
             android:text="@string/PREF_IMMEDIATE" />
 
+        <CheckBox
+            android:id="@+id/cxClearBuffer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/PREF_CLEAR_BUFFER" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
