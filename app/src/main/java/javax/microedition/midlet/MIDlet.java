@@ -19,7 +19,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 
 import java.util.LinkedHashMap;
 
@@ -159,17 +158,6 @@ public class MIDlet {
 	public void startActivity(Class cls) {
 		Intent i = new Intent(context, cls);
 		context.startActivity(i);
-	}
-
-	public void startActivity(Class cls, Bundle bundle) {
-		Intent intent = new Intent(context, cls);
-		intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-		if (bundle != null) {
-			intent.putExtras(bundle);
-		}
-
-		context.startActivity(intent);
 	}
 
 	public boolean platformRequest(String url)
