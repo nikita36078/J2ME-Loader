@@ -34,9 +34,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	protected DataSource source;
 	protected MediaPlayer player;
 	protected int state;
-	protected int loopCount;
-
-	protected final Object lock = new Object();
+	protected int loopCount = 1;
 
 	protected ArrayList<PlayerListener> listeners;
 	protected HashMap<String, Control> controls;
@@ -408,7 +406,10 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
 
-		player.seekTo((int) (now / 1000L));
+		int time = (int) now / 1000;
+		if (time != player.getCurrentPosition()) {
+			player.seekTo(time);
+		}
 		return getMediaTime();
 	}
 
