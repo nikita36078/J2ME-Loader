@@ -21,6 +21,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public final class Graphics3D {
+	public static final int	ANTIALIAS = 2;
+	public static final int	DITHER = 4;
+	public static final int	OVERWRITE = 16;
+	public static final int	TRUE_COLOR = 8;
 
 	private static final String PROPERTY_SUPPORT_ANTIALIASING = "supportAntialiasing";
 	private static final String PROPERTY_SUPPORT_TRUECOLOR = "supportTrueColor";
