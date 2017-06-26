@@ -417,7 +417,6 @@ public class Loader {
 					dis.reset();
 					loadNode(mesh);
 					objs.addElement(mesh);
-					objs.addElement(new Group()); // dummy
 				} else if (objectType == 18) {
 					loadNode(new Group());
 					Image2D image = (Image2D) getObject(readInt());

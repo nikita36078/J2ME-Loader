@@ -5,8 +5,8 @@ import java.util.Enumeration;
 
 public class Mesh extends Node {
 	private VertexBuffer vertices;
-	private Vector submeshes = new Vector();
-	private Vector appearances = new Vector();
+	private IndexBuffer[] submeshes;
+	private Appearance[] appearances;
 
 	private Mesh() {
 	}
@@ -20,13 +20,11 @@ public class Mesh extends Node {
 			minValidity = Math.min(validity, minValidity);
 		}
 
-		if (!appearances.isEmpty()) {
-			for (int i = 0; i < submeshes.size() && minValidity > 0; i++) {
-				Appearance app = (Appearance) appearances.elementAt(i);
-				if (app != null) {
-					validity = app.applyAnimation(time);
-					minValidity = Math.min(validity, minValidity);
-				}
+		for (int i = 0; i < submeshes.length && minValidity > 0; i++) {
+			Appearance app = appearances[i];
+			if (app != null) {
+				validity = app.applyAnimation(time);
+				minValidity = Math.min(validity, minValidity);
 			}
 		}
 
@@ -38,8 +36,10 @@ public class Mesh extends Node {
 			throw new NullPointerException();
 		}
 		this.vertices = vertices;
-		this.submeshes.add(submesh);
-		this.appearances.add(appearance);
+		this.submeshes = new IndexBuffer[1];
+		this.submeshes[0] = submesh;
+		this.appearances = new Appearance[1];
+		this.appearances[0] = appearance;
 	}
 
 	public Mesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances) {
@@ -50,10 +50,12 @@ public class Mesh extends Node {
 			throw new IllegalArgumentException();
 		}
 		this.vertices = vertices;
+		this.submeshes = new IndexBuffer[submeshes.length];
+		this.appearances = new Appearance[appearances.length];
 		for (int i = 0; i < submeshes.length; ++i)
-			this.submeshes.add(submeshes[i]);
+			this.submeshes[i] = submeshes[i];
 		for (int i = 0; i < appearances.length; ++i)
-			this.appearances.add(appearances[i]);
+			this.appearances[i] = appearances[i];
 	}
 
 	Object3D duplicateImpl() {
@@ -61,23 +63,22 @@ public class Mesh extends Node {
 		duplicate((Node) copy);
 		copy.vertices = vertices;
 		copy.submeshes = submeshes;
-		copy.appearances = new Vector();
-		Enumeration e = appearances.elements();
-		while (e.hasMoreElements())
-			copy.appearances.add(e.nextElement());
+		copy.appearances = new Appearance[appearances.length];
+		for (int i = 0; i < appearances.length; ++i)
+			copy.appearances[i] = appearances[i];
 		return copy;
 	}
 
 	public Appearance getAppearance(int index) {
-		return (Appearance) appearances.elementAt(index);
+		return appearances[index];
 	}
 
 	public IndexBuffer getIndexBuffer(int index) {
-		return (IndexBuffer) submeshes.elementAt(index);
+		return submeshes[index];
 	}
 
 	public int getSubmeshCount() {
-		return submeshes.size();
+		return submeshes.length;
 	}
 
 	public VertexBuffer getVertexBuffer() {
@@ -85,7 +86,7 @@ public class Mesh extends Node {
 	}
 
 	public void setAppearance(int index, Appearance appearance) {
-		appearances.set(index, appearance);
+		appearances[index] = appearance;
 	}
 
 	@Override
@@ -98,15 +99,15 @@ public class Mesh extends Node {
 			++parentCount;
 		}
 
-		for (int i = 0; i < submeshes.size(); ++i) {
+		for (int i = 0; i < submeshes.length; ++i) {
 			if (references != null)
-				references[parentCount] = (Object3D) submeshes.elementAt(i);
+				references[parentCount] = (Object3D) submeshes[i];
 			++parentCount;
 		}
 
-		for (int i = 0; i < appearances.size(); ++i) {
+		for (int i = 0; i < appearances.length; ++i) {
 			if (references != null)
-				references[parentCount] = (Object3D) appearances.elementAt(i);
+				references[parentCount] = (Object3D) appearances[i];
 			++parentCount;
 		}
 

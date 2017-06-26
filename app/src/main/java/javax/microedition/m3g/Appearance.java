@@ -67,13 +67,13 @@ public class Appearance extends Object3D {
 	}
 
 	public void setTexture(int index, Texture2D texture) {
-		if (index < 0 || index > numTextureUnits - 1)
+		if (index < 0 || index >= numTextureUnits)
 			throw new IndexOutOfBoundsException("index must be in [0," + numTextureUnits + "]");
 		textures[index] = texture;
 	}
 
 	public Texture2D getTexture(int index) {
-		if (index < 0 || index > numTextureUnits - 1)
+		if (index < 0 || index >= numTextureUnits)
 			throw new IndexOutOfBoundsException("index must be in [0," + numTextureUnits + "]");
 		return textures[index];
 	}
