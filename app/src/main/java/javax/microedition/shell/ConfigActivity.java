@@ -38,6 +38,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -96,6 +97,7 @@ public class ConfigActivity extends Activity implements
 	protected String locale;
 
 	private MIDlet midlet;
+	private File keylayoutFile;
 	public static String pathToMidletDir;
 	public static String appName;
 	public static final String MIDLET_RES_DIR = "/res/";
@@ -129,6 +131,7 @@ public class ConfigActivity extends Activity implements
 		MIDlet.setMidletContext(this);
 		pathToMidletDir = getIntent().getDataString();
 		appName = getIntent().getStringExtra("name");
+		keylayoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
 
 		DataContainer params = new SharedPreferencesContainer(
 				appName, Context.MODE_PRIVATE, this);
@@ -447,13 +450,15 @@ public class ConfigActivity extends Activity implements
 		vk.setHideDelay(vkDelay);
 		vk.setLayoutEditKey(vkLayoutKeyCode);
 
-		try {
-			FileInputStream fis = new FileInputStream(new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout"));
-			DataInputStream dis = new DataInputStream(fis);
-			vk.readLayout(dis);
-			fis.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		if (keylayoutFile.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(keylayoutFile);
+				DataInputStream dis = new DataInputStream(fis);
+				vk.readLayout(dis);
+				fis.close();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
 
 		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);
@@ -467,11 +472,10 @@ public class ConfigActivity extends Activity implements
 		VirtualKeyboard.LayoutListener listener = new VirtualKeyboard.LayoutListener() {
 			public void layoutChanged(VirtualKeyboard vk) {
 				try {
-					DataOutputStream dos = new DataOutputStream(ContextHolder.openFileOutput(
-							"VirtualKeyboardLayout",
-							Context.MODE_PRIVATE));
+					FileOutputStream fos = new FileOutputStream(keylayoutFile);
+					DataOutputStream dos = new DataOutputStream(fos);
 					vk.writeLayout(dos);
-					dos.close();
+					fos.close();
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
@@ -518,8 +522,7 @@ public class ConfigActivity extends Activity implements
 						ConfigActivity.this);
 				params.edit().clear().commit();
 				params.close();
-				File layoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
-				layoutFile.delete();
+				keylayoutFile.delete();
 				loadParams(params);
 				break;
 			case android.R.id.home:
