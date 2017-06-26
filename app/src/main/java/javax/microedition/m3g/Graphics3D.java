@@ -132,15 +132,9 @@ public final class Graphics3D {
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, null);
 		EGL_ASSERT(eglContext != EGL10.EGL_NO_CONTEXT);
 
-		// Create an offscreen surface
-		width = Canvas.width;
-		height = Canvas.height;
-		int[] s_surfaceAttribs = {
-				EGL10.EGL_WIDTH, width,
-				EGL10.EGL_HEIGHT, height,
-				EGL10.EGL_NONE };
-		this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
-		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
+		EGLSurface tmpSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, null);
+		EGL_ASSERT(tmpSurface != EGL10.EGL_NO_SURFACE);
+		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, tmpSurface, tmpSurface, eglContext));
 
 		this.gl = (GL10) eglContext.getGL();
 
@@ -157,15 +151,8 @@ public final class Graphics3D {
 		gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, params, 0);
 		maxTextureSize = params[0];
 
-		// Set default clipping rectangle
-		clipX0 = 0;
-		clipY0 = 0;
-		clipX1 = width;
-		clipY1 = height;
-		gl.glEnable(GL10.GL_SCISSOR_TEST);
-		gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
+		EGL_ASSERT(egl.eglDestroySurface(eglDisplay, tmpSurface));
 	}
 
 	private void populateProperties() {
@@ -185,13 +172,63 @@ public final class Graphics3D {
 		implementationProperties.put(PROPERTY_MAX_TEXTURE_UNITS, new Integer(maxTextureUnits));
 	}
 
+	protected void finalize() {
+		// Destroy EGL
+		egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+		if (eglWindowSurface != null)
+			egl.eglDestroySurface(eglDisplay, eglWindowSurface);
+		egl.eglDestroyContext(eglDisplay, eglContext);
+		egl.eglTerminate(eglDisplay);
+	}
+
 	public void bindTarget(Object target) {
 		bindTarget(target, true, 0);
 	}
 
 	public void bindTarget(Object target, boolean depthBuffer, int hints) {
-		if (target == null) {
+		if (target == null)
 			throw new NullPointerException("Rendering target must not be null");
+
+		targetBound = true;
+
+		// Create a new window surface if the target changes (i.e, for MIDP2, the target Canvas changed)
+		if (target != renderTarget) {
+			renderTarget = target;
+
+			if (this.eglWindowSurface != null) {
+				EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
+				egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
+			}
+
+			if (target instanceof Graphics) {
+				// Create an offscreen surface
+				Graphics graphics = (Graphics) target;
+				width = graphics.getCanvas().getWidth();
+				height = graphics.getCanvas().getHeight();
+			} else if (target instanceof Image2D) {
+				Image2D image = (Image2D) target;
+				width = image.getWidth();
+				height = image.getHeight();
+			}
+
+			int[] s_surfaceAttribs = {
+				EGL10.EGL_WIDTH, width,
+				EGL10.EGL_HEIGHT, height,
+				EGL10.EGL_NONE };
+			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
+			EGL_ASSERT(this.eglWindowSurface != EGL10.EGL_NO_SURFACE);
+			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
+			this.gl = (GL10) eglContext.getGL();
+
+			// Set default clipping rectangle
+			clipX0 = 0;
+			clipY0 = 0;
+			clipX1 = width;
+			clipY1 = height;
+			gl.glEnable(GL10.GL_SCISSOR_TEST);
+			gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
+			gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		}
 
 		// Depth buffer
@@ -210,36 +247,6 @@ public final class Graphics3D {
 
 		// Overwriting
 		overwrite = ((hints & OVERWRITE) != 0);
-
-		// A target should not be already bound
-		if (targetBound) {
-			//throw new IllegalStateException("Graphics3D already has a rendering target");
-			return;
-		}
-		// Now bind the target
-		targetBound = true;
-
-		// Create a new window surface if the target changes (i.e, for MIDP2, the target Canvas changed)
-		if (target != renderTarget) {
-			renderTarget = target;
-			/*Displayable disp = ContextHolder.getCurrentActivity().getCurrent();
-			if (disp != null && disp instanceof javax.microedition.lcdui.Canvas) {
-				SurfaceView sv = (SurfaceView) disp.getDisplayableView();
-				SurfaceHolder holder = sv.getHolder();
-				while (holder == null) {
-					try {
-						Thread.sleep(50);
-					} catch (Exception e) {
-					}
-					holder = sv.getHolder();
-				}
-				this.eglWindowSurface = egl.eglCreateWindowSurface(eglDisplay, eglConfig, target, null);
-				//this.eglWindowSurface = egl.eglCreatePixmapSurface(eglDisplay, eglConfig, Bitmap.createBitmap(480, 800, Bitmap.Config.ARGB_8888), null);
-				EGL_ASSERT(eglWindowSurface != EGL10.EGL_NO_SURFACE);
-			}*/
-		}
-
-		this.gl = (GL10) eglContext.getGL();
 		setViewport(0, 0, width, height);
 	}
 	
@@ -255,29 +262,43 @@ public final class Graphics3D {
 	}
 
 	public void releaseTarget() {
-		if (targetBound) {
-			int b[]=new int[width*height];
-			int bt[]=new int[width*height];
-			IntBuffer ib=IntBuffer.wrap(b);
-			ib.position(0);
+		int b[]=new int[width*height];
+		int bt[]=new int[width*height];
+		IntBuffer ib=IntBuffer.wrap(b);
+		ib.position(0);
 
-			gl.glFinish();
-			gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
+		gl.glFinish();
+		gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
 
-			for(int i=0; i<height; i++) {
-				for(int j=0; j<width; j++) {
-					int pix=b[i*width+j];
-					int pb=(pix>>>16)&0xff;
-					int pr=(pix<<16)&0x00ff0000;
-					int pix1=(pix&0xff00ff00) | pr | pb | (overwrite ? 0xff000000 : (((pix & 0xff000000) == 0) ? 0 : 0xff000000));
-					bt[(height-i-1)*width+j]=pix1;
-				}
+		for(int i=0; i<height; i++) {
+			for(int j=0; j<width; j++) {
+				int pix=b[i*width+j];
+				int pb=(pix>>>16)&0xff;
+				int pr=(pix<<16)&0x00ff0000;
+				int pix1=(pix&0xff00ff00) | pr | pb | (overwrite ? 0xff000000 : (((pix & 0xff000000) == 0) ? 0 : 0xff000000));
+				bt[(height-i-1)*width+j]=pix1;
 			}
-			((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
-			targetBound = false;
-			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
 		}
+
+		if (renderTarget instanceof Graphics)
+			((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
+		else if (renderTarget instanceof Image2D) {
+			ByteBuffer bb = ((Image2D)renderTarget).getPixels();
+			if (bb == null)
+				bb = ByteBuffer.allocateDirect(width * height * 4);
+			bb.position(0);
+			for (int i = 0; i < height; i++)
+				for (int j = 0; j < width; j++) {
+					int pix = bt[i * width + j];
+					bb.put((byte)(pix >>> 24));
+					bb.put((byte)((pix >>> 16) & 0xFF));
+					bb.put((byte)((pix >>> 8) & 0xFF));
+					bb.put((byte)(pix & 0xFF));
+				}
+		}
+
+		targetBound = false;
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 	}
 
 	public void clear(Background background) {
