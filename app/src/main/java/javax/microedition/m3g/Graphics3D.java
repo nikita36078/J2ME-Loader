@@ -159,8 +159,8 @@ public final class Graphics3D {
 		clipY1 = height;
 		gl.glEnable(GL10.GL_SCISSOR_TEST);
 		gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 	}
 
 	private void populateProperties() {
@@ -177,7 +177,7 @@ public final class Graphics3D {
 		implementationProperties.put(PROPERTY_MAX_TEXTURE_DIMENSION, new Integer(maxTextureSize));
 		implementationProperties.put(PROPERTY_MAX_SPRITE_CROP_DIMENSION, new Integer(maxTextureSize));
 		implementationProperties.put(PROPERTY_MAX_TRANSFORM_PER_VERTEX, new Integer(4));
-		implementationProperties.put(PROPERTY_MAX_TEXTURE_UNITS, new Integer(2));
+		implementationProperties.put(PROPERTY_MAX_TEXTURE_UNITS, new Integer(maxTextureUnits));
 	}
 
 	public void bindTarget(Object target) {
@@ -262,7 +262,6 @@ public final class Graphics3D {
 			}
 			((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
 			targetBound = false;
-			gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		}
