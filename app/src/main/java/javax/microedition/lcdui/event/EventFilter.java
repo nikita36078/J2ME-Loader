@@ -16,7 +16,6 @@
 
 package javax.microedition.lcdui.event;
 
-public interface EventFilter
-{
+public interface EventFilter {
 	public boolean accept(Event event);
 }

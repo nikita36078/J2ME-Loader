@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 
 package javax.bluetooth;
 
@@ -17,10 +16,9 @@ import javax.microedition.io.Connection;
  * Bluetooth manager provides the lowest level of interface possible
  * into the Bluetooth stack.  It provides access to and control of the
  * local Bluetooth device.
- * <P>
+ * <p>
  * This class produces a singleton object.
  *
- * @version 1.0 February 11, 2002
  * @version 1.1 September 2, 2005
  */
 public class LocalDevice {
@@ -41,10 +39,9 @@ public class LocalDevice {
 	 * device. Multiple calls to this method will return the same
 	 * object. This method will never return <code>null</code>.
 	 *
-	 * @return  an object that represents the local Bluetooth device
-	 *
-	 * @exception BluetoothStateException if the Bluetooth system could not be
-	 * initialized
+	 * @return an object that represents the local Bluetooth device
+	 * @throws BluetoothStateException if the Bluetooth system could not be
+	 *                                 initialized
 	 */
 	public static LocalDevice getLocalDevice() throws BluetoothStateException {
 		throw new BluetoothStateException("This is not JSR-82 implementation");
@@ -56,7 +53,6 @@ public class LocalDevice {
 	 * never return <code>null</code>.
 	 *
 	 * @return the discovery agent for the local device
-	 *
 	 */
 	public DiscoveryAgent getDiscoveryAgent() {
 		return null;
@@ -71,7 +67,7 @@ public class LocalDevice {
 	 * name could not be retrieved
 	 */
 	public String getFriendlyName() {
-	    return null;
+		return null;
 	}
 
 	/**
@@ -85,10 +81,9 @@ public class LocalDevice {
 	 * class of the local device, or <code>null</code> if the service
 	 * classes, major device class or minor device class could not be
 	 * determined
-	 *
 	 */
 	public DeviceClass getDeviceClass() {
-	    return null;
+		return null;
 	}
 
 	/**
@@ -108,37 +103,32 @@ public class LocalDevice {
 	 * <code>DiscoveryAgent.NOT_DISCOVERABLE</code> flag.  The BCC decides if the
 	 * request will be granted.  In addition to the BCC, the Bluetooth system
 	 * could effect the discoverability of a device.
-	 * <P>
+	 * <p>
 	 * According to the Bluetooth Specification, a device should only be
 	 * limited discoverable (<code>DiscoveryAgent.LIAC</code>) for 1 minute.
 	 * This is handled by the implementation of the API.  After the minute is
 	 * up, the device will revert back to the previous discoverable mode.
 	 *
-	 * @see DiscoveryAgent#GIAC
-	 * @see DiscoveryAgent#LIAC
-	 * @see DiscoveryAgent#NOT_DISCOVERABLE
-	 *
-	 * @param mode  the mode the device should be in; valid modes are
-	 * <code>DiscoveryAgent.GIAC</code>, <code>DiscoveryAgent.LIAC</code>,
-	 * <code>DiscoveryAgent.NOT_DISCOVERABLE</code> and any value in the
-	 * range 0x9E8B00 to 0x9E8B3F
-	 *
+	 * @param mode the mode the device should be in; valid modes are
+	 *             <code>DiscoveryAgent.GIAC</code>, <code>DiscoveryAgent.LIAC</code>,
+	 *             <code>DiscoveryAgent.NOT_DISCOVERABLE</code> and any value in the
+	 *             range 0x9E8B00 to 0x9E8B3F
 	 * @return <code>true</code> if the request succeeded, otherwise
 	 * <code>false</code> if the request failed because the BCC denied
 	 * the request; <code>false</code> if the Bluetooth system does not
 	 * support the access mode specified in <code>mode</code>
-	 *
-	 * @exception IllegalArgumentException if the <code>mode</code> is
-	 * not <code>DiscoveryAgent.GIAC</code>, <code>DiscoveryAgent.LIAC</code>,
-	 * <code>DiscoveryAgent.NOT_DISCOVERABLE</code>, or in the range
-	 * 0x9E8B00 to 0x9E8B3F
-	 *
-	 * @exception BluetoothStateException if the Bluetooth system is in
-	 * a state that does not allow the discoverable mode to be changed
-	 *
+	 * @throws IllegalArgumentException if the <code>mode</code> is
+	 *                                  not <code>DiscoveryAgent.GIAC</code>, <code>DiscoveryAgent.LIAC</code>,
+	 *                                  <code>DiscoveryAgent.NOT_DISCOVERABLE</code>, or in the range
+	 *                                  0x9E8B00 to 0x9E8B3F
+	 * @throws BluetoothStateException  if the Bluetooth system is in
+	 *                                  a state that does not allow the discoverable mode to be changed
+	 * @see DiscoveryAgent#GIAC
+	 * @see DiscoveryAgent#LIAC
+	 * @see DiscoveryAgent#NOT_DISCOVERABLE
 	 */
 	public boolean setDiscoverable(int mode) throws BluetoothStateException {
-		if ((mode != DiscoveryAgent.GIAC) && (mode != DiscoveryAgent.LIAC) && (mode != DiscoveryAgent.NOT_DISCOVERABLE) 
+		if ((mode != DiscoveryAgent.GIAC) && (mode != DiscoveryAgent.LIAC) && (mode != DiscoveryAgent.NOT_DISCOVERABLE)
 				&& (mode < 0x9E8B00 || mode > 0x9E8B3F)) {
 			throw new IllegalArgumentException("Invalid discoverable mode");
 		}
@@ -147,10 +137,10 @@ public class LocalDevice {
 
 	/**
 	 * Retrieves the power state of the local Bluetooth device.
-	 * 
-	 * @since 1.1
+	 *
 	 * @return <code>true</code> if the local Bluetooth device is powered on,
-	 *         <code>false</code> if the local Bluetooth device is off.
+	 * <code>false</code> if the local Bluetooth device is off.
+	 * @since 1.1
 	 */
 	public static boolean isPowerOn() {
 		return false;
@@ -163,11 +153,10 @@ public class LocalDevice {
 	 * <code>DiscoveryAgent.NOT_DISCOVERABLE</code>, or a value in the
 	 * range 0x9E8B00 to 0x9E8B3F.
 	 *
+	 * @return the discoverable mode the device is presently in
 	 * @see DiscoveryAgent#GIAC
 	 * @see DiscoveryAgent#LIAC
 	 * @see DiscoveryAgent#NOT_DISCOVERABLE
-	 *
-	 * @return the discoverable mode the device is presently in
 	 */
 	public int getDiscoverable() {
 		return DiscoveryAgent.NOT_DISCOVERABLE;
@@ -209,16 +198,15 @@ public class LocalDevice {
 	 * device if it is already connected to another device.  Valid values are
 	 * either "true" or "false".</TD></TR>
 	 * </TABLE>
-     * <p>
+	 * <p>
 	 * BlueCove specific properties.
 	 * <TABLE>
 	 * <TR><TH>Property Name</TH><TH>Description</TH></TR>
 	 * <TR><TD>bluecove</TD><TD>The version of BlueCove implementation</TD></TR>
 	 * <TR><TD>bluecove.stack</TD><TD>The Bluetooth Stack: "winsock", "widcomm" or "bluesoleil"</TD></TR>
 	 * </TABLE>
-     *
-	 * @param property the property to retrieve as defined in this class.
 	 *
+	 * @param property the property to retrieve as defined in this class.
 	 * @return the value of the property specified; <code>null</code> if
 	 * the <code>property</code> is not defined
 	 */
@@ -234,7 +222,7 @@ public class LocalDevice {
 	 * @return the Bluetooth address of the local device
 	 */
 	public String getBluetoothAddress() {
-	    return null;
+		return null;
 	}
 
 	/**
@@ -244,7 +232,7 @@ public class LocalDevice {
 	 * returned by <code>getRecord()</code> was created by the same
 	 * call to <code>Connector.open()</code> that created the
 	 * <code>notifier</code>.
-	 *
+	 * <p>
 	 * <p> If a connect-anytime server application does not already
 	 * have a service record in the SDDB, either because a service
 	 * record for this service was never added to the SDDB or because
@@ -263,31 +251,27 @@ public class LocalDevice {
 	 * server), and that service record is still in the SDDB, then
 	 * those changes must be reflected in the
 	 * <code>ServiceRecord</code> returned by <code>getRecord()</code>.
-	 *
+	 * <p>
 	 * <p> Two invocations of this method with the same
 	 * <code>notifier</code> argument return objects that describe the
 	 * same service attributes, but the return values may be different
 	 * object references.
 	 *
 	 * @param notifier a connection that waits for clients to connect
-	 * to a Bluetooth service
-	 *
+	 *                 to a Bluetooth service
 	 * @return the <code>ServiceRecord</code> associated with
 	 * <code>notifier</code>
-	 *
-	 * @exception IllegalArgumentException if <code>notifier</code> is
-	 * closed, or if <code>notifier</code> does not implement one of
-	 * the following interfaces:
-	 * <code>javax.microedition.io.StreamConnectionNotifier</code>,
-	 * <code>javax.bluetooth.L2CapConnectionNotifier</code>, or
-	 * <code>javax.obex.SessionNotifier</code>.  This exception is
-	 * also thrown if <code>notifier</code> is not a Bluetooth
-	 * notifier, e.g., a <code>StreamConnectionNotifier</code> created
-	 * with a scheme other than <code>btspp</code>.
-	 *
-	 * @exception NullPointerException if <code>notifier</code> is
-	 * <code>null</code>
-	 *
+	 * @throws IllegalArgumentException if <code>notifier</code> is
+	 *                                  closed, or if <code>notifier</code> does not implement one of
+	 *                                  the following interfaces:
+	 *                                  <code>javax.microedition.io.StreamConnectionNotifier</code>,
+	 *                                  <code>javax.bluetooth.L2CapConnectionNotifier</code>, or
+	 *                                  <code>javax.obex.SessionNotifier</code>.  This exception is
+	 *                                  also thrown if <code>notifier</code> is not a Bluetooth
+	 *                                  notifier, e.g., a <code>StreamConnectionNotifier</code> created
+	 *                                  with a scheme other than <code>btspp</code>.
+	 * @throws NullPointerException     if <code>notifier</code> is
+	 *                                  <code>null</code>
 	 */
 	public ServiceRecord getRecord(Connection notifier) {
 		if (notifier == null) {
@@ -304,33 +288,33 @@ public class LocalDevice {
 	 * <code>getRecord()</code> method. The service record in the SDDB
 	 * is modified to have the same service attributes with the same
 	 * contents as <code>srvRecord</code>.
-	 *
 	 * <p>
-	 *
+	 * <p>
+	 * <p>
 	 * If <code>srvRecord</code> was obtained from the SDDB of a
 	 * remote device using the service search methods, updating is not
 	 * possible and this method will throw an
 	 * <code>IllegalArgumentException</code>.
-	 *
-	 * <P>
-	 *
+	 * <p>
+	 * <p>
+	 * <p>
 	 * If the <code>srvRecord</code> parameter is a <code>btspp</code>
 	 * service record, then before the SDDB is changed the following
 	 * checks are performed. If any of these checks fail, then an
 	 * <code>IllegalArgumentException</code> is thrown.
-	 *
+	 * <p>
 	 * <UL>
 	 * <LI>ServiceClassIDList and ProtocolDescriptorList, the mandatory
 	 * service attributes for a <code>btspp</code> service record, must
 	 * be present in <code>srvRecord</code>.
 	 * <LI>L2CAP and RFCOMM must be in the ProtocolDescriptorList.
 	 * <LI><code>srvRecord</code> must not have changed the RFCOMM server
-	 *  channel number from the channel number that is currently in the
-	 *  SDDB version of this service record.
+	 * channel number from the channel number that is currently in the
+	 * SDDB version of this service record.
 	 * </UL>
-	 *
-	 * <P>
-	 *
+	 * <p>
+	 * <p>
+	 * <p>
 	 * If the <code>srvRecord</code> parameter is a <code>btl2cap</code>
 	 * service record, then before the SDDB is changed the following
 	 * checks are performed. If any of these checks fail, then an
@@ -344,9 +328,9 @@ public class LocalDevice {
 	 * from the PSM value that is currently in the SDDB version of this
 	 * service record.
 	 * </UL>
-	 *
-	 * <P>
-	 *
+	 * <p>
+	 * <p>
+	 * <p>
 	 * If the <code>srvRecord</code> parameter is a <code>btgoep</code>
 	 * service record, then before the SDDB is changed the following
 	 * checks are performed. If any of these checks fail, then an
@@ -358,39 +342,35 @@ public class LocalDevice {
 	 * <LI>L2CAP, RFCOMM and OBEX must all be in the
 	 * ProtocolDescriptorList.
 	 * <LI><code>srvRecord</code> must not have changed the RFCOMM server
-	 *  channel number from the channel number that is currently in the
-	 *  SDDB version of this service record.
+	 * channel number from the channel number that is currently in the
+	 * SDDB version of this service record.
 	 * </UL>
-	 *
 	 * <p>
-	 *
+	 * <p>
+	 * <p>
 	 * <code>updateRecord()</code> is not required to ensure that
 	 * <code>srvRecord</code> is a completely valid service record. It
 	 * is the responsibility of the application to ensure that
 	 * <code>srvRecord</code> follows all of the applicable syntactic
 	 * and semantic rules for service record correctness.
-	 *
-	 * <P>
-	 *
+	 * <p>
+	 * <p>
+	 * <p>
 	 * If there is currently no SDDB version of the
 	 * <code>srvRecord</code> service record, then this method will do
 	 * nothing.
 	 *
 	 * @param srvRecord the new contents to use for the service record in
-	 * the SDDB
-	 *
-	 * @exception NullPointerException if <code>srvRecord</code> is
-	 * <code>null</code>
-	 *
-	 * @exception IllegalArgumentException if the structure of the
-	 * <code>srvRecord</code> is  missing any mandatory service
-	 * attributes, or if an attempt has been made to change any of the
-	 * values described as fixed.
-	 *
-	 * @exception ServiceRegistrationException if the local SDDB could
-	 * not be updated successfully due to
-	 * insufficient disk space, database locks, etc.
-	 * 
+	 *                  the SDDB
+	 * @throws NullPointerException         if <code>srvRecord</code> is
+	 *                                      <code>null</code>
+	 * @throws IllegalArgumentException     if the structure of the
+	 *                                      <code>srvRecord</code> is  missing any mandatory service
+	 *                                      attributes, or if an attempt has been made to change any of the
+	 *                                      values described as fixed.
+	 * @throws ServiceRegistrationException if the local SDDB could
+	 *                                      not be updated successfully due to
+	 *                                      insufficient disk space, database locks, etc.
 	 */
 	public void updateRecord(ServiceRecord srvRecord) throws ServiceRegistrationException {
 		if (srvRecord == null) {

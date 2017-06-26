@@ -1,20 +1,29 @@
- /*
- * Copyright 2012 Kulikov Dmitriy
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/*
+* Copyright 2012 Kulikov Dmitriy
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 package javax.microedition.lcdui;
+
+import android.content.Context;
+import android.graphics.RectF;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
 
 import java.util.HashMap;
 
@@ -23,16 +32,6 @@ import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.util.ContextHolder;
-
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.RectF;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.util.Log;
 
 public abstract class Canvas extends Displayable {
 	public static final int KEY_POUND = 35;
@@ -47,7 +46,7 @@ public abstract class Canvas extends Displayable {
 	public static final int KEY_NUM7 = 55;
 	public static final int KEY_NUM8 = 56;
 	public static final int KEY_NUM9 = 57;
-	
+
 	public static final int KEY_UP = -1;
 	public static final int KEY_DOWN = -2;
 	public static final int KEY_LEFT = -3;
@@ -74,8 +73,7 @@ public abstract class Canvas extends Displayable {
 	private static HashMap<Integer, Integer> gameActionToKeyCode;
 	private static HashMap<Integer, String> keyCodeToKeyName;
 
-	static
-	{
+	static {
 		androidToMIDP = new HashMap();
 		keyCodeToGameAction = new HashMap();
 		gameActionToKeyCode = new HashMap();
@@ -303,7 +301,7 @@ public abstract class Canvas extends Displayable {
 
 		/**
 		 * В очереди должно быть не более двух перерисовок.
-		 *
+		 * <p>
 		 * Одна не обеспечит плавности, а если делать больше двух,
 		 * то как определить, насколько именно больше двух их нужно сделать?
 		 */
@@ -385,11 +383,12 @@ public abstract class Canvas extends Displayable {
 
 	/**
 	 * Обновить размер и положение виртуального экрана относительно реального.
+	 *
 	 * @param post следует ли оповещать об этих изменениях сам холст и картинку двойной буферизации
 	 */
 	private void updateSize(boolean post) {
 		/*
-		 * Превращаем размеры виртуального экрана
+         * Превращаем размеры виртуального экрана
 		 * в размеры видимого для мидлета холста.
 		 * 
 		 * При этом учитываем, что один или оба виртуальных размера могут быть
@@ -499,7 +498,7 @@ public abstract class Canvas extends Displayable {
 
 	/**
 	 * Привести экранные координаты указателя к виртуальным.
-	 * 
+	 *
 	 * @param x координата указателя на реальном экране
 	 * @return соответствующая координата указателя на виртуальном экране
 	 */
@@ -509,7 +508,7 @@ public abstract class Canvas extends Displayable {
 
 	/**
 	 * Привести экранные координаты указателя к виртуальным.
-	 * 
+	 *
 	 * @param y координата указателя на реальном экране
 	 * @return соответствующая координата указателя на виртуальном экране
 	 */

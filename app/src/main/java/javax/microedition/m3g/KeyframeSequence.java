@@ -26,7 +26,7 @@ public class KeyframeSequence extends Object3D {
 	private int[] keyFrameTimes;
 	private QVec4[] a;
 	private QVec4[] b;
-	
+
 	private KeyframeSequence() {
 		//dirty = true;
 	}
@@ -39,26 +39,26 @@ public class KeyframeSequence extends Object3D {
 
 		// Check given interpolation mode
 		switch (interpolation) {
-		case SLERP:
-			if (numComponents != 4)
-				throw new IllegalArgumentException("SLERP and SQUAD mode requires 4 components in each keyframe");
-			break;
-		case SQUAD:
-			if (numComponents != 4)
-				throw new IllegalArgumentException("SLERP and SQUAD mode requires 4 components in each keyframe");
-			a = new QVec4[numKeyframes];
-			b = new QVec4[numKeyframes];
-			break;
-		case STEP:
-			break;
-		case LINEAR:
-			break;
-		case SPLINE:
-			inTangents = new float[numKeyframes][numComponents];
-			outTangents = new float[numKeyframes][numComponents];
-			break;
-		default:
-			throw new IllegalArgumentException("Unknown interpolation mode");
+			case SLERP:
+				if (numComponents != 4)
+					throw new IllegalArgumentException("SLERP and SQUAD mode requires 4 components in each keyframe");
+				break;
+			case SQUAD:
+				if (numComponents != 4)
+					throw new IllegalArgumentException("SLERP and SQUAD mode requires 4 components in each keyframe");
+				a = new QVec4[numKeyframes];
+				b = new QVec4[numKeyframes];
+				break;
+			case STEP:
+				break;
+			case LINEAR:
+				break;
+			case SPLINE:
+				inTangents = new float[numKeyframes][numComponents];
+				outTangents = new float[numKeyframes][numComponents];
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown interpolation mode");
 		}
 
 		this.keyframeCount = numKeyframes;
@@ -74,7 +74,7 @@ public class KeyframeSequence extends Object3D {
 
 
 	}
-	
+
 	Object3D duplicateImpl() {
 		KeyframeSequence copy = new KeyframeSequence(keyframeCount, componentCount, interpolationType);
 		copy.repeatMode = repeatMode;
@@ -85,7 +85,7 @@ public class KeyframeSequence extends Object3D {
 		//copy.keyframeCount = keyframeCount;
 		//copy.componentCount = componentCount;
 		//copy.probablyNext = probablyNext;
-		
+
 		copy.keyFrames = new float[keyFrames.length][keyFrames[0].length];
 		for (int i = 0; i < keyFrames.length; i++)
 			System.arraycopy(keyFrames[i], 0, copy.keyFrames[i], 0, keyFrames[i].length);
@@ -157,7 +157,7 @@ public class KeyframeSequence extends Object3D {
 			return 0;
 		else {
 			int prevind = previousKeyframeIndex(ind);
-			return (((float) timeDelta(prevind) * 2.0f)/((float)(timeDelta(ind) + timeDelta(prevind))));
+			return (((float) timeDelta(prevind) * 2.0f) / ((float) (timeDelta(ind) + timeDelta(prevind))));
 		}
 	}
 
@@ -166,7 +166,7 @@ public class KeyframeSequence extends Object3D {
 			return 0;
 		else {
 			int prevind = previousKeyframeIndex(ind);
-			return (((float) timeDelta(ind) * 2.0f)/((float)(timeDelta(ind) + timeDelta(prevind))));
+			return (((float) timeDelta(ind) * 2.0f) / ((float) (timeDelta(ind) + timeDelta(prevind))));
 		}
 	}
 
@@ -195,7 +195,7 @@ public class KeyframeSequence extends Object3D {
 					float[] out = tangentFrom(kf);
 
 					for (int i = 0; i < componentCount; i++) {
-						in[i]  = ((0.5f * ((next[i] - prev[i]))) * sIn);
+						in[i] = ((0.5f * ((next[i] - prev[i]))) * sIn);
 						out[i] = ((0.5f * ((next[i] - prev[i]))) * sOut);
 					}
 
@@ -205,7 +205,7 @@ public class KeyframeSequence extends Object3D {
 				int kf = validRangeFirst;
 				QVec4 start = new QVec4();
 				QVec4 end = new QVec4();
-			       	QVec4 prev = new QVec4();
+				QVec4 prev = new QVec4();
 				QVec4 next = new QVec4();
 				QVec4 tempq = new QVec4();
 				Vector3 tempv = new Vector3();
@@ -294,7 +294,7 @@ public class KeyframeSequence extends Object3D {
 			return (interpolationType == STEP) ? (timeDelta(start) - (time - keyFrameTimes[start])) : 1;
 		}
 
-		float s = ((time - keyFrameTimes[start]) / (float)timeDelta(start));
+		float s = ((time - keyFrameTimes[start]) / (float) timeDelta(start));
 
 		int end = nextKeyframeIndex(start);
 		float[] Start;
@@ -392,7 +392,7 @@ public class KeyframeSequence extends Object3D {
 				temp[2] = q1.z;
 				temp[3] = q1.w;
 				/*temp = a[start];
-				temp[0] = A.x;
+                temp[0] = A.x;
 				temp[1] = A.y;
 				temp[2] = A.z;
 				temp[3] = A.w;
@@ -403,7 +403,7 @@ public class KeyframeSequence extends Object3D {
 				temp[3] = B.w;*/
 				break;
 			default:
-			       throw new IllegalStateException();
+				throw new IllegalStateException();
 		}
 		return 1;
 	}
@@ -450,7 +450,7 @@ public class KeyframeSequence extends Object3D {
 		if ((index < 0) || (index >= keyframeCount)) {
 			throw new IndexOutOfBoundsException();
 		}
-		
+
 		if ((value != null) && (value.length < componentCount)) {
 			throw new IllegalArgumentException();
 		}
@@ -458,7 +458,7 @@ public class KeyframeSequence extends Object3D {
 		if (value != null) {
 			System.arraycopy(keyFrames[index], 0, value, 0, componentCount);
 		}
-		
+
 		return keyFrameTimes[index];
 	}
 

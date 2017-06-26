@@ -19,29 +19,24 @@ package javax.microedition.lcdui;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public class XMLForm extends Screen
-{
+public class XMLForm extends Screen {
 	protected View view;
 	protected int resID;
-	
-	public XMLForm(String title, int resID)
-	{
+
+	public XMLForm(String title, int resID) {
 		setTitle(title);
 		this.resID = resID;
 	}
-	
-	public View getScreenView()
-	{
-		if(view == null)
-		{
+
+	public View getScreenView() {
+		if (view == null) {
 			view = LayoutInflater.from(getParentActivity()).inflate(resID, null);
 		}
-		
+
 		return view;
 	}
 
-	public void clearScreenView()
-	{
+	public void clearScreenView() {
 		view = null;
 	}
 }

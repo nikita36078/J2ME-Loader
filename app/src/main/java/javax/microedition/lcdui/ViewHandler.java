@@ -23,17 +23,14 @@ import android.os.Looper;
  * Класс для централизованного создания и изменения View.
  * Необходим, потому что чертов Android не дает изменять View из разных потоков.
  */
-public class ViewHandler
-{
+public class ViewHandler {
 	private static Handler handler;
-	
-	static
-	{
+
+	static {
 		handler = new Handler(Looper.getMainLooper());
 	}
-	
-	public static void postEvent(Runnable event)
-	{
+
+	public static void postEvent(Runnable event) {
 		handler.post(event);
 	}
 }

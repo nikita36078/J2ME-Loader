@@ -16,10 +16,6 @@
 
 package javax.microedition.lcdui.list;
 
-import java.util.ArrayList;
-
-import javax.microedition.lcdui.Image;
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -28,142 +24,119 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
 
-public abstract class CompoundAdapter implements Adapter
-{
+import java.util.ArrayList;
+
+import javax.microedition.lcdui.Image;
+
+public abstract class CompoundAdapter implements Adapter {
 	protected ArrayList<CompoundItem> items;
 	protected ArrayList<DataSetObserver> observers;
 	protected Context context;
-	
-	public CompoundAdapter(Context context)
-	{
+
+	public CompoundAdapter(Context context) {
 		this.context = context;
-		
+
 		items = new ArrayList();
 		observers = new ArrayList();
 	}
-	
-	public void append(String stringPart, Image imagePart)
-	{
+
+	public void append(String stringPart, Image imagePart) {
 		items.add(new CompoundItem(stringPart, imagePart));
 		notifyDataSetChanged();
 	}
-	
-	public void insert(int elementNum, String stringPart, Image imagePart)
-	{
+
+	public void insert(int elementNum, String stringPart, Image imagePart) {
 		items.add(elementNum, new CompoundItem(stringPart, imagePart));
 		notifyDataSetChanged();
 	}
-	
-	public void set(int elementNum, String stringPart, Image imagePart)
-	{
+
+	public void set(int elementNum, String stringPart, Image imagePart) {
 		items.set(elementNum, new CompoundItem(stringPart, imagePart));
 		notifyDataSetChanged();
 	}
-	
-	public void delete(int elementNum)
-	{
+
+	public void delete(int elementNum) {
 		items.remove(elementNum);
 		notifyDataSetChanged();
 	}
-	
-	public void deleteAll()
-	{
+
+	public void deleteAll() {
 		items.clear();
 		notifyDataSetChanged();
 	}
-	
-	public int getCount()
-	{
+
+	public int getCount() {
 		return items.size();
 	}
-	
-	public boolean isEmpty()
-	{
+
+	public boolean isEmpty() {
 		return items.isEmpty();
 	}
 
-	public CompoundItem getItem(int position)
-	{
+	public CompoundItem getItem(int position) {
 		return items.get(position);
 	}
-	
-	public boolean hasStableIds()
-	{
+
+	public boolean hasStableIds() {
 		return true;
 	}
 
-	public long getItemId(int position)
-	{
+	public long getItemId(int position) {
 		return position;
 	}
-	
-	public int getViewTypeCount()
-	{
+
+	public int getViewTypeCount() {
 		return 1;
 	}
-	
-	public int getItemViewType(int position)
-	{
+
+	public int getItemViewType(int position) {
 		return 0;
 	}
-	
-	protected View getView(int position, View convertView, ViewGroup parent, int viewResourceID, boolean useImagePart)
-	{
+
+	protected View getView(int position, View convertView, ViewGroup parent, int viewResourceID, boolean useImagePart) {
 		TextView textview;
-		
-		if(convertView != null && convertView instanceof TextView)
-		{
-			textview = (TextView)convertView;
+
+		if (convertView != null && convertView instanceof TextView) {
+			textview = (TextView) convertView;
+		} else {
+			textview = (TextView) LayoutInflater.from(context).inflate(viewResourceID, null);
 		}
-		else
-		{
-			textview = (TextView)LayoutInflater.from(context).inflate(viewResourceID, null);
-		}
-		
+
 		CompoundItem item = items.get(position);
 		textview.setText(item.getString());
-		
-		if(useImagePart)
-		{
+
+		if (useImagePart) {
 			textview.setCompoundDrawablesWithIntrinsicBounds(item.getDrawable(), null, null, null);
 			textview.setCompoundDrawablePadding(textview.getPaddingLeft());
 		}
-		
+
 		return textview;
 	}
 
 	public abstract View getView(int position, View convertView, ViewGroup parent);
 
-	public void registerDataSetObserver(DataSetObserver observer)
-	{
-		if(!observers.contains(observer))
-		{
+	public void registerDataSetObserver(DataSetObserver observer) {
+		if (!observers.contains(observer)) {
 			observers.add(observer);
 		}
 	}
 
-	public void unregisterDataSetObserver(DataSetObserver observer)
-	{
+	public void unregisterDataSetObserver(DataSetObserver observer) {
 		observers.remove(observer);
 	}
-	
-	public void notifyDataSetChanged()
-	{
-		for(DataSetObserver observer : observers)
-		{
+
+	public void notifyDataSetChanged() {
+		for (DataSetObserver observer : observers) {
 			try {
 				observer.onChanged();
-			}
-			catch (Exception e){
+			} catch (Exception e) {
 
 			}
 		}
 	}
-	
-	public void notifyDataSetInvalidated()
-	{
-		for(DataSetObserver observer : observers)
-		{
+
+	public void notifyDataSetInvalidated() {
+		for (DataSetObserver observer : observers) {
 			observer.onInvalidated();
 		}
 	}

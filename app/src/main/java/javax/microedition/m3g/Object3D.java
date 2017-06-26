@@ -1,7 +1,7 @@
 package javax.microedition.m3g;
 
-import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Vector;
 
 public abstract class Object3D {
 
@@ -96,6 +96,7 @@ public abstract class Object3D {
 
 		return null;
 	}
+
 	public Object3D find(int userID) {
 		if (this.userID == userID)
 			return this;
@@ -124,14 +125,14 @@ public abstract class Object3D {
 	}
 
 	public void addAnimationTrack(AnimationTrack animationTrack) {
-		
+
 		if (animationTrack == null) {
 			throw new NullPointerException();
 		}
 		if (/*(!isCompatible(animationTrack)) ||*/ animationTracks.contains(animationTrack)) {
 			throw new IllegalArgumentException("AnimationTrack is already existing or incompatible");
 		}
-			
+
 		int newTrackTarget = animationTrack.getTargetProperty();
 		int components = animationTrack.getKeyframeSequence().getComponentCount();
 		int i;
@@ -145,7 +146,7 @@ public abstract class Object3D {
 				throw new IllegalArgumentException();
 			}
 		}
-		
+
 		animationTracks.add(i, animationTrack);
 	}
 
@@ -164,7 +165,7 @@ public abstract class Object3D {
 	public final int animate(int time) {
 		return applyAnimation(time);
 	}
-	
+
 	boolean isCompatible(AnimationTrack animationtrack) {
 		return false;
 	}

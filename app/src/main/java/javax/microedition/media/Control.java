@@ -16,6 +16,5 @@
 
 package javax.microedition.media;
 
-public interface Control
-{
+public interface Control {
 }

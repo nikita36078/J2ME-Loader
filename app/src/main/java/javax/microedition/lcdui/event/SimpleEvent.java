@@ -16,22 +16,17 @@
 
 package javax.microedition.lcdui.event;
 
-public abstract class SimpleEvent extends Event
-{
-	public void recycle()
-	{
-	}
-	
-	public void enterQueue()
-	{
-	}
-	
-	public void leaveQueue()
-	{
+public abstract class SimpleEvent extends Event {
+	public void recycle() {
 	}
 
-	public boolean placeableAfter(Event event)
-	{
+	public void enterQueue() {
+	}
+
+	public void leaveQueue() {
+	}
+
+	public boolean placeableAfter(Event event) {
 		return true;
 	}
 }

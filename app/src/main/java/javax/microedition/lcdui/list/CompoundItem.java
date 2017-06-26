@@ -16,47 +16,40 @@
 
 package javax.microedition.lcdui.list;
 
-import javax.microedition.lcdui.Image;
-
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-public class CompoundItem
-{
+import javax.microedition.lcdui.Image;
+
+public class CompoundItem {
 	protected String stringPart;
-	
+
 	protected Image imagePart;
 	protected Drawable imageDrawable;
-	
-	public CompoundItem(String stringPart, Image imagePart)
-	{
+
+	public CompoundItem(String stringPart, Image imagePart) {
 		this.stringPart = stringPart;
 		this.imagePart = imagePart;
 	}
-	
-	public void setString(String stringPart)
-	{
+
+	public void setString(String stringPart) {
 		this.stringPart = stringPart;
 	}
-	
-	public String getString()
-	{
+
+	public String getString() {
 		return stringPart;
 	}
-	
-	public void setImage(Image imagePart)
-	{
+
+	public void setImage(Image imagePart) {
 		this.imagePart = imagePart;
 		this.imageDrawable = new BitmapDrawable(imagePart.getBitmap());
 	}
 
-	public Image getImage()
-	{
+	public Image getImage() {
 		return imagePart;
 	}
 
-	public Drawable getDrawable()
-	{
+	public Drawable getDrawable() {
 		return imageDrawable;
 	}
 }

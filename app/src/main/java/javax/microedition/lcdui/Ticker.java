@@ -16,22 +16,18 @@
 
 package javax.microedition.lcdui;
 
-public class Ticker
-{
+public class Ticker {
 	protected String text;
-	
-	public Ticker(String text)
-	{
+
+	public Ticker(String text) {
 		setString(text);
 	}
-	
-	public void setString(String text)
-	{
+
+	public void setString(String text) {
 		this.text = text;
 	}
-	
-	public String getString()
-	{
+
+	public String getString() {
 		return text;
 	}
 }

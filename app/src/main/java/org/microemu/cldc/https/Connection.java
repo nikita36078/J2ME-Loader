@@ -24,6 +24,9 @@
 
 package org.microemu.cldc.https;
 
+import org.microemu.cldc.CertificateImpl;
+import org.microemu.cldc.SecurityInfoImpl;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
@@ -34,9 +37,6 @@ import javax.microedition.io.SecurityInfo;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
-import org.microemu.cldc.CertificateImpl;
-import org.microemu.cldc.SecurityInfoImpl;
-
 public class Connection extends org.microemu.cldc.http.Connection implements HttpsConnection {
 
 	private SSLContext sslContext;
@@ -44,7 +44,7 @@ public class Connection extends org.microemu.cldc.http.Connection implements Htt
 	private SecurityInfo securityInfo;
 
 	public Connection() {
-	    try {
+		try {
 			sslContext = SSLContext.getInstance("TLS");
 		} catch (NoSuchAlgorithmException ex) {
 			ex.printStackTrace();
@@ -55,7 +55,7 @@ public class Connection extends org.microemu.cldc.http.Connection implements Htt
 
 	public SecurityInfo getSecurityInfo() throws IOException {
 		if (securityInfo == null) {
-		    if (cn == null) {
+			if (cn == null) {
 				throw new IOException();
 			}
 			if (!connected) {
@@ -82,11 +82,11 @@ public class Connection extends org.microemu.cldc.http.Connection implements Htt
 	}
 
 
-    /**
-     * Returns the network port number of the URL for this HttpsConnection
-     *
-     * @return  the network port number of the URL for this HttpsConnection. The default HTTPS port number (443) is returned if there was no port number in the string passed to Connector.open.
-     */
+	/**
+	 * Returns the network port number of the URL for this HttpsConnection
+	 *
+	 * @return the network port number of the URL for this HttpsConnection. The default HTTPS port number (443) is returned if there was no port number in the string passed to Connector.open.
+	 */
 	public int getPort() {
 		if (cn == null) {
 			return -1;

@@ -28,167 +28,167 @@ import javax.microedition.util.ContextHolder;
 
 public class RecordStore {
 
-    public static final int AUTHMODE_PRIVATE = 0;
+	public static final int AUTHMODE_PRIVATE = 0;
 
-    public static final int AUTHMODE_ANY = 1;
+	public static final int AUTHMODE_ANY = 1;
 
-    public static void deleteRecordStore(String recordStoreName)
-            throws RecordStoreException, RecordStoreNotFoundException {
-        ContextHolder.getRecordStoreManager().deleteRecordStore(recordStoreName);
-    }
-
-
-    public static String[] listRecordStores() {
-        return ContextHolder.getRecordStoreManager().listRecordStores();
-    }
+	public static void deleteRecordStore(String recordStoreName)
+			throws RecordStoreException, RecordStoreNotFoundException {
+		ContextHolder.getRecordStoreManager().deleteRecordStore(recordStoreName);
+	}
 
 
-    public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
-            throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
-        return ContextHolder.getRecordStoreManager().openRecordStore(recordStoreName, createIfNecessary);
-    }
+	public static String[] listRecordStores() {
+		return ContextHolder.getRecordStoreManager().listRecordStores();
+	}
 
 
-    public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary, int authmode, boolean writable)
-            throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
-        // TODO Not yet implemented
-        return openRecordStore(recordStoreName, createIfNecessary);
-    }
+	public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
+			throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
+		return ContextHolder.getRecordStoreManager().openRecordStore(recordStoreName, createIfNecessary);
+	}
 
 
-    public static RecordStore openRecordStore(String recordStoreName, String vendorName, String suiteName)
-            throws RecordStoreException, RecordStoreNotFoundException {
-        // TODO Not yet implemented
-        return openRecordStore(recordStoreName, false);
-    }
-
-    public void closeRecordStore()
-            throws RecordStoreNotOpenException, RecordStoreException {
-        // Must be overriden
-    }
+	public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary, int authmode, boolean writable)
+			throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
+		// TODO Not yet implemented
+		return openRecordStore(recordStoreName, createIfNecessary);
+	}
 
 
-    public String getName()
-            throws RecordStoreNotOpenException {
-        // Must be overriden
+	public static RecordStore openRecordStore(String recordStoreName, String vendorName, String suiteName)
+			throws RecordStoreException, RecordStoreNotFoundException {
+		// TODO Not yet implemented
+		return openRecordStore(recordStoreName, false);
+	}
 
-        return null;
-    }
-
-
-    public int getVersion()
-            throws RecordStoreNotOpenException {
-        // Must be overriden
-
-        return -1;
-    }
+	public void closeRecordStore()
+			throws RecordStoreNotOpenException, RecordStoreException {
+		// Must be overriden
+	}
 
 
-    public int getNumRecords()
-            throws RecordStoreNotOpenException {
-        // Must be overriden
+	public String getName()
+			throws RecordStoreNotOpenException {
+		// Must be overriden
 
-        return -1;
-    }
-
-
-    public int getSize()
-            throws RecordStoreNotOpenException {
-        // Must be overriden
-
-        return -1;
-    }
+		return null;
+	}
 
 
-    public int getSizeAvailable()
-            throws RecordStoreNotOpenException {
-        // Must be overriden
+	public int getVersion()
+			throws RecordStoreNotOpenException {
+		// Must be overriden
 
-        return -1;
-    }
-
-
-    public long getLastModified()
-            throws RecordStoreNotOpenException {
-        // Must be overriden
-
-        return -1;
-    }
+		return -1;
+	}
 
 
-    public void addRecordListener(RecordListener listener) {
-        // Must be overriden
-    }
+	public int getNumRecords()
+			throws RecordStoreNotOpenException {
+		// Must be overriden
+
+		return -1;
+	}
 
 
-    public void removeRecordListener(RecordListener listener) {
-        // Must be overriden
-    }
+	public int getSize()
+			throws RecordStoreNotOpenException {
+		// Must be overriden
+
+		return -1;
+	}
 
 
-    public int getNextRecordID()
-            throws RecordStoreNotOpenException, RecordStoreException {
-        // Must be overriden
+	public int getSizeAvailable()
+			throws RecordStoreNotOpenException {
+		// Must be overriden
 
-        return -1;
-    }
-
-
-    public int addRecord(byte[] data, int offset, int numBytes)
-            throws RecordStoreNotOpenException, RecordStoreException, RecordStoreFullException {
-        // Must be overriden
-
-        return -1;
-    }
+		return -1;
+	}
 
 
-    public void deleteRecord(int recordId)
-            throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
-        // Must be overriden
-    }
+	public long getLastModified()
+			throws RecordStoreNotOpenException {
+		// Must be overriden
+
+		return -1;
+	}
 
 
-    public int getRecordSize(int recordId)
-            throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
-        // Must be overriden
-
-        return -1;
-    }
+	public void addRecordListener(RecordListener listener) {
+		// Must be overriden
+	}
 
 
-    public int getRecord(int recordId, byte[] buffer, int offset)
-            throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
-        // Must be overriden
-
-        return -1;
-    }
+	public void removeRecordListener(RecordListener listener) {
+		// Must be overriden
+	}
 
 
-    public byte[] getRecord(int recordId)
-            throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
-        // Must be overriden
+	public int getNextRecordID()
+			throws RecordStoreNotOpenException, RecordStoreException {
+		// Must be overriden
 
-        return null;
-    }
-
-
-    public void setMode(int authmode, boolean writable)
-            throws RecordStoreException {
-        // TODO Not yet implemented
-    }
-
-    public void setRecord(int recordId, byte[] newData, int offset, int numBytes)
-            throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException, RecordStoreFullException {
-        // Must be overriden
-    }
+		return -1;
+	}
 
 
-    public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated)
-            throws RecordStoreNotOpenException {
-        // Must be overriden
+	public int addRecord(byte[] data, int offset, int numBytes)
+			throws RecordStoreNotOpenException, RecordStoreException, RecordStoreFullException {
+		// Must be overriden
 
-        return null;
-    }
+		return -1;
+	}
+
+
+	public void deleteRecord(int recordId)
+			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+		// Must be overriden
+	}
+
+
+	public int getRecordSize(int recordId)
+			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+		// Must be overriden
+
+		return -1;
+	}
+
+
+	public int getRecord(int recordId, byte[] buffer, int offset)
+			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+		// Must be overriden
+
+		return -1;
+	}
+
+
+	public byte[] getRecord(int recordId)
+			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+		// Must be overriden
+
+		return null;
+	}
+
+
+	public void setMode(int authmode, boolean writable)
+			throws RecordStoreException {
+		// TODO Not yet implemented
+	}
+
+	public void setRecord(int recordId, byte[] newData, int offset, int numBytes)
+			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException, RecordStoreFullException {
+		// Must be overriden
+	}
+
+
+	public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated)
+			throws RecordStoreNotOpenException {
+		// Must be overriden
+
+		return null;
+	}
 
 }
 

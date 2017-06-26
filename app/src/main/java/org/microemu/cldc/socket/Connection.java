@@ -24,9 +24,9 @@
 
 package org.microemu.cldc.socket;
 
-import java.io.IOException;
-
 import org.microemu.cldc.ClosedConnection;
+
+import java.io.IOException;
 
 public class Connection implements ClosedConnection {
 

@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 package javax.obex;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ import javax.microedition.io.Connection;
  * connection to the client. The <code>acceptAndOpen()</code> method also
  * takes a <code>ServerRequestHandler</code> argument that will process the
  * requests from the client that connects to the server.
- * 
+ *
  * @version 1.0 February 11, 2002
  */
 public interface SessionNotifier extends Connection {
@@ -33,14 +32,14 @@ public interface SessionNotifier extends Connection {
 	 * associated with this connection, therefore, it is implementation
 	 * dependent as to how an authentication challenge and authentication
 	 * response header will be received and processed.
-	 * <P>
+	 * <p>
 	 * <H4>Additional Note for OBEX over Bluetooth</H4>
 	 * If this method is called on a <code>SessionNotifier</code> object that
 	 * does not have a <code>ServiceRecord</code> in the SDDB, the
 	 * <code>ServiceRecord</code> for this object will be added to the SDDB.
 	 * This method requests the BCC to put the local device in connectable mode
 	 * so that it will respond to connection attempts by clients.
-	 * <P>
+	 * <p>
 	 * The following checks are done to verify that the service record provided
 	 * is valid. If any of these checks fail, then a
 	 * <code>ServiceRegistrationException</code> is thrown.
@@ -52,7 +51,7 @@ public interface SessionNotifier extends Connection {
 	 * <LI>The <code>ServiceRecord</code> associated with this notifier must
 	 * not have changed the RFCOMM server channel number
 	 * </UL>
-	 * <P>
+	 * <p>
 	 * This method will not ensure that <code>ServiceRecord</code> associated
 	 * with this notifier is a completely valid service record. It is the
 	 * responsibility of the application to ensure that the service record
@@ -66,32 +65,22 @@ public interface SessionNotifier extends Connection {
 	 * instance MUST throw {@code InterruptedIOException}. This mechanism
 	 * provides an application with the means to cancel any outstanding
 	 * {@code acceptAndOpen()} method calls
-	 * 
-	 * @param handler
-	 *            the request handler that will respond to OBEX requests
-	 * 
+	 *
+	 * @param handler the request handler that will respond to OBEX requests
 	 * @return the connection to the client
-	 * 
-	 * @exception IOException
-	 *                if an error occurs in the transport layer
-	 * 
-	 * @exception NullPointerException
-	 *                if <code>handler</code> is <code>null</code>
-	 * 
-	 * @exception ServiceRegistrationException
-	 *                if the structure of the associated service record is
-	 *                invalid or if the service record could not be added
-	 *                successfully to the local SDDB. The structure of service
-	 *                record is invalid if the service record is missing any
-	 *                mandatory service attributes, or has changed any of the
-	 *                values described above which are fixed and cannot be
-	 *                changed. Failures to add the record to the SDDB could be
-	 *                due to insufficient disk space, database locks, etc.
-	 * 
-	 * @exception BluetoothStateException
-	 *                if the server device could not be placed in connectable
-	 *                mode because the device user has configured the device to
-	 *                be non-connectable
+	 * @throws IOException                  if an error occurs in the transport layer
+	 * @throws NullPointerException         if <code>handler</code> is <code>null</code>
+	 * @throws ServiceRegistrationException if the structure of the associated service record is
+	 *                                      invalid or if the service record could not be added
+	 *                                      successfully to the local SDDB. The structure of service
+	 *                                      record is invalid if the service record is missing any
+	 *                                      mandatory service attributes, or has changed any of the
+	 *                                      values described above which are fixed and cannot be
+	 *                                      changed. Failures to add the record to the SDDB could be
+	 *                                      due to insufficient disk space, database locks, etc.
+	 * @throws BluetoothStateException      if the server device could not be placed in connectable
+	 *                                      mode because the device user has configured the device to
+	 *                                      be non-connectable
 	 */
 	public Connection acceptAndOpen(ServerRequestHandler handler) throws IOException;
 
@@ -100,14 +89,14 @@ public interface SessionNotifier extends Connection {
 	 * the handler to handle the requests from the client and the
 	 * <code>Authenticator</code> to use to respond to authentication
 	 * challenge and authentication response headers.
-	 * <P>
+	 * <p>
 	 * <H4>Additional Note for OBEX over Bluetooth</H4>
 	 * If this method is called on a <code>SessionNotifier</code> object that
 	 * does not have a <code>ServiceRecord</code> in the SDDB, the
 	 * <code>ServiceRecord</code> for this object will be added to the SDDB.
 	 * This method requests the BCC to put the local device in connectable mode
 	 * so that it will respond to connection attempts by clients.
-	 * <P>
+	 * <p>
 	 * The following checks are done to verify that the service record provided
 	 * is valid. If any of these checks fail, then a
 	 * <code>ServiceRegistrationException</code> is thrown.
@@ -119,7 +108,7 @@ public interface SessionNotifier extends Connection {
 	 * <LI>The <code>ServiceRecord</code> associated with this notifier must
 	 * not have changed the RFCOMM server channel number
 	 * </UL>
-	 * <P>
+	 * <p>
 	 * This method will not ensure that <code>ServiceRecord</code> associated
 	 * with this notifier is a completely valid service record. It is the
 	 * responsibility of the application to ensure that the service record
@@ -133,37 +122,25 @@ public interface SessionNotifier extends Connection {
 	 * instance MUST throw {@code InterruptedIOException}. This mechanism
 	 * provides an application with the means to cancel any outstanding
 	 * {@code acceptAndOpen()} method calls
-	 * 
-	 * @param handler
-	 *            the request handler that will respond to OBEX requests
-	 * 
-	 * @param auth
-	 *            the <code>Authenticator</code> to use with this connection;
-	 *            if <code>null</code> then no <code>Authenticator</code>
-	 *            will be used
-	 * 
+	 *
+	 * @param handler the request handler that will respond to OBEX requests
+	 * @param auth    the <code>Authenticator</code> to use with this connection;
+	 *                if <code>null</code> then no <code>Authenticator</code>
+	 *                will be used
 	 * @return the connection to the client
-	 * 
-	 * @exception IOException
-	 *                if an error occurs in the transport layer
-	 * 
-	 * @exception NullPointerException
-	 *                if <code>handler</code> is <code>null</code>
-	 * 
-	 * @exception ServiceRegistrationException
-	 *                if the structure of the associated service record is
-	 *                invalid or if the service record could not be added
-	 *                successfully to the local SDDB. The structure of service
-	 *                record is invalid if the service record is missing any
-	 *                mandatory service attributes, or has changed any of the
-	 *                values described above which are fixed and cannot be
-	 *                changed. Failures to add the record to the SDDB could be
-	 *                due to insufficient disk space, database locks, etc.
-	 * 
-	 * @exception BluetoothStateException
-	 *                if the server device could not be placed in connectable
-	 *                mode because the device user has configured the device to
-	 *                be non-connectable
+	 * @throws IOException                  if an error occurs in the transport layer
+	 * @throws NullPointerException         if <code>handler</code> is <code>null</code>
+	 * @throws ServiceRegistrationException if the structure of the associated service record is
+	 *                                      invalid or if the service record could not be added
+	 *                                      successfully to the local SDDB. The structure of service
+	 *                                      record is invalid if the service record is missing any
+	 *                                      mandatory service attributes, or has changed any of the
+	 *                                      values described above which are fixed and cannot be
+	 *                                      changed. Failures to add the record to the SDDB could be
+	 *                                      due to insufficient disk space, database locks, etc.
+	 * @throws BluetoothStateException      if the server device could not be placed in connectable
+	 *                                      mode because the device user has configured the device to
+	 *                                      be non-connectable
 	 */
 	public Connection acceptAndOpen(ServerRequestHandler handler, Authenticator auth) throws IOException;
 }

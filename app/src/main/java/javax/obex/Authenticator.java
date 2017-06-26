@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 package javax.obex;
 
 /**
@@ -15,13 +14,13 @@ package javax.obex;
  * <code>onAuthenticationChallenge()</code> or
  * <code>onAuthenticationResponse()</code> will be called, respectively, by
  * the implementation.
- * <P>
+ * <p>
  * For more information on how the authentication procedure works in OBEX,
  * please review the IrOBEX specification at <A
  * HREF="http://www.irda.org">http://www.irda.org</A>.
- * <P>
+ * <p>
  * <STRONG>Authentication Challenges</STRONG>
- * <P>
+ * <p>
  * When a client or server receives an authentication challenge header, the
  * <code>onAuthenticationChallenge()</code> method will be invoked by the OBEX
  * API implementation. The application will then return the user name (if
@@ -31,9 +30,9 @@ package javax.obex;
  * with the password returned from the <code>onAuthenticationChallenge()</code>
  * method and passed through the MD5 hash algorithm. The resulting value is sent
  * in the authentication response along with the user name if it was provided.
- * <P>
+ * <p>
  * <STRONG>Authentication Responses</STRONG>
- * <P>
+ * <p>
  * When a client or server receives an authentication response header, the
  * <code>onAuthenticationResponse()</code> method is invoked by the API
  * implementation with the user name received in the authentication response
@@ -54,7 +53,7 @@ package javax.obex;
  * <code>onAuthenticationFailure()</code> method will be called on the
  * <code>ServerRequestHandler</code> that failed authentication. The
  * connection is <B>not</B> closed if authentication failed.
- * 
+ *
  * @version 1.0 February 11, 2002
  */
 public interface Authenticator {
@@ -64,40 +63,32 @@ public interface Authenticator {
 	 * header. It should respond to the challenge with a
 	 * <code>PasswordAuthentication</code> that contains the correct user name
 	 * and password for the challenge.
-	 * 
-	 * @param description
-	 *            the description of which user name and password should be
-	 *            used; if no description is provided in the authentication
-	 *            challenge or the description is encoded in an encoding scheme
-	 *            that is not supported, an empty string will be provided
-	 * 
-	 * @param isUserIdRequired
-	 *            <code>true</code> if the user ID is required;
-	 *            <code>false</code> if the user ID is not required
-	 * 
-	 * @param isFullAccess
-	 *            <code>true</code> if full access to the server will be
-	 *            granted; <code>false</code> if read only access will be
-	 *            granted
-	 * 
+	 *
+	 * @param description      the description of which user name and password should be
+	 *                         used; if no description is provided in the authentication
+	 *                         challenge or the description is encoded in an encoding scheme
+	 *                         that is not supported, an empty string will be provided
+	 * @param isUserIdRequired <code>true</code> if the user ID is required;
+	 *                         <code>false</code> if the user ID is not required
+	 * @param isFullAccess     <code>true</code> if full access to the server will be
+	 *                         granted; <code>false</code> if read only access will be
+	 *                         granted
 	 * @return a <code>PasswordAuthentication</code> object containing the
-	 *         user name and password used for authentication
+	 * user name and password used for authentication
 	 */
 	public PasswordAuthentication onAuthenticationChallenge(String description, boolean isUserIdRequired,
-			boolean isFullAccess);
+															boolean isFullAccess);
 
 	/**
 	 * Called when a client or server receives an authentication response
 	 * header. This method will provide the user name and expect the correct
 	 * password to be returned.
-	 * 
-	 * @param userName
-	 *            the user name provided in the authentication response; may be
-	 *            <code>null</code>
-	 * 
+	 *
+	 * @param userName the user name provided in the authentication response; may be
+	 *                 <code>null</code>
 	 * @return the correct password for the user name provided; if
-	 *         <code>null</code> is returned then the authentication request
-	 *         failed
+	 * <code>null</code> is returned then the authentication request
+	 * failed
 	 */
 	public byte[] onAuthenticationResponse(byte[] userName);
 }

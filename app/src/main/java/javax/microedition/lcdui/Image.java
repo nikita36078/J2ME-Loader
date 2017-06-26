@@ -16,62 +16,52 @@
 
 package javax.microedition.lcdui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.game.Sprite;
+import javax.microedition.shell.ConfigActivity;
 import javax.microedition.util.ContextHolder;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import java.io.FileInputStream;
-import javax.microedition.shell.ConfigActivity;
-
-public class Image
-{
+public class Image {
 	private Bitmap bitmap;
 	private Canvas canvas;
 
-	public Image(Bitmap bitmap)
-	{
-		if(bitmap == null)
-		{
+	public Image(Bitmap bitmap) {
+		if (bitmap == null) {
 			throw new NullPointerException();
 		}
 
 		this.bitmap = bitmap;
 	}
 
-	public Bitmap getBitmap()
-	{
+	public Bitmap getBitmap() {
 		return bitmap;
 	}
 
-	public Canvas getCanvas()
-	{
-		if(canvas == null)
-		{
+	public Canvas getCanvas() {
+		if (canvas == null) {
 			canvas = new Canvas(bitmap);
 		}
 
 		return canvas;
 	}
 
-	public static Image createImage(int width, int height)
-	{
+	public static Image createImage(int width, int height) {
 		return new Image(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
 	}
 
-	public static Image createImage(int id)
-	{
+	public static Image createImage(int id) {
 		return new Image(BitmapFactory.decodeResource(ContextHolder.getContext().getResources(), id));
 	}
 
-	public static Image createImage(String resname) throws IOException
-	{
-		if(resname.startsWith("/"))
-		{
+	public static Image createImage(String resname) throws IOException {
+		if (resname.startsWith("/")) {
 			resname = resname.substring(1);
 		}
 
@@ -82,96 +72,79 @@ public class Image
 		return new Image(bitmap);
 	}
 
-	public static Image createImage(InputStream stream)
-	{
+	public static Image createImage(InputStream stream) {
 		return new Image(BitmapFactory.decodeStream(stream));
 	}
 
-	public static Image createImage(byte[] imageData, int imageOffset, int imageLength)
-	{
+	public static Image createImage(byte[] imageData, int imageOffset, int imageLength) {
 		return new Image(BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength));
 	}
 
-	public static Image createImage(Image image, int x, int y, int width, int height, int transform)
-	{
+	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
 		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, Sprite.transformMatrix(null, transform, width / 2f, height / 2f), true));
 	}
-	
-	public static Image createImage(Image image){
+
+	public static Image createImage(Image image) {
 		return new Image(Bitmap.createBitmap(image.bitmap));
 	}
 
-	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha)
-	{
+	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {
 		return new Image(Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888));
 	}
 
 	/**
 	 * Функция масштабирования изображений.
-	 *
+	 * <p>
 	 * Если один из конечных размеров меньше 0,
 	 * он вычисляется на основе другого с сохранением пропорций.
-	 *
+	 * <p>
 	 * Если оба конечных размера меньше 0,
 	 * или они равны размеру исходной картинки,
 	 * возвращается исходная картинка.
 	 *
-	 * @param destw конечная ширина
-	 * @param desth конечная высота
+	 * @param destw  конечная ширина
+	 * @param desth  конечная высота
 	 * @param filter true, если нужно использовать интерполяцию
 	 * @return масштабированная картинка
 	 */
-	public Image scale(int destw, int desth, boolean filter)
-	{
+	public Image scale(int destw, int desth, boolean filter) {
 		int srcw = getWidth();
 		int srch = getHeight();
 
-		if(srcw == destw && srch == desth)
-		{
+		if (srcw == destw && srch == desth) {
 			return this;
 		}
 
-		if(destw < 0)
-		{
-			if(desth < 0)
-			{
+		if (destw < 0) {
+			if (desth < 0) {
 				return this;
-			}
-			else
-			{
+			} else {
 				destw = srcw * desth / srch;
 			}
-		}
-		else if(desth < 0)
-		{
+		} else if (desth < 0) {
 			desth = srch * destw / srcw;
 		}
 
 		return new Image(Bitmap.createScaledBitmap(bitmap, destw, desth, filter));
 	}
 
-	public Graphics getGraphics()
-	{
+	public Graphics getGraphics() {
 		return new Graphics(getCanvas());
 	}
 
-	public boolean isMutable()
-	{
+	public boolean isMutable() {
 		return bitmap.isMutable();
 	}
 
-	public int getWidth()
-	{
+	public int getWidth() {
 		return bitmap.getWidth();
 	}
 
-	public int getHeight()
-	{
+	public int getHeight() {
 		return bitmap.getHeight();
 	}
 
-	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height)
-	{
+	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
 		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
 	}
 }

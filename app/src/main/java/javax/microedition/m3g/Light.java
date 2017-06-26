@@ -107,29 +107,29 @@ public class Light extends Node {
 		} else {
 
 			gl.glLightfv(lightId, GL10.GL_DIFFUSE, col, 0);
-			gl.glLightfv(lightId, GL10.GL_AMBIENT, new float[] { 0, 0, 0, 0 }, 0);
+			gl.glLightfv(lightId, GL10.GL_AMBIENT, new float[]{0, 0, 0, 0}, 0);
 			gl.glLightfv(lightId, GL10.GL_SPECULAR, col, 0);
 
 			if (mode == Light.OMNI) {
 				// set position
-				gl.glLightfv(lightId, GL10.GL_POSITION, new float[] { 0, 0, 0, 1 }, 0);
+				gl.glLightfv(lightId, GL10.GL_POSITION, new float[]{0, 0, 0, 1}, 0);
 
 				// Set default values for cutoff/exponent
 				gl.glLightf(lightId, GL10.GL_SPOT_CUTOFF, 180.0f); // 0..90, 180
-				gl.glLightf(lightId, GL10.GL_SPOT_EXPONENT, 0.0f); // 0..128				
+				gl.glLightf(lightId, GL10.GL_SPOT_EXPONENT, 0.0f); // 0..128
 			} else if (mode == Light.SPOT) {
 				// set position
-				gl.glLightfv(lightId, GL10.GL_POSITION, new float[] { 0, 0, 0, 1 }, 0);
+				gl.glLightfv(lightId, GL10.GL_POSITION, new float[]{0, 0, 0, 1}, 0);
 
 				// Set cutoff/exponent
 				gl.glLightf(lightId, GL10.GL_SPOT_CUTOFF, spotAngle);
 				gl.glLightf(lightId, GL10.GL_SPOT_EXPONENT, spotExponent);
 
 				// Set default spot direction
-				gl.glLightfv(lightId, GL10.GL_SPOT_DIRECTION, new float[] { 0, 0, -1 }, 0);
+				gl.glLightfv(lightId, GL10.GL_SPOT_DIRECTION, new float[]{0, 0, -1}, 0);
 			} else if (mode == Light.DIRECTIONAL) {
 				// set direction (w=0 meaning directional instead of positional)
-				gl.glLightfv(lightId, GL10.GL_POSITION, new float[] { 0, 0, 1, 0 }, 0);
+				gl.glLightfv(lightId, GL10.GL_POSITION, new float[]{0, 0, 1, 0}, 0);
 
 				// Set default values for cutoff/exponent
 				gl.glLightf(lightId, GL10.GL_SPOT_CUTOFF, 180.0f);
@@ -144,13 +144,13 @@ public class Light extends Node {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.COLOR:
-		case AnimationTrack.INTENSITY:
-		case AnimationTrack.SPOT_ANGLE:
-		case AnimationTrack.SPOT_EXPONENT:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.COLOR:
+			case AnimationTrack.INTENSITY:
+			case AnimationTrack.SPOT_ANGLE:
+			case AnimationTrack.SPOT_EXPONENT:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 

@@ -18,44 +18,37 @@ package javax.microedition.lcdui;
 
 import android.view.View;
 
-public class Spacer extends Item
-{
+public class Spacer extends Item {
 	private int width, height;
 	private View view;
-	
-	public Spacer(int width, int height)
-	{
+
+	public Spacer(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}
-	
-	public void setMinimumSize(int width, int height)
-	{
+
+	public void setMinimumSize(int width, int height) {
 		this.width = width;
 		this.height = height;
-		
-		if(view != null)
-		{
+
+		if (view != null) {
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
 		}
 	}
-	
-	public View getItemContentView()
-	{
-		if(view == null)
-		{
+
+	public View getItemContentView() {
+		if (view == null) {
 			view = new View(getOwnerForm().getParentActivity());
-			
+
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
 		}
-		
+
 		return view;
 	}
-	
-	public void clearItemContentView()
-	{
+
+	public void clearItemContentView() {
 		view = null;
 	}
 }

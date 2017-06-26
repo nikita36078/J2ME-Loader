@@ -19,51 +19,42 @@ package javax.microedition.lcdui;
 import android.view.View;
 import android.widget.ImageView;
 
-public class ImageItem extends Item
-{
+public class ImageItem extends Item {
 	private Image image;
 	private ImageView imgview;
-	
-	public ImageItem(String label, Image image, int layout, String altText)
-	{
+
+	public ImageItem(String label, Image image, int layout, String altText) {
 		this(label, image, layout, altText, PLAIN);
 	}
-	
-	public ImageItem(String label, Image image, int layout, String altText, int appearanceMode)
-	{
+
+	public ImageItem(String label, Image image, int layout, String altText, int appearanceMode) {
 		setLabel(label);
 		setImage(image);
 		setLayout(layout);
 	}
-	
-	public void setImage(Image img)
-	{
+
+	public void setImage(Image img) {
 		image = img;
-		
-		if(imgview != null)
-		{
+
+		if (imgview != null) {
 			imgview.setImageBitmap(image != null ? image.getBitmap() : null);
 		}
 	}
-	
-	public Image getImage()
-	{
+
+	public Image getImage() {
 		return image;
 	}
-	
-	public View getItemContentView()
-	{
-		if(imgview == null)
-		{
+
+	public View getItemContentView() {
+		if (imgview == null) {
 			imgview = new ImageView(getOwnerForm().getParentActivity());
 			imgview.setImageBitmap(image != null ? image.getBitmap() : null);
 		}
-		
+
 		return imgview;
 	}
-	
-	public void clearItemContentView()
-	{
+
+	public void clearItemContentView() {
 		imgview = null;
 	}
 }

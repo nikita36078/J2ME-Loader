@@ -20,150 +20,150 @@ import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
 
-    private static ArrayStack<CanvasEvent> recycled = new ArrayStack();
+	private static ArrayStack<CanvasEvent> recycled = new ArrayStack();
 
-    public static final int KEY_PRESSED = 0,
-            KEY_REPEATED = 1,
-            KEY_RELEASED = 2,
-            POINTER_PRESSED = 3,
-            POINTER_DRAGGED = 4,
-            POINTER_RELEASED = 5,
-            SHOW_NOTIFY = 6,
-            HIDE_NOTIFY = 7,
-            SIZE_CHANGED = 8;
+	public static final int KEY_PRESSED = 0,
+			KEY_REPEATED = 1,
+			KEY_RELEASED = 2,
+			POINTER_PRESSED = 3,
+			POINTER_DRAGGED = 4,
+			POINTER_RELEASED = 5,
+			SHOW_NOTIFY = 6,
+			HIDE_NOTIFY = 7,
+			SIZE_CHANGED = 8;
 
-    private static int[] enqueued = new int[9];
+	private static int[] enqueued = new int[9];
 
-    private Canvas canvas;
-    private int eventType;
+	private Canvas canvas;
+	private int eventType;
 
-    private int keyCode;
+	private int keyCode;
 
-    private int pointer;
-    private float x, y;
+	private int pointer;
+	private float x, y;
 
-    private int width;
-    private int height;
+	private int width;
+	private int height;
 
-    public static Event getInstance(Canvas canvas, int eventType) {
-        CanvasEvent instance = recycled.pop();
+	public static Event getInstance(Canvas canvas, int eventType) {
+		CanvasEvent instance = recycled.pop();
 
-        if (instance == null) {
-            instance = new CanvasEvent();
-        }
+		if (instance == null) {
+			instance = new CanvasEvent();
+		}
 
-        instance.canvas = canvas;
-        instance.eventType = eventType;
+		instance.canvas = canvas;
+		instance.eventType = eventType;
 
-        return instance;
-    }
+		return instance;
+	}
 
-    public static Event getInstance(Canvas canvas, int eventType, int keyCode) {
-        CanvasEvent instance = recycled.pop();
+	public static Event getInstance(Canvas canvas, int eventType, int keyCode) {
+		CanvasEvent instance = recycled.pop();
 
-        if (instance == null) {
-            instance = new CanvasEvent();
-        }
+		if (instance == null) {
+			instance = new CanvasEvent();
+		}
 
-        instance.canvas = canvas;
-        instance.eventType = eventType;
-        instance.keyCode = keyCode;
+		instance.canvas = canvas;
+		instance.eventType = eventType;
+		instance.keyCode = keyCode;
 
-        return instance;
-    }
+		return instance;
+	}
 
-    public static Event getInstance(Canvas canvas, int eventType, int pointer, float x, float y) {
-        CanvasEvent instance = recycled.pop();
+	public static Event getInstance(Canvas canvas, int eventType, int pointer, float x, float y) {
+		CanvasEvent instance = recycled.pop();
 
-        if (instance == null) {
-            instance = new CanvasEvent();
-        }
+		if (instance == null) {
+			instance = new CanvasEvent();
+		}
 
-        instance.canvas = canvas;
-        instance.eventType = eventType;
-        instance.pointer = pointer;
-        instance.x = x;
-        instance.y = y;
+		instance.canvas = canvas;
+		instance.eventType = eventType;
+		instance.pointer = pointer;
+		instance.x = x;
+		instance.y = y;
 
-        return instance;
-    }
+		return instance;
+	}
 
-    public static Event getInstance(Canvas canvas, int eventType, int width, int height) {
-        CanvasEvent instance = recycled.pop();
+	public static Event getInstance(Canvas canvas, int eventType, int width, int height) {
+		CanvasEvent instance = recycled.pop();
 
-        if (instance == null) {
-            instance = new CanvasEvent();
-        }
+		if (instance == null) {
+			instance = new CanvasEvent();
+		}
 
-        instance.canvas = canvas;
-        instance.eventType = eventType;
-        instance.width = width;
-        instance.height = height;
+		instance.canvas = canvas;
+		instance.eventType = eventType;
+		instance.width = width;
+		instance.height = height;
 
-        return instance;
-    }
+		return instance;
+	}
 
-    public void process() {
-        switch (eventType) {
-            case KEY_PRESSED:
-                canvas.keyPressed(keyCode);
-                return;
+	public void process() {
+		switch (eventType) {
+			case KEY_PRESSED:
+				canvas.keyPressed(keyCode);
+				return;
 
-            case KEY_REPEATED:
-                canvas.keyRepeated(keyCode);
-                return;
+			case KEY_REPEATED:
+				canvas.keyRepeated(keyCode);
+				return;
 
-            case KEY_RELEASED:
-                canvas.keyReleased(keyCode);
-                return;
+			case KEY_RELEASED:
+				canvas.keyReleased(keyCode);
+				return;
 
-            case POINTER_PRESSED:
-                canvas.pointerPressed(pointer, x, y);
-                return;
+			case POINTER_PRESSED:
+				canvas.pointerPressed(pointer, x, y);
+				return;
 
-            case POINTER_DRAGGED:
-                canvas.pointerDragged(pointer, x, y);
-                return;
+			case POINTER_DRAGGED:
+				canvas.pointerDragged(pointer, x, y);
+				return;
 
-            case POINTER_RELEASED:
-                canvas.pointerReleased(pointer, x, y);
-                return;
+			case POINTER_RELEASED:
+				canvas.pointerReleased(pointer, x, y);
+				return;
 
-            case SHOW_NOTIFY:
-                canvas.showNotify();
-                return;
+			case SHOW_NOTIFY:
+				canvas.showNotify();
+				return;
 
-            case HIDE_NOTIFY:
-                canvas.hideNotify();
-                return;
+			case HIDE_NOTIFY:
+				canvas.hideNotify();
+				return;
 
-            case SIZE_CHANGED:
-                canvas.sizeChanged(width, height);
-                return;
-        }
-    }
+			case SIZE_CHANGED:
+				canvas.sizeChanged(width, height);
+				return;
+		}
+	}
 
-    public void recycle() {
-        canvas = null;
-        recycled.push(this);
-    }
+	public void recycle() {
+		canvas = null;
+		recycled.push(this);
+	}
 
-    public void enterQueue() {
-        enqueued[eventType]++;
-    }
+	public void enterQueue() {
+		enqueued[eventType]++;
+	}
 
-    public void leaveQueue() {
-        enqueued[eventType]--;
-    }
+	public void leaveQueue() {
+		enqueued[eventType]--;
+	}
 
-    public boolean placeableAfter(Event event) {
-        if (event instanceof CanvasEvent) {
-            switch (eventType) {
-                case KEY_REPEATED:
-                case POINTER_DRAGGED:
-                    return enqueued[eventType] < 2;
-            }
-        }
-        return true;
-    }
+	public boolean placeableAfter(Event event) {
+		if (event instanceof CanvasEvent) {
+			switch (eventType) {
+				case KEY_REPEATED:
+				case POINTER_DRAGGED:
+					return enqueued[eventType] < 2;
+			}
+		}
+		return true;
+	}
 }

@@ -5,13 +5,13 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 
 final class CommandHandler implements CommandListener {
-    private FullCanvas canvas;
+	private FullCanvas canvas;
 
-    CommandHandler(FullCanvas fullCanvas) {
-        this.canvas = fullCanvas;
-    }
+	CommandHandler(FullCanvas fullCanvas) {
+		this.canvas = fullCanvas;
+	}
 
-    public final void commandAction(Command command, Displayable displayable) {
-        canvas.processKeyCommand(((ButtonCommand) command).key);
-    }
+	public final void commandAction(Command command, Displayable displayable) {
+		canvas.processKeyCommand(((ButtonCommand) command).key);
+	}
 }

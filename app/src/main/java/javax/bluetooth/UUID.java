@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 
 package javax.bluetooth;
 
@@ -14,16 +13,16 @@ package javax.bluetooth;
  * unique identifiers. These 128-bit unsigned integers are guaranteed
  * to be unique across all time and space. Accordingly, an instance of
  * this class is immutable.
- *
+ * <p>
  * The Bluetooth specification provides an algorithm describing how a
  * 16-bit or 32-bit UUID could be promoted to a 128-bit UUID.
  * Accordingly, this class provides an interface that assists
  * applications in creating 16-bit, 32-bit, and 128-bit long UUIDs. The
  * methods supported by this class allow equality testing of two UUID
  * objects.
- *
  * <p>
- *
+ * <p>
+ * <p>
  * The Bluetooth Assigned Numbers document (<A
  * HREF="http://www.bluetooth.org/assigned-numbers/sdp.htm">
  * http://www.bluetooth.org/assigned-numbers/sdp.htm</A>)
@@ -58,7 +57,6 @@ package javax.bluetooth;
  * </TABLE>
  *
  * @version 1.0 February 11, 2002
- *
  */
 public class UUID {
 	/**
@@ -73,10 +71,8 @@ public class UUID {
 	 * be thrown.
 	 *
 	 * @param uuidValue the 16-bit or 32-bit value of the UUID
-	 *
-	 * @exception IllegalArgumentException if <code>uuidValue</code>
-	 * is not in the range [0, 2<sup>32</sup> -1]
-	 *
+	 * @throws IllegalArgumentException if <code>uuidValue</code>
+	 *                                  is not in the range [0, 2<sup>32</sup> -1]
 	 */
 	public UUID(long uuidValue) {
 		if (uuidValue < 0 || uuidValue > 0xffffffffl) {
@@ -94,7 +90,7 @@ public class UUID {
 	 * and less than or equal to 32. A string length that exceeds 32 is
 	 * illegal and will cause an exception. Finally, a <code>null</code> input
 	 * is also considered illegal and causes an exception.
-	 * <P>
+	 * <p>
 	 * If <code>shortUUID</code> is <code>true</code>, <code>uuidValue</code>
 	 * represents a 16-bit or 32-bit UUID.  If <code>uuidValue</code> is in
 	 * the range 0x0000 to 0xFFFF then this constructor will create a
@@ -102,36 +98,31 @@ public class UUID {
 	 * 0x000010000 to 0xFFFFFFFF, then this constructor will create
 	 * a 32-bit UUID.  Therefore, <code>uuidValue</code> may only be 8 characters
 	 * long.
-	 * <P>
+	 * <p>
 	 * On the other hand, if <code>shortUUID</code> is <code>false</code>, then
 	 * <code>uuidValue</code> represents a 128-bit UUID.  Therefore,
 	 * <code>uuidValue</code> may only be 32 character long
 	 *
 	 * @param uuidValue the string representation of a 16-bit,
-	 * 32-bit or 128-bit UUID
-	 *
+	 *                  32-bit or 128-bit UUID
 	 * @param shortUUID indicates the size of the UUID to be constructed;
-	 * <code>true</code> is used to indicate short UUIDs,
-	 * i.e. either 16-bit or 32-bit; <code>false</code> indicates an 128-bit
-	 * UUID
-	 *
-	 * @exception NumberFormatException if <code>uuidValue</code>
-	 * has characters that are not defined in the hexadecimal set [0-9,
-	 * a-f, A-F]
-	 *
-	 * @exception IllegalArgumentException if <code>uuidValue</code>
-	 * length is zero; if <code>shortUUID</code> is <code>true</code>
-	 * and <code>uuidValue</code>'s length is  greater than 8; if
-	 * <code>shortUUID</code> is <code>false</code> and
-	 * <code>uuidValue</code>'s length is greater than 32
-	 *
-	 * @exception NullPointerException if <code>uuidValue</code> is
-	 * <code>null</code>
-	 *
+	 *                  <code>true</code> is used to indicate short UUIDs,
+	 *                  i.e. either 16-bit or 32-bit; <code>false</code> indicates an 128-bit
+	 *                  UUID
+	 * @throws NumberFormatException    if <code>uuidValue</code>
+	 *                                  has characters that are not defined in the hexadecimal set [0-9,
+	 *                                  a-f, A-F]
+	 * @throws IllegalArgumentException if <code>uuidValue</code>
+	 *                                  length is zero; if <code>shortUUID</code> is <code>true</code>
+	 *                                  and <code>uuidValue</code>'s length is  greater than 8; if
+	 *                                  <code>shortUUID</code> is <code>false</code> and
+	 *                                  <code>uuidValue</code>'s length is greater than 32
+	 * @throws NullPointerException     if <code>uuidValue</code> is
+	 *                                  <code>null</code>
 	 */
 	public UUID(String uuidValue, boolean shortUUID) {
 		if (uuidValue == null) {
-            throw new NullPointerException("uuidValue is null");
+			throw new NullPointerException("uuidValue is null");
 		}
 	}
 
@@ -144,7 +135,6 @@ public class UUID {
 	 * never be <code>null</code>.
 	 *
 	 * @return the string representation of the UUID
-	 *
 	 */
 	public String toString() {
 		return null;
@@ -157,10 +147,8 @@ public class UUID {
 	 * <code>null</code> or is not a <code>UUID</code> object.
 	 *
 	 * @param value the object to compare to
-	 *
 	 * @return <code>true</code> if the 128 bit values of the two
 	 * objects are equal, otherwise <code>false</code>
-	 *
 	 */
 	public boolean equals(Object value) {
 		if (value == null || !(value instanceof UUID)) {

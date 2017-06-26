@@ -19,47 +19,45 @@ package javax.microedition.lcdui.event;
 /**
  * Базовый класс для всех событий.
  */
-public abstract class Event implements Runnable
-{
+public abstract class Event implements Runnable {
 	/**
 	 * Обработка события.
 	 * Именно здесь нужно выполнять требуемые действия.
 	 */
 	public abstract void process();
-	
+
 	/**
 	 * Сдача события в утиль.
-	 * 
+	 * <p>
 	 * Если предусмотрен пул событий, то здесь
 	 * событие нужно обнулить и вернуть в пул.
 	 */
 	public abstract void recycle();
-	
+
 	/**
 	 * Обработать событие и сдать в утиль за один прием.
 	 */
-	public void run()
-	{
+	public void run() {
 		process();
 		recycle();
 	}
-	
+
 	/**
 	 * Вызывается, когда событие вошло в очередь.
 	 * Здесь можно увеличить счетчик таких событий в очереди.
 	 */
 	public abstract void enterQueue();
-	
+
 	/**
 	 * Вызывается, когда событие покинуло очередь.
 	 * Здесь можно уменьшить счетчик таких событий в очереди.
 	 */
 	public abstract void leaveQueue();
-	
+
 	/**
 	 * Проверить, можно ли поместить это событие в очередь
 	 * сразу за некоторым другим событием.
-	 * 
+	 *
 	 * @param event событие, после которого нас могут поместить в очередь
 	 * @return true, если мы на это согласны
 	 */

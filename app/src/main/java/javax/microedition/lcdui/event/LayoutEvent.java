@@ -16,66 +16,57 @@
 
 package javax.microedition.lcdui.event;
 
-import javax.microedition.util.ArrayStack;
-
 import android.view.View;
 import android.view.ViewGroup;
 
-public class LayoutEvent extends Event
-{
+import javax.microedition.util.ArrayStack;
+
+public class LayoutEvent extends Event {
 	private static ArrayStack<LayoutEvent> recycled = new ArrayStack();
-	
+
 	private static final int ADD_VIEW = 0;
-	
+
 	private int eventType;
 	private ViewGroup layout;
 	private View view;
-	
-	public static Event addView(ViewGroup layout, View view)
-	{
+
+	public static Event addView(ViewGroup layout, View view) {
 		LayoutEvent instance = recycled.pop();
-		
-		if(instance == null)
-		{
+
+		if (instance == null) {
 			instance = new LayoutEvent();
 		}
-		
+
 		instance.eventType = ADD_VIEW;
-		
+
 		instance.layout = layout;
 		instance.view = view;
-		
+
 		return instance;
 	}
-	
-	public void process()
-	{
-		switch(eventType)
-		{
+
+	public void process() {
+		switch (eventType) {
 			case ADD_VIEW:
 				layout.addView(view);
 				return;
 		}
 	}
-	
-	public void recycle()
-	{
+
+	public void recycle() {
 		layout = null;
 		view = null;
-		
+
 		recycled.push(this);
 	}
-	
-	public void enterQueue()
-	{
-	}
-	
-	public void leaveQueue()
-	{
+
+	public void enterQueue() {
 	}
 
-	public boolean placeableAfter(Event event)
-	{
+	public void leaveQueue() {
+	}
+
+	public boolean placeableAfter(Event event) {
 		return true;
 	}
 }

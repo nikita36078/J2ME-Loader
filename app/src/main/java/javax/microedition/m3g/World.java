@@ -7,7 +7,7 @@ public class World extends Group {
 
 	public World() {
 	}
-	
+
 	Object3D duplicateImpl() {
 		super.duplicateImpl();
 		World copy = new World();

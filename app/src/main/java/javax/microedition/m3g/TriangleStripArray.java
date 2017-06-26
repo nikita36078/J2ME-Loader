@@ -20,9 +20,9 @@ public class TriangleStripArray extends IndexBuffer {
 	public TriangleStripArray(int firstIndex, int[] stripLengths) {
 		this(getStripIndices(firstIndex, stripLengths), stripLengths);
 	}
-	
+
 	private void put(int value) {
-		buffer.put((short)(value & 0xFFFF));
+		buffer.put((short) (value & 0xFFFF));
 	}
 
 	public TriangleStripArray(int[] stripIndices, int[] stripLengths) {
@@ -52,7 +52,7 @@ public class TriangleStripArray extends IndexBuffer {
 			if (strip != 0) {
 				put(stripIndices[index - 1]);
 				put(stripIndices[index]);
-				if ((stripLengths[strip-1] % 2) != 0)
+				if ((stripLengths[strip - 1] % 2) != 0)
 					put(stripIndices[index]);
 			}
 			for (int i = 0; i < stripLengths[strip]; i++)
@@ -89,7 +89,7 @@ public class TriangleStripArray extends IndexBuffer {
 		}
 		return sum;
 	}
-	
+
 	Object3D duplicateImpl() {
 		TriangleStripArray copy = new TriangleStripArray();
 		buffer.rewind();

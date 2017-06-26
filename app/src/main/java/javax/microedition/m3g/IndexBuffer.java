@@ -1,8 +1,8 @@
 package javax.microedition.m3g;
 
 import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
 import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 public abstract class IndexBuffer extends Object3D {
 	protected ShortBuffer buffer = null;

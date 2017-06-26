@@ -21,23 +21,20 @@
  *  See the LGPL or the AL for the specific language governing permissions and
  *  limitations.
  */
- 
+
 package javax.microedition.rms;
 
 
-public class InvalidRecordIDException extends RecordStoreException
-{
+public class InvalidRecordIDException extends RecordStoreException {
 
-	public InvalidRecordIDException(String message)
-	{
+	public InvalidRecordIDException(String message) {
 		super(message);
 	}
-	
-	
-	public InvalidRecordIDException()
-	{
+
+
+	public InvalidRecordIDException() {
 		super();
 	}
-	
+
 }
 

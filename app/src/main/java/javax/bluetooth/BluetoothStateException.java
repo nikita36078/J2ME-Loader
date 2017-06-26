@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 
 package javax.bluetooth;
 
@@ -27,17 +26,17 @@ public class BluetoothStateException extends IOException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-     * Creates a new <code>BluetoothStateException</code> without a detail
-     * message.
-     */
+	 * Creates a new <code>BluetoothStateException</code> without a detail
+	 * message.
+	 */
 	public BluetoothStateException() {
 	}
 
-    /**
-     * Creates a <code>BluetoothStateException</code> with the specified
-     * detail message.
-     *
-     * @param msg the reason for the exception
+	/**
+	 * Creates a <code>BluetoothStateException</code> with the specified
+	 * detail message.
+	 *
+	 * @param msg the reason for the exception
 	 */
 
 	public BluetoothStateException(String msg) {

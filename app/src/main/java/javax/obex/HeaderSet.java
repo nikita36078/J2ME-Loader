@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 package javax.obex;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.io.IOException;
 /**
  * The <code>HeaderSet</code> interface defines the methods that set and get
  * the values of OBEX headers.
- * <P>
+ * <p>
  * The following table describes how the headers specified in this interface are
  * represented in OBEX and in Java. The Java types are used with the
  * <code>setHeader()</code> and <code>getHeader()</code> methods and specify
@@ -86,7 +85,7 @@ import java.io.IOException;
  * <TD><code>byte[]</code></TD>
  * </TR>
  * </TABLE>
- * <P>
+ * <p>
  * The <code>APPLICATION_PARAMETER</code> header requires some additional
  * explanation. The byte array provided with the
  * <code>APPLICATION_PARAMETER</code> should be of the form Tag-Length-Value
@@ -95,9 +94,9 @@ import java.io.IOException;
  * triples are allowed within a single <code>APPLICATION_PARAMETER</code>
  * header. The implementation will NOT check this condition. It is mentioned
  * only to allow for interoperability between OBEX implementations.
- * <P>
+ * <p>
  * <STRONG>User Defined Headers</STRONG>
- * <P>
+ * <p>
  * OBEX allows 64 user-defined header values. Depending on the header identifier
  * provided, headers have different types. The table below defines the ranges
  * and their types. <TABLE BORDER>
@@ -132,7 +131,7 @@ import java.io.IOException;
  * <TD><code>java.lang.Long</code> in the range 0 to 2<sup>32</sup>-1</TD>
  * </TR>
  * </TABLE>
- * 
+ *
  * @version 1.0 February 11, 2002
  */
 public interface HeaderSet {
@@ -140,14 +139,14 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Count header. This allows the connection statement to
 	 * tell the server how many objects it plans to send or retrieve.
-	 * <P>
+	 * <p>
 	 * The value of <code>COUNT</code> is 0xC0 (192).
 	 */
 	public static final int COUNT = 0xC0;
 
 	/**
 	 * Represents the OBEX Name header. This specifies the name of the object.
-	 * <P>
+	 * <p>
 	 * The value of <code>NAME</code> is 0x01 (1).
 	 */
 	public static final int NAME = 0x01;
@@ -155,7 +154,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Type header. This allows a request to specify the
 	 * type of the object (e.g. text, html, binary, etc.).
-	 * <P>
+	 * <p>
 	 * The value of <code>TYPE</code> is 0x42 (66).
 	 */
 	public static final int TYPE = 0x42;
@@ -163,7 +162,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Length header. This is the length of the object in
 	 * bytes.
-	 * <P>
+	 * <p>
 	 * The value of <code>LENGTH</code> is 0xC3 (195).
 	 */
 	public static final int LENGTH = 0xC3;
@@ -171,7 +170,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Time header using the ISO 8601 standards. This is the
 	 * preferred time header.
-	 * <P>
+	 * <p>
 	 * The value of <code>TIME_ISO_8601</code> is 0x44 (68).
 	 */
 	public static final int TIME_ISO_8601 = 0x44;
@@ -180,7 +179,7 @@ public interface HeaderSet {
 	 * Represents the OBEX Time header using the 4 byte representation. This is
 	 * only included for backwards compatibility. It represents the number of
 	 * seconds since January 1, 1970.
-	 * <P>
+	 * <p>
 	 * The value of <code>TIME_4_BYTE</code> is 0xC4 (196).
 	 */
 	public static final int TIME_4_BYTE = 0xC4;
@@ -188,7 +187,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Description header. This is a text description of the
 	 * object.
-	 * <P>
+	 * <p>
 	 * The value of <code>DESCRIPTION</code> is 0x05 (5).
 	 */
 	public static final int DESCRIPTION = 0x05;
@@ -196,7 +195,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Target header. This is the name of the service an
 	 * operation is targeted to.
-	 * <P>
+	 * <p>
 	 * The value of <code>TARGET</code> is 0x46 (70).
 	 */
 	public static final int TARGET = 0x46;
@@ -204,7 +203,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX HTTP header. This allows an HTTP 1.X header to be
 	 * included in a request or reply.
-	 * <P>
+	 * <p>
 	 * The value of <code>HTTP</code> is 0x47 (71).
 	 */
 	public static final int HTTP = 0x47;
@@ -212,7 +211,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Who header. Identifies the OBEX application to
 	 * determine if the two peers are talking to each other.
-	 * <P>
+	 * <p>
 	 * The value of <code>WHO</code> is 0x4A (74).
 	 */
 	public static final int WHO = 0x4A;
@@ -220,7 +219,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Object Class header. This header specifies the OBEX
 	 * object class of the object.
-	 * <P>
+	 * <p>
 	 * The value of <code>OBJECT_CLASS</code> is 0x4F (79).
 	 */
 	public static final int OBJECT_CLASS = 0x4F;
@@ -228,7 +227,7 @@ public interface HeaderSet {
 	/**
 	 * Represents the OBEX Application Parameter header. This header specifies
 	 * additional application request and response information.
-	 * <P>
+	 * <p>
 	 * The value of <code>APPLICATION_PARAMETER</code> is 0x4C (76).
 	 */
 	public static final int APPLICATION_PARAMETER = 0x4C;
@@ -239,39 +238,28 @@ public interface HeaderSet {
 	 * this interface. If <code>null</code> is passed as the
 	 * <code>headerValue</code> then the header will be removed from the set
 	 * of headers to include in the next request.
-	 * 
-	 * @param headerID
-	 *            the identifier to include in the message
-	 * 
-	 * @param headerValue
-	 *            the value of the header identifier
-	 * 
-	 * @exception IllegalArgumentException
-	 *                if the header identifier provided is not one defined in
-	 *                this interface or a user-defined header; if the type of
-	 *                <code>headerValue</code> is not the correct Java type as
-	 *                defined in the description of this interface
+	 *
+	 * @param headerID    the identifier to include in the message
+	 * @param headerValue the value of the header identifier
+	 * @throws IllegalArgumentException if the header identifier provided is not one defined in
+	 *                                  this interface or a user-defined header; if the type of
+	 *                                  <code>headerValue</code> is not the correct Java type as
+	 *                                  defined in the description of this interface
 	 */
 	public void setHeader(int headerID, Object headerValue);
 
 	/**
 	 * Retrieves the value of the header identifier provided. The type of the
 	 * Object returned is defined in the description of this interface.
-	 * 
-	 * @param headerID
-	 *            the header identifier whose value is to be returned
-	 * 
+	 *
+	 * @param headerID the header identifier whose value is to be returned
 	 * @return the value of the header provided or <code>null</code> if the
-	 *         header identifier specified is not part of this
-	 *         <code>HeaderSet</code> object
-	 * 
-	 * @exception IllegalArgumentException
-	 *                if the <code>headerID</code> is not one defined in this
-	 *                interface or any of the user-defined headers
-	 * 
-	 * @exception IOException
-	 *                if an error occurred in the transport layer during the
-	 *                operation or if the connection has been closed
+	 * header identifier specified is not part of this
+	 * <code>HeaderSet</code> object
+	 * @throws IllegalArgumentException if the <code>headerID</code> is not one defined in this
+	 *                                  interface or any of the user-defined headers
+	 * @throws IOException              if an error occurred in the transport layer during the
+	 *                                  operation or if the connection has been closed
 	 */
 	public Object getHeader(int headerID) throws IOException;
 
@@ -280,15 +268,12 @@ public interface HeaderSet {
 	 * <code>getHeader</code> method that will not return <code>null</code>.
 	 * In other words, this method returns all the headers that are available in
 	 * this object.
-	 * 
-	 * @see #getHeader
-	 * 
+	 *
 	 * @return the array of headers that are set in this object or
-	 *         <code>null</code> if no headers are available
-	 * 
-	 * @exception IOException
-	 *                if an error occurred in the transport layer during the
-	 *                operation or the connection has been closed
+	 * <code>null</code> if no headers are available
+	 * @throws IOException if an error occurred in the transport layer during the
+	 *                     operation or the connection has been closed
+	 * @see #getHeader
 	 */
 	public int[] getHeaderList() throws IOException;
 
@@ -297,38 +282,30 @@ public interface HeaderSet {
 	 * be encoded based upon the default encoding scheme used by the
 	 * implementation to encode strings. Therefore, the encoding scheme used to
 	 * encode the <code>realm</code> is application dependent.
-	 * 
-	 * @param realm
-	 *            a short description that describes what password to use; if
-	 *            <code>null</code> no realm will be sent in the
-	 *            authentication challenge header
-	 * 
-	 * @param userID
-	 *            if <code>true</code>, a user ID is required in the reply;
-	 *            if <code>false</code>, no user ID is required
-	 * 
-	 * @param access
-	 *            if <code>true</code> then full access will be granted if
-	 *            successful; if <code>false</code> then read-only access will
-	 *            be granted if successful
+	 *
+	 * @param realm  a short description that describes what password to use; if
+	 *               <code>null</code> no realm will be sent in the
+	 *               authentication challenge header
+	 * @param userID if <code>true</code>, a user ID is required in the reply;
+	 *               if <code>false</code>, no user ID is required
+	 * @param access if <code>true</code> then full access will be granted if
+	 *               successful; if <code>false</code> then read-only access will
+	 *               be granted if successful
 	 */
 	public void createAuthenticationChallenge(String realm, boolean userID, boolean access);
 
 	/**
 	 * Returns the response code received from the server. Response codes are
 	 * defined in the <code>ResponseCodes</code> class.
-	 * 
-	 * @see ResponseCodes
-	 * 
+	 *
 	 * @return the response code retrieved from the server
-	 * 
-	 * @exception IOException
-	 *                if an error occurred in the transport layer during the
-	 *                transaction; if this method is called on a
-	 *                <code>HeaderSet</code> object created by calling
-	 *                <code>createHeaderSet()</code> in a
-	 *                <code>ClientSession</code> object; if an OBEX server
-	 *                created this object
+	 * @throws IOException if an error occurred in the transport layer during the
+	 *                     transaction; if this method is called on a
+	 *                     <code>HeaderSet</code> object created by calling
+	 *                     <code>createHeaderSet()</code> in a
+	 *                     <code>ClientSession</code> object; if an OBEX server
+	 *                     created this object
+	 * @see ResponseCodes
 	 */
 	public int getResponseCode() throws IOException;
 }

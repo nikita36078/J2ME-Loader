@@ -65,10 +65,10 @@ public class MorphingMesh extends Mesh {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.MORPH_WEIGHTS:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.MORPH_WEIGHTS:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 

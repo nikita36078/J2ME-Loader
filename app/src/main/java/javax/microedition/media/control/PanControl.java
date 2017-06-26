@@ -18,8 +18,8 @@ package javax.microedition.media.control;
 
 import javax.microedition.media.Control;
 
-public interface PanControl extends Control
-{
+public interface PanControl extends Control {
 	public int setPan(int pan);
+
 	public int getPan();
 }

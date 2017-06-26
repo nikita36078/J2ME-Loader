@@ -25,6 +25,8 @@
 
 package org.microemu.cldc.datagram;
 
+import org.microemu.microedition.io.ConnectionImplementation;
+
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -32,8 +34,6 @@ import java.net.InetAddress;
 import javax.microedition.io.Datagram;
 import javax.microedition.io.DatagramConnection;
 import javax.microedition.io.UDPDatagramConnection;
-
-import org.microemu.microedition.io.ConnectionImplementation;
 
 /**
  * {@link ConnectionImplementation} for the datagram protocol (UDP).
@@ -105,7 +105,7 @@ public class Connection implements DatagramConnection, UDPDatagramConnection, Co
 		InetAddress address = socket.getInetAddress();
 		if (address == null) {
 			/*
-			 * server mode we get the localhost from InetAddress otherwise we
+             * server mode we get the localhost from InetAddress otherwise we
 			 * get '0.0.0.0'
 			 */
 			address = InetAddress.getLocalHost();

@@ -1,30 +1,34 @@
 /**
- *  MicroEmulator
- *  Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
+ * MicroEmulator
+ * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
+ * <p>
+ * It is licensed under the following two licenses as alternatives:
+ * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
+ * 2. Apache License (the "AL") Version 2.0
+ * <p>
+ * You may not use this file except in compliance with at least one of
+ * the above two licenses.
+ * <p>
+ * You may obtain a copy of the LGPL at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+ * <p>
+ * You may obtain a copy of the AL at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the LGPL or the AL for the specific language governing permissions and
+ * limitations.
  *
- *  It is licensed under the following two licenses as alternatives:
- *    1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
- *    2. Apache License (the "AL") Version 2.0
- *
- *  You may not use this file except in compliance with at least one of
- *  the above two licenses.
- *
- *  You may obtain a copy of the LGPL at
- *      http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
- *
- *  You may obtain a copy of the AL at
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the LGPL or the AL for the specific language governing permissions and
- *  limitations.
- *
- *  @version $Id$
+ * @version $Id$
  */
 
 package org.microemu.android.asm;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -41,26 +45,22 @@ import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-
 public class AndroidProducer {
-	
-	private static 	HashMap<String, ArrayList<String>> classesHierarchy =
+
+	private static HashMap<String, ArrayList<String>> classesHierarchy =
 			new HashMap<String, ArrayList<String>>();
-	
-	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations = 
+
+	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations =
 			new HashMap<String, TreeMap<FieldNodeExt, String>>();
 
 	private static HashMap<String, ArrayList<String>> methodTranslations =
 			new HashMap<String, ArrayList<String>>();
-	
+
 	private static void analyze(String className, final InputStream classInputStream) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
 		FirstPassVisitor cv = new FirstPassVisitor(classesHierarchy, methodTranslations);
 		cr.accept(cv, 0);
-  }
+	}
 
 	private static byte[] instrument(String name, final InputStream classInputStream, boolean isMidlet) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
@@ -69,7 +69,7 @@ public class AndroidProducer {
 		cr.accept(cv, 0);
 
 		return cw.toByteArray();
-    }
+	}
 
 	public static void processJar(File jarInputFile, File jarOutputFile, boolean isMidlet) throws IOException {
 		JarInputStream jis = null;
@@ -83,7 +83,7 @@ public class AndroidProducer {
 			} else {
 				jos = new JarOutputStream(new FileOutputStream(jarOutputFile), manifest);
 			}
-		
+
 			byte[] buffer = new byte[1024];
 			JarEntry jarEntry;
 			while ((jarEntry = jis.getNextJarEntry()) != null) {
@@ -94,7 +94,7 @@ public class AndroidProducer {
 					int length = buffer.length;
 					while ((read = jis.read(buffer, size, length)) > 0) {
 						size += read;
-						
+
 						length = 1024;
 						if (size + length > buffer.length) {
 							byte[] newInputBuffer = new byte[size + length];
@@ -105,23 +105,23 @@ public class AndroidProducer {
 					byte[] inBuffer = new byte[size];
 					System.arraycopy(buffer, 0, inBuffer, 0, size);
 					resources.put(name, inBuffer);
-					if (name.endsWith(".class")) {	
+					if (name.endsWith(".class")) {
 						analyze(name.substring(0, name.length() - ".class".length()), new ByteArrayInputStream(inBuffer));
 					}
 				}
 			}
-			
+
 			Iterator<String> it = resources.keySet().iterator();
 			while (it.hasNext()) {
 				String name = it.next();
 				byte[] inBuffer = resources.get(name);
 				byte[] outBuffer = inBuffer;
-				if (name.endsWith(".class")) {					
-			        outBuffer = instrument(name, new ByteArrayInputStream(inBuffer), isMidlet);
+				if (name.endsWith(".class")) {
+					outBuffer = instrument(name, new ByteArrayInputStream(inBuffer), isMidlet);
 				}
 				jos.putNextEntry(new JarEntry(name));
 				jos.write(outBuffer);
-			}			
+			}
 		} finally {
 			if (jis != null) {
 				jis.close();
@@ -131,7 +131,7 @@ public class AndroidProducer {
 			}
 		}
 	}
-	
+
 	public static void main(String args[]) {
 		if (args.length < 2 || args.length > 3) {
 			System.out.println("usage: AndroidProducer <infile> <outfile> [midlet]");

@@ -16,6 +16,8 @@
 
 package javax.microedition.media;
 
+import android.webkit.MimeTypeMap;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,199 +26,150 @@ import java.io.RandomAccessFile;
 import javax.microedition.media.protocol.DataSource;
 import javax.microedition.util.ContextHolder;
 
-import android.webkit.MimeTypeMap;
-
-public class Manager
-{
-	private static class StreamCacheCleaner implements PlayerListener
-	{
-		public void playerUpdate(Player player, String event, Object eventData)
-		{
-			if(PlayerListener.CLOSED.equals(event) && eventData instanceof String)
-			{
-				event = (String)eventData;
+public class Manager {
+	private static class StreamCacheCleaner implements PlayerListener {
+		public void playerUpdate(Player player, String event, Object eventData) {
+			if (PlayerListener.CLOSED.equals(event) && eventData instanceof String) {
+				event = (String) eventData;
 				int index = event.lastIndexOf('/');
-				
-				if(index >= 0)
-				{
+
+				if (index >= 0) {
 					event = event.substring(index + 1);
 				}
-				
+
 				File file = new File(ContextHolder.getCacheDir(), event);
-				
-				if(file.delete())
-				{
+
+				if (file.delete()) {
 					System.out.println("Temp file deleted: " + event);
 				}
 			}
 		}
 	}
-	
+
 	private static StreamCacheCleaner cleaner = new StreamCacheCleaner();
-	
-	public static Player createPlayer(String locator) throws IOException
-	{
+
+	public static Player createPlayer(String locator) throws IOException {
 		return new MicroPlayer(new DataSource(locator));
 	}
 
-	public static Player createPlayer(DataSource source) throws IOException
-	{
+	public static Player createPlayer(DataSource source) throws IOException {
 		return new MicroPlayer(source);
 	}
-	
-	public static Player createPlayer(final InputStream stream, String type) throws IOException
-	{
-		if(type != null)
-		{
+
+	public static Player createPlayer(final InputStream stream, String type) throws IOException {
+		if (type != null) {
 			type = MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
-			
-			if(type != null)
-			{
+
+			if (type != null) {
 				type = "." + type;
 			}
 		}
-		
+
 		File file = File.createTempFile("media", type, ContextHolder.getCacheDir());
 		final RandomAccessFile raf = new RandomAccessFile(file, "rw");
-		
+
 		final String name = file.getName();
 		System.out.println("Starting media pipe: " + name);
-		
+
 		int length = stream.available();
-		
-		if(length >= 0)
-		{
+
+		if (length >= 0) {
 			raf.setLength(length);
 			System.out.println("Changing file size to " + length + " bytes: " + name);
 		}
-		
+
 		final Object sync = new Object();
-		
-		Runnable runnable = new Runnable()
-		{
-			public void run()
-			{
+
+		Runnable runnable = new Runnable() {
+			public void run() {
 				byte[] buf = new byte[0x10000];
 				int read;
-				
-				try
-				{
-					while(true)
-					{
+
+				try {
+					while (true) {
 						read = stream.read(buf);
-						
-						if(read > 0)
-						{
-							synchronized(sync)
-							{
+
+						if (read > 0) {
+							synchronized (sync) {
 								raf.write(buf, 0, read);
 							}
-						}
-						else if(read < 0)
-						{
+						} else if (read < 0) {
 							break;
 						}
 					}
-					
+
 					raf.close();
-					
+
 					System.out.println("Media pipe closed: " + name);
-				}
-				catch(IOException e)
-				{
+				} catch (IOException e) {
 					System.out.println("Media pipe failure: " + e.toString());
 				}
 			}
 		};
-		
+
 		Thread thread = new Thread(runnable);
 		thread.start();
-		
-		try
-		{
+
+		try {
 			MicroPlayer player = new MicroPlayer();
 			player.addPlayerListener(cleaner);
-			
+
 			DataSource source = new DataSource(file);
-			
-			try
-			{
+
+			try {
 				player.setDataSource(source);
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 				source.close();
-				
-				if(thread.isAlive())
-				{
+
+				if (thread.isAlive()) {
 					System.out.println("Waiting for pipe to close: " + name);
-					try
-					{
+					try {
 						thread.join();
+					} catch (InterruptedException ie) {
 					}
-					catch(InterruptedException ie)
-					{
-					}
-					
+
 					player.setDataSource(source);
-				}
-				else
-				{
+				} else {
 					throw e;
 				}
 			}
-			
+
 			return player;
-		}
-		catch(IOException e)
-		{
-			try
-			{
-				synchronized(sync)
-				{
+		} catch (IOException e) {
+			try {
+				synchronized (sync) {
 					raf.close();
 				}
-			}
-			catch(IOException x)
-			{
+			} catch (IOException x) {
 				System.out.println("File is not closing: " + name);
 			}
-			
+
 			cleaner.playerUpdate(null, PlayerListener.CLOSED, name);
-			
+
 			throw e;
 		}
 	}
-	
-	public static float exponentMap(float value, float range)
-	{
-		if(value <= 0)
-		{
+
+	public static float exponentMap(float value, float range) {
+		if (value <= 0) {
 			return 0;
-		}
-		else if(value >= range)
-		{
+		} else if (value >= range) {
 			return 1;
+		} else {
+			return (float) Math.pow(10, 72 * (value - range) / 20 / range);
 		}
-		else
-		{
-			return (float)Math.pow(10, 72 * (value - range) / 20 / range);
-		}
-	}
-	
-	public static String[] getSupportedContentTypes(String str)
-    {
-        return new String[]{"audio/*", "video/*", "audio/wav", "audio/x-tone-seq", "audio/x-wav", "audio/midi", "audio/x-midi", "audio/mpeg", "audio/amr", "audio/amr-wb", "audio/mp3", "audio/mp4", "video/mpeg", "video/mp4", "video/mpeg4", "video/3gpp"};
 	}
 
-	public static String[] getSupportedProtocols(String str)
-    {
+	public static String[] getSupportedContentTypes(String str) {
+		return new String[]{"audio/*", "video/*", "audio/wav", "audio/x-tone-seq", "audio/x-wav", "audio/midi", "audio/x-midi", "audio/mpeg", "audio/amr", "audio/amr-wb", "audio/mp3", "audio/mp4", "video/mpeg", "video/mp4", "video/mpeg4", "video/3gpp"};
+	}
+
+	public static String[] getSupportedProtocols(String str) {
 		return new String[]{"device", "file", "http"};
 	}
 
 	public synchronized static void playTone(int frequency, int time, int volume)
-	throws MediaException 
-	{
+			throws MediaException {
 		//TODO method stub
 	}
 }

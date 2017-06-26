@@ -29,7 +29,7 @@ import java.security.cert.X509Certificate;
 import javax.microedition.pki.Certificate;
 
 public class CertificateImpl implements Certificate {
-	
+
 	private X509Certificate cert;
 
 	public CertificateImpl(X509Certificate cert) {

@@ -7,8 +7,8 @@ class Constants {
 }
 
 class Tools {
-	public static boolean isPowerOfTwo (int x) {
-		return (x & (x -1)) == 0;
+	public static boolean isPowerOfTwo(int x) {
+		return (x & (x - 1)) == 0;
 	}
 }
 
@@ -51,10 +51,10 @@ class Vector3 {
 	}
 
 	public void logQuat(QVec4 quat) {
-		float sinTheta = (float)Math.sqrt(QVec4.norm3(quat));
+		float sinTheta = (float) Math.sqrt(QVec4.norm3(quat));
 
 		if (sinTheta > Constants.EPSILON) {
-			float s = (float)(Math.atan2(sinTheta, quat.w) / sinTheta);
+			float s = (float) (Math.atan2(sinTheta, quat.w) / sinTheta);
 			x = s * quat.x;
 			y = s * quat.y;
 			z = s * quat.z;
@@ -96,7 +96,7 @@ class Vector3 {
 		temp.x = -from.x;
 		temp.y = -from.y;
 		temp.z = -from.z;
-		temp.w =  from.w;
+		temp.w = from.w;
 		temp.mulQuat(to);
 		this.logQuat(temp);
 	}
@@ -132,8 +132,8 @@ class Vector3 {
 	}
 
 	public float lengthVec3() {
-                return (float) Math.sqrt(x * x + y * y + z * z);
-        }
+		return (float) Math.sqrt(x * x + y * y + z * z);
+	}
 
 	public static float norm3(float[] v) {
 		return (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
@@ -142,7 +142,7 @@ class Vector3 {
 	public void normalizeVec3() {
 		float norm = norm3(new float[]{x, y, z});
 		if (norm > Constants.EPSILON) {
-			norm = (float)(1.0d / Math.sqrt(norm));
+			norm = (float) (1.0d / Math.sqrt(norm));
 			scaleVec3(norm);
 		} else {
 			x = y = z = 0;
@@ -150,13 +150,13 @@ class Vector3 {
 	}
 
 	public void cross(Vector3 a, Vector3 b) {
-		x = a.y*b.z - a.z*b.y;
-		y = a.z*b.x - a.x*b.z;
-		z = a.x*b.y - a.y*b.x;
+		x = a.y * b.z - a.z * b.y;
+		y = a.z * b.x - a.x * b.z;
+		z = a.x * b.y - a.y * b.x;
 	}
 
 	public static float dot3(Vector3 a, Vector3 b) {
-		return a.x*b.x + a.y*b.y + a.z*b.z;
+		return a.x * b.x + a.y * b.y + a.z * b.z;
 	}
 
 	public static boolean intersectTriangle(Vector3 orig, Vector3 dir, Vector3 vert0, Vector3 vert1, Vector3 vert2, Vector3 tuv, int cullMode) {
@@ -179,7 +179,7 @@ class Vector3 {
 
 		if (det > -Constants.EPSILON && det < Constants.EPSILON)
 			return false;
-		float inv_det = (float)(1.0d / det);
+		float inv_det = (float) (1.0d / det);
 
 		tvec.assign(orig);
 		tvec.subVec3(vert0);
@@ -201,10 +201,10 @@ class Vector3 {
 }
 
 class QVec4 {
-	public static final int[] Vec4_X_AXIS = new int[] {1, 0, 0, 0};
-	public static final int[] Vec4_Y_AXIS = new int[] {0, 1, 0, 0};
-	public static final int[] Vec4_Z_AXIS = new int[] {0, 0, 1, 0};
-	public static final int[] Vec4_ORIGIN = new int[] {0, 0, 0, 1};
+	public static final int[] Vec4_X_AXIS = new int[]{1, 0, 0, 0};
+	public static final int[] Vec4_Y_AXIS = new int[]{0, 1, 0, 0};
+	public static final int[] Vec4_Z_AXIS = new int[]{0, 0, 1, 0};
+	public static final int[] Vec4_ORIGIN = new int[]{0, 0, 0, 1};
 
 	public float x;
 	public float y;
@@ -268,25 +268,25 @@ class QVec4 {
 	public void mulQuat(QVec4 other) {
 		QVec4 q = new QVec4();
 		q.assign(other);
-		w = q.w*other.w - q.x*other.x - q.y*other.y - q.z*other.z;
-		x = q.w*other.x + q.x*other.w + q.y*other.z - q.z*other.y;
-		y = q.w*other.y - q.x*other.z + q.y*other.w + q.z*other.x;
-		z = q.w*other.z + q.x*other.y - q.y*other.x + q.z*other.w;
+		w = q.w * other.w - q.x * other.x - q.y * other.y - q.z * other.z;
+		x = q.w * other.x + q.x * other.w + q.y * other.z - q.z * other.y;
+		y = q.w * other.y - q.x * other.z + q.y * other.w + q.z * other.x;
+		z = q.w * other.z + q.x * other.y - q.y * other.x + q.z * other.w;
 	}
-	
+
 	public static float norm3(QVec4 quat) {
 		return (quat.x * quat.x + quat.y * quat.y + quat.z * quat.z);
 	}
 
 	public void expQuat(Vector3 qExp) {
-		float theta = (float)(Math.sqrt(qExp.x * qExp.x + qExp.y * qExp.y + qExp.z * qExp.z));
+		float theta = (float) (Math.sqrt(qExp.x * qExp.x + qExp.y * qExp.y + qExp.z * qExp.z));
 
 		if (theta > Constants.EPSILON) {
-			float s = (float)(Math.sin(theta) * (1.0d / (double) theta));
+			float s = (float) (Math.sin(theta) * (1.0d / (double) theta));
 			x = qExp.x * s;
 			y = qExp.y * s;
 			z = qExp.z * s;
-			w = (float)Math.cos(theta);
+			w = (float) Math.cos(theta);
 		} else {
 			x = y = z = 0.0f;
 			w = 1.0f;
@@ -304,10 +304,10 @@ class QVec4 {
 
 		if (cosTheta > (Constants.EPSILON - 1.0f)) {
 			if (cosTheta < (1.0f - Constants.EPSILON)) {
-				float theta = (float) Math.acos((double)cosTheta);
-				float sinTheta = (float)Math.sin(theta);
-				s0 = (float)(Math.sin(oneMinusS * theta) / sinTheta);
-				s1 = (float)(Math.sin(s * theta) / sinTheta);
+				float theta = (float) Math.acos((double) cosTheta);
+				float sinTheta = (float) Math.sin(theta);
+				s0 = (float) (Math.sin(oneMinusS * theta) / sinTheta);
+				s1 = (float) (Math.sin(s * theta) / sinTheta);
 			} else {
 				s0 = oneMinusS;
 				s1 = s;
@@ -318,12 +318,12 @@ class QVec4 {
 			w = s0 * q0.w + s1 * q1.w;
 		} else {
 			x = -q0.y;
-			y =  q0.x;
+			y = q0.x;
 			z = -q0.w;
-			w =  q0.z;
+			w = q0.z;
 
-			s0 = (float)Math.sin(oneMinusS * (Math.PI / 2));
-			s1 = (float)Math.sin(s * (Math.PI / 2));
+			s0 = (float) Math.sin(oneMinusS * (Math.PI / 2));
+			s1 = (float) Math.sin(s * (Math.PI / 2));
 
 			x = s0 * q0.x + s1 * x;
 			y = s0 * q0.y + s1 * y;
@@ -343,7 +343,7 @@ class QVec4 {
 	}
 
 	public static float norm4(float[] v) {
-		return v[0]*v[0] + v[1]*v[1] + v[2]*v[2] + v[3]*v[3];
+		return v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3] * v[3];
 	}
 
 	public void identityQuat() {
@@ -355,7 +355,7 @@ class QVec4 {
 		float norm = (x * x + y * y + z * z + w * w);
 
 		if (norm > Constants.EPSILON) {
-			norm = (float)(1.0d / Math.sqrt(norm));
+			norm = (float) (1.0d / Math.sqrt(norm));
 			scaleVec4(norm);
 		} else
 			identityQuat();
@@ -368,24 +368,23 @@ class QVec4 {
 	public void setAngleAxisRad(float angleRad, float ax, float ay, float az) {
 		if (angleRad != 0) {
 			float halfAngle = angleRad / 2;
-			float s = (float)Math.sin(halfAngle);
+			float s = (float) Math.sin(halfAngle);
 
-			float sqrNorm = ax*ax + ay*ay + az*az;
+			float sqrNorm = ax * ax + ay * ay + az * az;
 			if (sqrNorm < 0.995f || sqrNorm > 1.005f) {
 				if (sqrNorm > Constants.EPSILON) {
-					float ooNorm = (float)(1.0d / Math.sqrt(sqrNorm));
+					float ooNorm = (float) (1.0d / Math.sqrt(sqrNorm));
 					ax *= ooNorm;
 					ay *= ooNorm;
 					az *= ooNorm;
-				}
-				else
+				} else
 					ax = ay = az = 0.0f;
 			}
 
 			x = ax * s;
 			y = ay * s;
 			z = az * s;
-			w = (float)Math.cos(halfAngle);
+			w = (float) Math.cos(halfAngle);
 		} else
 			identityQuat();
 	}
@@ -395,10 +394,10 @@ class QVec4 {
 		float y = this.y;
 		float z = this.z;
 
-		float sinTheta = (float)(Math.sqrt(x * x + y * y + z * z));
+		float sinTheta = (float) (Math.sqrt(x * x + y * y + z * z));
 
 		if (sinTheta > Constants.EPSILON) {
-			float ooSinTheta = (float)(1.0d / sinTheta);
+			float ooSinTheta = (float) (1.0d / sinTheta);
 			axis.x = x * ooSinTheta;
 			axis.y = y * ooSinTheta;
 			axis.z = z * ooSinTheta;
@@ -406,7 +405,7 @@ class QVec4 {
 			axis.x = axis.y = 0.0f;
 			axis.z = 1.0f;
 		}
-		return (float)(2.0f * Constants.RAD2DEG * Math.acos(this.w));
+		return (float) (2.0f * Constants.RAD2DEG * Math.acos(this.w));
 	}
 
 	public void setQuatRotation(Vector3 from, Vector3 to) {
@@ -418,11 +417,11 @@ class QVec4 {
 		} else if (cosAngle > (1.0e-3f - 1.0f)) {
 			Vector3 axis = new Vector3();
 			axis.cross(from, to);
-			setAngleAxisRad((float)(Math.acos(cosAngle)), axis.x, axis.y, axis.z);
+			setAngleAxisRad((float) (Math.acos(cosAngle)), axis.x, axis.y, axis.z);
 		} else {
 			Vector3 axis = new Vector3();
 			Vector3 temp = new Vector3();
-			
+
 			axis.x = axis.y = axis.z = 0.0f;
 			if (Math.abs(from.z) < (1.0f - Constants.EPSILON))
 				axis.z = 1.0f;
@@ -463,7 +462,7 @@ class QVec4 {
 		float norm = norm4();
 
 		if (norm > Constants.EPSILON) {
-			norm = (float)(1.0d / Math.sqrt(norm));
+			norm = (float) (1.0d / Math.sqrt(norm));
 			scaleVec4(norm);
 		} else {
 			x = 0;
@@ -533,8 +532,7 @@ class AABB {
 
 			if (tnear > tfar) return false;
 			if (tfar < 0) return false;
-		} else
-			if (orig.x > box.max[0] || orig.x < box.min[0]) return false;
+		} else if (orig.x > box.max[0] || orig.x < box.min[0]) return false;
 
 		if (dir.y != 0) {
 			t1 = (box.min[1] - orig.y) / dir.y;
@@ -551,8 +549,7 @@ class AABB {
 
 			if (tnear > tfar) return false;
 			if (tfar < 0) return false;
-		} else
-			if (orig.y > box.max[1] || orig.y < box.min[1]) return false;
+		} else if (orig.y > box.max[1] || orig.y < box.min[1]) return false;
 
 		if (dir.z != 0) {
 			t1 = (box.min[2] - orig.z) / dir.z;
@@ -563,14 +560,13 @@ class AABB {
 				t1 = t2;
 				t2 = temp;
 			}
-			
+
 			if (t1 > tnear) tnear = t1;
 			if (t2 < tfar) tfar = t2;
 
 			if (tnear > tfar) return false;
 			if (tfar < 0) return false;
-		} else
-			if (orig.z > box.max[2] || orig.y < box.min[2]) return false;
+		} else if (orig.z > box.max[2] || orig.y < box.min[2]) return false;
 
 		return true;
 	}
@@ -595,28 +591,28 @@ class AABB {
 }
 
 class Matrix {
-	public static final byte ZERO		= 0;
-	public static final byte ONE		= 1;
-	public static final byte MINUS_ONE	= 2;
-	public static final byte ANY		= 3;
+	public static final byte ZERO = 0;
+	public static final byte ONE = 1;
+	public static final byte MINUS_ONE = 2;
+	public static final byte ANY = 3;
 
-	public static final int IDENTITY		= 0x40100401;
-	public static final int FRUSTUM			= 0x30BF0C03;
-	public static final int PERSPECTIVE		= 0x30B00C03;
-	public static final int ORTHO			= 0x7F300C03;
-	public static final int PARALLEL		= 0x70300C03;
-	public static final int SCALING_ROTATION	= 0x403F3F3F;
-	public static final int SCALING			= 0x40300C03;
-	public static final int TRANSLATION		= 0x7F100401;
-	public static final int X_ROTATION		= 0x403C3C01;
-	public static final int Y_ROTATION		= 0x40330433;
-	public static final int Z_ROTATION		= 0x40100F0F;
-	public static final int W_UNITY			= 0x7F3F3F3F;
-	public static final int GENERIC			= 0xFFFFFFFF;
+	public static final int IDENTITY = 0x40100401;
+	public static final int FRUSTUM = 0x30BF0C03;
+	public static final int PERSPECTIVE = 0x30B00C03;
+	public static final int ORTHO = 0x7F300C03;
+	public static final int PARALLEL = 0x70300C03;
+	public static final int SCALING_ROTATION = 0x403F3F3F;
+	public static final int SCALING = 0x40300C03;
+	public static final int TRANSLATION = 0x7F100401;
+	public static final int X_ROTATION = 0x403C3C01;
+	public static final int Y_ROTATION = 0x40330433;
+	public static final int Z_ROTATION = 0x40100F0F;
+	public static final int W_UNITY = 0x7F3F3F3F;
+	public static final int GENERIC = 0xFFFFFFFF;
 
-	public static final int TRANSLATION_PART	= 0x3F000000;
-	public static final int SCALE_PART		= 0x00300C03;
-	public static final int SCALE_ROTATION_PART	= 0x003F3F3F;
+	public static final int TRANSLATION_PART = 0x3F000000;
+	public static final int SCALE_PART = 0x00300C03;
+	public static final int SCALE_ROTATION_PART = 0x003F3F3F;
 
 	public float[] elem = new float[16];
 	public byte[] mask = new byte[16];
@@ -632,10 +628,10 @@ class Matrix {
 
 	public static byte[] getByteMask(int mask) {
 		//System.out.println("getByteMask");
-		byte[] maskArr= new byte[16];
+		byte[] maskArr = new byte[16];
 		//System.out.println(Integer.toHexString(mask));
 		for (int i = 0; i < 16; i++, mask >>>= 2) {
-			maskArr[i] = (byte)(mask & 3);
+			maskArr[i] = (byte) (mask & 3);
 			//System.out.println(Integer.toHexString((int)maskArr[i]));
 		}
 		return maskArr;
@@ -752,15 +748,15 @@ class Matrix {
 
 	public boolean isWUnity() {
 		if (classified)
-			return (mask[3]  == ZERO) &&
-			       (mask[7]  == ZERO) &&
-			       (mask[11] == ZERO) &&
-			       (mask[15] == ONE);
+			return (mask[3] == ZERO) &&
+					(mask[7] == ZERO) &&
+					(mask[11] == ZERO) &&
+					(mask[15] == ONE);
 		else
-			return (elem[3]  == 0.0f) &&
-			       (elem[7]  == 0.0f) &&
-			       (elem[11] == 0.0f) &&
-			       (elem[15] == 1.0f);
+			return (elem[3] == 0.0f) &&
+					(elem[7] == 0.0f) &&
+					(elem[11] == 0.0f) &&
+					(elem[15] == 1.0f);
 	}
 
 	public void getMatrixColumn(int col, QVec4 dst) {
@@ -808,9 +804,9 @@ class Matrix {
 	public void setMatrixRows(float[] src) {
 		for (int i = 0, row = 0; row < 4; row++) {
 			elem[row] = src[i++];
-			elem[row+4] = src[i++];
-			elem[row+8] = src[i++];
-			elem[row+12] = src[i++];
+			elem[row + 4] = src[i++];
+			elem[row + 8] = src[i++];
+			elem[row + 12] = src[i++];
 		}
 		classified = false;
 		complete = true;
@@ -856,83 +852,83 @@ class Matrix {
 		float[] matrix = elem;
 
 		for (int i = 0; i < 4; i++) {
-			src[i] = matrix[i*4];
-			src[i+4] = matrix[i*4+1];
-			src[i+8] = matrix[i*4+2];
-			src[i+12] = matrix[i*4+3];
+			src[i] = matrix[i * 4];
+			src[i + 4] = matrix[i * 4 + 1];
+			src[i + 8] = matrix[i * 4 + 2];
+			src[i + 12] = matrix[i * 4 + 3];
 		}
 
 		/* calculate pairs for first 8 elements (cofactors) */
-		tmp[0] = src[10]*src[15];
-		tmp[1] = src[11]*src[14];
-		tmp[2] = src[9]*src[15];
-		tmp[3] = src[11]*src[13];
-		tmp[4] = src[9]*src[14];
-		tmp[5] = src[10]*src[13];
-		tmp[6] = src[8]*src[15];
-		tmp[7] = src[11]*src[12];
-		tmp[8] = src[8]*src[14];
-		tmp[9] = src[10]*src[12];
-		tmp[10] = src[8]*src[13];
-		tmp[11] = src[9]*src[12];
+		tmp[0] = src[10] * src[15];
+		tmp[1] = src[11] * src[14];
+		tmp[2] = src[9] * src[15];
+		tmp[3] = src[11] * src[13];
+		tmp[4] = src[9] * src[14];
+		tmp[5] = src[10] * src[13];
+		tmp[6] = src[8] * src[15];
+		tmp[7] = src[11] * src[12];
+		tmp[8] = src[8] * src[14];
+		tmp[9] = src[10] * src[12];
+		tmp[10] = src[8] * src[13];
+		tmp[11] = src[9] * src[12];
 
 		/* calculate first 8 elements (cofactors) */
-		matrix[0] = tmp[0]*src[5] + tmp[3]*src[6] + tmp[4]*src[7];
-		matrix[0] -= tmp[1]*src[5] + tmp[2]*src[6] + tmp[5]*src[7];
-		matrix[1] = tmp[1]*src[4] + tmp[6]*src[6] + tmp[9]*src[7];
-		matrix[1] -= tmp[0]*src[4] + tmp[7]*src[6] + tmp[8]*src[7];
-		matrix[2] = tmp[2]*src[4] + tmp[7]*src[5] + tmp[10]*src[7];
-		matrix[2] -= tmp[3]*src[4] + tmp[6]*src[5] + tmp[11]*src[7];
-		matrix[3] = tmp[5]*src[4] + tmp[8]*src[5] + tmp[11]*src[6];
-		matrix[3] -= tmp[4]*src[4] + tmp[9]*src[5] + tmp[10]*src[6];
-		matrix[4] = tmp[1]*src[1] + tmp[2]*src[2] + tmp[5]*src[3];
-		matrix[4] -= tmp[0]*src[1] + tmp[3]*src[2] + tmp[4]*src[3];
-		matrix[5] = tmp[0]*src[0] + tmp[7]*src[2] + tmp[8]*src[3];
-		matrix[5] -= tmp[1]*src[0] + tmp[6]*src[2] + tmp[9]*src[3];
-		matrix[6] = tmp[3]*src[0] + tmp[6]*src[1] + tmp[11]*src[3];
-		matrix[6] -= tmp[2]*src[0] + tmp[7]*src[1] + tmp[10]*src[3];
-		matrix[7] = tmp[4]*src[0] + tmp[9]*src[1] + tmp[10]*src[2];
-		matrix[7] -= tmp[5]*src[0] + tmp[8]*src[1] + tmp[11]*src[2];
+		matrix[0] = tmp[0] * src[5] + tmp[3] * src[6] + tmp[4] * src[7];
+		matrix[0] -= tmp[1] * src[5] + tmp[2] * src[6] + tmp[5] * src[7];
+		matrix[1] = tmp[1] * src[4] + tmp[6] * src[6] + tmp[9] * src[7];
+		matrix[1] -= tmp[0] * src[4] + tmp[7] * src[6] + tmp[8] * src[7];
+		matrix[2] = tmp[2] * src[4] + tmp[7] * src[5] + tmp[10] * src[7];
+		matrix[2] -= tmp[3] * src[4] + tmp[6] * src[5] + tmp[11] * src[7];
+		matrix[3] = tmp[5] * src[4] + tmp[8] * src[5] + tmp[11] * src[6];
+		matrix[3] -= tmp[4] * src[4] + tmp[9] * src[5] + tmp[10] * src[6];
+		matrix[4] = tmp[1] * src[1] + tmp[2] * src[2] + tmp[5] * src[3];
+		matrix[4] -= tmp[0] * src[1] + tmp[3] * src[2] + tmp[4] * src[3];
+		matrix[5] = tmp[0] * src[0] + tmp[7] * src[2] + tmp[8] * src[3];
+		matrix[5] -= tmp[1] * src[0] + tmp[6] * src[2] + tmp[9] * src[3];
+		matrix[6] = tmp[3] * src[0] + tmp[6] * src[1] + tmp[11] * src[3];
+		matrix[6] -= tmp[2] * src[0] + tmp[7] * src[1] + tmp[10] * src[3];
+		matrix[7] = tmp[4] * src[0] + tmp[9] * src[1] + tmp[10] * src[2];
+		matrix[7] -= tmp[5] * src[0] + tmp[8] * src[1] + tmp[11] * src[2];
 
 		/* calculate pairs for second 8 elements (cofactors) */
-		tmp[0] = src[2]*src[7];
-		tmp[1] = src[3]*src[6];
-		tmp[2] = src[1]*src[7];
-		tmp[3] = src[3]*src[5];
-		tmp[4] = src[1]*src[6];
-		tmp[5] = src[2]*src[5];
-		tmp[6] = src[0]*src[7];
-		tmp[7] = src[3]*src[4];
-		tmp[8] = src[0]*src[6];
-		tmp[9] = src[2]*src[4];
-		tmp[10] = src[0]*src[5];
-		tmp[11] = src[1]*src[4];
+		tmp[0] = src[2] * src[7];
+		tmp[1] = src[3] * src[6];
+		tmp[2] = src[1] * src[7];
+		tmp[3] = src[3] * src[5];
+		tmp[4] = src[1] * src[6];
+		tmp[5] = src[2] * src[5];
+		tmp[6] = src[0] * src[7];
+		tmp[7] = src[3] * src[4];
+		tmp[8] = src[0] * src[6];
+		tmp[9] = src[2] * src[4];
+		tmp[10] = src[0] * src[5];
+		tmp[11] = src[1] * src[4];
 
 		/* calculate second 8 elements (cofactors) */
-		matrix[8] = tmp[0]*src[13] + tmp[3]*src[14] + tmp[4]*src[15];
-		matrix[8] -= tmp[1]*src[13] + tmp[2]*src[14] + tmp[5]*src[15];
-		matrix[9] = tmp[1]*src[12] + tmp[6]*src[14] + tmp[9]*src[15];
-		matrix[9] -= tmp[0]*src[12] + tmp[7]*src[14] + tmp[8]*src[15];
-		matrix[10] = tmp[2]*src[12] + tmp[7]*src[13] + tmp[10]*src[15];
-		matrix[10] -= tmp[3]*src[12] + tmp[6]*src[13] + tmp[11]*src[15];
-		matrix[11] = tmp[5]*src[12] + tmp[8]*src[13] + tmp[11]*src[14];
-		matrix[11] -= tmp[4]*src[12] + tmp[9]*src[13] + tmp[10]*src[14];
-		matrix[12] = tmp[2]*src[10] + tmp[5]*src[11] + tmp[1]*src[9];
-		matrix[12] -= tmp[4]*src[11] + tmp[0]*src[9] + tmp[3]*src[10];
-		matrix[13] = tmp[8]*src[11] + tmp[0]*src[8] + tmp[7]*src[10];
-		matrix[13] -= tmp[6]*src[10] + tmp[9]*src[11] + tmp[1]*src[8];
-		matrix[14] = tmp[6]*src[9] + tmp[11]*src[11] + tmp[3]*src[8];
-		matrix[14] -= tmp[10]*src[11] + tmp[2]*src[8] + tmp[7]*src[9];
-		matrix[15] = tmp[10]*src[10] + tmp[4]*src[8] + tmp[9]*src[9];
-		matrix[15] -= tmp[8]*src[9] + tmp[11]*src[10] + tmp[5]*src[8];
+		matrix[8] = tmp[0] * src[13] + tmp[3] * src[14] + tmp[4] * src[15];
+		matrix[8] -= tmp[1] * src[13] + tmp[2] * src[14] + tmp[5] * src[15];
+		matrix[9] = tmp[1] * src[12] + tmp[6] * src[14] + tmp[9] * src[15];
+		matrix[9] -= tmp[0] * src[12] + tmp[7] * src[14] + tmp[8] * src[15];
+		matrix[10] = tmp[2] * src[12] + tmp[7] * src[13] + tmp[10] * src[15];
+		matrix[10] -= tmp[3] * src[12] + tmp[6] * src[13] + tmp[11] * src[15];
+		matrix[11] = tmp[5] * src[12] + tmp[8] * src[13] + tmp[11] * src[14];
+		matrix[11] -= tmp[4] * src[12] + tmp[9] * src[13] + tmp[10] * src[14];
+		matrix[12] = tmp[2] * src[10] + tmp[5] * src[11] + tmp[1] * src[9];
+		matrix[12] -= tmp[4] * src[11] + tmp[0] * src[9] + tmp[3] * src[10];
+		matrix[13] = tmp[8] * src[11] + tmp[0] * src[8] + tmp[7] * src[10];
+		matrix[13] -= tmp[6] * src[10] + tmp[9] * src[11] + tmp[1] * src[8];
+		matrix[14] = tmp[6] * src[9] + tmp[11] * src[11] + tmp[3] * src[8];
+		matrix[14] -= tmp[10] * src[11] + tmp[2] * src[8] + tmp[7] * src[9];
+		matrix[15] = tmp[10] * src[10] + tmp[4] * src[8] + tmp[9] * src[9];
+		matrix[15] -= tmp[8] * src[9] + tmp[11] * src[10] + tmp[5] * src[8];
 
 		/* calculate determinant */
-		float det = (float)(src[0]*matrix[0]+src[1]*matrix[1]+src[2]*matrix[2]+src[3]*matrix[3]);
+		float det = (float) (src[0] * matrix[0] + src[1] * matrix[1] + src[2] * matrix[2] + src[3] * matrix[3]);
 
 		if (det == 0.0f)
 			return false;
 
-		det = (float)(1.0d / det);
+		det = (float) (1.0d / det);
 
 		for (int i = 0; i < 16; i++)
 			matrix[i] *= det;
@@ -954,10 +950,10 @@ class Matrix {
 			other.fillClassifiedMatrix();
 
 		for (int i = 0; i < 4; i++) {
-			elem[i] = other.elem[i*4];
-			elem[i+4] = other.elem[i*4+1];
-			elem[i+8] = other.elem[i*4+2];
-			elem[i+12] = other.elem[i*4+3];
+			elem[i] = other.elem[i * 4];
+			elem[i + 4] = other.elem[i * 4 + 1];
+			elem[i + 8] = other.elem[i * 4 + 2];
+			elem[i + 12] = other.elem[i * 4 + 3];
 		}
 		classified = false;
 		complete = true;
@@ -990,14 +986,22 @@ class Matrix {
 
 			for (int i = 0; i < n; i++) {
 				float d = v.x * elem[i];
-				d += v.y * elem[i+4];
-				d += v.z * elem[i+8];
-				d += v.w * elem[i+12];
+				d += v.y * elem[i + 4];
+				d += v.z * elem[i + 8];
+				d += v.w * elem[i + 12];
 				switch (i) {
-					case 0: vec.x = d; break;
-					case 1: vec.y = d; break;
-					case 2: vec.z = d; break;
-					case 3: vec.w = d; break;
+					case 0:
+						vec.x = d;
+						break;
+					case 1:
+						vec.y = d;
+						break;
+					case 2:
+						vec.z = d;
+						break;
+					case 3:
+						vec.w = d;
+						break;
 				}
 			}
 		}
@@ -1112,15 +1116,15 @@ class Matrix {
 
 		float wx, wy, wz, xx, yy, yz, xy, xz, zz;
 
-		xx = qx*qx;
-		xy = qx*qy;
-		xz = qx*qz;
-		yy = qy*qy;
-		yz = qy*qz;
-		zz = qz*qz;
-		wx = qw*qx;
-		wy = qw*qy;
-		wz = qw*qz;
+		xx = qx * qx;
+		xy = qx * qy;
+		xz = qx * qz;
+		yy = qy * qy;
+		yz = qy * qz;
+		zz = qz * qz;
+		wx = qw * qx;
+		wy = qw * qy;
+		wz = qw * qz;
 
 		if (type != X_ROTATION) {
 			elem[0] = 1.f - 2 * (yy + zz);
@@ -1198,11 +1202,11 @@ class Matrix {
 	public void rotateMatrixQuat(QVec4 quat) {
 		postRotateMatrixQuat(quat);
 	}
-	
+
 	public void translateMatrix(float tx, float ty, float tz) {
 		postTranslateMatrix(tx, ty, tz);
 	}
-	
+
 	public void scaleMatrix(float sx, float sy, float sz) {
 		postScaleMatrix(sx, sy, sz);
 	}
@@ -1224,26 +1228,26 @@ class ColConv {
 	public static final int ALPHA_MASK = 0xFF000000;
 
 	public static int alpha1f(float a) {
-		return (int)(a * 255.f);
+		return (int) (a * 255.f);
 	}
 
 	public static int color3f(float r, float g, float b) {
-		return (((int)(r * 255.f)) << 16) | (((int)(g * 255.f)) << 8) | (int)(b * 255.f) | ALPHA_MASK;
+		return (((int) (r * 255.f)) << 16) | (((int) (g * 255.f)) << 8) | (int) (b * 255.f) | ALPHA_MASK;
 	}
 
 	public static int color4f(float r, float g, float b, float a) {
-		return (((int)(r * 255.f)) << 16) | (((int)(g * 255.f)) << 8) | (int)(b * 255.f) | (((int)(a * 255.f)) << 24);
+		return (((int) (r * 255.f)) << 16) | (((int) (g * 255.f)) << 8) | (int) (b * 255.f) | (((int) (a * 255.f)) << 24);
 	}
 
 	public static float[] floatColor(int argb, float intensity) {
 		float[] rgba = new float[4];
-		float oneOver255 = (float)(1.0001d / 255.0d);
+		float oneOver255 = (float) (1.0001d / 255.0d);
 
-		rgba[0] = (float)((argb >>> 16) & 0xFF);
-		rgba[1] = (float)((argb >>>  8) & 0xFF);
-		rgba[2] = (float)((argb       ) & 0xFF);
-		rgba[3] = (float)((argb >>> 24) & 0xFF);
-		
+		rgba[0] = (float) ((argb >>> 16) & 0xFF);
+		rgba[1] = (float) ((argb >>> 8) & 0xFF);
+		rgba[2] = (float) ((argb) & 0xFF);
+		rgba[3] = (float) ((argb >>> 24) & 0xFF);
+
 		QVec4.scale4(rgba, oneOver255 * intensity);
 		return rgba;
 	}
@@ -1270,7 +1274,7 @@ class Color {
 	}
 
 	public float[] toRGBAArray() {
-		float[] c = { r, g, b, a };
+		float[] c = {r, g, b, a};
 		return c;
 	}
 

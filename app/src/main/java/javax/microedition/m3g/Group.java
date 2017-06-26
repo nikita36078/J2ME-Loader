@@ -11,13 +11,13 @@ public class Group extends Node {
 	public Group() {
 		children = new Vector();
 	}
-	
+
 	Object3D duplicateImpl() {
 		Group copy = new Group();
-		duplicate((Node)copy);
+		duplicate((Node) copy);
 		Enumeration e = children.elements();
-		while(e.hasMoreElements()) {
-			Node nodeCopy = (Node)((Object3D)e.nextElement()).duplicate();
+		while (e.hasMoreElements()) {
+			Node nodeCopy = (Node) ((Object3D) e.nextElement()).duplicate();
 			copy.addChild(nodeCopy);
 		}
 		return copy;

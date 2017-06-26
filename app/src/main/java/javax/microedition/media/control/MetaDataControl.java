@@ -18,8 +18,7 @@ package javax.microedition.media.control;
 
 import javax.microedition.media.Control;
 
-public interface MetaDataControl extends Control
-{
+public interface MetaDataControl extends Control {
 	public static final String TRACK_NUMBER_KEY = "tracknum";
 	public static final String ALBUM_KEY = "album";
 	public static final String ARTIST_KEY = "artist";
@@ -37,7 +36,8 @@ public interface MetaDataControl extends Control
 	public static final String DISC_NUMBER_KEY = "discnum";
 	public static final String COMPILATION_KEY = "compilation";
 	public static final String COPYRIGHT_KEY = "copyright";
-	
+
 	public String[] getKeys();
+
 	public String getKeyValue(String key);
 }

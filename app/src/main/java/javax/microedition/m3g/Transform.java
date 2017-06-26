@@ -37,7 +37,7 @@ public class Transform {
 			throw new NullPointerException("matrix can not be null");
 		if (matrix.length < 16)
 			throw new IllegalArgumentException("matrix must be of length 16");
-		
+
 		mtx.setMatrixRows(matrix);
 	}
 
@@ -61,12 +61,12 @@ public class Transform {
 		QVec4 vec = new QVec4();
 
 		for (int i = 0; i < vectors.length; i += 4) {
-			vec.setVec4(vectors[i], vectors[i+1], vectors[i+2], vectors[i+3]);
+			vec.setVec4(vectors[i], vectors[i + 1], vectors[i + 2], vectors[i + 3]);
 			mtx.transformVec4(vec);
 			vectors[i] = vec.x;
-			vectors[i+1] = vec.y;
-			vectors[i+2] = vec.z;
-			vectors[i+3] = vec.w;
+			vectors[i + 1] = vec.y;
+			vectors[i + 2] = vec.z;
+			vectors[i + 3] = vec.w;
 		}
 	}
 

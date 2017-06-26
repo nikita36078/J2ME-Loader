@@ -18,7 +18,7 @@ public class PolygonMode extends Object3D {
 	private boolean twoSidedLightingEnabled = false;
 	private boolean localCameraLightingEnabled = false;
 	private boolean perspectiveCorrectionEnabled = true;
-	
+
 	Object3D duplicateImpl() {
 		PolygonMode copy = new PolygonMode();
 		copy.culling = culling;
@@ -54,8 +54,8 @@ public class PolygonMode extends Object3D {
 		return winding;
 	}
 
-	public void setTwoSidedLightingEnable(boolean  enable) {
-		this.twoSidedLightingEnabled =  enable;
+	public void setTwoSidedLightingEnable(boolean enable) {
+		this.twoSidedLightingEnabled = enable;
 	}
 
 	public boolean isTwoSidedLightingEnabled() {
@@ -63,15 +63,15 @@ public class PolygonMode extends Object3D {
 	}
 
 	public void setLocalCameraLightingEnable(boolean enable) {
-		this.localCameraLightingEnabled =  enable;
+		this.localCameraLightingEnabled = enable;
 	}
 
 	public boolean isLocalCameraLightingEnabled() {
 		return localCameraLightingEnabled;
 	}
 
-	public void setPerspectiveCorrectionEnable(boolean  enable) {
-		this.perspectiveCorrectionEnabled =  enable;
+	public void setPerspectiveCorrectionEnable(boolean enable) {
+		this.perspectiveCorrectionEnabled = enable;
 	}
 
 	public boolean isPerspectiveCorrectionEnabled() {

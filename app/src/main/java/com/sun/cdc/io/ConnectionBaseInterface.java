@@ -1,7 +1,7 @@
 /**
- *  MicroEmulator
+ * MicroEmulator
  *
- *  @version $Id$
+ * @version $Id$
  */
 package com.sun.cdc.io;
 

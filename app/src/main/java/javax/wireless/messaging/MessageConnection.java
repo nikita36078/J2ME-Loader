@@ -33,16 +33,16 @@ public interface MessageConnection extends Connection {
 
 	public static final java.lang.String BINARY_MESSAGE = "binary";
 	public static final java.lang.String TEXT_MESSAGE = "text";
-	
+
 	public Message newMessage(String type);
-	
+
 	public Message newMessage(String type, String address);
-	
+
 	public int numberOfSegments(Message message);
-	
+
 	public Message receive() throws IOException, InterruptedIOException;
-	
+
 	public void send(Message message) throws IOException, InterruptedIOException;
-	
+
 	public void setMessageListener(MessageListener listener) throws IOException;
 }

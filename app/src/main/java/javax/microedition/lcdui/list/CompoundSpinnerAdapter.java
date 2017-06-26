@@ -21,20 +21,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 
-public class CompoundSpinnerAdapter extends CompoundAdapter implements SpinnerAdapter
-{
-	public CompoundSpinnerAdapter(Context context)
-	{
+public class CompoundSpinnerAdapter extends CompoundAdapter implements SpinnerAdapter {
+	public CompoundSpinnerAdapter(Context context) {
 		super(context);
 	}
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+	public View getView(int position, View convertView, ViewGroup parent) {
 		return getView(position, convertView, parent, android.R.layout.simple_spinner_item, false);
 	}
-	
-	public View getDropDownView(int position, View convertView, ViewGroup parent)
-	{
+
+	public View getDropDownView(int position, View convertView, ViewGroup parent) {
 		return getView(position, convertView, parent, android.R.layout.simple_spinner_dropdown_item, true);
 	}
 }

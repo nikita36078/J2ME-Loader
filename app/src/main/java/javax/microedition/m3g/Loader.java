@@ -6,15 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.util.Vector;
+import java.util.zip.Inflater;
 
 import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;
 
-import java.util.zip.Inflater;
-
 public class Loader {
-	private static final byte[] IDENTIFIER = { (byte) 0xAB, 0x4A, 0x53, 0x52, 0x31, 0x38, 0x34, (byte) 0xBB, 0x0D,
-			0x0A, 0x1A, 0x0A };
+	private static final byte[] IDENTIFIER = {(byte) 0xAB, 0x4A, 0x53, 0x52, 0x31, 0x38, 0x34, (byte) 0xBB, 0x0D,
+			0x0A, 0x1A, 0x0A};
 
 	private static DataInputStream dis;
 	private static Vector objs;
@@ -29,11 +28,11 @@ public class Loader {
 			// TODO
 			is = null;
 		}
-		
+
 		if (is == null) {
 			throw new IOException("Can't load " + name);
 		}
-		
+
 		PushbackInputStream pis = new PushbackInputStream(is, 12);
 
 		byte[] identifier = new byte[12];
@@ -51,7 +50,7 @@ public class Loader {
 			pis.unread(identifier);
 			Object image = Image.createImage(pis);
 			Image2D image2D = new Image2D(Image2D.RGB, image);
-			return new Object3D[] { image2D };
+			return new Object3D[]{image2D};
 		}
 
 	}
@@ -71,7 +70,7 @@ public class Loader {
 			if (compressionScheme == 0) {
 				dis.readFully(uncompressedData);
 			} else if (compressionScheme == 1) {
-				int compressedLength = totalSectionLength-13;
+				int compressedLength = totalSectionLength - 13;
 				byte[] compressedData = new byte[compressedLength];
 				dis.readFully(compressedData);
 
@@ -85,7 +84,7 @@ public class Loader {
 				}
 				decompresser.end();
 
-				if(resultLength != uncompressedLength)
+				if (resultLength != uncompressedLength)
 					throw new IOException("Unable to decompress data.");
 			} else {
 				throw new IOException("Unknown compression scheme.");
@@ -362,7 +361,7 @@ public class Loader {
 
 					for (int i = 0; i < subMeshCount; i++) {
 						ib[i] = (IndexBuffer) getObject(readInt());
-						ap[i] = (Appearance)  getObject(readInt());
+						ap[i] = (Appearance) getObject(readInt());
 					}
 
 					int targetCount = readInt();
@@ -398,14 +397,14 @@ public class Loader {
 
 					for (int i = 0; i < subMeshCount; i++) {
 						ib[i] = (IndexBuffer) getObject(readInt());
-						ap[i] = (Appearance)  getObject(readInt());
+						ap[i] = (Appearance) getObject(readInt());
 					}
 
 					Group skeleton = (Group) getObject(readInt());
 
 					SkinnedMesh mesh = new SkinnedMesh(vb, ib, ap, skeleton);
 					int transformReferenceCount = readInt();
-					
+
 					for (int i = 0; i < transformReferenceCount; i++) {
 						Node bone = (Node) getObject(readInt());
 						int firstVertex = readInt();

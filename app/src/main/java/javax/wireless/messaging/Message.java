@@ -29,9 +29,9 @@ import java.util.Date;
 public interface Message {
 
 	public String getAddress();
-	
+
 	public Date getTimestamp();
-	
+
 	public void setAddress(String address);
-		
+
 }

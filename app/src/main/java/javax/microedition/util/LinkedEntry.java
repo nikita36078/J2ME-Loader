@@ -18,116 +18,105 @@ package javax.microedition.util;
 
 /**
  * Элемент связного списка.
+ *
  * @param <E> что он содержит
  */
-public class LinkedEntry<E>
-{
+public class LinkedEntry<E> {
 	private LinkedEntry<E> prev;
 	private LinkedEntry<E> next;
-	
+
 	private E element;
-	
+
 	/**
 	 * Присвоить элементу значение.
+	 *
 	 * @param element новое значение
 	 */
-	public void setElement(E element)
-	{
+	public void setElement(E element) {
 		this.element = element;
 	}
-	
+
 	/**
 	 * @return текущее значение элемента
 	 */
-	public E getElement()
-	{
+	public E getElement() {
 		return element;
 	}
-	
+
 	/**
 	 * @return элемент, предшествующий данному; или null, если такого элемента нет
 	 */
-	public LinkedEntry<E> prevEntry()
-	{
+	public LinkedEntry<E> prevEntry() {
 		return prev;
 	}
-	
+
 	/**
 	 * @return элемент, следующий за данным; null, если такого элемента нет
 	 */
-	public LinkedEntry<E> nextEntry()
-	{
+	public LinkedEntry<E> nextEntry() {
 		return next;
 	}
-	
+
 	/**
 	 * Изъять этот элемент из списка.
 	 * Смежные элементы при этом соединяются между собой.
 	 */
-	public void remove()
-	{
-		if(prev != null)
-		{
-			prev.next = next;	// следующий за предыдущим = следующий за этим
+	public void remove() {
+		if (prev != null) {
+			prev.next = next;    // следующий за предыдущим = следующий за этим
 		}
-		
-		if(next != null)
-		{
-			next.prev = prev;	// предшествующий следующему = предшествующий этому
+
+		if (next != null) {
+			next.prev = prev;    // предшествующий следующему = предшествующий этому
 		}
-		
+
 		prev = null;
 		next = null;
 	}
-	
+
 	/**
 	 * Восстановить двунаправленность связей для этого элемента.
-	 * 
+	 * <p>
 	 * То есть, если перед нами кто-то есть, то мы стоим за ним;
 	 * если кто-то есть после нас, то мы стоим перед ним.
 	 */
-	private void updateLinks()
-	{
-		if(prev != null)
-		{
+	private void updateLinks() {
+		if (prev != null) {
 			prev.next = this;
 		}
-		
-		if(next != null)
-		{
+
+		if (next != null) {
 			next.prev = this;
 		}
 	}
-	
+
 	/**
 	 * Вставить этот элемент перед указанным.
 	 * Предполагается, что указанный элемент входит в состав некоторого списка.
-	 * 
-	 * @param entry 
+	 *
+	 * @param entry
 	 */
-	public void insertBefore(LinkedEntry<E> entry)
-	{
-		remove();			// элемент не можеть быть одновременно в двух местах в списке
-		
-		prev = entry.prev;	// предыдущий для указанного - теперь наш предыдущий
-		next = entry;		// сам указанный - теперь наш следующий
-		
-		updateLinks();		// доносим эти изменения до наших новых соседей
+	public void insertBefore(LinkedEntry<E> entry) {
+		remove();            // элемент не можеть быть одновременно в двух местах в списке
+
+		prev = entry.prev;    // предыдущий для указанного - теперь наш предыдущий
+		next = entry;        // сам указанный - теперь наш следующий
+
+		updateLinks();        // доносим эти изменения до наших новых соседей
 	}
-	
+
 	/**
 	 * Вставить этот элемент после указанного.
 	 * Предполагается, что указанный элемент входит в состав некоторого списка.
-	 * 
+	 *
 	 * @param entry
 	 */
-	public void insertAfter(LinkedEntry<E> entry)
-	{
-		remove();			// элемент не можеть быть одновременно в двух местах в списке
-		
-		prev = entry;		// сам указанный - теперь наш предыдущий
-		next = entry.next;	// следующий для указанного - теперь наш следующий
-		
-		updateLinks();		// доносим эти изменения до наших новых соседей
+	public void insertAfter(LinkedEntry<E> entry) {
+		remove();            // элемент не можеть быть одновременно в двух местах в списке
+
+		prev = entry;        // сам указанный - теперь наш предыдущий
+		next = entry.next;    // следующий для указанного - теперь наш следующий
+
+		updateLinks();        // доносим эти изменения до наших новых соседей
 	}
 }

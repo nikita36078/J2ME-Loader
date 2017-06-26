@@ -11,18 +11,18 @@ public class CompositingMode extends Object3D {
 	public static final int REPLACE = 68;
 
 	/* Attributes set to default values */
-	private boolean depthTestEnabled = true; 
-	private boolean depthWriteEnabled = true; 
-	private boolean colorWriteEnabled = true; 
+	private boolean depthTestEnabled = true;
+	private boolean depthWriteEnabled = true;
+	private boolean colorWriteEnabled = true;
 	private boolean alphaWriteEnabled = true;
 	private int blending = ALPHA;
-	private float alphaThreshold = 0.0f; 
+	private float alphaThreshold = 0.0f;
 	private float depthOffsetFactor = 0.0f;
 	private float depthOffsetUnits = 0.0f;
 
 	public CompositingMode() {
 	}
-	
+
 	Object3D duplicateImpl() {
 		CompositingMode copy = new CompositingMode();
 		copy.depthTestEnabled = depthTestEnabled;
@@ -78,7 +78,7 @@ public class CompositingMode extends Object3D {
 				this.blending = blending;
 				break;
 			default:
-				throw new IllegalArgumentException("Blending is not specified constant");	
+				throw new IllegalArgumentException("Blending is not specified constant");
 		}
 	}
 
@@ -118,7 +118,7 @@ public class CompositingMode extends Object3D {
 	void setupGL(GL10 gl, boolean depthBufferEnabled) {
 		gl.glDepthFunc(depthTestEnabled ? GL10.GL_LEQUAL : GL10.GL_ALWAYS);
 /*
-		// Setup depth testing		
+		// Setup depth testing
 		if (depthBufferEnabled && depthTestEnabled)
 			gl.glEnable(GL10.GL_DEPTH_TEST);
 		else
@@ -128,7 +128,7 @@ public class CompositingMode extends Object3D {
 		gl.glDepthMask(depthWriteEnabled);
 		gl.glColorMask(colorWriteEnabled, colorWriteEnabled, colorWriteEnabled, alphaWriteEnabled);
 
-		// Setup alpha testing		
+		// Setup alpha testing
 		if (alphaThreshold > 0) {
 			gl.glAlphaFunc(GL10.GL_GEQUAL, alphaThreshold);
 			gl.glEnable(GL10.GL_ALPHA_TEST);
@@ -138,20 +138,20 @@ public class CompositingMode extends Object3D {
 		// Setup blending
 		if (blending != REPLACE) {
 			switch (blending) {
-			case ALPHA:
-				gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-				break;
-			case ALPHA_ADD:
-				gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
-				break;
-			case MODULATE:
-				gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_COLOR);
-				break;
-			case MODULATE_X2:
-				gl.glBlendFunc(GL10.GL_DST_COLOR, GL10.GL_SRC_COLOR);
-				break;
-			default:
-				gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ZERO);
+				case ALPHA:
+					gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+					break;
+				case ALPHA_ADD:
+					gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
+					break;
+				case MODULATE:
+					gl.glBlendFunc(GL10.GL_ZERO, GL10.GL_SRC_COLOR);
+					break;
+				case MODULATE_X2:
+					gl.glBlendFunc(GL10.GL_DST_COLOR, GL10.GL_SRC_COLOR);
+					break;
+				default:
+					gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ZERO);
 			}
 			gl.glEnable(GL10.GL_BLEND);
 		} else

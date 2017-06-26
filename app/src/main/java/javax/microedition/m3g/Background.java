@@ -1,8 +1,8 @@
 package javax.microedition.m3g;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -25,7 +25,7 @@ public class Background extends Object3D {
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer textureBuffer;
 	// top right, top left, bottom right, bottom left coordinates
-	private float[] vertexArray = { 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f };
+	private float[] vertexArray = {1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f};
 	private float[] textureArray;
 
 	public Background() {
@@ -160,7 +160,7 @@ public class Background extends Object3D {
 
 		// Draw the background image if any
 		if (backgroundImage != null) {
-		    
+
 			int w = Graphics3D.getInstance().getViewportWidth();
 			int h = Graphics3D.getInstance().getViewportHeight();
 
@@ -182,7 +182,7 @@ public class Background extends Object3D {
 
 			gl.glActiveTexture(GL10.GL_TEXTURE0);
 			gl.glClientActiveTexture(GL10.GL_TEXTURE0);
-			backgroundTexture.setupGL(gl, new float[] { 1, 0, 0, 0 });
+			backgroundTexture.setupGL(gl, new float[]{1, 0, 0, 0});
 
 			// Calculate crop
 
@@ -232,12 +232,12 @@ public class Background extends Object3D {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.ALPHA:
-		case AnimationTrack.COLOR:
-		case AnimationTrack.CROP:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.ALPHA:
+			case AnimationTrack.COLOR:
+			case AnimationTrack.CROP:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 

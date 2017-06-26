@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 
 package javax.bluetooth;
 
@@ -17,7 +16,7 @@ import javax.microedition.io.Connection;
  * The <code>L2CAPConnection</code> interface represents a
  * connection-oriented L2CAP channel.  This  interface is to be
  * used as part of the CLDC Generic Connection Framework.
- * <P>
+ * <p>
  * To create a client connection, the protocol is <code>btl2cap</code>.
  * The target is the combination of the address
  * of the Bluetooth device to connect to and the Protocol
@@ -25,7 +24,7 @@ import javax.microedition.io.Connection;
  * The PSM value is used by the
  * L2CAP to determine which higher level protocol or application is the
  * recipient of the messages the layer receives.
- * <P>
+ * <p>
  * The parameters defined specific to L2CAP are ReceiveMTU (Maximum
  * Transmission Unit (MTU)) and TransmitMTU.  The ReceiveMTU and TransmitMTU
  * parameters are optional. ReceiveMTU
@@ -41,7 +40,7 @@ public interface L2CAPConnection extends Connection {
 	/**
 	 * Default MTU value for connection-oriented channels
 	 * is 672 bytes.
-	 * <P>
+	 * <p>
 	 * The value of <code>DEFAULT_MTU</code> is 0x02A0 (672).
 	 */
 	public static final int DEFAULT_MTU = 672;
@@ -49,7 +48,7 @@ public interface L2CAPConnection extends Connection {
 	/**
 	 * Minimum MTU value for connection-oriented channels
 	 * is 48 bytes.
-	 * <P>
+	 * <p>
 	 * The value of <code>MINIMUM_MTU</code> is 0x30 (48).
 	 */
 	public static final int MINIMUM_MTU = 48;
@@ -65,8 +64,7 @@ public interface L2CAPConnection extends Connection {
 	 *
 	 * @return the maximum number of bytes that can be sent in a single call to
 	 * <code>send()</code> without losing any data
-	 *
-	 * @exception IOException if the connection is closed
+	 * @throws IOException if the connection is closed
 	 */
 	public int getTransmitMTU() throws IOException;
 
@@ -79,9 +77,7 @@ public interface L2CAPConnection extends Connection {
 	 *
 	 * @return the maximum number of bytes that can be read in a single call
 	 * to <code>receive()</code>
-	 *
-	 * @exception IOException if the connection is closed
-	 *
+	 * @throws IOException if the connection is closed
 	 */
 	public int getReceiveMTU() throws IOException;
 
@@ -94,12 +90,10 @@ public interface L2CAPConnection extends Connection {
 	 * <code>data</code> is of length 0, an empty L2CAP packet will be sent.
 	 *
 	 * @param data data to be sent
-	 *
-	 * @exception IOException if <code>data</code> cannot be sent successfully
-	 * or if the connection is closed
-	 *
-	 * @exception NullPointerException if the <code>data</code> is
-	 * <code>null</code>
+	 * @throws IOException          if <code>data</code> cannot be sent successfully
+	 *                              or if the connection is closed
+	 * @throws NullPointerException if the <code>data</code> is
+	 *                              <code>null</code>
 	 */
 	public void send(byte[] data) throws IOException;
 
@@ -118,16 +112,12 @@ public interface L2CAPConnection extends Connection {
 	 * one packet is lost unless the length of the packet is 0.
 	 *
 	 * @param inBuf byte array to store the received data
-	 *
 	 * @return the actual number of bytes read; 0 if a zero length packet is
 	 * received; 0 if <code>inBuf</code> length is zero
-	 *
-	 * @exception IOException if an I/O error occurs or the connection has been
-	 * closed
-	 *
-	 * @exception InterruptedIOException if the request timed out
-	 *
-	 * @exception NullPointerException if <code>inBuf</code> is <code>null</code>
+	 * @throws IOException            if an I/O error occurs or the connection has been
+	 *                                closed
+	 * @throws InterruptedIOException if the request timed out
+	 * @throws NullPointerException   if <code>inBuf</code> is <code>null</code>
 	 */
 	public int receive(byte[] inBuf) throws IOException;
 
@@ -136,13 +126,10 @@ public interface L2CAPConnection extends Connection {
 	 * <code>receive()</code>.  If <code>true</code>, a call to
 	 * <code>receive()</code> will not block the application.
 	 *
-	 * @see #receive
-	 *
 	 * @return <code>true</code> if there is data to read;
 	 * <code>false</code> if there is no data to read
-	 *
-	 * @exception IOException if the connection is closed
-	 *
+	 * @throws IOException if the connection is closed
+	 * @see #receive
 	 */
 	public boolean ready() throws IOException;
 

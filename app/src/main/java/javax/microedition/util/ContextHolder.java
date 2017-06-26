@@ -22,8 +22,6 @@ import android.os.Environment;
 import android.view.Display;
 import android.view.WindowManager;
 
-import filelog.Log;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,175 +35,177 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
 import javax.microedition.shell.MyClassLoader;
 
+import filelog.Log;
+
 public class ContextHolder {
-    private static final String tag = "ContextHolder";
+	private static final String tag = "ContextHolder";
 
-    private static Context context;
-    private static Display display;
-    private static VirtualKeyboard vk;
-    private static MicroActivity currentActivity;
-    private static ArrayList<WeakReference<MicroActivity>> activityPool = new ArrayList();
-    private static ArrayList<ActivityResultListener> resultListeners = new ArrayList();
-    private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
+	private static Context context;
+	private static Display display;
+	private static VirtualKeyboard vk;
+	private static MicroActivity currentActivity;
+	private static ArrayList<WeakReference<MicroActivity>> activityPool = new ArrayList();
+	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList();
+	private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
 
-    public static void setContext(Context cx) {
-        Log.d("ContextHolder", "setContext old=" + context);
-        Log.d("ContextHolder", "setContext new=" + cx);
-        context = cx;
-    }
+	public static void setContext(Context cx) {
+		Log.d("ContextHolder", "setContext old=" + context);
+		Log.d("ContextHolder", "setContext new=" + cx);
+		context = cx;
+	}
 
-    public static Context getContext() {
-        if (context == null) {
-            throw new IllegalStateException("call setContext() before calling getContext()");
-        }
-        Log.d("ContextHolder", "getContext=" + context);
-        return context;
-    }
+	public static Context getContext() {
+		if (context == null) {
+			throw new IllegalStateException("call setContext() before calling getContext()");
+		}
+		Log.d("ContextHolder", "getContext=" + context);
+		return context;
+	}
 
-    public static VirtualKeyboard getVk() {
-        return vk;
-    }
+	public static VirtualKeyboard getVk() {
+		return vk;
+	}
 
-    public static void setVk(VirtualKeyboard vk) {
-        ContextHolder.vk = vk;
-    }
+	public static void setVk(VirtualKeyboard vk) {
+		ContextHolder.vk = vk;
+	}
 
-    public static Display getDisplay() {
-        if (display == null) {
-            display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        }
-        return display;
-    }
+	public static Display getDisplay() {
+		if (display == null) {
+			display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		}
+		return display;
+	}
 
-    public static int getDisplayWidth() {
-        return getDisplay().getWidth();
-    }
+	public static int getDisplayWidth() {
+		return getDisplay().getWidth();
+	}
 
-    public static int getDisplayHeight() {
-        return getDisplay().getHeight();
-    }
+	public static int getDisplayHeight() {
+		return getDisplay().getHeight();
+	}
 
-    public static WeakReference<MicroActivity> compactActivityPool(MicroActivity activity) {
-        WeakReference<MicroActivity> reference = null;
-        MicroActivity referent;
+	public static WeakReference<MicroActivity> compactActivityPool(MicroActivity activity) {
+		WeakReference<MicroActivity> reference = null;
+		MicroActivity referent;
 
-        for (int index = 0; index < activityPool.size(); ) {
-            referent = activityPool.get(index).get();
+		for (int index = 0; index < activityPool.size(); ) {
+			referent = activityPool.get(index).get();
 
-            if (referent == null) {
-                activityPool.remove(index);
-            } else if (referent == activity) {
-                reference = activityPool.remove(index);
-            } else {
-                index++;
-            }
-        }
+			if (referent == null) {
+				activityPool.remove(index);
+			} else if (referent == activity) {
+				reference = activityPool.remove(index);
+			} else {
+				index++;
+			}
+		}
 
-        return reference;
-    }
+		return reference;
+	}
 
-    public static AndroidRecordStoreManager getRecordStoreManager(){
-        return recordStoreManager;
-    }
+	public static AndroidRecordStoreManager getRecordStoreManager() {
+		return recordStoreManager;
+	}
 
-    public static void addActivityToPool(MicroActivity activity) {
-        WeakReference<MicroActivity> reference = compactActivityPool(activity);
+	public static void addActivityToPool(MicroActivity activity) {
+		WeakReference<MicroActivity> reference = compactActivityPool(activity);
 
-        if (reference == null) {
-            reference = new WeakReference(activity);
-        }
+		if (reference == null) {
+			reference = new WeakReference(activity);
+		}
 
-        activityPool.add(reference);
-    }
+		activityPool.add(reference);
+	}
 
-    public static void setCurrentActivity(MicroActivity activity) {
-        currentActivity = activity;
-    }
+	public static void setCurrentActivity(MicroActivity activity) {
+		currentActivity = activity;
+	}
 
-    public static MicroActivity getCurrentActivity() {
-        return currentActivity;
-    }
+	public static MicroActivity getCurrentActivity() {
+		return currentActivity;
+	}
 
-    public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
-        for (ActivityResultListener listener : resultListeners) {
-            listener.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-	
-	public static InputStream getResourceAsStream(Class className, String resName){
-        System.err.println("CUSTOM GET RES CALLED WITH PATH: " + resName);
-        Log.d(tag, "CUSTOM GET RES CALLED WITH PATH: " + resName);
-        try {
-            return new MIDletResourceInputStream(new File(MyClassLoader.getResFolder(), resName));
-        } catch (FileNotFoundException e) {
-            System.err.println("Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
-            Log.d(tag, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
-            return null;
-        }
-    }
+	public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
+		for (ActivityResultListener listener : resultListeners) {
+			listener.onActivityResult(requestCode, resultCode, data);
+		}
+	}
 
-    public static FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
-        return new FileOutputStream(getFileByName(name));
-    }
+	public static InputStream getResourceAsStream(Class className, String resName) {
+		System.err.println("CUSTOM GET RES CALLED WITH PATH: " + resName);
+		Log.d(tag, "CUSTOM GET RES CALLED WITH PATH: " + resName);
+		try {
+			return new MIDletResourceInputStream(new File(MyClassLoader.getResFolder(), resName));
+		} catch (FileNotFoundException e) {
+			System.err.println("Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
+			Log.d(tag, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
+			return null;
+		}
+	}
 
-    public static FileInputStream openFileInput(String name) throws FileNotFoundException {
-        return new FileInputStream(getFileByName(name));
-    }
+	public static FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
+		return new FileOutputStream(getFileByName(name));
+	}
 
-    public static boolean deleteFile(String name) {
-        return getFileByName(name).delete();
-    }
+	public static FileInputStream openFileInput(String name) throws FileNotFoundException {
+		return new FileInputStream(getFileByName(name));
+	}
 
-    public static File getFileByName(String name) {
-        File dir = new File(context.getFilesDir() + MyClassLoader.getName());
-        if(!dir.exists()){
-            dir.mkdir();
-        }
-        File file = new File(dir, name);
-        return file;
-    }
+	public static boolean deleteFile(String name) {
+		return getFileByName(name).delete();
+	}
 
-    public static File getCacheDir() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            return getContext().getExternalCacheDir();
-        } else {
-            return getContext().getCacheDir();
-        }
-    }
+	public static File getFileByName(String name) {
+		File dir = new File(context.getFilesDir() + MyClassLoader.getName());
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		File file = new File(dir, name);
+		return file;
+	}
 
-    /**
-     * Свернуться в фоновый режим.
-     */
-    public static void notifyPaused() {
-        if (currentActivity != null) {
-            currentActivity.moveTaskToBack(true);
-        }
-    }
+	public static File getCacheDir() {
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			return getContext().getExternalCacheDir();
+		} else {
+			return getContext().getCacheDir();
+		}
+	}
 
-    /**
-     * Закрыть все Activity и завершить процесс, в котором они выполнялись.
-     */
-    public static void notifyDestroyed() {
-        MicroActivity activity;
-        int index;
+	/**
+	 * Свернуться в фоновый режим.
+	 */
+	public static void notifyPaused() {
+		if (currentActivity != null) {
+			currentActivity.moveTaskToBack(true);
+		}
+	}
 
-        while (true) {
-            index = activityPool.size() - 1;
+	/**
+	 * Закрыть все Activity и завершить процесс, в котором они выполнялись.
+	 */
+	public static void notifyDestroyed() {
+		MicroActivity activity;
+		int index;
 
-            if (index < 0) {
-                break;
-            }
+		while (true) {
+			index = activityPool.size() - 1;
 
-            activity = activityPool.remove(index).get();
+			if (index < 0) {
+				break;
+			}
 
-            if (activity != null && activity != currentActivity) {
-                activity.finish();
-            }
-        }
+			activity = activityPool.remove(index).get();
 
-        if (currentActivity != null) {
-            currentActivity.finish();
-        }
+			if (activity != null && activity != currentActivity) {
+				activity.finish();
+			}
+		}
 
-    }
+		if (currentActivity != null) {
+			currentActivity.finish();
+		}
+
+	}
 }

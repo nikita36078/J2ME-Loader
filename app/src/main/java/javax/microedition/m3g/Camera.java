@@ -101,12 +101,12 @@ public class Camera extends Node {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.FAR_DISTANCE:
-		case AnimationTrack.FIELD_OF_VIEW:
-		case AnimationTrack.NEAR_DISTANCE:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.FAR_DISTANCE:
+			case AnimationTrack.FIELD_OF_VIEW:
+			case AnimationTrack.NEAR_DISTANCE:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 }

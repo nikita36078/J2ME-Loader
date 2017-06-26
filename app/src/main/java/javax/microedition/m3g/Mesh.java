@@ -1,8 +1,5 @@
 package javax.microedition.m3g;
 
-import java.util.Vector;
-import java.util.Enumeration;
-
 public class Mesh extends Node {
 	private VertexBuffer vertices;
 	private IndexBuffer[] submeshes;

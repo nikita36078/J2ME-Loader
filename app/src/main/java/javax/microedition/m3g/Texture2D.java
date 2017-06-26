@@ -24,7 +24,7 @@ public class Texture2D extends Transformable {
 	private int imageFilter = FILTER_NEAREST;
 
 	private boolean textureInitialized = false;
-	private int[] id = { 0 };
+	private int[] id = {0};
 
 	public Texture2D(Image2D image) {
 		setImage(image);
@@ -52,15 +52,15 @@ public class Texture2D extends Transformable {
 
 	public void setBlending(int blending) {
 		switch (blending) {
-		case FUNC_REPLACE:
-		case FUNC_MODULATE:
-		case FUNC_DECAL:
-		case FUNC_BLEND:
-		case FUNC_ADD:
-			this.blending = blending;
-			break;
-		default:
-			throw new IllegalArgumentException("Bad blending function");
+			case FUNC_REPLACE:
+			case FUNC_MODULATE:
+			case FUNC_DECAL:
+			case FUNC_BLEND:
+			case FUNC_ADD:
+				this.blending = blending;
+				break;
+			default:
+				throw new IllegalArgumentException("Bad blending function");
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Texture2D extends Transformable {
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, id[0]);
 		}
 
-		// Set filtering. 
+		// Set filtering.
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, getGLFilter()); // Linear Filtering
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, getGLFilter()); // Linear Filtering
 
@@ -176,34 +176,34 @@ public class Texture2D extends Transformable {
 
 	private int getGLWrap(int wrap) {
 		switch (wrap) {
-		case Texture2D.WRAP_CLAMP:
-			return GL10.GL_CLAMP_TO_EDGE;
-		default:
-			return GL10.GL_REPEAT;
+			case Texture2D.WRAP_CLAMP:
+				return GL10.GL_CLAMP_TO_EDGE;
+			default:
+				return GL10.GL_REPEAT;
 		}
 	}
 
 	private int getGLBlend() {
 		switch (blending) {
-		case FUNC_ADD:
-			return GL10.GL_ADD;
-		case FUNC_MODULATE:
-			return GL10.GL_MODULATE;
-		case FUNC_BLEND:
-			return GL10.GL_BLEND;
-		case FUNC_REPLACE:
-			return GL10.GL_REPLACE;
-		default:
-			return GL10.GL_DECAL;
+			case FUNC_ADD:
+				return GL10.GL_ADD;
+			case FUNC_MODULATE:
+				return GL10.GL_MODULATE;
+			case FUNC_BLEND:
+				return GL10.GL_BLEND;
+			case FUNC_REPLACE:
+				return GL10.GL_REPLACE;
+			default:
+				return GL10.GL_DECAL;
 		}
 	}
-	
+
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.COLOR:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.COLOR:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 }

@@ -15,16 +15,16 @@
  */
 package javax.microedition.midlet;
 
-import java.util.LinkedHashMap;
-
-import javax.microedition.io.ConnectionNotFoundException;
-import javax.microedition.util.ContextHolder;
-
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import java.util.LinkedHashMap;
+
+import javax.microedition.io.ConnectionNotFoundException;
+import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.util.FileUtils;
 
@@ -37,7 +37,7 @@ public class MIDlet {
 	private static boolean destroyAppCalled = false;
 
 	public void start() {
-        FileUtils.deleteDirectory(ContextHolder.getCacheDir());
+		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 		startApp();
 	}
 
@@ -61,7 +61,7 @@ public class MIDlet {
 	/**
 	 * Сообщить оболочке, что мидлет готов перейти в состояние паузы. При этом
 	 * он будет свернут в фон.
-	 *
+	 * <p>
 	 * Вызовы этого метода из pauseApp() игнорируются.
 	 */
 	public final void notifyPaused() {
@@ -73,7 +73,7 @@ public class MIDlet {
 	/**
 	 * Сообщить оболочке, что мидлет завершил работу. При этом оболочка будет
 	 * закрыта.
-	 *
+	 * <p>
 	 * Вызовы этого метода из destroyApp() игнорируются.
 	 */
 	public final void notifyDestroyed() {
@@ -86,7 +86,7 @@ public class MIDlet {
 	/**
 	 * Вызывается в самом начале запуска оболочки, когда создается объект
 	 * Application.
-	 *
+	 * <p>
 	 * В частности, этот метод вызывается перед созданием Activity.
 	 * Соответственно, если конфигурирование оболочки происходит через
 	 * ConfigActivity, то в момент вызова этого метода состояние оболочки еще не
@@ -98,10 +98,10 @@ public class MIDlet {
 
 	/**
 	 * Вызывается при передаче управления мидлету.
-	 *
+	 * <p>
 	 * Этот метод следует использовать вместо конструктора класса мидлета для
 	 * его инициализации.
-	 *
+	 * <p>
 	 * Если конфигурирование оболочки происходит через ConfigActivity, то в
 	 * момент вызова этого метода состояние оболочки полностью определено:
 	 * виртуальный экран имеет указанный пользователем размер, размеры шрифтов
@@ -137,9 +137,8 @@ public class MIDlet {
 	/**
 	 * Вызывается при завершении работы приложения.
 	 *
-	 * @param unconditional
-	 *            флаг безусловного завершения, для Android не имеет особого
-	 *            смысла
+	 * @param unconditional флаг безусловного завершения, для Android не имеет особого
+	 *                      смысла
 	 */
 	public static/* abstract */void destroyApp(boolean unconditional) {
 	}
@@ -148,9 +147,8 @@ public class MIDlet {
 	 * Корректно вызвать destroyApp(). Во время выполнения этого метода вызовы
 	 * notifyDestroyed() игнорируются.
 	 *
-	 * @param unconditional
-	 *            флаг безусловного завершения, для Android не имеет особого
-	 *            смысла
+	 * @param unconditional флаг безусловного завершения, для Android не имеет особого
+	 *                      смысла
 	 */
 	public static final void callDestroyApp(boolean unconditional) {
 		destroyAppCalled = true;

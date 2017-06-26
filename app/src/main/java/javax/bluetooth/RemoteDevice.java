@@ -1,11 +1,10 @@
 /**
- *  Java docs licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0 
- *   (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
+ * Java docs licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * (c) Copyright 2001, 2002 Motorola, Inc.  ALL RIGHTS RESERVED.
  *
- *
- *  @version $Id$
- */ 
+ * @version $Id$
+ */
 
 package javax.bluetooth;
 
@@ -32,18 +31,16 @@ public class RemoteDevice {
 	 * <code>00af8300cd0b</code><BR>
 	 * <code>014bd91DA8FC</code>
 	 *
-	 * @param address  the address of the Bluetooth device as a 12 character
-	 * hex string
-	 *
-	 * @exception NullPointerException if <code>address</code> is
-	 * <code>null</code>
-	 *
-	 * @exception IllegalArgumentException if <code>address</code> is the
-	 * address of the local device or is not a valid Bluetooth address
+	 * @param address the address of the Bluetooth device as a 12 character
+	 *                hex string
+	 * @throws NullPointerException     if <code>address</code> is
+	 *                                  <code>null</code>
+	 * @throws IllegalArgumentException if <code>address</code> is the
+	 *                                  address of the local device or is not a valid Bluetooth address
 	 */
 	protected RemoteDevice(String address) {
-		if(address == null) {
-            throw new NullPointerException("address is null");
+		if (address == null) {
+			throw new NullPointerException("address is null");
 		}
 		throw new RuntimeException("Can't initialize bluetooth support");
 	}
@@ -65,19 +62,17 @@ public class RemoteDevice {
 	 * the remote device if the name is not known or
 	 * <code>alwaysAsk</code> is <code>true</code>.
 	 *
-	 * @param alwaysAsk  if <code>true</code> then the device will be
-	 * contacted for its name, otherwise, if there exists a known
-	 * name for this device, the name will be returned without
-	 * contacting the remote device
-	 *
+	 * @param alwaysAsk if <code>true</code> then the device will be
+	 *                  contacted for its name, otherwise, if there exists a known
+	 *                  name for this device, the name will be returned without
+	 *                  contacting the remote device
 	 * @return the name of the device, or <code>null</code> if the
 	 * Bluetooth system does not support this feature; if the local device
 	 * is able to contact the remote device, the result will never be
 	 * <code>null</code>; if the remote device does not have a name
 	 * then an empty string will be returned
-	 *
-	 * @exception IOException if the remote device can not be contacted or the
-	 * remote device could not provide its name
+	 * @throws IOException if the remote device can not be contacted or the
+	 *                     remote device could not provide its name
 	 */
 	public String getFriendlyName(boolean alwaysAsk) throws IOException {
 		return null;
@@ -91,7 +86,7 @@ public class RemoteDevice {
 	 * @return the Bluetooth address of the remote device
 	 */
 	public final String getBluetoothAddress() {
-	    return null;
+		return null;
 	}
 
 	/**
@@ -99,7 +94,6 @@ public class RemoteDevice {
 	 * equal if they have the same Bluetooth device address.
 	 *
 	 * @param obj the object to compare to
-	 *
 	 * @return <code>true</code> if both devices have the same Bluetooth
 	 * address; <code>false</code> if both devices do not have the same address;
 	 * <code>false</code> if <code>obj</code> is <code>null</code>;
@@ -126,21 +120,17 @@ public class RemoteDevice {
 	 * connection provided.  This method will never return <code>null</code>.
 	 *
 	 * @param conn the Bluetooth Serial Port connection, L2CAP connection,
-	 * or OBEX over RFCOMM connection whose remote Bluetooth device is needed
-	 *
+	 *             or OBEX over RFCOMM connection whose remote Bluetooth device is needed
 	 * @return the remote device involved in the connection
-	 *
-	 * @exception IllegalArgumentException if <code>conn</code> is not a
-	 * Bluetooth Serial Port Profile connection, L2CAP connection, or OBEX
-	 * over RFCOMM connection; if <code>conn</code> is a
-	 * <code>L2CAPConnectionNotifier</code>,
-	 * <code>StreamConnectionNotifier</code>, or
-	 * <code>SessionNotifier</code>
-	 *
-	 * @exception IOException if the connection is closed
-	 *
-	 * @exception NullPointerException if <code>conn</code> is
-	 * <code>null</code>
+	 * @throws IllegalArgumentException if <code>conn</code> is not a
+	 *                                  Bluetooth Serial Port Profile connection, L2CAP connection, or OBEX
+	 *                                  over RFCOMM connection; if <code>conn</code> is a
+	 *                                  <code>L2CAPConnectionNotifier</code>,
+	 *                                  <code>StreamConnectionNotifier</code>, or
+	 *                                  <code>SessionNotifier</code>
+	 * @throws IOException              if the connection is closed
+	 * @throws NullPointerException     if <code>conn</code> is
+	 *                                  <code>null</code>
 	 */
 	public static RemoteDevice getRemoteDevice(Connection conn) throws IOException {
 		return null;
@@ -159,7 +149,7 @@ public class RemoteDevice {
 	 * BCC, if the stack does not
 	 * support authentication at all, or if the stack does not support
 	 * authentication subsequent to connection establishment.
-	 *
+	 * <p>
 	 * <p> If this <code>RemoteDevice</code> has previously been
 	 * authenticated, then this method returns <code>true</code>
 	 * without attempting to re-authenticate this
@@ -167,9 +157,8 @@ public class RemoteDevice {
 	 *
 	 * @return <code>true</code> if authentication is successful;
 	 * otherwise <code>false</code>
-	 *
-	 * @exception IOException if there are no open connections between
-	 * the local device and this <code>RemoteDevice</code>
+	 * @throws IOException if there are no open connections between
+	 *                     the local device and this <code>RemoteDevice</code>
 	 */
 	public boolean authenticate() throws IOException {
 		return false;
@@ -187,12 +176,12 @@ public class RemoteDevice {
 	 * service over the connection <code>conn</code>.  In devices with
 	 * a user interface, the BCC is expected to consult with the user
 	 * to obtain approval.
-	 *
+	 * <p>
 	 * <p> Some Bluetooth systems may allow the user to permanently
 	 * authorize a remote device for all local services. When a device
 	 * is authorized in this way, it is known as a "trusted device"
 	 * -- see {@link #isTrustedDevice() isTrustedDevice()}.
-	 *
+	 * <p>
 	 * <p> The <code>authorize()</code> method will also check that the
 	 * identity of the <code>RemoteDevice</code> can be verified through authentication.
 	 * If this <code>RemoteDevice</code> has been authorized for
@@ -200,27 +189,23 @@ public class RemoteDevice {
 	 * <code>true</code> without attempting to re-authorize this
 	 * <code>RemoteDevice</code>.
 	 *
-	 * @see #isTrustedDevice
-	 *
 	 * @param conn the connection that this <code>RemoteDevice</code> is
-	 * using to access a local service
-	 *
+	 *             using to access a local service
 	 * @return <code>true</code> if this <code>RemoteDevice</code> is
 	 * successfully authenticated and authorized, otherwise
 	 * <code>false</code> if authentication or authorization fails
-	 *
-	 * @exception IllegalArgumentException if <code>conn</code> is not
-	 * a connection to this <code>RemoteDevice</code>, or if the local
-	 * device initiated the connection, i.e., the local device is the
-	 * client rather than the server.  This exception is also thrown if
-	 * <code>conn</code> was created by <code>RemoteDevice</code>
-	 * using a scheme other than <code>btspp</code>,
-	 * <code>btl2cap</code>, or <code>btgoep</code>. This exception
-	 * is thrown if <code>conn</code> is a notifier used by a server
-	 * to wait for a client connection, since the notifier is not a
-	 * connection to this <code>RemoteDevice</code>.
-	 *
-	 * @exception IOException if <code>conn</code> is closed
+	 * @throws IllegalArgumentException if <code>conn</code> is not
+	 *                                  a connection to this <code>RemoteDevice</code>, or if the local
+	 *                                  device initiated the connection, i.e., the local device is the
+	 *                                  client rather than the server.  This exception is also thrown if
+	 *                                  <code>conn</code> was created by <code>RemoteDevice</code>
+	 *                                  using a scheme other than <code>btspp</code>,
+	 *                                  <code>btl2cap</code>, or <code>btgoep</code>. This exception
+	 *                                  is thrown if <code>conn</code> is a notifier used by a server
+	 *                                  to wait for a client connection, since the notifier is not a
+	 *                                  connection to this <code>RemoteDevice</code>.
+	 * @throws IOException              if <code>conn</code> is closed
+	 * @see #isTrustedDevice
 	 */
 	public boolean authorize(javax.microedition.io.Connection conn) throws IOException {
 		return false;
@@ -241,7 +226,7 @@ public class RemoteDevice {
 	 * could happen because the stack does not support encryption or
 	 * because encryption conflicts with the user's security settings
 	 * for the device.  </UL>
-	 *
+	 * <p>
 	 * <p> In the case where the parameter <code>on</code> is
 	 * <code>false</code>, there are again two possible outcomes: <UL>
 	 * <LI> encryption is turned off on the connection and
@@ -257,7 +242,7 @@ public class RemoteDevice {
 	 * might be left on because other connections to the same device
 	 * need encryption.  (All of the connections over the same
 	 * physical link must be encrypted if any of them are encrypted.)
-	 *
+	 * <p>
 	 * <p> While attempting to turn encryption off may not succeed
 	 * immediately because other connections need encryption on, there
 	 * may be a delayed effect.  At some point, all of the connections
@@ -270,7 +255,7 @@ public class RemoteDevice {
 	 * false)</code> once they no longer need encryption to allow the
 	 * BCC to determine if it can reduce the overhead on connections
 	 * to this <code>RemoteDevice</code>.
-	 *
+	 * <p>
 	 * <p> The fact that <code>encrypt(conn, false)</code> may not
 	 * succeed in turning off encryption has very few consequences for
 	 * applications.  The stack handles encryption and decryption, so
@@ -278,26 +263,22 @@ public class RemoteDevice {
 	 * depending on whether the connection is still encrypted or not.
 	 *
 	 * @param conn the connection whose need for encryption has changed
-	 *
-	 * @param on  <code>true</code> attempts to turn on encryption;
-	 * <code>false</code> attempts to turn off encryption
-	 *
+	 * @param on   <code>true</code> attempts to turn on encryption;
+	 *             <code>false</code> attempts to turn off encryption
 	 * @return <code>true</code> if the change succeeded, otherwise
 	 * <code>false</code> if it failed
-	 *
-	 * @exception IOException if <code>conn</code> is closed
-	 *
-	 * @exception IllegalArgumentException if <code>conn</code> is not
-	 * a connection to this <code>RemoteDevice</code>; if <code>conn</code> was
-	 * created by the
-	 * client side of the connection using a scheme other than
-	 * <code>btspp</code>, <code>btl2cap</code>, or
-	 * <code>btgoep</code> (for example, this exception will be
-	 * thrown if <code>conn</code> was created using the
-	 * <code>file</code> or <code>http</code> schemes.);
-	 * if <code>conn</code> is a notifier used by a server
-	 * to wait for a client connection, since the notifier is not a
-	 * connection to this <code>RemoteDevice</code>
+	 * @throws IOException              if <code>conn</code> is closed
+	 * @throws IllegalArgumentException if <code>conn</code> is not
+	 *                                  a connection to this <code>RemoteDevice</code>; if <code>conn</code> was
+	 *                                  created by the
+	 *                                  client side of the connection using a scheme other than
+	 *                                  <code>btspp</code>, <code>btl2cap</code>, or
+	 *                                  <code>btgoep</code> (for example, this exception will be
+	 *                                  thrown if <code>conn</code> was created using the
+	 *                                  <code>file</code> or <code>http</code> schemes.);
+	 *                                  if <code>conn</code> is a notifier used by a server
+	 *                                  to wait for a client connection, since the notifier is not a
+	 *                                  connection to this <code>RemoteDevice</code>
 	 */
 	public boolean encrypt(javax.microedition.io.Connection conn, boolean on) throws IOException {
 		return false;
@@ -306,7 +287,7 @@ public class RemoteDevice {
 	/**
 	 * Determines if this <code>RemoteDevice</code> has been
 	 * authenticated.
-	 * <P>
+	 * <p>
 	 * A device may have been authenticated by this application
 	 * or another application.  Authentication applies to an ACL link between
 	 * devices and not on a specific L2CAP, RFCOMM, or OBEX connection.
@@ -333,23 +314,20 @@ public class RemoteDevice {
 	 * all legal values of the <code>conn</code> argument.
 	 *
 	 * @param conn a connection that this <code>RemoteDevice</code> is
-	 * using to access a service or provide a service
-	 *
+	 *             using to access a service or provide a service
 	 * @return <code>true</code> if <code>conn</code> is a server-side
 	 * connection and this <code>RemoteDevice</code> has been
 	 * authorized; <code>false</code> if <code>conn</code> is a
 	 * client-side connection, or a server-side connection that has not
 	 * been authorized
-	 *
-	 * @exception IllegalArgumentException if <code>conn</code> is not
-	 * a connection to this <code>RemoteDevice</code>; if
-	 * <code>conn</code> was not created using one of the schemes
-	 * <code>btspp</code>, <code>btl2cap</code>, or
-	 * <code>btgoep</code>; or if <code>conn</code> is a notifier
-	 * used by a server to wait for a client connection, since the
-	 * notifier is not a connection to this <code>RemoteDevice</code>.
-	 *
-	 * @exception IOException if <code>conn</code> is closed
+	 * @throws IllegalArgumentException if <code>conn</code> is not
+	 *                                  a connection to this <code>RemoteDevice</code>; if
+	 *                                  <code>conn</code> was not created using one of the schemes
+	 *                                  <code>btspp</code>, <code>btl2cap</code>, or
+	 *                                  <code>btgoep</code>; or if <code>conn</code> is a notifier
+	 *                                  used by a server to wait for a client connection, since the
+	 *                                  notifier is not a connection to this <code>RemoteDevice</code>.
+	 * @throws IOException              if <code>conn</code> is closed
 	 */
 	public boolean isAuthorized(javax.microedition.io.Connection conn) throws IOException {
 		return false;
@@ -358,7 +336,7 @@ public class RemoteDevice {
 	/**
 	 * Determines if data exchanges with this <code>RemoteDevice</code>
 	 * are currently being encrypted.
-	 * <P>
+	 * <p>
 	 * Encryption may have been previously turned on by this or another
 	 * application.  Encryption applies to an ACL link
 	 * between devices and not on a specific L2CAP, RFCOMM, or OBEX connection.

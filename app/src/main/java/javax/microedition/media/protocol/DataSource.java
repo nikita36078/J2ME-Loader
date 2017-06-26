@@ -16,6 +16,10 @@
 
 package javax.microedition.media.protocol;
 
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -23,12 +27,7 @@ import java.io.IOException;
 
 import javax.microedition.util.ContextHolder;
 
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
-
-public class DataSource
-{
+public class DataSource {
 	protected String locator;
 	protected File file;
 
@@ -38,24 +37,18 @@ public class DataSource
 	protected long offset;
 	protected long length;
 
-	public DataSource(String locator)
-	{
+	public DataSource(String locator) {
 		this.locator = locator;
 	}
 
-	public DataSource(File file)
-	{
+	public DataSource(File file) {
 		this.file = file;
 	}
 
-	public void open() throws IOException
-	{
-		if(descriptor == null)
-		{
-			if(locator != null && !locator.contains("://"))
-			{
-				if(locator.startsWith("/"))
-				{
+	public void open() throws IOException {
+		if (descriptor == null) {
+			if (locator != null && !locator.contains("://")) {
+				if (locator.startsWith("/")) {
 					locator = locator.substring(1);
 				}
 
@@ -65,9 +58,7 @@ public class DataSource
 
 				offset = asset.getStartOffset();
 				length = asset.getLength();
-			}
-			else if(file != null)
-			{
+			} else if (file != null) {
 				stream = new FileInputStream(file);
 
 				descriptor = stream.getFD();
@@ -78,29 +69,20 @@ public class DataSource
 		}
 	}
 
-	public void close()
-	{
-		if(stream != null)
-		{
-			try
-			{
+	public void close() {
+		if (stream != null) {
+			try {
 				stream.close();
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 			}
 
 			stream = null;
 		}
 
-		if(asset != null)
-		{
-			try
-			{
+		if (asset != null) {
+			try {
 				asset.close();
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 			}
 
 			asset = null;
@@ -109,42 +91,30 @@ public class DataSource
 		descriptor = null;
 	}
 
-	public String getURL()
-	{
-		if(locator != null)
-		{
+	public String getURL() {
+		if (locator != null) {
 			return locator;
-		}
-		else
-		{
+		} else {
 			return "file://" + file.getAbsolutePath();
 		}
 	}
 
-	public void setFor(MediaPlayer player) throws IOException
-	{
+	public void setFor(MediaPlayer player) throws IOException {
 		open();
 
-		if(descriptor != null)
-		{
+		if (descriptor != null) {
 			player.setDataSource(descriptor, offset, length);
-		}
-		else
-		{
+		} else {
 			player.setDataSource(locator);
 		}
 	}
 
-	public void setFor(MediaMetadataRetriever retriever) throws IOException
-	{
+	public void setFor(MediaMetadataRetriever retriever) throws IOException {
 		open();
 
-		if(descriptor != null)
-		{
+		if (descriptor != null) {
 			retriever.setDataSource(descriptor, 0, length);
-		}
-		else
-		{
+		} else {
 			retriever.setDataSource(locator);
 		}
 	}

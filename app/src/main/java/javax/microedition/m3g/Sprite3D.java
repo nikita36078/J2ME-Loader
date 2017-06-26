@@ -1,9 +1,9 @@
 package javax.microedition.m3g;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Hashtable;
-import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -22,7 +22,7 @@ public class Sprite3D extends Node {
 
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer textureBuffer;
-	private float[] vertexArray = { 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f };
+	private float[] vertexArray = {1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f};
 	private float[] textureArray;
 
 	public Sprite3D(boolean scaled, Image2D image, Appearance appearance) {
@@ -223,10 +223,10 @@ public class Sprite3D extends Node {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.CROP:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.CROP:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 }

@@ -22,247 +22,216 @@ import javax.microedition.util.LinkedList;
 /**
  * Очередь событий. В целом очень хитрая штука...
  */
-public class EventQueue implements Runnable
-{
+public class EventQueue implements Runnable {
 	protected LinkedList<Event> queue;
 	protected Event event;
-	
+
 	protected boolean enabled;
 	protected Thread thread;
-	
+
 	protected final Object waiter;
 	protected final Object interlock;
-	
+
 	protected boolean isrunning;
 	protected boolean continuerun;
 
 	protected static boolean immediate;
-	
-	public EventQueue()
-	{
+
+	public EventQueue() {
 		queue = new LinkedList();
-		
+
 		waiter = new Object();
 		interlock = new Object();
-		
+
 		immediate = false;
 	}
-	
+
 	/**
 	 * Включить неотложный режим обработки.
-	 * 
+	 * <p>
 	 * В этом режиме события обрабатываются сразу при поступлении,
 	 * очереди как таковой нет (нарушается принцип сериализации).
-	 * 
+	 * <p>
 	 * Можно попробовать включить этот режим, если каждый FPS на счету,
 	 * но как себя при этом поведет мидлет - нужно смотреть индивидуально.
-	 * 
+	 *
 	 * @param value должен ли быть включен неотложный режим
 	 */
-	public static void setImmediate(boolean value)
-	{
+	public static void setImmediate(boolean value) {
 		immediate = value;
 	}
-	
+
 	/**
 	 * Добавить событие в очередь.
-	 * 
+	 * <p>
 	 * Если включен неотложный режим обработки,
 	 * событие обрабатывается здесь же,
 	 * в этом случае очереди как таковой и нет.
-	 * 
+	 * <p>
 	 * Если событие было добавлено в очередь,
 	 * вызывается его метод enterQueue().
-	 * 
+	 *
 	 * @param event добавляемое событие
 	 */
-	public void postEvent(Event event)
-	{
+	public void postEvent(Event event) {
 //		System.out.println("Post event " + event.getID());
-		
-		if(immediate)		// включен неотложный режим
+
+		if (immediate)        // включен неотложный режим
 		{
-			event.run();	// обрабатываем событие на месте
-			return;			// и больше нам здесь ловить нечего
+			event.run();    // обрабатываем событие на месте
+			return;            // и больше нам здесь ловить нечего
 		}
-		
+
 		boolean empty;
-		
-		synchronized(queue)	// все операции с очередью должны быть синхронизированы (на ней самой)
+
+		synchronized (queue)    // все операции с очередью должны быть синхронизированы (на ней самой)
 		{
 			empty = queue.isEmpty();
-			
-			if(empty || event.placeableAfter(queue.getLast()))
-			{
+
+			if (empty || event.placeableAfter(queue.getLast())) {
 				/*
-				 * Если собственно очередь пустая, то это уже подразумевает, что осталось
+                 * Если собственно очередь пустая, то это уже подразумевает, что осталось
 				 * либо ровно одно событие и оно сейчас в обработке,
 				 * либо не осталось вообще ни одного события.
 				 * 
 				 * И в том, и в другом случае новое событие следует добавить в очередь,
 				 * независимо от значения event.placeableAfter().
 				 */
-				
+
 				queue.addLast(event);
 				event.enterQueue();
-			}
-			else
-			{
+			} else {
 				// так правильнее, но требуются дополнительные проверки
 				// queue.setLast(event).recycle(); // предыдущее убрать, а это - добавить
-				
+
 				event.recycle(); // так надежнее // оставить предыдущее, новое сдать в утиль
 			}
-			
+
 //			queue.dump(System.out);
 		}
-		
-		if(empty)
-		{
+
+		if (empty) {
 			/**
 			 * с другой стороны, если очередь была непустая,
 			 * то как минимум еще на одну итерацию события есть,
 			 * и этого делать не нужно
 			 */
-			
-			synchronized(waiter)
-			{
-				if(isrunning)
-				{
+
+			synchronized (waiter) {
+				if (isrunning) {
 					continuerun = true;
-				}
-				else
-				{
+				} else {
 					waiter.notifyAll();
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Удалить из очереди события, подходящие под заданный фильтр.
-	 * 
+	 *
 	 * @param filter фильтр событий для удаления
 	 * @return true, если что-то было удалено
 	 */
-	public boolean removeEvents(EventFilter filter)
-	{
-		if(queue.isEmpty())
-		{
+	public boolean removeEvents(EventFilter filter) {
+		if (queue.isEmpty()) {
 			return false;
 		}
-		
+
 		boolean removed = false;
-		
-		synchronized(queue)
-		{
+
+		synchronized (queue) {
 //			System.out.println("removeEvents start");
-			
+
 			LinkedEntry<Event> entry = queue.firstEntry();
 			LinkedEntry<Event> last = queue.lastEntry();
 			LinkedEntry<Event> next;
-			
-			while(true)
-			{
+
+			while (true) {
 //				queue.dump(System.out);
-				
+
 				next = entry.nextEntry();
-				
-				if(filter.accept(entry.getElement()))
-				{
+
+				if (filter.accept(entry.getElement())) {
 					queue.recycleEntry(entry);
 					removed = true;
 				}
-				
-				if(entry != last)
-				{
+
+				if (entry != last) {
 					entry = next;
-				}
-				else
-				{
+				} else {
 					break;
 				}
 			}
-			
+
 //			System.out.println("removeEvents end");
 		}
-		
+
 		return removed;
 	}
-	
+
 	/**
 	 * Проверить, есть ли что-нибудь в очереди.
+	 *
 	 * @return true, если очередь пуста
 	 */
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return queue.isEmpty();
 	}
-	
+
 	/**
 	 * Очистить очередь.
 	 */
-	public void clear()
-	{
-		synchronized(queue)
-		{
+	public void clear() {
+		synchronized (queue) {
 			queue.clear();
 		}
 	}
-	
+
 	/**
 	 * Запустить цикл обработки событий.
 	 * Повторные вызовы этого метода игнорируются.
 	 */
-	public void startProcessing()
-	{
+	public void startProcessing() {
 		enabled = true;
-		
-		if(thread == null)
-		{
+
+		if (thread == null) {
 			thread = new Thread(this);
 			thread.start();
 		}
 	}
-	
+
 	/**
 	 * Остановить цикл обработки событий.
 	 * Этот метод блокируется до полной остановки цикла.
 	 */
-	public void stopProcessing()
-	{
+	public void stopProcessing() {
 		enabled = false;
-		
-		synchronized(waiter)
-		{
+
+		synchronized (waiter) {
 			waiter.notifyAll();
 		}
-		
-		synchronized(interlock)
-		{
+
+		synchronized (interlock) {
 			thread = null;
 		}
 	}
-	
+
 	/**
 	 * @return текущее обрабатываемое событие, или null
 	 */
-	public Event currentEvent()
-	{
+	public Event currentEvent() {
 		return event;
 	}
-	
+
 	/**
 	 * Здесь крутится основной цикл обработки событий.
 	 */
-	public void run()
-	{
-		synchronized(interlock) 
-		{
+	public void run() {
+		synchronized (interlock) {
 			isrunning = true;
-			
-			while(enabled)
-			{
+
+			while (enabled) {
 				/*
 				 * порядок блокировки:
 				 * 
@@ -272,68 +241,52 @@ public class EventQueue implements Runnable
 				 * соответственно, в Canvas.serviceRepaints() порядок должен быть такой же,
 				 * иначе возможна взаимная блокировка двух потоков (все повиснет)
 				 */
-				
-				synchronized(this)		// нужно для Canvas.serviceRepaints()
+
+				synchronized (this)        // нужно для Canvas.serviceRepaints()
 				{
-					synchronized(queue)	// нужно для postEvent()
+					synchronized (queue)    // нужно для postEvent()
 					{
-						event = queue.removeFirst();	// достаем первый элемент и сразу же удаляем из очереди
+						event = queue.removeFirst();    // достаем первый элемент и сразу же удаляем из очереди
 					}
-					
+
 					// event = queue.getFirst();
 				}
-				
-				if(event != null)
-				{
-					try
-					{
+
+				if (event != null) {
+					try {
 						event.process();
-					}
-					catch(Throwable ex)
-					{
+					} catch (Throwable ex) {
 						ex.printStackTrace();
 					}
-					
-					synchronized(queue)
-					{
+
+					synchronized (queue) {
 						// queue.removeFirst();
-						
+
 						event.leaveQueue();
 						event.recycle();
 					}
-					
+
 //					System.out.println("Event " + event.getID() + " processed, removed from queue and recycled");
-					
-					synchronized(this)
-					{
-						synchronized(queue)
-						{
+
+					synchronized (this) {
+						synchronized (queue) {
 							event = null;
 						}
-						
+
 						this.notifyAll();
 					}
-				}
-				else
-				{
-					synchronized(waiter)
-					{
-						if(continuerun)
-						{
+				} else {
+					synchronized (waiter) {
+						if (continuerun) {
 							continuerun = false;
-						}
-						else
-						{
+						} else {
 							isrunning = false;
-							
-							try
-							{
+
+							try {
 								waiter.wait();
+							} catch (InterruptedException ie) {
 							}
-							catch(InterruptedException ie)
-							{
-							}
-							
+
 							isrunning = true;
 						}
 					}

@@ -1,7 +1,10 @@
 package javax.microedition.m3g;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -12,19 +15,13 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
-
-import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 
-import java.nio.IntBuffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 public final class Graphics3D {
-	public static final int	ANTIALIAS = 2;
-	public static final int	DITHER = 4;
-	public static final int	OVERWRITE = 16;
-	public static final int	TRUE_COLOR = 8;
+	public static final int ANTIALIAS = 2;
+	public static final int DITHER = 4;
+	public static final int OVERWRITE = 16;
+	public static final int TRUE_COLOR = 8;
 
 	private static final String PROPERTY_SUPPORT_ANTIALIASING = "supportAntialiasing";
 	private static final String PROPERTY_SUPPORT_TRUECOLOR = "supportTrueColor";
@@ -117,14 +114,14 @@ public final class Graphics3D {
 		int[] num_config = new int[1];
 		//EGL_ASSERT(egl.eglGetConfigs(eglDisplay, null, 0, num_config));
 		int[] s_configAttribs = {
-			//EGL10.EGL_SURFACE_TYPE, EGL10.EGL_PBUFFER_BIT,
-			EGL10.EGL_RED_SIZE, 8,
-			EGL10.EGL_GREEN_SIZE, 8,
-			EGL10.EGL_BLUE_SIZE, 8,
-			EGL10.EGL_ALPHA_SIZE, 8,
-			EGL10.EGL_DEPTH_SIZE, 16,
-			EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
-			EGL10.EGL_NONE };
+				//EGL10.EGL_SURFACE_TYPE, EGL10.EGL_PBUFFER_BIT,
+				EGL10.EGL_RED_SIZE, 8,
+				EGL10.EGL_GREEN_SIZE, 8,
+				EGL10.EGL_BLUE_SIZE, 8,
+				EGL10.EGL_ALPHA_SIZE, 8,
+				EGL10.EGL_DEPTH_SIZE, 16,
+				EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
+				EGL10.EGL_NONE};
 		EGLConfig[] eglConfigs = new EGLConfig[1];
 		EGL_ASSERT(egl.eglChooseConfig(eglDisplay, s_configAttribs, eglConfigs, 1, num_config));
 		this.eglConfig = eglConfigs[0];
@@ -212,9 +209,9 @@ public final class Graphics3D {
 			}
 
 			int[] s_surfaceAttribs = {
-				EGL10.EGL_WIDTH, width,
-				EGL10.EGL_HEIGHT, height,
-				EGL10.EGL_NONE };
+					EGL10.EGL_WIDTH, width,
+					EGL10.EGL_HEIGHT, height,
+					EGL10.EGL_NONE};
 			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
 			EGL_ASSERT(this.eglWindowSurface != EGL10.EGL_NO_SURFACE);
 			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
@@ -249,12 +246,12 @@ public final class Graphics3D {
 		overwrite = ((hints & OVERWRITE) != 0);
 		setViewport(0, 0, width, height);
 	}
-	
+
 	private static void EGL_ASSERT(boolean val) {
-	    if (!val) {
-		System.out.println("EGL_ASSERT failed!");
-	        throw new IllegalStateException();
-	    }
+		if (!val) {
+			System.out.println("EGL_ASSERT failed!");
+			throw new IllegalStateException();
+		}
 	}
 
 	public Object getTarget() {
@@ -262,38 +259,38 @@ public final class Graphics3D {
 	}
 
 	public void releaseTarget() {
-		int b[]=new int[width*height];
-		int bt[]=new int[width*height];
-		IntBuffer ib=IntBuffer.wrap(b);
+		int b[] = new int[width * height];
+		int bt[] = new int[width * height];
+		IntBuffer ib = IntBuffer.wrap(b);
 		ib.position(0);
 
 		gl.glFinish();
 		gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
 
-		for(int i=0; i<height; i++) {
-			for(int j=0; j<width; j++) {
-				int pix=b[i*width+j];
-				int pb=(pix>>>16)&0xff;
-				int pr=(pix<<16)&0x00ff0000;
-				int pix1=(pix&0xff00ff00) | pr | pb | (overwrite ? 0xff000000 : (((pix & 0xff000000) == 0) ? 0 : 0xff000000));
-				bt[(height-i-1)*width+j]=pix1;
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				int pix = b[i * width + j];
+				int pb = (pix >>> 16) & 0xff;
+				int pr = (pix << 16) & 0x00ff0000;
+				int pix1 = (pix & 0xff00ff00) | pr | pb | (overwrite ? 0xff000000 : (((pix & 0xff000000) == 0) ? 0 : 0xff000000));
+				bt[(height - i - 1) * width + j] = pix1;
 			}
 		}
 
 		if (renderTarget instanceof Graphics)
-			((Graphics)renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
+			((Graphics) renderTarget).drawRGB(bt, 0, width, 0, 0, width, height, true);
 		else if (renderTarget instanceof Image2D) {
-			ByteBuffer bb = ((Image2D)renderTarget).getPixels();
+			ByteBuffer bb = ((Image2D) renderTarget).getPixels();
 			if (bb == null)
 				bb = ByteBuffer.allocateDirect(width * height * 4);
 			bb.position(0);
 			for (int i = 0; i < height; i++)
 				for (int j = 0; j < width; j++) {
 					int pix = bt[i * width + j];
-					bb.put((byte)(pix >>> 24));
-					bb.put((byte)((pix >>> 16) & 0xFF));
-					bb.put((byte)((pix >>> 8) & 0xFF));
-					bb.put((byte)(pix & 0xFF));
+					bb.put((byte) (pix >>> 24));
+					bb.put((byte) ((pix >>> 16) & 0xFF));
+					bb.put((byte) ((pix >>> 8) & 0xFF));
+					bb.put((byte) (pix & 0xFF));
 				}
 		}
 
@@ -303,7 +300,7 @@ public final class Graphics3D {
 
 	public void clear(Background background) {
 		/*if (!targetBound) {
-			throw new IllegalStateException("Graphics3D does not have a rendering target");
+            throw new IllegalStateException("Graphics3D does not have a rendering target");
 		}*/
 
 		if (background != null)
@@ -448,11 +445,11 @@ public final class Graphics3D {
 
 	public void setCamera(Camera camera, Transform transform) {
 		this.camera = camera;
-		
+
 		Transform t = new Transform();
 		if (transform != null) {
 			t.set(transform);
-		} 
+		}
 		t.mtx.invertMatrix();
 		this.cameraTransform = t;
 		cameraHasChanged = true;
@@ -538,7 +535,7 @@ public final class Graphics3D {
 		if (camera == null)
 			throw new IllegalStateException("Graphics3D does not have a current camera");
 		// TODO Check if vertices or triangles violates the constraints defined in VertexBuffer or IndexBuffer
-		
+
 		// If the given transform is null, use the identity matrix
 		if (transform == null) {
 			transform = new Transform();
@@ -604,7 +601,7 @@ public final class Graphics3D {
 			VertexArray texcoords = vertices.getTexCoords(i, texScaleBias);
 			gl.glClientActiveTexture(GL10.GL_TEXTURE0 + i);
 			if ((texcoords != null) && (appearance.getTexture(i) != null)) {
-				// Enable the texture coordinate array 
+				// Enable the texture coordinate array
 				gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 				// Activate the texture unit
@@ -647,7 +644,7 @@ public final class Graphics3D {
 	}
 
 	public void render(VertexBuffer vertices, IndexBuffer triangles, Appearance appearance, Transform transform,
-			int scope) {
+					   int scope) {
 		// TODO: check scope
 		render(vertices, triangles, appearance, transform);
 	}
@@ -804,7 +801,7 @@ public final class Graphics3D {
 			gl.glClientActiveTexture(GL10.GL_TEXTURE0 + i);
 			gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
 			if ((texcoords != null) && (app.getTexture(i) != null)) {
-				// Enable the texture coordinate array 
+				// Enable the texture coordinate array
 				gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 				//FloatBuffer tex = texcoords.getFloatBuffer();
 				//tex.position(0);
@@ -848,7 +845,7 @@ public final class Graphics3D {
 		ShortBuffer indices = ib.getBuffer();
 		indices.position(0);
 		//if (triangles instanceof TriangleStripArray) {
-			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, ib.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, ib.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
 		/*} else {
 			gl.glDrawElements(GL10.GL_TRIANGLES, ib.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
 		}*/
@@ -865,7 +862,8 @@ public final class Graphics3D {
 			VertexBuffer vertices = mesh.getVertexBuffer();
 			for (int i = 0; i < subMeshes; ++i)
 				if (mesh.getAppearance(i) != null)
-					/*drawMesh*/render(vertices, mesh.getIndexBuffer(i), mesh.getAppearance(i), transform);
+					/*drawMesh*/
+					render(vertices, mesh.getIndexBuffer(i), mesh.getAppearance(i), transform);
 		} else if (node instanceof Sprite3D) {
 			Sprite3D sprite = (Sprite3D) node;
 			sprite.render(gl, transform);

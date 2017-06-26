@@ -12,7 +12,7 @@ public class Fog extends Object3D {
 	private float density = 1.0f;
 	private float nearDistance = 0.0f;
 	private float farDistance = 1.0f;
-	
+
 	Object3D duplicateImpl() {
 		Fog copy = new Fog();
 		copy.color = color;
@@ -79,22 +79,22 @@ public class Fog extends Object3D {
 
 	private int getGLFogMode(int mode) {
 		switch (mode) {
-		case EXPONENTIAL:
-			return GL10.GL_EXP;
-		default:
-			return GL10.GL_LINEAR;
+			case EXPONENTIAL:
+				return GL10.GL_EXP;
+			default:
+				return GL10.GL_LINEAR;
 		}
 	}
-	
+
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.COLOR:
-		case AnimationTrack.DENSITY:
-		case AnimationTrack.FAR_DISTANCE:
-		case AnimationTrack.NEAR_DISTANCE:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.COLOR:
+			case AnimationTrack.DENSITY:
+			case AnimationTrack.FAR_DISTANCE:
+			case AnimationTrack.NEAR_DISTANCE:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 }

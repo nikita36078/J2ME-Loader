@@ -17,12 +17,12 @@ public class SkinnedMesh extends Mesh {
 	}
 
 	public void addTransform(Node bone, int weight, int firstVertex, int numVertices) {
-	    if (bone == null)
-	    	throw new NullPointerException();
-	    if ((weight <= 0) || (numVertices <= 0))
-	    	throw new IllegalArgumentException();
-	    if ((firstVertex < 0) || (firstVertex + numVertices > 65535))
-	    	throw new IndexOutOfBoundsException();
+		if (bone == null)
+			throw new NullPointerException();
+		if ((weight <= 0) || (numVertices <= 0))
+			throw new IllegalArgumentException();
+		if ((firstVertex < 0) || (firstVertex + numVertices > 65535))
+			throw new IndexOutOfBoundsException();
 	}
 
 	public void getBoneTransform(Node bone, Transform transform) {
@@ -39,7 +39,7 @@ public class SkinnedMesh extends Mesh {
 	public Group getSkeleton() {
 		return skeleton;
 	}
-	
+
 	private void checkSkeleton(Group skeleton) {
 		if (skeleton == null)
 			throw new NullPointerException();

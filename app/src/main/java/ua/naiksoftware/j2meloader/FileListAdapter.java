@@ -1,7 +1,6 @@
 package ua.naiksoftware.j2meloader;
 
 /**
- *
  * @author Naik
  */
 
@@ -40,26 +39,26 @@ public class FileListAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View view, ViewGroup viewGroup) {
-    	ViewHolder holder;
-        if (view == null) {
-            view = li.inflate(R.layout.list_row, null);
-            holder = new ViewHolder();
-            holder.icon = (ImageView) view.findViewById(R.id.list_image);
-            holder.label = (TextView) view.findViewById(R.id.list_header);
-            holder.sublabel = (TextView) view.findViewById(R.id.list_subheader);
-            view.setTag(holder);
-        } else {
-        	holder = (ViewHolder) view.getTag();
-        }
+		ViewHolder holder;
+		if (view == null) {
+			view = li.inflate(R.layout.list_row, null);
+			holder = new ViewHolder();
+			holder.icon = (ImageView) view.findViewById(R.id.list_image);
+			holder.label = (TextView) view.findViewById(R.id.list_header);
+			holder.sublabel = (TextView) view.findViewById(R.id.list_subheader);
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
 
-        FSItem item = list.get(position);
+		FSItem item = list.get(position);
 
-        holder.icon.setImageResource(item.getImageId());
-        holder.label.setText(item.getName());
-        holder.sublabel.setText(item.getDescription());
+		holder.icon.setImageResource(item.getImageId());
+		holder.label.setText(item.getName());
+		holder.sublabel.setText(item.getDescription());
 
-        return view;
-    }
+		return view;
+	}
 
 	private static class ViewHolder {
 		ImageView icon;

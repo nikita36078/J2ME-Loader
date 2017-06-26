@@ -19,124 +19,104 @@ package javax.microedition.lcdui.pointer;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.event.CanvasEvent;
 
-public class KeyRepeater implements Runnable
-{
+public class KeyRepeater implements Runnable {
 	public static long[] INTERVALS =
-	{
-		400,
-		200,
-		400,
-		128,
-		128,
-		128,
-		128,
-		128,
-		80
-	};
-	
+			{
+					400,
+					200,
+					400,
+					128,
+					128,
+					128,
+					128,
+					128,
+					80
+			};
+
 	protected Canvas target;
-	
+
 	protected Thread thread;
 	protected Object waiter;
 	protected boolean isrunning;
-	
+
 	protected boolean enabled;
 	protected int position;
-	
+
 	protected int keyCode;
 	protected int secondKeyCode;
-	
-	public KeyRepeater()
-	{
+
+	public KeyRepeater() {
 		waiter = new Object();
-		
+
 		thread = new Thread(this);
 		thread.start();
 	}
-	
-	public void setTarget(Canvas canvas)
-	{
-		if(canvas == null)
-		{
+
+	public void setTarget(Canvas canvas) {
+		if (canvas == null) {
 			stop();
 		}
-		
+
 		target = canvas;
 	}
-	
-	public void start(int keyCode)
-	{
+
+	public void start(int keyCode) {
 		start(keyCode, 0);
 	}
-	
-	public void start(int keyCode, int secondKeyCode)
-	{
-		if(target == null)
-		{
+
+	public void start(int keyCode, int secondKeyCode) {
+		if (target == null) {
 			return;
 		}
-		
-		synchronized(waiter)
-		{
-			if(isrunning)
-			{
+
+		synchronized (waiter) {
+			if (isrunning) {
 				return;
 			}
-			
+
 			this.keyCode = keyCode;
 			this.secondKeyCode = secondKeyCode;
-			
+
 			enabled = true;
 			position = 0;
-			
+
 			waiter.notifyAll();
 		}
 	}
-	
-	public void stop()
-	{
+
+	public void stop() {
 		enabled = false;
 		thread.interrupt();
 	}
-	
-	public boolean isRunning()
-	{
+
+	public boolean isRunning() {
 		return isrunning;
 	}
-	
-	public void run()
-	{
-		while(true)
-		{
-			try
-			{
-				synchronized(waiter)
-				{
+
+	public void run() {
+		while (true) {
+			try {
+				synchronized (waiter) {
 					isrunning = false;
 					waiter.wait();
-					
+
 					isrunning = true;
 				}
-				
-				while(enabled)
-				{
+
+				while (enabled) {
 					Thread.sleep(INTERVALS[position]);
-					
+
 					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, keyCode));
-					
-					if(secondKeyCode != 0)
-					{
+
+					if (secondKeyCode != 0) {
 						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, secondKeyCode));
 					}
-					
-					if(position < INTERVALS.length - 1)
-					{
+
+					if (position < INTERVALS.length - 1) {
 						position++;
 					}
 				}
-			}
-			catch(InterruptedException ie)
-			{
+			} catch (InterruptedException ie) {
 			}
 		}
 	}

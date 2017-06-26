@@ -79,15 +79,15 @@ public class Material extends Object3D {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.ALPHA:
-		case AnimationTrack.AMBIENT_COLOR:
-		case AnimationTrack.DIFFUSE_COLOR:
-		case AnimationTrack.EMISSIVE_COLOR:
-		case AnimationTrack.SHININESS:
-		case AnimationTrack.SPECULAR_COLOR:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.ALPHA:
+			case AnimationTrack.AMBIENT_COLOR:
+			case AnimationTrack.DIFFUSE_COLOR:
+			case AnimationTrack.EMISSIVE_COLOR:
+			case AnimationTrack.SHININESS:
+			case AnimationTrack.SPECULAR_COLOR:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 }

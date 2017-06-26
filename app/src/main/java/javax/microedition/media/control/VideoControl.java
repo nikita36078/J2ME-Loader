@@ -19,25 +19,30 @@ package javax.microedition.media.control;
 import javax.microedition.media.Control;
 import javax.microedition.media.MediaException;
 
-public interface VideoControl extends Control
-{
+public interface VideoControl extends Control {
 	public static final int USE_DIRECT_VIDEO = 1;
-	
+
 	public Object initDisplayMode(int mode, Object arg);
-	
+
 	public void setDisplayLocation(int x, int y);
+
 	public void setDisplaySize(int width, int height) throws MediaException;
+
 	public void setDisplayFullScreen(boolean fullScreenMode) throws MediaException;
+
 	public void setVisible(boolean visible);
-	
+
 	public int getSourceWidth();
+
 	public int getSourceHeight();
-	
+
 	public int getDisplayX();
+
 	public int getDisplayY();
-	
+
 	public int getDisplayWidth();
+
 	public int getDisplayHeight();
-	
+
 	public byte[] getSnapshot(String imageType) throws MediaException;
 }

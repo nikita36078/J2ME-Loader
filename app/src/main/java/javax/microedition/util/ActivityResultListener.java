@@ -18,7 +18,6 @@ package javax.microedition.util;
 
 import android.content.Intent;
 
-public interface ActivityResultListener
-{
+public interface ActivityResultListener {
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
 }

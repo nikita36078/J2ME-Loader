@@ -1,8 +1,5 @@
 package javax.microedition.m3g;
 
-import java.lang.Integer;
-import java.lang.Float;
-
 public class AnimationTrack extends Object3D {
 
 	public static final int ALPHA = 256;
@@ -130,35 +127,35 @@ public class AnimationTrack extends Object3D {
 
 	private boolean isCompatible(int components, int property) {
 		switch (property) {
-		case ALPHA:
-		case DENSITY:
-		case FAR_DISTANCE:
-		case FIELD_OF_VIEW:
-		case INTENSITY:
-		case NEAR_DISTANCE:
-		case PICKABILITY:
-		case SHININESS:
-		case SPOT_ANGLE:
-		case SPOT_EXPONENT:
-		case VISIBILITY:
-			return components == 1;
-		case CROP:
-			return components == 2 || components == 4;
-		case AMBIENT_COLOR:
-		case COLOR:
-		case DIFFUSE_COLOR:
-		case EMISSIVE_COLOR:
-		case SPECULAR_COLOR:
-		case TRANSLATION:
-			return components == 3;
-		case SCALE:
-			return components == 1 || components == 3;
-		case ORIENTATION:
-			return components == 4;
-		case MORPH_WEIGHTS:
-			return components > 0;
-		default:
-			return false; // Shouldn't occur
+			case ALPHA:
+			case DENSITY:
+			case FAR_DISTANCE:
+			case FIELD_OF_VIEW:
+			case INTENSITY:
+			case NEAR_DISTANCE:
+			case PICKABILITY:
+			case SHININESS:
+			case SPOT_ANGLE:
+			case SPOT_EXPONENT:
+			case VISIBILITY:
+				return components == 1;
+			case CROP:
+				return components == 2 || components == 4;
+			case AMBIENT_COLOR:
+			case COLOR:
+			case DIFFUSE_COLOR:
+			case EMISSIVE_COLOR:
+			case SPECULAR_COLOR:
+			case TRANSLATION:
+				return components == 3;
+			case SCALE:
+				return components == 1 || components == 3;
+			case ORIENTATION:
+				return components == 4;
+			case MORPH_WEIGHTS:
+				return components > 0;
+			default:
+				return false; // Shouldn't occur
 		}
 	}
 

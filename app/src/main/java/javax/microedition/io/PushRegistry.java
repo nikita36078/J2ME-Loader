@@ -27,10 +27,10 @@
 
 package javax.microedition.io;
 
-import java.io.IOException;
-
 import org.microemu.microedition.ImplFactory;
 import org.microemu.microedition.io.PushRegistryDelegate;
+
+import java.io.IOException;
 
 public class PushRegistry {
 

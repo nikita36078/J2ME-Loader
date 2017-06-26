@@ -25,7 +25,7 @@ public abstract class Node extends Transformable {
 	boolean[] dirty = new boolean[2];
 
 	void duplicate(Node copy) {
-		super.duplicate((Transformable)copy);
+		super.duplicate((Transformable) copy);
 		copy.parent = parent;
 		copy.left = left;
 		copy.right = right;
@@ -54,7 +54,7 @@ public abstract class Node extends Transformable {
 	void updateProperty(int property, float[] value) {
 		switch (property) {
 			case AnimationTrack.ALPHA:
-				alphaFactor = (int)(Math.max(0.f, Math.min(1.f, value[0]) * 0xFFFF));
+				alphaFactor = (int) (Math.max(0.f, Math.min(1.f, value[0]) * 0xFFFF));
 				break;
 			case AnimationTrack.PICKABILITY:
 				enableBits[PICK] = (value[0] >= 0.5f);
@@ -66,7 +66,7 @@ public abstract class Node extends Transformable {
 				super.updateProperty(property, value);
 		}
 	}
-	
+
 	boolean compareFlags(boolean[] flags) {
 		if (dirty[0] == flags[0] && dirty[1] == flags[1])
 			return true;
@@ -139,7 +139,7 @@ public abstract class Node extends Transformable {
 			if (norm < 1.0e-5f)
 				return true;
 
-			norm = (float)(1.0d / Math.sqrt(norm));
+			norm = (float) (1.0d / Math.sqrt(norm));
 
 			targetAxis.x *= norm;
 			targetAxis.y *= norm;
@@ -191,14 +191,14 @@ public abstract class Node extends Transformable {
 			if (!computeAlignmentRotation(new Vector3(0, 0, 1), (zRef != null) ? zRef : refNode, zTarget, NONE))
 				return false;
 		}
-		
+
 		if (this.yTarget != NONE) {
 			if (yRef == null && refNode == this)
 				return false;
 			if (!computeAlignmentRotation(new Vector3(0, 1, 0), (yRef != null) ? yRef : refNode, yTarget, (zTarget != NONE) ? Z_AXIS : NONE))
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -216,7 +216,7 @@ public abstract class Node extends Transformable {
 	}
 
 	public float getAlphaFactor() {
-		return (float)(alphaFactor * (1.d / 0xFFFF));
+		return (float) (alphaFactor * (1.d / 0xFFFF));
 	}
 
 	public Node getParent() {
@@ -228,9 +228,9 @@ public abstract class Node extends Transformable {
 		Node node = this;
 		while (node != null) {
 			if (node instanceof Group || node instanceof World) {
-				((Group)node).numNonCullables += nonCullableChange;
-				((Group)node).numRenderables += renderableChange;
-				hasRenderables = ((Group)node).numRenderables > 0;
+				((Group) node).numNonCullables += nonCullableChange;
+				((Group) node).numRenderables += renderableChange;
+				hasRenderables = ((Group) node).numRenderables > 0;
 			}
 			node.hasRenderables = hasRenderables;
 			node = node.parent;
@@ -247,19 +247,19 @@ public abstract class Node extends Transformable {
 
 	void setParent(Node parent) {
 		int nonCullableChange = 0, renderableChange = 0;
-		 
+
 		if (this instanceof Group) {
-			nonCullableChange = ((Group)this).numNonCullables;
-			renderableChange = ((Group)this).numRenderables;
+			nonCullableChange = ((Group) this).numNonCullables;
+			renderableChange = ((Group) this).numRenderables;
 		} else if (this instanceof Sprite3D) {
 			renderableChange = 1;
-			if (!((Sprite3D)this).isScaled())
+			if (!((Sprite3D) this).isScaled())
 				nonCullableChange = 1;
 		} else if (this instanceof Light)
 			nonCullableChange = 1;
 		else if (this instanceof SkinnedMesh) {
-			nonCullableChange += ((SkinnedMesh)this).skeleton.numNonCullables;
-			renderableChange += ((SkinnedMesh)this).skeleton.numRenderables + 1;
+			nonCullableChange += ((SkinnedMesh) this).skeleton.numNonCullables;
+			renderableChange += ((SkinnedMesh) this).skeleton.numRenderables + 1;
 		} else if (this instanceof Mesh || this instanceof MorphingMesh)
 			renderableChange = 1;
 
@@ -432,7 +432,7 @@ public abstract class Node extends Transformable {
 	public void setAlphaFactor(float alphaFactor) {
 		if (alphaFactor < 0 || alphaFactor > 1)
 			throw new IllegalArgumentException("alphaFactor must be in [0,1]");
-		this.alphaFactor = (int)(alphaFactor * 0xFFFF);
+		this.alphaFactor = (int) (alphaFactor * 0xFFFF);
 	}
 
 	public void setPickingEnable(boolean enable) {
@@ -486,16 +486,16 @@ public abstract class Node extends Transformable {
 		}
 		return depth;
 	}
-	
+
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.ALPHA:
-		case AnimationTrack.VISIBILITY:
-		case AnimationTrack.PICKABILITY:
-		    return true;
-		default:
-		    return super.isCompatible(track);
+			case AnimationTrack.ALPHA:
+			case AnimationTrack.VISIBILITY:
+			case AnimationTrack.PICKABILITY:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
-	
+
 }

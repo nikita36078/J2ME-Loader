@@ -21,23 +21,20 @@
  *  See the LGPL or the AL for the specific language governing permissions and
  *  limitations.
  */
- 
+
 package javax.microedition.rms;
 
 
-public class RecordStoreNotFoundException extends RecordStoreException
-{
+public class RecordStoreNotFoundException extends RecordStoreException {
 
-	public RecordStoreNotFoundException(String message)
-	{
+	public RecordStoreNotFoundException(String message) {
 		super(message);
 	}
-	
-	
-	public RecordStoreNotFoundException()
-	{
+
+
+	public RecordStoreNotFoundException() {
 		super();
 	}
-	
+
 }
 

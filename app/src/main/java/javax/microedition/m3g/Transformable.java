@@ -8,8 +8,12 @@ public abstract class Transformable extends Object3D {
 	Matrix matrix;
 
 	void duplicate(Transformable copy) {
-		copy.tx = tx; copy.ty = ty; copy.tz = tz;
-		copy.sx = sx; copy.sy = sy; copy.sz = sz;
+		copy.tx = tx;
+		copy.ty = ty;
+		copy.tz = tz;
+		copy.sx = sx;
+		copy.sy = sy;
+		copy.sz = sz;
 		copy.orientation = new QVec4(orientation.x, orientation.y, orientation.z, orientation.w);
 		copy.transform = new Transform(transform);
 		if (matrix != null) {
@@ -20,8 +24,8 @@ public abstract class Transformable extends Object3D {
 
 	void invalidateTransformable() {
 		if (!(this instanceof Texture2D))
-			if (((Node)this).parent != null && (((Node)this).hasRenderables || ((Node)this).hasBones))
-				((Node)this).parent.invalidateNode(new boolean[]{false,false});
+			if (((Node) this).parent != null && (((Node) this).hasRenderables || ((Node) this).hasBones))
+				((Node) this).parent.invalidateNode(new boolean[]{false, false});
 	}
 
 	@Override
@@ -193,16 +197,16 @@ public abstract class Transformable extends Object3D {
 
 		invalidateTransformable();
 	}
-	
+
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.ORIENTATION:
-		case AnimationTrack.SCALE:
-		case AnimationTrack.TRANSLATION:
-		    return true;
-		default:
-		    return super.isCompatible(track);
+			case AnimationTrack.ORIENTATION:
+			case AnimationTrack.SCALE:
+			case AnimationTrack.TRANSLATION:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
-	
+
 }

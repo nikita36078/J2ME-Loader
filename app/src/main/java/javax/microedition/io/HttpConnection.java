@@ -21,19 +21,18 @@
  *  See the LGPL or the AL for the specific language governing permissions and
  *  limitations.
  */
- 
+
 package javax.microedition.io;
 
 import java.io.IOException;
 
 
-public interface HttpConnection extends ContentConnection
-{
+public interface HttpConnection extends ContentConnection {
 
 	static final String HEAD = "HEAD";
 	static final String GET = "GET";
 	static final String POST = "POST";
-	
+
 	static final int HTTP_OK = 200;
 	static final int HTTP_CREATED = 201;
 	static final int HTTP_ACCEPTED = 202;
@@ -41,7 +40,7 @@ public interface HttpConnection extends ContentConnection
 	static final int HTTP_NO_CONTENT = 204;
 	static final int HTTP_RESET = 205;
 	static final int HTTP_PARTIAL = 206;
-	
+
 	static final int HTTP_MULT_CHOICE = 300;
 	static final int HTTP_MOVED_PERM = 301;
 	static final int HTTP_MOVED_TEMP = 302;
@@ -68,67 +67,67 @@ public interface HttpConnection extends ContentConnection
 	static final int HTTP_UNSUPPORTED_TYPE = 415;
 	static final int HTTP_UNSUPPORTED_RANGE = 416;
 	static final int HTTP_EXPECT_FAILED = 417;
-	
+
 	static final int HTTP_INTERNAL_ERROR = 500;
 	static final int HTTP_NOT_IMPLEMENTED = 501;
 	static final int HTTP_BAD_GATEWAY = 502;
 	static final int HTTP_UNAVAILABLE = 503;
 	static final int HTTP_GATEWAY_TIMEOUT = 504;
 	static final int HTTP_VERSION = 505;
-	
-	
+
+
 	String getURL();
-	
+
 	String getProtocol();
-	
+
 	String getHost();
-	
+
 	String getFile();
-	
+
 	String getRef();
-	
+
 	String getQuery();
-	
+
 	int getPort();
-	
+
 	String getRequestMethod();
-	
+
 	void setRequestMethod(String method)
-      throws IOException;
-      
+			throws IOException;
+
 	String getRequestProperty(String key);
-	
+
 	void setRequestProperty(String key, String value)
-      throws IOException;
-  
-  int getResponseCode()
-      throws IOException;
-      
+			throws IOException;
+
+	int getResponseCode()
+			throws IOException;
+
 	String getResponseMessage()
-      throws IOException;
-      
+			throws IOException;
+
 	long getExpiration()
-      throws IOException;
-      
+			throws IOException;
+
 	long getDate()
-      throws IOException;
-      
-  long getLastModified()
-      throws IOException;
-      
-  String getHeaderField(String name)
-      throws IOException;
-      
-  int getHeaderFieldInt(String name, int def)
-      throws IOException;
-      
-  long getHeaderFieldDate(String name, long def)
-      throws IOException;
-	
+			throws IOException;
+
+	long getLastModified()
+			throws IOException;
+
+	String getHeaderField(String name)
+			throws IOException;
+
+	int getHeaderFieldInt(String name, int def)
+			throws IOException;
+
+	long getHeaderFieldDate(String name, long def)
+			throws IOException;
+
 	String getHeaderField(int n)
-      throws IOException;
-      
-  String getHeaderFieldKey(int n)
-      throws IOException;
-      	
+			throws IOException;
+
+	String getHeaderFieldKey(int n)
+			throws IOException;
+
 }

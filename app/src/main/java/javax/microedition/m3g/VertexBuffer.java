@@ -14,7 +14,7 @@ public class VertexBuffer extends Object3D {
 	private float[] positionBias = null;
 	private float positionScale = 1.0f;
 	private float[][] texCoordsBias = null;
-	private float[] texCoordsScale = { 1, 1, 1 };
+	private float[] texCoordsScale = {1, 1, 1};
 	private int maxTextureUnitIndex = 0;
 	private int defaultColor = 0xFFFFFFFF;
 
@@ -71,7 +71,7 @@ public class VertexBuffer extends Object3D {
 			this.positionScale = scale;
 
 			if (bias == null)
-				bias = new float[] { 0, 0, 0 };
+				bias = new float[]{0, 0, 0};
 
 			this.positionBias[0] = bias[0];
 			this.positionBias[1] = bias[1];
@@ -99,7 +99,7 @@ public class VertexBuffer extends Object3D {
 			this.texCoordsScale[index] = scale;
 
 			if (bias == null)
-				bias = new float[] { 0, 0, 0 };
+				bias = new float[]{0, 0, 0};
 			this.texCoordsBias[index][0] = bias[0];
 			this.texCoordsBias[index][1] = bias[1];
 			if (bias.length > 2)
@@ -155,7 +155,8 @@ public class VertexBuffer extends Object3D {
 					dstBuffer[dstOffset + 3] = -1;
 				}
 
-				ByteBuffer argbBuffer = ByteBuffer.allocateDirect(count * 4).order(ByteOrder.nativeOrder());;
+				ByteBuffer argbBuffer = ByteBuffer.allocateDirect(count * 4).order(ByteOrder.nativeOrder());
+				;
 				argbBuffer.put(dstBuffer);
 				colors.setARGBBuffer(argbBuffer);
 			} else {
@@ -264,11 +265,11 @@ public class VertexBuffer extends Object3D {
 
 	boolean isCompatible(AnimationTrack track) {
 		switch (track.getTargetProperty()) {
-		case AnimationTrack.ALPHA:
-		case AnimationTrack.COLOR:
-			return true;
-		default:
-			return super.isCompatible(track);
+			case AnimationTrack.ALPHA:
+			case AnimationTrack.COLOR:
+				return true;
+			default:
+				return super.isCompatible(track);
 		}
 	}
 }

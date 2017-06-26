@@ -1,38 +1,34 @@
 package javax.microedition.shell;
 
-import dalvik.system.DexClassLoader;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.FileNotFoundException;
 
 import javax.microedition.util.ContextHolder;
 
-import filelog.Log;
+import dalvik.system.DexClassLoader;
 
 public class MyClassLoader extends DexClassLoader {
 
-    private static File resFolder;
-    private static String resFolderName;
+	private static File resFolder;
+	private static String resFolderName;
 
-    public MyClassLoader(String paths, String tmpDir, String libs, ClassLoader parent, String resDir) {
-        super(paths, tmpDir, libs, parent);
-        resFolder = new File(resDir);
-        String[] segments = resDir.split("/");
-        resFolderName = "/" + segments[segments.length - 2] + "/";
-    }
-	
-    @Override
-    public InputStream getResourceAsStream(String resName) {
-        return ContextHolder.getResourceAsStream(null, resName);
-    }
+	public MyClassLoader(String paths, String tmpDir, String libs, ClassLoader parent, String resDir) {
+		super(paths, tmpDir, libs, parent);
+		resFolder = new File(resDir);
+		String[] segments = resDir.split("/");
+		resFolderName = "/" + segments[segments.length - 2] + "/";
+	}
 
-    public static File getResFolder() {
-        return resFolder;
-    }
+	@Override
+	public InputStream getResourceAsStream(String resName) {
+		return ContextHolder.getResourceAsStream(null, resName);
+	}
 
-    public static String getName() {
-        return resFolderName;
-    }
+	public static File getResFolder() {
+		return resFolder;
+	}
+
+	public static String getName() {
+		return resFolderName;
+	}
 }

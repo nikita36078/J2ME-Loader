@@ -2,9 +2,8 @@ package javax.microedition.m3g;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -17,9 +16,9 @@ public class VertexArray extends Object3D {
 	int stride;
 
 	private Buffer buffer;
-	
+
 	private ByteBuffer argbBuffer;
-	
+
 	private VertexArray() {
 	}
 
@@ -68,19 +67,19 @@ public class VertexArray extends Object3D {
 		for (int count = numVertices * elementSize; count > 0; count -= elementSize) {
 			byteBuffer.put(values[index++]);
 			byteBuffer.put(values[index++]);
-			byteBuffer.put((elementSize >= 3) ? values[index++] : (byte)0x00);
-			byteBuffer.put((elementSize == 4) ? values[index++] : (byte)0xFF);
+			byteBuffer.put((elementSize >= 3) ? values[index++] : (byte) 0x00);
+			byteBuffer.put((elementSize == 4) ? values[index++] : (byte) 0xFF);
 		}
 		byteBuffer.position(0);
 	}
-	
+
 	Object3D duplicateImpl() {
 		VertexArray copy = new VertexArray();
 		copy.vertexCount = vertexCount;
 		copy.elementSize = elementSize;
 		copy.elementType = elementType;
 		copy.numElements = numElements;
-		copy.argbBuffer =  ByteBuffer.allocateDirect(argbBuffer.remaining()).order(ByteOrder.nativeOrder()).put(argbBuffer);
+		copy.argbBuffer = ByteBuffer.allocateDirect(argbBuffer.remaining()).order(ByteOrder.nativeOrder()).put(argbBuffer);
 		return copy;
 	}
 
@@ -153,9 +152,10 @@ public class VertexArray extends Object3D {
 	ByteBuffer getARGBBuffer() {
 		return argbBuffer;
 	}
+
 	void setARGBBuffer(ByteBuffer argbBuffer) {
 		this.argbBuffer = argbBuffer;
 	}
-	
-	
+
+
 }

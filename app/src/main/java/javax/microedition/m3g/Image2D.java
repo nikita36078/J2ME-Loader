@@ -72,7 +72,7 @@ public class Image2D extends Object3D {
 			throw new IllegalArgumentException("Unrecognized image object.");
 		}
 	}
-	
+
 	Object3D duplicateImpl() {
 		Image2D copy = new Image2D(format, width, height);
 		pixels.rewind();
@@ -90,7 +90,7 @@ public class Image2D extends Object3D {
 	private void loadFromImage(Image image) {
 		this.width = image.getWidth();
 		this.height = image.getHeight();
-		
+
 		if (width == -1 || height == -1)
 			throw new IllegalArgumentException("Failed to get width/height.");
 
@@ -117,7 +117,7 @@ public class Image2D extends Object3D {
 			}
 		}
 		pixels.flip();
-	
+
 	}
 
 	public void setWidth(int width) {

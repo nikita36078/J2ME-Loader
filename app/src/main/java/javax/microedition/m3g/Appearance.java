@@ -1,6 +1,6 @@
 package javax.microedition.m3g;
 
-public class Appearance extends Object3D { 
+public class Appearance extends Object3D {
 
 	int numTextureUnits = 8;
 
@@ -14,7 +14,7 @@ public class Appearance extends Object3D {
 	public Appearance() {
 		textures = new Texture2D[numTextureUnits];
 	}
-	
+
 	Object3D duplicateImpl() {
 		Appearance copy = new Appearance();
 		copy.layer = layer;
