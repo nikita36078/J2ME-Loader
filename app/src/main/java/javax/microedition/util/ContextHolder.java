@@ -49,8 +49,6 @@ public class ContextHolder {
 	private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
 
 	public static void setContext(Context cx) {
-		Log.d("ContextHolder", "setContext old=" + context);
-		Log.d("ContextHolder", "setContext new=" + cx);
 		context = cx;
 	}
 
@@ -58,7 +56,6 @@ public class ContextHolder {
 		if (context == null) {
 			throw new IllegalStateException("call setContext() before calling getContext()");
 		}
-		Log.d("ContextHolder", "getContext=" + context);
 		return context;
 	}
 
