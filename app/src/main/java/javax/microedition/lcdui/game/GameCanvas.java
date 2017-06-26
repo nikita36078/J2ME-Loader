@@ -64,9 +64,19 @@ public class GameCanvas extends Canvas {
 
     public void flushGraphics() {
         repaint();
+	if (clearBuffer) {
+		graphics.setColor(0);
+		graphics.setClip(0, 0, width, height);
+		graphics.fillRect(0, 0, width, height);
+	}
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
         repaint(x, y, width, height);
+	if (clearBuffer) {
+		graphics.setColor(0);
+		graphics.setClip(0, 0, width, height);
+		graphics.fillRect(0, 0, width, height);
+	}
     }
 }

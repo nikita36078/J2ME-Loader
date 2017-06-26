@@ -265,9 +265,9 @@ public abstract class Canvas extends Displayable {
 				}
 				graphics.setCanvas(offscreen.getCanvas());
 				if (clearBuffer) {
-					graphics.setColor(Color.TRANSPARENT);
-					graphics.setClip(onX, onY, onWidth, onHeight);
-					graphics.fillRect(onX, onY, onWidth, onHeight);
+					graphics.setColor(0);
+					graphics.setClip(0, 0, width, height);
+					graphics.fillRect(0, 0, width, height);
 				}
 				try {
 					paint(graphics);
@@ -337,7 +337,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean scaleToFit;
 	private static boolean keepAspectRatio;
 	private static boolean filter;
-	private static boolean clearBuffer;
+	protected static boolean clearBuffer;
 	private static int backgroundColor;
 
 	private Image offscreen;
