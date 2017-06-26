@@ -82,6 +82,7 @@ public final class Graphics3D {
 	private boolean depthRangeHasChanged = false;
 
 	private boolean depthBufferEnabled;
+	private boolean overwrite;
 	private int hints;
 
 	private static Hashtable implementationProperties = new Hashtable();
@@ -168,7 +169,7 @@ public final class Graphics3D {
 	}
 
 	private void populateProperties() {
-		implementationProperties.put(PROPERTY_SUPPORT_ANTIALIASING, new Boolean(false));
+		implementationProperties.put(PROPERTY_SUPPORT_ANTIALIASING, new Boolean(true));
 		implementationProperties.put(PROPERTY_SUPPORT_TRUECOLOR, new Boolean(true));
 		implementationProperties.put(PROPERTY_SUPPORT_DITHERING, new Boolean(false));
 		implementationProperties.put(PROPERTY_SUPPORT_MIPMAPPING, new Boolean(false));
@@ -189,7 +190,6 @@ public final class Graphics3D {
 	}
 
 	public void bindTarget(Object target, boolean depthBuffer, int hints) {
-
 		if (target == null) {
 			throw new NullPointerException("Rendering target must not be null");
 		}
@@ -201,6 +201,15 @@ public final class Graphics3D {
 		else
 			gl.glDisable(GL10.GL_DEPTH_TEST);
 		this.hints = hints;
+
+		// Multisapling
+		if ((hints & ANTIALIAS) != 0)
+			gl.glEnable(GL10.GL_MULTISAMPLE);
+		else
+			gl.glDisable(GL10.GL_MULTISAMPLE);
+
+		// Overwriting
+		overwrite = ((hints & OVERWRITE) != 0);
 
 		// A target should not be already bound
 		if (targetBound) {
@@ -260,7 +269,7 @@ public final class Graphics3D {
 					int pix=b[i*width+j];
 					int pb=(pix>>>16)&0xff;
 					int pr=(pix<<16)&0x00ff0000;
-					int pix1=(pix&0xff00ff00) | pr | pb | (((pix & 0xff000000) == 0) ? 0 : 0xff000000);
+					int pix1=(pix&0xff00ff00) | pr | pb | (overwrite ? 0xff000000 : (((pix & 0xff000000) == 0) ? 0 : 0xff000000));
 					bt[(height-i-1)*width+j]=pix1;
 				}
 			}
