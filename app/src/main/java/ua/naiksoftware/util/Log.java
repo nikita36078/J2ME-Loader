@@ -1,4 +1,4 @@
-package filelog;
+package ua.naiksoftware.util;
 
 public class Log {
 
@@ -6,6 +6,7 @@ public class Log {
 	private static final long MAX_LEN = 300 * 1024;//50 Kb
 
 	public static void d(String tag, String message) {
+		System.out.println(message);
 		/*try {
             boolean noClear;
             File file = new File(Environment.getExternalStorageDirectory(), "log_j2meloader.txt");

@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import filelog.Log;
+import ua.naiksoftware.util.Log;
 import ua.naiksoftware.util.MathUtils;
 
 /**

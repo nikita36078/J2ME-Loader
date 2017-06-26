@@ -35,7 +35,7 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
 import javax.microedition.shell.MyClassLoader;
 
-import filelog.Log;
+import ua.naiksoftware.util.Log;
 
 public class ContextHolder {
 	private static final String tag = "ContextHolder";
@@ -133,12 +133,10 @@ public class ContextHolder {
 	}
 
 	public static InputStream getResourceAsStream(Class className, String resName) {
-		System.err.println("CUSTOM GET RES CALLED WITH PATH: " + resName);
 		Log.d(tag, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		try {
 			return new MIDletResourceInputStream(new File(MyClassLoader.getResFolder(), resName));
 		} catch (FileNotFoundException e) {
-			System.err.println("Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
 			Log.d(tag, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
 			return null;
 		}

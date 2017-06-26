@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import javax.microedition.shell.ConfigActivity;
 
-import filelog.Log;
+import ua.naiksoftware.util.Log;
 import ua.naiksoftware.util.FileUtils;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {

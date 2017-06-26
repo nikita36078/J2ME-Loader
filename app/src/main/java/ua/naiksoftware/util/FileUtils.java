@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import filelog.Log;
-
 /**
  * @author Naik
  */
@@ -53,25 +51,19 @@ public class FileUtils {
 	}
 
 	public static boolean unzip(InputStream is, File folderToUnzip) {
-		//Log.d("Unzip", "method unzip started");
 		ZipInputStream zip = new ZipInputStream(new BufferedInputStream(is));
-		FileOutputStream fos = null;
-		String fileName = null;
 		ZipEntry zipEntry;
 		try {
 			while ((zipEntry = zip.getNextEntry()) != null) {
-				//long free = folderToUnzip.getFreeSpace();
-				fileName = zipEntry.getName();
+				String fileName = zipEntry.getName();
 				final File outputFile = new File(folderToUnzip, fileName);
 				outputFile.getParentFile().mkdirs();
-				//Log.d("Unzip", "Zip entry: " + fileName + ", extract to: " + outputFile.getPath());
 				if (fileName.endsWith("/")) {
-					//Log.d("Unzip", fileName+ " is directory");
 					outputFile.mkdirs();
 					continue;
 				} else {
 					outputFile.createNewFile();
-					fos = new FileOutputStream(outputFile, false);
+					FileOutputStream fos = new FileOutputStream(outputFile, false);
 					byte[] bytes = new byte[2048];
 					int c;
 					try {
@@ -93,7 +85,6 @@ public class FileUtils {
 		} finally {
 			try {
 				zip.close();
-				zip = null;
 			} catch (Exception e) {
 			}
 		}
@@ -106,10 +97,8 @@ public class FileUtils {
 			for (File file : listFiles) {
 				deleteDirectory(file);
 			}
-			dir.delete();
-		} else {
-			dir.delete();
 		}
+		dir.delete();
 	}
 
 	public static LinkedHashMap<String, String> loadManifest(File mf) {
