@@ -68,13 +68,20 @@ public class Material extends Object3D {
 		return isVertexColorTrackingEnabled;
 	}
 
-	void setupGL(GL10 gl, int lightTarget) {
-		gl.glEnable(GL10.GL_LIGHTING);
+	void setupGL(GL10 gl) {
+		if (isVertexColorTrackingEnabled)
+			gl.glEnable(GL10.GL_COLOR_MATERIAL);
+		else {
+			gl.glDisable(GL10.GL_COLOR_MATERIAL);
+
+			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, Color.intToFloatArray(ambientColor), 0);
+			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, Color.intToFloatArray(diffuseColor), 0);
+		}
 		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, Color.intToFloatArray(emissiveColor), 0);
-		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, Color.intToFloatArray(ambientColor), 0);
-		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, Color.intToFloatArray(diffuseColor), 0);
 		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, Color.intToFloatArray(specularColor), 0);
 		gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, shininess);
+
+		gl.glEnable(GL10.GL_LIGHTING);
 	}
 
 	boolean isCompatible(AnimationTrack track) {

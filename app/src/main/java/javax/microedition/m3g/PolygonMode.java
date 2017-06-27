@@ -79,28 +79,25 @@ public class PolygonMode extends Object3D {
 	}
 
 	void setupGL(GL10 gl) {
-		// Setup shading
-		if (shading == SHADE_SMOOTH)
-			gl.glShadeModel(GL10.GL_SMOOTH);
-		else
-			gl.glShadeModel(GL10.GL_FLAT);
-
 		// Setup culling
 		if (culling == CULL_NONE)
 			gl.glDisable(GL10.GL_CULL_FACE);
 		else {
+			gl.glCullFace((culling == CULL_BACK) ? GL10.GL_BACK : GL10.GL_FRONT);
 			gl.glEnable(GL10.GL_CULL_FACE);
-			if (culling == CULL_BACK)
-				gl.glCullFace(GL10.GL_BACK);
-			else
-				gl.glCullFace(GL10.GL_FRONT);
 		}
 
+		// Setup two sided lighting
+		gl.glLightModelf(GL10.GL_LIGHT_MODEL_TWO_SIDE, twoSidedLightingEnabled ? GL10.GL_TRUE : GL10.GL_FALSE);
+
+		// Setup shading
+		gl.glShadeModel((shading == SHADE_FLAT) ? GL10.GL_FLAT : GL10.GL_SMOOTH);
+		
 		// Setup winding
-		if (winding == WINDING_CCW)
-			gl.glFrontFace(GL10.GL_CCW);
-		else
-			gl.glFrontFace(GL10.GL_CW);
+		gl.glFrontFace((winding == WINDING_CW) ? GL10.GL_CW : GL10.GL_CCW);
+
+		// Setup perspective correction
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, perspectiveCorrectionEnabled ? GL10.GL_NICEST : GL10.GL_FASTEST);
 	}
 
 	int getLightTarget() {

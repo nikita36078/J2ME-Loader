@@ -71,6 +71,7 @@ public class CompositingMode extends Object3D {
 	public void setBlending(int blending) {
 		switch (blending) {
 			case ALPHA:
+				System.out.println("Alpha CompositingMode");
 			case ALPHA_ADD:
 			case MODULATE:
 			case MODULATE_X2:
@@ -115,25 +116,20 @@ public class CompositingMode extends Object3D {
 		this.depthOffsetUnits = depthOffsetUnits;
 	}
 
-	void setupGL(GL10 gl, boolean depthBufferEnabled) {
+	void setupGL(GL10 gl) {
 		gl.glDepthFunc(depthTestEnabled ? GL10.GL_LEQUAL : GL10.GL_ALWAYS);
-/*
-		// Setup depth testing
-		if (depthBufferEnabled && depthTestEnabled)
-			gl.glEnable(GL10.GL_DEPTH_TEST);
-		else
-			gl.glDisable(GL10.GL_DEPTH_TEST);*/
 
 		// Setup depth and color writes
 		gl.glDepthMask(depthWriteEnabled);
 		gl.glColorMask(colorWriteEnabled, colorWriteEnabled, colorWriteEnabled, alphaWriteEnabled);
 
 		// Setup alpha testing
-		if (alphaThreshold > 0) {
+		if (alphaThreshold == 0.0f)
+			gl.glDisable(GL10.GL_ALPHA_TEST);
+		else {
 			gl.glAlphaFunc(GL10.GL_GEQUAL, alphaThreshold);
 			gl.glEnable(GL10.GL_ALPHA_TEST);
-		} else
-			gl.glDisable(GL10.GL_ALPHA_TEST);
+		}
 
 		// Setup blending
 		if (blending != REPLACE) {
@@ -158,10 +154,10 @@ public class CompositingMode extends Object3D {
 			gl.glDisable(GL10.GL_BLEND);
 
 		// Setup depth offset
-		if (depthOffsetFactor != 0 || depthOffsetUnits != 0) {
-			gl.glPolygonOffset(depthOffsetFactor, depthOffsetUnits);
+		gl.glPolygonOffset(depthOffsetFactor, depthOffsetUnits);
+		if (depthOffsetFactor != 0 || depthOffsetUnits != 0)
 			gl.glEnable(GL10.GL_POLYGON_OFFSET_FILL);
-		} else
+		else
 			gl.glDisable(GL10.GL_POLYGON_OFFSET_FILL);
 	}
 }

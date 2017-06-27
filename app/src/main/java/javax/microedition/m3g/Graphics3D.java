@@ -68,8 +68,6 @@ public final class Graphics3D {
 	private int maxLights = 1;
 	private boolean lightHasChanged = false;
 
-	private CompositingMode defaultCompositioningMode = new CompositingMode();
-	private PolygonMode defaultPolygonMode = new PolygonMode();
 	private Background defaultBackground = new Background();
 
 	private boolean cameraHasChanged = false;
@@ -157,7 +155,7 @@ public final class Graphics3D {
 		implementationProperties.put(PROPERTY_SUPPORT_TRUECOLOR, new Boolean(true));
 		implementationProperties.put(PROPERTY_SUPPORT_DITHERING, new Boolean(false));
 		implementationProperties.put(PROPERTY_SUPPORT_MIPMAPPING, new Boolean(false));
-		implementationProperties.put(PROPERTY_SUPPORT_PERSPECTIVE_CORRECTION, new Boolean(false));
+		implementationProperties.put(PROPERTY_SUPPORT_PERSPECTIVE_CORRECTION, new Boolean(true));
 		implementationProperties.put(PROPERTY_MAX_LIGHTS, new Integer(maxLights));
 		implementationProperties.put(PROPERTY_MAX_VIEWPORT_WIDTH, new Integer(maxViewportWidth));
 		implementationProperties.put(PROPERTY_MAX_VIEWPORT_HEIGHT, new Integer(maxViewportHeight));
@@ -300,7 +298,7 @@ public final class Graphics3D {
 
 	public void clear(Background background) {
 		/*if (!targetBound) {
-            throw new IllegalStateException("Graphics3D does not have a rendering target");
+			throw new IllegalStateException("Graphics3D does not have a rendering target");
 		}*/
 
 		if (background != null)
@@ -625,7 +623,7 @@ public final class Graphics3D {
 		}
 
 		// Appearance
-		setAppearance(appearance);
+		appearance.setupGL(gl);
 
 		// Scene
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -724,7 +722,7 @@ public final class Graphics3D {
 			tr.put(transform).position(0);
 			gl.glMultMatrixf(tr);
 		}
-		setAppearance(app);
+		app.setupGL(gl);
 
 		VertexArray colors = vb.getColors();
 		if (colors != null) {
@@ -855,54 +853,22 @@ public final class Graphics3D {
 	}
 
 	private void renderNode(Node node, Transform transform) {
-
 		if (node instanceof Mesh) {
 			Mesh mesh = (Mesh) node;
 			int subMeshes = mesh.getSubmeshCount();
 			VertexBuffer vertices = mesh.getVertexBuffer();
 			for (int i = 0; i < subMeshes; ++i)
-				if (mesh.getAppearance(i) != null)
+				if (mesh.getAppearance(i) != null) {
 					/*drawMesh*/
+					/*if (mesh.getAppearance(i).getCompositingMode() != null && mesh.getAppearance(i).getCompositingMode().getBlending() == CompositingMode.ALPHA)
+						System.out.println("CompositingMode!!!");*/
 					render(vertices, mesh.getIndexBuffer(i), mesh.getAppearance(i), transform);
+				}
 		} else if (node instanceof Sprite3D) {
 			Sprite3D sprite = (Sprite3D) node;
 			sprite.render(gl, transform);
 		} else if (node instanceof Group) {
 			renderDescendants(node, node);
-		}
-
-	}
-
-	void setAppearance(Appearance appearance) {
-		if (appearance == null)
-			throw new NullPointerException("Appearance must not be null");
-
-		// Polygon mode
-		PolygonMode polyMode = appearance.getPolygonMode();
-		if (polyMode == null) {
-			polyMode = defaultPolygonMode;
-		}
-		polyMode.setupGL(gl);
-
-		// Material
-		if (appearance.getMaterial() != null) {
-			appearance.getMaterial().setupGL(gl, polyMode.getLightTarget());
-		} else {
-			gl.glDisable(GL10.GL_LIGHTING);
-		}
-
-		// Fog
-		if (appearance.getFog() != null) {
-			appearance.getFog().setupGL(gl);
-		} else {
-			gl.glDisable(GL10.GL_FOG);
-		}
-
-		// Compositing mode
-		if (appearance.getCompositingMode() != null) {
-			appearance.getCompositingMode().setupGL(gl, depthBufferEnabled);
-		} else {
-			defaultCompositioningMode.setupGL(gl, depthBufferEnabled);
 		}
 
 	}
