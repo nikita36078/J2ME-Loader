@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array translatable="false" name="languages">
+    <string-array name="languages" translatable="false">
         <item>English</item>
         <item>Русский</item>
     </string-array>
-    <string-array translatable="false" name="locales">
+    <string-array name="locales" translatable="false">
         <item>en</item>
         <item>ru</item>
     </string-array>

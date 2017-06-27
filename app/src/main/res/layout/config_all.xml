@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView1"
@@ -16,12 +17,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/PREF_SCREEN_OPTIONS"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <LinearLayout
             android:id="@+id/linearLayoutInner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/tfScreenWidth"
@@ -31,9 +32,9 @@
                 android:gravity="center"
                 android:hint="@string/PREF_WIDTH"
                 android:inputType="numberSigned"
-                android:singleLine="true" >
+                android:singleLine="true">
 
-                <requestFocus />
+                <requestFocus/>
             </EditText>
 
             <TextView
@@ -41,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_RESOLUTION_SEPARATOR"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
                 android:id="@+id/tfScreenHeight"
@@ -51,25 +52,25 @@
                 android:gravity="center"
                 android:hint="@string/PREF_HEIGHT"
                 android:inputType="numberSigned"
-                android:singleLine="true" />
+                android:singleLine="true"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/cmdScreenSizePresets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/SIZE_PRESETS" />
+            android:text="@string/SIZE_PRESETS"/>
 
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/cmdScreenBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/PREF_BACKGROUND" />
+                android:text="@string/PREF_BACKGROUND"/>
 
             <EditText
                 android:id="@+id/tfScreenBack"
@@ -78,7 +79,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="@string/PREF_COLOR_HINT" />
+                android:hint="@string/PREF_COLOR_HINT"/>
         </LinearLayout>
 
         <CheckBox
@@ -86,35 +87,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/PREF_SCALE_TO_FIT" />
+            android:text="@string/PREF_SCALE_TO_FIT"/>
 
         <CheckBox
             android:id="@+id/cxKeepAspectRatio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/PREF_KEEP_ASPECT_RATIO" />
+            android:text="@string/PREF_KEEP_ASPECT_RATIO"/>
 
         <CheckBox
             android:id="@+id/cxFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/PREF_FILTER" />
+            android:text="@string/PREF_FILTER"/>
 
         <CheckBox
             android:id="@+id/cxImmediate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="@string/PREF_IMMEDIATE" />
+            android:text="@string/PREF_IMMEDIATE"/>
 
         <CheckBox
             android:id="@+id/cxClearBuffer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="@string/PREF_CLEAR_BUFFER" />
+            android:text="@string/PREF_CLEAR_BUFFER"/>
 
         <TextView
             android:id="@+id/textView3"
@@ -122,12 +123,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/PREF_FONT_OPTIONS"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/tfFontSizeSmall"
@@ -136,14 +137,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_FONT_SMALL"
-                android:inputType="number" />
+                android:inputType="number"/>
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_FONT_SEPARATOR"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
                 android:id="@+id/tfFontSizeMedium"
@@ -152,14 +153,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_FONT_MEDIUM"
-                android:inputType="number" />
+                android:inputType="number"/>
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_FONT_SEPARATOR"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
                 android:id="@+id/tfFontSizeLarge"
@@ -168,20 +169,20 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_FONT_LARGE"
-                android:inputType="number" />
+                android:inputType="number"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/cmdFontSizePresets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/SIZE_PRESETS" />
+            android:text="@string/SIZE_PRESETS"/>
 
         <CheckBox
             android:id="@+id/cxFontSizeInSP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/PREF_FONT_SIZE_IN_SP" />
+            android:text="@string/PREF_FONT_SIZE_IN_SP"/>
 
         <TextView
             android:id="@+id/textView15"
@@ -189,13 +190,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/PREF_MISC"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-           <Button
+        <Button
             android:id="@+id/cmdLanguage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/PREF_LANGUAGE" />
+            android:text="@string/PREF_LANGUAGE"/>
 
         <TextView
             android:id="@+id/textView6"
@@ -203,23 +204,23 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/PREF_VIRTUAL_KEYBOARD_OPTIONS"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <TableLayout
             android:id="@+id/tableLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-			
-			<CheckBox
-				android:id="@+id/cxIsShowKeyboard"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/PREF_VK_SHOW" />	
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/cxIsShowKeyboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/PREF_VK_SHOW"/>
 
             <TableRow
                 android:id="@+id/tableRow6"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textView7"
@@ -228,20 +229,20 @@
                     android:layout_gravity="left"
                     android:gravity="center"
                     android:text="@string/PREF_VK_ALPHA"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <SeekBar
                     android:id="@+id/sbVKAlpha"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:max="255" />
+                    android:max="255"/>
             </TableRow>
 
             <TableRow
                 android:id="@+id/tableRow7"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textView8"
@@ -250,13 +251,13 @@
                     android:layout_gravity="left"
                     android:gravity="center"
                     android:text="@string/PREF_VK_HIDE_DELAY"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <LinearLayout
                     android:id="@+id/linearLayout6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <EditText
                         android:id="@+id/tfVKHideDelay"
@@ -265,14 +266,14 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:hint="@string/_MINUS_ONE"
-                        android:inputType="number|numberSigned" />
+                        android:inputType="number|numberSigned"/>
 
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/PREF_UNIT_MS"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
                 </LinearLayout>
             </TableRow>
         </TableLayout>
@@ -280,14 +281,14 @@
         <LinearLayout
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/PREF_CUSTOMIZE_VK_LAYOUT"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <EditText
                 android:id="@+id/tfVKLayoutKeyCode"
@@ -296,24 +297,24 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_KEY_CODE_HINT"
-                android:inputType="numberSigned" />
+                android:inputType="numberSigned"/>
         </LinearLayout>
 
         <TableLayout
             android:id="@+id/tableLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TableRow
                 android:id="@+id/tableRow1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/cmdVKFore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/PREF_VK_FORE" />
+                    android:text="@string/PREF_VK_FORE"/>
 
                 <EditText
                     android:id="@+id/tfVKFore"
@@ -321,19 +322,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
             <TableRow
                 android:id="@+id/tableRow2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/cmdVKBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/PREF_VK_BACK" />
+                    android:text="@string/PREF_VK_BACK"/>
 
                 <EditText
                     android:id="@+id/tfVKBack"
@@ -341,19 +342,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
             <TableRow
                 android:id="@+id/tableRow4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/cmdVKSelBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/PREF_VK_SEL_FORE" />
+                    android:text="@string/PREF_VK_SEL_FORE"/>
 
                 <EditText
                     android:id="@+id/tfVKSelBack"
@@ -361,19 +362,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
             <TableRow
                 android:id="@+id/tableRow5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/cmdVKSelFore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/PREF_VK_SEL_BACK" />
+                    android:text="@string/PREF_VK_SEL_BACK"/>
 
                 <EditText
                     android:id="@+id/tfVKSelFore"
@@ -381,19 +382,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
             <TableRow
                 android:id="@+id/tableRow3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/cmdVKOutline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/PREF_VK_OUTLINE" />
+                    android:text="@string/PREF_VK_OUTLINE"/>
 
                 <EditText
                     android:id="@+id/tfVKOutline"
@@ -401,7 +402,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
         </TableLayout>
     </LinearLayout>

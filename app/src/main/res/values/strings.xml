@@ -7,58 +7,58 @@
     <string name="exit">Exit</string>
     <string name="action_settings">Settings</string>
     <string name="open_jar">Open jar</string>
-	<string name="author">Author: </string>
-	<string name="version">Version: </string>
+    <string name="author">Author: </string>
+    <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
     <string name="message_delete">Do you really want to delete this app?</string>
     <string name="converting_wait">Converting JAR...</string>
     <string name="convert_complete">Complete</string>
-    
-    <string formatted="false" name="PREF_SCREEN_OPTIONS">Screen options</string>
-    <string formatted="false" name="PREF_SCALE_TO_FIT">Scale to fit</string>
-    <string formatted="false" name="PREF_KEEP_ASPECT_RATIO">Keep aspect ratio</string>
-    <string formatted="false" name="PREF_FILTER">Filter</string>
-    <string formatted="false" name="PREF_FONT_OPTIONS">Font options</string>
-    <string formatted="false" name="PREF_WIDTH">Width</string>
-    <string formatted="false" name="PREF_HEIGHT">Height</string>
-    <string formatted="false" name="PREF_FONT_SMALL">Small</string>
-    <string formatted="false" name="PREF_FONT_MEDIUM">Medium</string>
-    <string formatted="false" name="PREF_FONT_LARGE">Large</string>
-    <string formatted="false" name="PREF_FONT_SIZE_IN_SP">Values are in Scaled Pixels</string>
-    <string formatted="false" name="PREF_BACKGROUND">Background</string>
-    <string formatted="false" name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
-    <string formatted="false" name="PREF_VK_BACK">Buttons</string>
-    <string formatted="false" name="PREF_VK_FORE">Labels</string>
-    <string formatted="false" name="PREF_VK_OUTLINE">Outline</string>
-    <string formatted="false" name="PREF_COLOR_HINT">RGB</string>
-    <string formatted="false" name="PREF_VK_ALPHA">Opacity: </string>
-    <string formatted="false" name="PREF_VK_HIDE_DELAY">Hide delay: </string>
-    <string formatted="false" name="PREF_UNIT_MS">ms</string>
-    <string formatted="false" name="PREF_CUSTOMIZE_VK_LAYOUT">Keycode for the layout customization launch: </string>
-    <string formatted="false" name="START_CMD">Start</string>
-    <string formatted="false" name="CANCEL_CMD">Cancel</string>
-    <string formatted="false" name="PREF_VK_SEL_FORE">Labels (P)</string>
-    <string formatted="false" name="PREF_VK_SEL_BACK">Buttons (P)</string>
-    <string formatted="false" name="PREF_VK_KEY_SIZES">Key sizes</string>
-    <string formatted="false" name="PREF_VK_NAV_KEYS">Joystick: </string>
-    <string formatted="false" name="PREF_VK_SOFT_KEYS">Soft keys: </string>
-    <string formatted="false" name="PREF_VK_NUM_KEYS">Digits: </string>
-    <string formatted="false" name="PREF_VK_FIRE_KEY">Fire: </string>
-    <string formatted="false" name="PREF_VK_SIZE_HINT">Size</string>
-    <string formatted="false" name="RESET_CMD">Reset</string>
-    <string formatted="false" name="SIZE_PRESETS">Presets</string>
-    <string formatted="false" name="PREF_KEY_CODE_HINT">Key code</string>
-    <string formatted="false" name="PREF_LANGUAGE">Language: %A</string>
-    <string formatted="false" name="PREF_MISC">Misc options</string>
-    <string formatted="false" name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
-    <string formatted="false" name="CONFIRMATION_REQUIRED">Confirmation required</string>
-    <string formatted="false" name="YES_CMD">Yes</string>
-    <string formatted="false" name="NO_CMD">No</string>
+
+    <string name="PREF_SCREEN_OPTIONS" formatted="false">Screen options</string>
+    <string name="PREF_SCALE_TO_FIT" formatted="false">Scale to fit</string>
+    <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Keep aspect ratio</string>
+    <string name="PREF_FILTER" formatted="false">Filter</string>
+    <string name="PREF_FONT_OPTIONS" formatted="false">Font options</string>
+    <string name="PREF_WIDTH" formatted="false">Width</string>
+    <string name="PREF_HEIGHT" formatted="false">Height</string>
+    <string name="PREF_FONT_SMALL" formatted="false">Small</string>
+    <string name="PREF_FONT_MEDIUM" formatted="false">Medium</string>
+    <string name="PREF_FONT_LARGE" formatted="false">Large</string>
+    <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Values are in Scaled Pixels</string>
+    <string name="PREF_BACKGROUND" formatted="false">Background</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Virtual keyboard</string>
+    <string name="PREF_VK_BACK" formatted="false">Buttons</string>
+    <string name="PREF_VK_FORE" formatted="false">Labels</string>
+    <string name="PREF_VK_OUTLINE" formatted="false">Outline</string>
+    <string name="PREF_COLOR_HINT" formatted="false">RGB</string>
+    <string name="PREF_VK_ALPHA" formatted="false">Opacity: </string>
+    <string name="PREF_VK_HIDE_DELAY" formatted="false">Hide delay: </string>
+    <string name="PREF_UNIT_MS" formatted="false">ms</string>
+    <string name="PREF_CUSTOMIZE_VK_LAYOUT" formatted="false">Keycode for the layout customization launch: </string>
+    <string name="START_CMD" formatted="false">Start</string>
+    <string name="CANCEL_CMD" formatted="false">Cancel</string>
+    <string name="PREF_VK_SEL_FORE" formatted="false">Labels (P)</string>
+    <string name="PREF_VK_SEL_BACK" formatted="false">Buttons (P)</string>
+    <string name="PREF_VK_KEY_SIZES" formatted="false">Key sizes</string>
+    <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
+    <string name="PREF_VK_SOFT_KEYS" formatted="false">Soft keys: </string>
+    <string name="PREF_VK_NUM_KEYS" formatted="false">Digits: </string>
+    <string name="PREF_VK_FIRE_KEY" formatted="false">Fire: </string>
+    <string name="PREF_VK_SIZE_HINT" formatted="false">Size</string>
+    <string name="RESET_CMD" formatted="false">Reset</string>
+    <string name="SIZE_PRESETS" formatted="false">Presets</string>
+    <string name="PREF_KEY_CODE_HINT" formatted="false">Key code</string>
+    <string name="PREF_LANGUAGE" formatted="false">Language: %A</string>
+    <string name="PREF_MISC" formatted="false">Misc options</string>
+    <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
+    <string name="CONFIRMATION_REQUIRED" formatted="false">Confirmation required</string>
+    <string name="YES_CMD" formatted="false">Yes</string>
+    <string name="NO_CMD" formatted="false">No</string>
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>
     <string name="_MINUS_ONE" translatable="false">-1</string>
     <string name="converting_message">Processing...</string>
-	<string name="action_restart">Restart</string>
+    <string name="action_restart">Restart</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="error">Error</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>

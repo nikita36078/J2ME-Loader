@@ -1,60 +1,63 @@
 <?xml version= "1.0" encoding = "utf-8" ?>
 <RelativeLayout
-	xmlns:android = "http://schemas.android.com/apk/res/android"
-	android:layout_width = "fill_parent"
-	android:layout_height = "wrap_content"
-	android:background = "@drawable/list_selector"
-	android:orientation = "horizontal"
-	android:padding = "5dip" >
-	<!--  ListRow Left sied Thumbnail image -->
-	<LinearLayout
-		android:id = "@+id/thumbnail"
-		android:layout_width ="wrap_content"
-		android:layout_height = "wrap_content"
-		android:padding = "3dip"
-		android:layout_alignParentLeft = "true"
-		android:layout_marginRight = "5dip" >
-		<ImageView
-			android:id = "@+id/list_image"
-			android:layout_width = "35dip"
-			android:layout_height = "35dip" />
-	</LinearLayout>
-	<!-- Title Of App-->
-	<TextView
-		android:id = "@+id/list_title"
-		android:layout_width ="wrap_content"
-		android:layout_height = "wrap_content"
-		android:layout_alignTop = "@+id/thumbnail"
-		android:layout_toRightOf ="@+id/thumbnail"
-		android:textColor = "#040404"
-		android:typeface = "sans"
-		android:textSize = "15dip"
-		android:textStyle = "bold" />
-	
-	<!-- Author and version app -->
-	<RelativeLayout
-		android:layout_width ="match_parent"
-		android:layout_height = "wrap_content"
-		android:padding = "3dip"
-		android:layout_toRightOf ="@+id/thumbnail"
-		android:layout_below="@id/list_title"
-		android:layout_marginRight = "5dip" >
-		<TextView
-			android:id = "@+id/list_author"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:layout_alignParentLeft="true"
-			android:textColor = "#343434"
-			android:typeface = "sans"
-			android:textSize = "10dip" />
-		<TextView
-			android:id = "@+id/list_version"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			android:layout_alignParentRight="true"
-			android:textColor = "#343434"
-			android:typeface = "sans"
-			android:textSize = "10dip" />
-	</RelativeLayout>
-		
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="5dip">
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip">
+
+        <ImageView
+            android:id="@+id/list_image"
+            android:layout_width="35dip"
+            android:layout_height="35dip"/>
+    </LinearLayout>
+    <!-- Title Of App-->
+    <TextView
+        android:id="@+id/list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:textColor="#040404"
+        android:textSize="15dip"
+        android:textStyle="bold"
+        android:typeface="sans"/>
+
+    <!-- Author and version app -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_title"
+        android:layout_marginRight="5dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:padding="3dip">
+
+        <TextView
+            android:id="@+id/list_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="#343434"
+            android:textSize="10dip"
+            android:typeface="sans"/>
+
+        <TextView
+            android:id="@+id/list_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="#343434"
+            android:textSize="10dip"
+            android:typeface="sans"/>
+    </RelativeLayout>
+
 </RelativeLayout>
