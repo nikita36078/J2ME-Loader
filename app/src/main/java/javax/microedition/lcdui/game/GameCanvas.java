@@ -9,6 +9,7 @@ public class GameCanvas extends Canvas {
 	private Image image;
 	private Graphics graphics;
 	private int key;
+	private int repeatedKey;
 	public static final int UP_PRESSED = 1 << Canvas.UP;
 	public static final int DOWN_PRESSED = 1 << Canvas.DOWN;
 	public static final int LEFT_PRESSED = 1 << Canvas.LEFT;
@@ -29,33 +30,45 @@ public class GameCanvas extends Canvas {
 		g.drawImage(image, 0, 0, Graphics.LEFT | Graphics.TOP);
 	}
 
-	public void keyPressed(int keyCode) {
+	private int convertGameKeyCode(int keyCode) {
 		switch (keyCode) {
 			case KEY_LEFT:
 			case KEY_NUM4:
-				key = LEFT_PRESSED;
-				break;
+				return LEFT_PRESSED;
 			case KEY_UP:
 			case KEY_NUM2:
-				key = UP_PRESSED;
-				break;
+				return UP_PRESSED;
 			case KEY_RIGHT:
 			case KEY_NUM6:
-				key = RIGHT_PRESSED;
-				break;
+				return RIGHT_PRESSED;
 			case KEY_DOWN:
 			case KEY_NUM8:
-				key = DOWN_PRESSED;
-				break;
+				return DOWN_PRESSED;
+			case KEY_FIRE:
+			case KEY_NUM5:
+				return FIRE_PRESSED;
+			default:
+				return 0;
 		}
 	}
 
-	public void keyReleased(int keyCode) {
-		key = 0;
+	public void gameKeyPressed(int keyCode) {
+		key |= convertGameKeyCode(keyCode);
+	}
+
+	public void gameKeyReleased(int keyCode) {
+		repeatedKey &= ~convertGameKeyCode(keyCode);
+	}
+
+	public void gameKeyRepeated(int keyCode) {
+		repeatedKey |= convertGameKeyCode(keyCode);
 	}
 
 	public int getKeyStates() {
-		return key;
+		int temp = key;
+		temp |= repeatedKey;
+		key = repeatedKey;
+		return temp;
 	}
 
 	public Graphics getGraphics() {
