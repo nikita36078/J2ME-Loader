@@ -33,7 +33,7 @@ public class Background extends Object3D {
 		vertexBuffer = ByteBuffer.allocateDirect(4 * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		vertexBuffer.put(vertexArray);
 		vertexBuffer.flip();
-		//	4 elements, 2 coordinates per element, float type
+		// 4 elements, 2 coordinates per element, float type
 		textureBuffer = ByteBuffer.allocateDirect(4 * 2 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		textureArray = new float[4 * 2];
 	}

@@ -69,20 +69,20 @@ public class Fog extends Object3D {
 	}
 
 	void setupGL(GL10 gl) {
-		gl.glFogf(GL10.GL_FOG_MODE, getGLFogMode(this.mode));
-		gl.glFogfv(GL10.GL_FOG_COLOR, Color.intToFloatArray(this.color), 0);
-		gl.glFogf(GL10.GL_FOG_DENSITY, this.density);
-		gl.glFogf(GL10.GL_FOG_START, this.nearDistance);
-		gl.glFogf(GL10.GL_FOG_END, this.farDistance);
-		gl.glEnable(GL10.GL_FOG);
-	}
-
-	private int getGLFogMode(int mode) {
-		switch (mode) {
+		switch (this.mode) {
+			case LINEAR:
+				gl.glEnable(GL10.GL_FOG);
+				gl.glFogf(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
+				gl.glFogf(GL10.GL_FOG_START, this.nearDistance);
+				gl.glFogf(GL10.GL_FOG_END, this.farDistance);
+				gl.glFogfv(GL10.GL_FOG_COLOR, Color.intToFloatArray(this.color), 0);
+				break;
 			case EXPONENTIAL:
-				return GL10.GL_EXP;
-			default:
-				return GL10.GL_LINEAR;
+				gl.glEnable(GL10.GL_FOG);
+				gl.glFogf(GL10.GL_FOG_MODE, GL10.GL_EXP);
+				gl.glFogf(GL10.GL_FOG_DENSITY, this.density);
+				gl.glFogfv(GL10.GL_FOG_COLOR, Color.intToFloatArray(this.color), 0);
+				break;
 		}
 	}
 
