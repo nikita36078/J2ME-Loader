@@ -522,8 +522,10 @@ public class ConfigActivity extends Activity implements
 						ConfigActivity.this);
 				params.edit().clear().commit();
 				params.close();
-				keylayoutFile.delete();
 				loadParams(params);
+				break;
+			case R.id.action_reset_layout:
+				keylayoutFile.delete();
 				break;
 			case android.R.id.home:
 				if (midlet != null) {

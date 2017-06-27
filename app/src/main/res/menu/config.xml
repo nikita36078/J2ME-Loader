@@ -9,5 +9,10 @@
         android:id="@+id/action_reset"
         android:title="@string/RESET_CMD"
 		android:showAsAction="never"/>
+
+	<item
+		android:id="@+id/action_reset_layout"
+		android:title="@string/RESET_LAYOUT_CMD"
+		android:showAsAction="never"/>
     
 </menu>

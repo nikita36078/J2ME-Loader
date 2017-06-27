@@ -50,7 +50,6 @@
     <string formatted="false" name="PREF_KEY_CODE_HINT">Key code</string>
     <string formatted="false" name="PREF_LANGUAGE">Language: %A</string>
     <string formatted="false" name="PREF_MISC">Misc options</string>
-    <string formatted="false" name="EDIT_MANIFEST_CMD">Edit manifest</string>
     <string formatted="false" name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string formatted="false" name="CONFIRMATION_REQUIRED">Confirmation required</string>
     <string formatted="false" name="YES_CMD">Yes</string>
@@ -65,5 +64,9 @@
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
     <string name="PREF_CLEAR_BUFFER">Draw buffer clearing</string>
+    <string name="layout_edit_mode">Keylayout edit mode</string>
+    <string name="layout_resize_mode">Keylayout resize mode</string>
+    <string name="layout_edit_finished">Edit mode finished</string>
+    <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
 
 </resources>
