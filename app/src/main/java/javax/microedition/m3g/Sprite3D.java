@@ -44,6 +44,63 @@ public class Sprite3D extends Node {
 		return copy;
 	}
 
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		if (image != null) {
+			if (references != null)
+				references[num] = image;
+			num++;
+		}
+		if (appearance != null) {
+			if (references != null)
+				references[num] = appearance;
+			num++;
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (image != null))
+			found = image.findID(userID);
+		if ((found == null) && (appearance != null))
+			found = appearance.findID(userID);
+		return found;
+	}
+
+	@Override
+	int applyAnimation(int time) {
+		int minValidity = super.applyAnimation(time);
+
+		if (minValidity > 0) {
+			Object3D app = appearance;
+
+			if (app != null) {
+				int validity = app.applyAnimation(time);
+				minValidity = Math.min(validity, minValidity);
+			}
+		}
+		return minValidity;
+	}
+
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.CROP:
+				if (value.length > 2) {
+					setCrop((int)value[0], (int)value[1], (int)Math.max(-Graphics3D.getMaxTextureSize(), Math.min(Graphics3D.getMaxTextureSize(), value[2])),
+							(int)Math.max(-Graphics3D.getMaxTextureSize(), Math.min(Graphics3D.getMaxTextureSize(), value[3])));
+				} else {
+					setCrop((int)value[0], (int)value[1], getCropWidth(), getCropHeight());
+				}
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public void setAppearance(Appearance appearance) {
 		this.appearance = appearance;
 	}

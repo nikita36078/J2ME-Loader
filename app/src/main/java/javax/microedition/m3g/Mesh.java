@@ -17,15 +17,32 @@ public class Mesh extends Node {
 			minValidity = Math.min(validity, minValidity);
 		}
 
-		for (int i = 0; i < submeshes.length && minValidity > 0; i++) {
-			Appearance app = appearances[i];
-			if (app != null) {
-				validity = app.applyAnimation(time);
-				minValidity = Math.min(validity, minValidity);
+		if (appearances != null) {
+			for (int i = 0; i < submeshes.length && minValidity > 0; i++) {
+				Appearance app = appearances[i];
+				if (app != null) {
+					validity = app.applyAnimation(time);
+					minValidity = Math.min(validity, minValidity);
+				}
 			}
 		}
 
 		return minValidity;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if (found == null)
+			found = vertices.findID(userID);
+		for (int i = 0; (found == null) && (i < submeshes.length); i++) {
+			if (submeshes[i] != null)
+				found = submeshes[i].findID(userID);
+			if ((found == null) && (appearances[i] != null))
+				found = appearances[i].findID(userID);
+		}
+		return found;
 	}
 
 	public Mesh(VertexBuffer vertices, IndexBuffer submesh, Appearance appearance) {
@@ -87,8 +104,8 @@ public class Mesh extends Node {
 	}
 
 	@Override
-	int doGetReferences(Object3D[] references) throws IllegalArgumentException {
-		int parentCount = super.getReferences(references);
+	int doGetReferences(Object3D[] references) {
+		int parentCount = super.doGetReferences(references);
 
 		if (vertices != null) {
 			if (references != null)

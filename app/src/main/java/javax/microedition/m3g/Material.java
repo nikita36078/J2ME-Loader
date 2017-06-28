@@ -29,6 +29,32 @@ public class Material extends Object3D {
 		return copy;
 	}
 
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.ALPHA:
+				diffuseColor = (diffuseColor | 0xFF000000) & (ColConv.alpha1f(value[0]) << 24);
+				break;
+			case AnimationTrack.AMBIENT_COLOR:
+				ambientColor = ColConv.color3f(value[0], value[1], value[2]);
+				break;
+			case AnimationTrack.DIFFUSE_COLOR:
+				diffuseColor = (diffuseColor | 0x00FFFFFF) & (ColConv.color3f(value[0], value[1], value[2]));
+				break;
+			case AnimationTrack.EMISSIVE_COLOR:
+				emissiveColor = (ColConv.color3f(value[0], value[1], value[2]) & 0x00FFFFFF);
+				break;
+			case AnimationTrack.SHININESS:
+				shininess = Math.max(0.f, Math.min(128.f, value[0]));
+				break;
+			case AnimationTrack.SPECULAR_COLOR:
+				specularColor = ColConv.color3f(value[0], value[1], value[2]);
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public void setColor(int target, int color) {
 		if ((target & AMBIENT) != 0)
 			this.ambientColor = color;

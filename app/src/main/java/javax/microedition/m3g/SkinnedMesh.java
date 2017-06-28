@@ -16,6 +16,37 @@ public class SkinnedMesh extends Mesh {
 		this.skeleton = skeleton;
 	}
 
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		if (skeleton != null) {
+			if (references != null)
+				references[num] = skeleton;
+			num++;
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (skeleton != null))
+			found = skeleton.findID(userID);
+		return found;
+	}
+
+	@Override
+	int applyAnimation(int time) {
+		int validity = super.applyAnimation(time);
+
+		if (validity > 0) {
+			int validity2 = skeleton.applyAnimation(time);
+			return Math.min(validity, validity2);
+		}
+		return 0;
+	}
+
 	public void addTransform(Node bone, int weight, int firstVertex, int numVertices) {
 		if (bone == null)
 			throw new NullPointerException();

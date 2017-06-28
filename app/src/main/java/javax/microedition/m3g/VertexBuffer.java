@@ -232,7 +232,7 @@ public class VertexBuffer extends Object3D {
 
 	@Override
 	int doGetReferences(Object3D[] references) throws IllegalArgumentException {
-		int parentCount = super.getReferences(references);
+		int parentCount = super.doGetReferences(references);
 
 		if (positions != null) {
 			if (references != null)
@@ -261,6 +261,36 @@ public class VertexBuffer extends Object3D {
 		}
 
 		return parentCount;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (positions != null))
+			found = positions.findID(userID);
+		if ((found == null) && (normals != null))
+			found = normals.findID(userID);
+		if ((found == null) && (colors != null))
+			found = colors.findID(userID);
+		for (int i = 0; (found == null) && (i < texCoords.length); i++)
+			if (texCoords[i] != null)
+				found = texCoords[i].findID(userID);
+		return found;
+	}
+
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.ALPHA:
+				defaultColor = (defaultColor | 0xFF000000) & (ColConv.alpha1f(value[0]) << 24);
+				break;
+			case AnimationTrack.COLOR:
+				defaultColor = (defaultColor | 0x00FFFFFF) & (ColConv.color3f(value[0], value[1], value[2]));
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
 	}
 
 	boolean isCompatible(AnimationTrack track) {

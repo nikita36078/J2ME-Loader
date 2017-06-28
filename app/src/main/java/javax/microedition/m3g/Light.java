@@ -34,6 +34,26 @@ public class Light extends Node {
 		return copy;
 	}
 
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.COLOR:
+				color = ColConv.color3f(value[0], value[1], value[2]);
+				break;
+			case AnimationTrack.INTENSITY:
+				intensity = value[0];
+				break;
+			case AnimationTrack.SPOT_ANGLE:
+				spotAngle = Math.max(0.f, Math.min(90.f, value[0]));
+				break;
+			case AnimationTrack.SPOT_EXPONENT:
+				spotExponent = Math.max(0.f, Math.min(128.f, value[0]));
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public int getColor() {
 		return color;
 	}
