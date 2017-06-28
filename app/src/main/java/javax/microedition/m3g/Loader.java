@@ -123,11 +123,7 @@ public class Loader {
 					int approximateContentSize = readInt();
 					String authoringField = readString();
 
-					objs.addElement(new Group()); // dummy
-				} else if (objectType == 255) {
-					// TODO: load external resource
-					System.out.println("Loader: Loading external resources not implemented.");
-					String uri = readString();
+					//objs.addElement(new Group()); // dummy
 				} else if (objectType == 1) {
 					AnimationController cont = new AnimationController();
 					loadObject3D(cont);
@@ -224,6 +220,16 @@ public class Loader {
 						fog.setFarDistance(readFloat());
 					}
 					objs.addElement(fog);
+				} else if (objectType == 8) {
+					PolygonMode polygonMode = new PolygonMode();
+					loadObject3D(polygonMode);
+					polygonMode.setCulling(readByte());
+					polygonMode.setShading(readByte());
+					polygonMode.setWinding(readByte());
+					polygonMode.setTwoSidedLightingEnable(readBoolean());
+					polygonMode.setLocalCameraLightingEnable(readBoolean());
+					polygonMode.setPerspectiveCorrectionEnable(readBoolean());
+					objs.addElement(polygonMode);
 				} else if (objectType == 9) {
 					Group group = new Group();
 					loadGroup(group);
@@ -257,60 +263,51 @@ public class Loader {
 					loadObject3D(image);
 
 					objs.addElement(image);
-				} else if (objectType == 19) {
-					loadObject3D(new Group());
-					int interpolation = readByte();
-					int repeatMode = readByte();
+				} else if (objectType == 11) {
+					loadObject3D(new Group()); // dummy
+
 					int encoding = readByte();
-					int duration = readInt();
-					int rangeFirst = readInt();
-					int rangeLast = readInt();
-					int components = readInt();
-					int keyFrames = readInt();
-					int size = (encoding == 0) ? (keyFrames * (4 + components * 4)) : (components * 8 + keyFrames * (4 + components * (encoding == 1 ? 1 : 2)));
-
-					KeyframeSequence seq = new KeyframeSequence(keyFrames, components, interpolation);
-					seq.setRepeatMode(repeatMode);
-					seq.setDuration(duration);
-					seq.setValidRange(rangeFirst, rangeLast);
-					float[] values = new float[components];
-					if (encoding == 0) {
-						for (int i = 0; i < keyFrames; i++) {
-							int time = readInt();
-
-							for (int j = 0; j < components; j++) {
-								values[j] = readFloat();
-							}
-
-							seq.setKeyframe(i, time, values);
-						}
-					} else {
-						float[] vectorBiasScale = new float[components * 2];
-						for (int i = 0; i < components; i++) {
-							vectorBiasScale[i] = readFloat();
-						}
-
-						for (int i = 0; i < components; i++) {
-							vectorBiasScale[i + components] = readFloat();
-						}
-
-						for (int i = 0; i < keyFrames; i++) {
-							int time = readInt();
-							if (encoding == 1) {
-								for (int j = 0; j < components; j++) {
-									int v = readByte();
-									values[j] = vectorBiasScale[j] + ((vectorBiasScale[j + components] * v) / 255.0f);
-								}
-							} else {
-								for (int j = 0; j < components; j++) {
-									int v = readShort();
-									values[j] = vectorBiasScale[j] + ((vectorBiasScale[j + components] * v) / 65535.0f);
-								}
-							}
-							seq.setKeyframe(i, time, values);
-						}
+					int firstIndex = 0;
+					int[] indices = null;
+					if (encoding == 0)
+						firstIndex = readInt();
+					else if (encoding == 1)
+						firstIndex = readByte();
+					else if (encoding == 2)
+						firstIndex = readShort();
+					else if (encoding == 128) {
+						int numIndices = readInt();
+						indices = new int[numIndices];
+						for (int i = 0; i < numIndices; ++i)
+							indices[i] = readInt();
+					} else if (encoding == 129) {
+						int numIndices = readInt();
+						indices = new int[numIndices];
+						for (int i = 0; i < numIndices; ++i)
+							indices[i] = readByte();
+					} else if (encoding == 130) {
+						int numIndices = readInt();
+						indices = new int[numIndices];
+						for (int i = 0; i < numIndices; ++i)
+							indices[i] = readShort();
 					}
-					objs.addElement(seq);
+
+					int numStripLengths = readInt();
+					int[] stripLengths = new int[numStripLengths];
+					for (int i = 0; i < numStripLengths; i++)
+						stripLengths[i] = readInt();
+
+					dis.reset();
+
+					TriangleStripArray triStrip = null;
+					if (indices == null)
+						triStrip = new TriangleStripArray(firstIndex, stripLengths);
+					else
+						triStrip = new TriangleStripArray(indices, stripLengths);
+
+					loadObject3D(triStrip);
+
+					objs.addElement(triStrip);
 				} else if (objectType == 12) {
 					Light light = new Light();
 					loadNode(light);
@@ -378,16 +375,6 @@ public class Loader {
 					loadNode(mesh);
 
 					objs.addElement(mesh);
-				} else if (objectType == 8) {
-					PolygonMode polygonMode = new PolygonMode();
-					loadObject3D(polygonMode);
-					polygonMode.setCulling(readByte());
-					polygonMode.setShading(readByte());
-					polygonMode.setWinding(readByte());
-					polygonMode.setTwoSidedLightingEnable(readBoolean());
-					polygonMode.setLocalCameraLightingEnable(readBoolean());
-					polygonMode.setPerspectiveCorrectionEnable(readBoolean());
-					objs.addElement(polygonMode);
 				} else if (objectType == 16) {
 					loadNode(new Group());
 					VertexBuffer vb = (VertexBuffer) getObject(readInt());
@@ -416,19 +403,6 @@ public class Loader {
 					dis.reset();
 					loadNode(mesh);
 					objs.addElement(mesh);
-				} else if (objectType == 18) {
-					loadNode(new Group());
-					Image2D image = (Image2D) getObject(readInt());
-					Appearance ap = (Appearance) getObject(readInt());
-					Sprite3D sprite = new Sprite3D(readBoolean(), image, ap);
-					int x = readInt();
-					int y = readInt();
-					int width = readInt();
-					int height = readInt();
-					sprite.setCrop(x, y, width, height);
-					dis.reset();
-					loadNode(sprite);
-					objs.addElement(sprite);
 				} else if (objectType == 17) {
 					loadTransformable(new Group()); // dummy
 					Texture2D texture = new Texture2D((Image2D) getObject(readInt()));
@@ -445,51 +419,73 @@ public class Loader {
 					loadTransformable(texture);
 
 					objs.addElement(texture);
-				} else if (objectType == 11) {
-					loadObject3D(new Group()); // dummy
-
-					int encoding = readByte();
-					int firstIndex = 0;
-					int[] indices = null;
-					if (encoding == 0)
-						firstIndex = readInt();
-					else if (encoding == 1)
-						firstIndex = readByte();
-					else if (encoding == 2)
-						firstIndex = readShort();
-					else if (encoding == 128) {
-						int numIndices = readInt();
-						indices = new int[numIndices];
-						for (int i = 0; i < numIndices; ++i)
-							indices[i] = readInt();
-					} else if (encoding == 129) {
-						int numIndices = readInt();
-						indices = new int[numIndices];
-						for (int i = 0; i < numIndices; ++i)
-							indices[i] = readByte();
-					} else if (encoding == 130) {
-						int numIndices = readInt();
-						indices = new int[numIndices];
-						for (int i = 0; i < numIndices; ++i)
-							indices[i] = readShort();
-					}
-
-					int numStripLengths = readInt();
-					int[] stripLengths = new int[numStripLengths];
-					for (int i = 0; i < numStripLengths; i++)
-						stripLengths[i] = readInt();
-
+				} else if (objectType == 18) {
+					loadNode(new Group());
+					Image2D image = (Image2D) getObject(readInt());
+					Appearance ap = (Appearance) getObject(readInt());
+					Sprite3D sprite = new Sprite3D(readBoolean(), image, ap);
+					int x = readInt();
+					int y = readInt();
+					int width = readInt();
+					int height = readInt();
+					sprite.setCrop(x, y, width, height);
 					dis.reset();
+					loadNode(sprite);
+					objs.addElement(sprite);
+				} else if (objectType == 19) {
+					loadObject3D(new Group());
+					int interpolation = readByte();
+					int repeatMode = readByte();
+					int encoding = readByte();
+					int duration = readInt();
+					int rangeFirst = readInt();
+					int rangeLast = readInt();
+					int components = readInt();
+					int keyFrames = readInt();
+					int size = (encoding == 0) ? (keyFrames * (4 + components * 4)) : (components * 8 + keyFrames * (4 + components * (encoding == 1 ? 1 : 2)));
 
-					TriangleStripArray triStrip = null;
-					if (indices == null)
-						triStrip = new TriangleStripArray(firstIndex, stripLengths);
-					else
-						triStrip = new TriangleStripArray(indices, stripLengths);
+					KeyframeSequence seq = new KeyframeSequence(keyFrames, components, interpolation);
+					seq.setRepeatMode(repeatMode);
+					seq.setDuration(duration);
+					seq.setValidRange(rangeFirst, rangeLast);
+					float[] values = new float[components];
+					if (encoding == 0) {
+						for (int i = 0; i < keyFrames; i++) {
+							int time = readInt();
 
-					loadObject3D(triStrip);
+							for (int j = 0; j < components; j++) {
+								values[j] = readFloat();
+							}
 
-					objs.addElement(triStrip);
+							seq.setKeyframe(i, time, values);
+						}
+					} else {
+						float[] vectorBiasScale = new float[components * 2];
+						for (int i = 0; i < components; i++) {
+							vectorBiasScale[i] = readFloat();
+						}
+
+						for (int i = 0; i < components; i++) {
+							vectorBiasScale[i + components] = readFloat();
+						}
+
+						for (int i = 0; i < keyFrames; i++) {
+							int time = readInt();
+							if (encoding == 1) {
+								for (int j = 0; j < components; j++) {
+									int v = readByte();
+									values[j] = vectorBiasScale[j] + ((vectorBiasScale[j + components] * v) / 255.0f);
+								}
+							} else {
+								for (int j = 0; j < components; j++) {
+									int v = readShort();
+									values[j] = vectorBiasScale[j] + ((vectorBiasScale[j + components] * v) / 65535.0f);
+								}
+							}
+							seq.setKeyframe(i, time, values);
+						}
+					}
+					objs.addElement(seq);
 				} else if (objectType == 20) {
 					loadObject3D(new Group()); // dummy
 
@@ -571,6 +567,10 @@ public class Loader {
 					Object3D[] ret = loadM3G(dis);
 					dis = old;
 					return ret;
+				} else if (objectType == 255) {
+					// TODO: load external resource
+					System.out.println("Loader: Loading external resources not implemented.");
+					String uri = readString();
 				} else {
 					System.out.println("Loader: unsupported objectType " + objectType + ".");
 				}
@@ -635,6 +635,7 @@ public class Loader {
 
 	private static String readString() throws IOException {
 		// TODO
+		while (readByte() != 0) ;
 		return "";
 	}
 
@@ -648,7 +649,7 @@ public class Loader {
 	private static Object getObject(int index) {
 		if (index == 0)
 			return null;
-		return objs.elementAt(index - 1);
+		return objs.elementAt(index - 2);
 	}
 
 	private static void loadObject3D(Object3D object) throws IOException {
