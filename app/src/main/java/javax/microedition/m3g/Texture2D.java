@@ -42,6 +42,37 @@ public class Texture2D extends Transformable {
 		return copy;
 	}
 
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		if (image != null) {
+			if (references != null)
+				references[num] = image;
+			num++;
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (image != null))
+			found = image.findID(userID);
+		return found;
+	}
+
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.COLOR:
+				blendColor = (value.length == 3) ? ColConv.color3f(value[0], value[1], value[2]) : ColConv.color4f(value[0], value[1], value[2], value[3]);
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public void setBlendColor(int blendColor) {
 		this.blendColor = blendColor & 0xFFFFFF;
 	}

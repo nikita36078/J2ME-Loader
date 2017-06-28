@@ -656,7 +656,7 @@ public class Loader {
 
 		int animationTracks = readInt();
 		for (int i = 0; i < animationTracks; ++i)
-			readInt();//object.addAnimationTrack((AnimationTrack)getObject(readInt()));
+			object.addAnimationTrack((AnimationTrack)getObject(readInt()));
 
 		int userParameterCount = readInt();
 		for (int i = 0; i < userParameterCount; ++i) {

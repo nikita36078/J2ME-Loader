@@ -15,7 +15,7 @@ public class CompositingMode extends Object3D {
 	private boolean depthWriteEnabled = true;
 	private boolean colorWriteEnabled = true;
 	private boolean alphaWriteEnabled = true;
-	private int blending = ALPHA;
+	private int blending = REPLACE;
 	private float alphaThreshold = 0.0f;
 	private float depthOffsetFactor = 0.0f;
 	private float depthOffsetUnits = 0.0f;
@@ -71,7 +71,6 @@ public class CompositingMode extends Object3D {
 	public void setBlending(int blending) {
 		switch (blending) {
 			case ALPHA:
-				System.out.println("Alpha CompositingMode");
 			case ALPHA_ADD:
 			case MODULATE:
 			case MODULATE_X2:

@@ -27,6 +27,23 @@ public class Camera extends Node {
 		return copy;
 	}
 
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.FAR_DISTANCE:
+				far = (projectionType == PERSPECTIVE) ? Math.max(0.f, value[0]) : value[0];
+				break;
+			case AnimationTrack.FIELD_OF_VIEW:
+				fovy = (projectionType == PERSPECTIVE) ? Math.max(0.f, Math.min(180.f, value[0])) : Math.max(0, value[0]);
+				break;
+			case AnimationTrack.NEAR_DISTANCE:
+				near = (projectionType == PERSPECTIVE) ? Math.max(0.f, value[0]) : value[0];
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public void setParallel(float fovy, float aspectRatio, float near, float far) {
 		this.projectionType = PARALLEL;
 		this.fovy = fovy;

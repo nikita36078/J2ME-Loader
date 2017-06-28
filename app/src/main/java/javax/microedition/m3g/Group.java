@@ -43,12 +43,39 @@ public class Group extends Node {
 		return children.size();
 	}
 
-	public int getReferences(Object3D[] references) throws IllegalArgumentException {
-		int parentCount = super.getReferences(references);
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int parentCount = super.doGetReferences(references);
 		if (references != null)
 			for (int i = 0; i < children.size(); ++i)
 				references[parentCount + i] = (Object3D) children.elementAt(i);
 		return parentCount + children.size();
+	}
+
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		for (int i = 0; (found == null) && (i < children.size()); i++)
+			found = ((Object3D) children.elementAt(i)).findID(userID);
+		return found;
+	}
+
+	@Override
+	int applyAnimation(int time) {
+		int minValidity = super.applyAnimation(time);
+		for (int i = 0; (minValidity > 0) && (i < children.size()); i++) {
+			int validity = ((Object3D) children.elementAt(i)).applyAnimation(time);
+			minValidity = Math.min(validity, minValidity);
+		}
+		return minValidity;
+	}
+
+	@Override
+	boolean doAlign(Node ref) {
+		for (int i = 0; i < children.size(); i++)
+			if (!((Node)children.elementAt(i)).doAlign(ref))
+				return false;
+		return true;
 	}
 
 	public boolean pick(int scope, float x, float y, Camera camera, RayIntersection ri) {

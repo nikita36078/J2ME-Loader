@@ -17,6 +17,46 @@ public class MorphingMesh extends Mesh {
 		this.targets = targets;
 	}
 
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		for (int i = 0; i < targets.length; i++) {
+			if (targets[i] != null) {
+				if (references != null)
+					references[num] = targets[i];
+				num++;
+			}
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		for (int i = 0; (found == null) && (i < targets.length); i++)
+			if (targets[i] != null)
+				found = targets[i].findID(userID);
+		return found;
+	}
+
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.MORPH_WEIGHTS:
+				for (int i = 0; i < targets.length; i++) {
+					if (i < value.length)
+						weights[i] = value[i];
+					else
+						weights[i] = 0;
+				}
+				invalidateNode(new boolean[] {false, true});
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public VertexBuffer getMorphTarget(int index) {
 		return targets[index];
 	}

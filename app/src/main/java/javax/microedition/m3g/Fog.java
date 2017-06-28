@@ -23,6 +23,26 @@ public class Fog extends Object3D {
 		return copy;
 	}
 
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.COLOR:
+				color = ColConv.color3f(value[0], value[1], value[2]) & 0x00FFFFFF;
+				break;
+			case AnimationTrack.DENSITY:
+				density = (value[0] < 0.f) ? 0.f : value[0];
+				break;
+			case AnimationTrack.FAR_DISTANCE:
+				farDistance = value[0];
+				break;
+			case AnimationTrack.NEAR_DISTANCE:
+				nearDistance = value[0];
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public void setColor(int color) {
 		this.color = color;
 	}

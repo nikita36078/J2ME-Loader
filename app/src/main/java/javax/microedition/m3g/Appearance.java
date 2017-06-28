@@ -7,15 +7,11 @@ public class Appearance extends Object3D {
 	int numTextureUnits = 8;
 
 	private int layer = 0;
-	private CompositingMode compositingMode;
-	private Fog fog;
-	private PolygonMode polygonMode;
-	private Material material;
-	private Texture2D[] textures;
-
-	public Appearance() {
-		textures = new Texture2D[numTextureUnits];
-	}
+	private CompositingMode compositingMode = null;
+	private Fog fog = null;
+	private PolygonMode polygonMode = null;
+	private Material material = null;
+	private Texture2D[] textures = new Texture2D[numTextureUnits];
 
 	Object3D duplicateImpl() {
 		Appearance copy = new Appearance();
@@ -26,6 +22,81 @@ public class Appearance extends Object3D {
 		copy.material = material;
 		copy.textures = textures;
 		return copy;
+	}
+
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		if (compositingMode != null) {
+			if (references != null)
+				references[num] = compositingMode;
+			num++;
+		}
+		if (polygonMode != null) {
+			if (references != null)
+				references[num] = polygonMode;
+			num++;
+		}
+		if (fog != null) {
+			if (references != null)
+				references[num] = fog;
+			num++;
+		}
+		if (material != null) {
+			if (references != null)
+				references[num] = material;
+			num++;
+		}
+		for (int i = 0; i < textures.length; i++) {
+			if (textures[i] != null) {
+				if (references != null)
+					references[num] = textures[i];
+				num++;
+			}
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (compositingMode != null))
+			found = compositingMode.findID(userID);
+		if ((found == null) && (polygonMode != null))
+			found = polygonMode.findID(userID);
+		if ((found == null) && (fog != null))
+			found = fog.findID(userID);
+		if ((found == null) && (material != null))
+			found = material.findID(userID);
+		for (int i = 0; (found == null) && (i < textures.length); i++)
+			if (textures[i] != null)
+				found = textures[i].find(userID);
+		return found;
+	}
+
+	@Override
+	int applyAnimation(int time) {
+		int minValidity = 0x7FFFFFFF;
+		int validity;
+		if (compositingMode != null) {
+			validity = compositingMode.applyAnimation(time);
+			minValidity = Math.min(validity, minValidity);
+		}
+		if (fog != null) {
+			validity = fog.applyAnimation(time);
+			minValidity = Math.min(validity, minValidity);
+		}
+		if (material != null) {
+			validity = material.applyAnimation(time);
+			minValidity = Math.min(validity, minValidity);
+		}
+		for (int i = 0; i < textures.length; i++)
+			if (textures[i] != null) {
+				validity = textures[i].applyAnimation(time);
+				minValidity = Math.min(validity, minValidity);
+			}
+		return minValidity;
 	}
 
 	public void setLayer(int layer) {

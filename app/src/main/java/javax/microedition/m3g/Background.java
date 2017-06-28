@@ -56,6 +56,51 @@ public class Background extends Object3D {
 		return copy;
 	}
 
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		if (backgroundImage != null) {
+			if (references != null)
+				references[num] = backgroundImage;
+			num++;
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (backgroundImage != null))
+			found = backgroundImage.findID(userID);
+		return found;
+	}
+
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.ALPHA:
+				backgroundColor = (backgroundColor | 0xFF000000) & (ColConv.alpha1f(value[0]) << 24);
+				break;
+			case AnimationTrack.COLOR:
+				backgroundColor = (backgroundColor | 0x00FFFFFF) & (ColConv.color3f(value[0], value[1], value[2]));
+				break;
+			case AnimationTrack.CROP:
+				int x = (int)value[0];
+				int y = (int)value[1];
+				int width = cropWidth;
+				int height = cropHeight;
+				if (value.length > 2) {
+					width = (value[2] < 0) ? 0 : (int)value[2];
+					height = (value[3] < 0) ? 0 : (int)value[3];
+				}
+				setCrop(x, y, width, height);
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
+
 	public int getColor() {
 		return this.backgroundColor;
 	}

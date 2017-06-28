@@ -32,8 +32,9 @@ public class World extends Group {
 		this.background = background;
 	}
 
-	public int getReferences(Object3D[] references) throws IllegalArgumentException {
-		int parentCount = super.getReferences(references);
+	@Override
+	public int doGetReferences(Object3D[] references) {
+		int parentCount = super.doGetReferences(references);
 
 		if (activeCamera != null) {
 			if (references != null)
@@ -48,5 +49,26 @@ public class World extends Group {
 		}
 
 		return parentCount;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (activeCamera != null))
+			found = activeCamera.findID(userID);
+		if ((found == null) && (background != null))
+			found = background.findID(userID);
+		return found;
+	}
+
+	@Override
+	int applyAnimation(int time) {
+		int minValidity = super.applyAnimation(time);
+		if ((background != null) && (minValidity > 0)) {
+			int validity = background.applyAnimation(time);
+			minValidity = Math.min(validity, minValidity);
+		}
+		return minValidity;
 	}
 }

@@ -7,7 +7,6 @@ public abstract class Object3D {
 
 	protected int userID = 0;
 	protected Object userObject = null;
-
 	Vector animationTracks = new Vector();
 
 	void updateProperty(int property, float[] value) {
@@ -43,7 +42,7 @@ public abstract class Object3D {
 					return 0;
 
 				sumWeights += weight[0];
-				validity = (validity <= Validity[0]) ? validity : Validity[0];
+				validity = Math.min(validity, Validity[0]);
 
 				if (++trackIndex == numTracks)
 					break;
@@ -129,7 +128,7 @@ public abstract class Object3D {
 		if (animationTrack == null) {
 			throw new NullPointerException();
 		}
-		if (/*(!isCompatible(animationTrack)) ||*/ animationTracks.contains(animationTrack)) {
+		if ((!isCompatible(animationTrack)) || animationTracks.contains(animationTrack)) {
 			throw new IllegalArgumentException("AnimationTrack is already existing or incompatible");
 		}
 

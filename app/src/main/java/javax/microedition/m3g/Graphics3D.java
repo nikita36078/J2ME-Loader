@@ -40,7 +40,7 @@ public final class Graphics3D {
 	private static Graphics3D instance = null;
 
 	private int maxTextureUnits = 1;
-	private int maxTextureSize;
+	private static int maxTextureSize;
 
 	private int viewportX = 0;
 	private int viewportY = 0;
@@ -542,6 +542,9 @@ public final class Graphics3D {
 		// Apply Graphics3D settings to the OpenGL pipeline
 		initRender();
 
+		// Appearance
+		appearance.setupGL(gl);
+
 		// Vertices
 		float[] scaleBias = new float[4];
 		VertexArray positions = vertices.getPositions(scaleBias);
@@ -622,9 +625,6 @@ public final class Graphics3D {
 			}
 		}
 
-		// Appearance
-		appearance.setupGL(gl);
-
 		// Scene
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
@@ -672,7 +672,7 @@ public final class Graphics3D {
 		initRender();
 
 		// Begin traversal of scene graph
-		renderDescendants(world, world);
+		renderDescendants(world, world, new Transform());
 	}
 
 	private void populateLights(World world, Object3D obj) {
@@ -692,7 +692,7 @@ public final class Graphics3D {
 		}
 	}
 
-	private void renderDescendants(Node topNode, Object3D obj) {
+	private void renderDescendants(Node topNode, Object3D obj, Transform transform) {
 		int numReferences = obj.getReferences(null);
 		if (numReferences > 0) {
 			Object3D[] objArray = new Object3D[numReferences];
@@ -701,11 +701,13 @@ public final class Graphics3D {
 				if (objArray[i] instanceof Node) {
 					Node subNode = (Node) objArray[i];
 					if (subNode instanceof Group) {
-						renderDescendants(topNode, subNode);
+						renderDescendants(topNode, subNode, transform);
 					} else {
 						Transform t = new Transform();
 						subNode.getTransformTo(topNode, t);
-						renderNode(subNode, t);
+						Transform tr = new Transform(transform);
+						tr.postMultiply(t);
+						renderNode(subNode, tr);
 					}
 				}
 			}
@@ -857,18 +859,17 @@ public final class Graphics3D {
 			Mesh mesh = (Mesh) node;
 			int subMeshes = mesh.getSubmeshCount();
 			VertexBuffer vertices = mesh.getVertexBuffer();
-			for (int i = 0; i < subMeshes; ++i)
+			for (int i = 0; i < subMeshes; i++) {
 				if (mesh.getAppearance(i) != null) {
 					/*drawMesh*/
-					/*if (mesh.getAppearance(i).getCompositingMode() != null && mesh.getAppearance(i).getCompositingMode().getBlending() == CompositingMode.ALPHA)
-						System.out.println("CompositingMode!!!");*/
 					render(vertices, mesh.getIndexBuffer(i), mesh.getAppearance(i), transform);
 				}
+			}
 		} else if (node instanceof Sprite3D) {
 			Sprite3D sprite = (Sprite3D) node;
 			sprite.render(gl, transform);
 		} else if (node instanceof Group) {
-			renderDescendants(node, node);
+			renderDescendants(node, node, transform);
 		}
 
 	}
@@ -877,7 +878,7 @@ public final class Graphics3D {
 		return maxTextureUnits;
 	}
 
-	int getMaxTextureSize() {
+	static int getMaxTextureSize() {
 		return maxTextureSize;
 	}
 
