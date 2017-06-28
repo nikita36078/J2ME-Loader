@@ -115,16 +115,14 @@ public class Loader {
 
 				dis.mark(Integer.MAX_VALUE);
 
-				if (objectType == 0) {
+				if (objectType == 0) { // Header
 					int versionHigh = readByte();
 					int versionLow = readByte();
 					boolean hasExternalReferences = readBoolean();
 					int totolFileSize = readInt();
 					int approximateContentSize = readInt();
 					String authoringField = readString();
-
-					//objs.addElement(new Group()); // dummy
-				} else if (objectType == 1) {
+				} else if (objectType == 1) { // AnimationController
 					AnimationController cont = new AnimationController();
 					loadObject3D(cont);
 					float speed = readFloat();
@@ -138,7 +136,7 @@ public class Loader {
 					cont.setSpeed(speed, referenceWorldTime);
 					cont.setWeight(weight);
 					objs.addElement(cont);
-				} else if (objectType == 2) {
+				} else if (objectType == 2) { // AnimationTrack
 					loadObject3D(new Group());
 					KeyframeSequence ks = (KeyframeSequence) getObject(readInt());
 					AnimationController cont = (AnimationController) getObject(readInt());
@@ -148,7 +146,7 @@ public class Loader {
 					dis.reset();
 					loadObject3D(track);
 					objs.addElement(track);
-				} else if (objectType == 3) {
+				} else if (objectType == 3) { // Appearance
 					Appearance appearance = new Appearance();
 					loadObject3D(appearance);
 					appearance.setLayer(readByte());
@@ -160,7 +158,7 @@ public class Loader {
 					for (int i = 0; i < numTextures; ++i)
 						appearance.setTexture(i, (Texture2D) getObject(readInt()));
 					objs.addElement(appearance);
-				} else if (objectType == 4) {
+				} else if (objectType == 4) { // Background
 					Background background = new Background();
 					loadObject3D(background);
 					background.setColor(readRGBA());
@@ -176,7 +174,7 @@ public class Loader {
 					background.setDepthClearEnable(readBoolean());
 					background.setColorClearEnable(readBoolean());
 					objs.addElement(background); // dummy
-				} else if (objectType == 5) {
+				} else if (objectType == 5) { // Camera
 					Camera camera = new Camera();
 					loadNode(camera);
 
@@ -196,7 +194,7 @@ public class Loader {
 							camera.setPerspective(fovy, aspect, near, far);
 					}
 					objs.addElement(camera);
-				} else if (objectType == 6) {
+				} else if (objectType == 6) { // CompositingMode
 					CompositingMode compositingMode = new CompositingMode();
 					loadObject3D(compositingMode);
 					compositingMode.setDepthTestEnable(readBoolean());
@@ -208,7 +206,7 @@ public class Loader {
 					compositingMode.setDepthOffsetFactor(readFloat());
 					compositingMode.setDepthOffsetUnits(readFloat());
 					objs.addElement(compositingMode);
-				} else if (objectType == 7) {
+				} else if (objectType == 7) { // Fog
 					Fog fog = new Fog();
 					loadObject3D(fog);
 					fog.setColor(readRGB());
@@ -220,7 +218,7 @@ public class Loader {
 						fog.setFarDistance(readFloat());
 					}
 					objs.addElement(fog);
-				} else if (objectType == 8) {
+				} else if (objectType == 8) { // PolygonMode
 					PolygonMode polygonMode = new PolygonMode();
 					loadObject3D(polygonMode);
 					polygonMode.setCulling(readByte());
@@ -230,11 +228,11 @@ public class Loader {
 					polygonMode.setLocalCameraLightingEnable(readBoolean());
 					polygonMode.setPerspectiveCorrectionEnable(readBoolean());
 					objs.addElement(polygonMode);
-				} else if (objectType == 9) {
+				} else if (objectType == 9) { // Group
 					Group group = new Group();
 					loadGroup(group);
 					objs.addElement(group);
-				} else if (objectType == 10) {
+				} else if (objectType == 10) { // Image2D
 					Image2D image = null;
 					loadObject3D(new Group()); // dummy
 					int format = readByte();
@@ -263,7 +261,7 @@ public class Loader {
 					loadObject3D(image);
 
 					objs.addElement(image);
-				} else if (objectType == 11) {
+				} else if (objectType == 11) { // TriangleStripArray
 					loadObject3D(new Group()); // dummy
 
 					int encoding = readByte();
@@ -308,7 +306,7 @@ public class Loader {
 					loadObject3D(triStrip);
 
 					objs.addElement(triStrip);
-				} else if (objectType == 12) {
+				} else if (objectType == 12) { // Light
 					Light light = new Light();
 					loadNode(light);
 					float constant = readFloat();
@@ -321,7 +319,7 @@ public class Loader {
 					light.setSpotAngle(readFloat());
 					light.setSpotExponent(readFloat());
 					objs.addElement(light);
-				} else if (objectType == 13) {
+				} else if (objectType == 13) { // Material
 					Material material = new Material();
 					loadObject3D(material);
 					material.setColor(Material.AMBIENT, readRGB());
@@ -331,7 +329,7 @@ public class Loader {
 					material.setShininess(readFloat());
 					material.setVertexColorTrackingEnable(readBoolean());
 					objs.addElement(material);
-				} else if (objectType == 14) {
+				} else if (objectType == 14) { // Mesh
 					loadNode(new Group()); // dummy
 
 					VertexBuffer vertices = (VertexBuffer) getObject(readInt());
@@ -349,7 +347,7 @@ public class Loader {
 					loadNode(mesh);
 
 					objs.addElement(mesh);
-				} else if (objectType == 15) {
+				} else if (objectType == 15) { // MorphingMesh
 					loadNode(new Group());
 					VertexBuffer vb = (VertexBuffer) getObject(readInt());
 					int subMeshCount = readInt();
@@ -375,7 +373,7 @@ public class Loader {
 					loadNode(mesh);
 
 					objs.addElement(mesh);
-				} else if (objectType == 16) {
+				} else if (objectType == 16) { // SkinnedMesh
 					loadNode(new Group());
 					VertexBuffer vb = (VertexBuffer) getObject(readInt());
 					int subMeshCount = readInt();
@@ -403,7 +401,7 @@ public class Loader {
 					dis.reset();
 					loadNode(mesh);
 					objs.addElement(mesh);
-				} else if (objectType == 17) {
+				} else if (objectType == 17) { // Texture2D
 					loadTransformable(new Group()); // dummy
 					Texture2D texture = new Texture2D((Image2D) getObject(readInt()));
 					texture.setBlendColor(readRGB());
@@ -419,7 +417,7 @@ public class Loader {
 					loadTransformable(texture);
 
 					objs.addElement(texture);
-				} else if (objectType == 18) {
+				} else if (objectType == 18) { // Sprite
 					loadNode(new Group());
 					Image2D image = (Image2D) getObject(readInt());
 					Appearance ap = (Appearance) getObject(readInt());
@@ -432,7 +430,7 @@ public class Loader {
 					dis.reset();
 					loadNode(sprite);
 					objs.addElement(sprite);
-				} else if (objectType == 19) {
+				} else if (objectType == 19) { // KeyframeSequence
 					loadObject3D(new Group());
 					int interpolation = readByte();
 					int repeatMode = readByte();
@@ -486,7 +484,7 @@ public class Loader {
 						}
 					}
 					objs.addElement(seq);
-				} else if (objectType == 20) {
+				} else if (objectType == 20) { // VertexArray
 					loadObject3D(new Group()); // dummy
 
 					int componentSize = readByte();
@@ -526,7 +524,7 @@ public class Loader {
 					loadObject3D(vertices);
 
 					objs.addElement(vertices);
-				} else if (objectType == 21) {
+				} else if (objectType == 21) { // VertexBuffer
 					VertexBuffer vertices = new VertexBuffer();
 					loadObject3D(vertices);
 
@@ -554,20 +552,20 @@ public class Loader {
 					}
 
 					objs.addElement(vertices);
-				} else if (objectType == 22) {
+				} else if (objectType == 22) { // World
 					World world = new World();
 					loadGroup(world);
 
 					world.setActiveCamera((Camera) getObject(readInt()));
 					world.setBackground((Background) getObject(readInt()));
 					objs.addElement(world);
-				} else if (objectType == 171) {
+				} else if (objectType == 171) { // M3G file
 					for (int sk = 0; sk < 7; sk++)
 						readByte();
 					Object3D[] ret = loadM3G(dis);
 					dis = old;
 					return ret;
-				} else if (objectType == 255) {
+				} else if (objectType == 255) { // External resource
 					// TODO: load external resource
 					System.out.println("Loader: Loading external resources not implemented.");
 					String uri = readString();
