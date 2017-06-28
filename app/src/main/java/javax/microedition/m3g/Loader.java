@@ -119,7 +119,7 @@ public class Loader {
 					int versionHigh = readByte();
 					int versionLow = readByte();
 					boolean hasExternalReferences = readBoolean();
-					int totolFileSize = readInt();
+					int totalFileSize = readInt();
 					int approximateContentSize = readInt();
 					String authoringField = readString();
 				} else if (objectType == 1) { // AnimationController
@@ -483,33 +483,36 @@ public class Loader {
 							seq.setKeyframe(i, time, values);
 						}
 					}
+					dis.reset();
+					loadObject3D(seq);
 					objs.addElement(seq);
 				} else if (objectType == 20) { // VertexArray
 					loadObject3D(new Group()); // dummy
 
 					int componentSize = readByte();
-					int componentCount = readByte();
+					int components = readByte();
 					int encoding = readByte();
-					int vertexCount = readShort();
+					int vertices = readShort();
 
-					VertexArray vertices = new VertexArray(vertexCount, componentCount, componentSize);
+					VertexArray va = new VertexArray(vertices, components, componentSize);
+					int size = vertices * components;
 
 					if (componentSize == 1) {
-						byte[] values = new byte[componentCount * vertexCount];
+						byte[] values = new byte[size];
 						if (encoding == 0)
 							dis.readFully(values);
 						else {
 							byte last = 0;
-							for (int i = 0; i < vertexCount * componentCount; ++i) {
+							for (int i = 0; i < size; ++i) {
 								last += readByte();
 								values[i] = last;
 							}
 						}
-						vertices.set(0, vertexCount, values);
+						va.set(0, vertices, values);
 					} else {
 						short last = 0;
-						short[] values = new short[componentCount * vertexCount];
-						for (int i = 0; i < componentCount * vertexCount; ++i) {
+						short[] values = new short[size];
+						for (int i = 0; i < size; ++i) {
 							if (encoding == 0)
 								values[i] = (short) readShort();
 							else {
@@ -517,13 +520,13 @@ public class Loader {
 								values[i] = last;
 							}
 						}
-						vertices.set(0, vertexCount, values);
+						va.set(0, vertices, values);
 					}
 
 					dis.reset();
-					loadObject3D(vertices);
+					loadObject3D(va);
 
-					objs.addElement(vertices);
+					objs.addElement(va);
 				} else if (objectType == 21) { // VertexBuffer
 					VertexBuffer vertices = new VertexBuffer();
 					loadObject3D(vertices);
@@ -566,9 +569,11 @@ public class Loader {
 					dis = old;
 					return ret;
 				} else if (objectType == 255) { // External resource
-					// TODO: load external resource
-					System.out.println("Loader: Loading external resources not implemented.");
+					//System.out.println("Loader: Loading external resources not implemented.");
 					String uri = readString();
+					Object3D[] objArray = Loader.load("/" + uri);
+					for (int i = 0; i < objArray.length; i++)
+						objs.addElement(objArray[i]);
 				} else {
 					System.out.println("Loader: unsupported objectType " + objectType + ".");
 				}
@@ -596,14 +601,14 @@ public class Loader {
 	private static int readShort() throws IOException {
 		int a = readByte();
 		int b = readByte();
-		return (b << 8) + a;
+		return (b << 8) | a;
 	}
 
 	private static int readRGB() throws IOException {
 		byte r = dis.readByte();
 		byte g = dis.readByte();
 		byte b = dis.readByte();
-		return (r << 16) + (g << 8) + b;
+		return (r << 16) | (g << 8) | b;
 	}
 
 	private static int readRGBA() throws IOException {
@@ -611,7 +616,7 @@ public class Loader {
 		byte g = dis.readByte();
 		byte b = dis.readByte();
 		byte a = dis.readByte();
-		return (a << 24) + (r << 16) + (g << 8) + b;
+		return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
 	private static float readFloat() throws IOException {
@@ -632,9 +637,14 @@ public class Loader {
 	}
 
 	private static String readString() throws IOException {
-		// TODO
-		while (readByte() != 0) ;
-		return "";
+		String str = new String();
+		while (true) {
+			char c = (char)readByte();
+			if (c == '\0') break;
+			str += c;
+		}
+		System.out.println("String: " + str);
+		return str;
 	}
 
 	private static float[] readMatrix() throws IOException {
@@ -657,12 +667,15 @@ public class Loader {
 		for (int i = 0; i < animationTracks; ++i)
 			object.addAnimationTrack((AnimationTrack)getObject(readInt()));
 
-		int userParameterCount = readInt();
-		for (int i = 0; i < userParameterCount; ++i) {
-			int parameterID = readInt();
-			int numBytes = readInt();
-			byte[] parameterBytes = new byte[numBytes];
-			dis.readFully(parameterBytes);
+		int userParams = readInt();
+		if (userParams != 0) {
+
+			for (int i = 0; i < userParams; ++i) {
+				int parameterID = readInt();
+				int numBytes = readInt();
+				byte[] parameterBytes = new byte[numBytes];
+				dis.readFully(parameterBytes);
+			}
 		}
 	}
 
