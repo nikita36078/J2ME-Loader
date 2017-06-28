@@ -115,20 +115,14 @@ public class Loader {
 
 				dis.mark(Integer.MAX_VALUE);
 
-				if (objectType == 0) {
+				if (objectType == 0) { // Header
 					int versionHigh = readByte();
 					int versionLow = readByte();
 					boolean hasExternalReferences = readBoolean();
 					int totolFileSize = readInt();
 					int approximateContentSize = readInt();
 					String authoringField = readString();
-
-					objs.addElement(new Group()); // dummy
-				} else if (objectType == 255) {
-					// TODO: load external resource
-					System.out.println("Loader: Loading external resources not implemented.");
-					String uri = readString();
-				} else if (objectType == 1) {
+				} else if (objectType == 1) { // AnimationController
 					AnimationController cont = new AnimationController();
 					loadObject3D(cont);
 					float speed = readFloat();
@@ -142,7 +136,7 @@ public class Loader {
 					cont.setSpeed(speed, referenceWorldTime);
 					cont.setWeight(weight);
 					objs.addElement(cont);
-				} else if (objectType == 2) {
+				} else if (objectType == 2) { // AnimationTrack
 					loadObject3D(new Group());
 					KeyframeSequence ks = (KeyframeSequence) getObject(readInt());
 					AnimationController cont = (AnimationController) getObject(readInt());
@@ -152,7 +146,7 @@ public class Loader {
 					dis.reset();
 					loadObject3D(track);
 					objs.addElement(track);
-				} else if (objectType == 3) {
+				} else if (objectType == 3) { // Appearance
 					Appearance appearance = new Appearance();
 					loadObject3D(appearance);
 					appearance.setLayer(readByte());
@@ -164,7 +158,7 @@ public class Loader {
 					for (int i = 0; i < numTextures; ++i)
 						appearance.setTexture(i, (Texture2D) getObject(readInt()));
 					objs.addElement(appearance);
-				} else if (objectType == 4) {
+				} else if (objectType == 4) { // Background
 					Background background = new Background();
 					loadObject3D(background);
 					background.setColor(readRGBA());
@@ -180,7 +174,7 @@ public class Loader {
 					background.setDepthClearEnable(readBoolean());
 					background.setColorClearEnable(readBoolean());
 					objs.addElement(background); // dummy
-				} else if (objectType == 5) {
+				} else if (objectType == 5) { // Camera
 					Camera camera = new Camera();
 					loadNode(camera);
 
@@ -200,7 +194,7 @@ public class Loader {
 							camera.setPerspective(fovy, aspect, near, far);
 					}
 					objs.addElement(camera);
-				} else if (objectType == 6) {
+				} else if (objectType == 6) { // CompositingMode
 					CompositingMode compositingMode = new CompositingMode();
 					loadObject3D(compositingMode);
 					compositingMode.setDepthTestEnable(readBoolean());
@@ -212,7 +206,7 @@ public class Loader {
 					compositingMode.setDepthOffsetFactor(readFloat());
 					compositingMode.setDepthOffsetUnits(readFloat());
 					objs.addElement(compositingMode);
-				} else if (objectType == 7) {
+				} else if (objectType == 7) { // Fog
 					Fog fog = new Fog();
 					loadObject3D(fog);
 					fog.setColor(readRGB());
@@ -224,11 +218,21 @@ public class Loader {
 						fog.setFarDistance(readFloat());
 					}
 					objs.addElement(fog);
-				} else if (objectType == 9) {
+				} else if (objectType == 8) { // PolygonMode
+					PolygonMode polygonMode = new PolygonMode();
+					loadObject3D(polygonMode);
+					polygonMode.setCulling(readByte());
+					polygonMode.setShading(readByte());
+					polygonMode.setWinding(readByte());
+					polygonMode.setTwoSidedLightingEnable(readBoolean());
+					polygonMode.setLocalCameraLightingEnable(readBoolean());
+					polygonMode.setPerspectiveCorrectionEnable(readBoolean());
+					objs.addElement(polygonMode);
+				} else if (objectType == 9) { // Group
 					Group group = new Group();
 					loadGroup(group);
 					objs.addElement(group);
-				} else if (objectType == 10) {
+				} else if (objectType == 10) { // Image2D
 					Image2D image = null;
 					loadObject3D(new Group()); // dummy
 					int format = readByte();
@@ -257,7 +261,176 @@ public class Loader {
 					loadObject3D(image);
 
 					objs.addElement(image);
-				} else if (objectType == 19) {
+				} else if (objectType == 11) { // TriangleStripArray
+					loadObject3D(new Group()); // dummy
+
+					int encoding = readByte();
+					int firstIndex = 0;
+					int[] indices = null;
+					if (encoding == 0)
+						firstIndex = readInt();
+					else if (encoding == 1)
+						firstIndex = readByte();
+					else if (encoding == 2)
+						firstIndex = readShort();
+					else if (encoding == 128) {
+						int numIndices = readInt();
+						indices = new int[numIndices];
+						for (int i = 0; i < numIndices; ++i)
+							indices[i] = readInt();
+					} else if (encoding == 129) {
+						int numIndices = readInt();
+						indices = new int[numIndices];
+						for (int i = 0; i < numIndices; ++i)
+							indices[i] = readByte();
+					} else if (encoding == 130) {
+						int numIndices = readInt();
+						indices = new int[numIndices];
+						for (int i = 0; i < numIndices; ++i)
+							indices[i] = readShort();
+					}
+
+					int numStripLengths = readInt();
+					int[] stripLengths = new int[numStripLengths];
+					for (int i = 0; i < numStripLengths; i++)
+						stripLengths[i] = readInt();
+
+					dis.reset();
+
+					TriangleStripArray triStrip = null;
+					if (indices == null)
+						triStrip = new TriangleStripArray(firstIndex, stripLengths);
+					else
+						triStrip = new TriangleStripArray(indices, stripLengths);
+
+					loadObject3D(triStrip);
+
+					objs.addElement(triStrip);
+				} else if (objectType == 12) { // Light
+					Light light = new Light();
+					loadNode(light);
+					float constant = readFloat();
+					float linear = readFloat();
+					float quadratic = readFloat();
+					light.setAttenuation(constant, linear, quadratic);
+					light.setColor(readRGB());
+					light.setMode(readByte());
+					light.setIntensity(readFloat());
+					light.setSpotAngle(readFloat());
+					light.setSpotExponent(readFloat());
+					objs.addElement(light);
+				} else if (objectType == 13) { // Material
+					Material material = new Material();
+					loadObject3D(material);
+					material.setColor(Material.AMBIENT, readRGB());
+					material.setColor(Material.DIFFUSE, readRGBA());
+					material.setColor(Material.EMISSIVE, readRGB());
+					material.setColor(Material.SPECULAR, readRGB());
+					material.setShininess(readFloat());
+					material.setVertexColorTrackingEnable(readBoolean());
+					objs.addElement(material);
+				} else if (objectType == 14) { // Mesh
+					loadNode(new Group()); // dummy
+
+					VertexBuffer vertices = (VertexBuffer) getObject(readInt());
+					int submeshCount = readInt();
+
+					IndexBuffer[] submeshes = new IndexBuffer[submeshCount];
+					Appearance[] appearances = new Appearance[submeshCount];
+					for (int i = 0; i < submeshCount; ++i) {
+						submeshes[i] = (IndexBuffer) getObject(readInt());
+						appearances[i] = (Appearance) getObject(readInt());
+					}
+					Mesh mesh = new Mesh(vertices, submeshes, appearances);
+
+					dis.reset();
+					loadNode(mesh);
+
+					objs.addElement(mesh);
+				} else if (objectType == 15) { // MorphingMesh
+					loadNode(new Group());
+					VertexBuffer vb = (VertexBuffer) getObject(readInt());
+					int subMeshCount = readInt();
+					IndexBuffer[] ib = new IndexBuffer[subMeshCount];
+					Appearance[] ap = new Appearance[subMeshCount];
+
+					for (int i = 0; i < subMeshCount; i++) {
+						ib[i] = (IndexBuffer) getObject(readInt());
+						ap[i] = (Appearance) getObject(readInt());
+					}
+
+					int targetCount = readInt();
+					float[] weights = new float[targetCount];
+					VertexBuffer[] targets = new VertexBuffer[targetCount];
+
+					for (int i = 0; i < targetCount; i++) {
+						targets[i] = (VertexBuffer) getObject(readInt());
+						weights[i] = readFloat();
+					}
+
+					MorphingMesh mesh = new MorphingMesh(vb, targets, ib, ap);
+					dis.reset();
+					loadNode(mesh);
+
+					objs.addElement(mesh);
+				} else if (objectType == 16) { // SkinnedMesh
+					loadNode(new Group());
+					VertexBuffer vb = (VertexBuffer) getObject(readInt());
+					int subMeshCount = readInt();
+					IndexBuffer[] ib = new IndexBuffer[subMeshCount];
+					Appearance[] ap = new Appearance[subMeshCount];
+
+					for (int i = 0; i < subMeshCount; i++) {
+						ib[i] = (IndexBuffer) getObject(readInt());
+						ap[i] = (Appearance) getObject(readInt());
+					}
+
+					Group skeleton = (Group) getObject(readInt());
+
+					SkinnedMesh mesh = new SkinnedMesh(vb, ib, ap, skeleton);
+					int transformReferenceCount = readInt();
+
+					for (int i = 0; i < transformReferenceCount; i++) {
+						Node bone = (Node) getObject(readInt());
+						int firstVertex = readInt();
+						int vertexCount = readInt();
+						int weight = readInt();
+						mesh.addTransform(bone, weight, firstVertex, vertexCount);
+					}
+
+					dis.reset();
+					loadNode(mesh);
+					objs.addElement(mesh);
+				} else if (objectType == 17) { // Texture2D
+					loadTransformable(new Group()); // dummy
+					Texture2D texture = new Texture2D((Image2D) getObject(readInt()));
+					texture.setBlendColor(readRGB());
+					texture.setBlending(readByte());
+					int wrapS = readByte();
+					int wrapT = readByte();
+					texture.setWrapping(wrapS, wrapT);
+					int levelFilter = readByte();
+					int imageFilter = readByte();
+					texture.setFiltering(levelFilter, imageFilter);
+
+					dis.reset();
+					loadTransformable(texture);
+
+					objs.addElement(texture);
+				} else if (objectType == 18) { // Sprite
+					loadNode(new Group());
+					Image2D image = (Image2D) getObject(readInt());
+					Appearance ap = (Appearance) getObject(readInt());
+					Sprite3D sprite = new Sprite3D(readBoolean(), image, ap);
+					int x = readInt();
+					int y = readInt();
+					int width = readInt();
+					int height = readInt();
+					sprite.setCrop(x, y, width, height);
+					dis.reset();
+					loadNode(sprite);
+					objs.addElement(sprite);
+				} else if (objectType == 19) { // KeyframeSequence
 					loadObject3D(new Group());
 					int interpolation = readByte();
 					int repeatMode = readByte();
@@ -311,186 +484,7 @@ public class Loader {
 						}
 					}
 					objs.addElement(seq);
-				} else if (objectType == 12) {
-					Light light = new Light();
-					loadNode(light);
-					float constant = readFloat();
-					float linear = readFloat();
-					float quadratic = readFloat();
-					light.setAttenuation(constant, linear, quadratic);
-					light.setColor(readRGB());
-					light.setMode(readByte());
-					light.setIntensity(readFloat());
-					light.setSpotAngle(readFloat());
-					light.setSpotExponent(readFloat());
-					objs.addElement(light);
-				} else if (objectType == 13) {
-					Material material = new Material();
-					loadObject3D(material);
-					material.setColor(Material.AMBIENT, readRGB());
-					material.setColor(Material.DIFFUSE, readRGBA());
-					material.setColor(Material.EMISSIVE, readRGB());
-					material.setColor(Material.SPECULAR, readRGB());
-					material.setShininess(readFloat());
-					material.setVertexColorTrackingEnable(readBoolean());
-					objs.addElement(material);
-				} else if (objectType == 14) {
-					loadNode(new Group()); // dummy
-
-					VertexBuffer vertices = (VertexBuffer) getObject(readInt());
-					int submeshCount = readInt();
-
-					IndexBuffer[] submeshes = new IndexBuffer[submeshCount];
-					Appearance[] appearances = new Appearance[submeshCount];
-					for (int i = 0; i < submeshCount; ++i) {
-						submeshes[i] = (IndexBuffer) getObject(readInt());
-						appearances[i] = (Appearance) getObject(readInt());
-					}
-					Mesh mesh = new Mesh(vertices, submeshes, appearances);
-
-					dis.reset();
-					loadNode(mesh);
-
-					objs.addElement(mesh);
-				} else if (objectType == 15) {
-					loadNode(new Group());
-					VertexBuffer vb = (VertexBuffer) getObject(readInt());
-					int subMeshCount = readInt();
-					IndexBuffer[] ib = new IndexBuffer[subMeshCount];
-					Appearance[] ap = new Appearance[subMeshCount];
-
-					for (int i = 0; i < subMeshCount; i++) {
-						ib[i] = (IndexBuffer) getObject(readInt());
-						ap[i] = (Appearance) getObject(readInt());
-					}
-
-					int targetCount = readInt();
-					float[] weights = new float[targetCount];
-					VertexBuffer[] targets = new VertexBuffer[targetCount];
-
-					for (int i = 0; i < targetCount; i++) {
-						targets[i] = (VertexBuffer) getObject(readInt());
-						weights[i] = readFloat();
-					}
-
-					MorphingMesh mesh = new MorphingMesh(vb, targets, ib, ap);
-					dis.reset();
-					loadNode(mesh);
-
-					objs.addElement(mesh);
-				} else if (objectType == 8) {
-					PolygonMode polygonMode = new PolygonMode();
-					loadObject3D(polygonMode);
-					polygonMode.setCulling(readByte());
-					polygonMode.setShading(readByte());
-					polygonMode.setWinding(readByte());
-					polygonMode.setTwoSidedLightingEnable(readBoolean());
-					polygonMode.setLocalCameraLightingEnable(readBoolean());
-					polygonMode.setPerspectiveCorrectionEnable(readBoolean());
-					objs.addElement(polygonMode);
-				} else if (objectType == 16) {
-					loadNode(new Group());
-					VertexBuffer vb = (VertexBuffer) getObject(readInt());
-					int subMeshCount = readInt();
-					IndexBuffer[] ib = new IndexBuffer[subMeshCount];
-					Appearance[] ap = new Appearance[subMeshCount];
-
-					for (int i = 0; i < subMeshCount; i++) {
-						ib[i] = (IndexBuffer) getObject(readInt());
-						ap[i] = (Appearance) getObject(readInt());
-					}
-
-					Group skeleton = (Group) getObject(readInt());
-
-					SkinnedMesh mesh = new SkinnedMesh(vb, ib, ap, skeleton);
-					int transformReferenceCount = readInt();
-
-					for (int i = 0; i < transformReferenceCount; i++) {
-						Node bone = (Node) getObject(readInt());
-						int firstVertex = readInt();
-						int vertexCount = readInt();
-						int weight = readInt();
-						mesh.addTransform(bone, weight, firstVertex, vertexCount);
-					}
-
-					dis.reset();
-					loadNode(mesh);
-					objs.addElement(mesh);
-				} else if (objectType == 18) {
-					loadNode(new Group());
-					Image2D image = (Image2D) getObject(readInt());
-					Appearance ap = (Appearance) getObject(readInt());
-					Sprite3D sprite = new Sprite3D(readBoolean(), image, ap);
-					int x = readInt();
-					int y = readInt();
-					int width = readInt();
-					int height = readInt();
-					sprite.setCrop(x, y, width, height);
-					dis.reset();
-					loadNode(sprite);
-					objs.addElement(sprite);
-				} else if (objectType == 17) {
-					loadTransformable(new Group()); // dummy
-					Texture2D texture = new Texture2D((Image2D) getObject(readInt()));
-					texture.setBlendColor(readRGB());
-					texture.setBlending(readByte());
-					int wrapS = readByte();
-					int wrapT = readByte();
-					texture.setWrapping(wrapS, wrapT);
-					int levelFilter = readByte();
-					int imageFilter = readByte();
-					texture.setFiltering(levelFilter, imageFilter);
-
-					dis.reset();
-					loadTransformable(texture);
-
-					objs.addElement(texture);
-				} else if (objectType == 11) {
-					loadObject3D(new Group()); // dummy
-
-					int encoding = readByte();
-					int firstIndex = 0;
-					int[] indices = null;
-					if (encoding == 0)
-						firstIndex = readInt();
-					else if (encoding == 1)
-						firstIndex = readByte();
-					else if (encoding == 2)
-						firstIndex = readShort();
-					else if (encoding == 128) {
-						int numIndices = readInt();
-						indices = new int[numIndices];
-						for (int i = 0; i < numIndices; ++i)
-							indices[i] = readInt();
-					} else if (encoding == 129) {
-						int numIndices = readInt();
-						indices = new int[numIndices];
-						for (int i = 0; i < numIndices; ++i)
-							indices[i] = readByte();
-					} else if (encoding == 130) {
-						int numIndices = readInt();
-						indices = new int[numIndices];
-						for (int i = 0; i < numIndices; ++i)
-							indices[i] = readShort();
-					}
-
-					int numStripLengths = readInt();
-					int[] stripLengths = new int[numStripLengths];
-					for (int i = 0; i < numStripLengths; i++)
-						stripLengths[i] = readInt();
-
-					dis.reset();
-
-					TriangleStripArray triStrip = null;
-					if (indices == null)
-						triStrip = new TriangleStripArray(firstIndex, stripLengths);
-					else
-						triStrip = new TriangleStripArray(indices, stripLengths);
-
-					loadObject3D(triStrip);
-
-					objs.addElement(triStrip);
-				} else if (objectType == 20) {
+				} else if (objectType == 20) { // VertexArray
 					loadObject3D(new Group()); // dummy
 
 					int componentSize = readByte();
@@ -530,7 +524,7 @@ public class Loader {
 					loadObject3D(vertices);
 
 					objs.addElement(vertices);
-				} else if (objectType == 21) {
+				} else if (objectType == 21) { // VertexBuffer
 					VertexBuffer vertices = new VertexBuffer();
 					loadObject3D(vertices);
 
@@ -558,19 +552,23 @@ public class Loader {
 					}
 
 					objs.addElement(vertices);
-				} else if (objectType == 22) {
+				} else if (objectType == 22) { // World
 					World world = new World();
 					loadGroup(world);
 
 					world.setActiveCamera((Camera) getObject(readInt()));
 					world.setBackground((Background) getObject(readInt()));
 					objs.addElement(world);
-				} else if (objectType == 171) {
+				} else if (objectType == 171) { // M3G file
 					for (int sk = 0; sk < 7; sk++)
 						readByte();
 					Object3D[] ret = loadM3G(dis);
 					dis = old;
 					return ret;
+				} else if (objectType == 255) { // External resource
+					// TODO: load external resource
+					System.out.println("Loader: Loading external resources not implemented.");
+					String uri = readString();
 				} else {
 					System.out.println("Loader: unsupported objectType " + objectType + ".");
 				}
@@ -635,6 +633,7 @@ public class Loader {
 
 	private static String readString() throws IOException {
 		// TODO
+		while (readByte() != 0) ;
 		return "";
 	}
 
@@ -648,7 +647,7 @@ public class Loader {
 	private static Object getObject(int index) {
 		if (index == 0)
 			return null;
-		return objs.elementAt(index - 1);
+		return objs.elementAt(index - 2);
 	}
 
 	private static void loadObject3D(Object3D object) throws IOException {

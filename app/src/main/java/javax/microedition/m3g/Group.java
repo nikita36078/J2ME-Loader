@@ -72,6 +72,9 @@ public class Group extends Node {
 
 	@Override
 	boolean doAlign(Node ref) {
+		if (!super.doAlign(ref))
+			return false;
+
 		for (int i = 0; i < children.size(); i++)
 			if (!((Node)children.elementAt(i)).doAlign(ref))
 				return false;
