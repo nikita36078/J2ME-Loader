@@ -174,4 +174,7 @@ public class MIDlet {
 	public final int checkPermission(String str) {
 		return -1;
 	}
+
+	public final void resumeRequest() {
+	}
 }
