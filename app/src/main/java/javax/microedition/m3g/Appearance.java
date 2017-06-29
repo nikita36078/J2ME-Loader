@@ -3,15 +3,12 @@ package javax.microedition.m3g;
 import javax.microedition.khronos.opengles.GL10;
 
 public class Appearance extends Object3D {
-
-	int numTextureUnits = 8;
-
 	private int layer = 0;
 	private CompositingMode compositingMode = null;
 	private Fog fog = null;
 	private PolygonMode polygonMode = null;
 	private Material material = null;
-	private Texture2D[] textures = new Texture2D[numTextureUnits];
+	private Texture2D[] textures = new Texture2D[Defs.NUM_TEXTURE_UNITS];
 
 	Object3D duplicateImpl() {
 		Appearance copy = new Appearance();
@@ -140,14 +137,14 @@ public class Appearance extends Object3D {
 	}
 
 	public void setTexture(int index, Texture2D texture) {
-		if (index < 0 || index >= numTextureUnits)
-			throw new IndexOutOfBoundsException("index must be in [0," + numTextureUnits + "]");
+		if (index < 0 || index >= Defs.NUM_TEXTURE_UNITS)
+			throw new IndexOutOfBoundsException("index must be in [0," + Defs.NUM_TEXTURE_UNITS + "]");
 		textures[index] = texture;
 	}
 
 	public Texture2D getTexture(int index) {
-		if (index < 0 || index >= numTextureUnits)
-			throw new IndexOutOfBoundsException("index must be in [0," + numTextureUnits + "]");
+		if (index < 0 || index >= Defs.NUM_TEXTURE_UNITS)
+			throw new IndexOutOfBoundsException("index must be in [0," + Defs.NUM_TEXTURE_UNITS + "]");
 		return textures[index];
 	}
 

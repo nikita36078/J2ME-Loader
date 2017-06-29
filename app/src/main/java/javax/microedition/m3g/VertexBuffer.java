@@ -19,13 +19,12 @@ public class VertexBuffer extends Object3D {
 	private int defaultColor = 0xFFFFFFFF;
 
 	public VertexBuffer() {
-		int numTextureUnits = 8;
-		maxTextureUnitIndex = numTextureUnits - 1;
-		texCoords = new VertexArray[numTextureUnits];
+		maxTextureUnitIndex = Defs.NUM_TEXTURE_UNITS - 1;
+		texCoords = new VertexArray[Defs.NUM_TEXTURE_UNITS];
 
 		positionBias = new float[3];
-		texCoordsBias = new float[numTextureUnits][3];
-		texCoordsScale = new float[numTextureUnits];
+		texCoordsBias = new float[Defs.NUM_TEXTURE_UNITS][3];
+		texCoordsScale = new float[Defs.NUM_TEXTURE_UNITS];
 	}
 
 	Object3D duplicateImpl() {
