@@ -1,72 +1,81 @@
 package javax.microedition.m3g;
 
 public class RayIntersection {
-
-	private float distance = 0.0f;
+	private Node intersected = null;
+	private float distance = 0.f;
 	private int submeshIndex = 0;
-	private float textureS = 0.0f;
-	private float textureT = 0.0f;
-	private float normalX = 0.0f;
-	private float normalY = 0.0f;
-	private float normalZ = 1.0f;
-	private float[] ray;
-
-	Node intersectionNode = null;
+	private float[] textureS = new float[Defs.NUM_TEXTURE_UNITS];
+	private float[] textureT = new float[Defs.NUM_TEXTURE_UNITS];
+	private float[] normal = new float[3];
+	private float[] ray = new float[6];
 
 	public RayIntersection() {
-		ray = new float[6];
-		ray[5] = 1.0f;
+		normal[0] = 0.f;
+		normal[1] = 0.f;
+		normal[2] = 1.f;
+
+		ray[0] = 0.f;
+		ray[1] = 0.f;
+		ray[2] = 0.f;
+		ray[3] = 0.f;
+		ray[4] = 0.f;
+		ray[5] = 1.f;
 	}
 
 	public Node getIntersected() {
-		return intersectionNode;
-	}
-
-	public void getRay(float[] ray) {
-		if (ray == null) {
-			throw new NullPointerException();
-		}
-		if (ray.length < 6) {
-			throw new IllegalArgumentException("Float array size must be 6 at least");
-		}
-
-		System.arraycopy(this.ray, 0, ray, 0, 6);
+		return intersected;
 	}
 
 	public float getDistance() {
-		// TODO
-		//float pickRayLenght = (float)Math.sqrt(ray[3] * ray[3] + ray[4] * ray[4] + ray[5] * ray[5]);
 		return distance;
 	}
 
-	public float getNormalX() {
-		// TODO
-		return normalX;
-	}
-
-	public float getNormalY() {
-		// TODO
-		return normalY;
-	}
-
-	public float getNormalZ() {
-		// TODO
-		return normalZ;
-	}
-
 	public int getSubmeshIndex() {
-		// TODO
 		return submeshIndex;
 	}
 
-	public float getTextureS() {
-		// TODO
-		return textureS;
+	public float getTextureS(int index) {
+		if (index < 0 || index >= textureS.length) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		return textureS[index];
 	}
 
-	public float getTextureT() {
-		// TODO
-		return textureT;
+	public float getTextureT(int index) {
+		if (index < 0 || index >= textureT.length) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		return textureT[index];
 	}
 
+	public float getNormalX() {
+		return normal[0];
+	}
+
+	public float getNormalY() {
+		return normal[1];
+	}
+
+	public float getNormalZ() {
+		return normal[2];
+	}
+
+	public void getRay(float[] ray) {
+		if (ray.length < 6) {
+			throw new IllegalArgumentException();
+		}
+
+		ray[0] = this.ray[0];
+		ray[1] = this.ray[1];
+		ray[2] = this.ray[2];
+		ray[3] = this.ray[3];
+		ray[4] = this.ray[4];
+		ray[5] = this.ray[5];
+	}
+
+	static float[] createResult() {
+		return new float[1 + 1 + 2 * Defs.NUM_TEXTURE_UNITS + 3 + 6];
+	}
 }
