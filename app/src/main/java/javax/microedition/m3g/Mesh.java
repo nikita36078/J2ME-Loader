@@ -50,10 +50,8 @@ public class Mesh extends Node {
 			throw new NullPointerException();
 		}
 		this.vertices = vertices;
-		this.submeshes = new IndexBuffer[1];
-		this.submeshes[0] = submesh;
-		this.appearances = new Appearance[1];
-		this.appearances[0] = appearance;
+		this.submeshes = new IndexBuffer[]{submesh};
+		this.appearances = new Appearance[]{appearance};
 	}
 
 	public Mesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances) {
@@ -65,11 +63,10 @@ public class Mesh extends Node {
 		}
 		this.vertices = vertices;
 		this.submeshes = new IndexBuffer[submeshes.length];
-		this.appearances = new Appearance[appearances.length];
-		for (int i = 0; i < submeshes.length; ++i)
-			this.submeshes[i] = submeshes[i];
-		for (int i = 0; i < appearances.length; ++i)
-			this.appearances[i] = appearances[i];
+		this.appearances = new Appearance[submeshes.length];
+		System.arraycopy(submeshes, 0, this.submeshes, 0, submeshes.length);
+		if (appearances != null)
+			System.arraycopy(appearances, 0, this.appearances, 0, appearances.length);
 	}
 
 	Object3D duplicateImpl() {
