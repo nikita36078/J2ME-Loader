@@ -5,20 +5,19 @@ import java.util.Vector;
 
 public class Group extends Node {
 
-	protected Vector children;
+	Node firstChild;
 	int numNonCullables = 0, numRenderables = 0;
-
-	public Group() {
-		children = new Vector();
-	}
 
 	Object3D duplicateImpl() {
 		Group copy = new Group();
 		duplicate((Node) copy);
-		Enumeration e = children.elements();
-		while (e.hasMoreElements()) {
-			Node nodeCopy = (Node) ((Object3D) e.nextElement()).duplicate();
-			copy.addChild(nodeCopy);
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				Node temp = (Node) ((Object3D) child).duplicate();
+				copy.addChild(temp);
+				child = child.right;
+			} while (child != firstChild);
 		}
 		return copy;
 	}
@@ -29,41 +28,86 @@ public class Group extends Node {
 		if (child == this)
 			throw new IllegalArgumentException("can not add self as child");
 
-		children.addElement(child);
-		child.parent = this;
+		if (child.parent == null) {
+			if (firstChild == null) {
+				firstChild = child;
+				child.left = child;
+				child.right = child;
+			} else {
+				Node linkChild = firstChild;
+				child.left = linkChild.left;
+				linkChild.left.right = child;
+
+				child.right = linkChild;
+				linkChild.left = child;
+			}
+			child.setParent(this);
+		}
 	}
 
-	public Node getChild(int index) {
-		return (Node) children.elementAt(index);
+	public Node getChild(int idx) {
+		if (idx < 0)
+			throw new IllegalArgumentException();
+
+		Node n = firstChild;
+		while (idx-- > 0) {
+			n = n.right;
+			if (n == firstChild)
+				throw new IllegalArgumentException();
+		}
+		return n;
 	}
 
 	public int getChildCount() {
-		return children.size();
+		int count = 0;
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				++count;
+				child = child.right;
+			} while (child != firstChild);
+		}
+		return count;
 	}
 
 	@Override
 	int doGetReferences(Object3D[] references) {
-		int parentCount = super.doGetReferences(references);
-		if (references != null)
-			for (int i = 0; i < children.size(); ++i)
-				references[parentCount + i] = (Object3D) children.elementAt(i);
-		return parentCount + children.size();
+		int num = super.doGetReferences(references);
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				if (references != null)
+					references[num] = child;
+				child = child.right;
+				num++;
+			} while (child != firstChild);
+		}
+		return num;
 	}
 
 	Object3D findID(int userID) {
 		Object3D found = super.findID(userID);
-
-		for (int i = 0; (found == null) && (i < children.size()); i++)
-			found = ((Object3D) children.elementAt(i)).findID(userID);
+		Node child = firstChild;
+		if (child != null && found == null) {
+			do {
+				found = child.findID(userID);
+				child = child.right;
+			} while (found == null && child != firstChild);
+		}
 		return found;
 	}
 
 	@Override
 	int applyAnimation(int time) {
 		int minValidity = super.applyAnimation(time);
-		for (int i = 0; (minValidity > 0) && (i < children.size()); i++) {
-			int validity = ((Object3D) children.elementAt(i)).applyAnimation(time);
-			minValidity = Math.min(validity, minValidity);
+		Node child = firstChild;
+		int validity;
+		if (child != null && minValidity > 0) {
+			do {
+				validity = child.applyAnimation(time);
+				minValidity = Math.min(validity, minValidity);
+				child = child.right;
+			} while (minValidity > 0 && child != firstChild);
 		}
 		return minValidity;
 	}
@@ -73,22 +117,45 @@ public class Group extends Node {
 		if (!super.doAlign(ref))
 			return false;
 
-		for (int i = 0; i < children.size(); i++)
-			if (!((Node)children.elementAt(i)).doAlign(ref))
-				return false;
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				if (!child.doAlign(ref))
+					return false;
+				child = child.right;
+			} while (child != firstChild);
+		}
 		return true;
 	}
 
 	public boolean pick(int scope, float x, float y, Camera camera, RayIntersection ri) {
+		// TODO
 		return false;
 	}
 
 	public boolean pick(int scope, float ox, float oy, float oz, float dx, float dy, float dz, RayIntersection ri) {
+		// TODO
 		return false;
 	}
 
 	public void removeChild(Node child) {
-		children.removeElement(child);
-		child.parent = null;
+		if (child != null && firstChild != null) {
+			Node n = firstChild;
+			do {
+				if (n == child) {
+					n.right.left = n.left;
+					n.left.right = n.right;
+
+					if (firstChild == n)
+						firstChild = (n.right != n) ? n.right : null;
+
+					n.left = null;
+					n.right = null;
+					n.setParent(null);
+					return;
+				}
+				n = n.right;
+			} while (n != firstChild);
+		}
 	}
 }

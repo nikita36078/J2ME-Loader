@@ -100,7 +100,7 @@ public class VertexArray extends Object3D {
 		checkShortInput(firstVertex, numVertices, numElements, values);
 
 		ShortBuffer shortBuffer = (ShortBuffer) buffer;
-		shortBuffer.position(firstVertex);
+		shortBuffer.position(firstVertex * stride / 2);
 		shortBuffer.get(values, 0, numElements);
 	}
 
@@ -109,8 +109,20 @@ public class VertexArray extends Object3D {
 		checkByteInput(firstVertex, numVertices, numElements, values);
 
 		ByteBuffer byteBuffer = (ByteBuffer) buffer;
-		byteBuffer.position(firstVertex);
-		byteBuffer.get(values, 0, numElements);
+		byteBuffer.position(firstVertex * stride);
+		int index = 0;
+		for (int i = 0; i < numVertices; i++) {
+			values[index++] = byteBuffer.get();
+			values[index++] = byteBuffer.get();
+			if (elementSize >= 3)
+				values[index++] = byteBuffer.get();
+			else
+				byteBuffer.get();
+			if (elementSize == 4)
+				values[index++] = byteBuffer.get();
+			else
+				byteBuffer.get();
+		}
 	}
 
 	private void checkShortInput(int firstVertex, int numVertices, int numElements, short[] values) {
