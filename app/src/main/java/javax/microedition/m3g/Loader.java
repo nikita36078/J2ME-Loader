@@ -17,6 +17,7 @@ public class Loader {
 
 	private static DataInputStream dis;
 	private static Vector objs;
+	private static int readed = 0;
 
 	public static Object3D[] load(String name) throws IOException {
 
@@ -49,7 +50,7 @@ public class Loader {
 		} else {
 			pis.unread(identifier);
 			Object image = Image.createImage(pis);
-			Image2D image2D = new Image2D(Image2D.RGB, image);
+			Image2D image2D = new Image2D(Image2D.RGBA, image);
 			return new Object3D[]{image2D};
 		}
 
@@ -109,6 +110,7 @@ public class Loader {
 			while (dis.available() > 0) {
 				int objectType = readByte();
 				int length = readInt();
+				readed = 0;
 
 				System.out.println("objectType: " + objectType);
 				System.out.println("length: " + length);
@@ -138,6 +140,7 @@ public class Loader {
 					objs.addElement(cont);
 				} else if (objectType == 2) { // AnimationTrack
 					loadObject3D(new Group());
+					readed = 0;
 					KeyframeSequence ks = (KeyframeSequence) getObject(readInt());
 					AnimationController cont = (AnimationController) getObject(readInt());
 					int property = readInt();
@@ -235,6 +238,7 @@ public class Loader {
 				} else if (objectType == 10) { // Image2D
 					Image2D image = null;
 					loadObject3D(new Group()); // dummy
+					readed = 0;
 					int format = readByte();
 					boolean isMutable = readBoolean();
 					int width = readInt();
@@ -245,11 +249,13 @@ public class Loader {
 						if (paletteSize > 0) {
 							palette = new byte[paletteSize];
 							dis.readFully(palette);
+							readed += paletteSize;
 						}
 
 						int pixelSize = readInt();
 						byte[] pixel = new byte[pixelSize];
 						dis.readFully(pixel);
+						readed += pixelSize;
 						if (palette != null)
 							image = new Image2D(format, width, height, pixel, palette);
 						else
@@ -263,6 +269,7 @@ public class Loader {
 					objs.addElement(image);
 				} else if (objectType == 11) { // TriangleStripArray
 					loadObject3D(new Group()); // dummy
+					readed = 0;
 
 					int encoding = readByte();
 					int firstIndex = 0;
@@ -331,6 +338,7 @@ public class Loader {
 					objs.addElement(material);
 				} else if (objectType == 14) { // Mesh
 					loadNode(new Group()); // dummy
+					readed = 0;
 
 					VertexBuffer vertices = (VertexBuffer) getObject(readInt());
 					int submeshCount = readInt();
@@ -349,6 +357,7 @@ public class Loader {
 					objs.addElement(mesh);
 				} else if (objectType == 15) { // MorphingMesh
 					loadNode(new Group());
+					readed = 0;
 					VertexBuffer vb = (VertexBuffer) getObject(readInt());
 					int subMeshCount = readInt();
 					IndexBuffer[] ib = new IndexBuffer[subMeshCount];
@@ -375,6 +384,7 @@ public class Loader {
 					objs.addElement(mesh);
 				} else if (objectType == 16) { // SkinnedMesh
 					loadNode(new Group());
+					readed = 0;
 					VertexBuffer vb = (VertexBuffer) getObject(readInt());
 					int subMeshCount = readInt();
 					IndexBuffer[] ib = new IndexBuffer[subMeshCount];
@@ -403,6 +413,7 @@ public class Loader {
 					objs.addElement(mesh);
 				} else if (objectType == 17) { // Texture2D
 					loadTransformable(new Group()); // dummy
+					readed = 0;
 					Texture2D texture = new Texture2D((Image2D) getObject(readInt()));
 					texture.setBlendColor(readRGB());
 					texture.setBlending(readByte());
@@ -419,6 +430,7 @@ public class Loader {
 					objs.addElement(texture);
 				} else if (objectType == 18) { // Sprite
 					loadNode(new Group());
+					readed = 0;
 					Image2D image = (Image2D) getObject(readInt());
 					Appearance ap = (Appearance) getObject(readInt());
 					Sprite3D sprite = new Sprite3D(readBoolean(), image, ap);
@@ -432,6 +444,7 @@ public class Loader {
 					objs.addElement(sprite);
 				} else if (objectType == 19) { // KeyframeSequence
 					loadObject3D(new Group());
+					readed = 0;
 					int interpolation = readByte();
 					int repeatMode = readByte();
 					int encoding = readByte();
@@ -488,6 +501,7 @@ public class Loader {
 					objs.addElement(seq);
 				} else if (objectType == 20) { // VertexArray
 					loadObject3D(new Group()); // dummy
+					readed = 0;
 
 					int componentSize = readByte();
 					int components = readByte();
@@ -499,8 +513,10 @@ public class Loader {
 
 					if (componentSize == 1) {
 						byte[] values = new byte[size];
-						if (encoding == 0)
+						if (encoding == 0) {
 							dis.readFully(values);
+							readed += size;
+						}
 						else {
 							byte last = 0;
 							for (int i = 0; i < size; ++i) {
@@ -579,6 +595,8 @@ public class Loader {
 				}
 
 				dis.reset();
+				if (readed != length)
+					System.out.println("Warning: length mismatch, expected: " + length + ", readed: " + readed + ", objectType: " + objectType);
 				dis.skipBytes(length);
 			}
 		} catch (Exception e) {
@@ -595,6 +613,7 @@ public class Loader {
 	}
 
 	private static int readByte() throws IOException {
+		readed++;
 		return dis.readUnsignedByte();
 	}
 
@@ -608,6 +627,7 @@ public class Loader {
 		byte r = dis.readByte();
 		byte g = dis.readByte();
 		byte b = dis.readByte();
+		readed += 3;
 		return (r << 16) | (g << 8) | b;
 	}
 
@@ -616,6 +636,7 @@ public class Loader {
 		byte g = dis.readByte();
 		byte b = dis.readByte();
 		byte a = dis.readByte();
+		readed += 4;
 		return (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
@@ -629,6 +650,7 @@ public class Loader {
 		int c = dis.readUnsignedByte();
 		int d = dis.readUnsignedByte();
 		int i = (d << 24) | (c << 16) | (b << 8) | a;
+		readed += 4;
 		return i;
 	}
 
@@ -675,6 +697,7 @@ public class Loader {
 				int numBytes = readInt();
 				byte[] parameterBytes = new byte[numBytes];
 				dis.readFully(parameterBytes);
+				readed += numBytes;
 			}
 		}
 	}
