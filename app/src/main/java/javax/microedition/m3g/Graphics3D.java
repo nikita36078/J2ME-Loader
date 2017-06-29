@@ -692,25 +692,18 @@ public final class Graphics3D {
 		}
 	}
 
-	private void renderDescendants(Node topNode, Object3D obj, Transform transform) {
-		int numReferences = obj.getReferences(null);
-		if (numReferences > 0) {
-			Object3D[] objArray = new Object3D[numReferences];
-			obj.getReferences(objArray);
-			for (int i = 0; i < numReferences; ++i) {
-				if (objArray[i] instanceof Node) {
-					Node subNode = (Node) objArray[i];
-					if (subNode instanceof Group) {
-						renderDescendants(topNode, subNode, transform);
-					} else {
-						Transform t = new Transform();
-						subNode.getTransformTo(topNode, t);
-						Transform tr = new Transform(transform);
-						tr.postMultiply(t);
-						renderNode(subNode, tr);
-					}
+	private void renderDescendants(Group group, Object3D caller, Transform transform) {
+		Node child = group.firstChild;
+		if (child != null) {
+			do {
+				if (child != caller) {
+					Transform t = new Transform();
+					child.getCompositeTransform(t);
+					t.mtx.preMultiplyMatrix(transform.mtx);
+					renderNode(child, t);
 				}
-			}
+				child = child.right;
+			} while (child != group.firstChild);
 		}
 	}
 
@@ -869,7 +862,7 @@ public final class Graphics3D {
 			Sprite3D sprite = (Sprite3D) node;
 			sprite.render(gl, transform);
 		} else if (node instanceof Group) {
-			renderDescendants(node, node, transform);
+			renderDescendants((Group) node, node, transform);
 		}
 
 	}
