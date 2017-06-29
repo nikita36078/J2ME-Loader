@@ -28,8 +28,6 @@ public class Group extends Node {
 			throw new NullPointerException("child can not be null");
 		if (child == this)
 			throw new IllegalArgumentException("can not add self as child");
-		if (child.parent != null)
-			throw new IllegalArgumentException("child already has a parent");
 
 		children.addElement(child);
 		child.parent = this;
