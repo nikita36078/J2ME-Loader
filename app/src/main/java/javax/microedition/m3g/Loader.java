@@ -12,18 +12,47 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;
 
 public class Loader {
-	private static final byte[] IDENTIFIER = {(byte) 0xAB, 0x4A, 0x53, 0x52, 0x31, 0x38, 0x34, (byte) 0xBB, 0x0D,
-			0x0A, 0x1A, 0x0A};
-
 	private static DataInputStream dis;
 	private static Vector objs;
+	private static String resName;
 	private static int readed = 0;
+
+	// M3G
+	private static final byte[] M3G_FILE_IDENTIFIER =
+			{
+					-85, 74, 83, 82, 49, 56, 52, -69, 13, 10, 26, 10
+			};
+	// PNG
+	private static final byte[] PNG_FILE_IDENTIFIER =
+			{
+					-119, 80, 78, 71, 13, 10, 26, 10
+			};
+
+	// JPEG
+	private static final byte[] JPEG_FILE_IDENTIFIER =
+			{
+					-1, -40
+			};
+
+	private static final int INVALID_HEADER_TYPE = -1;
+	private static final int M3G_TYPE = 0;
+	private static final int PNG_TYPE = 1;
+	private static final int JPEG_TYPE = 2;
+
+	private static final int PNG_IHDR = ((73 << 24) + (72 << 16) + (68 << 8) + 82);
+	private static final int PNG_tRNS = ((116 << 24) + (82 << 16) + (78 << 8) + 83);
+	private static final int PNG_IDAT = ((73 << 24) + (68 << 16) + (65 << 8) + 84);
+
+	private static final int JPEG_JFIF = ((74 << 24) + (70 << 16) + (73 << 8) + 70);
+	private static final int JPEG_SOFn_DELTA = 7;
+	private static final int JPEG_INVALID_COLOUR_FORMAT = -1;
 
 	public static Object3D[] load(String name) throws IOException {
 
 		InputStream is;
 		if (name.startsWith("/")) {
 			is = ContextHolder.getResourceAsStream(Loader.class, name);
+			resName = name;
 
 		} else {
 			// TODO
@@ -38,22 +67,187 @@ public class Loader {
 
 		byte[] identifier = new byte[12];
 		int read = pis.read(identifier, 0, 12);
-		boolean isM3GFile = true;
-		for (int i = 0; i < 12; i++) {
-			if (identifier[i] != IDENTIFIER[i]) {
-				isM3GFile = false;
+		int type = getIdentifierType(identifier, 0);
+		if (type == M3G_TYPE) {
+			return loadM3G(is);
+		} else if (type == PNG_TYPE) {
+			return loadPNG(is);
+		} else if (type == JPEG_TYPE) {
+			return loadJPEG(is);
+		}
+		throw new IOException("File not recognized.");
+	}
+
+	private static Object3D[] loadPNG(InputStream aStream) throws IOException {
+		int format = Image2D.RGB;
+		DataInputStream in = new DataInputStream(aStream);
+		// Scan chuncs that have effect on Image2D format
+		in.skip(PNG_FILE_IDENTIFIER.length);
+		try {
+			while (true) {
+				int length = in.readInt();
+				int type = in.readInt();
+				// IHDR
+				if (type == PNG_IHDR) {
+					in.skip(9);
+					int colourType = in.readUnsignedByte();
+					length -= 10;
+					switch (colourType) {
+						case 0:
+							format = Image2D.LUMINANCE;
+							break;
+						case 2:
+							format = Image2D.RGB;
+							break;
+						case 3:
+							format = Image2D.RGB;
+							break;
+						case 4:
+							format = Image2D.LUMINANCE_ALPHA;
+							break;
+						case 6:
+							format = Image2D.RGBA;
+							break;
+					}
+				}
+				// tRNS
+				if (type == PNG_tRNS) {
+					switch (format) {
+						case Image2D.LUMINANCE:
+							format = Image2D.LUMINANCE_ALPHA;
+							break;
+						case Image2D.RGB:
+							format = Image2D.RGBA;
+							break;
+					}
+				}
+				// IDAT
+				if (type == PNG_IDAT) {
+					break;
+				}
+				in.skip(length + 4);
 			}
 		}
-
-		if (isM3GFile) {
-			return loadM3G(is);
-		} else {
-			pis.unread(identifier);
-			Object image = Image.createImage(pis);
-			Image2D image2D = new Image2D(Image2D.RGBA, image);
-			return new Object3D[]{image2D};
+		// EOF
+		catch (Exception e) {
 		}
+		// Close the data stream
+		try {
+			in.close();
+		} catch (Exception e) {
+		}
+		return buildImage2D(format);
+	}
 
+	private static Object3D[] loadJPEG(InputStream aStream) throws IOException {
+		int format = JPEG_INVALID_COLOUR_FORMAT;
+		DataInputStream in = new DataInputStream(aStream);
+		// Skip file identifier
+		in.skip(JPEG_FILE_IDENTIFIER.length);
+		try {
+			int marker;
+			do {
+				// Find marker
+				while (in.readUnsignedByte() != 0xff) ;
+				do {
+					marker = in.readUnsignedByte();
+				}
+				while (marker == 0xff);
+				// Parse marker
+				switch (marker) {
+					// 'SOFn' (Start Of Frame n)
+					case 0xC0:
+					case 0xC1:
+					case 0xC2:
+					case 0xC3:
+					case 0xC5:
+					case 0xC6:
+					case 0xC7:
+					case 0xC9:
+					case 0xCA:
+					case 0xCB:
+					case 0xCD:
+					case 0xCE:
+					case 0xCF:
+						// Skip length(2), precicion(1), width(2), height(2)
+						in.skip(JPEG_SOFn_DELTA);
+						switch (in.readUnsignedByte()) {
+							case 1:
+								format = Image2D.LUMINANCE;
+								break;
+							case 3:
+								format = Image2D.RGB;
+								break;
+							default:
+								throw new IOException("Unknown JPG format.");
+						}
+						break;
+					// APP0 (0xe0) marker segments and constrains certain parameters in the frame.
+					case 0xe0:
+						int length = in.readUnsignedShort();
+						if (JPEG_JFIF != in.readInt()) {
+							throw new IOException("Not a valid JPG file.");
+						}
+						in.skip(length - 4 - 2);
+						break;
+					default:
+						// Skip variable data
+						in.skip(in.readUnsignedShort() - 2);
+						break;
+				}
+			}
+			while (format == JPEG_INVALID_COLOUR_FORMAT);
+		} catch (Exception e) {
+		}
+		// Close the data stream
+		try {
+			in.close();
+		} catch (Exception e) {
+		}
+		return buildImage2D(format);
+	}
+
+	private static Object3D[] buildImage2D(int aColourFormat) throws IOException {
+		InputStream stream = ContextHolder.getResourceAsStream(Loader.class, resName);
+		// Create an image object
+		Image2D i2d;
+		try {
+			i2d = new Image2D(aColourFormat, Image.createImage(stream));
+		} finally {
+			try {
+				stream.close();
+			} catch (Exception e) {
+			}
+		}
+		return new Object3D[]{i2d};
+	}
+
+	private static int getIdentifierType(byte[] aData, int aOffset) {
+		// Try the JPEG/JFIF identifier
+		if (parseIdentifier(aData, aOffset, JPEG_FILE_IDENTIFIER)) {
+			return JPEG_TYPE;
+		}
+		// Try the PNG identifier
+		else if (parseIdentifier(aData, aOffset, PNG_FILE_IDENTIFIER)) {
+			return PNG_TYPE;
+		}
+		// Try the M3G identifier
+		else if (parseIdentifier(aData, aOffset, M3G_FILE_IDENTIFIER)) {
+			return M3G_TYPE;
+		}
+		return INVALID_HEADER_TYPE;
+	}
+
+	private static boolean parseIdentifier(byte[] aData, int aOffset, byte[] aIdentifier) {
+		if ((aData.length - aOffset) < aIdentifier.length) {
+			return false;
+		}
+		for (int index = 0; index < aIdentifier.length; index++) {
+			if (aData[index + aOffset] != aIdentifier[index]) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static Object3D[] loadM3G(InputStream is) throws IOException {
