@@ -301,6 +301,29 @@ public class Loader {
 		dis = new DataInputStream(new ByteArrayInputStream(data));
 
 		try {
+			dis.skip(offset);
+
+			// Check header
+			dis.mark(12);
+			byte[] identifier = new byte[12];
+			int read = dis.read(identifier, 0, 12);
+			int type = getIdentifierType(identifier, 0);
+			dis.reset();
+			if (type == M3G_TYPE) {
+				dis.skip(M3G_FILE_IDENTIFIER.length);
+				Object3D[] ret = loadM3G(dis);
+				dis = old;
+				return ret;
+			} else if (type == PNG_TYPE) {
+				Object3D[] ret = loadPNG(dis);
+				dis = old;
+				return ret;
+			} else if (type == JPEG_TYPE) {
+				Object3D[] ret = loadJPEG(dis);
+				dis = old;
+				return ret;
+			}
+
 			while (dis.available() > 0) {
 				int objectType = readByte();
 				int length = readInt();
