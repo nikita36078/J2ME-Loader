@@ -81,7 +81,7 @@ public class Loader {
 	private static Object3D[] loadPNG(InputStream aStream) throws IOException {
 		int format = Image2D.RGB;
 		DataInputStream in = new DataInputStream(aStream);
-		// Scan chuncs that have effect on Image2D format
+		// Scan chunks that have effect on Image2D format
 		in.skip(PNG_FILE_IDENTIFIER.length);
 		try {
 			while (true) {
