@@ -4,8 +4,8 @@ public class RayIntersection {
 	private Node intersected = null;
 	private float distance = 0.f;
 	private int submeshIndex = 0;
-	private float[] textureS = new float[Defs.NUM_TEXTURE_UNITS];
-	private float[] textureT = new float[Defs.NUM_TEXTURE_UNITS];
+	private float[] textureS = new float[Graphics3D.getInstance().getTextureUnitCount()];
+	private float[] textureT = new float[Graphics3D.getInstance().getTextureUnitCount()];
 	private float[] normal = new float[3];
 	private float[] ray = new float[6];
 
@@ -76,6 +76,6 @@ public class RayIntersection {
 	}
 
 	static float[] createResult() {
-		return new float[1 + 1 + 2 * Defs.NUM_TEXTURE_UNITS + 3 + 6];
+		return new float[1 + 1 + 2 * Graphics3D.getInstance().getTextureUnitCount() + 3 + 6];
 	}
 }

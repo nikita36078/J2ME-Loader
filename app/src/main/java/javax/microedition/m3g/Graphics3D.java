@@ -292,6 +292,11 @@ public final class Graphics3D {
 				}
 		}
 
+		for (int i = 0; i < Texture2D.recycledTextures.size(); i++) {
+			((Texture2D) Texture2D.recycledTextures.elementAt(i)).releaseTexture(gl);
+			Texture2D.recycledTextures.remove(i);
+		}
+
 		targetBound = false;
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 	}

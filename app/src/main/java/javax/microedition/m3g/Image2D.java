@@ -24,6 +24,11 @@ public class Image2D extends Object3D {
 		this.format = format;
 		this.width = width;
 		this.height = height;
+
+		int bpp = getBytesPerPixel();
+
+		pixels = ByteBuffer.allocateDirect(width * height * bpp).order(ByteOrder.nativeOrder());
+		pixels.clear();
 	}
 
 	public Image2D(int format, int width, int height, byte[] image) {
@@ -83,8 +88,19 @@ public class Image2D extends Object3D {
 		return copy;
 	}
 
-	public void set(int x, int y, int width, int height, byte[] image) {
+	public void set(int px, int py, int wid, int hei, byte[] image) {
 		// TODO
+		int bpp = getBytesPerPixel();
+		if (px == 0 && py == 0 && wid == this.width && hei == this.height) {
+			pixels.rewind();
+			pixels.put(image, 0, wid * hei * bpp);
+		} else {
+			for (int y = 0; y < hei; y++) {
+				pixels.position((y + py) * this.width * bpp + px * bpp);
+				pixels.put(image, y * wid * bpp, wid * bpp);
+			}
+		}
+		pixels.rewind();
 	}
 
 	private void loadFromImage(Image image) {
@@ -149,27 +165,24 @@ public class Image2D extends Object3D {
 	}
 
 	int getBytesPerPixel() {
-		if (format == RGBA)
-			return 4;
-		else if (format == RGB)
-			return 3;
-		else if (format == LUMINANCE_ALPHA)
-			return 2;
-		else
-			return 1;
+		switch (format) {
+			case ALPHA:		return 1;
+			case LUMINANCE:		return 1;
+			case LUMINANCE_ALPHA:	return 2;
+			case RGB:		return 3;
+			case RGBA:		return 4;
+			default: throw new RuntimeException("Invalid format on image");
+		}
 	}
 
 	int getGLFormat() {
-		if (format == RGBA)
-			return GL10.GL_RGBA;
-		else if (format == RGB)
-			return GL10.GL_RGB;
-		else if (format == LUMINANCE_ALPHA)
-			return GL10.GL_LUMINANCE_ALPHA;
-		else if (format == LUMINANCE)
-			return GL10.GL_LUMINANCE;
-		else if (format == ALPHA)
-			return GL10.GL_ALPHA;
-		throw new RuntimeException("Invalid format on image");
+		switch (format) {
+			case ALPHA:		return GL10.GL_ALPHA;
+			case LUMINANCE:		return GL10.GL_LUMINANCE;
+			case LUMINANCE_ALPHA:	return GL10.GL_LUMINANCE_ALPHA;
+			case RGB:		return GL10.GL_RGB;
+			case RGBA:		return GL10.GL_RGBA;
+			default: throw new RuntimeException("Invalid format on image");
+		}
 	}
 }
