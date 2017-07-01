@@ -10,15 +10,16 @@ import com.android.dx.command.Main;
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.zip.ZipException;
 
 import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.Log;
 import ua.naiksoftware.util.FileUtils;
+import ua.naiksoftware.util.ZipUtils;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 
@@ -28,7 +29,6 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private String err = "Void error";
 	private ProgressDialog dialog;
 
-	private String pathToJar;
 	private String appDir;
 	private final File dirTmp;
 
@@ -39,28 +39,25 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(String... p1) {
-		pathToJar = p1[0];
+		String pathToJar = p1[0];
 		String pathConverted = p1[1];
 		Log.d(tag, "doInBackground$ pathToJar=" + pathToJar + " pathConverted="
 				+ pathConverted);
 		dirTmp.mkdir();
 		File tmp = new File(pathToJar);
-		File tmp2 = new File(dirTmp, tmp.getName() + ".jar");
+		File tmp2;
 		try {
-			AndroidProducer.processJar(tmp, tmp2, true);
+			tmp2 = fixJar(tmp);
 		} catch (IOException e) {
 			e.printStackTrace();
 			err = "Can't convert";
-			tmp2.delete();
 			FileUtils.deleteDirectory(dirTmp);
 			return false;
 		}
-		pathToJar = tmp2.getAbsolutePath();
 		try {
-			if (!FileUtils.unzip(new FileInputStream(new File(pathToJar)),
+			if (!ZipUtils.unzip(tmp2,
 					dirTmp)) {
 				err = "Brocken jar";
-				tmp2.delete();
 				FileUtils.deleteDirectory(dirTmp);
 				return false;
 			}
@@ -79,14 +76,13 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 				"--dex", "--no-optimize",
 				"--output=" + appConverted.getPath()
 						+ ConfigActivity.MIDLET_DEX_FILE,
-				/* dirForJAssist.getPath() */pathToJar});
+				/* dirForJAssist.getPath() */tmp2.getAbsolutePath()});
 		File conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
 		try {
 			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_CONF_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		tmp2.delete();
 		// Extract other resources from jar.
 		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir
 				+ ConfigActivity.MIDLET_RES_DIR, new FilenameFilter() {
@@ -98,9 +94,6 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 				}
 			}
 		});
-		FileUtils.deleteDirectory(dirTmp);
-		File dexTemp = new File(context.getApplicationInfo().dataDir, ConfigActivity.MIDLET_DEX_FILE);
-		dexTemp.delete();
 		FileUtils.deleteDirectory(dirTmp);
 		return true;
 	}
@@ -132,5 +125,21 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		}
 		dialog.dismiss();
 		t.show();
+	}
+
+	private File fixJar(File tmp) throws IOException {
+		File tmp2 = new File(dirTmp, tmp.getName() + ".jar");
+		try {
+			AndroidProducer.processJar(tmp, tmp2, true);
+		} catch (ZipException e) {
+			File unpackedJarFolder = new File(tmp.getParent(), tmp.getName() + "_jar");
+			ZipUtils.unzip(tmp, unpackedJarFolder);
+			File repackedJar = new File(tmp.getPath() + ".new.jar");
+			ZipUtils.zipFileAtPath(unpackedJarFolder, repackedJar);
+			AndroidProducer.processJar(repackedJar, tmp2, true);
+			repackedJar.delete();
+			unpackedJarFolder.delete();
+		}
+		return tmp2;
 	}
 }

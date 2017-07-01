@@ -1,20 +1,16 @@
 package ua.naiksoftware.util;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * @author Naik
@@ -48,47 +44,6 @@ public class FileUtils {
 			sourceChannel.close();
 			destChannel.close();
 		}
-	}
-
-	public static boolean unzip(InputStream is, File folderToUnzip) {
-		ZipInputStream zip = new ZipInputStream(new BufferedInputStream(is));
-		ZipEntry zipEntry;
-		try {
-			while ((zipEntry = zip.getNextEntry()) != null) {
-				String fileName = zipEntry.getName();
-				final File outputFile = new File(folderToUnzip, fileName);
-				outputFile.getParentFile().mkdirs();
-				if (fileName.endsWith("/")) {
-					outputFile.mkdirs();
-					continue;
-				} else {
-					outputFile.createNewFile();
-					FileOutputStream fos = new FileOutputStream(outputFile, false);
-					byte[] bytes = new byte[2048];
-					int c;
-					try {
-						while ((c = zip.read(bytes)) != -1) {
-							fos.write(bytes, 0, c);
-						}
-						fos.flush();
-						fos.close();
-					} catch (IOException e) {
-						Log.d("Unzip", "IOErr in readFromStream (zip.read(bytes)): " + e.getMessage());
-						return false;
-					}
-				}
-				zip.closeEntry();
-			}
-		} catch (IOException ioe) {
-			Log.d("Unzip err", ioe.getMessage());
-			return false;
-		} finally {
-			try {
-				zip.close();
-			} catch (Exception e) {
-			}
-		}
-		return true;
 	}
 
 	public static void deleteDirectory(File dir) {
