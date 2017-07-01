@@ -51,12 +51,12 @@ public class Form extends Screen {
 
 	public int append(String text) {
 		append(new StringItem(null, text));
-		return 0;
+		return items.size() - 1;
 	}
 
 	public int append(Image img) {
 		append(new ImageItem(null, img, ImageItem.LAYOUT_DEFAULT, null));
-		return 0;
+		return items.size() - 1;
 	}
 
 	public int append(final Item item) {
@@ -74,7 +74,7 @@ public class Form extends Screen {
 				});
 			}
 		}
-		return 0;
+		return items.size() - 1;
 	}
 
 	public void insert(final int index, final Item item) {
