@@ -185,32 +185,32 @@ public class Sprite extends Layer {
 				curRefY = refY;
 				break;
 			case TRANS_MIRROR_ROT180:
-				curRefX = width - refX;
-				curRefY = height - refY;
+				curRefX = refX;
+				curRefY = height - refY - 1;
 				break;
 			case TRANS_MIRROR:
-				curRefX = width - refX;
+				curRefX = width - refX - 1;
 				curRefY = refY;
 				break;
 			case TRANS_ROT180:
-				curRefX = refX;
-				curRefY = height - refY;
+				curRefX = width - refX - 1;
+				curRefY = height - refY - 1;
 				break;
 			case TRANS_MIRROR_ROT270:
-				curRefX = height - refY;
+				curRefX = refY;
 				curRefY = refX;
 				break;
 			case TRANS_ROT90:
-				curRefX = height - refY;
-				curRefY = width - refX;
+				curRefX = height - refY - 1;
+				curRefY = refX;
 				break;
 			case TRANS_ROT270:
 				curRefX = refY;
-				curRefY = refX;
+				curRefY = width - refX - 1;
 				break;
 			case TRANS_MIRROR_ROT90:
-				curRefX = refY;
-				curRefY = width - refX;
+				curRefX = height - refY - 1;
+				curRefY = width - refX - 1;
 				break;
 			default: // cant really happen, but the return keeps the
 				// compiler happy (otherwise it'll report variable
@@ -323,7 +323,7 @@ public class Sprite extends Layer {
 					int dx, dy;
 					switch (transform) {
 						case TRANS_MIRROR_ROT180:
-							dx = newW - oldW;
+							dx = 0;
 							dy = newH - oldH;
 							break;
 						case TRANS_MIRROR:
@@ -331,23 +331,23 @@ public class Sprite extends Layer {
 							dy = 0;
 							break;
 						case TRANS_ROT180:
-							dx = 0;
+							dx = newW - oldW;
 							dy = newH - oldH;
 							break;
 						case TRANS_MIRROR_ROT270:
-							dx = newH - oldH;
+							dx = 0;
 							dy = 0;
 							break;
 						case TRANS_ROT90:
 							dx = newH - oldH;
-							dy = newW - oldW;
+							dy = 0;
 							break;
 						case TRANS_ROT270:
 							dx = 0;
-							dy = 0;
+							dy = newW - oldW;
 							break;
 						case TRANS_MIRROR_ROT90:
-							dx = 0;
+							dx = newH - oldH;
 							dy = newW - oldW;
 							break;
 						default: // cant really happen, but the return keeps the
@@ -398,32 +398,32 @@ public class Sprite extends Layer {
 				newRefY = refY;
 				break;
 			case TRANS_MIRROR_ROT180:
-				newRefX = width - refX;
-				newRefY = height - refY;
+				newRefX = refX;
+				newRefY = height - refY - 1;
 				break;
 			case TRANS_MIRROR:
-				newRefX = width - refX;
+				newRefX = width - refX - 1;
 				newRefY = refY;
 				break;
 			case TRANS_ROT180:
-				newRefX = refX;
-				newRefY = height - refY;
+				newRefX = width - refX - 1;
+				newRefY = height - refY - 1;
 				break;
 			case TRANS_MIRROR_ROT270:
-				newRefX = height - refY;
+				newRefX = refY;
 				newRefY = refX;
 				break;
 			case TRANS_ROT90:
-				newRefX = height - refY;
-				newRefY = width - refX;
+				newRefX = height - refY - 1;
+				newRefY = refX;
 				break;
 			case TRANS_ROT270:
 				newRefX = refY;
-				newRefY = refX;
+				newRefY = width - refX - 1;
 				break;
 			case TRANS_MIRROR_ROT90:
-				newRefX = refY;
-				newRefY = width - refX;
+				newRefX = height - refY - 1;
+				newRefY = width - refX - 1;
 				break;
 			default:
 				throw new IllegalArgumentException();
@@ -440,32 +440,32 @@ public class Sprite extends Layer {
 				curRefY = refY;
 				break;
 			case TRANS_MIRROR_ROT180:
-				curRefX = width - refX;
-				curRefY = height - refY;
+				curRefX = refX;
+				curRefY = height - refY - 1;
 				break;
 			case TRANS_MIRROR:
-				curRefX = width - refX;
+				curRefX = width - refX - 1;
 				curRefY = refY;
 				break;
 			case TRANS_ROT180:
-				curRefX = refX;
-				curRefY = height - refY;
+				curRefX = width - refX - 1;
+				curRefY = height - refY - 1;
 				break;
 			case TRANS_MIRROR_ROT270:
-				curRefX = height - refY;
+				curRefX = refY;
 				curRefY = refX;
 				break;
 			case TRANS_ROT90:
-				curRefX = height - refY;
-				curRefY = width - refX;
+				curRefX = height - refY - 1;
+				curRefY = refX;
 				break;
 			case TRANS_ROT270:
 				curRefX = refY;
-				curRefY = refX;
+				curRefY = width - refX - 1;
 				break;
 			case TRANS_MIRROR_ROT90:
-				curRefX = refY;
-				curRefY = width - refX;
+				curRefX = height - refY - 1;
+				curRefY = width - refX - 1;
 				break;
 			default: // cant really happen, but the return keeps the
 				// compiler happy (otherwise it'll report variable
