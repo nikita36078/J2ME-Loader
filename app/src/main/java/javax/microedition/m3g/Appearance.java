@@ -8,7 +8,7 @@ public class Appearance extends Object3D {
 	private Fog fog = null;
 	private PolygonMode polygonMode = null;
 	private Material material = null;
-	private Texture2D[] textures = new Texture2D[Defs.NUM_TEXTURE_UNITS];
+	private Texture2D[] textures = new Texture2D[Graphics3D.getInstance().getTextureUnitCount()];
 
 	Object3D duplicateImpl() {
 		Appearance copy = new Appearance();
@@ -137,14 +137,14 @@ public class Appearance extends Object3D {
 	}
 
 	public void setTexture(int index, Texture2D texture) {
-		if (index < 0 || index >= Defs.NUM_TEXTURE_UNITS)
-			throw new IndexOutOfBoundsException("index must be in [0," + Defs.NUM_TEXTURE_UNITS + "]");
+		if (index < 0 || index >= Graphics3D.getInstance().getTextureUnitCount())
+			throw new IndexOutOfBoundsException("index must be in [0," + Graphics3D.getInstance().getTextureUnitCount() + "]");
 		textures[index] = texture;
 	}
 
 	public Texture2D getTexture(int index) {
-		if (index < 0 || index >= Defs.NUM_TEXTURE_UNITS)
-			throw new IndexOutOfBoundsException("index must be in [0," + Defs.NUM_TEXTURE_UNITS + "]");
+		if (index < 0 || index >= Graphics3D.getInstance().getTextureUnitCount())
+			throw new IndexOutOfBoundsException("index must be in [0," + Graphics3D.getInstance().getTextureUnitCount() + "]");
 		return textures[index];
 	}
 
