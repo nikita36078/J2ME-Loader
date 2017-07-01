@@ -1,6 +1,7 @@
 package javax.microedition.m3g;
 
 import javax.microedition.khronos.opengles.GL10;
+import java.util.Vector;
 
 public class Texture2D extends Transformable {
 
@@ -26,9 +27,25 @@ public class Texture2D extends Transformable {
 	private boolean textureInitialized = false;
 	private int[] id = {0};
 
+	static Vector recycledTextures = new Vector();
+
 	public Texture2D(Image2D image) {
 		setImage(image);
 	}
+
+	@Override
+	public void finalize() {
+		if (textureInitialized)
+			recycledTextures.add(this);
+	}
+
+	void releaseTexture(GL10 gl) {
+		if (textureInitialized) {
+			gl.glDeleteTextures(1, id, 0);
+			textureInitialized = false;
+		}
+	}
+			
 
 	Object3D duplicateImpl() {
 		Texture2D copy = new Texture2D(image);
@@ -116,6 +133,7 @@ public class Texture2D extends Transformable {
 		}
 
 		this.image = image;
+		textureInitialized = false;
 	}
 
 	public Image2D getImage() {
