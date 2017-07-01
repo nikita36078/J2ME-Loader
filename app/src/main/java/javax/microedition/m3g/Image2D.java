@@ -89,7 +89,6 @@ public class Image2D extends Object3D {
 	}
 
 	public void set(int px, int py, int wid, int hei, byte[] image) {
-		// TODO
 		int bpp = getBytesPerPixel();
 		if (px == 0 && py == 0 && wid == this.width && hei == this.height) {
 			pixels.rewind();
