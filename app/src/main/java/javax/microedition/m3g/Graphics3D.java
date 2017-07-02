@@ -168,6 +168,12 @@ public final class Graphics3D {
 	}
 
 	protected void finalize() {
+		// Release textures
+		for (int i = 0; i < Texture2D.recycledTextures.size(); i++) {
+			((Texture2D) Texture2D.recycledTextures.elementAt(i)).releaseTexture(gl);
+			Texture2D.recycledTextures.remove(i);
+		}
+
 		// Destroy EGL
 		egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
 		if (eglWindowSurface != null)
