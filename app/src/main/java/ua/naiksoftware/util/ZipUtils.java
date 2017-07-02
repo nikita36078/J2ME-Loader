@@ -4,11 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
@@ -71,43 +71,35 @@ public class ZipUtils {
 		}
 	}
 
-	public static boolean unzip(File zipFile, File folderToUnzip) throws FileNotFoundException {
-		ZipInputStream zip = new ZipInputStream(new FileInputStream(zipFile));
-		ZipEntry zipEntry;
+	public static boolean unzip(File zipFile, File extractFolder) {
 		try {
-			while ((zipEntry = zip.getNextEntry()) != null) {
-				String fileName = zipEntry.getName();
-				final File outputFile = new File(folderToUnzip, fileName);
-				outputFile.getParentFile().mkdirs();
-				if (fileName.endsWith("/")) {
-					outputFile.mkdirs();
-					continue;
-				} else {
-					outputFile.createNewFile();
-					FileOutputStream fos = new FileOutputStream(outputFile, false);
-					byte[] bytes = new byte[BUFFER_SIZE];
-					int c;
-					try {
-						while ((c = zip.read(bytes)) != -1) {
-							fos.write(bytes, 0, c);
-						}
-						fos.flush();
-						fos.close();
-					} catch (IOException e) {
-						Log.d("Unzip", "IOErr in readFromStream (zip.read(bytes)): " + e.getMessage());
-						return false;
+			ZipFile zip = new ZipFile(zipFile);
+			extractFolder.mkdir();
+			Enumeration zipFileEntries = zip.entries();
+			while (zipFileEntries.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
+				String currentEntry = entry.getName();
+				File destFile = new File(extractFolder, currentEntry);
+				File destinationParent = destFile.getParentFile();
+				destinationParent.mkdirs();
+				if (!entry.isDirectory()) {
+					BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
+					int currentByte;
+					byte data[] = new byte[BUFFER_SIZE];
+					// write the current file to disk
+					FileOutputStream fos = new FileOutputStream(destFile);
+					BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER_SIZE);
+					while ((currentByte = is.read(data, 0, BUFFER_SIZE)) != -1) {
+						dest.write(data, 0, currentByte);
 					}
+					dest.flush();
+					dest.close();
+					is.close();
 				}
-				zip.closeEntry();
 			}
-		} catch (IOException ioe) {
-			Log.d("Unzip err", ioe.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
-		} finally {
-			try {
-				zip.close();
-			} catch (Exception e) {
-			}
 		}
 		return true;
 	}

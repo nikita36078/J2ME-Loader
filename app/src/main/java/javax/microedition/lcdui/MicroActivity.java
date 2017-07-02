@@ -89,20 +89,6 @@ public class MicroActivity extends Activity {
 		startActivity(intent);
 	}
 
-	public void restart() {
-		onPause();
-		onStop();
-
-		Bundle bundle = new Bundle();
-		onSaveInstanceState(bundle);
-
-		onDestroy();
-
-		onCreate(bundle);
-		onStart();
-		onResume();
-	}
-
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ContextHolder.addActivityToPool(this);

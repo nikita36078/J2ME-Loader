@@ -10,7 +10,6 @@ import com.android.dx.command.Main;
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.zip.ZipException;
@@ -54,15 +53,9 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			FileUtils.deleteDirectory(dirTmp);
 			return false;
 		}
-		try {
-			if (!ZipUtils.unzip(tmp2,
-					dirTmp)) {
-				err = "Brocken jar";
-				FileUtils.deleteDirectory(dirTmp);
-				return false;
-			}
-		} catch (FileNotFoundException e) {
-			err = e.getMessage();
+		if (!ZipUtils.unzip(tmp2, dirTmp)) {
+			err = "Brocken jar";
+			FileUtils.deleteDirectory(dirTmp);
 			return false;
 		}
 		appDir = FileUtils.loadManifest(
@@ -138,7 +131,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			ZipUtils.zipFileAtPath(unpackedJarFolder, repackedJar);
 			AndroidProducer.processJar(repackedJar, tmp2, true);
 			repackedJar.delete();
-			unpackedJarFolder.delete();
+			FileUtils.deleteDirectory(unpackedJarFolder);
 		}
 		return tmp2;
 	}
