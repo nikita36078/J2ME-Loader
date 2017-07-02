@@ -162,7 +162,6 @@ public class VertexBuffer extends Object3D {
 				}
 
 				ByteBuffer argbBuffer = ByteBuffer.allocateDirect(count * 4).order(ByteOrder.nativeOrder());
-				;
 				argbBuffer.put(dstBuffer);
 				colors.setARGBBuffer(argbBuffer);
 			} else {
@@ -237,7 +236,7 @@ public class VertexBuffer extends Object3D {
 	}
 
 	@Override
-	int doGetReferences(Object3D[] references) throws IllegalArgumentException {
+	int doGetReferences(Object3D[] references) {
 		int parentCount = super.doGetReferences(references);
 
 		if (positions != null) {

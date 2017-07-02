@@ -100,7 +100,7 @@ public abstract class Object3D {
 		return findID(userID);
 	}
 
-	public int getReferences(Object3D[] references) throws IllegalArgumentException {
+	public int getReferences(Object3D[] references) {
 		return doGetReferences(references);
 	}
 

@@ -51,9 +51,7 @@ public class Mesh extends Node {
 		}
 		this.vertices = vertices;
 		this.submeshes = new IndexBuffer[]{submesh};
-		//this.appearances = new Appearance[]{appearance};
-		this.appearances = new Appearance[1];
-		this.appearances[0] = appearance;
+		this.appearances = new Appearance[]{appearance};
 	}
 
 	public Mesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances) {
@@ -72,7 +70,7 @@ public class Mesh extends Node {
 	}
 
 	void duplicate(Mesh copy) {
-		super.duplicate(copy);
+		super.duplicate((Node) copy);
 		copy.vertices = vertices;
 		copy.submeshes = submeshes;
 		/*copy.appearances = new Appearance[appearances.length];
