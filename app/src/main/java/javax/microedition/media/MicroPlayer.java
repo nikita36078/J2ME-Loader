@@ -414,17 +414,19 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	}
 
 	public long getMediaTime() {
-		checkRealized();
+		checkClosed();
 		return player.getCurrentPosition() * 1000;
 	}
 
 	public long getDuration() {
-		checkRealized();
+		checkClosed();
 		return player.getDuration() * 1000;
 	}
 
 	public void setLoopCount(int count) {
-		checkRealized();
+		checkClosed();
+		if (state == STARTED)
+			throw new IllegalStateException("player must not be in STARTED state while using setLoopCount()");
 
 		if (count == 0) {
 			throw new IllegalArgumentException("loop count must not be 0");
