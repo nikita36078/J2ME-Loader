@@ -64,7 +64,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		loopCount = 1;
 
 		metadata = new InternalMetaData();
-		equalizer = new InternalEqualizer(player.getAudioSessionId());
+		equalizer = new InternalEqualizer();
 
 		listeners = new ArrayList();
 		controls = new HashMap();
