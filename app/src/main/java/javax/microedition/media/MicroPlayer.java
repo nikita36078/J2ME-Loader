@@ -18,7 +18,6 @@ package javax.microedition.media;
 
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.audiofx.Equalizer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,161 +33,13 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	protected DataSource source;
 	protected MediaPlayer player;
 	protected int state;
-	protected int loopCount = 1;
+	protected int loopCount;
 
 	protected ArrayList<PlayerListener> listeners;
 	protected HashMap<String, Control> controls;
 
 	protected boolean mute;
 	protected int level, pan;
-
-	public static class InternalMetaData implements MetaDataControl {
-		protected static ArrayList<Integer> androidMetaKeys;
-		protected static HashMap<Integer, String> androidMetaToMIDP;
-
-		static {
-			androidMetaKeys = new ArrayList();
-			androidMetaToMIDP = new HashMap();
-
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, TRACK_NUMBER_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ALBUM, ALBUM_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ARTIST, ARTIST_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_AUTHOR, AUTHOR_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_COMPOSER, COMPOSER_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_DATE, DATE_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_GENRE, GENRE_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_TITLE, TITLE_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_YEAR, YEAR_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_DURATION, DURATION_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_NUM_TRACKS, NUM_TRACKS_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_WRITER, WRITER_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_MIMETYPE, MIME_TYPE_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, ALBUM_ARTIST_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER, DISC_NUMBER_KEY);
-			mapMetaKey(MediaMetadataRetriever.METADATA_KEY_COMPILATION, COMPILATION_KEY);
-		}
-
-		protected static void mapMetaKey(int android, String midp) {
-			androidMetaKeys.add(android);
-			androidMetaToMIDP.put(android, midp);
-		}
-
-		protected ArrayList<String> metakeys;
-		protected HashMap<String, String> metadata;
-
-		public InternalMetaData() {
-			metakeys = new ArrayList();
-			metadata = new HashMap();
-		}
-
-		public void updateMetaData(MediaMetadataRetriever retriever) {
-			metakeys.clear();
-			metadata.clear();
-
-			String key, value;
-
-			for (Integer keyCode : androidMetaKeys) {
-				value = retriever.extractMetadata(keyCode);
-
-				if (value != null) {
-					key = androidMetaToMIDP.get(keyCode);
-
-					metakeys.add(key);
-					metadata.put(key, value);
-				}
-			}
-		}
-
-		public String[] getKeys() {
-			return metakeys.toArray(new String[0]);
-		}
-
-		public String getKeyValue(String key) {
-			return metadata.get(key);
-		}
-	}
-
-	public static class InternalEqualizer implements EqualizerControl {
-		protected Equalizer equalizer;
-		protected String[] presets;
-
-		public InternalEqualizer(int audioSession) {
-			equalizer = new Equalizer(0, audioSession);
-		}
-
-		public String[] getPresetNames() {
-			if (presets == null) {
-				presets = new String[equalizer.getNumberOfPresets()];
-
-				for (short i = 0; i < presets.length; i++) {
-					presets[i] = equalizer.getPresetName(i);
-				}
-			}
-
-			return presets;
-		}
-
-		public void setPreset(String preset) {
-			if (presets == null) {
-				getPresetNames();
-			}
-
-			for (short i = 0; i < presets.length; i++) {
-				if (presets[i].equals(preset)) {
-					equalizer.usePreset(i);
-					break;
-				}
-			}
-		}
-
-		public String getPreset() {
-			if (presets == null) {
-				getPresetNames();
-			}
-
-			try {
-				return presets[equalizer.getCurrentPreset()];
-			} catch (Exception e) {
-				return null;
-			}
-		}
-
-		public void setEnabled(boolean enable) {
-			equalizer.setEnabled(enable);
-		}
-
-		public boolean isEnabled() {
-			return equalizer.getEnabled();
-		}
-
-		public int getNumberOfBands() {
-			return equalizer.getNumberOfBands();
-		}
-
-		public int getBand(int frequency) {
-			return equalizer.getBand(frequency);
-		}
-
-		public int getCenterFreq(int band) {
-			return equalizer.getCenterFreq((short) band);
-		}
-
-		public int getMinBandLevel() {
-			return equalizer.getBandLevelRange()[0];
-		}
-
-		public int getMaxBandLevel() {
-			return equalizer.getBandLevelRange()[1];
-		}
-
-		public void setBandLevel(int level, int band) {
-			equalizer.setBandLevel((short) band, (short) level);
-		}
-
-		public int getBandLevel(int band) {
-			return equalizer.getBandLevel((short) band);
-		}
-	}
 
 	protected InternalMetaData metadata;
 	protected InternalEqualizer equalizer;
@@ -210,6 +61,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		mute = false;
 		level = 100;
 		pan = 0;
+		loopCount = 1;
 
 		metadata = new InternalMetaData();
 		equalizer = new InternalEqualizer(player.getAudioSessionId());
@@ -217,10 +69,10 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		listeners = new ArrayList();
 		controls = new HashMap();
 
-		controls.put(VolumeControl.class.getName(), this);
-		controls.put(PanControl.class.getName(), this);
-		controls.put(MetaDataControl.class.getName(), metadata);
-		controls.put(EqualizerControl.class.getName(), equalizer);
+		controls.put(VolumeControl.class.getSimpleName(), this);
+		controls.put(PanControl.class.getSimpleName(), this);
+		controls.put(MetaDataControl.class.getSimpleName(), metadata);
+		controls.put(EqualizerControl.class.getSimpleName(), equalizer);
 	}
 
 	public void setDataSource(DataSource datasource) throws IOException {
@@ -238,10 +90,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	}
 
 	public Control getControl(String controlType) {
-		if (controlType.indexOf('.') < 0) {
-			controlType = "javax.microedition.media.control." + controlType;
-		}
-
 		return controls.get(controlType);
 	}
 
@@ -439,15 +287,18 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return state;
 	}
 
+
+	// VolumeControl
+
 	protected void updateVolume() {
 		float left, right;
 
 		if (mute) {
 			left = right = 0;
 		} else {
-			left = right = Manager.exponentMap(level, 100);
+			left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
 
-			if (pan > 0) {
+			if (pan >= 0) {
 				left *= (float) (100 - pan) / 100f;
 			}
 
@@ -486,6 +337,8 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return level;
 	}
 
+
+	// PanControl
 	public int setPan(int pan) {
 		if (pan < -100) {
 			pan = -100;

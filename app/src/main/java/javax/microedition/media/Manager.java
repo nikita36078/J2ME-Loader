@@ -150,16 +150,6 @@ public class Manager {
 		}
 	}
 
-	public static float exponentMap(float value, float range) {
-		if (value <= 0) {
-			return 0;
-		} else if (value >= range) {
-			return 1;
-		} else {
-			return (float) Math.pow(10, 72 * (value - range) / 20 / range);
-		}
-	}
-
 	public static String[] getSupportedContentTypes(String str) {
 		return new String[]{"audio/*", "video/*", "audio/wav", "audio/x-tone-seq", "audio/x-wav", "audio/midi", "audio/x-midi", "audio/mpeg", "audio/amr", "audio/amr-wb", "audio/mp3", "audio/mp4", "video/mpeg", "video/mp4", "video/mpeg4", "video/3gpp"};
 	}
