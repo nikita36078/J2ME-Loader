@@ -33,22 +33,29 @@ public class VertexBuffer extends Object3D {
 		copy.positions = positions;
 		copy.normals = normals;
 		copy.colors = colors;
+		copy.positionScale = positionScale;
+
+		if (positionBias != null) {
+			copy.positionBias = new float[positionBias.length];
+			System.arraycopy(positionBias, 0, copy.positionBias, 0, positionBias.length);
+		}
 
 		if (texCoords != null) {
 			for (int i = 0; i < texCoords.length; i++) {
-				if (texCoords[i] != null) {
-					copy.texCoords[i] = (VertexArray) texCoords[i].duplicateImpl();
-				}
+				copy.texCoords[i] = texCoords[i];
 			}
 		}
-		copy.positionBias = new float[positionBias.length];
-		System.arraycopy(positionBias, 0, copy.positionBias, 0, positionBias.length);
-		copy.positionScale = positionScale;
-		copy.texCoordsBias = new float[texCoordsBias.length][3];
-		for (int i = 0; i < texCoordsBias.length; i++)
-			System.arraycopy(texCoordsBias[i], 0, copy.texCoordsBias[i], 0, texCoordsBias[i].length);
-		copy.texCoordsScale = new float[texCoordsScale.length];
-		System.arraycopy(texCoordsScale, 0, copy.texCoordsScale, 0, texCoordsScale.length);
+
+		if (texCoordsBias != null) {
+			copy.texCoordsBias = new float[texCoordsBias.length][3];
+			for (int i = 0; i < texCoordsBias.length; i++)
+				System.arraycopy(texCoordsBias[i], 0, copy.texCoordsBias[i], 0, texCoordsBias[i].length);
+		}
+
+		if (texCoordsScale != null) {
+			copy.texCoordsScale = new float[texCoordsScale.length];
+			System.arraycopy(texCoordsScale, 0, copy.texCoordsScale, 0, texCoordsScale.length);
+		}
 
 		copy.maxTextureUnitIndex = maxTextureUnitIndex;
 		copy.defaultColor = defaultColor;

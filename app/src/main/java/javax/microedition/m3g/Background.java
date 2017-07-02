@@ -48,10 +48,8 @@ public class Background extends Object3D {
 		copy.cropY = cropY;
 		copy.cropWidth = cropWidth;
 		copy.cropHeight = cropHeight;
-		copy.cropY = cropY;
 		copy.colorClearEnabled = colorClearEnabled;
 		copy.depthClearEnabled = depthClearEnabled;
-		copy.colorClearEnabled = colorClearEnabled;
 		copy.backgroundTexture = backgroundTexture;
 		return copy;
 	}

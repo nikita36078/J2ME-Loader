@@ -17,13 +17,13 @@ public class Camera extends Node {
 
 	Object3D duplicateImpl() {
 		Camera copy = new Camera();
-		duplicate((Node) copy);
+		super.duplicate((Node) copy);
 		copy.projectionType = projectionType;
 		copy.fovy = fovy;
 		copy.aspectRatio = aspectRatio;
 		copy.near = near;
 		copy.far = far;
-		copy.transform = new Transform(transform);
+		copy.transform = transform;
 		return copy;
 	}
 

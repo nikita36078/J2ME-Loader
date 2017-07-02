@@ -39,8 +39,12 @@ public class Sprite3D extends Node {
 
 	Object3D duplicateImpl() {
 		Sprite3D copy = new Sprite3D(scaled, image, appearance);
-		duplicate((Node) copy);
+		super.duplicate((Node) copy);
 		copy.texture = texture;
+		copy.cropX = cropX;
+		copy.cropY = cropY;
+		copy.cropWidth = cropWidth;
+		copy.cropHeight = cropHeight;
 		return copy;
 	}
 

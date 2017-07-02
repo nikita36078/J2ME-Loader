@@ -81,10 +81,9 @@ public class Image2D extends Object3D {
 	Object3D duplicateImpl() {
 		Image2D copy = new Image2D(format, width, height);
 		pixels.rewind();
-		int length = pixels.remaining();
-		copy.pixels = ByteBuffer.allocateDirect(length).order(ByteOrder.nativeOrder());
 		copy.pixels.put(pixels);
 		copy.pixels.flip();
+		copy.isMutable = isMutable;
 		return copy;
 	}
 

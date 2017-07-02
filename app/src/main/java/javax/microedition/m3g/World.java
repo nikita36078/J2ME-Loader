@@ -9,8 +9,8 @@ public class World extends Group {
 	}
 
 	Object3D duplicateImpl() {
-		super.duplicateImpl();
 		World copy = new World();
+		super.duplicate((Group) copy);
 		copy.activeCamera = activeCamera;
 		copy.background = background;
 		return copy;

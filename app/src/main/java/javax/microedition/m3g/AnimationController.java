@@ -13,10 +13,10 @@ public class AnimationController extends Object3D {
 		AnimationController copy = new AnimationController();
 		copy.activationTime = activationTime;
 		copy.deactivationTime = deactivationTime;
+		copy.weight = weight;
 		copy.speed = speed;
 		copy.refWorldTime = refWorldTime;
 		copy.refSequenceTime = refSequenceTime;
-		copy.weight = weight;
 		return copy;
 	}
 

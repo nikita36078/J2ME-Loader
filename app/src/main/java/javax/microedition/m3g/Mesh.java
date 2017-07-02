@@ -5,7 +5,7 @@ public class Mesh extends Node {
 	private IndexBuffer[] submeshes;
 	private Appearance[] appearances;
 
-	private Mesh() {
+	protected Mesh() {
 	}
 
 	@Override
@@ -51,7 +51,9 @@ public class Mesh extends Node {
 		}
 		this.vertices = vertices;
 		this.submeshes = new IndexBuffer[]{submesh};
-		this.appearances = new Appearance[]{appearance};
+		//this.appearances = new Appearance[]{appearance};
+		this.appearances = new Appearance[1];
+		this.appearances[0] = appearance;
 	}
 
 	public Mesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances) {
@@ -69,14 +71,19 @@ public class Mesh extends Node {
 			System.arraycopy(appearances, 0, this.appearances, 0, appearances.length);
 	}
 
-	Object3D duplicateImpl() {
-		Mesh copy = new Mesh();
-		duplicate((Node) copy);
+	void duplicate(Mesh copy) {
+		super.duplicate(copy);
 		copy.vertices = vertices;
 		copy.submeshes = submeshes;
-		copy.appearances = new Appearance[appearances.length];
+		/*copy.appearances = new Appearance[appearances.length];
 		for (int i = 0; i < appearances.length; ++i)
-			copy.appearances[i] = appearances[i];
+			copy.appearances[i] = appearances[i];*/
+		copy.appearances = appearances;
+	}
+
+	Object3D duplicateImpl() {
+		Mesh copy = new Mesh();
+		duplicate((Mesh) copy);
 		return copy;
 	}
 

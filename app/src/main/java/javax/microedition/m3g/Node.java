@@ -26,9 +26,9 @@ public abstract class Node extends Transformable {
 
 	void duplicate(Node copy) {
 		super.duplicate((Transformable) copy);
-		copy.parent = parent;
-		copy.left = left;
-		copy.right = right;
+		copy.parent = null;
+		copy.left = null;
+		copy.right = null;
 		copy.scope = scope;
 		copy.zReference = zReference;
 		copy.yReference = yReference;
@@ -38,7 +38,6 @@ public abstract class Node extends Transformable {
 		System.arraycopy(enableBits, 0, copy.enableBits, 0, 2);
 		copy.hasRenderables = hasRenderables;
 		copy.hasBones = hasBones;
-		System.arraycopy(dirty, 0, copy.dirty, 0, 2);
 	}
 
 	static boolean isChildOf(Node parent, Node child) {
@@ -497,5 +496,4 @@ public abstract class Node extends Transformable {
 				return super.isCompatible(track);
 		}
 	}
-
 }

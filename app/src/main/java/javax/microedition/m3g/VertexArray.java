@@ -79,7 +79,24 @@ public class VertexArray extends Object3D {
 		copy.elementSize = elementSize;
 		copy.elementType = elementType;
 		copy.numElements = numElements;
-		copy.argbBuffer = ByteBuffer.allocateDirect(argbBuffer.remaining()).order(ByteOrder.nativeOrder()).put(argbBuffer);
+		copy.stride = stride;
+		int length = numElements * stride;
+		buffer.rewind();
+		if (buffer instanceof ByteBuffer) {
+			copy.buffer = ByteBuffer.allocateDirect(length).order(ByteOrder.nativeOrder());
+			copy.buffer.rewind();
+			((ByteBuffer) copy.buffer).put((ByteBuffer) buffer);
+		} else if (buffer instanceof ShortBuffer) {
+			copy.buffer = ByteBuffer.allocateDirect(length).order(ByteOrder.nativeOrder()).asShortBuffer();
+			copy.buffer.rewind();
+			((ShortBuffer) copy.buffer).put((ShortBuffer) buffer);
+		}
+		if (argbBuffer != null) {
+			argbBuffer.rewind();
+			copy.argbBuffer = ByteBuffer.allocateDirect(argbBuffer.remaining()).order(ByteOrder.nativeOrder());
+			copy.argbBuffer.rewind();
+			copy.argbBuffer.put(argbBuffer);
+		}
 		return copy;
 	}
 

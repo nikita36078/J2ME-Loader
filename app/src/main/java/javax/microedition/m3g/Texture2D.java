@@ -49,7 +49,7 @@ public class Texture2D extends Transformable {
 
 	Object3D duplicateImpl() {
 		Texture2D copy = new Texture2D(image);
-		duplicate((Transformable) copy);
+		super.duplicate((Transformable) copy);
 		copy.blendColor = blendColor;
 		copy.blending = blending;
 		copy.wrappingS = wrappingS;

@@ -2,7 +2,6 @@ package javax.microedition.m3g;
 
 
 public class TriangleStripArray extends IndexBuffer {
-	int[] lengths;
 	int maxIndex;
 
 	private static int[] getStripIndices(int firstIndex, int[] stripLengths) {
@@ -43,12 +42,8 @@ public class TriangleStripArray extends IndexBuffer {
 		allocate(joinedIndexCount);
 		buffer.position(0);
 
-		lengths = new int[stripLengths.length];
-
 		int index = 0;
 		for (int strip = 0; strip < stripLengths.length; strip++) {
-			lengths[strip] = stripLengths[strip];
-
 			if (strip != 0) {
 				put(stripIndices[index - 1]);
 				put(stripIndices[index]);
@@ -96,6 +91,8 @@ public class TriangleStripArray extends IndexBuffer {
 		copy.allocate(getIndexCount());
 		copy.buffer.put(buffer);
 		copy.buffer.flip();
+		copy.indexCount = indexCount;
+		copy.maxIndex = maxIndex;
 		return copy;
 	}
 
