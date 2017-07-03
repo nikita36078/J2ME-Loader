@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.lcdui.Image;
+import java.util.Vector;
 
 public class Image2D extends Object3D {
 	public static final int ALPHA = 96;
@@ -18,6 +19,22 @@ public class Image2D extends Object3D {
 	private int width;
 	private int height;
 	private ByteBuffer pixels;
+	private int[] id = new int[]{0};
+	private boolean dirty = true;
+	static Vector recycledTextures = new Vector();
+
+	@Override
+	public void finalize() {
+		if (id[0] != 0)
+			recycledTextures.add(this);
+	}
+
+	void releaseTexture(GL10 gl) {
+		if (id[0] != 0) {
+			gl.glDeleteTextures(1, id, 0);
+			id[0] = 0;
+		}
+	}
 
 	public Image2D(int format, int width, int height) {
 		this.isMutable = true;
@@ -99,6 +116,7 @@ public class Image2D extends Object3D {
 			}
 		}
 		pixels.rewind();
+		dirty = true;
 	}
 
 	private void loadFromImage(Image image) {
@@ -181,6 +199,18 @@ public class Image2D extends Object3D {
 			case RGB:		return GL10.GL_RGB;
 			case RGBA:		return GL10.GL_RGBA;
 			default: throw new RuntimeException("Invalid format on image");
+		}
+	}
+
+	void setupGL(GL10 gl) {
+		if (id[0] == 0) {
+			gl.glGenTextures(1, id, 0);
+			dirty = true;
+		}
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, id[0]);
+		if (dirty) {
+			gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, getGLFormat(), getWidth(), getHeight(), 0, getGLFormat(), GL10.GL_UNSIGNED_BYTE, getPixels());
+			dirty = false;
 		}
 	}
 }

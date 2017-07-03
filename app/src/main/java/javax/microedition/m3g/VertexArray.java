@@ -17,8 +17,6 @@ public class VertexArray extends Object3D {
 
 	private Buffer buffer;
 
-	private ByteBuffer argbBuffer;
-
 	private VertexArray() {
 	}
 
@@ -90,12 +88,6 @@ public class VertexArray extends Object3D {
 			copy.buffer = ByteBuffer.allocateDirect(length).order(ByteOrder.nativeOrder()).asShortBuffer();
 			copy.buffer.rewind();
 			((ShortBuffer) copy.buffer).put((ShortBuffer) buffer);
-		}
-		if (argbBuffer != null) {
-			argbBuffer.rewind();
-			copy.argbBuffer = ByteBuffer.allocateDirect(argbBuffer.remaining()).order(ByteOrder.nativeOrder());
-			copy.argbBuffer.rewind();
-			copy.argbBuffer.put(argbBuffer);
 		}
 		return copy;
 	}
@@ -177,14 +169,4 @@ public class VertexArray extends Object3D {
 	Buffer getBuffer() {
 		return buffer;
 	}
-
-	ByteBuffer getARGBBuffer() {
-		return argbBuffer;
-	}
-
-	void setARGBBuffer(ByteBuffer argbBuffer) {
-		this.argbBuffer = argbBuffer;
-	}
-
-
 }

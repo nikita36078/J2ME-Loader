@@ -146,28 +146,6 @@ public class VertexBuffer extends Object3D {
 
 			numVertices = colors.getVertexCount();
 			this.colors = colors;
-
-			if (colors.getComponentCount() == 3) {
-				int count = colors.getVertexCount();
-				byte[] srcBuffer = new byte[count * 3];
-				colors.get(0, count, srcBuffer);
-				byte[] dstBuffer = new byte[count * 4];
-				for (int i = 0; i < count; i++) {
-					int srcOffset = i * 3;
-					int dstOffset = i * 4;
-					dstBuffer[dstOffset] = srcBuffer[srcOffset];
-					dstBuffer[dstOffset + 1] = srcBuffer[srcOffset + 1];
-					dstBuffer[dstOffset + 2] = srcBuffer[srcOffset + 2];
-					dstBuffer[dstOffset + 3] = -1;
-				}
-
-				ByteBuffer argbBuffer = ByteBuffer.allocateDirect(count * 4).order(ByteOrder.nativeOrder());
-				argbBuffer.put(dstBuffer);
-				colors.setARGBBuffer(argbBuffer);
-			} else {
-				colors.setARGBBuffer((ByteBuffer) colors.getBuffer());
-			}
-
 		} else {
 			this.colors = colors;
 			resetVertexCount();
