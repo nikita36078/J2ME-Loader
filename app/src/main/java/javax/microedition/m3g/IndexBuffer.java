@@ -8,11 +8,7 @@ public abstract class IndexBuffer extends Object3D {
 	protected ShortBuffer buffer = null;
 	int indexCount;
 
-	public int getIndexCount() {
-		//return buffer.limit();
-		return indexCount;
-	}
-
+	public abstract int getIndexCount();
 	public abstract void getIndices(int[] indices);
 
 	protected void allocate(int numElements) {

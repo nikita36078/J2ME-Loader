@@ -17,13 +17,13 @@ public class Camera extends Node {
 
 	Object3D duplicateImpl() {
 		Camera copy = new Camera();
-		duplicate((Node) copy);
+		super.duplicate((Node) copy);
 		copy.projectionType = projectionType;
 		copy.fovy = fovy;
 		copy.aspectRatio = aspectRatio;
 		copy.near = near;
 		copy.far = far;
-		copy.transform = new Transform(transform);
+		copy.transform = transform;
 		return copy;
 	}
 
@@ -65,7 +65,7 @@ public class Camera extends Node {
 		this.transform.set(transform);
 	}
 
-	public int getProjection(Transform transform) throws ArithmeticException {
+	public int getProjection(Transform transform) {
 		if (transform != null) {
 			if (projectionType == GENERIC) {
 				transform.set(this.transform);
@@ -103,7 +103,7 @@ public class Camera extends Node {
 		return projectionType;
 	}
 
-	public int getProjection(float[] params) throws IllegalArgumentException {
+	public int getProjection(float[] params) {
 		if (params != null) {
 			if (params.length < 4)
 				throw new IllegalArgumentException("Params");

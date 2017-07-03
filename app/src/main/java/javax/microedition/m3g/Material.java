@@ -12,7 +12,7 @@ public class Material extends Object3D {
 	private int diffuseColor = 0xFFCCCCCC;
 	private int emissiveColor = 0;
 	private int specularColor = 0;
-	private float shininess = 10.0f;
+	private float shininess = 0.0f;
 	private boolean isVertexColorTrackingEnabled = false;
 
 	public Material() {
@@ -67,15 +67,18 @@ public class Material extends Object3D {
 	}
 
 	public int getColor(int target) {
-		if (target == AMBIENT)
-			return ambientColor;
-		else if (target == DIFFUSE)
-			return diffuseColor;
-		else if (target == EMISSIVE)
-			return emissiveColor;
-		else if (target == SPECULAR)
-			return specularColor;
-		throw new IllegalArgumentException("Invalid color target");
+		switch (target) {
+			case AMBIENT:
+				return ambientColor;
+			case DIFFUSE:
+				return diffuseColor;
+			case EMISSIVE:
+				return emissiveColor;
+			case SPECULAR:
+				return specularColor;
+			default:
+				throw new IllegalArgumentException("Invalid color target");
+		}
 	}
 
 	public void setShininess(float shininess) {

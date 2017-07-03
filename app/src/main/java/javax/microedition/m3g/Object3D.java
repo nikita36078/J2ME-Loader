@@ -1,6 +1,5 @@
 package javax.microedition.m3g;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 public abstract class Object3D {
@@ -72,10 +71,8 @@ public abstract class Object3D {
 		Object3D copy = duplicateImpl();
 		copy.userID = userID;
 		copy.userObject = userObject;
-		copy.animationTracks = new Vector();
-		Enumeration e = animationTracks.elements();
-		while (e.hasMoreElements())
-			copy.animationTracks.add(e.nextElement());
+		for (int i = 0; i < animationTracks.size(); i++)
+			copy.animationTracks.add(animationTracks.elementAt(i));
 		return copy;
 	}
 
@@ -103,7 +100,7 @@ public abstract class Object3D {
 		return findID(userID);
 	}
 
-	public int getReferences(Object3D[] references) throws IllegalArgumentException {
+	public int getReferences(Object3D[] references) {
 		return doGetReferences(references);
 	}
 

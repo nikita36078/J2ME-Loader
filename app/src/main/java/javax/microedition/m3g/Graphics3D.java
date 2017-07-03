@@ -169,9 +169,9 @@ public final class Graphics3D {
 
 	protected void finalize() {
 		// Release textures
-		for (int i = 0; i < Texture2D.recycledTextures.size(); i++) {
-			((Texture2D) Texture2D.recycledTextures.elementAt(i)).releaseTexture(gl);
-			Texture2D.recycledTextures.remove(i);
+		for (int i = 0; i < Image2D.recycledTextures.size(); i++) {
+			((Image2D) Image2D.recycledTextures.elementAt(i)).releaseTexture(gl);
+			Image2D.recycledTextures.remove(i);
 		}
 
 		// Destroy EGL
@@ -298,9 +298,9 @@ public final class Graphics3D {
 				}
 		}
 
-		for (int i = 0; i < Texture2D.recycledTextures.size(); i++) {
-			((Texture2D) Texture2D.recycledTextures.elementAt(i)).releaseTexture(gl);
-			Texture2D.recycledTextures.remove(i);
+		for (int i = 0; i < Image2D.recycledTextures.size(); i++) {
+			((Image2D) Image2D.recycledTextures.elementAt(i)).releaseTexture(gl);
+			Image2D.recycledTextures.remove(i);
 		}
 
 		targetBound = false;
@@ -594,9 +594,8 @@ public final class Graphics3D {
 		// Colors
 		VertexArray colors = vertices.getColors();
 		if (colors != null) {
-			Buffer buffer = colors.getARGBBuffer();
+			Buffer buffer = colors.getBuffer();
 			buffer.position(0);
-			// Force number of color components to 4 (i.e. don't use colors.getComponentCount())
 			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 			gl.glColorPointer(4, GL10.GL_UNSIGNED_BYTE, 4, buffer);
 		} else {
@@ -612,12 +611,13 @@ public final class Graphics3D {
 			float[] texScaleBias = new float[4];
 			VertexArray texcoords = vertices.getTexCoords(i, texScaleBias);
 			gl.glClientActiveTexture(GL10.GL_TEXTURE0 + i);
+			gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
 			if ((texcoords != null) && (appearance.getTexture(i) != null)) {
 				// Enable the texture coordinate array
 				gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 				// Activate the texture unit
-				gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
+				gl.glEnable(GL10.GL_TEXTURE_2D);
 				appearance.getTexture(i).setupGL(gl, texScaleBias);
 
 				// Set the texture coordinates
@@ -633,6 +633,7 @@ public final class Graphics3D {
 
 			} else {
 				gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+				gl.glDisable(GL10.GL_TEXTURE_2D);
 			}
 		}
 
@@ -650,6 +651,15 @@ public final class Graphics3D {
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, triangles.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
 
 		gl.glPopMatrix();
+
+		// Release textures
+		for (int i = 0; i < maxTextureUnits; i++) {
+			if (appearance.getTexture(i) != null) {
+				gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
+				gl.glClientActiveTexture(GL10.GL_TEXTURE0 + i);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
+			}
+		}
 	}
 
 	public void render(VertexBuffer vertices, IndexBuffer triangles, Appearance appearance, Transform transform,
@@ -733,7 +743,7 @@ public final class Graphics3D {
 		VertexArray colors = vb.getColors();
 		if (colors != null) {
 			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			Buffer buffer = colors.getARGBBuffer();
+			Buffer buffer = colors.getBuffer();
 			buffer.position(0);
 			// Force number of color components to 4 (i.e. don't use colors.getComponentCount())
 			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
@@ -848,11 +858,7 @@ public final class Graphics3D {
 		// Draw
 		ShortBuffer indices = ib.getBuffer();
 		indices.position(0);
-		//if (triangles instanceof TriangleStripArray) {
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, ib.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
-		/*} else {
-			gl.glDrawElements(GL10.GL_TRIANGLES, ib.getIndexCount(), GL10.GL_UNSIGNED_SHORT, indices);
-		}*/
 
 		if (modelTransform != null)
 			gl.glPopMatrix();

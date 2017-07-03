@@ -22,7 +22,7 @@ public class Light extends Node {
 
 	Object3D duplicateImpl() {
 		Light copy = new Light();
-		duplicate((Node) copy);
+		super.duplicate((Node) copy);
 		copy.attenuationConstant = attenuationConstant;
 		copy.attenuationLinear = attenuationLinear;
 		copy.attenuationQuadratic = attenuationQuadratic;

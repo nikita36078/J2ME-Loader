@@ -10,7 +10,12 @@ public class Group extends Node {
 
 	Object3D duplicateImpl() {
 		Group copy = new Group();
-		duplicate((Node) copy);
+		duplicate((Group) copy);
+		return copy;
+	}
+
+	void duplicate(Group copy) {
+		super.duplicate((Node) copy);
 		Node child = firstChild;
 		if (child != null) {
 			do {
@@ -19,7 +24,6 @@ public class Group extends Node {
 				child = child.right;
 			} while (child != firstChild);
 		}
-		return copy;
 	}
 
 	public void addChild(Node child) {

@@ -24,32 +24,13 @@ public class Texture2D extends Transformable {
 	private int levelFilter = FILTER_BASE_LEVEL;
 	private int imageFilter = FILTER_NEAREST;
 
-	private boolean textureInitialized = false;
-	private int[] id = {0};
-
-	static Vector recycledTextures = new Vector();
-
 	public Texture2D(Image2D image) {
 		setImage(image);
 	}
 
-	@Override
-	public void finalize() {
-		if (textureInitialized)
-			recycledTextures.add(this);
-	}
-
-	void releaseTexture(GL10 gl) {
-		if (textureInitialized) {
-			gl.glDeleteTextures(1, id, 0);
-			textureInitialized = false;
-		}
-	}
-			
-
 	Object3D duplicateImpl() {
 		Texture2D copy = new Texture2D(image);
-		duplicate((Transformable) copy);
+		super.duplicate((Transformable) copy);
 		copy.blendColor = blendColor;
 		copy.blending = blending;
 		copy.wrappingS = wrappingS;
@@ -133,7 +114,6 @@ public class Texture2D extends Transformable {
 		}
 
 		this.image = image;
-		textureInitialized = false;
 	}
 
 	public Image2D getImage() {
@@ -179,32 +159,9 @@ public class Texture2D extends Transformable {
 	}
 
 	void setupGL(GL10 gl, float[] scaleBias) {
+		image.setupGL(gl);
 
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-
-		if (!textureInitialized) {
-			gl.glGenTextures(1, id, 0);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, id[0]);
-			gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, image.getGLFormat(), image.getWidth(), image.getHeight(), 0, image
-					.getGLFormat(), GL10.GL_UNSIGNED_BYTE, image.getPixels());
-			textureInitialized = true;
-		} else {
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, id[0]);
-		}
-
-		// Set filtering.
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, getGLFilter()); // Linear Filtering
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, getGLFilter()); // Linear Filtering
-
-		// Set wrap mode
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, getGLWrap(this.wrappingS));
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, getGLWrap(this.wrappingT));
-
-		// Set blendmode
-		gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, getGLBlend());
-		gl.glTexEnvfv(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_COLOR, Color.intToFloatArray(blendColor), 0);
-
-		// set texture scale
+		// Set texture scale
 		Transform t = new Transform();
 		getCompositeTransform(t);
 
@@ -213,6 +170,18 @@ public class Texture2D extends Transformable {
 		gl.glTranslatef(scaleBias[1], scaleBias[2], scaleBias[3]);
 		gl.glScalef(scaleBias[0], scaleBias[0], scaleBias[0]);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+		// Set blendmode
+		gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, getGLBlend());
+		gl.glTexEnvfv(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_COLOR, Color.intToFloatArray(blendColor), 0);
+
+		// Set wrap mode
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, getGLWrap(this.wrappingS));
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, getGLWrap(this.wrappingT));
+
+		// Set filtering.
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, getGLFilter()); // Linear Filtering
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, getGLFilter()); // Linear Filtering
 	}
 
 	private int getGLFilter() {

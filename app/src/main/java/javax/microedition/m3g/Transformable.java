@@ -1,11 +1,15 @@
 package javax.microedition.m3g;
 
 public abstract class Transformable extends Object3D {
-	QVec4 orientation = new QVec4();
+	QVec4 orientation;
 	private Transform transform = new Transform();
 	float sx = 1, sy = 1, sz = 1;
 	float tx = 0, ty = 0, tz = 0;
-	Matrix matrix;
+
+	public Transformable() {
+		orientation = new QVec4();
+		orientation.identityQuat();
+	}
 
 	void duplicate(Transformable copy) {
 		copy.tx = tx;
@@ -14,12 +18,9 @@ public abstract class Transformable extends Object3D {
 		copy.sx = sx;
 		copy.sy = sy;
 		copy.sz = sz;
-		copy.orientation = new QVec4(orientation.x, orientation.y, orientation.z, orientation.w);
-		copy.transform = new Transform(transform);
-		if (matrix != null) {
-			copy.matrix = new Matrix();
-			copy.matrix.copyMatrix(matrix);
-		}
+		copy.orientation = orientation;
+		if (this.transform != null)
+			copy.transform = new Transform(transform);
 	}
 
 	void invalidateTransformable() {
@@ -56,8 +57,8 @@ public abstract class Transformable extends Object3D {
 
 	boolean getInverseCompositeTransform(Matrix transform) {
 		transform.scalingMatrix(sx, sy, sz);
-		if (matrix != null)
-			transform.mulMatrix(matrix);
+		if (transform != null)
+			transform.mulMatrix(this.transform.mtx);
 
 		boolean ok = transform.invertMatrix();
 		if (!ok)
@@ -76,8 +77,8 @@ public abstract class Transformable extends Object3D {
 		mtx.translateMatrix(tx, ty, tz);
 		mtx.rotateMatrixQuat(orientation);
 		mtx.scaleMatrix(sx, sy, sz);
-		if (matrix != null)
-			mtx.mulMatrix(matrix);
+		if (transform != null)
+			mtx.mulMatrix(transform.mtx);
 	}
 
 	public void getCompositeTransform(Transform transform) {
@@ -89,8 +90,8 @@ public abstract class Transformable extends Object3D {
 		transform.mtx.rotateMatrixQuat(orientation);
 		transform.mtx.scaleMatrix(sx, sy, sz);
 
-		if (matrix != null)
-			transform.mtx.mulMatrix(matrix);
+		if (this.transform != null)
+			transform.mtx.mulMatrix(this.transform.mtx);
 	}
 
 	public void setOrientation(float angle, float ax, float ay, float az) {
@@ -105,8 +106,8 @@ public abstract class Transformable extends Object3D {
 		if (transform == null)
 			throw new NullPointerException("transform can not be null");
 
-		if (this.matrix != null)
-			transform.mtx.copyMatrix(matrix);
+		if (this.transform != null)
+			transform.mtx.copyMatrix(this.transform.mtx);
 		else
 			transform.mtx.identityMatrix();
 	}
@@ -182,18 +183,15 @@ public abstract class Transformable extends Object3D {
 	}
 
 	public void setTransform(Transform transform) {
-		if (transform == null)
-			throw new NullPointerException("transform can not be null");
-
-		this.transform.set(transform);
+		this.transform = transform;
 		if (transform != null) {
 			if (!(this instanceof Texture2D) && !transform.mtx.isWUnity())
 				throw new IllegalArgumentException();
-			if (matrix == null)
-				matrix = new Matrix();
-			matrix.copyMatrix(transform.mtx);
-		} else if (matrix != null)
-			matrix.identityMatrix();
+			if (this.transform == null)
+				this.transform = new Transform();
+			this.transform.mtx.copyMatrix(transform.mtx);
+		} else if (this.transform != null)
+			this.transform.mtx.identityMatrix();
 
 		invalidateTransformable();
 	}

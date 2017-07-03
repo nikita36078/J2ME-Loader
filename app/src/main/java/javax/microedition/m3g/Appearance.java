@@ -17,7 +17,8 @@ public class Appearance extends Object3D {
 		copy.fog = fog;
 		copy.polygonMode = polygonMode;
 		copy.material = material;
-		copy.textures = textures;
+		copy.textures = new Texture2D[textures.length];
+		System.arraycopy(this.textures, 0, copy.textures, 0, textures.length);
 		return copy;
 	}
 
@@ -137,14 +138,14 @@ public class Appearance extends Object3D {
 	}
 
 	public void setTexture(int index, Texture2D texture) {
-		if (index < 0 || index >= Graphics3D.getInstance().getTextureUnitCount())
-			throw new IndexOutOfBoundsException("index must be in [0," + Graphics3D.getInstance().getTextureUnitCount() + "]");
+		if (index < 0 || index >= textures.length)
+			throw new IndexOutOfBoundsException("index must be in [0," + textures.length + "]");
 		textures[index] = texture;
 	}
 
 	public Texture2D getTexture(int index) {
-		if (index < 0 || index >= Graphics3D.getInstance().getTextureUnitCount())
-			throw new IndexOutOfBoundsException("index must be in [0," + Graphics3D.getInstance().getTextureUnitCount() + "]");
+		if (index < 0 || index >= textures.length)
+			throw new IndexOutOfBoundsException("index must be in [0," + textures.length + "]");
 		return textures[index];
 	}
 

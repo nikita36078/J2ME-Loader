@@ -17,6 +17,17 @@ public class MorphingMesh extends Mesh {
 		this.targets = targets;
 	}
 
+	private MorphingMesh() {
+	}
+
+	Object3D duplicateImpl() {
+		MorphingMesh copy = new MorphingMesh();
+		super.duplicate((Mesh) copy);
+		copy.weights = weights;
+		copy.targets = targets;
+		return copy;
+	}
+
 	@Override
 	int doGetReferences(Object3D[] references) {
 		int num = super.doGetReferences(references);
