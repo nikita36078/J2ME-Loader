@@ -2,13 +2,22 @@ package javax.microedition.m3g;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+import java.nio.IntBuffer;
 import java.util.Hashtable;
 
 import javax.microedition.khronos.opengles.GL10;
 
 public class Sprite3D extends Node {
-	private static Hashtable textures = new Hashtable();
+	private Appearance appearance;
+	private Image2D image;
+
+	private static final int FLIPX = 1;
+	private static final int FLIPY = 2;
+	private int flip;
+
+	private int width;
+	private int height;
 
 	private int cropX = 0;
 	private int cropY = 0;
@@ -16,35 +25,24 @@ public class Sprite3D extends Node {
 	private int cropHeight;
 
 	private boolean scaled = false;
-	private Appearance appearance;
-	private Image2D image;
-	private Texture2D texture;
-
-	private FloatBuffer vertexBuffer;
-	private FloatBuffer textureBuffer;
-	private float[] vertexArray = {1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f};
-	private float[] textureArray;
 
 	public Sprite3D(boolean scaled, Image2D image, Appearance appearance) {
-		setImage(image);
 		setAppearance(appearance);
 
-		vertexBuffer = ByteBuffer.allocateDirect(4 * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-		textureBuffer = ByteBuffer.allocateDirect(4 * 2 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-		textureArray = new float[4 * 2];
-
-		cropWidth = image.getWidth();
-		cropHeight = image.getHeight();
+		hasRenderables = true;
+		this.scaled = scaled;
+		this.image = image;
+		setImage(image);
 	}
 
 	Object3D duplicateImpl() {
 		Sprite3D copy = new Sprite3D(scaled, image, appearance);
 		super.duplicate((Node) copy);
-		copy.texture = texture;
 		copy.cropX = cropX;
 		copy.cropY = cropY;
 		copy.cropWidth = cropWidth;
 		copy.cropHeight = cropHeight;
+		copy.flip = flip;
 		return copy;
 	}
 
@@ -105,6 +103,132 @@ public class Sprite3D extends Node {
 		}
 	}
 
+	private boolean getSpriteCoordinates(Graphics3D ctx, Camera cam, Transform toCamera, int[] vert, short[] texvert, QVec4 eyeSpace, short adjust) {
+		QVec4 o = new QVec4(0, 0, 0, 1);
+		QVec4 x = new QVec4(0.5f, 0, 0, 1);
+		QVec4 y = new QVec4(0, 0.5f, 0, 1);
+
+		int rIntX = cropX, rIntY = cropY;
+		int rIntW = Math.min(width, cropX + cropWidth) - rIntX;
+		int rIntH = Math.min(height, cropY + cropHeight) - rIntY;
+		if (rIntW < 0 || rIntH < 0)
+			return false;
+
+		toCamera.mtx.transformVec4(o);
+		toCamera.mtx.transformVec4(x);
+		toCamera.mtx.transformVec4(y);
+
+		QVec4 ot = new QVec4(o);
+
+		o.scaleVec4((float) (1.0d / o.w));
+		x.scaleVec4((float) (1.0d / x.w));
+		y.scaleVec4((float) (1.0d / y.w));
+
+		if (eyeSpace != null) {
+			eyeSpace.x = o.x;
+			eyeSpace.y = o.y;
+			eyeSpace.z = o.z;
+		}
+
+		x.subVec4(o);
+		y.subVec4(o);
+
+		x.x = ot.x + new Vector3(x).lengthVec3();
+		x.y = ot.y;
+		x.z = ot.z;
+		x.w = ot.w;
+
+		y.y = ot.y + new Vector3(y).lengthVec3();
+		y.x = ot.x;
+		y.z = ot.z;
+		y.w = ot.w;
+
+		Transform projMatrix = new Transform();
+		cam.getProjection(projMatrix);
+		projMatrix.mtx.transformVec4(ot);
+		projMatrix.mtx.transformVec4(x);
+		projMatrix.mtx.transformVec4(y);
+
+		ot.scaleVec4((float) (1.0d / ot.w));
+		x.scaleVec4((float) (1.0d / x.w));
+		y.scaleVec4((float) (1.0d / y.w));
+
+		x.subVec4(ot);
+		y.subVec4(ot);
+
+		x.x = new Vector3(x).lengthVec3();
+		y.y = new Vector3(y).lengthVec3();
+
+		if (!scaled) {
+			int[] viewport;
+			if (ctx != null)
+				viewport = new int[] { ctx.getViewportX(), ctx.getViewportY(), ctx.getViewportWidth(), ctx.getViewportHeight() };
+			else
+				viewport = new int[] { 0, 0, 256, 256 };
+
+			x.x = rIntW / viewport[2];
+			y.y = rIntH / viewport[3];
+
+			ot.x = (ot.x - ((2 * cropX + cropWidth - 2 * rIntX - rIntW) / viewport[2]));
+
+		        ot.y = (ot.y + ((2 * cropY + cropHeight - 2 * rIntY - rIntH) / viewport[3]));
+		} else {
+			x.x /= cropWidth;
+			y.y /= cropHeight;
+
+
+			ot.x = (ot.x - ((float)(2 * cropX + cropWidth - 2 * rIntX - rIntW) * x.x));
+
+			ot.y = (ot.y + ((float)(2 * cropY + cropHeight - 2 * rIntY - rIntH) * y.y));
+
+			x.x = (x.x * (float) rIntW);
+			y.y = (y.y * (float) rIntH);
+		}
+
+		vert[0 * 3 + 0] = (int) (65536 * (ot.x - x.x));
+		vert[0 * 3 + 1] = (int) ((65536 * (ot.y + y.y)) + 0.5f);
+		vert[0 * 3 + 2] = (int) (65536 * ot.z);
+
+		vert[1 * 3 + 0] = vert[0 * 3 + 0];
+		vert[1 * 3 + 1] = (int) (65536 * (ot.y - y.y));
+		vert[1 * 3 + 2] = vert[0 * 3 + 2];
+
+		vert[2 * 3 + 0] = (int) ((65536 * (ot.x * x.x)) + 0.5f);
+		vert[2 * 3 + 1] = vert[0 * 3 + 1];
+		vert[2 * 3 + 2] = vert[0 * 3 + 2];
+
+		vert[3 * 3 + 0] = vert[2 * 3 + 0];
+		vert[3 * 3 + 1] = vert[1 * 3 + 1];
+		vert[3 * 3 + 2] = vert[0 * 3 + 2];
+
+		if ((flip & FLIPX) == 0) {
+			texvert[0 * 2 + 0] = (short) rIntX;
+			texvert[1 * 2 + 0] = (short) rIntX;
+			texvert[2 * 2 + 0] = (short) (rIntX + rIntW - adjust);
+			texvert[3 * 2 + 0] = (short) (rIntX + rIntW - adjust);
+		} else {
+			texvert[0 * 2 + 0] = (short) (rIntX + rIntW - adjust);
+			texvert[1 * 2 + 0] = (short) (rIntX + rIntW - adjust);
+			texvert[2 * 2 + 0] = (short) rIntX;
+			texvert[3 * 2 + 0] = (short) rIntX;
+		}
+
+		if ((flip & FLIPY) == 0) {
+			texvert[0 * 2 + 1] = (short) rIntY;
+			texvert[1 * 2 + 1] = (short) (rIntY + rIntH - adjust);
+			texvert[2 * 2 + 1] = (short) rIntY;
+			texvert[3 * 2 + 1] = (short) (rIntY + rIntH - adjust);
+		} else {
+			texvert[0 * 2 + 1] = (short) (rIntY + rIntH - adjust);
+			texvert[1 * 2 + 1] = (short) rIntY;
+			texvert[2 * 2 + 1] = (short) (rIntY + rIntH - adjust);
+			texvert[3 * 2 + 1] = (short) rIntY;
+		}
+
+		return true;
+	}
+
+
 	public void setAppearance(Appearance appearance) {
 		this.appearance = appearance;
 	}
@@ -115,17 +239,16 @@ public class Sprite3D extends Node {
 
 	public void setImage(Image2D image) {
 		this.image = image;
-		texture = (Texture2D) textures.get(image);
 
-		if (texture == null) {
-			texture = new Texture2D(image);
-			texture.setFiltering(Texture2D.FILTER_LINEAR, Texture2D.FILTER_LINEAR);
-			texture.setWrapping(Texture2D.WRAP_CLAMP, Texture2D.WRAP_CLAMP);
-			texture.setBlending(Texture2D.FUNC_REPLACE);
+		width = image.getWidth();
+		height = image.getHeight();
 
-			// cache texture
-			textures.put(image, texture);
-		}
+		cropX = 0;
+		cropY = 0;
+		cropWidth = image.getWidth();
+		cropHeight = image.getHeight();
+
+		flip = 0;
 	}
 
 	public Image2D getImage() {
@@ -145,141 +268,117 @@ public class Sprite3D extends Node {
 	}
 
 	public int getCropWidth() {
-		return cropWidth;
+		return ((flip & FLIPX) != 0) ? -cropWidth : cropWidth;
 	}
 
 	public int getCropHeight() {
-		return cropHeight;
+		return ((flip & FLIPY) != 0) ? -cropHeight : cropHeight;
 	}
 
 	public void setCrop(int x, int y, int width, int height) {
-		if ((width < 0) || (height < 0)) {
-			throw new IllegalArgumentException("Width and height must be positive or zero");
-		}
 		this.cropX = x;
 		this.cropY = y;
-		this.cropWidth = width;
-		this.cropHeight = height;
+
+		if (width < 0) {
+			this.cropWidth = -width;
+			flip |= FLIPX;
+		} else {
+			this.cropWidth = width;
+			flip &= ~FLIPX;
+		}
+
+		if (height < 0) {
+			this.cropHeight = -height;
+			flip |= FLIPY;
+		} else {
+			this.cropHeight = height;
+			flip &= ~FLIPY;
+		}
 	}
 
-	void render(GL10 gl, Transform t) {
-/*
+	void render(GL10 gl, Graphics3D ctx) {
+		short[] texvert = new short[8];
+		int[] vert = new int[12];
+		QVec4 eyeSpace = new QVec4();
+		Transform toCamera = new Transform();
+		Camera curCamera = ctx.getCamera(toCamera);
+
+		if (!getSpriteCoordinates(ctx, curCamera, toCamera, vert, texvert, eyeSpace, (short) 0))
+			return;
+
+		Appearance app = new Appearance();
+		app.setupGL(gl);
+		for (int i = 0; i < ctx.getTextureUnitCount(); i++) {
+			gl.glClientActiveTexture(GL10.GL_TEXTURE0 + i);
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
+			gl.glDisable(GL10.GL_TEXTURE_2D);
+		}
+
+		gl.glClientActiveTexture(GL10.GL_TEXTURE0);
+		gl.glActiveTexture(GL10.GL_TEXTURE0);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		ShortBuffer texvertbuf = ByteBuffer.allocateDirect(texvert.length * 2).order(ByteOrder.nativeOrder()).asShortBuffer();
+		texvertbuf.position(0);
+		texvertbuf.put(texvert);
+		gl.glTexCoordPointer(2, GL10.GL_SHORT, 0, texvertbuf);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
+
+		image.setupGL(gl);
+
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glLoadIdentity();
+		gl.glScalef((float) (1.0d / image.getWidth()), (float) (1.0d / image.getHeight()), 1.f);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+		app.setFog(appearance.getFog());
+		app.setCompositingMode(appearance.getCompositingMode());
+
+		gl.glColor4x(1 << 16, 1 << 16, 1 << 16, 1 << 16);
+
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		IntBuffer vertbuf = ByteBuffer.allocateDirect(vert.length * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
+		vertbuf.position(0);
+		vertbuf.put(vert);
+		gl.glVertexPointer(3, GL10.GL_FIXED, 0, vertbuf);
+
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
-		//gl.glLoadIdentity();
-		t.multGL(gl);
-		
-		// get current modelview matrix
-		float[] m = new float[16];
-		((GL11)gl).glGetFloatv(GL11.GL_MODELVIEW_MATRIX, m, 0);
-		
-		float[] m = new float[16];
-		t.get(m);
+		gl.glLoadIdentity();
 
-		// get up and right vector, used to create a camera-facing quad
-		//Vector3 up = new Vector3(m[4], m[5], m[6]);
-		
-		Vector3 up = new Vector3(m[1], m[5], m[9]);
-		up.normalize();
-		//Vector3 right = new Vector3(m[0], m[1], m[2]);
-		Vector3 right = new Vector3(m[0], m[4], m[8]);
-		right.normalize();
+		float[] transform = new float[16];
+		float scaleW[] = new float[] { 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f };
+		Matrix invProjMatrix = new Matrix();
+		Transform projMatrix = new Transform();
+		curCamera.getProjection(projMatrix);
 
-		float size = 1;
-		Vector3 rightPlusUp = new Vector3(right);
-		rightPlusUp.add(up);
-		rightPlusUp.multiply(size);
-		Vector3 rightMinusUp = new Vector3(right);
-		rightMinusUp.subtract(up);
-		rightMinusUp.multiply(size);
+		invProjMatrix.matrixInverse(projMatrix.mtx);
+		invProjMatrix.getMatrixColumns(transform);
 
-		Vector3 topLeft = new Vector3(rightMinusUp);
-		topLeft.multiply(-1);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glMultMatrixf(transform, 0);
+		scaleW[0] = scaleW[5] = scaleW[10] = scaleW[15] = eyeSpace.w;
+		gl.glMultMatrixf(scaleW, 0);
 
-		Vector3 topRight = new Vector3(rightPlusUp);
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		projMatrix.mtx.getMatrixColumns(transform);
+		gl.glLoadMatrixf(transform, 0);
 
-		Vector3 bottomLeft = new Vector3(rightPlusUp);
-		bottomLeft.multiply(-1);
-
-		Vector3 bottomRight = new Vector3(rightMinusUp);
-
-		Graphics3D.getInstance().setAppearance(getAppearance());
-		Graphics3D.getInstance().disableTextureUnits();
-		gl.glActiveTexture(GL10.GL_TEXTURE0);
-		gl.glClientActiveTexture(GL10.GL_TEXTURE0);
-		texture.setupGL(gl, new float[] { 1, 0, 0, 0 });
-		
-		int w = image.getWidth();
-		int h = image.getHeight(); 
-		float u0 = (float) cropX / (float) w;
-		float u1 = u0 + (float) cropWidth / (float) w;
-		float v0 = (float) cropY / (float) h;
-		float v1 = v0 + (float) cropHeight / (float) h;
-
-		// Set texture coordinates
-		// Top right
-		textureArray[0] = u1;
-		textureArray[1] = v0;
-		// Top left
-		textureArray[2] = u0;
-		textureArray[3] = v0;
-		// Bottom Right
-		textureArray[4] = u1;
-		textureArray[5] = v1;
-		// Bottom Left
-		textureArray[6] = u0;
-		textureArray[7] = v1;
-		textureBuffer.put(textureArray);
-		textureBuffer.flip();
-		
-		// Top right
-		vertexArray[0] = topRight.x;  
-		vertexArray[1] = topRight.y;
-		vertexArray[2] = topRight.z;
-		// Top left
-		vertexArray[3] = topLeft.x;
-		vertexArray[4] = topLeft.x;
-		vertexArray[5] = topLeft.x;
-		// Bottom Right
-		vertexArray[6] = bottomRight.x;
-		vertexArray[7] = bottomRight.x;
-		vertexArray[8] = bottomRight.x;
-		// Bottom Left
-		vertexArray[9] = bottomLeft.x;
-		vertexArray[10] = bottomLeft.x;
-		vertexArray[11] = bottomLeft.x;
-		vertexBuffer.put(vertexArray);
-		vertexBuffer.flip();
-
-		// Draw the background
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
-		// Draw sprite
-		/*
-		gl.glBegin(GL10.GL_QUADS);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
 
-		gl.glTexCoord2f(0, 0);
-		gl.glVertex3f(topLeft.x, topLeft.y, topLeft.z); // Top Left
-
-		gl.glTexCoord2f(0, 1);
-		gl.glVertex3f(bottomLeft.x, bottomLeft.y, bottomLeft.z); // Bottom Left
-
-		gl.glTexCoord2f(1, 1);
-		gl.glVertex3f(bottomRight.x, bottomRight.y, bottomRight.z); // Bottom Right
-
-		gl.glTexCoord2f(1, 0);
-		gl.glVertex3f(topRight.x, topRight.y, topRight.z); // Top Right
-
-		gl.glEnd();/
-
+		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glPopMatrix();
-
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-		gl.glDepthMask(true);*/
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glPopMatrix();
 	}
 
 	boolean isCompatible(AnimationTrack track) {
