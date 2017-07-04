@@ -880,7 +880,7 @@ public final class Graphics3D {
 			if (sprite.getAppearance() != null && sprite.getImage() != null && sprite.getCropWidth() != 0 && sprite.getCropHeight() != 0) {
 				gl.glMatrixMode(GL10.GL_MODELVIEW);
 				gl.glPushMatrix();
-				t.multGL(gl);
+				transform.multGL(gl);
 
 				sprite.render(gl, this);
 
