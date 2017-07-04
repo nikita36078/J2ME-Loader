@@ -288,7 +288,7 @@ public class Loader {
 				cont.setPosition(referenceSeqTime, referenceWorldTime);
 				cont.setSpeed(speed, referenceWorldTime);
 				cont.setWeight(weight);
-					objs.addElement(cont);
+				objs.addElement(cont);
 			} else if (objectType == 2) { // AnimationTrack
 				loadObject3D(new Group());
 				readed = 0;
