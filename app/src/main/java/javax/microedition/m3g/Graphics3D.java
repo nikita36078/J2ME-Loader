@@ -877,7 +877,15 @@ public final class Graphics3D {
 			}
 		} else if (node instanceof Sprite3D) {
 			Sprite3D sprite = (Sprite3D) node;
-			sprite.render(gl, transform);
+			if (sprite.getAppearance() != null && sprite.getImage() != null && sprite.getCropWidth() != 0 && sprite.getCropHeight() != 0) {
+				gl.glMatrixMode(GL10.GL_MODELVIEW);
+				gl.glPushMatrix();
+				t.multGL(gl);
+
+				sprite.render(gl, this);
+
+				gl.glPopMatrix();
+			}
 		} else if (node instanceof Group) {
 			renderDescendants((Group) node, node, transform);
 		}

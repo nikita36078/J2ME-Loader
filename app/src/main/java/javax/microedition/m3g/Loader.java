@@ -8,6 +8,7 @@ import java.io.PushbackInputStream;
 import java.io.BufferedInputStream;
 import java.util.Vector;
 import java.util.zip.Inflater;
+import java.util.Hashtable;
 
 import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;
@@ -287,7 +288,7 @@ public class Loader {
 				cont.setPosition(referenceSeqTime, referenceWorldTime);
 				cont.setSpeed(speed, referenceWorldTime);
 				cont.setWeight(weight);
-					objs.addElement(cont);
+				objs.addElement(cont);
 			} else if (objectType == 2) { // AnimationTrack
 				loadObject3D(new Group());
 				readed = 0;
@@ -930,14 +931,18 @@ public class Loader {
 
 		int userParams = readInt();
 		if (userParams != 0) {
-
+			Hashtable hashtable = new Hashtable();
 			for (int i = 0; i < userParams; ++i) {
 				int parameterID = readInt();
 				int numBytes = readInt();
 				byte[] parameterBytes = new byte[numBytes];
 				dis.readFully(parameterBytes);
 				readed += numBytes;
+
+				hashtable.put(new Integer(parameterID), parameterBytes);
 			}
+			object.setUserObject(hashtable);
+			System.out.println("Loaded " + userParams + " user objects");
 		}
 	}
 
