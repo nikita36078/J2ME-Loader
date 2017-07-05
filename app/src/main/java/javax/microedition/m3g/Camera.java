@@ -11,6 +11,7 @@ public class Camera extends Node {
 	private float near;
 	private float far;
 	private Transform transform = new Transform();
+	private boolean zeroViewVolume;
 
 	public Camera() {
 	}
@@ -42,6 +43,8 @@ public class Camera extends Node {
 			default:
 				super.updateProperty(property, value);
 		}
+
+		validateProjectionMatrix();
 	}
 
 	public void setParallel(float fovy, float aspectRatio, float near, float far) {
@@ -50,6 +53,8 @@ public class Camera extends Node {
 		this.aspectRatio = aspectRatio;
 		this.near = near;
 		this.far = far;
+
+		validateProjectionMatrix();
 	}
 
 	public void setPerspective(float fovy, float aspectRatio, float near, float far) {
@@ -58,48 +63,73 @@ public class Camera extends Node {
 		this.aspectRatio = aspectRatio;
 		this.near = near;
 		this.far = far;
+
+		validateProjectionMatrix();
+	}
+
+	private void validateProjectionMatrix() {
+		if (projectionType != GENERIC) {
+			float[] m = new float[16];
+
+			float clipNear = near;
+			float clipFar = far;
+
+			if (projectionType == PERSPECTIVE) {
+				float height = (float) Math.tan(Constants.DEG2RAD * 0.5f * fovy);
+
+				m[0] = (float) (1.0d / (aspectRatio * height));
+				m[1] = m[2] = m[3] = 0.f;
+
+				m[4] = 0.f;
+				m[5] = (float) (1.0d / height);
+				m[6] = m[7] = 0.f;
+
+				m[8] = m[9] = 0.f;
+				m[10] = (-clipNear - clipFar) / (clipFar - clipNear);
+				m[11] = -1.f;
+
+				m[12] = m[13] = 0.f;
+				m[14] = (((-2.f * clipFar) * clipNear) / (clipFar - clipNear));
+				m[15] = 0.f;
+			} else if (projectionType == PARALLEL) {
+				float height = fovy;
+
+				m[0] = (float) (2.d / (aspectRatio * height));
+				m[1] = m[2] = m[3] = 0.f;
+
+				m[4] = 0.f;
+				m[5] = (float) (2.d / height);
+				m[6] = m[7] = 0;
+
+				m[8] = m[9] = 0;
+				m[10] = (float) (-2.f / (clipFar - clipNear));
+				m[11] = 0.f;
+
+				m[12] = m[13] = 0.f;
+				m[14] = (-clipNear - clipFar) / (clipFar - clipNear);
+				m[15] = 1.f;
+			}
+			transform.mtx.setMatrixColumns(m);
+		}
+
+		Matrix im = new Matrix();
+		if (im.matrixInverse(transform.mtx))
+			zeroViewVolume = false;
+		else
+			zeroViewVolume = true;
 	}
 
 	public void setGeneric(Transform transform) {
 		this.projectionType = GENERIC;
-		this.transform.set(transform);
+		//this.transform.set(transform);
+		this.transform.mtx.copyMatrix(transform.mtx);
+
+		validateProjectionMatrix();
 	}
 
 	public int getProjection(Transform transform) {
-		if (transform != null) {
-			if (projectionType == GENERIC) {
-				transform.set(this.transform);
-			} else if (projectionType == PARALLEL) {
-				if (far == near)
-					throw new ArithmeticException(
-							"Unable to compute projection matrix. Illegal parameters (near == far).");
-
-				float[] m = new float[16];
-				m[1] = m[2] = m[3] = m[4] = m[6] = m[7] = m[8] = m[9] = m[12] = m[13] = m[14] = 0;
-				m[0] = 2 / (aspectRatio * fovy);
-				m[5] = 2 / fovy;
-				m[10] = -2 / (far - near);
-				m[11] = -(near + far) / (far - near);
-				m[15] = 1;
-				transform.set(m);
-			} else if (projectionType == PERSPECTIVE) {
-				if (far == near)
-					throw new ArithmeticException(
-							"Unable to compute projection matrix. Illegal parameters (near == far).");
-
-				float h = (float) Math.tan(fovy * Constants.DEG2RAD / 2);
-
-				float[] m = new float[16];
-				m[1] = m[2] = m[3] = m[4] = m[6] = m[7] = m[8] = m[9] = m[12] = m[13] = m[14] = 0;
-				m[0] = 1 / (aspectRatio * h);
-				m[5] = 1 / h;
-				m[10] = -(near + far) / (far - near);
-				m[11] = -2 * near * far / (far - near);
-				m[14] = -1;
-				m[15] = 0;
-				transform.set(m);
-			}
-		}
+		if (transform != null)
+			transform.mtx.copyMatrix(this.transform.mtx);
 		return projectionType;
 	}
 
