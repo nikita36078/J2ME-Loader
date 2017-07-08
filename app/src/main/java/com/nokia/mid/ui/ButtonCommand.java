@@ -5,9 +5,9 @@ import javax.microedition.lcdui.Command;
 final class ButtonCommand extends Command {
 	int key;
 
-	ButtonCommand(int i, int i2) {
-		super("", i2, 1);
-		this.key = i;
+	ButtonCommand(int key, int type) {
+		super("", type, 1);
+		this.key = key;
 	}
 
 	public final String toString() {
