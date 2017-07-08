@@ -162,24 +162,22 @@ public class DirectGraphicsImp implements DirectGraphics {
 		return s;
 	}
 
-	public void drawPolygon(int[] iArr, int i, int[] iArr2, int i2, int i3, int i4) {
-		setARGBColor(i4);
-		graphics.drawPolygon(iArr, i, iArr2, i2, i3);
+	public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
+		setARGBColor(argbColor);
+		graphics.drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
 
-	public void drawTriangle(int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-		setARGBColor(i7);
-		graphics.drawTriangle(i, i2, i3, i4, i5, i6);
+	public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+		drawPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
 
-	public void fillPolygon(int[] iArr, int i, int[] iArr2, int i2, int i3, int i4) {
-		setARGBColor(i4);
-		graphics.fillPolygon(iArr, i, iArr2, i2, i3);
+	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
+		setARGBColor(argbColor);
+		graphics.fillPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
 
-	public void fillTriangle(int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-		setARGBColor(i7);
-		graphics.fillTriangle(i, i2, i3, i4, i5, i6);
+	public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+		fillPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
 
 	public int getAlphaComponent() {
@@ -198,13 +196,13 @@ public class DirectGraphicsImp implements DirectGraphics {
 		System.err.println("!!!public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
 	}
 
-	public void getPixels(short[] sArr, int i, int i2, int i3, int i4, int i5, int i6, int i7) {
-		switch (i7) {
+	public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) {
+		switch (format) {
 			case DirectGraphics.TYPE_USHORT_444_RGB:
 			case DirectGraphics.TYPE_USHORT_4444_ARGB:
 				return;
 			default:
-				throw new IllegalArgumentException("Illegal format: " + i7);
+				throw new IllegalArgumentException("Illegal format: " + format);
 		}
 	}
 

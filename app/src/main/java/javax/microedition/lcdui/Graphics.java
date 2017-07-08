@@ -100,53 +100,35 @@ public class Graphics {
 		setCanvas(canvas);
 	}
 
-	public void fillPolygon(int[] iArr, int i, int[] iArr2, int i2, int i3) {
-		// TODO: Implement this method
-		if (i3 > 0) {
-			Path x_a = computePath(iArr, i, iArr2, i2, i3);
-			drawPaint.setStyle(Paint.Style.FILL);
-			canvas.drawPath(x_a, drawPaint);
-			drawPaint.setStyle(Paint.Style.STROKE);
+	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
+		if (nPoints > 0) {
+			Path path = computePath(xPoints, xOffset, yPoints, yOffset, nPoints);
+			canvas.drawPath(path, fillPaint);
 		}
 	}
 
-	public void drawTriangle(int i, int i2, int i3, int i4, int i5, int i6) {
-		// TODO: Implement this method
-		Path path = new Path();
-		path.moveTo((float) i, (float) i2);
-		path.lineTo((float) i3, (float) i4);
-		path.lineTo((float) i5, (float) i6);
-		path.close();
-		drawPaint.setStyle(Paint.Style.STROKE);
-		canvas.drawPath(path, drawPaint);
-	}
-
-	public void drawPolygon(int[] iArr, int i, int[] iArr2, int i2, int i3) {
-		// TODO: Implement this method
-		if (i3 > 0) {
-			Path path = computePath(iArr, i, iArr2, i2, i3);
-			drawPaint.setStyle(Paint.Style.STROKE);
+	public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
+		if (nPoints > 0) {
+			Path path = computePath(xPoints, xOffset, yPoints, yOffset, nPoints);
 			canvas.drawPath(path, drawPaint);
 		}
-
 	}
 
-	private static Path computePath(int[] iArr, int i, int[] iArr2, int i2, int i3) {
-		// TODO: Implement
+	private Path computePath(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
 		Path path = new Path();
-		int i4 = i + 1;
-		int i5 = i2 + 1;
-		path.moveTo((float) iArr[i], (float) iArr2[i2]);
+		int i4 = xOffset + 1;
+		int i5 = yOffset + 1;
+		path.moveTo((float) xPoints[xOffset], (float) yPoints[yOffset]);
 		int i6 = i5;
 		i5 = i4;
 		i4 = 1;
-		while (i4 < i3) {
+		while (i4 < nPoints) {
 			int i7 = i5 + 1;
 			int i8 = i6 + 1;
-			path.lineTo((float) iArr[i5], (float) iArr2[i6]);
-			i4++;
-			i6 = i8;
+			path.lineTo((float) xPoints[i5], (float) yPoints[i6]);
 			i5 = i7;
+			i6 = i8;
+			i4++;
 		}
 		path.close();
 		return path;
