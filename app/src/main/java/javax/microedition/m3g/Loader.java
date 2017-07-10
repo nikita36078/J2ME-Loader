@@ -762,10 +762,31 @@ public class Loader {
 	private Object3D[] loadM3G() throws IOException {
 		objs = new Vector();
 
-		while (dis.available() > 0) {
-			int compressionScheme = readByte();
-			int totalSectionLength = readInt();
-			int uncompressedLength = readInt();
+		readed = 0;
+		// First section must be header
+		int compressionScheme = readByte();
+		int totalSectionLength = readInt();
+		int uncompressedLength = readInt();
+
+		int objectType = readByte();
+		int length = readInt();
+
+		int versionHigh = readByte();
+		int versionLow = readByte();
+		boolean hasExternalReferences = readBoolean();
+		int totalFileSize = readInt();
+		int approximateContentSize = readInt();
+		String authoringField = readString();
+
+		int checkSum = readInt();
+
+		int read = readed + M3G_FILE_IDENTIFIER.length;
+		int size = (dis.available() != 0) ? (dis.available() + readed) : 2048;
+		while (read < totalFileSize) {
+		//while (dis.available() > 0) {
+			compressionScheme = readByte();
+			totalSectionLength = readInt();
+			uncompressedLength = readInt();
 
 			byte[] uncompressedData = new byte[uncompressedLength];
 
@@ -792,9 +813,11 @@ public class Loader {
 				throw new IOException("Unknown compression scheme.");
 			}
 
-			int checkSum = dis.readInt();
+			checkSum = readInt();
 
 			new Loader(uncompressedData, objs).loadM3GSectionData();
+
+			read += totalSectionLength;
 		}
 		dis.close();
 
