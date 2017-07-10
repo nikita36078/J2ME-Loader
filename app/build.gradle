@@ -8,8 +8,8 @@ android {
         applicationId "ua.naiksoftware.j2meloader"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.2.0"
+        versionCode 10
+        versionName "1.2.1"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
     }
     buildTypes {
