@@ -17,4 +17,6 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="AppDialogTheme" parent="@android:style/Theme.Holo.Light.Dialog"/>
+
 </resources>

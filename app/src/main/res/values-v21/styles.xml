@@ -9,4 +9,6 @@
         <!-- API 14 theme customizations can go here. -->
     </style>
 
+    <style name="AppDialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert"/>
+
 </resources>
