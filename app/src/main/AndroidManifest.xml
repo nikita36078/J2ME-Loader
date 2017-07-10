@@ -12,6 +12,7 @@
         android:largeHeap="true"
         android:icon="@drawable/icon_java"
         android:label="@string/app_name"
+        android:name=".EmulatorApplication"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
@@ -25,6 +26,10 @@
         <activity android:name="javax.microedition.shell.ConfigActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name="javax.microedition.lcdui.Display$ScreenActivity" />
         <activity android:name="javax.microedition.lcdui.Display$CanvasActivity" />
+        <activity
+            android:name="com.devs.acr.ErrorReporterActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

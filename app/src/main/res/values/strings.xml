@@ -68,5 +68,8 @@
     <string name="layout_resize_mode">Keylayout resize mode</string>
     <string name="layout_edit_finished">Edit mode finished</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
+    <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
+    <string name="crash_dialog_title">Error detected</string>
+    <string name="report_crash">Send</string>
 
 </resources>

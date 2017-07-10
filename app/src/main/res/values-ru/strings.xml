@@ -61,4 +61,7 @@
     <string name="layout_resize_mode">Режим масштабирования раскладки</string>
     <string name="layout_edit_mode">Режим редактирования раскладки</string>
     <string name="RESET_LAYOUT_CMD">Сброс раскладки</string>
+    <string name="crash_dialog_message">Вы хотите отправить отчет об ошибке разработчику?</string>
+    <string name="crash_dialog_title">Произошла ошибка</string>
+    <string name="report_crash">Отправить</string>
 </resources>
