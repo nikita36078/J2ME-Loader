@@ -112,12 +112,12 @@ public final class Graphics3D {
 		int[] num_config = new int[1];
 		//EGL_ASSERT(egl.eglGetConfigs(eglDisplay, null, 0, num_config));
 		int[] s_configAttribs = {
-				//EGL10.EGL_SURFACE_TYPE, EGL10.EGL_PBUFFER_BIT,
+				EGL10.EGL_SURFACE_TYPE, EGL10.EGL_PBUFFER_BIT,
 				EGL10.EGL_RED_SIZE, 8,
 				EGL10.EGL_GREEN_SIZE, 8,
 				EGL10.EGL_BLUE_SIZE, 8,
 				EGL10.EGL_ALPHA_SIZE, 8,
-				EGL10.EGL_DEPTH_SIZE, 16,
+				EGL10.EGL_DEPTH_SIZE, 8,
 				EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
 				EGL10.EGL_NONE};
 		EGLConfig[] eglConfigs = new EGLConfig[1];
@@ -127,7 +127,11 @@ public final class Graphics3D {
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, null);
 		EGL_ASSERT(eglContext != EGL10.EGL_NO_CONTEXT);
 
-		EGLSurface tmpSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, null);
+		int[] eglPbufferAttribs = {
+			EGL10.EGL_WIDTH, 1,
+			EGL10.EGL_HEIGHT, 1,
+			EGL10.EGL_NONE};
+		EGLSurface tmpSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, eglPbufferAttribs);
 		EGL_ASSERT(tmpSurface != EGL10.EGL_NO_SURFACE);
 		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, tmpSurface, tmpSurface, eglContext));
 
@@ -145,6 +149,7 @@ public final class Graphics3D {
 		maxViewportHeight = params[1];
 		gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, params, 0);
 		maxTextureSize = params[0];
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
 		EGL_ASSERT(egl.eglDestroySurface(eglDisplay, tmpSurface));
@@ -229,8 +234,13 @@ public final class Graphics3D {
 			gl.glEnable(GL10.GL_SCISSOR_TEST);
 			gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
 			gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		}
+
+		gl.glDepthMask(true);
+		gl.glColorMask(true, true, true, !overwrite);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		gl.glClearDepthf(1.0f);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		// Depth buffer
 		depthBufferEnabled = depthBuffer;
@@ -304,7 +314,6 @@ public final class Graphics3D {
 		}
 
 		targetBound = false;
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 	}
 
 	public void clear(Background background) {
