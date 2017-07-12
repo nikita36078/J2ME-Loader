@@ -33,7 +33,8 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	public JarConverter(MainActivity context) {
 		this.context = context;
-		dirTmp = new File(context.getApplicationInfo().dataDir + "/tmp");
+		dirTmp = new File(context.getApplicationInfo().dataDir, "tmp");
+		dirTmp.mkdir();
 	}
 
 	@Override
@@ -42,34 +43,31 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		String pathConverted = p1[1];
 		Log.d(tag, "doInBackground$ pathToJar=" + pathToJar + " pathConverted="
 				+ pathConverted);
-		dirTmp.mkdir();
-		File tmp = new File(pathToJar);
-		File tmp2;
+		File inputJar = new File(pathToJar);
+		File fixedJar;
 		try {
-			tmp2 = fixJar(tmp);
+			fixedJar = fixJar(inputJar);
 		} catch (IOException e) {
 			e.printStackTrace();
 			err = "Can't convert";
-			FileUtils.deleteDirectory(dirTmp);
+			deleteTemp();
 			return false;
 		}
-		if (!ZipUtils.unzip(tmp2, dirTmp)) {
+		if (!ZipUtils.unzip(fixedJar, dirTmp)) {
 			err = "Brocken jar";
-			FileUtils.deleteDirectory(dirTmp);
+			deleteTemp();
 			return false;
 		}
 		appDir = FileUtils.loadManifest(
 				new File(dirTmp, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
 		appDir = appDir.replace(":", "");
-		File appConverted = new File(pathConverted + appDir);
+		File appConverted = new File(pathConverted, appDir);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
 		Log.d(tag, "appConverted=" + appConverted.getPath());
 		Main.main(new String[]{
-				"--dex", "--no-optimize",
-				"--output=" + appConverted.getPath()
-						+ ConfigActivity.MIDLET_DEX_FILE,
-				/* dirForJAssist.getPath() */tmp2.getAbsolutePath()});
+				"--dex", "--no-optimize", "--output=" + appConverted.getPath()
+				+ ConfigActivity.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
 		File conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
 		try {
 			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_CONF_FILE));
@@ -80,20 +78,19 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir
 				+ ConfigActivity.MIDLET_RES_DIR, new FilenameFilter() {
 			public boolean accept(File dir, String fname) {
-				if (fname.endsWith(".class")) {
+				if (fname.endsWith(".class") || fname.endsWith(".jar.jar")) {
 					return false;
 				} else {
 					return true;
 				}
 			}
 		});
-		FileUtils.deleteDirectory(dirTmp);
+		deleteTemp();
 		return true;
 	}
 
 	@Override
 	public void onPreExecute() {
-		// Log.i(tag, "onPreExecute");
 		dialog = new ProgressDialog(context);
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -105,34 +102,41 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	@Override
 	public void onPostExecute(Boolean result) {
-		// Log.i(tag, "onPostExecute with: " + result);
-		Toast t;
+		Toast toast;
 		if (result) {
-			t = Toast.makeText(context,
-					context.getResources().getString(R.string.convert_complete)
-							+ " " + appDir, Toast.LENGTH_LONG);
+			toast = Toast.makeText(context, context.getResources().getString(R.string.convert_complete) + " " + appDir, Toast.LENGTH_LONG);
 			((MainActivity) context).updateApps();
 		} else {
-			t = Toast.makeText(context, err, Toast.LENGTH_LONG);
-
+			toast = Toast.makeText(context, err, Toast.LENGTH_LONG);
 		}
 		dialog.dismiss();
-		t.show();
+		toast.show();
 	}
 
-	private File fixJar(File tmp) throws IOException {
-		File tmp2 = new File(dirTmp, tmp.getName() + ".jar");
+	private File fixJar(File inputJar) throws IOException {
+		File fixedJar = new File(dirTmp, inputJar.getName() + ".jar");
 		try {
-			AndroidProducer.processJar(tmp, tmp2, true);
+			AndroidProducer.processJar(inputJar, fixedJar, true);
 		} catch (ZipException e) {
-			File unpackedJarFolder = new File(tmp.getParent(), tmp.getName() + "_jar");
-			ZipUtils.unzip(tmp, unpackedJarFolder);
-			File repackedJar = new File(tmp.getPath() + ".new.jar");
+			File unpackedJarFolder = new File(context.getApplicationInfo().dataDir, "tmp_fix");
+			ZipUtils.unzip(inputJar, unpackedJarFolder);
+
+			File repackedJar = new File(dirTmp, inputJar.getName());
 			ZipUtils.zipFileAtPath(unpackedJarFolder, repackedJar);
-			AndroidProducer.processJar(repackedJar, tmp2, true);
-			repackedJar.delete();
+
+			AndroidProducer.processJar(repackedJar, fixedJar, true);
 			FileUtils.deleteDirectory(unpackedJarFolder);
+			repackedJar.delete();
 		}
-		return tmp2;
+		return fixedJar;
+	}
+
+	private void deleteTemp() {
+		// Delete temp files
+		FileUtils.deleteDirectory(dirTmp);
+		File uriDir = new File(context.getApplicationInfo().dataDir, "uri_tmp");
+		if (uriDir.exists()) {
+			FileUtils.deleteDirectory(uriDir);
+		}
 	}
 }

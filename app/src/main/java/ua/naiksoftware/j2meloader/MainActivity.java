@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -62,6 +64,15 @@ public class MainActivity extends Activity implements
 					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 		} else {
 			setupActivity();
+		}
+		Uri uri = getIntent().getData();
+		if (uri != null) {
+			JarConverter converter = new JarConverter(this);
+			try {
+				converter.execute(FileUtils.getPath(this, uri), pathConverted);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

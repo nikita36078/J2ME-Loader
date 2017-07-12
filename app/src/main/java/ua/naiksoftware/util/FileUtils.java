@@ -1,12 +1,18 @@
 package ua.naiksoftware.util;
 
+import android.content.Context;
+import android.net.Uri;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -81,5 +87,33 @@ public class FileUtils {
 			System.out.println("getAppProperty() will not be available due to " + t.toString());
 		}
 		return params;
+	}
+
+	public static String getPath(Context context, Uri uri) throws FileNotFoundException {
+		InputStream in = context.getContentResolver().openInputStream(uri);
+		OutputStream out = null;
+		File folder = new File(context.getApplicationInfo().dataDir, "uri_tmp");
+		folder.mkdir();
+		File file = new File(folder, "tmp.jar");
+		try {
+			out = new FileOutputStream(file);
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return file.getPath();
 	}
 }

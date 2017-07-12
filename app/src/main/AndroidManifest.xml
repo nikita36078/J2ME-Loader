@@ -22,6 +22,28 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="application/java-archive" />
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="*/*" />
+                <data android:host="*"/>
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:pathPattern=".*\\.jar" />
+                <data android:pathPattern=".*\\..*\\.jar" />
+                <data android:pathPattern=".*\\..*\\..*\\.jar" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.jar" />
+            </intent-filter>
         </activity>
         <activity android:name="javax.microedition.shell.ConfigActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name="javax.microedition.lcdui.Display$ScreenActivity" />
