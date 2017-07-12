@@ -212,6 +212,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 
 	public void uncaughtException(Thread t, Throwable e) {
 		showLog("====uncaughtException");
+		e.printStackTrace();
 
 		StringBuilder reportStringBuffer = new StringBuilder();
 		reportStringBuffer.append("Error Report collected on : ").append(new Date().toString());
