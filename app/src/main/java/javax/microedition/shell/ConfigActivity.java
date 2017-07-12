@@ -256,20 +256,13 @@ public class ConfigActivity extends Activity implements
 		addScreenSizePreset(132, 176);
 		addScreenSizePreset(176, 220);
 		addScreenSizePreset(240, 320);
-
-		int w2 = w / 2;
-		int h2 = h / 2;
+		addScreenSizePreset(640, 360);
+		addScreenSizePreset(800, 480);
 
 		if (w > h) {
-			addScreenSizePreset(h2 * 3 / 4, h2);
-			addScreenSizePreset(h2 * 4 / 3, h2);
-
 			addScreenSizePreset(h * 3 / 4, h);
 			addScreenSizePreset(h * 4 / 3, h);
 		} else {
-			addScreenSizePreset(w2, w2 * 4 / 3);
-			addScreenSizePreset(w2, w2 * 3 / 4);
-
 			addScreenSizePreset(w, w * 4 / 3);
 			addScreenSizePreset(w, w * 3 / 4);
 		}
