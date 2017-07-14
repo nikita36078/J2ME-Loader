@@ -196,6 +196,7 @@ public class ConfigActivity extends Activity implements
 		tfVKLayoutKeyCode.setOnKeyListener(this);
 
 		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this);
+		findViewById(R.id.cmdSwapSizes).setOnClickListener(this);
 		findViewById(R.id.cmdFontSizePresets).setOnClickListener(this);
 		findViewById(R.id.cmdScreenBack).setOnClickListener(this);
 		findViewById(R.id.cmdVKBack).setOnClickListener(this);
@@ -565,6 +566,10 @@ public class ConfigActivity extends Activity implements
 							.get(which)));
 				}
 			};
+		} else if (id == R.id.cmdSwapSizes) {
+			String tmp = tfScreenWidth.getText().toString();
+			tfScreenWidth.setText(tfScreenHeight.getText().toString());
+			tfScreenHeight.setText(tmp);
 		} else if (id == R.id.cmdFontSizePresets) {
 			presets = fontAdapter.toArray(new String[0]);
 

@@ -64,4 +64,5 @@
     <string name="crash_dialog_message">Вы хотите отправить отчет об ошибке разработчику?</string>
     <string name="crash_dialog_title">Произошла ошибка</string>
     <string name="report_crash">Отправить</string>
+    <string name="SWAP_SIZES">Поменять местами</string>
 </resources>

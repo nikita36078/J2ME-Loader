@@ -55,11 +55,26 @@
                 android:singleLine="true"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/cmdScreenSizePresets"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/SIZE_PRESETS"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cmdScreenSizePresets"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/SIZE_PRESETS"/>
+
+            <Button
+                android:id="@+id/cmdSwapSizes"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/SWAP_SIZES"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout3"

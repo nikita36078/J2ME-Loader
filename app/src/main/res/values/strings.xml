@@ -71,5 +71,6 @@
     <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
     <string name="crash_dialog_title">Error detected</string>
     <string name="report_crash">Send</string>
+    <string name="SWAP_SIZES">Swap sizes</string>
 
 </resources>
