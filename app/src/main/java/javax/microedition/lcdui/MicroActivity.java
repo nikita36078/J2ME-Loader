@@ -17,21 +17,15 @@
 package javax.microedition.lcdui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 import javax.microedition.lcdui.event.SimpleEvent;
-import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
-
-import ua.naiksoftware.j2meloader.R;
 
 public class MicroActivity extends Activity {
 	private Displayable current;
@@ -75,17 +69,8 @@ public class MicroActivity extends Activity {
 	}
 
 	public void startActivity(Class cls) {
-		startActivity(cls, null);
-	}
-
-	public void startActivity(Class cls, Bundle bundle) {
 		Intent intent = new Intent(this, cls);
 		intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-		if (bundle != null) {
-			intent.putExtras(bundle);
-		}
-
 		startActivity(intent);
 	}
 
@@ -115,55 +100,6 @@ public class MicroActivity extends Activity {
 
 		ContextHolder.compactActivityPool(this);
 		super.onDestroy();
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			event.startTracking();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			return true;
-		}
-		return super.onKeyUp(keyCode, event);
-	}
-
-
-	@Override
-	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-			alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
-					.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-					.setPositiveButton(R.string.YES_CMD, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface p1, int p2) {
-							Runnable r = new Runnable() {
-								public void run() {
-									try {
-										MIDlet.callDestroyApp(true);
-									} catch (Throwable ex) {
-										ex.printStackTrace();
-									}
-
-									ContextHolder.notifyDestroyed();
-									System.exit(1);
-								}
-							};
-
-							(new Thread(r)).start();
-						}
-					})
-					.setNegativeButton(R.string.NO_CMD, null);
-			alertBuilder.create().show();
-		}
-		return super.onKeyLongPress(keyCode, event);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

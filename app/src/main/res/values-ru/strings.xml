@@ -37,7 +37,6 @@
     <string name="PREF_VK_ALPHA" formatted="false">Прозрачность: </string>
     <string name="PREF_VK_HIDE_DELAY" formatted="false">Скрывать через </string>
     <string name="PREF_UNIT_MS" formatted="false">мс</string>
-    <string name="PREF_CUSTOMIZE_VK_LAYOUT" formatted="false">Код кнопки для настройки раскладки: </string>
     <string name="PREF_VK_SEL_FORE" formatted="false">Надписи (Н)</string>
     <string name="PREF_VK_SEL_BACK" formatted="false">Кнопки (Н)</string>
     <string name="PREF_VK_KEY_SIZES" formatted="false">Размеры клавиш</string>
@@ -47,7 +46,6 @@
     <string name="PREF_VK_FIRE_KEY" formatted="false">Огонь: </string>
     <string name="PREF_VK_SIZE_HINT" formatted="false">Разм.</string>
     <string name="SIZE_PRESETS" formatted="false">Предустановки</string>
-    <string name="PREF_KEY_CODE_HINT" formatted="false">Код кл.</string>
     <string name="PREF_LANGUAGE" formatted="false">Язык: %A</string>
     <string name="PREF_MISC" formatted="false">Прочие параметры</string>
     <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
@@ -64,5 +62,6 @@
     <string name="layout_edit_finished">Редактирование раскладки завершено</string>
     <string name="layout_edit_finish">Завершить редактирование раскладки</string>
     <string name="layout_edit_mode">Режим редактирования раскладки</string>
-    <string name="layout_resize_mode">Режим масштабирования раскладки</string>
+    <string name="layout_scale_mode">Режим масштабирования раскладки</string>
+    <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
 </resources>

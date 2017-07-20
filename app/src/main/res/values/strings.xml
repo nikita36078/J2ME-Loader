@@ -41,7 +41,6 @@
     <string name="PREF_VK_ALPHA" formatted="false">Opacity: </string>
     <string name="PREF_VK_HIDE_DELAY" formatted="false">Hide delay: </string>
     <string name="PREF_UNIT_MS" formatted="false">ms</string>
-    <string name="PREF_CUSTOMIZE_VK_LAYOUT" formatted="false">Keycode for the layout customization launch: </string>
     <string name="PREF_VK_SEL_FORE" formatted="false">Labels (P)</string>
     <string name="PREF_VK_SEL_BACK" formatted="false">Buttons (P)</string>
     <string name="PREF_VK_KEY_SIZES" formatted="false">Key sizes</string>
@@ -51,7 +50,6 @@
     <string name="PREF_VK_FIRE_KEY" formatted="false">Fire: </string>
     <string name="PREF_VK_SIZE_HINT" formatted="false">Size</string>
     <string name="SIZE_PRESETS" formatted="false">Presets</string>
-    <string name="PREF_KEY_CODE_HINT" formatted="false">Key code</string>
     <string name="PREF_LANGUAGE" formatted="false">Language: %A</string>
     <string name="PREF_MISC" formatted="false">Misc options</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
@@ -68,7 +66,8 @@
     <string name="layout_edit_finished">Edit mode finished</string>
     <string name="layout_edit_finish">Finish edit mode</string>
     <string name="layout_edit_mode">Keylayout edit mode</string>
-    <string name="layout_resize_mode">Keylayout resize mode</string>
+    <string name="layout_scale_mode">Keylayout resize mode</string>
+    <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>

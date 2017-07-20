@@ -293,28 +293,6 @@
             </TableRow>
         </TableLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/PREF_CUSTOMIZE_VK_LAYOUT"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <EditText
-                android:id="@+id/tfVKLayoutKeyCode"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:hint="@string/PREF_KEY_CODE_HINT"
-                android:inputType="numberSigned"/>
-        </LinearLayout>
-
         <TableLayout
             android:id="@+id/tableLayout1"
             android:layout_width="match_parent"

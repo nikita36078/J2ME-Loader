@@ -18,7 +18,6 @@ package javax.microedition.lcdui.pointer;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.view.KeyEvent;
 import android.widget.Toast;
 
 import java.io.DataInputStream;
@@ -251,8 +250,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected boolean[] snapValid;
 	protected int[] snapStack;
 
-	protected int layoutEditKeyCode;
-	protected boolean layoutEditKeyRepeated;
 	protected int layoutEditMode;
 	protected int editedIndex;
 	protected float offsetX, offsetY;
@@ -309,7 +306,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapStack = new int[keypad.length];
 
 		resetLayout(layoutVariant = 0);
-		layoutEditKeyCode = Canvas.convertAndroidKeyCode(KeyEvent.KEYCODE_MENU);
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
 		offscreenChanged = true;
@@ -587,18 +583,16 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		show();
 	}
 
-	private void cycleLayoutEditMode() {
-		switch (layoutEditMode) {
-			case LAYOUT_EOF:
-				setLayoutEditMode(LAYOUT_KEYS);
+	public void switchLayoutEditMode(int newMode) {
+		setLayoutEditMode(newMode);
+		switch (newMode) {
+			case LAYOUT_KEYS:
 				Toast.makeText(context, R.string.layout_edit_mode, Toast.LENGTH_SHORT).show();
 				break;
-			case LAYOUT_KEYS:
-				setLayoutEditMode(LAYOUT_SCALES);
-				Toast.makeText(context, R.string.layout_resize_mode, Toast.LENGTH_SHORT).show();
+			case LAYOUT_SCALES:
+				Toast.makeText(context, R.string.layout_scale_mode, Toast.LENGTH_SHORT).show();
 				break;
-			default:
-				setLayoutEditMode(LAYOUT_EOF);
+			case LAYOUT_EOF:
 				Toast.makeText(context, R.string.layout_edit_finished, Toast.LENGTH_SHORT).show();
 				break;
 		}
@@ -876,50 +870,25 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public boolean keyPressed(int keyCode) {
-		if (keyCode == layoutEditKeyCode) {
-			return true;
-		} else {
-			for (VirtualKey aKeypad : keypad) {
-				if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
-					aKeypad.setSelected(true);
-				}
+		for (VirtualKey aKeypad : keypad) {
+			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
+				aKeypad.setSelected(true);
 			}
-			return false;
-		}
-	}
-
-	public boolean keyRepeated(int keyCode) {
-		if (keyCode == layoutEditKeyCode) {
-			if (!layoutEditKeyRepeated) {
-				layoutEditKeyRepeated = true;
-				setLayoutEditMode(LAYOUT_EOF);
-				resetLayout(layoutVariant);
-				if (++layoutVariant >= 2) {
-					layoutVariant = 0;
-				}
-				for (int group = 0; group < keyScaleGroups.length; group++) {
-					resizeKeyGroup(group);
-				}
-				snapKeys();
-			}
-			return true;
 		}
 		return false;
 	}
 
+	public boolean keyRepeated(int keyCode) {
+		return false;
+	}
+
 	public boolean keyReleased(int keyCode) {
-		if (keyCode == layoutEditKeyCode) {
-			layoutEditKeyRepeated = false;
-			cycleLayoutEditMode();
-			return true;
-		} else {
-			for (VirtualKey aKeypad : keypad) {
-				if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
-					aKeypad.setSelected(false);
-				}
+		for (VirtualKey aKeypad : keypad) {
+			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
+				aKeypad.setSelected(false);
 			}
-			return false;
 		}
+		return false;
 	}
 
 	public Font getFont() {
@@ -960,13 +929,5 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setKeyScale(int type, float value) {
 		keyScales[type] = value;
-	}
-
-	public int getLayoutEditKey() {
-		return layoutEditKeyCode;
-	}
-
-	public void setLayoutEditKey(int keyCode) {
-		layoutEditKeyCode = Canvas.convertAndroidKeyCode(keyCode);
 	}
 }

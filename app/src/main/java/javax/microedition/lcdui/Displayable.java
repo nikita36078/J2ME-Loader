@@ -16,8 +16,11 @@
 
 package javax.microedition.lcdui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -25,7 +28,11 @@ import java.util.ArrayList;
 import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
+
+import ua.naiksoftware.j2meloader.R;
 
 public abstract class Displayable {
 	private MicroActivity parent;
@@ -35,6 +42,11 @@ public abstract class Displayable {
 	private CommandListener listener;
 
 	private static EventQueue queue;
+	private static final int ADDITIONAL_MENU_SIZE = 5;
+	private static final int MENU_EXIT = 1;
+	private static final int MENU_KEY_EDIT = 2;
+	private static final int MENU_KEY_SCALE = 3;
+	private static final int MENU_KEY_FINISH = 4;
 
 	static {
 		queue = new EventQueue();
@@ -115,18 +127,65 @@ public abstract class Displayable {
 
 	public void populateMenu(Menu menu) {
 		menu.clear();
+		SubMenu subMenu = menu.addSubMenu(Menu.NONE, 0, 0, R.string.common_settings);
+		subMenu.add(Menu.NONE, MENU_EXIT, 0, R.string.exit);
+		subMenu.add(Menu.NONE, MENU_KEY_EDIT, 0, R.string.layout_edit_mode);
+		subMenu.add(Menu.NONE, MENU_KEY_SCALE, 0, R.string.layout_scale_mode);
+		subMenu.add(Menu.NONE, MENU_KEY_FINISH, 0, R.string.layout_edit_finish);
 
 		for (Command cmd : commands) {
 			menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getLabel());
 		}
 	}
 
+	public void showExitConfirmation() {
+		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(parent);
+		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
+				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface p1, int p2) {
+						Runnable r = new Runnable() {
+							public void run() {
+								try {
+									MIDlet.callDestroyApp(true);
+								} catch (Throwable ex) {
+									ex.printStackTrace();
+								}
+								ContextHolder.notifyDestroyed();
+								System.exit(1);
+							}
+						};
+						(new Thread(r)).start();
+					}
+				})
+				.setNegativeButton(android.R.string.no, null);
+		alertBuilder.create().show();
+	}
+
 	public boolean menuItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id < ADDITIONAL_MENU_SIZE) {
+			switch (id) {
+				case MENU_EXIT:
+					showExitConfirmation();
+					break;
+				case MENU_KEY_EDIT:
+					ContextHolder.getVk().switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+					break;
+				case MENU_KEY_SCALE:
+					ContextHolder.getVk().switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+					break;
+				case MENU_KEY_FINISH:
+					ContextHolder.getVk().switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+					break;
+			}
+			return true;
+		}
+
 		if (listener == null) {
 			return false;
 		}
-
-		int id = item.getItemId();
 
 		for (Command cmd : commands) {
 			if (cmd.hashCode() == id) {
@@ -134,7 +193,6 @@ public abstract class Displayable {
 				return true;
 			}
 		}
-
 		return false;
 	}
 

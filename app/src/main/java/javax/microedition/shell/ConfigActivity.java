@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,8 +57,7 @@ import ua.naiksoftware.j2meloader.R;
 import ua.naiksoftware.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ConfigActivity extends Activity implements
-		View.OnKeyListener, View.OnClickListener {
+public class ConfigActivity extends Activity implements View.OnClickListener {
 
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
@@ -78,7 +76,6 @@ public class ConfigActivity extends Activity implements
 
 	protected SeekBar sbVKAlpha;
 	protected EditText tfVKHideDelay;
-	protected EditText tfVKLayoutKeyCode;
 	protected EditText tfVKFore;
 	protected EditText tfVKBack;
 	protected EditText tfVKSelFore;
@@ -169,7 +166,6 @@ public class ConfigActivity extends Activity implements
 
 		sbVKAlpha = (SeekBar) findViewById(R.id.sbVKAlpha);
 		tfVKHideDelay = (EditText) findViewById(R.id.tfVKHideDelay);
-		tfVKLayoutKeyCode = (EditText) findViewById(R.id.tfVKLayoutKeyCode);
 		tfVKFore = (EditText) findViewById(R.id.tfVKFore);
 		tfVKBack = (EditText) findViewById(R.id.tfVKBack);
 		tfVKSelFore = (EditText) findViewById(R.id.tfVKSelFore);
@@ -192,8 +188,6 @@ public class ConfigActivity extends Activity implements
 		addFontSizePreset("128 x 160", 13, 15, 20);
 		addFontSizePreset("176 x 220", 15, 18, 22);
 		addFontSizePreset("240 x 320", 18, 22, 26);
-
-		tfVKLayoutKeyCode.setOnKeyListener(this);
 
 		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this);
 		findViewById(R.id.cmdSwapSizes).setOnClickListener(this);
@@ -314,8 +308,6 @@ public class ConfigActivity extends Activity implements
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt(
 				"VirtualKeyboardDelay", -1)));
-		tfVKLayoutKeyCode.setText(Integer.toString(params.getInt(
-				"VirtualKeyboardLayoutKeyCode", KeyEvent.KEYCODE_MENU)));
 		tfVKBack.setText(Integer.toHexString(
 				params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0))
 				.toUpperCase());
@@ -363,8 +355,6 @@ public class ConfigActivity extends Activity implements
 			editor.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
 			editor.putInt("VirtualKeyboardDelay",
 					Integer.parseInt(tfVKHideDelay.getText().toString()));
-			editor.putInt("VirtualKeyboardLayoutKeyCode",
-					Integer.parseInt(tfVKLayoutKeyCode.getText().toString()));
 			editor.putInt("VirtualKeyboardColorBackground",
 					Integer.parseInt(tfVKBack.getText().toString(), 16));
 			editor.putInt("VirtualKeyboardColorForeground",
@@ -425,8 +415,6 @@ public class ConfigActivity extends Activity implements
 	private void setVirtualKeyboard() {
 		int vkAlpha = sbVKAlpha.getProgress();
 		int vkDelay = Integer.parseInt(tfVKHideDelay.getText().toString());
-		int vkLayoutKeyCode = Integer.parseInt(tfVKLayoutKeyCode.getText()
-				.toString());
 		int vkColorBackground = Integer.parseInt(tfVKBack.getText().toString(),
 				16);
 		int vkColorForeground = Integer.parseInt(tfVKFore.getText().toString(),
@@ -442,7 +430,6 @@ public class ConfigActivity extends Activity implements
 
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
-		vk.setLayoutEditKey(vkLayoutKeyCode);
 
 		if (keylayoutFile.exists()) {
 			try {
@@ -529,16 +516,6 @@ public class ConfigActivity extends Activity implements
 				break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		if (v == tfVKLayoutKeyCode
-				&& (event.getFlags() & KeyEvent.FLAG_SOFT_KEYBOARD) == 0) {
-			tfVKLayoutKeyCode.setText(Integer.toString(keyCode));
-			return true;
-		}
-
-		return false;
 	}
 
 	public void setLanguage(int which) {
