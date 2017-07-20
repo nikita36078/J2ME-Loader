@@ -165,7 +165,7 @@ public abstract class Displayable {
 
 	public boolean menuItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id < ADDITIONAL_MENU_SIZE) {
+		if (id < ADDITIONAL_MENU_SIZE && id > 0) {
 			switch (id) {
 				case MENU_EXIT:
 					showExitConfirmation();
