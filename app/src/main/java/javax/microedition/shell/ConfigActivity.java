@@ -227,7 +227,7 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 		// запуском конструктора
 		// мидлета
 		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs", appName + ".xml");
-		if (appSettings.exists()) {
+		if (appSettings.exists() && !getIntent().getBooleanExtra("showSettings", false)) {
 			startMIDlet();
 		}
 	}

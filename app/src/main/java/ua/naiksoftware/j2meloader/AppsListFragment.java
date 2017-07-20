@@ -86,6 +86,11 @@ public class AppsListFragment extends ListFragment {
 		int index = info.position;
 		switch (item.getItemId()){
 			case R.id.action_context_settings:
+				AppItem appItem = apps.get(index);
+				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
+				i.putExtra("name", appItem.getTitle());
+				i.putExtra("showSettings", true);
+				startActivityForResult(i, 0);
 				break;
 			case R.id.action_context_delete:
 				showDialog(index);
