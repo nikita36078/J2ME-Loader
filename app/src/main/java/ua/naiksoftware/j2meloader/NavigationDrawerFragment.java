@@ -7,7 +7,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -172,8 +172,6 @@ public class NavigationDrawerFragment extends Fragment {
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(getActivity(),
 				mDrawerLayout, /* DrawerLayout object */
-				true,
-				R.drawable.ic_drawer,
 				R.string.navigation_drawer_open, /*
 												   * "open drawer" description for
 												   * accessibility
