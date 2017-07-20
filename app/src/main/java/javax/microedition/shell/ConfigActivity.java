@@ -226,6 +226,10 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 		applyConfiguration(/* new MIDlet() */);// Настройка конфигурации перед
 		// запуском конструктора
 		// мидлета
+		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs", appName + ".xml");
+		if (appSettings.exists()) {
+			startMIDlet();
+		}
 	}
 
 	public void onPause() {
@@ -477,25 +481,7 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_start:
-				try {
-					// Теперь применяем конфигурацию к запускаемому мидлету.
-
-					if (cxShowKeyboard.isChecked()) {
-						setVirtualKeyboard();
-					}
-					midlet = loadMIDlet();
-					applyConfiguration();
-					midlet.start();
-					finish();
-				} catch (Throwable t) {
-					t.printStackTrace();
-					AlertDialog.Builder builder = new AlertDialog.Builder(this)
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.setTitle(R.string.error)
-							.setMessage(t.getMessage());
-					builder.show();
-				}
-
+				startMIDlet();
 				break;
 			case R.id.action_reset:
 				SharedPreferencesContainer params = new SharedPreferencesContainer(
@@ -516,6 +502,26 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void startMIDlet() {
+		try {
+			// Теперь применяем конфигурацию к запускаемому мидлету.
+			if (cxShowKeyboard.isChecked()) {
+				setVirtualKeyboard();
+			}
+			midlet = loadMIDlet();
+			applyConfiguration();
+			midlet.start();
+			finish();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			AlertDialog.Builder builder = new AlertDialog.Builder(this)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setTitle(R.string.error)
+					.setMessage(t.getMessage());
+			builder.show();
+		}
 	}
 
 	public void setLanguage(int which) {

@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -34,13 +37,7 @@ public class AppsListFragment extends ListFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		setEmptyText(getText(R.string.no_data_for_display));
-		getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-				showDialog(i);
-				return true;
-			}
-		});
+		registerForContextMenu(getListView());
 	}
 
 	private void showDialog(final int id) {
@@ -74,6 +71,27 @@ public class AppsListFragment extends ListFragment {
 		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPath()), getActivity(), ConfigActivity.class);
 		i.putExtra("name", item.getTitle());
 		startActivityForResult(i, 0);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getActivity().getMenuInflater();
+		inflater.inflate(R.menu.context_main, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		int index = info.position;
+		switch (item.getItemId()){
+			case R.id.action_context_settings:
+				break;
+			case R.id.action_context_delete:
+				showDialog(index);
+				break;
+		}
+		return super.onContextItemSelected(item);
 	}
 
 }

@@ -16,6 +16,8 @@
     <string name="action_restart">Restart</string>
     <string name="converting_message">Processing...</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
+    <string name="action_context_settings">Settings</string>
+    <string name="action_context_delete">Delete</string>
 
     <string name="START_CMD" formatted="false">Start</string>
     <string name="CANCEL_CMD" formatted="false">Cancel</string>
