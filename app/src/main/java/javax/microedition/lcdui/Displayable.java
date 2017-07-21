@@ -138,7 +138,7 @@ public abstract class Displayable {
 		}
 	}
 
-	public void showExitConfirmation() {
+	private void showExitConfirmation() {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(parent);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
@@ -163,6 +163,12 @@ public abstract class Displayable {
 		alertBuilder.create().show();
 	}
 
+	private void switchLayoutEditMode(int mode) {
+		if (this instanceof Canvas && ContextHolder.getVk() != null) {
+			ContextHolder.getVk().switchLayoutEditMode(mode);
+		}
+	}
+
 	public boolean menuItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id < ADDITIONAL_MENU_SIZE && id > 0) {
@@ -171,13 +177,13 @@ public abstract class Displayable {
 					showExitConfirmation();
 					break;
 				case MENU_KEY_EDIT:
-					ContextHolder.getVk().switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+					switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
 					break;
 				case MENU_KEY_SCALE:
-					ContextHolder.getVk().switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+					switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
 					break;
 				case MENU_KEY_FINISH:
-					ContextHolder.getVk().switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+					switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
 					break;
 			}
 			return true;
