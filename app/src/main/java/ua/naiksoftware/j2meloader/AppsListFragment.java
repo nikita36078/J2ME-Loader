@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -70,7 +72,7 @@ public class AppsListFragment extends ListFragment {
 		AppItem item = apps.get(position);
 		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPath()), getActivity(), ConfigActivity.class);
 		i.putExtra("name", item.getTitle());
-		startActivityForResult(i, 0);
+		startActivity(i);
 	}
 
 	@Override
@@ -84,13 +86,23 @@ public class AppsListFragment extends ListFragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
+		AppItem appItem = apps.get(index);
 		switch (item.getItemId()){
+			case R.id.action_context_shortcut:
+				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePath());
+				Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
+				launchIntent.putExtra("name", appItem.getTitle());
+				intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
+				intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, appItem.getTitle());
+				intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bitmap);
+				getActivity().sendBroadcast(intent);
+				break;
 			case R.id.action_context_settings:
-				AppItem appItem = apps.get(index);
 				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
 				i.putExtra("name", appItem.getTitle());
 				i.putExtra("showSettings", true);
-				startActivityForResult(i, 0);
+				startActivity(i);
 				break;
 			case R.id.action_context_delete:
 				showDialog(index);

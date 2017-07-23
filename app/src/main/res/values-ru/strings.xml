@@ -12,6 +12,7 @@
     <string name="action_restart">Перезапуск</string>
     <string name="converting_message">Обработка...</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
+    <string name="action_context_shortcut">Добавить ярлык</string>
     <string name="action_context_settings">Настройки</string>
     <string name="action_context_delete">Удалить</string>
 
