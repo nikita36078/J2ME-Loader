@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ua.naiksoftware.util.Log;
-import ua.naiksoftware.util.MathUtils;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -67,7 +66,7 @@ public class NavigationDrawerFragment extends Fragment {
 
 	private TextView fullPath;
 	ArrayList<FSItem> items;
-	private String currPath, prevPath;
+	private String currPath;
 	private String startPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 	private static final Comparator<SortItem> comparator = new AlphabeticComparator<SortItem>();
 	private static final Map<String, Integer> mapExt = new HashMap<String, Integer>() {
@@ -114,7 +113,6 @@ public class NavigationDrawerFragment extends Fragment {
 					public void onItemClick(AdapterView<?> parent, View view,
 											int position, long id) {
 
-						prevPath = currPath;
 						FSItem it = items.get(position);
 						switch (it.getType()) {
 							case Folder:
@@ -152,7 +150,6 @@ public class NavigationDrawerFragment extends Fragment {
 		if (currPath == null) {
 			this.currPath = startPath;
 		}
-		prevPath = calcBackPath();
 		readFolder(currPath);
 
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
@@ -230,7 +227,7 @@ public class NavigationDrawerFragment extends Fragment {
 			}
 		});
 
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerLayout.addDrawerListener(mDrawerToggle);
 	}
 
 	@Override
@@ -274,7 +271,6 @@ public class NavigationDrawerFragment extends Fragment {
 	private void showGlobalContextActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setTitle(R.string.open_jar);
 	}
 
@@ -286,7 +282,7 @@ public class NavigationDrawerFragment extends Fragment {
 	 * Callbacks interface that all activities using this fragment must
 	 * implement.
 	 */
-	public static interface SelectedCallback {
+	public interface SelectedCallback {
 		/**
 		 * Called when clicked on file
 		 */
@@ -310,9 +306,7 @@ public class NavigationDrawerFragment extends Fragment {
 			fullPath.setText(currPath);
 			return;
 		}
-		int j = 0;// счетчик для names
 		for (File file : current.listFiles()) {
-			j++;
 			subheader.delete(0, subheader.length()).append(' ');// cls subheader
 			if (file.isDirectory()) {
 				// если папка или ссылка
@@ -349,12 +343,17 @@ public class NavigationDrawerFragment extends Fragment {
 		if (length < 1024) {
 			return String.valueOf(length).concat(" b");
 		} else if (length < 1048576) {
-			return String.valueOf(MathUtils.round((float) length / 1024f))
+			return String.valueOf(round((float) length / 1024f))
 					.concat(" Kb");
 		} else {
-			return String.valueOf(MathUtils.round((float) length / 1048576f))
+			return String.valueOf(round((float) length / 1048576f))
 					.concat(" Mb");
 		}
+	}
+
+	private float round(float sourceNum) {
+		int temp = (int) (sourceNum / 0.01f);
+		return temp / 100f;
 	}
 
 	private String calcDate(long l) {
