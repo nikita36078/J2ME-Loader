@@ -58,12 +58,7 @@ public class AppsListFragment extends ListFragment {
 						((MainActivity) getActivity()).updateApps();
 					}
 				})
-				.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						return;
-					}
-				});
+				.setNegativeButton(android.R.string.no, null);
 		builder.show();
 	}
 
@@ -87,7 +82,7 @@ public class AppsListFragment extends ListFragment {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
 		AppItem appItem = apps.get(index);
-		switch (item.getItemId()){
+		switch (item.getItemId()) {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePath());
 				Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");

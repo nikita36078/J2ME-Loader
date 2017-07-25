@@ -16,8 +16,8 @@ import java.util.zip.ZipException;
 
 import javax.microedition.shell.ConfigActivity;
 
-import ua.naiksoftware.util.Log;
 import ua.naiksoftware.util.FileUtils;
+import ua.naiksoftware.util.Log;
 import ua.naiksoftware.util.ZipUtils;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {

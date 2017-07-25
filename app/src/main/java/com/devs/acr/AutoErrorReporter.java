@@ -204,8 +204,8 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		infoStringBuffer.append("\nTIME         : ").append(time);
 		infoStringBuffer.append("\nTYPE         : ").append(type);
 		infoStringBuffer.append("\nUSER         : ").append(user);
-		infoStringBuffer.append("\nTOTAL-INTERNAL-MEMORY     : ").append(getTotalInternalMemorySize() + " mb");
-		infoStringBuffer.append("\nAVAILABLE-INTERNAL-MEMORY : ").append(getAvailableInternalMemorySize() + " mb");
+		infoStringBuffer.append("\nTOTAL-INTERNAL-MEMORY     : ").append(getTotalInternalMemorySize()).append(" mb");
+		infoStringBuffer.append("\nAVAILABLE-INTERNAL-MEMORY : ").append(getAvailableInternalMemorySize()).append(" mb");
 
 		return infoStringBuffer.toString();
 	}

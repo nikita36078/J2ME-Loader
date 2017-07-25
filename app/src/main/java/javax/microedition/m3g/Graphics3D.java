@@ -453,7 +453,7 @@ public final class Graphics3D {
 		return depthRangeFar;
 	}
 
-	public static final Hashtable getProperties() {
+	public static Hashtable getProperties() {
 		// Force initialization of Graphics3D in order to populate implementationProperties
 		if (instance == null) {
 			getInstance();

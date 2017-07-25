@@ -2,10 +2,10 @@ package javax.microedition.m3g;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.lcdui.Image;
-import java.util.Vector;
 
 public class Image2D extends Object3D {
 	public static final int ALPHA = 96;

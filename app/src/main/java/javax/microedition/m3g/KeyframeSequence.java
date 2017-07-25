@@ -269,13 +269,11 @@ public class KeyframeSequence extends Object3D {
 		} else {
 			if (time < keyFrameTimes[validRangeFirst]) {
 				float[] value = keyframeAt(validRangeFirst);
-				for (int i = 0; i < componentCount; i++)
-					sample[i] = value[i];
+				System.arraycopy(value, 0, sample, 0, componentCount);
 				return (keyFrameTimes[validRangeFirst] - time);
 			} else if (time >= keyFrameTimes[validRangeLast]) {
 				float[] value = keyframeAt(validRangeLast);
-				for (int i = 0; i < componentCount; i++)
-					sample[i] = value[i];
+				System.arraycopy(value, 0, sample, 0, componentCount);
 				return 0x7FFFFFFF;
 			}
 		}

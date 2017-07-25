@@ -1,7 +1,6 @@
 package javax.microedition.m3g;
 
 import javax.microedition.khronos.opengles.GL10;
-import java.util.Vector;
 
 public class Texture2D extends Transformable {
 

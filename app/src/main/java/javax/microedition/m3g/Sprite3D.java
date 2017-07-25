@@ -2,9 +2,8 @@ package javax.microedition.m3g;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
 import java.nio.IntBuffer;
-import java.util.Hashtable;
+import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 

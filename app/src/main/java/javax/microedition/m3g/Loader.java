@@ -1,14 +1,13 @@
 package javax.microedition.m3g;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PushbackInputStream;
-import java.io.BufferedInputStream;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.zip.Inflater;
-import java.util.Hashtable;
 
 import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;

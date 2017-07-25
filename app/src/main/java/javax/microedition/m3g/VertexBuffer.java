@@ -1,8 +1,5 @@
 package javax.microedition.m3g;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 public class VertexBuffer extends Object3D {
 
 	private int numVertices = 0;
@@ -41,9 +38,7 @@ public class VertexBuffer extends Object3D {
 		}
 
 		if (texCoords != null) {
-			for (int i = 0; i < texCoords.length; i++) {
-				copy.texCoords[i] = texCoords[i];
-			}
+			System.arraycopy(texCoords, 0, copy.texCoords, 0, texCoords.length);
 		}
 
 		if (texCoordsBias != null) {

@@ -166,7 +166,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 				if (catchInfo == null) {
 					catchInfo = new HashMap<Label, CatchInformation>();
 				}
-				CatchInformation newHandler = (CatchInformation) catchInfo.get(handler);
+				CatchInformation newHandler = catchInfo.get(handler);
 				if (newHandler == null) {
 					newHandler = new CatchInformation(type);
 					catchInfo.put(handler, newHandler);
@@ -193,12 +193,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 		className = name;
 		super.visit(version, access, name, signature, superName, interfaces);
-	}
-
-	@Override
-	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-		return super.visitField(access, name, desc, signature, value);
-
 	}
 
 	public MethodVisitor visitMethod(int access, final String name, String desc, final String signature, final String[] exceptions) {
