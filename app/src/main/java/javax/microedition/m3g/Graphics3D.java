@@ -28,6 +28,7 @@ public final class Graphics3D {
 	private static final String PROPERTY_SUPPORT_DITHERING = "supportDithering";
 	private static final String PROPERTY_SUPPORT_MIPMAPPING = "supportMipmapping";
 	private static final String PROPERTY_SUPPORT_PERSPECTIVE_CORRECTION = "supportPerspectiveCorrection";
+	private static final String PROPERTY_SUPPORT_LOCAL_CAMERA_LIGHTING = "supportLocalCameraLighting";
 	private static final String PROPERTY_MAX_LIGHTS = "maxLights";
 	private static final String PROPERTY_MAX_VIEWPORT_WIDTH = "maxViewportWidth";
 	private static final String PROPERTY_MAX_VIEWPORT_HEIGHT = "maxViewportHeight";
@@ -161,6 +162,7 @@ public final class Graphics3D {
 		implementationProperties.put(PROPERTY_SUPPORT_DITHERING, new Boolean(false));
 		implementationProperties.put(PROPERTY_SUPPORT_MIPMAPPING, new Boolean(false));
 		implementationProperties.put(PROPERTY_SUPPORT_PERSPECTIVE_CORRECTION, new Boolean(true));
+		implementationProperties.put(PROPERTY_SUPPORT_LOCAL_CAMERA_LIGHTING, new Boolean(false));
 		implementationProperties.put(PROPERTY_MAX_LIGHTS, new Integer(maxLights));
 		implementationProperties.put(PROPERTY_MAX_VIEWPORT_WIDTH, new Integer(maxViewportWidth));
 		implementationProperties.put(PROPERTY_MAX_VIEWPORT_HEIGHT, new Integer(maxViewportHeight));
