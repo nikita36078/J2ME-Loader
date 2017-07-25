@@ -114,15 +114,15 @@ public class TiledLayer extends Layer {
 
 	public void setStaticTileSet(Image image, int tileWidth, int tileHeight) {
 		synchronized (this) {
-			if (img == null)
+			if (image == null)
 				throw new NullPointerException();
 			if (tileHeight <= 0 || tileWidth <= 0)
 				throw new IllegalArgumentException();
-			if (img.getWidth() % tileWidth != 0 || img.getHeight() % tileHeight != 0)
+			if (image.getWidth() % tileWidth != 0 || image.getHeight() % tileHeight != 0)
 				throw new IllegalArgumentException();
 
-			int newNumStaticTiles = (img.getWidth() / getCellWidth()) *
-					(img.getHeight() / getCellHeight());
+			int newNumStaticTiles = (image.getWidth() / getCellWidth()) *
+					(image.getHeight() / getCellHeight());
 
 
 			// recalculate size
@@ -131,7 +131,7 @@ public class TiledLayer extends Layer {
 
 			setSize(w, h);
 
-			this.img = img;
+			this.img = image;
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
 
