@@ -54,8 +54,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="javax.microedition.lcdui.Display$ScreenActivity" />
-        <activity android:name="javax.microedition.lcdui.Display$CanvasActivity" />
+        <activity android:name="javax.microedition.lcdui.MicroActivity" />
         <activity
             android:name="com.devs.acr.ErrorReporterActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
