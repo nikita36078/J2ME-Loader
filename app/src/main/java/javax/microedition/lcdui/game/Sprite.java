@@ -119,30 +119,6 @@ public class Sprite extends Layer {
 			return collidesWith(image, iX, iY);
 	}
 
-
-
-    /*public final boolean collidesWith(TiledLayer layer, boolean pixelLevel) {
-		int sX, sY;
-        int sW, sH;
-
-        if (layer == null) {
-            throw new NullPointerException();
-        }
-
-        // only check collision if visible
-        if (!this.isVisible())
-			return false;
-
-        // only check collision if both are visible
-        if (!layer.isVisible() || !this.isVisible())
-            return false;
-
-        if (pixelLevel) // second and third parameters are dont care
-            return collidesWithPixelLevel(layer, 0, 0);
-        else 
-            return collidesWith(layer, 0, 0);
-    }*/
-
 	public final boolean collidesWith(Sprite otherSprite, boolean pixelLevel) {
 		int sX, sY;
 		int sW, sH;
@@ -577,7 +553,7 @@ public class Sprite extends Layer {
 					// another = true;
 					t = (Sprite) o;
 				}/* else if (o instanceof TiledLayer) {
-                    another = false;
+					another = false;
                     TiledLayer layer = (TiledLayer) o;
                     oX = layer.getX();
                     oY = layer.getY();
@@ -611,63 +587,7 @@ public class Sprite extends Layer {
 		else if (tY < oY && tY + tH <= oY)
 			return false;
 
-        /*if (o instanceof TiledLayer) {
-            // if o is a tiledLayer then
-            // it is possible to have not a
-            // collision if every intersection tile
-            // has a zero value 
-            TiledLayer layer = (TiledLayer) o;
-            // this is the intersection of the two rectangles
-            int rX, rY, rW, rH;
-
-            if (oX > tX) {
-                rX = oX;
-                rW = ((oX + oW < tX + tW)? oX + oW : tX + tW) - rX;
-            } else {
-                rX = tX;
-                rW = ((tX + tW < oX + oW)? tX + tW : oX + oW) - rX;
-            }
-            if (oY > tY) {
-                rY = oY;
-                rH = ((oY + oH < tY + tH)? oY + oH : tY + tH) - rY;
-            } else {
-                rY = tY;
-                rH = ((tY + tH < oY + oH)? tY + tH : oY + oH) - rY;
-            }
-
-            Image img = layer.img;
-
-            int lW = layer.getCellWidth();
-            int lH = layer.getCellHeight();
-
-            int minC = (rX - oX) / lW;
-            int minR = (rY - oY) / lH;
-            int maxC = (rX - oX + rW - 1) / lW;
-            int maxR = (rY - oY + rH - 1) / lH;
-
-            // travel across all cells in the collision
-            // rectangle
-            for (int row = minR; row <= maxR; row++) {
-                for (int col = minC; col <= maxC; col++) {
-                    int cell = layer.getCell(col, row);
-                    // if cell is animated get current
-                    // associated static tile
-                    if (cell < 0)
-                        cell = layer.getAnimatedTile(cell);
-
-                    if (cell != 0)
-                        return true;
-                }
-            }
-
-            // if no non zero cell was found
-            // there is no collision
-            return false;
-        } else {*/
-		// if the other object is an image or sprite
-		// collision happened
 		return true;
-		//}
 	}
 
 	private synchronized boolean collidesWithPixelLevel(Object o,
@@ -772,14 +692,7 @@ public class Sprite extends Layer {
 					// two sprites first round
 					// another = true;
 					t = (Sprite) o;
-				}/* else if (o instanceof TiledLayer) {
-                    another = false;
-                    TiledLayer layer = (TiledLayer) o;
-                    oX = layer.getX();
-                    oY = layer.getY();
-                    oW = layer.getWidth();
-                    oH = layer.getHeight();
-                }*/ else { // o instanceof lcdui.Image
+				} else { // o instanceof lcdui.Image
 					another = false;
 					Image img = (Image) o;
 					oW = img.getWidth();
@@ -924,70 +837,7 @@ public class Sprite extends Layer {
 					fH = t.getHeight();
 					fX = fW * (f % t.rows);
 					fY = fH * (f / t.rows);
-				}/* else if (o instanceof TiledLayer) {
-                    another = false;
-                    TiledLayer layer = (TiledLayer) o;
-                    Image img = layer.img;
-
-                    oOffset = 0;
-                    oColIncr = 1;
-                    oRowIncr = 0;
-
-                    int lW = layer.getCellWidth();
-                    int lH = layer.getCellHeight();
-
-                    int minC = (rX - oX) / lW;
-                    int minR = (rY - oY) / lH;
-                    int maxC = (rX - oX + rW - 1) / lW;
-                    int maxR = (rY - oY + rH - 1) / lH;
-
-                    // travel across all cells in the collision
-                    // rectangle
-                    for (int row = minR; row <= maxR; row++) {
-                        for (int col = minC; col <= maxC; col++) {
-                            int cell = layer.getCell(col, row);
-                            // if cell is animated get current
-                            // associated static tile
-                            if (cell < 0)
-                                cell = layer.getAnimatedTile(cell);
-
-                            int minX = (col == minC)? (rX - oX) % lW : 0;
-                            int minY = (row == minR)? (rY - oY) % lH : 0;
-                            int maxX = (col == maxC)? (rX + rW - oX - 1) % lW : lW-1;
-                            int maxY = (row == maxR)? (rY + rH - oY - 1) % lH : lH-1;
-
-
-                            int c = (row - minR) * lH * rW + (col - minC) * lW -
-								((col == minC)? 0 : (rX - oX) % lW) -
-								((row == minR)? 0 : (rY - oY) % lH) * rW;
-
-                            // if cell is invisible we should still set
-                            // all points as transparent to prevent
-                            // fake positives caused by residual data
-                            // on the rgb array
-                            if (cell == 0) {
-
-                                for (int y = minY; y <= maxY; y++, 
-								c += rW - (maxX - minX + 1)) {
-                                    for (int x = minX; x <= maxX; x++, c++) {
-                                        rgbDataAux[c] = 0;
-                                    }
-                                }
-                            } else {
-                                // make cell 0-based
-                                cell--;
-
-                                int imgCols = img.getWidth() / layer.getCellWidth();
-                                int xSrc = lW * (cell % imgCols);
-                                int ySrc = (cell / imgCols) * lH;
-                                img.getRGB(rgbDataAux, c, rW, xSrc + minX, 
-										   ySrc + minY, maxX - minX + 1, 
-										   maxY - minY + 1);
-
-                            }
-                        }
-                    }
-                }*/ else { // o instanceof lcdui.Image
+				} else { // o instanceof lcdui.Image
 					another = false;
 					Image img = (Image) o;
 					// get the image rgb data, and the increments
