@@ -147,6 +147,7 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 		System.setProperty("microedition.pim.version", "1.0");
 		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
 		System.setProperty("microedition.locale", locale.toLowerCase());
+		System.setProperty("microedition.encoding", "ISO-8859-1");
 		System.setProperty("user.home", Environment.getExternalStorageDirectory().getAbsolutePath());
 
 		tfScreenWidth = (EditText) findViewById(R.id.tfScreenWidth);
