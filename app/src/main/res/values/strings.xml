@@ -13,7 +13,6 @@
     <string name="message_delete">Do you really want to delete this app?</string>
     <string name="converting_wait">Converting JAR...</string>
     <string name="convert_complete">Complete</string>
-    <string name="action_restart">Restart</string>
     <string name="converting_message">Processing...</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
     <string name="action_context_shortcut">Add shortcut</string>

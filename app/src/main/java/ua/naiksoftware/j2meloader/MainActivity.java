@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,8 +23,6 @@ import java.util.LinkedHashMap;
 import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.SelectedCallback {
@@ -138,13 +135,6 @@ public class MainActivity extends Activity implements
 		switch (item.getItemId()) {
 			case R.id.action_exit_app:
 				finish();
-				break;
-			case R.id.action_restart:
-				Intent intent = new Intent(this, MainActivity.class);
-				intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
-				finish();
-				System.exit(0);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

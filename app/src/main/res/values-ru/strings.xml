@@ -9,7 +9,6 @@
     <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
     <string name="converting_wait">Конвертация JAR...</string>
     <string name="convert_complete">Завершено</string>
-    <string name="action_restart">Перезапуск</string>
     <string name="converting_message">Обработка...</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="action_context_shortcut">Добавить ярлык</string>

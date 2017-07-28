@@ -6,10 +6,5 @@
         android:id="@+id/action_exit_app"
         android:showAsAction="withText|ifRoom"
         android:title="@string/exit"/>
-    <item
-        android:id="@+id/action_restart"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_restart"/>
 
 </menu>
