@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 
@@ -75,6 +74,10 @@ public class Display {
 	private Display(MIDlet midlet) {
 		context = midlet;
 		advancer = new AlertAdvancer();
+	}
+
+	public static void initDisplay() {
+		instance = null;
 	}
 
 	public void setCurrent(Displayable disp) {

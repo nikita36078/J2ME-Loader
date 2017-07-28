@@ -75,7 +75,6 @@ public class MIDlet {
 	public final void notifyDestroyed() {
 		if (!destroyAppCalled) {
 			ContextHolder.notifyDestroyed();
-			System.exit(1);
 		}
 	}
 

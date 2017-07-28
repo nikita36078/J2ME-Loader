@@ -110,11 +110,6 @@ public class MicroActivity extends Activity {
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		ContextHolder.notifyOnActivityResult(requestCode, resultCode, data);
-	}
-
-	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (current != null) {
 			current.populateMenu(menu);

@@ -44,6 +44,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -511,6 +512,8 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 			if (cxShowKeyboard.isChecked()) {
 				setVirtualKeyboard();
 			}
+
+			Display.initDisplay();
 			midlet = loadMIDlet();
 			applyConfiguration();
 			midlet.start();

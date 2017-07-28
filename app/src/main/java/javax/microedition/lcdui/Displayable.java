@@ -153,7 +153,6 @@ public abstract class Displayable {
 									ex.printStackTrace();
 								}
 								ContextHolder.notifyDestroyed();
-								System.exit(1);
 							}
 						};
 						(new Thread(r)).start();
