@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -107,6 +108,18 @@ public class MicroActivity extends Activity {
 		Intent intent = new Intent(this, cls);
 		intent.putExtra(INTENT_PARAM_IS_CANVAS, isCanvas);
 		startActivity(intent);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_MENU:
+				return true;
+			case KeyEvent.KEYCODE_BACK:
+				openOptionsMenu();
+				return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
