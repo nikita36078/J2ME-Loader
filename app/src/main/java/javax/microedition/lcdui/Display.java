@@ -46,12 +46,6 @@ public class Display {
 					0xFF000080
 			};
 
-	private static class AlertAdvancer implements CommandListener {
-		public void commandAction(Command c, Displayable d) {
-			Display.getDisplay(null).showCurrent();
-		}
-	}
-
 	private static Display instance;
 
 	private MIDlet context;
@@ -62,8 +56,6 @@ public class Display {
 	private static PowerManager.WakeLock wakelock;
 	private static Vibrator vibrator;
 
-	private AlertAdvancer advancer;
-
 	public static Display getDisplay(MIDlet midlet) {
 		if (instance == null) {
 			instance = new Display(midlet);
@@ -73,7 +65,6 @@ public class Display {
 
 	private Display(MIDlet midlet) {
 		context = midlet;
-		advancer = new AlertAdvancer();
 	}
 
 	public static void initDisplay() {
@@ -89,11 +80,15 @@ public class Display {
 		showCurrent();
 	}
 
-	public void setCurrent(Alert alert, Displayable disp) {
+	public void setCurrent(final Alert alert, Displayable disp) {
 		changeCurrent(disp);
-		alert.showDialog(activity != null ? activity : ContextHolder.getContext());
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				alert.prepareDialog().show();
+			}
+		});
 		if (alert.finiteTimeout()) {
-			alert.setCommandListener(advancer);
 			(new Thread(alert)).start();
 		}
 	}

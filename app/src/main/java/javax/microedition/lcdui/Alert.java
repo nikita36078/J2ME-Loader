@@ -33,7 +33,6 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 	private AlertType type;
 	private int timeout;
 
-	private AlertDialog dialog;
 	private Form form;
 
 	private Command[] commands;
@@ -88,13 +87,15 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 		if (finiteTimeout()) {
 			try {
 				Thread.sleep(timeout);
-				fireCommandAction(DISMISS_COMMAND, this);
+				Display display = Display.getDisplay(null);
+				display.setCurrent(display.getCurrent());
 			} catch (InterruptedException ie) {
 			}
 		}
 	}
 
-	public void showDialog(Context context) {
+	public AlertDialog.Builder prepareDialog() {
+		Context context = getParentActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
 		builder.setTitle(getTitle());
@@ -103,8 +104,6 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 		if (image != null) {
 			builder.setIcon(new BitmapDrawable(context.getResources(), image.getBitmap()));
 		}
-
-		dialog = builder.create();
 
 		commands = getCommands();
 		Arrays.sort(commands);
@@ -126,25 +125,18 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 		}
 
 		if (positive >= 0) {
-			dialog.setButton(DialogInterface.BUTTON_POSITIVE, commands[positive].getLabel(), this);
+			builder.setPositiveButton(commands[positive].getLabel(), this);
 		}
 
 		if (negative >= 0) {
-			dialog.setButton(DialogInterface.BUTTON_NEGATIVE, commands[negative].getLabel(), this);
+			builder.setNegativeButton(commands[negative].getLabel(), this);
 		}
 
 		if (neutral >= 0) {
-			dialog.setButton(DialogInterface.BUTTON_NEUTRAL, commands[neutral].getLabel(), this);
+			builder.setNeutralButton(commands[neutral].getLabel(), this);
 		}
 
-		dialog.show();
-	}
-
-	public void dismissDialog() {
-		if (dialog != null) {
-			dialog.dismiss();
-			dialog = null;
-		}
+		return builder;
 	}
 
 	public View getScreenView() {
