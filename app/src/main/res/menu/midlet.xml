@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_common_settings"
+        android:title="@string/common_settings">
+        <menu>
+            <group android:id="@+id/action_group_common_settings">
+                <item
+                    android:id="@+id/action_exit_midlet"
+                    android:title="@string/exit"/>
+                <item
+                    android:id="@+id/action_layout_edit_mode"
+                    android:title="@string/layout_edit_mode"/>
+                <item
+                    android:id="@+id/action_layout_scale_mode"
+                    android:title="@string/layout_scale_mode"/>
+                <item
+                    android:id="@+id/action_layout_edit_finish"
+                    android:title="@string/layout_edit_finish"/>
+            </group>
+        </menu>
+    </item>
+</menu>

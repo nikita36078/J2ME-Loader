@@ -21,12 +21,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.util.ContextHolder;
+
+import ua.naiksoftware.j2meloader.R;
 
 public class MicroActivity extends Activity {
 	public final static String INTENT_PARAM_IS_CANVAS = "isCanvas";
@@ -123,8 +126,16 @@ public class MicroActivity extends Activity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+
+	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (current != null) {
+			menu.clear();
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.midlet, menu);
 			current.populateMenu(menu);
 		}
 

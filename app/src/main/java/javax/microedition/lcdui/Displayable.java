@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -42,11 +41,6 @@ public abstract class Displayable {
 	private CommandListener listener;
 
 	private static EventQueue queue;
-	private static final int ADDITIONAL_MENU_SIZE = 5;
-	private static final int MENU_EXIT = 1;
-	private static final int MENU_KEY_EDIT = 2;
-	private static final int MENU_KEY_SCALE = 3;
-	private static final int MENU_KEY_FINISH = 4;
 
 	static {
 		queue = new EventQueue();
@@ -126,13 +120,6 @@ public abstract class Displayable {
 	}
 
 	public void populateMenu(Menu menu) {
-		menu.clear();
-		SubMenu subMenu = menu.addSubMenu(Menu.NONE, 0, 0, R.string.common_settings);
-		subMenu.add(Menu.NONE, MENU_EXIT, 0, R.string.exit);
-		subMenu.add(Menu.NONE, MENU_KEY_EDIT, 0, R.string.layout_edit_mode);
-		subMenu.add(Menu.NONE, MENU_KEY_SCALE, 0, R.string.layout_scale_mode);
-		subMenu.add(Menu.NONE, MENU_KEY_FINISH, 0, R.string.layout_edit_finish);
-
 		for (Command cmd : commands) {
 			menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getLabel());
 		}
@@ -170,18 +157,18 @@ public abstract class Displayable {
 
 	public boolean menuItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id < ADDITIONAL_MENU_SIZE && id > 0) {
+		if (item.getGroupId() == R.id.action_group_common_settings) {
 			switch (id) {
-				case MENU_EXIT:
+				case R.id.action_exit_midlet:
 					showExitConfirmation();
 					break;
-				case MENU_KEY_EDIT:
+				case R.id.action_layout_edit_mode:
 					switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
 					break;
-				case MENU_KEY_SCALE:
+				case R.id.action_layout_scale_mode:
 					switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
 					break;
-				case MENU_KEY_FINISH:
+				case R.id.action_layout_edit_finish:
 					switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
 					break;
 			}
