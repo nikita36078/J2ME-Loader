@@ -23,7 +23,7 @@ public class AboutDialogFragment extends DialogFragment {
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(message.toString()));
 		tv.setTextSize(16);
-		tv.setPadding(10, 0, 0, 0);
+		tv.setPadding(10, 10, 10, 10);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.app_name)
 				.setIcon(R.drawable.icon_java)
