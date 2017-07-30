@@ -474,7 +474,7 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = new MenuInflater(this);
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.config, menu);
 		return super.onCreateOptionsMenu(menu);
 	}

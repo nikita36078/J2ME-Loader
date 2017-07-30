@@ -125,7 +125,7 @@ public class MainActivity extends Activity implements
 			// decide what to show in the action bar.
 			restoreActionBar();
 		}
-		MenuInflater inflater = new MenuInflater(this);
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
