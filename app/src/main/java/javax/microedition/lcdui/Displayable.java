@@ -16,9 +16,6 @@
 
 package javax.microedition.lcdui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -28,7 +25,6 @@ import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;
@@ -119,36 +115,6 @@ public abstract class Displayable {
 		}
 	}
 
-	public void populateMenu(Menu menu) {
-		for (Command cmd : commands) {
-			menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getLabel());
-		}
-	}
-
-	private void showExitConfirmation() {
-		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(parent);
-		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
-				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface p1, int p2) {
-						Runnable r = new Runnable() {
-							public void run() {
-								try {
-									MIDlet.callDestroyApp(true);
-								} catch (Throwable ex) {
-									ex.printStackTrace();
-								}
-								ContextHolder.notifyDestroyed();
-							}
-						};
-						(new Thread(r)).start();
-					}
-				})
-				.setNegativeButton(android.R.string.no, null);
-		alertBuilder.create().show();
-	}
-
 	private void switchLayoutEditMode(int mode) {
 		if (this instanceof Canvas && ContextHolder.getVk() != null) {
 			ContextHolder.getVk().switchLayoutEditMode(mode);
@@ -160,7 +126,7 @@ public abstract class Displayable {
 		if (item.getGroupId() == R.id.action_group_common_settings) {
 			switch (id) {
 				case R.id.action_exit_midlet:
-					showExitConfirmation();
+					parent.showExitConfirmation();
 					break;
 				case R.id.action_layout_edit_mode:
 					switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);

@@ -17,6 +17,8 @@
 package javax.microedition.lcdui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -27,6 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;
@@ -107,6 +110,30 @@ public class MicroActivity extends Activity {
 		return visible;
 	}
 
+	public void showExitConfirmation() {
+		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
+				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface p1, int p2) {
+						Runnable r = new Runnable() {
+							public void run() {
+								try {
+									MIDlet.callDestroyApp(true);
+								} catch (Throwable ex) {
+									ex.printStackTrace();
+								}
+								ContextHolder.notifyDestroyed();
+							}
+						};
+						(new Thread(r)).start();
+					}
+				})
+				.setNegativeButton(android.R.string.no, null);
+		alertBuilder.create().show();
+	}
+
 	public void startActivity(Class cls, boolean isCanvas) {
 		Intent intent = new Intent(this, cls);
 		intent.putExtra(INTENT_PARAM_IS_CANVAS, isCanvas);
@@ -126,17 +153,14 @@ public class MicroActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
-	}
-
-	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (current != null) {
 			menu.clear();
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.midlet, menu);
-			current.populateMenu(menu);
+			for (Command cmd : current.getCommands()) {
+				menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getLabel());
+			}
 		}
 
 		return super.onPrepareOptionsMenu(menu);
