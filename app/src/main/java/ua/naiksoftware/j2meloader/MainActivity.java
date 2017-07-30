@@ -1,15 +1,15 @@
 package ua.naiksoftware.j2meloader;
 
 import android.Manifest;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +24,7 @@ import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends AppCompatActivity implements
 		NavigationDrawerFragment.SelectedCallback {
 
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements
 	private void setupActivity() {
 		setContentView(R.layout.activity_main);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements
 		bundle.putSerializable("apps", apps);
 		appsListFragment.setArguments(bundle);
 		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, appsListFragment).commit();
 		updateApps();
@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements
 	}
 
 	public void restoreActionBar() {
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);
 	}

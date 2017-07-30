@@ -1,18 +1,19 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_start"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/START_CMD"/>
+        android:title="@string/START_CMD"
+        app:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/action_reset"
-        android:showAsAction="never"
-        android:title="@string/RESET_CMD"/>
+        android:title="@string/RESET_CMD"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_reset_layout"
-        android:showAsAction="never"
-        android:title="@string/RESET_LAYOUT_CMD"/>
+        android:title="@string/RESET_LAYOUT_CMD"
+        app:showAsAction="never"/>
 
 </menu>

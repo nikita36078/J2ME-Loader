@@ -13,10 +13,10 @@
         android:largeHeap="true"
         android:icon="@drawable/icon_java"
         android:label="@string/app_name"
-        android:name=".EmulatorApplication"
-        android:theme="@style/AppTheme" >
+        android:name=".EmulatorApplication" >
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -48,6 +48,7 @@
         </activity>
         <activity
             android:name="javax.microedition.shell.ConfigActivity"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />

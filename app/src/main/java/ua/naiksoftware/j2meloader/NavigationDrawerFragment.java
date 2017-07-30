@@ -1,14 +1,15 @@
 package ua.naiksoftware.j2meloader;
 
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -174,7 +175,7 @@ public class NavigationDrawerFragment extends Fragment {
 												   * accessibility
 												   */
 				R.string.navigation_drawer_close /*
-                                                   * "close drawer" description for
+												   * "close drawer" description for
 												   * accessibility
 												   */
 		) {
@@ -275,7 +276,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private ActionBar getActionBar() {
-		return getActivity().getActionBar();
+		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
 
 	/**

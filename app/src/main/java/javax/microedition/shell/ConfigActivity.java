@@ -17,13 +17,13 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,7 +58,7 @@ import ua.naiksoftware.util.FileUtils;
 import ua.naiksoftware.util.Log;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ConfigActivity extends Activity implements View.OnClickListener {
+public class ConfigActivity extends AppCompatActivity implements View.OnClickListener {
 
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
@@ -125,7 +125,7 @@ public class ConfigActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.config_all);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		MIDlet.setMidletContext(this);
 		pathToMidletDir = getIntent().getDataString();
 		appName = getIntent().getStringExtra("name");
