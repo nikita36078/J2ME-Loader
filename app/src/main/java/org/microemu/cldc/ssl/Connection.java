@@ -25,8 +25,8 @@
 package org.microemu.cldc.ssl;
 
 import org.microemu.cldc.CertificateImpl;
-import org.microemu.cldc.ClosedConnection;
 import org.microemu.cldc.SecurityInfoImpl;
+import org.microemu.microedition.io.ConnectionImplementation;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -44,7 +44,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class Connection extends org.microemu.cldc.socket.SocketConnection implements SecureConnection, ClosedConnection {
+public class Connection extends org.microemu.cldc.socket.SocketConnection implements SecureConnection, ConnectionImplementation {
 
 	private SecurityInfo securityInfo;
 
@@ -52,7 +52,7 @@ public class Connection extends org.microemu.cldc.socket.SocketConnection implem
 		securityInfo = null;
 	}
 
-	public javax.microedition.io.Connection open(String name) throws IOException {
+	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 
 		if (!org.microemu.cldc.http.Connection.isAllowNetworkConnection()) {
 			throw new IOException("No network");

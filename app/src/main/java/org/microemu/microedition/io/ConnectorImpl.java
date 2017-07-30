@@ -28,8 +28,6 @@ package org.microemu.microedition.io;
 
 import android.util.Log;
 
-import org.microemu.cldc.ClosedConnection;
-
 import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.security.AccessControlContext;
@@ -136,7 +134,7 @@ public class ConnectorImpl extends ConnectorAdapter {
 				if (inst instanceof ConnectionImplementation) {
 					return ((ConnectionImplementation) inst).openConnection(name, mode, timeouts);
 				} else {
-					return ((ClosedConnection) inst).open(name);
+					throw new ClassNotFoundException();
 				}
 			} catch (ClassNotFoundException e) {
 				Log.d(TAG, "connection [" + protocol + "] class not found", e);

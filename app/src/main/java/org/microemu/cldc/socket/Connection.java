@@ -24,13 +24,13 @@
 
 package org.microemu.cldc.socket;
 
-import org.microemu.cldc.ClosedConnection;
+import org.microemu.microedition.io.ConnectionImplementation;
 
 import java.io.IOException;
 
-public class Connection implements ClosedConnection {
+public class Connection implements ConnectionImplementation {
 
-	public javax.microedition.io.Connection open(String name) throws IOException {
+	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 
 		if (!org.microemu.cldc.http.Connection.isAllowNetworkConnection()) {
 			throw new IOException("No network");
