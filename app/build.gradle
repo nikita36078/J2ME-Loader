@@ -22,7 +22,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.google.android.tools:dx:1.7'
     compile 'com.github.yukuku:ambilwarna:2.0.1'
     compile 'org.ow2.asm:asm-tree:5.2'
     compile fileTree(include: ['*.jar', '*.so'], dir: 'libs')
