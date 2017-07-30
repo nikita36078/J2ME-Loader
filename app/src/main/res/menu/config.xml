@@ -5,12 +5,10 @@
         android:id="@+id/action_start"
         android:title="@string/START_CMD"
         app:showAsAction="ifRoom|withText"/>
-
     <item
         android:id="@+id/action_reset"
         android:title="@string/RESET_CMD"
         app:showAsAction="never"/>
-
     <item
         android:id="@+id/action_reset_layout"
         android:title="@string/RESET_LAYOUT_CMD"

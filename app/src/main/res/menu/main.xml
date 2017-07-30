@@ -4,8 +4,12 @@
       tools:context="ua.naiksoftware.j2meloader.MainActivity">
 
     <item
+        android:id="@+id/action_about"
+        android:title="@string/about"
+        app:showAsAction="withText|ifRoom"/>
+    <item
         android:id="@+id/action_exit_app"
         android:title="@string/exit"
-        app:showAsAction="withText|ifRoom"/>
+        app:showAsAction="never"/>
 
 </menu>
