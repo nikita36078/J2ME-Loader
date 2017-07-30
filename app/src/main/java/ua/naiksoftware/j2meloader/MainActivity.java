@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements
 			setupActivity();
 		}
 		Uri uri = getIntent().getData();
-		if (uri != null) {
+		if (savedInstanceState == null && uri != null) {
 			JarConverter converter = new JarConverter(this);
 			try {
 				converter.execute(FileUtils.getPath(this, uri), pathConverted);
