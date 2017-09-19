@@ -119,6 +119,24 @@ public class Sprite extends Layer {
 			return collidesWith(image, iX, iY);
 	}
 
+	public final boolean collidesWith(TiledLayer layer, boolean pixelLevel) {
+		int sX, sY;
+		int sW, sH;
+		if (layer == null) {
+			throw new NullPointerException();
+		}
+		// only check collision if visible
+		if (!this.isVisible())
+			return false;
+		// only check collision if both are visible
+		if (!layer.isVisible() || !this.isVisible())
+			return false;
+		if (pixelLevel) // second and third parameters are dont care
+			return collidesWithPixelLevel(layer, 0, 0);
+		else
+			return collidesWith(layer, 0, 0);
+	}
+
 	public final boolean collidesWith(Sprite otherSprite, boolean pixelLevel) {
 		int sX, sY;
 		int sW, sH;
