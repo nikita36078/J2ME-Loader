@@ -50,4 +50,6 @@ public interface Player extends Controllable {
 	public void addPlayerListener(PlayerListener playerListener);
 
 	public void removePlayerListener(PlayerListener playerListener);
+
+	public String getContentType();
 }

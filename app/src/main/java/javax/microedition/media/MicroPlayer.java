@@ -356,7 +356,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return pan;
 	}
 
-	public String getCountentType() {
+	public String getContentType() {
 		return "";
 	}
 
