@@ -1,5 +1,8 @@
 package ua.naiksoftware.j2meloader;
 
+import android.support.v4.content.pm.ShortcutInfoCompat;
+import android.support.v4.content.pm.ShortcutManagerCompat;
+import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -85,13 +88,17 @@ public class AppsListFragment extends ListFragment {
 		switch (item.getItemId()) {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePath());
-				Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
 				launchIntent.putExtra("name", appItem.getTitle());
-				intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
-				intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, appItem.getTitle());
-				intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bitmap);
-				getActivity().sendBroadcast(intent);
+				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder = new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
+						.setIntent(launchIntent)
+						.setShortLabel(appItem.getTitle());
+				if (bitmap != null) {
+					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
+				} else {
+					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.drawable.icon_java));
+				}
+				ShortcutManagerCompat.requestPinShortcut(getActivity(), shortcutInfoCompatBuilder.build(), null);
 				break;
 			case R.id.action_context_settings:
 				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
