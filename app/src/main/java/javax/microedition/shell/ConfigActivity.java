@@ -96,6 +96,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 	private MIDlet midlet;
 	private File keylayoutFile;
+	private SharedPreferencesContainer params;
 	public static String pathToMidletDir;
 	public static String appName;
 	public static final String MIDLET_RES_DIR = "/res/";
@@ -129,10 +130,10 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		MIDlet.setMidletContext(this);
 		pathToMidletDir = getIntent().getDataString();
 		appName = getIntent().getStringExtra("name");
+		appName = appName.replace(":", "").replace("/", "");
 		keylayoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
 
-		DataContainer params = new SharedPreferencesContainer(
-				appName, Context.MODE_PRIVATE, this);
+		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
 
 		locale = params.getString("Locale", Locale.getDefault().getCountry());
 		System.setProperty("microedition.sensor.version", "1");
@@ -235,9 +236,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	public void onPause() {
-		SharedPreferencesContainer params = new SharedPreferencesContainer(
-				appName, Context.MODE_PRIVATE, this);
-		saveParams(params);
+		saveParams();
 		super.onPause();
 	}
 
@@ -331,49 +330,49 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				.toUpperCase());
 	}
 
-	public void saveParams(SharedPreferencesContainer editor) {
+	public void saveParams() {
 		try {
-			editor.edit();
-			editor.putString("Locale", locale);
+			params.edit();
+			params.putString("Locale", locale);
 
-			editor.putInt("ScreenWidth",
+			params.putInt("ScreenWidth",
 					Integer.parseInt(tfScreenWidth.getText().toString()));
-			editor.putInt("ScreenHeight",
+			params.putInt("ScreenHeight",
 					Integer.parseInt(tfScreenHeight.getText().toString()));
-			editor.putInt("ScreenBackgroundColor",
+			params.putInt("ScreenBackgroundColor",
 					Integer.parseInt(tfScreenBack.getText().toString(), 16));
-			editor.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
-			editor.putBoolean("ScreenKeepAspectRatio",
+			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
+			params.putBoolean("ScreenKeepAspectRatio",
 					cxKeepAspectRatio.isChecked());
-			editor.putBoolean("ScreenFilter", cxFilter.isChecked());
-			editor.putBoolean("ImmediateMode", cxImmediate.isChecked());
-			editor.putBoolean("ClearBuffer", cxClearBuffer.isChecked());
+			params.putBoolean("ScreenFilter", cxFilter.isChecked());
+			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
+			params.putBoolean("ClearBuffer", cxClearBuffer.isChecked());
 
-			editor.putInt("FontSizeSmall",
+			params.putInt("FontSizeSmall",
 					Integer.parseInt(tfFontSizeSmall.getText().toString()));
-			editor.putInt("FontSizeMedium",
+			params.putInt("FontSizeMedium",
 					Integer.parseInt(tfFontSizeMedium.getText().toString()));
-			editor.putInt("FontSizeLarge",
+			params.putInt("FontSizeLarge",
 					Integer.parseInt(tfFontSizeLarge.getText().toString()));
-			editor.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
-			editor.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
+			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
+			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
 
-			editor.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
-			editor.putInt("VirtualKeyboardDelay",
+			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
+			params.putInt("VirtualKeyboardDelay",
 					Integer.parseInt(tfVKHideDelay.getText().toString()));
-			editor.putInt("VirtualKeyboardColorBackground",
+			params.putInt("VirtualKeyboardColorBackground",
 					Integer.parseInt(tfVKBack.getText().toString(), 16));
-			editor.putInt("VirtualKeyboardColorForeground",
+			params.putInt("VirtualKeyboardColorForeground",
 					Integer.parseInt(tfVKFore.getText().toString(), 16));
-			editor.putInt("VirtualKeyboardColorBackgroundSelected",
+			params.putInt("VirtualKeyboardColorBackgroundSelected",
 					Integer.parseInt(tfVKSelBack.getText().toString(), 16));
-			editor.putInt("VirtualKeyboardColorForegroundSelected",
+			params.putInt("VirtualKeyboardColorForegroundSelected",
 					Integer.parseInt(tfVKSelFore.getText().toString(), 16));
-			editor.putInt("VirtualKeyboardColorOutline",
+			params.putInt("VirtualKeyboardColorOutline",
 					Integer.parseInt(tfVKOutline.getText().toString(), 16));
 
-			editor.apply();
-			editor.close();
+			params.apply();
+			params.close();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -486,9 +485,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				startMIDlet();
 				break;
 			case R.id.action_reset:
-				SharedPreferencesContainer params = new SharedPreferencesContainer(
-						appName, Context.MODE_PRIVATE,
-						ConfigActivity.this);
 				params.edit().clear().commit();
 				params.close();
 				loadParams(params);
