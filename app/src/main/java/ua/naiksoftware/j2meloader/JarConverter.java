@@ -60,7 +60,12 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		}
 		appDir = FileUtils.loadManifest(
 				new File(dirTmp, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
-		appDir = appDir.replace(":", "");
+		if (appDir == null) {
+			err = "Brocken manifest";
+			deleteTemp();
+			return false;
+		}
+		appDir = appDir.replace(":", "").replace("/", "");
 		File appConverted = new File(pathConverted, appDir);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
