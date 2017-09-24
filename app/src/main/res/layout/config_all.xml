@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -32,13 +29,9 @@
                 android:gravity="center"
                 android:hint="@string/PREF_WIDTH"
                 android:inputType="numberSigned"
-                android:singleLine="true">
-
-                <requestFocus/>
-            </EditText>
+                android:maxLines="1"/>
 
             <TextView
-                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_RESOLUTION_SEPARATOR"
@@ -52,7 +45,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_HEIGHT"
                 android:inputType="numberSigned"
-                android:singleLine="true"/>
+                android:maxLines="1"/>
         </LinearLayout>
 
         <LinearLayout
@@ -77,7 +70,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -133,7 +125,6 @@
             android:text="@string/PREF_CLEAR_BUFFER"/>
 
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -141,7 +132,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -155,7 +145,6 @@
                 android:inputType="number"/>
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_FONT_SEPARATOR"
@@ -171,7 +160,6 @@
                 android:inputType="number"/>
 
             <TextView
-                android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_FONT_SEPARATOR"
@@ -200,7 +188,6 @@
             android:text="@string/PREF_FONT_SIZE_IN_SP"/>
 
         <TextView
-            android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -214,7 +201,6 @@
             android:text="@string/PREF_LANGUAGE"/>
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -222,7 +208,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <TableLayout
-            android:id="@+id/tableLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -232,13 +217,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/PREF_VK_SHOW"/>
 
-            <TableRow
-                android:id="@+id/tableRow6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
-                    android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -254,13 +235,9 @@
                     android:max="255"/>
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <TextView
-                    android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
@@ -269,7 +246,6 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -284,7 +260,6 @@
                         android:inputType="number|numberSigned"/>
 
                     <TextView
-                        android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/PREF_UNIT_MS"
@@ -294,14 +269,10 @@
         </TableLayout>
 
         <TableLayout
-            android:id="@+id/tableLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <Button
                     android:id="@+id/cmdVKFore"
@@ -318,10 +289,7 @@
                     android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <Button
                     android:id="@+id/cmdVKBack"
@@ -338,10 +306,7 @@
                     android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <Button
                     android:id="@+id/cmdVKSelBack"
@@ -358,10 +323,7 @@
                     android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <Button
                     android:id="@+id/cmdVKSelFore"
@@ -378,10 +340,7 @@
                     android:hint="@string/PREF_COLOR_HINT"/>
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow>
 
                 <Button
                     android:id="@+id/cmdVKOutline"
