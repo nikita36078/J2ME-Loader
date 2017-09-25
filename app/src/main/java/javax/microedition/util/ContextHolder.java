@@ -144,7 +144,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		File dir = new File(context.getFilesDir() + MyClassLoader.getName());
+		File dir = new File(context.getFilesDir(), MyClassLoader.getName());
 		if (!dir.exists()) {
 			dir.mkdir();
 		}

@@ -10,13 +10,10 @@ import dalvik.system.DexClassLoader;
 public class MyClassLoader extends DexClassLoader {
 
 	private static File resFolder;
-	private static String resFolderName;
 
 	public MyClassLoader(String paths, String tmpDir, String libs, ClassLoader parent, String resDir) {
 		super(paths, tmpDir, libs, parent);
 		resFolder = new File(resDir);
-		String[] segments = resDir.split("/");
-		resFolderName = "/" + segments[segments.length - 2] + "/";
 	}
 
 	@Override
@@ -29,6 +26,6 @@ public class MyClassLoader extends DexClassLoader {
 	}
 
 	public static String getName() {
-		return resFolderName;
+		return resFolder.getParentFile().getName();
 	}
 }
