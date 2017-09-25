@@ -24,6 +24,8 @@ import java.util.Random;
 
 import javax.microedition.shell.MyClassLoader;
 
+import ua.naiksoftware.j2meloader.BuildConfig;
+
 /**
  * @author Deven
  *         <p>
@@ -33,11 +35,11 @@ import javax.microedition.shell.MyClassLoader;
 public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 
 	private static final String TAG = AutoErrorReporter.class.getSimpleName();
-	private static final boolean DEBUGABLE = false;
-	private static String DEFAULT_EMAIL_SUBJECT = "ACR: New Crash Report Generated";
+	private static final boolean DEBUGABLE = BuildConfig.DEBUG;
 
 	private String[] recipients;
 	private boolean startAttempted = false;
+	private String subject;
 
 	private String versionName;
 	private String packageName;
@@ -48,17 +50,10 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 	private String board;
 	private String brand;
 	private String device;
-	private String display;
-	private String fingerPrint;
-	private String host;
 	private String id;
 	private String manufacturer;
 	private String model;
-	private String product;
-	private String tags;
 	private long time;
-	private String type;
-	private String user;
 	private HashMap<String, String> customParameters = new HashMap<String, String>();
 
 	private static AutoErrorReporter sInstance;
@@ -66,6 +61,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 
 	private AutoErrorReporter(Application application) {
 		this.application = application;
+		this.filePath = application.getFilesDir().getAbsolutePath();
 	}
 
 	public static AutoErrorReporter get(Application application) {
@@ -115,7 +111,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 			throw new IllegalStateException("EmailSubject must be set before start");
 		}
 
-		DEFAULT_EMAIL_SUBJECT = emailSubject;
+		subject = emailSubject;
 		return this;
 	}
 
@@ -144,18 +140,16 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		return (totalBlocks * blockSize) / (1024 * 1024);
 	}
 
-	private void recordInformations(Context context) {
+	private void recordInformations() {
 		try {
 			emulatedAppName = MyClassLoader.getName();
-			PackageManager pm = context.getPackageManager();
+			PackageManager pm = application.getPackageManager();
 			PackageInfo pi;
 			// Version
-			pi = pm.getPackageInfo(context.getPackageName(), 0);
+			pi = pm.getPackageInfo(application.getPackageName(), 0);
 			versionName = pi.versionName;
-			//buildNumber = currentVersionNumber(context);
 			// Package name
 			packageName = pi.packageName;
-
 			// Device model
 			phoneModel = Build.MODEL;
 			// Android version
@@ -164,25 +158,17 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 			board = Build.BOARD;
 			brand = Build.BRAND;
 			device = Build.DEVICE;
-			display = Build.DISPLAY;
-			fingerPrint = Build.FINGERPRINT;
-			host = Build.HOST;
 			id = Build.ID;
 			model = Build.MODEL;
-			product = Build.PRODUCT;
 			manufacturer = Build.MANUFACTURER;
-			tags = Build.TAGS;
 			time = Build.TIME;
-			type = Build.TYPE;
-			user = Build.USER;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private String createInformationString() {
-		recordInformations(application);
+		recordInformations();
 		StringBuilder infoStringBuffer = new StringBuilder();
 		infoStringBuffer.append("\nVERSION		: ").append(versionName);
 		infoStringBuffer.append("\nPACKAGE      : ").append(packageName);
@@ -193,17 +179,10 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		infoStringBuffer.append("\nBOARD        : ").append(board);
 		infoStringBuffer.append("\nBRAND        : ").append(brand);
 		infoStringBuffer.append("\nDEVICE       : ").append(device);
-		infoStringBuffer.append("\nDISPLAY      : ").append(display);
-		infoStringBuffer.append("\nFINGER-PRINT : ").append(fingerPrint);
-		infoStringBuffer.append("\nHOST         : ").append(host);
 		infoStringBuffer.append("\nID           : ").append(id);
 		infoStringBuffer.append("\nMODEL        : ").append(model);
-		infoStringBuffer.append("\nPRODUCT      : ").append(product);
 		infoStringBuffer.append("\nMANUFACTURER : ").append(manufacturer);
-		infoStringBuffer.append("\nTAGS         : ").append(tags);
 		infoStringBuffer.append("\nTIME         : ").append(time);
-		infoStringBuffer.append("\nTYPE         : ").append(type);
-		infoStringBuffer.append("\nUSER         : ").append(user);
 		infoStringBuffer.append("\nTOTAL-INTERNAL-MEMORY     : ").append(getTotalInternalMemorySize()).append(" mb");
 		infoStringBuffer.append("\nAVAILABLE-INTERNAL-MEMORY : ").append(getAvailableInternalMemorySize()).append(" mb");
 
@@ -229,7 +208,6 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		final PrintWriter printWriter = new PrintWriter(result);
 		e.printStackTrace(printWriter);
 		reportStringBuffer.append(result.toString());
-
 		reportStringBuffer.append("\nCause :\n==============");
 		// If the exception was thrown in a background thread inside
 		// AsyncTask, then the actual exception can be found with getCause
@@ -250,17 +228,16 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 	}
 
 
-	private void sendErrorMail(Context context, String errorContent) {
+	private void sendErrorMail(String errorContent) {
 		showLog("====sendErrorMail");
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		String subject = DEFAULT_EMAIL_SUBJECT;
 		String body = "\n\n" + errorContent + "\n\n";
 		sendIntent.putExtra(Intent.EXTRA_EMAIL, recipients);
 		sendIntent.putExtra(Intent.EXTRA_TEXT, body);
 		sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
 		sendIntent.setType("message/rfc822");
 		sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(Intent.createChooser(sendIntent, "Title:"));
+		application.startActivity(Intent.createChooser(sendIntent, "Title:"));
 	}
 
 	private void saveAsFile(String errorContent) {
@@ -269,19 +246,16 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 			Random generator = new Random();
 			int random = generator.nextInt(99999);
 			String FileName = "stack-" + random + ".stacktrace";
-			FileOutputStream trace = application.openFileOutput(FileName,
-					Context.MODE_PRIVATE);
+			FileOutputStream trace = application.openFileOutput(FileName, Context.MODE_PRIVATE);
 			trace.write(errorContent.getBytes());
 			trace.close();
 		} catch (Exception e) {
-			// ...
+			e.printStackTrace();
 		}
 	}
 
 	private String[] getErrorFileList() {
-		File dir = new File(filePath + "/");
-		// Try to create the files folder if it doesn't exist
-		dir.mkdir();
+		File dir = new File(filePath);
 		// Filter for ".stacktrace" files
 		FilenameFilter filter = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
@@ -295,9 +269,8 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		return getErrorFileList().length > 0;
 	}
 
-	void checkErrorAndSendMail(Context context) {
+	void checkErrorAndSendMail() {
 		try {
-			filePath = context.getFilesDir().getAbsolutePath();
 			if (bIsThereAnyErrorFile()) {
 				StringBuilder wholeErrorTextSB = new StringBuilder();
 
@@ -320,7 +293,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 					File curFile = new File(filePath + "/" + curString);
 					curFile.delete();
 				}
-				sendErrorMail(context, wholeErrorTextSB.toString());
+				sendErrorMail(wholeErrorTextSB.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -28,7 +28,7 @@ public class ErrorReporterActivity extends Activity {
 				.setPositiveButton(R.string.report_crash, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
-						AutoErrorReporter.get(getApplication()).checkErrorAndSendMail(ErrorReporterActivity.this);
+						AutoErrorReporter.get(getApplication()).checkErrorAndSendMail();
 						System.exit(10);
 					}
 				})
