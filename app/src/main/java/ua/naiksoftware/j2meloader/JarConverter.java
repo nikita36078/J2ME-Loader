@@ -30,6 +30,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	private String appDir;
 	private final File dirTmp;
+	private static String targetJarName;
 
 	public JarConverter(MainActivity context) {
 		this.context = context;
@@ -40,6 +41,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	@Override
 	protected Boolean doInBackground(String... p1) {
 		String pathToJar = p1[0];
+		targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
 		String pathConverted = p1[1];
 		Log.d(tag, "doInBackground$ pathToJar=" + pathToJar + " pathConverted="
 				+ pathConverted);
@@ -143,5 +145,9 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		if (uriDir.exists()) {
 			FileUtils.deleteDirectory(uriDir);
 		}
+	}
+
+	public static String getTargetJarName() {
+		return targetJarName;
 	}
 }

@@ -25,6 +25,7 @@ import java.util.Random;
 import javax.microedition.shell.MyClassLoader;
 
 import ua.naiksoftware.j2meloader.BuildConfig;
+import ua.naiksoftware.j2meloader.JarConverter;
 
 /**
  * @author Deven
@@ -44,6 +45,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 	private String versionName;
 	private String packageName;
 	private String emulatedAppName;
+	private String targetJarName;
 	private String filePath;
 	private String phoneModel;
 	private String androidVersion;
@@ -143,6 +145,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 	private void recordInformations() {
 		try {
 			emulatedAppName = MyClassLoader.getName();
+			targetJarName = JarConverter.getTargetJarName();
 			PackageManager pm = application.getPackageManager();
 			PackageInfo pi;
 			// Version
@@ -173,7 +176,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		infoStringBuffer.append("\nVERSION		: ").append(versionName);
 		infoStringBuffer.append("\nPACKAGE      : ").append(packageName);
 		infoStringBuffer.append("\nEMULATED APP : ").append(emulatedAppName);
-		infoStringBuffer.append("\nFILE-PATH    : ").append(filePath);
+		infoStringBuffer.append("\nTARGET JAR NAME    : ").append(targetJarName);
 		infoStringBuffer.append("\nPHONE-MODEL  : ").append(phoneModel);
 		infoStringBuffer.append("\nANDROID_VERS : ").append(androidVersion);
 		infoStringBuffer.append("\nBOARD        : ").append(board);
