@@ -18,7 +18,8 @@ public class AboutDialogFragment extends DialogFragment {
 				.append(BuildConfig.VERSION_NAME)
 				.append(getText(R.string.about_email))
 				.append(getText(R.string.about_github))
-				.append(getText(R.string.about_4pda));
+				.append(getText(R.string.about_4pda))
+				.append(getText(R.string.about_copyright));
 		TextView tv = new TextView(getActivity());
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(message.toString()));
@@ -26,7 +27,7 @@ public class AboutDialogFragment extends DialogFragment {
 		tv.setPadding(10, 10, 10, 10);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.app_name)
-				.setIcon(R.drawable.icon_java)
+				.setIcon(R.mipmap.ic_launcher)
 				.setView(tv);
 		return builder.create();
 	}

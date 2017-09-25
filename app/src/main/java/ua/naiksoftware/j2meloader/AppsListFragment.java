@@ -96,7 +96,7 @@ public class AppsListFragment extends ListFragment {
 				if (bitmap != null) {
 					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
 				} else {
-					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.drawable.icon_java));
+					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.mipmap.ic_launcher));
 				}
 				ShortcutManagerCompat.requestPinShortcut(getActivity(), shortcutInfoCompatBuilder.build(), null);
 				break;
