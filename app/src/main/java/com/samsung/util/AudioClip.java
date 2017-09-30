@@ -1,6 +1,22 @@
-package com.samsung.util;
+/*
+ * J2ME Loader
+ * Copyright (C) 2017 Nikita Shakarun
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import android.util.Log;
+package com.samsung.util;
 
 import java.io.IOException;
 
@@ -10,31 +26,24 @@ public class AudioClip {
 	public static final int TYPE_MP3 = 2;
 
 	public AudioClip(int i, String str) throws IOException {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public  com/samsung/util/AudioClip(int p0, java.lang.String p1)");
 	}
 
 	public AudioClip(int i, byte[] bArr, int i2, int i3) {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public  com/samsung/util/AudioClip(int p0, byte[] p1, int p2, int p3)");
 	}
 
 	public static boolean isSupported() {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public static  isSupported()");
 		return false;
 	}
 
 	public void pause() {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public  pause()");
 	}
 
 	public void play(int i, int i2) {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public  play(int p0, int p1)");
 	}
 
 	public void resume() {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public  resume()");
 	}
 
 	public void stop() {
-		Log.e("Android Wrapper", "Not Implemented! com/samsung/util/AudioClip :: public  stop()");
 	}
 }

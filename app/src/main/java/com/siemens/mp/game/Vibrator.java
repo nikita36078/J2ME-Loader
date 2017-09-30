@@ -23,13 +23,6 @@
  */
 package com.siemens.mp.game;
 
-import javax.microedition.midlet.*;
-
-/**
- *
- * @author  markus
- * @version
- */
 public class Vibrator {
     public static void startVibrator()
     {}

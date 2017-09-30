@@ -1,5 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2015-2016 Nickolay Savchenko
+ * Copyright 2017 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +66,6 @@ public class Form extends Screen {
 		item.setOwnerForm(this);
 
 		if (layout != null) {
-			// Added by Naik run in UI thread
 			MicroActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
@@ -82,7 +83,6 @@ public class Form extends Screen {
 		item.setOwnerForm(this);
 
 		if (layout != null) {
-			// Added by Naik run in UI thread
 			MicroActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
@@ -99,7 +99,6 @@ public class Form extends Screen {
 		item.setOwnerForm(this);
 
 		if (layout != null) {
-			// Added by Naik run in UI thread
 			MicroActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
@@ -116,7 +115,6 @@ public class Form extends Screen {
 		items.remove(index).setOwnerForm(null);
 
 		if (layout != null) {
-			// Added by Naik run in UI thread
 			MicroActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
@@ -136,7 +134,6 @@ public class Form extends Screen {
 		items.clear();
 
 		if (layout != null) {
-			// Added by Naik run in UI thread
 			MicroActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {

@@ -1,5 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2015-2016 Nickolay Savchenko
+ * Copyright 2017 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,12 +164,10 @@ public abstract class Displayable {
 		queue.postEvent(event);
 	}
 
-	// Added by Naik
 	public int getWidth() {
 		return ContextHolder.getDisplayWidth();
 	}
 
-	// Added by Naik
 	public int getHeight() {
 		return ContextHolder.getDisplayHeight();
 	}
