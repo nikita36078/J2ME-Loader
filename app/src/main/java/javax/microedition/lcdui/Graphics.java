@@ -116,20 +116,10 @@ public class Graphics {
 	}
 
 	private Path computePath(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
-		Path path = new Path();
-		int i4 = xOffset + 1;
-		int i5 = yOffset + 1;
+		path.reset();
 		path.moveTo((float) xPoints[xOffset], (float) yPoints[yOffset]);
-		int i6 = i5;
-		i5 = i4;
-		i4 = 1;
-		while (i4 < nPoints) {
-			int i7 = i5 + 1;
-			int i8 = i6 + 1;
-			path.lineTo((float) xPoints[i5], (float) yPoints[i6]);
-			i5 = i7;
-			i6 = i8;
-			i4++;
+		for (int i = 1; i < nPoints; i++) {
+			path.lineTo((float) xPoints[xOffset + i], (float) yPoints[yOffset + i]);
 		}
 		path.close();
 		return path;
@@ -383,14 +373,7 @@ public class Graphics {
 	}
 
 	public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-		path.reset();
-
-		path.moveTo(x1, y1);
-		path.lineTo(x2, y2);
-		path.lineTo(x3, y3);
-		path.close();
-
-		canvas.drawPath(path, fillPaint);
+		fillPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3);
 	}
 
 	public void drawChar(char character, int x, int y, int anchor) {
