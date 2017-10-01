@@ -96,7 +96,7 @@ public abstract class FullCanvas extends Canvas {
 }
 
 class NokiaCommandListener implements CommandListener {
-	FullCanvas fc;
+	private FullCanvas fc;
 
 	NokiaCommandListener(FullCanvas f) {
 		fc = f;
@@ -109,7 +109,7 @@ class NokiaCommandListener implements CommandListener {
 }
 
 class NokiaCommand extends Command {
-	int key;
+	private int key;
 
 	NokiaCommand(int key, int type) {
 		super("", type, 1);
