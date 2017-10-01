@@ -526,11 +526,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		}
 	}
 
-	public void setLanguage(int which) {
-		locale = getResources().getStringArray(R.array.locales)[which];
-		recreate();
-	}
-
 	public void onClick(View v) {
 		String[] presets = null;
 		DialogInterface.OnClickListener presetListener = null;
@@ -573,7 +568,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 			presetListener = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					setLanguage(which);
+					locale = getResources().getStringArray(R.array.locales)[which];
 				}
 			};
 		} else if (id == R.id.cmdScreenBack) {
