@@ -17,12 +17,12 @@
 
 package javax.microedition.lcdui;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -55,10 +55,6 @@ public class Graphics {
 	private RectF floatRect;
 	private Path path;
 
-	private Point windowOrg;
-	private Rect windowClip;
-	private boolean useWindow;
-
 	private DashPathEffect dpeffect;
 	private int stroke;
 
@@ -85,10 +81,6 @@ public class Graphics {
 		setAntiAliasText(true);
 
 		font = Font.getDefaultFont();
-
-		windowOrg = new Point();
-		windowClip = new Rect();
-		useWindow = false;
 
 		intRect = new Rect();
 		floatRect = new RectF();
@@ -221,38 +213,13 @@ public class Graphics {
 		return font;
 	}
 
-	public void setWindow(int x, int y, int width, int height) {
-		windowOrg.set(x, y);
-		windowClip.set(0, 0, width, height);
-
-		canvas.translate(x, y);
-		canvas.clipRect(windowClip, Region.Op.REPLACE);
-
-		useWindow = true;
-	}
-
-	public void resetWindow() {
-		canvas.translate(-windowOrg.x, -windowOrg.y);
-
-		windowClip.set(0, 0, canvas.getWidth(), canvas.getHeight());
-		canvas.clipRect(windowClip, Region.Op.REPLACE);
-
-		useWindow = false;
-	}
-
 	public void resetClip() {
 		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
 
 	public void setClip(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
-
-		if (useWindow) {
-			canvas.clipRect(windowClip, Region.Op.REPLACE);
-			canvas.clipRect(intRect, Region.Op.INTERSECT);
-		} else {
-			canvas.clipRect(intRect, Region.Op.REPLACE);
-		}
+		canvas.clipRect(intRect, Region.Op.REPLACE);
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
