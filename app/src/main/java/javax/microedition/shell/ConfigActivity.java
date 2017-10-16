@@ -26,6 +26,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -65,6 +67,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
 	protected EditText tfScreenBack;
+	protected SeekBar sbScaleRatio;
+	protected EditText tfScaleRatioValue;
 	protected CheckBox cxScaleToFit;
 	protected CheckBox cxKeepAspectRatio;
 	protected CheckBox cxFilter;
@@ -158,6 +162,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfScreenHeight = (EditText) findViewById(R.id.tfScreenHeight);
 		tfScreenBack = (EditText) findViewById(R.id.tfScreenBack);
 		cxScaleToFit = (CheckBox) findViewById(R.id.cxScaleToFit);
+		sbScaleRatio = (SeekBar) findViewById(R.id.sbScaleRatio);
+		tfScaleRatioValue = (EditText) findViewById(R.id.tfScaleRatioValue);
 		cxKeepAspectRatio = (CheckBox) findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = (CheckBox) findViewById(R.id.cxFilter);
 		cxImmediate = (CheckBox) findViewById(R.id.cxImmediate);
@@ -204,6 +210,34 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		findViewById(R.id.cmdVKSelFore).setOnClickListener(this);
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
 		findViewById(R.id.cmdLanguage).setOnClickListener(this);
+		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+				tfScaleRatioValue.setText(String.valueOf(progress));
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+
+		tfScaleRatioValue.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				Integer enteredProgress = Integer.valueOf(s.toString());
+				sbScaleRatio.setProgress(enteredProgress);
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {}
+		});
 
 		loadParams(params);
 
@@ -295,6 +329,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				.setText(Integer.toHexString(
 						params.getInt("ScreenBackgroundColor", 0xD0D0D0))
 						.toUpperCase());
+		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
+		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
 		cxScaleToFit.setChecked(params.getBoolean("ScreenScaleToFit", true));
 		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio",
 				true));
@@ -343,6 +379,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					Integer.parseInt(tfScreenHeight.getText().toString()));
 			params.putInt("ScreenBackgroundColor",
 					Integer.parseInt(tfScreenBack.getText().toString(), 16));
+			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
 			params.putBoolean("ScreenKeepAspectRatio",
 					cxKeepAspectRatio.isChecked());
@@ -396,6 +433,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					.toString());
 			int screenBackgroundColor = Integer.parseInt(tfScreenBack.getText()
 					.toString(), 16);
+			int screenScaleRatio = sbScaleRatio.getProgress();
 			boolean screenScaleToFit = cxScaleToFit.isChecked();
 			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			boolean screenFilter = cxFilter.isChecked();
@@ -408,7 +446,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Font.setApplyDimensions(fontApplyDimensions);
 
 			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
-					screenKeepAspectRatio);
+					screenKeepAspectRatio, screenScaleRatio);
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);

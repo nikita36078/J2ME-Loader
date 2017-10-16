@@ -11,7 +11,7 @@
     <string name="about_email" translatable="false">&lt;BR>Email: &lt;a href="mailto:nikita36078@gmail.com">nikita36078@gmail.com&lt;/a></string>
     <string name="about_github" translatable="false">&lt;BR>GitHub: &lt;a href="https://github.com/nikita36078/J2ME-Loader">github.com/nikita36078/J2ME-Loader&lt;/a></string>
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>App icon designed by Aha-Soft (CC BY 3.0)</string>
+    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>App icon designed by Aha-Soft (CC BY 3.0)</string>
     <string name="open_jar">Open jar</string>
     <string name="author">Author: </string>
     <string name="version">Version: </string>
@@ -30,6 +30,7 @@
     <string name="RESET_CMD" formatted="false">Reset</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
     <string name="PREF_SCREEN_OPTIONS" formatted="false">Screen options</string>
+    <string name="PREF_SCALE_RATIO">Scale(%)</string>
     <string name="PREF_SCALE_TO_FIT" formatted="false">Scale to fit</string>
     <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Keep aspect ratio</string>
     <string name="PREF_FILTER" formatted="false">Filter</string>

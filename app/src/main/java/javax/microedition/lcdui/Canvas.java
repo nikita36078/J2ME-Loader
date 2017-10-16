@@ -338,6 +338,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean filter;
 	protected static boolean clearBuffer;
 	private static int backgroundColor;
+	private static int scaleRatio;
 
 	private Image offscreen;
 	private int onX, onY, onWidth, onHeight;
@@ -352,12 +353,13 @@ public abstract class Canvas extends Displayable {
 		updateSize(false);
 	}
 
-	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio) {
+	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
 		Canvas.virtualWidth = virtualWidth;
 		Canvas.virtualHeight = virtualHeight;
 
 		Canvas.scaleToFit = scaleToFit;
 		Canvas.keepAspectRatio = keepAspectRatio;
+		Canvas.scaleRatio = scaleRatio;
 	}
 
 	public static void setBackgroundColor(int color) {
@@ -460,6 +462,9 @@ public abstract class Canvas extends Displayable {
 			onWidth = width;
 			onHeight = height;
 		}
+
+		onWidth = onWidth * scaleRatio / 100;
+		onHeight = onHeight * scaleRatio / 100;
 
 		if (displayWidth >= displayHeight) {
 			/*

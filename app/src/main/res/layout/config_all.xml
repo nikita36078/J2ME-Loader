@@ -88,6 +88,34 @@
                 android:hint="@string/PREF_COLOR_HINT"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/PREF_SCALE_RATIO"/>
+
+            <SeekBar
+                android:id="@+id/sbScaleRatio"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:max="100"/>
+
+            <EditText
+                android:id="@+id/tfScaleRatioValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="2"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
         <CheckBox
             android:id="@+id/cxScaleToFit"
             android:layout_width="match_parent"

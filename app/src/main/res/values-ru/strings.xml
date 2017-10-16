@@ -24,6 +24,7 @@
     <string name="RESET_CMD" formatted="false">Сброс</string>
     <string name="RESET_LAYOUT_CMD">Сброс раскладки</string>
     <string name="PREF_SCREEN_OPTIONS" formatted="false">Параметры экрана</string>
+    <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT" formatted="false">Масштабировать</string>
     <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Сохранять пропорции</string>
     <string name="PREF_FILTER" formatted="false">Фильтрация</string>
