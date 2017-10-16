@@ -2,6 +2,6 @@
 
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
-    <style name="AppDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog"/>
+    <style name="AppTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"/>
 
 </resources>

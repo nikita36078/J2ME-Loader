@@ -21,7 +21,7 @@ public class ErrorReporterActivity extends Activity {
 
 		this.setFinishOnTouchOutside(false);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppDialogTheme)
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
 				.setMessage(R.string.crash_dialog_message)
 				.setTitle(R.string.crash_dialog_title)
 				.setCancelable(false)
