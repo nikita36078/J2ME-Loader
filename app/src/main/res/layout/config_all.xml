@@ -17,7 +17,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <LinearLayout
-            android:id="@+id/linearLayoutInner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
