@@ -27,6 +27,7 @@ import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;

@@ -23,6 +23,7 @@ import android.os.Vibrator;
 
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
+import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 public class Display {

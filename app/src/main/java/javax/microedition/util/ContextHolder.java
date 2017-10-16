@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import javax.microedition.lcdui.MicroActivity;
+import javax.microedition.shell.MicroActivity;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
 import javax.microedition.shell.MyClassLoader;

@@ -25,7 +25,7 @@ import android.net.Uri;
 import java.util.LinkedHashMap;
 
 import javax.microedition.io.ConnectionNotFoundException;
-import javax.microedition.lcdui.MicroActivity;
+import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.util.FileUtils;
