@@ -17,17 +17,14 @@
 
 package javax.microedition.lcdui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.midlet.MIDlet;
@@ -35,7 +32,7 @@ import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;
 
-public class MicroActivity extends Activity {
+public class MicroActivity extends AppCompatActivity {
 	public final static String INTENT_PARAM_IS_CANVAS = "isCanvas";
 	private Displayable current;
 	private boolean visible;
@@ -47,9 +44,9 @@ public class MicroActivity extends Activity {
 		ContextHolder.addActivityToPool(this);
 		isCanvas = getIntent().getBooleanExtra(INTENT_PARAM_IS_CANVAS, false);
 		if (isCanvas) {
-			Window wnd = getWindow();
-			wnd.requestFeature(Window.FEATURE_NO_TITLE);
-			wnd.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			setTheme(R.style.AppTheme_Fullscreen);
+		} else {
+			setTheme(R.style.AppTheme);
 		}
 	}
 
@@ -139,18 +136,6 @@ public class MicroActivity extends Activity {
 		Intent intent = new Intent(this, cls);
 		intent.putExtra(INTENT_PARAM_IS_CANVAS, isCanvas);
 		startActivity(intent);
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-			case KeyEvent.KEYCODE_MENU:
-				return true;
-			case KeyEvent.KEYCODE_BACK:
-				openOptionsMenu();
-				return true;
-		}
-		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
