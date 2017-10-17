@@ -50,6 +50,7 @@
         </activity>
         <activity
             android:name="javax.microedition.shell.ConfigActivity"
+            android:exported="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name="javax.microedition.shell.MicroActivity" />
