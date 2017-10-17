@@ -22,7 +22,7 @@
     <string name="converting_message">Processing...</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
     <string name="action_context_shortcut">Add shortcut</string>
-    <string name="action_context_settings">Settings</string>
+    <string name="action_settings">Settings</string>
     <string name="action_context_delete">Delete</string>
 
     <string name="START_CMD" formatted="false">Start</string>
@@ -77,6 +77,9 @@
     <string name="layout_edit_mode">Keylayout edit mode</string>
     <string name="layout_scale_mode">Keylayout resize mode</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
+
+    <string name="pref_enable_actionbar_title">Enable ActionBar</string>
+    <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>

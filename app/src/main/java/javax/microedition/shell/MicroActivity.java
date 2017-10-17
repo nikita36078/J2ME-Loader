@@ -21,8 +21,11 @@ package javax.microedition.shell;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,14 +45,20 @@ public class MicroActivity extends AppCompatActivity {
 	private Displayable current;
 	private boolean visible;
 	private boolean isCanvas;
+	private boolean isActionBarEnabled;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ContextHolder.addActivityToPool(this);
 		isCanvas = getIntent().getBooleanExtra(INTENT_PARAM_IS_CANVAS, false);
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", true);
 		if (isCanvas) {
 			setTheme(R.style.AppTheme_Fullscreen);
+			if (!isActionBarEnabled) {
+				getSupportActionBar().hide();
+			}
 		} else {
 			setTheme(R.style.AppTheme);
 		}
@@ -141,6 +150,15 @@ public class MicroActivity extends AppCompatActivity {
 		Intent intent = new Intent(this, cls);
 		intent.putExtra(INTENT_PARAM_IS_CANVAS, isCanvas);
 		startActivity(intent);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

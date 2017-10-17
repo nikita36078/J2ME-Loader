@@ -1,6 +1,8 @@
 <resources>
 
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar"/>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
 
     <style name="AppTheme.Fullscreen" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowFullscreen">true</item>

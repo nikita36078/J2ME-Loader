@@ -20,6 +20,7 @@
 package ua.naiksoftware.j2meloader;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -155,6 +156,10 @@ public class MainActivity extends AppCompatActivity implements
 			case R.id.action_about:
 				AboutDialogFragment dialogFragment = new AboutDialogFragment();
 				dialogFragment.show(getSupportFragmentManager(), "about");
+				break;
+			case R.id.action_settings:
+				Intent intent = new Intent(this, SettingsActivity.class);
+				startActivity(intent);
 				break;
 			case R.id.action_exit_app:
 				finish();

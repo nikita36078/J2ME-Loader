@@ -16,7 +16,7 @@
     <string name="converting_message">Обработка...</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
-    <string name="action_context_settings">Настройки</string>
+    <string name="action_settings">Настройки</string>
     <string name="action_context_delete">Удалить</string>
 
     <string name="START_CMD" formatted="false">Пуск</string>
@@ -71,4 +71,7 @@
     <string name="layout_edit_mode">Режим редактирования раскладки</string>
     <string name="layout_scale_mode">Режим масштабирования раскладки</string>
     <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
+
+    <string name="pref_enable_actionbar_title">Включить ActionBar</string>
+    <string name="pref_enable_actionbar_summary">В полноэкранных приложениях</string>
 </resources>
