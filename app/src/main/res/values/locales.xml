@@ -4,10 +4,12 @@
     <string-array name="languages" translatable="false">
         <item>English</item>
         <item>Русский</item>
+        <item>中文</item>
     </string-array>
     <string-array name="locales" translatable="false">
         <item>en</item>
         <item>ru</item>
+        <item>cn</item>
     </string-array>
 
 </resources>
