@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">J2me Loader</string>
+    <string name="navigation_drawer_open" translatable="false">打开导航栏</string>
+    <string name="navigation_drawer_close" translatable="false">关闭导航栏</string>
+
+    <string name="exit">退出</string>
+    <string name="about">关于</string>
+    <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 3D 游戏，有一些限制。&lt;BR></string>
+    <string name="about_email" translatable="false">&lt;BR>Email: &lt;a href="mailto:nikita36078@gmail.com">nikita36078@gmail.com&lt;/a></string>
+    <string name="about_github" translatable="false">&lt;BR>GitHub: &lt;a href="https://github.com/nikita36078/J2ME-Loader">github.com/nikita36078/J2ME-Loader&lt;/a></string>
+    <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
+    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>由 Aha-Soft 设计应用程序图标(CC BY 3.0)</string>
+    <string name="open_jar">打开 jar</string>
+    <string name="author">作者: </string>
+    <string name="version">版本: </string>
+    <string name="no_data_for_display">无数据</string>
+    <string name="message_delete">是否确实要删除此应用程序？</string>
+    <string name="converting_wait">正在转换 JAR...</string>
+    <string name="convert_complete">完成</string>
+    <string name="converting_message">正在处理...</string>
+    <string name="permission_request_failed">此应用程序需要存储写入权限</string>
+    <string name="action_context_shortcut">添加快捷方式</string>
+    <string name="action_settings">设置</string>
+    <string name="action_context_delete">删除</string>
+
+    <string name="START_CMD" formatted="false">开始</string>
+    <string name="CANCEL_CMD" formatted="false">取消</string>
+    <string name="RESET_CMD" formatted="false">重置</string>
+    <string name="RESET_LAYOUT_CMD">重置键布局</string>
+    <string name="PREF_SCREEN_OPTIONS" formatted="false">屏幕选项</string>
+    <string name="PREF_SCALE_RATIO">比例(%)</string>
+    <string name="PREF_SCALE_TO_FIT" formatted="false">自适应缩放</string>
+    <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">保持纵横比</string>
+    <string name="PREF_FILTER" formatted="false">Filter</string>
+    <string name="PREF_FONT_OPTIONS" formatted="false">字体选项</string>
+    <string name="PREF_WIDTH" formatted="false">宽度</string>
+    <string name="PREF_HEIGHT" formatted="false">高度</string>
+    <string name="PREF_FONT_SMALL" formatted="false">小</string>
+    <string name="PREF_FONT_MEDIUM" formatted="false">中</string>
+    <string name="PREF_FONT_LARGE" formatted="false">大</string>
+    <string name="PREF_FONT_SIZE_IN_SP" formatted="false">值以缩放像素为单位</string>
+    <string name="PREF_BACKGROUND" formatted="false">背景</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">虚拟键盘</string>
+    <string name="PREF_VK_BACK" formatted="false">按钮</string>
+    <string name="PREF_VK_FORE" formatted="false">标签</string>
+    <string name="PREF_VK_OUTLINE" formatted="false">轮廓</string>
+    <string name="PREF_COLOR_HINT" formatted="false">RGB</string>
+    <string name="PREF_VK_ALPHA" formatted="false">透明度: </string>
+    <string name="PREF_VK_HIDE_DELAY" formatted="false">隐藏延迟: </string>
+    <string name="PREF_UNIT_MS" formatted="false">ms</string>
+    <string name="PREF_VK_SEL_FORE" formatted="false">标签 (P)</string>
+    <string name="PREF_VK_SEL_BACK" formatted="false">按钮 (P)</string>
+    <string name="PREF_VK_KEY_SIZES" formatted="false">键尺寸</string>
+    <string name="PREF_VK_NAV_KEYS" formatted="false">操纵杆: </string>
+    <string name="PREF_VK_SOFT_KEYS" formatted="false">软按键: </string>
+    <string name="PREF_VK_NUM_KEYS" formatted="false">数字: </string>
+    <string name="PREF_VK_FIRE_KEY" formatted="false">开火: </string>
+    <string name="PREF_VK_SIZE_HINT" formatted="false">尺寸</string>
+    <string name="SIZE_PRESETS" formatted="false">预设</string>
+    <string name="PREF_LANGUAGE" formatted="false">语言: %A</string>
+    <string name="PREF_MISC" formatted="false">其他选项</string>
+    <string name="PREF_VK_SHOW">显示键盘</string>
+    <string name="PREF_IMMEDIATE">即时处理模式</string>
+    <string name="PREF_CLEAR_BUFFER">绘制缓冲区清除</string>
+    <string name="SWAP_SIZES">交换尺寸</string>
+    <string name="error">错误</string>
+
+    <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">强制关闭应用程序可能会导致数据丢失甚至完全中断!\n继续?</string>
+    <string name="CONFIRMATION_REQUIRED" formatted="false">需要确认</string>
+    <string name="crash_dialog_message">是否要向开发人员发送错误报告？</string>
+    <string name="crash_dialog_title">检测到错误</string>
+    <string name="report_crash">发送</string>
+    <string name="layout_edit_finished">编辑模式完成</string>
+    <string name="layout_edit_finish">完成编辑模式</string>
+    <string name="layout_edit_mode">键布局编辑模式</string>
+    <string name="layout_scale_mode">键布局调整大小模式</string>
+    <string name="common_settings">[通用设置]</string>
+
+    <string name="pref_enable_actionbar_title">启用操作栏</string>
+    <string name="pref_enable_actionbar_summary">在全屏应用中</string>
+
+    <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
+    <string name="_FONT_SEPARATOR" translatable="false">-</string>
+    <string name="_MINUS_ONE" translatable="false">-1</string>
+</resources>
