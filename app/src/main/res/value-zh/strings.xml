@@ -33,7 +33,7 @@
     <string name="PREF_SCALE_RATIO">比例(%)</string>
     <string name="PREF_SCALE_TO_FIT" formatted="false">自适应缩放</string>
     <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">保持纵横比</string>
-    <string name="PREF_FILTER" formatted="false">Filter</string>
+    <string name="PREF_FILTER" formatted="false">过滤</string>
     <string name="PREF_FONT_OPTIONS" formatted="false">字体选项</string>
     <string name="PREF_WIDTH" formatted="false">宽度</string>
     <string name="PREF_HEIGHT" formatted="false">高度</string>
