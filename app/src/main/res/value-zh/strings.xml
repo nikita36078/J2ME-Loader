@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">J2me Loader</string>
-    <string name="navigation_drawer_open" translatable="false">打开导航栏</string>
-    <string name="navigation_drawer_close" translatable="false">关闭导航栏</string>
-
     <string name="exit">退出</string>
     <string name="about">关于</string>
     <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 3D 游戏，有一些限制。&lt;BR></string>
-    <string name="about_email" translatable="false">&lt;BR>Email: &lt;a href="mailto:nikita36078@gmail.com">nikita36078@gmail.com&lt;/a></string>
-    <string name="about_github" translatable="false">&lt;BR>GitHub: &lt;a href="https://github.com/nikita36078/J2ME-Loader">github.com/nikita36078/J2ME-Loader&lt;/a></string>
-    <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>由 Aha-Soft 设计应用程序图标(CC BY 3.0)</string>
     <string name="open_jar">打开 jar</string>
     <string name="author">作者: </string>
     <string name="version">版本: </string>
@@ -80,8 +72,4 @@
 
     <string name="pref_enable_actionbar_title">启用操作栏</string>
     <string name="pref_enable_actionbar_summary">在全屏应用中</string>
-
-    <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
-    <string name="_FONT_SEPARATOR" translatable="false">-</string>
-    <string name="_MINUS_ONE" translatable="false">-1</string>
 </resources>
