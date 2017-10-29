@@ -9,7 +9,7 @@
     <string-array name="locales" translatable="false">
         <item>en</item>
         <item>ru</item>
-        <item>cn</item>
+        <item>zh</item>
     </string-array>
 
 </resources>
