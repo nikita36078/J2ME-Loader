@@ -53,7 +53,7 @@ public class MicroActivity extends AppCompatActivity {
 		ContextHolder.addActivityToPool(this);
 		isCanvas = getIntent().getBooleanExtra(INTENT_PARAM_IS_CANVAS, false);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", true);
+		isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 		if (isCanvas) {
 			setTheme(R.style.AppTheme_Fullscreen);
 			if (!isActionBarEnabled) {

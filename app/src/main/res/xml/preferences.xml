@@ -4,5 +4,5 @@
         android:title="@string/pref_enable_actionbar_title"
         android:summary="@string/pref_enable_actionbar_summary"
         android:key="pref_actionbar_switch"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
 </PreferenceScreen>
