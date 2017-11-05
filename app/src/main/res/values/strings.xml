@@ -76,6 +76,7 @@
     <string name="layout_edit_finish">Finish edit mode</string>
     <string name="layout_edit_mode">Keylayout edit mode</string>
     <string name="layout_scale_mode">Keylayout resize mode</string>
+    <string name="layout_switch">Switch keylayout</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_enable_actionbar_title">Enable ActionBar</string>
