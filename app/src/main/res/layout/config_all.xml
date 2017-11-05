@@ -97,7 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/PREF_SCALE_RATIO"/>
+                android:text="@string/PREF_SCALE_RATIO"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <SeekBar
                 android:id="@+id/sbScaleRatio"
