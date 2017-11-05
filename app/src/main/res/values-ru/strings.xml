@@ -70,6 +70,7 @@
     <string name="layout_edit_finish">Завершить редактирование раскладки</string>
     <string name="layout_edit_mode">Режим редактирования раскладки</string>
     <string name="layout_scale_mode">Режим масштабирования раскладки</string>
+    <string name="layout_switch">Сменить раскладку</string>
     <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
 
     <string name="pref_enable_actionbar_title">Включить ActionBar</string>

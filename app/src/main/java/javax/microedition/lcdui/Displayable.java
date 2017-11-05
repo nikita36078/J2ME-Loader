@@ -127,19 +127,24 @@ public abstract class Displayable {
 	public boolean menuItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (item.getGroupId() == R.id.action_group_common_settings) {
-			switch (id) {
-				case R.id.action_exit_midlet:
-					parent.showExitConfirmation();
-					break;
-				case R.id.action_layout_edit_mode:
-					switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
-					break;
-				case R.id.action_layout_scale_mode:
-					switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
-					break;
-				case R.id.action_layout_edit_finish:
-					switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-					break;
+			if (id == R.id.action_exit_midlet) {
+				parent.showExitConfirmation();
+			} else if (this instanceof Canvas && ContextHolder.getVk() != null) {
+				VirtualKeyboard vk = ContextHolder.getVk();
+				switch (id) {
+					case R.id.action_layout_edit_mode:
+						vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+						break;
+					case R.id.action_layout_scale_mode:
+						vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+						break;
+					case R.id.action_layout_edit_finish:
+						vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+						break;
+					case R.id.action_layout_switch:
+						vk.switchLayout();
+						break;
+				}
 			}
 			return true;
 		}

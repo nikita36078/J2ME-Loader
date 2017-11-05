@@ -16,6 +16,9 @@
                 <item
                     android:id="@+id/action_layout_edit_finish"
                     android:title="@string/layout_edit_finish"/>
+                <item
+                    android:id="@+id/action_layout_switch"
+                    android:title="@string/layout_switch"/>
             </group>
         </menu>
     </item>

@@ -51,21 +51,19 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private RectF rect;
 		private int keyCode, secondKeyCode;
 		private String label;
-		private boolean selected;
-
+		private boolean isSelected;
+		private boolean isVisible;
 
 		public VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
 			this.label = label;
-
+			this.isVisible = true;
 			rect = new RectF();
 		}
 
 		public VirtualKey(int keyCode, int secondKeyCode, String label) {
-			this.keyCode = keyCode;
+			this(keyCode, label);
 			this.secondKeyCode = secondKeyCode;
-			this.label = label;
-			rect = new RectF();
 		}
 
 		public int getKeyCode() {
@@ -77,7 +75,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		public void setSelected(boolean flag) {
-			selected = flag;
+			isSelected = flag;
+		}
+
+		public void setVisible(boolean flag) {
+			isVisible = flag;
+		}
+
+		public boolean isVisible() {
+			return isVisible;
 		}
 
 		public RectF getRect() {
@@ -90,15 +96,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		public boolean contains(float x, float y) {
-			return rect.contains(x, y);
+			return isVisible && rect.contains(x, y);
 		}
 
 		public void paint(Graphics g) {
-			if (label != null) {
-				g.setColor(colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
+			if (label != null && isVisible) {
+				g.setColor(colors[isSelected ? BACKGROUND_SELECTED : BACKGROUND]);
 				g.fillArc(rect, 0, 360);
 
-				g.setColor(colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
+				g.setColor(colors[isSelected ? FOREGROUND_SELECTED : FOREGROUND]);
 				g.setFont(font);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
@@ -153,7 +159,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			KEY_FIRE = 24;
 
 	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
-	private static final int LAYOUT_VERSION = 1;
+	private static final int LAYOUT_OLD_VERSION = 1;
+	private static final int LAYOUT_VERSION = 2;
 
 	public static final int LAYOUT_EOF = -1;
 	public static final int LAYOUT_KEYS = 0,
@@ -214,7 +221,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			},
 			{
 					KEY_DIAL,
-					KEY_CANCEL,},
+					KEY_CANCEL,
+			},
 			{
 					KEY_NUM1,
 					KEY_NUM2,
@@ -356,48 +364,38 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keyScales[SCALE_JOYSTICK] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
-				keyScales[SCALE_DIGITS] = 0.75f;
-				keyScales[SCALE_FIRE_KEY] = 1.5f;
+				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_FIRE_KEY] = 1;
 
-				setSnap(KEY_DOWN_LEFT, SCREEN, RectSnap.INT_SOUTHWEST);
-				setSnap(KEY_LEFT, KEY_DOWN_LEFT, RectSnap.EXT_NORTH);
-				setSnap(KEY_UP_LEFT, KEY_LEFT, RectSnap.EXT_NORTH);
-				setSnap(KEY_UP, KEY_UP_LEFT, RectSnap.EXT_EAST);
-				setSnap(KEY_UP_RIGHT, KEY_UP, RectSnap.EXT_EAST);
-				setSnap(KEY_DOWN, KEY_DOWN_LEFT, RectSnap.EXT_EAST);
+				setSnap(KEY_DOWN, SCREEN, RectSnap.INT_SOUTH);
 				setSnap(KEY_DOWN_RIGHT, KEY_DOWN, RectSnap.EXT_EAST);
+				setSnap(KEY_DOWN_LEFT, KEY_DOWN, RectSnap.EXT_WEST);
+				setSnap(KEY_LEFT, KEY_DOWN_LEFT, RectSnap.EXT_NORTH);
 				setSnap(KEY_RIGHT, KEY_DOWN_RIGHT, RectSnap.EXT_NORTH);
+				setSnap(KEY_UP_RIGHT, KEY_RIGHT, RectSnap.EXT_NORTH);
+				setSnap(KEY_UP, KEY_UP_RIGHT, RectSnap.EXT_WEST);
+				setSnap(KEY_UP_LEFT, KEY_UP, RectSnap.EXT_WEST);
+				setSnap(KEY_FIRE, KEY_DOWN_RIGHT, RectSnap.EXT_NORTHWEST);
+				setSnap(KEY_SOFT_LEFT, KEY_UP_LEFT, RectSnap.EXT_WEST);
+				setSnap(KEY_SOFT_RIGHT, KEY_UP_RIGHT, RectSnap.EXT_EAST);
 
-				setSnap(KEY_NUM3, SCREEN, RectSnap.INT_NORTHEAST);
-				setSnap(KEY_NUM2, KEY_NUM3, RectSnap.EXT_WEST);
-				setSnap(KEY_NUM1, KEY_NUM2, RectSnap.EXT_WEST);
-				setSnap(KEY_NUM6, KEY_NUM3, RectSnap.EXT_SOUTH);
-				setSnap(KEY_NUM5, KEY_NUM6, RectSnap.EXT_WEST);
-				setSnap(KEY_NUM4, KEY_NUM5, RectSnap.EXT_WEST);
-				setSnap(KEY_NUM9, KEY_NUM6, RectSnap.EXT_SOUTH);
-				setSnap(KEY_NUM8, KEY_NUM9, RectSnap.EXT_WEST);
-				setSnap(KEY_NUM7, KEY_NUM8, RectSnap.EXT_WEST);
-				setSnap(KEY_POUND, KEY_NUM9, RectSnap.EXT_SOUTH);
-				setSnap(KEY_NUM0, KEY_POUND, RectSnap.EXT_WEST);
-				setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
-
-				setSnap(KEY_DIAL, KEY_UP_LEFT, RectSnap.ALIGN_LEFT | RectSnap.SNAP_TOP);
-				setSnap(KEY_CANCEL, KEY_DIAL, RectSnap.EXT_EAST);
-
-				setSnap(KEY_SOFT_RIGHT, KEY_NUM0, RectSnap.RIGHT_HCENTER | RectSnap.SNAP_BOTTOM);
-				setSnap(KEY_SOFT_LEFT, KEY_SOFT_RIGHT, RectSnap.EXT_WEST);
-
-				keySize = Math.max(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight()) / 12;
-				float keyOffset = keySize * (keyScales[SCALE_JOYSTICK] * 3 - keyScales[SCALE_FIRE_KEY]) / 2;
-
-				snapOrigins[KEY_FIRE] = SCREEN;
-				snapModes[KEY_FIRE] = RectSnap.INT_SOUTHEAST;
-				snapOffsets[KEY_FIRE] = new PointF(-keyOffset, -keyOffset);
-				snapValid[KEY_FIRE] = false;
-
+				for (int i = KEY_NUM1; i < 12; i++) {
+					keypad[i].setVisible(false);
+				}
+				keypad[KEY_DIAL].setVisible(false);
+				keypad[KEY_CANCEL].setVisible(false);
 				break;
 		}
+	}
 
+	public void switchLayout(){
+		layoutVariant ^= 1;
+		resetLayout(layoutVariant);
+		for (int group = 0; group < keyScaleGroups.length; group++) {
+			resizeKeyGroup(group);
+		}
+		snapKeys();
+		repaint();
 	}
 
 	public void writeLayout(DataOutputStream dos) throws IOException {
@@ -408,6 +406,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		dos.writeInt(keypad.length);
 		for (int i = 0; i < keypad.length; i++) {
 			dos.writeInt(keypad[i].hashCode());
+			dos.writeBoolean(keypad[i].isVisible());
 			dos.writeInt(snapOrigins[i]);
 			dos.writeInt(snapModes[i]);
 			dos.writeFloat(snapOffsets[i].x);
@@ -433,7 +432,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (dis.readInt() != LAYOUT_SIGNATURE) {
 			throw new IOException("file signature not found");
 		}
-		if (dis.readInt() != LAYOUT_VERSION) {
+		int version = dis.readInt();
+		if (version != LAYOUT_VERSION && version != LAYOUT_OLD_VERSION) {
 			throw new IOException("incompatible file version");
 		}
 		while (true) {
@@ -453,6 +453,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						found = false;
 						for (int key = 0; key < keypad.length; key++) {
 							if (keypad[key].hashCode() == hash) {
+								if (version == LAYOUT_VERSION) {
+									keypad[key].setVisible(dis.readBoolean());
+								}
 								snapOrigins[key] = dis.readInt();
 								snapModes[key] = dis.readInt();
 								snapOffsets[key].x = dis.readFloat();
