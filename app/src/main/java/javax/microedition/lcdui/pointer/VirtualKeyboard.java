@@ -37,10 +37,10 @@ import ua.naiksoftware.j2meloader.R;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
-	public static final String ARROW_LEFT = "\u2190";
-	public static final String ARROW_UP = "\u2191";
-	public static final String ARROW_RIGHT = "\u2192";
-	public static final String ARROW_DOWN = "\u2193";
+	private static final String ARROW_LEFT = "\u2190";
+	private static final String ARROW_UP = "\u2191";
+	private static final String ARROW_RIGHT = "\u2192";
+	private static final String ARROW_DOWN = "\u2193";
 
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
@@ -48,10 +48,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private class VirtualKey {
 
-		protected RectF rect;
-		protected int keyCode, secondKeyCode;
-		protected String label;
-		protected boolean selected;
+		private RectF rect;
+		private int keyCode, secondKeyCode;
+		private String label;
+		private boolean selected;
+
 
 		public VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
@@ -123,9 +124,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	public static final int SCREEN = -1;
+	private static final int SCREEN = -1;
 
-	public static final int KEY_NUM1 = 0,
+	private static final int KEY_NUM1 = 0,
 			KEY_NUM2 = 1,
 			KEY_NUM3 = 2,
 			KEY_NUM4 = 3,
@@ -151,8 +152,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			KEY_DOWN_RIGHT = 23,
 			KEY_FIRE = 24;
 
-	protected static final int LAYOUT_SIGNATURE = 0x564B4C00;
-	protected static final int LAYOUT_VERSION = 1;
+	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
+	private static final int LAYOUT_VERSION = 1;
 
 	public static final int LAYOUT_EOF = -1;
 	public static final int LAYOUT_KEYS = 0,
@@ -160,8 +161,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			LAYOUT_COLORS = 2;
 
 	protected Font font = Font.getDefaultFont();
-	protected int delay = -1;
-	protected int overlayAlpha = 64;
+	private int delay = -1;
+	private int overlayAlpha = 64;
 
 	public static final int BACKGROUND = 0;
 	public static final int FOREGROUND = 1;
@@ -169,7 +170,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public static final int FOREGROUND_SELECTED = 3;
 	public static final int OUTLINE = 4;
 
-	protected int[] colors
+	private int[] colors
 			= {
 			0xD0D0D0,
 			0x000080,
@@ -178,15 +179,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			0xFFFFFF
 	};
 
-	public static final int SCALE_JOYSTICK = 0;
-	public static final int SCALE_SOFT_KEYS = 1;
-	public static final int SCALE_DIAL_KEYS = 2;
-	public static final int SCALE_DIGITS = 3;
-	public static final int SCALE_FIRE_KEY = 4;
+	private static final int SCALE_JOYSTICK = 0;
+	private static final int SCALE_SOFT_KEYS = 1;
+	private static final int SCALE_DIAL_KEYS = 2;
+	private static final int SCALE_DIGITS = 3;
+	private static final int SCALE_FIRE_KEY = 4;
 
-	protected static final float SCALE_SNAP_RADIUS = 0.05f;
+	private static final float SCALE_SNAP_RADIUS = 0.05f;
 
-	protected float[] keyScales
+	private float[] keyScales
 			= {
 			1,
 			1,
@@ -195,7 +196,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			1.5f
 	};
 
-	protected int[][] keyScaleGroups
+	private int[][] keyScaleGroups
 			= {
 			{
 					KEY_UP_LEFT,
@@ -236,36 +237,36 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected Canvas target;
 	protected Context context;
 
-	protected Image offscreen;
-	protected Graphics offgraphics;
-	protected boolean obscuresVirtualScreen;
-	protected boolean offscreenChanged;
+	private Image offscreen;
+	private Graphics offgraphics;
+	private boolean obscuresVirtualScreen;
+	private boolean offscreenChanged;
 
-	protected boolean visible, hiding, skip;
-	protected final Object waiter = new Object();
-	protected Thread hider;
+	private boolean visible, hiding, skip;
+	private final Object waiter = new Object();
+	private Thread hider;
 
-	protected int[] snapOrigins;
-	protected int[] snapModes;
-	protected PointF[] snapOffsets;
-	protected boolean[] snapValid;
-	protected int[] snapStack;
+	private int[] snapOrigins;
+	private int[] snapModes;
+	private PointF[] snapOffsets;
+	private boolean[] snapValid;
+	private int[] snapStack;
 
-	protected int layoutEditMode;
-	protected int editedIndex;
-	protected float offsetX, offsetY;
-	protected float prevScale;
-	protected int layoutVariant;
+	private int layoutEditMode;
+	private int editedIndex;
+	private float offsetX, offsetY;
+	private float prevScale;
+	private int layoutVariant;
 
 	protected RectF screen;
-	protected RectF virtualScreen;
-	protected float keySize;
-	protected float snapRadius;
+	private RectF virtualScreen;
+	private float keySize;
+	private float snapRadius;
 
-	protected VirtualKey[] keypad;
-	protected VirtualKey[] associatedKeys;
+	private VirtualKey[] keypad;
+	private VirtualKey[] associatedKeys;
 
-	protected KeyRepeater repeater;
+	private KeyRepeater repeater;
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
@@ -922,13 +923,5 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setColor(int color, int value) {
 		colors[color] = value;
-	}
-
-	public float getKeyScale(int type) {
-		return keyScales[type];
-	}
-
-	public void setKeyScale(int type, float value) {
-		keyScales[type] = value;
 	}
 }
