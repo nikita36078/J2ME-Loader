@@ -92,7 +92,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	public void setARGBColor(int argb) {
 		alphaComponent = (argb >> 24 & 0xff);
-		graphics.setColor(argb & 0xffffff);
+		graphics.setColorAlpha(argb);
 	}
 
 	/**
