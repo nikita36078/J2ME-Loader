@@ -166,15 +166,13 @@ public class DirectGraphicsImp implements DirectGraphics {
 		if (format == TYPE_BYTE_1_GRAY) {
 
 			int b = 7;
-
 			for (int yj = 0; yj < height; yj++) {
 				int line = off + yj * scanlen;
 				int ypos = yj * width;
 				for (int xj = 0; xj < width; xj++) {
 					c = doAlpha(pix, alpha, (line + xj) / 8, b);
-					if ((c >> 24 & 0xff) != 0)//alpha
-					{
-						if (g.getColor() != c) g.setColor(c);
+					if (!isTransparent(c)) { //alpha
+						g.setColorAlpha(c);
 						g.drawLine(xj + x, yj + y, xj + x, yj + y);
 					}
 					b--;
@@ -190,9 +188,10 @@ public class DirectGraphicsImp implements DirectGraphics {
 				int tmp = (ods + yj) / 8 * scanlen + oms;
 				for (int xj = 0; xj < width; xj++) {
 					c = doAlpha(pix, alpha, tmp + xj, b);
-					if (g.getColor() != c) g.setColor(c);
-					if ((c >> 24 & 0xff) != 0) //alpha
+					if (!isTransparent(c)) { //alpha
+						g.setColorAlpha(c);
 						g.drawLine(xj + x, yj + y, xj + x, yj + y);
+					}
 				}
 				b++;
 				if (b > 7) b = 0;
@@ -216,7 +215,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param format
 	 */
 	public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
-		if (format != TYPE_USHORT_4444_ARGB) {
+		if (format != TYPE_USHORT_4444_ARGB && format != TYPE_USHORT_444_RGB) {
 			throw new IllegalArgumentException("Illegal format: " + format);
 		}
 
@@ -224,9 +223,9 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
-				int c = toARGB(pix[off + ix + iy * scanlen], TYPE_USHORT_4444_ARGB);
+				int c = toARGB(pix[off + ix + iy * scanlen], format);
 				if (!isTransparent(c)) {
-					g.setColor(c);
+					g.setColorAlpha(c);
 					g.drawLine(x + ix, y + iy, x + ix, y + iy);
 				}
 			}
@@ -248,8 +247,21 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param format
 	 */
 	public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
-		System.out.println("public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format)");
-		throw new IllegalArgumentException();
+		if (format != TYPE_INT_888_RGB && format != TYPE_INT_8888_ARGB) {
+			throw new IllegalArgumentException("Illegal format: " + format);
+		}
+
+		Graphics g = graphics;
+
+		for (int iy = 0; iy < height; iy++) {
+			for (int ix = 0; ix < width; ix++) {
+				int c = pix[off + ix + iy * scanlen];
+				if (!isTransparent(c)) {
+					g.setColorAlpha(c);
+					g.drawLine(x + ix, y + iy, x + ix, y + iy);
+				}
+			}
+		}
 	}
 
 	/**
