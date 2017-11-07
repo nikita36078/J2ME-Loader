@@ -54,26 +54,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 		if (img == null) {
 			throw new NullPointerException();
 		}
-		int transform;
-		switch (manipulation) {
-			case FLIP_HORIZONTAL:
-				transform = Sprite.TRANS_MIRROR_ROT180;
-				break;
-			case FLIP_VERTICAL:
-				transform = Sprite.TRANS_MIRROR;
-				break;
-			case ROTATE_90:
-				transform = Sprite.TRANS_ROT90;
-				break;
-			case ROTATE_180:
-				transform = Sprite.TRANS_ROT180;
-				break;
-			case ROTATE_270:
-				transform = Sprite.TRANS_ROT270;
-				break;
-			default:
-				transform = -1;
-		}
+		int transform = getTransformation(manipulation);
 		if (anchor >= 64 || transform == -1) {
 			throw new IllegalArgumentException();
 		} else {
@@ -83,7 +64,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 					img.getWidth(), img.getHeight(),
 					transform,
 					x + graphics.getTranslateX(), y + graphics.getTranslateY(), anchor);
-			return;
 		}
 	}
 
@@ -277,7 +257,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	/**
-	 *
 	 * @param pix
 	 * @param alpha
 	 * @param offset
@@ -309,7 +288,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	/**
-	 *
 	 * @param pix
 	 * @param offset
 	 * @param scanlen
@@ -367,4 +345,85 @@ public class DirectGraphicsImp implements DirectGraphics {
 	private static boolean isTransparent(int s) {
 		return (s & 0xFF000000) == 0;
 	}
+
+	private static int getTransformation(int manipulation) {
+		// manipulations are C-CW and sprite rotations are CW
+		int ret = -1;
+		int rotation = manipulation & 0x0FFF;
+		if ((manipulation & FLIP_HORIZONTAL) != 0) {
+			if ((manipulation & FLIP_VERTICAL) != 0) {
+				// horiz and vertical flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_ROT180;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_ROT90;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_NONE;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_ROT270;
+						break;
+					default:
+				}
+			} else {
+				// horizontal flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_MIRROR_ROT180;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_MIRROR_ROT90;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_MIRROR;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_MIRROR_ROT270;
+						break;
+					default:
+				}
+			}
+		} else {
+			if ((manipulation & FLIP_VERTICAL) != 0) {
+				// vertical flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_MIRROR;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_MIRROR_ROT270;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_MIRROR_ROT180;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_MIRROR_ROT90;
+						break;
+					default:
+				}
+			} else {
+				// no flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_NONE;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_ROT270;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_ROT180;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_ROT90;
+						break;
+					default:
+				}
+			}
+		}
+		return ret;
+	}
+
 }
