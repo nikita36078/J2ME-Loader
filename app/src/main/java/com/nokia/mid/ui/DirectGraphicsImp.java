@@ -277,7 +277,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	/**
-	 * Not supported
 	 *
 	 * @param pix
 	 * @param alpha
@@ -291,7 +290,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format) {
 		System.out.println("public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
-		throw new IllegalArgumentException();
 	}
 
 	/**
@@ -308,11 +306,9 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
 		System.out.println("public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format)");
-		throw new IllegalArgumentException();
 	}
 
 	/**
-	 * Not supported
 	 *
 	 * @param pix
 	 * @param offset
@@ -325,7 +321,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
 		System.out.println("public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
-		throw new IllegalArgumentException();
 	}
 
 	private static int doAlpha(byte[] pix, byte[] alpha, int pos, int shift) {
