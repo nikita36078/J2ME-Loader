@@ -58,12 +58,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 		if (anchor >= 64 || transform == -1) {
 			throw new IllegalArgumentException();
 		} else {
-			graphics.drawRegion(
-					img,
-					x + graphics.getTranslateX(), y + graphics.getTranslateY(),
-					img.getWidth(), img.getHeight(),
-					transform,
-					x + graphics.getTranslateX(), y + graphics.getTranslateY(), anchor);
+			graphics.drawRegion(img, 0, 0, img.getWidth(), img.getHeight(),
+					transform, x, y, anchor);
 		}
 	}
 
