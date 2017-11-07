@@ -52,15 +52,22 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	public void drawImage(Image img, int x, int y, int anchor, int manipulation) {
 		if (img == null) {
-			throw new NullPointerException();
+			//throw new NullPointerException();
+			return; //It's unnecessary to throw new Exception()
 		}
 		int transform;
 		switch (manipulation) {
+// 			case FLIP_HORIZONTAL:
+// 				transform = Sprite.TRANS_MIRROR_ROT180;
+// 				break;
+// 			case FLIP_VERTICAL:
+// 				transform = Sprite.TRANS_MIRROR;
+// 				break;
 			case FLIP_HORIZONTAL:
-				transform = Sprite.TRANS_MIRROR_ROT180;
+				transform = Sprite.TRANS_MIRROR;
 				break;
 			case FLIP_VERTICAL:
-				transform = Sprite.TRANS_MIRROR;
+				transform = Sprite.TRANS_MIRROR_ROT180;
 				break;
 			case ROTATE_90:
 				transform = Sprite.TRANS_ROT90;
@@ -75,14 +82,19 @@ public class DirectGraphicsImp implements DirectGraphics {
 				transform = -1;
 		}
 		if (anchor >= 64 || transform == -1) {
-			throw new IllegalArgumentException();
+			//throw new IllegalArgumentException();
+			return; //It's unnecessary to throw new Exception()
 		} else {
+			try{
 			graphics.drawRegion(
 					img,
-					x + graphics.getTranslateX(), y + graphics.getTranslateY(),
+					graphics.getTranslateX(), graphics.getTranslateY(), //start （0,0）
 					img.getWidth(), img.getHeight(),
 					transform,
 					x + graphics.getTranslateX(), y + graphics.getTranslateY(), anchor);
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 			return;
 		}
 	}
