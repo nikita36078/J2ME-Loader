@@ -45,7 +45,6 @@ public class MicroActivity extends AppCompatActivity {
 	private Displayable current;
 	private boolean visible;
 	private boolean isCanvas;
-	private boolean isActionBarEnabled;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,9 +52,10 @@ public class MicroActivity extends AppCompatActivity {
 		ContextHolder.addActivityToPool(this);
 		isCanvas = getIntent().getBooleanExtra(INTENT_PARAM_IS_CANVAS, false);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
+		boolean isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 		if (isCanvas) {
 			setTheme(R.style.AppTheme_Fullscreen);
+			getSupportActionBar().setTitle(MyClassLoader.getName());
 			if (!isActionBarEnabled) {
 				getSupportActionBar().hide();
 			}
