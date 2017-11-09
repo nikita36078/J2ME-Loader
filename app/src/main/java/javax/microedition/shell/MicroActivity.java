@@ -168,7 +168,7 @@ public class MicroActivity extends AppCompatActivity {
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.menu.midlet, menu);
 			for (Command cmd : current.getCommands()) {
-				menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getLabel());
+				menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getLabel());
 			}
 		}
 
