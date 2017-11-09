@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.1'
 
     defaultConfig {
         applicationId "ua.naiksoftware.j2meloader"
         minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 13
-        versionName "1.2.4"
+        targetSdkVersion 27
+        versionCode 14
+        versionName "1.2.5"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
     }
     buildTypes {
@@ -21,9 +21,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:preference-v7:26.1.0'
-    compile 'com.github.yukuku:ambilwarna:2.0.1'
-    compile 'org.ow2.asm:asm-tree:5.2'
-    compile fileTree(include: ['*.jar', '*.so'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.0.0'
+    implementation 'com.android.support:preference-v7:27.0.0'
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+    implementation 'org.ow2.asm:asm-tree:5.2'
+    implementation fileTree(include: ['*.jar', '*.so'], dir: 'libs')
 }
