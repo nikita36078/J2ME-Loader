@@ -91,6 +91,13 @@ public class Font {
 		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // а теперь ставим размер точно равный заданному (в пикселях)
 	}
 
+	// Font for keyboard
+	public Font() {
+		paint = new Paint();
+		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sizes[1], ContextHolder.getContext().getResources().getDisplayMetrics());
+		paint.setTextSize(size);
+	}
+
 	public static Font getFont(int face, int style, int size) {
 		int index = getFontIndex(face, style, size);
 
