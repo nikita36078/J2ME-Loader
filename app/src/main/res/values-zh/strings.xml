@@ -68,6 +68,7 @@
     <string name="layout_edit_finish">完成编辑模式</string>
     <string name="layout_edit_mode">键布局编辑模式</string>
     <string name="layout_scale_mode">键布局调整大小模式</string>
+    <string name="layout_switch">切换键布局</string>
     <string name="common_settings">[通用设置]</string>
 
     <string name="pref_enable_actionbar_title">启用操作栏</string>
