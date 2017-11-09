@@ -167,7 +167,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			LAYOUT_SCALES = 1,
 			LAYOUT_COLORS = 2;
 
-	protected Font font = Font.getDefaultFont();
+	protected Font font;
 	private int delay = -1;
 	private int overlayAlpha = 64;
 
@@ -279,6 +279,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public VirtualKeyboard() {
 		context = ContextHolder.getContext();
+		font = new Font();
 		keypad = new VirtualKey[25];
 		associatedKeys = new VirtualKey[10]; // у среднестатистического пользователя обычно не более 10 пальцев...
 
