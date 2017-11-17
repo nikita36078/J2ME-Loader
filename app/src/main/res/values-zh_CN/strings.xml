@@ -38,7 +38,6 @@
     <string name="PREF_VK_BACK" formatted="false">按钮</string>
     <string name="PREF_VK_FORE" formatted="false">标签</string>
     <string name="PREF_VK_OUTLINE" formatted="false">轮廓</string>
-    <string name="PREF_COLOR_HINT" formatted="false">RGB</string>
     <string name="PREF_VK_ALPHA" formatted="false">透明度: </string>
     <string name="PREF_VK_HIDE_DELAY" formatted="false">隐藏延迟: </string>
     <string name="PREF_UNIT_MS" formatted="false">ms</string>
