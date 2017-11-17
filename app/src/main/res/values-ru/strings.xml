@@ -39,7 +39,6 @@
   <string name="PREF_VK_BACK" formatted="false">Кнопки</string>
   <string name="PREF_VK_FORE" formatted="false">Надписи</string>
   <string name="PREF_VK_OUTLINE" formatted="false">Обводка</string>
-  <string name="PREF_COLOR_HINT" formatted="false">RGB</string>
   <string name="PREF_VK_ALPHA" formatted="false">Прозрачность: </string>
   <string name="PREF_VK_HIDE_DELAY" formatted="false">Скрывать через </string>
   <string name="PREF_UNIT_MS" formatted="false">мс</string>
