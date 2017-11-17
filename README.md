@@ -7,3 +7,10 @@
 A J2ME emulator for Android.
 
 http://4pda.ru/forum/index.php?showtopic=824201
+
+## Screenshots
+
+![Screenshot](/screenshots/screen.jpg)
+![Screenshot](/screenshots/screen2.jpg)
+![Screenshot](/screenshots/screen3.jpg)
+![Screenshot](/screenshots/screen4.jpg)
