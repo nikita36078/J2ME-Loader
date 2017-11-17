@@ -46,7 +46,7 @@
     <string name="PREF_VK_BACK" formatted="false">Buttons</string>
     <string name="PREF_VK_FORE" formatted="false">Labels</string>
     <string name="PREF_VK_OUTLINE" formatted="false">Outline</string>
-    <string name="PREF_COLOR_HINT" formatted="false">RGB</string>
+    <string name="PREF_COLOR_HINT" formatted="false" translatable="false">RGB</string>
     <string name="PREF_VK_ALPHA" formatted="false">Opacity: </string>
     <string name="PREF_VK_HIDE_DELAY" formatted="false">Hide delay: </string>
     <string name="PREF_UNIT_MS" formatted="false">ms</string>
