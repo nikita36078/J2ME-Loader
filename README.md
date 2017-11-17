@@ -10,5 +10,5 @@ http://4pda.ru/forum/index.php?showtopic=824201
 
 ## Screenshots
 
-![Screenshot]<img src="/screenshots/screen.jpg" width="288" height="512">![Screenshot]<img src="/screenshots/screen2.jpg" width="288" height="512">
-![Screenshot]<img src="/screenshots/screen3.jpg" width="288" height="512">![Screenshot]<img src="/screenshots/screen4.jpg" width="288" height="512">
+<img src="/screenshots/screen.jpg" width="288" height="512"> <img src="/screenshots/screen2.jpg" width="288" height="512">
+<img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
