@@ -160,6 +160,7 @@ public abstract class Canvas extends Displayable {
 		public InnerView(Context context) {
 			super(context);
 			getHolder().addCallback(this);
+			getHolder().setFormat(android.graphics.PixelFormat.RGBA_8888);
 			setFocusableInTouchMode(true);
 		}
 
