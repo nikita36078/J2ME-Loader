@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
-				.replace(R.id.container, appsListFragment).commit();
+				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
 		updateApps();
 	}
 
