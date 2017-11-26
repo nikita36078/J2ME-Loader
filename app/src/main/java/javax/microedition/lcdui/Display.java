@@ -78,8 +78,26 @@ public class Display {
 			ContextHolder.notifyPaused();
 			return;
 		}
-		changeCurrent(disp);
-		showCurrent();
+		if (disp instanceof Alert && ((Alert) disp).finiteTimeout()) {
+			final Displayable prev = current;
+			final Alert alert = (Alert) disp;
+			changeCurrent(disp);
+			showCurrent();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(alert.getTimeout());
+						changeCurrent(prev);
+						showCurrent();
+					} catch (Exception e) {
+					}
+				}
+			}).start();
+		} else {
+			changeCurrent(disp);
+			showCurrent();
+		}
 	}
 
 	public void setCurrent(final Alert alert, Displayable disp) {
