@@ -71,8 +71,10 @@ public class FileUtils {
 	public static void deleteDirectory(File dir) {
 		if (dir.isDirectory()) {
 			File[] listFiles = dir.listFiles();
-			for (File file : listFiles) {
-				deleteDirectory(file);
+			if (listFiles.length != 0) {
+				for (File file : listFiles) {
+					deleteDirectory(file);
+				}
 			}
 		}
 		dir.delete();

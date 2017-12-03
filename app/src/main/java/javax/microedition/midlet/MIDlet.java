@@ -28,8 +28,6 @@ import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-import ua.naiksoftware.util.FileUtils;
-
 public class MIDlet {
 
 	private static Context context;
@@ -39,7 +37,6 @@ public class MIDlet {
 	private static boolean destroyAppCalled = false;
 
 	public void start() {
-		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 		startApp();
 	}
 

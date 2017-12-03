@@ -227,7 +227,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		tfScaleRatioValue.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -236,7 +237,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			}
 
 			@Override
-			public void afterTextChanged(Editable s) {}
+			public void afterTextChanged(Editable s) {
+			}
 		});
 
 		loadParams(params);
@@ -548,8 +550,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			if (cxShowKeyboard.isChecked()) {
 				setVirtualKeyboard();
 			}
-
 			Display.initDisplay();
+			FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 			midlet = loadMIDlet();
 			applyConfiguration();
 			midlet.start();
