@@ -3,7 +3,6 @@
 <resources>
   <string name="exit">Verlaten</string>
   <string name="about">Over</string>
-  <string name="about_message">Met deze app kun je J2ME-apps en -games op Android starten. Het ondersteunt de meeste 2D-spellen en ook 3D met enkele beperkingen.&lt;BR&gt;</string>
   <string name="open_jar">Pot openen</string>
   <string name="author">Auteur: </string>
   <string name="version">Versie: </string>
