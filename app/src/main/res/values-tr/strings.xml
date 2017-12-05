@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">Çıkış</string>
   <string name="about">Hakkında</string>
-  <string name="about_message">Bu uygulama Android\'de J2ME uygulamaları ve oyunları açmanızı sağlar. Birçok 2D oyun ve bazı sınırlamaları da 3D destekler. &amp; Lt; BR &amp; gt;</string>
+  <string name="about_message">Bu uygulama Android\'de J2ME uygulamaları ve oyunları açmanızı sağlar. Birçok 2D oyun ve bazı sınırlamaları da 3D destekler.&lt;BR&gt;</string>
   <string name="open_jar">Kavanozu aç</string>
   <string name="author">Yazar: </string>
   <string name="version">Sürüm: </string>
@@ -49,7 +49,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Yangın: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Boyut</string>
   <string name="SIZE_PRESETS" formatted="false">Hazır</string>
-  <string name="PREF_LANGUAGE" formatted="false">Dil</string>
+  <string name="PREF_LANGUAGE" formatted="false">Dil: %A</string>
   <string name="PREF_MISC" formatted="false">Çeşitli seçenekler</string>
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
   <string name="PREF_IMMEDIATE">Hızlı işleme modu</string>
