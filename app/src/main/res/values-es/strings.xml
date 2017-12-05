@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">Salir</string>
   <string name="about">Acerca de</string>
-  <string name="about_message">Esta aplicación permite iniciar aplicaciones J2ME y juegos en Android. Es compatible con la mayoría de los juegos en 2D, también en 3D con algunas limitaciones.&lt;BR&gt;</string>
+  <string name="about_message">Esta aplicación permite iniciar aplicaciones J2ME y juegos en Android. Es compatible con la mayoría de los juegos en 2D, también en 3D con algunas limitaciones.\n</string>
   <string name="open_jar">Abrir jar</string>
   <string name="author">Autor: </string>
   <string name="version">Versión: </string>

@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">退出</string>
   <string name="about">关于</string>
-  <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 3D 游戏，有一些限制。&lt;BR&gt;</string>
+  <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 3D 游戏，有一些限制。\n</string>
   <string name="open_jar">打开 jar</string>
   <string name="author">作者: </string>
   <string name="version">版本: </string>

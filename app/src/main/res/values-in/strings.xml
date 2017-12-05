@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">Keluar</string>
   <string name="about">Tentang</string>
-  <string name="about_message">Aplikasi ini memungkinkan Anda meluncurkan aplikasi J2ME dan permainan di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D.&lt;BR&gt;</string>
+  <string name="about_message">Aplikasi ini memungkinkan Anda meluncurkan aplikasi J2ME dan permainan di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D.\n</string>
   <string name="open_jar">Buka jar</string>
   <string name="author">Pengarang: </string>
   <string name="version">Versi: </string>
