@@ -3,7 +3,6 @@
 <resources>
   <string name="exit">Sair</string>
   <string name="about">Informações</string>
-  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D e 3D, mas com algumas limitações;</string>
   <string name="open_jar">Abrir Jar</string>
   <string name="author">Autor: </string>
   <string name="version">Versão: </string>
