@@ -25,6 +25,7 @@
   <string name="PREF_SCALE_TO_FIT" formatted="false">Schaal om passend te maken</string>
   <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Beeldverhouding behouden</string>
   <string name="PREF_FILTER" formatted="false">Filter</string>
+  <string name="PREF_FONT_OPTIONS" formatted="false">Lettertypeopties</string>
   <string name="PREF_WIDTH" formatted="false">Breedte</string>
   <string name="PREF_HEIGHT" formatted="false">Hoogte</string>
   <string name="PREF_FONT_SMALL" formatted="false">Klein</string>
@@ -42,4 +43,17 @@
   <string name="PREF_VK_SEL_FORE" formatted="false">Etiketten (P)</string>
   <string name="PREF_VK_SEL_BACK" formatted="false">Knoppen (P)</string>
   <string name="PREF_VK_KEY_SIZES" formatted="false">Sleutel grootte</string>
+  <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
+  <string name="PREF_VK_SOFT_KEYS" formatted="false">Soft toetsen: </string>
+  <string name="PREF_VK_NUM_KEYS" formatted="false">Cijfers: </string>
+  <string name="PREF_VK_FIRE_KEY" formatted="false">Brand: </string>
+  <string name="PREF_VK_SIZE_HINT" formatted="false">Maat</string>
+  <string name="SIZE_PRESETS" formatted="false">Voorinstellingen</string>
+  <string name="PREF_LANGUAGE" formatted="false">Taal: %A</string>
+  <string name="PREF_MISC" formatted="false">Misc opties</string>
+  <string name="PREF_VK_SHOW">Toon toetsenbord</string>
+  <string name="PREF_IMMEDIATE">Onmiddellijke verwerkingsmodus</string>
+  <string name="PREF_CLEAR_BUFFER">Tekenbuffer wissen</string>
+  <string name="SWAP_SIZES">Swap grootte</string>
+  <string name="error">Fout</string>
 </resources>
