@@ -64,4 +64,9 @@
   <string name="layout_edit_finished">Bewerkingsmodus voltooid</string>
   <string name="layout_edit_finish">Voltooi de bewerkingsmodus</string>
   <string name="layout_edit_mode">Keylayout bewerkingsmodus</string>
+  <string name="layout_scale_mode">Wijzig de grootte van de keylayout</string>
+  <string name="layout_switch">Wissel keylayout</string>
+  <string name="common_settings">[ALGEMENE INSTELLINGEN]</string>
+  <string name="pref_enable_actionbar_title">ActionBar inschakelen</string>
+  <string name="pref_enable_actionbar_summary">In fullscreen toepassingen</string>
 </resources>
