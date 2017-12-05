@@ -3,7 +3,6 @@
 <resources>
   <string name="exit">Çıkış</string>
   <string name="about">Hakkında</string>
-  <string name="about_message">Bu uygulama Android\'de J2ME uygulamaları ve oyunları açmanızı sağlar. Birçok 2D oyun ve bazı sınırlamaları da 3D destekler.&lt;BR&gt;</string>
   <string name="open_jar">Kavanozu aç</string>
   <string name="author">Yazar: </string>
   <string name="version">Sürüm: </string>
