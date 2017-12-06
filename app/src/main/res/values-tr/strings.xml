@@ -45,7 +45,7 @@
   <string name="PREF_VK_KEY_SIZES" formatted="false">Anahtar boyutu</string>
   <string name="PREF_VK_NAV_KEYS" formatted="false">Oyun kolu: </string>
   <string name="PREF_VK_SOFT_KEYS" formatted="false">Yumuşak tuşlar: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">&amp;Basamaklar: </string>
+  <string name="PREF_VK_NUM_KEYS" formatted="false">Basamaklar: </string>
   <string name="PREF_VK_FIRE_KEY" formatted="false">Yangın: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Boyut</string>
   <string name="SIZE_PRESETS" formatted="false">Hazır</string>
