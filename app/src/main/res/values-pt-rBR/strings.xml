@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">Sair</string>
   <string name="about">Informações</string>
-  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D e 3D, mas com algumas limitações;</string>
+  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D e 3D, mas com algumas limitações.&lt;BR&gt;</string>
   <string name="open_jar">Abrir Jar</string>
   <string name="author">Autor: </string>
   <string name="version">Versão: </string>
@@ -12,7 +12,7 @@
   <string name="converting_wait">Convertendo JAR...</string>
   <string name="convert_complete">Completo</string>
   <string name="converting_message">Processando... Espere...</string>
-  <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento.</string>
+  <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento</string>
   <string name="action_context_shortcut">Adicionar atalho</string>
   <string name="action_settings">Configurações</string>
   <string name="action_context_delete">Excluir</string>
