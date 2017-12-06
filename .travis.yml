@@ -1,4 +1,7 @@
 language: android
+branches:
+   except:
+   - l10n_master
 android:
   components:
     - tools
