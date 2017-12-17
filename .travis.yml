@@ -7,10 +7,11 @@ android:
     - tools
     - platform-tools
     - tools
-    - build-tools-27.0.1
+    - build-tools-27.0.2
     - android-27
     - extra-google-m2repository
 before_install:
+  - yes | sdkmanager "platforms;android-27"
   - chmod +x gradlew
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
