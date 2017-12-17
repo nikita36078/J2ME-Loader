@@ -24,9 +24,6 @@ public class RunnableEvent extends Event {
 
 	private Runnable runnable;
 
-	private RunnableEvent() {
-	}
-
 	public static Event getInstance(Runnable runnable) {
 		RunnableEvent instance = recycled.pop();
 

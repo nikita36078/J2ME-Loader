@@ -60,7 +60,7 @@ public class Display {
 	private static Vibrator vibrator;
 
 	public static Display getDisplay(MIDlet midlet) {
-		if (instance == null) {
+		if (instance == null && midlet != null) {
 			instance = new Display(midlet);
 		}
 		return instance;
@@ -68,6 +68,7 @@ public class Display {
 
 	private Display(MIDlet midlet) {
 		context = midlet;
+		activity = ContextHolder.getCurrentActivity();
 	}
 
 	public static void initDisplay() {
@@ -125,30 +126,22 @@ public class Display {
 		current = disp;
 	}
 
-	public void changeActivity(MicroActivity subject) {
-		if (subject == activity) {
-			try {
-				context.startApp();
-			} catch (MIDletStateChangeException e) {
-				e.printStackTrace();
-			}
+	private void showCurrent() {
+		activity.setCurrent(current);
+	}
+
+
+	public void activityResumed() {
+		try {
+			context.startApp();
+		} catch (MIDletStateChangeException e) {
+			e.printStackTrace();
 		}
-		activity = subject;
 		showCurrent();
 	}
 
-	private void showCurrent() {
-		if (activity != null) {
-			activity.setCurrent(current);
-		} else {
-			context.startActivity(MicroActivity.class);
-		}
-	}
-
-	public void activityStopped(MicroActivity subject) {
-		if (subject == this.activity) {
-			context.callPauseApp();
-		}
+	public void activityStopped() {
+		context.callPauseApp();
 	}
 
 	public void activityDestroyed() {

@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.game.Sprite;
-import javax.microedition.shell.ConfigActivity;
+import javax.microedition.shell.MyClassLoader;
 import javax.microedition.util.ContextHolder;
 
 public class Image {
@@ -65,7 +65,7 @@ public class Image {
 			resname = resname.substring(1);
 		}
 
-		InputStream is = new FileInputStream(ConfigActivity.pathToMidletDir + ConfigActivity.MIDLET_RES_DIR + resname);
+		InputStream is = new FileInputStream(MyClassLoader.getResFolder() + "/" + resname);
 		Bitmap bitmap = BitmapFactory.decodeStream(is);
 		is.close();
 

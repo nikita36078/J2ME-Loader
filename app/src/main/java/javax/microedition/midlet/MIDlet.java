@@ -18,7 +18,6 @@
 package javax.microedition.midlet;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -110,12 +109,6 @@ public abstract class MIDlet {
 			e.printStackTrace();
 		}
 		destroyAppCalled = false;
-	}
-
-	public void startActivity(Class cls) {
-		Context context = ContextHolder.getContext();
-		Intent i = new Intent(context, cls);
-		context.startActivity(i);
 	}
 
 	public boolean platformRequest(String url)

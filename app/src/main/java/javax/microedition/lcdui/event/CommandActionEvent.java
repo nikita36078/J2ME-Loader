@@ -34,9 +34,6 @@ public class CommandActionEvent extends Event {
 	private Displayable displayable;
 	private Item item;
 
-	private CommandActionEvent() {
-	}
-
 	public static Event getInstance(CommandListener listener, Command command, Displayable displayable) {
 		CommandActionEvent instance = recycled.pop();
 
@@ -93,20 +90,4 @@ public class CommandActionEvent extends Event {
 	public boolean placeableAfter(Event event) {
 		return true;
 	}
-
-//	public String toString()
-//	{
-//		if(listener != null)
-//		{
-//			return "сommandAction(" + command + ", " + displayable + ")";
-//		}
-//		else if(itemlistener != null)
-//		{
-//			return "сommandAction(" + command + ", " + item + ")";
-//		}
-//		else
-//		{
-//			return "сommandAction(" + command + ")";
-//		}
-//	}
 }

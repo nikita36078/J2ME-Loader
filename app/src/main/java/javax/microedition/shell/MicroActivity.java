@@ -18,13 +18,13 @@
 
 package javax.microedition.shell;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -35,37 +35,60 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import java.io.File;
+import java.util.LinkedHashMap;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;
+import ua.naiksoftware.util.FileUtils;
+import ua.naiksoftware.util.Log;
 
 public class MicroActivity extends AppCompatActivity {
 	private Displayable current;
 	private boolean visible;
 	private LinearLayout layout;
-	Toolbar toolbar;
+	private Toolbar toolbar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_micro);
+		ContextHolder.setCurrentActivity(this);
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		ContextHolder.setCurrentActivity(this);
+		String path = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH);
+		try {
+			loadMIDlet(path).startApp();
+		} catch (Exception e) {
+			e.printStackTrace();
+			AlertDialog.Builder builder = new AlertDialog.Builder(this)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setTitle(R.string.error)
+					.setMessage(e.getMessage());
+			builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+				@Override
+				public void onDismiss(DialogInterface dialogInterface) {
+					finish();
+				}
+			});
+			builder.show();
+		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		visible = true;
-		Display.getDisplay(null).changeActivity(this);
+		Display.getDisplay(null).activityResumed();
 	}
 
 	@Override
@@ -77,15 +100,31 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Display.getDisplay(null).activityStopped(this);
+		Display.getDisplay(null).activityStopped();
 	}
 
-	@Override
-	public void onDestroy() {
-		if (current != null) {
-			current.setParentActivity(null);
+	private MIDlet loadMIDlet(String pathToMidletDir) {
+		MIDlet midlet = null;
+		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(
+				pathToMidletDir + ConfigActivity.MIDLET_CONF_FILE));
+		MIDlet.initProps(params);
+		String dex = pathToMidletDir + ConfigActivity.MIDLET_DEX_FILE;
+		ClassLoader loader = new MyClassLoader(dex,
+				getApplicationInfo().dataDir, null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
+		try {
+			String mainClassParam = params.get("MIDlet-1");
+			String mainClass = mainClassParam.substring(
+					mainClassParam.lastIndexOf(',') + 1).trim();
+			Log.d("inf", "load main: " + mainClass + " from dex:" + dex);
+			midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
+		} catch (ClassNotFoundException ex) {
+			Log.d("err", ex.toString() + "/n" + ex.getMessage());
+		} catch (InstantiationException ex) {
+			Log.d("err", ex.toString() + "/n" + ex.getMessage());
+		} catch (IllegalAccessException ex) {
+			Log.d("err", ex.toString() + "/n" + ex.getMessage());
 		}
-		super.onDestroy();
+		return midlet;
 	}
 
 	private SimpleEvent msgSetCurent = new SimpleEvent() {
@@ -105,7 +144,7 @@ public class MicroActivity extends AppCompatActivity {
 					actionBar.hide();
 				} else {
 					actionBar.setTitle(MyClassLoader.getName());
-					layoutParams.height = 52;
+					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
 				window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -125,9 +164,6 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	public void setCurrent(Displayable disp) {
-		if (current != null) {
-			current.setParentActivity(null);
-		}
 		current = disp;
 		runOnUiThread(msgSetCurent);
 	}

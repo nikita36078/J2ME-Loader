@@ -19,6 +19,7 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,7 +45,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 
 import javax.microedition.lcdui.Canvas;
@@ -52,14 +52,12 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import ua.naiksoftware.j2meloader.R;
 import ua.naiksoftware.util.FileUtils;
-import ua.naiksoftware.util.Log;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener {
@@ -100,14 +98,13 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 	protected String locale;
 
-	private MIDlet midlet;
 	private File keylayoutFile;
 	private SharedPreferencesContainer params;
-	public static String pathToMidletDir;
-	public static String appName;
+	private String pathToMidletDir;
 	public static final String MIDLET_RES_DIR = "/res/";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_CONF_FILE = MIDLET_DEX_FILE + ".conf";
+	public static final String MIDLET_PATH = "path";
 
 	/*
 	 * <xml locale=en>../../../../res/values/strings.xml</xml> <xml
@@ -128,14 +125,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		return res;
 	}
 
-	@SuppressLint("StringFormatMatches")
+	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.config_all);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ContextHolder.setContext(this);
 		pathToMidletDir = getIntent().getDataString();
-		appName = getIntent().getStringExtra("name");
+		String appName = getIntent().getStringExtra("name");
 		appName = appName.replace(":", "").replace("/", "");
 		keylayoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
 
@@ -535,9 +532,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				keylayoutFile.delete();
 				break;
 			case android.R.id.home:
-				if (midlet != null) {
-					midlet.notifyDestroyed();
-				}
 				finish();
 				break;
 		}
@@ -545,25 +539,17 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	private void startMIDlet() {
-		try {
-			// Теперь применяем конфигурацию к запускаемому мидлету.
-			if (cxShowKeyboard.isChecked()) {
-				setVirtualKeyboard();
-			}
-			Display.initDisplay();
-			FileUtils.deleteDirectory(ContextHolder.getCacheDir());
-			applyConfiguration();
-			midlet = loadMIDlet();
-			midlet.startApp();
-			finish();
-		} catch (Throwable t) {
-			t.printStackTrace();
-			AlertDialog.Builder builder = new AlertDialog.Builder(this)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle(R.string.error)
-					.setMessage(t.getMessage());
-			builder.show();
+		// Теперь применяем конфигурацию к запускаемому мидлету.
+		if (cxShowKeyboard.isChecked()) {
+			setVirtualKeyboard();
 		}
+		Display.initDisplay();
+		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
+		applyConfiguration();
+		Intent i = new Intent(this, MicroActivity.class);
+		i.putExtra(MIDLET_PATH, pathToMidletDir);
+		startActivity(i);
+		finish();
 	}
 
 	public void onClick(View v) {
@@ -699,29 +685,5 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					color | 0xFF000000, colorListener);
 			dialog.show();
 		}
-	}
-
-	private MIDlet loadMIDlet() {
-		MIDlet midlet = null;
-		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(
-				pathToMidletDir + MIDLET_CONF_FILE));
-		MIDlet.initProps(params);
-		String dex = pathToMidletDir + ConfigActivity.MIDLET_DEX_FILE;
-		ClassLoader loader = new MyClassLoader(dex,
-				getApplicationInfo().dataDir, null, getClassLoader(), pathToMidletDir + MIDLET_RES_DIR);
-		try {
-			String mainClassParam = params.get("MIDlet-1");
-			String mainClass = mainClassParam.substring(
-					mainClassParam.lastIndexOf(',') + 1).trim();
-			Log.d("inf", "load main: " + mainClass + " from dex:" + dex);
-			midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
-		} catch (ClassNotFoundException ex) {
-			Log.d("err", ex.toString() + "/n" + ex.getMessage());
-		} catch (InstantiationException ex) {
-			Log.d("err", ex.toString() + "/n" + ex.getMessage());
-		} catch (IllegalAccessException ex) {
-			Log.d("err", ex.toString() + "/n" + ex.getMessage());
-		}
-		return midlet;
 	}
 }
