@@ -542,6 +542,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		// Теперь применяем конфигурацию к запускаемому мидлету.
 		if (cxShowKeyboard.isChecked()) {
 			setVirtualKeyboard();
+		} else {
+			ContextHolder.setVk(null);
 		}
 		Display.initDisplay();
 		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
