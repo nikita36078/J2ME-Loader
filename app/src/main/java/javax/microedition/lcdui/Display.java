@@ -23,6 +23,7 @@ import android.os.Vibrator;
 
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
@@ -75,7 +76,7 @@ public class Display {
 
 	public void setCurrent(Displayable disp) {
 		if (disp == null) {
-			ContextHolder.notifyPaused();
+			context.notifyPaused();
 			return;
 		}
 		if (disp instanceof Alert && ((Alert) disp).finiteTimeout()) {
@@ -91,6 +92,7 @@ public class Display {
 						changeCurrent(prev);
 						showCurrent();
 					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			}).start();
@@ -125,22 +127,21 @@ public class Display {
 
 	public void changeActivity(MicroActivity subject) {
 		if (subject == activity) {
-			context.startApp();
+			try {
+				context.startApp();
+			} catch (MIDletStateChangeException e) {
+				e.printStackTrace();
+			}
 		}
 		activity = subject;
 		showCurrent();
 	}
 
 	private void showCurrent() {
-		boolean isCanvas = current instanceof Canvas;
 		if (activity != null) {
-			if (activity.isCanvas() == isCanvas) {
-				activity.setCurrent(current);
-			} else {
-				activity.startActivity(MicroActivity.class, isCanvas);
-			}
+			activity.setCurrent(current);
 		} else {
-			context.startActivity(MicroActivity.class, isCanvas);
+			context.startActivity(MicroActivity.class);
 		}
 	}
 
@@ -148,6 +149,10 @@ public class Display {
 		if (subject == this.activity) {
 			context.callPauseApp();
 		}
+	}
+
+	public void activityDestroyed() {
+		context.callDestroyApp(true);
 	}
 
 	public Displayable getCurrent() {

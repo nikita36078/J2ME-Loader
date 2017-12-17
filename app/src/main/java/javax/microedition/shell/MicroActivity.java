@@ -20,54 +20,50 @@ package javax.microedition.shell;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.event.SimpleEvent;
-import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ua.naiksoftware.j2meloader.R;
 
 public class MicroActivity extends AppCompatActivity {
-	public final static String INTENT_PARAM_IS_CANVAS = "isCanvas";
 	private Displayable current;
 	private boolean visible;
-	private boolean isCanvas;
+	private LinearLayout layout;
+	Toolbar toolbar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ContextHolder.addActivityToPool(this);
-		isCanvas = getIntent().getBooleanExtra(INTENT_PARAM_IS_CANVAS, false);
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
-		if (isCanvas) {
-			setTheme(R.style.AppTheme_Fullscreen);
-			getSupportActionBar().setTitle(MyClassLoader.getName());
-			if (!isActionBarEnabled) {
-				getSupportActionBar().hide();
-			}
-		} else {
-			setTheme(R.style.AppTheme);
-		}
+		setContentView(R.layout.activity_micro);
+		layout = findViewById(R.id.displayable_container);
+		toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		ContextHolder.setCurrentActivity(this);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		ContextHolder.setCurrentActivity(this);
 		visible = true;
 		Display.getDisplay(null).changeActivity(this);
 	}
@@ -75,7 +71,6 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		ContextHolder.setCurrentActivity(null);
 		visible = false;
 	}
 
@@ -90,21 +85,44 @@ public class MicroActivity extends AppCompatActivity {
 		if (current != null) {
 			current.setParentActivity(null);
 		}
-		ContextHolder.compactActivityPool(this);
 		super.onDestroy();
-	}
-
-	public boolean isCanvas() {
-		return isCanvas;
 	}
 
 	private SimpleEvent msgSetCurent = new SimpleEvent() {
 		public void process() {
 			current.setParentActivity(MicroActivity.this);
 			setTitle(current.getTitle());
-			setContentView(current.getDisplayableView());
+			layout.removeAllViews();
+			layout.addView(current.getDisplayableView());
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			boolean isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
+			Window window = getWindow();
+			ActionBar actionBar = getSupportActionBar();
+			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
+			if (current instanceof Canvas) {
+				window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				if (!isActionBarEnabled) {
+					actionBar.hide();
+				} else {
+					actionBar.setTitle(MyClassLoader.getName());
+					layoutParams.height = 52;
+				}
+			} else {
+				window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				actionBar.show();
+				layoutParams.height = getToolBarHeight();
+			}
+			toolbar.setLayoutParams(layoutParams);
 		}
 	};
+
+	public int getToolBarHeight() {
+		int[] attrs = new int[]{R.attr.actionBarSize};
+		TypedArray ta = obtainStyledAttributes(attrs);
+		int toolBarHeight = ta.getDimensionPixelSize(0, -1);
+		ta.recycle();
+		return toolBarHeight;
+	}
 
 	public void setCurrent(Displayable disp) {
 		if (current != null) {
@@ -132,7 +150,7 @@ public class MicroActivity extends AppCompatActivity {
 						Runnable r = new Runnable() {
 							public void run() {
 								try {
-									MIDlet.callDestroyApp(true);
+									Display.getDisplay(null).activityDestroyed();
 								} catch (Throwable ex) {
 									ex.printStackTrace();
 								}
@@ -144,12 +162,6 @@ public class MicroActivity extends AppCompatActivity {
 				})
 				.setNegativeButton(android.R.string.no, null);
 		alertBuilder.create().show();
-	}
-
-	public void startActivity(Class cls, boolean isCanvas) {
-		Intent intent = new Intent(this, cls);
-		intent.putExtra(INTENT_PARAM_IS_CANVAS, isCanvas);
-		startActivity(intent);
 	}
 
 	@Override

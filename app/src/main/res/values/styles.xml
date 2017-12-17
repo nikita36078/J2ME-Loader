@@ -4,13 +4,11 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
-    <style name="AppTheme.Fullscreen" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
-    </style>
-
-    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
-        <item name="height">35dp</item>
+    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"/>

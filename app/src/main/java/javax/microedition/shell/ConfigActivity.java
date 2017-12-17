@@ -133,7 +133,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.config_all);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		MIDlet.setMidletContext(this);
+		ContextHolder.setContext(this);
 		pathToMidletDir = getIntent().getDataString();
 		appName = getIntent().getStringExtra("name");
 		appName = appName.replace(":", "").replace("/", "");
@@ -552,9 +552,9 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			}
 			Display.initDisplay();
 			FileUtils.deleteDirectory(ContextHolder.getCacheDir());
-			midlet = loadMIDlet();
 			applyConfiguration();
-			midlet.start();
+			midlet = loadMIDlet();
+			midlet.startApp();
 			finish();
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -714,11 +714,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			String mainClass = mainClassParam.substring(
 					mainClassParam.lastIndexOf(',') + 1).trim();
 			Log.d("inf", "load main: " + mainClass + " from dex:" + dex);
-			midlet = (MIDlet) loader.loadClass(mainClass).newInstance();// Тут
-			// вызывается
-			// конструктор
-			// по
-			// умолчанию.
+			midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 		} catch (ClassNotFoundException ex) {
 			Log.d("err", ex.toString() + "/n" + ex.getMessage());
 		} catch (InstantiationException ex) {

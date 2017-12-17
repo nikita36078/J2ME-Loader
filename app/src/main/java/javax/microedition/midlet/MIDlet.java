@@ -25,25 +25,13 @@ import android.net.Uri;
 import java.util.LinkedHashMap;
 
 import javax.microedition.io.ConnectionNotFoundException;
-import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-public class MIDlet {
+public abstract class MIDlet {
 
-	private static Context context;
 	private static LinkedHashMap<String, String> properties;
-
-	private static boolean pauseAppCalled = false;
-	private static boolean destroyAppCalled = false;
-
-	public void start() {
-		startApp();
-	}
-
-	public static void setMidletContext(Context c) {
-		context = c;
-		ContextHolder.setContext(context);
-	}
+	private boolean pauseAppCalled = false;
+	private boolean destroyAppCalled = false;
 
 	public static void initProps(LinkedHashMap<String, String> p) {
 		properties = p;
@@ -78,45 +66,16 @@ public class MIDlet {
 	}
 
 	/**
-	 * Вызывается в самом начале запуска оболочки, когда создается объект
-	 * Application.
-	 * <p>
-	 * В частности, этот метод вызывается перед созданием Activity.
-	 * Соответственно, если конфигурирование оболочки происходит через
-	 * ConfigActivity, то в момент вызова этого метода состояние оболочки еще не
-	 * определено: виртуальный экран имеет нулевой размер, размеры шрифтов не
-	 * скорректированы, ...
-	 */
-	public void createApp() {
-	}
-
-	/**
-	 * Вызывается при передаче управления мидлету.
-	 * <p>
-	 * Этот метод следует использовать вместо конструктора класса мидлета для
-	 * его инициализации.
-	 * <p>
-	 * Если конфигурирование оболочки происходит через ConfigActivity, то в
-	 * момент вызова этого метода состояние оболочки полностью определено:
-	 * виртуальный экран имеет указанный пользователем размер, размеры шрифтов
-	 * скорректированы в соответствии с разрешением экрана, ...
-	 */
-	public/* abstract */void initApp() {
-	}
-
-	/**
 	 * Вызывается каждый раз, когда мидлет становится активным: при запуске
 	 * после initApp(), при восстановлении из свернутого состояния, ...
 	 */
-	public/* abstract */void startApp() {
-	}
+	public abstract void startApp() throws MIDletStateChangeException;
 
 	/**
 	 * Вызывается каждый раз, когда мидлет становится на паузу: при сворачивании
 	 * в фоновый режим, ...
 	 */
-	public/* abstract */void pauseApp() {
-	}
+	public abstract void pauseApp();
 
 	/**
 	 * Корректно вызвать pauseApp(). Во время выполнения этого метода вызовы
@@ -134,8 +93,7 @@ public class MIDlet {
 	 * @param unconditional флаг безусловного завершения, для Android не имеет особого
 	 *                      смысла
 	 */
-	public static/* abstract */void destroyApp(boolean unconditional) {
-	}
+	public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
 
 	/**
 	 * Корректно вызвать destroyApp(). Во время выполнения этого метода вызовы
@@ -144,22 +102,26 @@ public class MIDlet {
 	 * @param unconditional флаг безусловного завершения, для Android не имеет особого
 	 *                      смысла
 	 */
-	public static final void callDestroyApp(boolean unconditional) {
+	public final void callDestroyApp(boolean unconditional) {
 		destroyAppCalled = true;
-		destroyApp(unconditional);
+		try {
+			destroyApp(unconditional);
+		} catch (MIDletStateChangeException e) {
+			e.printStackTrace();
+		}
 		destroyAppCalled = false;
 	}
 
-	public void startActivity(Class cls, boolean isCanvas) {
+	public void startActivity(Class cls) {
+		Context context = ContextHolder.getContext();
 		Intent i = new Intent(context, cls);
-		i.putExtra(MicroActivity.INTENT_PARAM_IS_CANVAS, isCanvas);
 		context.startActivity(i);
 	}
 
 	public boolean platformRequest(String url)
 			throws ConnectionNotFoundException {
 		try {
-			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+			ContextHolder.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		} catch (ActivityNotFoundException e) {
 			throw new ConnectionNotFoundException();
 		}

@@ -27,8 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -44,7 +42,6 @@ public class ContextHolder {
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static MicroActivity currentActivity;
-	private static ArrayList<WeakReference<MicroActivity>> activityPool = new ArrayList();
 	private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
 
 	public static void setContext(Context cx) {
@@ -66,7 +63,7 @@ public class ContextHolder {
 		ContextHolder.vk = vk;
 	}
 
-	public static Display getDisplay() {
+	private static Display getDisplay() {
 		if (display == null) {
 			display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		}
@@ -81,37 +78,8 @@ public class ContextHolder {
 		return getDisplay().getHeight();
 	}
 
-	public static WeakReference<MicroActivity> compactActivityPool(MicroActivity activity) {
-		WeakReference<MicroActivity> reference = null;
-		MicroActivity referent;
-
-		for (int index = 0; index < activityPool.size(); ) {
-			referent = activityPool.get(index).get();
-
-			if (referent == null) {
-				activityPool.remove(index);
-			} else if (referent == activity) {
-				reference = activityPool.remove(index);
-			} else {
-				index++;
-			}
-		}
-
-		return reference;
-	}
-
 	public static AndroidRecordStoreManager getRecordStoreManager() {
 		return recordStoreManager;
-	}
-
-	public static void addActivityToPool(MicroActivity activity) {
-		WeakReference<MicroActivity> reference = compactActivityPool(activity);
-
-		if (reference == null) {
-			reference = new WeakReference(activity);
-		}
-
-		activityPool.add(reference);
 	}
 
 	public static void setCurrentActivity(MicroActivity activity) {
@@ -149,8 +117,7 @@ public class ContextHolder {
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
-		File file = new File(dir, name);
-		return file;
+		return new File(dir, name);
 	}
 
 	public static File getCacheDir() {
@@ -174,26 +141,8 @@ public class ContextHolder {
 	 * Закрыть все Activity и завершить процесс, в котором они выполнялись.
 	 */
 	public static void notifyDestroyed() {
-		MicroActivity activity;
-		int index;
-
-		while (true) {
-			index = activityPool.size() - 1;
-
-			if (index < 0) {
-				break;
-			}
-
-			activity = activityPool.remove(index).get();
-
-			if (activity != null && activity != currentActivity) {
-				activity.finish();
-			}
-		}
-
 		if (currentActivity != null) {
 			currentActivity.finish();
 		}
-
 	}
 }
