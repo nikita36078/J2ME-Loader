@@ -25,6 +25,7 @@ import javax.microedition.lcdui.event.SimpleEvent;
 public class StringItem extends Item {
 	private String text;
 	private TextView textview;
+	private Font font;
 
 	private SimpleEvent msgSetText = new SimpleEvent() {
 		public void process() {
@@ -67,5 +68,14 @@ public class StringItem extends Item {
 
 	public void clearItemContentView() {
 		textview = null;
+	}
+
+	public Font getFont(){
+		return font;
+	}
+
+	public void setFont(Font font){
+		// TODO Implement this method
+		this.font = font;
 	}
 }
