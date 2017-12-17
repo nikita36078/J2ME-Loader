@@ -61,10 +61,10 @@ public class AppsListAdapter extends BaseAdapter {
 		if (view == null) {
 			view = layoutInflater.inflate(R.layout.list_row_jar, null);
 			holder = new ViewHolder();
-			holder.icon = (ImageView) view.findViewById(R.id.list_image);
-			holder.name = (TextView) view.findViewById(R.id.list_title);
-			holder.author = (TextView) view.findViewById(R.id.list_author);
-			holder.version = (TextView) view.findViewById(R.id.list_version);
+			holder.icon = view.findViewById(R.id.list_image);
+			holder.name = view.findViewById(R.id.list_title);
+			holder.author = view.findViewById(R.id.list_author);
+			holder.version = view.findViewById(R.id.list_version);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();

@@ -1274,8 +1274,7 @@ class Color {
 	}
 
 	public float[] toRGBAArray() {
-		float[] c = {r, g, b, a};
-		return c;
+		return new float[]{r, g, b, a};
 	}
 
 	public static float[] intToFloatArray(int color) {

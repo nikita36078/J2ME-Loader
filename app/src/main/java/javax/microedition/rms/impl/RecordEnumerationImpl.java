@@ -123,9 +123,8 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 
 		currentRecord--;
-		byte[] result = ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).value;
 
-		return result;
+		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).value;
 	}
 
 
@@ -136,9 +135,8 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 
 		currentRecord--;
-		int result = ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).recordId;
 
-		return result;
+		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).recordId;
 	}
 
 

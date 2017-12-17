@@ -57,9 +57,9 @@ public class FileListAdapter extends BaseAdapter {
 		if (view == null) {
 			view = li.inflate(R.layout.list_row, null);
 			holder = new ViewHolder();
-			holder.icon = (ImageView) view.findViewById(R.id.list_image);
-			holder.label = (TextView) view.findViewById(R.id.list_header);
-			holder.sublabel = (TextView) view.findViewById(R.id.list_subheader);
+			holder.icon = view.findViewById(R.id.list_image);
+			holder.label = view.findViewById(R.id.list_header);
+			holder.sublabel = view.findViewById(R.id.list_subheader);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();

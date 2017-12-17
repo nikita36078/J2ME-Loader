@@ -17,7 +17,6 @@
 
 package javax.microedition.lcdui;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;

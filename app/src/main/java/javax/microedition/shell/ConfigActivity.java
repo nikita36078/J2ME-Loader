@@ -155,30 +155,30 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		System.setProperty("microedition.encoding", "ISO-8859-1");
 		System.setProperty("user.home", Environment.getExternalStorageDirectory().getAbsolutePath());
 
-		tfScreenWidth = (EditText) findViewById(R.id.tfScreenWidth);
-		tfScreenHeight = (EditText) findViewById(R.id.tfScreenHeight);
-		tfScreenBack = (EditText) findViewById(R.id.tfScreenBack);
-		cxScaleToFit = (CheckBox) findViewById(R.id.cxScaleToFit);
-		sbScaleRatio = (SeekBar) findViewById(R.id.sbScaleRatio);
-		tfScaleRatioValue = (EditText) findViewById(R.id.tfScaleRatioValue);
-		cxKeepAspectRatio = (CheckBox) findViewById(R.id.cxKeepAspectRatio);
-		cxFilter = (CheckBox) findViewById(R.id.cxFilter);
-		cxImmediate = (CheckBox) findViewById(R.id.cxImmediate);
-		cxClearBuffer = (CheckBox) findViewById(R.id.cxClearBuffer);
+		tfScreenWidth = findViewById(R.id.tfScreenWidth);
+		tfScreenHeight = findViewById(R.id.tfScreenHeight);
+		tfScreenBack = findViewById(R.id.tfScreenBack);
+		cxScaleToFit = findViewById(R.id.cxScaleToFit);
+		sbScaleRatio = findViewById(R.id.sbScaleRatio);
+		tfScaleRatioValue = findViewById(R.id.tfScaleRatioValue);
+		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
+		cxFilter = findViewById(R.id.cxFilter);
+		cxImmediate = findViewById(R.id.cxImmediate);
+		cxClearBuffer = findViewById(R.id.cxClearBuffer);
 
-		tfFontSizeSmall = (EditText) findViewById(R.id.tfFontSizeSmall);
-		tfFontSizeMedium = (EditText) findViewById(R.id.tfFontSizeMedium);
-		tfFontSizeLarge = (EditText) findViewById(R.id.tfFontSizeLarge);
-		cxFontSizeInSP = (CheckBox) findViewById(R.id.cxFontSizeInSP);
-		cxShowKeyboard = (CheckBox) findViewById(R.id.cxIsShowKeyboard);
+		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
+		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
+		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
+		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
+		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
 
-		sbVKAlpha = (SeekBar) findViewById(R.id.sbVKAlpha);
-		tfVKHideDelay = (EditText) findViewById(R.id.tfVKHideDelay);
-		tfVKFore = (EditText) findViewById(R.id.tfVKFore);
-		tfVKBack = (EditText) findViewById(R.id.tfVKBack);
-		tfVKSelFore = (EditText) findViewById(R.id.tfVKSelFore);
-		tfVKSelBack = (EditText) findViewById(R.id.tfVKSelBack);
-		tfVKOutline = (EditText) findViewById(R.id.tfVKOutline);
+		sbVKAlpha = findViewById(R.id.sbVKAlpha);
+		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
+		tfVKFore = findViewById(R.id.tfVKFore);
+		tfVKBack = findViewById(R.id.tfVKBack);
+		tfVKSelFore = findViewById(R.id.tfVKSelFore);
+		tfVKSelBack = findViewById(R.id.tfVKSelBack);
+		tfVKOutline = findViewById(R.id.tfVKOutline);
 
 		screenWidths = new ArrayList();
 		screenHeights = new ArrayList();

@@ -287,8 +287,7 @@ public class KeyframeSequence extends Object3D {
 
 		if (time == keyFrameTimes[start] || interpolationType == STEP) {
 			float[] value = keyframeAt(start);
-			for (int i = 0; i < componentCount; i++)
-				sample[i] = value[i];
+			System.arraycopy(value, 0, sample, 0, componentCount);
 			return (interpolationType == STEP) ? (timeDelta(start) - (time - keyFrameTimes[start])) : 1;
 		}
 
