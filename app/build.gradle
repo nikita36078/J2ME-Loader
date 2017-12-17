@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
         applicationId "ua.naiksoftware.j2meloader"
@@ -24,8 +24,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:27.0.0'
-    implementation 'com.android.support:preference-v7:27.0.0'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:preference-v7:27.0.2'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'org.ow2.asm:asm-tree:5.2'
     implementation fileTree(include: ['*.jar', '*.so'], dir: 'libs')
