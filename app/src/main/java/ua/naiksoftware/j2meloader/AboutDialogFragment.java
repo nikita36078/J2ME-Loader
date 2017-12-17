@@ -37,6 +37,7 @@ public class AboutDialogFragment extends DialogFragment {
 				.append(getText(R.string.about_email))
 				.append(getText(R.string.about_github))
 				.append(getText(R.string.about_4pda))
+				.append(getText(R.string.about_crowdin))
 				.append(getText(R.string.about_copyright));
 		TextView tv = new TextView(getActivity());
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
