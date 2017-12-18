@@ -637,6 +637,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			resizeKeyGroup(group);
 		}
 		snapKeys();
+		repaint();
 	}
 
 	public void paint(Graphics g) {
