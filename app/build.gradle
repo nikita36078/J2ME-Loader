@@ -8,7 +8,7 @@ android {
         applicationId "ua.naiksoftware.j2meloader"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 16
+        versionCode 15
         versionName "1.2.6-test1"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
     }
@@ -20,6 +20,7 @@ android {
     }
     lintOptions {
         abortOnError false
+        disable 'MissingTranslation'
     }
 }
 
