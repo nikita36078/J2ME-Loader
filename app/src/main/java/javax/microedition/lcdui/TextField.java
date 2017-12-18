@@ -24,6 +24,8 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
+import javax.microedition.lcdui.event.SimpleEvent;
+
 public class TextField extends Item {
 	public static final int ANY = 0;
 	public static final int EMAILADDR = 1;
@@ -44,6 +46,12 @@ public class TextField extends Item {
 	private EditText textview;
 	private int maxSize;
 	private int constraints;
+
+	private SimpleEvent msgSetText = new SimpleEvent() {
+		public void process() {
+			textview.setText(text);
+		}
+	};
 
 	private class InternalEditText extends EditText {
 		public InternalEditText(Context context) {
@@ -82,7 +90,7 @@ public class TextField extends Item {
 		this.text = text;
 
 		if (textview != null) {
-			textview.setText(text);
+			ViewHandler.postEvent(msgSetText);
 		}
 	}
 
@@ -181,9 +189,6 @@ public class TextField extends Item {
 			Context context = getOwnerForm().getParentActivity();
 
 			textview = new InternalEditText(context);
-
-			// textview.setBackgroundDrawable(Item.createBackground(context));
-			// textview.setTextColor(context.getResources().getColor(android.R.color.white));
 
 			setMaxSize(maxSize);
 			setConstraints(constraints);
