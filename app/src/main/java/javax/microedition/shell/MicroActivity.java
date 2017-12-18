@@ -43,6 +43,7 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -54,6 +55,7 @@ import ua.naiksoftware.util.Log;
 public class MicroActivity extends AppCompatActivity {
 	private Displayable current;
 	private boolean visible;
+	private boolean started;
 	private LinearLayout layout;
 	private Toolbar toolbar;
 
@@ -88,7 +90,10 @@ public class MicroActivity extends AppCompatActivity {
 	public void onResume() {
 		super.onResume();
 		visible = true;
-		Display.getDisplay(null).activityResumed();
+		if (started) {
+			Display.getDisplay(null).activityResumed();
+		}
+		started = true;
 	}
 
 	@Override

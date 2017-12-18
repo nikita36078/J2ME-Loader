@@ -80,23 +80,8 @@ public class Display {
 			context.notifyPaused();
 			return;
 		}
-		if (disp instanceof Alert && ((Alert) disp).finiteTimeout()) {
-			final Displayable prev = current;
-			final Alert alert = (Alert) disp;
-			changeCurrent(disp);
-			showCurrent();
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(alert.getTimeout());
-						changeCurrent(prev);
-						showCurrent();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}).start();
+		if (disp instanceof Alert) {
+			setCurrent((Alert) disp, current);
 		} else {
 			changeCurrent(disp);
 			showCurrent();
@@ -129,7 +114,6 @@ public class Display {
 	private void showCurrent() {
 		activity.setCurrent(current);
 	}
-
 
 	public void activityResumed() {
 		try {
