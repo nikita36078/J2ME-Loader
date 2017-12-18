@@ -68,5 +68,5 @@
   <string name="layout_switch">Alternar layout</string>
   <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>
   <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
-  <string name="pref_enable_actionbar_summary">Tela completa na aplicação</string>
+  <string name="pref_enable_actionbar_summary">Assistente para jogos em tela completa</string>
 </resources>
