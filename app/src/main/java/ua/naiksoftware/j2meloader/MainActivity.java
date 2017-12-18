@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements
 		NavigationDrawerFragment.SelectedCallback {
 
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
+	public static final String APP_LIST_KEY = "apps";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements
 		pathConverted = getApplicationInfo().dataDir + "/converted/";
 		appsListFragment = new AppsListFragment();
 		Bundle bundle = new Bundle();
-		bundle.putSerializable("apps", apps);
+		bundle.putSerializable(APP_LIST_KEY, apps);
 		appsListFragment.setArguments(bundle);
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements
 		}
 	}
 
-	public void restoreActionBar() {
+	private void restoreActionBar() {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);

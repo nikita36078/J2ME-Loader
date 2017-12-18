@@ -40,6 +40,7 @@ import android.widget.ListView;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.microedition.midlet.MIDlet;
 import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;
@@ -51,7 +52,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		apps = (ArrayList<AppItem>) getArguments().getSerializable("apps");
+		apps = (ArrayList<AppItem>) getArguments().getSerializable(MainActivity.APP_LIST_KEY);
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class AppsListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = apps.get(position);
 		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPath()), getActivity(), ConfigActivity.class);
-		i.putExtra("name", item.getTitle());
+		i.putExtra(ConfigActivity.MIDLET_NAME_KEY, item.getTitle());
 		startActivity(i);
 	}
 
@@ -105,7 +106,7 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePath());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
-				launchIntent.putExtra("name", appItem.getTitle());
+				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder = new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 						.setIntent(launchIntent)
 						.setShortLabel(appItem.getTitle());
@@ -118,8 +119,8 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_context_settings:
 				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
-				i.putExtra("name", appItem.getTitle());
-				i.putExtra("showSettings", true);
+				i.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
+				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 				startActivity(i);
 				break;
 			case R.id.action_context_delete:

@@ -104,7 +104,9 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	public static final String MIDLET_RES_DIR = "/res/";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_CONF_FILE = MIDLET_DEX_FILE + ".conf";
-	public static final String MIDLET_PATH = "path";
+	public static final String MIDLET_PATH_KEY = "path";
+	public static final String MIDLET_NAME_KEY = "name";
+	public static final String SHOW_SETTINGS_KEY = "showSettings";
 
 	/*
 	 * <xml locale=en>../../../../res/values/strings.xml</xml> <xml
@@ -126,13 +128,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.config_all);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ContextHolder.setContext(this);
 		pathToMidletDir = getIntent().getDataString();
-		String appName = getIntent().getStringExtra("name");
+		String appName = getIntent().getStringExtra(MIDLET_NAME_KEY);
 		appName = appName.replace(":", "").replace("/", "");
 		keylayoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
 
@@ -261,27 +264,27 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		((Button) findViewById(R.id.cmdLanguage)).setText(getString(
 				R.string.PREF_LANGUAGE, language));
 
-		applyConfiguration(/* new MIDlet() */);// Настройка конфигурации перед
-		// запуском конструктора
-		// мидлета
+		applyConfiguration();
 		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs", appName + ".xml");
-		if (appSettings.exists() && !getIntent().getBooleanExtra("showSettings", false)) {
+		if (appSettings.exists() && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
 			startMIDlet();
 		}
 	}
 
+	@Override
 	public void onPause() {
 		saveParams();
 		super.onPause();
 	}
 
+	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		fillScreenSizePresets(ContextHolder.getDisplayWidth(),
 				ContextHolder.getDisplayHeight());
 	}
 
-	public void fillScreenSizePresets(int w, int h) {
+	private void fillScreenSizePresets(int w, int h) {
 		screenWidths.clear();
 		screenHeights.clear();
 		screenAdapter.clear();
@@ -305,21 +308,21 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		addScreenSizePreset(w, h);
 	}
 
-	public void addScreenSizePreset(int width, int height) {
+	private void addScreenSizePreset(int width, int height) {
 		screenWidths.add(width);
 		screenHeights.add(height);
 		screenAdapter.add(Integer.toString(width) + " x "
 				+ Integer.toString(height));
 	}
 
-	public void addFontSizePreset(String title, int small, int medium, int large) {
+	private void addFontSizePreset(String title, int small, int medium, int large) {
 		fontSmall.add(small);
 		fontMedium.add(medium);
 		fontLarge.add(large);
 		fontAdapter.add(title);
 	}
 
-	public void loadParams(DataContainer params) {
+	private void loadParams(DataContainer params) {
 		tfScreenWidth.setText(Integer.toString(params
 				.getInt("ScreenWidth", 240)));
 		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight",
@@ -367,7 +370,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				.toUpperCase());
 	}
 
-	public void saveParams() {
+	private void saveParams() {
 		try {
 			params.edit();
 			params.putString("Locale", locale);
@@ -416,7 +419,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		}
 	}
 
-	public void applyConfiguration(/* MIDlet midlet */) {
+	private void applyConfiguration() {
 		try {
 			int fontSizeSmall = Integer.parseInt(tfFontSizeSmall.getText()
 					.toString());
@@ -450,7 +453,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);
 			Canvas.setClearBuffer(clearBuffer);
-
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -549,11 +551,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 		applyConfiguration();
 		Intent i = new Intent(this, MicroActivity.class);
-		i.putExtra(MIDLET_PATH, pathToMidletDir);
+		i.putExtra(MIDLET_PATH_KEY, pathToMidletDir);
 		startActivity(i);
 		finish();
 	}
 
+	@Override
 	public void onClick(View v) {
 		String[] presets = null;
 		DialogInterface.OnClickListener presetListener = null;

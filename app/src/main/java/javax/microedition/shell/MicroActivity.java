@@ -43,7 +43,6 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -67,7 +66,7 @@ public class MicroActivity extends AppCompatActivity {
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		String path = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH);
+		String path = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
 		try {
 			loadMIDlet(path).startApp();
 		} catch (Exception e) {
@@ -160,7 +159,7 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	};
 
-	public int getToolBarHeight() {
+	private int getToolBarHeight() {
 		int[] attrs = new int[]{R.attr.actionBarSize};
 		TypedArray ta = obtainStyledAttributes(attrs);
 		int toolBarHeight = ta.getDimensionPixelSize(0, -1);
