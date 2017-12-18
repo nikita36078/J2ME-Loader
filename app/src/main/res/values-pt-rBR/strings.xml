@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">Sair</string>
   <string name="about">Informações</string>
-  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D e 3D, mas com algumas limitações.&lt;BR&gt;</string>
+  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D, mas jogos em 3D tem algumas limitações.&lt;BR&gt;</string>
   <string name="open_jar">Abrir Jar</string>
   <string name="author">Autor: </string>
   <string name="version">Versão: </string>
@@ -68,5 +68,5 @@
   <string name="layout_switch">Alternar layout</string>
   <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>
   <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
-  <string name="pref_enable_actionbar_summary">Tela completa na aplicação</string>
+  <string name="pref_enable_actionbar_summary">Assistente para jogos em tela completa</string>
 </resources>
