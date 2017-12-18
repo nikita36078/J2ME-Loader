@@ -130,7 +130,6 @@ public class MicroActivity extends AppCompatActivity {
 	private SimpleEvent msgSetCurent = new SimpleEvent() {
 		public void process() {
 			current.setParentActivity(MicroActivity.this);
-			setTitle(current.getTitle());
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -149,6 +148,7 @@ public class MicroActivity extends AppCompatActivity {
 			} else {
 				window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 				actionBar.show();
+				actionBar.setTitle(current.getTitle());
 				layoutParams.height = getToolBarHeight();
 			}
 			toolbar.setLayoutParams(layoutParams);

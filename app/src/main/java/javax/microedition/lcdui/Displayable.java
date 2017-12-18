@@ -68,7 +68,7 @@ public abstract class Displayable {
 		this.title = title;
 
 		if (parent != null) {
-			parent.setTitle(title);
+			parent.getSupportActionBar().setTitle(title);
 		}
 	}
 

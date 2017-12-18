@@ -55,7 +55,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name="com.devs.acr.ErrorReporterActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
