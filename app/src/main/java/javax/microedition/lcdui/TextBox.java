@@ -161,6 +161,9 @@ public class TextBox extends Screen {
 		return constraints;
 	}
 
+	public void setInitialInputMode(String characterSubset) {
+	}
+
 	public View getScreenView() {
 		if (scrollview == null) {
 			Context context = getParentActivity();

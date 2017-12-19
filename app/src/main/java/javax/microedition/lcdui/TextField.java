@@ -184,6 +184,9 @@ public class TextField extends Item {
 		return constraints;
 	}
 
+	public void setInitialInputMode(String characterSubset) {
+	}
+
 	public View getItemContentView() {
 		if (textview == null) {
 			Context context = getOwnerForm().getParentActivity();
