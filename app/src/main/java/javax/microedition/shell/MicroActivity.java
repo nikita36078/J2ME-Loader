@@ -34,8 +34,10 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import javax.microedition.lcdui.Canvas;
@@ -54,9 +56,11 @@ import ua.naiksoftware.util.Log;
 public class MicroActivity extends AppCompatActivity {
 	private Displayable current;
 	private boolean visible;
+	private boolean loaded;
 	private boolean started;
 	private LinearLayout layout;
 	private Toolbar toolbar;
+	private String pathToMidletDir;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,33 +70,21 @@ public class MicroActivity extends AppCompatActivity {
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		String path = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
-		try {
-			loadMIDlet(path).startApp();
-		} catch (Exception e) {
-			e.printStackTrace();
-			AlertDialog.Builder builder = new AlertDialog.Builder(this)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle(R.string.error)
-					.setMessage(e.getMessage());
-			builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-				@Override
-				public void onDismiss(DialogInterface dialogInterface) {
-					finish();
-				}
-			});
-			builder.show();
-		}
+		pathToMidletDir = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
+		loadMIDlet();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		visible = true;
-		if (started) {
-			Display.getDisplay(null).activityResumed();
+		if (loaded) {
+			if (started) {
+				Display.getDisplay(null).activityResumed();
+			} else {
+				started = true;
+			}
 		}
-		started = true;
 	}
 
 	@Override
@@ -104,31 +96,83 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Display.getDisplay(null).activityStopped();
+		if (loaded) {
+			Display.getDisplay(null).activityStopped();
+		}
 	}
 
-	private MIDlet loadMIDlet(String pathToMidletDir) {
-		MIDlet midlet = null;
-		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(
-				pathToMidletDir + ConfigActivity.MIDLET_CONF_FILE));
+	private void loadMIDlet() {
+		ArrayList<String> midlets = new ArrayList<>();
+		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + ConfigActivity.MIDLET_CONF_FILE));
 		MIDlet.initProps(params);
+		for (LinkedHashMap.Entry<String, String> entry : params.entrySet()) {
+			if (entry.getKey().matches("MIDlet-[0-9]+")) {
+				midlets.add(entry.getValue());
+			}
+		}
+		int size = midlets.size();
+		String[] midletsNameArray = new String[size];
+		String[] midletsClassArray = new String[size];
+		for (int i = 0; i < size; i++) {
+			String tmp = midlets.get(i);
+			midletsClassArray[i] = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
+			midletsNameArray[i] = tmp.substring(0, tmp.indexOf(',')).trim();
+		}
+		if (size == 0) {
+			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+			finish();
+		} else if (size == 1) {
+			startMidlet(midletsClassArray[0]);
+		} else if (size > 1) {
+			showMidletDialog(midletsNameArray, midletsClassArray);
+		}
+	}
+
+	private void showMidletDialog(String[] midletsNameArray, final String[] midletsClassArray) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setItems(midletsNameArray, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface d, int n) {
+				startMidlet(midletsClassArray[n]);
+			}
+		});
+		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialogInterface) {
+				finish();
+			}
+		});
+		builder.setTitle(R.string.select_dialog_title);
+		builder.show();
+	}
+
+	private void startMidlet(String mainClass) {
 		String dex = pathToMidletDir + ConfigActivity.MIDLET_DEX_FILE;
 		ClassLoader loader = new MyClassLoader(dex,
 				getApplicationInfo().dataDir, null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
 		try {
-			String mainClassParam = params.get("MIDlet-1");
-			String mainClass = mainClassParam.substring(
-					mainClassParam.lastIndexOf(',') + 1).trim();
 			Log.d("inf", "load main: " + mainClass + " from dex:" + dex);
-			midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
-		} catch (ClassNotFoundException ex) {
-			Log.d("err", ex.toString() + "/n" + ex.getMessage());
-		} catch (InstantiationException ex) {
-			Log.d("err", ex.toString() + "/n" + ex.getMessage());
-		} catch (IllegalAccessException ex) {
-			Log.d("err", ex.toString() + "/n" + ex.getMessage());
+			MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
+			midlet.startApp();
+			loaded = true;
+		} catch (Throwable t) {
+			Log.d("err", t.toString() + "/n" + t.getMessage());
+			showErrorDialog(t.getMessage());
 		}
-		return midlet;
+	}
+
+	private void showErrorDialog(String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.error)
+				.setMessage(message);
+		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialogInterface) {
+				finish();
+			}
+		});
+		builder.show();
 	}
 
 	private SimpleEvent msgSetCurent = new SimpleEvent() {
@@ -136,6 +180,7 @@ public class MicroActivity extends AppCompatActivity {
 			current.setParentActivity(MicroActivity.this);
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
+			invalidateOptionsMenu();
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			boolean isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 			Window window = getWindow();

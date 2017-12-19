@@ -70,6 +70,7 @@
 
     <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED" formatted="false">Confirmation required</string>
+    <string name="select_dialog_title">Select MIDlet</string>
     <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
     <string name="crash_dialog_title">Error detected</string>
     <string name="report_crash">Send</string>
