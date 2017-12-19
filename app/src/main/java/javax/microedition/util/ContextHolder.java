@@ -129,15 +129,6 @@ public class ContextHolder {
 	}
 
 	/**
-	 * Свернуться в фоновый режим.
-	 */
-	public static void notifyPaused() {
-		if (currentActivity != null) {
-			currentActivity.moveTaskToBack(true);
-		}
-	}
-
-	/**
 	 * Закрыть все Activity и завершить процесс, в котором они выполнялись.
 	 */
 	public static void notifyDestroyed() {

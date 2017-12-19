@@ -29,7 +29,6 @@ import javax.microedition.util.ContextHolder;
 public abstract class MIDlet {
 
 	private static LinkedHashMap<String, String> properties;
-	private boolean pauseAppCalled = false;
 	private boolean destroyAppCalled = false;
 
 	public static void initProps(LinkedHashMap<String, String> p) {
@@ -41,15 +40,9 @@ public abstract class MIDlet {
 	}
 
 	/**
-	 * Сообщить оболочке, что мидлет готов перейти в состояние паузы. При этом
-	 * он будет свернут в фон.
-	 * <p>
-	 * Вызовы этого метода из pauseApp() игнорируются.
+	 * Сообщить оболочке, что мидлет готов перейти в состояние паузы.
 	 */
 	public final void notifyPaused() {
-		if (!pauseAppCalled) {
-			ContextHolder.notifyPaused();
-		}
 	}
 
 	/**
@@ -75,16 +68,6 @@ public abstract class MIDlet {
 	 * в фоновый режим, ...
 	 */
 	public abstract void pauseApp();
-
-	/**
-	 * Корректно вызвать pauseApp(). Во время выполнения этого метода вызовы
-	 * notifyPaused() игнорируются.
-	 */
-	public final void callPauseApp() {
-		pauseAppCalled = true;
-		pauseApp();
-		pauseAppCalled = false;
-	}
 
 	/**
 	 * Вызывается при завершении работы приложения.

@@ -77,7 +77,6 @@ public class Display {
 
 	public void setCurrent(Displayable disp) {
 		if (disp == null) {
-			context.notifyPaused();
 			return;
 		}
 		if (disp instanceof Alert) {
@@ -125,7 +124,7 @@ public class Display {
 	}
 
 	public void activityStopped() {
-		context.callPauseApp();
+		context.pauseApp();
 	}
 
 	public void activityDestroyed() {
