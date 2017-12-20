@@ -154,8 +154,6 @@ public class Display {
 			}
 			if (duration > 0) {
 				wakelock.acquire(duration);
-			} else if (duration < 0) {
-				wakelock.acquire();
 			}
 			return true;
 		} catch (Throwable t) {
