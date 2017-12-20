@@ -58,6 +58,7 @@
   <string name="error">Ошибка</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
   <string name="CONFIRMATION_REQUIRED" formatted="false">Требуется подтверждение</string>
+  <string name="select_dialog_title">Выберите MIDlet</string>
   <string name="crash_dialog_message">Вы хотите отправить отчет об ошибке разработчику?</string>
   <string name="crash_dialog_title">Произошла ошибка</string>
   <string name="report_crash">Отправить</string>
