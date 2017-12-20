@@ -3,14 +3,14 @@
 <resources>
   <string name="exit">Salir</string>
   <string name="about">Acerca de</string>
-  <string name="about_message">Esta aplicación permite iniciar aplicaciones J2ME y juegos en Android. Es compatible con la mayoría de los juegos en 2D, también en 3D con algunas limitaciones.&lt;BR&gt;</string>
+  <string name="about_message">Esta aplicación te permite ejecutar aplicaciones y juegos J2ME en Android. Es compatible con la mayoría de juegos 2D y 3D con algunas limitaciones.&lt;BR&gt;</string>
   <string name="open_jar">Abrir jar</string>
   <string name="author">Autor: </string>
   <string name="version">Versión: </string>
   <string name="no_data_for_display">Sin datos</string>
   <string name="message_delete">¿Realmente desea eliminar esta aplicación?</string>
   <string name="converting_wait">Convirtiendo JAR...</string>
-  <string name="convert_complete">Completo</string>
+  <string name="convert_complete">Completado</string>
   <string name="converting_message">Procesando...</string>
   <string name="permission_request_failed">Esta aplicación requiere permisos de escritura de almacenamiento</string>
   <string name="action_context_shortcut">Agregar acceso directo</string>
@@ -21,7 +21,7 @@
   <string name="RESET_CMD" formatted="false">Reiniciar</string>
   <string name="RESET_LAYOUT_CMD">Reiniciar disposición del teclado</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Opciones de pantalla</string>
-  <string name="PREF_SCALE_RATIO">Escala(%)</string>
+  <string name="PREF_SCALE_RATIO">Escala (%)</string>
   <string name="PREF_SCALE_TO_FIT" formatted="false">Escalar para adaptarse</string>
   <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Mantener relación de aspecto</string>
   <string name="PREF_FILTER" formatted="false">Filtro</string>
@@ -38,17 +38,17 @@
   <string name="PREF_VK_FORE" formatted="false">Etiquetas</string>
   <string name="PREF_VK_OUTLINE" formatted="false">Contorno</string>
   <string name="PREF_VK_ALPHA" formatted="false">Opacidad: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Ocultar el retraso: </string>
+  <string name="PREF_VK_HIDE_DELAY" formatted="false">Ocultar retraso: </string>
   <string name="PREF_UNIT_MS" formatted="false">ms</string>
   <string name="PREF_VK_SEL_FORE" formatted="false">Etiquetas (P)</string>
   <string name="PREF_VK_SEL_BACK" formatted="false">Botones (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Tamaño de clave</string>
+  <string name="PREF_VK_KEY_SIZES" formatted="false">Tamaño de teclas</string>
   <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
   <string name="PREF_VK_SOFT_KEYS" formatted="false">Teclas programables: </string>
   <string name="PREF_VK_NUM_KEYS" formatted="false">Dígitos: </string>
   <string name="PREF_VK_FIRE_KEY" formatted="false">Repetible: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Tamaño</string>
-  <string name="SIZE_PRESETS" formatted="false">Preajustes</string>
+  <string name="SIZE_PRESETS" formatted="false">Plantillas</string>
   <string name="PREF_LANGUAGE" formatted="false">Idioma: %A</string>
   <string name="PREF_MISC" formatted="false">Opciones Misc</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
