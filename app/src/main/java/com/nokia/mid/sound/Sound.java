@@ -25,13 +25,14 @@ public class Sound {
 	public static final int SOUND_STOPPED = 1;
 	public static final int SOUND_UNINITIALIZED = 3;
 
-	public Sound(int i, long j) {
+	public Sound(int freq, long duration) {
 	}
 
-	public Sound(byte[] bArr, int i) {
+	public Sound(byte[] data, int type) {
+		init(data, type);
 	}
 
-	public static int getConcurrentSoundCount(int i) {
+	public static int getConcurrentSoundCount(int type) {
 		return 0;
 	}
 
@@ -44,16 +45,16 @@ public class Sound {
 	}
 
 	public int getState() {
-		return 1;
+		return SOUND_UNINITIALIZED;
 	}
 
-	public void init(int i, long j) {
+	public void init(int freq, long duration) {
 	}
 
-	public void init(byte[] bArr, int i) {
+	public void init(byte[] data, int type) {
 	}
 
-	public synchronized void play(int i) {
+	public void play(int loop) {
 	}
 
 	public void release() {

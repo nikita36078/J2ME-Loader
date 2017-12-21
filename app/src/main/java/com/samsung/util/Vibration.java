@@ -32,10 +32,6 @@ public class Vibration {
 	}
 
 	public static boolean isSupported() {
-		if (ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE) != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE) != null;
 	}
 }
