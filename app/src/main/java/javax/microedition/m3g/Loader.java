@@ -28,6 +28,7 @@ import javax.microedition.io.*;
 import javax.microedition.lcdui.Image;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
+import javax.microedition.util.ContextHolder;
 //#ifdef RD_JAVA_OMJ
 //#endif // RD_JAVA_OMJ
 
@@ -947,7 +948,7 @@ public class Loader
 
         if (name.charAt(0) == '/')   // absolute file reference
         {
-            return (new Object()).getClass().getResourceAsStream(name);
+            return (ContextHolder.getResourceAsStream(null, name));
         }
 
         if (iParentResourceName == null)
@@ -959,7 +960,7 @@ public class Loader
 
         if (uri.charAt(0) == '/')
         {
-            return (new Object()).getClass().getResourceAsStream(uri);
+            return (ContextHolder.getResourceAsStream(null, uri));
         }
         else
         {
