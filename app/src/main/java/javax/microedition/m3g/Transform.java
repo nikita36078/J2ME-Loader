@@ -1,177 +1,169 @@
+/*
+* Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+
 package javax.microedition.m3g;
 
-import javax.microedition.khronos.opengles.GL10;
+public class Transform
+{
+    //------------------------------------------------------------------
+    // Static data
+    //------------------------------------------------------------------
 
-public class Transform {
-	Matrix mtx;
+    //------------------------------------------------------------------
+    // Instance data
+    //------------------------------------------------------------------
 
-	public Transform() {
-		mtx = new Matrix();
+    // Check size from m3g_math.h Matrix
+    byte[] matrix = new byte[72];
 
-		mtx.identityMatrix();
-	}
+    //------------------------------------------------------------------
+    // Constructor(s)
+    //------------------------------------------------------------------
 
-	public Transform(Transform transform) {
-		mtx = new Matrix();
+    public Transform()
+    {
+        if (!Platform.uiThreadAvailable())
+        {
+            throw new Error("UI thread not initialized");
+        }
+        setIdentity();
+    }
 
-		mtx.copyMatrix(transform.mtx);
-	}
+    /**
+     */
+    public Transform(Transform other)
+    {
+        if (!Platform.uiThreadAvailable())
+        {
+            throw new Error("UI thread not initialized");
+        }
+        set(other);
+    }
 
-	public void get(float[] matrix) {
-		if (matrix == null)
-			throw new NullPointerException("matrix can not be null");
-		if (matrix.length < 16)
-			throw new IllegalArgumentException("matrix must be of length 16");
+    //------------------------------------------------------------------
+    // Public methods
+    //------------------------------------------------------------------
 
-		mtx.getMatrixRows(matrix);
-	}
+    public void setIdentity()
+    {
+        _setIdentity(matrix);
+    }
 
-	public void invert() {
-		if (!mtx.invertMatrix()) {
-			throw new ArithmeticException("matrix can not be inverted");
-		}
-	}
+    public void set(Transform transform)
+    {
+        System.arraycopy(transform.matrix, 0,
+                         this.matrix, 0,
+                         this.matrix.length);
+    }
 
-	public void set(float[] matrix) {
-		if (matrix == null)
-			throw new NullPointerException("matrix can not be null");
-		if (matrix.length < 16)
-			throw new IllegalArgumentException("matrix must be of length 16");
+    public void set(float[] matrix)
+    {
+        _setMatrix(this.matrix, matrix);
+    }
 
-		mtx.setMatrixRows(matrix);
-	}
+    public void get(float[] matrix)
+    {
+        _getMatrix(this.matrix, matrix);
+    }
 
-	public void set(Transform transform) {
-		if (transform == null)
-			throw new NullPointerException("transform can not be null");
+    public void invert()
+    {
+        _invert(matrix);
+    }
 
-		mtx.copyMatrix(transform.mtx);
-	}
+    public void transpose()
+    {
+        _transpose(matrix);
+    }
 
-	public void setIdentity() {
-		mtx.identityMatrix();
-	}
+    public void postMultiply(Transform transform)
+    {
+        _mul(this.matrix, this.matrix, transform.matrix);
+    }
 
-	public void transform(float[] vectors) {
-		if (vectors == null)
-			throw new NullPointerException("vectors can not be null");
-		if ((vectors.length % 4) != 0)
-			throw new IllegalArgumentException("Number of elements in vector array must be a multiple of 4");
+    public void postScale(float sx, float sy, float sz)
+    {
+        _scale(matrix, sx, sy , sz);
+    }
 
-		QVec4 vec = new QVec4();
+    /**
+     */
+    public void postRotate(float angle, float ax, float ay, float az)
+    {
+        _rotate(matrix, angle, ax, ay, az);
+    }
 
-		for (int i = 0; i < vectors.length; i += 4) {
-			vec.setVec4(vectors[i], vectors[i + 1], vectors[i + 2], vectors[i + 3]);
-			mtx.transformVec4(vec);
-			vectors[i] = vec.x;
-			vectors[i + 1] = vec.y;
-			vectors[i + 2] = vec.z;
-			vectors[i + 3] = vec.w;
-		}
-	}
+    /**
+     */
+    public void postRotateQuat(float qx, float qy, float qz, float qw)
+    {
+        _rotateQuat(matrix, qx, qy, qz, qw);
+    }
 
-	public void transform(VertexArray in, float[] out, boolean W) {
-		if (in == null)
-			throw new NullPointerException("in can not be null");
-		if (out == null)
-			throw new NullPointerException("out can not be null");
-		if (out.length < in.getVertexCount() * 4)
-			throw new IllegalArgumentException("Number of elements in out array must be at least vertexCount*4");
+    /**
+     */
+    public void postTranslate(float tx, float ty, float tz)
+    {
+        _translate(matrix, tx, ty, tz);
+    }
 
-		int cc = in.getComponentCount();
-		int vc = in.getVertexCount();
-		QVec4 vec = new QVec4();
+    /**
+     */
+    public void transform(float[] v)
+    {
+        if ((v.length % 4) != 0)
+        {
+            throw new IllegalArgumentException();
+        }
 
-		if (in.getComponentType() == 1) {
-			byte[] values = new byte[vc * cc];
-			in.get(0, vc, values);
-			for (int i = 0, j = 0; i < vc * cc; i += cc, j += 4) {
-				vec.x = values[i];
-				vec.y = (cc >= 2 ? (float) values[i + 1] : 0.0f);
-				vec.z = (cc >= 3 ? (float) values[i + 2] : 0.0f);
-				vec.w = (cc >= 4 ? (float) values[i + 3] : (W ? 1 : 0));
+        if (v.length != 0)
+        {
+            _transformTable(matrix, v);
+        }
+    }
 
-				mtx.transformVec4(vec);
+    /**
+     */
+    public void transform(VertexArray in, float[] out, boolean W)
+    {
+        if (in == null || out == null)
+        {
+            throw new NullPointerException();
+        }
 
-				out[j] = vec.x;
-				out[j + 1] = vec.y;
-				out[j + 2] = vec.z;
-				out[j + 3] = vec.w;
-			}
-		} else {
-			short[] values = new short[vc * cc];
-			in.get(0, vc, values);
-			for (int i = 0, j = 0; i < vc * cc; i += cc, j += 4) {
-				vec.x = values[i];
-				vec.y = (cc >= 2 ? (float) values[i + 1] : 0.0f);
-				vec.z = (cc >= 3 ? (float) values[i + 2] : 0.0f);
-				vec.w = (cc >= 4 ? (float) values[i + 3] : (W ? 1 : 0));
+        _transformArray(matrix, in.handle, out, W);
+    }
 
-				mtx.transformVec4(vec);
+    //------------------------------------------------------------------
+    // Private methods
+    //------------------------------------------------------------------
 
-				out[j] = vec.x;
-				out[j + 1] = vec.y;
-				out[j + 2] = vec.z;
-				out[j + 3] = vec.w;
-			}
-		}
-	}
-
-	public void transpose() {
-		Matrix tpos = new Matrix();
-		tpos.matrixTranspose(mtx);
-		mtx.copyMatrix(tpos);
-	}
-
-	public void postMultiply(Transform transform) {
-		Matrix temp = new Matrix();
-		temp.matrixProduct(this.mtx, transform.mtx);
-		mtx.copyMatrix(temp);
-	}
-
-	public void postRotate(float angle, float ax, float ay, float az) {
-		if (ax == 0 && ay == 0 && az == 0 && angle != 0)
-			throw new IllegalArgumentException();
-		mtx.postRotateMatrix(angle, ax, ay, az);
-	}
-
-	public void postRotateQuat(float qx, float qy, float qz, float qw) {
-		QVec4 quat = new QVec4(qx, qy, qz, qw);
-		quat.normalizeQuat();
-		mtx.postRotateMatrixQuat(quat);
-	}
-
-	public void postScale(float sx, float sy, float sz) {
-		mtx.postScaleMatrix(sx, sy, sz);
-	}
-
-	public void postTranslate(float tx, float ty, float tz) {
-		mtx.postTranslateMatrix(tx, ty, tz);
-	}
-
-	void setGL(GL10 gl) {
-		float[] cols = new float[16];
-		mtx.getMatrixColumns(cols);
-		gl.glLoadMatrixf(cols, 0);
-	}
-
-	void multGL(GL10 gl) {
-		float[] cols = new float[16];
-		mtx.getMatrixColumns(cols);
-		gl.glMultMatrixf(cols, 0);
-	}
-
-	private void transpose(Matrix other) {
-		other.matrixTranspose(mtx);
-	}
-
-	public String toString() {
-		String ret = "{";
-		for (int i = 0; i < 16; ++i) {
-			if ((i % 4) == 0 && i > 0)
-				ret += "\n ";
-			ret += mtx.elem[i] + ", ";
-		}
-		return ret + "}";
-	}
+    // Native methods
+    private static native void _mul(byte[] prod, byte[] left, byte[] right);
+    private static native void _setIdentity(byte[] matrix);
+    private static native void _setMatrix(byte[] matrix, float[] srcMatrix);
+    private static native void _getMatrix(byte[] matrix, float[] dstMatrix);
+    private static native void _invert(byte[] matrix);
+    private static native void _transpose(byte[] matrix);
+    private static native void _rotate(byte[] matrix, float angle, float ax, float ay, float az);
+    private static native void _rotateQuat(byte[] matrix, float qx, float qy, float qz, float qw);
+    private static native void _scale(byte[] matrix, float sx, float sy, float sz);
+    private static native void _translate(byte[] matrix, float tx, float ty, float tz);
+    private static native void _transformTable(byte[] matrix, float[] v);
+    private static native void _transformArray(byte[] matrix, int handle, float[] out, boolean W);
 }

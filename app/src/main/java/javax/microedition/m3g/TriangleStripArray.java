@@ -1,105 +1,76 @@
+/*
+* Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+
 package javax.microedition.m3g;
 
+public class TriangleStripArray extends IndexBuffer
+{
+    //------------------------------------------------------------------
+    // Constructors
+    //------------------------------------------------------------------
 
-public class TriangleStripArray extends IndexBuffer {
-	int maxIndex;
-	int indexCount;
+    public TriangleStripArray(int firstIndex, final int[] stripLengths)
+    {
+        super(_createImplicit(Interface.getHandle(),
+                              firstIndex,
+                              stripLengths));
+    }
 
-	private static int[] getStripIndices(int firstIndex, int[] stripLengths) {
-		int indexCount = 0;
-		for (int i = 0; i < stripLengths.length; i++)
-			indexCount += stripLengths[i];
+    public TriangleStripArray(final int[] indices, final int[] stripLengths)
+    {
+        super(_createExplicit(Interface.getHandle(), indices, stripLengths));
+    }
 
-		int[] stripIndices = new int[indexCount];
+    TriangleStripArray(int handle)
+    {
+        super(handle);
+    }
 
-		for (int i = 0; i < indexCount; i++)
-			stripIndices[i] = firstIndex + i;
-		return stripIndices;
-	}
+    // M3G 1.1 Maintenance release getters
 
-	public TriangleStripArray(int firstIndex, int[] stripLengths) {
-		this(getStripIndices(firstIndex, stripLengths), stripLengths);
-	}
+    public int getIndexCount()
+    {
+        return _getIndexCount(handle);
+    }
 
-	private void put(int value) {
-		buffer.put((short) (value & 0xFFFF));
-	}
-
-	public TriangleStripArray(int[] stripIndices, int[] stripLengths) {
-		int joinedIndexCount = 0;
-		int originalIndexCount = 0;
-		int maxIndex = 0;
-		for (int strip = 0; strip < stripLengths.length; strip++) {
-			if (strip != 0)
-				joinedIndexCount += ((joinedIndexCount % 2) != 0) ? 3 : 2;
-
-			joinedIndexCount += stripLengths[strip];
-			originalIndexCount += stripLengths[strip];
-
-			for (int i = 0; i < stripLengths[strip]; i++)
-				if (stripIndices[i] > maxIndex) maxIndex = stripIndices[i];
-		}
-
-		allocate(joinedIndexCount);
-		buffer.position(0);
-
-		int index = 0;
-		for (int strip = 0; strip < stripLengths.length; strip++) {
-			if (strip != 0) {
-				put(stripIndices[index - 1]);
-				put(stripIndices[index]);
-				if ((stripLengths[strip - 1] % 2) != 0)
-					put(stripIndices[index]);
-			}
-			for (int i = 0; i < stripLengths[strip]; i++)
-				put(stripIndices[index++]);
-		}
-		buffer.flip();
-		this.maxIndex = index;
-		this.indexCount = joinedIndexCount;
-	}
-
-	private TriangleStripArray() {
-	}
-
-	public int getIndexCount() {
-                //return buffer.limit();
-                return indexCount;
+    public void getIndices(int[] indices)
+    {
+        if (indices.length < _getIndexCount(handle))
+        {
+            throw new IllegalArgumentException();
         }
+        _getIndices(handle, indices);
+    }
 
-	public void getIndices(int[] indices) {
-		if (indices != null)
-			throw new NullPointerException("Indices can not be null");
-		if (indices.length < getIndexCount())
-			throw new IllegalArgumentException("Length of indices array must be " + getIndexCount());
-		// TODO: fill indices with triangle-data
-	}
+    //------------------------------------------------------------------
+    // Private methods
+    //------------------------------------------------------------------
 
-	private int checkInput(int[] stripLengths) {
-		int sum = 0;
-		if (stripLengths == null)
-			throw new NullPointerException("stripLengths can not be null");
-		int l = stripLengths.length;
-		if (l == 0)
-			throw new IllegalArgumentException("stripLenghts can not be empty");
-		for (int i = 0; i < l; i++) {
-			if (stripLengths[i] < 3)
-				throw new IllegalArgumentException("stripLengths must not contain elemets less than 3");
+    // Native methods
+    private native static int _createImplicit(int hInterface,
+            int first,
+            final int[] lengths);
+    private native static int _createExplicit(int hInterface,
+            final int[] indices,
+            final int[] lengths);
 
-			sum += stripLengths[i];
-		}
-		return sum;
-	}
-
-	Object3D duplicateImpl() {
-		TriangleStripArray copy = new TriangleStripArray();
-		buffer.rewind();
-		copy.allocate(getIndexCount());
-		copy.buffer.put(buffer);
-		copy.buffer.flip();
-		copy.indexCount = indexCount;
-		copy.maxIndex = maxIndex;
-		return copy;
-	}
+    // M3G 1.1 Maintenance release getters
+    private native static int _getIndexCount(int handle);
+    private native static void _getIndices(int handle, int[] indices);
 
 }

@@ -1,162 +1,110 @@
+/*
+* Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+
 package javax.microedition.m3g;
 
-public class AnimationTrack extends Object3D {
+public class AnimationTrack extends Object3D
+{
+    //------------------------------------------------------------------
+    // Static data
+    //------------------------------------------------------------------
 
-	public static final int ALPHA = 256;
-	public static final int AMBIENT_COLOR = 257;
-	public static final int COLOR = 258;
-	public static final int CROP = 259;
-	public static final int DENSITY = 260;
-	public static final int DIFFUSE_COLOR = 261;
-	public static final int EMISSIVE_COLOR = 262;
-	public static final int FAR_DISTANCE = 263;
-	public static final int FIELD_OF_VIEW = 264;
-	public static final int INTENSITY = 265;
-	public static final int MORPH_WEIGHTS = 266;
-	public static final int NEAR_DISTANCE = 267;
-	public static final int ORIENTATION = 268;
-	public static final int PICKABILITY = 269;
-	public static final int SCALE = 270;
-	public static final int SHININESS = 271;
-	public static final int SPECULAR_COLOR = 272;
-	public static final int SPOT_ANGLE = 273;
-	public static final int SPOT_EXPONENT = 274;
-	public static final int TRANSLATION = 275;
-	public static final int VISIBILITY = 276;
+    public static final int ALPHA               = 256;
+    public static final int AMBIENT_COLOR       = 257;
+    public static final int COLOR               = 258;
+    public static final int CROP                = 259;
+    public static final int DENSITY             = 260;
+    public static final int DIFFUSE_COLOR       = 261;
+    public static final int EMISSIVE_COLOR      = 262;
+    public static final int FAR_DISTANCE        = 263;
+    public static final int FIELD_OF_VIEW       = 264;
+    public static final int INTENSITY           = 265;
+    public static final int MORPH_WEIGHTS       = 266;
+    public static final int NEAR_DISTANCE       = 267;
+    public static final int ORIENTATION         = 268;
+    public static final int PICKABILITY         = 269;
+    public static final int SCALE               = 270;
+    public static final int SHININESS           = 271;
+    public static final int SPECULAR_COLOR      = 272;
+    public static final int SPOT_ANGLE          = 273;
+    public static final int SPOT_EXPONENT       = 274;
+    public static final int TRANSLATION         = 275;
+    public static final int VISIBILITY          = 276;
 
-	KeyframeSequence sequence;
-	int property;
-	private AnimationController controller;
+    //------------------------------------------------------------------
+    // Instance data
+    //------------------------------------------------------------------
 
-	public AnimationTrack(KeyframeSequence sequence, int property) {
-		if (sequence == null) {
-			throw new NullPointerException("Sequence must not be null");
-		}
-		if ((property < ALPHA) || (property > VISIBILITY)) {
-			throw new IllegalArgumentException("Unknown property");
-		}
-		if (!isCompatible(sequence.getComponentCount(), property)) {
-			throw new IllegalArgumentException("Sequence is not compatible with property");
-		}
-		this.sequence = sequence;
-		this.property = property;
-	}
+    private AnimationController controller;
+    private KeyframeSequence sequence;
 
-	Object3D duplicateImpl() {
-		AnimationTrack copy = new AnimationTrack(sequence, property);
-		copy.controller = controller;
-		return copy;
-	}
+    //------------------------------------------------------------------
+    // Constructors
+    //------------------------------------------------------------------
 
-	@Override
-	int doGetReferences(Object3D[] references) {
-		int num = super.doGetReferences(references);
-		if (sequence != null) {
-			if (references != null)
-				references[num] = (Object3D) sequence;
-			num++;
-		}
-		if (controller != null) {
-			if (references != null)
-				references[num] = (Object3D) controller;
-			num++;
-		}
-		return num;
-	}
+    AnimationTrack(int handle)
+    {
+        super(handle);
+        controller = (AnimationController)getInstance(_getController(handle));
+        sequence = (KeyframeSequence)getInstance(_getSequence(handle));
+    }
 
-	@Override
-	Object3D findID(int userID) {
-		Object3D found = super.findID(userID);
+    public AnimationTrack(KeyframeSequence sequence, int property)
+    {
+        super(_ctor(Interface.getHandle(),
+                    sequence != null ? sequence.handle : 0, property));
+        this.sequence = sequence;
+    }
 
-		if (found == null && sequence != null)
-			found = sequence.findID(userID);
-		if (found == null && controller != null)
-			found = controller.findID(userID);
+    //------------------------------------------------------------------
+    // Public methods
+    //------------------------------------------------------------------
 
-		return found;
-	}
+    public void setController(AnimationController controller)
+    {
+        _setController(handle, controller != null ? controller.handle : 0);
+        this.controller = controller;
+    }
 
-	void getContribution(int time, float[] accumSamples, float[] weight, int[] validity) {
-		if (this.controller == null || !controller.isActive(time)) {
-			weight[0] = 0;
-			validity[0] = ((controller != null) ? controller.timeToActivation(time) : 0x7FFFFFFF);
-			if (validity[0] < 1)
-				validity[0] = 1;
-			return;
-		}
+    public AnimationController getController()
+    {
+        return controller;
+    }
 
-		int sampleLength = sequence.getComponentCount();
-		weight[0] = controller.getWeight();
+    public KeyframeSequence getKeyframeSequence()
+    {
+        return sequence;
+    }
 
-		if (weight[0] <= 0.0f) {
-			validity[0] = 0x7FFFFFFF;
-			return;
-		}
+    public int getTargetProperty()
+    {
+        return _getTargetProperty(handle);
+    }
 
-		float[] sample = new float[sampleLength];
+    //------------------------------------------------------------------
+    // Private methods
+    //------------------------------------------------------------------
 
-		int sampleTime = (int) controller.getPosition(time);
-		int sampleValidity = sequence.getSample(sampleTime, sample);
-		validity[0] = sampleValidity;
-
-		if (sampleValidity > 0) {
-			sampleValidity = controller.timeToDeactivation(time);
-			if (sampleValidity < validity[0])
-				validity[0] = sampleValidity;
-
-			for (int i = 0; i < sampleLength; i++)
-				accumSamples[i] += sample[i] * weight[0];
-		}
-	}
-
-	public AnimationController getController() {
-		return controller;
-	}
-
-	public void setController(AnimationController controller) {
-		this.controller = controller;
-	}
-
-	public int getTargetProperty() {
-		return property;
-	}
-
-	public KeyframeSequence getKeyframeSequence() {
-		return sequence;
-	}
-
-	private boolean isCompatible(int components, int property) {
-		switch (property) {
-			case ALPHA:
-			case DENSITY:
-			case FAR_DISTANCE:
-			case FIELD_OF_VIEW:
-			case INTENSITY:
-			case NEAR_DISTANCE:
-			case PICKABILITY:
-			case SHININESS:
-			case SPOT_ANGLE:
-			case SPOT_EXPONENT:
-			case VISIBILITY:
-				return components == 1;
-			case CROP:
-				return components == 2 || components == 4;
-			case AMBIENT_COLOR:
-			case COLOR:
-			case DIFFUSE_COLOR:
-			case EMISSIVE_COLOR:
-			case SPECULAR_COLOR:
-			case TRANSLATION:
-				return components == 3;
-			case SCALE:
-				return components == 1 || components == 3;
-			case ORIENTATION:
-				return components == 4;
-			case MORPH_WEIGHTS:
-				return components > 0;
-			default:
-				return false; // Shouldn't occur
-		}
-	}
-
+    private native static int _ctor(int hInterface,
+                                    int hSequence,
+                                    int property);
+    private native static int _getController(int handle);
+    private native static int _getSequence(int handle);
+    private native static int _getTargetProperty(int handle);
+    private native static void _setController(int handle, int hController);
 }
