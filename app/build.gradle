@@ -22,6 +22,11 @@ android {
         abortOnError false
         disable 'MissingTranslation'
     }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
 }
 
 dependencies {
