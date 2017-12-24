@@ -360,6 +360,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
 				setSnap(KEY_DIAL, KEY_NUM1, RectSnap.EXT_NORTH);
 				setSnap(KEY_CANCEL, KEY_NUM3, RectSnap.EXT_NORTH);
+
+				for (int i = KEY_NUM1; i < 12; i++) {
+					keypad[i].setVisible(true);
+				}
+				keypad[KEY_DIAL].setVisible(true);
+				keypad[KEY_CANCEL].setVisible(true);
 				break;
 			case 1:
 				keyScales[SCALE_JOYSTICK] = 1;
