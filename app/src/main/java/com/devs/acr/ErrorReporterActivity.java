@@ -1,9 +1,9 @@
 package com.devs.acr;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
 import ua.naiksoftware.j2meloader.R;
 
@@ -28,7 +28,7 @@ public class ErrorReporterActivity extends Activity {
 				.setPositiveButton(R.string.report_crash, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
-						AutoErrorReporter.get(getApplication()).checkErrorAndSendMail();
+						AutoErrorReporter.get(getApplication()).checkErrorAndSendMail(ErrorReporterActivity.this);
 						System.exit(10);
 					}
 				})

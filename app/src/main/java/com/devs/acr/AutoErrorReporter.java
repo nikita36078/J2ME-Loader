@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -230,19 +231,6 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		application.startActivity(intent);
 	}
 
-
-	private void sendErrorMail(String errorContent) {
-		showLog("====sendErrorMail");
-		Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		String body = "\n\n" + errorContent + "\n\n";
-		sendIntent.putExtra(Intent.EXTRA_EMAIL, recipients);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, body);
-		sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-		sendIntent.setType("message/rfc822");
-		sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		application.startActivity(Intent.createChooser(sendIntent, "Title:"));
-	}
-
 	private void saveAsFile(String errorContent) {
 		showLog("====SaveAsFile");
 		try {
@@ -272,7 +260,7 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 		return getErrorFileList().length > 0;
 	}
 
-	void checkErrorAndSendMail() {
+	void checkErrorAndSendMail(Context context) {
 		try {
 			if (bIsThereAnyErrorFile()) {
 				StringBuilder wholeErrorTextSB = new StringBuilder();
@@ -296,7 +284,15 @@ public class AutoErrorReporter implements Thread.UncaughtExceptionHandler {
 					File curFile = new File(filePath + "/" + curString);
 					curFile.delete();
 				}
-				sendErrorMail(wholeErrorTextSB.toString());
+
+				showLog("====sendErrorMail");
+				String body = "\n\n" + wholeErrorTextSB.toString() + "\n\n";
+				Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+				sendIntent.setData(Uri.parse("mailto:"));
+				sendIntent.putExtra(Intent.EXTRA_EMAIL, recipients);
+				sendIntent.putExtra(Intent.EXTRA_TEXT, body);
+				sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+				context.startActivity(Intent.createChooser(sendIntent, "Title:"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
