@@ -7,8 +7,8 @@
 J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3D with some limitations. Emulator has a virtual keyboard, individual settings for each application, scaling support.
 
 System requirements: Android 4.0+ 
-
-http://4pda.ru/forum/index.php?showtopic=824201
+[List of the incompatible/bugged games (Google Docs)](https://docs.google.com/spreadsheets/d/1KmkDmod7CxbLYSm_BgEoVMCzy4YuZZoL05H8hK4sOh4/edit?usp=sharing).
+[4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201).
 
 ## Tips
  - Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.
