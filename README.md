@@ -21,5 +21,5 @@ System requirements: Android 4.0+
 
 ## License
 > Copyright (C) 2017 Nikita Shakarun.  
-> Licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl.html) license.  
+> Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)

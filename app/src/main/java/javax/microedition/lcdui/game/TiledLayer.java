@@ -22,7 +22,7 @@ import javax.microedition.lcdui.Image;
 public class TiledLayer extends Layer {
 	private final int rows, cols;
 	// package access for collision detection
-	Image img;
+	private Image img;
 
 	private int tileHeight, tileWidth, numStaticTiles;
 
@@ -34,9 +34,9 @@ public class TiledLayer extends Layer {
 	// NOTE the first animatedTile (index -1) goes
 	// into the first position in the array (index 0)
 	// so to access the correct tile use animatedTiles[-n-1]
-	int[] animatedTiles;
+	private int[] animatedTiles;
 	// the ammount of animated tiles
-	int numAnimatedTiles;
+	private int numAnimatedTiles;
 
 	public TiledLayer(int cols, int rows, Image img, int tileWidth, int tileHeight) {
 		// the specification doesn't states if the TiledLayer is visible on creation
