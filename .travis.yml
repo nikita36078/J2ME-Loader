@@ -1,4 +1,5 @@
 language: android
+sudo: true
 branches:
    except:
    - l10n_master
@@ -9,7 +10,6 @@ android:
     - build-tools-27.0.2
     - android-27
     - extra-google-m2repository
-    - extra-android-m2repository
 before_install:
   - rm -fr $HOME/android-ndk-r16b
   - curl -L http://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip -O
