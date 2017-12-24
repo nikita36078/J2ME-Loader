@@ -113,6 +113,11 @@ public class Graphics3D
         return s_instance;
     }
 
+    public static void initGraphics3D()
+    {
+        s_instance = null;
+    }
+
     private Graphics3D()
     {
         iInterface = Interface.getInstance();
@@ -232,7 +237,7 @@ public class Graphics3D
                     {
 			    Graphics g = (Graphics) currentTarget;
                         _releaseGraphics(handle,
-                                         0, iIsImageTarget, iIsProperRenderer, pixels);                        
+                                         0, iIsImageTarget, iIsProperRenderer, pixels);
 			g.drawRGB(pixels, 0, g.getCanvas().getWidth(), 0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight(), true);
 			//pixels = null;
 			for (int i = 0; i < pixels.length; i++)

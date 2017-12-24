@@ -52,6 +52,7 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.m3g.Graphics3D;
 import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
@@ -548,6 +549,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			ContextHolder.setVk(null);
 		}
 		Display.initDisplay();
+		Graphics3D.initGraphics3D();
 		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 		applyConfiguration();
 		Intent i = new Intent(this, MicroActivity.class);
