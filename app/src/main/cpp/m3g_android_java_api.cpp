@@ -21,7 +21,7 @@
  *
  */
 
-#include <M3G/m3g_core.h> // Please check if this header is needed
+#include <m3g_core.h> // Please check if this header is needed
 
 #include <jni.h>
 

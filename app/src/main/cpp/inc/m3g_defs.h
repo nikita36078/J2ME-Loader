@@ -25,7 +25,7 @@
  */
 
 /* Include public API */
-#include "M3G/m3g_core.h"
+#include "m3g_core.h"
 
 #if defined(__cplusplus)
 extern "C" {

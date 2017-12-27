@@ -27,7 +27,7 @@
 #   error included by m3g_<platform>_java_api.c; do not compile separately.
 #endif
 
-#include <m3g/m3g_core.h>
+#include <m3g_core.h>
 #include "m3g_jsr184.h"
 
 /*----------------------------------------------------------------------

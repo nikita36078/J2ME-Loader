@@ -24,7 +24,7 @@
  * \brief OpenGL utility functions and definitions
  */
 
-#include "M3G/m3g_core.h"
+#include "m3g_core.h"
 #include "m3g_defs.h"
 
 #if !(defined(M3G_NGL_CONTEXT_API) || defined(M3G_NGL_TEXTURE_API))
