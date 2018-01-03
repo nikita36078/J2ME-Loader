@@ -19,6 +19,7 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -68,7 +69,7 @@ public class Form extends Screen {
 		item.setOwnerForm(this);
 
 		if (layout != null) {
-			MicroActivity a = getParentActivity();
+			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
 					public void run() {
@@ -85,7 +86,7 @@ public class Form extends Screen {
 		item.setOwnerForm(this);
 
 		if (layout != null) {
-			MicroActivity a = getParentActivity();
+			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
 					public void run() {
@@ -101,7 +102,7 @@ public class Form extends Screen {
 		item.setOwnerForm(this);
 
 		if (layout != null) {
-			MicroActivity a = getParentActivity();
+			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
 					public void run() {
@@ -117,7 +118,7 @@ public class Form extends Screen {
 		items.remove(index).setOwnerForm(null);
 
 		if (layout != null) {
-			MicroActivity a = getParentActivity();
+			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
 					public void run() {
@@ -136,7 +137,7 @@ public class Form extends Screen {
 		items.clear();
 
 		if (layout != null) {
-			MicroActivity a = getParentActivity();
+			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(new Runnable() {
 					public void run() {

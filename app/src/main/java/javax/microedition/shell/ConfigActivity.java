@@ -134,7 +134,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.config_all);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		ContextHolder.setContext(this);
+		ContextHolder.setCurrentActivity(this);
 		pathToMidletDir = getIntent().getDataString();
 		String appName = getIntent().getStringExtra(MIDLET_NAME_KEY);
 		appName = appName.replace(":", "").replace("/", "");

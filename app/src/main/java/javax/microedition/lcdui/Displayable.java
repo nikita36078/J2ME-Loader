@@ -18,6 +18,7 @@
 
 package javax.microedition.lcdui;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -57,7 +58,7 @@ public abstract class Displayable {
 		clearDisplayableView();
 	}
 
-	public MicroActivity getParentActivity() {
+	public AppCompatActivity getParentActivity() {
 		if (parent == null) {
 			return ContextHolder.getCurrentActivity();
 		}

@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
 
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
@@ -53,7 +54,7 @@ public class Display {
 
 	private MIDlet context;
 	private Displayable current;
-	private MicroActivity activity;
+	private AppCompatActivity activity;
 
 	private static PowerManager powermanager;
 	private static PowerManager.WakeLock wakelock;
@@ -111,7 +112,7 @@ public class Display {
 	}
 
 	private void showCurrent() {
-		activity.setCurrent(current);
+		((MicroActivity) activity).setCurrent(current);
 	}
 
 	public void activityResumed() {
