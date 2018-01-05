@@ -45,6 +45,7 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
@@ -70,6 +71,7 @@ public class MicroActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		pathToMidletDir = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
+		initEmulator();
 		loadMIDlet();
 	}
 
@@ -158,6 +160,12 @@ public class MicroActivity extends AppCompatActivity {
 			Log.d("err", t.toString() + "/n" + t.getMessage());
 			showErrorDialog(t.getMessage());
 		}
+	}
+
+	private void initEmulator() {
+		Display.initDisplay();
+		Graphics3D.initGraphics3D();
+		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 	}
 
 	private void showErrorDialog(String message) {

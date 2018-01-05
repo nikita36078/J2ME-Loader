@@ -19,13 +19,13 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,17 +48,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.m3g.Graphics3D;
 import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import ua.naiksoftware.j2meloader.R;
-import ua.naiksoftware.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener {
@@ -548,9 +545,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		} else {
 			ContextHolder.setVk(null);
 		}
-		Display.initDisplay();
-		Graphics3D.initGraphics3D();
-		FileUtils.deleteDirectory(ContextHolder.getCacheDir());
 		applyConfiguration();
 		Intent i = new Intent(this, MicroActivity.class);
 		i.putExtra(MIDLET_PATH_KEY, pathToMidletDir);
