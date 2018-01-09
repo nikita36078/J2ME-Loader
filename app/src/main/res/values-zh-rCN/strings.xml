@@ -3,7 +3,7 @@
 <resources>
   <string name="exit">退出</string>
   <string name="about">关于</string>
-  <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 3D 游戏，有一些限制。&lt;BR&gt;</string>
+  <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 部分3D 游戏。&lt;BR&gt;</string>
   <string name="open_jar">打开 jar</string>
   <string name="author">作者: </string>
   <string name="version">版本: </string>
@@ -56,16 +56,17 @@
   <string name="PREF_CLEAR_BUFFER">绘制缓冲区清除</string>
   <string name="SWAP_SIZES">交换尺寸</string>
   <string name="error">错误</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">强制关闭应用程序可能会导致数据丢失甚至完全中断!\n继续?</string>
+  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">强制关闭应用程序可能会导致数据丢失甚至损坏!\n是否继续?</string>
   <string name="CONFIRMATION_REQUIRED" formatted="false">需要确认</string>
+  <string name="select_dialog_title">选择 MIDlet</string>
   <string name="crash_dialog_message">是否要向开发人员发送错误报告？</string>
   <string name="crash_dialog_title">检测到错误</string>
   <string name="report_crash">发送</string>
   <string name="layout_edit_finished">编辑模式完成</string>
   <string name="layout_edit_finish">完成编辑模式</string>
-  <string name="layout_edit_mode">键布局编辑模式</string>
-  <string name="layout_scale_mode">键布局调整大小模式</string>
-  <string name="layout_switch">切换键布局</string>
+  <string name="layout_edit_mode">按键布局编辑</string>
+  <string name="layout_scale_mode">调整按键大小</string>
+  <string name="layout_switch">切换按键布局</string>
   <string name="common_settings">[通用设置]</string>
   <string name="pref_enable_actionbar_title">启用操作栏</string>
   <string name="pref_enable_actionbar_summary">在全屏应用中</string>
