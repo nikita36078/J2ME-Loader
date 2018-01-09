@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +46,7 @@ public class ChoiceGroup extends Item implements Choice {
 
 	private int choiceType;
 	private int selectedIndex = -1;
+	private int fitPolicy;
 
 	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -113,6 +115,7 @@ public class ChoiceGroup extends Item implements Choice {
 				throw new IllegalArgumentException("choice type " + choiceType + " is not supported");
 		}
 
+		fitPolicy = Choice.TEXT_WRAP_DEFAULT;
 		setLabel(label);
 	}
 
@@ -347,6 +350,14 @@ public class ChoiceGroup extends Item implements Choice {
 				}
 			}
 		}
+	}
+
+	public void setFitPolicy(int fitPolicy) {
+		this.fitPolicy = fitPolicy;
+	}
+
+	public int getFitPolicy() {
+		return fitPolicy;
 	}
 
 	public int size() {
