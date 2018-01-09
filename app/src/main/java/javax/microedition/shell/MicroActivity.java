@@ -41,10 +41,13 @@ import java.util.LinkedHashMap;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -130,20 +133,20 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void showMidletDialog(String[] midletsNameArray, final String[] midletsClassArray) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(midletsNameArray, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface d, int n) {
-				startMidlet(midletsClassArray[n]);
-			}
-		});
-		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialogInterface) {
-				finish();
-			}
-		});
-		builder.setTitle(R.string.select_dialog_title);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.select_dialog_title)
+				.setItems(midletsNameArray, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface d, int n) {
+						startMidlet(midletsClassArray[n]);
+					}
+				})
+				.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialogInterface) {
+						finish();
+					}
+				});
 		builder.show();
 	}
 
@@ -232,7 +235,7 @@ public class MicroActivity extends AppCompatActivity {
 		return visible;
 	}
 
-	public void showExitConfirmation() {
+	private void showExitConfirmation() {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
@@ -282,10 +285,61 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (current != null) {
-			current.menuItemSelected(item);
+			int id = item.getItemId();
+			if (item.getGroupId() == R.id.action_group_common_settings) {
+				if (id == R.id.action_exit_midlet) {
+					showExitConfirmation();
+				} else if (current instanceof Canvas && ContextHolder.getVk() != null) {
+					VirtualKeyboard vk = ContextHolder.getVk();
+					switch (id) {
+						case R.id.action_layout_edit_mode:
+							vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+							break;
+						case R.id.action_layout_scale_mode:
+							vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+							break;
+						case R.id.action_layout_edit_finish:
+							vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+							break;
+						case R.id.action_layout_switch:
+							vk.switchLayout();
+							break;
+						case R.id.action_hide_buttons:
+							showHideButtonDialog();
+							break;
+					}
+				}
+				return true;
+			}
+
+			CommandListener listener = current.getCommandListener();
+			if (listener == null) {
+				return false;
+			}
+
+			for (Command cmd : current.getCommands()) {
+				if (cmd.hashCode() == id) {
+					current.getEventQueue().postEvent(CommandActionEvent.getInstance(listener, cmd, current));
+					return true;
+				}
+			}
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void showHideButtonDialog() {
+		final VirtualKeyboard vk = ContextHolder.getVk();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.hide_buttons)
+				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(), new DialogInterface.OnMultiChoiceClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+						vk.setKeyVisibility(i, b);
+					}
+				})
+				.setPositiveButton(android.R.string.ok, null);
+		builder.show();
 	}
 
 	@Override

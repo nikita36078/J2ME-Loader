@@ -51,13 +51,13 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private RectF rect;
 		private int keyCode, secondKeyCode;
 		private String label;
-		private boolean isSelected;
-		private boolean isVisible;
+		private boolean selected;
+		private boolean visible;
 
 		public VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
 			this.label = label;
-			this.isVisible = true;
+			this.visible = true;
 			rect = new RectF();
 		}
 
@@ -75,15 +75,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		public void setSelected(boolean flag) {
-			isSelected = flag;
+			selected = flag;
 		}
 
 		public void setVisible(boolean flag) {
-			isVisible = flag;
+			visible = flag;
 		}
 
 		public boolean isVisible() {
-			return isVisible;
+			return visible;
 		}
 
 		public RectF getRect() {
@@ -96,15 +96,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		public boolean contains(float x, float y) {
-			return isVisible && rect.contains(x, y);
+			return visible && rect.contains(x, y);
 		}
 
 		public void paint(Graphics g) {
-			if (label != null && isVisible) {
-				g.setColor(colors[isSelected ? BACKGROUND_SELECTED : BACKGROUND]);
+			if (label != null && visible) {
+				g.setColor(colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				g.fillArc(rect, 0, 360);
 
-				g.setColor(colors[isSelected ? FOREGROUND_SELECTED : FOREGROUND]);
+				g.setColor(colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
 				g.setFont(font);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
@@ -130,6 +130,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
+	private static final int KEYBOARD_SIZE = 25;
 	private static final int SCREEN = -1;
 
 	private static final int KEY_NUM1 = 0,
@@ -280,7 +281,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public VirtualKeyboard() {
 		context = ContextHolder.getContext();
 		font = new Font();
-		keypad = new VirtualKey[25];
+		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // у среднестатистического пользователя обычно не более 10 пальцев...
 
 		for (int i = KEY_NUM1; i < 9; i++) {
@@ -395,7 +396,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	public void switchLayout(){
+	public void switchLayout() {
 		layoutVariant ^= 1;
 		resetLayout(layoutVariant);
 		for (int group = 0; group < keyScaleGroups.length; group++) {
@@ -403,6 +404,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 		snapKeys();
 		repaint();
+		listener.layoutChanged(this);
 	}
 
 	public void writeLayout(DataOutputStream dos) throws IOException {
@@ -501,6 +503,28 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					break;
 			}
 		}
+	}
+
+	public String[] getKeyNames() {
+		String[] names = new String[KEYBOARD_SIZE];
+		for (int i = 0; i < KEYBOARD_SIZE; i++) {
+			names[i] = keypad[i].getLabel();
+		}
+		return names;
+	}
+
+	public boolean[] getKeyVisibility() {
+		boolean[] states = new boolean[KEYBOARD_SIZE];
+		for (int i = 0; i < KEYBOARD_SIZE; i++) {
+			states[i] = !keypad[i].isVisible();
+		}
+		return states;
+	}
+
+	public void setKeyVisibility(int id, boolean hidden) {
+		keypad[id].setVisible(!hidden);
+		repaint();
+		listener.layoutChanged(this);
 	}
 
 	public void setTarget(Canvas canvas) {
