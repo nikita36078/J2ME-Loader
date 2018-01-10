@@ -1,6 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,7 +106,7 @@ public class TextField extends Item {
 		return getString().length();
 	}
 
-	public void setMaxSize(int maxSize) {
+	public int setMaxSize(int maxSize) {
 		if (maxSize <= 0) {
 			throw new IllegalArgumentException("max size must be > 0");
 		}
@@ -116,6 +116,8 @@ public class TextField extends Item {
 		if (textview != null) {
 			textview.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxSize)});
 		}
+
+		return maxSize;
 	}
 
 	public int getMaxSize() {
