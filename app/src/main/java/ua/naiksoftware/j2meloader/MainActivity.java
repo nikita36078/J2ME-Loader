@@ -172,12 +172,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_about:
-				AboutDialogFragment dialogFragment = new AboutDialogFragment();
-				dialogFragment.show(getSupportFragmentManager(), "about");
+				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+				aboutDialogFragment.show(getSupportFragmentManager(), "about");
 				break;
 			case R.id.action_settings:
 				Intent intent = new Intent(this, SettingsActivity.class);
 				startActivity(intent);
+				break;
+			case R.id.action_help:
+				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
+				helpDialogFragment.show(getSupportFragmentManager(), "help");
 				break;
 			case R.id.action_exit_app:
 				finish();
