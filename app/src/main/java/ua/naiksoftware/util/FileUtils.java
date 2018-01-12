@@ -1,6 +1,6 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import ua.naiksoftware.j2meloader.JarConverter;
+
 public class FileUtils {
+
+	private static final int BUFFER_SIZE = 1024;
 
 	public static void moveFiles(String src, String dest, FilenameFilter filter) {
 		File fsrc = new File(src);
@@ -48,7 +52,11 @@ public class FileUtils {
 			if (entry.isDirectory()) {
 				moveFiles(entry.getPath(), to, filter);
 			} else {
-				entry.renameTo(new File(to));
+				try {
+					copyFileUsingChannel(entry, new File(to));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -105,15 +113,15 @@ public class FileUtils {
 		return params;
 	}
 
-	public static String getPath(Context context, Uri uri) throws FileNotFoundException {
+	public static String getJarPath(Context context, Uri uri) throws FileNotFoundException {
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		OutputStream out = null;
-		File folder = new File(context.getApplicationInfo().dataDir, "uri_tmp");
+		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
 		folder.mkdir();
-		File file = new File(folder, "tmp.jar");
+		File file = new File(folder, JarConverter.TEMP_JAR_NAME);
 		try {
 			out = new FileOutputStream(file);
-			byte[] buf = new byte[1024];
+			byte[] buf = new byte[BUFFER_SIZE];
 			int len;
 			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);

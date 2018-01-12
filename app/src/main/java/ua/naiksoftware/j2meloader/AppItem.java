@@ -1,6 +1,6 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package ua.naiksoftware.j2meloader;
 
 import java.io.Serializable;
 
+import javax.microedition.shell.ConfigActivity;
+
 public class AppItem implements Serializable {
 
 	private String imagePath;
@@ -36,7 +38,7 @@ public class AppItem implements Serializable {
 
 	public void setPath(String p) {
 		path = p;
-		setImagePath();
+		imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
 	}
 
 	public String getPath() {
@@ -49,15 +51,6 @@ public class AppItem implements Serializable {
 
 	public String getTitle() {
 		return title;
-	}
-
-	public void setImagePath() {
-		String resString = "/res";
-		imagePath = imagePath.replace(" ", "");
-		if (!imagePath.contains("/")) {
-			resString += "/";
-		}
-		imagePath = path + resString + imagePath;
 	}
 
 	public String getImagePath() {

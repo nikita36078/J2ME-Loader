@@ -1,6 +1,6 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import android.widget.ListView;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.microedition.midlet.MIDlet;
 import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;
@@ -60,7 +59,7 @@ public class AppsListFragment extends ListFragment {
 		registerForContextMenu(getListView());
 	}
 
-	private void showDialog(final int id) {
+	private void showDeleteDialog(final int id) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
@@ -122,7 +121,7 @@ public class AppsListFragment extends ListFragment {
 				startActivity(i);
 				break;
 			case R.id.action_context_delete:
-				showDialog(index);
+				showDeleteDialog(index);
 				break;
 		}
 		return super.onContextItemSelected(item);

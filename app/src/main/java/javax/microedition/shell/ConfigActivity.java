@@ -99,7 +99,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private File keylayoutFile;
 	private SharedPreferencesContainer params;
 	private String pathToMidletDir;
-	public static final String MIDLET_RES_DIR = "/res/";
+	public static final String MIDLET_DIR = "/converted/";
+	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
+	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
+	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
+	public static final String TEMP_DEX_DIR = "/tmp_dex";
+	public static final String MIDLET_RES_DIR = "/res";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_CONF_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_PATH_KEY = "path";
@@ -135,7 +140,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		pathToMidletDir = getIntent().getDataString();
 		String appName = getIntent().getStringExtra(MIDLET_NAME_KEY);
 		appName = appName.replace(":", "").replace("/", "");
-		keylayoutFile = new File(getFilesDir() + "/" + appName, "VirtualKeyboardLayout");
+		keylayoutFile = new File(DATA_DIR + appName, "VirtualKeyboardLayout");
 
 		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
 

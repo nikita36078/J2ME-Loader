@@ -151,11 +151,17 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void startMidlet(String mainClass) {
-		String dex = pathToMidletDir + ConfigActivity.MIDLET_DEX_FILE;
-		ClassLoader loader = new MyClassLoader(dex,
-				getApplicationInfo().dataDir, null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
+		File dexSource = new File(pathToMidletDir, ConfigActivity.MIDLET_DEX_FILE);
+		File dexTargetDir = new File(getApplicationInfo().dataDir, ConfigActivity.TEMP_DEX_DIR);
+		if (!dexTargetDir.exists()) {
+			dexTargetDir.mkdirs();
+		}
+		File dexTarget = new File(dexTargetDir, ConfigActivity.MIDLET_DEX_FILE);
 		try {
-			Log.d("inf", "load main: " + mainClass + " from dex:" + dex);
+			FileUtils.copyFileUsingChannel(dexSource, dexTarget);
+			ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
+					getApplicationInfo().dataDir, null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
+			Log.d("inf", "load main: " + mainClass + " from dex:" + dexTarget.getPath());
 			MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 			midlet.startApp();
 			loaded = true;
@@ -195,13 +201,13 @@ public class MicroActivity extends AppCompatActivity {
 			layout.addView(current.getDisplayableView());
 			invalidateOptionsMenu();
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			boolean isActionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
+			boolean actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 			Window window = getWindow();
 			ActionBar actionBar = getSupportActionBar();
 			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
 			if (current instanceof Canvas) {
 				window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-				if (!isActionBarEnabled) {
+				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
 					actionBar.setTitle(MyClassLoader.getName());

@@ -1,6 +1,6 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@ package ua.naiksoftware.j2meloader;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +38,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -42,10 +46,8 @@ import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;
 
-public class MainActivity extends AppCompatActivity implements
-		NavigationDrawerFragment.SelectedCallback {
+public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.SelectedCallback {
 
-	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 	public static final String APP_LIST_KEY = "apps";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -61,22 +63,18 @@ public class MainActivity extends AppCompatActivity implements
 
 	private AppsListFragment appsListFragment;
 	private ArrayList<AppItem> apps = new ArrayList<AppItem>();
-
-	/**
-	 * путь к папке со сконвертированными приложениями
-	 */
-	private String pathConverted;
+	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if (ContextCompat.checkSelfPermission(this,
-				Manifest.permission.WRITE_EXTERNAL_STORAGE)
+		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+			Toast.makeText(this, R.string.external_storage_not_mounted, Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 				!= PackageManager.PERMISSION_GRANTED) {
-
-			ActivityCompat.requestPermissions(this,
-					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
 					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 		} else {
 			setupActivity();
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
 		if (savedInstanceState == null && uri != null) {
 			JarConverter converter = new JarConverter(this);
 			try {
-				converter.execute(FileUtils.getPath(this, uri), pathConverted);
+				converter.execute(FileUtils.getJarPath(this, uri), ConfigActivity.APP_DIR);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-		pathConverted = getApplicationInfo().dataDir + "/converted/";
+		moveToNewLocation();
 		appsListFragment = new AppsListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(APP_LIST_KEY, apps);
@@ -116,15 +114,14 @@ public class MainActivity extends AppCompatActivity implements
 	public void onRequestPermissionsResult(int requestCode,
 										   String permissions[], int[] grantResults) {
 		switch (requestCode) {
-			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE: {
-				if (grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					setupActivity();
 				} else {
 					Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 					finish();
 				}
-			}
+				break;
 		}
 	}
 
@@ -132,6 +129,30 @@ public class MainActivity extends AppCompatActivity implements
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);
+	}
+
+	private void moveToNewLocation() {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean dataMoved = sp.getBoolean("pref_data_moved", false);
+		if (!dataMoved) {
+			File oldConvertedDir = new File(getApplicationInfo().dataDir, ConfigActivity.MIDLET_DIR);
+			File oldDataDir = getFilesDir();
+			if (oldConvertedDir.exists() && oldConvertedDir.listFiles().length > 0) {
+				FileUtils.moveFiles(oldConvertedDir.getPath(), ConfigActivity.APP_DIR, null);
+				FileUtils.deleteDirectory(oldConvertedDir);
+
+				if (oldDataDir.exists() && oldDataDir.listFiles().length > 0) {
+					FileUtils.moveFiles(oldDataDir.getPath(), ConfigActivity.DATA_DIR, new FilenameFilter() {
+						@Override
+						public boolean accept(File file, String s) {
+							return !s.endsWith(".stacktrace");
+						}
+					});
+					FileUtils.deleteDirectory(oldDataDir);
+				}
+			}
+			sp.edit().putBoolean("pref_data_moved", true).apply();
+		}
 	}
 
 	@Override
@@ -168,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements
 	@Override
 	public void onSelected(String path) {
 		JarConverter converter = new JarConverter(this);
-		converter.execute(path, pathConverted);
+		converter.execute(path, ConfigActivity.APP_DIR);
 	}
 
 	public void updateApps() {
@@ -176,10 +197,10 @@ public class MainActivity extends AppCompatActivity implements
 		AppItem item;
 		String author = getString(R.string.author);
 		String version = getString(R.string.version);
-		String[] appFolders = new File(pathConverted).list();
+		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
 		if (!(appFolders == null)) {
 			for (String appFolder : appFolders) {
-				File temp = new File(pathConverted + appFolder);
+				File temp = new File(ConfigActivity.APP_DIR, appFolder);
 				if (temp.list().length > 0) {
 					LinkedHashMap<String, String> params = FileUtils
 							.loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
@@ -187,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements
 							params.get("MIDlet-Name"),
 							author + params.get("MIDlet-Vendor"),
 							version + params.get("MIDlet-Version"));
-					item.setPath(pathConverted + appFolder);
+					item.setPath(ConfigActivity.APP_DIR + appFolder);
 					apps.add(item);
 				} else {
 					temp.delete();

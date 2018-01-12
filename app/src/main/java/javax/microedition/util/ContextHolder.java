@@ -31,6 +31,7 @@ import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
+import javax.microedition.shell.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 
 import ua.naiksoftware.util.Log;
@@ -105,7 +106,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		File dir = new File(getContext().getFilesDir(), MyClassLoader.getName());
+		File dir = new File(ConfigActivity.DATA_DIR, MyClassLoader.getName());
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
@@ -113,11 +114,7 @@ public class ContextHolder {
 	}
 
 	public static File getCacheDir() {
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			return getContext().getExternalCacheDir();
-		} else {
-			return getContext().getCacheDir();
-		}
+		return getContext().getExternalCacheDir();
 	}
 
 	/**

@@ -39,7 +39,12 @@ import ua.naiksoftware.util.ZipUtils;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 
-	private static final String tag = "JarConverter";
+	public static final String TEMP_JAR_NAME = "tmp.jar";
+	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
+
+	private static final String TEMP_FIX_FOLDER_NAME = "tmp_fix";
+	private static final String TEMP_FOLDER_NAME = "tmp";
+	private static final String TAG = "JarConverter";
 
 	private final Context context;
 	private String err = "Void error";
@@ -51,7 +56,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	public JarConverter(MainActivity context) {
 		this.context = context;
-		dirTmp = new File(context.getApplicationInfo().dataDir, "tmp");
+		dirTmp = new File(context.getApplicationInfo().dataDir, TEMP_FOLDER_NAME);
 		dirTmp.mkdir();
 	}
 
@@ -60,7 +65,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		String pathToJar = p1[0];
 		targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
 		String pathConverted = p1[1];
-		Log.d(tag, "doInBackground$ pathToJar=" + pathToJar + " pathConverted="
+		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar + " pathConverted="
 				+ pathConverted);
 		File inputJar = new File(pathToJar);
 		File fixedJar;
@@ -90,7 +95,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		File appConverted = new File(pathConverted, appDir);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
-		Log.d(tag, "appConverted=" + appConverted.getPath());
+		Log.d(TAG, "appConverted=" + appConverted.getPath());
 		Main.main(new String[]{
 				"--dex", "--no-optimize", "--output=" + appConverted.getPath()
 				+ ConfigActivity.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
@@ -104,11 +109,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir
 				+ ConfigActivity.MIDLET_RES_DIR, new FilenameFilter() {
 			public boolean accept(File dir, String fname) {
-				if (fname.endsWith(".class") || fname.endsWith(".jar.jar")) {
-					return false;
-				} else {
-					return true;
-				}
+				return !(fname.endsWith(".class") || fname.endsWith(".jar.jar"));
 			}
 		});
 		deleteTemp();
@@ -144,7 +145,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		try {
 			AndroidProducer.processJar(inputJar, fixedJar, true);
 		} catch (ZipException e) {
-			File unpackedJarFolder = new File(context.getApplicationInfo().dataDir, "tmp_fix");
+			File unpackedJarFolder = new File(context.getApplicationInfo().dataDir, TEMP_FIX_FOLDER_NAME);
 			ZipUtils.unzip(inputJar, unpackedJarFolder);
 
 			File repackedJar = new File(dirTmp, inputJar.getName());
@@ -160,7 +161,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private void deleteTemp() {
 		// Delete temp files
 		FileUtils.deleteDirectory(dirTmp);
-		File uriDir = new File(context.getApplicationInfo().dataDir, "uri_tmp");
+		File uriDir = new File(context.getApplicationInfo().dataDir, TEMP_URI_FOLDER_NAME);
 		if (uriDir.exists()) {
 			FileUtils.deleteDirectory(uriDir);
 		}
