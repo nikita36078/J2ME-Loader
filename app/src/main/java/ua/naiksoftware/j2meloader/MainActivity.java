@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (!isTaskRoot()) {
+			finish();
+			return;
+		}
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(this, R.string.external_storage_not_mounted, Toast.LENGTH_SHORT).show();
 			finish();
