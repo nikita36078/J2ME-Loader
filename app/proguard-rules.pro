@@ -15,3 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class javax.** { *; }
+-keep class com.siemens.mp.game.** { *; }
+-keep class com.samsung.util.** { *; }
+-keep class com.nokia.mid.ui.** { *; }
+-keep class org.microemu.** { *; }
+-keepclasseswithmembernames class * {
+    native <methods>;
+}

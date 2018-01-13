@@ -8,8 +8,8 @@ android {
         applicationId "ua.naiksoftware.j2meloader"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 15
-        versionName "1.2.6-test2"
+        versionCode 16
+        versionName "1.2.6"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
@@ -17,7 +17,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
