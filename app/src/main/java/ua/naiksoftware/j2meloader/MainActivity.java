@@ -68,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (!isTaskRoot()) {
+		Uri uri = getIntent().getData();
+		if (!isTaskRoot() && uri == null) {
 			finish();
 			return;
 		}
@@ -82,14 +83,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 		} else {
 			setupActivity();
-		}
-		Uri uri = getIntent().getData();
-		if (savedInstanceState == null && uri != null) {
-			JarConverter converter = new JarConverter(this);
-			try {
-				converter.execute(FileUtils.getJarPath(this, uri), ConfigActivity.APP_DIR);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+			if (savedInstanceState == null && uri != null) {
+				JarConverter converter = new JarConverter(this);
+				try {
+					converter.execute(FileUtils.getJarPath(this, uri), ConfigActivity.APP_DIR);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
