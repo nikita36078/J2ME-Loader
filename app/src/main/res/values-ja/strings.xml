@@ -49,7 +49,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">火災： </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">サイズ</string>
   <string name="SIZE_PRESETS" formatted="false">プリセット</string>
-  <string name="PREF_LANGUAGE" formatted="false">言語</string>
+  <string name="PREF_LANGUAGE" formatted="false">言語: %A</string>
   <string name="PREF_MISC" formatted="false">その他のオプション</string>
   <string name="PREF_VK_SHOW">キーボードを表示する</string>
   <string name="PREF_IMMEDIATE">即時処理モード</string>

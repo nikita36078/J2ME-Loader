@@ -3,6 +3,8 @@
 <resources>
   <string name="exit">Выход</string>
   <string name="about">О программе</string>
+  <string name="help">Помощь</string>
+  <string name="help_message">&#8226; Включение фильтрации в некоторых случаях может значительно снизить производительность. Отключите эту опцию, если игра работает слишком медленно. &lt;BR&gt;&#8226; Проблемы с мерцанием изображения могут быть решены с помощью опции \"Режим неотложной обработки\".</string>
   <string name="about_message">Данный эмулятор позволяет запускать J2ME приложения на Android. Для работы программы не нужен интернет, конвертация приложений происходит прямо на устройстве.&lt;BR&gt;На данный момент поддерживается большинство 2д игр, поддержка 3д присутствует, но с некоторыми ограничениями.&lt;BR&gt;Есть виртуальная клавиатура, индивидуальные настройки для каждого приложения, присутствует поддержка масштабирования.&lt;BR&gt;</string>
   <string name="open_jar">Открыть jar</string>
   <string name="author">Автор: </string>
@@ -13,6 +15,7 @@
   <string name="convert_complete">Завершено</string>
   <string name="converting_message">Обработка...</string>
   <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
+  <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
   <string name="action_context_shortcut">Добавить ярлык</string>
   <string name="action_settings">Настройки</string>
   <string name="action_context_delete">Удалить</string>
