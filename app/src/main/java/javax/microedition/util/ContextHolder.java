@@ -93,7 +93,7 @@ public class ContextHolder {
 		}
 	}
 
-	public static FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
+	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {
 		return new FileOutputStream(getFileByName(name));
 	}
 
@@ -108,7 +108,7 @@ public class ContextHolder {
 	public static File getFileByName(String name) {
 		File dir = new File(ConfigActivity.DATA_DIR, MyClassLoader.getName());
 		if (!dir.exists()) {
-			dir.mkdir();
+			dir.mkdirs();
 		}
 		return new File(dir, name);
 	}

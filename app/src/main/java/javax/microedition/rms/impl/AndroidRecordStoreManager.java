@@ -209,7 +209,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			throws RecordStoreException {
 		try {
 			DataOutputStream dos = new DataOutputStream(
-					ContextHolder.openFileOutput(getHeaderFileName(recordStore.getName()), Context.MODE_PRIVATE));
+					ContextHolder.openFileOutput(getHeaderFileName(recordStore.getName())));
 			recordStore.writeHeader(dos);
 			dos.close();
 		} catch (IOException e) {
@@ -227,7 +227,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			throws RecordStoreException {
 		try {
 			DataOutputStream dos = new DataOutputStream(
-					ContextHolder.openFileOutput(getHeaderFileName(recordStore.getName()), Context.MODE_PRIVATE));
+					ContextHolder.openFileOutput(getHeaderFileName(recordStore.getName())));
 			recordStore.writeHeader(dos);
 			dos.close();
 		} catch (IOException e) {
@@ -238,7 +238,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		if (recordId != -1) {
 			try {
 				DataOutputStream dos = new DataOutputStream(
-						ContextHolder.openFileOutput(getRecordFileName(recordStore.getName(), recordId), Context.MODE_PRIVATE));
+						ContextHolder.openFileOutput(getRecordFileName(recordStore.getName(), recordId)));
 				recordStore.writeRecord(dos, recordId);
 				dos.close();
 			} catch (IOException e) {
