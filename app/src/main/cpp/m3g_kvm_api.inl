@@ -44,7 +44,7 @@
  * \brief Macros for serializing m3gcore function calls 
  * in native threading environment.
  */
-#include "CSynchronization.h"
+#include "CSynchronization.hpp"
 #define M3G_DO_LOCK CSynchronization::InstanceL()->Lock();
 #define M3G_DO_UNLOCK(aEnv) {\
                     int errorCode = CSynchronization::InstanceL()->GetErrorCode();\

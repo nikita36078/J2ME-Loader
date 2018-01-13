@@ -16,7 +16,7 @@
 */
 
 // INCLUDE FILES
-#include "CSynchronization.h"
+#include "CSynchronization.hpp"
 
 class M3gGlobals
 {
