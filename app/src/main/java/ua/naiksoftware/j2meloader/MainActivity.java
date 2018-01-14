@@ -40,6 +40,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 
 import javax.microedition.shell.ConfigActivity;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	private AppsListFragment appsListFragment;
 	private ArrayList<AppItem> apps = new ArrayList<AppItem>();
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
+	private static final Comparator<SortItem> comparator = new AlphabeticComparator<SortItem>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 				}
 			}
 		}
+		Collections.sort(apps, comparator);
 		AppsListAdapter adapter = new AppsListAdapter(this, apps);
 		appsListFragment.setListAdapter(adapter);
 	}

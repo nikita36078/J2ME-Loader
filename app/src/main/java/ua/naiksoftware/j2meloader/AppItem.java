@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 import javax.microedition.shell.ConfigActivity;
 
-public class AppItem implements Serializable {
+public class AppItem implements Serializable, SortItem {
 
 	private String imagePath;
 	private String title;
@@ -66,6 +66,10 @@ public class AppItem implements Serializable {
 
 	public String getVersion() {
 		return version;
+	}
+
+	public String getSortField() {
+		return title;
 	}
 
 }
