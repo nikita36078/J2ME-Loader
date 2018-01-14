@@ -38,6 +38,9 @@ public class AppItem implements Serializable {
 
 	public void setPath(String p) {
 		path = p;
+		if (!imagePath.contains("/")) {
+			imagePath = "/" + imagePath;
+		}
 		imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
 	}
 
