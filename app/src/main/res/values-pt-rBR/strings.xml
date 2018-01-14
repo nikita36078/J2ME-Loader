@@ -3,6 +3,8 @@
 <resources>
   <string name="exit">Sair</string>
   <string name="about">Informações</string>
+  <string name="help">Ajuda</string>
+  <string name="help_message">&#8226; Permite a filtragem, em alguns casos pode reduzir muito o desempenho. Desative esta opção se o jogo estiver enfrentando Lags. &lt; BR &gt; &#8226; imagem no falhando ou piscando podem ser corrigidos, permitindo a opção de \"modo de processamento imediato\".</string>
   <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D, mas jogos 3D existem algumas limitações.&lt;BR&gt;</string>
   <string name="open_jar">Abrir Jar</string>
   <string name="author">Autor: </string>
@@ -13,6 +15,7 @@
   <string name="convert_complete">Completo</string>
   <string name="converting_message">Processando... Espere...</string>
   <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento</string>
+  <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
   <string name="action_context_shortcut">Adicionar atalho</string>
   <string name="action_settings">Configurações</string>
   <string name="action_context_delete">Excluir</string>
@@ -58,6 +61,7 @@
   <string name="error">Erro</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Força o fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
   <string name="CONFIRMATION_REQUIRED" formatted="false">Confirmação necessária</string>
+  <string name="select_dialog_title">Selecionar MIDlet</string>
   <string name="crash_dialog_message">Você quer enviar o relatório de erro para o desenvolvedor?</string>
   <string name="crash_dialog_title">Erro detectado</string>
   <string name="report_crash">Enviar</string>
@@ -66,6 +70,7 @@
   <string name="layout_edit_mode">Editar botões</string>
   <string name="layout_scale_mode">Editar tamanho dos botões</string>
   <string name="layout_switch">Alternar layout</string>
+  <string name="hide_buttons">Ocultar botões</string>
   <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>
   <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
   <string name="pref_enable_actionbar_summary">Assistente para jogos em tela completa</string>
