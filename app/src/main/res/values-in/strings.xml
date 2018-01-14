@@ -3,6 +3,8 @@
 <resources>
   <string name="exit">Keluar</string>
   <string name="about">Tentang</string>
+  <string name="help">Bantuan</string>
+  <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja  yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".&lt;BR&gt;&#8226; Aktifkan \"Menggambar pembersihan buffer\" jika ada gambar dan buffer yang tidak perlu atau mengganggu.</string>
   <string name="about_message">Aplikasi ini digunakan untuk meluncurkan aplikasi J2ME dan permainan di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D dengan sebagaian keterbatasan.&lt;BR&gt;</string>
   <string name="open_jar">Buka jar</string>
   <string name="author">Vendor: </string>
@@ -13,6 +15,7 @@
   <string name="convert_complete">Selesai</string>
   <string name="converting_message">Memproses...</string>
   <string name="permission_request_failed">Aplikasi ini membutuhkan izin untuk menulis berkas</string>
+  <string name="external_storage_not_mounted">Aplikasi ini membutuhkan penyimpanan eksternal</string>
   <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
   <string name="action_settings">Pengaturan</string>
   <string name="action_context_delete">Hapus</string>
@@ -67,6 +70,7 @@
   <string name="layout_edit_mode">Mode ubah letak tombol</string>
   <string name="layout_scale_mode">Mode ubah ukuran tombol</string>
   <string name="layout_switch">Tukar letak tombol</string>
+  <string name="hide_buttons">Tombol yang tersembunyi</string>
   <string name="common_settings">[PENGATURAN UMUM]</string>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
   <string name="pref_enable_actionbar_summary">Aplikasi dalam keadaan layar penuh</string>
