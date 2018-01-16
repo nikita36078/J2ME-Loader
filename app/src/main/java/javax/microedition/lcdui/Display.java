@@ -167,7 +167,9 @@ public class Display {
 			if (vibrator == null) {
 				vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 			}
-			vibrator.vibrate(duration);
+			if (duration > 0) {
+				vibrator.vibrate(duration);
+			}
 			return true;
 		} catch (Throwable t) {
 			return false;
