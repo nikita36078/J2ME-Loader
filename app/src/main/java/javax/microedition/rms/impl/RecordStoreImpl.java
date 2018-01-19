@@ -1,6 +1,7 @@
 /*
  *  MicroEmulator
  *  Copyright (C) 2001-2005 Bartek Teodorczyk <barteo@barteo.net>
+ *  Copyright (C) 2018 Nikita Shakarun
  *
  *  It is licensed under the following two licenses as alternatives:
  *    1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -66,7 +67,6 @@ public class RecordStoreImpl extends RecordStore {
 
 	private transient Vector recordListeners = new Vector();
 
-
 	public RecordStoreImpl(RecordStoreManager recordStoreManager, String recordStoreName) {
 		this.recordStoreManager = recordStoreManager;
 		if (recordStoreName.length() <= 32) {
@@ -77,12 +77,10 @@ public class RecordStoreImpl extends RecordStore {
 		this.open = false;
 	}
 
-
 	public RecordStoreImpl(RecordStoreManager recordStoreManager)
 			throws IOException {
 		this.recordStoreManager = recordStoreManager;
 	}
-
 
 	public int readHeader(DataInputStream dis)
 			throws IOException {
@@ -105,7 +103,6 @@ public class RecordStoreImpl extends RecordStore {
 		return size;
 	}
 
-
 	public void readRecord(DataInputStream dis)
 			throws IOException {
 		int recordId = dis.readInt();
@@ -117,7 +114,6 @@ public class RecordStoreImpl extends RecordStore {
 		dis.read(data, 0, data.length);
 		this.records.put(new Integer(recordId), data);
 	}
-
 
 	public void writeHeader(DataOutputStream dos)
 			throws IOException {
@@ -133,7 +129,6 @@ public class RecordStoreImpl extends RecordStore {
 		dos.writeByte(0); // TODO Writable
 		dos.writeInt(size);
 	}
-
 
 	public void writeRecord(DataOutputStream dos, int recordId)
 			throws IOException {
@@ -152,16 +147,13 @@ public class RecordStoreImpl extends RecordStore {
 		}
 	}
 
-
 	public boolean isOpen() {
 		return open;
 	}
 
-
 	public void setOpen(boolean open) {
 		this.open = open;
 	}
-
 
 	public void closeRecordStore()
 			throws RecordStoreNotOpenException, RecordStoreException {
@@ -172,13 +164,11 @@ public class RecordStoreImpl extends RecordStore {
 		if (recordListeners != null) {
 			recordListeners.removeAllElements();
 		}
-		recordStoreManager.fireRecordStoreListener(ExtendedRecordListener.RECORDSTORE_CLOSE, this.getName());
 
 		records.clear();
 
 		open = false;
 	}
-
 
 	public String getName()
 			throws RecordStoreNotOpenException {
@@ -188,7 +178,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		return recordStoreName;
 	}
-
 
 	public int getVersion()
 			throws RecordStoreNotOpenException {
@@ -201,7 +190,6 @@ public class RecordStoreImpl extends RecordStore {
 		}
 	}
 
-
 	public int getNumRecords()
 			throws RecordStoreNotOpenException {
 		if (!open) {
@@ -210,7 +198,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		return size;
 	}
-
 
 	public int getSize()
 			throws RecordStoreNotOpenException {
@@ -239,7 +226,6 @@ public class RecordStoreImpl extends RecordStore {
 		return result;
 	}
 
-
 	public int getSizeAvailable()
 			throws RecordStoreNotOpenException {
 		if (!open) {
@@ -248,7 +234,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		return recordStoreManager.getSizeAvailable(this);
 	}
-
 
 	public long getLastModified()
 			throws RecordStoreNotOpenException {
@@ -261,18 +246,15 @@ public class RecordStoreImpl extends RecordStore {
 		}
 	}
 
-
 	public void addRecordListener(RecordListener listener) {
 		if (!recordListeners.contains(listener)) {
 			recordListeners.addElement(listener);
 		}
 	}
 
-
 	public void removeRecordListener(RecordListener listener) {
 		recordListeners.removeElement(listener);
 	}
-
 
 	public int getNextRecordID()
 			throws RecordStoreNotOpenException, RecordStoreException {
@@ -287,7 +269,6 @@ public class RecordStoreImpl extends RecordStore {
 			return lastRecordId + 1;
 		}
 	}
-
 
 	public int addRecord(byte[] data, int offset, int numBytes)
 			throws RecordStoreNotOpenException, RecordStoreException, RecordStoreFullException {
@@ -325,7 +306,6 @@ public class RecordStoreImpl extends RecordStore {
 		return nextRecordID;
 	}
 
-
 	public void deleteRecord(int recordId)
 			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
 		if (!open) {
@@ -345,7 +325,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		fireRecordListener(ExtendedRecordListener.RECORD_DELETE, recordId);
 	}
-
 
 	public int getRecordSize(int recordId)
 			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
@@ -367,7 +346,6 @@ public class RecordStoreImpl extends RecordStore {
 		}
 	}
 
-
 	public int getRecord(int recordId, byte[] buffer, int offset)
 			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
 		int recordSize;
@@ -380,7 +358,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		return recordSize;
 	}
-
 
 	public byte[] getRecord(int recordId)
 			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
@@ -397,7 +374,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		return data.length < 1 ? null : data;
 	}
-
 
 	public void setRecord(int recordId, byte[] newData, int offset, int numBytes)
 			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException, RecordStoreFullException {
@@ -426,7 +402,6 @@ public class RecordStoreImpl extends RecordStore {
 		fireRecordListener(ExtendedRecordListener.RECORD_CHANGE, recordId);
 	}
 
-
 	public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated)
 			throws RecordStoreNotOpenException {
 		if (!open) {
@@ -435,18 +410,6 @@ public class RecordStoreImpl extends RecordStore {
 
 		return new RecordEnumerationImpl(this, filter, comparator, keepUpdated);
 	}
-
-
-	public int getHeaderSize() {
-		// TODO fixit
-		return recordStoreName.length() + 4 + 8 + 4;
-	}
-
-
-	public int getRecordHeaderSize() {
-		return 4 + 4;
-	}
-
 
 	private void fireRecordListener(int type, int recordId) {
 		long timestamp = System.currentTimeMillis();

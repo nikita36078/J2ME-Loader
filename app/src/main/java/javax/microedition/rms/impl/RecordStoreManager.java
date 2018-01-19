@@ -1,6 +1,7 @@
 /**
  * MicroEmulator
  * Copyright (C) 2001-2007 Bartek Teodorczyk <barteo@barteo.net>
+ * Copyright (C) 2018 Nikita Shakarun
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -29,7 +30,6 @@ import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotFoundException;
 import javax.microedition.rms.RecordStoreNotOpenException;
 
-
 public interface RecordStoreManager {
 
 	String getName();
@@ -52,19 +52,5 @@ public interface RecordStoreManager {
 			throws RecordStoreNotOpenException, RecordStoreException;
 
 	int getSizeAvailable(RecordStoreImpl recordStoreImpl);
-
-	/**
-	 * Initialize RMS Manager before starting MIDlet
-	 */
-	void init();
-
-	/**
-	 * Delete all record stores.
-	 */
-	void deleteStores();
-
-	void setRecordListener(ExtendedRecordListener recordListener);
-
-	void fireRecordStoreListener(int type, String recordStoreName);
 
 }

@@ -1,6 +1,7 @@
 /*
  *  MicroEmulator
  *  Copyright (C) 2001-2005 Bartek Teodorczyk <barteo@barteo.net>
+ *  Copyright (C) 2018 Nikita Shakarun
  *
  *  It is licensed under the following two licenses as alternatives:
  *    1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -37,7 +38,6 @@ import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotOpenException;
 
-
 public class RecordEnumerationImpl implements RecordEnumeration {
 	private RecordStoreImpl recordStoreImpl;
 	private RecordFilter filter;
@@ -63,7 +63,6 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 	};
 
-
 	public RecordEnumerationImpl(RecordStoreImpl recordStoreImpl, RecordFilter filter, RecordComparator comparator, boolean keepUpdated) {
 		this.recordStoreImpl = recordStoreImpl;
 		this.filter = filter;
@@ -77,11 +76,9 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 	}
 
-
 	public int numRecords() {
 		return enumerationRecords.size();
 	}
-
 
 	public byte[] nextRecord()
 			throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException {
@@ -99,7 +96,6 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return result;
 	}
 
-
 	public int nextRecordId()
 			throws InvalidRecordIDException {
 		if (currentRecord >= numRecords()) {
@@ -111,7 +107,6 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 		return result;
 	}
-
 
 	public byte[] previousRecord()
 			throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException {
@@ -127,7 +122,6 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).value;
 	}
 
-
 	public int previousRecordId()
 			throws InvalidRecordIDException {
 		if (currentRecord < 0) {
@@ -139,7 +133,6 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).recordId;
 	}
 
-
 	public boolean hasNextElement() {
 		if (currentRecord == numRecords()) {
 			return false;
@@ -148,24 +141,16 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 	}
 
-
 	public boolean hasPreviousElement() {
-		if (currentRecord == 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return currentRecord != 0;
 	}
-
 
 	public void reset() {
 		currentRecord = 0;
 	}
 
-
 	public void rebuild() {
 		enumerationRecords.removeAllElements();
-
 		//
 		// filter
 		//
@@ -214,7 +199,6 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 	}
 
-
 	public void keepUpdated(boolean keepUpdated) {
 		if (keepUpdated) {
 			if (!this.keepUpdated) {
@@ -228,26 +212,20 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		this.keepUpdated = keepUpdated;
 	}
 
-
 	public boolean isKeptUpdated() {
 		return keepUpdated;
 	}
 
-
 	public void destroy() {
 	}
 
-
 	class EnumerationRecord {
 		int recordId;
-
 		byte[] value;
-
 
 		EnumerationRecord(int recordId, byte[] value) {
 			this.recordId = recordId;
 			this.value = value;
 		}
 	}
-
 }

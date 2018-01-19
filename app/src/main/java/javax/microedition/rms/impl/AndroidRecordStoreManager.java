@@ -27,7 +27,6 @@
 
 package javax.microedition.rms.impl;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.DataInputStream;
@@ -59,17 +58,11 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private ConcurrentHashMap<String, Object> recordStores = null;
 
-	private ExtendedRecordListener recordListener = null;
-
-	public AndroidRecordStoreManager() {
-	}
-
 	public String getName() {
 		return "Android record store";
 	}
 
 	private synchronized void initializeIfNecessary() {
-		Context context = ContextHolder.getContext();
 		if (recordStores == null) {
 			recordStores = new ConcurrentHashMap<String, Object>();
 			String[] list = new File(ConfigActivity.DATA_DIR, MyClassLoader.getName()).list();
@@ -117,8 +110,6 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		ContextHolder.deleteFile(getHeaderFileName(recordStoreName));
 
 		recordStores.remove(recordStoreName);
-
-		fireRecordStoreListener(ExtendedRecordListener.RECORDSTORE_DELETE, recordStoreName);
 	}
 
 	public RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
@@ -143,13 +134,8 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		} catch (IOException e) {
 			throw new RecordStoreException();
 		}
-		if (recordListener != null) {
-			recordStoreImpl.addRecordListener(recordListener);
-		}
 
 		recordStores.put(recordStoreName, recordStoreImpl);
-
-		fireRecordStoreListener(ExtendedRecordListener.RECORDSTORE_OPEN, recordStoreName);
 
 		return recordStoreImpl;
 	}
@@ -185,13 +171,9 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		}
 	}
 
-
 	public void saveRecord(RecordStoreImpl recordStoreImpl, int recordId)
 			throws RecordStoreNotOpenException, RecordStoreException {
 		saveToDisk(recordStoreImpl, recordId);
-	}
-
-	public void init() {
 	}
 
 	public void deleteStores() {
@@ -252,16 +234,6 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	public int getSizeAvailable(RecordStoreImpl recordStoreImpl) {
 		// FIXME should return free space on device
 		return 1024 * 1024;
-	}
-
-	public void setRecordListener(ExtendedRecordListener recordListener) {
-		this.recordListener = recordListener;
-	}
-
-	public void fireRecordStoreListener(int type, String recordStoreName) {
-		if (recordListener != null) {
-			recordListener.recordStoreEvent(type, System.currentTimeMillis(), recordStoreName);
-		}
 	}
 
 	private String getHeaderFileName(String recordStoreName) {
