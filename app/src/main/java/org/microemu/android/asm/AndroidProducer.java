@@ -1,7 +1,7 @@
 /**
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
- * Copyright (C) 2017 Nikita Shakarun
+ * Copyright (C) 2017-2018 Nikita Shakarun
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
@@ -82,6 +83,10 @@ public class AndroidProducer {
 			if (manifest == null) {
 				jos = new JarOutputStream(new FileOutputStream(jarOutputFile));
 			} else {
+				Attributes attributes = manifest.getMainAttributes();
+				if (!attributes.containsKey(Attributes.Name.MANIFEST_VERSION)) {
+					attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+				}
 				jos = new JarOutputStream(new FileOutputStream(jarOutputFile), manifest);
 			}
 
