@@ -39,6 +39,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -99,13 +100,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
 	private void setupActivity() {
 		setContentView(R.layout.activity_main);
+		initFolders();
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-		moveToNewLocation();
 		appsListFragment = new AppsListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(APP_LIST_KEY, apps);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		actionBar.setTitle(mTitle);
 	}
 
-	private void moveToNewLocation() {
+	private void initFolders() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean dataMoved = sp.getBoolean("pref_data_moved", false);
 		if (!dataMoved) {
@@ -159,6 +160,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 				}
 			}
 			sp.edit().putBoolean("pref_data_moved", true).apply();
+		}
+		File nomedia = new File(ConfigActivity.EMULATOR_DIR, ".nomedia");
+		if (!nomedia.exists()) {
+			try {
+				nomedia.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
