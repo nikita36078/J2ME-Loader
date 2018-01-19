@@ -153,14 +153,20 @@ public class MicroActivity extends AppCompatActivity {
 	private void startMidlet(String mainClass) {
 		File dexSource = new File(pathToMidletDir, ConfigActivity.MIDLET_DEX_FILE);
 		File dexTargetDir = new File(getApplicationInfo().dataDir, ConfigActivity.TEMP_DEX_DIR);
-		if (!dexTargetDir.exists()) {
-			dexTargetDir.mkdirs();
+		if (dexTargetDir.exists()) {
+			FileUtils.deleteDirectory(dexTargetDir);
 		}
+		dexTargetDir.mkdir();
+		File dexTargetOptDir = new File(getApplicationInfo().dataDir, ConfigActivity.TEMP_DEX_OPT_DIR);
+		if (dexTargetOptDir.exists()) {
+			FileUtils.deleteDirectory(dexTargetOptDir);
+		}
+		dexTargetOptDir.mkdir();
 		File dexTarget = new File(dexTargetDir, ConfigActivity.MIDLET_DEX_FILE);
 		try {
 			FileUtils.copyFileUsingChannel(dexSource, dexTarget);
 			ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
-					getApplicationInfo().dataDir, null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
+					dexTargetOptDir.getAbsolutePath(), null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
 			Log.d("inf", "load main: " + mainClass + " from dex:" + dexTarget.getPath());
 			MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 			midlet.startApp();
