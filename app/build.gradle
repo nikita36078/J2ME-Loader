@@ -8,8 +8,8 @@ android {
         applicationId "ua.naiksoftware.j2meloader"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 18
-        versionName "1.2.6.2"
+        versionCode 19
+        versionName "1.2.6.3"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
