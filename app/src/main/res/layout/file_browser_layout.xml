@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/gradient_bg_1"
@@ -13,11 +12,11 @@
         android:background="@drawable/gradient_bg_2"
         android:padding="2sp"
         android:textColor="#000000"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <ListView
         android:id="@+id/file_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:listSelector="@drawable/list_selector"/>
+        android:listSelector="@drawable/list_selector" />
 </LinearLayout>

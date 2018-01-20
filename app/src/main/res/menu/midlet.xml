@@ -6,22 +6,22 @@
             <group android:id="@+id/action_group_common_settings">
                 <item
                     android:id="@+id/action_exit_midlet"
-                    android:title="@string/exit"/>
+                    android:title="@string/exit" />
                 <item
                     android:id="@+id/action_layout_edit_mode"
-                    android:title="@string/layout_edit_mode"/>
+                    android:title="@string/layout_edit_mode" />
                 <item
                     android:id="@+id/action_layout_scale_mode"
-                    android:title="@string/layout_scale_mode"/>
+                    android:title="@string/layout_scale_mode" />
                 <item
                     android:id="@+id/action_layout_edit_finish"
-                    android:title="@string/layout_edit_finish"/>
+                    android:title="@string/layout_edit_finish" />
                 <item
                     android:id="@+id/action_layout_switch"
-                    android:title="@string/layout_switch"/>
+                    android:title="@string/layout_switch" />
                 <item
                     android:id="@+id/action_hide_buttons"
-                    android:title="@string/hide_buttons"/>
+                    android:title="@string/hide_buttons" />
             </group>
         </menu>
     </item>

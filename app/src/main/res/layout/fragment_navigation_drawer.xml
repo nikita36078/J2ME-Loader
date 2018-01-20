@@ -1,5 +1,4 @@
-<ListView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,4 +6,4 @@
     android:choiceMode="singleChoice"
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
-    tools:context="ua.naiksoftware.j2meloader.NavigationDrawerFragment"/>
+    tools:context="ua.naiksoftware.j2meloader.NavigationDrawerFragment" />
