@@ -693,7 +693,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		offscreenChanged = true;
 
 		if (target != null) {
-			//target.repaint();
+			target.repaint();
 		}
 	}
 
