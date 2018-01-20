@@ -92,7 +92,7 @@
         <item>Name</item>
         <item>Date</item>
     </string-array>
-    <string-array name="pref_app_sort_values">
+    <string-array name="pref_app_sort_values" translatable="false">
         <item>name</item>
         <item>date</item>
     </string-array>
