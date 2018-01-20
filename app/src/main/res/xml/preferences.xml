@@ -5,4 +5,9 @@
         android:key="pref_actionbar_switch"
         android:summary="@string/pref_enable_actionbar_summary"
         android:title="@string/pref_enable_actionbar_title" />
+    <ListPreference
+        android:entries="@array/pref_app_sort_entries"
+        android:entryValues="@array/pref_app_sort_values"
+        android:key="pref_app_sort"
+        android:title="@string/pref_app_sort_title" />
 </PreferenceScreen>

@@ -87,6 +87,15 @@
 
     <string name="pref_enable_actionbar_title">Enable ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
+    <string name="pref_app_sort_title">App sort order</string>
+    <string-array name="pref_app_sort_entries">
+        <item>Name</item>
+        <item>Date</item>
+    </string-array>
+    <string-array name="pref_app_sort_values">
+        <item>name</item>
+        <item>date</item>
+    </string-array>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>

@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
 	private AppsListFragment appsListFragment;
 	private ArrayList<AppItem> apps = new ArrayList<AppItem>();
+	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 	private static final Comparator<SortItem> comparator = new AlphabeticComparator<SortItem>();
 
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 			Toast.makeText(this, R.string.external_storage_not_mounted, Toast.LENGTH_SHORT).show();
 			finish();
 		}
+		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 				!= PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -140,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	}
 
 	private void initFolders() {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean dataMoved = sp.getBoolean("pref_data_moved", false);
 		if (!dataMoved) {
 			File oldConvertedDir = new File(getApplicationInfo().dataDir, ConfigActivity.MIDLET_DIR);
@@ -235,7 +236,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 				}
 			}
 		}
-		Collections.sort(apps, comparator);
+		String appSort = sp.getString("pref_app_sort", "name");
+		if (appSort.equals("name")) {
+			Collections.sort(apps, comparator);
+		}
 		AppsListAdapter adapter = new AppsListAdapter(this, apps);
 		appsListFragment.setListAdapter(adapter);
 	}

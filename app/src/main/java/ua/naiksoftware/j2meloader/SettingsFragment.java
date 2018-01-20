@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,16 @@
 package ua.naiksoftware.j2meloader;
 
 import android.os.Bundle;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
+		ListPreference sortPref = (ListPreference) findPreference("pref_app_sort");
+		if (sortPref.getValue() == null) {
+			sortPref.setValueIndex(0);
+		}
 	}
 }
