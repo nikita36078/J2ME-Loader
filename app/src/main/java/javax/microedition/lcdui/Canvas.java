@@ -1,19 +1,19 @@
 /*
-* Copyright 2012 Kulikov Dmitriy
-* Copyright 2017-2018 Nikita Shakarun
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2017-2018 Nikita Shakarun
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package javax.microedition.lcdui;
 
@@ -242,6 +242,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
+			surfaceCreated = true;
 			synchronized (paintsync) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			}
@@ -249,6 +250,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
+			surfaceCreated = false;
 			synchronized (paintsync) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
 			}
@@ -258,7 +260,7 @@ public abstract class Canvas extends Displayable {
 	private class PaintEvent extends Event implements EventFilter {
 		public void process() {
 			synchronized (paintsync) {
-				if (holder == null || !holder.getSurface().isValid()) {
+				if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 					return;
 				}
 				graphics.setCanvas(offscreen.getCanvas());
@@ -317,6 +319,7 @@ public abstract class Canvas extends Displayable {
 	private final Object paintsync = new Object();
 
 	private PaintEvent paintEvent = new PaintEvent();
+	private boolean surfaceCreated = false;
 
 	private InnerView view;
 	private SurfaceHolder holder;
@@ -388,9 +391,9 @@ public abstract class Canvas extends Displayable {
 	 */
 	private void updateSize(boolean post) {
 		/*
-         * Превращаем размеры виртуального экрана
+		 * Превращаем размеры виртуального экрана
 		 * в размеры видимого для мидлета холста.
-		 * 
+		 *
 		 * При этом учитываем, что один или оба виртуальных размера могут быть
 		 * меньше нуля, что означает автоподбор этого размера так,
 		 * чтобы получившийся холст имел то же соотношение сторон,
@@ -580,10 +583,10 @@ public abstract class Canvas extends Displayable {
 
 		/*
 		 * порядок блокировки:
-		 * 
+		 *
 		 * 1 - queue.this
 		 * 2 - queue.queue
-		 * 
+		 *
 		 * соответственно, внутри EventQueue порядок должен быть такой же,
 		 * иначе возможна взаимная блокировка двух потоков (все повиснет)
 		 */
@@ -592,7 +595,7 @@ public abstract class Canvas extends Displayable {
 			/*
 			 * Такая синхронизация фактически приостанавливает обработку событий
 			 * непосредственно перед изменением значения currentEvent()
-			 * 
+			 *
 			 * Тогда остается всего два варианта:
 			 */
 
