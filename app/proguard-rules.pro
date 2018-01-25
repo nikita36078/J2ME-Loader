@@ -20,6 +20,7 @@
 -keep class com.samsung.util.** { *; }
 -keep class com.nokia.mid.** { *; }
 -keep class org.microemu.** { *; }
+-keep class ua.naiksoftware.** { *; }
 -keepclasseswithmembernames class * {
     native <methods>;
 }
