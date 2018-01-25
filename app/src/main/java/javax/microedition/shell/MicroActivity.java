@@ -181,9 +181,10 @@ public class MicroActivity extends AppCompatActivity {
 		Display.initDisplay();
 		Graphics3D.initGraphics3D();
 		File cacheDir = ContextHolder.getCacheDir();
-		if (cacheDir != null) {
+		if (cacheDir.exists()) {
 			FileUtils.deleteDirectory(cacheDir);
 		}
+		cacheDir.mkdirs();
 	}
 
 	private void showErrorDialog(String message) {
