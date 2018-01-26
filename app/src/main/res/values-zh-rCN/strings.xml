@@ -3,7 +3,9 @@
 <resources>
   <string name="exit">退出</string>
   <string name="about">关于</string>
-  <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 部分3D 游戏。&lt;BR&gt;</string>
+  <string name="help">帮助</string>
+  <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt; BR &gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
+  <string name="about_message">此应用程序允许您在 Android 上启动 J2ME 应用程序和游戏。它支持大多数 2D 和 部分 3D 游戏。&lt;BR&gt;</string>
   <string name="open_jar">打开 jar</string>
   <string name="author">作者: </string>
   <string name="version">版本: </string>
@@ -13,6 +15,7 @@
   <string name="convert_complete">完成</string>
   <string name="converting_message">正在处理...</string>
   <string name="permission_request_failed">此应用程序需要存储写入权限</string>
+  <string name="external_storage_not_mounted">此应用程序需要外部存储</string>
   <string name="action_context_shortcut">添加快捷方式</string>
   <string name="action_settings">设置</string>
   <string name="action_context_delete">删除</string>
@@ -56,7 +59,7 @@
   <string name="PREF_CLEAR_BUFFER">绘制缓冲区清除</string>
   <string name="SWAP_SIZES">交换尺寸</string>
   <string name="error">错误</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">强制关闭应用程序可能会导致数据丢失甚至损坏!\n是否继续?</string>
+  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">强制关闭应用可能导致数据丢失或损坏!\n是否继续?</string>
   <string name="CONFIRMATION_REQUIRED" formatted="false">需要确认</string>
   <string name="select_dialog_title">选择 MIDlet</string>
   <string name="crash_dialog_message">是否要向开发人员发送错误报告？</string>
@@ -64,10 +67,16 @@
   <string name="report_crash">发送</string>
   <string name="layout_edit_finished">编辑模式完成</string>
   <string name="layout_edit_finish">完成编辑模式</string>
-  <string name="layout_edit_mode">按键布局编辑</string>
-  <string name="layout_scale_mode">调整按键大小</string>
+  <string name="layout_edit_mode">按键布局编辑模式</string>
+  <string name="layout_scale_mode">调整布局调整模式</string>
   <string name="layout_switch">切换按键布局</string>
-  <string name="common_settings">[通用设置]</string>
+  <string name="hide_buttons">隐藏按钮</string>
+  <string name="common_settings">[常用设置]</string>
   <string name="pref_enable_actionbar_title">启用操作栏</string>
-  <string name="pref_enable_actionbar_summary">在全屏应用中</string>
+  <string name="pref_enable_actionbar_summary">在应用全屏模式下</string>
+  <string name="pref_app_sort_title">应用程序排序</string>
+  <string-array name="pref_app_sort_entries">
+    <item>名称</item>
+    <item>日期</item>
+  </string-array>
 </resources>
