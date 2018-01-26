@@ -62,7 +62,7 @@ public class HockeySender implements ReportSender {
 				"Android: " + report.getString(ReportField.ANDROID_VERSION) + "\n" +
 				"Manufacturer: " + report.getString(ReportField.BRAND) + "\n" +
 				"Model: " + report.getString(ReportField.PHONE_MODEL) + "\n" +
-				"Running .jar: " + report.getString(ReportField.CUSTOM_DATA) + "\n" +
+				"App info: " + report.getString(ReportField.CUSTOM_DATA) + "\n" +
 				"Date: " + now + "\n" + "\n" + report.getString(ReportField.STACK_TRACE);
 		return log;
 	}
