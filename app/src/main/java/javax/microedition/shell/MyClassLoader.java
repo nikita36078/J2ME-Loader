@@ -43,9 +43,9 @@ public class MyClassLoader extends DexClassLoader {
 	}
 
 	public static String getName() {
-		try {
+		if (resFolder != null) {
 			return resFolder.getParentFile().getName();
-		} catch (NullPointerException npe) {
+		} else {
 			return null;
 		}
 	}
