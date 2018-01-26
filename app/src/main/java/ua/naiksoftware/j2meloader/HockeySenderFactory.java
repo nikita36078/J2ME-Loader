@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,21 @@
 
 package ua.naiksoftware.j2meloader;
 
-import android.app.Application;
 import android.content.Context;
-import org.acra.ACRA;
-import org.acra.annotation.AcraCore;
-import org.acra.annotation.AcraDialog;
+import android.support.annotation.NonNull;
+import org.acra.config.CoreConfiguration;
+import org.acra.sender.ReportSender;
+import org.acra.sender.ReportSenderFactory;
 
-@AcraCore(reportSenderFactoryClasses = {HockeySenderFactory.class})
-@AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
-		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = R.string.CANCEL_CMD, resTheme = R.style.AppTheme_Dialog)
-public class EmulatorApplication extends Application {
+public class HockeySenderFactory implements ReportSenderFactory {
+	@NonNull
 	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		ACRA.init(this);
+	public ReportSender create(Context context, CoreConfiguration config) {
+		return new HockeySender();
+	}
+
+	@Override
+	public boolean enabled(@NonNull CoreConfiguration config) {
+		return true;
 	}
 }

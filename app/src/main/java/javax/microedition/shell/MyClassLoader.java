@@ -23,6 +23,7 @@ import java.io.InputStream;
 import javax.microedition.util.ContextHolder;
 
 import dalvik.system.DexClassLoader;
+import org.acra.ACRA;
 
 public class MyClassLoader extends DexClassLoader {
 
@@ -31,6 +32,7 @@ public class MyClassLoader extends DexClassLoader {
 	public MyClassLoader(String paths, String tmpDir, String libs, ClassLoader parent, String resDir) {
 		super(paths, tmpDir, libs, parent);
 		resFolder = new File(resDir);
+		ACRA.getErrorReporter().putCustomData("Running app", getName());
 	}
 
 	@Override

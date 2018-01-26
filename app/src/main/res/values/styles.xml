@@ -11,6 +11,6 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
     </style>
 
-    <style name="AppTheme.Dialog" parent="@style/Theme.AppCompat.Light.Dialog"/>
+    <style name="AppTheme.Dialog" parent="@style/Theme.AppCompat.Dialog"/>
 
 </resources>

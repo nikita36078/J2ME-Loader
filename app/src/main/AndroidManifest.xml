@@ -58,10 +58,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name="com.devs.acr.ErrorReporterActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|screenSize" />
-        <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppTheme" />
     </application>
