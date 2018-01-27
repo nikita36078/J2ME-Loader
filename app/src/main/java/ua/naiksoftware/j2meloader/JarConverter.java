@@ -72,7 +72,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		File fixedJar;
 		try {
 			fixedJar = fixJar(inputJar);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			err = "Can't convert";
 			deleteTemp();
