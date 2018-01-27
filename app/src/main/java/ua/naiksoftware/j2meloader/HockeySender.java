@@ -46,6 +46,7 @@ public class HockeySender implements ReportSender {
 
 			List<NameValuePair> parameters = new ArrayList<>();
 			parameters.add(new BasicNameValuePair("raw", log));
+			parameters.add(new BasicNameValuePair("userID", report.getString(ReportField.INSTALLATION_ID)));
 			httpPost.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
 
 			httpClient.execute(httpPost);
