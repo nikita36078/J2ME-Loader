@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	private CharSequence mTitle;
 
 	private AppsListFragment appsListFragment;
-	private ArrayList<AppItem> apps = new ArrayList<AppItem>();
+	private ArrayList<AppItem> apps = new ArrayList<>();
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 	private static final Comparator<SortItem> comparator = new AlphabeticComparator<SortItem>();
@@ -73,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+		mTitle = getTitle();
 		Uri uri = getIntent().getData();
 		if (!isTaskRoot() && uri == null) {
 			finish();
@@ -101,12 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	}
 
 	private void setupActivity() {
-		setContentView(R.layout.activity_main);
 		initFolders();
-
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-		mTitle = getTitle();
-
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 		appsListFragment = new AppsListFragment();
@@ -121,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode,
-										   String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+										   @NonNull int[] grantResults) {
 		switch (requestCode) {
 			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -165,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		File nomedia = new File(ConfigActivity.EMULATOR_DIR, ".nomedia");
 		if (!nomedia.exists()) {
 			try {
+				nomedia.getParentFile().mkdirs();
 				nomedia.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -219,10 +219,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		String author = getString(R.string.author);
 		String version = getString(R.string.version);
 		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
-		if (!(appFolders == null)) {
+		if (appFolders != null) {
 			for (String appFolder : appFolders) {
 				File temp = new File(ConfigActivity.APP_DIR, appFolder);
-				if (temp.list().length > 0) {
+				if (temp.isDirectory() && temp.list().length > 0) {
 					LinkedHashMap<String, String> params = FileUtils
 							.loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
 					item = new AppItem(getIcon(params.get("MIDlet-1")),
