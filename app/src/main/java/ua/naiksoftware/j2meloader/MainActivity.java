@@ -246,7 +246,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
 	private String getIcon(String input) {
 		String[] params = input.split(",");
-		return params[1];
+		if (params.length == 3) {
+			return params[1];
+		} else {
+			return "";
+		}
 	}
 
 }

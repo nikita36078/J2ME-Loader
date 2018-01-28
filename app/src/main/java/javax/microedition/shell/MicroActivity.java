@@ -75,7 +75,12 @@ public class MicroActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		pathToMidletDir = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
 		initEmulator();
-		loadMIDlet();
+		try {
+			loadMIDlet();
+		} catch (Exception e) {
+			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+			finish();
+		}
 	}
 
 	@Override
@@ -105,7 +110,7 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	private void loadMIDlet() {
+	private void loadMIDlet() throws Exception {
 		ArrayList<String> midlets = new ArrayList<>();
 		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + ConfigActivity.MIDLET_CONF_FILE));
 		MIDlet.initProps(params);
@@ -123,11 +128,10 @@ public class MicroActivity extends AppCompatActivity {
 			midletsNameArray[i] = tmp.substring(0, tmp.indexOf(',')).trim();
 		}
 		if (size == 0) {
-			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-			finish();
+			throw new Exception();
 		} else if (size == 1) {
 			startMidlet(midletsClassArray[0]);
-		} else if (size > 1) {
+		} else {
 			showMidletDialog(midletsNameArray, midletsClassArray);
 		}
 	}
