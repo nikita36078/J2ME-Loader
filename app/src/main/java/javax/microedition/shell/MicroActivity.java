@@ -33,7 +33,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,8 +77,7 @@ public class MicroActivity extends AppCompatActivity {
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
-			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-			finish();
+			showErrorDialog(e.getMessage());
 		}
 	}
 
@@ -176,7 +174,6 @@ public class MicroActivity extends AppCompatActivity {
 			midlet.startApp();
 			loaded = true;
 		} catch (Throwable t) {
-			Log.d("err", t.toString() + "/n" + t.getMessage());
 			showErrorDialog(t.getMessage());
 		}
 	}
@@ -192,6 +189,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void showErrorDialog(String message) {
+		Log.d("err", message);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
