@@ -68,7 +68,7 @@ public class AppsListFragment extends ListFragment {
 					public void onClick(DialogInterface dialogInterface, int i) {
 						File appDir = new File(apps.get(id).getPath());
 						FileUtils.deleteDirectory(appDir);
-						File appSaveDir = new File(getActivity().getFilesDir(), apps.get(id).getTitle());
+						File appSaveDir = new File(ConfigActivity.DATA_DIR, apps.get(id).getTitle());
 						FileUtils.deleteDirectory(appSaveDir);
 						File appSettings = new File(getActivity().getFilesDir().getParent() + File.separator + "shared_prefs", apps.get(id).getTitle() + ".xml");
 						appSettings.delete();
