@@ -1,6 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,18 +32,18 @@ import javax.microedition.media.protocol.DataSource;
 
 public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, VolumeControl, PanControl {
 	protected DataSource source;
-	protected MediaPlayer player;
 	protected int state;
-	protected int loopCount;
+	private MediaPlayer player;
+	private int loopCount;
 
-	protected ArrayList<PlayerListener> listeners;
-	protected HashMap<String, Control> controls;
+	private ArrayList<PlayerListener> listeners;
+	private HashMap<String, Control> controls;
 
-	protected boolean mute;
-	protected int level, pan;
+	private boolean mute;
+	private int level, pan;
 
-	protected InternalMetaData metadata;
-	protected InternalEqualizer equalizer;
+	private InternalMetaData metadata;
+	private InternalEqualizer equalizer;
 
 	public MicroPlayer() {
 		this(null);
@@ -120,8 +120,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 	public synchronized void onCompletion(MediaPlayer mp) {
 		postEvent(PlayerListener.END_OF_MEDIA);
-
-		player.seekTo(0);
 
 		if (loopCount == 1) {
 			state = PREFETCHED;
