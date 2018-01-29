@@ -65,7 +65,12 @@ public abstract class Displayable {
 		this.title = title;
 
 		if (parent != null) {
-			parent.getSupportActionBar().setTitle(title);
+			parent.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					parent.getSupportActionBar().setTitle(Displayable.this.title);
+				}
+			});
 		}
 	}
 
