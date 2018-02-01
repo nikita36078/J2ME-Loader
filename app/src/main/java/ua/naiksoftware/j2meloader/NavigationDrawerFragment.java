@@ -1,6 +1,6 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,8 +47,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import ua.naiksoftware.util.Log;
-
 /**
  * Fragment used for managing interactions for and presentation of a navigation
  * drawer. See the <a href=
@@ -57,7 +56,7 @@ import ua.naiksoftware.util.Log;
  */
 public class NavigationDrawerFragment extends Fragment {
 
-	private static final String tag = NavigationDrawerFragment.class.getName();
+	private static final String TAG = NavigationDrawerFragment.class.getName();
 
 	/**
 	 * Remember the current path.
@@ -308,7 +307,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void readFolder(String folderStr) {
-		Log.d(tag, "read : " + folderStr);
+		Log.d(TAG, "read : " + folderStr);
 		File current = new File(folderStr);
 		items = new ArrayList<FSItem>();
 		ArrayList<FSItem> listFolder = new ArrayList<FSItem>();

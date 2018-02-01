@@ -20,6 +20,7 @@ package ua.naiksoftware.j2meloader;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.dx.command.Main;
@@ -35,7 +36,6 @@ import java.util.zip.ZipException;
 import javax.microedition.shell.ConfigActivity;
 
 import ua.naiksoftware.util.FileUtils;
-import ua.naiksoftware.util.Log;
 import ua.naiksoftware.util.ZipUtils;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
@@ -45,7 +45,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	private static final String TEMP_FIX_FOLDER_NAME = "tmp_fix";
 	private static final String TEMP_FOLDER_NAME = "tmp";
-	private static final String TAG = "JarConverter";
+	private static final String TAG = JarConverter.class.getName();
 
 	private final Context context;
 	private String err = "Void error";

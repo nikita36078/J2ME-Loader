@@ -26,6 +26,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,10 +34,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import ua.naiksoftware.j2meloader.R;
+import ua.naiksoftware.util.FileUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
@@ -50,12 +49,12 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
-
-import ua.naiksoftware.j2meloader.R;
-import ua.naiksoftware.util.FileUtils;
-import ua.naiksoftware.util.Log;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class MicroActivity extends AppCompatActivity {
+	private static final String TAG = MicroActivity.class.getName();
 	private Displayable current;
 	private boolean visible;
 	private boolean loaded;
@@ -169,7 +168,7 @@ public class MicroActivity extends AppCompatActivity {
 			FileUtils.copyFileUsingChannel(dexSource, dexTarget);
 			ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
 					dexTargetOptDir.getAbsolutePath(), null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
-			Log.d("inf", "load main: " + mainClass + " from dex:" + dexTarget.getPath());
+			Log.i(TAG, "load main: " + mainClass + " from dex:" + dexTarget.getPath());
 			MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 			midlet.startApp();
 			loaded = true;
@@ -190,7 +189,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void showErrorDialog(String message) {
-		Log.d("err", message);
+		Log.e(TAG, message);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)

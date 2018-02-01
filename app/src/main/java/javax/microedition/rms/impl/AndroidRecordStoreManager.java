@@ -29,13 +29,6 @@ package javax.microedition.rms.impl;
 
 import android.util.Log;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.microedition.rms.InvalidRecordIDException;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
@@ -45,6 +38,12 @@ import javax.microedition.rms.RecordStoreNotOpenException;
 import javax.microedition.shell.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 import javax.microedition.util.ContextHolder;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AndroidRecordStoreManager implements RecordStoreManager {
 
@@ -54,7 +53,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private final static Object NULL_STORE = new Object();
 
-	private String TAG = "RecordStore";
+	private static String TAG = RecordStore.class.getName();
 
 	private ConcurrentHashMap<String, Object> recordStores = null;
 
@@ -67,11 +66,10 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			recordStores = new ConcurrentHashMap<String, Object>();
 			String[] list = new File(ConfigActivity.DATA_DIR, MyClassLoader.getName()).list();
 			if (list != null && list.length > 0) {
-				for (int i = 0; i < list.length; i++) {
-					if (list[i].endsWith(RECORD_STORE_HEADER_SUFFIX)) {
-						recordStores.put(
-								list[i].substring(0, list[i].length() - RECORD_STORE_HEADER_SUFFIX.length()),
-								NULL_STORE);
+				for (String aList : list) {
+					if (aList.endsWith(RECORD_STORE_HEADER_SUFFIX)) {
+						recordStores.put(aList.substring(0,
+								aList.length() - RECORD_STORE_HEADER_SUFFIX.length()), NULL_STORE);
 					}
 				}
 			}
@@ -178,8 +176,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	public void deleteStores() {
 		String[] stores = listRecordStores();
-		for (int i = 0; i < stores.length; i++) {
-			String store = stores[i];
+		for (String store : stores) {
 			try {
 				deleteRecordStore(store);
 			} catch (RecordStoreException e) {
@@ -232,7 +229,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	}
 
 	public int getSizeAvailable(RecordStoreImpl recordStoreImpl) {
-		// FIXME should return free space on device
+		// TODO should return free space on device
 		return 1024 * 1024;
 	}
 

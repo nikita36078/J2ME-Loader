@@ -18,26 +18,23 @@
 package javax.microedition.util;
 
 import android.content.Context;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.rms.impl.AndroidRecordStoreManager;
+import javax.microedition.shell.ConfigActivity;
+import javax.microedition.shell.MyClassLoader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.rms.impl.AndroidRecordStoreManager;
-import javax.microedition.shell.ConfigActivity;
-import javax.microedition.shell.MyClassLoader;
-
-import ua.naiksoftware.util.Log;
-
 public class ContextHolder {
-	private static final String tag = "ContextHolder";
+	private static final String TAG = ContextHolder.class.getName();
 
 	private static Display display;
 	private static VirtualKeyboard vk;
@@ -84,11 +81,11 @@ public class ContextHolder {
 	}
 
 	public static InputStream getResourceAsStream(Class className, String resName) {
-		Log.d(tag, "CUSTOM GET RES CALLED WITH PATH: " + resName);
+		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		try {
 			return new MIDletResourceInputStream(new File(MyClassLoader.getResFolder(), resName));
 		} catch (FileNotFoundException e) {
-			Log.d(tag, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
+			Log.d(TAG, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
 			return null;
 		}
 	}

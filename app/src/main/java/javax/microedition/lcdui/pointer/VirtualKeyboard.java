@@ -19,11 +19,9 @@ package javax.microedition.lcdui.pointer;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 import android.widget.Toast;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import ua.naiksoftware.j2meloader.R;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
@@ -32,11 +30,13 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Overlay;
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.util.ContextHolder;
-
-import ua.naiksoftware.j2meloader.R;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
+	private static String TAG = VirtualKeyboard.class.getName();
 	private static final String ARROW_LEFT = "\u2190";
 	private static final String ARROW_UP = "\u2191";
 	private static final String ARROW_RIGHT = "\u2192";
@@ -560,12 +560,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private void snapKey(int key, int level) {
 		if (level >= snapStack.length) {
-			System.out.print("Snap loop detected: ");
+			Log.d(TAG, "Snap loop detected: ");
 			for (int i = 1; i < snapStack.length; i++) {
 				System.out.print(snapStack[i]);
 				System.out.print(", ");
 			}
-			System.out.print(key);
+			Log.d(TAG, String.valueOf(key));
 			return;
 		}
 		snapStack[level] = key;
@@ -899,6 +899,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					skip = true;
 					repaint();
 				} catch (InterruptedException ie) {
+					ie.printStackTrace();
 				}
 			}
 		} catch (InterruptedException ie) {

@@ -1,6 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,19 @@
 
 package javax.microedition.media;
 
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import javax.microedition.media.protocol.DataSource;
+import javax.microedition.util.ContextHolder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
-import javax.microedition.media.protocol.DataSource;
-import javax.microedition.util.ContextHolder;
-
 public class Manager {
+	private static final String TAG = Manager.class.getName();
+
 	private static class StreamCacheCleaner implements PlayerListener {
 		public void playerUpdate(Player player, String event, Object eventData) {
 			if (PlayerListener.CLOSED.equals(event) && eventData instanceof String) {
@@ -41,7 +43,7 @@ public class Manager {
 				File file = new File(ContextHolder.getCacheDir(), event);
 
 				if (file.delete()) {
-					System.out.println("Temp file deleted: " + event);
+					Log.d(TAG, "Temp file deleted: " + event);
 				}
 			}
 		}
@@ -70,13 +72,13 @@ public class Manager {
 		final RandomAccessFile raf = new RandomAccessFile(file, "rw");
 
 		final String name = file.getName();
-		System.out.println("Starting media pipe: " + name);
+		Log.d(TAG, "Starting media pipe: " + name);
 
 		int length = stream.available();
 
 		if (length >= 0) {
 			raf.setLength(length);
-			System.out.println("Changing file size to " + length + " bytes: " + name);
+			Log.d(TAG, "Changing file size to " + length + " bytes: " + name);
 		}
 
 		final Object sync = new Object();
@@ -101,9 +103,9 @@ public class Manager {
 
 					raf.close();
 
-					System.out.println("Media pipe closed: " + name);
+					Log.d(TAG, "Media pipe closed: " + name);
 				} catch (IOException e) {
-					System.out.println("Media pipe failure: " + e.toString());
+					Log.d(TAG, "Media pipe failure: " + e.toString());
 				}
 			}
 		};
@@ -123,10 +125,11 @@ public class Manager {
 				source.close();
 
 				if (thread.isAlive()) {
-					System.out.println("Waiting for pipe to close: " + name);
+					Log.d(TAG, "Waiting for pipe to close: " + name);
 					try {
 						thread.join();
 					} catch (InterruptedException ie) {
+						ie.printStackTrace();
 					}
 
 					player.setDataSource(source);
@@ -142,7 +145,7 @@ public class Manager {
 					raf.close();
 				}
 			} catch (IOException x) {
-				System.out.println("File is not closing: " + name);
+				Log.d(TAG, "File is not closing: " + name);
 			}
 
 			cleaner.playerUpdate(null, PlayerListener.CLOSED, name);

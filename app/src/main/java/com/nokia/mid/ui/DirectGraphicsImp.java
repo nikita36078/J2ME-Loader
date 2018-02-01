@@ -28,11 +28,14 @@
 
 package com.nokia.mid.ui;
 
+import android.util.Log;
+
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.Sprite;
 
 public class DirectGraphicsImp implements DirectGraphics {
+	private static String TAG = DirectGraphicsImp.class.getName();
 	private Graphics graphics;
 	private int alphaComponent;
 
@@ -152,7 +155,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param format
 	 */
 	public void drawPixels(byte[] pix, byte[] alpha, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
-		System.out.println("public void drawPixels(byte[] pix, byte[] alpha, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format)");
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -276,7 +278,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param format
 	 */
 	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format) {
-		System.out.println("public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
+		Log.e(TAG, "public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
 	}
 
 	/**
@@ -292,7 +294,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param format
 	 */
 	public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
-		System.out.println("public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format)");
+		Log.e(TAG, "public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format)");
 	}
 
 	/**
@@ -306,7 +308,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param format
 	 */
 	public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
-		System.out.println("public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
+		Log.e(TAG, "public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
 	}
 
 	private static int doAlpha(byte[] pix, byte[] alpha, int pos, int shift) {

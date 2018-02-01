@@ -19,26 +19,18 @@ package ua.naiksoftware.util;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+import ua.naiksoftware.j2meloader.JarConverter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import ua.naiksoftware.j2meloader.JarConverter;
-
 public class FileUtils {
 
+	private static String TAG = FileUtils.class.getName();
 	private static final int BUFFER_SIZE = 1024;
 
 	public static void moveFiles(String src, String dest, FilenameFilter filter) {
@@ -108,7 +100,7 @@ public class FileUtils {
 			}
 			br.close();
 		} catch (Throwable t) {
-			System.out.println("getAppProperty() will not be available due to " + t.toString());
+			Log.e(TAG, "getAppProperty() will not be available due to " + t.toString());
 		}
 		return params;
 	}
