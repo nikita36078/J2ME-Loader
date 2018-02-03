@@ -3,26 +3,29 @@
 <resources>
   <string name="exit">Çıkış</string>
   <string name="about">Hakkında</string>
-  <string name="about_message">Bu uygulama Android\'de J2ME uygulamaları ve oyunları açmanızı sağlar. Birçok 2D oyun ve bazı sınırlamaları da 3D destekler.&lt;BR&gt;</string>
-  <string name="open_jar">Kavanozu aç</string>
-  <string name="author">Yazar: </string>
+  <string name="help">Yardım</string>
+  <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
+  <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
+  <string name="open_jar">Jar aç</string>
+  <string name="author">Geliştirici: </string>
   <string name="version">Sürüm: </string>
-  <string name="no_data_for_display">Veri bulunamadı</string>
+  <string name="no_data_for_display">Veri yok</string>
   <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
-  <string name="converting_wait">Dönüştürüyor...</string>
+  <string name="converting_wait">JAR dönüştürülüyor...</string>
   <string name="convert_complete">Tamamlandı</string>
-  <string name="converting_message">İşlem gerçekleştiriliyor...</string>
-  <string name="permission_request_failed">Bu uygulama depolama yazma iznine gerek duyar</string>
+  <string name="converting_message">İşleniyor...</string>
+  <string name="permission_request_failed">Bu uygulama için depolama izni gerekiyor</string>
+  <string name="external_storage_not_mounted">Bu uygulama için harici depolama gerekiyor</string>
   <string name="action_context_shortcut">Kısayol ekle</string>
   <string name="action_settings">Ayarlar</string>
   <string name="action_context_delete">Sil</string>
   <string name="START_CMD" formatted="false">Başlat</string>
-  <string name="CANCEL_CMD" formatted="false">Iptal</string>
+  <string name="CANCEL_CMD" formatted="false">İptal</string>
   <string name="RESET_CMD" formatted="false">Sıfırla</string>
-  <string name="RESET_LAYOUT_CMD">Anahtar yerini sıfırla</string>
+  <string name="RESET_LAYOUT_CMD">Tuş düzenini sıfırla</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Ekran seçenekleri</string>
-  <string name="PREF_SCALE_RATIO">Ölçek(%)</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">Ekrana Sığdır</string>
+  <string name="PREF_SCALE_RATIO">Ölçekleme(%)</string>
+  <string name="PREF_SCALE_TO_FIT" formatted="false">Ekrana sığdır</string>
   <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">En boy oranını koru</string>
   <string name="PREF_FILTER" formatted="false">Filtre</string>
   <string name="PREF_FONT_OPTIONS" formatted="false">Yazı tipi seçenekleri</string>
@@ -35,38 +38,45 @@
   <string name="PREF_BACKGROUND" formatted="false">Arka plan</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Sanal klavye</string>
   <string name="PREF_VK_BACK" formatted="false">Tuşlar</string>
-  <string name="PREF_VK_FORE" formatted="false">Etiketler</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">Anahat</string>
+  <string name="PREF_VK_FORE" formatted="false">Metinler</string>
+  <string name="PREF_VK_OUTLINE" formatted="false">Dış hatlar</string>
   <string name="PREF_VK_ALPHA" formatted="false">Opaklık: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Gecikme gizle: </string>
+  <string name="PREF_VK_HIDE_DELAY" formatted="false">Gizleme gecikmesi: </string>
   <string name="PREF_UNIT_MS" formatted="false">ms</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">Etiketler (P)</string>
+  <string name="PREF_VK_SEL_FORE" formatted="false">Metinler (P)</string>
   <string name="PREF_VK_SEL_BACK" formatted="false">Tuşlar (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Anahtar boyutu</string>
+  <string name="PREF_VK_KEY_SIZES" formatted="false">Tuş boyutları</string>
   <string name="PREF_VK_NAV_KEYS" formatted="false">Oyun kolu: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">Yumuşak tuşlar: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">Basamaklar: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Yangın: </string>
+  <string name="PREF_VK_SOFT_KEYS" formatted="false">Yazılım tuşları: </string>
+  <string name="PREF_VK_NUM_KEYS" formatted="false">Rakamlar: </string>
+  <string name="PREF_VK_FIRE_KEY" formatted="false">Ateş: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Boyut</string>
-  <string name="SIZE_PRESETS" formatted="false">Hazır</string>
+  <string name="SIZE_PRESETS" formatted="false">Hazır ayarlar</string>
   <string name="PREF_LANGUAGE" formatted="false">Dil: %A</string>
   <string name="PREF_MISC" formatted="false">Çeşitli seçenekler</string>
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
-  <string name="PREF_IMMEDIATE">Hızlı işleme modu</string>
-  <string name="PREF_CLEAR_BUFFER">Arabelleği temizleme çiz</string>
-  <string name="SWAP_SIZES">Takas boyutları</string>
+  <string name="PREF_IMMEDIATE">Acil işleme modu</string>
+  <string name="PREF_CLEAR_BUFFER">Çizme arabelleğini temizle</string>
+  <string name="SWAP_SIZES">Boyutları değiştir</string>
   <string name="error">Hata</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir! \n Devam edilsin mi?</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">Onay gerekiyor</string>
-  <string name="crash_dialog_message">Geliştiriciler için hata raporu göndermek istiyor musunuz?</string>
+  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
+  <string name="CONFIRMATION_REQUIRED" formatted="false">Onaylama gerekli</string>
+  <string name="select_dialog_title">MIDlet seçin</string>
+  <string name="crash_dialog_message">Geliştiriciye hata raporu göndermek istiyor musunuz?</string>
   <string name="crash_dialog_title">Hata algılandı</string>
-  <string name="report_crash">Gönderme</string>
-  <string name="layout_edit_finished">Düzenleme modu tamamlandı</string>
+  <string name="report_crash">Gönder</string>
+  <string name="layout_edit_finished">Düzenleme modu bitti</string>
   <string name="layout_edit_finish">Düzenleme modunu bitir</string>
-  <string name="layout_edit_mode">Anahtar yeri düzenleme modu</string>
-  <string name="layout_scale_mode">Anahtar yeri düzenleme modu</string>
-  <string name="layout_switch">Anahtar yerini değiştir</string>
+  <string name="layout_edit_mode">Tuş düzenini düzenleme modu</string>
+  <string name="layout_scale_mode">Tuş düzenini yeniden boyutlandırma modu</string>
+  <string name="layout_switch">Tuş düzenini değiştir</string>
+  <string name="hide_buttons">Tuşları gizle</string>
   <string name="common_settings">[GENEL AYARLAR]</string>
-  <string name="pref_enable_actionbar_title">AksiyonBarını etkinleştir</string>
-  <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarında</string>
+  <string name="pref_enable_actionbar_title">Başlık çubuğunu etkinleştir</string>
+  <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
+  <string name="pref_app_sort_title">Uygulamaları sırala</string>
+  <string-array name="pref_app_sort_entries">
+    <item>Ada göre</item>
+    <item>Tarihe göre</item>
+  </string-array>
 </resources>
