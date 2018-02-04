@@ -55,7 +55,7 @@ import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
-import ua.naiksoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.R;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener {

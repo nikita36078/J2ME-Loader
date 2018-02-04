@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
 public class FSItem implements SortItem {
 

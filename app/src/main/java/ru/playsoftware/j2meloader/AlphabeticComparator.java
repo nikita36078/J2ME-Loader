@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
-public interface SortItem {
+import java.util.Comparator;
 
-	String getSortField();
+public class AlphabeticComparator<T extends SortItem> implements Comparator<T> {
+
+	public int compare(T p1, T p2) {
+		return p1.getSortField().compareToIgnoreCase(p2.getSortField());
+	}
 }

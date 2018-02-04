@@ -21,7 +21,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.widget.Toast;
-import ua.naiksoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.R;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.util;
+package ru.playsoftware.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

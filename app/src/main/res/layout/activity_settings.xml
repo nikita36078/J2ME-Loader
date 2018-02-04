@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:name="ua.naiksoftware.j2meloader.SettingsFragment"
+        android:name="ru.playsoftware.j2meloader.SettingsFragment"
         android:tag=".SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

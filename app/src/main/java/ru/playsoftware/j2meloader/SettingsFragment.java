@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Nickolay Savchenko
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
-import java.util.Comparator;
+import android.os.Bundle;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 
-public class AlphabeticComparator<T extends SortItem> implements Comparator<T> {
-
-	public int compare(T p1, T p2) {
-		return p1.getSortField().compareToIgnoreCase(p2.getSortField());
+public class SettingsFragment extends PreferenceFragmentCompat {
+	@Override
+	public void onCreatePreferences(Bundle bundle, String s) {
+		addPreferencesFromResource(R.xml.preferences);
+		ListPreference sortPref = (ListPreference) findPreference("pref_app_sort");
+		if (sortPref.getValue() == null) {
+			sortPref.setValueIndex(0);
+		}
 	}
 }

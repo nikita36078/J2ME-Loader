@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
 import android.Manifest;
 import android.content.Intent;
@@ -48,7 +48,7 @@ import java.util.LinkedHashMap;
 
 import javax.microedition.shell.ConfigActivity;
 
-import ua.naiksoftware.util.FileUtils;
+import ru.playsoftware.util.FileUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.SelectedCallback {
 

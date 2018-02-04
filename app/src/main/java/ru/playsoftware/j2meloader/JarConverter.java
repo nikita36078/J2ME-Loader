@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,8 +35,8 @@ import java.util.zip.ZipException;
 
 import javax.microedition.shell.ConfigActivity;
 
-import ua.naiksoftware.util.FileUtils;
-import ua.naiksoftware.util.ZipUtils;
+import ru.playsoftware.util.FileUtils;
+import ru.playsoftware.util.ZipUtils;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 

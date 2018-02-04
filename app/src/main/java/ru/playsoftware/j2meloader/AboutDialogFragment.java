@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2017 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -25,17 +25,25 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
-public class HelpDialogFragment extends DialogFragment {
+public class AboutDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		StringBuilder message = new StringBuilder().append(getText(R.string.about_message))
+				.append(getText(R.string.version))
+				.append(BuildConfig.VERSION_NAME)
+				.append(getText(R.string.about_email))
+				.append(getText(R.string.about_github))
+				.append(getText(R.string.about_4pda))
+				.append(getText(R.string.about_crowdin))
+				.append(getText(R.string.about_copyright));
 		TextView tv = new TextView(getActivity());
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		tv.setText(Html.fromHtml(getString(R.string.help_message)));
+		tv.setText(Html.fromHtml(message.toString()));
 		tv.setTextSize(16);
 		tv.setPadding(10, 10, 10, 10);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.help)
+		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(tv);
 		return builder.create();

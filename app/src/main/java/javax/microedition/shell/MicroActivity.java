@@ -34,8 +34,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import ua.naiksoftware.j2meloader.R;
-import ua.naiksoftware.util.FileUtils;
+import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.util.FileUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;

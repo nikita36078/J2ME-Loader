@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

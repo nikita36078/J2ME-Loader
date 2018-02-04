@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ua.naiksoftware.j2meloader;
+package ru.playsoftware.j2meloader;
 
 import android.content.Context;
 import org.acra.ReportField;
@@ -33,7 +33,7 @@ import java.util.List;
 
 public class HockeySender implements ReportSender {
 	private static String BASE_URL = "https://rink.hockeyapp.net/api/2/apps/";
-	private static String FORM_KEY = "27884e4164834206ae60c8cf4c367720";
+	private static String FORM_KEY = "89da3b5b92414df1833110eba7d26332";
 	private static String CRASHES_PATH = "/crashes";
 
 	@Override
