@@ -136,12 +136,8 @@ public class Graphics {
 	}
 
 	public void setColor(int r, int g, int b) {
-		setColor(255, r, g, b);
-	}
-
-	public void setColor(int a, int r, int g, int b) {
-		drawPaint.setARGB(a, r, g, b);
-		fillPaint.setARGB(a, r, g, b);
+		drawPaint.setARGB(255, r, g, b);
+		fillPaint.setARGB(255, r, g, b);
 	}
 
 	public void setGrayScale(int value) {
