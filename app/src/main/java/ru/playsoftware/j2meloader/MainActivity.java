@@ -222,17 +222,23 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		if (appFolders != null) {
 			for (String appFolder : appFolders) {
 				File temp = new File(ConfigActivity.APP_DIR, appFolder);
-				if (temp.isDirectory() && temp.list().length > 0) {
-					LinkedHashMap<String, String> params = FileUtils
-							.loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
-					item = new AppItem(getIcon(params.get("MIDlet-1")),
-							params.get("MIDlet-Name"),
-							author + params.get("MIDlet-Vendor"),
-							version + params.get("MIDlet-Version"));
-					item.setPath(ConfigActivity.APP_DIR + appFolder);
-					apps.add(item);
-				} else {
-					temp.delete();
+				try {
+					if (temp.isDirectory() && temp.list().length > 0) {
+						LinkedHashMap<String, String> params = FileUtils
+								.loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
+						item = new AppItem(getIcon(params.get("MIDlet-1")),
+								params.get("MIDlet-Name"),
+								author + params.get("MIDlet-Vendor"),
+								version + params.get("MIDlet-Version"));
+						item.setPath(ConfigActivity.APP_DIR + appFolder);
+						apps.add(item);
+					} else {
+						temp.delete();
+					}
+				} catch (RuntimeException re) {
+					re.printStackTrace();
+					FileUtils.deleteDirectory(temp);
+					Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
@@ -246,11 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
 	private String getIcon(String input) {
 		String[] params = input.split(",");
-		if (params.length == 3) {
-			return params[1];
-		} else {
-			return "";
-		}
+		return params[1];
 	}
 
 }

@@ -257,7 +257,7 @@ public class NavigationDrawerFragment extends Fragment {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Forward the new configuration the drawer toggle component.
-		if (mDrawerLayout != null) {
+		if (mDrawerToggle != null) {
 			mDrawerToggle.onConfigurationChanged(newConfig);
 		}
 	}
