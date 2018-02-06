@@ -918,18 +918,18 @@ public class Sprite extends Layer {
 				break;
 
 			case Sprite.TRANS_MIRROR_ROT90:
-				matrix.preScale(-1, 1, px, py);
 				matrix.preRotate(90, px, py);
+				matrix.preScale(-1, 1, px, py);
 				break;
 
 			case Sprite.TRANS_MIRROR_ROT180:
-				matrix.preScale(-1, 1, px, py);
 				matrix.preRotate(180, px, py);
+				matrix.preScale(-1, 1, px, py);
 				break;
 
 			case Sprite.TRANS_MIRROR_ROT270:
-				matrix.preScale(-1, 1, px, py);
 				matrix.preRotate(270, px, py);
+				matrix.preScale(-1, 1, px, py);
 				break;
 		}
 
