@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Opciones Misc</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_IMMEDIATE">Modo de procesamiento inmediato</string>
-  <string name="PREF_CLEAR_BUFFER">Limpieza de caché</string>
   <string name="SWAP_SIZES">Intercambiar tamaños</string>
   <string name="error">Error</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla por completo.\nProceder?</string>

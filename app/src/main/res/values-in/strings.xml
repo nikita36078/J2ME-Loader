@@ -56,7 +56,6 @@
   <string name="PREF_MISC" formatted="false">Pilihan lainnya</string>
   <string name="PREF_VK_SHOW">Tampilkan keypad</string>
   <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
-  <string name="PREF_CLEAR_BUFFER">Menggambar pembersihan buffer</string>
   <string name="SWAP_SIZES">Tukar ukuran</string>
   <string name="error">Kesalahan</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>

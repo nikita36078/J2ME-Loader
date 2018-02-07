@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Options diverses</string>
   <string name="PREF_VK_SHOW">Afficher le clavier</string>
   <string name="PREF_IMMEDIATE">Mode de traitement immédiat</string>
-  <string name="PREF_CLEAR_BUFFER">Dessiner la mémoire tampon</string>
   <string name="SWAP_SIZES">Echanger tailles</string>
   <string name="error">Erreur</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">La fermeture forcée de l\'application peut entraîner une perte de données ou même la casser complètement!\nDévelopper?</string>

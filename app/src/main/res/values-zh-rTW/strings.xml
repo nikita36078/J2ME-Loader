@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">雜項選項</string>
   <string name="PREF_VK_SHOW">顯示鍵盤</string>
   <string name="PREF_IMMEDIATE">即時處理模式</string>
-  <string name="PREF_CLEAR_BUFFER">繪製緩衝區清除</string>
   <string name="SWAP_SIZES">交換大小 ︰</string>
   <string name="error">錯誤</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\ nProceed？</string>

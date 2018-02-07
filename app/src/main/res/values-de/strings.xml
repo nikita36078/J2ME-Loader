@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Sonstige Optionen</string>
   <string name="PREF_VK_SHOW">Tastatur anzeigen</string>
   <string name="PREF_IMMEDIATE">Sofortiger Verarbeitungsmodus</string>
-  <string name="PREF_CLEAR_BUFFER">Zeichnungsbuffer leeren</string>
   <string name="SWAP_SIZES">Grössen tauschen</string>
   <string name="error">Fehler</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>

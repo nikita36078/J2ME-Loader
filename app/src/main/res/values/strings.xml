@@ -67,8 +67,7 @@
     <string name="PREF_MISC" formatted="false">Misc options</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
-    <string name="PREF_CLEAR_BUFFER">Draw buffer clearing</string>
-    <string name="SWAP_SIZES">Swap sizes</string>
+  <string name="SWAP_SIZES">Swap sizes</string>
     <string name="error">Error</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>

@@ -69,7 +69,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected CheckBox cxKeepAspectRatio;
 	protected CheckBox cxFilter;
 	protected CheckBox cxImmediate;
-	protected CheckBox cxClearBuffer;
 
 	protected EditText tfFontSizeSmall;
 	protected EditText tfFontSizeMedium;
@@ -171,7 +170,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
-		cxClearBuffer = findViewById(R.id.cxClearBuffer);
 
 		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
@@ -342,7 +340,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				true));
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", true));
 		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
-		cxClearBuffer.setChecked(params.getBoolean("ClearBuffer", false));
 
 		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall",
 				18)));
@@ -391,7 +388,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					cxKeepAspectRatio.isChecked());
 			params.putBoolean("ScreenFilter", cxFilter.isChecked());
 			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
-			params.putBoolean("ClearBuffer", cxClearBuffer.isChecked());
 
 			params.putInt("FontSizeSmall",
 					Integer.parseInt(tfFontSizeSmall.getText().toString()));
@@ -444,7 +440,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			boolean screenFilter = cxFilter.isChecked();
 			boolean immediateMode = cxImmediate.isChecked();
-			boolean clearBuffer = cxClearBuffer.isChecked();
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
 			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
@@ -456,7 +451,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);
-			Canvas.setClearBuffer(clearBuffer);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}

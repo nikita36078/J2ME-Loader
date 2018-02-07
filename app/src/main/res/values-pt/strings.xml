@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Opções diversas</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>
-  <string name="PREF_CLEAR_BUFFER">Buffer de compensação</string>
   <string name="SWAP_SIZES">Tamanhos de swap</string>
   <string name="error">Erro</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Força-fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>

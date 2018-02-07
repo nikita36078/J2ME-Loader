@@ -56,7 +56,6 @@
   <string name="PREF_MISC" formatted="false">其他选项</string>
   <string name="PREF_VK_SHOW">显示键盘</string>
   <string name="PREF_IMMEDIATE">即时处理模式</string>
-  <string name="PREF_CLEAR_BUFFER">绘制缓冲区清除</string>
   <string name="SWAP_SIZES">交换尺寸</string>
   <string name="error">错误</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">强制关闭应用可能导致数据丢失或损坏!\n是否继续?</string>

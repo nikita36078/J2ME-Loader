@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Muut vaihtoehdot</string>
   <string name="PREF_VK_SHOW">Näytä näppäimistö</string>
   <string name="PREF_IMMEDIATE">Välitön käsittelytapa</string>
-  <string name="PREF_CLEAR_BUFFER">Piirrä puskurin puhdistus</string>
   <string name="SWAP_SIZES">Vaihda kokoja</string>
   <string name="error">Virhe</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Sovelluksen sulkeutuminen voi johtaa tietojen menetykseen tai jopa rikkoa sen kokonaan!\nEdetä?</string>

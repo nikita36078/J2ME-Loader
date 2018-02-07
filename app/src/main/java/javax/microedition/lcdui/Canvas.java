@@ -264,11 +264,7 @@ public abstract class Canvas extends Displayable {
 					return;
 				}
 				graphics.setCanvas(offscreen.getCanvas());
-				if (clearBuffer) {
-					graphics.setColor(0);
-					graphics.setClip(0, 0, width, height);
-					graphics.fillRect(0, 0, width, height);
-				}
+				graphics.setClip(0, 0, width, height);
 				try {
 					paint(graphics);
 				} catch (Throwable t) {
@@ -336,7 +332,6 @@ public abstract class Canvas extends Displayable {
 	private static boolean scaleToFit;
 	private static boolean keepAspectRatio;
 	private static boolean filter;
-	protected static boolean clearBuffer;
 	private static int backgroundColor;
 	private static int scaleRatio;
 
@@ -368,10 +363,6 @@ public abstract class Canvas extends Displayable {
 
 	public static void setFilterBitmap(boolean filter) {
 		Canvas.filter = filter;
-	}
-
-	public static void setClearBuffer(boolean clearBuffer) {
-		Canvas.clearBuffer = clearBuffer;
 	}
 
 	public void setOverlay(Overlay ov) {
@@ -608,6 +599,7 @@ public abstract class Canvas extends Displayable {
 				try {
 					queue.wait();
 				} catch (InterruptedException ie) {
+					ie.printStackTrace();
 				}
 			} else if (queue.removeEvents(paintEvent)) {
 				/*

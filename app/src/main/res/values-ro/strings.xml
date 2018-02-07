@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Opțiuni diverse</string>
   <string name="PREF_VK_SHOW">Arată tastatura</string>
   <string name="PREF_IMMEDIATE">Modul de prelucrare imediată</string>
-  <string name="PREF_CLEAR_BUFFER">Se eliberează amortizorul de desenat</string>
   <string name="SWAP_SIZES">Schimbă dimensiunea</string>
   <string name="error">Eroare</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Închiderea forțată a aplicației ar putea duce la pierderea datelor!\nVrei să continui?</string>

@@ -53,7 +53,6 @@
   <string name="PREF_MISC" formatted="false">Różne opcje</string>
   <string name="PREF_VK_SHOW">Pokaż klawiaturę</string>
   <string name="PREF_IMMEDIATE">Tryb natychmiastowego przetwarzania</string>
-  <string name="PREF_CLEAR_BUFFER">Narysuj buforowanie</string>
   <string name="SWAP_SIZES">Zamień rozmiary</string>
   <string name="error">Błąd</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Wymuszenie zamknięcia aplikacji może spowodować utratę danych lub nawet całkowicie ją zepsuć! \nKontynuować?</string>

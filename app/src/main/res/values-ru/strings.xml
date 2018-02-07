@@ -56,7 +56,6 @@
   <string name="PREF_MISC" formatted="false">Прочие параметры</string>
   <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
   <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
-  <string name="PREF_CLEAR_BUFFER">Очистка буфера отрисовки</string>
   <string name="SWAP_SIZES">Поменять местами</string>
   <string name="error">Ошибка</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
