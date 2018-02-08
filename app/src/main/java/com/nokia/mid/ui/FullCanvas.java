@@ -70,14 +70,6 @@ public abstract class FullCanvas extends Canvas {
 		throw new IllegalStateException();
 	}
 
-	public int getWidth() {
-		return super.getWidth();
-	}
-
-	public int getHeight() {
-		return super.getHeight();
-	}
-
 	/**
 	 * Commands are not supported by FullCanvas
 	 *
