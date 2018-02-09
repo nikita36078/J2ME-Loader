@@ -26,13 +26,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import java.util.HashMap;
-
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.util.ContextHolder;
+import java.util.HashMap;
 
 public abstract class Canvas extends Displayable {
 	public static final int KEY_POUND = 35;
@@ -264,7 +263,7 @@ public abstract class Canvas extends Displayable {
 					return;
 				}
 				graphics.setCanvas(offscreen.getCanvas());
-				graphics.setClip(0, 0, width, height);
+				graphics.resetClip();
 				try {
 					paint(graphics);
 				} catch (Throwable t) {
@@ -558,11 +557,11 @@ public abstract class Canvas extends Displayable {
 	public abstract void paint(Graphics g);
 
 	public void repaint() {
-		getEventQueue().postEvent(paintEvent);
+		repaint(0, 0, width, height);
 	}
 
 	public void repaint(int x, int y, int width, int height) {
-		getEventQueue().postEvent(paintEvent);
+		postEvent(paintEvent);
 	}
 
 	/**

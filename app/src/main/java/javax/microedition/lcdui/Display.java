@@ -142,7 +142,7 @@ public class Display {
 
 	public void callSerially(Runnable r) {
 		if (current != null) {
-			current.getEventQueue().postEvent(RunnableEvent.getInstance(r));
+			current.postEvent(RunnableEvent.getInstance(r));
 		} else {
 			r.run();
 		}

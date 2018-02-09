@@ -337,7 +337,7 @@ public class MicroActivity extends AppCompatActivity {
 
 			for (Command cmd : current.getCommands()) {
 				if (cmd.hashCode() == id) {
-					current.getEventQueue().postEvent(CommandActionEvent.getInstance(listener, cmd, current));
+					current.postEvent(CommandActionEvent.getInstance(listener, cmd, current));
 					return true;
 				}
 			}

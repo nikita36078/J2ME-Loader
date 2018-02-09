@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ public class GameCanvas extends Canvas {
 
 	public void flushGraphics() {
 		repaint();
-		graphics.setClip(0, 0, width, height);
+		graphics.resetClip();
 	}
 
 	public void flushGraphics(int x, int y, int width, int height) {
