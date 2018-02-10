@@ -226,7 +226,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 					if (temp.isDirectory() && temp.list().length > 0) {
 						LinkedHashMap<String, String> params = FileUtils
 								.loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
-						item = new AppItem(getIcon(params.get("MIDlet-1")),
+						String imagePath = params.get("MIDlet-Icon");
+						if (imagePath == null) {
+							imagePath = params.get("MIDlet-1").split(",")[1];
+						}
+						item = new AppItem(imagePath,
 								params.get("MIDlet-Name"),
 								author + params.get("MIDlet-Vendor"),
 								version + params.get("MIDlet-Version"));
@@ -248,11 +252,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		}
 		AppsListAdapter adapter = new AppsListAdapter(this, apps);
 		appsListFragment.setListAdapter(adapter);
-	}
-
-	private String getIcon(String input) {
-		String[] params = input.split(",");
-		return params[1];
 	}
 
 }
