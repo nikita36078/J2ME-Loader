@@ -85,7 +85,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @return
 	 */
 	public int getNativePixelFormat() {
-		return TYPE_BYTE_1_GRAY;
+		return TYPE_INT_8888_ARGB;
 	}
 
 	/**
@@ -140,8 +140,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 		fillPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
 
-	//manipulations are not supported!
-
 	/**
 	 * @param pix
 	 * @param alpha
@@ -162,20 +160,16 @@ public class DirectGraphicsImp implements DirectGraphics {
 			throw new IllegalArgumentException();
 		}
 
-		Graphics g = graphics;
-		int c;
-
 		if (format == TYPE_BYTE_1_GRAY) {
-
 			int b = 7;
 			for (int yj = 0; yj < height; yj++) {
 				int line = off + yj * scanlen;
 				int ypos = yj * width;
 				for (int xj = 0; xj < width; xj++) {
-					c = doAlpha(pix, alpha, (line + xj) / 8, b);
+					int c = doAlpha(pix, alpha, (line + xj) / 8, b);
 					if (!isTransparent(c)) { //alpha
-						g.setColorAlpha(c);
-						g.drawLine(xj + x, yj + y, xj + x, yj + y);
+						graphics.setColorAlpha(c);
+						graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
 					}
 					b--;
 					if (b < 0) b = 7;
@@ -189,10 +183,10 @@ public class DirectGraphicsImp implements DirectGraphics {
 				int ypos = yj * width;
 				int tmp = (ods + yj) / 8 * scanlen + oms;
 				for (int xj = 0; xj < width; xj++) {
-					c = doAlpha(pix, alpha, tmp + xj, b);
+					int c = doAlpha(pix, alpha, tmp + xj, b);
 					if (!isTransparent(c)) { //alpha
-						g.setColorAlpha(c);
-						g.drawLine(xj + x, yj + y, xj + x, yj + y);
+						graphics.setColorAlpha(c);
+						graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
 					}
 				}
 				b++;
@@ -203,8 +197,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	/**
-	 * Only TYPE_USHORT_4444_ARGB format supported
-	 *
 	 * @param pix
 	 * @param trans
 	 * @param off
@@ -221,22 +213,23 @@ public class DirectGraphicsImp implements DirectGraphics {
 			throw new IllegalArgumentException("Illegal format: " + format);
 		}
 
-		Graphics g = graphics;
+		int transform = getTransformation(manipulation);
+		int[] pixres = new int[height * width];
 
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = toARGB(pix[off + ix + iy * scanlen], format);
-				if (!isTransparent(c)) {
-					g.setColorAlpha(c);
-					g.drawLine(x + ix, y + iy, x + ix, y + iy);
+				if (format == TYPE_USHORT_444_RGB) {
+					c |= (0xFF << 24);
 				}
+				pixres[iy * width + ix] = c;
 			}
 		}
+		Image image = Image.createRGBImage(pixres, width, height, false);
+		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
 	/**
-	 * Not supported
-	 *
 	 * @param pix
 	 * @param trans
 	 * @param off
@@ -253,17 +246,20 @@ public class DirectGraphicsImp implements DirectGraphics {
 			throw new IllegalArgumentException("Illegal format: " + format);
 		}
 
-		Graphics g = graphics;
+		int transform = getTransformation(manipulation);
+		int[] pixres = new int[height * width];
 
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = pix[off + ix + iy * scanlen];
-				if (!isTransparent(c)) {
-					g.setColorAlpha(c);
-					g.drawLine(x + ix, y + iy, x + ix, y + iy);
+				if (format == TYPE_INT_888_RGB) {
+					c |= (0xFF << 24);
 				}
+				pixres[iy * width + ix] = c;
 			}
 		}
+		Image image = Image.createRGBImage(pixres, width, height, false);
+		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
 	/**
@@ -277,13 +273,12 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param height
 	 * @param format
 	 */
-	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height,
+						  int format) {
 		Log.e(TAG, "public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
 	}
 
 	/**
-	 * Only TYPE_USHORT_4444_ARGB format supported
-	 *
 	 * @param pix
 	 * @param offset
 	 * @param scanlen
@@ -357,83 +352,25 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	private static int getTransformation(int manipulation) {
-		// manipulations are C-CW and sprite rotations are CW
-		int ret = -1;
-		int rotation = manipulation & 0x0FFF;
-		if ((manipulation & FLIP_HORIZONTAL) != 0) {
-			if ((manipulation & FLIP_VERTICAL) != 0) {
-				// horiz and vertical flipping
-				switch (rotation) {
-					case 0:
-						ret = Sprite.TRANS_ROT180;
-						break;
-					case ROTATE_90:
-						ret = Sprite.TRANS_ROT90;
-						break;
-					case ROTATE_180:
-						ret = Sprite.TRANS_NONE;
-						break;
-					case ROTATE_270:
-						ret = Sprite.TRANS_ROT270;
-						break;
-					default:
-				}
-			} else {
-				// horizontal flipping
-				switch (rotation) {
-					case 0:
-						ret = Sprite.TRANS_MIRROR_ROT180;
-						break;
-					case ROTATE_90:
-						ret = Sprite.TRANS_MIRROR_ROT90;
-						break;
-					case ROTATE_180:
-						ret = Sprite.TRANS_MIRROR;
-						break;
-					case ROTATE_270:
-						ret = Sprite.TRANS_MIRROR_ROT270;
-						break;
-					default:
-				}
-			}
-		} else {
-			if ((manipulation & FLIP_VERTICAL) != 0) {
-				// vertical flipping
-				switch (rotation) {
-					case 0:
-						ret = Sprite.TRANS_MIRROR;
-						break;
-					case ROTATE_90:
-						ret = Sprite.TRANS_MIRROR_ROT270;
-						break;
-					case ROTATE_180:
-						ret = Sprite.TRANS_MIRROR_ROT180;
-						break;
-					case ROTATE_270:
-						ret = Sprite.TRANS_MIRROR_ROT90;
-						break;
-					default:
-				}
-			} else {
-				// no flipping
-				switch (rotation) {
-					case 0:
-						ret = Sprite.TRANS_NONE;
-						break;
-					case ROTATE_90:
-						ret = Sprite.TRANS_ROT270;
-						break;
-					case ROTATE_180:
-						ret = Sprite.TRANS_ROT180;
-						break;
-					case ROTATE_270:
-						ret = Sprite.TRANS_ROT90;
-						break;
-					default:
-				}
-			}
+		int transform = 0;
+		switch (manipulation) {
+			case FLIP_HORIZONTAL:
+				transform = Sprite.TRANS_MIRROR;
+				break;
+			case FLIP_VERTICAL:
+				transform = Sprite.TRANS_MIRROR_ROT180;
+				break;
+			case ROTATE_90:
+				transform = Sprite.TRANS_ROT90;
+				break;
+			case ROTATE_180:
+				transform = Sprite.TRANS_ROT180;
+				break;
+			case ROTATE_270:
+				transform = Sprite.TRANS_ROT270;
+				break;
 		}
-		return ret;
+		return transform;
 	}
 
 }
