@@ -76,6 +76,7 @@ public class MicroActivity extends AppCompatActivity {
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
+			e.printStackTrace();
 			showErrorDialog(e.getMessage());
 		}
 	}
@@ -173,6 +174,7 @@ public class MicroActivity extends AppCompatActivity {
 			midlet.startApp();
 			loaded = true;
 		} catch (Throwable t) {
+			t.printStackTrace();
 			showErrorDialog(t.getMessage());
 		}
 	}
@@ -189,7 +191,9 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void showErrorDialog(String message) {
-		Log.e(TAG, message);
+		if (message != null) {
+			Log.e(TAG, message);
+		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
