@@ -193,12 +193,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 				aboutDialogFragment.show(getSupportFragmentManager(), "about");
 				break;
 			case R.id.action_settings:
-				Intent intent = new Intent(this, SettingsActivity.class);
-				startActivity(intent);
+				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+				startActivity(settingsIntent);
 				break;
 			case R.id.action_help:
 				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
 				helpDialogFragment.show(getSupportFragmentManager(), "help");
+				break;
+			case R.id.action_donate:
+				Intent donationsIntent = new Intent(this, DonationsActivity.class);
+				startActivity(donationsIntent);
 				break;
 			case R.id.action_exit_app:
 				finish();

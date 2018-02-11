@@ -19,6 +19,7 @@
   <string name="action_context_shortcut">Добавить ярлык</string>
   <string name="action_settings">Настройки</string>
   <string name="action_context_delete">Удалить</string>
+  <string name="donate">Поддержать</string>
   <string name="START_CMD" formatted="false">Пуск</string>
   <string name="CANCEL_CMD" formatted="false">Отмена</string>
   <string name="RESET_CMD" formatted="false">Сброс</string>

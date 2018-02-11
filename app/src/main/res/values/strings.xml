@@ -29,6 +29,15 @@
     <string name="action_settings">Settings</string>
     <string name="action_context_delete">Delete</string>
 
+    <string name="donate">Donate</string>
+    <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
+    <string-array name="donation_google_catalog_values" translatable="false">
+        <item>1 USD</item>
+        <item>2 USD</item>
+        <item>5 USD</item>
+        <item>10 USD</item>
+    </string-array>
+
     <string name="START_CMD" formatted="false">Start</string>
     <string name="CANCEL_CMD" formatted="false">Cancel</string>
     <string name="RESET_CMD" formatted="false">Reset</string>
@@ -67,7 +76,7 @@
     <string name="PREF_MISC" formatted="false">Misc options</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
-  <string name="SWAP_SIZES">Swap sizes</string>
+    <string name="SWAP_SIZES">Swap sizes</string>
     <string name="error">Error</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>

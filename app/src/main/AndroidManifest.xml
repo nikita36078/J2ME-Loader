@@ -60,6 +60,9 @@
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".DonationsActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
