@@ -352,25 +352,83 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	private static int getTransformation(int manipulation) {
-		int transform = 0;
-		switch (manipulation) {
-			case FLIP_HORIZONTAL:
-				transform = Sprite.TRANS_MIRROR;
-				break;
-			case FLIP_VERTICAL:
-				transform = Sprite.TRANS_MIRROR_ROT180;
-				break;
-			case ROTATE_90:
-				transform = Sprite.TRANS_ROT90;
-				break;
-			case ROTATE_180:
-				transform = Sprite.TRANS_ROT180;
-				break;
-			case ROTATE_270:
-				transform = Sprite.TRANS_ROT270;
-				break;
+		// manipulations are C-CW and sprite rotations are CW
+		int ret = -1;
+		int rotation = manipulation & 0x0FFF;
+		if ((manipulation & FLIP_HORIZONTAL) != 0) {
+			if ((manipulation & FLIP_VERTICAL) != 0) {
+				// horiz and vertical flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_ROT180;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_ROT90;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_NONE;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_ROT270;
+						break;
+					default:
+				}
+			} else {
+				// horizontal flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_MIRROR;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_MIRROR_ROT90;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_MIRROR_ROT180;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_MIRROR_ROT270;
+						break;
+					default:
+				}
+			}
+		} else {
+			if ((manipulation & FLIP_VERTICAL) != 0) {
+				// vertical flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_MIRROR;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_MIRROR_ROT270;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_MIRROR_ROT180;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_MIRROR_ROT90;
+						break;
+					default:
+				}
+			} else {
+				// no flipping
+				switch (rotation) {
+					case 0:
+						ret = Sprite.TRANS_NONE;
+						break;
+					case ROTATE_90:
+						ret = Sprite.TRANS_ROT270;
+						break;
+					case ROTATE_180:
+						ret = Sprite.TRANS_ROT180;
+						break;
+					case ROTATE_270:
+						ret = Sprite.TRANS_ROT90;
+						break;
+					default:
+				}
+			}
 		}
-		return transform;
+		return ret;
 	}
 
 }
