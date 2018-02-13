@@ -93,11 +93,9 @@ public class GameCanvas extends Canvas {
 
 	public void flushGraphics() {
 		repaint();
-		graphics.resetClip();
 	}
 
 	public void flushGraphics(int x, int y, int width, int height) {
 		repaint(x, y, width, height);
-		graphics.setClip(0, 0, width, height);
 	}
 }
