@@ -55,7 +55,7 @@
   <string name="PREF_IMMEDIATE">即時處理模式</string>
   <string name="SWAP_SIZES">交換大小 ︰</string>
   <string name="error">錯誤</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\ nProceed？</string>
+  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
   <string name="CONFIRMATION_REQUIRED" formatted="false">需要确认</string>
   <string name="crash_dialog_message">你想发送错误报告给开发者吗？</string>
   <string name="crash_dialog_title">检测到错误</string>
