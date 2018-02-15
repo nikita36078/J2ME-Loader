@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+import ru.playsoftware.j2meloader.R;
 
 public class HelpDialogFragment extends DialogFragment {
 	@NonNull

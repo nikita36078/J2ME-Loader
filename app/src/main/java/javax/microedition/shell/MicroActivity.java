@@ -35,7 +35,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.util.FileUtils;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;

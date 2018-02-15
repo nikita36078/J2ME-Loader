@@ -48,7 +48,18 @@ import java.util.LinkedHashMap;
 
 import javax.microedition.shell.ConfigActivity;
 
-import ru.playsoftware.util.FileUtils;
+import ru.playsoftware.j2meloader.applist.AppItem;
+import ru.playsoftware.j2meloader.applist.AppsListAdapter;
+import ru.playsoftware.j2meloader.applist.AppsListFragment;
+import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
+import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
+import ru.playsoftware.j2meloader.donations.DonationsActivity;
+import ru.playsoftware.j2meloader.filelist.NavigationDrawerFragment;
+import ru.playsoftware.j2meloader.filelist.AlphabeticComparator;
+import ru.playsoftware.j2meloader.filelist.SortItem;
+import ru.playsoftware.j2meloader.settings.SettingsActivity;
+import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.SelectedCallback {
 

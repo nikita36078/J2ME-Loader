@@ -21,6 +21,7 @@ import android.content.Context;
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
 import org.acra.annotation.AcraDialog;
+import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
 
 @AcraCore(reportSenderFactoryClasses = {HockeySenderFactory.class})
 @AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,

@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.util;
+package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-import ru.playsoftware.j2meloader.JarConverter;
 
 import java.io.*;
 import java.nio.channels.FileChannel;

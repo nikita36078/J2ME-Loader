@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.applist;
+
+import ru.playsoftware.j2meloader.filelist.SortItem;
 
 import java.io.Serializable;
 

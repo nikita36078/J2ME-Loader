@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.util;
+package ru.playsoftware.j2meloader.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

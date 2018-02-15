@@ -1,6 +1,5 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +14,29 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.filelist;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import ru.playsoftware.j2meloader.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class AppsListAdapter extends BaseAdapter {
+public class FileListAdapter extends BaseAdapter {
 
-	private List<AppItem> list;
-	private final LayoutInflater layoutInflater;
-	private Context context;
+	private ArrayList<FSItem> list = new ArrayList<FSItem>();
+	private final LayoutInflater li;
 
-	public AppsListAdapter(Context context, List<AppItem> list) {
-		if (list != null) {
-			this.list = list;
+	public FileListAdapter(Context context, ArrayList<FSItem> arr) {
+		if (arr != null) {
+			list = arr;
 		}
-		this.layoutInflater = LayoutInflater.from(context);
-		this.context = context;
+		li = LayoutInflater.from(context);
 	}
 
 	public int getCount() {
@@ -57,30 +54,28 @@ public class AppsListAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_jar, null);
+			view = li.inflate(R.layout.list_row, null);
 			holder = new ViewHolder();
 			holder.icon = view.findViewById(R.id.list_image);
-			holder.name = view.findViewById(R.id.list_title);
-			holder.author = view.findViewById(R.id.list_author);
-			holder.version = view.findViewById(R.id.list_version);
+			holder.label = view.findViewById(R.id.list_header);
+			holder.sublabel = view.findViewById(R.id.list_subheader);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		AppItem item = list.get(position);
 
-		holder.icon.setImageDrawable(new BitmapDrawable(context.getResources(), item.getImagePath()));
-		holder.name.setText(item.getTitle());
-		holder.author.setText(item.getAuthor());
-		holder.version.setText(item.getVersion());
+		FSItem item = list.get(position);
+
+		holder.icon.setImageResource(item.getImageId());
+		holder.label.setText(item.getName());
+		holder.sublabel.setText(item.getDescription());
 
 		return view;
 	}
 
 	private static class ViewHolder {
 		ImageView icon;
-		TextView name;
-		TextView author;
-		TextView version;
+		TextView label;
+		TextView sublabel;
 	}
 }

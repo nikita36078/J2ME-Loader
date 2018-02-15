@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.donations;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +25,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import org.sufficientlysecure.donations.DonationsFragment;
+import ru.playsoftware.j2meloader.BuildConfig;
+import ru.playsoftware.j2meloader.R;
 
 public class DonationsActivity extends AppCompatActivity {
 

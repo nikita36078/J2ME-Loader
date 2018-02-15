@@ -58,10 +58,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".DonationsActivity"
+            android:name=".donations.DonationsActivity"
             android:theme="@style/AppTheme" />
     </application>
 

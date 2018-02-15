@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2015-2016 Nickolay Savchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.filelist;
 
-import android.os.Bundle;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.PreferenceFragmentCompat;
+public interface SortItem {
 
-public class SettingsFragment extends PreferenceFragmentCompat {
-	@Override
-	public void onCreatePreferences(Bundle bundle, String s) {
-		addPreferencesFromResource(R.xml.preferences);
-		ListPreference sortPref = (ListPreference) findPreference("pref_app_sort");
-		if (sortPref.getValue() == null) {
-			sortPref.setValueIndex(0);
-		}
-	}
+	String getSortField();
 }

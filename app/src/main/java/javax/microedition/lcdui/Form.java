@@ -28,8 +28,6 @@ import android.widget.ScrollView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.microedition.shell.MicroActivity;
-
 public class Form extends Screen {
 	private ScrollView scrollview;
 	private LinearLayout layout;

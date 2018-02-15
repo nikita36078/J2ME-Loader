@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.filelist;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import ru.playsoftware.j2meloader.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

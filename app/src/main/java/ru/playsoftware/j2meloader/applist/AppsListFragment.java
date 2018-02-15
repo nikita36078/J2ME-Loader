@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader;
+package ru.playsoftware.j2meloader.applist;
 
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
@@ -40,7 +40,9 @@ import java.util.ArrayList;
 
 import javax.microedition.shell.ConfigActivity;
 
-import ru.playsoftware.util.FileUtils;
+import ru.playsoftware.j2meloader.MainActivity;
+import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class AppsListFragment extends ListFragment {
 
