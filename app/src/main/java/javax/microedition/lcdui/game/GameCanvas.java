@@ -38,7 +38,7 @@ public class GameCanvas extends Canvas {
 
 	public GameCanvas(boolean suppressCommands) {
 		super();
-		image = Image.createImage(super.getWidth(), super.getHeight());
+		image = Image.createImage(width, height);
 		graphics = image.getGraphics();
 	}
 
@@ -92,10 +92,10 @@ public class GameCanvas extends Canvas {
 	}
 
 	public void flushGraphics() {
-		repaint();
+		flushGraphics(0, 0, width, height);
 	}
 
 	public void flushGraphics(int x, int y, int width, int height) {
-		repaint(x, y, width, height);
+		flushBuffer(image);
 	}
 }

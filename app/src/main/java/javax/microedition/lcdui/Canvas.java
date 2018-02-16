@@ -564,6 +564,24 @@ public abstract class Canvas extends Displayable {
 		postEvent(paintEvent);
 	}
 
+	// GameCanvas
+	protected void flushBuffer(Image image) {
+		synchronized (paintsync) {
+			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
+				return;
+			}
+			graphics.setCanvas(holder.lockCanvas());
+			if (graphics.hasCanvas()) {
+				graphics.clear(backgroundColor);
+				graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
+				if (overlay != null) {
+					overlay.paint(graphics);
+				}
+				holder.unlockCanvasAndPost(graphics.getCanvas());
+			}
+		}
+	}
+
 	/**
 	 * После вызова этого метода гарантированно произойдет немедленная перерисовка,
 	 * причем вызывающий поток блокируется до ее завершения.
