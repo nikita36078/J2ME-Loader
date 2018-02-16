@@ -12,7 +12,7 @@ System requirements: Android 4.0+
 [4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201).
 
 <a href="https://play.google.com/store/apps/details?id=ru.playsoftware.j2meloader">
-<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
 
 ## Tips
  - Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.
