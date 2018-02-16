@@ -35,11 +35,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
 	private void setupActivity() {
 		initFolders();
+		checkActionBar();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 		appsListFragment = new AppsListFragment();
@@ -152,26 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	}
 
 	private void initFolders() {
-		boolean dataMoved = sp.getBoolean("pref_data_moved", false);
-		if (!dataMoved) {
-			File oldConvertedDir = new File(getApplicationInfo().dataDir, ConfigActivity.MIDLET_DIR);
-			File oldDataDir = getFilesDir();
-			if (oldConvertedDir.exists() && oldConvertedDir.listFiles().length > 0) {
-				FileUtils.moveFiles(oldConvertedDir.getPath(), ConfigActivity.APP_DIR, null);
-				FileUtils.deleteDirectory(oldConvertedDir);
-
-				if (oldDataDir.exists() && oldDataDir.listFiles().length > 0) {
-					FileUtils.moveFiles(oldDataDir.getPath(), ConfigActivity.DATA_DIR, new FilenameFilter() {
-						@Override
-						public boolean accept(File file, String s) {
-							return !s.endsWith(".stacktrace");
-						}
-					});
-					FileUtils.deleteDirectory(oldDataDir);
-				}
-			}
-			sp.edit().putBoolean("pref_data_moved", true).apply();
-		}
 		File nomedia = new File(ConfigActivity.EMULATOR_DIR, ".nomedia");
 		if (!nomedia.exists()) {
 			try {
@@ -180,6 +161,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void checkActionBar() {
+		boolean firstStart = sp.getBoolean("pref_first_start", true);
+		if (firstStart) {
+			if (!ViewConfiguration.get(this).hasPermanentMenuKey()) {
+				sp.edit().putBoolean("pref_actionbar_switch", true).apply();
+			}
+			sp.edit().putBoolean("pref_first_start", false).apply();
 		}
 	}
 
