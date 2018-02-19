@@ -22,8 +22,6 @@ import javax.microedition.lcdui.Graphics;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import android.util.Log;
-
 public class Graphics3D
 {
     //------------------------------------------------------------------
@@ -229,21 +227,15 @@ public class Graphics3D
 
         if (currentTarget instanceof Graphics)
         {
-                final Graphics finalG = (Graphics)currentTarget;
                 Platform.executeInUIThread(
-                    new M3gRunnable()
-                {
-                    public void doRun()
-                    {
-			    Graphics g = (Graphics) currentTarget;
-                        _releaseGraphics(handle,
-                                         0, iIsImageTarget, iIsProperRenderer, pixels);
-			g.drawRGB(pixels, 0, g.getCanvas().getWidth(), 0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight(), true);
-			//pixels = null;
-			for (int i = 0; i < pixels.length; i++)
-				pixels[i] = 0;
-                    }
-                });
+                    new M3gRunnable() {
+                        public void doRun() {
+                            Graphics g = (Graphics) currentTarget;
+                            _releaseGraphics(handle,
+                                    0, iIsImageTarget, iIsProperRenderer, pixels);
+                            g.drawRGB(pixels, 0, g.getCanvas().getWidth(), 0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight(), true);
+                        }
+                    });
         }
         else if (currentTarget instanceof Image2D)
         {

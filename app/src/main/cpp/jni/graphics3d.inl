@@ -123,7 +123,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
 		    }
 		    g_pixels = (jintArray) aEnv->NewGlobalRef(pixels);
 		    pixels_ptr = aEnv->GetIntArrayElements(g_pixels, NULL);
-		    m3gBindMemoryTarget((M3GRenderContext)aCtx, pixels_ptr, aClipW, aClipH, M3G_RGBA8, (M3Guint)(aClipW * 4), 0);
+		    m3gBindMemoryTarget((M3GRenderContext)aCtx, pixels_ptr, aClipW, aClipH, M3G_ARGB8, (M3Guint)(aClipW * 4), 0);
 	    }
 	    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
