@@ -152,9 +152,9 @@ public class Image2D extends Object3D
 				else if (bpp == 2) {
 					// TODO
 				} else if (bpp >= 3) {
-					byteArr[index++] = ((byte) (packedPixel & 0xFF));
-					byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
 					byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
 					if (bpp >= 4)
 						byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
 				}
