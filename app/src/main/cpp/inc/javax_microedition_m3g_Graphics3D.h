@@ -45,7 +45,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1addLight
  * Signature: (IIIIIIZIZ[I)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jboolean, jint, jboolean, jintArray);
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jboolean, jint, jboolean, jintArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D

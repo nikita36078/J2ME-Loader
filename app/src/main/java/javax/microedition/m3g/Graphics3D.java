@@ -176,9 +176,9 @@ public class Graphics3D
                     if (changed) pixels = new int[width * height];
                     iIsImageTarget = _bindGraphics(
                                          handle,
-                                         0,
-                                         0, 0,
-                                         width, height,
+                                         0, width, height,
+                                         finalG.getClipX(), finalG.getClipY(),
+                                         finalG.getClipWidth(), finalG.getClipHeight(),
                                          finalDepth, finalFlags,
                                          iIsProperRenderer,
 					 (changed) ? pixels : null);
@@ -233,7 +233,7 @@ public class Graphics3D
                             Graphics g = (Graphics) currentTarget;
                             _releaseGraphics(handle,
                                     0, iIsImageTarget, iIsProperRenderer, pixels);
-                            g.drawRGB(pixels, 0, g.getCanvas().getWidth(), 0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight(), true);
+                           g.drawRGB(pixels, 0, cur_width, 0, 0, cur_width, cur_height, false);
                         }
                     });
         }
@@ -614,6 +614,7 @@ public class Graphics3D
                                         byte[] transform);
     private native static boolean _bindGraphics(int handle,
             int surfaceHandle,
+            int width, int height,
             int clipX, int clipY,
             int clipW, int clipH,
             boolean depth,
