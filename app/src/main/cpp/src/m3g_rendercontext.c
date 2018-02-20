@@ -366,6 +366,7 @@ static M3Gbool m3gFormatHasAlpha(M3GPixelFormat format)
     case M3G_A8:
     case M3G_LA8:
     case M3G_LA4:
+    case M3G_ARGB8:
     case M3G_RGBA8:
     case M3G_BGRA8:
     case M3G_RGBA4:
