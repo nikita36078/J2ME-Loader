@@ -488,10 +488,10 @@ static M3Gbool m3gBindRenderTarget(RenderContext *ctx,
 {
     /* Check for generic errors */
     
-    if (ctx->target.type != SURFACE_NONE) {
+    /*if (ctx->target.type == SURFACE_NONE) {
         m3gRaiseError(M3G_INTERFACE(ctx), M3G_INVALID_OPERATION);
         return M3G_FALSE;
-    }
+    }*/
     if (!m3gValidTargetFormat(format)) {
         m3gRaiseError(M3G_INTERFACE(ctx), M3G_INVALID_ENUM);
         return M3G_FALSE;
