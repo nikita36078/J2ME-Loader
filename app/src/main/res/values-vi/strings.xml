@@ -15,9 +15,9 @@
   <string name="convert_complete">Hoàn thành</string>
   <string name="converting_message">Đang chế biến...</string>
   <string name="permission_request_failed">Ứng dụng này yêu cầu quyền ghi lưu trữ</string>
-  <string name="external_storage_not_mounted">Ứng dụng này yêu cầu bộ nhớ ngoài</string>
+  <string name="external_storage_not_mounted">Ứng dụng này đòi hỏi phải lưu trữ bộ nhớ ngoài</string>
   <string name="action_context_shortcut">Thêm lối tắt</string>
-  <string name="action_settings">Cài đặt</string>
+  <string name="action_settings">Thiết lập</string>
   <string name="action_context_delete">Xóa</string>
   <string name="donate">Tặng</string>
   <string name="START_CMD" formatted="false">Bắt đầu</string>
@@ -57,7 +57,7 @@
   <string name="PREF_MISC" formatted="false">Tùy chọn khác</string>
   <string name="PREF_VK_SHOW">Hiển thị bàn phím</string>
   <string name="PREF_IMMEDIATE">Chế độ xử lý ngay lập tức</string>
-  <string name="SWAP_SIZES">Kích thước hoán đổi</string>
+  <string name="SWAP_SIZES">K.thước hoán đổi</string>
   <string name="error">Lỗi</string>
   <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Buộc đóng ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí phá vỡ hoàn toàn!\nTiến hành?</string>
   <string name="CONFIRMATION_REQUIRED" formatted="false">Yêu cầu xác nhận</string>
@@ -74,7 +74,7 @@
   <string name="common_settings">[THIẾT LẬP CHUNG]</string>
   <string name="pref_enable_actionbar_title">Bật thanh hành động</string>
   <string name="pref_enable_actionbar_summary">Trong ứng dụng toàn màn hình</string>
-  <string name="pref_app_sort_title">Sắp thứ tự ứng dụng</string>
+  <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
   <string-array name="pref_app_sort_entries">
     <item>Tên</item>
     <item>Ngày</item>

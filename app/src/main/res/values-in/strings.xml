@@ -5,7 +5,7 @@
   <string name="about">Tentang</string>
   <string name="help">Bantuan</string>
   <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
-  <string name="about_message">Aplikasi ini digunakan untuk meluncurkan aplikasi J2ME dan permainan di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D dengan sebagaian keterbatasan.&lt;BR&gt;</string>
+  <string name="about_message">Aplikasi ini  dapat  menjalankan aplikasi dan permainan berbasis J2ME di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D dengan sebagaian keterbatasan.&lt;BR&gt;</string>
   <string name="open_jar">Buka jar</string>
   <string name="author">Vendor: </string>
   <string name="version">Versi: </string>
@@ -19,6 +19,7 @@
   <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
   <string name="action_settings">Pengaturan</string>
   <string name="action_context_delete">Hapus</string>
+  <string name="donate">Donasi</string>
   <string name="START_CMD" formatted="false">Mulai</string>
   <string name="CANCEL_CMD" formatted="false">Batal</string>
   <string name="RESET_CMD" formatted="false">Atur ulang</string>
@@ -28,7 +29,7 @@
   <string name="PREF_SCALE_TO_FIT" formatted="false">Sesuaikan dengan skala</string>
   <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Pertahankan aspek rasio</string>
   <string name="PREF_FILTER" formatted="false">Menyaring</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">Opsi font</string>
+  <string name="PREF_FONT_OPTIONS" formatted="false">Pilihan Huruf</string>
   <string name="PREF_WIDTH" formatted="false">Lebar</string>
   <string name="PREF_HEIGHT" formatted="false">Tinggi</string>
   <string name="PREF_FONT_SMALL" formatted="false">Kecil</string>
@@ -49,7 +50,7 @@
   <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
   <string name="PREF_VK_SOFT_KEYS" formatted="false">Soft keys: </string>
   <string name="PREF_VK_NUM_KEYS" formatted="false">Angka: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Fire/OK: </string>
+  <string name="PREF_VK_FIRE_KEY" formatted="false">Fire/Ok: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Ukuran</string>
   <string name="SIZE_PRESETS" formatted="false">Prasetel</string>
   <string name="PREF_LANGUAGE" formatted="false">Bahasa: %A</string>
@@ -66,11 +67,16 @@
   <string name="report_crash">Kirim</string>
   <string name="layout_edit_finished">Mode ubah telah selesai</string>
   <string name="layout_edit_finish">Akhiri mode ubah</string>
-  <string name="layout_edit_mode">Mode ubah letak tombol</string>
-  <string name="layout_scale_mode">Mode ubah ukuran tombol</string>
+  <string name="layout_edit_mode">Ubah letak tombol</string>
+  <string name="layout_scale_mode">Ubah ukuran tombol</string>
   <string name="layout_switch">Tukar letak tombol</string>
-  <string name="hide_buttons">Tombol yang tersembunyi</string>
+  <string name="hide_buttons">Sembunyikan tombol</string>
   <string name="common_settings">[PENGATURAN UMUM]</string>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
-  <string name="pref_enable_actionbar_summary">Aplikasi dalam keadaan layar penuh</string>
+  <string name="pref_enable_actionbar_summary">Aplikasi dalam layar penuh</string>
+  <string name="pref_app_sort_title">Perintah urut app</string>
+  <string-array name="pref_app_sort_entries">
+    <item>Nama</item>
+    <item>Tanggal</item>
+  </string-array>
 </resources>

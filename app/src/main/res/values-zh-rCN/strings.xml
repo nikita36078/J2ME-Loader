@@ -19,6 +19,7 @@
   <string name="action_context_shortcut">添加快捷方式</string>
   <string name="action_settings">设置</string>
   <string name="action_context_delete">删除</string>
+  <string name="donate">捐赠</string>
   <string name="START_CMD" formatted="false">开始</string>
   <string name="CANCEL_CMD" formatted="false">取消</string>
   <string name="RESET_CMD" formatted="false">重置</string>

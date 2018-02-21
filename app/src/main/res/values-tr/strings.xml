@@ -19,6 +19,7 @@
   <string name="action_context_shortcut">Kısayol ekle</string>
   <string name="action_settings">Ayarlar</string>
   <string name="action_context_delete">Sil</string>
+  <string name="donate">Bağış yap</string>
   <string name="START_CMD" formatted="false">Başlat</string>
   <string name="CANCEL_CMD" formatted="false">İptal</string>
   <string name="RESET_CMD" formatted="false">Sıfırla</string>

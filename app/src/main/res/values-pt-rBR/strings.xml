@@ -4,21 +4,22 @@
   <string name="exit">Sair</string>
   <string name="about">Informações</string>
   <string name="help">Ajuda</string>
-  <string name="help_message">&#8226; Permite a filtragem, em alguns casos pode reduzir muito o desempenho. Desative esta opção se o jogo estiver enfrentando Lags. &lt;BR&gt; &#8226; Imagem falhando ou piscando pode ser corrigido ativando a opção de \"modo de processamento imediato\".</string>
-  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), Ele suporta a maioria dos jogos 2D, mas jogos 3D existem algumas limitações.&lt;BR&gt;</string>
-  <string name="open_jar">Abrir Jar</string>
-  <string name="author">Autor: </string>
+  <string name="help_message">&#8226; Permitir a filtragem pode reduzir muito o desempenho em alguns jogos, desative essa opção se o jogo estiver enfrentando Lags. &lt;BR&gt; &#8226; Se a Imagem estiver falhando ou piscando, ative a opção de \"modo de processamento imediato\".</string>
+  <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), ele suporta a maioria dos jogos 2D, mas em alguns jogos 3D ainda existem algumas limitações.&lt;BR&gt;</string>
+  <string name="open_jar">Procurar JAR</string>
+  <string name="author">Criador: </string>
   <string name="version">Versão: </string>
   <string name="no_data_for_display">Sem dados</string>
-  <string name="message_delete">Deseja excluir esse jogo?</string>
+  <string name="message_delete">Deseja excluir o jogo?</string>
   <string name="converting_wait">Convertendo JAR...</string>
   <string name="convert_complete">Completo</string>
-  <string name="converting_message">Processando... Espere...</string>
+  <string name="converting_message">Processando... </string>
   <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento</string>
   <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
   <string name="action_context_shortcut">Adicionar atalho</string>
   <string name="action_settings">Configurações</string>
   <string name="action_context_delete">Excluir</string>
+  <string name="donate">Faça uma doação</string>
   <string name="START_CMD" formatted="false">Iniciar</string>
   <string name="CANCEL_CMD" formatted="false">Cancelar</string>
   <string name="RESET_CMD" formatted="false">Redefinir</string>
@@ -70,7 +71,7 @@
   <string name="layout_scale_mode">Editar tamanho dos botões</string>
   <string name="layout_switch">Alternar layout</string>
   <string name="hide_buttons">Ocultar botões</string>
-  <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>
+  <string name="common_settings">[AJUSTES]</string>
   <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
   <string name="pref_enable_actionbar_summary">Assistente para jogos em tela completa</string>
   <string name="pref_app_sort_title">Organizar jogos</string>
