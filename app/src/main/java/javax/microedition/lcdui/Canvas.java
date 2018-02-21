@@ -234,7 +234,8 @@ public abstract class Canvas extends Displayable {
 			synchronized (paintsync) {
 				displayWidth = newwidth;
 				displayHeight = newheight;
-				updateSize(true);
+				updateSize();
+				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED, width, height));
 			}
 			postEvent(paintEvent);
 		}
@@ -344,7 +345,7 @@ public abstract class Canvas extends Displayable {
 		displayHeight = ContextHolder.getDisplayHeight();
 		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
 
-		updateSize(false);
+		updateSize();
 	}
 
 	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
@@ -376,10 +377,8 @@ public abstract class Canvas extends Displayable {
 
 	/**
 	 * Обновить размер и положение виртуального экрана относительно реального.
-	 *
-	 * @param post следует ли оповещать об этих изменениях сам холст и картинку двойной буферизации
 	 */
-	private void updateSize(boolean post) {
+	private void updateSize() {
 		/*
 		 * Превращаем размеры виртуального экрана
 		 * в размеры видимого для мидлета холста.
@@ -477,15 +476,8 @@ public abstract class Canvas extends Displayable {
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
 
-		if (post) {
-			/*
-			 * проверяем, нужно ли создавать новую картинку для двойной буферизации,
-			 * или сгодится старая
-			 */
-			if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
-				offscreen = Image.createImage(width, height);
-			}
-			postEvent(CanvasEvent.getInstance(this, CanvasEvent.SIZE_CHANGED, width, height));
+		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
+			offscreen = Image.createImage(width, height);
 		}
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
