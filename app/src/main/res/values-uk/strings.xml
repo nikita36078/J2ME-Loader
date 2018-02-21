@@ -3,4 +3,80 @@
 <resources>
   <string name="exit">Вихід</string>
   <string name="about">Про додаток</string>
+  <string name="help">Довідка</string>
+  <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
+  <string name="about_message">Дана програма дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
+  <string name="open_jar">Відкрити jar</string>
+  <string name="author">Автор: </string>
+  <string name="version">Версія: </string>
+  <string name="no_data_for_display">Немає даних</string>
+  <string name="message_delete">Ви дійсно хочете видалити дану програму?</string>
+  <string name="converting_wait">Перетворення JAR...</string>
+  <string name="convert_complete">Завершено</string>
+  <string name="converting_message">Обробка...</string>
+  <string name="permission_request_failed">Дана програма вимагає дозволу записування даних</string>
+  <string name="external_storage_not_mounted">Дана програма вимагає збереження даних у зовнішню пам\'ять</string>
+  <string name="action_context_shortcut">Додати ярлик</string>
+  <string name="action_settings">Налаштування</string>
+  <string name="action_context_delete">Видалити</string>
+  <string name="donate">Підтримати проект</string>
+  <string name="START_CMD" formatted="false">Старт</string>
+  <string name="CANCEL_CMD" formatted="false">Відмінити</string>
+  <string name="RESET_CMD" formatted="false">Скинути</string>
+  <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
+  <string name="PREF_SCREEN_OPTIONS" formatted="false">Параметри екрану</string>
+  <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
+  <string name="PREF_SCALE_TO_FIT" formatted="false">Підганяти розмір</string>
+  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Зберігати пропорції</string>
+  <string name="PREF_FILTER" formatted="false">Фільтрація</string>
+  <string name="PREF_FONT_OPTIONS" formatted="false">Параметри шрифту</string>
+  <string name="PREF_WIDTH" formatted="false">Ширина</string>
+  <string name="PREF_HEIGHT" formatted="false">Висота</string>
+  <string name="PREF_FONT_SMALL" formatted="false">Малий</string>
+  <string name="PREF_FONT_MEDIUM" formatted="false">Середній</string>
+  <string name="PREF_FONT_LARGE" formatted="false">Великий</string>
+  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Значення в масштабованих пікселях</string>
+  <string name="PREF_BACKGROUND" formatted="false">Фон</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Віртуальна клавіатура</string>
+  <string name="PREF_VK_BACK" formatted="false">Клавіші</string>
+  <string name="PREF_VK_FORE" formatted="false">Позначки</string>
+  <string name="PREF_VK_OUTLINE" formatted="false">Контур</string>
+  <string name="PREF_VK_ALPHA" formatted="false">Прозорість: </string>
+  <string name="PREF_VK_HIDE_DELAY" formatted="false">Затримка приховування: </string>
+  <string name="PREF_UNIT_MS" formatted="false">ms</string>
+  <string name="PREF_VK_SEL_FORE" formatted="false">Позначки (P)</string>
+  <string name="PREF_VK_SEL_BACK" formatted="false">Клавіші (P)</string>
+  <string name="PREF_VK_KEY_SIZES" formatted="false">Розмір клавіш</string>
+  <string name="PREF_VK_NAV_KEYS" formatted="false">Джойстик: </string>
+  <string name="PREF_VK_SOFT_KEYS" formatted="false">Софт-клавіші: </string>
+  <string name="PREF_VK_NUM_KEYS" formatted="false">Цифри: </string>
+  <string name="PREF_VK_FIRE_KEY" formatted="false">Вогонь: </string>
+  <string name="PREF_VK_SIZE_HINT" formatted="false">Розмір</string>
+  <string name="SIZE_PRESETS" formatted="false">Шаблони</string>
+  <string name="PREF_LANGUAGE" formatted="false">Мова: %A</string>
+  <string name="PREF_MISC" formatted="false">Додаткові опції</string>
+  <string name="PREF_VK_SHOW">Показати клавіатуру</string>
+  <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
+  <string name="SWAP_SIZES">Поміняти розміри</string>
+  <string name="error">Помилка</string>
+  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Примусове закривання програми може призвести до втрати даних або навіть до повного виведення її з ладу! \nПродовжити?</string>
+  <string name="CONFIRMATION_REQUIRED" formatted="false">Необхідне підтвердження</string>
+  <string name="select_dialog_title">Вибрати MIDlet</string>
+  <string name="crash_dialog_message">Надіслати розробнику звіт про помилку?</string>
+  <string name="crash_dialog_title">Виявлена помилка</string>
+  <string name="report_crash">Надіслати</string>
+  <string name="layout_edit_finished">Режим редагування завершений</string>
+  <string name="layout_edit_finish">Завершити режим редагування</string>
+  <string name="layout_edit_mode">Режим редагування клавіатури</string>
+  <string name="layout_scale_mode">Режим зміни розмірів клавіатури</string>
+  <string name="layout_switch">Переключення розкладки клавіатури</string>
+  <string name="hide_buttons">Приховати клавіші</string>
+  <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
+  <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
+  <string name="pref_enable_actionbar_summary">У повноекранних програмах</string>
+  <string name="pref_app_sort_title">Порядок сортування програм</string>
+  <string-array name="pref_app_sort_entries">
+    <item>Назва</item>
+    <item>Дата</item>
+  </string-array>
 </resources>
