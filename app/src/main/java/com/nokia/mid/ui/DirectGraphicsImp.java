@@ -396,13 +396,13 @@ public class DirectGraphicsImp implements DirectGraphics {
 				// vertical flipping
 				switch (rotation) {
 					case 0:
-						ret = Sprite.TRANS_MIRROR;
+						ret = Sprite.TRANS_MIRROR_ROT180;
 						break;
 					case ROTATE_90:
 						ret = Sprite.TRANS_MIRROR_ROT270;
 						break;
 					case ROTATE_180:
-						ret = Sprite.TRANS_MIRROR_ROT180;
+						ret = Sprite.TRANS_MIRROR;
 						break;
 					case ROTATE_270:
 						ret = Sprite.TRANS_MIRROR_ROT90;
