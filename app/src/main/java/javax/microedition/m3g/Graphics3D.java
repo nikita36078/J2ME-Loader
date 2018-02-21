@@ -233,7 +233,7 @@ public class Graphics3D
                             Graphics g = (Graphics) currentTarget;
                             _releaseGraphics(handle,
                                     0, iIsImageTarget, iIsProperRenderer, pixels);
-                           g.drawRGB(pixels, 0, cur_width, 0, 0, cur_width, cur_height, false);
+                           g.drawRGB(pixels, 0, cur_width, 0, 0, cur_width, cur_height, true);
                         }
                     });
         }
