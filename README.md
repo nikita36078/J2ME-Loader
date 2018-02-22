@@ -5,7 +5,8 @@
 [![GitHub release](https://img.shields.io/github/release/nikita36078/J2ME-Loader.svg)](https://github.com/nikita36078/J2ME-Loader/releases)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/nikita36078)
 
-J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3D with some limitations. Emulator has a virtual keyboard, individual settings for each application, scaling support.
+J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3D with some limitations. Emulator has a virtual keyboard, individual settings for each application, scaling support.  
+This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoader).
 
 System requirements: Android 4.0+  
 [List of the incompatible/bugged games (Google Docs)](https://docs.google.com/spreadsheets/d/1KmkDmod7CxbLYSm_BgEoVMCzy4YuZZoL05H8hK4sOh4/edit?usp=sharing).  
