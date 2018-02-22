@@ -17,19 +17,19 @@
 package ru.playsoftware.j2meloader.hockeyapp;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import org.acra.ReportField;
 import org.acra.data.CrashReportData;
 import org.acra.sender.ReportSender;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HockeySender implements ReportSender {
 	private static String BASE_URL = "https://rink.hockeyapp.net/api/2/apps/";
@@ -37,27 +37,28 @@ public class HockeySender implements ReportSender {
 	private static String CRASHES_PATH = "/crashes";
 
 	@Override
-	public void send(Context context, CrashReportData report) {
-		String log = createCrashLog(report);
+	public void send(@NonNull Context context, @NonNull final CrashReportData report) {
+		final String log = createCrashLog(report);
 		String url = BASE_URL + FORM_KEY + CRASHES_PATH;
-		try {
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url);
 
-			List<NameValuePair> parameters = new ArrayList<>();
-			parameters.add(new BasicNameValuePair("raw", log));
-			parameters.add(new BasicNameValuePair("userID", report.getString(ReportField.INSTALLATION_ID)));
-			httpPost.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
-
-			httpClient.execute(httpPost);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		RequestQueue queue = Volley.newRequestQueue(context);
+		StringRequest postRequest = new StringRequest(Request.Method.POST, url, null,
+				error -> Log.e("Error.Response", error.getMessage())
+		) {
+			@Override
+			protected Map<String, String> getParams() {
+				Map<String, String> params = new HashMap<>();
+				params.put("raw", log);
+				params.put("userID", report.getString(ReportField.INSTALLATION_ID));
+				return params;
+			}
+		};
+		queue.add(postRequest);
 	}
 
 	private String createCrashLog(CrashReportData report) {
 		Date now = new Date();
-		String log = ("Package: " + report.getString(ReportField.PACKAGE_NAME) + "\n") +
+		return ("Package: " + report.getString(ReportField.PACKAGE_NAME) + "\n") +
 				"Version name: " + report.getString(ReportField.APP_VERSION_NAME) + "\n" +
 				"Version: " + report.getString(ReportField.APP_VERSION_CODE) + "\n" +
 				"Android: " + report.getString(ReportField.ANDROID_VERSION) + "\n" +
@@ -65,6 +66,5 @@ public class HockeySender implements ReportSender {
 				"Model: " + report.getString(ReportField.PHONE_MODEL) + "\n" +
 				"App info: " + report.getString(ReportField.CUSTOM_DATA) + "\n" +
 				"Date: " + now + "\n" + "\n" + report.getString(ReportField.STACK_TRACE);
-		return log;
 	}
 }
