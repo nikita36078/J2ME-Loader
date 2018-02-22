@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    def acraVersion = '5.0.1'
+    def acraVersion = '5.1.1'
     def supportLibVersion = '27.0.2'
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:preference-v7:$supportLibVersion"
