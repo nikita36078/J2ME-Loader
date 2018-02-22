@@ -52,6 +52,7 @@ import javax.microedition.util.ContextHolder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final String TAG = MicroActivity.class.getName();
@@ -112,7 +113,7 @@ public class MicroActivity extends AppCompatActivity {
 		ArrayList<String> midlets = new ArrayList<>();
 		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + ConfigActivity.MIDLET_CONF_FILE));
 		MIDlet.initProps(params);
-		for (LinkedHashMap.Entry<String, String> entry : params.entrySet()) {
+		for (Map.Entry<String, String> entry : params.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {
 				midlets.add(entry.getValue());
 			}
