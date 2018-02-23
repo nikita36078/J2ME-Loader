@@ -66,16 +66,14 @@ public class DirectUtils {
 	 *
 	 * @param width  the width of the new image, in pixels
 	 * @param height the height of the new image, in pixels
-	 * @param argb   the initial color for image<br>Note: This is argb color, but alpha channel is currently
-	 *               not supported by this emulation.
+	 * @param argb   the initial color for image.
 	 * @return the created image
 	 */
 	public static Image createImage(int width, int height, int argb) {
 		Image img = Image.createImage(width, height);
 		Graphics g = img.getGraphics();
-		g.setColor(argb);
+		g.setColorAlpha(argb);
 		g.fillRect(0, 0, width, height);
-		g.setColor(0);
 		return img;
 	}
 
