@@ -53,6 +53,7 @@ public class HockeySender implements ReportSender {
 				return params;
 			}
 		};
+		postRequest.setShouldCache(false);
 		queue.add(postRequest);
 	}
 
