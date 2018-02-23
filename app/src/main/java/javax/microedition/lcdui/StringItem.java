@@ -71,11 +71,11 @@ public class StringItem extends Item {
 		textview = null;
 	}
 
-	public Font getFont(){
+	public Font getFont() {
 		return font;
 	}
 
-	public void setFont(Font font){
+	public void setFont(Font font) {
 		// TODO Implement this method
 		this.font = font;
 	}

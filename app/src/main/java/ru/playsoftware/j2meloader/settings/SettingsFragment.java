@@ -19,6 +19,7 @@ package ru.playsoftware.j2meloader.settings;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+
 import ru.playsoftware.j2meloader.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {

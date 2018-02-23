@@ -17,17 +17,18 @@
 
 package javax.microedition.m3g;
 
-import javax.microedition.io.Connector;
-import javax.microedition.io.HttpConnection;
-import javax.microedition.io.InputConnection;
-import javax.microedition.lcdui.Image;
-import javax.microedition.util.ContextHolder;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.HttpConnection;
+import javax.microedition.io.InputConnection;
+import javax.microedition.lcdui.Image;
+import javax.microedition.util.ContextHolder;
 
 public class Loader {
 	// M3G

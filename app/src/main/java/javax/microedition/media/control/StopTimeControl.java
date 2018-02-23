@@ -22,6 +22,6 @@ public interface StopTimeControl extends Control {
 	public static long RESET = Long.MAX_VALUE;
 
 	public long getStopTime();
-	
+
 	public void setStopTime(long stopTime);
 }

@@ -27,6 +27,7 @@
 package org.microemu.android.asm;
 
 import android.support.annotation.NonNull;
+
 import org.objectweb.asm.tree.FieldNode;
 
 public class FieldNodeExt implements Comparable<FieldNodeExt> {

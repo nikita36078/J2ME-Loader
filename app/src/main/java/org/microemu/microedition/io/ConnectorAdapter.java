@@ -39,8 +39,8 @@ import javax.microedition.io.OutputConnection;
 
 /**
  * @author vlads
- *         <p>
- *         Default Connector
+ * <p>
+ * Default Connector
  */
 public abstract class ConnectorAdapter implements ConnectorDelegate {
 

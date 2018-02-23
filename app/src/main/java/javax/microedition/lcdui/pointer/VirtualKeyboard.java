@@ -21,7 +21,10 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.widget.Toast;
-import ru.playsoftware.j2meloader.R;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
@@ -30,9 +33,8 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Overlay;
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.util.ContextHolder;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+
+import ru.playsoftware.j2meloader.R;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 

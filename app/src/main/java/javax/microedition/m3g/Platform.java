@@ -58,8 +58,9 @@ class Platform {
 
 	/**
 	 * Check the UI thread / toolkit init status and store display if it is available
+	 *
 	 * @return true if either lcdui or eswt toolkit is initialized and ui thread is accessible
-	 *              otherwise false
+	 * otherwise false
 	 */
 	static boolean uiThreadAvailable() {
 		{

@@ -105,7 +105,7 @@ public class Connection implements DatagramConnection, UDPDatagramConnection, Co
 		InetAddress address = socket.getInetAddress();
 		if (address == null) {
 			/*
-             * server mode we get the localhost from InetAddress otherwise we
+			 * server mode we get the localhost from InetAddress otherwise we
 			 * get '0.0.0.0'
 			 */
 			address = InetAddress.getLocalHost();

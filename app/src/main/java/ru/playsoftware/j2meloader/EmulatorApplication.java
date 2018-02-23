@@ -18,9 +18,11 @@ package ru.playsoftware.j2meloader;
 
 import android.app.Application;
 import android.content.Context;
+
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
 import org.acra.annotation.AcraDialog;
+
 import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
 
 @AcraCore(reportSenderFactoryClasses = {HockeySenderFactory.class})

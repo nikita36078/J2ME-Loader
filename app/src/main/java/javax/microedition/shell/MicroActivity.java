@@ -17,7 +17,6 @@
 
 package javax.microedition.shell;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -34,8 +33,11 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.util.FileUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
@@ -49,10 +51,9 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final String TAG = MicroActivity.class.getName();

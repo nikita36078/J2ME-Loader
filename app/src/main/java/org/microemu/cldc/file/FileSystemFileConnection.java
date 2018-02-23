@@ -28,9 +28,16 @@ package org.microemu.cldc.file;
 
 import android.util.Log;
 
-import javax.microedition.io.file.ConnectionClosedException;
-import javax.microedition.io.file.FileConnection;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
 import java.security.AccessControlContext;
 import java.security.AccessController;
@@ -39,6 +46,9 @@ import java.security.PrivilegedExceptionAction;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.regex.Pattern;
+
+import javax.microedition.io.file.ConnectionClosedException;
+import javax.microedition.io.file.FileConnection;
 
 public class FileSystemFileConnection implements FileConnection {
 

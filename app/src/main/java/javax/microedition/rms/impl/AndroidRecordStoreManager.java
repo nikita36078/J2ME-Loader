@@ -29,6 +29,13 @@ package javax.microedition.rms.impl;
 
 import android.util.Log;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.microedition.rms.InvalidRecordIDException;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
@@ -38,12 +45,6 @@ import javax.microedition.rms.RecordStoreNotOpenException;
 import javax.microedition.shell.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 import javax.microedition.util.ContextHolder;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AndroidRecordStoreManager implements RecordStoreManager {
 

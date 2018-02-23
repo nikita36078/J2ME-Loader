@@ -34,10 +34,10 @@ import java.util.Map;
 
 /**
  * @author vlads
- *         <p>
- *         config2.xml example
- *         <p>
- *         <pre>
+ * <p>
+ * config2.xml example
+ * <p>
+ * <pre>
  *                  &lt;extensions&gt;
  *                  &lt;extension&gt;
  *                  &lt;className&gt;org.microemu.cldc.file.FileSystem&lt;/className&gt;

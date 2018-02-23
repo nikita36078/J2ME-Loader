@@ -17,9 +17,10 @@
 
 package javax.microedition.m3g;
 
-import javax.microedition.lcdui.Graphics;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import javax.microedition.lcdui.Graphics;
 
 public class Graphics3D {
 	//------------------------------------------------------------------

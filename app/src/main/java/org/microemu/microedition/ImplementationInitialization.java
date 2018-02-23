@@ -30,13 +30,13 @@ import java.util.Map;
 
 /**
  * @author vlads
- *         <p>
- *         Optional JSR implementation can be plugged to Emulator using this interfaces.
- *         See module microemu-jsr-75 as example
- *         <p>
- *         Relevant MicroEmulator command line option
- *         <p>
- *         <pre>
+ * <p>
+ * Optional JSR implementation can be plugged to Emulator using this interfaces.
+ * See module microemu-jsr-75 as example
+ * <p>
+ * Relevant MicroEmulator command line option
+ * <p>
+ * <pre>
  *                  --impl JSR_implementation_class_name Initialize and register optional JSR implementation class.
  *                 </pre>
  */

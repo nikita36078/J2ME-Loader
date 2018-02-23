@@ -23,15 +23,16 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.rms.impl.AndroidRecordStoreManager;
-import javax.microedition.shell.ConfigActivity;
-import javax.microedition.shell.MyClassLoader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.rms.impl.AndroidRecordStoreManager;
+import javax.microedition.shell.ConfigActivity;
+import javax.microedition.shell.MyClassLoader;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();

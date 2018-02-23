@@ -23,9 +23,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import ru.playsoftware.j2meloader.R;
 
 import java.util.ArrayList;
+
+import ru.playsoftware.j2meloader.R;
 
 public class FileListAdapter extends BaseAdapter {
 

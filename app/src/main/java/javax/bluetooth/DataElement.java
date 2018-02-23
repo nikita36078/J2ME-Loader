@@ -62,10 +62,10 @@ public class DataElement {
 
 
 
-    /*
+	/*
 	 * The following section defines public, static and instance
-     * member variables used in the implementation of the methods.
-     */
+	 * member variables used in the implementation of the methods.
+	 */
 
 
 	/**

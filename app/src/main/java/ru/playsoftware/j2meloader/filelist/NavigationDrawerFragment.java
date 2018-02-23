@@ -36,10 +36,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import ru.playsoftware.j2meloader.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -48,6 +46,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+import ru.playsoftware.j2meloader.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -185,13 +185,13 @@ public class NavigationDrawerFragment extends Fragment {
 		drawerToggle = new ActionBarDrawerToggle(getActivity(),
 				NavigationDrawerFragment.this.drawerLayout, /* DrawerLayout object */
 				R.string.navigation_drawer_open, /*
-												   * "open drawer" description for
-												   * accessibility
-												   */
+		 * "open drawer" description for
+		 * accessibility
+		 */
 				R.string.navigation_drawer_close /*
-												   * "close drawer" description for
-												   * accessibility
-												   */
+		 * "close drawer" description for
+		 * accessibility
+		 */
 		) {
 			@Override
 			public void onDrawerClosed(View drawerView) {

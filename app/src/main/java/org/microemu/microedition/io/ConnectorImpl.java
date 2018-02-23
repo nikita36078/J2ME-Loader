@@ -42,9 +42,9 @@ import javax.microedition.io.ConnectionNotFoundException;
 
 /**
  * @author vlads Original MicroEmulator implementation of
- *         javax.microedition.Connector
- *         <p>
- *         TODO integrate with ImplementationInitialization
+ * javax.microedition.Connector
+ * <p>
+ * TODO integrate with ImplementationInitialization
  */
 public class ConnectorImpl extends ConnectorAdapter {
 

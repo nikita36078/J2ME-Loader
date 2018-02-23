@@ -107,11 +107,11 @@ public class List extends Screen implements Choice, ItemSelector {
 			selected.addAll(Collections.nCopies(size, Boolean.FALSE));
 
 			if (strings.size() == 0) {
-				strings.addAll(Collections.nCopies(size,null));
+				strings.addAll(Collections.nCopies(size, null));
 			}
 
 			if (images.size() == 0) {
-				images.addAll(Collections.nCopies(size,null));
+				images.addAll(Collections.nCopies(size, null));
 			}
 		}
 	}

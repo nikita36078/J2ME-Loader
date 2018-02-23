@@ -17,11 +17,11 @@
 
 package ru.playsoftware.j2meloader.applist;
 
-import ru.playsoftware.j2meloader.filelist.SortItem;
-
 import java.io.Serializable;
 
 import javax.microedition.shell.ConfigActivity;
+
+import ru.playsoftware.j2meloader.filelist.SortItem;
 
 public class AppItem implements Serializable, SortItem {
 

@@ -17,13 +17,14 @@
 
 package javax.microedition.shell;
 
+import org.acra.ACRA;
+
 import java.io.File;
 import java.io.InputStream;
 
 import javax.microedition.util.ContextHolder;
 
 import dalvik.system.DexClassLoader;
-import org.acra.ACRA;
 
 public class MyClassLoader extends DexClassLoader {
 

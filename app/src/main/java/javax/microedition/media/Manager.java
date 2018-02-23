@@ -20,12 +20,13 @@ package javax.microedition.media;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import javax.microedition.media.protocol.DataSource;
-import javax.microedition.util.ContextHolder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+
+import javax.microedition.media.protocol.DataSource;
+import javax.microedition.util.ContextHolder;
 
 public class Manager {
 	private static final String TAG = Manager.class.getName();

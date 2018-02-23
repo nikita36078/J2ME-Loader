@@ -27,12 +27,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import java.util.HashMap;
+
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.util.ContextHolder;
-import java.util.HashMap;
 
 public abstract class Canvas extends Displayable {
 	public static final int KEY_POUND = 35;
