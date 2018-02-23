@@ -90,12 +90,7 @@ public class Display {
 
 	public void setCurrent(final Alert alert, Displayable disp) {
 		changeCurrent(disp);
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				alert.prepareDialog().show();
-			}
-		});
+		activity.runOnUiThread(() -> alert.prepareDialog().show());
 		if (alert.finiteTimeout()) {
 			(new Thread(alert)).start();
 		}

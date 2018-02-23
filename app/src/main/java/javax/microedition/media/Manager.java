@@ -83,30 +83,28 @@ public class Manager {
 
 		final Object sync = new Object();
 
-		Runnable runnable = new Runnable() {
-			public void run() {
-				byte[] buf = new byte[0x10000];
-				int read;
+		Runnable runnable = () -> {
+			byte[] buf = new byte[0x10000];
+			int read;
 
-				try {
-					while (true) {
-						read = stream.read(buf);
+			try {
+				while (true) {
+					read = stream.read(buf);
 
-						if (read > 0) {
-							synchronized (sync) {
-								raf.write(buf, 0, read);
-							}
-						} else if (read < 0) {
-							break;
+					if (read > 0) {
+						synchronized (sync) {
+							raf.write(buf, 0, read);
 						}
+					} else if (read < 0) {
+						break;
 					}
-
-					raf.close();
-
-					Log.d(TAG, "Media pipe closed: " + name);
-				} catch (IOException e) {
-					Log.d(TAG, "Media pipe failure: " + e.toString());
 				}
+
+				raf.close();
+
+				Log.d(TAG, "Media pipe closed: " + name);
+			} catch (IOException e) {
+				Log.d(TAG, "Media pipe failure: " + e.toString());
 			}
 		};
 

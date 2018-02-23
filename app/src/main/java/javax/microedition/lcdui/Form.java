@@ -32,7 +32,7 @@ public class Form extends Screen {
 	private ScrollView scrollview;
 	private LinearLayout layout;
 
-	private ArrayList<Item> items = new ArrayList();
+	private ArrayList<Item> items = new ArrayList<>();
 	private ItemStateListener listener;
 
 	public Form(String title) {
@@ -69,11 +69,7 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(new Runnable() {
-					public void run() {
-						layout.addView(item.getItemView());
-					}
-				});
+				a.runOnUiThread(() -> layout.addView(item.getItemView()));
 			}
 		}
 		return items.size() - 1;
@@ -86,11 +82,7 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(new Runnable() {
-					public void run() {
-						layout.addView(item.getItemView(), index);
-					}
-				});
+				a.runOnUiThread(() -> layout.addView(item.getItemView(), index));
 			}
 		}
 	}
@@ -102,11 +94,9 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(new Runnable() {
-					public void run() {
-						layout.removeViewAt(index);
-						layout.addView(item.getItemView(), index);
-					}
+				a.runOnUiThread(() -> {
+					layout.removeViewAt(index);
+					layout.addView(item.getItemView(), index);
 				});
 			}
 		}
@@ -118,11 +108,7 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(new Runnable() {
-					public void run() {
-						layout.removeViewAt(index);
-					}
-				});
+				a.runOnUiThread(() -> layout.removeViewAt(index));
 			}
 		}
 	}
@@ -137,11 +123,7 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(new Runnable() {
-					public void run() {
-						layout.removeAllViews();
-					}
-				});
+				a.runOnUiThread(() -> layout.removeAllViews());
 			}
 		}
 	}

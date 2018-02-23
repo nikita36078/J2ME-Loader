@@ -24,7 +24,6 @@ public class AlertType {
 	public static final AlertType WARNING = new AlertType();
 
 	public boolean playSound(Display display) {
-		//TODO
 		return false;
 	}
 }

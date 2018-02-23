@@ -584,7 +584,7 @@ public class Graphics3D
         }
         if (iInterface.isFullyInitialized() && Platform.uiThreadAvailable())
         {
-            handle = _ctor(iInterface.getHandle());
+            handle = _ctor(Interface.getHandle());
             _addRef(handle);
 
             Platform.executeInUIThread(

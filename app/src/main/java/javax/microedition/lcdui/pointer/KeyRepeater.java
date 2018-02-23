@@ -117,6 +117,7 @@ public class KeyRepeater implements Runnable {
 					}
 				}
 			} catch (InterruptedException ie) {
+				ie.printStackTrace();
 			}
 		}
 	}

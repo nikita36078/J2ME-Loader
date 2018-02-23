@@ -160,40 +160,46 @@ public class DirectGraphicsImp implements DirectGraphics {
 			throw new IllegalArgumentException();
 		}
 
-		if (format == TYPE_BYTE_1_GRAY) {
-			int b = 7;
-			for (int yj = 0; yj < height; yj++) {
-				int line = off + yj * scanlen;
-				int ypos = yj * width;
-				for (int xj = 0; xj < width; xj++) {
-					int c = doAlpha(pix, alpha, (line + xj) / 8, b);
-					if (!isTransparent(c)) { //alpha
-						graphics.setColorAlpha(c);
-						graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
-					}
-					b--;
-					if (b < 0) b = 7;
-				}
-			}
-		} else if (format == TYPE_BYTE_1_GRAY_VERTICAL) {
-			int ods = off / scanlen;
-			int oms = off % scanlen;
-			int b = 0;
-			for (int yj = 0; yj < height; yj++) {
-				int ypos = yj * width;
-				int tmp = (ods + yj) / 8 * scanlen + oms;
-				for (int xj = 0; xj < width; xj++) {
-					int c = doAlpha(pix, alpha, tmp + xj, b);
-					if (!isTransparent(c)) { //alpha
-						graphics.setColorAlpha(c);
-						graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
+		switch (format) {
+			case TYPE_BYTE_1_GRAY: {
+				int b = 7;
+				for (int yj = 0; yj < height; yj++) {
+					int line = off + yj * scanlen;
+					int ypos = yj * width;
+					for (int xj = 0; xj < width; xj++) {
+						int c = doAlpha(pix, alpha, (line + xj) / 8, b);
+						if (!isTransparent(c)) { //alpha
+							graphics.setColorAlpha(c);
+							graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
+						}
+						b--;
+						if (b < 0) b = 7;
 					}
 				}
-				b++;
-				if (b > 7) b = 0;
+				break;
 			}
-		} else
-			throw new IllegalArgumentException();
+			case TYPE_BYTE_1_GRAY_VERTICAL: {
+				int ods = off / scanlen;
+				int oms = off % scanlen;
+				int b = 0;
+				for (int yj = 0; yj < height; yj++) {
+					int ypos = yj * width;
+					int tmp = (ods + yj) / 8 * scanlen + oms;
+					for (int xj = 0; xj < width; xj++) {
+						int c = doAlpha(pix, alpha, tmp + xj, b);
+						if (!isTransparent(c)) { //alpha
+							graphics.setColorAlpha(c);
+							graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
+						}
+					}
+					b++;
+					if (b > 7) b = 0;
+				}
+				break;
+			}
+			default:
+				throw new IllegalArgumentException();
+		}
 	}
 
 	/**

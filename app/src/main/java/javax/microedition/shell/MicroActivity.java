@@ -138,18 +138,8 @@ public class MicroActivity extends AppCompatActivity {
 	private void showMidletDialog(String[] midletsNameArray, final String[] midletsClassArray) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
-				.setItems(midletsNameArray, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface d, int n) {
-						startMidlet(midletsClassArray[n]);
-					}
-				})
-				.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialogInterface) {
-						finish();
-					}
-				});
+				.setItems(midletsNameArray, (d, n) -> startMidlet(midletsClassArray[n]))
+				.setOnCancelListener(dialogInterface -> finish());
 		builder.show();
 	}
 
@@ -199,12 +189,7 @@ public class MicroActivity extends AppCompatActivity {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
 				.setMessage(message);
-		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialogInterface) {
-				finish();
-			}
-		});
+		builder.setOnCancelListener(dialogInterface -> finish());
 		builder.show();
 	}
 
@@ -262,21 +247,16 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface p1, int p2) {
-						Runnable r = new Runnable() {
-							public void run() {
-								try {
-									Display.getDisplay(null).activityDestroyed();
-								} catch (Throwable ex) {
-									ex.printStackTrace();
-								}
-								ContextHolder.notifyDestroyed();
-							}
-						};
-						(new Thread(r)).start();
-					}
+				.setPositiveButton(android.R.string.yes, (p1, p2) -> {
+					Runnable r = () -> {
+						try {
+							Display.getDisplay(null).activityDestroyed();
+						} catch (Throwable ex) {
+							ex.printStackTrace();
+						}
+						ContextHolder.notifyDestroyed();
+					};
+					(new Thread(r)).start();
 				})
 				.setNegativeButton(android.R.string.no, null);
 		alertBuilder.create().show();
@@ -355,12 +335,7 @@ public class MicroActivity extends AppCompatActivity {
 		final VirtualKeyboard vk = ContextHolder.getVk();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.hide_buttons)
-				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(), new DialogInterface.OnMultiChoiceClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-						vk.setKeyVisibility(i, b);
-					}
-				})
+				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(), (dialogInterface, i, b) -> vk.setKeyVisibility(i, b))
 				.setPositiveButton(android.R.string.ok, null);
 		builder.show();
 	}

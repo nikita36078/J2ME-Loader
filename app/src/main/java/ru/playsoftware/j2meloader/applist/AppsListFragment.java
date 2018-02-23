@@ -17,6 +17,7 @@
 
 package ru.playsoftware.j2meloader.applist;
 
+import android.support.annotation.NonNull;
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
@@ -55,7 +56,7 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
+	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		setEmptyText(getText(R.string.no_data_for_display));
 		registerForContextMenu(getListView());
@@ -65,17 +66,14 @@ public class AppsListFragment extends ListFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
-				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						File appDir = new File(apps.get(id).getPath());
-						FileUtils.deleteDirectory(appDir);
-						File appSaveDir = new File(ConfigActivity.DATA_DIR, apps.get(id).getTitle());
-						FileUtils.deleteDirectory(appSaveDir);
-						File appSettings = new File(getActivity().getFilesDir().getParent() + File.separator + "shared_prefs", apps.get(id).getTitle() + ".xml");
-						appSettings.delete();
-						((MainActivity) getActivity()).updateApps();
-					}
+				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+					File appDir = new File(apps.get(id).getPath());
+					FileUtils.deleteDirectory(appDir);
+					File appSaveDir = new File(ConfigActivity.DATA_DIR, apps.get(id).getTitle());
+					FileUtils.deleteDirectory(appSaveDir);
+					File appSettings = new File(getActivity().getFilesDir().getParent() + File.separator + "shared_prefs", apps.get(id).getTitle() + ".xml");
+					appSettings.delete();
+					((MainActivity) getActivity()).updateApps();
 				})
 				.setNegativeButton(android.R.string.no, null);
 		builder.show();

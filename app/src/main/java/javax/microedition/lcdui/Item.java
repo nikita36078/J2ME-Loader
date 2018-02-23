@@ -71,7 +71,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 	private Form owner;
 
-	private ArrayList<Command> commands = new ArrayList();
+	private ArrayList<Command> commands = new ArrayList<>();
 	private ItemCommandListener listener = null;
 
 	private SimpleEvent msgSetContextMenuListener = new SimpleEvent() {

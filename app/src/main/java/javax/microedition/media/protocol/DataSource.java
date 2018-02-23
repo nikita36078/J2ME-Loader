@@ -74,6 +74,7 @@ public class DataSource {
 			try {
 				stream.close();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
 			stream = null;
@@ -83,6 +84,7 @@ public class DataSource {
 			try {
 				asset.close();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
 			asset = null;

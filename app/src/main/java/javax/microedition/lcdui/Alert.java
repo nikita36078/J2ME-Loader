@@ -91,6 +91,7 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 				Display display = Display.getDisplay(null);
 				display.setCurrent(display.getCurrent());
 			} catch (InterruptedException ie) {
+				ie.printStackTrace();
 			}
 		}
 	}

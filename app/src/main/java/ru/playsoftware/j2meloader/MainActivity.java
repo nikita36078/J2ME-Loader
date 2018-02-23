@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	private ArrayList<AppItem> apps = new ArrayList<>();
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
-	private static final Comparator<SortItem> comparator = new AlphabeticComparator<SortItem>();
+	private static final Comparator<SortItem> comparator = new AlphabeticComparator<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		initFolders();
 		checkActionBar();
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout));
 		appsListFragment = new AppsListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(APP_LIST_KEY, apps);

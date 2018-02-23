@@ -18,10 +18,6 @@
 
 package javax.microedition.m3g;
 
-import javax.microedition.lcdui.Image;
-
-import java.io.*;
-
 public class Texture2D extends Transformable
 {
     //------------------------------------------------------------------

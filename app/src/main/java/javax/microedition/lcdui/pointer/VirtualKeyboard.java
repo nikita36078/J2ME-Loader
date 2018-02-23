@@ -692,9 +692,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private void repaint() {
 		offscreenChanged = true;
 
-		if (target != null) {
-			//target.repaint();
-		}
+		/*if (target != null) {
+			target.repaint();
+		}*/
 	}
 
 	/**
@@ -717,51 +717,55 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			return checkPointerHandled(x, y);
 		}
 
-		if (layoutEditMode == LAYOUT_EOF) {
-			if (pointer > associatedKeys.length) {
-				return checkPointerHandled(x, y);
-			}
-			for (VirtualKey aKeypad : keypad) {
-				if (aKeypad.contains(x, y)) {
-					associatedKeys[pointer] = aKeypad;
-					aKeypad.setSelected(true);
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getKeyCode()));
-					if (aKeypad.getSecondKeyCode() != 0) {
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getSecondKeyCode()));
+		switch (layoutEditMode) {
+			case LAYOUT_EOF:
+				if (pointer > associatedKeys.length) {
+					return checkPointerHandled(x, y);
+				}
+				for (VirtualKey aKeypad : keypad) {
+					if (aKeypad.contains(x, y)) {
+						associatedKeys[pointer] = aKeypad;
+						aKeypad.setSelected(true);
+						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getKeyCode()));
+						if (aKeypad.getSecondKeyCode() != 0) {
+							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getSecondKeyCode()));
+						}
+						repeater.start(aKeypad.getKeyCode(), aKeypad.getSecondKeyCode());
+						repaint();
+						break;
 					}
-					repeater.start(aKeypad.getKeyCode(), aKeypad.getSecondKeyCode());
+				}
+				break;
+			case LAYOUT_KEYS:
+				editedIndex = -1;
+				for (int i = 0; i < keypad.length; i++) {
+					if (keypad[i].contains(x, y)) {
+						editedIndex = i;
+						RectF rect = keypad[i].getRect();
+						offsetX = x - rect.left;
+						offsetY = y - rect.top;
+						break;
+					}
+				}
+				break;
+			case LAYOUT_SCALES:
+				int index = -1;
+				for (int group = 0; group < keyScaleGroups.length && index < 0; group++) {
+					for (int key = 0; key < keyScaleGroups[group].length && index < 0; key++) {
+						if (keypad[keyScaleGroups[group][key]].contains(x, y)) {
+							index = group;
+						}
+					}
+				}
+				if (index >= 0) {
+					editedIndex = index;
+					highlightGroup(index);
 					repaint();
-					break;
 				}
-			}
-		} else if (layoutEditMode == LAYOUT_KEYS) {
-			editedIndex = -1;
-			for (int i = 0; i < keypad.length; i++) {
-				if (keypad[i].contains(x, y)) {
-					editedIndex = i;
-					RectF rect = keypad[i].getRect();
-					offsetX = x - rect.left;
-					offsetY = y - rect.top;
-					break;
-				}
-			}
-		} else if (layoutEditMode == LAYOUT_SCALES) {
-			int index = -1;
-			for (int group = 0; group < keyScaleGroups.length && index < 0; group++) {
-				for (int key = 0; key < keyScaleGroups[group].length && index < 0; key++) {
-					if (keypad[keyScaleGroups[group][key]].contains(x, y)) {
-						index = group;
-					}
-				}
-			}
-			if (index >= 0) {
-				editedIndex = index;
-				highlightGroup(index);
-				repaint();
-			}
-			offsetX = x;
-			offsetY = y;
-			prevScale = keyScales[editedIndex];
+				offsetX = x;
+				offsetY = y;
+				prevScale = keyScales[editedIndex];
+				break;
 		}
 		return checkPointerHandled(x, y);
 	}
@@ -770,71 +774,75 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (skip) {
 			return checkPointerHandled(x, y);
 		}
-		if (layoutEditMode == LAYOUT_EOF) {
-			if (pointer > associatedKeys.length) {
-				return checkPointerHandled(x, y);
-			}
-			if (associatedKeys[pointer] == null) {
-				pointerPressed(pointer, x, y);
-			} else if (!associatedKeys[pointer].contains(x, y)) {
-				repeater.stop();
-				target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
-				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
+		switch (layoutEditMode) {
+			case LAYOUT_EOF:
+				if (pointer > associatedKeys.length) {
+					return checkPointerHandled(x, y);
 				}
-				associatedKeys[pointer].setSelected(false);
-				associatedKeys[pointer] = null;
-				repaint();
-				pointerPressed(pointer, x, y);
-			}
-		} else if (layoutEditMode == LAYOUT_KEYS) {
-			if (editedIndex >= 0) {
-				RectF rect = keypad[editedIndex].getRect();
-				rect.offsetTo(x - offsetX, y - offsetY);
-				snapModes[editedIndex] = RectSnap.NO_SNAP;
-				for (int i = 0; i < keypad.length; i++) {
-					if (i != editedIndex && findSnap(editedIndex, i)) {
-						break;
+				if (associatedKeys[pointer] == null) {
+					pointerPressed(pointer, x, y);
+				} else if (!associatedKeys[pointer].contains(x, y)) {
+					repeater.stop();
+					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
+					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
+						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
+					}
+					associatedKeys[pointer].setSelected(false);
+					associatedKeys[pointer] = null;
+					repaint();
+					pointerPressed(pointer, x, y);
+				}
+				break;
+			case LAYOUT_KEYS:
+				if (editedIndex >= 0) {
+					RectF rect = keypad[editedIndex].getRect();
+					rect.offsetTo(x - offsetX, y - offsetY);
+					snapModes[editedIndex] = RectSnap.NO_SNAP;
+					for (int i = 0; i < keypad.length; i++) {
+						if (i != editedIndex && findSnap(editedIndex, i)) {
+							break;
+						}
+					}
+					if (snapModes[editedIndex] == RectSnap.NO_SNAP) {
+						snapModes[editedIndex] = RectSnap.getSnap(rect, screen, snapOffsets[editedIndex]);
+						snapOrigins[editedIndex] = SCREEN;
+						if (Math.abs(snapOffsets[editedIndex].x) <= snapRadius) {
+							snapOffsets[editedIndex].x = 0;
+						}
+						if (Math.abs(snapOffsets[editedIndex].y) <= snapRadius) {
+							snapOffsets[editedIndex].y = 0;
+						}
+					}
+					snapKey(editedIndex, 0);
+					snapKeys();
+					repaint();
+				}
+				break;
+			case LAYOUT_SCALES:
+				float dx = x - offsetX;
+				float dy = offsetY - y;
+				float delta;
+				if (Math.abs(dx) > Math.abs(dy)) {
+					delta = dx;
+				} else {
+					delta = dy;
+				}
+				float scale = prevScale + delta / Math.max(screen.width(), screen.height());
+				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
+					scale = 1;
+				} else {
+					for (int i = 0; i < keyScales.length; i++) {
+						if (i != editedIndex && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
+							scale = keyScales[i];
+							break;
+						}
 					}
 				}
-				if (snapModes[editedIndex] == RectSnap.NO_SNAP) {
-					snapModes[editedIndex] = RectSnap.getSnap(rect, screen, snapOffsets[editedIndex]);
-					snapOrigins[editedIndex] = SCREEN;
-					if (Math.abs(snapOffsets[editedIndex].x) <= snapRadius) {
-						snapOffsets[editedIndex].x = 0;
-					}
-					if (Math.abs(snapOffsets[editedIndex].y) <= snapRadius) {
-						snapOffsets[editedIndex].y = 0;
-					}
-				}
-				snapKey(editedIndex, 0);
+				keyScales[editedIndex] = scale;
+				resizeKeyGroup(editedIndex);
 				snapKeys();
 				repaint();
-			}
-		} else if (layoutEditMode == LAYOUT_SCALES) {
-			float dx = x - offsetX;
-			float dy = offsetY - y;
-			float delta;
-			if (Math.abs(dx) > Math.abs(dy)) {
-				delta = dx;
-			} else {
-				delta = dy;
-			}
-			float scale = prevScale + delta / Math.max(screen.width(), screen.height());
-			if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
-				scale = 1;
-			} else {
-				for (int i = 0; i < keyScales.length; i++) {
-					if (i != editedIndex && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
-						scale = keyScales[i];
-						break;
-					}
-				}
-			}
-			keyScales[editedIndex] = scale;
-			resizeKeyGroup(editedIndex);
-			snapKeys();
-			repaint();
+				break;
 		}
 		return checkPointerHandled(x, y);
 	}

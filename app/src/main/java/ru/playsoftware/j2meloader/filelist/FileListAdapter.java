@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class FileListAdapter extends BaseAdapter {
 
-	private ArrayList<FSItem> list = new ArrayList<FSItem>();
+	private ArrayList<FSItem> list = new ArrayList<>();
 	private final LayoutInflater li;
 
 	public FileListAdapter(Context context, ArrayList<FSItem> arr) {
@@ -54,7 +54,7 @@ public class FileListAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
-			view = li.inflate(R.layout.list_row, null);
+			view = li.inflate(R.layout.list_row, viewGroup);
 			holder = new ViewHolder();
 			holder.icon = view.findViewById(R.id.list_image);
 			holder.label = view.findViewById(R.id.list_header);

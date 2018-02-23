@@ -108,11 +108,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		}
 		// Extract other resources from jar.
 		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir
-				+ ConfigActivity.MIDLET_RES_DIR, new FilenameFilter() {
-			public boolean accept(File dir, String fname) {
-				return !(fname.endsWith(".class") || fname.endsWith(".jar.jar"));
-			}
-		});
+				+ ConfigActivity.MIDLET_RES_DIR, (dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
 		deleteTemp();
 		return true;
 	}

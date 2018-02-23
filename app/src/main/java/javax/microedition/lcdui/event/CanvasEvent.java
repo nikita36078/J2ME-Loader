@@ -22,7 +22,7 @@ import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
 
-	private static ArrayStack<CanvasEvent> recycled = new ArrayStack();
+	private static ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
 
 	public static final int KEY_PRESSED = 0,
 			KEY_REPEATED = 1,

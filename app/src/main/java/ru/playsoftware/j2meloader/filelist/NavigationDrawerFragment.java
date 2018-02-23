@@ -22,6 +22,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -73,20 +74,20 @@ public class NavigationDrawerFragment extends Fragment {
 	/**
 	 * Helper component that ties the action bar to the navigation drawer.
 	 */
-	private ActionBarDrawerToggle mDrawerToggle;
+	private ActionBarDrawerToggle drawerToggle;
 
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerListView;
-	private View mFragmentContainerView;
+	private DrawerLayout drawerLayout;
+	private ListView drawerListView;
+	private View fragmentContainerView;
 
-	private boolean mFromSavedInstanceState;
-	private boolean mUserLearnedDrawer;
+	private boolean fromSavedInstanceState;
+	private boolean userLearnedDrawer;
 
 	private TextView fullPath;
 	ArrayList<FSItem> items;
 	private String currPath;
 	private String startPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-	private static final Comparator<SortItem> comparator = new AlphabeticComparator<SortItem>();
+	private static final Comparator<SortItem> comparator = new AlphabeticComparator<>();
 	private static final Map<String, Integer> mapExt = new HashMap<String, Integer>() {
 		{
 			put(".jar", R.drawable.icon_zip);
@@ -102,11 +103,11 @@ public class NavigationDrawerFragment extends Fragment {
 		// drawer. See PREF_USER_LEARNED_DRAWER for details.
 		SharedPreferences sp = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+		userLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
 		if (savedInstanceState != null) {
 			currPath = savedInstanceState.getString(STATE_SELECTED_PATH);
-			mFromSavedInstanceState = true;
+			fromSavedInstanceState = true;
 		}
 	}
 
@@ -119,42 +120,38 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.file_browser_layout, container,
 				false);
 		fullPath = v.findViewById(R.id.full_path);
-		mDrawerListView = v.findViewById(R.id.file_list);
-		mDrawerListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-											int position, long id) {
+		drawerListView = v.findViewById(R.id.file_list);
+		drawerListView
+				.setOnItemClickListener((parent, view, position, id) -> {
 
-						FSItem it = items.get(position);
-						switch (it.getType()) {
-							case Folder:
-								currPath = currPath + "/" + it.getName();// build
-								// URL
-								readFolder(currPath);
-								break;
-							case Back:
-								currPath = calcBackPath();
-								readFolder(currPath);
-								break;
-							case File:
-								selectFile(currPath + '/' + it.getName());// build
-								// URL
-								break;
-						}
+					FSItem it = items.get(position);
+					switch (it.getType()) {
+						case Folder:
+							currPath = currPath + "/" + it.getName();// build
+							// URL
+							readFolder(currPath);
+							break;
+						case Back:
+							currPath = calcBackPath();
+							readFolder(currPath);
+							break;
+						case File:
+							selectFile(currPath + '/' + it.getName());// build
+							// URL
+							break;
 					}
 				});
 		return v;
 	}
 
 	public boolean isDrawerOpen() {
-		return mDrawerLayout != null
-				&& mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+		return drawerLayout != null
+				&& drawerLayout.isDrawerOpen(fragmentContainerView);
 	}
 
 	/**
@@ -170,12 +167,12 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 		readFolder(currPath);
 
-		mFragmentContainerView = getActivity().findViewById(fragmentId);
-		mDrawerLayout = drawerLayout;
+		fragmentContainerView = getActivity().findViewById(fragmentId);
+		this.drawerLayout = drawerLayout;
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+		this.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				Gravity.LEFT);
 		// set up the drawer's list view with items and click listener
 
@@ -185,8 +182,8 @@ public class NavigationDrawerFragment extends Fragment {
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
-		mDrawerToggle = new ActionBarDrawerToggle(getActivity(),
-				mDrawerLayout, /* DrawerLayout object */
+		drawerToggle = new ActionBarDrawerToggle(getActivity(),
+				NavigationDrawerFragment.this.drawerLayout, /* DrawerLayout object */
 				R.string.navigation_drawer_open, /*
 												   * "open drawer" description for
 												   * accessibility
@@ -214,11 +211,11 @@ public class NavigationDrawerFragment extends Fragment {
 					return;
 				}
 
-				if (!mUserLearnedDrawer) {
+				if (!userLearnedDrawer) {
 					// The user manually opened the drawer; store this flag to
 					// prevent auto-showing
 					// the navigation drawer automatically in the future.
-					mUserLearnedDrawer = true;
+					userLearnedDrawer = true;
 					SharedPreferences sp = PreferenceManager
 							.getDefaultSharedPreferences(getActivity());
 					sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true)
@@ -233,23 +230,18 @@ public class NavigationDrawerFragment extends Fragment {
 		// If the user hasn't 'learned' about the drawer, open it to introduce
 		// them to the drawer,
 		// per the navigation drawer design guidelines.
-		if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-			mDrawerLayout.openDrawer(mFragmentContainerView);
+		if (!userLearnedDrawer && !fromSavedInstanceState) {
+			this.drawerLayout.openDrawer(fragmentContainerView);
 		}
 
 		// Defer code dependent on restoration of previous instance state.
-		mDrawerLayout.post(new Runnable() {
-			@Override
-			public void run() {
-				mDrawerToggle.syncState();
-			}
-		});
+		this.drawerLayout.post(() -> drawerToggle.syncState());
 
-		mDrawerLayout.addDrawerListener(mDrawerToggle);
+		this.drawerLayout.addDrawerListener(drawerToggle);
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString(STATE_SELECTED_PATH, currPath);
 	}
@@ -258,8 +250,8 @@ public class NavigationDrawerFragment extends Fragment {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Forward the new configuration the drawer toggle component.
-		if (mDrawerToggle != null) {
-			mDrawerToggle.onConfigurationChanged(newConfig);
+		if (drawerToggle != null) {
+			drawerToggle.onConfigurationChanged(newConfig);
 		}
 	}
 
@@ -269,7 +261,7 @@ public class NavigationDrawerFragment extends Fragment {
 		// See also
 		// showGlobalContextActionBar, which controls the top-left area of the
 		// action bar.
-		if (mDrawerLayout != null && isDrawerOpen()) {
+		if (drawerLayout != null && isDrawerOpen()) {
 			showGlobalContextActionBar();
 		}
 		super.onCreateOptionsMenu(menu, inflater);
@@ -277,10 +269,7 @@ public class NavigationDrawerFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -312,9 +301,9 @@ public class NavigationDrawerFragment extends Fragment {
 	private void readFolder(String folderStr) {
 		Log.d(TAG, "read : " + folderStr);
 		File current = new File(folderStr);
-		items = new ArrayList<FSItem>();
-		ArrayList<FSItem> listFolder = new ArrayList<FSItem>();
-		ArrayList<FSItem> listFile = new ArrayList<FSItem>();
+		items = new ArrayList<>();
+		ArrayList<FSItem> listFolder = new ArrayList<>();
+		ArrayList<FSItem> listFile = new ArrayList<>();
 		StringBuilder subheader = new StringBuilder();
 		if (!currPath.equals(startPath)) {
 			items.add(new FSItem(R.drawable.folder_in, "..", "Parent folder",
@@ -322,7 +311,7 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 		if (current.list().length == 0) {
 			// если папка пустая
-			mDrawerListView.setAdapter(new FileListAdapter(getActionBar().getThemedContext(), items));
+			drawerListView.setAdapter(new FileListAdapter(getActionBar().getThemedContext(), items));
 			fullPath.setText(currPath);
 			return;
 		}
@@ -351,7 +340,7 @@ public class NavigationDrawerFragment extends Fragment {
 		Collections.sort(listFile, comparator);
 		items.addAll(listFolder.subList(0, listFolder.size()));
 		items.addAll(listFile.subList(0, listFile.size()));
-		mDrawerListView.setAdapter(new FileListAdapter(getActionBar()
+		drawerListView.setAdapter(new FileListAdapter(getActionBar()
 				.getThemedContext(), items));
 		fullPath.setText(currPath);
 	}
@@ -392,8 +381,8 @@ public class NavigationDrawerFragment extends Fragment {
 	private void selectFile(String path) {
 		String ext = getExtension(path);
 		if (ext != null && ext.equals(".jar")) {
-			if (mDrawerLayout != null) {
-				mDrawerLayout.closeDrawer(mFragmentContainerView);
+			if (drawerLayout != null) {
+				drawerLayout.closeDrawer(fragmentContainerView);
 				getActionBar().setTitle(R.string.app_name);
 			}
 			((SelectedCallback) getActivity()).onSelected(path);

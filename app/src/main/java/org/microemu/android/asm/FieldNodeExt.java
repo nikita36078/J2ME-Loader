@@ -26,6 +26,7 @@
 
 package org.microemu.android.asm;
 
+import android.support.annotation.NonNull;
 import org.objectweb.asm.tree.FieldNode;
 
 public class FieldNodeExt implements Comparable<FieldNodeExt> {
@@ -36,7 +37,7 @@ public class FieldNodeExt implements Comparable<FieldNodeExt> {
 		this.fieldNode = fieldNode;
 	}
 
-	public int compareTo(FieldNodeExt test) {
+	public int compareTo(@NonNull FieldNodeExt test) {
 		int t = test.fieldNode.name.compareTo(fieldNode.name);
 		if (t != 0) {
 			return t;

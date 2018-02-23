@@ -84,8 +84,8 @@ public class RecordStoreImpl extends RecordStore {
 
 	public int readHeader(DataInputStream dis)
 			throws IOException {
-		for (int i = 0; i < fileIdentifier.length; i++) {
-			if (dis.read() != fileIdentifier[i]) {
+		for (byte aFileIdentifier : fileIdentifier) {
+			if (dis.read() != aFileIdentifier) {
 				throw new IOException();
 			}
 		}

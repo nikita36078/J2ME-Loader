@@ -44,7 +44,7 @@ public abstract class Displayable {
 	}
 
 	public Displayable() {
-		commands = new ArrayList();
+		commands = new ArrayList<>();
 		listener = null;
 	}
 
@@ -65,12 +65,7 @@ public abstract class Displayable {
 		this.title = title;
 
 		if (parent != null) {
-			parent.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					parent.getSupportActionBar().setTitle(Displayable.this.title);
-				}
-			});
+			parent.runOnUiThread(() -> parent.getSupportActionBar().setTitle(Displayable.this.title));
 		}
 	}
 

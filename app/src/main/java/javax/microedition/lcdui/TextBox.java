@@ -99,12 +99,12 @@ public class TextBox extends Screen {
 		this.constraints = constraints;
 
 		if (textview != null) {
-			int inputtype = 0;
+			int inputtype;
 
 			switch (constraints & TextField.CONSTRAINT_MASK) {
 				default:
 				case TextField.ANY:
-					inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL;
+					inputtype = InputType.TYPE_CLASS_TEXT;
 					break;
 
 				case TextField.EMAILADDR:

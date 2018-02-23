@@ -32,9 +32,9 @@ import javax.microedition.lcdui.list.ItemSelector;
 public class List extends Screen implements Choice, ItemSelector {
 	public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
-	private ArrayList<String> strings = new ArrayList();
-	private ArrayList<Image> images = new ArrayList();
-	private final ArrayList<Boolean> selected = new ArrayList();
+	private ArrayList<String> strings = new ArrayList<>();
+	private ArrayList<Image> images = new ArrayList<>();
+	private final ArrayList<Boolean> selected = new ArrayList<>();
 
 	private ListView list;
 	private CompoundListAdapter adapter;
@@ -107,11 +107,11 @@ public class List extends Screen implements Choice, ItemSelector {
 			selected.addAll(Collections.nCopies(size, Boolean.FALSE));
 
 			if (strings.size() == 0) {
-				strings.addAll(Collections.nCopies(size, (String) null));
+				strings.addAll(Collections.nCopies(size,null));
 			}
 
 			if (images.size() == 0) {
-				images.addAll(Collections.nCopies(size, (Image) null));
+				images.addAll(Collections.nCopies(size,null));
 			}
 		}
 	}

@@ -73,13 +73,11 @@ public class ConnectorImpl extends ConnectorAdapter {
 
 	public Connection open(final String name, final int mode, final boolean timeouts) throws IOException {
 		try {
-			return (Connection) AccessController.doPrivileged(new PrivilegedExceptionAction() {
-				public Object run() throws IOException {
-					if (debugConnectionInvocations || needPrivilegedCalls) {
-						return openSecureProxy(name, mode, timeouts, needPrivilegedCalls);
-					} else {
-						return openSecure(name, mode, timeouts);
-					}
+			return (Connection) AccessController.doPrivileged((PrivilegedExceptionAction) () -> {
+				if (debugConnectionInvocations || needPrivilegedCalls) {
+					return openSecureProxy(name, mode, timeouts, needPrivilegedCalls);
+				} else {
+					return openSecure(name, mode, timeouts);
 				}
 			}, acc);
 		} catch (PrivilegedActionException e) {
@@ -107,11 +105,11 @@ public class ConnectorImpl extends ConnectorAdapter {
 		Connection origConnection = openSecure(name, mode, timeouts);
 		Class connectionClass = null;
 		Class[] interfaces = getAllInterfaces(origConnection.getClass());
-		for (int i = 0; i < interfaces.length; i++) {
-			if (Connection.class.isAssignableFrom(interfaces[i])) {
-				connectionClass = interfaces[i];
+		for (Class anInterface : interfaces) {
+			if (Connection.class.isAssignableFrom(anInterface)) {
+				connectionClass = anInterface;
 				break;
-			} else if (interfaces[i].getClass().getName().equals(Connection.class.getName())) {
+			} else if (anInterface.getClass().getName().equals(Connection.class.getName())) {
 				Log.e(TAG, "Connection interface loaded by different ClassLoader");
 			}
 		}

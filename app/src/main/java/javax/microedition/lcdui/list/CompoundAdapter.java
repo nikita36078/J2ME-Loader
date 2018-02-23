@@ -29,15 +29,15 @@ import java.util.ArrayList;
 import javax.microedition.lcdui.Image;
 
 public abstract class CompoundAdapter implements Adapter {
-	protected ArrayList<CompoundItem> items;
-	protected ArrayList<DataSetObserver> observers;
+	private ArrayList<CompoundItem> items;
+	private ArrayList<DataSetObserver> observers;
 	protected Context context;
 
 	public CompoundAdapter(Context context) {
 		this.context = context;
 
-		items = new ArrayList();
-		observers = new ArrayList();
+		items = new ArrayList<>();
+		observers = new ArrayList<>();
 	}
 
 	public void append(String stringPart, Image imagePart) {
@@ -130,7 +130,7 @@ public abstract class CompoundAdapter implements Adapter {
 			try {
 				observer.onChanged();
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 	}

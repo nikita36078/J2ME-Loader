@@ -35,10 +35,10 @@ import java.util.Collections;
 import javax.microedition.lcdui.list.CompoundSpinnerAdapter;
 
 public class ChoiceGroup extends Item implements Choice {
-	private ArrayList<String> strings = new ArrayList();
-	private ArrayList<Image> images = new ArrayList();
-	private ArrayList<CompoundButton> buttons = new ArrayList();
-	private final ArrayList<Boolean> selected = new ArrayList();
+	private ArrayList<String> strings = new ArrayList<>();
+	private ArrayList<Image> images = new ArrayList<>();
+	private ArrayList<CompoundButton> buttons = new ArrayList<>();
+	private final ArrayList<Boolean> selected = new ArrayList<>();
 
 	private Spinner spinner;
 	private CompoundSpinnerAdapter adapter;
@@ -140,11 +140,11 @@ public class ChoiceGroup extends Item implements Choice {
 			selected.addAll(Collections.nCopies(size, Boolean.FALSE));
 
 			if (strings.size() == 0) {
-				strings.addAll(Collections.nCopies(size, (String) null));
+				strings.addAll(Collections.nCopies(size, null));
 			}
 
 			if (images.size() == 0) {
-				images.addAll(Collections.nCopies(size, (Image) null));
+				images.addAll(Collections.nCopies(size, null));
 			}
 		}
 	}

@@ -58,7 +58,7 @@ public class AppsListAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_jar, null);
+			view = layoutInflater.inflate(R.layout.list_row_jar, viewGroup);
 			holder = new ViewHolder();
 			holder.icon = view.findViewById(R.id.list_image);
 			holder.name = view.findViewById(R.id.list_title);

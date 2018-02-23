@@ -164,7 +164,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 		public void visitTryCatchBlock(final Label start, final Label end, final Label handler, final String type) {
 			if (enhanceCatchBlock && type != null) {
 				if (catchInfo == null) {
-					catchInfo = new HashMap<Label, CatchInformation>();
+					catchInfo = new HashMap<>();
 				}
 				CatchInformation newHandler = catchInfo.get(handler);
 				if (newHandler == null) {

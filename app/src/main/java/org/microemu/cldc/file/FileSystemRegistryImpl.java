@@ -57,11 +57,7 @@ public class FileSystemRegistryImpl implements FileSystemRegistryDelegate, Imple
 	public Enumeration listRoots() {
 		switch (Connection.getConnectionType()) {
 			case Connection.CONNECTIONTYPE_SYSTEM_FS:
-				return (Enumeration) AccessController.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						return FileSystemFileConnection.listRoots(fsRoot, fsSingle);
-					}
-				}, acc);
+				return (Enumeration) AccessController.doPrivileged((PrivilegedAction) () -> FileSystemFileConnection.listRoots(fsRoot, fsSingle), acc);
 			default:
 				throw new RuntimeException("Invalid connectionType configuration");
 		}

@@ -53,15 +53,8 @@ public class FileUtils {
 	}
 
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
-		FileChannel sourceChannel = null;
-		FileChannel destChannel = null;
-		try {
-			sourceChannel = new FileInputStream(source).getChannel();
-			destChannel = new FileOutputStream(dest).getChannel();
+		try (FileChannel sourceChannel = new FileInputStream(source).getChannel(); FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
 			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-		} finally {
-			sourceChannel.close();
-			destChannel.close();
 		}
 	}
 
@@ -78,7 +71,7 @@ public class FileUtils {
 	}
 
 	public static LinkedHashMap<String, String> loadManifest(File mf) {
-		LinkedHashMap<String, String> params = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> params = new LinkedHashMap<>();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(mf)));
 			String line;

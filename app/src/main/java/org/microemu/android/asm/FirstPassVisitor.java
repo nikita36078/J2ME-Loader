@@ -50,8 +50,7 @@ public class FirstPassVisitor extends ClassVisitor {
 	}
 
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-//		System.out.println("class: " + name +" + "+ superName);
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		this.name = name;
 		list.add(name);
 		list.add(superName);
@@ -59,13 +58,10 @@ public class FirstPassVisitor extends ClassVisitor {
 	}
 
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void visitAttribute(Attribute attr) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void visitEnd() {
@@ -77,8 +73,6 @@ public class FirstPassVisitor extends ClassVisitor {
 	}
 
 	public void visitInnerClass(String name, String outerName, String innerName, int access) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public MethodVisitor visitMethod(final int access, final String name, String desc, final String signature, final String[] exceptions) {
@@ -89,13 +83,9 @@ public class FirstPassVisitor extends ClassVisitor {
 	}
 
 	public void visitOuterClass(String owner, String name, String desc) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void visitSource(String source, String debug) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

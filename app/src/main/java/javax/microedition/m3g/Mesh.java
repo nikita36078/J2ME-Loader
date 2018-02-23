@@ -107,14 +107,8 @@ public class Mesh extends Node
         {
             throw new IllegalArgumentException();
         }
-        if (triangles.length == 0)
-        {
-            throw new IllegalArgumentException();
-        }
-        for (int i = 0; i < triangles.length; ++i)
-        {
-            if (triangles[i] == null)
-            {
+        for (IndexBuffer triangle : triangles) {
+            if (triangle == null) {
                 throw new NullPointerException();
             }
         }

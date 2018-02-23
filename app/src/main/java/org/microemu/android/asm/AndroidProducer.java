@@ -49,14 +49,11 @@ import java.util.jar.Manifest;
 
 public class AndroidProducer {
 
-	private static HashMap<String, ArrayList<String>> classesHierarchy =
-			new HashMap<String, ArrayList<String>>();
+	private static HashMap<String, ArrayList<String>> classesHierarchy = new HashMap<>();
 
-	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations =
-			new HashMap<String, TreeMap<FieldNodeExt, String>>();
+	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations = new HashMap<>();
 
-	private static HashMap<String, ArrayList<String>> methodTranslations =
-			new HashMap<String, ArrayList<String>>();
+	private static HashMap<String, ArrayList<String>> methodTranslations = new HashMap<>();
 
 	private static void analyze(String className, final InputStream classInputStream) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
@@ -76,7 +73,7 @@ public class AndroidProducer {
 	public static void processJar(File jarInputFile, File jarOutputFile, boolean isMidlet) throws IOException {
 		JarInputStream jis = null;
 		JarOutputStream jos = null;
-		HashMap<String, byte[]> resources = new HashMap<String, byte[]>();
+		HashMap<String, byte[]> resources = new HashMap<>();
 		try {
 			jis = new JarInputStream(new FileInputStream(jarInputFile));
 			Manifest manifest = jis.getManifest();
@@ -117,9 +114,7 @@ public class AndroidProducer {
 				}
 			}
 
-			Iterator<String> it = resources.keySet().iterator();
-			while (it.hasNext()) {
-				String name = it.next();
+			for (String name : resources.keySet()) {
 				byte[] inBuffer = resources.get(name);
 				byte[] outBuffer = inBuffer;
 				if (name.endsWith(".class")) {
@@ -142,14 +137,13 @@ public class AndroidProducer {
 		if (args.length < 2 || args.length > 3) {
 			System.out.println("usage: AndroidProducer <infile> <outfile> [midlet]");
 		} else {
-			boolean isMidlet = false;
+			boolean midlet = false;
 			if (args.length == 3 && args[2].toLowerCase().equals("midlet")) {
-				isMidlet = true;
+				midlet = true;
 			}
 			try {
-				processJar(new File(args[0]), new File(args[1]), isMidlet);
+				processJar(new File(args[0]), new File(args[1]), midlet);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

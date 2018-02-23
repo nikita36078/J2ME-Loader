@@ -25,7 +25,7 @@ import org.acra.sender.ReportSenderFactory;
 public class HockeySenderFactory implements ReportSenderFactory {
 	@NonNull
 	@Override
-	public ReportSender create(Context context, CoreConfiguration config) {
+	public ReportSender create(@NonNull Context context, @NonNull CoreConfiguration config) {
 		return new HockeySender();
 	}
 

@@ -18,17 +18,17 @@
 
 package javax.microedition.m3g;
 
-import java.io.*;
-import java.io.IOException;
-
-import java.util.Vector;
-import java.util.Hashtable;
-
-import javax.microedition.io.*;
-import javax.microedition.lcdui.Image;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
+import javax.microedition.io.InputConnection;
+import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Hashtable;
+import java.util.Vector;
 //#ifdef RD_JAVA_OMJ
 //#endif // RD_JAVA_OMJ
 
@@ -205,9 +205,10 @@ public class Loader
             try
             {
                 stream.close();
-                stream = null;
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         // Finally, remove file from history
         iFileHistory.removeElement(aName);
@@ -240,9 +241,10 @@ public class Loader
             try
             {
                 stream.close();
-                stream = null;
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return objects;
     }
@@ -254,17 +256,13 @@ public class Loader
      */
     private Object3D[] doLoad(InputStream aStream, int aType) throws IOException
     {
-        if (aType == M3G_TYPE)
-        {
-            return loadM3G(aStream);
-        }
-        else if (aType == PNG_TYPE)
-        {
-            return loadPNG(aStream);
-        }
-        else if (aType == JPEG_TYPE)
-        {
-            return loadJPEG(aStream);
+        switch (aType) {
+            case M3G_TYPE:
+                return loadM3G(aStream);
+            case PNG_TYPE:
+                return loadPNG(aStream);
+            case JPEG_TYPE:
+                return loadJPEG(aStream);
         }
         throw new IOException("File not recognized.");
     }
@@ -344,9 +342,10 @@ public class Loader
         try
         {
             in.close();
-            in = null;
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return buildImage2D(format);
     }
 
@@ -442,14 +441,17 @@ public class Loader
             }
             while (format == JPEG_INVALID_COLOUR_FORMAT);
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         // Close the data stream
         try
         {
             in.close();
-            in = null;
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return buildImage2D(format);
     }
 
@@ -467,8 +469,7 @@ public class Loader
         }
         else
         {
-            stream = (InputStream) new ByteArrayInputStream(
-                         iStreamData, iStreamOffset, iStreamData.length - iStreamOffset);
+            stream = new ByteArrayInputStream(iStreamData, iStreamOffset, iStreamData.length - iStreamOffset);
         }
         // Create an image object
         Image2D i2d;
@@ -482,7 +483,9 @@ public class Loader
             {
                 stream.close();
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return new Object3D[] { i2d };
     }
@@ -619,7 +622,7 @@ public class Loader
                     byte[] data = new byte[len];
                     int id = _getUserParameter(handle, i, j, data);
                     if (hash.put(new Integer(id), data) != null)
-                        throw new IOException("Duplicate id in user data [" + iResourceName + "].");;
+                        throw new IOException("Duplicate id in user data [" + iResourceName + "].");
                 }
                 Object3D object = Interface.getObjectInstance(obj[i]);
                 object.setUserObject(hash);
@@ -649,7 +652,7 @@ public class Loader
         int expectedCount = totalSectionLength;
 
         // Decompress data if necessary
-        CountedInputStream uncompressedStream = null;
+        CountedInputStream uncompressedStream;
         if (compressionScheme == 0)
         {
             uncompressedStream = new CountedInputStream(aStream);
@@ -670,10 +673,10 @@ public class Loader
                 {
                     throw new IOException("Section length mismatch [" + iResourceName + "].");
                 }
-                byte[] compressed = new byte[(int) totalSectionLength - 13];
+                byte[] compressed = new byte[totalSectionLength - 13];
                 aStream.read(compressed);
 
-                byte[] uncompressed = new byte[(int) uncompressedLength];
+                byte[] uncompressed = new byte[uncompressedLength];
 
                 // zlib decompression
                 if (!_inflate(compressed, uncompressed))
@@ -712,7 +715,7 @@ public class Loader
         int length    = readUInt32(aStream);
 
         int expectedCount = aStream.getCounter() + length;
-        Object3D newObject = null;
+        Object3D newObject;
 
         if (objectType == 255)
         {
@@ -773,8 +776,7 @@ public class Loader
      */
     private static String readString(InputStream aStream) throws IOException
     {
-        StringBuffer result = new StringBuffer();
-        int i = 0;
+        StringBuilder result = new StringBuilder();
         for (int c = aStream.read(); c != 0; c = aStream.read())
         {
             if ((c & 0x80) == 0)   // 0xxxxxxx => 1 byte
@@ -887,7 +889,7 @@ public class Loader
     private boolean inFileHistory(String name)
     {
         for (int i = 0; i < iFileHistory.size(); i++)
-            if (((String)iFileHistory.elementAt(i)).equals(name))
+            if ((iFileHistory.elementAt(i)).equals(name))
             {
                 return true;
             }
@@ -931,9 +933,10 @@ public class Loader
             try
             {
                 ic.close();
-                ic = null;
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return is;
     }
@@ -1003,8 +1006,7 @@ public class Loader
         public void increasePeekBuffer(int aLength)
         {
             int[] temp = new int[iPeekBuffer.length + aLength];
-            for (int i = 0; i < iBuffered; i++)
-                temp[i] = iPeekBuffer[i];
+            System.arraycopy(iPeekBuffer, 0, temp, 0, iBuffered);
             iPeekBuffer = temp;
         }
 
@@ -1091,12 +1093,12 @@ public class Loader
 //#endif // RD_JAVA_OMJ
 
     // Finalization method for Symbian
-    final private void registeredFinalize()
+    private void registeredFinalize()
     {
         if (handle != 0)
         {
             Platform.finalizeObject(handle, iInterface);
-            iInterface.deregister(this, iInterface);
+            Interface.deregister(this, iInterface);
             iInterface = null;
             handle = 0;
         }

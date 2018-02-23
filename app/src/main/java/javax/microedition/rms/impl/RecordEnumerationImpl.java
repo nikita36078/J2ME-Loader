@@ -168,6 +168,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 						}
 						enumerationRecords.add(new EnumerationRecord(recordId, data));
 					} catch (InvalidRecordIDException e) {
+						e.printStackTrace();
 					}
 					recordId++;
 				}
@@ -180,21 +181,15 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		// sort
 		//
 		if (comparator != null) {
-			Collections.sort(enumerationRecords, new Comparator() {
-
-				public int compare(Object lhs, Object rhs) {
-
-					int compare = comparator.compare(((EnumerationRecord) lhs).value,
-							((EnumerationRecord) rhs).value);
-					if (compare == RecordComparator.EQUIVALENT)
-						return 0;
-					else if (compare == RecordComparator.FOLLOWS)
-						return 1;
-					else
-						return -1;
-
-				}
-
+			Collections.sort(enumerationRecords, (Comparator) (lhs, rhs) -> {
+				int compare = comparator.compare(((EnumerationRecord) lhs).value,
+						((EnumerationRecord) rhs).value);
+				if (compare == RecordComparator.EQUIVALENT)
+					return 0;
+				else if (compare == RecordComparator.FOLLOWS)
+					return 1;
+				else
+					return -1;
 			});
 		}
 	}

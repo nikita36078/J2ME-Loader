@@ -18,7 +18,6 @@
 
 package javax.microedition.m3g;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 /**
@@ -57,7 +56,7 @@ public abstract class Object3D
             // Get associated Interafece object and
             // register this instance with that
             iInterface = Interface.getInstance();
-            iInterface.register(this);
+            Interface.register(this);
 
             int n = _getAnimationTrackCount(handle);
             while (n-- > 0)
@@ -209,7 +208,7 @@ public abstract class Object3D
             {
                 // finalize native peer
                 Platform.finalizeObject(handle, iInterface);
-                iInterface.deregister(this, iInterface);
+                Interface.deregister(this, iInterface);
 
                 // reset handles
                 iInterface = null;

@@ -25,6 +25,7 @@
 
 package org.microemu.cldc.ssl;
 
+import android.annotation.SuppressLint;
 import org.microemu.cldc.CertificateImpl;
 import org.microemu.cldc.SecurityInfoImpl;
 import org.microemu.microedition.io.ConnectionImplementation;

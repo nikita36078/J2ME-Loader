@@ -185,17 +185,17 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfVKSelBack = findViewById(R.id.tfVKSelBack);
 		tfVKOutline = findViewById(R.id.tfVKOutline);
 
-		screenWidths = new ArrayList();
-		screenHeights = new ArrayList();
-		screenAdapter = new ArrayList();
+		screenWidths = new ArrayList<>();
+		screenHeights = new ArrayList<>();
+		screenAdapter = new ArrayList<>();
 
 		fillScreenSizePresets(ContextHolder.getDisplayWidth(),
 				ContextHolder.getDisplayHeight());
 
-		fontSmall = new ArrayList();
-		fontMedium = new ArrayList();
-		fontLarge = new ArrayList();
-		fontAdapter = new ArrayList();
+		fontSmall = new ArrayList<>();
+		fontMedium = new ArrayList<>();
+		fontLarge = new ArrayList<>();
+		fontAdapter = new ArrayList<>();
 
 		addFontSizePreset("128 x 128", 9, 13, 15);
 		addFontSizePreset("128 x 160", 13, 15, 20);
@@ -494,16 +494,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				vkColorForegroundSelected);
 		vk.setColor(VirtualKeyboard.OUTLINE, vkColorOutline);
 
-		VirtualKeyboard.LayoutListener listener = new VirtualKeyboard.LayoutListener() {
-			public void layoutChanged(VirtualKeyboard vk) {
-				try {
-					FileOutputStream fos = new FileOutputStream(keylayoutFile);
-					DataOutputStream dos = new DataOutputStream(fos);
-					vk.writeLayout(dos);
-					fos.close();
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
+		VirtualKeyboard.LayoutListener listener = vk1 -> {
+			try {
+				FileOutputStream fos = new FileOutputStream(keylayoutFile);
+				DataOutputStream dos = new DataOutputStream(fos);
+				vk1.writeLayout(dos);
+				fos.close();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
 		};
 		vk.setLayoutListener(listener);
@@ -562,116 +560,119 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		int id = v.getId();
 
-		if (id == R.id.cmdScreenSizePresets) {
-			presets = screenAdapter.toArray(new String[0]);
+		switch (id) {
+			case R.id.cmdScreenSizePresets:
+				presets = screenAdapter.toArray(new String[0]);
 
-			presetListener = new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
+				presetListener = (dialog, which) -> {
 					tfScreenWidth.setText(Integer.toString(screenWidths
 							.get(which)));
 					tfScreenHeight.setText(Integer.toString(screenHeights
 							.get(which)));
-				}
-			};
-		} else if (id == R.id.cmdSwapSizes) {
-			String tmp = tfScreenWidth.getText().toString();
-			tfScreenWidth.setText(tfScreenHeight.getText().toString());
-			tfScreenHeight.setText(tmp);
-		} else if (id == R.id.cmdFontSizePresets) {
-			presets = fontAdapter.toArray(new String[0]);
+				};
+				break;
+			case R.id.cmdSwapSizes:
+				String tmp = tfScreenWidth.getText().toString();
+				tfScreenWidth.setText(tfScreenHeight.getText().toString());
+				tfScreenHeight.setText(tmp);
+				break;
+			case R.id.cmdFontSizePresets:
+				presets = fontAdapter.toArray(new String[0]);
 
-			presetListener = new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
+				presetListener = (dialog, which) -> {
 					tfFontSizeSmall.setText(Integer.toString(fontSmall
 							.get(which)));
 					tfFontSizeMedium.setText(Integer.toString(fontMedium
 							.get(which)));
 					tfFontSizeLarge.setText(Integer.toString(fontLarge
 							.get(which)));
-				}
-			};
-		} else if (id == R.id.cmdLanguage) {
-			presets = getResources().getStringArray(R.array.languages);
+				};
+				break;
+			case R.id.cmdLanguage:
+				presets = getResources().getStringArray(R.array.languages);
 
-			presetListener = new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					locale = getResources().getStringArray(R.array.locales)[which];
-				}
-			};
-		} else if (id == R.id.cmdScreenBack) {
-			color = Integer.parseInt(tfScreenBack.getText().toString(), 16);
+				presetListener = (dialog, which) -> locale = getResources().getStringArray(R.array.locales)[which];
+				break;
+			case R.id.cmdScreenBack:
+				color = Integer.parseInt(tfScreenBack.getText().toString(), 16);
 
-			colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-				public void onOk(AmbilWarnaDialog dialog, int color) {
-					tfScreenBack.setText(Integer.toHexString(color & 0xFFFFFF)
-							.toUpperCase());
-				}
+				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						tfScreenBack.setText(Integer.toHexString(color & 0xFFFFFF)
+								.toUpperCase());
+					}
 
-				public void onCancel(AmbilWarnaDialog dialog) {
-				}
-			};
-		} else if (id == R.id.cmdVKBack) {
-			color = Integer.parseInt(tfVKBack.getText().toString(), 16);
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+				};
+				break;
+			case R.id.cmdVKBack:
+				color = Integer.parseInt(tfVKBack.getText().toString(), 16);
 
-			colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-				public void onOk(AmbilWarnaDialog dialog, int color) {
-					tfVKBack.setText(Integer.toHexString(color & 0xFFFFFF)
-							.toUpperCase());
-				}
+				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						tfVKBack.setText(Integer.toHexString(color & 0xFFFFFF)
+								.toUpperCase());
+					}
 
-				public void onCancel(AmbilWarnaDialog dialog) {
-				}
-			};
-		} else if (id == R.id.cmdVKFore) {
-			color = Integer.parseInt(tfVKFore.getText().toString(), 16);
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+				};
+				break;
+			case R.id.cmdVKFore:
+				color = Integer.parseInt(tfVKFore.getText().toString(), 16);
 
-			colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-				public void onOk(AmbilWarnaDialog dialog, int color) {
-					tfVKFore.setText(Integer.toHexString(color & 0xFFFFFF)
-							.toUpperCase());
-				}
+				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						tfVKFore.setText(Integer.toHexString(color & 0xFFFFFF)
+								.toUpperCase());
+					}
 
-				public void onCancel(AmbilWarnaDialog dialog) {
-				}
-			};
-		} else if (id == R.id.cmdVKSelFore) {
-			color = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+				};
+				break;
+			case R.id.cmdVKSelFore:
+				color = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
 
-			colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-				public void onOk(AmbilWarnaDialog dialog, int color) {
-					tfVKSelFore.setText(Integer.toHexString(color & 0xFFFFFF)
-							.toUpperCase());
-				}
+				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						tfVKSelFore.setText(Integer.toHexString(color & 0xFFFFFF)
+								.toUpperCase());
+					}
 
-				public void onCancel(AmbilWarnaDialog dialog) {
-				}
-			};
-		} else if (id == R.id.cmdVKSelBack) {
-			color = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+				};
+				break;
+			case R.id.cmdVKSelBack:
+				color = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
 
-			colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-				public void onOk(AmbilWarnaDialog dialog, int color) {
-					tfVKSelBack.setText(Integer.toHexString(color & 0xFFFFFF)
-							.toUpperCase());
-				}
+				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						tfVKSelBack.setText(Integer.toHexString(color & 0xFFFFFF)
+								.toUpperCase());
+					}
 
-				public void onCancel(AmbilWarnaDialog dialog) {
-				}
-			};
-		} else if (id == R.id.cmdVKOutline) {
-			color = Integer.parseInt(tfVKOutline.getText().toString(), 16);
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+				};
+				break;
+			case R.id.cmdVKOutline:
+				color = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 
-			colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-				public void onOk(AmbilWarnaDialog dialog, int color) {
-					tfVKOutline.setText(Integer.toHexString(color & 0xFFFFFF)
-							.toUpperCase());
-				}
+				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						tfVKOutline.setText(Integer.toHexString(color & 0xFFFFFF)
+								.toUpperCase());
+					}
 
-				public void onCancel(AmbilWarnaDialog dialog) {
-				}
-			};
-		} else {
-			return;
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+				};
+				break;
+			default:
+				return;
 		}
 
 		if (presetListener != null) {

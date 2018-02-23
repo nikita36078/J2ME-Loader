@@ -18,8 +18,6 @@
 
 package javax.microedition.m3g;
 
-import javax.microedition.lcdui.Image;
-
 public class Image2D extends Object3D
 {
     //------------------------------------------------------------------
@@ -132,7 +130,7 @@ public class Image2D extends Object3D
         final int finalFormat = format;
         tempHandle = 0;
 
-	// TODO
+        // TODO
         if (image instanceof javax.microedition.lcdui.Image)
         {
             final javax.microedition.lcdui.Image cgfxImage = (javax.microedition.lcdui.Image)image;

@@ -75,7 +75,7 @@ public class UUID {
 	 *                                  is not in the range [0, 2<sup>32</sup> -1]
 	 */
 	public UUID(long uuidValue) {
-		if (uuidValue < 0 || uuidValue > 0xffffffffl) {
+		if (uuidValue < 0 || uuidValue > 0xffffffffL) {
 			throw new IllegalArgumentException("uuidValue is not in the range [0, 2^32 -1]");
 		}
 	}

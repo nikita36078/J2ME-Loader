@@ -30,16 +30,16 @@ public class EventQueue implements Runnable {
 	protected boolean enabled;
 	protected Thread thread;
 
-	protected final Object waiter;
-	protected final Object interlock;
+	private final Object waiter;
+	private final Object interlock;
 
-	protected boolean isrunning;
-	protected boolean continuerun;
+	private boolean running;
+	private boolean continuerun;
 
-	protected static boolean immediate;
+	private static boolean immediate;
 
 	public EventQueue() {
-		queue = new LinkedList();
+		queue = new LinkedList<>();
 
 		waiter = new Object();
 		interlock = new Object();
@@ -91,10 +91,10 @@ public class EventQueue implements Runnable {
 
 			if (empty || event.placeableAfter(queue.getLast())) {
 				/*
-                 * Если собственно очередь пустая, то это уже подразумевает, что осталось
+				 * Если собственно очередь пустая, то это уже подразумевает, что осталось
 				 * либо ровно одно событие и оно сейчас в обработке,
 				 * либо не осталось вообще ни одного события.
-				 * 
+				 *
 				 * И в том, и в другом случае новое событие следует добавить в очередь,
 				 * независимо от значения event.placeableAfter().
 				 */
@@ -119,7 +119,7 @@ public class EventQueue implements Runnable {
 			 */
 
 			synchronized (waiter) {
-				if (isrunning) {
+				if (running) {
 					continuerun = true;
 				} else {
 					waiter.notifyAll();
@@ -230,15 +230,15 @@ public class EventQueue implements Runnable {
 	 */
 	public void run() {
 		synchronized (interlock) {
-			isrunning = true;
+			running = true;
 
 			while (enabled) {
 				/*
 				 * порядок блокировки:
-				 * 
+				 *
 				 * 1 - this
 				 * 2 - queue
-				 * 
+				 *
 				 * соответственно, в Canvas.serviceRepaints() порядок должен быть такой же,
 				 * иначе возможна взаимная блокировка двух потоков (все повиснет)
 				 */
@@ -281,14 +281,15 @@ public class EventQueue implements Runnable {
 						if (continuerun) {
 							continuerun = false;
 						} else {
-							isrunning = false;
+							running = false;
 
 							try {
 								waiter.wait();
 							} catch (InterruptedException ie) {
+								ie.printStackTrace();
 							}
 
-							isrunning = true;
+							running = true;
 						}
 					}
 				}

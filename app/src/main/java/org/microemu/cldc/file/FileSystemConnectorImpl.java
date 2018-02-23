@@ -66,12 +66,8 @@ public class FileSystemConnectorImpl extends ConnectorAdapter implements Impleme
 			throw new IOException("Invalid Protocol " + name);
 		}
 
-		Connection con = (Connection) doPrivilegedIO(new PrivilegedExceptionAction() {
-			public Object run() throws IOException {
-				return new FileSystemFileConnection(fsRoot, name.substring(PROTOCOL.length()),
-						FileSystemConnectorImpl.this);
-			}
-		}, acc);
+		Connection con = (Connection) doPrivilegedIO(() -> new FileSystemFileConnection(fsRoot, name.substring(PROTOCOL.length()),
+				FileSystemConnectorImpl.this), acc);
 		openConnection.add(con);
 		return con;
 	}

@@ -23,6 +23,7 @@ import android.graphics.Matrix;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+@SuppressWarnings("SuspiciousNameCombination")
 public class Sprite extends Layer {
 
 	public static final int TRANS_NONE = 0;
@@ -238,8 +239,7 @@ public class Sprite extends Layer {
 		if (l == 0)
 			throw new IllegalArgumentException();
 
-		for (int i = 0; i < l; i++) {
-			int value = sequence[i];
+		for (int value : sequence) {
 			if (value > max || value < 0)
 				throw new ArrayIndexOutOfBoundsException();
 		}

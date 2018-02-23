@@ -106,7 +106,7 @@ public class MorphingMesh extends Mesh
         verifyParams(base, triangles);
 
         int[] hTargets = new int[targets.length];
-        int[] hTriangles = null;
+        int[] hTriangles;
         int[] hAppearances = null;
 
         for (int i = 0; i < targets.length; i++)
@@ -148,7 +148,7 @@ public class MorphingMesh extends Mesh
         verifyParams(base, triangles, appearances);
 
         int[] hTargets = new int[targets.length];
-        int[] hTriangles = null;
+        int[] hTriangles;
         int[] hAppearances = null;
 
         for (int i = 0; i < targets.length; i++)

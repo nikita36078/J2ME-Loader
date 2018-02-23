@@ -53,7 +53,7 @@ public class TextField extends Item {
 		}
 	};
 
-	private class InternalEditText extends EditText {
+	private class InternalEditText extends android.support.v7.widget.AppCompatEditText {
 		public InternalEditText(Context context) {
 			super(context);
 		}
@@ -128,12 +128,12 @@ public class TextField extends Item {
 		this.constraints = constraints;
 
 		if (textview != null) {
-			int inputtype = 0;
+			int inputtype;
 
 			switch (constraints & CONSTRAINT_MASK) {
 				default:
 				case ANY:
-					inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL;
+					inputtype = InputType.TYPE_CLASS_TEXT;
 					break;
 
 				case EMAILADDR:

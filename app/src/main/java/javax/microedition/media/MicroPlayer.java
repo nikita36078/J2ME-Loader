@@ -67,8 +67,8 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		metadata = new InternalMetaData();
 		equalizer = new InternalEqualizer();
 
-		listeners = new ArrayList();
-		controls = new HashMap();
+		listeners = new ArrayList<>();
+		controls = new HashMap<>();
 
 		controls.put(VolumeControl.class.getSimpleName(), this);
 		controls.put(PanControl.class.getSimpleName(), this);

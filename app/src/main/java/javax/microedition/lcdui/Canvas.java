@@ -17,6 +17,7 @@
 
 package javax.microedition.lcdui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.RectF;
 import android.util.Log;
@@ -74,10 +75,10 @@ public abstract class Canvas extends Displayable {
 	private static HashMap<Integer, String> keyCodeToKeyName;
 
 	static {
-		androidToMIDP = new HashMap();
-		keyCodeToGameAction = new HashMap();
-		gameActionToKeyCode = new HashMap();
-		keyCodeToKeyName = new HashMap();
+		androidToMIDP = new HashMap<>();
+		keyCodeToGameAction = new HashMap<>();
+		gameActionToKeyCode = new HashMap<>();
+		keyCodeToKeyName = new HashMap<>();
 
 		mapKeyCode(KeyEvent.KEYCODE_0, KEY_NUM0, 0, "0");
 		mapKeyCode(KeyEvent.KEYCODE_1, KEY_NUM1, 0, "1");
@@ -185,6 +186,7 @@ public abstract class Canvas extends Displayable {
 			return super.onKeyUp(keyCode, event);
 		}
 
+		@SuppressLint("ClickableViewAccessibility")
 		public boolean onTouchEvent(MotionEvent event) {
 			switch (event.getActionMasked()) {
 				case MotionEvent.ACTION_DOWN:

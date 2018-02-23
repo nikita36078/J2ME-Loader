@@ -311,7 +311,7 @@ public class DataElement {
 					throw new IllegalArgumentException(value + " not U_INT_2");
 				break;
 			case U_INT_4:
-				if (value < 0 || value > 0xffffffffl)
+				if (value < 0 || value > 0xffffffffL)
 					throw new IllegalArgumentException(value + " not U_INT_4");
 				break;
 			case INT_1:

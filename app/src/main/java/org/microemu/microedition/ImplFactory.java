@@ -122,16 +122,14 @@ public class ImplFactory {
 				name = name.substring(0, name.length() - INTERFACE_NAME_SUFIX.length());
 			}
 			final String implClassName = name + IMPLEMENTATION_NAME_SUFIX;
-			return AccessController.doPrivileged(new PrivilegedExceptionAction() {
-				public Object run() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-					Class implClass = ImplFactory.class.getClassLoader().loadClass(implClassName);
-					try {
-						implClass.getConstructor();
-					} catch (NoSuchMethodException e) {
-						throw new InstantiationException("No default constructor in class " + implClassName);
-					}
-					return implClass.newInstance();
+			return AccessController.doPrivileged((PrivilegedExceptionAction) () -> {
+				Class implClass = ImplFactory.class.getClassLoader().loadClass(implClassName);
+				try {
+					implClass.getConstructor();
+				} catch (NoSuchMethodException e) {
+					throw new InstantiationException("No default constructor in class " + implClassName);
 				}
+				return implClass.newInstance();
 			}, acc);
 		} catch (Throwable e) {
 			throw new RuntimeException("Unable create " + delegateInterface.getName() + " implementation", e);
@@ -140,11 +138,7 @@ public class ImplFactory {
 
 	private Object implementationNewInstance(final Class implClass) {
 		try {
-			return AccessController.doPrivileged(new PrivilegedExceptionAction() {
-				public Object run() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-					return implClass.newInstance();
-				}
-			}, acc);
+			return AccessController.doPrivileged((PrivilegedExceptionAction) () -> implClass.newInstance(), acc);
 		} catch (Throwable e) {
 			throw new RuntimeException("Unable create " + implClass.getName() + " implementation", e);
 		}

@@ -63,7 +63,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private synchronized void initializeIfNecessary() {
 		if (recordStores == null) {
-			recordStores = new ConcurrentHashMap<String, Object>();
+			recordStores = new ConcurrentHashMap<>();
 			String[] list = new File(ConfigActivity.DATA_DIR, MyClassLoader.getName()).list();
 			if (list != null && list.length > 0) {
 				for (String aList : list) {

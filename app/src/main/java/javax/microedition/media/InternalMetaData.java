@@ -25,12 +25,12 @@ import java.util.HashMap;
 import javax.microedition.media.control.MetaDataControl;
 
 public class InternalMetaData implements MetaDataControl {
-	protected static ArrayList<Integer> androidMetaKeys;
-	protected static HashMap<Integer, String> androidMetaToMIDP;
+	private static ArrayList<Integer> androidMetaKeys;
+	private static HashMap<Integer, String> androidMetaToMIDP;
 
 	static {
-		androidMetaKeys = new ArrayList();
-		androidMetaToMIDP = new HashMap();
+		androidMetaKeys = new ArrayList<>();
+		androidMetaToMIDP = new HashMap<>();
 
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, TRACK_NUMBER_KEY);
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ALBUM, ALBUM_KEY);
@@ -50,17 +50,17 @@ public class InternalMetaData implements MetaDataControl {
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_COMPILATION, COMPILATION_KEY);
 	}
 
-	protected static void mapMetaKey(int android, String midp) {
+	private static void mapMetaKey(int android, String midp) {
 		androidMetaKeys.add(android);
 		androidMetaToMIDP.put(android, midp);
 	}
 
-	protected ArrayList<String> metakeys;
-	protected HashMap<String, String> metadata;
+	private ArrayList<String> metakeys;
+	private HashMap<String, String> metadata;
 
 	public InternalMetaData() {
-		metakeys = new ArrayList();
-		metadata = new HashMap();
+		metakeys = new ArrayList<>();
+		metadata = new HashMap<>();
 	}
 
 	public void updateMetaData(MediaMetadataRetriever retriever) {
