@@ -58,5 +58,4 @@ dependencies {
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'org.ow2.asm:asm-tree:5.2'
     implementation 'org.sufficientlysecure:donations:2.5'
-    implementation fileTree(include: ['*.jar', '*.so'], dir: 'libs')
 }
