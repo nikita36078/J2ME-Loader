@@ -34,6 +34,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.microedition.rms.InvalidRecordIDException;
@@ -56,7 +57,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private static String TAG = RecordStore.class.getName();
 
-	private ConcurrentHashMap<String, Object> recordStores = null;
+	private Map<String, Object> recordStores = null;
 
 	public String getName() {
 		return "Android record store";
