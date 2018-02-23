@@ -22,14 +22,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.android.dx.command.Main;
-
+import com.android.dx.command.dexer.Main;
 import org.acra.ACRA;
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.zip.ZipException;
 
@@ -81,6 +78,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		try {
 			ZipUtils.unzip(fixedJar, dirTmp);
 		} catch (IOException e) {
+			e.printStackTrace();
 			err = "Brocken jar";
 			deleteTemp();
 			return false;
@@ -97,9 +95,16 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
 		Log.d(TAG, "appConverted=" + appConverted.getPath());
-		Main.main(new String[]{
-				"--dex", "--no-optimize", "--output=" + appConverted.getPath()
-				+ ConfigActivity.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
+		try {
+			Main.main(new String[]{
+					"--no-optimize", "--output=" + appConverted.getPath()
+					+ ConfigActivity.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
+		} catch (IOException e) {
+			e.printStackTrace();
+			err = "Can't convert";
+			deleteTemp();
+			return false;
+		}
 		File conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
 		try {
 			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_CONF_FILE));

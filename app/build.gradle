@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "ru.playsoftware.j2meloader"
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 27
         versionName "1.2.7.5"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
@@ -63,5 +63,5 @@ dependencies {
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'org.ow2.asm:asm-tree:5.2'
     implementation 'org.sufficientlysecure:donations:2.5'
-    implementation fileTree(include: ['*.jar', '*.so'], dir: 'libs')
+    implementation project(':dexlib')
 }
