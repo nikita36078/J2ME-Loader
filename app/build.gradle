@@ -8,8 +8,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 27
-        versionName "1.2.7.5"
+        versionCode 28
+        versionName "1.2.7.6"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
@@ -40,7 +40,7 @@ android {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "true"
             versionNameSuffix "-play"
         }
-        open  {
+        open {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             versionNameSuffix "-open"
         }
