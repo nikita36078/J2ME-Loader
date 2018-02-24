@@ -26,15 +26,9 @@
  */
 package org.microemu.microedition.io;
 
-import android.util.Log;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 
 import javax.microedition.io.Connection;
 
@@ -48,47 +42,18 @@ import javax.microedition.io.Connection;
 public class ConnectionInvocationHandler implements InvocationHandler {
 
 	private Connection originalConnection;
-	private final String TAG = "ConnectionInvocation";
 
-	/* The context to be used when connecting to network */
-	private AccessControlContext acc;
-
-	public ConnectionInvocationHandler(Connection con, boolean needPrivilegedCalls) {
+	public ConnectionInvocationHandler(Connection con) {
 		this.originalConnection = con;
-		if (needPrivilegedCalls) {
-			this.acc = AccessController.getContext();
-		}
 	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
 	 */
 	public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-		if (ConnectorImpl.debugConnectionInvocations) {
-			Log.d(TAG, "invoke" + method.getName());
-		}
 		try {
-			if (this.acc != null) {
-				return AccessController.doPrivileged((PrivilegedExceptionAction) () -> method.invoke(originalConnection, args), acc);
-			} else {
-				return method.invoke(this.originalConnection, args);
-			}
-		} catch (PrivilegedActionException e) {
-			if (e.getCause() instanceof InvocationTargetException) {
-				if (ConnectorImpl.debugConnectionInvocations) {
-					Log.e(TAG, "Connection." + method.getName(), e.getCause().getCause());
-				}
-				throw e.getCause().getCause();
-			} else {
-				if (ConnectorImpl.debugConnectionInvocations) {
-					Log.e(TAG, "Connection." + method.getName(), e.getCause());
-				}
-				throw e.getCause();
-			}
+			return method.invoke(this.originalConnection, args);
 		} catch (InvocationTargetException e) {
-			if (ConnectorImpl.debugConnectionInvocations) {
-				Log.e(TAG, "Connection." + method.getName(), e.getCause());
-			}
 			throw e.getCause();
 		}
 	}

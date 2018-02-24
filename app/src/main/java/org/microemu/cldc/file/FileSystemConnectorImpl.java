@@ -32,10 +32,6 @@ import org.microemu.microedition.ImplementationUnloadable;
 import org.microemu.microedition.io.ConnectorAdapter;
 
 import java.io.IOException;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.List;
 import java.util.Vector;
 
@@ -48,15 +44,11 @@ public class FileSystemConnectorImpl extends ConnectorAdapter implements Impleme
 
 	public final static String PROTOCOL = org.microemu.cldc.file.Connection.PROTOCOL;
 
-	/* The context to be used when acessing filesystem */
-	private AccessControlContext acc;
-
 	private String fsRoot;
 
 	private List openConnection = new Vector();
 
 	FileSystemConnectorImpl(String fsRoot) {
-		acc = AccessController.getContext();
 		this.fsRoot = fsRoot;
 	}
 
@@ -66,21 +58,10 @@ public class FileSystemConnectorImpl extends ConnectorAdapter implements Impleme
 			throw new IOException("Invalid Protocol " + name);
 		}
 
-		Connection con = (Connection) doPrivilegedIO(() -> new FileSystemFileConnection(fsRoot, name.substring(PROTOCOL.length()),
-				FileSystemConnectorImpl.this), acc);
+		Connection con = new FileSystemFileConnection(fsRoot, name.substring(PROTOCOL.length()),
+				FileSystemConnectorImpl.this);
 		openConnection.add(con);
 		return con;
-	}
-
-	static Object doPrivilegedIO(PrivilegedExceptionAction action, AccessControlContext context) throws IOException {
-		try {
-			return AccessController.doPrivileged(action, context);
-		} catch (PrivilegedActionException e) {
-			if (e.getCause() instanceof IOException) {
-				throw (IOException) e.getCause();
-			}
-			throw new IOException(e.toString());
-		}
 	}
 
 	void notifyMIDletDestroyed() {

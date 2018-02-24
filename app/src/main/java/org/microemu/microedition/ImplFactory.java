@@ -28,9 +28,6 @@ package org.microemu.microedition;
 
 import org.microemu.microedition.io.ConnectorDelegate;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,19 +48,12 @@ public class ImplFactory {
 
 	private Map implementationsGCF = new HashMap();
 
-	/* The context to be used when loading classes and resources */
-	private AccessControlContext acc;
-
 	/**
 	 * Allow default initialization. In Secure environment instance() should be
 	 * called initialy from secure contex.
 	 */
 	private static class SingletonHolder {
 		private static ImplFactory instance = new ImplFactory();
-	}
-
-	private ImplFactory() {
-		acc = AccessController.getContext();
 	}
 
 	public static ImplFactory instance() {
@@ -122,15 +112,13 @@ public class ImplFactory {
 				name = name.substring(0, name.length() - INTERFACE_NAME_SUFIX.length());
 			}
 			final String implClassName = name + IMPLEMENTATION_NAME_SUFIX;
-			return AccessController.doPrivileged((PrivilegedExceptionAction) () -> {
-				Class implClass = ImplFactory.class.getClassLoader().loadClass(implClassName);
-				try {
-					implClass.getConstructor();
-				} catch (NoSuchMethodException e) {
-					throw new InstantiationException("No default constructor in class " + implClassName);
-				}
-				return implClass.newInstance();
-			}, acc);
+			Class implClass = ImplFactory.class.getClassLoader().loadClass(implClassName);
+			try {
+				implClass.getConstructor();
+			} catch (NoSuchMethodException e) {
+				throw new InstantiationException("No default constructor in class " + implClassName);
+			}
+			return implClass.newInstance();
 		} catch (Throwable e) {
 			throw new RuntimeException("Unable create " + delegateInterface.getName() + " implementation", e);
 		}
@@ -138,7 +126,7 @@ public class ImplFactory {
 
 	private Object implementationNewInstance(final Class implClass) {
 		try {
-			return AccessController.doPrivileged((PrivilegedExceptionAction) () -> implClass.newInstance(), acc);
+			return implClass.newInstance();
 		} catch (Throwable e) {
 			throw new RuntimeException("Unable create " + implClass.getName() + " implementation", e);
 		}

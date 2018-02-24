@@ -29,13 +29,6 @@ package org.microemu.microedition.io;
 import android.util.Log;
 
 import java.io.IOException;
-import java.lang.reflect.Proxy;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.Collections;
-import java.util.Vector;
 
 import javax.microedition.io.Connection;
 import javax.microedition.io.ConnectionNotFoundException;
@@ -48,76 +41,10 @@ import javax.microedition.io.ConnectionNotFoundException;
  */
 public class ConnectorImpl extends ConnectorAdapter {
 
-	/* The context to be used when loading classes */
-	private AccessControlContext acc;
-
-	private final String TAG = "ConnectorImpl";
-
-	// TODO make this configurable
-	public static boolean debugConnectionInvocations = false;
-
-	private final boolean needPrivilegedCalls = isWebstart();
-
-	public ConnectorImpl() {
-		acc = AccessController.getContext();
-	}
-
-	private static boolean isWebstart() {
-		try {
-			return (System.getProperty("javawebstart.version") != null);
-		} catch (SecurityException e) {
-			// This is the case for Applet.
-			return false;
-		}
-	}
+	private final String TAG = ConnectorImpl.class.getName();
 
 	public Connection open(final String name, final int mode, final boolean timeouts) throws IOException {
-		try {
-			return (Connection) AccessController.doPrivileged((PrivilegedExceptionAction) () -> {
-				if (debugConnectionInvocations || needPrivilegedCalls) {
-					return openSecureProxy(name, mode, timeouts, needPrivilegedCalls);
-				} else {
-					return openSecure(name, mode, timeouts);
-				}
-			}, acc);
-		} catch (PrivilegedActionException e) {
-			if (e.getCause() instanceof IOException) {
-				throw (IOException) e.getCause();
-			}
-			throw new IOException(e.toString());
-		}
-	}
-
-	private static Class[] getAllInterfaces(Class klass) {
-		Vector allInterfaces = new Vector();
-		Class parent = klass;
-		while (parent != null) {
-			Class[] interfaces = parent.getInterfaces();
-			Collections.addAll(allInterfaces, interfaces);
-			parent = parent.getSuperclass();
-		}
-
-		return (Class[]) allInterfaces.toArray(new Class[allInterfaces.size()]);
-	}
-
-	private Connection openSecureProxy(String name, int mode, boolean timeouts, boolean needPrivilegedCalls)
-			throws IOException {
-		Connection origConnection = openSecure(name, mode, timeouts);
-		Class connectionClass = null;
-		Class[] interfaces = getAllInterfaces(origConnection.getClass());
-		for (Class anInterface : interfaces) {
-			if (Connection.class.isAssignableFrom(anInterface)) {
-				connectionClass = anInterface;
-				break;
-			} else if (anInterface.getClass().getName().equals(Connection.class.getName())) {
-				Log.e(TAG, "Connection interface loaded by different ClassLoader");
-			}
-		}
-		if (connectionClass == null) {
-			throw new ClassCastException(origConnection.getClass().getName() + " Connection expected");
-		}
-		return (Connection) Proxy.newProxyInstance(ConnectorImpl.class.getClassLoader(), interfaces,
-				new ConnectionInvocationHandler(origConnection, needPrivilegedCalls));
+		return openSecure(name, mode, timeouts);
 	}
 
 	private Connection openSecure(String name, int mode, boolean timeouts) throws IOException {
