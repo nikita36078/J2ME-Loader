@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.playsoftware.j2meloader"
     android:installLocation="auto" >
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -16,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:resizeableActivity="false"
-        android:name=".EmulatorApplication" >
+        android:name=".EmulatorApplication"
+        tools:targetApi="o">
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme"
