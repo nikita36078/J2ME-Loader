@@ -8,6 +8,9 @@
 # Java class files
 *.class
 
+# APK metadata file
+output.json
+
 # Gradle files
 .gradle/
 build/
