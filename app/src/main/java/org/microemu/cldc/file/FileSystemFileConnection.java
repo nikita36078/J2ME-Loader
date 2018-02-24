@@ -43,6 +43,7 @@ import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedExceptionAction;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -149,6 +150,7 @@ public class FileSystemFileConnection implements FileConnection {
 			files[0] = getRoot(fsRootConfig + fsSingleConfig);
 		} else {
 			files = getRoot(fsRootConfig).listFiles();
+			Arrays.sort(files);
 			if (files == null) { // null if security restricted
 				return (new Vector()).elements();
 			}
@@ -367,6 +369,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 
 		File[] files = this.file.listFiles(filenameFilter);
+		Arrays.sort(files);
 		if (files == null) { // null if security restricted
 			return (new Vector()).elements();
 		}
