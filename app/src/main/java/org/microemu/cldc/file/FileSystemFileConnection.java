@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Method;
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -81,8 +80,6 @@ public class FileSystemFileConnection implements FileConnection {
 
 	/* The context to be used when acessing filesystem */
 	private AccessControlContext acc;
-
-	private static boolean java15 = false;
 
 	private static String TAG = FileSystemFileConnection.class.getName();
 
@@ -173,7 +170,7 @@ public class FileSystemFileConnection implements FileConnection {
 			return -1;
 		}
 
-		return getFileValueJava6("getFreeSpace");
+		return file.getFreeSpace();
 	}
 
 	public long totalSize() {
@@ -181,7 +178,7 @@ public class FileSystemFileConnection implements FileConnection {
 		if (fsRoot == null) {
 			return -1;
 		}
-		return getFileValueJava6("getTotalSpace");
+		return file.getTotalSpace();
 	}
 
 	public boolean canRead() {
@@ -520,54 +517,9 @@ public class FileSystemFileConnection implements FileConnection {
 		throwClosed();
 	}
 
-	private void fileSetJava16(String mehtodName, final Boolean param) throws IOException {
-		if (java15) {
-			throw new IOException("Not supported on Java version < 6");
-		}
-		// Use Java6 function in reflection.
-		try {
-			final Method setWritable = file.getClass().getMethod(mehtodName, new Class[]{boolean.class});
-			doPrivilegedIO(() -> {
-				try {
-					setWritable.invoke(file, new Object[]{param});
-				} catch (Exception e) {
-					throw new IOException(e.getCause().getMessage());
-				}
-				file.setReadOnly();
-				return null;
-			});
-		} catch (NoSuchMethodException e) {
-			java15 = true;
-			throw new IOException("Not supported on Java version < 6");
-		}
-	}
-
-	private long getFileValueJava6(String mehtodName) throws SecurityException {
-		if (java15) {
-			throw new SecurityException("Not supported on Java version < 6");
-		}
-		// Use Java6 function in reflection.
-		try {
-			final Method getter = file.getClass().getMethod(mehtodName, new Class[]{});
-			Long rc = (Long) doPrivilegedIO(() -> {
-				try {
-					return getter.invoke(file, new Object[]{});
-				} catch (Exception e) {
-					throw new IOException(e.getCause().getMessage());
-				}
-			});
-			return rc.longValue();
-		} catch (IOException e) {
-			throw new SecurityException(e.getMessage());
-		} catch (NoSuchMethodException e) {
-			java15 = true;
-			throw new SecurityException("Not supported on Java version < 6");
-		}
-	}
-
 	public void setReadable(boolean readable) throws IOException {
 		throwClosed();
-		fileSetJava16("setReadable", new Boolean(readable));
+		file.setReadable(readable);
 	}
 
 	public void setWritable(boolean writable) throws IOException {
@@ -578,7 +530,7 @@ public class FileSystemFileConnection implements FileConnection {
 				return null;
 			});
 		} else {
-			fileSetJava16("setWritable", new Boolean(writable));
+			file.setWritable(writable);
 		}
 	}
 
