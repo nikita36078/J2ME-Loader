@@ -57,7 +57,6 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 			throw new IOException(ex.toString());
 		}
 		cn = url.openConnection();
-		cn.setDoOutput(true);
 		// J2ME do not follow redirects. Test this url
 		// http://www.microemu.org/test/r/
 		if (cn instanceof HttpURLConnection) {
