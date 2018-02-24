@@ -6,6 +6,7 @@
         android:summary="@string/pref_enable_actionbar_summary"
         android:title="@string/pref_enable_actionbar_title" />
     <ListPreference
+        android:defaultValue="name"
         android:entries="@array/pref_app_sort_entries"
         android:entryValues="@array/pref_app_sort_values"
         android:key="pref_app_sort"

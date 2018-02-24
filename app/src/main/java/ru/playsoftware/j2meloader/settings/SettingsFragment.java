@@ -26,9 +26,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
-		ListPreference sortPref = (ListPreference) findPreference("pref_app_sort");
-		if (sortPref.getValue() == null) {
-			sortPref.setValueIndex(0);
-		}
 	}
 }
