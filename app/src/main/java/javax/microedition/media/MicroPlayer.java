@@ -44,8 +44,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	private int level, pan;
 
 	private InternalMetaData metadata;
-	private InternalEqualizer equalizer;
-	private InternalMIDIControl midiControl;
 
 	public MicroPlayer() {
 		this(null);
@@ -67,8 +65,8 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		loopCount = 1;
 
 		metadata = new InternalMetaData();
-		equalizer = new InternalEqualizer();
-		midiControl = new InternalMIDIControl();
+		InternalEqualizer equalizer = new InternalEqualizer();
+		InternalMIDIControl midiControl = new InternalMIDIControl();
 
 		listeners = new ArrayList<>();
 		controls = new HashMap<>();
@@ -138,7 +136,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	}
 
 	public boolean onError(MediaPlayer mp, int what, int extra) {
-//		System.out.println("Error in MP " + source.getURL() + ": " + what + ", " + extra);
 		return true;
 	}
 
@@ -290,10 +287,13 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return state;
 	}
 
+	public String getContentType() {
+		return "";
+	}
 
 	// VolumeControl
 
-	protected void updateVolume() {
+	private void updateVolume() {
 		float left, right;
 
 		if (mute) {
@@ -342,6 +342,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 
 	// PanControl
+
 	public int setPan(int pan) {
 		if (pan < -100) {
 			pan = -100;
@@ -357,10 +358,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 	public int getPan() {
 		return pan;
-	}
-
-	public String getContentType() {
-		return "";
 	}
 
 }
