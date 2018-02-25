@@ -13,4 +13,13 @@
 
     <style name="AppTheme.Dialog" parent="@style/Theme.AppCompat.Dialog"/>
 
+    <style name="FilePickerTheme" parent="NNF_BaseTheme.Light">
+        <item name="colorAccent">@color/file_picker_accent</item>
+        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
+    </style>
+
+    <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/file_picker_accent</item>
+    </style>
+
 </resources>

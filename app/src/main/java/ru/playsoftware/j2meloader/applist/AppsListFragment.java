@@ -22,18 +22,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +49,7 @@ import javax.microedition.shell.ConfigActivity;
 
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.filelist.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class AppsListFragment extends ListFragment {
@@ -49,16 +57,24 @@ public class AppsListFragment extends ListFragment {
 	private ArrayList<AppItem> apps;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		apps = (ArrayList<AppItem>) getArguments().getSerializable(MainActivity.APP_LIST_KEY);
+		return inflater.inflate(R.layout.fragment_appslist, container, false);
 	}
 
 	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		setEmptyText(getText(R.string.no_data_for_display));
 		registerForContextMenu(getListView());
+		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+		fab.setOnClickListener(v -> {
+			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
+			i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+			i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+			i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+			i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+			startActivityForResult(i, MainActivity.FILE_CODE);
+		});
 	}
 
 	private void showDeleteDialog(final int id) {

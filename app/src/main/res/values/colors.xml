@@ -3,4 +3,8 @@
     <color name="primary_dark">#000000</color>
     <color name="primary">#212121</color>
     <color name="ic_launcher_background">#525AA0</color>
+    <color name="fab_material_red_500">#f44336</color>
+    <color name="fab_material_red_900">#b71c1c</color>
+    <color name="fab_material_red_300">#f36c60</color>
+    <color name="file_picker_accent">#cddc39</color>
 </resources>

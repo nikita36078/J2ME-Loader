@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -63,6 +65,7 @@ import ru.playsoftware.j2meloader.util.JarConverter;
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.SelectedCallback {
 
 	public static final String APP_LIST_KEY = "apps";
+	public static final int FILE_CODE = 0;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+		//mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 		Uri uri = getIntent().getData();
 		if (!isTaskRoot() && uri == null) {
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		initFolders();
 		checkActionBar();
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout));
+		//mNavigationDrawerFragment.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout));
 		appsListFragment = new AppsListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(APP_LIST_KEY, apps);
