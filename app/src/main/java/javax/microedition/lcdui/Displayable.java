@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,7 @@ public abstract class Displayable {
 
 	private ArrayList<Command> commands;
 	private CommandListener listener;
+	private Ticker ticker;
 
 	private static EventQueue queue;
 
@@ -133,5 +135,14 @@ public abstract class Displayable {
 
 	public int getHeight() {
 		return ContextHolder.getDisplayHeight();
+	}
+
+	public void setTicker(Ticker ticker) {
+		this.ticker = ticker;
+		Toast.makeText(parent, ticker.getString(), Toast.LENGTH_LONG).show();
+	}
+
+	public Ticker getTicker() {
+		return ticker;
 	}
 }
