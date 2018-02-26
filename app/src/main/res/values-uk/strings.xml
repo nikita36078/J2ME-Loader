@@ -22,7 +22,6 @@
   <string name="donate">Підтримати проект</string>
   <string name="START_CMD" formatted="false">Старт</string>
   <string name="CANCEL_CMD" formatted="false">Відмінити</string>
-  <string name="RESET_CMD" formatted="false">Скинути</string>
   <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Параметри екрану</string>
   <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
