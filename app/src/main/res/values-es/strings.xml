@@ -18,7 +18,6 @@
   <string name="action_context_delete">Eliminar</string>
   <string name="START_CMD" formatted="false">Iniciar</string>
   <string name="CANCEL_CMD" formatted="false">Cancelar</string>
-  <string name="RESET_CMD" formatted="false">Reiniciar</string>
   <string name="RESET_LAYOUT_CMD">Reiniciar disposición del teclado</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Opciones de pantalla</string>
   <string name="PREF_SCALE_RATIO">Escala (%)</string>
