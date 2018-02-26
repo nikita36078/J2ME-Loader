@@ -245,6 +245,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		}
 	}
 
+	public void setPreferredSize(int width, int height) {
+		// TODO Implement this method
+	}
+
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		menu.clear();
 
