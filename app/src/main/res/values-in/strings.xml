@@ -22,7 +22,6 @@
   <string name="donate">Donasi</string>
   <string name="START_CMD" formatted="false">Mulai</string>
   <string name="CANCEL_CMD" formatted="false">Batal</string>
-  <string name="RESET_CMD" formatted="false">Atur ulang</string>
   <string name="RESET_LAYOUT_CMD">Reset letak tombol</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Opsi layar</string>
   <string name="PREF_SCALE_RATIO">Skala(%)</string>
