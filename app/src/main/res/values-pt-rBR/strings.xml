@@ -22,7 +22,6 @@
   <string name="donate">Faça uma doação</string>
   <string name="START_CMD" formatted="false">Iniciar</string>
   <string name="CANCEL_CMD" formatted="false">Cancelar</string>
-  <string name="RESET_CMD" formatted="false">Redefinir</string>
   <string name="RESET_LAYOUT_CMD">Resetar teclado</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Opções de tela</string>
   <string name="PREF_SCALE_RATIO">Escala(%)</string>
