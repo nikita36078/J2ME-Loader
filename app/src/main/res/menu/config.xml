@@ -6,8 +6,12 @@
         android:title="@string/START_CMD"
         app:showAsAction="ifRoom|withText" />
     <item
-        android:id="@+id/action_reset"
-        android:title="@string/RESET_CMD"
+        android:id="@+id/action_clear_data"
+        android:title="@string/CLEAR_DATA_CMD"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_reset_settings"
+        android:title="@string/RESET_SETTINGS_CMD"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_reset_layout"

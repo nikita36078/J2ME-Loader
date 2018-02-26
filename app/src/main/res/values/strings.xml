@@ -40,7 +40,8 @@
 
     <string name="START_CMD" formatted="false">Start</string>
     <string name="CANCEL_CMD" formatted="false">Cancel</string>
-    <string name="RESET_CMD" formatted="false">Reset</string>
+    <string name="CLEAR_DATA_CMD" formatted="false">Clear data</string>
+    <string name="RESET_SETTINGS_CMD" formatted="false">Reset settings</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
     <string name="PREF_SCREEN_OPTIONS" formatted="false">Screen options</string>
     <string name="PREF_SCALE_RATIO">Scale(%)</string>

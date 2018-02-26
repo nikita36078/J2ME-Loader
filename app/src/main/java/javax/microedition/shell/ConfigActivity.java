@@ -56,6 +56,7 @@ import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener {
@@ -96,6 +97,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected String locale;
 
 	private File keylayoutFile;
+	private File dataDir;
 	private SharedPreferencesContainer params;
 	private String pathToMidletDir;
 	public static final String MIDLET_DIR = "/converted/";
@@ -141,6 +143,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		String appName = getIntent().getStringExtra(MIDLET_NAME_KEY);
 		appName = appName.replace(":", "").replace("/", "");
 		keylayoutFile = new File(DATA_DIR + appName, "VirtualKeyboardLayout");
+		dataDir = new File(DATA_DIR + appName);
 
 		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
 
@@ -521,7 +524,10 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			case R.id.action_start:
 				startMIDlet();
 				break;
-			case R.id.action_reset:
+			case R.id.action_clear_data:
+				FileUtils.deleteDirectory(dataDir);
+				break;
+			case R.id.action_reset_settings:
 				params.edit().clear().commit();
 				params.close();
 				loadParams(params);
