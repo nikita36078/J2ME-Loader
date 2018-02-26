@@ -18,7 +18,6 @@
   <string name="action_context_delete">Șterge</string>
   <string name="START_CMD" formatted="false">Start</string>
   <string name="CANCEL_CMD" formatted="false">Anulare</string>
-  <string name="RESET_CMD" formatted="false">Resetare</string>
   <string name="RESET_LAYOUT_CMD">Resetează formatul tastaturii</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Opțiunile ecranului</string>
   <string name="PREF_SCALE_RATIO">Redimensionare(%)</string>
