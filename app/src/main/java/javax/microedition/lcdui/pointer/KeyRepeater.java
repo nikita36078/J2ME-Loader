@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.event.CanvasEvent;
 
 public class KeyRepeater implements Runnable {
-	public static long[] INTERVALS =
+	private static long[] INTERVALS =
 			{
 					400,
 					200,
@@ -36,14 +37,14 @@ public class KeyRepeater implements Runnable {
 	protected Canvas target;
 
 	protected Thread thread;
-	protected Object waiter;
-	protected boolean isrunning;
+	private final Object waiter;
+	private boolean isrunning;
 
 	protected boolean enabled;
 	protected int position;
 
-	protected int keyCode;
-	protected int secondKeyCode;
+	private int keyCode;
+	private int secondKeyCode;
 
 	public KeyRepeater() {
 		waiter = new Object();
@@ -58,10 +59,6 @@ public class KeyRepeater implements Runnable {
 		}
 
 		target = canvas;
-	}
-
-	public void start(int keyCode) {
-		start(keyCode, 0);
 	}
 
 	public void start(int keyCode, int secondKeyCode) {
@@ -89,10 +86,6 @@ public class KeyRepeater implements Runnable {
 		thread.interrupt();
 	}
 
-	public boolean isRunning() {
-		return isrunning;
-	}
-
 	public void run() {
 		while (true) {
 			try {
@@ -117,7 +110,7 @@ public class KeyRepeater implements Runnable {
 					}
 				}
 			} catch (InterruptedException ie) {
-				ie.printStackTrace();
+				// Don't need to print stacktrace here
 			}
 		}
 	}
