@@ -18,7 +18,6 @@
   <string name="action_context_delete">Verwijder</string>
   <string name="START_CMD" formatted="false">Start</string>
   <string name="CANCEL_CMD" formatted="false">Annuleren</string>
-  <string name="RESET_CMD" formatted="false">Reset</string>
   <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Schermopties</string>
   <string name="PREF_SCALE_RATIO">Schaal(%)</string>
