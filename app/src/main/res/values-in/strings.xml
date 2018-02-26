@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Fire/Ok: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Ukuran</string>
   <string name="SIZE_PRESETS" formatted="false">Prasetel</string>
-  <string name="PREF_LANGUAGE" formatted="false">Bahasa: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Bahasa: %1$s</string>
   <string name="PREF_MISC" formatted="false">Pilihan lainnya</string>
   <string name="PREF_VK_SHOW">Tampilkan keypad</string>
   <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>

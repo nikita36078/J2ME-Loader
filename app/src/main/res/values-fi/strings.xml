@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Antaa potkut: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Sinä</string>
   <string name="SIZE_PRESETS" formatted="false">Esiasetukset</string>
-  <string name="PREF_LANGUAGE" formatted="false">Kieli: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Kieli: %1$s</string>
   <string name="PREF_MISC" formatted="false">Muut vaihtoehdot</string>
   <string name="PREF_VK_SHOW">Näytä näppäimistö</string>
   <string name="PREF_IMMEDIATE">Välitön käsittelytila</string>

@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Brand: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Maat</string>
   <string name="SIZE_PRESETS" formatted="false">Voorinstellingen</string>
-  <string name="PREF_LANGUAGE" formatted="false">Taal: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Taal: %1$s</string>
   <string name="PREF_MISC" formatted="false">Misc opties</string>
   <string name="PREF_VK_SHOW">Toon toetsenbord</string>
   <string name="PREF_IMMEDIATE">Onmiddellijke verwerkingsmodus</string>

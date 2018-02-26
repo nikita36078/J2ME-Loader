@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Repetible: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Tamaño</string>
   <string name="SIZE_PRESETS" formatted="false">Plantillas</string>
-  <string name="PREF_LANGUAGE" formatted="false">Idioma: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Idioma: %1$s</string>
   <string name="PREF_MISC" formatted="false">Opciones Misc</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_IMMEDIATE">Modo de procesamiento inmediato</string>

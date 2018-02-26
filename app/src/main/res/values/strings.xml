@@ -73,7 +73,7 @@
     <string name="PREF_VK_FIRE_KEY" formatted="false">Fire: </string>
     <string name="PREF_VK_SIZE_HINT" formatted="false">Size</string>
     <string name="SIZE_PRESETS" formatted="false">Presets</string>
-    <string name="PREF_LANGUAGE" formatted="false">Language: %A</string>
+    <string name="PREF_LANGUAGE" formatted="false">Language: %1$s</string>
     <string name="PREF_MISC" formatted="false">Misc options</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>

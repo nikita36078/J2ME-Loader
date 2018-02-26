@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Feuer: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Grösse</string>
   <string name="SIZE_PRESETS" formatted="false">Voreinstellungen</string>
-  <string name="PREF_LANGUAGE" formatted="false">Sprache: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Sprache: %1$s</string>
   <string name="PREF_MISC" formatted="false">Sonstige Optionen</string>
   <string name="PREF_VK_SHOW">Tastatur anzeigen</string>
   <string name="PREF_IMMEDIATE">Sofortiger Verarbeitungsmodus</string>

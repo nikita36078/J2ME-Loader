@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Ateş: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Boyut</string>
   <string name="SIZE_PRESETS" formatted="false">Hazır ayarlar</string>
-  <string name="PREF_LANGUAGE" formatted="false">Dil: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Dil: %1$s</string>
   <string name="PREF_MISC" formatted="false">Çeşitli seçenekler</string>
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
   <string name="PREF_IMMEDIATE">Acil işleme modu</string>

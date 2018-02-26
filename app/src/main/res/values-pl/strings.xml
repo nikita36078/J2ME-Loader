@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Ogień: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Rozmiar</string>
   <string name="SIZE_PRESETS" formatted="false">Presets</string>
-  <string name="PREF_LANGUAGE" formatted="false">Język:%A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Język:%1$s</string>
   <string name="PREF_MISC" formatted="false">Różne opcje</string>
   <string name="PREF_VK_SHOW">Pokaż klawiaturę</string>
   <string name="PREF_IMMEDIATE">Tryb natychmiastowego przetwarzania</string>

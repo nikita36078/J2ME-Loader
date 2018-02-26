@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Огонь: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Разм.</string>
   <string name="SIZE_PRESETS" formatted="false">Предустановки</string>
-  <string name="PREF_LANGUAGE" formatted="false">Язык: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Язык: %1$s</string>
   <string name="PREF_MISC" formatted="false">Прочие параметры</string>
   <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
   <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>

@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">开火: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">尺寸</string>
   <string name="SIZE_PRESETS" formatted="false">预设</string>
-  <string name="PREF_LANGUAGE" formatted="false">语言: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">语言: %1$s</string>
   <string name="PREF_MISC" formatted="false">其他选项</string>
   <string name="PREF_VK_SHOW">显示键盘</string>
   <string name="PREF_IMMEDIATE">即时处理模式</string>

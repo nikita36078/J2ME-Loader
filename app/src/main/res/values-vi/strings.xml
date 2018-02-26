@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Ngọn lửa: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Kích thước</string>
   <string name="SIZE_PRESETS" formatted="false">Đặt trước</string>
-  <string name="PREF_LANGUAGE" formatted="false">Ngôn ngữ:%A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Ngôn ngữ:%1$s</string>
   <string name="PREF_MISC" formatted="false">Tùy chọn khác</string>
   <string name="PREF_VK_SHOW">Hiển thị bàn phím</string>
   <string name="PREF_IMMEDIATE">Chế độ xử lý ngay lập tức</string>

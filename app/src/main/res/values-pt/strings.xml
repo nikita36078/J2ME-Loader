@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Selec: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Tamanho</string>
   <string name="SIZE_PRESETS" formatted="false">Predefinições</string>
-  <string name="PREF_LANGUAGE" formatted="false">Idioma: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Idioma: %1$s</string>
   <string name="PREF_MISC" formatted="false">Opções diversas</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>

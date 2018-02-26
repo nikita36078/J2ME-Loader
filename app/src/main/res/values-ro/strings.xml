@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Foc: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Dimensiune</string>
   <string name="SIZE_PRESETS" formatted="false">Presetări</string>
-  <string name="PREF_LANGUAGE" formatted="false">Limbă: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Limbă: %1$s</string>
   <string name="PREF_MISC" formatted="false">Opțiuni diverse</string>
   <string name="PREF_VK_SHOW">Arată tastatura</string>
   <string name="PREF_IMMEDIATE">Modul de prelucrare imediată</string>

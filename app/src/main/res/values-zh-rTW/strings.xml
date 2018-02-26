@@ -48,7 +48,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">火: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">大小</string>
   <string name="SIZE_PRESETS" formatted="false">預設</string>
-  <string name="PREF_LANGUAGE" formatted="false">語言：%A</string>
+  <string name="PREF_LANGUAGE" formatted="false">語言：%1$s</string>
   <string name="PREF_MISC" formatted="false">雜項選項</string>
   <string name="PREF_VK_SHOW">顯示鍵盤</string>
   <string name="PREF_IMMEDIATE">即時處理模式</string>

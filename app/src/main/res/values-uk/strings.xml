@@ -52,7 +52,7 @@
   <string name="PREF_VK_FIRE_KEY" formatted="false">Вогонь: </string>
   <string name="PREF_VK_SIZE_HINT" formatted="false">Розмір</string>
   <string name="SIZE_PRESETS" formatted="false">Шаблони</string>
-  <string name="PREF_LANGUAGE" formatted="false">Мова: %A</string>
+  <string name="PREF_LANGUAGE" formatted="false">Мова: %1$s</string>
   <string name="PREF_MISC" formatted="false">Додаткові опції</string>
   <string name="PREF_VK_SHOW">Показати клавіатуру</string>
   <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
