@@ -18,7 +18,6 @@
   <string name="action_context_delete">Löschen</string>
   <string name="START_CMD" formatted="false">Starten</string>
   <string name="CANCEL_CMD" formatted="false">Abbrechen</string>
-  <string name="RESET_CMD" formatted="false">Zurücksetzen</string>
   <string name="RESET_LAYOUT_CMD">Tastaturlayout zurücksetzen</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Bildschirmoptionen</string>
   <string name="PREF_SCALE_RATIO">Skalierung (%)</string>

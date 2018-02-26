@@ -22,7 +22,6 @@
   <string name="donate">Tặng</string>
   <string name="START_CMD" formatted="false">Bắt đầu</string>
   <string name="CANCEL_CMD" formatted="false">Hủy bỏ</string>
-  <string name="RESET_CMD" formatted="false">Cài lại</string>
   <string name="RESET_LAYOUT_CMD">Đặt lại bố cục chính</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Tùy chọn màn hình</string>
   <string name="PREF_SCALE_RATIO">Tỉ lệ(%)</string>

@@ -18,7 +18,6 @@
   <string name="action_context_delete">Kasować</string>
   <string name="START_CMD" formatted="false">Początek</string>
   <string name="CANCEL_CMD" formatted="false">Anuluj</string>
-  <string name="RESET_CMD" formatted="false">Nastawić</string>
   <string name="RESET_LAYOUT_CMD">Zresetuj keylayout</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Opcje ekranu</string>
   <string name="PREF_SCALE_RATIO">Skala(%)</string>

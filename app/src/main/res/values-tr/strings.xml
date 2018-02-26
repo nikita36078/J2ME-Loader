@@ -22,7 +22,6 @@
   <string name="donate">Bağış yap</string>
   <string name="START_CMD" formatted="false">Başlat</string>
   <string name="CANCEL_CMD" formatted="false">İptal</string>
-  <string name="RESET_CMD" formatted="false">Sıfırla</string>
   <string name="RESET_LAYOUT_CMD">Tuş düzenini sıfırla</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Ekran seçenekleri</string>
   <string name="PREF_SCALE_RATIO">Ölçekleme(%)</string>

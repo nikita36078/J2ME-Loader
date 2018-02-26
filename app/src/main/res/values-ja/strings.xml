@@ -18,7 +18,6 @@
   <string name="action_context_delete">削除</string>
   <string name="START_CMD" formatted="false">開始</string>
   <string name="CANCEL_CMD" formatted="false">キャンセル</string>
-  <string name="RESET_CMD" formatted="false">リセット</string>
   <string name="RESET_LAYOUT_CMD">キーロックアウトをリセットする</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">画面オプション</string>
   <string name="PREF_SCALE_RATIO">規模（％）</string>

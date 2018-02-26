@@ -18,7 +18,6 @@
   <string name="action_context_delete">Supprimer</string>
   <string name="START_CMD" formatted="false">Commencer</string>
   <string name="CANCEL_CMD" formatted="false">Annuler</string>
-  <string name="RESET_CMD" formatted="false">Réinitialiser</string>
   <string name="RESET_LAYOUT_CMD">Réinitialiser le keylayout</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Options d\'écran</string>
   <string name="PREF_SCALE_RATIO">Échelle(%)</string>

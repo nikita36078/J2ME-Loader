@@ -22,7 +22,6 @@
   <string name="donate">Lahjoita</string>
   <string name="START_CMD" formatted="false">Käynnistä</string>
   <string name="CANCEL_CMD" formatted="false">Peruuta</string>
-  <string name="RESET_CMD" formatted="false">Nollaa</string>
   <string name="RESET_LAYOUT_CMD">Nollaa näppäinasettelu</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">Näytön asetukset</string>
   <string name="PREF_SCALE_RATIO">Skaalaus (%)</string>

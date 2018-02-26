@@ -18,7 +18,6 @@
   <string name="action_context_delete">刪除</string>
   <string name="START_CMD" formatted="false">開始</string>
   <string name="CANCEL_CMD" formatted="false">取消</string>
-  <string name="RESET_CMD" formatted="false">重設</string>
   <string name="RESET_LAYOUT_CMD">重置 keylayout</string>
   <string name="PREF_SCREEN_OPTIONS" formatted="false">螢幕選項</string>
   <string name="PREF_SCALE_RATIO">縮放%</string>
