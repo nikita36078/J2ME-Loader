@@ -113,25 +113,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	public static final String MIDLET_NAME_KEY = "name";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
 
-	/*
-	 * <xml locale=en>../../../../res/values/strings.xml</xml> <xml
-	 * locale=ru>../../../../res/values-ru/strings.xml</xml>
-	 */
-
-	public String getString(int index, String token) {
-		return getString(index).replace("%A", token);
-	}
-
-	public String getString(int index, String[] tokens) {
-		String res = getString(index);
-
-		for (int i = 0; i < tokens.length; i++) {
-			res = res.replace("%" + (char) ('A' + i), tokens[i]);
-		}
-
-		return res;
-	}
-
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -192,8 +173,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		screenHeights = new ArrayList<>();
 		screenAdapter = new ArrayList<>();
 
-		fillScreenSizePresets(ContextHolder.getDisplayWidth(),
-				ContextHolder.getDisplayHeight());
+		fillScreenSizePresets(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight());
 
 		fontSmall = new ArrayList<>();
 		fontMedium = new ArrayList<>();
@@ -250,7 +230,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		String[] locales = getResources().getStringArray(R.array.locales);
 		int index = -1;
-
 		for (int i = 0; i < locales.length; i++) {
 			if (locales[i].equalsIgnoreCase(locale)) {
 				index = i;
@@ -258,19 +237,15 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			}
 		}
 
-		String language;
-
+		String language = locale;
 		if (index >= 0) {
 			language = getResources().getStringArray(R.array.languages)[index];
-		} else {
-			language = locale;
 		}
-
-		((Button) findViewById(R.id.cmdLanguage)).setText(getString(
-				R.string.PREF_LANGUAGE, language));
+		((Button) findViewById(R.id.cmdLanguage)).setText(getString(R.string.PREF_LANGUAGE, language));
 
 		applyConfiguration();
-		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs", appName + ".xml");
+		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs",
+				appName + ".xml");
 		if (appSettings.exists() && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
 			startMIDlet();
 		}
@@ -327,51 +302,37 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		fontAdapter.add(title);
 	}
 
+	@SuppressLint("SetTextI18n")
 	private void loadParams(DataContainer params) {
-		tfScreenWidth.setText(Integer.toString(params
-				.getInt("ScreenWidth", 240)));
-		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight",
-				320)));
-		tfScreenBack
-				.setText(Integer.toHexString(
-						params.getInt("ScreenBackgroundColor", 0xD0D0D0))
-						.toUpperCase());
+		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
+		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
+		tfScreenBack.setText(Integer.toHexString(params.
+				getInt("ScreenBackgroundColor", 0xD0D0D0)).toUpperCase());
 		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
 		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
 		cxScaleToFit.setChecked(params.getBoolean("ScreenScaleToFit", true));
-		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio",
-				true));
+		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio", true));
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", true));
 		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
 
-		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall",
-				18)));
-		tfFontSizeMedium.setText(Integer.toString(params.getInt(
-				"FontSizeMedium", 22)));
-		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge",
-				26)));
-		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions",
-				false));
+		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall", 18)));
+		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
+		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
+		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
-		tfVKHideDelay.setText(Integer.toString(params.getInt(
-				"VirtualKeyboardDelay", -1)));
+		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
 		tfVKBack.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0))
-				.toUpperCase());
+				params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0)).toUpperCase());
 		tfVKFore.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorForeground", 0x000080))
-				.toUpperCase());
+				params.getInt("VirtualKeyboardColorForeground", 0x000080)).toUpperCase());
 		tfVKSelBack.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorBackgroundSelected",
-						0x000080)).toUpperCase());
+				params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080)).toUpperCase());
 		tfVKSelFore.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorForegroundSelected",
-						0xFFFFFF)).toUpperCase());
+				params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF)).toUpperCase());
 		tfVKOutline.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF))
-				.toUpperCase());
+				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF)).toUpperCase());
 	}
 
 	private void saveParams() {
@@ -379,16 +340,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			params.edit();
 			params.putString("Locale", locale);
 
-			params.putInt("ScreenWidth",
-					Integer.parseInt(tfScreenWidth.getText().toString()));
-			params.putInt("ScreenHeight",
-					Integer.parseInt(tfScreenHeight.getText().toString()));
-			params.putInt("ScreenBackgroundColor",
-					Integer.parseInt(tfScreenBack.getText().toString(), 16));
+			params.putInt("ScreenWidth", Integer.parseInt(tfScreenWidth.getText().toString()));
+			params.putInt("ScreenHeight", Integer.parseInt(tfScreenHeight.getText().toString()));
+			params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
-			params.putBoolean("ScreenKeepAspectRatio",
-					cxKeepAspectRatio.isChecked());
+			params.putBoolean("ScreenKeepAspectRatio", cxKeepAspectRatio.isChecked());
 			params.putBoolean("ScreenFilter", cxFilter.isChecked());
 			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
 
@@ -424,20 +381,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 	private void applyConfiguration() {
 		try {
-			int fontSizeSmall = Integer.parseInt(tfFontSizeSmall.getText()
-					.toString());
-			int fontSizeMedium = Integer.parseInt(tfFontSizeMedium.getText()
-					.toString());
-			int fontSizeLarge = Integer.parseInt(tfFontSizeLarge.getText()
-					.toString());
+			int fontSizeSmall = Integer.parseInt(tfFontSizeSmall.getText().toString());
+			int fontSizeMedium = Integer.parseInt(tfFontSizeMedium.getText().toString());
+			int fontSizeLarge = Integer.parseInt(tfFontSizeLarge.getText().toString());
 			boolean fontApplyDimensions = cxFontSizeInSP.isChecked();
 
-			int screenWidth = Integer.parseInt(tfScreenWidth.getText()
-					.toString());
-			int screenHeight = Integer.parseInt(tfScreenHeight.getText()
-					.toString());
-			int screenBackgroundColor = Integer.parseInt(tfScreenBack.getText()
-					.toString(), 16);
+			int screenWidth = Integer.parseInt(tfScreenWidth.getText().toString());
+			int screenHeight = Integer.parseInt(tfScreenHeight.getText().toString());
+			int screenBackgroundColor = Integer.parseInt(tfScreenBack.getText().toString(), 16);
 			int screenScaleRatio = sbScaleRatio.getProgress();
 			boolean screenScaleToFit = cxScaleToFit.isChecked();
 			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
@@ -454,27 +405,21 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);
-		} catch (Throwable t) {
-			t.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void setVirtualKeyboard() {
 		int vkAlpha = sbVKAlpha.getProgress();
 		int vkDelay = Integer.parseInt(tfVKHideDelay.getText().toString());
-		int vkColorBackground = Integer.parseInt(tfVKBack.getText().toString(),
-				16);
-		int vkColorForeground = Integer.parseInt(tfVKFore.getText().toString(),
-				16);
-		int vkColorBackgroundSelected = Integer.parseInt(tfVKSelBack.getText()
-				.toString(), 16);
-		int vkColorForegroundSelected = Integer.parseInt(tfVKSelFore.getText()
-				.toString(), 16);
-		int vkColorOutline = Integer.parseInt(tfVKOutline.getText().toString(),
-				16);
+		int vkColorBackground = Integer.parseInt(tfVKBack.getText().toString(), 16);
+		int vkColorForeground = Integer.parseInt(tfVKFore.getText().toString(), 16);
+		int vkColorBackgroundSelected = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
+		int vkColorForegroundSelected = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
+		int vkColorOutline = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 
 		VirtualKeyboard vk = new VirtualKeyboard();
-
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
 
@@ -556,6 +501,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		finish();
 	}
 
+	@SuppressLint("SetTextI18n")
 	@Override
 	public void onClick(View v) {
 		String[] presets = null;
@@ -564,17 +510,13 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		int color = 0;
 		AmbilWarnaDialog.OnAmbilWarnaListener colorListener = null;
 
-		int id = v.getId();
-
-		switch (id) {
+		switch (v.getId()) {
 			case R.id.cmdScreenSizePresets:
 				presets = screenAdapter.toArray(new String[0]);
 
 				presetListener = (dialog, which) -> {
-					tfScreenWidth.setText(Integer.toString(screenWidths
-							.get(which)));
-					tfScreenHeight.setText(Integer.toString(screenHeights
-							.get(which)));
+					tfScreenWidth.setText(Integer.toString(screenWidths.get(which)));
+					tfScreenHeight.setText(Integer.toString(screenHeights.get(which)));
 				};
 				break;
 			case R.id.cmdSwapSizes:
@@ -586,17 +528,13 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				presets = fontAdapter.toArray(new String[0]);
 
 				presetListener = (dialog, which) -> {
-					tfFontSizeSmall.setText(Integer.toString(fontSmall
-							.get(which)));
-					tfFontSizeMedium.setText(Integer.toString(fontMedium
-							.get(which)));
-					tfFontSizeLarge.setText(Integer.toString(fontLarge
-							.get(which)));
+					tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
+					tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
+					tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
 				};
 				break;
 			case R.id.cmdLanguage:
 				presets = getResources().getStringArray(R.array.languages);
-
 				presetListener = (dialog, which) -> locale = getResources().getStringArray(R.array.locales)[which];
 				break;
 			case R.id.cmdScreenBack:
@@ -604,8 +542,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfScreenBack.setText(Integer.toHexString(color & 0xFFFFFF)
-								.toUpperCase());
+						tfScreenBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
@@ -617,8 +554,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKBack.setText(Integer.toHexString(color & 0xFFFFFF)
-								.toUpperCase());
+						tfVKBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
@@ -630,8 +566,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKFore.setText(Integer.toHexString(color & 0xFFFFFF)
-								.toUpperCase());
+						tfVKFore.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
@@ -643,8 +578,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKSelFore.setText(Integer.toHexString(color & 0xFFFFFF)
-								.toUpperCase());
+						tfVKSelFore.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
@@ -656,8 +590,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKSelBack.setText(Integer.toHexString(color & 0xFFFFFF)
-								.toUpperCase());
+						tfVKSelBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
@@ -669,8 +602,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKOutline.setText(Integer.toHexString(color & 0xFFFFFF)
-								.toUpperCase());
+						tfVKOutline.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
