@@ -1,5 +1,6 @@
 <?xml version= "1.0" encoding = "utf-8" ?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
@@ -27,7 +28,7 @@
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
         android:textColor="#040404"
-        android:textSize="15dip"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:typeface="sans" />
 
@@ -36,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/list_title"
-        android:layout_marginRight="5dip"
+        android:layout_marginRight="5sp"
         android:layout_toRightOf="@+id/thumbnail"
         android:padding="3dip">
 
@@ -46,8 +47,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textColor="#343434"
-            android:textSize="10dip"
-            android:typeface="sans" />
+            android:textSize="10sp"
+            android:typeface="sans"
+            tools:ignore="SmallSp" />
 
         <TextView
             android:id="@+id/list_version"
@@ -55,8 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textColor="#343434"
-            android:textSize="10dip"
-            android:typeface="sans" />
+            android:textSize="10sp"
+            android:typeface="sans"
+            tools:ignore="SmallSp" />
     </RelativeLayout>
 
 </RelativeLayout>
