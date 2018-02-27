@@ -20,48 +20,48 @@
   <string name="action_settings">Pengaturan</string>
   <string name="action_context_delete">Hapus</string>
   <string name="donate">Donasi</string>
-  <string name="START_CMD" formatted="false">Mulai</string>
-  <string name="CANCEL_CMD" formatted="false">Batal</string>
-  <string name="CLEAR_DATA_CMD" formatted="false">Hapus data</string>
-  <string name="RESET_SETTINGS_CMD" formatted="false">Setel ulang pengaturan</string>
+  <string name="START_CMD">Mulai</string>
+  <string name="CANCEL_CMD">Batal</string>
+  <string name="CLEAR_DATA_CMD">Hapus data</string>
+  <string name="RESET_SETTINGS_CMD">Setel ulang pengaturan</string>
   <string name="RESET_LAYOUT_CMD">Reset letak tombol</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">Opsi layar</string>
+  <string name="PREF_SCREEN_OPTIONS">Opsi layar</string>
   <string name="PREF_SCALE_RATIO">Skala(%)</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">Sesuaikan dengan skala</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Pertahankan aspek rasio</string>
-  <string name="PREF_FILTER" formatted="false">Menyaring</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">Pilihan Huruf</string>
-  <string name="PREF_WIDTH" formatted="false">Lebar</string>
-  <string name="PREF_HEIGHT" formatted="false">Tinggi</string>
-  <string name="PREF_FONT_SMALL" formatted="false">Kecil</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">Sedang</string>
-  <string name="PREF_FONT_LARGE" formatted="false">Besar</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Nilai dalam Skala Piksel</string>
-  <string name="PREF_BACKGROUND" formatted="false">Latar belakang</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Virtual keypad</string>
-  <string name="PREF_VK_BACK" formatted="false">Tombol</string>
-  <string name="PREF_VK_FORE" formatted="false">Label</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">Pinggiran</string>
-  <string name="PREF_VK_ALPHA" formatted="false">Keburaman: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Sembunyikan penundaan: </string>
-  <string name="PREF_UNIT_MS" formatted="false">ms</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">Label (P)</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">Tombol (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Ukuran tombol</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">Soft keys: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">Angka: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Fire/Ok: </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">Ukuran</string>
-  <string name="SIZE_PRESETS" formatted="false">Prasetel</string>
-  <string name="PREF_LANGUAGE" formatted="false">Bahasa: %1$s</string>
-  <string name="PREF_MISC" formatted="false">Pilihan lainnya</string>
+  <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
+  <string name="PREF_FILTER">Menyaring</string>
+  <string name="PREF_FONT_OPTIONS">Pilihan Huruf</string>
+  <string name="PREF_WIDTH">Lebar</string>
+  <string name="PREF_HEIGHT">Tinggi</string>
+  <string name="PREF_FONT_SMALL">Kecil</string>
+  <string name="PREF_FONT_MEDIUM">Sedang</string>
+  <string name="PREF_FONT_LARGE">Besar</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Nilai dalam Skala Piksel</string>
+  <string name="PREF_BACKGROUND">Latar belakang</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keypad</string>
+  <string name="PREF_VK_BACK">Tombol</string>
+  <string name="PREF_VK_FORE">Label</string>
+  <string name="PREF_VK_OUTLINE">Pinggiran</string>
+  <string name="PREF_VK_ALPHA">Keburaman: </string>
+  <string name="PREF_VK_HIDE_DELAY">Sembunyikan penundaan: </string>
+  <string name="PREF_UNIT_MS">ms</string>
+  <string name="PREF_VK_SEL_FORE">Label (P)</string>
+  <string name="PREF_VK_SEL_BACK">Tombol (P)</string>
+  <string name="PREF_VK_KEY_SIZES">Ukuran tombol</string>
+  <string name="PREF_VK_NAV_KEYS">Joystick: </string>
+  <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
+  <string name="PREF_VK_NUM_KEYS">Angka: </string>
+  <string name="PREF_VK_FIRE_KEY">Fire/Ok: </string>
+  <string name="PREF_VK_SIZE_HINT">Ukuran</string>
+  <string name="SIZE_PRESETS">Prasetel</string>
+  <string name="PREF_LANGUAGE">Bahasa: %1$s</string>
+  <string name="PREF_MISC">Pilihan lainnya</string>
   <string name="PREF_VK_SHOW">Tampilkan keypad</string>
   <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
   <string name="SWAP_SIZES">Tukar ukuran</string>
   <string name="error">Kesalahan</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">Memerlukan konfirmasi</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
+  <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>
   <string name="select_dialog_title">Pilih MIDlet</string>
   <string name="crash_dialog_message">Apakah Anda ingin mengirim laporan bug kepada pengembang?</string>
   <string name="crash_dialog_title">Kesalahan terdeteksi</string>
