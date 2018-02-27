@@ -20,46 +20,46 @@
   <string name="action_settings">Налаштування</string>
   <string name="action_context_delete">Видалити</string>
   <string name="donate">Підтримати проект</string>
-  <string name="START_CMD" formatted="false">Старт</string>
-  <string name="CANCEL_CMD" formatted="false">Відмінити</string>
+  <string name="START_CMD">Старт</string>
+  <string name="CANCEL_CMD">Відмінити</string>
   <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">Параметри екрану</string>
+  <string name="PREF_SCREEN_OPTIONS">Параметри екрану</string>
   <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">Підганяти розмір</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Зберігати пропорції</string>
-  <string name="PREF_FILTER" formatted="false">Фільтрація</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">Параметри шрифту</string>
-  <string name="PREF_WIDTH" formatted="false">Ширина</string>
-  <string name="PREF_HEIGHT" formatted="false">Висота</string>
-  <string name="PREF_FONT_SMALL" formatted="false">Малий</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">Середній</string>
-  <string name="PREF_FONT_LARGE" formatted="false">Великий</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Значення в масштабованих пікселях</string>
-  <string name="PREF_BACKGROUND" formatted="false">Фон</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Віртуальна клавіатура</string>
-  <string name="PREF_VK_BACK" formatted="false">Клавіші</string>
-  <string name="PREF_VK_FORE" formatted="false">Позначки</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">Контур</string>
-  <string name="PREF_VK_ALPHA" formatted="false">Прозорість: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Затримка приховування: </string>
-  <string name="PREF_UNIT_MS" formatted="false">ms</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">Позначки (P)</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">Клавіші (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Розмір клавіш</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">Джойстик: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">Софт-клавіші: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">Цифри: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Вогонь: </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">Розмір</string>
-  <string name="SIZE_PRESETS" formatted="false">Шаблони</string>
-  <string name="PREF_LANGUAGE" formatted="false">Мова: %1$s</string>
-  <string name="PREF_MISC" formatted="false">Додаткові опції</string>
+  <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">Зберігати пропорції</string>
+  <string name="PREF_FILTER">Фільтрація</string>
+  <string name="PREF_FONT_OPTIONS">Параметри шрифту</string>
+  <string name="PREF_WIDTH">Ширина</string>
+  <string name="PREF_HEIGHT">Висота</string>
+  <string name="PREF_FONT_SMALL">Малий</string>
+  <string name="PREF_FONT_MEDIUM">Середній</string>
+  <string name="PREF_FONT_LARGE">Великий</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Значення в масштабованих пікселях</string>
+  <string name="PREF_BACKGROUND">Фон</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
+  <string name="PREF_VK_BACK">Клавіші</string>
+  <string name="PREF_VK_FORE">Позначки</string>
+  <string name="PREF_VK_OUTLINE">Контур</string>
+  <string name="PREF_VK_ALPHA">Прозорість: </string>
+  <string name="PREF_VK_HIDE_DELAY">Затримка приховування: </string>
+  <string name="PREF_UNIT_MS">ms</string>
+  <string name="PREF_VK_SEL_FORE">Позначки (P)</string>
+  <string name="PREF_VK_SEL_BACK">Клавіші (P)</string>
+  <string name="PREF_VK_KEY_SIZES">Розмір клавіш</string>
+  <string name="PREF_VK_NAV_KEYS">Джойстик: </string>
+  <string name="PREF_VK_SOFT_KEYS">Софт-клавіші: </string>
+  <string name="PREF_VK_NUM_KEYS">Цифри: </string>
+  <string name="PREF_VK_FIRE_KEY">Вогонь: </string>
+  <string name="PREF_VK_SIZE_HINT">Розмір</string>
+  <string name="SIZE_PRESETS">Шаблони</string>
+  <string name="PREF_LANGUAGE">Мова: %1$s</string>
+  <string name="PREF_MISC">Додаткові опції</string>
   <string name="PREF_VK_SHOW">Показати клавіатуру</string>
   <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
   <string name="SWAP_SIZES">Поміняти розміри</string>
   <string name="error">Помилка</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Примусове закривання програми може призвести до втрати даних або навіть до повного виведення її з ладу! \nПродовжити?</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">Необхідне підтвердження</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання програми може призвести до втрати даних або навіть до повного виведення її з ладу! \nПродовжити?</string>
+  <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
   <string name="select_dialog_title">Вибрати MIDlet</string>
   <string name="crash_dialog_message">Надіслати розробнику звіт про помилку?</string>
   <string name="crash_dialog_title">Виявлена помилка</string>

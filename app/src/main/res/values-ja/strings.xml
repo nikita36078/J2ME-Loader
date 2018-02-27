@@ -16,46 +16,46 @@
   <string name="action_context_shortcut">ショートカットを追加する</string>
   <string name="action_settings">設定</string>
   <string name="action_context_delete">削除</string>
-  <string name="START_CMD" formatted="false">開始</string>
-  <string name="CANCEL_CMD" formatted="false">キャンセル</string>
+  <string name="START_CMD">開始</string>
+  <string name="CANCEL_CMD">キャンセル</string>
   <string name="RESET_LAYOUT_CMD">キーロックアウトをリセットする</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">画面オプション</string>
+  <string name="PREF_SCREEN_OPTIONS">画面オプション</string>
   <string name="PREF_SCALE_RATIO">規模（％）</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">フィットするようにスケールする</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">アスペクト比を維持する</string>
-  <string name="PREF_FILTER" formatted="false">フィルタ</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">フォントオプション</string>
-  <string name="PREF_WIDTH" formatted="false">幅</string>
-  <string name="PREF_HEIGHT" formatted="false">高さ</string>
-  <string name="PREF_FONT_SMALL" formatted="false">小さい</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">中</string>
-  <string name="PREF_FONT_LARGE" formatted="false">大</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">値はスケーリングされたピクセルです</string>
-  <string name="PREF_BACKGROUND" formatted="false">バックグラウンド</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">仮想キーボード</string>
-  <string name="PREF_VK_BACK" formatted="false">ボタン</string>
-  <string name="PREF_VK_FORE" formatted="false">ラベル</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">アウトライン</string>
-  <string name="PREF_VK_ALPHA" formatted="false">不透明度: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">遅れを隠す： </string>
-  <string name="PREF_UNIT_MS" formatted="false">ミズ</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">ラベル（P）</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">ボタン（P）</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">キーサイズ</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">ジョイスティック： </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">ソフトキー： </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">数字： </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">火災： </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">サイズ</string>
-  <string name="SIZE_PRESETS" formatted="false">プリセット</string>
-  <string name="PREF_LANGUAGE" formatted="false">言語: %1$s</string>
-  <string name="PREF_MISC" formatted="false">その他のオプション</string>
+  <string name="PREF_SCALE_TO_FIT">フィットするようにスケールする</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">アスペクト比を維持する</string>
+  <string name="PREF_FILTER">フィルタ</string>
+  <string name="PREF_FONT_OPTIONS">フォントオプション</string>
+  <string name="PREF_WIDTH">幅</string>
+  <string name="PREF_HEIGHT">高さ</string>
+  <string name="PREF_FONT_SMALL">小さい</string>
+  <string name="PREF_FONT_MEDIUM">中</string>
+  <string name="PREF_FONT_LARGE">大</string>
+  <string name="PREF_FONT_SIZE_IN_SP">値はスケーリングされたピクセルです</string>
+  <string name="PREF_BACKGROUND">バックグラウンド</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">仮想キーボード</string>
+  <string name="PREF_VK_BACK">ボタン</string>
+  <string name="PREF_VK_FORE">ラベル</string>
+  <string name="PREF_VK_OUTLINE">アウトライン</string>
+  <string name="PREF_VK_ALPHA">不透明度: </string>
+  <string name="PREF_VK_HIDE_DELAY">遅れを隠す： </string>
+  <string name="PREF_UNIT_MS">ミズ</string>
+  <string name="PREF_VK_SEL_FORE">ラベル（P）</string>
+  <string name="PREF_VK_SEL_BACK">ボタン（P）</string>
+  <string name="PREF_VK_KEY_SIZES">キーサイズ</string>
+  <string name="PREF_VK_NAV_KEYS">ジョイスティック： </string>
+  <string name="PREF_VK_SOFT_KEYS">ソフトキー： </string>
+  <string name="PREF_VK_NUM_KEYS">数字： </string>
+  <string name="PREF_VK_FIRE_KEY">火災： </string>
+  <string name="PREF_VK_SIZE_HINT">サイズ</string>
+  <string name="SIZE_PRESETS">プリセット</string>
+  <string name="PREF_LANGUAGE">言語: %1$s</string>
+  <string name="PREF_MISC">その他のオプション</string>
   <string name="PREF_VK_SHOW">キーボードを表示する</string>
   <string name="PREF_IMMEDIATE">即時処理モード</string>
   <string name="SWAP_SIZES">スワップサイズ</string>
   <string name="error">エラー</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">アプリケーションを強制終了すると、データが失われたり、完全に破損する可能性があります。 続行しますか？</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">確認が必要です</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">アプリケーションを強制終了すると、データが失われたり、完全に破損する可能性があります。 続行しますか？</string>
+  <string name="CONFIRMATION_REQUIRED">確認が必要です</string>
   <string name="crash_dialog_message">エラー報告を開発者に送信しますか？</string>
   <string name="crash_dialog_title">エラーを検出しました</string>
   <string name="report_crash">送信</string>
