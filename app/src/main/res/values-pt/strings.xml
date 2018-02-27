@@ -16,46 +16,46 @@
   <string name="action_context_shortcut">Adicionar atalho</string>
   <string name="action_settings">Configurações</string>
   <string name="action_context_delete">Eliminar</string>
-  <string name="START_CMD" formatted="false">Iniciar</string>
-  <string name="CANCEL_CMD" formatted="false">Cancelar</string>
+  <string name="START_CMD">Iniciar</string>
+  <string name="CANCEL_CMD">Cancelar</string>
   <string name="RESET_LAYOUT_CMD">Resetar Layout de teclas</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">Ajustes de Tela</string>
+  <string name="PREF_SCREEN_OPTIONS">Ajustes de Tela</string>
   <string name="PREF_SCALE_RATIO">Escala(%)</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">Ajuste para encaixar</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Manter a Proporção da Imagem</string>
-  <string name="PREF_FILTER" formatted="false">Filtro</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">Opções de fonte</string>
-  <string name="PREF_WIDTH" formatted="false">Largura</string>
-  <string name="PREF_HEIGHT" formatted="false">Altura</string>
-  <string name="PREF_FONT_SMALL" formatted="false">Pequeno</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">Médio</string>
-  <string name="PREF_FONT_LARGE" formatted="false">Largo</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Valores em pixel dimensionado</string>
-  <string name="PREF_BACKGROUND" formatted="false">Plano de Fundo</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Teclado virtual</string>
-  <string name="PREF_VK_BACK" formatted="false">Botões</string>
-  <string name="PREF_VK_FORE" formatted="false">Prioridades</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">Contorno</string>
-  <string name="PREF_VK_ALPHA" formatted="false">Transparência: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Esconder Atraso: </string>
-  <string name="PREF_UNIT_MS" formatted="false">ms</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">Rótulos (P)</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">Botões (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Tamanhos de chave</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">Teclas: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">Dígitos: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Selec: </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">Tamanho</string>
-  <string name="SIZE_PRESETS" formatted="false">Predefinições</string>
-  <string name="PREF_LANGUAGE" formatted="false">Idioma: %1$s</string>
-  <string name="PREF_MISC" formatted="false">Opções diversas</string>
+  <string name="PREF_SCALE_TO_FIT">Ajuste para encaixar</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">Manter a Proporção da Imagem</string>
+  <string name="PREF_FILTER">Filtro</string>
+  <string name="PREF_FONT_OPTIONS">Opções de fonte</string>
+  <string name="PREF_WIDTH">Largura</string>
+  <string name="PREF_HEIGHT">Altura</string>
+  <string name="PREF_FONT_SMALL">Pequeno</string>
+  <string name="PREF_FONT_MEDIUM">Médio</string>
+  <string name="PREF_FONT_LARGE">Largo</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Valores em pixel dimensionado</string>
+  <string name="PREF_BACKGROUND">Plano de Fundo</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
+  <string name="PREF_VK_BACK">Botões</string>
+  <string name="PREF_VK_FORE">Prioridades</string>
+  <string name="PREF_VK_OUTLINE">Contorno</string>
+  <string name="PREF_VK_ALPHA">Transparência: </string>
+  <string name="PREF_VK_HIDE_DELAY">Esconder Atraso: </string>
+  <string name="PREF_UNIT_MS">ms</string>
+  <string name="PREF_VK_SEL_FORE">Rótulos (P)</string>
+  <string name="PREF_VK_SEL_BACK">Botões (P)</string>
+  <string name="PREF_VK_KEY_SIZES">Tamanhos de chave</string>
+  <string name="PREF_VK_NAV_KEYS">Joystick: </string>
+  <string name="PREF_VK_SOFT_KEYS">Teclas: </string>
+  <string name="PREF_VK_NUM_KEYS">Dígitos: </string>
+  <string name="PREF_VK_FIRE_KEY">Selec: </string>
+  <string name="PREF_VK_SIZE_HINT">Tamanho</string>
+  <string name="SIZE_PRESETS">Predefinições</string>
+  <string name="PREF_LANGUAGE">Idioma: %1$s</string>
+  <string name="PREF_MISC">Opções diversas</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>
   <string name="SWAP_SIZES">Tamanhos de swap</string>
   <string name="error">Erro</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Força-fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">Confirmação Necessária</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">Força-fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
+  <string name="CONFIRMATION_REQUIRED">Confirmação Necessária</string>
   <string name="crash_dialog_message">Você quer enviar o relatório de erro para o desenvolvedor?</string>
   <string name="crash_dialog_title">Erro detectado</string>
   <string name="report_crash">Enviar</string>
