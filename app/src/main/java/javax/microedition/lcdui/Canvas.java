@@ -98,6 +98,7 @@ public abstract class Canvas extends Displayable {
 		mapKeyCode(KeyEvent.KEYCODE_DPAD_LEFT, KEY_LEFT, LEFT, "LEFT");
 		mapKeyCode(KeyEvent.KEYCODE_DPAD_RIGHT, KEY_RIGHT, RIGHT, "RIGHT");
 		mapKeyCode(KeyEvent.KEYCODE_DPAD_CENTER, KEY_FIRE, FIRE, "SELECT");
+		mapKeyCode(KeyEvent.KEYCODE_ENTER, KEY_FIRE, FIRE, "SELECT");
 		mapKeyCode(KeyEvent.KEYCODE_SOFT_LEFT, KEY_SOFT_LEFT, LEFT, "SOFT1");
 		mapKeyCode(KeyEvent.KEYCODE_SOFT_RIGHT, KEY_SOFT_RIGHT, 0, "SOFT2");
 		mapKeyCode(KeyEvent.KEYCODE_CLEAR, KEY_CLEAR, 0, "CLEAR");
