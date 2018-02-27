@@ -38,50 +38,50 @@
         <item>10 USD</item>
     </string-array>
 
-    <string name="START_CMD" formatted="false">Start</string>
-    <string name="CANCEL_CMD" formatted="false">Cancel</string>
-    <string name="CLEAR_DATA_CMD" formatted="false">Clear data</string>
-    <string name="RESET_SETTINGS_CMD" formatted="false">Reset settings</string>
+    <string name="START_CMD">Start</string>
+    <string name="CANCEL_CMD">Cancel</string>
+    <string name="CLEAR_DATA_CMD">Clear data</string>
+    <string name="RESET_SETTINGS_CMD">Reset settings</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
-    <string name="PREF_SCREEN_OPTIONS" formatted="false">Screen options</string>
+    <string name="PREF_SCREEN_OPTIONS">Screen options</string>
     <string name="PREF_SCALE_RATIO">Scale(%)</string>
-    <string name="PREF_SCALE_TO_FIT" formatted="false">Scale to fit</string>
-    <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Keep aspect ratio</string>
-    <string name="PREF_FILTER" formatted="false">Filter</string>
-    <string name="PREF_FONT_OPTIONS" formatted="false">Font options</string>
-    <string name="PREF_WIDTH" formatted="false">Width</string>
-    <string name="PREF_HEIGHT" formatted="false">Height</string>
-    <string name="PREF_FONT_SMALL" formatted="false">Small</string>
-    <string name="PREF_FONT_MEDIUM" formatted="false">Medium</string>
-    <string name="PREF_FONT_LARGE" formatted="false">Large</string>
-    <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Values are in Scaled Pixels</string>
-    <string name="PREF_BACKGROUND" formatted="false">Background</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Virtual keyboard</string>
-    <string name="PREF_VK_BACK" formatted="false">Buttons</string>
-    <string name="PREF_VK_FORE" formatted="false">Labels</string>
-    <string name="PREF_VK_OUTLINE" formatted="false">Outline</string>
-    <string name="PREF_COLOR_HINT" formatted="false" translatable="false">RGB</string>
-    <string name="PREF_VK_ALPHA" formatted="false">Opacity: </string>
-    <string name="PREF_VK_HIDE_DELAY" formatted="false">Hide delay: </string>
-    <string name="PREF_UNIT_MS" formatted="false">ms</string>
-    <string name="PREF_VK_SEL_FORE" formatted="false">Labels (P)</string>
-    <string name="PREF_VK_SEL_BACK" formatted="false">Buttons (P)</string>
-    <string name="PREF_VK_KEY_SIZES" formatted="false">Key sizes</string>
-    <string name="PREF_VK_NAV_KEYS" formatted="false">Joystick: </string>
-    <string name="PREF_VK_SOFT_KEYS" formatted="false">Soft keys: </string>
-    <string name="PREF_VK_NUM_KEYS" formatted="false">Digits: </string>
-    <string name="PREF_VK_FIRE_KEY" formatted="false">Fire: </string>
-    <string name="PREF_VK_SIZE_HINT" formatted="false">Size</string>
-    <string name="SIZE_PRESETS" formatted="false">Presets</string>
-    <string name="PREF_LANGUAGE" formatted="false">Language: %1$s</string>
-    <string name="PREF_MISC" formatted="false">Misc options</string>
+    <string name="PREF_SCALE_TO_FIT">Scale to fit</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">Keep aspect ratio</string>
+    <string name="PREF_FILTER">Filter</string>
+    <string name="PREF_FONT_OPTIONS">Font options</string>
+    <string name="PREF_WIDTH">Width</string>
+    <string name="PREF_HEIGHT">Height</string>
+    <string name="PREF_FONT_SMALL">Small</string>
+    <string name="PREF_FONT_MEDIUM">Medium</string>
+    <string name="PREF_FONT_LARGE">Large</string>
+    <string name="PREF_FONT_SIZE_IN_SP">Values are in Scaled Pixels</string>
+    <string name="PREF_BACKGROUND">Background</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
+    <string name="PREF_VK_BACK">Buttons</string>
+    <string name="PREF_VK_FORE">Labels</string>
+    <string name="PREF_VK_OUTLINE">Outline</string>
+    <string name="PREF_COLOR_HINT" translatable="false">RGB</string>
+    <string name="PREF_VK_ALPHA">Opacity: </string>
+    <string name="PREF_VK_HIDE_DELAY">Hide delay: </string>
+    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_VK_SEL_FORE">Labels (P)</string>
+    <string name="PREF_VK_SEL_BACK">Buttons (P)</string>
+    <string name="PREF_VK_KEY_SIZES">Key sizes</string>
+    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
+    <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
+    <string name="PREF_VK_NUM_KEYS">Digits: </string>
+    <string name="PREF_VK_FIRE_KEY">Fire: </string>
+    <string name="PREF_VK_SIZE_HINT">Size</string>
+    <string name="SIZE_PRESETS">Presets</string>
+    <string name="PREF_LANGUAGE">Language: %1$s</string>
+    <string name="PREF_MISC">Misc options</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="SWAP_SIZES">Swap sizes</string>
     <string name="error">Error</string>
 
-    <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
-    <string name="CONFIRMATION_REQUIRED" formatted="false">Confirmation required</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
+    <string name="CONFIRMATION_REQUIRED">Confirmation required</string>
     <string name="select_dialog_title">Select MIDlet</string>
     <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
     <string name="crash_dialog_title">Error detected</string>
