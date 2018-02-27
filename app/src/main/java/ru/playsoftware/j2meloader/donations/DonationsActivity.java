@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -45,15 +46,13 @@ public class DonationsActivity extends AppCompatActivity {
 	private static final String PAYPAL_USER = "nikita36078@mail.ru";
 	private static final String PAYPAL_CURRENCY_CODE = "RUB";
 
-	/**
-	 * Called when the activity is first created.
-	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_donations);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle(R.string.donate);
 
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		DonationsFragment donationsFragment;
@@ -62,8 +61,9 @@ public class DonationsActivity extends AppCompatActivity {
 					getResources().getStringArray(R.array.donation_google_catalog_values), false, null, null,
 					null, false, null, null, false, null);
 		} else {
-			donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null, null, true, PAYPAL_USER,
-					PAYPAL_CURRENCY_CODE, getString(R.string.donation_paypal_item), false, null, null, false, null);
+			donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null,
+					null, true, PAYPAL_USER, PAYPAL_CURRENCY_CODE,
+					getString(R.string.donation_paypal_item), false, null, null, false, null);
 		}
 
 		ft.replace(R.id.donations_activity_container, donationsFragment, "donationsFragment");
