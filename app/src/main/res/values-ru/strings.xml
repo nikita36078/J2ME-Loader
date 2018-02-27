@@ -20,48 +20,48 @@
   <string name="action_settings">Настройки</string>
   <string name="action_context_delete">Удалить</string>
   <string name="donate">Поддержать</string>
-  <string name="START_CMD" formatted="false">Пуск</string>
-  <string name="CANCEL_CMD" formatted="false">Отмена</string>
-  <string name="CLEAR_DATA_CMD" formatted="false">Очистить данные</string>
-  <string name="RESET_SETTINGS_CMD" formatted="false">Сброс настроек</string>
+  <string name="START_CMD">Пуск</string>
+  <string name="CANCEL_CMD">Отмена</string>
+  <string name="CLEAR_DATA_CMD">Очистить данные</string>
+  <string name="RESET_SETTINGS_CMD">Сброс настроек</string>
   <string name="RESET_LAYOUT_CMD">Сброс раскладки</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">Параметры экрана</string>
+  <string name="PREF_SCREEN_OPTIONS">Параметры экрана</string>
   <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">Масштабировать</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">Сохранять пропорции</string>
-  <string name="PREF_FILTER" formatted="false">Фильтрация</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">Параметры шрифтов</string>
-  <string name="PREF_WIDTH" formatted="false">Ширина</string>
-  <string name="PREF_HEIGHT" formatted="false">Высота</string>
-  <string name="PREF_FONT_SMALL" formatted="false">Малый</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">Средний</string>
-  <string name="PREF_FONT_LARGE" formatted="false">Большой</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Значения в масш. пикселях</string>
-  <string name="PREF_BACKGROUND" formatted="false">Фон</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Виртуальная клавиатура</string>
-  <string name="PREF_VK_BACK" formatted="false">Кнопки</string>
-  <string name="PREF_VK_FORE" formatted="false">Надписи</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">Обводка</string>
-  <string name="PREF_VK_ALPHA" formatted="false">Прозрачность: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Скрывать через: </string>
-  <string name="PREF_UNIT_MS" formatted="false">мс</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">Надписи (Н)</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">Кнопки (Н)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Размеры клавиш</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">Джойстик: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">Софт-кл.: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">Цифры: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Огонь: </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">Разм.</string>
-  <string name="SIZE_PRESETS" formatted="false">Предустановки</string>
-  <string name="PREF_LANGUAGE" formatted="false">Язык: %1$s</string>
-  <string name="PREF_MISC" formatted="false">Прочие параметры</string>
+  <string name="PREF_SCALE_TO_FIT">Масштабировать</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">Сохранять пропорции</string>
+  <string name="PREF_FILTER">Фильтрация</string>
+  <string name="PREF_FONT_OPTIONS">Параметры шрифтов</string>
+  <string name="PREF_WIDTH">Ширина</string>
+  <string name="PREF_HEIGHT">Высота</string>
+  <string name="PREF_FONT_SMALL">Малый</string>
+  <string name="PREF_FONT_MEDIUM">Средний</string>
+  <string name="PREF_FONT_LARGE">Большой</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Значения в масш. пикселях</string>
+  <string name="PREF_BACKGROUND">Фон</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуальная клавиатура</string>
+  <string name="PREF_VK_BACK">Кнопки</string>
+  <string name="PREF_VK_FORE">Надписи</string>
+  <string name="PREF_VK_OUTLINE">Обводка</string>
+  <string name="PREF_VK_ALPHA">Прозрачность: </string>
+  <string name="PREF_VK_HIDE_DELAY">Скрывать через: </string>
+  <string name="PREF_UNIT_MS">мс</string>
+  <string name="PREF_VK_SEL_FORE">Надписи (Н)</string>
+  <string name="PREF_VK_SEL_BACK">Кнопки (Н)</string>
+  <string name="PREF_VK_KEY_SIZES">Размеры клавиш</string>
+  <string name="PREF_VK_NAV_KEYS">Джойстик: </string>
+  <string name="PREF_VK_SOFT_KEYS">Софт-кл.: </string>
+  <string name="PREF_VK_NUM_KEYS">Цифры: </string>
+  <string name="PREF_VK_FIRE_KEY">Огонь: </string>
+  <string name="PREF_VK_SIZE_HINT">Разм.</string>
+  <string name="SIZE_PRESETS">Предустановки</string>
+  <string name="PREF_LANGUAGE">Язык: %1$s</string>
+  <string name="PREF_MISC">Прочие параметры</string>
   <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
   <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
   <string name="SWAP_SIZES">Поменять местами</string>
   <string name="error">Ошибка</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">Требуется подтверждение</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
+  <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
   <string name="select_dialog_title">Выберите MIDlet</string>
   <string name="crash_dialog_message">Вы хотите отправить отчет об ошибке разработчику?</string>
   <string name="crash_dialog_title">Произошла ошибка</string>
