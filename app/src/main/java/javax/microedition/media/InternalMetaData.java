@@ -18,6 +18,7 @@
 package javax.microedition.media;
 
 import android.media.MediaMetadataRetriever;
+import android.support.v4.util.SparseArrayCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +27,11 @@ import javax.microedition.media.control.MetaDataControl;
 
 public class InternalMetaData implements MetaDataControl {
 	private static ArrayList<Integer> androidMetaKeys;
-	private static HashMap<Integer, String> androidMetaToMIDP;
+	private static SparseArrayCompat<String> androidMetaToMIDP;
 
 	static {
 		androidMetaKeys = new ArrayList<>();
-		androidMetaToMIDP = new HashMap<>();
+		androidMetaToMIDP = new SparseArrayCompat<>();
 
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, TRACK_NUMBER_KEY);
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ALBUM, ALBUM_KEY);

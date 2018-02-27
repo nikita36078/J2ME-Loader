@@ -20,14 +20,14 @@ package javax.microedition.lcdui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.RectF;
+import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-
-import java.util.HashMap;
 
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
@@ -70,16 +70,16 @@ public abstract class Canvas extends Displayable {
 	public static final int GAME_C = 11;
 	public static final int GAME_D = 12;
 
-	private static HashMap<Integer, Integer> androidToMIDP;
-	private static HashMap<Integer, Integer> keyCodeToGameAction;
-	private static HashMap<Integer, Integer> gameActionToKeyCode;
-	private static HashMap<Integer, String> keyCodeToKeyName;
+	private static SparseIntArray androidToMIDP;
+	private static SparseIntArray keyCodeToGameAction;
+	private static SparseIntArray gameActionToKeyCode;
+	private static SparseArrayCompat<String> keyCodeToKeyName;
 
 	static {
-		androidToMIDP = new HashMap<>();
-		keyCodeToGameAction = new HashMap<>();
-		gameActionToKeyCode = new HashMap<>();
-		keyCodeToKeyName = new HashMap<>();
+		androidToMIDP = new SparseIntArray();
+		keyCodeToGameAction = new SparseIntArray();
+		gameActionToKeyCode = new SparseIntArray();
+		keyCodeToKeyName = new SparseArrayCompat<>();
 
 		mapKeyCode(KeyEvent.KEYCODE_0, KEY_NUM0, 0, "0");
 		mapKeyCode(KeyEvent.KEYCODE_1, KEY_NUM1, 0, "1");
@@ -127,17 +127,12 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private static int convertAndroidKeyCode(int keyCode) {
-		Integer res = androidToMIDP.get(keyCode);
-		if (res != null) {
-			return res;
-		} else {
-			return -(keyCode << 8);
-		}
+		return androidToMIDP.get(keyCode, -(keyCode << 8));
 	}
 
 	public int getKeyCode(int gameAction) {
-		Integer res = gameActionToKeyCode.get(gameAction);
-		if (res != null) {
+		int res = gameActionToKeyCode.get(gameAction, Integer.MAX_VALUE);
+		if (res != Integer.MAX_VALUE) {
 			return res;
 		} else {
 			throw new IllegalArgumentException("unknown game action " + gameAction);
@@ -145,12 +140,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getGameAction(int keyCode) {
-		Integer res = keyCodeToGameAction.get(keyCode);
-		if (res != null) {
-			return res;
-		} else {
-			return 0;
-		}
+		return keyCodeToGameAction.get(keyCode, 0);
 	}
 
 	public String getKeyName(int keyCode) {
