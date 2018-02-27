@@ -16,46 +16,46 @@
   <string name="action_context_shortcut">添加捷徑</string>
   <string name="action_settings">設置</string>
   <string name="action_context_delete">刪除</string>
-  <string name="START_CMD" formatted="false">開始</string>
-  <string name="CANCEL_CMD" formatted="false">取消</string>
+  <string name="START_CMD">開始</string>
+  <string name="CANCEL_CMD">取消</string>
   <string name="RESET_LAYOUT_CMD">重置 keylayout</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">螢幕選項</string>
+  <string name="PREF_SCREEN_OPTIONS">螢幕選項</string>
   <string name="PREF_SCALE_RATIO">縮放%</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">縮放以適合</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">保持長寬比:</string>
-  <string name="PREF_FILTER" formatted="false">過濾</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">字體選項</string>
-  <string name="PREF_WIDTH" formatted="false">寬度</string>
-  <string name="PREF_HEIGHT" formatted="false">高度</string>
-  <string name="PREF_FONT_SMALL" formatted="false">小</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">中</string>
-  <string name="PREF_FONT_LARGE" formatted="false">大</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">值以縮放圖元為單位</string>
-  <string name="PREF_BACKGROUND" formatted="false">背景</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">虛擬鍵盤</string>
-  <string name="PREF_VK_BACK" formatted="false">按鈕</string>
-  <string name="PREF_VK_FORE" formatted="false">標籤：</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">大綱</string>
-  <string name="PREF_VK_ALPHA" formatted="false">不透明度： </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">隱藏延遲: </string>
-  <string name="PREF_UNIT_MS" formatted="false">ms</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">標籤 (P)</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">按鈕 (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">金鑰大小</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">遊戲杆: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">軟鍵: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">數字： </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">火: </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">大小</string>
-  <string name="SIZE_PRESETS" formatted="false">預設</string>
-  <string name="PREF_LANGUAGE" formatted="false">語言：%1$s</string>
-  <string name="PREF_MISC" formatted="false">雜項選項</string>
+  <string name="PREF_SCALE_TO_FIT">縮放以適合</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">保持長寬比:</string>
+  <string name="PREF_FILTER">過濾</string>
+  <string name="PREF_FONT_OPTIONS">字體選項</string>
+  <string name="PREF_WIDTH">寬度</string>
+  <string name="PREF_HEIGHT">高度</string>
+  <string name="PREF_FONT_SMALL">小</string>
+  <string name="PREF_FONT_MEDIUM">中</string>
+  <string name="PREF_FONT_LARGE">大</string>
+  <string name="PREF_FONT_SIZE_IN_SP">值以縮放圖元為單位</string>
+  <string name="PREF_BACKGROUND">背景</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虛擬鍵盤</string>
+  <string name="PREF_VK_BACK">按鈕</string>
+  <string name="PREF_VK_FORE">標籤：</string>
+  <string name="PREF_VK_OUTLINE">大綱</string>
+  <string name="PREF_VK_ALPHA">不透明度： </string>
+  <string name="PREF_VK_HIDE_DELAY">隱藏延遲: </string>
+  <string name="PREF_UNIT_MS">ms</string>
+  <string name="PREF_VK_SEL_FORE">標籤 (P)</string>
+  <string name="PREF_VK_SEL_BACK">按鈕 (P)</string>
+  <string name="PREF_VK_KEY_SIZES">金鑰大小</string>
+  <string name="PREF_VK_NAV_KEYS">遊戲杆: </string>
+  <string name="PREF_VK_SOFT_KEYS">軟鍵: </string>
+  <string name="PREF_VK_NUM_KEYS">數字： </string>
+  <string name="PREF_VK_FIRE_KEY">火: </string>
+  <string name="PREF_VK_SIZE_HINT">大小</string>
+  <string name="SIZE_PRESETS">預設</string>
+  <string name="PREF_LANGUAGE">語言：%1$s</string>
+  <string name="PREF_MISC">雜項選項</string>
   <string name="PREF_VK_SHOW">顯示鍵盤</string>
   <string name="PREF_IMMEDIATE">即時處理模式</string>
   <string name="SWAP_SIZES">交換大小 ︰</string>
   <string name="error">錯誤</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">需要确认</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
+  <string name="CONFIRMATION_REQUIRED">需要确认</string>
   <string name="crash_dialog_message">你想发送错误报告给开发者吗？</string>
   <string name="crash_dialog_title">检测到错误</string>
   <string name="report_crash">發送</string>
