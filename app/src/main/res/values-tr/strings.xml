@@ -20,46 +20,46 @@
   <string name="action_settings">Ayarlar</string>
   <string name="action_context_delete">Sil</string>
   <string name="donate">Bağış yap</string>
-  <string name="START_CMD" formatted="false">Başlat</string>
-  <string name="CANCEL_CMD" formatted="false">İptal</string>
+  <string name="START_CMD">Başlat</string>
+  <string name="CANCEL_CMD">İptal</string>
   <string name="RESET_LAYOUT_CMD">Tuş düzenini sıfırla</string>
-  <string name="PREF_SCREEN_OPTIONS" formatted="false">Ekran seçenekleri</string>
+  <string name="PREF_SCREEN_OPTIONS">Ekran seçenekleri</string>
   <string name="PREF_SCALE_RATIO">Ölçekleme(%)</string>
-  <string name="PREF_SCALE_TO_FIT" formatted="false">Ekrana sığdır</string>
-  <string name="PREF_KEEP_ASPECT_RATIO" formatted="false">En boy oranını koru</string>
-  <string name="PREF_FILTER" formatted="false">Filtre</string>
-  <string name="PREF_FONT_OPTIONS" formatted="false">Yazı tipi seçenekleri</string>
-  <string name="PREF_WIDTH" formatted="false">Genişlik</string>
-  <string name="PREF_HEIGHT" formatted="false">Yükseklik</string>
-  <string name="PREF_FONT_SMALL" formatted="false">Küçük</string>
-  <string name="PREF_FONT_MEDIUM" formatted="false">Orta</string>
-  <string name="PREF_FONT_LARGE" formatted="false">Büyük</string>
-  <string name="PREF_FONT_SIZE_IN_SP" formatted="false">Değerler ölçekli piksellerde</string>
-  <string name="PREF_BACKGROUND" formatted="false">Arka plan</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" formatted="false">Sanal klavye</string>
-  <string name="PREF_VK_BACK" formatted="false">Tuşlar</string>
-  <string name="PREF_VK_FORE" formatted="false">Metinler</string>
-  <string name="PREF_VK_OUTLINE" formatted="false">Dış hatlar</string>
-  <string name="PREF_VK_ALPHA" formatted="false">Opaklık: </string>
-  <string name="PREF_VK_HIDE_DELAY" formatted="false">Gizleme gecikmesi: </string>
-  <string name="PREF_UNIT_MS" formatted="false">ms</string>
-  <string name="PREF_VK_SEL_FORE" formatted="false">Metinler (P)</string>
-  <string name="PREF_VK_SEL_BACK" formatted="false">Tuşlar (P)</string>
-  <string name="PREF_VK_KEY_SIZES" formatted="false">Tuş boyutları</string>
-  <string name="PREF_VK_NAV_KEYS" formatted="false">Oyun kolu: </string>
-  <string name="PREF_VK_SOFT_KEYS" formatted="false">Yazılım tuşları: </string>
-  <string name="PREF_VK_NUM_KEYS" formatted="false">Rakamlar: </string>
-  <string name="PREF_VK_FIRE_KEY" formatted="false">Ateş: </string>
-  <string name="PREF_VK_SIZE_HINT" formatted="false">Boyut</string>
-  <string name="SIZE_PRESETS" formatted="false">Hazır ayarlar</string>
-  <string name="PREF_LANGUAGE" formatted="false">Dil: %1$s</string>
-  <string name="PREF_MISC" formatted="false">Çeşitli seçenekler</string>
+  <string name="PREF_SCALE_TO_FIT">Ekrana sığdır</string>
+  <string name="PREF_KEEP_ASPECT_RATIO">En boy oranını koru</string>
+  <string name="PREF_FILTER">Filtre</string>
+  <string name="PREF_FONT_OPTIONS">Yazı tipi seçenekleri</string>
+  <string name="PREF_WIDTH">Genişlik</string>
+  <string name="PREF_HEIGHT">Yükseklik</string>
+  <string name="PREF_FONT_SMALL">Küçük</string>
+  <string name="PREF_FONT_MEDIUM">Orta</string>
+  <string name="PREF_FONT_LARGE">Büyük</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Değerler ölçekli piksellerde</string>
+  <string name="PREF_BACKGROUND">Arka plan</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Sanal klavye</string>
+  <string name="PREF_VK_BACK">Tuşlar</string>
+  <string name="PREF_VK_FORE">Metinler</string>
+  <string name="PREF_VK_OUTLINE">Dış hatlar</string>
+  <string name="PREF_VK_ALPHA">Opaklık: </string>
+  <string name="PREF_VK_HIDE_DELAY">Gizleme gecikmesi: </string>
+  <string name="PREF_UNIT_MS">ms</string>
+  <string name="PREF_VK_SEL_FORE">Metinler (P)</string>
+  <string name="PREF_VK_SEL_BACK">Tuşlar (P)</string>
+  <string name="PREF_VK_KEY_SIZES">Tuş boyutları</string>
+  <string name="PREF_VK_NAV_KEYS">Oyun kolu: </string>
+  <string name="PREF_VK_SOFT_KEYS">Yazılım tuşları: </string>
+  <string name="PREF_VK_NUM_KEYS">Rakamlar: </string>
+  <string name="PREF_VK_FIRE_KEY">Ateş: </string>
+  <string name="PREF_VK_SIZE_HINT">Boyut</string>
+  <string name="SIZE_PRESETS">Hazır ayarlar</string>
+  <string name="PREF_LANGUAGE">Dil: %1$s</string>
+  <string name="PREF_MISC">Çeşitli seçenekler</string>
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
   <string name="PREF_IMMEDIATE">Acil işleme modu</string>
   <string name="SWAP_SIZES">Boyutları değiştir</string>
   <string name="error">Hata</string>
-  <string name="FORCE_CLOSE_CONFIRMATION" formatted="false">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
-  <string name="CONFIRMATION_REQUIRED" formatted="false">Onaylama gerekli</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
+  <string name="CONFIRMATION_REQUIRED">Onaylama gerekli</string>
   <string name="select_dialog_title">MIDlet seçin</string>
   <string name="crash_dialog_message">Geliştiriciye hata raporu göndermek istiyor musunuz?</string>
   <string name="crash_dialog_title">Hata algılandı</string>
