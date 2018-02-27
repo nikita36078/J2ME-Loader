@@ -9,11 +9,15 @@ J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3
 This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoader).
 
 System requirements: Android 4.0+  
-[List of the incompatible/bugged games (Google Docs)](https://docs.google.com/spreadsheets/d/1KmkDmod7CxbLYSm_BgEoVMCzy4YuZZoL05H8hK4sOh4/edit?usp=sharing).  
 [4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201).
 
 <a href="https://play.google.com/store/apps/details?id=ru.playsoftware.j2meloader">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
+
+## Compatibility
+[List of the tested Java Games (Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Touchscreen))  
+[List of the tested Java Games (Non Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Non-Touchscreen))  
+[List of the Java Games with glitches](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Java-Games-with-glitches)
 
 ## Tips
  - Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.
