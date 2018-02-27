@@ -168,11 +168,11 @@ public abstract class Canvas extends Displayable {
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
 			if (event.getRepeatCount() == 0) {
-				if (overlay == null) {
+				if (overlay == null || !overlay.keyPressed(keyCode)) {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_PRESSED, keyCode));
 				}
 			} else {
-				if (overlay == null) {
+				if (overlay == null || !overlay.keyRepeated(keyCode)) {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_REPEATED, keyCode));
 				}
 			}
@@ -181,7 +181,7 @@ public abstract class Canvas extends Displayable {
 
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
-			if (overlay == null) {
+			if (overlay == null || !overlay.keyReleased(keyCode)) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_RELEASED, keyCode));
 			}
 			return super.onKeyUp(keyCode, event);
