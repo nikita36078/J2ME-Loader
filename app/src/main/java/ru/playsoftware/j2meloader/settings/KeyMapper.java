@@ -35,7 +35,7 @@ public class KeyMapper {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		JSONArray json = new JSONArray();
-		StringBuffer data = new StringBuffer().append("[");
+		StringBuilder  data = new StringBuilder().append("[");
 		for (int i = 0; i < intArray.size(); i++) {
 			data.append("{")
 					.append("\"key\": ")
@@ -45,6 +45,7 @@ public class KeyMapper {
 					.append("},");
 			json.put(data);
 		}
+		data.deleteCharAt(data.length() - 1);
 		data.append("]");
 		editor.putString(PREF_KEY, intArray.size() == 0 ? null : data.toString());
 		editor.apply();

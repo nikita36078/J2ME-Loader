@@ -130,6 +130,7 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 			case R.id.action_reset_mapping:
 				androidToMIDP.clear();
 				KeyMapper.initArray(androidToMIDP);
+				KeyMapper.saveArrayPref(this, androidToMIDP);
 				break;
 		}
 		return super.onOptionsItemSelected(item);
