@@ -18,6 +18,7 @@
 package javax.microedition.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -33,6 +34,10 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
 import javax.microedition.shell.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
+
+import ru.playsoftware.j2meloader.MainActivity;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -119,8 +124,10 @@ public class ContextHolder {
 	 * Закрыть все Activity и завершить процесс, в котором они выполнялись.
 	 */
 	public static void notifyDestroyed() {
-		if (currentActivity != null) {
-			currentActivity.finish();
-		}
+		Intent intent = new Intent(currentActivity, MainActivity.class);
+		intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+		currentActivity.startActivity(intent);
+		currentActivity.finish();
+		Runtime.getRuntime().exit(0);
 	}
 }
