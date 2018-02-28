@@ -300,19 +300,21 @@ public class NavigationDrawerFragment extends Fragment {
 
 	private void readFolder(String folderStr) {
 		Log.d(TAG, "read : " + folderStr);
+		if (folderStr.equals("")) {
+			folderStr = "/";
+		}
 		File current = new File(folderStr);
 		items = new ArrayList<>();
+		if (!currPath.equals("/")) {
+			items.add(new FSItem(R.drawable.folder_in, "..", "Parent folder", FSItem.Type.Back));
+		}
 		ArrayList<FSItem> listFolder = new ArrayList<>();
 		ArrayList<FSItem> listFile = new ArrayList<>();
 		StringBuilder subheader = new StringBuilder();
-		if (!currPath.equals(startPath)) {
-			items.add(new FSItem(R.drawable.folder_in, "..", "Parent folder",
-					FSItem.Type.Back));
-		}
-		if (current.list().length == 0) {
+		fullPath.setText(currPath);
+		if (current.list() == null || current.list().length == 0) {
 			// если папка пустая
 			drawerListView.setAdapter(new FileListAdapter(getActionBar().getThemedContext(), items));
-			fullPath.setText(currPath);
 			return;
 		}
 		for (File file : current.listFiles()) {
@@ -342,7 +344,6 @@ public class NavigationDrawerFragment extends Fragment {
 		items.addAll(listFile.subList(0, listFile.size()));
 		drawerListView.setAdapter(new FileListAdapter(getActionBar()
 				.getThemedContext(), items));
-		fullPath.setText(currPath);
 	}
 
 	/*
