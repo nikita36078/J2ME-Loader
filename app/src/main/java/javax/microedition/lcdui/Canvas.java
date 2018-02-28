@@ -76,34 +76,32 @@ public abstract class Canvas extends Displayable {
 	private static SparseArrayCompat<String> keyCodeToKeyName;
 
 	static {
-		androidToMIDP = new SparseIntArray();
 		keyCodeToGameAction = new SparseIntArray();
 		gameActionToKeyCode = new SparseIntArray();
 		keyCodeToKeyName = new SparseArrayCompat<>();
 
-		mapKeyCode(KeyEvent.KEYCODE_0, KEY_NUM0, 0, "0");
-		mapKeyCode(KeyEvent.KEYCODE_1, KEY_NUM1, 0, "1");
-		mapKeyCode(KeyEvent.KEYCODE_2, KEY_NUM2, UP, "2");
-		mapKeyCode(KeyEvent.KEYCODE_3, KEY_NUM3, 0, "3");
-		mapKeyCode(KeyEvent.KEYCODE_4, KEY_NUM4, LEFT, "4");
-		mapKeyCode(KeyEvent.KEYCODE_5, KEY_NUM5, FIRE, "5");
-		mapKeyCode(KeyEvent.KEYCODE_6, KEY_NUM6, RIGHT, "6");
-		mapKeyCode(KeyEvent.KEYCODE_7, KEY_NUM7, GAME_A, "7");
-		mapKeyCode(KeyEvent.KEYCODE_8, KEY_NUM8, DOWN, "8");
-		mapKeyCode(KeyEvent.KEYCODE_9, KEY_NUM9, GAME_B, "9");
-		mapKeyCode(KeyEvent.KEYCODE_STAR, KEY_STAR, GAME_C, "ASTERISK");
-		mapKeyCode(KeyEvent.KEYCODE_POUND, KEY_POUND, GAME_D, "POUND");
-		mapKeyCode(KeyEvent.KEYCODE_DPAD_UP, KEY_UP, UP, "UP");
-		mapKeyCode(KeyEvent.KEYCODE_DPAD_DOWN, KEY_DOWN, DOWN, "DOWN");
-		mapKeyCode(KeyEvent.KEYCODE_DPAD_LEFT, KEY_LEFT, LEFT, "LEFT");
-		mapKeyCode(KeyEvent.KEYCODE_DPAD_RIGHT, KEY_RIGHT, RIGHT, "RIGHT");
-		mapKeyCode(KeyEvent.KEYCODE_DPAD_CENTER, KEY_FIRE, FIRE, "SELECT");
-		mapKeyCode(KeyEvent.KEYCODE_ENTER, KEY_FIRE, FIRE, "SELECT");
-		mapKeyCode(KeyEvent.KEYCODE_SOFT_LEFT, KEY_SOFT_LEFT, LEFT, "SOFT1");
-		mapKeyCode(KeyEvent.KEYCODE_SOFT_RIGHT, KEY_SOFT_RIGHT, 0, "SOFT2");
-		mapKeyCode(KeyEvent.KEYCODE_CLEAR, KEY_CLEAR, 0, "CLEAR");
-		mapKeyCode(KeyEvent.KEYCODE_CALL, KEY_SEND, 0, "SEND");
-		mapKeyCode(KeyEvent.KEYCODE_ENDCALL, KEY_END, 0, "END");
+		mapKeyCode(KEY_NUM0, 0, "0");
+		mapKeyCode(KEY_NUM1, 0, "1");
+		mapKeyCode(KEY_NUM2, UP, "2");
+		mapKeyCode(KEY_NUM3, 0, "3");
+		mapKeyCode(KEY_NUM4, LEFT, "4");
+		mapKeyCode(KEY_NUM5, FIRE, "5");
+		mapKeyCode(KEY_NUM6, RIGHT, "6");
+		mapKeyCode(KEY_NUM7, GAME_A, "7");
+		mapKeyCode(KEY_NUM8, DOWN, "8");
+		mapKeyCode(KEY_NUM9, GAME_B, "9");
+		mapKeyCode(KEY_STAR, GAME_C, "ASTERISK");
+		mapKeyCode(KEY_POUND, GAME_D, "POUND");
+		mapKeyCode(KEY_UP, UP, "UP");
+		mapKeyCode(KEY_DOWN, DOWN, "DOWN");
+		mapKeyCode(KEY_LEFT, LEFT, "LEFT");
+		mapKeyCode(KEY_RIGHT, RIGHT, "RIGHT");
+		mapKeyCode(KEY_FIRE, FIRE, "SELECT");
+		mapKeyCode(KEY_SOFT_LEFT, LEFT, "SOFT1");
+		mapKeyCode(KEY_SOFT_RIGHT, 0, "SOFT2");
+		mapKeyCode(KEY_CLEAR, 0, "CLEAR");
+		mapKeyCode(KEY_SEND, 0, "SEND");
+		mapKeyCode(KEY_END, 0, "END");
 
 		mapGameAction(UP, KEY_UP, "UP");
 		mapGameAction(LEFT, KEY_LEFT, "LEFT");
@@ -116,8 +114,7 @@ public abstract class Canvas extends Displayable {
 		mapGameAction(GAME_D, KEY_POUND, "POUND");
 	}
 
-	private static void mapKeyCode(int androidKeyCode, int midpKeyCode, int gameAction, String keyName) {
-		androidToMIDP.put(androidKeyCode, midpKeyCode);
+	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
 		keyCodeToGameAction.put(midpKeyCode, gameAction);
 		keyCodeToKeyName.put(midpKeyCode, keyName);
 	}
@@ -357,6 +354,10 @@ public abstract class Canvas extends Displayable {
 
 	public static void setFilterBitmap(boolean filter) {
 		Canvas.filter = filter;
+	}
+
+	public static void setKeyMapping(SparseIntArray intArray) {
+		Canvas.androidToMIDP = intArray;
 	}
 
 	public void setOverlay(Overlay ov) {

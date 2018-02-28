@@ -29,6 +29,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,6 +57,7 @@ import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
@@ -394,6 +396,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			boolean screenFilter = cxFilter.isChecked();
 			boolean immediateMode = cxImmediate.isChecked();
+			SparseIntArray intArray = KeyMapper.getArrayPref(this);
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
 			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
@@ -405,6 +408,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);
+			Canvas.setKeyMapping(intArray);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

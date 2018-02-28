@@ -67,6 +67,9 @@
         <activity
             android:name=".donations.DonationsActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".settings.KeyMapperActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

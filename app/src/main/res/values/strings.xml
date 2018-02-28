@@ -73,7 +73,7 @@
     <string name="PREF_VK_FIRE_KEY">Fire: </string>
     <string name="PREF_VK_SIZE_HINT">Size</string>
     <string name="SIZE_PRESETS">Presets</string>
-    <string name="PREF_LANGUAGE">Language: %1$s</string>
+    <string name="PREF_LANGUAGE" formatted="false">Language: %1$s</string>
     <string name="PREF_MISC">Misc options</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
@@ -105,8 +105,35 @@
         <item>name</item>
         <item>date</item>
     </string-array>
+    <string name="pref_map_keys">Key mappings</string>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>
     <string name="_MINUS_ONE" translatable="false">-1</string>
+    <string name="virtual_key_left_soft" translatable="false">L</string>
+    <string name="virtual_key_right_soft" translatable="false">R</string>
+    <string name="virtual_key_d" translatable="false">D</string>
+    <string name="virtual_key_c" translatable="false">C</string>
+    <string name="virtual_key_left" translatable="false">←</string>
+    <string name="virtual_key_right" translatable="false">→</string>
+    <string name="virtual_key_up" translatable="false">↑</string>
+    <string name="virtual_key_down" translatable="false">↓</string>
+    <string name="virtual_key_f" translatable="false">F</string>
+    <string name="virtual_key_1" translatable="false">1</string>
+    <string name="virtual_key_2" translatable="false">2</string>
+    <string name="virtual_key_3" translatable="false">3</string>
+    <string name="virtual_key_4" translatable="false">4</string>
+    <string name="virtual_key_5" translatable="false">5</string>
+    <string name="virtual_key_6" translatable="false">6</string>
+    <string name="virtual_key_7" translatable="false">7</string>
+    <string name="virtual_key_8" translatable="false">8</string>
+    <string name="virtual_key_9" translatable="false">9</string>
+    <string name="virtual_key_0" translatable="false">0</string>
+    <string name="virtual_key_star" translatable="false">*</string>
+    <string name="virtual_key_pound" translatable="false">#</string>
+    <string name="mapping_dialog_title">Press a key</string>
+    <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
+    <string name="reset_mapping">Reset</string>
+
+
 </resources>

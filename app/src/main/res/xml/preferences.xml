@@ -11,4 +11,11 @@
         android:entryValues="@array/pref_app_sort_values"
         android:key="pref_app_sort"
         android:title="@string/pref_app_sort_title" />
+    <Preference
+        android:title="@string/pref_map_keys">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="ru.playsoftware.j2meloader"
+            android:targetClass="ru.playsoftware.j2meloader.settings.KeyMapperActivity" />
+    </Preference>
 </android.support.v7.preference.PreferenceScreen>
