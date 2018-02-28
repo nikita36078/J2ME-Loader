@@ -255,6 +255,7 @@ public abstract class Canvas extends Displayable {
 					return;
 				}
 				graphics.setCanvas(offscreen.getCanvas());
+				graphics.resetTranslation();
 				graphics.resetClip();
 				try {
 					paint(graphics);
