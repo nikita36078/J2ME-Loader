@@ -83,7 +83,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private boolean fromSavedInstanceState;
 	private boolean userLearnedDrawer;
 
-	private TextView fullPath;
+	private TextView fullPathView;
 	ArrayList<FSItem> items;
 	private String currPath;
 	private String startPath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -124,7 +124,7 @@ public class NavigationDrawerFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.file_browser_layout, container,
 				false);
-		fullPath = v.findViewById(R.id.full_path);
+		fullPathView = v.findViewById(R.id.full_path);
 		drawerListView = v.findViewById(R.id.file_list);
 		drawerListView
 				.setOnItemClickListener((parent, view, position, id) -> {
@@ -134,11 +134,11 @@ public class NavigationDrawerFragment extends Fragment {
 						case Folder:
 							currPath = currPath + "/" + it.getName();// build
 							// URL
-							readFolder(currPath);
+							readFolder();
 							break;
 						case Back:
 							currPath = calcBackPath();
-							readFolder(currPath);
+							readFolder();
 							break;
 						case File:
 							selectFile(currPath + '/' + it.getName());// build
@@ -165,15 +165,14 @@ public class NavigationDrawerFragment extends Fragment {
 		if (currPath == null) {
 			this.currPath = startPath;
 		}
-		readFolder(currPath);
+		readFolder();
 
 		fragmentContainerView = getActivity().findViewById(fragmentId);
 		this.drawerLayout = drawerLayout;
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
-		this.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				Gravity.LEFT);
+		this.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.LEFT);
 		// set up the drawer's list view with items and click listener
 
 		ActionBar actionBar = getActionBar();
@@ -298,20 +297,22 @@ public class NavigationDrawerFragment extends Fragment {
 		void onSelected(String path);
 	}
 
-	private void readFolder(String folderStr) {
-		Log.d(TAG, "read : " + folderStr);
-		if (folderStr.equals("")) {
-			folderStr = "/";
+	private void readFolder() {
+		Log.d(TAG, "read : " + currPath);
+		File current;
+		if (currPath.equals("")) {
+			current = new File(currPath + "/");
+		} else {
+			current = new File(currPath);
 		}
-		File current = new File(folderStr);
 		items = new ArrayList<>();
-		if (!currPath.equals("/")) {
+		if (!currPath.equals("")) {
 			items.add(new FSItem(R.drawable.folder_in, "..", "Parent folder", FSItem.Type.Back));
 		}
 		ArrayList<FSItem> listFolder = new ArrayList<>();
 		ArrayList<FSItem> listFile = new ArrayList<>();
 		StringBuilder subheader = new StringBuilder();
-		fullPath.setText(currPath);
+		fullPathView.setText(currPath);
 		if (current.list() == null || current.list().length == 0) {
 			// если папка пустая
 			drawerListView.setAdapter(new FileListAdapter(getActionBar().getThemedContext(), items));
