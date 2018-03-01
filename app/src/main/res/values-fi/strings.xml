@@ -28,6 +28,7 @@
   <string name="PREF_SCALE_TO_FIT">Skaalaus sopivaksi</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Pidä kuvasuhde</string>
   <string name="PREF_FILTER">Suodatin</string>
+  <string name="PREF_IMMEDIATE">Välitön käsittelytila</string>
   <string name="PREF_FONT_OPTIONS">Fonttiasetukset</string>
   <string name="PREF_WIDTH">Leveys</string>
   <string name="PREF_HEIGHT">Korkeus</string>
@@ -37,6 +38,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Arvot ovat skaalattuja pikseleitä</string>
   <string name="PREF_BACKGROUND">Tausta</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuaalinen näppäimistö</string>
+  <string name="PREF_VK_SHOW">Näytä näppäimistö</string>
   <string name="PREF_VK_BACK">Painikkeet</string>
   <string name="PREF_VK_FORE">Selitteet</string>
   <string name="PREF_VK_OUTLINE">Ääriviivat</string>
@@ -52,10 +54,6 @@
   <string name="PREF_VK_FIRE_KEY">Antaa potkut: </string>
   <string name="PREF_VK_SIZE_HINT">Sinä</string>
   <string name="SIZE_PRESETS">Esiasetukset</string>
-  <string name="PREF_LANGUAGE">Kieli: %1$s</string>
-  <string name="PREF_MISC">Muut vaihtoehdot</string>
-  <string name="PREF_VK_SHOW">Näytä näppäimistö</string>
-  <string name="PREF_IMMEDIATE">Välitön käsittelytila</string>
   <string name="SWAP_SIZES">Vaihda kokoja</string>
   <string name="error">Virhe</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Sovelluksen sulkeutuminen voi johtaa tietojen menetykseen tai jopa rikkoa sen kokonaan!\nJatketaanko?</string>
