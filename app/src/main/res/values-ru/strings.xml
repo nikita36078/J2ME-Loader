@@ -30,6 +30,7 @@
   <string name="PREF_SCALE_TO_FIT">Масштабировать</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Сохранять пропорции</string>
   <string name="PREF_FILTER">Фильтрация</string>
+  <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
   <string name="PREF_FONT_OPTIONS">Параметры шрифтов</string>
   <string name="PREF_WIDTH">Ширина</string>
   <string name="PREF_HEIGHT">Высота</string>
@@ -39,6 +40,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Значения в масш. пикселях</string>
   <string name="PREF_BACKGROUND">Фон</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуальная клавиатура</string>
+  <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
   <string name="PREF_VK_BACK">Кнопки</string>
   <string name="PREF_VK_FORE">Надписи</string>
   <string name="PREF_VK_OUTLINE">Обводка</string>
@@ -54,12 +56,8 @@
   <string name="PREF_VK_FIRE_KEY">Огонь: </string>
   <string name="PREF_VK_SIZE_HINT">Разм.</string>
   <string name="SIZE_PRESETS">Предустановки</string>
-  <string name="PREF_LANGUAGE">Язык: %1$s</string>
-  <string name="PREF_MISC">Прочие параметры</string>
-  <string name="PREF_SYS_PROPS">Системные параметры</string>
-  <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
-  <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
   <string name="SWAP_SIZES">Поменять местами</string>
+  <string name="PREF_SYS_PROPS">Системные параметры</string>
   <string name="error">Ошибка</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
   <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
@@ -81,4 +79,8 @@
     <item>Имя</item>
     <item>Дата</item>
   </string-array>
+  <string name="pref_map_keys">Назначение кнопок</string>
+  <string name="mapping_dialog_title">Нажмите кнопку</string>
+  <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
+  <string name="reset_mapping">Сброс</string>
 </resources>
