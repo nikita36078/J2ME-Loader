@@ -190,7 +190,7 @@ public class MicroActivity extends AppCompatActivity {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
 				.setMessage(message);
-		builder.setOnCancelListener(dialogInterface -> finish());
+		builder.setOnCancelListener(dialogInterface -> ContextHolder.notifyDestroyed());
 		builder.show();
 	}
 
