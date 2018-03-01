@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">フィットするようにスケールする</string>
   <string name="PREF_KEEP_ASPECT_RATIO">アスペクト比を維持する</string>
   <string name="PREF_FILTER">フィルタ</string>
+  <string name="PREF_IMMEDIATE">即時処理モード</string>
   <string name="PREF_FONT_OPTIONS">フォントオプション</string>
   <string name="PREF_WIDTH">幅</string>
   <string name="PREF_HEIGHT">高さ</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">値はスケーリングされたピクセルです</string>
   <string name="PREF_BACKGROUND">バックグラウンド</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">仮想キーボード</string>
+  <string name="PREF_VK_SHOW">キーボードを表示する</string>
   <string name="PREF_VK_BACK">ボタン</string>
   <string name="PREF_VK_FORE">ラベル</string>
   <string name="PREF_VK_OUTLINE">アウトライン</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">火災： </string>
   <string name="PREF_VK_SIZE_HINT">サイズ</string>
   <string name="SIZE_PRESETS">プリセット</string>
-  <string name="PREF_LANGUAGE">言語: %1$s</string>
-  <string name="PREF_MISC">その他のオプション</string>
-  <string name="PREF_VK_SHOW">キーボードを表示する</string>
-  <string name="PREF_IMMEDIATE">即時処理モード</string>
   <string name="SWAP_SIZES">スワップサイズ</string>
   <string name="error">エラー</string>
   <string name="FORCE_CLOSE_CONFIRMATION">アプリケーションを強制終了すると、データが失われたり、完全に破損する可能性があります。 続行しますか？</string>
