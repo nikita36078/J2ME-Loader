@@ -290,6 +290,13 @@ public class List extends Screen implements Choice, ItemSelector {
 		}
 	}
 
+	public void setFont(int elementNum, Font font) {
+	}
+
+	public Font getFont(int elementNum) {
+		return null;
+	}
+
 	public int size() {
 		synchronized (selected) {
 			return selected.size();
