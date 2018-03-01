@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">Ajuster a l\'écran</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Conserver les proportions de l\'aspect</string>
   <string name="PREF_FILTER">Filtrer</string>
+  <string name="PREF_IMMEDIATE">Mode de traitement immédiat</string>
   <string name="PREF_FONT_OPTIONS">Options de police</string>
   <string name="PREF_WIDTH">Largeur</string>
   <string name="PREF_HEIGHT">Hauteur</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Les valeurs sont en mise à l’échelle des Pixels</string>
   <string name="PREF_BACKGROUND">Fond</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Clavier virtuel</string>
+  <string name="PREF_VK_SHOW">Afficher le clavier</string>
   <string name="PREF_VK_BACK">Boutons</string>
   <string name="PREF_VK_FORE">Étiquettes</string>
   <string name="PREF_VK_OUTLINE">Contour</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">Feu: </string>
   <string name="PREF_VK_SIZE_HINT">Taille</string>
   <string name="SIZE_PRESETS">Pré-définis</string>
-  <string name="PREF_LANGUAGE">Langue : %1$s</string>
-  <string name="PREF_MISC">Options diverses</string>
-  <string name="PREF_VK_SHOW">Afficher le clavier</string>
-  <string name="PREF_IMMEDIATE">Mode de traitement immédiat</string>
   <string name="SWAP_SIZES">Echanger tailles</string>
   <string name="error">Erreur</string>
   <string name="FORCE_CLOSE_CONFIRMATION">La fermeture forcée de l\'application peut entraîner une perte de données ou même la casser complètement!\nDévelopper?</string>

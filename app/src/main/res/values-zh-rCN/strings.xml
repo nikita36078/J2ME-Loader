@@ -28,6 +28,7 @@
   <string name="PREF_SCALE_TO_FIT">缩放以适应屏幕</string>
   <string name="PREF_KEEP_ASPECT_RATIO">保持纵横比</string>
   <string name="PREF_FILTER">过滤</string>
+  <string name="PREF_IMMEDIATE">即时处理模式</string>
   <string name="PREF_FONT_OPTIONS">字体选项</string>
   <string name="PREF_WIDTH">宽度</string>
   <string name="PREF_HEIGHT">高度</string>
@@ -37,6 +38,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">值以缩放像素为单位</string>
   <string name="PREF_BACKGROUND">背景</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
+  <string name="PREF_VK_SHOW">显示键盘</string>
   <string name="PREF_VK_BACK">按钮</string>
   <string name="PREF_VK_FORE">标签</string>
   <string name="PREF_VK_OUTLINE">轮廓</string>
@@ -52,10 +54,6 @@
   <string name="PREF_VK_FIRE_KEY">开火: </string>
   <string name="PREF_VK_SIZE_HINT">尺寸</string>
   <string name="SIZE_PRESETS">预设</string>
-  <string name="PREF_LANGUAGE">语言: %1$s</string>
-  <string name="PREF_MISC">其他选项</string>
-  <string name="PREF_VK_SHOW">显示键盘</string>
-  <string name="PREF_IMMEDIATE">即时处理模式</string>
   <string name="SWAP_SIZES">交换尺寸</string>
   <string name="error">错误</string>
   <string name="FORCE_CLOSE_CONFIRMATION">强制关闭应用可能导致数据丢失或损坏！\n要继续吗？</string>

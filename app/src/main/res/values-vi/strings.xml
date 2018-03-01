@@ -28,6 +28,7 @@
   <string name="PREF_SCALE_TO_FIT">Mở rộng để phù hợp với</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Giữ tỉ lệ co</string>
   <string name="PREF_FILTER">Bộ lọc</string>
+  <string name="PREF_IMMEDIATE">Chế độ xử lý ngay lập tức</string>
   <string name="PREF_FONT_OPTIONS">Tùy chọn phông chữ</string>
   <string name="PREF_WIDTH">Chiều rộng</string>
   <string name="PREF_HEIGHT">Chiều cao</string>
@@ -37,6 +38,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Các giá trị có trong Pixel Tỷ lệ</string>
   <string name="PREF_BACKGROUND">Hình nền</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Bàn phím ảo</string>
+  <string name="PREF_VK_SHOW">Hiển thị bàn phím</string>
   <string name="PREF_VK_BACK">Nút</string>
   <string name="PREF_VK_FORE">Nhãn</string>
   <string name="PREF_VK_OUTLINE">Đề cương</string>
@@ -52,10 +54,6 @@
   <string name="PREF_VK_FIRE_KEY">Ngọn lửa: </string>
   <string name="PREF_VK_SIZE_HINT">Kích thước</string>
   <string name="SIZE_PRESETS">Đặt trước</string>
-  <string name="PREF_LANGUAGE">Ngôn ngữ:%1$s</string>
-  <string name="PREF_MISC">Tùy chọn khác</string>
-  <string name="PREF_VK_SHOW">Hiển thị bàn phím</string>
-  <string name="PREF_IMMEDIATE">Chế độ xử lý ngay lập tức</string>
   <string name="SWAP_SIZES">K.thước hoán đổi</string>
   <string name="error">Lỗi</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Buộc đóng ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí phá vỡ hoàn toàn!\nTiến hành?</string>

@@ -28,6 +28,7 @@
   <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Зберігати пропорції</string>
   <string name="PREF_FILTER">Фільтрація</string>
+  <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
   <string name="PREF_FONT_OPTIONS">Параметри шрифту</string>
   <string name="PREF_WIDTH">Ширина</string>
   <string name="PREF_HEIGHT">Висота</string>
@@ -37,6 +38,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Значення в масштабованих пікселях</string>
   <string name="PREF_BACKGROUND">Фон</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
+  <string name="PREF_VK_SHOW">Показати клавіатуру</string>
   <string name="PREF_VK_BACK">Клавіші</string>
   <string name="PREF_VK_FORE">Позначки</string>
   <string name="PREF_VK_OUTLINE">Контур</string>
@@ -52,12 +54,8 @@
   <string name="PREF_VK_FIRE_KEY">Вогонь: </string>
   <string name="PREF_VK_SIZE_HINT">Розмір</string>
   <string name="SIZE_PRESETS">Шаблони</string>
-  <string name="PREF_LANGUAGE">Мова: %1$s</string>
-  <string name="PREF_MISC">Додаткові опції</string>
-  <string name="PREF_SYS_PROPS">Системні опції</string>
-  <string name="PREF_VK_SHOW">Показати клавіатуру</string>
-  <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
   <string name="SWAP_SIZES">Поміняти розміри</string>
+  <string name="PREF_SYS_PROPS">Системні опції</string>
   <string name="error">Помилка</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання програми може призвести до втрати даних або навіть до повного виведення її з ладу! \nПродовжити?</string>
   <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>

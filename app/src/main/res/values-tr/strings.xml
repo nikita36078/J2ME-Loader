@@ -28,6 +28,7 @@
   <string name="PREF_SCALE_TO_FIT">Ekrana sığdır</string>
   <string name="PREF_KEEP_ASPECT_RATIO">En boy oranını koru</string>
   <string name="PREF_FILTER">Filtre</string>
+  <string name="PREF_IMMEDIATE">Acil işleme modu</string>
   <string name="PREF_FONT_OPTIONS">Yazı tipi seçenekleri</string>
   <string name="PREF_WIDTH">Genişlik</string>
   <string name="PREF_HEIGHT">Yükseklik</string>
@@ -37,6 +38,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Değerler ölçekli piksellerde</string>
   <string name="PREF_BACKGROUND">Arka plan</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Sanal klavye</string>
+  <string name="PREF_VK_SHOW">Klavyeyi göster</string>
   <string name="PREF_VK_BACK">Tuşlar</string>
   <string name="PREF_VK_FORE">Metinler</string>
   <string name="PREF_VK_OUTLINE">Dış hatlar</string>
@@ -52,10 +54,6 @@
   <string name="PREF_VK_FIRE_KEY">Ateş: </string>
   <string name="PREF_VK_SIZE_HINT">Boyut</string>
   <string name="SIZE_PRESETS">Hazır ayarlar</string>
-  <string name="PREF_LANGUAGE">Dil: %1$s</string>
-  <string name="PREF_MISC">Çeşitli seçenekler</string>
-  <string name="PREF_VK_SHOW">Klavyeyi göster</string>
-  <string name="PREF_IMMEDIATE">Acil işleme modu</string>
   <string name="SWAP_SIZES">Boyutları değiştir</string>
   <string name="error">Hata</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>

@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">Escalar para adaptarse</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Mantener relación de aspecto</string>
   <string name="PREF_FILTER">Filtro</string>
+  <string name="PREF_IMMEDIATE">Modo de procesamiento inmediato</string>
   <string name="PREF_FONT_OPTIONS">Opciones de fuente</string>
   <string name="PREF_WIDTH">Ancho</string>
   <string name="PREF_HEIGHT">Alto</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Los valores son en píxeles escalados</string>
   <string name="PREF_BACKGROUND">Fondo</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
+  <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_VK_BACK">Botones</string>
   <string name="PREF_VK_FORE">Etiquetas</string>
   <string name="PREF_VK_OUTLINE">Contorno</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">Repetible: </string>
   <string name="PREF_VK_SIZE_HINT">Tamaño</string>
   <string name="SIZE_PRESETS">Plantillas</string>
-  <string name="PREF_LANGUAGE">Idioma: %1$s</string>
-  <string name="PREF_MISC">Opciones Misc</string>
-  <string name="PREF_VK_SHOW">Mostrar teclado</string>
-  <string name="PREF_IMMEDIATE">Modo de procesamiento inmediato</string>
   <string name="SWAP_SIZES">Intercambiar tamaños</string>
   <string name="error">Error</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla por completo.\nProceder?</string>

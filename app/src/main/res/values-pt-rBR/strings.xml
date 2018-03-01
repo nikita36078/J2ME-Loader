@@ -28,6 +28,7 @@
   <string name="PREF_SCALE_TO_FIT">Redimensionar tela</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Manter a proporção</string>
   <string name="PREF_FILTER">Filtro</string>
+  <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>
   <string name="PREF_FONT_OPTIONS">Opções de fonte</string>
   <string name="PREF_WIDTH">Largura</string>
   <string name="PREF_HEIGHT">Altura</string>
@@ -37,6 +38,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Valores de Pixels redimensionados</string>
   <string name="PREF_BACKGROUND">Fundo do Jogo</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
+  <string name="PREF_VK_SHOW">Mostrar o teclado</string>
   <string name="PREF_VK_BACK">Botões</string>
   <string name="PREF_VK_FORE">Rótulos</string>
   <string name="PREF_VK_OUTLINE">Contorno</string>
@@ -52,10 +54,6 @@
   <string name="PREF_VK_FIRE_KEY">Escolher: </string>
   <string name="PREF_VK_SIZE_HINT">Tamanho</string>
   <string name="SIZE_PRESETS">Predefinições</string>
-  <string name="PREF_LANGUAGE">Idioma: %1$s</string>
-  <string name="PREF_MISC">Opções extras</string>
-  <string name="PREF_VK_SHOW">Mostrar o teclado</string>
-  <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>
   <string name="SWAP_SIZES">Tamanhos de swap</string>
   <string name="error">Erro</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Força o fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
