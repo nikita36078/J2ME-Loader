@@ -39,9 +39,6 @@ import ru.playsoftware.j2meloader.R;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 
-	public static final String TEMP_JAR_NAME = "tmp.jar";
-	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
-
 	private static final String TEMP_FIX_FOLDER_NAME = "tmp_fix";
 	private static final String TEMP_FOLDER_NAME = "tmp";
 	private static final String TAG = JarConverter.class.getName();
@@ -61,12 +58,24 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(String... p1) {
+		boolean jadInstall = false;
+		String pathToJad = null;
 		String pathToJar = p1[0];
+		String pathConverted = p1[1];
+		// Fix uri path
+		pathToJar = pathToJar.replace("/file:", "");
+		// Add jar name to ACRA
 		String targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
 		ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
-		String pathConverted = p1[1];
-		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar + " pathConverted="
-				+ pathConverted);
+		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar + " pathConverted=" + pathConverted);
+		// Check extension
+		String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());
+		if (extension.equals(".jad")) {
+			jadInstall = true;
+			// Fix path to jar
+			pathToJad = pathToJar;
+			pathToJar = pathToJar.substring(0, pathToJar.length() - 1).concat("r");
+		}
 		File inputJar = new File(pathToJar);
 		File fixedJar;
 		try {
@@ -92,6 +101,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			deleteTemp();
 			return false;
 		}
+		// Remove invalid characters from app path
 		appDir = appDir.replace(":", "").replace("/", "");
 		File appConverted = new File(pathConverted, appDir);
 		FileUtils.deleteDirectory(appConverted);
@@ -107,15 +117,21 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			deleteTemp();
 			return false;
 		}
-		File conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
+		// Get midlet config file
+		File conf;
+		if (jadInstall) {
+			conf = new File(pathToJad);
+		} else {
+			conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
+		}
 		try {
 			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_CONF_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		// Extract other resources from jar.
-		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir
-				+ ConfigActivity.MIDLET_RES_DIR, (dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
+		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir + ConfigActivity.MIDLET_RES_DIR,
+				(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
 		deleteTemp();
 		return true;
 	}
@@ -165,9 +181,5 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private void deleteTemp() {
 		// Delete temp files
 		FileUtils.deleteDirectory(dirTmp);
-		File uriDir = new File(context.getApplicationInfo().dataDir, TEMP_URI_FOLDER_NAME);
-		if (uriDir.exists()) {
-			FileUtils.deleteDirectory(uriDir);
-		}
 	}
 }

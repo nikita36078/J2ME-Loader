@@ -38,7 +38,6 @@ import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,11 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 			setupActivity();
 			if (savedInstanceState == null && uri != null) {
 				JarConverter converter = new JarConverter(this);
-				try {
-					converter.execute(FileUtils.getJarPath(this, uri), ConfigActivity.APP_DIR);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
+				File uriFile = new File(uri.toString());
+				converter.execute(uriFile.getAbsolutePath(), ConfigActivity.APP_DIR);
 			}
 		}
 	}

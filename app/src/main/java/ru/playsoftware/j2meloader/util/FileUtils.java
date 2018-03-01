@@ -17,20 +17,15 @@
 
 package ru.playsoftware.j2meloader.util;
 
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -39,7 +34,6 @@ import java.util.Map;
 public class FileUtils {
 
 	private static String TAG = FileUtils.class.getName();
-	private static final int BUFFER_SIZE = 1024;
 
 	public static void moveFiles(String src, String dest, FilenameFilter filter) {
 		File fsrc = new File(src);
@@ -104,33 +98,5 @@ public class FileUtils {
 			Log.e(TAG, "getAppProperty() will not be available due to " + t.toString());
 		}
 		return params;
-	}
-
-	public static String getJarPath(Context context, Uri uri) throws FileNotFoundException {
-		InputStream in = context.getContentResolver().openInputStream(uri);
-		OutputStream out = null;
-		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
-		folder.mkdir();
-		File file = new File(folder, JarConverter.TEMP_JAR_NAME);
-		try {
-			out = new FileOutputStream(file);
-			byte[] buf = new byte[BUFFER_SIZE];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return file.getPath();
 	}
 }

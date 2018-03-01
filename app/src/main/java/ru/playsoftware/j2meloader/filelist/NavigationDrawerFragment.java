@@ -91,6 +91,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private static final Map<String, Integer> mapExt = new HashMap<String, Integer>() {
 		{
 			put(".jar", R.drawable.icon_zip);
+			put(".jad", R.drawable.file);
 		}
 	};
 
@@ -382,7 +383,7 @@ public class NavigationDrawerFragment extends Fragment {
 
 	private void selectFile(String path) {
 		String ext = getExtension(path);
-		if (ext != null && ext.equals(".jar")) {
+		if (ext != null && mapExt.containsKey(ext)) {
 			if (drawerLayout != null) {
 				drawerLayout.closeDrawer(fragmentContainerView);
 				getActionBar().setTitle(R.string.app_name);
