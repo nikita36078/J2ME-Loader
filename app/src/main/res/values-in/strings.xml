@@ -57,6 +57,7 @@
   <string name="PREF_VK_SIZE_HINT">Ukuran</string>
   <string name="SIZE_PRESETS">Prasetel</string>
   <string name="SWAP_SIZES">Tukar ukuran</string>
+  <string name="PREF_SYS_PROPS">Properti sistem</string>
   <string name="error">Kesalahan</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
   <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>
@@ -78,4 +79,6 @@
     <item>Nama</item>
     <item>Tanggal</item>
   </string-array>
+  <string name="mapping_dialog_title">Tekan tombol</string>
+  <string name="reset_mapping">Setel ulang</string>
 </resources>
