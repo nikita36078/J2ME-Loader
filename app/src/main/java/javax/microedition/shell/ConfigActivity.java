@@ -34,7 +34,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -99,8 +98,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected ArrayList<Integer> fontLarge;
 	protected ArrayList<String> fontAdapter;
 
-	protected String locale;
-
 	private File keylayoutFile;
 	private File dataDir;
 	private SharedPreferencesContainer params;
@@ -133,7 +130,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
 
-		locale = params.getString("Locale", Locale.getDefault().getCountry());
 		System.setProperty("microedition.sensor.version", "1");
 		System.setProperty("microedition.platform", "Nokia 6233");
 		System.setProperty("microedition.configuration", "CDLC1.1");
@@ -146,7 +142,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		System.setProperty("supports.recording", "false");
 		System.setProperty("microedition.pim.version", "1.0");
 		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
-		System.setProperty("microedition.locale", locale.toLowerCase());
+		System.setProperty("microedition.locale", Locale.getDefault().getCountry().toLowerCase());
 		System.setProperty("microedition.encoding", "ISO-8859-1");
 		System.setProperty("user.home", Environment.getExternalStorageDirectory().getAbsolutePath());
 
@@ -202,7 +198,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		findViewById(R.id.cmdVKSelBack).setOnClickListener(this);
 		findViewById(R.id.cmdVKSelFore).setOnClickListener(this);
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
-		findViewById(R.id.cmdLanguage).setOnClickListener(this);
 		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -235,22 +230,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		});
 
 		loadParams(params);
-
-		String[] locales = getResources().getStringArray(R.array.locales);
-		int index = -1;
-		for (int i = 0; i < locales.length; i++) {
-			if (locales[i].equalsIgnoreCase(locale)) {
-				index = i;
-				break;
-			}
-		}
-
-		String language = locale;
-		if (index >= 0) {
-			language = getResources().getStringArray(R.array.languages)[index];
-		}
-		((Button) findViewById(R.id.cmdLanguage)).setText(getString(R.string.PREF_LANGUAGE, language));
-
 		applyConfiguration();
 		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs",
 				appName + ".xml");
@@ -349,7 +328,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private void saveParams() {
 		try {
 			params.edit();
-			params.putString("Locale", locale);
 
 			params.putInt("ScreenWidth", Integer.parseInt(tfScreenWidth.getText().toString()));
 			params.putInt("ScreenHeight", Integer.parseInt(tfScreenHeight.getText().toString()));
@@ -560,10 +538,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
 					tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
 				};
-				break;
-			case R.id.cmdLanguage:
-				presets = getResources().getStringArray(R.array.languages);
-				presetListener = (dialog, which) -> locale = getResources().getStringArray(R.array.locales)[which];
 				break;
 			case R.id.cmdScreenBack:
 				color = Integer.parseInt(tfScreenBack.getText().toString(), 16);

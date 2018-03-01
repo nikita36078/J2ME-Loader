@@ -212,19 +212,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="@string/PREF_MISC"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/cmdLanguage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/PREF_LANGUAGE" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:text="@string/PREF_SYS_PROPS"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
