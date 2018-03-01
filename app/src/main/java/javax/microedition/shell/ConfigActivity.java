@@ -212,7 +212,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
-
 		tfScaleRatioValue.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -231,6 +230,16 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		loadParams(params);
 		applyConfiguration();
+
+		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
+		cxShowKeyboard.setOnClickListener(v -> {
+			if (!((CheckBox) v).isChecked()) {
+				cxVKFeedback.setEnabled(false);
+			} else {
+				cxVKFeedback.setEnabled(true);
+			}
+		});
+
 		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs",
 				appName + ".xml");
 		if (appSettings.exists() && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
