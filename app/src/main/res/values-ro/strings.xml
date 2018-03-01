@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">Redimensionare pentru potrivire</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Păstrează raportul aspectului</string>
   <string name="PREF_FILTER">Filtru</string>
+  <string name="PREF_IMMEDIATE">Modul de prelucrare imediată</string>
   <string name="PREF_FONT_OPTIONS">Opțiuni font</string>
   <string name="PREF_WIDTH">Lățime</string>
   <string name="PREF_HEIGHT">Înălțime</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Valorile sunt redimensionate în pixeli</string>
   <string name="PREF_BACKGROUND">Fundal</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Tastatură virtuală</string>
+  <string name="PREF_VK_SHOW">Arată tastatura</string>
   <string name="PREF_VK_BACK">Butoane</string>
   <string name="PREF_VK_FORE">Etichete</string>
   <string name="PREF_VK_OUTLINE">Contur</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">Foc: </string>
   <string name="PREF_VK_SIZE_HINT">Dimensiune</string>
   <string name="SIZE_PRESETS">Presetări</string>
-  <string name="PREF_LANGUAGE">Limbă: %1$s</string>
-  <string name="PREF_MISC">Opțiuni diverse</string>
-  <string name="PREF_VK_SHOW">Arată tastatura</string>
-  <string name="PREF_IMMEDIATE">Modul de prelucrare imediată</string>
   <string name="SWAP_SIZES">Schimbă dimensiunea</string>
   <string name="error">Eroare</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Închiderea forțată a aplicației ar putea duce la pierderea datelor!\nVrei să continui?</string>
