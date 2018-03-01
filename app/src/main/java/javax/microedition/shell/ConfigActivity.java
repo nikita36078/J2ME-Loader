@@ -314,7 +314,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
 		cxScaleToFit.setChecked(params.getBoolean("ScreenScaleToFit", true));
 		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio", true));
-		cxFilter.setChecked(params.getBoolean("ScreenFilter", true));
+		cxFilter.setChecked(params.getBoolean("ScreenFilter", false));
 		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
 
 		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall", 18)));
