@@ -54,6 +54,7 @@
   <string name="SIZE_PRESETS">Шаблони</string>
   <string name="PREF_LANGUAGE">Мова: %1$s</string>
   <string name="PREF_MISC">Додаткові опції</string>
+  <string name="PREF_SYS_PROPS">Системні опції</string>
   <string name="PREF_VK_SHOW">Показати клавіатуру</string>
   <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
   <string name="SWAP_SIZES">Поміняти розміри</string>

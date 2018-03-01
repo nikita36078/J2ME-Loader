@@ -56,6 +56,7 @@
   <string name="SIZE_PRESETS">Предустановки</string>
   <string name="PREF_LANGUAGE">Язык: %1$s</string>
   <string name="PREF_MISC">Прочие параметры</string>
+  <string name="PREF_SYS_PROPS">Системные параметры</string>
   <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
   <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
   <string name="SWAP_SIZES">Поменять местами</string>
