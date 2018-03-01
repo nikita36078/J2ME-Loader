@@ -77,6 +77,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected EditText tfFontSizeMedium;
 	protected EditText tfFontSizeLarge;
 	protected CheckBox cxFontSizeInSP;
+	protected EditText tfSystemProperties;
 	protected CheckBox cxShowKeyboard;
 
 	protected SeekBar sbVKAlpha;
@@ -161,6 +162,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
 		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
+		tfSystemProperties = findViewById(R.id.tfSystemProperties);
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
 
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
@@ -321,6 +323,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
 		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
 		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
+		tfSystemProperties.setText(params.getString("SystemProperties"));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
@@ -358,6 +361,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			params.putInt("FontSizeLarge",
 					Integer.parseInt(tfFontSizeLarge.getText().toString()));
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
+			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
 
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
@@ -402,6 +406,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
 			Font.setSize(Font.SIZE_LARGE, fontSizeLarge);
 			Font.setApplyDimensions(fontApplyDimensions);
+
+			final String[] propLines = tfSystemProperties.getText().toString().split("\n");
+			for (String line : propLines) {
+				String[] prop = line.split(":", 2);
+				if (prop.length == 2) {
+					System.setProperty(prop[0], prop[1]);
+				}
+			}
 
 			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
 					screenKeepAspectRatio, screenScaleRatio);

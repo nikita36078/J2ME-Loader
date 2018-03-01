@@ -75,6 +75,8 @@
     <string name="SIZE_PRESETS">Presets</string>
     <string name="PREF_LANGUAGE" formatted="false">Language: %1$s</string>
     <string name="PREF_MISC">Misc options</string>
+    <string name="PREF_SYS_PROPS">System properties</string>
+    <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="SWAP_SIZES">Swap sizes</string>
