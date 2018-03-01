@@ -39,6 +39,9 @@ import ru.playsoftware.j2meloader.R;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 
+	public static final String TEMP_JAR_NAME = "tmp.jar";
+	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
+
 	private static final String TEMP_FIX_FOLDER_NAME = "tmp_fix";
 	private static final String TEMP_FOLDER_NAME = "tmp";
 	private static final String TAG = JarConverter.class.getName();
@@ -62,8 +65,6 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		String pathToJad = null;
 		String pathToJar = p1[0];
 		String pathConverted = p1[1];
-		// Fix uri path
-		pathToJar = pathToJar.replace("/file:", "");
 		// Add jar name to ACRA
 		String targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
 		ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
