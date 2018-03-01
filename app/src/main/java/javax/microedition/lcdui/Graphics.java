@@ -186,14 +186,14 @@ public class Graphics {
 		return stroke;
 	}
 
-	public void setAntiAlias(boolean aa) {
+	private void setAntiAlias(boolean aa) {
 		drawAntiAlias = aa;
 
 		drawPaint.setAntiAlias(aa);
 		fillPaint.setAntiAlias(aa);
 	}
 
-	public void setAntiAliasText(boolean aa) {
+	private void setAntiAliasText(boolean aa) {
 		textAntiAlias = aa;
 	}
 
@@ -206,7 +206,7 @@ public class Graphics {
 		return font;
 	}
 
-	public void resetClip() {
+	protected void resetClip() {
 		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
 
@@ -248,7 +248,7 @@ public class Graphics {
 		canvas.translate(dx, dy);
 	}
 
-	public void resetTranslation() {
+	protected void resetTranslation() {
 		translate(-translateX, -translateY);
 	}
 
