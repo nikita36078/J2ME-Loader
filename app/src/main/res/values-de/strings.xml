@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">Passend skalieren</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Seitenverhältnis beibehalten</string>
   <string name="PREF_FILTER">Filter</string>
+  <string name="PREF_IMMEDIATE">Sofortiger Verarbeitungsmodus</string>
   <string name="PREF_FONT_OPTIONS">Schriftoptionen</string>
   <string name="PREF_WIDTH">Breite</string>
   <string name="PREF_HEIGHT">Höhe</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Werte sind in Scaled Pixels</string>
   <string name="PREF_BACKGROUND">Hintergrund</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Bildschirmtastatur</string>
+  <string name="PREF_VK_SHOW">Tastatur anzeigen</string>
   <string name="PREF_VK_BACK">Schaltflächen</string>
   <string name="PREF_VK_FORE">Beschriftungen</string>
   <string name="PREF_VK_OUTLINE">Umrandung</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">Feuer: </string>
   <string name="PREF_VK_SIZE_HINT">Grösse</string>
   <string name="SIZE_PRESETS">Voreinstellungen</string>
-  <string name="PREF_LANGUAGE">Sprache: %1$s</string>
-  <string name="PREF_MISC">Sonstige Optionen</string>
-  <string name="PREF_VK_SHOW">Tastatur anzeigen</string>
-  <string name="PREF_IMMEDIATE">Sofortiger Verarbeitungsmodus</string>
   <string name="SWAP_SIZES">Grössen tauschen</string>
   <string name="error">Fehler</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
