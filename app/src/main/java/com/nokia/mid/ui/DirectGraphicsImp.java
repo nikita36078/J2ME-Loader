@@ -225,11 +225,13 @@ public class DirectGraphicsImp implements DirectGraphics {
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = toARGB(pix[off + ix + iy * scanlen], format);
+				if (format == TYPE_USHORT_444_RGB) {
+					c |= (0xFF << 24);
+				}
 				pixres[iy * width + ix] = c;
 			}
 		}
-		boolean processAlpha = (format == TYPE_USHORT_4444_ARGB);
-		Image image = Image.createRGBImage(pixres, width, height, processAlpha);
+		Image image = Image.createRGBImage(pixres, width, height, true);
 		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
@@ -256,11 +258,13 @@ public class DirectGraphicsImp implements DirectGraphics {
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = pix[off + ix + iy * scanlen];
+				if (format == TYPE_INT_888_RGB) {
+					c |= (0xFF << 24);
+				}
 				pixres[iy * width + ix] = c;
 			}
 		}
-		boolean processAlpha = (format == TYPE_INT_8888_ARGB);
-		Image image = Image.createRGBImage(pixres, width, height, processAlpha);
+		Image image = Image.createRGBImage(pixres, width, height, true);
 		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
