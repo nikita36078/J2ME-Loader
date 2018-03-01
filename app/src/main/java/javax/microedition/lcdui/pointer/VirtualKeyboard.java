@@ -27,6 +27,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -252,6 +253,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private Graphics offgraphics;
 	private boolean obscuresVirtualScreen;
 	private boolean offscreenChanged;
+	private boolean feedback;
+	private static final int FEEDBACK_DURATION = 50;
 
 	private boolean visible, hiding, skip;
 	private final Object waiter = new Object();
@@ -726,6 +729,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 				for (VirtualKey aKeypad : keypad) {
 					if (aKeypad.contains(x, y)) {
+						vibrate();
 						associatedKeys[pointer] = aKeypad;
 						aKeypad.setSelected(true);
 						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getKeyCode()));
@@ -939,6 +943,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return false;
 	}
 
+	private void vibrate() {
+		if (feedback) Display.getDisplay(null).vibrate(FEEDBACK_DURATION);
+	}
+
 	public Font getFont() {
 		return font;
 	}
@@ -947,27 +955,19 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		this.font = font;
 	}
 
-	public int getHideDelay() {
-		return delay;
-	}
-
 	public void setHideDelay(int delay) {
 		this.delay = delay;
-	}
-
-	public int getOverlayAlpha() {
-		return overlayAlpha;
 	}
 
 	public void setOverlayAlpha(int overlayAlpha) {
 		this.overlayAlpha = overlayAlpha;
 	}
 
-	public int getColor(int color) {
-		return colors[color];
-	}
-
 	public void setColor(int color, int value) {
 		colors[color] = value;
+	}
+
+	public void setHasHapticFeedback(boolean feedback) {
+		this.feedback = feedback;
 	}
 }

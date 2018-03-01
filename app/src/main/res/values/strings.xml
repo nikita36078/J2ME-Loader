@@ -48,6 +48,7 @@
     <string name="PREF_SCALE_TO_FIT">Scale to fit</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Keep aspect ratio</string>
     <string name="PREF_FILTER">Filter</string>
+    <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="PREF_FONT_OPTIONS">Font options</string>
     <string name="PREF_WIDTH">Width</string>
     <string name="PREF_HEIGHT">Height</string>
@@ -57,6 +58,9 @@
     <string name="PREF_FONT_SIZE_IN_SP">Values are in Scaled Pixels</string>
     <string name="PREF_BACKGROUND">Background</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
+    <string name="PREF_VK_SHOW">Show keyboard</string>
+    <string name="PREF_VK_FEEDBACK">Haptic feedback</string>
+    <string name="PREF_TOUCH_INPUT">Touch input</string>
     <string name="PREF_VK_BACK">Buttons</string>
     <string name="PREF_VK_FORE">Labels</string>
     <string name="PREF_VK_OUTLINE">Outline</string>
@@ -73,13 +77,11 @@
     <string name="PREF_VK_FIRE_KEY">Fire: </string>
     <string name="PREF_VK_SIZE_HINT">Size</string>
     <string name="SIZE_PRESETS">Presets</string>
+    <string name="SWAP_SIZES">Swap sizes</string>
     <string name="PREF_LANGUAGE" formatted="false">Language: %1$s</string>
     <string name="PREF_MISC">Misc options</string>
     <string name="PREF_SYS_PROPS">System properties</string>
     <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
-    <string name="PREF_VK_SHOW">Show keyboard</string>
-    <string name="PREF_IMMEDIATE">Immediate processing mode</string>
-    <string name="SWAP_SIZES">Swap sizes</string>
     <string name="error">Error</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>

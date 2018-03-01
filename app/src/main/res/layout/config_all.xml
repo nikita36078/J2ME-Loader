@@ -234,7 +234,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/PREF_SYS_PROPS_HINT"
             android:inputType="textMultiLine"
-            android:lines="2"/>
+            android:lines="2" />
 
         <TextView
             android:layout_width="match_parent"
@@ -252,6 +252,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/PREF_VK_SHOW" />
+
+            <CheckBox
+                android:id="@+id/cxVKFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/PREF_VK_FEEDBACK" />
+
+            <CheckBox
+                android:id="@+id/cxTouchInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/PREF_TOUCH_INPUT" />
 
             <TableRow>
 

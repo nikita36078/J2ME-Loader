@@ -184,8 +184,9 @@ public abstract class Canvas extends Displayable {
 					}
 				case MotionEvent.ACTION_POINTER_DOWN:
 					int index = event.getActionIndex();
-					if (overlay == null || !overlay.pointerPressed(index, event.getX(index), event.getY(index))) {
-						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, index, convertPointerX(event.getX()), convertPointerY(event.getY())));
+					if ((overlay == null || !overlay.pointerPressed(index, event.getX(index), event.getY(index))) && touchInput) {
+						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, index,
+								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
 				case MotionEvent.ACTION_MOVE:
@@ -193,14 +194,16 @@ public abstract class Canvas extends Displayable {
 					int historySize = event.getHistorySize();
 					for (int h = 0; h < historySize; h++) {
 						for (int p = 0; p < pointerCount; p++) {
-							if (overlay == null || !overlay.pointerDragged(p, event.getHistoricalX(p, h), event.getHistoricalY(p, h))) {
-								postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p, convertPointerX(event.getHistoricalX(p, h)), convertPointerY(event.getHistoricalY(p, h))));
+							if ((overlay == null || !overlay.pointerDragged(p, event.getHistoricalX(p, h), event.getHistoricalY(p, h))) && touchInput) {
+								postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p,
+										convertPointerX(event.getHistoricalX(p, h)), convertPointerY(event.getHistoricalY(p, h))));
 							}
 						}
 					}
 					for (int p = 0; p < pointerCount; p++) {
-						if (overlay == null || !overlay.pointerDragged(p, event.getX(p), event.getY(p))) {
-							postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p, convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
+						if ((overlay == null || !overlay.pointerDragged(p, event.getX(p), event.getY(p))) && touchInput) {
+							postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p,
+									convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
 						}
 					}
 					break;
@@ -210,8 +213,9 @@ public abstract class Canvas extends Displayable {
 					}
 				case MotionEvent.ACTION_POINTER_UP:
 					index = event.getActionIndex();
-					if (overlay == null || !overlay.pointerReleased(index, event.getX(index), event.getY(index))) {
-						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, index, convertPointerX(event.getX()), convertPointerY(event.getY())));
+					if ((overlay == null || !overlay.pointerReleased(index, event.getX(index), event.getY(index))) && touchInput) {
+						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, index,
+								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
 				default:
@@ -324,6 +328,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean scaleToFit;
 	private static boolean keepAspectRatio;
 	private static boolean filter;
+	private static boolean touchInput;
 	private static int backgroundColor;
 	private static int scaleRatio;
 
@@ -359,6 +364,10 @@ public abstract class Canvas extends Displayable {
 
 	public static void setKeyMapping(SparseIntArray intArray) {
 		Canvas.androidToMIDP = intArray;
+	}
+
+	public static void setHasTouchInput(boolean touchInput) {
+		Canvas.touchInput = touchInput;
 	}
 
 	public void setOverlay(Overlay ov) {

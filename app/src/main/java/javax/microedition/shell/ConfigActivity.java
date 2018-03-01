@@ -79,6 +79,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected CheckBox cxFontSizeInSP;
 	protected EditText tfSystemProperties;
 	protected CheckBox cxShowKeyboard;
+	protected CheckBox cxVKFeedback;
+	protected CheckBox cxTouchInput;
 
 	protected SeekBar sbVKAlpha;
 	protected EditText tfVKHideDelay;
@@ -164,6 +166,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
+		cxVKFeedback = findViewById(R.id.cxVKFeedback);
+		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
 		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
@@ -325,6 +329,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
 		tfSystemProperties.setText(params.getString("SystemProperties"));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
+		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
+		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
@@ -363,6 +369,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
 			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
+			params.putBoolean("VirtualKeyboardFeedback", cxVKFeedback.isChecked());
+			params.putBoolean("TouchInput", cxTouchInput.isChecked());
 
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
 			params.putInt("VirtualKeyboardDelay",
@@ -400,6 +408,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			boolean screenFilter = cxFilter.isChecked();
 			boolean immediateMode = cxImmediate.isChecked();
+			boolean touchInput = cxTouchInput.isChecked();
 			SparseIntArray intArray = KeyMapper.getArrayPref(this);
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
@@ -421,6 +430,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setBackgroundColor(screenBackgroundColor);
 			Canvas.setKeyMapping(intArray);
+			Canvas.setHasTouchInput(touchInput);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -434,10 +444,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		int vkColorBackgroundSelected = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
 		int vkColorForegroundSelected = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
 		int vkColorOutline = Integer.parseInt(tfVKOutline.getText().toString(), 16);
+		boolean vkFeedback = cxVKFeedback.isChecked();
 
 		VirtualKeyboard vk = new VirtualKeyboard();
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
+		vk.setHasHapticFeedback(vkFeedback);
 
 		if (keylayoutFile.exists()) {
 			try {
