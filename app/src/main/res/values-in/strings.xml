@@ -30,6 +30,7 @@
   <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
   <string name="PREF_FILTER">Menyaring</string>
+  <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
   <string name="PREF_FONT_OPTIONS">Pilihan Huruf</string>
   <string name="PREF_WIDTH">Lebar</string>
   <string name="PREF_HEIGHT">Tinggi</string>
@@ -39,6 +40,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Nilai dalam Skala Piksel</string>
   <string name="PREF_BACKGROUND">Latar belakang</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keypad</string>
+  <string name="PREF_VK_SHOW">Tampilkan keypad</string>
   <string name="PREF_VK_BACK">Tombol</string>
   <string name="PREF_VK_FORE">Label</string>
   <string name="PREF_VK_OUTLINE">Pinggiran</string>
@@ -54,10 +56,6 @@
   <string name="PREF_VK_FIRE_KEY">Fire/Ok: </string>
   <string name="PREF_VK_SIZE_HINT">Ukuran</string>
   <string name="SIZE_PRESETS">Prasetel</string>
-  <string name="PREF_LANGUAGE">Bahasa: %1$s</string>
-  <string name="PREF_MISC">Pilihan lainnya</string>
-  <string name="PREF_VK_SHOW">Tampilkan keypad</string>
-  <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
   <string name="SWAP_SIZES">Tukar ukuran</string>
   <string name="error">Kesalahan</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
