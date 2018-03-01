@@ -418,7 +418,15 @@ public class Graphics {
 		if (rows < height) {
 			height = rows;
 		}
-		canvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, drawPaint);
+		int[] pixres = new int[height * width];
+		for (int iy = 0; iy < height; iy++) {
+			for (int ix = 0; ix < width; ix++) {
+				int c = rgbData[offset + ix + iy * scanlength];
+				pixres[iy * width + ix] = c;
+			}
+		}
+		Image image = Image.createRGBImage(pixres, width, height, processAlpha);
+		drawRegion(image, 0, 0, width, height, 0, x, y, 0);
 	}
 
 	public void copyArea(int x_src, int y_src, int width, int height,
