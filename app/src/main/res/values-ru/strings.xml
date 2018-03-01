@@ -41,6 +41,8 @@
   <string name="PREF_BACKGROUND">Фон</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуальная клавиатура</string>
   <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
+  <string name="PREF_VK_FEEDBACK">Тактильный отклик</string>
+  <string name="PREF_TOUCH_INPUT">Сенсорный ввод</string>
   <string name="PREF_VK_BACK">Кнопки</string>
   <string name="PREF_VK_FORE">Надписи</string>
   <string name="PREF_VK_OUTLINE">Обводка</string>
