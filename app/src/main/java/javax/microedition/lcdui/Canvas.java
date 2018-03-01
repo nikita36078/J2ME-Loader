@@ -528,11 +528,11 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public boolean hasPointerEvents() {
-		return overlay == null;
+		return touchInput;
 	}
 
 	public boolean hasPointerMotionEvents() {
-		return overlay == null;
+		return touchInput;
 	}
 
 	public boolean hasRepeatEvents() {
