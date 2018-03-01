@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">縮放以適合</string>
   <string name="PREF_KEEP_ASPECT_RATIO">保持長寬比:</string>
   <string name="PREF_FILTER">過濾</string>
+  <string name="PREF_IMMEDIATE">即時處理模式</string>
   <string name="PREF_FONT_OPTIONS">字體選項</string>
   <string name="PREF_WIDTH">寬度</string>
   <string name="PREF_HEIGHT">高度</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">值以縮放圖元為單位</string>
   <string name="PREF_BACKGROUND">背景</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虛擬鍵盤</string>
+  <string name="PREF_VK_SHOW">顯示鍵盤</string>
   <string name="PREF_VK_BACK">按鈕</string>
   <string name="PREF_VK_FORE">標籤：</string>
   <string name="PREF_VK_OUTLINE">大綱</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">火: </string>
   <string name="PREF_VK_SIZE_HINT">大小</string>
   <string name="SIZE_PRESETS">預設</string>
-  <string name="PREF_LANGUAGE">語言：%1$s</string>
-  <string name="PREF_MISC">雜項選項</string>
-  <string name="PREF_VK_SHOW">顯示鍵盤</string>
-  <string name="PREF_IMMEDIATE">即時處理模式</string>
   <string name="SWAP_SIZES">交換大小 ︰</string>
   <string name="error">錯誤</string>
   <string name="FORCE_CLOSE_CONFIRMATION">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
