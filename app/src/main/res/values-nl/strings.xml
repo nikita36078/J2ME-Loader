@@ -24,6 +24,7 @@
   <string name="PREF_SCALE_TO_FIT">Schaal om passend te maken</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Beeldverhouding behouden</string>
   <string name="PREF_FILTER">Filter</string>
+  <string name="PREF_IMMEDIATE">Onmiddellijke verwerkingsmodus</string>
   <string name="PREF_FONT_OPTIONS">Lettertypeopties</string>
   <string name="PREF_WIDTH">Breedte</string>
   <string name="PREF_HEIGHT">Hoogte</string>
@@ -33,6 +34,7 @@
   <string name="PREF_FONT_SIZE_IN_SP">Waarden staan in geschaalde pixels</string>
   <string name="PREF_BACKGROUND">Achtergrond</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtueel toetsenbord</string>
+  <string name="PREF_VK_SHOW">Toon toetsenbord</string>
   <string name="PREF_VK_BACK">Knoppen</string>
   <string name="PREF_VK_FORE">Etiketten</string>
   <string name="PREF_VK_OUTLINE">Outline</string>
@@ -48,10 +50,6 @@
   <string name="PREF_VK_FIRE_KEY">Brand: </string>
   <string name="PREF_VK_SIZE_HINT">Maat</string>
   <string name="SIZE_PRESETS">Voorinstellingen</string>
-  <string name="PREF_LANGUAGE">Taal: %1$s</string>
-  <string name="PREF_MISC">Misc opties</string>
-  <string name="PREF_VK_SHOW">Toon toetsenbord</string>
-  <string name="PREF_IMMEDIATE">Onmiddellijke verwerkingsmodus</string>
   <string name="SWAP_SIZES">Swap grootte</string>
   <string name="error">Fout</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Als u de toepassing forceert om de toepassing te sluiten, kan dit leiden tot gegevensverlies of zelfs helemaal breken! \nVerder?</string>
