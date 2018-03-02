@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,37 +25,21 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
-import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 
-public class AboutDialogFragment extends DialogFragment {
+public class InfoDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		StringBuilder message = new StringBuilder().append(getText(R.string.version))
-				.append(BuildConfig.VERSION_NAME)
-				.append(getText(R.string.about_email))
-				.append(getText(R.string.about_github))
-				.append(getText(R.string.about_4pda))
-				.append(getText(R.string.about_crowdin))
-				.append(getText(R.string.about_copyright));
 		TextView tv = new TextView(getActivity());
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		tv.setText(Html.fromHtml(message.toString()));
+		tv.setText(Html.fromHtml(getString(R.string.about_message)));
 		tv.setTextSize(16);
 		tv.setPadding(10, 15, 10, 10);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)
-				.setView(tv)
-				.setPositiveButton(R.string.licenses, (dialog, which) -> {
-					LicensesDialogFragment licensesDialogFragment = new LicensesDialogFragment();
-					licensesDialogFragment.show(getFragmentManager(), "licenses");
-				})
-				.setNeutralButton(R.string.more, (dialog, which) -> {
-					InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
-					infoDialogFragment.show(getFragmentManager(), "more");
-				});
+				.setView(tv);
 		return builder.create();
 	}
 }

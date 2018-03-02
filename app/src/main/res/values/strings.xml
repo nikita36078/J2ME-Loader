@@ -8,6 +8,7 @@
     <string name="exit">Exit</string>
     <string name="about">About</string>
     <string name="help">Help</string>
+    <string name="more">More</string>
     <string name="licenses">Licenses</string>
     <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.&lt;BR></string>
     <string name="help_message">&#8226; Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.&lt;BR>&#8226; Image flickering issues can be fixed by enabling the "Immediate processing mode" option.</string>
