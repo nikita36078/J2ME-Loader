@@ -88,15 +88,13 @@ public abstract class Displayable {
 	public abstract void clearDisplayableView();
 
 	public void addCommand(Command cmd) {
-		commands.add(cmd);
+		if (!commands.contains(cmd)) {
+			commands.add(cmd);
+		}
 	}
 
 	public void removeCommand(Command cmd) {
 		commands.remove(cmd);
-	}
-
-	public void removeAllCommands() {
-		commands.clear();
 	}
 
 	public int countCommands() {
