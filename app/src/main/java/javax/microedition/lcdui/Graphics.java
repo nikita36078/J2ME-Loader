@@ -422,10 +422,13 @@ public class Graphics {
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = rgbData[offset + ix + iy * scanlength];
+				if (!processAlpha) {
+					c |= (0xFF << 24);
+				}
 				pixres[iy * width + ix] = c;
 			}
 		}
-		Image image = Image.createRGBImage(pixres, width, height, processAlpha);
+		Image image = Image.createRGBImage(pixres, width, height, true);
 		drawRegion(image, 0, 0, width, height, 0, x, y, 0);
 	}
 
