@@ -41,7 +41,9 @@ public class Form extends Screen {
 
 	public Form(String title, Item[] elements) {
 		setTitle(title);
-		items.addAll(Arrays.asList(elements));
+		for (Item item : elements) {
+			append(item);
+		}
 	}
 
 	public Item get(int index) {
