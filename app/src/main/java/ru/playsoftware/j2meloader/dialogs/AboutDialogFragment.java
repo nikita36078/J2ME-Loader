@@ -48,7 +48,11 @@ public class AboutDialogFragment extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)
-				.setView(tv);
+				.setView(tv)
+				.setPositiveButton(R.string.licenses, (dialog, which) -> {
+					LicensesDialogFragment licensesDialogFragment = new LicensesDialogFragment();
+					licensesDialogFragment.show(getFragmentManager(), "licenses");
+				});
 		return builder.create();
 	}
 }
