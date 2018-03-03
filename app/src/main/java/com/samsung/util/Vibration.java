@@ -15,20 +15,14 @@
  */
 package com.samsung.util;
 
-import android.content.Context;
-import android.os.Vibrator;
-
-import javax.microedition.util.ContextHolder;
+import javax.microedition.lcdui.Display;
 
 public class Vibration {
 	public static void start(int duration, int strength) {
-		Vibrator vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-		if (vibrator != null) {
-			vibrator.vibrate(duration * 1000);
-		}
+		Display.getDisplay(null).vibrate(duration * 1000);
 	}
 
 	public static boolean isSupported() {
-		return ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE) != null;
+		return true;
 	}
 }

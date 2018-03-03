@@ -162,17 +162,20 @@ public class Display {
 	}
 
 	public boolean vibrate(int duration) {
-		try {
-			if (vibrator == null) {
-				vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-			}
-			if (duration > 0) {
-				vibrator.vibrate(duration);
-			}
-			return true;
-		} catch (Throwable t) {
+		if (vibrator == null) {
+			vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+		}
+		if (!vibrator.hasVibrator()) {
 			return false;
 		}
+		if (duration > 0) {
+			vibrator.vibrate(duration);
+		} else if (duration < 0) {
+			throw new IllegalStateException();
+		} else {
+			vibrator.cancel();
+		}
+		return true;
 	}
 
 	public void setCurrentItem(Item item) {

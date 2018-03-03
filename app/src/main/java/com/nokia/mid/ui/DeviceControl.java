@@ -24,21 +24,21 @@
 
 package com.nokia.mid.ui;
 
-// only empty methods. the emulator cant vibrate or switch light on
+import javax.microedition.lcdui.Display;
 
 public class DeviceControl {
 
-	static void setLightOn(int val) {
-	}
-
-	static int getLightOn() {
-		return 0;
-	}
-
 	public static void startVibra(int frequency, long duration) {
+		if (frequency < 0 || frequency > 100) {
+			throw new IllegalArgumentException();
+		}
+		if (!Display.getDisplay(null).vibrate((int) duration)) {
+			throw new IllegalStateException();
+		}
 	}
 
 	public static void stopVibra() {
+		Display.getDisplay(null).vibrate(0);
 	}
 
 	public static void setLights(int num, int level) {
