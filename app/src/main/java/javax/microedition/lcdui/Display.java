@@ -168,7 +168,7 @@ public class Display {
 	}
 
 	public int numAlphaLevels() {
-		return 255;
+		return 256;
 	}
 
 	public int numColors() {
