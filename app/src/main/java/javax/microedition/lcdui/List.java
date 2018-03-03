@@ -41,6 +41,7 @@ public class List extends Screen implements Choice, ItemSelector {
 
 	private int listType;
 	private int selectedIndex = -1;
+	private int fitPolicy;
 
 	private Command selectCommand = SELECT_COMMAND;
 
@@ -295,6 +296,14 @@ public class List extends Screen implements Choice, ItemSelector {
 
 	public Font getFont(int elementNum) {
 		return null;
+	}
+
+	public void setFitPolicy(int fitPolicy) {
+		this.fitPolicy = fitPolicy;
+	}
+
+	public int getFitPolicy() {
+		return fitPolicy;
 	}
 
 	public int size() {
