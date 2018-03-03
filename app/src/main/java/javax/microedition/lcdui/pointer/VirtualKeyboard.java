@@ -679,7 +679,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (visible) {
 			if (obscuresVirtualScreen && overlayAlpha <= 250) {
 				if (offscreenChanged) {
-					offgraphics.clear(0);
 					for (VirtualKey aKeypad : keypad) {
 						aKeypad.paint(offgraphics);
 					}
@@ -696,10 +695,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private void repaint() {
 		offscreenChanged = true;
-
-		/*if (target != null) {
-			target.repaint();
-		}*/
 	}
 
 	/**
@@ -945,10 +940,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private void vibrate() {
 		if (feedback) Display.getDisplay(null).vibrate(FEEDBACK_DURATION);
-	}
-
-	public Font getFont() {
-		return font;
 	}
 
 	public void setFont(Font font) {
