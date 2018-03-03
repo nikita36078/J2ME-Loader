@@ -105,8 +105,8 @@ public abstract class MIDlet {
 		return true;
 	}
 
-	public final int checkPermission(String str) {
-		return -1;
+	public final int checkPermission(String permission) {
+		return 1;
 	}
 
 	public final void resumeRequest() {
