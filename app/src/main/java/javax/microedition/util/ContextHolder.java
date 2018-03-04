@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.rms.impl.AndroidRecordStoreManager;
@@ -45,6 +46,7 @@ public class ContextHolder {
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static AppCompatActivity currentActivity;
+	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList();
 	private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
 
 	public static Context getContext() {
@@ -84,6 +86,22 @@ public class ContextHolder {
 
 	public static AppCompatActivity getCurrentActivity() {
 		return currentActivity;
+	}
+
+	public static void addActivityResultListener(ActivityResultListener listener) {
+		if (!resultListeners.contains(listener)) {
+			resultListeners.add(listener);
+		}
+	}
+
+	public static void removeActivityResultListener(ActivityResultListener listener) {
+		resultListeners.remove(listener);
+	}
+
+	public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
+		for (ActivityResultListener listener : resultListeners) {
+			listener.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	public static InputStream getResourceAsStream(Class className, String resName) {
