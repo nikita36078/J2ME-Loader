@@ -74,12 +74,12 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		listeners = new ArrayList<>();
 		controls = new HashMap<>();
 
-		controls.put(VolumeControl.class.getSimpleName(), this);
-		controls.put(PanControl.class.getSimpleName(), this);
-		controls.put(MetaDataControl.class.getSimpleName(), metadata);
-		controls.put(EqualizerControl.class.getSimpleName(), equalizer);
-		controls.put(MIDIControl.class.getSimpleName(), midiControl);
-		controls.put(ToneControl.class.getSimpleName(), toneControl);
+		controls.put(VolumeControl.class.getName(), this);
+		controls.put(PanControl.class.getName(), this);
+		controls.put(MetaDataControl.class.getName(), metadata);
+		controls.put(EqualizerControl.class.getName(), equalizer);
+		controls.put(MIDIControl.class.getName(), midiControl);
+		controls.put(ToneControl.class.getName(), toneControl);
 	}
 
 	public void setDataSource(DataSource datasource) throws IOException {
@@ -97,6 +97,9 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	}
 
 	public Control getControl(String controlType) {
+		if (!controlType.contains(".")) {
+			controlType = "javax.microedition.media.control." + controlType;
+		}
 		return controls.get(controlType);
 	}
 
