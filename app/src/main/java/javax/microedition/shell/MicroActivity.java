@@ -18,6 +18,7 @@
 package javax.microedition.shell;
 
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -64,6 +65,7 @@ public class MicroActivity extends AppCompatActivity {
 	private LinearLayout layout;
 	private Toolbar toolbar;
 	private String pathToMidletDir;
+	private boolean forceActive;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,10 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (forceActive) {
+			forceActive = false;
+			return;
+		}
 		visible = true;
 		if (loaded) {
 			if (started) {
@@ -99,6 +105,9 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
+		if (forceActive) {
+			return;
+		}
 		visible = false;
 	}
 
@@ -348,5 +357,13 @@ public class MicroActivity extends AppCompatActivity {
 		}
 
 		return super.onContextItemSelected(item);
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		ContextHolder.notifyOnActivityResult(requestCode, resultCode, data);
+	}
+
+	public void forceActiveState() {
+		forceActive = true;
 	}
 }
