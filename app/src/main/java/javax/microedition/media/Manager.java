@@ -29,6 +29,9 @@ import javax.microedition.media.protocol.DataSource;
 import javax.microedition.util.ContextHolder;
 
 public class Manager {
+	public static final String TONE_DEVICE_LOCATOR = "device://tone";
+	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
+
 	private static final String TAG = Manager.class.getName();
 
 	private static class StreamCacheCleaner implements PlayerListener {
