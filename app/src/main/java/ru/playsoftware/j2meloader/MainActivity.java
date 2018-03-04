@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	private AppsListFragment appsListFragment;
 	private ArrayList<AppItem> apps = new ArrayList<>();
 	private SharedPreferences sp;
-	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
+	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE_ACCESS_COARSE_LOCATION = 0;
 	private static final Comparator<SortItem> comparator = new AlphabeticComparator<>();
 
 	@Override
@@ -98,9 +98,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		}
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-				!= PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+				!= PackageManager.PERMISSION_GRANTED
+		 || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+			 	!= PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+			Manifest.permission.ACCESS_COARSE_LOCATION},
+					MY_PERMISSIONS_REQUEST_WRITE_STORAGE_ACCESS_COARSE_LOCATION);
 		} else {
 			setupActivity();
 			if (savedInstanceState == null && uri != null) {
@@ -134,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
 										   @NonNull int[] grantResults) {
 		switch (requestCode) {
-			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
+			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE_ACCESS_COARSE_LOCATION:
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					setupActivity();
 				} else {
