@@ -28,10 +28,12 @@ import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.MIDIControl;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.PanControl;
+import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
 
-public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, VolumeControl, PanControl {
+public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
+		MediaPlayer.OnErrorListener, VolumeControl, PanControl {
 	protected DataSource source;
 	protected int state;
 	private MediaPlayer player;
@@ -67,6 +69,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		metadata = new InternalMetaData();
 		InternalEqualizer equalizer = new InternalEqualizer();
 		InternalMIDIControl midiControl = new InternalMIDIControl();
+		InternalToneControl toneControl = new InternalToneControl();
 
 		listeners = new ArrayList<>();
 		controls = new HashMap<>();
@@ -76,6 +79,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		controls.put(MetaDataControl.class.getSimpleName(), metadata);
 		controls.put(EqualizerControl.class.getSimpleName(), equalizer);
 		controls.put(MIDIControl.class.getSimpleName(), midiControl);
+		controls.put(ToneControl.class.getSimpleName(), toneControl);
 	}
 
 	public void setDataSource(DataSource datasource) throws IOException {
