@@ -678,6 +678,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public void paint(Graphics g) {
 		if (visible) {
 			if (offscreenChanged) {
+				offgraphics.clear(0);
 				for (VirtualKey aKeypad : keypad) {
 					aKeypad.paint(offgraphics);
 				}
