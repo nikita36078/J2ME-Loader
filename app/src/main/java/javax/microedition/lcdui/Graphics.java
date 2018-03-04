@@ -70,8 +70,6 @@ public class Graphics {
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
 
-		imagePaint.setAlpha(255);
-
 		dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
 		setStrokeStyle(SOLID);
 
