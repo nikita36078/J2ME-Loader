@@ -426,7 +426,7 @@ public class Graphics {
 			}
 		}
 		Image image = Image.createRGBImage(pixres, width, height, true);
-		drawRegion(image, 0, 0, width, height, 0, x, y, 0);
+		drawImage(image, x, y, 0);
 	}
 
 	public void copyArea(int x_src, int y_src, int width, int height,
