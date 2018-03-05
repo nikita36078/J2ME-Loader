@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.samsung.util;
 
-import javax.microedition.lcdui.Display;
+package javax.microedition.media;
 
-public class Vibration {
-	public static void start(int duration, int strength) {
-		Display.getDisplay(null).vibrate(duration * 1000);
-	}
+import javax.microedition.media.control.ToneControl;
 
-	public static boolean isSupported() {
-		return true;
+public class InternalToneControl implements ToneControl {
+	@Override
+	public void setSequence(byte[] sequence) {
 	}
 }

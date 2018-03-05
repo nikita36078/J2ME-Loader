@@ -18,7 +18,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 
@@ -56,8 +55,6 @@ public class Display {
 	private Displayable current;
 	private AppCompatActivity activity;
 
-	private static PowerManager powermanager;
-	private static PowerManager.WakeLock wakelock;
 	private static Vibrator vibrator;
 
 	public static Display getDisplay(MIDlet midlet) {
@@ -144,35 +141,24 @@ public class Display {
 	}
 
 	public boolean flashBacklight(int duration) {
-		try {
-			if (powermanager == null) {
-				powermanager = (PowerManager) ContextHolder.getContext().getSystemService(Context.POWER_SERVICE);
-				wakelock = powermanager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Display.flashBacklight");
-			}
-			if (wakelock.isHeld()) {
-				wakelock.release();
-			}
-			if (duration > 0) {
-				wakelock.acquire(duration);
-			}
-			return true;
-		} catch (Throwable t) {
-			return false;
-		}
+		return false;
 	}
 
 	public boolean vibrate(int duration) {
-		try {
-			if (vibrator == null) {
-				vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-			}
-			if (duration > 0) {
-				vibrator.vibrate(duration);
-			}
-			return true;
-		} catch (Throwable t) {
+		if (vibrator == null) {
+			vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+		}
+		if (!vibrator.hasVibrator()) {
 			return false;
 		}
+		if (duration > 0) {
+			vibrator.vibrate(duration);
+		} else if (duration < 0) {
+			throw new IllegalStateException();
+		} else {
+			vibrator.cancel();
+		}
+		return true;
 	}
 
 	public void setCurrentItem(Item item) {
@@ -182,7 +168,7 @@ public class Display {
 	}
 
 	public int numAlphaLevels() {
-		return 255;
+		return 256;
 	}
 
 	public int numColors() {

@@ -70,8 +70,6 @@ public class Graphics {
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
 
-		imagePaint.setAlpha(255);
-
 		dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
 		setStrokeStyle(SOLID);
 
@@ -405,7 +403,6 @@ public class Graphics {
 	}
 
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
-		if (width == 0 || height == 0) return;
 		drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
 	}
 
@@ -429,7 +426,7 @@ public class Graphics {
 			}
 		}
 		Image image = Image.createRGBImage(pixres, width, height, true);
-		drawRegion(image, 0, 0, width, height, 0, x, y, 0);
+		drawImage(image, x, y, 0);
 	}
 
 	public void copyArea(int x_src, int y_src, int width, int height,

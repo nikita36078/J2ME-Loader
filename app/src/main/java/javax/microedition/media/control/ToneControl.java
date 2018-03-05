@@ -18,29 +18,26 @@ package javax.microedition.media.control;
 
 import javax.microedition.media.Control;
 
-public interface MIDIControl extends Control {
-	public static final int CONTROL_CHANGE = 176;
-	public static final int NOTE_ON = 144;
+public interface ToneControl extends Control {
+	public static final byte VERSION = -2;
 
-	public int[] getBankList(boolean custom);
+	public static final byte TEMPO = -3;
 
-	public int getChannelVolume(int channel);
+	public static final byte RESOLUTION = -4;
 
-	public String getKeyName(int bank, int prog, int key);
+	public static final byte BLOCK_START = -5;
 
-	public int[] getProgram(int channel);
+	public static final byte BLOCK_END = -6;
 
-	public int[] getProgramList(int bank);
+	public static final byte PLAY_BLOCK = -7;
 
-	public String getProgramName(int bank, int prog);
+	public static final byte SET_VOLUME = -8;
 
-	public boolean isBankQuerySupported();
+	public static final byte REPEAT = -9;
 
-	public int longMidiEvent(byte[] data, int offset, int length);
+	public static final byte C4 = 60;
 
-	public void setChannelVolume(int channel, int volume);
+	public static final byte SILENCE = -1;
 
-	public void setProgram(int channel, int bank, int program);
-
-	public void shortMidiEvent(int type, int data1, int data2);
+	public void setSequence(byte[] sequence);
 }

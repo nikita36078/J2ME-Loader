@@ -77,7 +77,7 @@ public class Loader {
 	private Vector iLoadedObjects = new Vector();
 	private Vector iFileHistory = new Vector();
 	private String iResourceName = null;
-	private String iParentResourceName = null;
+	//private String iParentResourceName = null;
 
 	private int iTotalFileSize = 0;
 	private int iBytesRead = M3G_FILE_IDENTIFIER.length;
@@ -107,7 +107,7 @@ public class Loader {
 	 * @param aParentResourceName Resource name
 	 */
 	private Loader(Vector aFileHistory, String aParentResourceName) {
-		iParentResourceName = aParentResourceName;
+		//iParentResourceName = aParentResourceName;
 		iFileHistory = aFileHistory;
 		iInterface = Interface.getInstance();
 	}
@@ -819,22 +819,7 @@ public class Loader {
 			return getHttpInputStream(name);
 		}
 
-		if (name.charAt(0) == '/')   // absolute file reference
-		{
-			return (ContextHolder.getResourceAsStream(null, name));
-		}
-
-		if (iParentResourceName == null) {
-			throw new IOException("Relative URI.");
-		}
-
-		String uri = iParentResourceName.substring(0, iParentResourceName.lastIndexOf('/') + 1) + name;
-
-		if (uri.charAt(0) == '/') {
-			return (ContextHolder.getResourceAsStream(null, uri));
-		} else {
-			return getHttpInputStream(uri);
-		}
+		return (ContextHolder.getResourceAsStream(null, name));
 	}
 
 	class PeekInputStream extends InputStream {
