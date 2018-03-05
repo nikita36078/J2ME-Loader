@@ -75,9 +75,7 @@ public class DiscoveryAgent {
 					boolean supportsSPP = false;
 					{
 						Parcelable[] uuidParcel = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-						if (uuidParcel == null || uuidParcel.length == 0) {
-							return;
-						} else if (uuidParcel != null) {
+						if (uuidParcel != null) {
 							uuidExtra = new UUID[uuidParcel.length];
 							for (int i = 0; i < uuidExtra.length; i++)
 								uuidExtra[i] = new UUID(((ParcelUuid) uuidParcel[i]).getUuid());
