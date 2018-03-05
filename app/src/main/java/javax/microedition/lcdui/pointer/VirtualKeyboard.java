@@ -937,10 +937,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (feedback) Display.getDisplay(null).vibrate(FEEDBACK_DURATION);
 	}
 
-	public void setFont(Font font) {
-		this.font = font;
-	}
-
 	public void setHideDelay(int delay) {
 		this.delay = delay;
 	}

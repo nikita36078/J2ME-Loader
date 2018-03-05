@@ -37,7 +37,8 @@ public class Font {
 	public static final int STYLE_PLAIN = 0;
 	public static final int STYLE_UNDERLINED = 4;
 
-	public static final int FONT_COUNT = 3 * 3 * (1 << 3);
+	private static final int FONT_COUNT = 3 * 3 * (1 << 3);
+	private static final int SIZE_KEYBOARD = 22;
 	private static Font[] fonts = new Font[FONT_COUNT];
 
 	private static boolean applyDimensions = true;
@@ -94,7 +95,7 @@ public class Font {
 	// Font for keyboard
 	public Font() {
 		paint = new Paint();
-		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sizes[1], ContextHolder.getContext().getResources().getDisplayMetrics());
+		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getContext().getResources().getDisplayMetrics());
 		paint.setTextSize(size);
 	}
 
