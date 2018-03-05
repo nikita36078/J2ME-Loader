@@ -4,8 +4,8 @@
   <string name="exit">Sair</string>
   <string name="about">Informações</string>
   <string name="help">Ajuda</string>
-  <string name="help_message">&#8226; Permitir a filtragem pode reduzir muito o desempenho em alguns jogos, desative essa opção se o jogo estiver enfrentando Lags. &lt;BR&gt; &#8226; Se a Imagem estiver falhando ou piscando, ative a opção de \"modo de processamento imediato\".</string>
   <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), ele suporta a maioria dos jogos 2D, mas em alguns jogos 3D ainda existem algumas limitações.&lt;BR&gt;</string>
+  <string name="help_message">&#8226; Permitir a filtragem pode reduzir muito o desempenho em alguns jogos, desative essa opção se o jogo estiver enfrentando Lags. &lt;BR&gt; &#8226; Se a Imagem estiver falhando ou piscando, ative a opção de \"modo de processamento imediato\".</string>
   <string name="open_jar">Procurar JAR</string>
   <string name="author">Criador: </string>
   <string name="version">Versão: </string>
@@ -22,6 +22,8 @@
   <string name="donate">Faça uma doação</string>
   <string name="START_CMD">Iniciar</string>
   <string name="CANCEL_CMD">Cancelar</string>
+  <string name="CLEAR_DATA_CMD">Limpar Dados</string>
+  <string name="RESET_SETTINGS_CMD">Redefinir configurações</string>
   <string name="RESET_LAYOUT_CMD">Resetar teclado</string>
   <string name="PREF_SCREEN_OPTIONS">Opções de tela</string>
   <string name="PREF_SCALE_RATIO">Escala(%)</string>
@@ -39,6 +41,8 @@
   <string name="PREF_BACKGROUND">Fundo do Jogo</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
   <string name="PREF_VK_SHOW">Mostrar o teclado</string>
+  <string name="PREF_VK_FEEDBACK">Resposta ao toque</string>
+  <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
   <string name="PREF_VK_BACK">Botões</string>
   <string name="PREF_VK_FORE">Rótulos</string>
   <string name="PREF_VK_OUTLINE">Contorno</string>
@@ -55,6 +59,7 @@
   <string name="PREF_VK_SIZE_HINT">Tamanho</string>
   <string name="SIZE_PRESETS">Predefinições</string>
   <string name="SWAP_SIZES">Tamanhos de swap</string>
+  <string name="PREF_SYS_PROPS">Propriedades do sistema</string>
   <string name="error">Erro</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Força o fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
   <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
@@ -76,4 +81,8 @@
     <item>Nome</item>
     <item>Data</item>
   </string-array>
+  <string name="pref_map_keys">Mapear teclas</string>
+  <string name="mapping_dialog_title">Aperte qualquer tecla</string>
+  <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
+  <string name="reset_mapping">Redefinir</string>
 </resources>
