@@ -35,15 +35,15 @@ public class Graphics3D {
 	public static final int OVERWRITE = 16;
 
 	// Singleton instances
-	static Graphics3D s_instance = null;
+	private static Graphics3D s_instance = null;
 
 	//------------------------------------------------------------------
 	// Instance data
 	//------------------------------------------------------------------
 
-	int handle;
-	int[] pixels;
-	int cur_width, cur_height;
+	private int handle;
+	private int[] pixels;
+	private int cur_width, cur_height;
 
 	private Camera camera = null;
 	private Vector lights = new Vector();
