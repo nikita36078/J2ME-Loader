@@ -1,7 +1,7 @@
 /**
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
- * Copyright (C) 2017 Nikita Shakarun
+ * Copyright (C) 2017-2018 Nikita Shakarun
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -39,8 +39,6 @@ import java.util.TreeMap;
 
 public class AndroidClassVisitor extends ClassVisitor {
 
-	private static boolean enhanceCatchBlock = false;
-
 	private boolean isMidlet;
 
 	private String className;
@@ -51,20 +49,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 	private HashMap<String, ArrayList<String>> methodTranslations;
 
-	private HashMap<Label, CatchInformation> catchInfo;
-
-	private static class CatchInformation {
-
-		Label label;
-
-		String type;
-
-		public CatchInformation(String type) {
-			this.label = new Label();
-			this.type = type;
-		}
-	}
-
 	public class AndroidMethodVisitor extends PatternMethodAdapter {
 
 		private final static int SEEN_NOTHING = 0;
@@ -72,6 +56,10 @@ public class AndroidClassVisitor extends ClassVisitor {
 		private final static int SEEN_I2B = 1;
 
 		private int state;
+
+		private boolean enhanceCatchBlock = false;
+
+		private Label exceptionHandler;
 
 		public AndroidMethodVisitor(MethodVisitor mv) {
 			super(mv);
@@ -129,12 +117,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 		@Override
 		public void visitInsn(int opcode) {
-			if (opcode == Opcodes.BASTORE) {
-				if (state != SEEN_I2B) {
-					//System.out.println("I2B opcode needed !!!");
-					//mv.visitInsn(Opcodes.I2B);
-				}
-			}
 			visitInsn();
 			if (opcode == Opcodes.I2B) {
 				state = SEEN_I2B;
@@ -142,12 +124,24 @@ public class AndroidClassVisitor extends ClassVisitor {
 			mv.visitInsn(opcode);
 		}
 
+		@Override
+		public void visitLabel(Label label) {
+			mv.visitLabel(label);
+			if (enhanceCatchBlock && label == exceptionHandler) {
+				mv.visitInsn(Opcodes.DUP);
+				mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/Throwable", "printStackTrace", "()V", false);
+				exceptionHandler = null;
+			}
+		}
+
+		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			visitInsn();
 			if (isMidlet) {
 				if (opcode == Opcodes.INVOKEVIRTUAL) {
 					if ((name.equals("getResourceAsStream")) && (owner.equals("java/lang/Class"))) {
-						mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name, "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
+						mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name,
+								"(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
 						return;
 					}
 				}
@@ -160,26 +154,18 @@ public class AndroidClassVisitor extends ClassVisitor {
 			mv.visitMethodInsn(opcode, owner, name, desc, itf);
 		}
 
-
+		@Override
 		public void visitTryCatchBlock(final Label start, final Label end, final Label handler, final String type) {
 			if (enhanceCatchBlock && type != null) {
-				if (catchInfo == null) {
-					catchInfo = new HashMap<>();
-				}
-				CatchInformation newHandler = catchInfo.get(handler);
-				if (newHandler == null) {
-					newHandler = new CatchInformation(type);
-					catchInfo.put(handler, newHandler);
-				}
-				mv.visitTryCatchBlock(start, end, newHandler.label, type);
-			} else {
-				mv.visitTryCatchBlock(start, end, handler, type);
+				exceptionHandler = handler;
 			}
+			mv.visitTryCatchBlock(start, end, handler, type);
 		}
 
 	}
 
-	public AndroidClassVisitor(ClassVisitor cv, boolean isMidlet, HashMap<String, ArrayList<String>> classesHierarchy, HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations,
+	public AndroidClassVisitor(ClassVisitor cv, boolean isMidlet, HashMap<String, ArrayList<String>> classesHierarchy,
+							   HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations,
 							   HashMap<String, ArrayList<String>> methodTranslations) {
 		super(Opcodes.ASM5, cv);
 
@@ -195,6 +181,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 		super.visit(version, access, name, signature, superName, interfaces);
 	}
 
+	@Override
 	public MethodVisitor visitMethod(int access, final String name, String desc, final String signature, final String[] exceptions) {
 		return new AndroidMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions));
 	}
