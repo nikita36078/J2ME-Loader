@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Form extends Screen {
 	private ScrollView scrollview;
@@ -149,6 +148,7 @@ public class Form extends Screen {
 		}
 	}
 
+	@Override
 	public View getScreenView() {
 		if (scrollview == null) {
 			Context context = getParentActivity();
@@ -167,6 +167,7 @@ public class Form extends Screen {
 		return scrollview;
 	}
 
+	@Override
 	public void clearScreenView() {
 		scrollview = null;
 		layout = null;

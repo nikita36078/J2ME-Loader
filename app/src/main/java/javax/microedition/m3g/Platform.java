@@ -132,6 +132,7 @@ class Platform {
 			final int finalHandle = handle;
 			executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						void doRun() {
 							_finalizeObject(finalHandle);
 						}
@@ -150,6 +151,7 @@ class Platform {
 			final int finalHandle = handle;
 			executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							_finalizeObject(finalHandle);
 						}

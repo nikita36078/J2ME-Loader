@@ -36,21 +36,26 @@ public class RunnableEvent extends Event {
 		return instance;
 	}
 
+	@Override
 	public void process() {
 		runnable.run();
 	}
 
+	@Override
 	public void recycle() {
 		runnable = null;
 		recycled.push(this);
 	}
 
+	@Override
 	public void enterQueue() {
 	}
 
+	@Override
 	public void leaveQueue() {
 	}
 
+	@Override
 	public boolean placeableAfter(Event event) {
 		return true;
 	}

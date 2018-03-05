@@ -39,10 +39,12 @@ public class SecurityInfoImpl implements SecurityInfo {
 		this.certificate = certificate;
 	}
 
+	@Override
 	public String getCipherSuite() {
 		return cipherSuite;
 	}
 
+	@Override
 	public String getProtocolName() {
 		if (protocolName.startsWith("TLS")) {
 			return "TLS";
@@ -59,6 +61,7 @@ public class SecurityInfoImpl implements SecurityInfo {
 		}
 	}
 
+	@Override
 	public String getProtocolVersion() {
 		if (protocolName.startsWith("TLS")) {
 			return "3.1";
@@ -75,6 +78,7 @@ public class SecurityInfoImpl implements SecurityInfo {
 		}
 	}
 
+	@Override
 	public Certificate getServerCertificate() {
 		return certificate;
 	}

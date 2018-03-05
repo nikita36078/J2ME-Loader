@@ -38,6 +38,7 @@ public class FieldNodeExt implements Comparable<FieldNodeExt> {
 		this.fieldNode = fieldNode;
 	}
 
+	@Override
 	public int compareTo(@NonNull FieldNodeExt test) {
 		int t = test.fieldNode.name.compareTo(fieldNode.name);
 		if (t != 0) {

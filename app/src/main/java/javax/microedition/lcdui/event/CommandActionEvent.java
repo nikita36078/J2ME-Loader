@@ -62,6 +62,7 @@ public class CommandActionEvent extends Event {
 		return instance;
 	}
 
+	@Override
 	public void process() {
 		if (listener != null) {
 			listener.commandAction(command, displayable);
@@ -70,6 +71,7 @@ public class CommandActionEvent extends Event {
 		}
 	}
 
+	@Override
 	public void recycle() {
 		listener = null;
 		itemlistener = null;
@@ -81,12 +83,15 @@ public class CommandActionEvent extends Event {
 		recycled.push(this);
 	}
 
+	@Override
 	public void enterQueue() {
 	}
 
+	@Override
 	public void leaveQueue() {
 	}
 
+	@Override
 	public boolean placeableAfter(Event event) {
 		return true;
 	}

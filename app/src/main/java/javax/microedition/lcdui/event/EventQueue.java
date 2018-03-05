@@ -228,6 +228,7 @@ public class EventQueue implements Runnable {
 	/**
 	 * Здесь крутится основной цикл обработки событий.
 	 */
+	@Override
 	public void run() {
 		synchronized (interlock) {
 			running = true;

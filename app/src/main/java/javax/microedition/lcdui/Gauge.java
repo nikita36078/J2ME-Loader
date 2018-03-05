@@ -34,6 +34,7 @@ public class Gauge extends Item {
 	private int value, maxValue;
 
 	private class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
+		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			if (fromUser) {
 				value = progress;
@@ -41,9 +42,11 @@ public class Gauge extends Item {
 			}
 		}
 
+		@Override
 		public void onStartTrackingTouch(SeekBar seekBar) {
 		}
 
+		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
 		}
 	}
@@ -82,6 +85,7 @@ public class Gauge extends Item {
 		}
 	}
 
+	@Override
 	protected View getItemContentView() {
 		if (pbar == null) {
 			if (interactive) {
@@ -98,6 +102,7 @@ public class Gauge extends Item {
 		return pbar;
 	}
 
+	@Override
 	protected void clearItemContentView() {
 		pbar = null;
 	}

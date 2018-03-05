@@ -48,6 +48,7 @@ public class TextField extends Item {
 	private int constraints;
 
 	private SimpleEvent msgSetText = new SimpleEvent() {
+		@Override
 		public void process() {
 			textview.setText(text);
 		}
@@ -58,6 +59,7 @@ public class TextField extends Item {
 			super(context);
 		}
 
+		@Override
 		public void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
 			super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
 
@@ -66,6 +68,7 @@ public class TextField extends Item {
 			}
 		}
 
+		@Override
 		public void onWindowFocusChanged(boolean hasWindowFocus) {
 			super.onWindowFocusChanged(hasWindowFocus);
 
@@ -189,6 +192,7 @@ public class TextField extends Item {
 	public void setInitialInputMode(String characterSubset) {
 	}
 
+	@Override
 	public View getItemContentView() {
 		if (textview == null) {
 			Context context = getOwnerForm().getParentActivity();
@@ -203,6 +207,7 @@ public class TextField extends Item {
 		return textview;
 	}
 
+	@Override
 	public void clearItemContentView() {
 		textview = null;
 	}

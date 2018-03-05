@@ -32,6 +32,7 @@ public abstract class Object3D {
 	private Vector animTracks;
 	private Interface iInterface;
 
+	@Override
 	protected void finalize() {
 		doFinalize();
 	}

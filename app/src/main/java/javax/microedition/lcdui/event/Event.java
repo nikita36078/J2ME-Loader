@@ -38,6 +38,7 @@ public abstract class Event implements Runnable {
 	/**
 	 * Обработать событие и сдать в утиль за один прием.
 	 */
+	@Override
 	public void run() {
 		process();
 		recycle();

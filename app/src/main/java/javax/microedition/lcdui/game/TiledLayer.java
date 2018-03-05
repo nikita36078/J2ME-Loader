@@ -189,6 +189,7 @@ public class TiledLayer extends Layer {
 		return tileHeight;
 	}
 
+	@Override
 	public final void paint(Graphics g) {
 		synchronized (this) {
 			if (!this.isVisible())

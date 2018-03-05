@@ -39,12 +39,16 @@ public interface FileConnection extends StreamConnection {
 
 	public abstract boolean isOpen();
 
+	@Override
 	public abstract InputStream openInputStream() throws IOException;
 
+	@Override
 	public abstract DataInputStream openDataInputStream() throws IOException;
 
+	@Override
 	public abstract OutputStream openOutputStream() throws IOException;
 
+	@Override
 	public abstract DataOutputStream openDataOutputStream() throws IOException;
 
 	public abstract OutputStream openOutputStream(long byteOffset) throws IOException;

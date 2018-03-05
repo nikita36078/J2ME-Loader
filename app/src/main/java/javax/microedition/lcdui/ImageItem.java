@@ -45,6 +45,7 @@ public class ImageItem extends Item {
 		return image;
 	}
 
+	@Override
 	public View getItemContentView() {
 		if (imgview == null) {
 			imgview = new ImageView(getOwnerForm().getParentActivity());
@@ -54,6 +55,7 @@ public class ImageItem extends Item {
 		return imgview;
 	}
 
+	@Override
 	public void clearItemContentView() {
 		imgview = null;
 	}

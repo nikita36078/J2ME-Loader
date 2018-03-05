@@ -88,6 +88,7 @@ public class Loader {
 	private Interface iInterface;
 
 	//#ifdef RD_JAVA_OMJ
+	@Override
 	protected void finalize() {
 		doFinalize();
 	}
@@ -833,6 +834,7 @@ public class Loader {
 			iPeekBuffer = new int[aLength];
 		}
 
+		@Override
 		public int read() throws IOException {
 			if (iCounter < iBuffered) {
 				return iPeekBuffer[iCounter++];
@@ -855,6 +857,7 @@ public class Loader {
 			iPeekBuffer = temp;
 		}
 
+		@Override
 		public int available() throws IOException {
 			if (iCounter < iBuffered) {
 				return iBuffered - iCounter + iStream.available();
@@ -862,6 +865,7 @@ public class Loader {
 			return iStream.available();
 		}
 
+		@Override
 		public void close() {
 			try {
 				iStream.close();
@@ -887,6 +891,7 @@ public class Loader {
 			resetCounter();
 		}
 
+		@Override
 		public int read() throws IOException {
 			iCounter++;
 			return iStream.read();
@@ -900,6 +905,7 @@ public class Loader {
 			return iCounter;
 		}
 
+		@Override
 		public void close() {
 			try {
 				iStream.close();
@@ -908,6 +914,7 @@ public class Loader {
 			}
 		}
 
+		@Override
 		public int available() throws IOException {
 			return iStream.available();
 		}

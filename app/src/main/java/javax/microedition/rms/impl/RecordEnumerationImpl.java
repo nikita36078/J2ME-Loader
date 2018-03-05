@@ -49,14 +49,17 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 	private RecordListener recordListener = new RecordListener() {
 
+		@Override
 		public void recordAdded(RecordStore recordStore, int recordId) {
 			rebuild();
 		}
 
+		@Override
 		public void recordChanged(RecordStore recordStore, int recordId) {
 			rebuild();
 		}
 
+		@Override
 		public void recordDeleted(RecordStore recordStore, int recordId) {
 			rebuild();
 		}
@@ -76,10 +79,12 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 	}
 
+	@Override
 	public int numRecords() {
 		return enumerationRecords.size();
 	}
 
+	@Override
 	public byte[] nextRecord()
 			throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException {
 		if (!recordStoreImpl.isOpen()) {
@@ -96,6 +101,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return result;
 	}
 
+	@Override
 	public int nextRecordId()
 			throws InvalidRecordIDException {
 		if (currentRecord >= numRecords()) {
@@ -108,6 +114,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return result;
 	}
 
+	@Override
 	public byte[] previousRecord()
 			throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException {
 		if (!recordStoreImpl.isOpen()) {
@@ -122,6 +129,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).value;
 	}
 
+	@Override
 	public int previousRecordId()
 			throws InvalidRecordIDException {
 		if (currentRecord < 0) {
@@ -133,6 +141,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).recordId;
 	}
 
+	@Override
 	public boolean hasNextElement() {
 		if (currentRecord == numRecords()) {
 			return false;
@@ -141,14 +150,17 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 	}
 
+	@Override
 	public boolean hasPreviousElement() {
 		return currentRecord != 0;
 	}
 
+	@Override
 	public void reset() {
 		currentRecord = 0;
 	}
 
+	@Override
 	public void rebuild() {
 		enumerationRecords.removeAllElements();
 		//
@@ -194,6 +206,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		}
 	}
 
+	@Override
 	public void keepUpdated(boolean keepUpdated) {
 		if (keepUpdated) {
 			if (!this.keepUpdated) {
@@ -207,10 +220,12 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		this.keepUpdated = keepUpdated;
 	}
 
+	@Override
 	public boolean isKeptUpdated() {
 		return keepUpdated;
 	}
 
+	@Override
 	public void destroy() {
 	}
 

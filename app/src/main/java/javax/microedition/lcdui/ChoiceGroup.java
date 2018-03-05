@@ -49,6 +49,7 @@ public class ChoiceGroup extends Item implements Choice {
 	private int fitPolicy;
 
 	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
+		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			selectedIndex = checkedId;
 			notifyStateChanged();
@@ -56,6 +57,7 @@ public class ChoiceGroup extends Item implements Choice {
 	}
 
 	private class CheckListener implements CompoundButton.OnCheckedChangeListener {
+		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			int index = buttonView.getId();
 
@@ -72,6 +74,7 @@ public class ChoiceGroup extends Item implements Choice {
 	}
 
 	private class SpinnerListener implements AdapterView.OnItemSelectedListener {
+		@Override
 		public void onItemSelected(AdapterView parent, View view, int position, long id) {
 			synchronized (selected) {
 				if (selectedIndex >= 0 && selectedIndex < selected.size()) {
@@ -87,6 +90,7 @@ public class ChoiceGroup extends Item implements Choice {
 			notifyStateChanged();
 		}
 
+		@Override
 		public void onNothingSelected(AdapterView parent) {
 			synchronized (selected) {
 				if (selectedIndex >= 0 && selectedIndex < selected.size()) {
@@ -149,6 +153,7 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public int append(String stringPart, Image imagePart) {
 		synchronized (selected) {
 			int index = selected.size();
@@ -176,6 +181,7 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public void delete(int elementNum) {
 		synchronized (selected) {
 			strings.remove(elementNum);
@@ -197,6 +203,7 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public void deleteAll() {
 		synchronized (selected) {
 			strings.clear();
@@ -214,10 +221,12 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public Image getImage(int elementNum) {
 		return images.get(elementNum);
 	}
 
+	@Override
 	public int getSelectedFlags(boolean[] selectedArray) {
 		synchronized (selected) {
 			if (selectedArray.length < selected.size()) {
@@ -243,14 +252,17 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public int getSelectedIndex() {
 		return selectedIndex;
 	}
 
+	@Override
 	public String getString(int elementNum) {
 		return strings.get(elementNum);
 	}
 
+	@Override
 	public void insert(int elementNum, String stringPart, Image imagePart) {
 		synchronized (selected) {
 			boolean select = selected.size() == 0 && choiceType != MULTIPLE;
@@ -275,12 +287,14 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public boolean isSelected(int elementNum) {
 		synchronized (selected) {
 			return selected.get(elementNum);
 		}
 	}
 
+	@Override
 	public void set(int elementNum, String stringPart, Image imagePart) {
 		synchronized (selected) {
 			strings.set(elementNum, stringPart);
@@ -304,6 +318,7 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public void setSelectedFlags(boolean[] selectedArray) {
 		if (choiceType == EXCLUSIVE || choiceType == POPUP) {
 			for (int i = 0; i < selectedArray.length; i++) {
@@ -334,6 +349,7 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public void setSelectedIndex(int elementNum, boolean flag) {
 		synchronized (selected) {
 			selected.set(elementNum, flag);
@@ -360,12 +376,14 @@ public class ChoiceGroup extends Item implements Choice {
 		return fitPolicy;
 	}
 
+	@Override
 	public int size() {
 		synchronized (selected) {
 			return selected.size();
 		}
 	}
 
+	@Override
 	public View getItemContentView() {
 		Context context = getOwnerForm().getParentActivity();
 
@@ -415,6 +433,7 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public void clearItemContentView() {
 		buttongroup = null;
 		buttons.clear();

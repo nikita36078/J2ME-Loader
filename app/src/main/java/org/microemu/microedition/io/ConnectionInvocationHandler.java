@@ -50,6 +50,7 @@ public class ConnectionInvocationHandler implements InvocationHandler {
 	/* (non-Javadoc)
 	 * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
 	 */
+	@Override
 	public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 		try {
 			return method.invoke(this.originalConnection, args);

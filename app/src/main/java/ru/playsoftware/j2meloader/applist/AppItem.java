@@ -70,6 +70,7 @@ public class AppItem implements Serializable, SortItem {
 		return version;
 	}
 
+	@Override
 	public String getSortField() {
 		return title;
 	}

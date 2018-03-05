@@ -43,6 +43,7 @@ public class ConnectorImpl extends ConnectorAdapter {
 
 	private final String TAG = ConnectorImpl.class.getName();
 
+	@Override
 	public Connection open(final String name, final int mode, final boolean timeouts) throws IOException {
 		return openSecure(name, mode, timeouts);
 	}

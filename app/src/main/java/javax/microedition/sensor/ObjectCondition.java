@@ -24,10 +24,12 @@ public final class ObjectCondition implements Condition {
 		return null;
 	}
 
+	@Override
 	public final boolean isMet(double d) {
 		return false;
 	}
 
+	@Override
 	public final boolean isMet(Object obj) {
 		return false;
 	}

@@ -6,6 +6,7 @@ public interface HttpsConnection extends HttpConnection {
 
 	public SecurityInfo getSecurityInfo() throws IOException;
 
+	@Override
 	public int getPort();
 
 }

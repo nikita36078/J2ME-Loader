@@ -82,10 +82,12 @@ public class InternalMetaData implements MetaDataControl {
 		}
 	}
 
+	@Override
 	public String[] getKeys() {
 		return metakeys.toArray(new String[0]);
 	}
 
+	@Override
 	public String getKeyValue(String key) {
 		return metadata.get(key);
 	}

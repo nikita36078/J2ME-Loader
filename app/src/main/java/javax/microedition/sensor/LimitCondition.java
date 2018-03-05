@@ -30,6 +30,7 @@ public final class LimitCondition implements Condition {
 		return false;
 	}
 
+	@Override
 	public final boolean isMet(Object obj) {
 		return false;
 	}

@@ -26,10 +26,12 @@ public class CompoundSpinnerAdapter extends CompoundAdapter implements SpinnerAd
 		super(context);
 	}
 
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		return getView(position, convertView, parent, android.R.layout.simple_spinner_item, false);
 	}
 
+	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
 		return getView(position, convertView, parent, android.R.layout.simple_spinner_dropdown_item, true);
 	}

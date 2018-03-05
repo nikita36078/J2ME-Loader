@@ -49,6 +49,7 @@ public class FSItem implements SortItem {
 		return imageId;
 	}
 
+	@Override
 	public String getSortField() {
 		return name;
 	}

@@ -38,10 +38,12 @@ public class TriangleStripArray extends IndexBuffer {
 
 	// M3G 1.1 Maintenance release getters
 
+	@Override
 	public int getIndexCount() {
 		return _getIndexCount(handle);
 	}
 
+	@Override
 	public void getIndices(int[] indices) {
 		if (indices.length < _getIndexCount(handle)) {
 			throw new IllegalArgumentException();

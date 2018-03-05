@@ -53,6 +53,7 @@ public class Connection extends org.microemu.cldc.socket.SocketConnection implem
 		securityInfo = null;
 	}
 
+	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 
 		if (!org.microemu.cldc.http.Connection.isAllowNetworkConnection()) {
@@ -66,14 +67,17 @@ public class Connection extends org.microemu.cldc.socket.SocketConnection implem
 		// TODO validate certificate chains
 		TrustManager[] trustAllCerts = new TrustManager[]{
 				new X509TrustManager() {
+					@Override
 					public X509Certificate[] getAcceptedIssuers() {
 						return null;
 					}
 
+					@Override
 					public void checkClientTrusted(
 							X509Certificate[] certs, String authType) {
 					}
 
+					@Override
 					public void checkServerTrusted(
 							X509Certificate[] certs, String authType) {
 					}
@@ -94,12 +98,14 @@ public class Connection extends org.microemu.cldc.socket.SocketConnection implem
 		return this;
 	}
 
+	@Override
 	public void close() throws IOException {
 		// TODO fix differences between Java ME and Java SE
 
 		socket.close();
 	}
 
+	@Override
 	public SecurityInfo getSecurityInfo() throws IOException {
 		if (securityInfo == null) {
 			SSLSession session = ((SSLSocket) socket).getSession();

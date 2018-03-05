@@ -42,6 +42,7 @@ public class GameCanvas extends Canvas {
 		graphics = image.getGraphics();
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		g.drawImage(image, 0, 0, Graphics.LEFT | Graphics.TOP);
 	}

@@ -46,6 +46,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 
 	protected static boolean allowNetworkConnection = true;
 
+	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 		if (!isAllowNetworkConnection()) {
 			throw new IOException("No network");
@@ -65,6 +66,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return this;
 	}
 
+	@Override
 	public void close() throws IOException {
 		if (cn == null) {
 			return;
@@ -77,6 +79,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		cn = null;
 	}
 
+	@Override
 	public String getURL() {
 		if (cn == null) {
 			return null;
@@ -85,10 +88,12 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getURL().toString();
 	}
 
+	@Override
 	public String getProtocol() {
 		return "http";
 	}
 
+	@Override
 	public String getHost() {
 		if (cn == null) {
 			return null;
@@ -97,6 +102,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getURL().getHost();
 	}
 
+	@Override
 	public String getFile() {
 		if (cn == null) {
 			return null;
@@ -105,6 +111,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getURL().getFile();
 	}
 
+	@Override
 	public String getRef() {
 		if (cn == null) {
 			return null;
@@ -113,6 +120,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getURL().getRef();
 	}
 
+	@Override
 	public String getQuery() {
 		if (cn == null) {
 			return null;
@@ -122,6 +130,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return null;
 	}
 
+	@Override
 	public int getPort() {
 		if (cn == null) {
 			return -1;
@@ -134,6 +143,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return port;
 	}
 
+	@Override
 	public String getRequestMethod() {
 		if (cn == null) {
 			return null;
@@ -146,6 +156,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		}
 	}
 
+	@Override
 	public void setRequestMethod(String method) throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -160,6 +171,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		}
 	}
 
+	@Override
 	public String getRequestProperty(String key) {
 		if (cn == null) {
 			return null;
@@ -168,6 +180,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getRequestProperty(key);
 	}
 
+	@Override
 	public void setRequestProperty(String key, String value) throws IOException {
 		if (cn == null || connected) {
 			throw new IOException();
@@ -176,6 +189,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		cn.setRequestProperty(key, value);
 	}
 
+	@Override
 	public int getResponseCode() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -192,6 +206,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		}
 	}
 
+	@Override
 	public String getResponseMessage() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -208,6 +223,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		}
 	}
 
+	@Override
 	public long getExpiration() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -220,6 +236,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getExpiration();
 	}
 
+	@Override
 	public long getDate() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -232,6 +249,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getDate();
 	}
 
+	@Override
 	public long getLastModified() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -244,6 +262,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getLastModified();
 	}
 
+	@Override
 	public String getHeaderField(String name) throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -256,6 +275,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getHeaderField(name);
 	}
 
+	@Override
 	public int getHeaderFieldInt(String name, int def) throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -268,6 +288,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getHeaderFieldInt(name, def);
 	}
 
+	@Override
 	public long getHeaderFieldDate(String name, long def) throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -280,6 +301,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getHeaderFieldDate(name, def);
 	}
 
+	@Override
 	public String getHeaderField(int n) throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -292,6 +314,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getHeaderField(getImplIndex(n));
 	}
 
+	@Override
 	public String getHeaderFieldKey(int n) throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -311,6 +334,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return index;
 	}
 
+	@Override
 	public InputStream openInputStream() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -321,10 +345,12 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getInputStream();
 	}
 
+	@Override
 	public DataInputStream openDataInputStream() throws IOException {
 		return new DataInputStream(openInputStream());
 	}
 
+	@Override
 	public OutputStream openOutputStream() throws IOException {
 		if (cn == null) {
 			throw new IOException();
@@ -335,10 +361,12 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		return cn.getOutputStream();
 	}
 
+	@Override
 	public DataOutputStream openDataOutputStream() throws IOException {
 		return new DataOutputStream(openOutputStream());
 	}
 
+	@Override
 	public String getType() {
 		try {
 			return getHeaderField("content-type");
@@ -347,6 +375,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		}
 	}
 
+	@Override
 	public String getEncoding() {
 		try {
 			return getHeaderField("content-encoding");
@@ -355,6 +384,7 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 		}
 	}
 
+	@Override
 	public long getLength() {
 		try {
 			return getHeaderFieldInt("content-length", -1);

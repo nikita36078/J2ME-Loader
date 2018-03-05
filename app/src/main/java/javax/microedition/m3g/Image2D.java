@@ -151,6 +151,7 @@ public class Image2D extends Object3D {
 			// excute in UI thread
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						void doRun() {
 							tempHandle = createHandle(finalFormat, cgfxImage.getWidth(), cgfxImage.getHeight(), byteArr);
 						}

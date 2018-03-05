@@ -153,6 +153,7 @@ public abstract class Canvas extends Displayable {
 			setFocusableInTouchMode(true);
 		}
 
+		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
 			if (event.getRepeatCount() == 0) {
@@ -167,6 +168,7 @@ public abstract class Canvas extends Displayable {
 			return super.onKeyDown(keyCode, event);
 		}
 
+		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
 			if (overlay == null || !overlay.keyReleased(keyCode)) {
@@ -175,6 +177,7 @@ public abstract class Canvas extends Displayable {
 			return super.onKeyUp(keyCode, event);
 		}
 
+		@Override
 		@SuppressLint("ClickableViewAccessibility")
 		public boolean onTouchEvent(MotionEvent event) {
 			switch (event.getActionMasked()) {
@@ -253,6 +256,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private class PaintEvent extends Event implements EventFilter {
+		@Override
 		public void process() {
 			synchronized (paintsync) {
 				if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
@@ -280,15 +284,18 @@ public abstract class Canvas extends Displayable {
 			}
 		}
 
+		@Override
 		public void recycle() {
 		}
 
 		private int enqueued = 0;
 
+		@Override
 		public void enterQueue() {
 			enqueued++;
 		}
 
+		@Override
 		public void leaveQueue() {
 			enqueued--;
 		}
@@ -299,10 +306,12 @@ public abstract class Canvas extends Displayable {
 		 * Одна не обеспечит плавности, а если делать больше двух,
 		 * то как определить, насколько именно больше двух их нужно сделать?
 		 */
+		@Override
 		public boolean placeableAfter(Event event) {
 			return enqueued < 2;
 		}
 
+		@Override
 		public boolean accept(Event event) {
 			return event == this;
 		}
@@ -509,6 +518,7 @@ public abstract class Canvas extends Displayable {
 		return (y - onY) * virtualHeight / onHeight;
 	}
 
+	@Override
 	public View getDisplayableView() {
 		if (view == null) {
 			view = new InnerView(getParentActivity());
@@ -517,6 +527,7 @@ public abstract class Canvas extends Displayable {
 		return view;
 	}
 
+	@Override
 	public void clearDisplayableView() {
 		synchronized (paintsync) {
 			view = null;
@@ -543,10 +554,12 @@ public abstract class Canvas extends Displayable {
 		return true;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}

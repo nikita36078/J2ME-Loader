@@ -31,6 +31,7 @@ import java.io.IOException;
 
 public class Connection implements ConnectionImplementation {
 
+	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 
 		if (!org.microemu.cldc.http.Connection.isAllowNetworkConnection()) {

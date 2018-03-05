@@ -36,6 +36,7 @@ public abstract class Screen extends Displayable {
 	private int tickermode;
 
 	private SimpleEvent msgSetTicker = new SimpleEvent() {
+		@Override
 		public void process() {
 			if (ticker != null) {
 				marquee.setText(ticker.getString());
@@ -55,6 +56,7 @@ public abstract class Screen extends Displayable {
 		}
 	};
 
+	@Override
 	public void setTicker(Ticker newticker) {
 		if (layout != null) {
 			if (ticker == null && newticker != null) {
@@ -71,10 +73,12 @@ public abstract class Screen extends Displayable {
 		}
 	}
 
+	@Override
 	public Ticker getTicker() {
 		return ticker;
 	}
 
+	@Override
 	public View getDisplayableView() {
 		if (layout == null) {
 			Context context = getParentActivity();
@@ -98,6 +102,7 @@ public abstract class Screen extends Displayable {
 		return layout;
 	}
 
+	@Override
 	public void clearDisplayableView() {
 		layout = null;
 		marquee = null;

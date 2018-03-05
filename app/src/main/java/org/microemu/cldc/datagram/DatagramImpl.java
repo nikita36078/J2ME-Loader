@@ -75,6 +75,7 @@ public class DatagramImpl implements Datagram {
 			this.offset = originalOffset;
 		}
 
+		@Override
 		public void write(int b) throws IOException {
 			byte[] buffer = packet.getData();
 			if (offset > buffer.length - 1) {
@@ -122,22 +123,27 @@ public class DatagramImpl implements Datagram {
 		dis = new DataInputStream(new ByteArrayInputStream(packet.getData()));
 	}
 
+	@Override
 	public String getAddress() {
 		return Connection.PROTOCOL + packet.getAddress().getCanonicalHostName() + ":" + packet.getPort();
 	}
 
+	@Override
 	public byte[] getData() {
 		return packet.getData();
 	}
 
+	@Override
 	public int getLength() {
 		return packet.getLength();
 	}
 
+	@Override
 	public int getOffset() {
 		return packet.getOffset();
 	}
 
+	@Override
 	public void reset() {
 		try {
 			os.reset();
@@ -148,6 +154,7 @@ public class DatagramImpl implements Datagram {
 		}
 	}
 
+	@Override
 	public void setAddress(String address) throws IOException {
 		if (address == null) {
 			throw new NullPointerException("address cannot be null");
@@ -166,131 +173,163 @@ public class DatagramImpl implements Datagram {
 		packet.setPort(Integer.parseInt(port));
 	}
 
+	@Override
 	public void setAddress(Datagram reference) {
 		packet.setAddress(((DatagramImpl) reference).getDatagramPacket().getAddress());
 		packet.setPort(((DatagramImpl) reference).getDatagramPacket().getPort());
 	}
 
+	@Override
 	public void setData(byte[] buffer, int offset, int len) {
 		packet.setData(buffer, offset, len);
 	}
 
+	@Override
 	public void setLength(int len) {
 		packet.setLength(len);
 	}
 
+	@Override
 	public boolean readBoolean() throws IOException {
 		return dis.readBoolean();
 	}
 
+	@Override
 	public byte readByte() throws IOException {
 		return dis.readByte();
 	}
 
+	@Override
 	public char readChar() throws IOException {
 		return dis.readChar();
 	}
 
+	@Override
 	public double readDouble() throws IOException {
 		return dis.readDouble();
 	}
 
+	@Override
 	public float readFloat() throws IOException {
 		return dis.readFloat();
 	}
 
+	@Override
 	public void readFully(byte[] b) throws IOException {
 		dis.readFully(b);
 	}
 
+	@Override
 	public void readFully(byte[] b, int off, int len) throws IOException {
 		dis.read(b, off, len);
 	}
 
+	@Override
 	public int readInt() throws IOException {
 		return dis.readInt();
 	}
 
+	@Override
 	public String readLine() throws IOException {
 		return dis.readLine();
 	}
 
+	@Override
 	public long readLong() throws IOException {
 		return dis.readLong();
 	}
 
+	@Override
 	public short readShort() throws IOException {
 		return dis.readShort();
 	}
 
+	@Override
 	public String readUTF() throws IOException {
 		return dis.readUTF();
 	}
 
+	@Override
 	public int readUnsignedByte() throws IOException {
 		return dis.readUnsignedByte();
 	}
 
+	@Override
 	public int readUnsignedShort() throws IOException {
 		return dis.readUnsignedShort();
 	}
 
+	@Override
 	public int skipBytes(int n) throws IOException {
 		return dis.skipBytes(n);
 	}
 
+	@Override
 	public void write(int b) throws IOException {
 		dos.write(b);
 	}
 
+	@Override
 	public void write(byte[] b) throws IOException {
 		dos.write(b);
 	}
 
+	@Override
 	public void write(byte[] b, int off, int len) throws IOException {
 		dos.write(b, off, len);
 	}
 
+	@Override
 	public void writeBoolean(boolean v) throws IOException {
 		dos.writeBoolean(v);
 	}
 
+	@Override
 	public void writeByte(int v) throws IOException {
 		dos.writeByte(v);
 	}
 
+	@Override
 	public void writeBytes(String s) throws IOException {
 		dos.writeBytes(s);
 	}
 
+	@Override
 	public void writeChar(int v) throws IOException {
 		dos.writeChar(v);
 	}
 
+	@Override
 	public void writeChars(String v) throws IOException {
 		dos.writeChars(v);
 	}
 
+	@Override
 	public void writeDouble(double v) throws IOException {
 		dos.writeDouble(v);
 	}
 
+	@Override
 	public void writeFloat(float v) throws IOException {
 		dos.writeFloat(v);
 	}
 
+	@Override
 	public void writeInt(int v) throws IOException {
 		dos.writeInt(v);
 	}
 
+	@Override
 	public void writeLong(long v) throws IOException {
 		dos.writeLong(v);
 	}
 
+	@Override
 	public void writeShort(int v) throws IOException {
 		dos.writeShort(v);
 	}
 
+	@Override
 	public void writeUTF(String str) throws IOException {
 		dos.writeUTF(str);
 	}

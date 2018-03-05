@@ -532,6 +532,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		listener.layoutChanged(this);
 	}
 
+	@Override
 	public void setTarget(Canvas canvas) {
 		target = canvas;
 		repeater.setTarget(canvas);
@@ -651,6 +652,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
+	@Override
 	public void resize(RectF screen, RectF virtualScreen) {
 		this.screen = screen;
 		this.virtualScreen = virtualScreen;
@@ -675,6 +677,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		repaint();
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		if (visible) {
 			if (offscreenChanged) {
@@ -707,6 +710,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return !virtualScreen.contains(x, y);
 	}
 
+	@Override
 	public boolean pointerPressed(int pointer, float x, float y) {
 		if (skip) {
 			return checkPointerHandled(x, y);
@@ -766,6 +770,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return checkPointerHandled(x, y);
 	}
 
+	@Override
 	public boolean pointerDragged(int pointer, float x, float y) {
 		if (skip) {
 			return checkPointerHandled(x, y);
@@ -843,6 +848,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return checkPointerHandled(x, y);
 	}
 
+	@Override
 	public boolean pointerReleased(int pointer, float x, float y) {
 		if (skip) {
 			skip = false;
@@ -868,6 +874,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return checkPointerHandled(x, y);
 	}
 
+	@Override
 	public void show() {
 		synchronized (waiter) {
 			if (hiding) {
@@ -878,6 +885,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		repaint();
 	}
 
+	@Override
 	public void hide() {
 		if (delay >= 0 && obscuresVirtualScreen) {
 			synchronized (waiter) {
@@ -886,6 +894,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
+	@Override
 	public void run() {
 		try {
 			while (true) {
@@ -911,6 +920,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
+	@Override
 	public boolean keyPressed(int keyCode) {
 		for (VirtualKey aKeypad : keypad) {
 			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
@@ -920,10 +930,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return false;
 	}
 
+	@Override
 	public boolean keyRepeated(int keyCode) {
 		return false;
 	}
 
+	@Override
 	public boolean keyReleased(int keyCode) {
 		for (VirtualKey aKeypad : keypad) {
 			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {

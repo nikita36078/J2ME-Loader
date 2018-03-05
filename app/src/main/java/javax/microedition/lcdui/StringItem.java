@@ -29,6 +29,7 @@ public class StringItem extends Item {
 	private Font font;
 
 	private SimpleEvent msgSetText = new SimpleEvent() {
+		@Override
 		public void process() {
 			textview.setText(text);
 		}
@@ -55,6 +56,7 @@ public class StringItem extends Item {
 		return text;
 	}
 
+	@Override
 	public View getItemContentView() {
 		if (textview == null) {
 			Context context = getOwnerForm().getParentActivity();
@@ -67,6 +69,7 @@ public class StringItem extends Item {
 		return textview;
 	}
 
+	@Override
 	public void clearItemContentView() {
 		textview = null;
 	}

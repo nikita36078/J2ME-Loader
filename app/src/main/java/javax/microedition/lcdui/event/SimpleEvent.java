@@ -18,15 +18,19 @@
 package javax.microedition.lcdui.event;
 
 public abstract class SimpleEvent extends Event {
+	@Override
 	public void recycle() {
 	}
 
+	@Override
 	public void enterQueue() {
 	}
 
+	@Override
 	public void leaveQueue() {
 	}
 
+	@Override
 	public boolean placeableAfter(Event event) {
 		return true;
 	}

@@ -44,19 +44,23 @@ public class ServerSocketConnection implements
 		serverSocket = new ServerSocket(port);
 	}
 
+	@Override
 	public String getLocalAddress() throws IOException {
 		InetAddress localHost = InetAddress.getLocalHost();
 		return localHost.getHostAddress();
 	}
 
+	@Override
 	public int getLocalPort() throws IOException {
 		return serverSocket.getLocalPort();
 	}
 
+	@Override
 	public StreamConnection acceptAndOpen() throws IOException {
 		return new SocketConnection(serverSocket.accept());
 	}
 
+	@Override
 	public void close() throws IOException {
 		serverSocket.close();
 	}

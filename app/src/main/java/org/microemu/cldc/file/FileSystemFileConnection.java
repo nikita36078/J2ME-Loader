@@ -138,6 +138,7 @@ public class FileSystemFileConnection implements FileConnection {
 		return list.elements();
 	}
 
+	@Override
 	public long availableSize() {
 		throwClosed();
 		if (fsRoot == null) {
@@ -147,6 +148,7 @@ public class FileSystemFileConnection implements FileConnection {
 		return file.getFreeSpace();
 	}
 
+	@Override
 	public long totalSize() {
 		throwClosed();
 		if (fsRoot == null) {
@@ -155,16 +157,19 @@ public class FileSystemFileConnection implements FileConnection {
 		return file.getTotalSpace();
 	}
 
+	@Override
 	public boolean canRead() {
 		throwClosed();
 		return file.canRead();
 	}
 
+	@Override
 	public boolean canWrite() {
 		throwClosed();
 		return file.canWrite();
 	}
 
+	@Override
 	public void create() throws IOException {
 		throwClosed();
 		if (!file.createNewFile()) {
@@ -172,6 +177,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public void delete() throws IOException {
 		throwClosed();
 		if (!file.delete()) {
@@ -179,6 +185,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public long directorySize(final boolean includeSubDirs) throws IOException {
 		throwClosed();
 		if (!file.isDirectory()) {
@@ -205,16 +212,19 @@ public class FileSystemFileConnection implements FileConnection {
 		return size;
 	}
 
+	@Override
 	public boolean exists() {
 		throwClosed();
 		return file.exists();
 	}
 
+	@Override
 	public long fileSize() throws IOException {
 		throwClosed();
 		return file.length();
 	}
 
+	@Override
 	public String getName() {
 		// TODO test on real device. Not declared
 		throwClosed();
@@ -230,6 +240,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public String getPath() {
 		// TODO test on real device. Not declared
 		throwClosed();
@@ -247,6 +258,7 @@ public class FileSystemFileConnection implements FileConnection {
 		return DIR_SEP + fullPath.substring(0, pathEnd + 1);
 	}
 
+	@Override
 	public String getURL() {
 		// TODO test on real device. Not declared
 		throwClosed();
@@ -257,21 +269,25 @@ public class FileSystemFileConnection implements FileConnection {
 		return Connection.PROTOCOL + this.host + DIR_SEP + fullPath + ((this.isDirectory) ? DIR_SEP_STR : "");
 	}
 
+	@Override
 	public boolean isDirectory() {
 		throwClosed();
 		return this.isDirectory;
 	}
 
+	@Override
 	public boolean isHidden() {
 		throwClosed();
 		return file.isHidden();
 	}
 
+	@Override
 	public long lastModified() {
 		throwClosed();
 		return file.lastModified();
 	}
 
+	@Override
 	public void mkdir() throws IOException {
 		throwClosed();
 		if (!file.mkdir()) {
@@ -279,10 +295,12 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public Enumeration list() throws IOException {
 		return this.list(null, false);
 	}
 
+	@Override
 	public Enumeration list(final String filter, final boolean includeHidden) throws IOException {
 		throwClosed();
 		return listPrivileged(filter, includeHidden);
@@ -302,6 +320,7 @@ public class FileSystemFileConnection implements FileConnection {
 					pattern = Pattern.compile(filter.replaceAll("\\.", "\\\\.").replaceAll("\\*", ".*"));
 				}
 
+				@Override
 				public boolean accept(File dir, String name) {
 					return pattern.matcher(name).matches();
 				}
@@ -327,6 +346,7 @@ public class FileSystemFileConnection implements FileConnection {
 		return list.elements();
 	}
 
+	@Override
 	public boolean isOpen() {
 		return (this.file != null);
 	}
@@ -337,6 +357,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public InputStream openInputStream() throws IOException {
 		throwClosed();
 		throwOpenDirectory();
@@ -349,6 +370,7 @@ public class FileSystemFileConnection implements FileConnection {
 		 * OutputStream from a StreamConnection causes an IOException.
 		 */
 		this.opendInputStream = new FileInputStream(file) {
+			@Override
 			public void close() throws IOException {
 				FileSystemFileConnection.this.opendInputStream = null;
 				super.close();
@@ -357,10 +379,12 @@ public class FileSystemFileConnection implements FileConnection {
 		return this.opendInputStream;
 	}
 
+	@Override
 	public DataInputStream openDataInputStream() throws IOException {
 		return new DataInputStream(openInputStream());
 	}
 
+	@Override
 	public OutputStream openOutputStream() throws IOException {
 		return openOutputStream(false);
 	}
@@ -377,6 +401,7 @@ public class FileSystemFileConnection implements FileConnection {
 		 * OutputStream from a StreamConnection causes an IOException.
 		 */
 		this.opendOutputStream = new FileOutputStream(file, append) {
+			@Override
 			public void close() throws IOException {
 				FileSystemFileConnection.this.opendOutputStream = null;
 				super.close();
@@ -385,10 +410,12 @@ public class FileSystemFileConnection implements FileConnection {
 		return this.opendOutputStream;
 	}
 
+	@Override
 	public DataOutputStream openDataOutputStream() throws IOException {
 		return new DataOutputStream(openOutputStream());
 	}
 
+	@Override
 	public OutputStream openOutputStream(long byteOffset) throws IOException {
 		throwClosed();
 		throwOpenDirectory();
@@ -415,6 +442,7 @@ public class FileSystemFileConnection implements FileConnection {
 		RandomAccessFile raf = new RandomAccessFile(file, "rw");
 		raf.seek(byteOffset);
 		return new FileOutputStream(raf.getFD()) {
+			@Override
 			public void close() throws IOException {
 				FileSystemFileConnection.this.opendOutputStream = null;
 				super.close();
@@ -422,6 +450,7 @@ public class FileSystemFileConnection implements FileConnection {
 		};
 	}
 
+	@Override
 	public void rename(final String newName) throws IOException {
 		throwClosed();
 		if (newName.indexOf(DIR_SEP) != -1) {
@@ -435,20 +464,24 @@ public class FileSystemFileConnection implements FileConnection {
 		this.fullPath = this.getPath() + newName;
 	}
 
+	@Override
 	public void setFileConnection(String s) throws IOException {
 		throwClosed();
 		// TODO Auto-generated method stub
 	}
 
+	@Override
 	public void setHidden(boolean hidden) throws IOException {
 		throwClosed();
 	}
 
+	@Override
 	public void setReadable(boolean readable) throws IOException {
 		throwClosed();
 		file.setReadable(readable);
 	}
 
+	@Override
 	public void setWritable(boolean writable) throws IOException {
 		throwClosed();
 		if (!writable) {
@@ -458,6 +491,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public void truncate(final long byteOffset) throws IOException {
 		throwClosed();
 		try (RandomAccessFile raf = new RandomAccessFile(file, "rw")) {
@@ -465,6 +499,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public long usedSize() {
 		try {
 			return fileSize();
@@ -473,6 +508,7 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		if (this.file != null) {
 			if (this.notifyClosed != null) {

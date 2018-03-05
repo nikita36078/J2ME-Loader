@@ -53,6 +53,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param anchor
 	 * @param manipulation ignored, since manipulations are not supported at the moment
 	 */
+	@Override
 	public void drawImage(Image img, int x, int y, int anchor, int manipulation) {
 		if (img == null) {
 			throw new NullPointerException();
@@ -69,6 +70,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	/**
 	 * @param argb
 	 */
+	@Override
 	public void setARGBColor(int argb) {
 		alphaComponent = (argb >> 24 & 0xff);
 		graphics.setColorAlpha(argb);
@@ -77,6 +79,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	/**
 	 * @return
 	 */
+	@Override
 	public int getAlphaComponent() {
 		return alphaComponent;
 	}
@@ -84,6 +87,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	/**
 	 * @return
 	 */
+	@Override
 	public int getNativePixelFormat() {
 		return TYPE_INT_8888_ARGB;
 	}
@@ -96,6 +100,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param nPoints
 	 * @param argbColor
 	 */
+	@Override
 	public void drawPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
@@ -110,6 +115,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param y3
 	 * @param argbColor
 	 */
+	@Override
 	public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
 		drawPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
@@ -122,6 +128,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param nPoints
 	 * @param argbColor
 	 */
+	@Override
 	public void fillPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.fillPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
@@ -136,6 +143,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param y3
 	 * @param argbColor
 	 */
+	@Override
 	public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
 		fillPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
@@ -152,6 +160,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param manipulation ignored, since manipulations are not supported at the moment
 	 * @param format
 	 */
+	@Override
 	public void drawPixels(byte[] pix, byte[] alpha, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
@@ -214,6 +223,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param manipulation
 	 * @param format
 	 */
+	@Override
 	public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (format != TYPE_USHORT_4444_ARGB && format != TYPE_USHORT_444_RGB) {
 			throw new IllegalArgumentException("Illegal format: " + format);
@@ -247,6 +257,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param manipulation
 	 * @param format
 	 */
+	@Override
 	public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (format != TYPE_INT_888_RGB && format != TYPE_INT_8888_ARGB) {
 			throw new IllegalArgumentException("Illegal format: " + format);
@@ -279,6 +290,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param height
 	 * @param format
 	 */
+	@Override
 	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height,
 						  int format) {
 		Log.e(TAG, "public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
@@ -294,6 +306,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param height
 	 * @param format
 	 */
+	@Override
 	public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
 		Log.e(TAG, "public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format)");
 	}
@@ -308,6 +321,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 * @param height
 	 * @param format
 	 */
+	@Override
 	public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
 		Log.e(TAG, "public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
 	}

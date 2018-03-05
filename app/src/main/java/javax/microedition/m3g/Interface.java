@@ -94,6 +94,7 @@ class Interface {
 
 
 	//#ifdef RD_JAVA_OMJ
+	@Override
 	protected void finalize() {
 		doFinalize();
 	}
@@ -313,6 +314,7 @@ class Interface {
 		if (Platform.uiThreadAvailable()) {
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							handle = _ctor();
 						}
@@ -336,6 +338,7 @@ class Interface {
 		if (Interface.instance != null) {
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							Platform.finalizeInterface(handle);
 						}

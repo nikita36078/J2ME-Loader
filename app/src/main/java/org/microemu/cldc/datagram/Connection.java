@@ -55,30 +55,37 @@ public class Connection implements DatagramConnection, UDPDatagramConnection, Co
 	 */
 	private String address;
 
+	@Override
 	public void close() throws IOException {
 		socket.close();
 	}
 
+	@Override
 	public int getMaximumLength() throws IOException {
 		return Math.min(socket.getReceiveBufferSize(), socket.getSendBufferSize());
 	}
 
+	@Override
 	public int getNominalLength() throws IOException {
 		return getMaximumLength();
 	}
 
+	@Override
 	public void send(Datagram dgram) throws IOException {
 		socket.send(((DatagramImpl) dgram).getDatagramPacket());
 	}
 
+	@Override
 	public void receive(Datagram dgram) throws IOException {
 		socket.receive(((DatagramImpl) dgram).getDatagramPacket());
 	}
 
+	@Override
 	public Datagram newDatagram(int size) throws IOException {
 		return newDatagram(size, address);
 	}
 
+	@Override
 	public Datagram newDatagram(int size, String addr) throws IOException {
 		if (!addr.startsWith(PROTOCOL)) {
 			throw new IllegalArgumentException("Invalid Protocol " + addr);
@@ -88,10 +95,12 @@ public class Connection implements DatagramConnection, UDPDatagramConnection, Co
 		return datagram;
 	}
 
+	@Override
 	public Datagram newDatagram(byte[] buf, int size) throws IOException {
 		return newDatagram(buf, size, address);
 	}
 
+	@Override
 	public Datagram newDatagram(byte[] buf, int size, String addr) throws IOException {
 		if (!addr.startsWith(PROTOCOL)) {
 			throw new IllegalArgumentException("Invalid Protocol " + addr);
@@ -101,6 +110,7 @@ public class Connection implements DatagramConnection, UDPDatagramConnection, Co
 		return datagram;
 	}
 
+	@Override
 	public String getLocalAddress() throws IOException {
 		InetAddress address = socket.getInetAddress();
 		if (address == null) {
@@ -118,10 +128,12 @@ public class Connection implements DatagramConnection, UDPDatagramConnection, Co
 		return address.getHostAddress();
 	}
 
+	@Override
 	public int getLocalPort() throws IOException {
 		return socket.getLocalPort();
 	}
 
+	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 		if (!org.microemu.cldc.http.Connection.isAllowNetworkConnection()) {
 			throw new IOException("No network");

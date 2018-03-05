@@ -156,6 +156,7 @@ public class Graphics3D {
 
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							if (changed) pixels = new int[width * height];
 							iIsImageTarget = _bindGraphics(
@@ -179,6 +180,7 @@ public class Graphics3D {
 
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							_bindImage(handle, imageHandle, finalDepth, finalFlags);
 						}
@@ -204,6 +206,7 @@ public class Graphics3D {
 		if (currentTarget instanceof Graphics) {
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							Graphics g = (Graphics) currentTarget;
 							_releaseGraphics(handle,
@@ -214,6 +217,7 @@ public class Graphics3D {
 		} else if (currentTarget instanceof Image2D) {
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							_releaseImage(handle);
 						}
@@ -245,6 +249,7 @@ public class Graphics3D {
 		final Background finalBackground = background;
 		Platform.executeInUIThread(
 				new M3gRunnable() {
+					@Override
 					public void doRun() {
 						_clear(handle, finalBackground != null ? finalBackground.handle : 0);
 					}
@@ -259,6 +264,7 @@ public class Graphics3D {
 		final World finalWorld = world;
 		Platform.executeInUIThread(
 				new M3gRunnable() {
+					@Override
 					public void doRun() {
 						_renderWorld(handle, finalWorld.handle);
 					}
@@ -297,6 +303,7 @@ public class Graphics3D {
 
 		Platform.executeInUIThread(
 				new M3gRunnable() {
+					@Override
 					public void doRun() {
 						_render(handle,
 								finalVertices.handle,
@@ -325,6 +332,7 @@ public class Graphics3D {
 
 		Platform.executeInUIThread(
 				new M3gRunnable() {
+					@Override
 					public void doRun() {
 						_renderNode(handle,
 								finalNode.handle,
@@ -515,6 +523,7 @@ public class Graphics3D {
 
 			Platform.executeInUIThread(
 					new M3gRunnable() {
+						@Override
 						public void doRun() {
 							iIsProperRenderer = _isProperRenderer();
 						}

@@ -43,6 +43,7 @@ public class Connection implements ConnectionImplementation {
 
 	private static int connectionType = CONNECTIONTYPE_SYSTEM_FS;
 
+	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 		// file://<host>/<path>
 		if (!name.startsWith(PROTOCOL)) {

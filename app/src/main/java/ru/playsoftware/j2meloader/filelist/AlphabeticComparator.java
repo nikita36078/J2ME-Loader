@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 public class AlphabeticComparator<T extends SortItem> implements Comparator<T> {
 
+	@Override
 	public int compare(T p1, T p2) {
 		return p1.getSortField().compareToIgnoreCase(p2.getSortField());
 	}

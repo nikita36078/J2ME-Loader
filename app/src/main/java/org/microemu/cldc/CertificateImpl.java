@@ -36,34 +36,42 @@ public class CertificateImpl implements Certificate {
 		this.cert = cert;
 	}
 
+	@Override
 	public String getIssuer() {
 		return cert.getIssuerDN().getName();
 	}
 
+	@Override
 	public long getNotAfter() {
 		return cert.getNotAfter().getTime();
 	}
 
+	@Override
 	public long getNotBefore() {
 		return cert.getNotBefore().getTime();
 	}
 
+	@Override
 	public String getSerialNumber() {
 		return cert.getSerialNumber().toString();
 	}
 
+	@Override
 	public String getSigAlgName() {
 		return cert.getSigAlgName();
 	}
 
+	@Override
 	public String getSubject() {
 		return cert.getSubjectDN().getName();
 	}
 
+	@Override
 	public String getType() {
 		return cert.getType();
 	}
 
+	@Override
 	public String getVersion() {
 		return Integer.toString(cert.getVersion());
 	}

@@ -99,6 +99,7 @@ public class Command implements Comparable<Command> {
 		return true;
 	}
 
+	@Override
 	public int compareTo(Command cmd) {
 		return cmd.getPriority() - priority;
 	}

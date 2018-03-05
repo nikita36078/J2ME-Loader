@@ -59,6 +59,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private Map<String, Object> recordStores = null;
 
+	@Override
 	public String getName() {
 		return "Android record store";
 	}
@@ -78,6 +79,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		}
 	}
 
+	@Override
 	public void deleteRecordStore(final String recordStoreName)
 			throws RecordStoreNotFoundException, RecordStoreException {
 		initializeIfNecessary();
@@ -112,6 +114,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		recordStores.remove(recordStoreName);
 	}
 
+	@Override
 	public RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
 			throws RecordStoreException {
 		initializeIfNecessary();
@@ -140,6 +143,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		return recordStoreImpl;
 	}
 
+	@Override
 	public String[] listRecordStores() {
 		initializeIfNecessary();
 
@@ -152,11 +156,13 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		}
 	}
 
+	@Override
 	public void deleteRecord(RecordStoreImpl recordStoreImpl, int recordId)
 			throws RecordStoreNotOpenException, RecordStoreException {
 		deleteFromDisk(recordStoreImpl, recordId);
 	}
 
+	@Override
 	public void loadRecord(RecordStoreImpl recordStoreImpl, int recordId)
 			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
 		try {
@@ -171,6 +177,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		}
 	}
 
+	@Override
 	public void saveRecord(RecordStoreImpl recordStoreImpl, int recordId)
 			throws RecordStoreNotOpenException, RecordStoreException {
 		saveToDisk(recordStoreImpl, recordId);
@@ -230,6 +237,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		}
 	}
 
+	@Override
 	public int getSizeAvailable(RecordStoreImpl recordStoreImpl) {
 		// TODO should return free space on device
 		return 1024 * 1024;

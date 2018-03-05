@@ -35,6 +35,7 @@ public class Manager {
 	private static final String TAG = Manager.class.getName();
 
 	private static class StreamCacheCleaner implements PlayerListener {
+		@Override
 		public void playerUpdate(Player player, String event, Object eventData) {
 			if (PlayerListener.CLOSED.equals(event) && eventData instanceof String) {
 				event = (String) eventData;

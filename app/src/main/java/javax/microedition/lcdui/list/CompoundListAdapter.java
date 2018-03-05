@@ -59,6 +59,7 @@ public class CompoundListAdapter extends CompoundAdapter implements ListAdapter 
 		}
 	}
 
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = getView(position, convertView, parent, viewResourceID, true);
 
@@ -69,10 +70,12 @@ public class CompoundListAdapter extends CompoundAdapter implements ListAdapter 
 		return convertView;
 	}
 
+	@Override
 	public boolean areAllItemsEnabled() {
 		return true;
 	}
 
+	@Override
 	public boolean isEnabled(int position) {
 		return true;
 	}

@@ -28,6 +28,7 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 		prefs = context.getSharedPreferences(name, mode);
 	}
 
+	@Override
 	public DataEditor edit() {
 		if (editor == null) {
 			editor = prefs.edit();
@@ -36,93 +37,114 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 		return this;
 	}
 
+	@Override
 	public boolean contains(String key) {
 		return prefs.contains(key);
 	}
 
+	@Override
 	public boolean getBoolean(String key, boolean defValue) {
 		return prefs.getBoolean(key, defValue);
 	}
 
+	@Override
 	public float getFloat(String key, float defValue) {
 		return prefs.getFloat(key, defValue);
 	}
 
+	@Override
 	public int getInt(String key, int defValue) {
 		return prefs.getInt(key, defValue);
 	}
 
+	@Override
 	public long getLong(String key, long defValue) {
 		return prefs.getLong(key, defValue);
 	}
 
+	@Override
 	public String getString(String key, String defValue) {
 		return prefs.getString(key, defValue);
 	}
 
+	@Override
 	public boolean getBoolean(String key) {
 		return prefs.getBoolean(key, false);
 	}
 
+	@Override
 	public float getFloat(String key) {
 		return prefs.getFloat(key, 0);
 	}
 
+	@Override
 	public int getInt(String key) {
 		return prefs.getInt(key, 0);
 	}
 
+	@Override
 	public long getLong(String key) {
 		return prefs.getLong(key, 0);
 	}
 
+	@Override
 	public String getString(String key) {
 		return prefs.getString(key, "");
 	}
 
+	@Override
 	public DataEditor clear() {
 		editor.clear();
 		return this;
 	}
 
+	@Override
 	public DataEditor remove(String key) {
 		editor.remove(key);
 		return this;
 	}
 
+	@Override
 	public DataEditor putBoolean(String key, boolean value) {
 		editor.putBoolean(key, value);
 		return this;
 	}
 
+	@Override
 	public DataEditor putFloat(String key, float value) {
 		editor.putFloat(key, value);
 		return this;
 	}
 
+	@Override
 	public DataEditor putInt(String key, int value) {
 		editor.putInt(key, value);
 		return this;
 	}
 
+	@Override
 	public DataEditor putLong(String key, long value) {
 		editor.putLong(key, value);
 		return this;
 	}
 
+	@Override
 	public DataEditor putString(String key, String value) {
 		editor.putString(key, value);
 		return this;
 	}
 
+	@Override
 	public void apply() {
 		editor.apply();
 	}
 
+	@Override
 	public boolean commit() {
 		return editor.commit();
 	}
 
+	@Override
 	public void close() {
 		editor = null;
 	}

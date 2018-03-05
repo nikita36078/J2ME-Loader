@@ -65,30 +65,37 @@ public abstract class CompoundAdapter implements Adapter {
 		notifyDataSetChanged();
 	}
 
+	@Override
 	public int getCount() {
 		return items.size();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return items.isEmpty();
 	}
 
+	@Override
 	public CompoundItem getItem(int position) {
 		return items.get(position);
 	}
 
+	@Override
 	public boolean hasStableIds() {
 		return true;
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
+	@Override
 	public int getViewTypeCount() {
 		return 1;
 	}
 
+	@Override
 	public int getItemViewType(int position) {
 		return 0;
 	}
@@ -113,14 +120,17 @@ public abstract class CompoundAdapter implements Adapter {
 		return textview;
 	}
 
+	@Override
 	public abstract View getView(int position, View convertView, ViewGroup parent);
 
+	@Override
 	public void registerDataSetObserver(DataSetObserver observer) {
 		if (!observers.contains(observer)) {
 			observers.add(observer);
 		}
 	}
 
+	@Override
 	public void unregisterDataSetObserver(DataSetObserver observer) {
 		observers.remove(observer);
 	}

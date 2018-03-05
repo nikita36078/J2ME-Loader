@@ -46,6 +46,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		this.socket = socket;
 	}
 
+	@Override
 	public String getAddress() throws IOException {
 		if (socket == null || socket.isClosed()) {
 			throw new IOException();
@@ -54,6 +55,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		return socket.getInetAddress().toString();
 	}
 
+	@Override
 	public String getLocalAddress() throws IOException {
 		if (socket == null || socket.isClosed()) {
 			throw new IOException();
@@ -62,6 +64,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		return socket.getLocalAddress().toString();
 	}
 
+	@Override
 	public int getLocalPort() throws IOException {
 		if (socket == null || socket.isClosed()) {
 			throw new IOException();
@@ -70,6 +73,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		return socket.getLocalPort();
 	}
 
+	@Override
 	public int getPort() throws IOException {
 		if (socket == null || socket.isClosed()) {
 			throw new IOException();
@@ -78,6 +82,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		return socket.getPort();
 	}
 
+	@Override
 	public int getSocketOption(byte option) throws IllegalArgumentException,
 			IOException {
 		if (socket != null && socket.isClosed()) {
@@ -112,6 +117,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		}
 	}
 
+	@Override
 	public void setSocketOption(byte option, int value)
 			throws IllegalArgumentException, IOException {
 		if (socket.isClosed()) {
@@ -159,24 +165,29 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 		}
 	}
 
+	@Override
 	public void close() throws IOException {
 		// TODO fix differences between Java ME and Java SE
 
 		socket.close();
 	}
 
+	@Override
 	public InputStream openInputStream() throws IOException {
 		return socket.getInputStream();
 	}
 
+	@Override
 	public DataInputStream openDataInputStream() throws IOException {
 		return new DataInputStream(openInputStream());
 	}
 
+	@Override
 	public OutputStream openOutputStream() throws IOException {
 		return socket.getOutputStream();
 	}
 
+	@Override
 	public DataOutputStream openDataOutputStream() throws IOException {
 		return new DataOutputStream(openOutputStream());
 	}

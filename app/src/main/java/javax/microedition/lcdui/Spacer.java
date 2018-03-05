@@ -37,6 +37,7 @@ public class Spacer extends Item {
 		}
 	}
 
+	@Override
 	public View getItemContentView() {
 		if (view == null) {
 			view = new View(getOwnerForm().getParentActivity());
@@ -48,6 +49,7 @@ public class Spacer extends Item {
 		return view;
 	}
 
+	@Override
 	public void clearItemContentView() {
 		view = null;
 	}

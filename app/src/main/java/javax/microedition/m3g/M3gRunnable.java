@@ -28,6 +28,7 @@ abstract class M3gRunnable implements Runnable {
 	/**
 	 * From Runnable interface
 	 */
+	@Override
 	public void run() {
 		try {
 			doRun();

@@ -105,6 +105,7 @@ public class CanvasEvent extends Event {
 		return instance;
 	}
 
+	@Override
 	public void process() {
 		switch (eventType) {
 			case KEY_PRESSED:
@@ -154,19 +155,23 @@ public class CanvasEvent extends Event {
 		}
 	}
 
+	@Override
 	public void recycle() {
 		canvas = null;
 		recycled.push(this);
 	}
 
+	@Override
 	public void enterQueue() {
 		enqueued[eventType]++;
 	}
 
+	@Override
 	public void leaveQueue() {
 		enqueued[eventType]--;
 	}
 
+	@Override
 	public boolean placeableAfter(Event event) {
 		if (event instanceof CanvasEvent) {
 			switch (eventType) {

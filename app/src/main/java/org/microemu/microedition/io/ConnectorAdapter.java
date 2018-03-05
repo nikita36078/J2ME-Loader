@@ -44,28 +44,35 @@ import javax.microedition.io.OutputConnection;
  */
 public abstract class ConnectorAdapter implements ConnectorDelegate {
 
+	@Override
 	public abstract Connection open(String name, int mode, boolean timeouts) throws IOException;
 
+	@Override
 	public Connection open(String name) throws IOException {
 		return open(name, Connector.READ_WRITE, false);
 	}
 
+	@Override
 	public Connection open(String name, int mode) throws IOException {
 		return open(name, mode, false);
 	}
 
+	@Override
 	public DataInputStream openDataInputStream(String name) throws IOException {
 		return ((InputConnection) open(name)).openDataInputStream();
 	}
 
+	@Override
 	public DataOutputStream openDataOutputStream(String name) throws IOException {
 		return ((OutputConnection) open(name)).openDataOutputStream();
 	}
 
+	@Override
 	public InputStream openInputStream(String name) throws IOException {
 		return ((InputConnection) open(name)).openInputStream();
 	}
 
+	@Override
 	public OutputStream openOutputStream(String name) throws IOException {
 		return ((OutputConnection) open(name)).openOutputStream();
 	}

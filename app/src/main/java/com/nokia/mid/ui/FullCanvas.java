@@ -56,6 +56,7 @@ public abstract class FullCanvas extends Canvas {
 	 *
 	 * @param cmd
 	 */
+	@Override
 	public void addCommand(Command cmd) {
 		throw new IllegalStateException();
 	}
@@ -65,6 +66,7 @@ public abstract class FullCanvas extends Canvas {
 	 *
 	 * @param l
 	 */
+	@Override
 	public void setCommandListener(CommandListener l) {
 		throw new IllegalStateException();
 	}

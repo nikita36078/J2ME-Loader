@@ -552,10 +552,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				color = Integer.parseInt(tfScreenBack.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						tfScreenBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
+					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
 				};
@@ -564,10 +566,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				color = Integer.parseInt(tfVKBack.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						tfVKBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
+					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
 				};
@@ -576,10 +580,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				color = Integer.parseInt(tfVKFore.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						tfVKFore.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
+					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
 				};
@@ -588,10 +594,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				color = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						tfVKSelFore.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
+					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
 				};
@@ -600,10 +608,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				color = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						tfVKSelBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
+					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
 				};
@@ -612,10 +622,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				color = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						tfVKOutline.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
+					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
 				};

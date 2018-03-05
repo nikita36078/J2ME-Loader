@@ -86,6 +86,7 @@ public class KeyRepeater implements Runnable {
 		thread.interrupt();
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			try {

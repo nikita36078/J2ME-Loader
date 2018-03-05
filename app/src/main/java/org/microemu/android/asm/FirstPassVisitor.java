@@ -49,6 +49,7 @@ public class FirstPassVisitor extends ClassVisitor {
 		this.methodTranslations = methodTranslations;
 	}
 
+	@Override
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 		ArrayList<String> list = new ArrayList<>();
 		this.name = name;
@@ -57,24 +58,30 @@ public class FirstPassVisitor extends ClassVisitor {
 		classesHierarchy.put(name, list);
 	}
 
+	@Override
 	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
 		return null;
 	}
 
+	@Override
 	public void visitAttribute(Attribute attr) {
 	}
 
+	@Override
 	public void visitEnd() {
 		methodTranslations.put(name, methods);
 	}
 
+	@Override
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
 		return null;
 	}
 
+	@Override
 	public void visitInnerClass(String name, String outerName, String innerName, int access) {
 	}
 
+	@Override
 	public MethodVisitor visitMethod(final int access, final String name, String desc, final String signature, final String[] exceptions) {
 		if (!name.equals("<init>") && (access & Opcodes.ACC_PRIVATE) == 0) {
 			methods.add(name + desc);
@@ -82,9 +89,11 @@ public class FirstPassVisitor extends ClassVisitor {
 		return null;
 	}
 
+	@Override
 	public void visitOuterClass(String owner, String name, String desc) {
 	}
 
+	@Override
 	public void visitSource(String source, String debug) {
 	}
 

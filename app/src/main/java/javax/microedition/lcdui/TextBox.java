@@ -35,6 +35,7 @@ public class TextBox extends Screen {
 	private int constraints;
 
 	private SimpleEvent msgSetText = new SimpleEvent() {
+		@Override
 		public void process() {
 			textview.setText(text);
 		}
@@ -164,6 +165,7 @@ public class TextBox extends Screen {
 	public void setInitialInputMode(String characterSubset) {
 	}
 
+	@Override
 	public View getScreenView() {
 		if (scrollview == null) {
 			Context context = getParentActivity();
@@ -181,6 +183,7 @@ public class TextBox extends Screen {
 		return scrollview;
 	}
 
+	@Override
 	public void clearScreenView() {
 		scrollview = null;
 		textview = null;

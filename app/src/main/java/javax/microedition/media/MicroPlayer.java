@@ -96,6 +96,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return player;
 	}
 
+	@Override
 	public Control getControl(String controlType) {
 		if (!controlType.contains(".")) {
 			controlType = "javax.microedition.media.control." + controlType;
@@ -103,16 +104,19 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return controls.get(controlType);
 	}
 
+	@Override
 	public Control[] getControls() {
 		return controls.values().toArray(new Control[0]);
 	}
 
+	@Override
 	public void addPlayerListener(PlayerListener playerListener) {
 		if (!listeners.contains(playerListener)) {
 			listeners.add(playerListener);
 		}
 	}
 
+	@Override
 	public void removePlayerListener(PlayerListener playerListener) {
 		listeners.remove(playerListener);
 	}
@@ -123,10 +127,12 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// state = PREFETCHED;
 	}
 
+	@Override
 	public synchronized void onCompletion(MediaPlayer mp) {
 		postEvent(PlayerListener.END_OF_MEDIA);
 
@@ -142,10 +148,12 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 		return true;
 	}
 
+	@Override
 	public void realize() throws MediaException {
 		checkClosed();
 
@@ -175,6 +183,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public void prefetch() throws MediaException {
 		checkClosed();
 
@@ -192,6 +201,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public synchronized void start() throws MediaException {
 		prefetch();
 
@@ -203,6 +213,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public synchronized void stop() {
 		if (state == STARTED) {
 			player.pause();
@@ -212,6 +223,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public void deallocate() {
 		checkClosed();
 
@@ -223,6 +235,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public void close() {
 		stop();
 
@@ -258,6 +271,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		}
 	}
 
+	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
 
@@ -268,16 +282,19 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return getMediaTime();
 	}
 
+	@Override
 	public long getMediaTime() {
 		checkClosed();
 		return player.getCurrentPosition() * 1000;
 	}
 
+	@Override
 	public long getDuration() {
 		checkClosed();
 		return player.getDuration() * 1000;
 	}
 
+	@Override
 	public void setLoopCount(int count) {
 		checkClosed();
 		if (state == STARTED)
@@ -290,10 +307,12 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		loopCount = count;
 	}
 
+	@Override
 	public int getState() {
 		return state;
 	}
 
+	@Override
 	public String getContentType() {
 		return "";
 	}
@@ -321,15 +340,18 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		postEvent(PlayerListener.VOLUME_CHANGED);
 	}
 
+	@Override
 	public void setMute(boolean mute) {
 		this.mute = mute;
 		updateVolume();
 	}
 
+	@Override
 	public boolean isMuted() {
 		return mute;
 	}
 
+	@Override
 	public int setLevel(int level) {
 		if (level < 0) {
 			level = 0;
@@ -343,6 +365,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return level;
 	}
 
+	@Override
 	public int getLevel() {
 		return level;
 	}
@@ -350,6 +373,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 	// PanControl
 
+	@Override
 	public int setPan(int pan) {
 		if (pan < -100) {
 			pan = -100;
@@ -363,6 +387,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		return pan;
 	}
 
+	@Override
 	public int getPan() {
 		return pan;
 	}
