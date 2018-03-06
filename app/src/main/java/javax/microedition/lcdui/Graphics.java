@@ -403,6 +403,7 @@ public class Graphics {
 	}
 
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
+		if (width == 0 || height == 0) return;
 		drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
 	}
 
