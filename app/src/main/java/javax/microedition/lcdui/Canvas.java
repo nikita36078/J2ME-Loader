@@ -97,7 +97,7 @@ public abstract class Canvas extends Displayable {
 		mapKeyCode(KEY_LEFT, LEFT, "LEFT");
 		mapKeyCode(KEY_RIGHT, RIGHT, "RIGHT");
 		mapKeyCode(KEY_FIRE, FIRE, "SELECT");
-		mapKeyCode(KEY_SOFT_LEFT, LEFT, "SOFT1");
+		mapKeyCode(KEY_SOFT_LEFT, 0, "SOFT1");
 		mapKeyCode(KEY_SOFT_RIGHT, 0, "SOFT2");
 		mapKeyCode(KEY_CLEAR, 0, "CLEAR");
 		mapKeyCode(KEY_SEND, 0, "SEND");
