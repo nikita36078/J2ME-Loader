@@ -62,6 +62,6 @@ dependencies {
     implementation "ch.acra:acra-dialog:$acraVersion"
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'org.ow2.asm:asm-tree:5.2'
-    implementation 'org.sufficientlysecure:donations:2.5'
+    implementation 'org.sufficientlysecure:donations:2.6'
     implementation project(':dexlib')
 }
