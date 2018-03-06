@@ -65,11 +65,11 @@ public class Form extends Screen {
 
 	public int append(final Item item) {
 		items.add(item);
-		item.setOwnerForm(this);
 
-		if (item.getItemView().getParent() != null) {
+		if (item.hasOwnerForm()) {
 			throw new IllegalStateException();
 		}
+		item.setOwnerForm(this);
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
@@ -81,11 +81,11 @@ public class Form extends Screen {
 
 	public void insert(final int index, final Item item) {
 		items.add(index, item);
-		item.setOwnerForm(this);
 
-		if (item.getItemView().getParent() != null) {
+		if (item.hasOwnerForm()) {
 			throw new IllegalStateException();
 		}
+		item.setOwnerForm(this);
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
@@ -96,11 +96,11 @@ public class Form extends Screen {
 
 	public void set(final int index, final Item item) {
 		items.set(index, item).setOwnerForm(null);
-		item.setOwnerForm(this);
 
-		if (item.getItemView().getParent() != null) {
+		if (item.hasOwnerForm()) {
 			throw new IllegalStateException();
 		}
+		item.setOwnerForm(this);
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
