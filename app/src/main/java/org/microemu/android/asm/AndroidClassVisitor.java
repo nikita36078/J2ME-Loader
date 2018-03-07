@@ -32,6 +32,12 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.InsnNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -176,7 +182,79 @@ public class AndroidClassVisitor extends ClassVisitor {
 				mv.visitTryCatchBlock(start, end, handler, type);
 			}
 		}
+	}
 
+	public class CheckCastRemover extends MethodNode {
+		public CheckCastRemover(int access, final String name, String desc, final String signature, final String[] exceptions, MethodVisitor mv) {
+			super(Opcodes.ASM5, access, name, desc, signature, exceptions);
+			this.mv = mv;
+		}
+
+		public void visitEnd() {
+			super.visitEnd();
+			MethodNode node = (MethodNode) this;
+			for (int i = 0; i < node.instructions.size()-1; i++) {
+				MethodInsnNode invoke;
+				TypeInsnNode cast;
+
+				AbstractInsnNode insn = node.instructions.get(i);
+				if (insn.getOpcode() == Opcodes.INVOKEVIRTUAL)
+					invoke = (MethodInsnNode) insn;
+				else
+					continue;
+
+				insn = node.instructions.get(i+1);
+				if (insn.getOpcode() == Opcodes.CHECKCAST)
+					cast = (TypeInsnNode) insn;
+				else
+					continue;
+
+				if (!invoke.owner.equals("javax/bluetooth/DataElement") || !invoke.name.equals("getValue")
+						|| !cast.desc.equals("java/lang/String"))
+					continue;
+
+				// check for "LDC" instruction around
+				// get the value and replace getValue() call with it
+				// probably not a best solution, but faking
+				// equals() is even harder
+				int back = 1, forward = 1;
+				String[] vals = new String[2];
+
+				for (int j = i + forward; j < node.instructions.size(); j = i + forward++) {
+					insn = node.instructions.get(j);
+					if (insn.getOpcode() != Opcodes.LDC)
+						continue;
+					LdcInsnNode ldc = (LdcInsnNode) insn;
+					if (!(ldc.cst instanceof String))
+						continue;
+					vals[0] = (String) ldc.cst;
+					break;
+
+				}
+
+				for (int j = i - back; j > 0; j = i - back++) {
+					insn = node.instructions.get(j);
+					if (insn.getOpcode() != Opcodes.LDC)
+						continue;
+					LdcInsnNode ldc = (LdcInsnNode) insn;
+					if (!(ldc.cst instanceof String))
+						continue;
+					vals[1] = (String) ldc.cst;
+					break;
+				}
+
+				// get the nearest one
+				String result = vals[(forward < back && vals[0] != null) ? 0 : 1];
+
+				node.instructions.insertBefore(invoke, new InsnNode(Opcodes.POP));
+				node.instructions.set(invoke, new LdcInsnNode(result));
+				// node.instructions.insertBefore(cast, new InsnNode(Opcodes.NOP));
+				node.instructions.remove(cast);
+
+
+			}
+			accept(mv);
+		}
 	}
 
 	public AndroidClassVisitor(ClassVisitor cv, boolean isMidlet, HashMap<String, ArrayList<String>> classesHierarchy, HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations,
@@ -196,7 +274,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 	}
 
 	public MethodVisitor visitMethod(int access, final String name, String desc, final String signature, final String[] exceptions) {
-		return new AndroidMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions));
+		MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
+		return new AndroidMethodVisitor(new CheckCastRemover(access, name, desc, signature, exceptions, mv));
 	}
-
 }

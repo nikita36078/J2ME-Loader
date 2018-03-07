@@ -61,6 +61,9 @@ class J2MEServiceRecord implements ServiceRecord {
 	}
 
 	public DataElement getAttributeValue(int attrID) {
+		// Fake service name
+		if (attrID == 0x100)
+			return new DataElement(DataElement.STRING, "SOMENAME");
 		return null;
 	}
 
