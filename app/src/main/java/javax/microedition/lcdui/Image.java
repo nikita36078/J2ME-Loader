@@ -21,12 +21,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.game.Sprite;
-import javax.microedition.shell.MyClassLoader;
+import javax.microedition.util.ContextHolder;
 
 public class Image {
 	private Bitmap bitmap;
@@ -57,14 +56,9 @@ public class Image {
 	}
 
 	public static Image createImage(String resname) throws IOException {
-		if (resname.startsWith("/")) {
-			resname = resname.substring(1);
-		}
-
-		InputStream is = new FileInputStream(MyClassLoader.getResFolder() + "/" + resname);
+		InputStream is = ContextHolder.getResourceAsStream(null, resname);
 		Bitmap bitmap = BitmapFactory.decodeStream(is);
 		is.close();
-
 		return new Image(bitmap);
 	}
 
