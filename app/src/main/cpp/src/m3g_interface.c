@@ -1234,7 +1234,6 @@ static m3gErrorHandler *m3gSetErrorHandler(Interface *m3g, m3gErrorHandler *erro
 
 static void m3gConfigureGL(Interface *m3g)
 {
-#if 0
 #   if defined(M3G_NGL_CONTEXT_API)
     m3g->maxTextureDimension = M3G_MAX_TEXTURE_DIMENSION;
     m3g->maxViewportWidth = M3G_MAX_VIEWPORT_WIDTH;
@@ -1262,7 +1261,6 @@ static void m3gConfigureGL(Interface *m3g)
 
     M3G_ASSERT(numConfigs > 0);
     
-    //eglBindAPI(EGL_OPENGL_ES_API);
     ctx = eglCreateContext(eglGetDisplay(0),
                            config,
                            NULL,
@@ -1329,50 +1327,6 @@ static void m3gConfigureGL(Interface *m3g)
     m3gShutdownGL(m3g);
     
 #endif /* M3G_NGL_CONTEXT_API */
-#endif // 0
-	EGLint config_attribs[] = {
-		EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-		EGL_RED_SIZE, 8,
-		EGL_GREEN_SIZE, 8,
-		EGL_BLUE_SIZE, 8,
-		EGL_ALPHA_SIZE, 8,
-		EGL_DEPTH_SIZE, 8,
-		EGL_STENCIL_SIZE, EGL_DONT_CARE,
-		EGL_NONE };
-	EGLDisplay display;
-	EGLConfig config;
-	EGLint num_configs;
-	EGLContext context;
-	EGLint pbuffer_attribs[] = {
-		EGL_WIDTH, 2,
-		EGL_HEIGHT, 2,
-		EGL_NONE };
-	EGLSurface surface;
-	EGLint params[2];
-
-       	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-	m3gInitializeGL(m3g);
-	//eglInitialize(display, NULL, NULL);
-	//eglBindAPI(EGL_OPENGL_ES_API);
-	eglChooseConfig(display, config_attribs, &config, 1, &num_configs);
-	context = eglCreateContext(display, config, EGL_NO_CONTEXT, NULL);
-	surface = eglCreatePbufferSurface(display, config, pbuffer_attribs);
-	eglMakeCurrent(display, surface, surface, context);
-
-	m3g->supportAntialiasing = M3G_TRUE;
-
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, params);
-	m3g->maxTextureDimension = params[0];
-
-	glGetIntegerv(GL_MAX_VIEWPORT_DIMS, params);
-	m3g->maxViewportWidth = params[0];
-	m3g->maxViewportHeight = params[1];
-	m3g->maxViewportDim = M3G_MIN(params[0], params[1]);
-
-	eglMakeCurrent(display, NULL, NULL, NULL);
-	eglDestroySurface(display, surface);
-	eglDestroyContext(display, context);
-	m3gShutdownGL(m3g);
 }
 
 

@@ -149,16 +149,32 @@ public class Graphics3D {
 				throw new IllegalArgumentException();
 			}
 
-			final int width = finalG.getCanvas().getWidth();
-			final int height = finalG.getCanvas().getHeight();
-			final boolean changed;
-			changed = (width * height) != (cur_width * cur_height);
+			android.graphics.Canvas canvas = finalG.getCanvas();
+			final int width = canvas.getWidth();
+			final int height = canvas.getHeight();
+			if (pixels == null || width != cur_width || height != cur_height)
+				pixels = new int[width * height];
+			else
+				java.util.Arrays.fill(pixels, 0);
+
+			// TODO: draw on background? Probably should fix alpha
+			/*
+			android.graphics.Bitmap bitmap;
+			try {
+				java.lang.reflect.Field mBitmap = canvas.getClass().getDeclaredField("mBitmap");
+				mBitmap.setAccessible(true);
+				bitmap = (Bitmap) mBitmap.get(canvas);
+				bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+				for (int i = 0; i < pixels.length; i++)
+					pixels[i] |= 0xFF000000;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
 
 			Platform.executeInUIThread(
 					new M3gRunnable() {
 						@Override
 						public void doRun() {
-							if (changed) pixels = new int[width * height];
 							iIsImageTarget = _bindGraphics(
 									handle,
 									0, width, height,
@@ -166,7 +182,7 @@ public class Graphics3D {
 									finalG.getClipWidth(), finalG.getClipHeight(),
 									finalDepth, finalFlags,
 									iIsProperRenderer,
-									(changed) ? pixels : null);
+									pixels);
 						}
 					});
 			currentTarget = finalG;

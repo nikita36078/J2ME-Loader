@@ -425,7 +425,6 @@ M3G_API void m3gFreeGLESResources(M3GRenderContext ctx)
 
     /* EGL might not be initialized yet, so do it here just in case. */ 
     eglInitialize(eglGetDisplay(EGL_DEFAULT_DISPLAY), NULL, NULL);
-    //eglBindAPI(EGL_OPENGL_ES_API);
     eglMakeCurrent(eglGetDisplay(EGL_DEFAULT_DISPLAY), NULL, NULL, NULL);
 
     /* Delete EGL surfaces */
@@ -488,10 +487,10 @@ static M3Gbool m3gBindRenderTarget(RenderContext *ctx,
 {
     /* Check for generic errors */
     
-    /*if (ctx->target.type == SURFACE_NONE) {
+    if (ctx->target.type != SURFACE_NONE) {
         m3gRaiseError(M3G_INTERFACE(ctx), M3G_INVALID_OPERATION);
         return M3G_FALSE;
-    }*/
+    }
     if (!m3gValidTargetFormat(format)) {
         m3gRaiseError(M3G_INTERFACE(ctx), M3G_INVALID_ENUM);
         return M3G_FALSE;
@@ -554,59 +553,26 @@ static void m3gValidateBuffers(RenderContext *ctx)
     /* Initialize OpenGL if not already done */
     
     if (!ctx->glInitialized) {
-	EGLint config_attribs[] = {
-		EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-		EGL_RED_SIZE, 8,
-		EGL_GREEN_SIZE, 8,
-		EGL_BLUE_SIZE, 8,
-		EGL_ALPHA_SIZE, 8,
-		EGL_DEPTH_SIZE, 8,
-		EGL_STENCIL_SIZE, EGL_DONT_CARE,
-		EGL_NONE };
-	EGLDisplay display;
-	EGLConfig config;
-	EGLint num_configs;
-	EGLContext context;
-	EGLint pbuffer_attribs[] = {
-		EGL_WIDTH, ctx->target.width,
-		EGL_HEIGHT, ctx->target.height,
-		EGL_NONE };
-	EGLSurface surface;
-	EGLint params[2];
-
-       	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-	m3gInitializeGL(M3G_INTERFACE(ctx));
-	//eglInitialize(display, NULL, NULL);
-	//eglBindAPI(EGL_OPENGL_ES_API);
-	eglChooseConfig(display, config_attribs, &config, 1, &num_configs);
-	context = eglCreateContext(display, config, EGL_NO_CONTEXT, NULL);
-	surface = eglCreatePbufferSurface(display, config, pbuffer_attribs);
-	eglMakeCurrent(display, surface, surface, context);
-
-	ctx->backBuffer.glSurface = surface;
-	ctx->backBuffer.width = ctx->target.width;
-	ctx->backBuffer.height = ctx->target.height;
-
+        m3gInitializeGL(M3G_INTERFACE(ctx));
         ctx->glInitialized = M3G_TRUE;
     }
 
     /* Check whether we can render directly to the target or need to
      * use a back buffer */
     
-    ctx->target.buffered = M3G_TRUE; //!m3gCanDirectRender(ctx);
+    ctx->target.buffered = !m3gCanDirectRender(ctx);
 #   if defined(M3G_FORCE_BUFFERED_RENDERING)
     ctx->target.buffered = M3G_TRUE;
 #   endif
     
     /* If direct rendering wasn't possible, check that the back buffer
      * for buffered rendering exists. */
-#if 0 
+    
     if (ctx->target.buffered) {
         if (!m3gValidateBackBuffer(ctx)) {
             return; /* out of memory */
         }
     }
-#endif
 
     /* With the legacy NGL API, we also manage the depth buffer */
     
@@ -636,7 +602,7 @@ static void m3gValidateBuffers(RenderContext *ctx)
  */
 static void m3gMakeCurrent(RenderContext *ctx)
 {
-    //m3gMakeGLCurrent(ctx);
+    m3gMakeGLCurrent(ctx);
 
     /* Note that the depth buffer may in some cases exist even if not
      * explicitly requested, so we need to disable the depth test just
@@ -717,7 +683,7 @@ static void m3gInitRender(M3GRenderContext context, M3Genum renderMode)
 {
     RenderContext *ctx = (RenderContext *) context;
     M3G_VALIDATE_OBJECT(ctx);
-
+    
     m3gIncrementRenderTimeStamp(ctx);
     m3gMakeCurrent(ctx);
     m3gCollectGLObjects(M3G_INTERFACE(ctx));
@@ -728,7 +694,7 @@ static void m3gInitRender(M3GRenderContext context, M3Genum renderMode)
     if (ctx->target.buffered && !ctx->backBuffer.contentsValid) {
         m3gUpdateBackBuffer(ctx);
     }
-    
+
     /* Set up viewport and scissoring */
     
     glViewport(ctx->viewport.x, ctx->viewport.y,
@@ -1196,36 +1162,36 @@ static const ObjectVFTable m3gvf_RenderContext = {
 /*@only@*/
 M3G_API M3GRenderContext m3gCreateContext(M3GInterface interface)/*@*/
 {
-	Interface *m3g = (Interface*) interface;
-	M3G_VALIDATE_INTERFACE(m3g);
-
-	{
-		RenderContext *ctx =
-			(RenderContext*) m3gAllocZ(m3g, (int) sizeof(RenderContext));
-		if (ctx == NULL) {
-			return NULL; /* m3gAlloc automatically raises out-of-mem */
-		}
+    Interface *m3g = (Interface*) interface;
+    M3G_VALIDATE_INTERFACE(m3g);
+        
+    {
+        RenderContext *ctx =
+            (RenderContext*) m3gAllocZ(m3g, (int) sizeof(RenderContext));
+        if (ctx == NULL) {
+            return NULL; /* m3gAlloc automatically raises out-of-mem */
+        }
 
 		ctx->renderQueue = m3gCreateRenderQueue(m3g);
-		if (ctx->renderQueue == NULL) {
-			m3gFree(m3g, ctx);
-			return NULL;
-		}
-		ctx->bufferBits = M3G_COLOR_BUFFER_BIT|M3G_DEPTH_BUFFER_BIT;
-		ctx->depthNear = 0.0f;
-		ctx->depthFar = 1.0f;
+        if (ctx->renderQueue == NULL) {
+            m3gFree(m3g, ctx);
+            return NULL;
+        }
+        ctx->bufferBits = M3G_COLOR_BUFFER_BIT|M3G_DEPTH_BUFFER_BIT;
+        ctx->depthNear = 0.0f;
+        ctx->depthFar = 1.0f;
 
-		m3gInitObject(&ctx->object, m3g, M3G_CLASS_RENDER_CONTEXT);
+        m3gInitObject(&ctx->object, m3g, M3G_CLASS_RENDER_CONTEXT);
 
 		m3gSetAlphaWrite(ctx, M3G_TRUE);
 
-		if (m3gGetColorMaskWorkaround(M3G_INTERFACE(ctx))) {
-			ctx->currentColorWrite = M3G_TRUE;
-			ctx->currentAlphaWrite = m3gGetAlphaWrite(ctx);
-		}
-
+        if (m3gGetColorMaskWorkaround(M3G_INTERFACE(ctx))) {
+            ctx->currentColorWrite = M3G_TRUE;
+            ctx->currentAlphaWrite = m3gGetAlphaWrite(ctx);
+        }
+        
 		return (M3GRenderContext)ctx;
-	}
+    }
 }
 
 /*!
@@ -1387,7 +1353,7 @@ M3G_API void m3gReleaseTarget(M3GRenderContext context)
     RenderContext *ctx = (RenderContext*) context;
     M3G_VALIDATE_OBJECT(ctx);
 
-    M3G_LOG(M3G_LOG_RENDERING, "Releasing target: start\n");
+    M3G_LOG(M3G_LOG_RENDERING, "Releasing target\n");
     
     if (ctx->target.type == SURFACE_NONE) {
         return;
@@ -1421,7 +1387,6 @@ M3G_API void m3gReleaseTarget(M3GRenderContext context)
      * release any GL resources that might have been release since the
      * last time we rendered, then release the GL context so we don't
      * hog resources */
-#if 0
 #   if !defined(M3G_NGL_CONTEXT_API)
     if (ctx->target.type == SURFACE_WINDOW) {
         m3gSwapBuffers(ctx->target.surface);
@@ -1429,7 +1394,7 @@ M3G_API void m3gReleaseTarget(M3GRenderContext context)
 #   endif
     m3gCollectGLObjects(M3G_INTERFACE(ctx));
 #   if !defined(M3G_NGL_CONTEXT_API)
-    //m3gMakeGLCurrent(NULL);
+    m3gMakeGLCurrent(NULL);
     ctx->target.surface = NULL;
 #   else
     if (ctx->target.type == SURFACE_MEMORY && ctx->target.pixels == NULL) {
@@ -1438,13 +1403,11 @@ M3G_API void m3gReleaseTarget(M3GRenderContext context)
 #   endif
 
     ctx->target.type = SURFACE_NONE;
-#endif
     ctx->renderQueue->root = NULL;
 
 #   if (M3G_PROFILE_LOG_INTERVAL > 0)
     m3gLogProfileCounters(M3G_INTERFACE(ctx));
 #   endif
-    M3G_LOG(M3G_LOG_RENDERING, "Releasing target: end\n");
 }
 
 /*!
