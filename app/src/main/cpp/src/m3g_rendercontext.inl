@@ -87,7 +87,7 @@ static EGLConfig m3gQueryEGLConfig(M3Genum format,
     /* Set up the depth buffer */
     
     attribs[4].attrib = EGL_DEPTH_SIZE;
-    attribs[4].value = (bufferBits & M3G_DEPTH_BUFFER_BIT) ? 16 : 0;
+    attribs[4].value = (bufferBits & M3G_DEPTH_BUFFER_BIT) ? 8 : 0;
     
     /* Set target surface type mask */
     
@@ -1216,7 +1216,6 @@ static EGLContext m3gSelectGLContext(RenderContext *ctx,
         }
         */
         if (!glrc) {
-		M3G_LOG1(M3G_LOG_OBJECTS, "EGL error: 0x%08X\n", (unsigned) eglGetError());
             m3gRaiseError(M3G_INTERFACE(ctx), M3G_OUT_OF_MEMORY);
             return NULL;
         }
@@ -1406,8 +1405,6 @@ static void m3gDeleteGLSurfaces(RenderContext *ctx,
  */
 static void m3gMakeGLCurrent(RenderContext *ctx)
 {
-    //eglBindAPI(EGL_OPENGL_ES_API);
-
     if (ctx != NULL) {
         EGLContext eglCtx = NULL;
         if (ctx->target.buffered) {
@@ -1432,10 +1429,6 @@ static void m3gMakeGLCurrent(RenderContext *ctx)
                 ctx->target.surface = surface;
             }
         }
-        /* Synchronize with native rendering in case we're 
-           rendering to a native bitmap (or window) target */
-        //eglWaitNative(EGL_CORE_NATIVE_ENGINE);
-
         /* Update the current acceleration status */
         
         if (eglCtx) {
@@ -1444,8 +1437,7 @@ static void m3gMakeGLCurrent(RenderContext *ctx)
                             eglCtx, EGL_CONFIG_ID,
                             &param);
             eglGetConfigAttrib(eglGetCurrentDisplay(),
-                               m3gEGLConfigForConfigID(eglGetCurrentDisplay(), param),
-			       EGL_CONFIG_CAVEAT,
+                               m3gEGLConfigForConfigID(eglGetCurrentDisplay(), param), EGL_CONFIG_CAVEAT,
                                &param);
             ctx->accelerated = (param == EGL_NONE);
         }

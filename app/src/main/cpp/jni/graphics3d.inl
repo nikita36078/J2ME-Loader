@@ -115,20 +115,10 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
                             M3G_COLOR_BUFFER_BIT|M3G_DEPTH_BUFFER_BIT :
                             M3G_COLOR_BUFFER_BIT) && m3gSetRenderHints((M3GRenderContext)aCtx, aHintBits))
     {
-	    if (pixels) {
-                    if (g_pixels) {
-			aEnv->ReleaseIntArrayElements(g_pixels, pixels_ptr, JNI_ABORT);
-                        aEnv->DeleteGlobalRef(g_pixels);
-			pixels_ptr = NULL;
-		    }
-		    g_pixels = (jintArray) aEnv->NewGlobalRef(pixels);
-		    pixels_ptr = aEnv->GetIntArrayElements(g_pixels, NULL);
-		    m3gBindMemoryTarget((M3GRenderContext)aCtx, pixels_ptr, aWidth, aHeight, M3G_ARGB8, (M3Guint)(aWidth * 4), 0);
-	    }
-	    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-        // Pass the physical screen size to m3gcore
-        //m3gSetDisplayArea(aCtx, screenRect.Width(), screenRect.Height());
+	    g_pixels = (jintArray) aEnv->NewGlobalRef(pixels);
+	    pixels_ptr = aEnv->GetIntArrayElements(g_pixels, NULL);
+	    m3gBindMemoryTarget((M3GRenderContext)aCtx, pixels_ptr, aWidth, aHeight, M3G_ARGB8, (M3Guint)(aWidth * 4), 0);
+	    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
         m3gSetClipRect((M3GRenderContext)aCtx, aClipX, aClipY, aClipW, aClipH);
         m3gSetViewport((M3GRenderContext)aCtx, aClipX, aClipY, aClipW, aClipH);
@@ -215,6 +205,11 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseGraphics
 
     // Release used target surface
 
+    if (g_pixels) {
+	aEnv->ReleaseIntArrayElements(g_pixels, pixels_ptr, JNI_ABORT);
+	aEnv->DeleteGlobalRef(g_pixels);
+	pixels_ptr = NULL;
+    }
     /*
     CMIDGraphics *cmidGraphics = MIDUnhandObject<CMIDGraphics>(aGraphicsHandle);
 
