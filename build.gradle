@@ -5,7 +5,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0-rc01'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,7 +19,7 @@ allprojects {
 }
 
 ext {
-    buildToolsVersion = '27.0.3'
+    buildToolsVersion = '28.0.0-rc1'
     compileSdkVersion = 27
 
     minSdkVersion = 14
