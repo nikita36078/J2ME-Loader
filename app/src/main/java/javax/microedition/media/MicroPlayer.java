@@ -79,16 +79,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 		controls.put(ToneControl.class.getName(), toneControl);
 	}
 
-	public void setDataSource(DataSource datasource) throws IOException {
-		deallocate();
-
-		if (source != null) {
-			source.disconnect();
-		}
-
-		source = datasource;
-	}
-
 	@Override
 	public Control getControl(String controlType) {
 		if (!controlType.contains(".")) {
@@ -104,6 +94,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 
 	@Override
 	public void addPlayerListener(PlayerListener playerListener) {
+		checkClosed();
 		if (!listeners.contains(playerListener)) {
 			listeners.add(playerListener);
 		}
@@ -111,6 +102,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 
 	@Override
 	public void removePlayerListener(PlayerListener playerListener) {
+		checkClosed();
 		listeners.remove(playerListener);
 	}
 
@@ -139,10 +131,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 	@Override
 	public void realize() throws MediaException {
 		checkClosed();
-
-		if (source == null) {
-			throw new IllegalStateException("call setDataSource() before calling realize()");
-		}
 
 		if (state == UNREALIZED) {
 			try {
@@ -194,6 +182,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 
 	@Override
 	public synchronized void stop() {
+		checkClosed();
 		if (state == STARTED) {
 			player.pause();
 
@@ -204,8 +193,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 
 	@Override
 	public void deallocate() {
-		checkClosed();
-
 		stop();
 
 		if (state != UNREALIZED) {
@@ -216,8 +203,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 
 	@Override
 	public void close() {
-		stop();
-
 		if (state != CLOSED) {
 			player.release();
 		}
@@ -231,14 +216,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 	protected void checkClosed() {
 		if (state == CLOSED) {
 			throw new IllegalStateException("player is closed");
-		}
-	}
-
-	protected void checkDataSource() {
-		checkClosed();
-
-		if (source == null) {
-			throw new IllegalStateException("call setDataSource() before using the player");
 		}
 	}
 
@@ -293,6 +270,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 
 	@Override
 	public String getContentType() {
+		checkRealized();
 		return source.getContentType();
 	}
 
