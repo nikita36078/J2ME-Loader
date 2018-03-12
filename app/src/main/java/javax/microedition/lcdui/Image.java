@@ -57,6 +57,9 @@ public class Image {
 
 	public static Image createImage(String resname) throws IOException {
 		InputStream is = ContextHolder.getResourceAsStream(null, resname);
+		if (is == null) {
+			throw new IOException();
+		}
 		Bitmap bitmap = BitmapFactory.decodeStream(is);
 		is.close();
 		return new Image(bitmap);
