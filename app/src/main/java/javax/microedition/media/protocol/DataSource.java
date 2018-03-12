@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,108 +16,39 @@
 
 package javax.microedition.media.protocol;
 
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
-
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.microedition.util.ContextHolder;
+import javax.microedition.media.Control;
+import javax.microedition.media.Controllable;
 
-public class DataSource {
-	protected String locator;
-	protected File file;
+public abstract class DataSource implements Controllable {
 
-	protected FileInputStream stream;
-	protected AssetFileDescriptor asset;
-	protected FileDescriptor descriptor;
-	protected long offset;
-	protected long length;
+	private String sourceLocator;
 
 	public DataSource(String locator) {
-		this.locator = locator;
+		sourceLocator = locator;
 	}
 
-	public DataSource(File file) {
-		this.file = file;
+	public String getLocator() {
+		return sourceLocator;
 	}
 
-	public void open() throws IOException {
-		if (descriptor == null) {
-			if (locator != null && !locator.contains("://")) {
-				if (locator.startsWith("/")) {
-					locator = locator.substring(1);
-				}
+	public abstract String getContentType();
 
-				asset = ContextHolder.getContext().getAssets().openFd(locator);
+	public abstract void connect() throws IOException;
 
-				descriptor = asset.getFileDescriptor();
+	public abstract void disconnect();
 
-				offset = asset.getStartOffset();
-				length = asset.getLength();
-			} else if (file != null) {
-				stream = new FileInputStream(file);
+	public abstract void start() throws IOException;
 
-				descriptor = stream.getFD();
+	public abstract void stop() throws IOException;
 
-				offset = 0;
-				length = file.length();
-			}
-		}
-	}
+	public abstract SourceStream[] getStreams();
 
-	public void close() {
-		if (stream != null) {
-			try {
-				stream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	@Override
+	public abstract Control[] getControls();
 
-			stream = null;
-		}
+	@Override
+	public abstract Control getControl(String control);
 
-		if (asset != null) {
-			try {
-				asset.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			asset = null;
-		}
-
-		descriptor = null;
-	}
-
-	public String getURL() {
-		if (locator != null) {
-			return locator;
-		} else {
-			return "file://" + file.getAbsolutePath();
-		}
-	}
-
-	public void setFor(MediaPlayer player) throws IOException {
-		open();
-
-		if (descriptor != null) {
-			player.setDataSource(descriptor, offset, length);
-		} else {
-			player.setDataSource(locator);
-		}
-	}
-
-	public void setFor(MediaMetadataRetriever retriever) throws IOException {
-		open();
-
-		if (descriptor != null) {
-			retriever.setDataSource(descriptor, 0, length);
-		} else {
-			retriever.setDataSource(locator);
-		}
-	}
 }

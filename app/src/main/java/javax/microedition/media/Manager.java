@@ -17,144 +17,25 @@
 
 package javax.microedition.media;
 
-import android.util.Log;
-import android.webkit.MimeTypeMap;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 
 import javax.microedition.media.protocol.DataSource;
-import javax.microedition.util.ContextHolder;
 
 public class Manager {
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
-	private static final String TAG = Manager.class.getName();
-
-	private static class StreamCacheCleaner implements PlayerListener {
-		@Override
-		public void playerUpdate(Player player, String event, Object eventData) {
-			if (PlayerListener.CLOSED.equals(event) && eventData instanceof String) {
-				event = (String) eventData;
-				int index = event.lastIndexOf('/');
-
-				if (index >= 0) {
-					event = event.substring(index + 1);
-				}
-
-				File file = new File(ContextHolder.getCacheDir(), event);
-
-				if (file.delete()) {
-					Log.d(TAG, "Temp file deleted: " + event);
-				}
-			}
-		}
-	}
-
-	private static StreamCacheCleaner cleaner = new StreamCacheCleaner();
-
 	public static Player createPlayer(String locator) throws IOException {
-		return new MicroPlayer(new DataSource(locator));
+		return new MicroPlayer();
 	}
 
 	public static Player createPlayer(DataSource source) throws IOException {
-		return new MicroPlayer(source);
+		return new MicroPlayer();
 	}
 
 	public static Player createPlayer(final InputStream stream, String type) throws IOException {
-		if (type != null) {
-			type = MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
-
-			if (type != null) {
-				type = "." + type;
-			}
-		}
-
-		File file = File.createTempFile("media", type, ContextHolder.getCacheDir());
-		final RandomAccessFile raf = new RandomAccessFile(file, "rw");
-
-		final String name = file.getName();
-		Log.d(TAG, "Starting media pipe: " + name);
-
-		int length = stream.available();
-
-		if (length >= 0) {
-			raf.setLength(length);
-			Log.d(TAG, "Changing file size to " + length + " bytes: " + name);
-		}
-
-		final Object sync = new Object();
-
-		Runnable runnable = () -> {
-			byte[] buf = new byte[0x10000];
-			int read;
-
-			try {
-				while (true) {
-					read = stream.read(buf);
-
-					if (read > 0) {
-						synchronized (sync) {
-							raf.write(buf, 0, read);
-						}
-					} else if (read < 0) {
-						break;
-					}
-				}
-
-				raf.close();
-
-				Log.d(TAG, "Media pipe closed: " + name);
-			} catch (IOException e) {
-				Log.d(TAG, "Media pipe failure: " + e.toString());
-			}
-		};
-
-		Thread thread = new Thread(runnable);
-		thread.start();
-
-		try {
-			MicroPlayer player = new MicroPlayer();
-			player.addPlayerListener(cleaner);
-
-			DataSource source = new DataSource(file);
-
-			try {
-				player.setDataSource(source);
-			} catch (IOException e) {
-				source.close();
-
-				if (thread.isAlive()) {
-					Log.d(TAG, "Waiting for pipe to close: " + name);
-					try {
-						thread.join();
-					} catch (InterruptedException ie) {
-						ie.printStackTrace();
-					}
-
-					player.setDataSource(source);
-				} else {
-					throw e;
-				}
-			}
-
-			return player;
-		} catch (IOException e) {
-			try {
-				synchronized (sync) {
-					raf.close();
-				}
-			} catch (IOException x) {
-				Log.d(TAG, "File is not closing: " + name);
-			}
-
-			cleaner.playerUpdate(null, PlayerListener.CLOSED, name);
-
-			throw e;
-		}
+		return new MicroPlayer(new InternalDataSource(stream, type));
 	}
 
 	public static String[] getSupportedContentTypes(String str) {

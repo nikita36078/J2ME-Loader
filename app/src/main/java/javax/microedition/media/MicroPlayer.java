@@ -32,8 +32,8 @@ import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
 
-public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
-		MediaPlayer.OnErrorListener, VolumeControl, PanControl {
+public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
+		VolumeControl, PanControl {
 	protected DataSource source;
 	protected int state;
 	private MediaPlayer player;
@@ -53,10 +53,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 	public MicroPlayer(DataSource datasource) {
 		player = new MediaPlayer();
-
-		player.setOnPreparedListener(this);
 		player.setOnCompletionListener(this);
-		player.setOnErrorListener(this);
 
 		source = datasource;
 		state = UNREALIZED;
@@ -86,14 +83,10 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		deallocate();
 
 		if (source != null) {
-			source.close();
+			source.disconnect();
 		}
 
 		source = datasource;
-	}
-
-	public MediaPlayer getMediaPlayer() {
-		return player;
 	}
 
 	@Override
@@ -123,13 +116,8 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 	public void postEvent(String event) {
 		for (PlayerListener listener : listeners) {
-			listener.playerUpdate(this, event, source.getURL());
+			listener.playerUpdate(this, event, source.getLocator());
 		}
-	}
-
-	@Override
-	public void onPrepared(MediaPlayer mp) {
-		// state = PREFETCHED;
 	}
 
 	@Override
@@ -149,11 +137,6 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 	}
 
 	@Override
-	public boolean onError(MediaPlayer mp, int what, int extra) {
-		return true;
-	}
-
-	@Override
 	public void realize() throws MediaException {
 		checkClosed();
 
@@ -163,18 +146,8 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 		if (state == UNREALIZED) {
 			try {
-				MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-				source.setFor(retriever);
-
-				metadata.updateMetaData(retriever);
-
-				retriever.release();
-			} catch (Throwable e) {
-				source.close();
-			}
-
-			try {
-				source.setFor(player);
+				source.connect();
+				player.setDataSource(source.getLocator());
 			} catch (IOException e) {
 				throw new MediaException(e);
 			}
@@ -194,6 +167,12 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 		if (state == REALIZED) {
 			try {
 				player.prepare();
+
+				MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+				retriever.setDataSource(source.getLocator());
+				metadata.updateMetaData(retriever);
+				retriever.release();
+
 				state = PREFETCHED;
 			} catch (IOException e) {
 				throw new MediaException(e);
@@ -243,7 +222,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 			player.release();
 		}
 
-		source.close();
+		source.disconnect();
 
 		state = CLOSED;
 		postEvent(PlayerListener.CLOSED);
@@ -314,7 +293,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnPreparedListener, Medi
 
 	@Override
 	public String getContentType() {
-		return "";
+		return source.getContentType();
 	}
 
 	// VolumeControl
