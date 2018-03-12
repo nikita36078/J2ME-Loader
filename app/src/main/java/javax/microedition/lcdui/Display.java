@@ -112,6 +112,8 @@ public class Display {
 			context.startApp();
 		} catch (MIDletStateChangeException e) {
 			e.printStackTrace();
+		} catch (IllegalThreadStateException e) {
+			e.printStackTrace();
 		}
 		showCurrent();
 	}
