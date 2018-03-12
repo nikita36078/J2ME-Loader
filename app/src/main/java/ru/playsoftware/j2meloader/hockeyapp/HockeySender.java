@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HockeySender implements ReportSender {
+	private static final String TAG = HockeySender.class.getName();
 	private static String BASE_URL = "https://rink.hockeyapp.net/api/2/apps/";
 	private static String FORM_KEY = "89da3b5b92414df1833110eba7d26332";
 	private static String CRASHES_PATH = "/crashes";
@@ -45,7 +46,7 @@ public class HockeySender implements ReportSender {
 
 		RequestQueue queue = Volley.newRequestQueue(context);
 		StringRequest postRequest = new StringRequest(Request.Method.POST, url, null,
-				error -> Log.e("Error.Response", error.getMessage())
+				error -> Log.e(TAG, "Response error")
 		) {
 			@Override
 			protected Map<String, String> getParams() {
