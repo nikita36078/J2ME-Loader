@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,82 +16,130 @@
 
 package javax.microedition.lcdui.game;
 
-import java.util.Vector;
-
 import javax.microedition.lcdui.Graphics;
 
 public class LayerManager {
-	private Vector<Layer> layers;
-	private int x, y, width, height;
+	private int nlayers;
+	private Layer component[] = new Layer[4];
+	private int viewX, viewY, viewWidth, viewHeight;
 
 	public LayerManager() {
-		layers = new Vector<>();
-		x = y = 0;
-		width = height = Integer.MAX_VALUE;
+		setViewWindow(0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 
-	public void append(Layer layer) {
-		synchronized (this) {
-			if (layer == null)
-				throw new NullPointerException();
-			layers.add(layer);
+	public void append(Layer l) {
+		// remove the Layer if it is already present
+		// will throw NullPointerException if the Layer is null
+		removeImpl(l);
+		addImpl(l, nlayers);
+	}
+
+	public void insert(Layer l, int index) {
+		if ((index < 0) || (index > nlayers) || (exist(l) && (index >= nlayers))) {
+			throw new IndexOutOfBoundsException();
 		}
+		removeImpl(l);
+		addImpl(l, index);
 	}
 
-	public void insert(Layer layer, int i) {
-		synchronized (this) {
-			if (layer == null)
-				throw new NullPointerException();
-			layers.insertElementAt(layer, i);
+	public Layer getLayerAt(int index) {
+		if ((index < 0) || (index >= nlayers)) {
+			throw new IndexOutOfBoundsException();
 		}
-	}
-
-	public Layer getLayerAt(int i) {
-		return layers.get(i);
+		return component[index];
 	}
 
 	public int getSize() {
-		return layers.size();
+		return nlayers;
+	}
+
+	public void remove(Layer l) {
+		removeImpl(l);
 	}
 
 	public void paint(Graphics g, int x, int y) {
-		synchronized (this) {
-			if (g == null)
-				throw new NullPointerException();
-			int clipX = g.getClipX();
-			int clipY = g.getClipY();
-			int clipW = g.getClipWidth();
-			int clipH = g.getClipHeight();
-			g.translate(x - this.x, y - this.y);
-			g.clipRect(this.x, this.y, width, height);
-			for (int i = getSize(); --i >= 0; ) {
-				Layer comp = getLayerAt(i);
-				if (comp.isVisible()) {
-					comp.paint(g);
-				}
-			}
-			g.translate(-x + this.x, -y + this.y);
-			g.setClip(clipX, clipY, clipW, clipH);
-		}
-	}
+		// if g == null g.getClipX will throw NullPointerException;
 
-	public void remove(Layer layer) {
-		synchronized (this) {
-			if (layer == null)
-				throw new NullPointerException();
-			layers.remove(layer);
+		// save the original clip
+		int clipX = g.getClipX();
+		int clipY = g.getClipY();
+		int clipW = g.getClipWidth();
+		int clipH = g.getClipHeight();
+
+		// translate the LayerManager co-ordinates to Screen co-ordinates
+		g.translate(x - viewX, y - viewY);
+		// set the clip to view window
+		g.clipRect(viewX, viewY, viewWidth, viewHeight);
+
+		// draw last to first
+		for (int i = nlayers; --i >= 0; ) {
+			Layer comp = component[i];
+			if (comp.visible) {
+				comp.paint(g);
+			}
 		}
+
+		g.translate(-x + viewX, -y + viewY);
+		g.setClip(clipX, clipY, clipW, clipH);
 	}
 
 	public void setViewWindow(int x, int y, int width, int height) {
-		synchronized (this) {
-			if (width < 0 || height < 0)
-				throw new IllegalArgumentException();
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException();
 		}
+
+		viewX = x;
+		viewY = y;
+		viewWidth = width;
+		viewHeight = height;
+	}
+
+	private void addImpl(Layer layer, int index) {
+		if (nlayers == component.length) {
+			Layer newcomponents[] = new Layer[nlayers + 4];
+			System.arraycopy(component, 0, newcomponents, 0, nlayers);
+			System.arraycopy(component, index, newcomponents,
+					index + 1, nlayers - index);
+			component = newcomponents;
+		} else {
+			System.arraycopy(component, index, component,
+					index + 1, nlayers - index);
+		}
+
+		component[index] = layer;
+		nlayers++;
+	}
+
+	private void removeImpl(Layer l) {
+		if (l == null) {
+			throw new NullPointerException();
+		}
+
+		for (int i = nlayers; --i >= 0; ) {
+			if (component[i] == l) {
+				remove(i);
+			}
+		}
+	}
+
+	private boolean exist(Layer l) {
+		if (l == null) {
+			return false;
+		}
+
+		for (int i = nlayers; --i >= 0; ) {
+			if (component[i] == l) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void remove(int index) {
+		System.arraycopy(component, index + 1,
+				component, index,
+				nlayers - index - 1);
+		component[--nlayers] = null;
 	}
 
 }
