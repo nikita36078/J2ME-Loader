@@ -16,6 +16,13 @@
 
 package com.nokia.mid.sound;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import javax.microedition.media.Manager;
+import javax.microedition.media.MediaException;
+import javax.microedition.media.Player;
+
 public class Sound {
 	public static final int FORMAT_TONE = 1;
 	public static final int FORMAT_WAV = 5;
@@ -23,7 +30,12 @@ public class Sound {
 	public static final int SOUND_STOPPED = 1;
 	public static final int SOUND_UNINITIALIZED = 3;
 
+	private Player player;
+	private int state;
+	private SoundListener soundListener;
+
 	public Sound(int freq, long duration) {
+		init(freq, duration);
 	}
 
 	public Sound(byte[] data, int type) {
@@ -31,42 +43,82 @@ public class Sound {
 	}
 
 	public static int getConcurrentSoundCount(int type) {
-		return 0;
+		return 1;
 	}
 
 	public static int[] getSupportedFormats() {
-		return new int[0];
+		return new int[]{FORMAT_TONE, FORMAT_WAV};
 	}
 
 	public int getGain() {
-		return 0;
+		return -1;
 	}
 
 	public int getState() {
-		return SOUND_UNINITIALIZED;
+		return state;
 	}
 
 	public void init(int freq, long duration) {
+		try {
+			player = Manager.createPlayer(null, null);
+			postEvent(SOUND_UNINITIALIZED);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void init(byte[] data, int type) {
+		try {
+			player = Manager.createPlayer(new ByteArrayInputStream(data), "audio/midi");
+			postEvent(SOUND_UNINITIALIZED);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void play(int loop) {
+		try {
+			player.start();
+			postEvent(SOUND_PLAYING);
+		} catch (MediaException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void release() {
+		player.close();
+		postEvent(SOUND_UNINITIALIZED);
 	}
 
 	public void resume() {
+		try {
+			player.start();
+			postEvent(SOUND_PLAYING);
+		} catch (MediaException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setGain(int i) {
 	}
 
 	public void setSoundListener(SoundListener soundListener) {
+		this.soundListener = soundListener;
 	}
 
 	public void stop() {
+		try {
+			player.stop();
+			postEvent(SOUND_STOPPED);
+		} catch (MediaException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void postEvent(int state) {
+		this.state = state;
+		if (soundListener != null) {
+			soundListener.soundStateChanged(this, state);
+		}
 	}
 }
