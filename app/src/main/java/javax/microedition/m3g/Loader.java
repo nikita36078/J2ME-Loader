@@ -820,13 +820,9 @@ public class Loader {
 			return getHttpInputStream(name);
 		}
 
-		if (name.charAt(0) == '/')   // absolute file reference
+		if (name.charAt(0) == '/' || iParentResourceName == null)   // absolute file reference
 		{
 			return (ContextHolder.getResourceAsStream(null, name));
-		}
-
-		if (iParentResourceName == null) {
-			throw new IOException("Relative URI.");
 		}
 
 		String uri = iParentResourceName.substring(0, iParentResourceName.lastIndexOf('/') + 1) + name;
