@@ -19,6 +19,7 @@ package javax.microedition.media;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.microedition.media.protocol.DataSource;
 
@@ -27,19 +28,24 @@ public class Manager {
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
 	public static Player createPlayer(String locator) throws IOException {
-		return new MicroPlayer();
+		return new NullPlayer();
 	}
 
 	public static Player createPlayer(DataSource source) throws IOException {
-		return new MicroPlayer();
+		return new NullPlayer();
 	}
 
 	public static Player createPlayer(final InputStream stream, String type) throws IOException {
-		return new MicroPlayer(new InternalDataSource(stream, type));
+		String[] supportedTypes = getSupportedContentTypes(null);
+		if (Arrays.asList(supportedTypes).contains(type)) {
+			return new MicroPlayer(new InternalDataSource(stream, type));
+		} else {
+			return new NullPlayer();
+		}
 	}
 
 	public static String[] getSupportedContentTypes(String str) {
-		return new String[]{"audio/*", "video/*", "audio/wav", "audio/x-tone-seq", "audio/x-wav", "audio/midi", "audio/x-midi", "audio/mpeg", "audio/amr", "audio/amr-wb", "audio/mp3", "audio/mp4", "video/mpeg", "video/mp4", "video/mpeg4", "video/3gpp"};
+		return new String[]{"audio/wav", "audio/x-wav", "audio/midi", "audio/x-midi", "audio/mpeg", "audio/amr", "audio/amr-wb", "audio/mp3", "audio/mp4", "video/mpeg", "video/mp4", "video/mpeg4", "video/3gpp"};
 	}
 
 	public static String[] getSupportedProtocols(String str) {
