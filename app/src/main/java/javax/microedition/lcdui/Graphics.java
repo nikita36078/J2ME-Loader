@@ -408,6 +408,7 @@ public class Graphics {
 	}
 
 	public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
+		if (width == 0 || height == 0) return;
 		// MIDP allows almost any value of scanlength, drawBitmap is more strict with the stride
 		if (scanlength < width) {
 			scanlength = width;
