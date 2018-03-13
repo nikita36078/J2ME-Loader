@@ -260,6 +260,12 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
 
+		if (count == -1) {
+			player.setLooping(true);
+		} else {
+			player.setLooping(false);
+		}
+
 		loopCount = count;
 	}
 
