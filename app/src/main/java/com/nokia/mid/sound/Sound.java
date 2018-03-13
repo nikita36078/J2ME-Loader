@@ -78,6 +78,10 @@ public class Sound {
 
 	public void play(int loop) {
 		try {
+			if (loop == 0) {
+				loop = -1;
+			}
+			player.setLoopCount(loop);
 			player.start();
 			postEvent(SOUND_PLAYING);
 		} catch (MediaException e) {
