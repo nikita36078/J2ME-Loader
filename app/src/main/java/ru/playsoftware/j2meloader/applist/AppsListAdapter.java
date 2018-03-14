@@ -1,6 +1,6 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,12 +75,16 @@ public class AppsListAdapter extends BaseAdapter {
 		}
 		AppItem item = list.get(position);
 
-		holder.icon.setImageDrawable(new BitmapDrawable(context.getResources(), item.getImagePath()));
+		holder.icon.setImageDrawable(new BitmapDrawable(context.getResources(), item.getImagePathExt()));
 		holder.name.setText(item.getTitle());
-		holder.author.setText(item.getAuthor());
-		holder.version.setText(item.getVersion());
+		holder.author.setText(item.getAuthorExt(context));
+		holder.version.setText(item.getVersionExt(context));
 
 		return view;
+	}
+
+	public void setItems(List<AppItem> items) {
+		list = items;
 	}
 
 	private static class ViewHolder {

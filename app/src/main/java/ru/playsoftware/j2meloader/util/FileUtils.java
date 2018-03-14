@@ -20,6 +20,7 @@ package ru.playsoftware.j2meloader.util;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,9 +33,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.microedition.shell.ConfigActivity;
+
+import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.applist.AppItem;
 
 public class FileUtils {
 
@@ -132,5 +139,42 @@ public class FileUtils {
 			}
 		}
 		return file.getPath();
+	}
+
+	public static ArrayList<AppItem> getAppsList(Context context) {
+		ArrayList<AppItem> apps = new ArrayList<>();
+		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
+		if (appFolders != null) {
+			for (String appFolder : appFolders) {
+				File temp = new File(ConfigActivity.APP_DIR, appFolder);
+				try {
+					if (temp.isDirectory() && temp.list().length > 0) {
+						AppItem item = getApp(temp);
+						apps.add(item);
+					} else {
+						temp.delete();
+					}
+				} catch (RuntimeException re) {
+					re.printStackTrace();
+					FileUtils.deleteDirectory(temp);
+					Toast.makeText(context, R.string.error, Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
+		return apps;
+	}
+
+	public static AppItem getApp(File file) {
+		LinkedHashMap<String, String> params = FileUtils
+				.loadManifest(new File(file.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
+		String imagePath = params.get("MIDlet-Icon");
+		if (imagePath == null) {
+			imagePath = params.get("MIDlet-1").split(",")[1];
+		}
+		AppItem item = new AppItem(file.getName(), params.get("MIDlet-Name"),
+				params.get("MIDlet-Vendor"),
+				params.get("MIDlet-Version"));
+		item.setImagePathExt(imagePath);
+		return item;
 	}
 }

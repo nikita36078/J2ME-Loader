@@ -18,6 +18,7 @@
 package ru.playsoftware.j2meloader;
 
 import android.Manifest;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -41,45 +42,32 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.microedition.shell.ConfigActivity;
 
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppsListAdapter;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
+import ru.playsoftware.j2meloader.appsdb.AppDatabase;
+import ru.playsoftware.j2meloader.appsdb.AppItemDao;
 import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
 import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
-import ru.playsoftware.j2meloader.filelist.AlphabeticComparator;
 import ru.playsoftware.j2meloader.filelist.NavigationDrawerFragment;
-import ru.playsoftware.j2meloader.filelist.SortItem;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.SelectedCallback {
 
-	public static final String APP_LIST_KEY = "apps";
-	/**
-	 * Fragment managing the behaviors, interactions and presentation of the
-	 * navigation drawer.
-	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
-
-	/**
-	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
-	 */
 	private CharSequence mTitle;
 
+	private AppItemDao appItemDao;
 	private AppsListFragment appsListFragment;
-	private ArrayList<AppItem> apps = new ArrayList<>();
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
-	private static final Comparator<SortItem> comparator = new AlphabeticComparator<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,20 +102,27 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateAppsList();
+	}
+
 	private void setupActivity() {
 		initFolders();
+		initDb();
 		checkActionBar();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout));
 		appsListFragment = new AppsListFragment();
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(APP_LIST_KEY, apps);
-		appsListFragment.setArguments(bundle);
+		ArrayList<AppItem> apps = new ArrayList<>();
+		AppsListAdapter adapter = new AppsListAdapter(this, apps);
+		appsListFragment.setListAdapter(adapter);
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
-		updateApps();
+		updateAppsList();
 	}
 
 	@Override
@@ -149,6 +144,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);
+	}
+
+	private void initDb() {
+		AppDatabase db = Room.databaseBuilder(this,
+				AppDatabase.class, "apps-database.db").allowMainThreadQueries().build();
+		appItemDao = db.appItemDao();
+		if (appItemDao.getSize() == 0) {
+			appItemDao.insertAll(FileUtils.getAppsList(this));
+		}
 	}
 
 	private void initFolders() {
@@ -176,9 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (mNavigationDrawerFragment != null && !mNavigationDrawerFragment.isDrawerOpen()) {
-			// Only show items in the action bar relevant to this screen
-			// if the drawer is not showing. Otherwise, let the drawer
-			// decide what to show in the action bar.
 			restoreActionBar();
 		}
 		MenuInflater inflater = getMenuInflater();
@@ -218,45 +219,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		converter.execute(path, ConfigActivity.APP_DIR);
 	}
 
-	public void updateApps() {
-		apps.clear();
-		AppItem item;
-		String author = getString(R.string.author);
-		String version = getString(R.string.version);
-		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
-		if (appFolders != null) {
-			for (String appFolder : appFolders) {
-				File temp = new File(ConfigActivity.APP_DIR, appFolder);
-				try {
-					if (temp.isDirectory() && temp.list().length > 0) {
-						LinkedHashMap<String, String> params = FileUtils
-								.loadManifest(new File(temp.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
-						String imagePath = params.get("MIDlet-Icon");
-						if (imagePath == null) {
-							imagePath = params.get("MIDlet-1").split(",")[1];
-						}
-						item = new AppItem(imagePath,
-								params.get("MIDlet-Name"),
-								author + params.get("MIDlet-Vendor"),
-								version + params.get("MIDlet-Version"));
-						item.setPath(ConfigActivity.APP_DIR + appFolder);
-						apps.add(item);
-					} else {
-						temp.delete();
-					}
-				} catch (RuntimeException re) {
-					re.printStackTrace();
-					FileUtils.deleteDirectory(temp);
-					Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-				}
-			}
-		}
-		String appSort = sp.getString("pref_app_sort", "name");
-		if (appSort.equals("name")) {
-			Collections.sort(apps, comparator);
-		}
-		AppsListAdapter adapter = new AppsListAdapter(this, apps);
-		appsListFragment.setListAdapter(adapter);
+	public void addApp(AppItem item) {
+		appItemDao.insert(item);
+		updateAppsList();
 	}
 
+	public void deleteApp(AppItem item) {
+		appItemDao.delete(item);
+		updateAppsList();
+	}
+
+	private void updateAppsList() {
+		String appSort = sp.getString("pref_app_sort", "name");
+		List<AppItem> apps;
+		if (appSort.equals("name")) {
+			apps = appItemDao.getAllByName();
+		} else {
+			apps = appItemDao.getAllByDate();
+		}
+		AppsListAdapter adapter = (AppsListAdapter) appsListFragment.getListAdapter();
+		adapter.setItems(apps);
+		adapter.notifyDataSetChanged();
+	}
 }

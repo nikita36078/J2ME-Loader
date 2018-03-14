@@ -17,41 +17,46 @@
 
 package ru.playsoftware.j2meloader.applist;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+
 import java.io.Serializable;
 
 import javax.microedition.shell.ConfigActivity;
 
-import ru.playsoftware.j2meloader.filelist.SortItem;
+import ru.playsoftware.j2meloader.R;
 
-public class AppItem implements Serializable, SortItem {
-
+@Entity(tableName = "apps", indices = {@Index(value = {"path"}, unique = true)})
+public class AppItem implements Serializable {
+	@PrimaryKey(autoGenerate = true)
+	private int id;
 	private String imagePath;
 	private String title;
 	private String author;
 	private String version;
+	@ColumnInfo(name = "path")
 	private String path;
 
-	public AppItem(String imagePath_, String title_, String author_, String version_) {
-		imagePath = imagePath_;
-		title = title_;
-		author = author_;
-		version = version_;
+	public AppItem(String path, String title, String author, String version) {
+		this.path = path;
+		this.title = title;
+		this.author = author;
+		this.version = version;
 	}
 
-	public void setPath(String p) {
-		path = p;
-		if (!imagePath.contains("/")) {
-			imagePath = "/" + imagePath;
-		}
-		imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getPath() {
 		return path;
-	}
-
-	public void setTitle(String title_) {
-		title = title_;
 	}
 
 	public String getTitle() {
@@ -62,6 +67,10 @@ public class AppItem implements Serializable, SortItem {
 		return imagePath;
 	}
 
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
 	public String getAuthor() {
 		return author;
 	}
@@ -70,9 +79,27 @@ public class AppItem implements Serializable, SortItem {
 		return version;
 	}
 
-	@Override
-	public String getSortField() {
-		return title;
+	public String getPathExt() {
+		return ConfigActivity.APP_DIR + path;
+	}
+
+	public String getImagePathExt() {
+		return ConfigActivity.APP_DIR + imagePath;
+	}
+
+	public String getAuthorExt(Context context) {
+		return context.getString(R.string.author) + author;
+	}
+
+	public String getVersionExt(Context context) {
+		return context.getString(R.string.version) + version;
+	}
+
+	public void setImagePathExt(String imagePath) {
+		if (!imagePath.contains("/")) {
+			imagePath = "/" + imagePath;
+		}
+		this.imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
 	}
 
 }

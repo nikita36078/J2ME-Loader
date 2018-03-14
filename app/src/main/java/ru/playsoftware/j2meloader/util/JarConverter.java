@@ -52,6 +52,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	private String appDir;
 	private final File dirTmp;
+	private File appConverted;
 
 	public JarConverter(MainActivity context) {
 		this.context = context;
@@ -104,7 +105,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		}
 		// Remove invalid characters from app path
 		appDir = appDir.replace(":", "").replace("/", "");
-		File appConverted = new File(pathConverted, appDir);
+		appConverted = new File(pathConverted, appDir);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
 		Log.d(TAG, "appConverted=" + appConverted.getPath());
@@ -153,7 +154,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		Toast toast;
 		if (result) {
 			toast = Toast.makeText(context, context.getResources().getString(R.string.convert_complete) + " " + appDir, Toast.LENGTH_LONG);
-			((MainActivity) context).updateApps();
+			((MainActivity) context).addApp(FileUtils.getApp(appConverted));
 		} else {
 			toast = Toast.makeText(context, err, Toast.LENGTH_LONG);
 		}
