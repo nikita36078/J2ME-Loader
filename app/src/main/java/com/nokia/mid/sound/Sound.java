@@ -81,6 +81,9 @@ public class Sound {
 			if (loop == 0) {
 				loop = -1;
 			}
+			if (player.getState() == Player.STARTED) {
+				player.stop();
+			}
 			player.setLoopCount(loop);
 			player.start();
 			postEvent(SOUND_PLAYING);
