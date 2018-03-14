@@ -93,6 +93,7 @@ public class InternalDataSource extends DataSource {
 			}
 			raf.close();
 			Log.d(TAG, "Media pipe closed: " + name);
+			stream.reset();
 		} catch (IOException e) {
 			Log.d(TAG, "Media pipe failure: " + e.toString());
 		}
