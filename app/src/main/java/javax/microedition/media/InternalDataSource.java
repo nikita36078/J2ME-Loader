@@ -100,8 +100,14 @@ public class InternalDataSource extends DataSource {
 
 	@Override
 	public void disconnect() {
-		mediaFile.delete();
-		Log.d(TAG, "Temp file deleted: " + mediaFile.getAbsolutePath());
+		try {
+			stream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (mediaFile.delete()) {
+			Log.d(TAG, "Temp file deleted: " + mediaFile.getAbsolutePath());
+		}
 	}
 
 	@Override
