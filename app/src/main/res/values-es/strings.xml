@@ -3,7 +3,11 @@
 <resources>
   <string name="exit">Salir</string>
   <string name="about">Acerca de</string>
+  <string name="help">Ayuda</string>
+  <string name="more">Más detalles</string>
+  <string name="licenses">Licencias</string>
   <string name="about_message">Esta aplicación te permite ejecutar aplicaciones y juegos J2ME en Android. Es compatible con la mayoría de juegos 2D y 3D con algunas limitaciones.&lt;BR&gt;</string>
+  <string name="help_message">&#8226; Habilitar el filtrado en algunos casos puede reducir enormemente el rendimiento. Desactive esta opción si el juego es demasiado lento.&lt;BR&gt;&#8226; Los problemas de parpadeo de la imagen se pueden solucionar activando la opción \"Modo de procesamiento inmediato\".</string>
   <string name="open_jar">Abrir jar</string>
   <string name="author">Autor: </string>
   <string name="version">Versión: </string>
@@ -13,11 +17,15 @@
   <string name="convert_complete">Completado</string>
   <string name="converting_message">Procesando...</string>
   <string name="permission_request_failed">Esta aplicación requiere permisos de escritura de almacenamiento</string>
+  <string name="external_storage_not_mounted">Esta aplicacion requiere almacenamiento externo</string>
   <string name="action_context_shortcut">Agregar acceso directo</string>
   <string name="action_settings">Configuración</string>
   <string name="action_context_delete">Eliminar</string>
+  <string name="donate">Donar</string>
   <string name="START_CMD">Iniciar</string>
   <string name="CANCEL_CMD">Cancelar</string>
+  <string name="CLEAR_DATA_CMD">Borrar datos</string>
+  <string name="RESET_SETTINGS_CMD">Reiniciar configuraciones</string>
   <string name="RESET_LAYOUT_CMD">Reiniciar disposición del teclado</string>
   <string name="PREF_SCREEN_OPTIONS">Opciones de pantalla</string>
   <string name="PREF_SCALE_RATIO">Escala (%)</string>
@@ -35,6 +43,8 @@
   <string name="PREF_BACKGROUND">Fondo</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
   <string name="PREF_VK_SHOW">Mostrar teclado</string>
+  <string name="PREF_VK_FEEDBACK">Vibracion del teclato tactil</string>
+  <string name="PREF_TOUCH_INPUT">Entrada tactil</string>
   <string name="PREF_VK_BACK">Botones</string>
   <string name="PREF_VK_FORE">Etiquetas</string>
   <string name="PREF_VK_OUTLINE">Contorno</string>
@@ -51,9 +61,11 @@
   <string name="PREF_VK_SIZE_HINT">Tamaño</string>
   <string name="SIZE_PRESETS">Plantillas</string>
   <string name="SWAP_SIZES">Intercambiar tamaños</string>
+  <string name="PREF_SYS_PROPS">Propiedades del sistema</string>
   <string name="error">Error</string>
-  <string name="FORCE_CLOSE_CONFIRMATION">Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla por completo.\nProceder?</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">¿Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla por completo.\nProceder?</string>
   <string name="CONFIRMATION_REQUIRED">Se requiere confirmación</string>
+  <string name="select_dialog_title">Seleccionar MIDlet</string>
   <string name="crash_dialog_message">¿Desea enviar un informe de errores el desarrollador?</string>
   <string name="crash_dialog_title">Error detectado</string>
   <string name="report_crash">Enviar</string>
@@ -62,7 +74,17 @@
   <string name="layout_edit_mode">Modo de edición de disposición del teclado</string>
   <string name="layout_scale_mode">Modo de cambiar el tamaño de disposición del teclado</string>
   <string name="layout_switch">Cambiar disposición del teclado</string>
+  <string name="hide_buttons">Ocultar botones</string>
   <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
   <string name="pref_enable_actionbar_title">Permitir barra de acción</string>
   <string name="pref_enable_actionbar_summary">En aplicaciones de pantalla completa</string>
+  <string name="pref_app_sort_title">Orden de las aplicaciones</string>
+  <string-array name="pref_app_sort_entries">
+    <item>Nombre</item>
+    <item>Fecha</item>
+  </string-array>
+  <string name="pref_map_keys">Mapear teclas</string>
+  <string name="mapping_dialog_title">Presiona una tecla</string>
+  <string name="mapping_dialog_message" formatted="false">Mapeo actual: %1$s</string>
+  <string name="reset_mapping">Reiniciar</string>
 </resources>
