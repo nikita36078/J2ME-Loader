@@ -23,14 +23,12 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
-import java.io.Serializable;
-
 import javax.microedition.shell.ConfigActivity;
 
 import ru.playsoftware.j2meloader.R;
 
 @Entity(tableName = "apps", indices = {@Index(value = {"path"}, unique = true)})
-public class AppItem implements Serializable {
+public class AppItem {
 	@PrimaryKey(autoGenerate = true)
 	private int id;
 	private String imagePath;

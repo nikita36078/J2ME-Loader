@@ -102,15 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		updateAppsList();
-	}
-
 	private void setupActivity() {
 		initFolders();
-		initDb();
 		checkActionBar();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout));
@@ -122,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
+		initDb();
 		updateAppsList();
 	}
 
