@@ -813,7 +813,7 @@ static M3Gbool m3gValidateBackBuffer(RenderContext *ctx)
         
         bbuf->glSurface = m3gCreatePBufferSurface(
             M3G_RGBA8,
-            (M3Gbitmask)(M3G_COLOR_BUFFER_BIT|M3G_DEPTH_BUFFER_BIT|M3G_MULTISAMPLE_BUFFER_BIT),
+            (M3Gbitmask)(M3G_COLOR_BUFFER_BIT|M3G_DEPTH_BUFFER_BIT),
             w, h);
         
         bbuf->width = w;
@@ -1412,8 +1412,7 @@ static void m3gMakeGLCurrent(RenderContext *ctx)
                 ctx,
                 M3G_RGBA8,
                 (M3Gbitmask) M3G_COLOR_BUFFER_BIT |
-                             M3G_DEPTH_BUFFER_BIT |
-                             M3G_MULTISAMPLE_BUFFER_BIT,
+                             M3G_DEPTH_BUFFER_BIT,
                 (M3Gbitmask) EGL_PBUFFER_BIT,
                 ctx->backBuffer.glSurface);
             ctx->target.surface = ctx->backBuffer.glSurface;
