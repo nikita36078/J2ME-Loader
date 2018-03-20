@@ -112,7 +112,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_CONF_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_PATH_KEY = "path";
-	public static final String MIDLET_NAME_KEY = "name";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
@@ -123,8 +122,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ContextHolder.setCurrentActivity(this);
 		pathToMidletDir = getIntent().getDataString();
-		String appName = getIntent().getStringExtra(MIDLET_NAME_KEY);
-		appName = appName.replace(":", "").replace("/", "");
+		String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
 		keylayoutFile = new File(DATA_DIR + appName, "VirtualKeyboardLayout");
 		dataDir = new File(DATA_DIR + appName);
 

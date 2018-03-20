@@ -89,7 +89,6 @@ public class AppsListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = (AppItem) adapter.getItem(position);
 		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), ConfigActivity.class);
-		i.putExtra(ConfigActivity.MIDLET_NAME_KEY, item.getTitle());
 		startActivity(i);
 	}
 
@@ -109,7 +108,6 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder = new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 						.setIntent(launchIntent)
 						.setShortLabel(appItem.getTitle());
@@ -122,7 +120,6 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_context_settings:
 				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-				i.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 				startActivity(i);
 				break;
