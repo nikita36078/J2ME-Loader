@@ -104,14 +104,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		public void paint(Graphics g) {
 			if (label != null && visible) {
-				g.setColorAlpha(colors[selected ? BACKGROUND_SELECTED : BACKGROUND] | overlayAlpha);
+				g.setColor(colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				g.fillArc(rect, 0, 360);
 
-				g.setColorAlpha(colors[selected ? FOREGROUND_SELECTED : FOREGROUND] | overlayAlpha);
+				g.setColor(colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
 				g.setFont(font);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
-				g.setColorAlpha(colors[OUTLINE] | overlayAlpha);
+				g.setColor(colors[OUTLINE]);
 				g.drawArc(rect, 0, 360);
 			}
 		}
@@ -680,11 +680,22 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void paint(Graphics g) {
 		if (visible) {
-			Font prevFont = g.getFont();
-			for (VirtualKey aKeypad : keypad) {
-				aKeypad.paint(g);
+			if (obscuresVirtualScreen && overlayAlpha <= 250) {
+				if (offscreenChanged) {
+					offgraphics.clear(0);
+					for (VirtualKey aKeypad : keypad) {
+						aKeypad.paint(offgraphics);
+					}
+					offscreenChanged = false;
+				}
+				g.drawImage(offscreen, 0, 0, -1, -1, false, overlayAlpha);
+			} else {
+				Font prevFont = g.getFont();
+				for (VirtualKey aKeypad : keypad) {
+					aKeypad.paint(g);
+				}
+				g.setFont(prevFont);
 			}
-			g.setFont(prevFont);
 		}
 	}
 
@@ -951,7 +962,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public void setOverlayAlpha(int overlayAlpha) {
-		this.overlayAlpha = overlayAlpha << 24;
+		this.overlayAlpha = overlayAlpha;
 	}
 
 	public void setColor(int color, int value) {
