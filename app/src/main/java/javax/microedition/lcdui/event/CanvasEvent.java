@@ -111,22 +111,25 @@ public class CanvasEvent extends Event {
 			case KEY_PRESSED:
 				if (canvas instanceof GameCanvas) {
 					((GameCanvas) canvas).gameKeyPressed(keyCode);
+				} else {
+					canvas.keyPressed(keyCode);
 				}
-				canvas.keyPressed(keyCode);
 				return;
 
 			case KEY_REPEATED:
 				if (canvas instanceof GameCanvas) {
 					((GameCanvas) canvas).gameKeyRepeated(keyCode);
+				} else {
+					canvas.keyRepeated(keyCode);
 				}
-				canvas.keyRepeated(keyCode);
 				return;
 
 			case KEY_RELEASED:
 				if (canvas instanceof GameCanvas) {
 					((GameCanvas) canvas).gameKeyReleased(keyCode);
+				} else {
+					canvas.keyReleased(keyCode);
 				}
-				canvas.keyReleased(keyCode);
 				return;
 
 			case POINTER_PRESSED:

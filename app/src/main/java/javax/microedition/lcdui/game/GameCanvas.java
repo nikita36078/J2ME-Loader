@@ -26,6 +26,7 @@ public class GameCanvas extends Canvas {
 	private Graphics graphics;
 	private int key;
 	private int repeatedKey;
+	private boolean suppressCommands;
 	public static final int UP_PRESSED = 1 << Canvas.UP;
 	public static final int DOWN_PRESSED = 1 << Canvas.DOWN;
 	public static final int LEFT_PRESSED = 1 << Canvas.LEFT;
@@ -38,6 +39,7 @@ public class GameCanvas extends Canvas {
 
 	public GameCanvas(boolean suppressCommands) {
 		super();
+		this.suppressCommands = suppressCommands;
 		image = Image.createImage(width, height);
 		graphics = image.getGraphics();
 	}
@@ -70,14 +72,23 @@ public class GameCanvas extends Canvas {
 	}
 
 	public void gameKeyPressed(int keyCode) {
+		if (!suppressCommands || getGameAction(keyCode) == 0) {
+			keyPressed(keyCode);
+		}
 		key |= convertGameKeyCode(keyCode);
 	}
 
 	public void gameKeyReleased(int keyCode) {
+		if (!suppressCommands || getGameAction(keyCode) == 0) {
+			keyReleased(keyCode);
+		}
 		repeatedKey &= ~convertGameKeyCode(keyCode);
 	}
 
 	public void gameKeyRepeated(int keyCode) {
+		if (!suppressCommands || getGameAction(keyCode) == 0) {
+			keyRepeated(keyCode);
+		}
 		repeatedKey |= convertGameKeyCode(keyCode);
 	}
 
