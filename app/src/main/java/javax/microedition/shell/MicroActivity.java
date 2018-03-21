@@ -19,6 +19,7 @@ package javax.microedition.shell;
 
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
@@ -30,7 +31,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -61,6 +62,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean visible;
 	private boolean loaded;
 	private boolean started;
+	private boolean actionBarEnabled;
 	private LinearLayout layout;
 	private Toolbar toolbar;
 	private String pathToMidletDir;
@@ -73,6 +75,8 @@ public class MicroActivity extends AppCompatActivity {
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 		pathToMidletDir = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
 		initEmulator();
 		try {
@@ -107,6 +111,14 @@ public class MicroActivity extends AppCompatActivity {
 		super.onStop();
 		if (loaded) {
 			Display.getDisplay(null).activityStopped();
+		}
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (hasFocus && current != null && current instanceof Canvas) {
+			hideSystemUI();
 		}
 	}
 
@@ -201,13 +213,10 @@ public class MicroActivity extends AppCompatActivity {
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
 			invalidateOptionsMenu();
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			boolean actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
-			Window window = getWindow();
 			ActionBar actionBar = getSupportActionBar();
 			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
 			if (current instanceof Canvas) {
-				window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				hideSystemUI();
 				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
@@ -215,7 +224,7 @@ public class MicroActivity extends AppCompatActivity {
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
-				window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				showSystemUI();
 				actionBar.show();
 				actionBar.setTitle(current.getTitle());
 				layoutParams.height = getToolBarHeight();
@@ -230,6 +239,28 @@ public class MicroActivity extends AppCompatActivity {
 		int toolBarHeight = ta.getDimensionPixelSize(0, -1);
 		ta.recycle();
 		return toolBarHeight;
+	}
+
+	private void hideSystemUI() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			getWindow().getDecorView().setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		} else {
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
+	}
+
+	private void showSystemUI() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
 	}
 
 	public void setCurrent(Displayable disp) {
