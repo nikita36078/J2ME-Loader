@@ -299,6 +299,7 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
+				openOptionsMenu();
 				return true;
 		}
 		return super.onKeyDown(keyCode, event);
