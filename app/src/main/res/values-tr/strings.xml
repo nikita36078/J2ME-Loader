@@ -4,6 +4,8 @@
   <string name="exit">Çıkış</string>
   <string name="about">Hakkında</string>
   <string name="help">Yardım</string>
+  <string name="more">Daha Fazla</string>
+  <string name="licenses">Lisanslar</string>
   <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
   <string name="open_jar">Jar aç</string>
@@ -11,7 +13,7 @@
   <string name="version">Sürüm: </string>
   <string name="no_data_for_display">Veri yok</string>
   <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
-  <string name="converting_wait">JAR dönüştürülüyor...</string>
+  <string name="converting_wait">JAR\'a dönüştürülüyor...</string>
   <string name="convert_complete">Tamamlandı</string>
   <string name="converting_message">İşleniyor...</string>
   <string name="permission_request_failed">Bu uygulama için depolama izni gerekiyor</string>
@@ -22,6 +24,8 @@
   <string name="donate">Bağış yap</string>
   <string name="START_CMD">Başlat</string>
   <string name="CANCEL_CMD">İptal</string>
+  <string name="CLEAR_DATA_CMD">Verileri temizle</string>
+  <string name="RESET_SETTINGS_CMD">Ayarları sıfırla</string>
   <string name="RESET_LAYOUT_CMD">Tuş düzenini sıfırla</string>
   <string name="PREF_SCREEN_OPTIONS">Ekran seçenekleri</string>
   <string name="PREF_SCALE_RATIO">Ölçekleme(%)</string>
@@ -39,6 +43,8 @@
   <string name="PREF_BACKGROUND">Arka plan</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Sanal klavye</string>
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
+  <string name="PREF_VK_FEEDBACK">Haptik Geribildirim</string>
+  <string name="PREF_TOUCH_INPUT">Dokunma girişi</string>
   <string name="PREF_VK_BACK">Tuşlar</string>
   <string name="PREF_VK_FORE">Metinler</string>
   <string name="PREF_VK_OUTLINE">Dış hatlar</string>
@@ -55,6 +61,7 @@
   <string name="PREF_VK_SIZE_HINT">Boyut</string>
   <string name="SIZE_PRESETS">Hazır ayarlar</string>
   <string name="SWAP_SIZES">Boyutları değiştir</string>
+  <string name="PREF_SYS_PROPS">Sistem özellikleri</string>
   <string name="error">Hata</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
   <string name="CONFIRMATION_REQUIRED">Onaylama gerekli</string>
@@ -76,4 +83,8 @@
     <item>Ada göre</item>
     <item>Tarihe göre</item>
   </string-array>
+  <string name="pref_map_keys">Tuş düzenlemesi</string>
+  <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
+  <string name="mapping_dialog_message" formatted="false">Şimdiki düzenleme: %1$s</string>
+  <string name="reset_mapping">Sıfırla</string>
 </resources>
