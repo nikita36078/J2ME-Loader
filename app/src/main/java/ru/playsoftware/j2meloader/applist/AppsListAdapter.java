@@ -75,7 +75,12 @@ public class AppsListAdapter extends BaseAdapter {
 		}
 		AppItem item = list.get(position);
 
-		holder.icon.setImageDrawable(new BitmapDrawable(context.getResources(), item.getImagePathExt()));
+		BitmapDrawable iconDrawable = new BitmapDrawable(context.getResources(), item.getImagePathExt());
+		if (iconDrawable.getBitmap() == null) {
+			holder.icon.setImageResource(R.mipmap.ic_launcher);
+		} else {
+			holder.icon.setImageDrawable(iconDrawable);
+		}
 		holder.name.setText(item.getTitle());
 		holder.author.setText(item.getAuthorExt(context));
 		holder.version.setText(item.getVersionExt(context));
