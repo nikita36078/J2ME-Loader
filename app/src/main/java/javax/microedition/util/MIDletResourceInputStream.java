@@ -47,6 +47,16 @@ public class MIDletResourceInputStream extends InputStream {
 	}
 
 	@Override
+	public int read(@NonNull byte[] b) throws IOException {
+		return fis.read(b);
+	}
+
+	@Override
+	public int read(@NonNull byte[] b, int off, int len) throws IOException {
+		return fis.read(b, off, len);
+	}
+
+	@Override
 	public long skip(long n) throws IOException {
 		int available = available();
 		if (n > available) {
