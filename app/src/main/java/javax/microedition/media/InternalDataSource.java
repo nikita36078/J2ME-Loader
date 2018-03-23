@@ -33,7 +33,6 @@ public class InternalDataSource extends DataSource {
 	private static final String TAG = InternalDataSource.class.getName();
 
 	private File mediaFile;
-	private InputStream stream;
 	private String type;
 
 	public InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
@@ -49,22 +48,8 @@ public class InternalDataSource extends DataSource {
 		}
 
 		this.mediaFile = File.createTempFile("media", type, ContextHolder.getCacheDir());
-		this.stream = stream;
 		this.type = type;
-	}
 
-	@Override
-	public String getLocator() {
-		return mediaFile.getAbsolutePath();
-	}
-
-	@Override
-	public String getContentType() {
-		return type;
-	}
-
-	@Override
-	public void connect() throws IOException {
 		final RandomAccessFile raf = new RandomAccessFile(mediaFile, "rw");
 
 		final String name = mediaFile.getName();
@@ -93,19 +78,29 @@ public class InternalDataSource extends DataSource {
 			}
 			raf.close();
 			Log.d(TAG, "Media pipe closed: " + name);
-			stream.reset();
 		} catch (IOException e) {
 			Log.d(TAG, "Media pipe failure: " + e.toString());
+		} finally {
+			stream.close();
 		}
 	}
 
 	@Override
+	public String getLocator() {
+		return mediaFile.getAbsolutePath();
+	}
+
+	@Override
+	public String getContentType() {
+		return type;
+	}
+
+	@Override
+	public void connect() throws IOException {
+	}
+
+	@Override
 	public void disconnect() {
-		try {
-			stream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		if (mediaFile.delete()) {
 			Log.d(TAG, "Temp file deleted: " + mediaFile.getAbsolutePath());
 		}
