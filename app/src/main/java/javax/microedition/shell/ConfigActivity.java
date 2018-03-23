@@ -118,7 +118,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.config_all);
+		setContentView(R.layout.activity_config);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ContextHolder.setCurrentActivity(this);
 		pathToMidletDir = getIntent().getDataString();
