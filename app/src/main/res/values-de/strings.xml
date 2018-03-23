@@ -4,8 +4,7 @@
   <string name="exit">Beenden</string>
   <string name="about">Infos</string>
   <string name="about_message">Diese App ermöglicht es Ihnen, J2Me Anwendungen und Spiele auf Android zu starten. Die meisten 2D-Spiele und, mit einigen Einschränkungen, auch 3D.&lt;BR&gt;</string>
-  <string name="open_jar">Jar öffnen</string>
-  <string name="author">Autor: </string>
+    <string name="author">Autor: </string>
   <string name="version">Version: </string>
   <string name="no_data_for_display">Keine Daten</string>
   <string name="message_delete">Möchten Sie diese App wirklich löschen?</string>

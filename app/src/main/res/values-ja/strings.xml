@@ -4,8 +4,7 @@
   <string name="exit">出口</string>
   <string name="about">約</string>
   <string name="about_message">このアプリではAndroidでJ2MEのアプリやゲームを起動できます。 これはほとんどの2Dゲームといくつかの制限付き3Dをサポートしています。&lt;BR&gt;</string>
-  <string name="open_jar">オープンジャー</string>
-  <string name="author">著者 </string>
+    <string name="author">著者 </string>
   <string name="version">バージョン </string>
   <string name="no_data_for_display">データなし</string>
   <string name="message_delete">本当にこのアプリを削除しますか？</string>

@@ -4,8 +4,7 @@
   <string name="exit">退出</string>
   <string name="about">關於</string>
   <string name="about_message">这个应用程序允许您在Android上启动J2ME应用程序和游戏。 它支持大多数2D游戏，3D也有一些限制。＆lt; BR＆gt;</string>
-  <string name="open_jar">打開罐子</string>
-  <string name="author">作者: </string>
+    <string name="author">作者: </string>
   <string name="version">版本： </string>
   <string name="no_data_for_display">無資料</string>
   <string name="message_delete">你真的想删除这个应用程序？</string>

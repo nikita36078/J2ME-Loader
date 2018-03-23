@@ -17,41 +17,48 @@
 
 package ru.playsoftware.j2meloader.applist;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.filepicker.Utils;
+
 import java.io.File;
+import java.util.List;
 
 import javax.microedition.shell.ConfigActivity;
 
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
+import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class AppsListFragment extends ListFragment {
 
 	private AppsListAdapter adapter;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
+	private static final int FILE_CODE = 0;
 
 	@Override
 	public void setListAdapter(ListAdapter adapter) {
@@ -60,10 +67,36 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_appslist, container, false);
+	}
+
+	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		setEmptyText(getText(R.string.no_data_for_display));
 		registerForContextMenu(getListView());
+		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+		fab.setOnClickListener(v -> {
+			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
+			i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+			i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, true);
+			i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+			i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+			i.putExtra(FilePickerActivity.EXTRA_START_PATH, FilteredFilePickerFragment.getLastPath());
+			startActivityForResult(i, FILE_CODE);
+		});
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
+			List<Uri> files = Utils.getSelectedFilesFromResult(data);
+			for (Uri uri : files) {
+				File file = Utils.getFileForUri(uri);
+				JarConverter converter = new JarConverter((MainActivity) getActivity());
+				converter.execute(file.getAbsolutePath(), ConfigActivity.APP_DIR);
+			}
+		}
 	}
 
 	private void showDeleteDialog(final int id) {

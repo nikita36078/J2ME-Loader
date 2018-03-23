@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,15 +53,11 @@ import ru.playsoftware.j2meloader.appsdb.AppItemDao;
 import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
 import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
-import ru.playsoftware.j2meloader.filelist.NavigationDrawerFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
 
-public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.SelectedCallback {
-
-	private NavigationDrawerFragment mNavigationDrawerFragment;
-	private CharSequence mTitle;
+public class MainActivity extends AppCompatActivity {
 
 	private AppItemDao appItemDao;
 	private AppsListFragment appsListFragment;
@@ -73,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-		mTitle = getTitle();
 		Uri uri = getIntent().getData();
 		if (!isTaskRoot() && uri == null) {
 			finish();
@@ -105,13 +98,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 	private void setupActivity() {
 		initFolders();
 		checkActionBar();
-		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, findViewById(R.id.drawer_layout));
 		appsListFragment = new AppsListFragment();
 		ArrayList<AppItem> apps = new ArrayList<>();
 		AppsListAdapter adapter = new AppsListAdapter(this, apps);
 		appsListFragment.setListAdapter(adapter);
-		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
@@ -132,12 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 				}
 				break;
 		}
-	}
-
-	private void restoreActionBar() {
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
 	}
 
 	private void initDb() {
@@ -173,9 +157,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (mNavigationDrawerFragment != null && !mNavigationDrawerFragment.isDrawerOpen()) {
-			restoreActionBar();
-		}
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
@@ -205,12 +186,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 				break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void onSelected(String path) {
-		JarConverter converter = new JarConverter(this);
-		converter.execute(path, ConfigActivity.APP_DIR);
 	}
 
 	public void addApp(AppItem item) {

@@ -8,8 +8,7 @@
   <string name="licenses">Licenças</string>
   <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), ele suporta a maioria dos jogos 2D, mas em alguns jogos 3D ainda existem algumas limitações.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Permitir a filtragem pode reduzir muito o desempenho em alguns jogos, desative essa opção se o jogo estiver enfrentando Lags. &lt;BR&gt; &#8226; Se a Imagem estiver falhando ou piscando, ative a opção de \"modo de processamento imediato\".</string>
-  <string name="open_jar">Procurar JAR</string>
-  <string name="author">Criador: </string>
+    <string name="author">Criador: </string>
   <string name="version">Versão: </string>
   <string name="no_data_for_display">Sem dados</string>
   <string name="message_delete">Deseja excluir o jogo?</string>
