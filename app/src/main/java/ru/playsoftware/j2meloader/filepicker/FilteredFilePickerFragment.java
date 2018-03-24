@@ -18,17 +18,45 @@ package ru.playsoftware.j2meloader.filepicker;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.nononsenseapps.filepicker.FilePickerFragment;
+import com.nononsenseapps.filepicker.LogicHandler;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import ru.playsoftware.j2meloader.R;
+
 public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	private static String lastPath = Environment.getExternalStorageDirectory().getPath();
 	private static final List<String> extList = Arrays.asList(".jad", ".jar");
+
+	@NonNull
+	@Override
+	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		View v;
+		switch (viewType) {
+			case LogicHandler.VIEWTYPE_HEADER:
+				v = LayoutInflater.from(getActivity()).inflate(R.layout.listitem_dir,
+						parent, false);
+				return new HeaderViewHolder(v);
+			case LogicHandler.VIEWTYPE_CHECKABLE:
+				v = LayoutInflater.from(getActivity()).inflate(R.layout.listitem_checkable,
+						parent, false);
+				return new CheckableViewHolder(v);
+			case LogicHandler.VIEWTYPE_DIR:
+			default:
+				v = LayoutInflater.from(getActivity()).inflate(R.layout.listitem_dir,
+						parent, false);
+				return new DirViewHolder(v);
+		}
+	}
 
 	private String getExtension(@NonNull File file) {
 		String path = file.getPath();
