@@ -138,11 +138,21 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getGameAction(int keyCode) {
-		return keyCodeToGameAction.get(keyCode, 0);
+		int res = keyCodeToGameAction.get(keyCode, Integer.MAX_VALUE);
+		if (res != Integer.MAX_VALUE) {
+			return res;
+		} else {
+			throw new IllegalArgumentException("unknown keycode " + keyCode);
+		}
 	}
 
 	public String getKeyName(int keyCode) {
-		return keyCodeToKeyName.get(keyCode);
+		String res = keyCodeToKeyName.get(keyCode);
+		if (res != null) {
+			return res;
+		} else {
+			throw new IllegalArgumentException("unknown keycode " + keyCode);
+		}
 	}
 
 	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {

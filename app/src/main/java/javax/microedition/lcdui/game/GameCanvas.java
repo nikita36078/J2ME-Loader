@@ -72,24 +72,33 @@ public class GameCanvas extends Canvas {
 	}
 
 	public void gameKeyPressed(int keyCode) {
-		if (!suppressCommands || getGameAction(keyCode) == 0) {
+		if (!suppressCommands || checkGameAction(keyCode)) {
 			keyPressed(keyCode);
 		}
 		key |= convertGameKeyCode(keyCode);
 	}
 
 	public void gameKeyReleased(int keyCode) {
-		if (!suppressCommands || getGameAction(keyCode) == 0) {
+		if (!suppressCommands || checkGameAction(keyCode)) {
 			keyReleased(keyCode);
 		}
 		repeatedKey &= ~convertGameKeyCode(keyCode);
 	}
 
 	public void gameKeyRepeated(int keyCode) {
-		if (!suppressCommands || getGameAction(keyCode) == 0) {
+		if (!suppressCommands || checkGameAction(keyCode)) {
 			keyRepeated(keyCode);
 		}
 		repeatedKey |= convertGameKeyCode(keyCode);
+	}
+
+	private boolean checkGameAction(int keyCode) {
+		try {
+			getGameAction(keyCode);
+			return true;
+		} catch (IllegalArgumentException iae) {
+			return false;
+		}
 	}
 
 	public int getKeyStates() {
