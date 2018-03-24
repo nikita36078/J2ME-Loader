@@ -44,7 +44,7 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	protected boolean isItemVisible(final File file) {
 		if (!isDir(file) && (mode == MODE_FILE || mode == MODE_FILE_AND_DIR)) {
 			String ext = getExtension(file);
-			return ext != null && extList.contains(ext);
+			return ext != null && extList.contains(ext.toLowerCase());
 		}
 		return isDir(file);
 	}
