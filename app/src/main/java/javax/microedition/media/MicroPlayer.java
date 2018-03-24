@@ -95,7 +95,7 @@ public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
 	@Override
 	public void addPlayerListener(PlayerListener playerListener) {
 		checkClosed();
-		if (!listeners.contains(playerListener)) {
+		if (!listeners.contains(playerListener) && playerListener != null) {
 			listeners.add(playerListener);
 		}
 	}
