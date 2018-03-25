@@ -29,10 +29,10 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Dao
 public interface AppItemDao {
-	@Query("SELECT * FROM apps order by title asc")
+	@Query("SELECT * FROM apps ORDER BY title COLLATE NOCASE ASC")
 	List<AppItem> getAllByName();
 
-	@Query("SELECT * FROM apps order by id asc")
+	@Query("SELECT * FROM apps ORDER BY id ASC")
 	List<AppItem> getAllByDate();
 
 	@Query("SELECT count(*) FROM apps")
