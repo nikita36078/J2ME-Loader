@@ -48,8 +48,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/cmdScreenSizePresets"
@@ -89,13 +88,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:text="@string/PREF_SCALE_RATIO"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -238,82 +237,82 @@
             android:text="@string/PREF_VIRTUAL_KEYBOARD_OPTIONS"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TableLayout
+        <CheckBox
+            android:id="@+id/cxIsShowKeyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/PREF_VK_SHOW" />
+
+        <CheckBox
+            android:id="@+id/cxVKFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/PREF_VK_FEEDBACK" />
+
+        <CheckBox
+            android:id="@+id/cxTouchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/PREF_TOUCH_INPUT" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <CheckBox
-                android:id="@+id/cxIsShowKeyboard"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/PREF_VK_SHOW" />
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:text="@string/PREF_VK_ALPHA"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <CheckBox
-                android:id="@+id/cxVKFeedback"
-                android:layout_width="match_parent"
+            <SeekBar
+                android:id="@+id/sbVKAlpha"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:max="255" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:text="@string/PREF_VK_HIDE_DELAY"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/PREF_VK_FEEDBACK" />
+                android:layout_weight="1">
 
-            <CheckBox
-                android:id="@+id/cxTouchInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/PREF_TOUCH_INPUT" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="@string/PREF_VK_ALPHA"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <SeekBar
-                    android:id="@+id/sbVKAlpha"
-                    android:layout_width="0dp"
+                <EditText
+                    android:id="@+id/tfVKHideDelay"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:max="255" />
-            </TableRow>
-
-            <TableRow>
+                    android:gravity="center"
+                    android:hint="@string/_MINUS_ONE"
+                    android:inputType="number|numberSigned" />
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="@string/PREF_VK_HIDE_DELAY"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/tfVKHideDelay"
-                        android:layout_width="0dip"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="@string/_MINUS_ONE"
-                        android:inputType="number|numberSigned" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/PREF_UNIT_MS"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-                </LinearLayout>
-            </TableRow>
-        </TableLayout>
+                    android:layout_marginRight="5dp"
+                    android:text="@string/PREF_UNIT_MS"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TableLayout
             android:layout_width="match_parent"
