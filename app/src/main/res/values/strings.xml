@@ -62,6 +62,7 @@
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_VK_FEEDBACK">Haptic feedback</string>
     <string name="PREF_TOUCH_INPUT">Touch input</string>
+    <string name="PREF_HW_ACCELERATION">HW acceleration (unstable)</string>
     <string name="PREF_VK_BACK">Buttons</string>
     <string name="PREF_VK_FORE">Labels</string>
     <string name="PREF_VK_OUTLINE">Outline</string>

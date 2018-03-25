@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
@@ -71,6 +72,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected CheckBox cxKeepAspectRatio;
 	protected CheckBox cxFilter;
 	protected CheckBox cxImmediate;
+	protected CheckBox cxHwAcceleration;
 
 	protected EditText tfFontSizeSmall;
 	protected EditText tfFontSizeMedium;
@@ -142,7 +144,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
 		System.setProperty("microedition.locale", Locale.getDefault().getCountry().toLowerCase());
 		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getAbsolutePath());
+		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
 
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
@@ -153,6 +155,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
+		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
 
 		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
@@ -229,6 +232,9 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		loadParams(params);
 		applyConfiguration();
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			cxHwAcceleration.setVisibility(View.VISIBLE);
+		}
 		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxShowKeyboard.setOnClickListener(v -> {
 			if (!((CheckBox) v).isChecked()) {
@@ -308,6 +314,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio", true));
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", false));
 		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
+		cxHwAcceleration.setChecked(params.getBoolean("HwAcceleration", false));
 
 		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall", 18)));
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
@@ -344,6 +351,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			params.putBoolean("ScreenKeepAspectRatio", cxKeepAspectRatio.isChecked());
 			params.putBoolean("ScreenFilter", cxFilter.isChecked());
 			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
+			params.putBoolean("HwAcceleration", cxHwAcceleration.isChecked());
 
 			params.putInt("FontSizeSmall",
 					Integer.parseInt(tfFontSizeSmall.getText().toString()));
@@ -394,6 +402,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			boolean screenFilter = cxFilter.isChecked();
 			boolean immediateMode = cxImmediate.isChecked();
 			boolean touchInput = cxTouchInput.isChecked();
+			boolean hwAcceleration = cxHwAcceleration.isChecked();
 			SparseIntArray intArray = KeyMapper.getArrayPref(this);
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
@@ -413,6 +422,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					screenKeepAspectRatio, screenScaleRatio);
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
+			Canvas.setHardwareAcceleration(hwAcceleration);
 			Canvas.setBackgroundColor(screenBackgroundColor);
 			Canvas.setKeyMapping(intArray);
 			Canvas.setHasTouchInput(touchInput);

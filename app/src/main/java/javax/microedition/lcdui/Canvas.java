@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.RectF;
+import android.os.Build;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -282,14 +283,14 @@ public abstract class Canvas extends Displayable {
 					graphics.resetTranslation();
 					graphics.resetClip();
 				}
-				graphics.setCanvas(holder.lockCanvas());
+				graphics.setCanvas(lockCanvas());
 				if (graphics.hasCanvas()) {
 					graphics.clear(backgroundColor);
 					graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
 					if (overlay != null) {
 						overlay.paint(graphics);
 					}
-					holder.unlockCanvasAndPost(graphics.getCanvas());
+					unlockCanvasAndPost(graphics.getCanvas());
 				}
 			}
 		}
@@ -348,6 +349,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean keepAspectRatio;
 	private static boolean filter;
 	private static boolean touchInput;
+	private static boolean hardwareAcceleration;
 	private static int backgroundColor;
 	private static int scaleRatio;
 
@@ -387,6 +389,10 @@ public abstract class Canvas extends Displayable {
 
 	public static void setHasTouchInput(boolean touchInput) {
 		Canvas.touchInput = touchInput;
+	}
+
+	public static void setHardwareAcceleration(boolean hardwareAcceleration) {
+		Canvas.hardwareAcceleration = hardwareAcceleration;
 	}
 
 	public void setOverlay(Overlay ov) {
@@ -590,15 +596,31 @@ public abstract class Canvas extends Displayable {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
 			}
-			graphics.setCanvas(holder.lockCanvas());
+			graphics.setCanvas(lockCanvas());
 			if (graphics.hasCanvas()) {
 				graphics.clear(backgroundColor);
 				graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
 				if (overlay != null) {
 					overlay.paint(graphics);
 				}
-				holder.unlockCanvasAndPost(graphics.getCanvas());
+				unlockCanvasAndPost(graphics.getCanvas());
 			}
+		}
+	}
+
+	private android.graphics.Canvas lockCanvas() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hardwareAcceleration) {
+			return holder.getSurface().lockHardwareCanvas();
+		} else {
+			return holder.lockCanvas();
+		}
+	}
+
+	private void unlockCanvasAndPost(android.graphics.Canvas canvas) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hardwareAcceleration) {
+			holder.getSurface().unlockCanvasAndPost(canvas);
+		} else {
+			holder.unlockCanvasAndPost(canvas);
 		}
 	}
 
