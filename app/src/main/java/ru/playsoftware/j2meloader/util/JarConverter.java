@@ -72,7 +72,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar + " pathConverted=" + pathConverted);
 		// Check extension
 		String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());
-		if (extension.equals(".jad")) {
+		if (extension.equalsIgnoreCase(".jad")) {
 			jadInstall = true;
 			// Fix path to jar
 			pathToJad = pathToJar;
