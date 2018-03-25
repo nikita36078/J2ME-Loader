@@ -65,11 +65,10 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		boolean jadInstall = false;
 		String pathToJad = null;
 		String pathToJar = p1[0];
-		String pathConverted = p1[1];
 		// Add jar name to ACRA
 		String targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
 		ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
-		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar + " pathConverted=" + pathConverted);
+		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar);
 		// Check extension
 		String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());
 		if (extension.equalsIgnoreCase(".jad")) {
@@ -105,7 +104,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		}
 		// Remove invalid characters from app path
 		appDir = appDir.replace(":", "").replace("/", "");
-		appConverted = new File(pathConverted, appDir);
+		appConverted = new File(ConfigActivity.APP_DIR, appDir);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
 		Log.d(TAG, "appConverted=" + appConverted.getPath());
@@ -132,7 +131,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			e.printStackTrace();
 		}
 		// Extract other resources from jar.
-		FileUtils.moveFiles(dirTmp.getPath(), pathConverted + appDir + ConfigActivity.MIDLET_RES_DIR,
+		FileUtils.moveFiles(dirTmp.getPath(), ConfigActivity.APP_DIR + appDir + ConfigActivity.MIDLET_RES_DIR,
 				(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
 		deleteTemp();
 		return true;

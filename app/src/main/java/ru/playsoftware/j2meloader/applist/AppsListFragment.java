@@ -91,10 +91,10 @@ public class AppsListFragment extends ListFragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
+			JarConverter converter = new JarConverter((MainActivity) getActivity());
 			for (Uri uri : files) {
 				File file = Utils.getFileForUri(uri);
-				JarConverter converter = new JarConverter((MainActivity) getActivity());
-				converter.execute(file.getAbsolutePath(), ConfigActivity.APP_DIR);
+				converter.execute(file.getAbsolutePath());
 			}
 		}
 	}

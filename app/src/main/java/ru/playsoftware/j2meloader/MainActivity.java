@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 			if (savedInstanceState == null && uri != null) {
 				JarConverter converter = new JarConverter(this);
 				try {
-					converter.execute(FileUtils.getJarPath(this, uri), ConfigActivity.APP_DIR);
+					converter.execute(FileUtils.getJarPath(this, uri));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
