@@ -182,5 +182,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private void deleteTemp() {
 		// Delete temp files
 		FileUtils.deleteDirectory(dirTmp);
+		File uriFolder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
+		FileUtils.deleteDirectory(uriFolder);
 	}
 }
