@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -68,6 +69,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected EditText tfScreenBack;
 	protected SeekBar sbScaleRatio;
 	protected EditText tfScaleRatioValue;
+	protected Spinner spOrientation;
 	protected CheckBox cxScaleToFit;
 	protected CheckBox cxKeepAspectRatio;
 	protected CheckBox cxFilter;
@@ -114,6 +116,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_CONF_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_PATH_KEY = "path";
+	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
@@ -152,6 +155,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		cxScaleToFit = findViewById(R.id.cxScaleToFit);
 		sbScaleRatio = findViewById(R.id.sbScaleRatio);
 		tfScaleRatioValue = findViewById(R.id.tfScaleRatioValue);
+		spOrientation = findViewById(R.id.spOrientation);
 		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
@@ -310,6 +314,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				getInt("ScreenBackgroundColor", 0xD0D0D0)).toUpperCase());
 		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
 		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
+		spOrientation.setSelection(params.getInt("Orientation", 0));
 		cxScaleToFit.setChecked(params.getBoolean("ScreenScaleToFit", true));
 		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio", true));
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", false));
@@ -347,6 +352,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			params.putInt("ScreenHeight", Integer.parseInt(tfScreenHeight.getText().toString()));
 			params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
+			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
 			params.putBoolean("ScreenKeepAspectRatio", cxKeepAspectRatio.isChecked());
 			params.putBoolean("ScreenFilter", cxFilter.isChecked());
@@ -520,6 +526,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		applyConfiguration();
 		Intent i = new Intent(this, MicroActivity.class);
 		i.putExtra(MIDLET_PATH_KEY, pathToMidletDir);
+		i.putExtra(MIDLET_ORIENTATION_KEY, spOrientation.getSelectedItemPosition());
 		startActivity(i);
 		finish();
 	}

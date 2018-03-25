@@ -61,6 +61,13 @@
   <string name="SIZE_PRESETS">Предустановки</string>
   <string name="SWAP_SIZES">Поменять местами</string>
   <string name="PREF_SYS_PROPS">Системные параметры</string>
+  <string name="PREF_ORIENTATION">Ориентация экрана</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>По умолчанию</item>
+    <item>Автоматически</item>
+    <item>Портрет</item>
+    <item>Альбом</item>
+  </string-array>
   <string name="error">Ошибка</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
   <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>

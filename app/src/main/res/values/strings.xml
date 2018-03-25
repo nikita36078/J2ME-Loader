@@ -82,6 +82,13 @@
     <string name="SWAP_SIZES">Swap sizes</string>
     <string name="PREF_SYS_PROPS">System properties</string>
     <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
+    <string name="PREF_ORIENTATION">Screen orientation</string>
+    <string-array name="PREF_ORIENTATION_ENTRIES">
+        <item>Default</item>
+        <item>Auto</item>
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </string-array>
     <string name="error">Error</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>

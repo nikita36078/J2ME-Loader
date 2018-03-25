@@ -17,7 +17,9 @@
 
 package javax.microedition.shell;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,6 +60,11 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final String TAG = MicroActivity.class.getName();
+	private static final int ORIENTATION_DEFAULT = 0;
+	private static final int ORIENTATION_AUTO = 1;
+	private static final int ORIENTATION_PORTRAIT = 2;
+	private static final int ORIENTATION_LANDSCAPE = 3;
+
 	private Displayable current;
 	private boolean visible;
 	private boolean loaded;
@@ -77,7 +84,10 @@ public class MicroActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
-		pathToMidletDir = getIntent().getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
+		Intent intent = getIntent();
+		int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
+		setOrientation(orientation);
+		pathToMidletDir = intent.getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
 		initEmulator();
 		try {
 			loadMIDlet();
@@ -119,6 +129,23 @@ public class MicroActivity extends AppCompatActivity {
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus && current != null && current instanceof Canvas) {
 			hideSystemUI();
+		}
+	}
+
+	private void setOrientation(int orientation) {
+		switch (orientation) {
+			case ORIENTATION_AUTO:
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+				break;
+			case ORIENTATION_PORTRAIT:
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+				break;
+			case ORIENTATION_LANDSCAPE:
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+				break;
+			case ORIENTATION_DEFAULT:
+			default:
+				break;
 		}
 	}
 
