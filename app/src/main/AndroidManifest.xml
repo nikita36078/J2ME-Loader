@@ -49,6 +49,10 @@
                 <data android:pathPattern=".*\\..*\\.jar" />
                 <data android:pathPattern=".*\\..*\\..*\\.jar" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.jar" />
+                <data android:pathPattern=".*\\.JAR" />
+                <data android:pathPattern=".*\\..*\\.JAR" />
+                <data android:pathPattern=".*\\..*\\..*\\.JAR" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.JAR" />
             </intent-filter>
         </activity>
         <activity
