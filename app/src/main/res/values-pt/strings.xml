@@ -4,7 +4,7 @@
   <string name="exit">Sair</string>
   <string name="about">Sobre</string>
   <string name="about_message">Este app permite emular jogos e aplicativos em J2ME no Android. Ele suporta a maioria dos jogos 2D e 3D com algumas limitações. &lt;BR&gt;</string>
-    <string name="author">Autor: </string>
+  <string name="author">Autor: </string>
   <string name="version">Versão: </string>
   <string name="no_data_for_display">Sem informação</string>
   <string name="message_delete">Você quer mesmo excluir este app?</string>
