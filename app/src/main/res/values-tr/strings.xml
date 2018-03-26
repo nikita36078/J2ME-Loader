@@ -8,7 +8,7 @@
   <string name="licenses">Lisanslar</string>
   <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
-    <string name="author">Geliştirici: </string>
+  <string name="author">Geliştirici: </string>
   <string name="version">Sürüm: </string>
   <string name="no_data_for_display">Veri yok</string>
   <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
