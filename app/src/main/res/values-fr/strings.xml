@@ -4,7 +4,7 @@
   <string name="exit">Sortir</string>
   <string name="about">À propos de</string>
   <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android. Il prend en charge la plupart des jeux 2D et 3D avec certaines limitations.&lt;BR&gt;</string>
-    <string name="author">Auteur: </string>
+  <string name="author">Auteur: </string>
   <string name="version">Version: </string>
   <string name="no_data_for_display">Pas de données</string>
   <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
