@@ -37,7 +37,7 @@ public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File>
 
 	@Override
 	public void onBackPressed() {
-		if (currentFragment.isBackTop()) {
+		if (currentFragment == null || currentFragment.isBackTop()) {
 			super.onBackPressed();
 		} else {
 			currentFragment.goUp();
