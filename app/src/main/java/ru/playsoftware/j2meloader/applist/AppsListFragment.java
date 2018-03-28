@@ -37,8 +37,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
@@ -99,6 +101,26 @@ public class AppsListFragment extends ListFragment {
 		}
 	}
 
+	private void showRenameDialog(final int id) {
+		AppItem item = (AppItem) adapter.getItem(id);
+		EditText editText = new EditText(getActivity());
+		editText.setText(item.getTitle());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+				.setTitle(R.string.action_context_rename)
+				.setView(editText)
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+					String title = editText.getText().toString().trim();
+					if (title.equals("")) {
+						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT);
+					} else {
+						item.setTitle(title);
+						((MainActivity) getActivity()).addApp(item);
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, null);
+		builder.show();
+	}
+
 	private void showDeleteDialog(final int id) {
 		AppItem item = (AppItem) adapter.getItem(id);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -150,6 +172,9 @@ public class AppsListFragment extends ListFragment {
 					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.mipmap.ic_launcher));
 				}
 				ShortcutManagerCompat.requestPinShortcut(getActivity(), shortcutInfoCompatBuilder.build(), null);
+				break;
+			case R.id.action_context_rename:
+				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
 				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);

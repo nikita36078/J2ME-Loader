@@ -29,6 +29,7 @@
     <string name="action_context_shortcut">Add shortcut</string>
     <string name="action_settings">Settings</string>
     <string name="action_context_delete">Delete</string>
+    <string name="action_context_rename">Rename</string>
 
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>

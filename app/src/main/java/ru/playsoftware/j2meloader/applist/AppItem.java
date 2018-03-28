@@ -61,6 +61,10 @@ public class AppItem {
 		return title;
 	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getImagePath() {
 		return imagePath;
 	}
@@ -81,6 +85,13 @@ public class AppItem {
 		return ConfigActivity.APP_DIR + path;
 	}
 
+	public void setImagePathExt(String imagePath) {
+		if (!imagePath.contains("/")) {
+			imagePath = "/" + imagePath;
+		}
+		this.imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
+	}
+
 	public String getImagePathExt() {
 		return ConfigActivity.APP_DIR + imagePath;
 	}
@@ -91,13 +102,6 @@ public class AppItem {
 
 	public String getVersionExt(Context context) {
 		return context.getString(R.string.version) + version;
-	}
-
-	public void setImagePathExt(String imagePath) {
-		if (!imagePath.contains("/")) {
-			imagePath = "/" + imagePath;
-		}
-		this.imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
 	}
 
 }
