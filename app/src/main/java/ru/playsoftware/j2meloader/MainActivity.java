@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
 		initDb();
-		updateAppsList();
 	}
 
 	@Override
@@ -128,9 +127,10 @@ public class MainActivity extends AppCompatActivity {
 		AppDatabase db = Room.databaseBuilder(this,
 				AppDatabase.class, "apps-database.db").allowMainThreadQueries().build();
 		appItemDao = db.appItemDao();
-		if (appItemDao.getSize() == 0) {
+		if (!FileUtils.checkDb(this, appItemDao.getAllByName())) {
 			appItemDao.insertAll(FileUtils.getAppsList(this));
 		}
+		updateAppsList();
 	}
 
 	private void initFolders() {
@@ -196,6 +196,10 @@ public class MainActivity extends AppCompatActivity {
 	public void deleteApp(AppItem item) {
 		appItemDao.delete(item);
 		updateAppsList();
+	}
+
+	public void deleteAllApps() {
+		appItemDao.deleteAll();
 	}
 
 	private void updateAppsList() {

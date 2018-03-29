@@ -46,4 +46,7 @@ public interface AppItemDao {
 
 	@Delete
 	void delete(AppItem item);
+
+	@Query("DELETE FROM apps")
+	void deleteAll();
 }

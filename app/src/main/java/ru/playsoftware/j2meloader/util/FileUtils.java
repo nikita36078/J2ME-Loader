@@ -34,12 +34,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.microedition.shell.ConfigActivity;
 
+import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
@@ -176,5 +179,38 @@ public class FileUtils {
 				params.get("MIDlet-Version"));
 		item.setImagePathExt(imagePath);
 		return item;
+	}
+
+	public static boolean checkDb(Context context, List<AppItem> items) {
+		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
+		int itemsNum = items.size();
+		int foldersNum = appFolders.length;
+		// If db is empty
+		if (itemsNum == 0) {
+			if (appFolders == null || foldersNum == 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (appFolders == null || foldersNum == 0) {
+			// Else if app folder is empty
+			((MainActivity) context).deleteAllApps();
+			return true;
+		}
+		List<String> appFoldersList = Arrays.asList(appFolders);
+		boolean result = true;
+		// Delete invalid app items from db
+		for (int i = 0; i < itemsNum; i++) {
+			AppItem item = items.get(i);
+			if (!appFoldersList.contains(item.getPath())) {
+				result = false;
+				((MainActivity) context).deleteApp(item);
+				items.remove(item);
+			}
+		}
+		if (foldersNum != items.size()) {
+			result = false;
+		}
+		return result;
 	}
 }
