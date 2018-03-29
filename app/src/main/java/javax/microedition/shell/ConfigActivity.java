@@ -133,21 +133,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
 
-		System.setProperty("microedition.sensor.version", "1");
-		System.setProperty("microedition.platform", "Nokia 6233");
-		System.setProperty("microedition.configuration", "CDLC1.1");
-		System.setProperty("microedition.profiles", "MIDP2.0");
-		System.setProperty("microedition.m3g.version", "1.1");
-		System.setProperty("microedition.media.version", "1.0");
-		System.setProperty("supports.mixing", "true");
-		System.setProperty("supports.audio.capture", "false");
-		System.setProperty("supports.video.capture", "false");
-		System.setProperty("supports.recording", "false");
-		System.setProperty("microedition.pim.version", "1.0");
-		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
-		System.setProperty("microedition.locale", Locale.getDefault().getCountry().toLowerCase());
-		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
+		setProperties();
 
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
@@ -255,6 +241,24 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		}
 	}
 
+	private void setProperties() {
+		System.setProperty("microedition.sensor.version", "1");
+		System.setProperty("microedition.platform", "Nokia 6233");
+		System.setProperty("microedition.configuration", "CDLC1.1");
+		System.setProperty("microedition.profiles", "MIDP2.0");
+		System.setProperty("microedition.m3g.version", "1.1");
+		System.setProperty("microedition.media.version", "1.0");
+		System.setProperty("supports.mixing", "true");
+		System.setProperty("supports.audio.capture", "false");
+		System.setProperty("supports.video.capture", "false");
+		System.setProperty("supports.recording", "false");
+		System.setProperty("microedition.pim.version", "1.0");
+		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
+		System.setProperty("microedition.locale", Locale.getDefault().getCountry().toLowerCase());
+		System.setProperty("microedition.encoding", "ISO-8859-1");
+		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
+	}
+
 	@Override
 	public void onPause() {
 		saveParams();
@@ -264,8 +268,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		fillScreenSizePresets(ContextHolder.getDisplayWidth(),
-				ContextHolder.getDisplayHeight());
+		fillScreenSizePresets(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight());
 	}
 
 	private void fillScreenSizePresets(int w, int h) {
@@ -295,8 +298,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private void addScreenSizePreset(int width, int height) {
 		screenWidths.add(width);
 		screenHeights.add(height);
-		screenAdapter.add(Integer.toString(width) + " x "
-				+ Integer.toString(height));
+		screenAdapter.add(Integer.toString(width) + " x " + Integer.toString(height));
 	}
 
 	private void addFontSizePreset(String title, int small, int medium, int large) {
