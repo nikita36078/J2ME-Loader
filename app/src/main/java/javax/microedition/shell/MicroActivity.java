@@ -201,9 +201,18 @@ public class MicroActivity extends AppCompatActivity {
 			ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
 					dexTargetOptDir.getAbsolutePath(), null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
 			Log.i(TAG, "load main: " + mainClass + " from dex:" + dexTarget.getPath());
-			MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
-			midlet.startApp();
-			loaded = true;
+			final MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
+			// Start midlet in Thread
+			Runnable r = () -> {
+				try {
+					midlet.startApp();
+					loaded = true;
+				} catch (Throwable t) {
+					t.printStackTrace();
+					ContextHolder.notifyDestroyed();
+				}
+			};
+			(new Thread(r)).start();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			showErrorDialog(t.getMessage());
@@ -222,9 +231,6 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void showErrorDialog(String message) {
-		if (message != null) {
-			Log.e(TAG, message);
-		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
