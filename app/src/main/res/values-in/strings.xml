@@ -6,7 +6,7 @@
   <string name="help">Bantuan</string>
   <string name="more">Lainnya</string>
   <string name="licenses">Lisensi</string>
-  <string name="about_message">Aplikasi ini  dapat  menjalankan aplikasi dan permainan berbasis J2ME di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D dengan sebagaian keterbatasan.&lt;BR&gt;</string>
+  <string name="about_message">Aplikasi ini digunakan untuk meluncurkan permainan dan aplikasi J2ME di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D dengan sebagaian keterbatasan.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
   <string name="author">Vendor: </string>
   <string name="version">Versi: </string>
@@ -30,9 +30,9 @@
   <string name="PREF_SCALE_RATIO">Skala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
-  <string name="PREF_FILTER">Penyaring</string>
+  <string name="PREF_FILTER">Menyaring</string>
   <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
-  <string name="PREF_FONT_OPTIONS">Opsi Huruf</string>
+  <string name="PREF_FONT_OPTIONS">Opsi font</string>
   <string name="PREF_WIDTH">Lebar</string>
   <string name="PREF_HEIGHT">Tinggi</string>
   <string name="PREF_FONT_SMALL">Kecil</string>
@@ -41,9 +41,10 @@
   <string name="PREF_FONT_SIZE_IN_SP">Nilai dalam Skala Piksel</string>
   <string name="PREF_BACKGROUND">Latar belakang</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keypad</string>
-  <string name="PREF_VK_SHOW">Tampilkan papan tulis</string>
+  <string name="PREF_VK_SHOW">Tampilkan keypad</string>
   <string name="PREF_VK_FEEDBACK">Respon sentuh</string>
   <string name="PREF_TOUCH_INPUT">Memakai sentuh</string>
+  <string name="PREF_HW_ACCELERATION">Akselerasi HW (tidak stabil)</string>
   <string name="PREF_VK_BACK">Tombol</string>
   <string name="PREF_VK_FORE">Label</string>
   <string name="PREF_VK_OUTLINE">Pinggiran</string>
@@ -61,6 +62,13 @@
   <string name="SIZE_PRESETS">Prasetel</string>
   <string name="SWAP_SIZES">Tukar ukuran</string>
   <string name="PREF_SYS_PROPS">Properti sistem</string>
+  <string name="PREF_ORIENTATION">Orientasi layar</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>Sistem Bawaan</item>
+    <item>Otomatis</item>
+    <item>Potret</item>
+    <item>Lanskap</item>
+  </string-array>
   <string name="error">Kesalahan</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
   <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>
@@ -77,7 +85,7 @@
   <string name="common_settings">[PENGATURAN UMUM]</string>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
   <string name="pref_enable_actionbar_summary">Aplikasi dalam layar penuh</string>
-  <string name="pref_app_sort_title">Perintah urut app</string>
+  <string name="pref_app_sort_title">Mengurutkan app</string>
   <string-array name="pref_app_sort_entries">
     <item>Nama</item>
     <item>Tanggal</item>
