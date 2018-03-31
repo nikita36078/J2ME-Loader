@@ -44,6 +44,7 @@
   <string name="PREF_VK_SHOW">显示键盘</string>
   <string name="PREF_VK_FEEDBACK">触摸反馈</string>
   <string name="PREF_TOUCH_INPUT">触摸输入</string>
+  <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
   <string name="PREF_VK_BACK">按钮</string>
   <string name="PREF_VK_FORE">标签</string>
   <string name="PREF_VK_OUTLINE">轮廓</string>
@@ -61,6 +62,13 @@
   <string name="SIZE_PRESETS">预设</string>
   <string name="SWAP_SIZES">交换尺寸</string>
   <string name="PREF_SYS_PROPS">系统性能</string>
+  <string name="PREF_ORIENTATION">屏幕方向​​​​​​​​​​​​​​</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>默认</item>
+    <item>自动</item>
+    <item>竖屏</item>
+    <item>横屏</item>
+  </string-array>
   <string name="error">错误</string>
   <string name="FORCE_CLOSE_CONFIRMATION">强制关闭应用可能导致数据丢失或损坏！\n要继续吗？</string>
   <string name="CONFIRMATION_REQUIRED">需要确认</string>
