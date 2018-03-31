@@ -8,7 +8,7 @@
   <string name="licenses">Lisanslar</string>
   <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
-    <string name="author">Geliştirici: </string>
+  <string name="author">Geliştirici: </string>
   <string name="version">Sürüm: </string>
   <string name="no_data_for_display">Veri yok</string>
   <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
@@ -44,6 +44,7 @@
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
   <string name="PREF_VK_FEEDBACK">Haptik Geribildirim</string>
   <string name="PREF_TOUCH_INPUT">Dokunma girişi</string>
+  <string name="PREF_HW_ACCELERATION">Donanımsal hızlandırma (kararsız)</string>
   <string name="PREF_VK_BACK">Tuşlar</string>
   <string name="PREF_VK_FORE">Metinler</string>
   <string name="PREF_VK_OUTLINE">Dış hatlar</string>
@@ -61,6 +62,13 @@
   <string name="SIZE_PRESETS">Hazır ayarlar</string>
   <string name="SWAP_SIZES">Boyutları değiştir</string>
   <string name="PREF_SYS_PROPS">Sistem özellikleri</string>
+  <string name="PREF_ORIENTATION">Ekran yönü</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>Varsayılan</item>
+    <item>Otomatik</item>
+    <item>Dikey</item>
+    <item>Yatay</item>
+  </string-array>
   <string name="error">Hata</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
   <string name="CONFIRMATION_REQUIRED">Onaylama gerekli</string>

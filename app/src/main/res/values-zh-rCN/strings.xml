@@ -4,9 +4,11 @@
   <string name="exit">退出</string>
   <string name="about">关于</string>
   <string name="help">帮助</string>
+  <string name="more">更多</string>
+  <string name="licenses">许可</string>
   <string name="about_message">此应用程序允许您在 Android 上运行 J2ME 应用程序和游戏。它支持大多数 2D 和 部分 3D 游戏。&lt;BR&gt;</string>
   <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt; BR &gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
-    <string name="author">作者: </string>
+  <string name="author">作者: </string>
   <string name="version">版本: </string>
   <string name="no_data_for_display">无数据</string>
   <string name="message_delete">是否确实要删除此应用程序？</string>
@@ -21,6 +23,8 @@
   <string name="donate">捐赠</string>
   <string name="START_CMD">开始</string>
   <string name="CANCEL_CMD">取消</string>
+  <string name="CLEAR_DATA_CMD">清除数据</string>
+  <string name="RESET_SETTINGS_CMD">恢复默认设置</string>
   <string name="RESET_LAYOUT_CMD">重置键布局</string>
   <string name="PREF_SCREEN_OPTIONS">屏幕选项</string>
   <string name="PREF_SCALE_RATIO">比例(%)</string>
@@ -38,6 +42,9 @@
   <string name="PREF_BACKGROUND">背景</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
   <string name="PREF_VK_SHOW">显示键盘</string>
+  <string name="PREF_VK_FEEDBACK">触摸反馈</string>
+  <string name="PREF_TOUCH_INPUT">触摸输入</string>
+  <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
   <string name="PREF_VK_BACK">按钮</string>
   <string name="PREF_VK_FORE">标签</string>
   <string name="PREF_VK_OUTLINE">轮廓</string>
@@ -54,6 +61,14 @@
   <string name="PREF_VK_SIZE_HINT">尺寸</string>
   <string name="SIZE_PRESETS">预设</string>
   <string name="SWAP_SIZES">交换尺寸</string>
+  <string name="PREF_SYS_PROPS">系统性能</string>
+  <string name="PREF_ORIENTATION">屏幕方向​​​​​​​​​​​​​​</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>默认</item>
+    <item>自动</item>
+    <item>竖屏</item>
+    <item>横屏</item>
+  </string-array>
   <string name="error">错误</string>
   <string name="FORCE_CLOSE_CONFIRMATION">强制关闭应用可能导致数据丢失或损坏！\n要继续吗？</string>
   <string name="CONFIRMATION_REQUIRED">需要确认</string>
@@ -68,11 +83,15 @@
   <string name="layout_switch">切换按键布局</string>
   <string name="hide_buttons">隐藏按钮</string>
   <string name="common_settings">[通用设置]</string>
-  <string name="pref_enable_actionbar_title">启用 ActionBar</string>
+  <string name="pref_enable_actionbar_title">隐藏操作栏</string>
   <string name="pref_enable_actionbar_summary">在全屏应用中</string>
   <string name="pref_app_sort_title">应用程序排序</string>
   <string-array name="pref_app_sort_entries">
     <item>名称</item>
     <item>日期</item>
   </string-array>
+  <string name="pref_map_keys">键盘映射</string>
+  <string name="mapping_dialog_title">按任意键</string>
+  <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
+  <string name="reset_mapping">重置</string>
 </resources>

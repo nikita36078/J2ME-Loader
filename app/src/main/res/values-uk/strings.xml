@@ -6,7 +6,7 @@
   <string name="help">Довідка</string>
   <string name="about_message">Дана програма дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
-    <string name="author">Автор: </string>
+  <string name="author">Автор: </string>
   <string name="version">Версія: </string>
   <string name="no_data_for_display">Немає даних</string>
   <string name="message_delete">Ви дійсно хочете видалити дану програму?</string>

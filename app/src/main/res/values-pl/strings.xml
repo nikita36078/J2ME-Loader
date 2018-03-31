@@ -8,7 +8,7 @@
   <string name="licenses">Licencje</string>
   <string name="about_message">Ta aplikacja pozwala uruchamiać aplikacje i gry J2ME na urządzeniu z systemem Android. Obsługuje większość gier 2D, a także 3D z pewnymi ograniczeniami.&lt;BR&gt;</string>
   <string name="help_message">&#8226;Włączenie filtrowania w niektórych przypadkach może negatywnie wpłynąć na wydajność. Wyłącz tą opcję jeśli gra działa zbyt wolno.&lt;BR&gt;&#8226;Problem migotania obrazu może być naprawiony poprzez zaznaczenie opcji \"Tryb natychmiastowego przetwarzania\".</string>
-    <string name="author">Autor: </string>
+  <string name="author">Autor: </string>
   <string name="version">Wersja: </string>
   <string name="no_data_for_display">Brak danych</string>
   <string name="message_delete">Czy na pewno chcesz usunąć tę aplikację?</string>
@@ -44,6 +44,7 @@
   <string name="PREF_VK_SHOW">Pokaż klawiaturę</string>
   <string name="PREF_VK_FEEDBACK">Wibracja przy naciśnięciu</string>
   <string name="PREF_TOUCH_INPUT">Wprowadzanie dotykowe</string>
+  <string name="PREF_HW_ACCELERATION">Przyspieszenie sprzętowe (niestabilne)</string>
   <string name="PREF_VK_BACK">Guziki</string>
   <string name="PREF_VK_FORE">Etykiety</string>
   <string name="PREF_VK_OUTLINE">Zarys</string>
@@ -61,6 +62,13 @@
   <string name="SIZE_PRESETS">Presets</string>
   <string name="SWAP_SIZES">Zamień rozmiary</string>
   <string name="PREF_SYS_PROPS">Właściwości systemu</string>
+  <string name="PREF_ORIENTATION">Orientacja ekranu</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>Domyślna</item>
+    <item>Automatyczna</item>
+    <item>Pionowa</item>
+    <item>Pozioma</item>
+  </string-array>
   <string name="error">Błąd</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Wymuszenie zamknięcia aplikacji może spowodować utratę danych lub nawet całkowicie ją zepsuć! \nKontynuować?</string>
   <string name="CONFIRMATION_REQUIRED">Wymagane potwierdzenie</string>

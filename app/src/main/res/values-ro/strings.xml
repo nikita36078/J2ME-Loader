@@ -4,7 +4,7 @@
   <string name="exit">Ieșire</string>
   <string name="about">Despre</string>
   <string name="about_message">Această aplicație iți permite să lansezi aplicații J2ME și jocuri pe Android. Suportă majoritatea jocurilor 2D și 3D cu unele limitări. &lt;BR&gt;</string>
-    <string name="author">Autor: </string>
+  <string name="author">Autor: </string>
   <string name="version">Versiune: </string>
   <string name="no_data_for_display">Nu există informații disponibile</string>
   <string name="message_delete">Ești sigur că vrei să ștergi această aplicație?</string>

@@ -8,7 +8,7 @@
   <string name="licenses">Licenser</string>
   <string name="about_message">Denne app gør det muligt at afvikle J2ME apps og spil på Android. Den understøtter de fleste 2D spil og desuden 3D med nogle begrænsninger.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Aktivering af filtrering kan i nogle tilfælde reducere ydeevnen. Deaktiver denne indstilling, hvis spillet er for langsomt.&lt;BR&gt;&#8226; Problemer med flimmer kan rettes ved aktivering af indstillingen \"Omgående behandlingstilstand\".</string>
-    <string name="author">Forfatter: </string>
+  <string name="author">Forfatter: </string>
   <string name="version">Version: </string>
   <string name="no_data_for_display">Ingen data</string>
   <string name="message_delete">Vil du slette denne app?</string>
