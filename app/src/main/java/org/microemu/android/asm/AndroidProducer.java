@@ -40,11 +40,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class AndroidProducer {
 
@@ -70,31 +68,22 @@ public class AndroidProducer {
 	}
 
 	public static void processJar(File jarInputFile, File jarOutputFile, boolean isMidlet) throws IOException {
-		JarInputStream jis = null;
-		JarOutputStream jos = null;
+		ZipInputStream zis = null;
+		ZipOutputStream zos = null;
 		HashMap<String, byte[]> resources = new HashMap<>();
 		try {
-			jis = new JarInputStream(new FileInputStream(jarInputFile));
-			Manifest manifest = jis.getManifest();
-			if (manifest == null) {
-				jos = new JarOutputStream(new FileOutputStream(jarOutputFile));
-			} else {
-				Attributes attributes = manifest.getMainAttributes();
-				if (!attributes.containsKey(Attributes.Name.MANIFEST_VERSION)) {
-					attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-				}
-				jos = new JarOutputStream(new FileOutputStream(jarOutputFile), manifest);
-			}
+			zis = new ZipInputStream(new FileInputStream(jarInputFile));
+			zos = new ZipOutputStream(new FileOutputStream(jarOutputFile));
 
 			byte[] buffer = new byte[1024];
-			JarEntry jarEntry;
-			while ((jarEntry = jis.getNextJarEntry()) != null) {
-				if (!jarEntry.isDirectory()) {
-					String name = jarEntry.getName();
+			ZipEntry zipEntry;
+			while ((zipEntry = zis.getNextEntry()) != null) {
+				if (!zipEntry.isDirectory()) {
+					String name = zipEntry.getName();
 					int size = 0;
 					int read;
 					int length = buffer.length;
-					while ((read = jis.read(buffer, size, length)) > 0) {
+					while ((read = zis.read(buffer, size, length)) > 0) {
 						size += read;
 
 						length = 1024;
@@ -119,31 +108,15 @@ public class AndroidProducer {
 				if (name.endsWith(".class")) {
 					outBuffer = instrument(name, new ByteArrayInputStream(inBuffer), isMidlet);
 				}
-				jos.putNextEntry(new JarEntry(name));
-				jos.write(outBuffer);
+				zos.putNextEntry(new ZipEntry(name));
+				zos.write(outBuffer);
 			}
 		} finally {
-			if (jis != null) {
-				jis.close();
+			if (zis != null) {
+				zis.close();
 			}
-			if (jos != null) {
-				jos.close();
-			}
-		}
-	}
-
-	public static void main(String args[]) {
-		if (args.length < 2 || args.length > 3) {
-			System.out.println("usage: AndroidProducer <infile> <outfile> [midlet]");
-		} else {
-			boolean midlet = false;
-			if (args.length == 3 && args[2].toLowerCase().equals("midlet")) {
-				midlet = true;
-			}
-			try {
-				processJar(new File(args[0]), new File(args[1]), midlet);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (zos != null) {
+				zos.close();
 			}
 		}
 	}
