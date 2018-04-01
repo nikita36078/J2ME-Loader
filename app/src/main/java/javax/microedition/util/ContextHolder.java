@@ -31,13 +31,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.rms.impl.AndroidRecordStoreManager;
 import javax.microedition.shell.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 
 import ru.playsoftware.j2meloader.MainActivity;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -45,7 +42,6 @@ public class ContextHolder {
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static AppCompatActivity currentActivity;
-	private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
 
 	public static Context getContext() {
 		return currentActivity.getApplicationContext();
@@ -72,10 +68,6 @@ public class ContextHolder {
 
 	public static int getDisplayHeight() {
 		return getDisplay().getHeight();
-	}
-
-	public static AndroidRecordStoreManager getRecordStoreManager() {
-		return recordStoreManager;
 	}
 
 	public static void setCurrentActivity(AppCompatActivity activity) {
@@ -125,7 +117,7 @@ public class ContextHolder {
 	 */
 	public static void notifyDestroyed() {
 		Intent intent = new Intent(currentActivity, MainActivity.class);
-		intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		currentActivity.startActivity(intent);
 		currentActivity.finish();
 		Runtime.getRuntime().exit(0);

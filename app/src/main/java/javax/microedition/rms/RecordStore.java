@@ -25,7 +25,7 @@
 
 package javax.microedition.rms;
 
-import javax.microedition.util.ContextHolder;
+import javax.microedition.rms.impl.AndroidRecordStoreManager;
 
 public class RecordStore {
 
@@ -33,18 +33,20 @@ public class RecordStore {
 
 	public static final int AUTHMODE_ANY = 1;
 
+	private static AndroidRecordStoreManager recordStoreManager = new AndroidRecordStoreManager();
+
 	public static void deleteRecordStore(String recordStoreName)
 			throws RecordStoreException, RecordStoreNotFoundException {
-		ContextHolder.getRecordStoreManager().deleteRecordStore(recordStoreName);
+		recordStoreManager.deleteRecordStore(recordStoreName);
 	}
 
 	public static String[] listRecordStores() {
-		return ContextHolder.getRecordStoreManager().listRecordStores();
+		return recordStoreManager.listRecordStores();
 	}
 
 	public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
 			throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
-		return ContextHolder.getRecordStoreManager().openRecordStore(recordStoreName, createIfNecessary);
+		return recordStoreManager.openRecordStore(recordStoreName, createIfNecessary);
 	}
 
 	public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary, int authmode, boolean writable)
