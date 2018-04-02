@@ -16,9 +16,7 @@
 
 package javax.microedition.lcdui.pointer;
 
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 /**
@@ -175,21 +173,6 @@ public class RectSnap {
 
 	/**
 	 * Определить режим привязки двух прямоугольников (если есть).
-	 * Версия для Rect.
-	 *
-	 * @param target  что привязывать
-	 * @param origin  куда привязывать
-	 * @param radius  на каком расстоянии начинает действовать привязка
-	 * @param mask    маска разрешенных привязок
-	 * @param biaxial если true, то привязка будет либо по обоим осям, либо ее вообще не будет
-	 * @return режим привязки, или NO_SNAP
-	 */
-	public static int getSnap(Rect target, Rect origin, int radius, int mask, boolean biaxial) {
-		return getSnap(new RectF(target), new RectF(origin), radius, mask, biaxial);
-	}
-
-	/**
-	 * Определить режим привязки двух прямоугольников (если есть).
 	 * Версия для RectF.
 	 *
 	 * @param target  что привязывать
@@ -245,25 +228,6 @@ public class RectSnap {
 		if (biaxial && (((snap & HORIZONTAL_MASK) == 0) ^ ((snap & VERTICAL_MASK) == 0))) {
 			snap = NO_SNAP;
 		}
-
-		return snap;
-	}
-
-	/**
-	 * Определить наилучшую привязку двух прямоугольников (существует всегда),
-	 * и опционально вернуть смещение от этой привязки.
-	 * Версия для Rect и Point.
-	 *
-	 * @param target что привязывать
-	 * @param origin куда привязывать
-	 * @param offset точка, в которую будет записано смещение от привязки (или null)
-	 * @return режим привязки
-	 */
-	public static int getSnap(Rect target, Rect origin, Point offset) {
-		PointF point = new PointF();
-		int snap = getSnap(new RectF(target), new RectF(origin), point);
-
-		offset.set(Math.round(point.x), Math.round(point.y));
 
 		return snap;
 	}
@@ -350,31 +314,6 @@ public class RectSnap {
 		}
 
 		return snpx[minIX] | snpy[minIY];
-	}
-
-	/**
-	 * Привязать один прямоугольник к другому,
-	 * опционально сместив его на некоторое расстояние от привязки.
-	 * Версия для Rect и Point.
-	 *
-	 * @param target что привязывать
-	 * @param origin куда привязывать
-	 * @param mode   как привязывать
-	 * @param offset точка, в которой содержится смещение от привязки (или null)
-	 */
-	public static void snap(Rect target, Rect origin, int mode, Point offset) {
-		RectF a = new RectF(target);
-		RectF b = new RectF(origin);
-
-		PointF point = null;
-
-		if (offset != null) {
-			point = new PointF(offset);
-		}
-
-		snap(a, b, mode, point);
-
-		target.set(Math.round(a.left), Math.round(a.top), Math.round(a.right), Math.round(a.bottom));
 	}
 
 	/**
@@ -488,97 +427,5 @@ public class RectSnap {
 		if (offset != null) {
 			target.offset(offset.x, offset.y);
 		}
-	}
-
-	public static String toString(int mode) {
-		String res = "[";
-
-		switch (mode & HORIZONTAL_MASK) {
-			case SNAP_LEFT:
-				res += "SNAP_LEFT";
-				break;
-
-			case ALIGN_LEFT:
-				res += "ALIGN_LEFT";
-				break;
-
-			case ALIGN_HCENTER:
-				res += "ALIGN_HCENTER";
-				break;
-
-			case ALIGN_RIGHT:
-				res += "ALIGN_RIGHT";
-				break;
-
-			case SNAP_RIGHT:
-				res += "SNAP_RIGHT";
-				break;
-
-			case MID_LEFT:
-				res += "MID_LEFT";
-				break;
-
-			case MID_RIGHT:
-				res += "MID_RIGHT";
-				break;
-
-			case LEFT_HCENTER:
-				res += "LEFT_HCENTER";
-				break;
-
-			case RIGHT_HCENTER:
-				res += "RIGHT_HCENTER";
-				break;
-
-			default:
-				res += mode & HORIZONTAL_MASK;
-		}
-
-		res += "|";
-
-		switch (mode & VERTICAL_MASK) {
-			case SNAP_TOP:
-				res += "SNAP_TOP";
-				break;
-
-			case ALIGN_TOP:
-				res += "ALIGN_TOP";
-				break;
-
-			case ALIGN_VCENTER:
-				res += "ALIGN_VCENTER";
-				break;
-
-			case ALIGN_BOTTOM:
-				res += "ALIGN_BOTTOM";
-				break;
-
-			case SNAP_BOTTOM:
-				res += "SNAP_BOTTOM";
-				break;
-
-			case MID_TOP:
-				res += "MID_TOP";
-				break;
-
-			case MID_BOTTOM:
-				res += "MID_BOTTOM";
-				break;
-
-			case TOP_VCENTER:
-				res += "TOP_VCENTER";
-				break;
-
-			case BOTTOM_VCENTER:
-				res += "BOTTOM_VCENTER";
-				break;
-
-			default:
-				res += mode & VERTICAL_MASK;
-		}
-
-		res += "]";
-
-		return res;
 	}
 }
