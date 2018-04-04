@@ -101,11 +101,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		File dir = new File(ConfigActivity.DATA_DIR, MyClassLoader.getName());
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		return new File(dir, name);
+		return new File(ConfigActivity.DATA_DIR + MyClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {

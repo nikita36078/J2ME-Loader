@@ -128,8 +128,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		ContextHolder.setCurrentActivity(this);
 		pathToMidletDir = getIntent().getDataString();
 		String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
-		keylayoutFile = new File(DATA_DIR + appName, "VirtualKeyboardLayout");
 		dataDir = new File(DATA_DIR + appName);
+		dataDir.mkdirs();
+		keylayoutFile = new File(dataDir, "VirtualKeyboardLayout");
 
 		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
 
