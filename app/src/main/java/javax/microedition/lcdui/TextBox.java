@@ -165,6 +165,10 @@ public class TextBox extends Screen {
 	public void setInitialInputMode(String characterSubset) {
 	}
 
+	public void setChars(char[] data, int offset, int length) {
+		setString(new String(data, offset, length));
+	}
+
 	@Override
 	public View getScreenView() {
 		if (scrollview == null) {

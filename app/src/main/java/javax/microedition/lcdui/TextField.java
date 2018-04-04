@@ -192,6 +192,10 @@ public class TextField extends Item {
 	public void setInitialInputMode(String characterSubset) {
 	}
 
+	public void setChars(char[] data, int offset, int length) {
+		setString(new String(data, offset, length));
+	}
+
 	@Override
 	public View getItemContentView() {
 		if (textview == null) {
