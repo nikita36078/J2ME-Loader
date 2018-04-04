@@ -20,6 +20,7 @@
   <string name="action_context_shortcut">Добавить ярлык</string>
   <string name="action_settings">Настройки</string>
   <string name="action_context_delete">Удалить</string>
+  <string name="action_context_rename">Переименовать</string>
   <string name="donate">Поддержать</string>
   <string name="START_CMD">Пуск</string>
   <string name="CANCEL_CMD">Отмена</string>
