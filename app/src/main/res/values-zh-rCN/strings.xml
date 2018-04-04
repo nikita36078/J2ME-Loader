@@ -20,6 +20,7 @@
   <string name="action_context_shortcut">添加快捷方式</string>
   <string name="action_settings">设置</string>
   <string name="action_context_delete">删除</string>
+  <string name="action_context_rename">重命名</string>
   <string name="donate">捐赠</string>
   <string name="START_CMD">开始</string>
   <string name="CANCEL_CMD">取消</string>
