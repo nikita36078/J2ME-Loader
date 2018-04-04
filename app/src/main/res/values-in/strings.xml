@@ -20,6 +20,7 @@
   <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
   <string name="action_settings">Pengaturan</string>
   <string name="action_context_delete">Hapus</string>
+  <string name="action_context_rename">Ubah nama</string>
   <string name="donate">Donasi</string>
   <string name="START_CMD">Mulai</string>
   <string name="CANCEL_CMD">Batal</string>
