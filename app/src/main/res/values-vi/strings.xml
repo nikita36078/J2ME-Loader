@@ -6,7 +6,7 @@
   <string name="help">Trợ giúp</string>
   <string name="more">Nhiều hơn</string>
   <string name="licenses">Giấy phép</string>
-  <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D cũng có một số hạn chế việt hoá thanh ngân.&lt;BR&gt;</string>
+  <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D với một số hạn chế.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Bật lọc trong một số trường hợp có thể làm giảm hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm. &lt;BR&gt;&#8226; Các sự cố nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tùy chọn \"Chế độ ngay lập tức\".</string>
   <string name="author">Tác giả: </string>
   <string name="version">Phiên bản: </string>
