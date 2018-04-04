@@ -76,13 +76,14 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		setTheme(sp.getString("pref_theme", "light"));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_micro);
 		ContextHolder.setCurrentActivity(this);
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 		Intent intent = getIntent();
 		int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
@@ -146,6 +147,14 @@ public class MicroActivity extends AppCompatActivity {
 			case ORIENTATION_DEFAULT:
 			default:
 				break;
+		}
+	}
+
+	private void setTheme(String theme) {
+		if (theme.equals("dark")) {
+			setTheme(R.style.AppTheme_NoActionBar);
+		} else {
+			setTheme(R.style.AppTheme_Light_NoActionBar);
 		}
 	}
 

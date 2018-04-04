@@ -22,15 +22,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import org.sufficientlysecure.donations.DonationsFragment;
 
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class DonationsActivity extends AppCompatActivity {
+public class DonationsActivity extends BaseActivity {
 
 	/**
 	 * Google

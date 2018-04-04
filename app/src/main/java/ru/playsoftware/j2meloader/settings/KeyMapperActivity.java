@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -32,8 +31,9 @@ import android.widget.Button;
 import javax.microedition.lcdui.Canvas;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class KeyMapperActivity extends AppCompatActivity implements View.OnClickListener {
+public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
 	private static SparseIntArray idToCanvasKey = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
 

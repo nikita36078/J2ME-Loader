@@ -26,10 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
-        android:textColor="#040404"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="15sp"
-        android:textStyle="bold"
-        android:typeface="sans" />
+        android:textStyle="bold" />
 
     <!-- Author and version app -->
     <RelativeLayout
@@ -45,9 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:textColor="#343434"
+            android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="10sp"
-            android:typeface="sans"
             tools:ignore="SmallSp" />
 
         <TextView
@@ -55,9 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:textColor="#343434"
+            android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="10sp"
-            android:typeface="sans"
             tools:ignore="SmallSp" />
     </RelativeLayout>
 

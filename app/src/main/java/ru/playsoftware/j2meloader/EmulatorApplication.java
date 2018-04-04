@@ -27,7 +27,8 @@ import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
 
 @AcraCore(reportSenderFactoryClasses = {HockeySenderFactory.class})
 @AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
-		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = R.string.CANCEL_CMD, resTheme = R.style.AppTheme_Dialog)
+		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = R.string.CANCEL_CMD,
+		resTheme = R.style.Theme_AppCompat_Dialog)
 public class EmulatorApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {

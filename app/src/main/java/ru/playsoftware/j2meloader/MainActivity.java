@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,6 +49,7 @@ import ru.playsoftware.j2meloader.applist.AppsListAdapter;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.appsdb.AppDatabase;
 import ru.playsoftware.j2meloader.appsdb.AppItemDao;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
 import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
@@ -57,7 +57,7 @@ import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
 	private AppItemDao appItemDao;
 	private AppsListFragment appsListFragment;

@@ -21,7 +21,6 @@
         <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -58,24 +57,19 @@
         <activity
             android:name="javax.microedition.shell.ConfigActivity"
             android:exported="true"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name=".settings.SettingsActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".settings.SettingsActivity" />
         <activity
-            android:name=".donations.DonationsActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".donations.DonationsActivity" />
         <activity
-            android:name=".settings.KeyMapperActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".settings.KeyMapperActivity" />
         <activity
-            android:name=".filepicker.FilteredFilePickerActivity"
-            android:theme="@style/FilePickerTheme"/>
+            android:name=".filepicker.FilteredFilePickerActivity" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

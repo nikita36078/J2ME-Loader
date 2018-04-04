@@ -27,7 +27,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseIntArray;
@@ -58,11 +57,12 @@ import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ConfigActivity extends AppCompatActivity implements View.OnClickListener {
+public class ConfigActivity extends BaseActivity implements View.OnClickListener {
 
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;

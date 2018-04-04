@@ -106,6 +106,16 @@
     <string name="hide_buttons">Hide buttons</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
 
+    <string name="pref_theme_title">Theme</string>
+    <string-array name="pref_theme_entries">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="pref_theme_values" translatable="false">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+    <string name="pref_requires_restart_summary">Requires restart</string>
     <string name="pref_enable_actionbar_title">Enable ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
     <string name="pref_app_sort_title">App sort order</string>
