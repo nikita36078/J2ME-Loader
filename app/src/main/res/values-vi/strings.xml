@@ -14,14 +14,14 @@
   <string name="message_delete">Bạn có thực sự muốn xóa ứng dụng này?</string>
   <string name="converting_wait">Đang chuyển đổi JAR...</string>
   <string name="convert_complete">Hoàn thành</string>
-  <string name="converting_message">Đang chế biến...</string>
+  <string name="converting_message">Đang xử lý...</string>
   <string name="permission_request_failed">Ứng dụng này yêu cầu quyền ghi lưu trữ</string>
   <string name="external_storage_not_mounted">Ứng dụng này đòi hỏi phải lưu trữ bộ nhớ ngoài</string>
   <string name="action_context_shortcut">Thêm lối tắt</string>
   <string name="action_settings">Thiết lập</string>
   <string name="action_context_delete">Xóa</string>
   <string name="action_context_rename">Đổi tên</string>
-  <string name="donate">Tặng</string>
+  <string name="donate">Quyên góp</string>
   <string name="START_CMD">Bắt đầu</string>
   <string name="CANCEL_CMD">Hủy bỏ</string>
   <string name="CLEAR_DATA_CMD">Xoá dữ liệu</string>
