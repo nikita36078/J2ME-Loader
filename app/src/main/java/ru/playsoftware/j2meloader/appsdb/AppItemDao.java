@@ -38,7 +38,7 @@ public interface AppItemDao {
 	@Query("SELECT count(*) FROM apps")
 	int getSize();
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	void insert(AppItem item);
 
 	@Insert
