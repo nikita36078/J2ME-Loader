@@ -536,6 +536,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public void setTarget(Canvas canvas) {
 		target = canvas;
 		repeater.setTarget(canvas);
+		highlightGroup(-1);
 	}
 
 	public void setLayoutListener(LayoutListener listener) {
