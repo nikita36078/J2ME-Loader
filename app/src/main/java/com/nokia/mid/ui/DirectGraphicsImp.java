@@ -169,6 +169,9 @@ public class DirectGraphicsImp implements DirectGraphics {
 			throw new IllegalArgumentException();
 		}
 
+		int transform = getTransformation(manipulation);
+		int[] pixres = new int[height * width];
+
 		switch (format) {
 			case TYPE_BYTE_1_GRAY: {
 				int b = 7;
@@ -178,8 +181,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 					for (int xj = 0; xj < width; xj++) {
 						int c = doAlpha(pix, alpha, (line + xj) / 8, b);
 						if (!isTransparent(c)) { //alpha
-							graphics.setColorAlpha(c);
-							graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
+							pixres[yj * width + xj] = c;
 						}
 						b--;
 						if (b < 0) b = 7;
@@ -197,8 +199,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 					for (int xj = 0; xj < width; xj++) {
 						int c = doAlpha(pix, alpha, tmp + xj, b);
 						if (!isTransparent(c)) { //alpha
-							graphics.setColorAlpha(c);
-							graphics.drawLine(xj + x, yj + y, xj + x, yj + y);
+							pixres[yj * width + xj] = c;
 						}
 					}
 					b++;
@@ -209,6 +210,9 @@ public class DirectGraphicsImp implements DirectGraphics {
 			default:
 				throw new IllegalArgumentException();
 		}
+
+		Image image = Image.createRGBImage(pixres, width, height, true);
+		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
 	/**
