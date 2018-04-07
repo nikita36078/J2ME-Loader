@@ -97,7 +97,7 @@
     <item>Tên</item>
     <item>Ngày</item>
   </string-array>
-  <string name="pref_map_keys">Ánh xạ chính</string>
+  <string name="pref_map_keys">Thiết lập phím bấm</string>
   <string name="mapping_dialog_title">Bấm một phím</string>
   <string name="mapping_dialog_message" formatted="false">Lập bản đồ hiện tại: %1$s</string>
   <string name="reset_mapping">Cài lại</string>
