@@ -6,7 +6,7 @@
   <string name="help">Trợ giúp</string>
   <string name="more">Nhiều hơn</string>
   <string name="licenses">Giấy phép</string>
-  <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D cũng có một số hạn chế việt hoá thanh ngân.&lt;BR&gt;</string>
+  <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D với một số hạn chế.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Bật lọc trong một số trường hợp có thể làm giảm hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm. &lt;BR&gt;&#8226; Các sự cố nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tùy chọn \"Chế độ ngay lập tức\".</string>
   <string name="author">Tác giả: </string>
   <string name="version">Phiên bản: </string>
@@ -14,13 +14,14 @@
   <string name="message_delete">Bạn có thực sự muốn xóa ứng dụng này?</string>
   <string name="converting_wait">Đang chuyển đổi JAR...</string>
   <string name="convert_complete">Hoàn thành</string>
-  <string name="converting_message">Đang chế biến...</string>
+  <string name="converting_message">Đang xử lý...</string>
   <string name="permission_request_failed">Ứng dụng này yêu cầu quyền ghi lưu trữ</string>
   <string name="external_storage_not_mounted">Ứng dụng này đòi hỏi phải lưu trữ bộ nhớ ngoài</string>
   <string name="action_context_shortcut">Thêm lối tắt</string>
   <string name="action_settings">Thiết lập</string>
   <string name="action_context_delete">Xóa</string>
-  <string name="donate">Tặng</string>
+  <string name="action_context_rename">Đổi tên</string>
+  <string name="donate">Quyên góp</string>
   <string name="START_CMD">Bắt đầu</string>
   <string name="CANCEL_CMD">Hủy bỏ</string>
   <string name="CLEAR_DATA_CMD">Xoá dữ liệu</string>
@@ -44,6 +45,7 @@
   <string name="PREF_VK_SHOW">Hiển thị bàn phím</string>
   <string name="PREF_VK_FEEDBACK">Thông tin phản hồi Haptic</string>
   <string name="PREF_TOUCH_INPUT">Cảm ứng đầu vào</string>
+  <string name="PREF_HW_ACCELERATION">Gia tốc phần cứng (không ổn định)</string>
   <string name="PREF_VK_BACK">Nút</string>
   <string name="PREF_VK_FORE">Nhãn</string>
   <string name="PREF_VK_OUTLINE">Đề cương</string>
@@ -61,6 +63,13 @@
   <string name="SIZE_PRESETS">Đặt trước</string>
   <string name="SWAP_SIZES">K.thước hoán đổi</string>
   <string name="PREF_SYS_PROPS">Thuộc tính hệ thống</string>
+  <string name="PREF_ORIENTATION">Chiều màn hình</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>Mặc định</item>
+    <item>Tự động</item>
+    <item>Chiều dọc</item>
+    <item>Chiều ngang</item>
+  </string-array>
   <string name="error">Lỗi</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Buộc đóng ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí phá vỡ hoàn toàn!\nTiến hành?</string>
   <string name="CONFIRMATION_REQUIRED">Yêu cầu xác nhận</string>
@@ -75,6 +84,12 @@
   <string name="layout_switch">Chuyển đổi bố trí chính</string>
   <string name="hide_buttons">Ẩn nút</string>
   <string name="common_settings">[THIẾT LẬP CHUNG]</string>
+  <string name="pref_theme_title">Chủ đề</string>
+  <string-array name="pref_theme_entries">
+    <item>Sáng</item>
+    <item>Tối</item>
+  </string-array>
+  <string name="pref_requires_restart_summary">Yêu cầu khởi động lại</string>
   <string name="pref_enable_actionbar_title">Bật thanh hành động</string>
   <string name="pref_enable_actionbar_summary">Trong ứng dụng toàn màn hình</string>
   <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
@@ -82,7 +97,7 @@
     <item>Tên</item>
     <item>Ngày</item>
   </string-array>
-  <string name="pref_map_keys">Ánh xạ chính</string>
+  <string name="pref_map_keys">Thiết lập phím bấm</string>
   <string name="mapping_dialog_title">Bấm một phím</string>
   <string name="mapping_dialog_message" formatted="false">Lập bản đồ hiện tại: %1$s</string>
   <string name="reset_mapping">Cài lại</string>

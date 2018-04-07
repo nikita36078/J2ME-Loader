@@ -20,6 +20,7 @@
   <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
   <string name="action_settings">Pengaturan</string>
   <string name="action_context_delete">Hapus</string>
+  <string name="action_context_rename">Ubah nama</string>
   <string name="donate">Donasi</string>
   <string name="START_CMD">Mulai</string>
   <string name="CANCEL_CMD">Batal</string>
@@ -83,6 +84,11 @@
   <string name="layout_switch">Tukar letak tombol</string>
   <string name="hide_buttons">Sembunyikan tombol</string>
   <string name="common_settings">[PENGATURAN UMUM]</string>
+  <string name="pref_theme_title">Tema</string>
+  <string-array name="pref_theme_entries">
+    <item>Terang</item>
+    <item>Gelap</item>
+  </string-array>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
   <string name="pref_enable_actionbar_summary">Aplikasi dalam layar penuh</string>
   <string name="pref_app_sort_title">Mengurutkan app</string>
