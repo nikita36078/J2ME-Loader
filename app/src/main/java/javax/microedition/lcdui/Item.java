@@ -68,6 +68,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	private String label;
 	private TextView labelview;
 	private int labelmode;
+	private int preferredWidth, preferredHeight;
 
 	private Form owner;
 
@@ -248,7 +249,24 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setPreferredSize(int width, int height) {
-		// TODO Implement this method
+		preferredWidth = width;
+		preferredHeight = height;
+	}
+
+	public int getPreferredWidth() {
+		return preferredWidth;
+	}
+
+	public int getPreferredHeight() {
+		return preferredHeight;
+	}
+
+	public int getMinimumHeight() {
+		return 0;
+	}
+
+	public int getMinimumWidth() {
+		return 0;
 	}
 
 	@Override
