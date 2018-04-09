@@ -41,7 +41,7 @@ public interface AppItemDao {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	void insert(AppItem item);
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	void insertAll(ArrayList<AppItem> items);
 
 	@Delete
