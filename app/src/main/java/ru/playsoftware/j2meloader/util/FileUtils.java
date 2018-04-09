@@ -199,12 +199,13 @@ public class FileUtils {
 		List<String> appFoldersList = Arrays.asList(appFolders);
 		boolean result = true;
 		// Delete invalid app items from db
-		for (int i = 0; i < itemsNum; i++) {
-			AppItem item = items.get(i);
+		Iterator<AppItem> iterator = items.iterator();
+		while (iterator.hasNext()) {
+			AppItem item = iterator.next();
 			if (!appFoldersList.contains(item.getPath())) {
 				result = false;
 				((MainActivity) context).deleteApp(item);
-				items.remove(item);
+				iterator.remove();
 			}
 		}
 		if (appFolders.length != items.size()) {
