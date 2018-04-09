@@ -184,15 +184,14 @@ public class FileUtils {
 	public static boolean checkDb(Context context, List<AppItem> items) {
 		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
 		int itemsNum = items.size();
-		int foldersNum = appFolders.length;
 		// If db is empty
 		if (itemsNum == 0) {
-			if (appFolders == null || foldersNum == 0) {
+			if (appFolders == null || appFolders.length == 0) {
 				return true;
 			} else {
 				return false;
 			}
-		} else if (appFolders == null || foldersNum == 0) {
+		} else if (appFolders == null || appFolders.length == 0) {
 			// Else if app folder is empty
 			((MainActivity) context).deleteAllApps();
 			return true;
@@ -208,7 +207,7 @@ public class FileUtils {
 				items.remove(item);
 			}
 		}
-		if (foldersNum != items.size()) {
+		if (appFolders.length != items.size()) {
 			result = false;
 		}
 		return result;
