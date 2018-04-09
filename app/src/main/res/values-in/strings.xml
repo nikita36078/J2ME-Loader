@@ -89,6 +89,7 @@
     <item>Terang</item>
     <item>Gelap</item>
   </string-array>
+  <string name="pref_requires_restart_summary">Perubahan hanya berlaku setelah mengulang J2ME Loader</string>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
   <string name="pref_enable_actionbar_summary">Aplikasi dalam layar penuh</string>
   <string name="pref_app_sort_title">Mengurutkan app</string>
