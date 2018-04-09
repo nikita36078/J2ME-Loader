@@ -88,6 +88,9 @@ public abstract class Displayable {
 	public abstract void clearDisplayableView();
 
 	public void addCommand(Command cmd) {
+		if (cmd == null) {
+			throw new NullPointerException();
+		}
 		if (!commands.contains(cmd)) {
 			commands.add(cmd);
 		}
