@@ -16,7 +16,7 @@
 #   public *;
 #}
 -keep class javax.** { *; }
--keep class com.siemens.mp.game.** { *; }
+-keep class com.siemens.mp.** { *; }
 -keep class com.samsung.util.** { *; }
 -keep class com.mascotcapsule.micro3d.v3.** { *; }
 -keep class com.nokia.mid.** { *; }
