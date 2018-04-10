@@ -1371,10 +1371,8 @@ public class Sprite extends Layer {
 		return t_y;
 	}
 
-	public static Matrix transformMatrix(Matrix matrix, int transform, float px, float py) {
-		if (matrix == null) {
-			matrix = new Matrix();
-		}
+	public static Matrix transformMatrix(int transform, float px, float py) {
+		Matrix matrix = new Matrix();
 
 		switch (transform) {
 			case Sprite.TRANS_ROT90:

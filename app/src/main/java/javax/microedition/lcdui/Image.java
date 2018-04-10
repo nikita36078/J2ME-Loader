@@ -74,7 +74,7 @@ public class Image {
 	}
 
 	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
-		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, Sprite.transformMatrix(null, transform, width / 2f, height / 2f), false));
+		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, Sprite.transformMatrix(transform, width / 2f, height / 2f), false));
 	}
 
 	public static Image createImage(Image image) {
