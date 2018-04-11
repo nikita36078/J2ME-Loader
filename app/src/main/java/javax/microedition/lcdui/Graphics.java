@@ -392,7 +392,24 @@ public class Graphics {
 
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
 		if (width == 0 || height == 0) return;
-		drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
+
+		if (transform != 0) {
+			drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
+		} else {
+			if ((anchor & Graphics.RIGHT) != 0) {
+				dstx -= image.getWidth();
+			} else if ((anchor & Graphics.HCENTER) != 0) {
+				dstx -= image.getWidth() / 2;
+			}
+			if ((anchor & Graphics.BOTTOM) != 0) {
+				dsty -= image.getHeight();
+			} else if ((anchor & Graphics.VCENTER) != 0) {
+				dsty -= image.getHeight() / 2;
+			}
+			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
+			RectF dstR = new RectF(dstx, dsty, dstx + width, dsty + height);
+			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+		}
 	}
 
 	public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
