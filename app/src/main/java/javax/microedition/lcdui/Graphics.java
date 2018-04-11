@@ -263,6 +263,18 @@ public class Graphics {
 	}
 
 	public void drawLine(int x1, int y1, int x2, int y2) {
+		if (x2 >= x1) {
+			x2++;
+		} else {
+			x1++;
+		}
+
+		if (y2 >= y1) {
+			y2++;
+		} else {
+			y1++;
+		}
+
 		canvas.drawLine(x1, y1, x2, y2, drawPaint);
 	}
 
