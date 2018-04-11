@@ -368,6 +368,13 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	public void setFont(int elementNum, Font font) {
+	}
+
+	public Font getFont(int elementNum) {
+		return Font.getDefaultFont();
+	}
+
 	public void setFitPolicy(int fitPolicy) {
 		this.fitPolicy = fitPolicy;
 	}

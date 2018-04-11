@@ -308,7 +308,7 @@ public class List extends Screen implements Choice, ItemSelector {
 	}
 
 	public Font getFont(int elementNum) {
-		return null;
+		return Font.getDefaultFont();
 	}
 
 	public void setFitPolicy(int fitPolicy) {
