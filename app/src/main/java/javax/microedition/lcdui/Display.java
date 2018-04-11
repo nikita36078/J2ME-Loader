@@ -138,7 +138,7 @@ public class Display {
 		if (current != null) {
 			current.postEvent(RunnableEvent.getInstance(r));
 		} else {
-			r.run();
+			(new Thread(r)).start();
 		}
 	}
 
