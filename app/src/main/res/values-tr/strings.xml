@@ -12,7 +12,7 @@
   <string name="version">Sürüm: </string>
   <string name="no_data_for_display">Veri yok</string>
   <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
-  <string name="converting_wait">JAR\'a dönüştürülüyor...</string>
+  <string name="converting_wait">JAR dönüştürülüyor...</string>
   <string name="convert_complete">Tamamlandı</string>
   <string name="converting_message">İşleniyor...</string>
   <string name="permission_request_failed">Bu uygulama için depolama izni gerekiyor</string>
@@ -20,6 +20,7 @@
   <string name="action_context_shortcut">Kısayol ekle</string>
   <string name="action_settings">Ayarlar</string>
   <string name="action_context_delete">Sil</string>
+  <string name="action_context_rename">Yeniden adlandır</string>
   <string name="donate">Bağış yap</string>
   <string name="START_CMD">Başlat</string>
   <string name="CANCEL_CMD">İptal</string>
@@ -83,6 +84,12 @@
   <string name="layout_switch">Tuş düzenini değiştir</string>
   <string name="hide_buttons">Tuşları gizle</string>
   <string name="common_settings">[GENEL AYARLAR]</string>
+  <string name="pref_theme_title">Tema</string>
+  <string-array name="pref_theme_entries">
+    <item>Açık</item>
+    <item>Koyu</item>
+  </string-array>
+  <string name="pref_requires_restart_summary">Yeniden başlatma gerektirir</string>
   <string name="pref_enable_actionbar_title">Başlık çubuğunu etkinleştir</string>
   <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
   <string name="pref_app_sort_title">Uygulamaları sırala</string>
