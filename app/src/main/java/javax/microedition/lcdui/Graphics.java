@@ -409,14 +409,14 @@ public class Graphics {
 			drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
 		} else {
 			if ((anchor & Graphics.RIGHT) != 0) {
-				dstx -= image.getWidth();
+				dstx -= width;
 			} else if ((anchor & Graphics.HCENTER) != 0) {
-				dstx -= image.getWidth() / 2;
+				dstx -= width / 2;
 			}
 			if ((anchor & Graphics.BOTTOM) != 0) {
-				dsty -= image.getHeight();
+				dsty -= height;
 			} else if ((anchor & Graphics.VCENTER) != 0) {
-				dsty -= image.getHeight() / 2;
+				dsty -= height / 2;
 			}
 			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
 			RectF dstR = new RectF(dstx, dsty, dstx + width, dsty + height);
