@@ -9,7 +9,8 @@ J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3
 This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoader).
 
 System requirements: Android 4.0+  
-[4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201).
+[4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201)  
+[XDA-Developers](https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889)
 
 <a href="https://play.google.com/store/apps/details?id=ru.playsoftware.j2meloader">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
