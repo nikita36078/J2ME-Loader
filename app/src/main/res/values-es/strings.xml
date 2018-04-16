@@ -20,6 +20,7 @@
   <string name="action_context_shortcut">Agregar acceso directo</string>
   <string name="action_settings">Configuración</string>
   <string name="action_context_delete">Eliminar</string>
+  <string name="action_context_rename">Cambiar el nombre de</string>
   <string name="donate">Donar</string>
   <string name="START_CMD">Iniciar</string>
   <string name="CANCEL_CMD">Cancelar</string>
