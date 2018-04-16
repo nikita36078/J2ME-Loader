@@ -86,14 +86,12 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 
 	@Override
 	public void run() {
-		if (finiteTimeout()) {
-			try {
-				Thread.sleep(timeout);
-				Display display = Display.getDisplay(null);
-				display.setCurrent(display.getCurrent());
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
+		try {
+			Thread.sleep(timeout);
+			Display display = Display.getDisplay(null);
+			display.setCurrent(display.getCurrent());
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
 		}
 	}
 
