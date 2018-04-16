@@ -4,6 +4,8 @@
   <string name="exit">Вихід</string>
   <string name="about">Про додаток</string>
   <string name="help">Довідка</string>
+  <string name="more">Більше</string>
+  <string name="licenses">Ліцензія</string>
   <string name="about_message">Дана програма дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
   <string name="author">Автор: </string>
@@ -18,9 +20,12 @@
   <string name="action_context_shortcut">Додати ярлик</string>
   <string name="action_settings">Налаштування</string>
   <string name="action_context_delete">Видалити</string>
+  <string name="action_context_rename">Перейменувати</string>
   <string name="donate">Підтримати проект</string>
   <string name="START_CMD">Старт</string>
   <string name="CANCEL_CMD">Відмінити</string>
+  <string name="CLEAR_DATA_CMD">Очистити дані</string>
+  <string name="RESET_SETTINGS_CMD">Скинути налаштування</string>
   <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
   <string name="PREF_SCREEN_OPTIONS">Параметри екрану</string>
   <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
@@ -38,6 +43,9 @@
   <string name="PREF_BACKGROUND">Фон</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
   <string name="PREF_VK_SHOW">Показати клавіатуру</string>
+  <string name="PREF_VK_FEEDBACK">Вібрація при натисканні</string>
+  <string name="PREF_TOUCH_INPUT">Сенсорний ввід</string>
+  <string name="PREF_HW_ACCELERATION">Апаратне прискорення (нестабільно)</string>
   <string name="PREF_VK_BACK">Клавіші</string>
   <string name="PREF_VK_FORE">Позначки</string>
   <string name="PREF_VK_OUTLINE">Контур</string>
@@ -55,6 +63,13 @@
   <string name="SIZE_PRESETS">Шаблони</string>
   <string name="SWAP_SIZES">Поміняти розміри</string>
   <string name="PREF_SYS_PROPS">Системні опції</string>
+  <string name="PREF_ORIENTATION">Орієнтація екрану</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>Типова</item>
+    <item>Автоматична</item>
+    <item>Портретна</item>
+    <item>Альбомна</item>
+  </string-array>
   <string name="error">Помилка</string>
   <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання програми може призвести до втрати даних або навіть до повного виведення її з ладу! \nПродовжити?</string>
   <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
@@ -69,6 +84,12 @@
   <string name="layout_switch">Переключення розкладки клавіатури</string>
   <string name="hide_buttons">Приховати клавіші</string>
   <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
+  <string name="pref_theme_title">Тема</string>
+  <string-array name="pref_theme_entries">
+    <item>Світла</item>
+    <item>Темна</item>
+  </string-array>
+  <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
   <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
   <string name="pref_enable_actionbar_summary">У повноекранних програмах</string>
   <string name="pref_app_sort_title">Порядок сортування програм</string>
@@ -76,4 +97,8 @@
     <item>Назва</item>
     <item>Дата</item>
   </string-array>
+  <string name="pref_map_keys">Зіставлення клавіш</string>
+  <string name="mapping_dialog_title">Натисніть клавішу</string>
+  <string name="mapping_dialog_message" formatted="false">Поточне зіставлення: %1$s</string>
+  <string name="reset_mapping">Скинути</string>
 </resources>
