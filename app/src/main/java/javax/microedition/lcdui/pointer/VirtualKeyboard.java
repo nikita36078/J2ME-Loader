@@ -44,6 +44,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_UP = "\u2191";
 	private static final String ARROW_RIGHT = "\u2192";
 	private static final String ARROW_DOWN = "\u2193";
+	private static final String ARROW_UP_LEFT = "\u2196";
+	private static final String ARROW_UP_RIGHT= "\u2197";
+	private static final String ARROW_DOWN_LEFT = "\u2199";
+	private static final String ARROW_DOWN_RIGHT = "\u2198";
 
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
@@ -303,16 +307,16 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		keypad[KEY_DIAL] = new VirtualKey(Canvas.KEY_SEND, "D");
 		keypad[KEY_CANCEL] = new VirtualKey(Canvas.KEY_END, "C");
 
-		keypad[KEY_UP_LEFT] = new VirtualKey(Canvas.KEY_UP, Canvas.KEY_LEFT, ARROW_LEFT + ARROW_UP);
+		keypad[KEY_UP_LEFT] = new VirtualKey(Canvas.KEY_UP, Canvas.KEY_LEFT, ARROW_UP_LEFT);
 		keypad[KEY_UP] = new VirtualKey(Canvas.KEY_UP, ARROW_UP);
-		keypad[KEY_UP_RIGHT] = new VirtualKey(Canvas.KEY_UP, Canvas.KEY_RIGHT, ARROW_UP + ARROW_RIGHT);
+		keypad[KEY_UP_RIGHT] = new VirtualKey(Canvas.KEY_UP, Canvas.KEY_RIGHT, ARROW_UP_RIGHT);
 
 		keypad[KEY_LEFT] = new VirtualKey(Canvas.KEY_LEFT, ARROW_LEFT);
 		keypad[KEY_RIGHT] = new VirtualKey(Canvas.KEY_RIGHT, ARROW_RIGHT);
 
-		keypad[KEY_DOWN_LEFT] = new VirtualKey(Canvas.KEY_DOWN, Canvas.KEY_LEFT, ARROW_LEFT + ARROW_DOWN);
+		keypad[KEY_DOWN_LEFT] = new VirtualKey(Canvas.KEY_DOWN, Canvas.KEY_LEFT, ARROW_DOWN_LEFT);
 		keypad[KEY_DOWN] = new VirtualKey(Canvas.KEY_DOWN, ARROW_DOWN);
-		keypad[KEY_DOWN_RIGHT] = new VirtualKey(Canvas.KEY_DOWN, Canvas.KEY_RIGHT, ARROW_DOWN + ARROW_RIGHT);
+		keypad[KEY_DOWN_RIGHT] = new VirtualKey(Canvas.KEY_DOWN, Canvas.KEY_RIGHT, ARROW_DOWN_RIGHT);
 
 		keypad[KEY_FIRE] = new VirtualKey(Canvas.KEY_FIRE, "F");
 
