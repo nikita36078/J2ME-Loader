@@ -245,8 +245,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private void setProperties() {
 		System.setProperty("microedition.sensor.version", "1");
 		System.setProperty("microedition.platform", "Nokia 6233");
-		System.setProperty("microedition.configuration", "CDLC1.1");
-		System.setProperty("microedition.profiles", "MIDP2.0");
+		System.setProperty("microedition.configuration", "CDLC-1.1");
+		System.setProperty("microedition.profiles", "MIDP-2.0");
 		System.setProperty("microedition.m3g.version", "1.1");
 		System.setProperty("microedition.media.version", "1.0");
 		System.setProperty("supports.mixing", "true");
