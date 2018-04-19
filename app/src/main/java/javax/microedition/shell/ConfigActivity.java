@@ -245,8 +245,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private void setProperties() {
 		System.setProperty("microedition.sensor.version", "1");
 		System.setProperty("microedition.platform", "Nokia 6233");
-		System.setProperty("microedition.configuration", "CDLC1.1");
-		System.setProperty("microedition.profiles", "MIDP2.0");
+		System.setProperty("microedition.configuration", "CDLC-1.1");
+		System.setProperty("microedition.profiles", "MIDP-2.0");
 		System.setProperty("microedition.m3g.version", "1.1");
 		System.setProperty("microedition.media.version", "1.0");
 		System.setProperty("supports.mixing", "true");
@@ -255,7 +255,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		System.setProperty("supports.recording", "false");
 		System.setProperty("microedition.pim.version", "1.0");
 		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
-		System.setProperty("microedition.locale", Locale.getDefault().getCountry().toLowerCase());
+		final Locale defaultLocale = Locale.getDefault();
+		final String country = defaultLocale.getCountry();
+		System.setProperty("microedition.locale", defaultLocale.getLanguage()
+				+ (country.length() == 2 ? "-" + country : ""));
 		System.setProperty("microedition.encoding", "ISO-8859-1");
 		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
 		System.setProperty("com.siemens.IMEI", "000000000000000");
