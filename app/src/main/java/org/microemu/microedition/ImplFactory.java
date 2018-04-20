@@ -86,9 +86,6 @@ public class ImplFactory {
 			scheme = DEFAULT;
 		}
 		Object impl = instance().implementationsGCF.get(scheme);
-		if (impl instanceof ImplementationUnloadable) {
-			((ImplementationUnloadable) impl).unregisterImplementation();
-		}
 		instance().implementationsGCF.put(scheme, implementation);
 	}
 
@@ -157,21 +154,11 @@ public class ImplFactory {
 		return (ConnectorDelegate) instance().getDefaultImplementation(ConnectorDelegate.class);
 	}
 
-	// public static Implementation getImplementation(Class origClass, Object[]
-	// constructorArgs) {
-	// //TO-DO constructorArgs
-	// return getImplementation(origClass);
-	// }
-
 	public static Implementation getImplementation(Class origClass, Class delegateInterface) {
 		// if called from implementation constructor return null to avoid
 		// recurive calls!
 		// TODO can be done using thread stack analyse or ThreadLocal
 		Object impl = instance().implementations.get(delegateInterface);
-		// debugClassLoader(Implementation.class);
-		// debugClassLoader(origClass);
-		// debugClassLoader(delegateInterface);
-		// debugClassLoader(o);
 
 		if (impl != null) {
 			if (impl instanceof Class) {

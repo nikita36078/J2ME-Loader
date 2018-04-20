@@ -43,8 +43,6 @@ public interface PushRegistryDelegate {
 
 	public String getFilter(String connection);
 
-	public long registerAlarm(String midlet, long time)
-
-			throws ClassNotFoundException, ConnectionNotFoundException;
+	public long registerAlarm(String midlet, long time) throws ClassNotFoundException, ConnectionNotFoundException;
 
 }

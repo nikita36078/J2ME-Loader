@@ -51,7 +51,7 @@ public class Connection implements ConnectionImplementation {
 		}
 		switch (connectionType) {
 			case CONNECTIONTYPE_SYSTEM_FS:
-				return new FileSystemFileConnection(null, name.substring(PROTOCOL.length()), null);
+				return new FileSystemFileConnection(name.substring(PROTOCOL.length()));
 			default:
 				throw new IOException("Invalid connectionType configuration");
 		}

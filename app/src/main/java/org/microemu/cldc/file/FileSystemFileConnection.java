@@ -64,8 +64,6 @@ public class FileSystemFileConnection implements FileConnection {
 
 	private Throwable locationClosedFrom = null;
 
-	private FileSystemConnectorImpl notifyClosed;
-
 	private InputStream opendInputStream;
 
 	private OutputStream opendOutputStream;
@@ -76,14 +74,12 @@ public class FileSystemFileConnection implements FileConnection {
 
 	private static String TAG = FileSystemFileConnection.class.getName();
 
-	FileSystemFileConnection(String fsRootConfig, String name, FileSystemConnectorImpl notifyClosed) throws IOException {
+	FileSystemFileConnection(String name) throws IOException {
 		// <host>/<path>
 		int hostEnd = name.indexOf(DIR_SEP);
 		if (hostEnd == -1) {
 			throw new IOException("Invalid path " + name);
 		}
-		this.fsRootConfig = fsRootConfig;
-		this.notifyClosed = notifyClosed;
 
 		host = name.substring(0, hostEnd);
 		fullPath = name.substring(hostEnd + 1);
@@ -101,7 +97,7 @@ public class FileSystemFileConnection implements FileConnection {
 	}
 
 
-	public static File getRoot(String fsRootConfig) {
+	private static File getRoot(String fsRootConfig) {
 		try {
 			File fsRoot = new File(System.getProperty("user.home"));
 			if (!fsRoot.isDirectory()) {
@@ -511,9 +507,6 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public void close() throws IOException {
 		if (this.file != null) {
-			if (this.notifyClosed != null) {
-				this.notifyClosed.notifyClosed(this);
-			}
 			locationClosedFrom = new Throwable();
 			locationClosedFrom.fillInStackTrace();
 			this.file = null;
