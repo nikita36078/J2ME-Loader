@@ -34,23 +34,11 @@ import javax.microedition.io.file.FileSystemListener;
 
 public class FileSystemRegistryImpl implements FileSystemRegistryDelegate, Implementation {
 
-	private String fsRoot;
-
-	private String fsSingle;
-
-	public FileSystemRegistryImpl() {
-	}
-
-	public FileSystemRegistryImpl(String fsRoot, String fsSingle) {
-		this.fsRoot = fsRoot;
-		this.fsSingle = fsSingle;
-	}
-
 	@Override
 	public Enumeration listRoots() {
 		switch (Connection.getConnectionType()) {
 			case Connection.CONNECTIONTYPE_SYSTEM_FS:
-				return FileSystemFileConnection.listRoots(fsRoot, fsSingle);
+				return FileSystemFileConnection.listRoots();
 			default:
 				throw new RuntimeException("Invalid connectionType configuration");
 		}

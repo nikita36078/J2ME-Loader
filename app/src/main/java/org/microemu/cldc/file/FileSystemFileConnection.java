@@ -26,8 +26,6 @@
  */
 package org.microemu.cldc.file;
 
-import android.util.Log;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -48,8 +46,6 @@ import javax.microedition.io.file.FileConnection;
 
 public class FileSystemFileConnection implements FileConnection {
 
-	private String fsRootConfig;
-
 	private File fsRoot;
 
 	private String host;
@@ -67,6 +63,8 @@ public class FileSystemFileConnection implements FileConnection {
 	private InputStream opendInputStream;
 
 	private OutputStream opendOutputStream;
+
+	private final static String ROOT_INTERNAL_DIR = "c:/";
 
 	private final static char DIR_SEP = '/';
 
@@ -88,49 +86,24 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 		int rootEnd = fullPath.indexOf(DIR_SEP);
 		isRoot = ((rootEnd == -1) || (rootEnd == fullPath.length() - 1));
-		if (fullPath.charAt(fullPath.length() - 1) == DIR_SEP) {
-			fullPath = fullPath.substring(0, fullPath.length() - 1);
-		}
-		fsRoot = getRoot(FileSystemFileConnection.this.fsRootConfig);
-		file = new File(fsRoot, fullPath);
+		fsRoot = getRoot(fullPath);
+		file = new File(fsRoot, fullPath.substring(rootEnd));
 		isDirectory = file.isDirectory();
 	}
 
 
-	private static File getRoot(String fsRootConfig) {
-		try {
+	private static File getRoot(String path) {
+		if (path.toLowerCase().startsWith(ROOT_INTERNAL_DIR)) {
 			File fsRoot = new File(System.getProperty("user.home"));
-			if (!fsRoot.isDirectory()) {
-				throw new RuntimeException("Can't find filesystem root " + fsRoot.getAbsolutePath());
-			}
 			return fsRoot;
-		} catch (SecurityException e) {
-			Log.e(TAG, "Cannot access user.home " + e);
+		} else {
 			return null;
 		}
 	}
 
-	static Enumeration listRoots(String fsRootConfig, String fsSingleConfig) {
-		File[] files;
-		if (fsSingleConfig != null) {
-			files = new File[1];
-			files[0] = getRoot(fsRootConfig + fsSingleConfig);
-		} else {
-			files = getRoot(fsRootConfig).listFiles();
-			Arrays.sort(files);
-			if (files == null) { // null if security restricted
-				return (new Vector()).elements();
-			}
-		}
+	static Enumeration listRoots() {
 		Vector list = new Vector();
-		for (File file : files) {
-			if (file.isHidden()) {
-				continue;
-			}
-			if (file.isDirectory()) {
-				list.add(file.getName() + DIR_SEP);
-			}
-		}
+		list.add(ROOT_INTERNAL_DIR);
 		return list.elements();
 	}
 
