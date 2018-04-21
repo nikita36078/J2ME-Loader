@@ -30,17 +30,6 @@ public final class CstBoolean
     public static final CstBoolean VALUE_TRUE = new CstBoolean(true);
 
     /**
-     * Makes an instance for the given value. This will return an
-     * already-allocated instance.
-     *
-     * @param value the {@code boolean} value
-     * @return {@code non-null;} the appropriate instance
-     */
-    public static CstBoolean make(boolean value) {
-        return value ? VALUE_TRUE : VALUE_FALSE;
-    }
-
-    /**
      * Makes an instance for the given {@code int} value. This
      * will return an already-allocated instance.
      *
@@ -73,7 +62,8 @@ public final class CstBoolean
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.BOOLEAN;
     }
 
@@ -84,7 +74,8 @@ public final class CstBoolean
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return getValue() ? "true" : "false";
     }
 

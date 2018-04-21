@@ -138,25 +138,7 @@ public final class SourcePosition {
              ((sourceFile != null) && sourceFile.equals(other.sourceFile)));
     }
 
-    /**
-     * Gets the source file, if known.
-     *
-     * @return {@code null-ok;} the source file or {@code null} if unknown
-     */
-    public CstString getSourceFile() {
-        return sourceFile;
-    }
-
-    /**
-     * Gets the original bytecode address.
-     *
-     * @return {@code >= -1;} the address or {@code -1} if unknown
-     */
-    public int getAddress() {
-        return address;
-    }
-
-    /**
+	/**
      * Gets the original line number.
      *
      * @return {@code >= -1;} the original line number or {@code -1} if

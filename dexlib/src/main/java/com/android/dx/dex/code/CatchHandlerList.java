@@ -50,7 +50,8 @@ public final class CatchHandlerList extends FixedSizeList
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return toHuman("", "");
     }
 
@@ -122,18 +123,9 @@ public final class CatchHandlerList extends FixedSizeList
         set0(n, new Entry(exceptionType, handler));
     }
 
-    /**
-     * Sets the entry at the given index.
-     *
-     * @param n {@code >= 0, < size();} which index
-     * @param entry {@code non-null;} the entry to set at {@code n}
-     */
-    public void set(int n, Entry entry) {
-        set0(n, entry);
-    }
-
     /** {@inheritDoc} */
-    public int compareTo(CatchHandlerList other) {
+    @Override
+	public int compareTo(CatchHandlerList other) {
         if (this == other) {
             // Easy out.
             return 0;
@@ -207,7 +199,8 @@ public final class CatchHandlerList extends FixedSizeList
         }
 
         /** {@inheritDoc} */
-        public int compareTo(Entry other) {
+        @Override
+		public int compareTo(Entry other) {
             if (handler < other.handler) {
                 return -1;
             } else if (handler > other.handler) {

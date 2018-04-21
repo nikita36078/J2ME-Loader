@@ -136,13 +136,4 @@ public class ExceptionWithContext extends RuntimeException {
         out.print(context);
     }
 
-    /**
-     * Prints the message and context.
-     *
-     * @param out {@code non-null;} where to print to
-     */
-    public void printContext(PrintWriter out) {
-        out.println(getMessage());
-        out.print(context);
-    }
 }

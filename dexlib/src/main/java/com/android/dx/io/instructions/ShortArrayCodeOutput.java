@@ -54,26 +54,30 @@ public final class ShortArrayCodeOutput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public void write(short codeUnit) {
+    @Override
+	public void write(short codeUnit) {
         array[cursor()] = codeUnit;
         advance(1);
     }
 
     /** {@inheritDoc} */
-    public void write(short u0, short u1) {
+    @Override
+	public void write(short u0, short u1) {
         write(u0);
         write(u1);
     }
 
     /** {@inheritDoc} */
-    public void write(short u0, short u1, short u2) {
+    @Override
+	public void write(short u0, short u1, short u2) {
         write(u0);
         write(u1);
         write(u2);
     }
 
     /** {@inheritDoc} */
-    public void write(short u0, short u1, short u2, short u3) {
+    @Override
+	public void write(short u0, short u1, short u2, short u3) {
         write(u0);
         write(u1);
         write(u2);
@@ -81,7 +85,8 @@ public final class ShortArrayCodeOutput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public void write(short u0, short u1, short u2, short u3, short u4) {
+    @Override
+	public void write(short u0, short u1, short u2, short u3, short u4) {
         write(u0);
         write(u1);
         write(u2);
@@ -90,13 +95,15 @@ public final class ShortArrayCodeOutput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public void writeInt(int value) {
+    @Override
+	public void writeInt(int value) {
         write((short) value);
         write((short) (value >> 16));
     }
 
     /** {@inheritDoc} */
-    public void writeLong(long value) {
+    @Override
+	public void writeLong(long value) {
         write((short) value);
         write((short) (value >> 16));
         write((short) (value >> 32));
@@ -104,7 +111,8 @@ public final class ShortArrayCodeOutput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public void write(byte[] data) {
+    @Override
+	public void write(byte[] data) {
         int value = 0;
         boolean even = true;
         for (byte b : data) {
@@ -124,21 +132,24 @@ public final class ShortArrayCodeOutput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public void write(short[] data) {
+    @Override
+	public void write(short[] data) {
         for (short unit : data) {
             write(unit);
         }
     }
 
     /** {@inheritDoc} */
-    public void write(int[] data) {
+    @Override
+	public void write(int[] data) {
         for (int i : data) {
             writeInt(i);
         }
     }
 
     /** {@inheritDoc} */
-    public void write(long[] data) {
+    @Override
+	public void write(long[] data) {
         for (long l : data) {
             writeLong(l);
         }

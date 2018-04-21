@@ -46,7 +46,8 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public OneLocalsArray copy() {
+    @Override
+	public OneLocalsArray copy() {
         OneLocalsArray result = new OneLocalsArray(locals.length);
 
         System.arraycopy(locals, 0, result.locals, 0, locals.length);
@@ -55,7 +56,8 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public void annotate(ExceptionWithContext ex) {
+    @Override
+	public void annotate(ExceptionWithContext ex) {
         for (int i = 0; i < locals.length; i++) {
             TypeBearer type = locals[i];
             String s = (type == null) ? "<invalid>" : type.toString();
@@ -64,7 +66,8 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < locals.length; i++) {
@@ -77,7 +80,8 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public void makeInitialized(Type type) {
+    @Override
+	public void makeInitialized(Type type) {
         int len = locals.length;
 
         if (len == 0) {
@@ -97,12 +101,14 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public int getMaxLocals() {
+    @Override
+	public int getMaxLocals() {
         return locals.length;
     }
 
     /** {@inheritDoc} */
-    public void set(int idx, TypeBearer type) {
+    @Override
+	public void set(int idx, TypeBearer type) {
         throwIfImmutable();
 
         try {
@@ -132,23 +138,27 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public void set(RegisterSpec spec) {
+    @Override
+	public void set(RegisterSpec spec) {
         set(spec.getReg(), spec);
     }
 
     /** {@inheritDoc} */
-    public void invalidate(int idx) {
+    @Override
+	public void invalidate(int idx) {
         throwIfImmutable();
         locals[idx] = null;
     }
 
     /** {@inheritDoc} */
-    public TypeBearer getOrNull(int idx) {
+    @Override
+	public TypeBearer getOrNull(int idx) {
         return locals[idx];
     }
 
     /** {@inheritDoc} */
-    public TypeBearer get(int idx) {
+    @Override
+	public TypeBearer get(int idx) {
         TypeBearer result = locals[idx];
 
         if (result == null) {
@@ -159,7 +169,8 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public TypeBearer getCategory1(int idx) {
+    @Override
+	public TypeBearer getCategory1(int idx) {
         TypeBearer result = get(idx);
         Type type = result.getType();
 
@@ -175,7 +186,8 @@ public class OneLocalsArray extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public TypeBearer getCategory2(int idx) {
+    @Override
+	public TypeBearer getCategory2(int idx) {
         TypeBearer result = get(idx);
 
         if (result.getType().isCategory1()) {

@@ -263,34 +263,7 @@ public final class LocalVariableList extends FixedSizeList {
             this.index = index;
         }
 
-        /**
-         * Gets the start pc of this variable's scope.
-         *
-         * @return {@code >= 0;} the start pc of this variable's scope
-         */
-        public int getStartPc() {
-            return startPc;
-        }
-
-        /**
-         * Gets the length (in bytecodes) of this variable's scope.
-         *
-         * @return {@code >= 0;} the length (in bytecodes) of this variable's scope
-         */
-        public int getLength() {
-            return length;
-        }
-
-        /**
-         * Gets the variable's type descriptor.
-         *
-         * @return {@code null-ok;} the variable's type descriptor
-         */
-        public CstString getDescriptor() {
-            return descriptor;
-        }
-
-        /**
+		/**
          * Gets the variable's LocalItem, a (name, signature) tuple
          *
          * @return {@code null-ok;} the variable's type descriptor
@@ -309,16 +282,7 @@ public final class LocalVariableList extends FixedSizeList {
             return signature;
         }
 
-        /**
-         * Gets the variable's local index.
-         *
-         * @return {@code >= 0;} the variable's local index
-         */
-        public int getIndex() {
-            return index;
-        }
-
-        /**
+		/**
          * Gets the variable's type descriptor. This is a convenient shorthand
          * for {@code Type.intern(getDescriptor().getString())}.
          *

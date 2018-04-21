@@ -67,37 +67,10 @@ public final class Dex {
     private final FieldIdTable fieldIds = new FieldIdTable();
     private final MethodIdTable methodIds = new MethodIdTable();
 
-    /**
-     * Creates a new dex that reads from {@code data}. It is an error to modify
-     * {@code data} after using it to create a dex buffer.
-     */
-    public Dex(byte[] data) throws IOException {
-        this(ByteBuffer.wrap(data));
-    }
-
     private Dex(ByteBuffer data) throws IOException {
         this.data = data;
         this.data.order(ByteOrder.LITTLE_ENDIAN);
         this.tableOfContents.readFrom(this);
-    }
-
-    /**
-     * Creates a new empty dex of the specified size.
-     */
-    public Dex(int byteCount) throws IOException {
-        this.data = ByteBuffer.wrap(new byte[byteCount]);
-        this.data.order(ByteOrder.LITTLE_ENDIAN);
-    }
-
-    /**
-     * Creates a new dex buffer of the dex in {@code in}, and closes {@code in}.
-     */
-    public Dex(InputStream in) throws IOException {
-        try {
-            loadFrom(in);
-        } finally {
-            in.close();
-        }
     }
 
     /**
@@ -180,39 +153,6 @@ public final class Dex {
         return new Section("section", sectionData);
     }
 
-    public Section appendSection(int maxByteCount, String name) {
-        if ((maxByteCount & 3) != 0) {
-            throw new IllegalStateException("Not four byte aligned!");
-        }
-        int limit = nextSectionStart + maxByteCount;
-        ByteBuffer sectionData = data.duplicate();
-        sectionData.order(ByteOrder.LITTLE_ENDIAN); // necessary?
-        sectionData.position(nextSectionStart);
-        sectionData.limit(limit);
-        Section result = new Section(name, sectionData);
-        nextSectionStart = limit;
-        return result;
-    }
-
-    public int getLength() {
-        return data.capacity();
-    }
-
-    public int getNextSectionStart() {
-        return nextSectionStart;
-    }
-
-    /**
-     * Returns a copy of the the bytes of this dex.
-     */
-    public byte[] getBytes() {
-        ByteBuffer data = this.data.duplicate(); // positioned ByteBuffers aren't thread safe
-        byte[] result = new byte[data.capacity()];
-        data.position(0);
-        data.get(result);
-        return result;
-    }
-
     public List<String> strings() {
         return strings;
     }
@@ -246,22 +186,6 @@ public final class Dex {
             return TypeList.EMPTY;
         }
         return open(offset).readTypeList();
-    }
-
-    public ClassData readClassData(ClassDef classDef) {
-        int offset = classDef.getClassDataOffset();
-        if (offset == 0) {
-            throw new IllegalArgumentException("offset == 0");
-        }
-        return open(offset).readClassData();
-    }
-
-    public Code readCode(ClassData.Method method) {
-        int offset = method.getCodeOffset();
-        if (offset == 0) {
-            throw new IllegalArgumentException("offset == 0");
-        }
-        return open(offset).readCode();
     }
 
     /**
@@ -352,7 +276,8 @@ public final class Dex {
             return readShort() & 0xffff;
         }
 
-        public byte readByte() {
+        @Override
+		public byte readByte() {
             return data.get();
         }
 
@@ -377,16 +302,8 @@ public final class Dex {
             return Leb128.readUnsignedLeb128(this);
         }
 
-        public int readUleb128p1() {
-            return Leb128.readUnsignedLeb128(this) - 1;
-        }
-
         public int readSleb128() {
             return Leb128.readSignedLeb128(this);
-        }
-
-        public void writeUleb128p1(int i) {
-            writeUleb128(i + 1);
         }
 
         public TypeList readTypeList() {
@@ -579,19 +496,6 @@ public final class Dex {
             return result;
         }
 
-        public Annotation readAnnotation() {
-            byte visibility = readByte();
-            int start = data.position();
-            new EncodedValueReader(this, EncodedValueReader.ENCODED_ANNOTATION).skipValue();
-            return new Annotation(Dex.this, visibility, new EncodedValue(getBytesFrom(start)));
-        }
-
-        public EncodedValue readEncodedArray() {
-            int start = data.position();
-            new EncodedValueReader(this, EncodedValueReader.ENCODED_ARRAY).skipValue();
-            return new EncodedValue(getBytesFrom(start));
-        }
-
         public void skip(int count) {
             if (count < 0) {
                 throw new IllegalArgumentException();
@@ -615,17 +519,12 @@ public final class Dex {
             }
         }
 
-        public void assertFourByteAligned() {
-            if ((data.position() & 3) != 0) {
-                throw new IllegalStateException("Not four byte aligned!");
-            }
-        }
-
         public void write(byte[] bytes) {
             this.data.put(bytes);
         }
 
-        public void writeByte(int b) {
+        @Override
+		public void writeByte(int b) {
             data.put((byte) b);
         }
 
@@ -641,12 +540,6 @@ public final class Dex {
             writeShort(s);
         }
 
-        public void write(short[] shorts) {
-            for (short s : shorts) {
-                writeShort(s);
-            }
-        }
-
         public void writeInt(int i) {
             data.putInt(i);
         }
@@ -659,40 +552,6 @@ public final class Dex {
             }
         }
 
-        public void writeSleb128(int i) {
-            try {
-                Leb128.writeSignedLeb128(this, i);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                throw new DexException("Section limit " + data.limit() + " exceeded by " + name);
-            }
-        }
-
-        public void writeStringData(String value) {
-            try {
-                int length = value.length();
-                writeUleb128(length);
-                write(Mutf8.encode(value));
-                writeByte(0);
-            } catch (UTFDataFormatException e) {
-                throw new AssertionError();
-            }
-        }
-
-        public void writeTypeList(TypeList typeList) {
-            short[] types = typeList.getTypes();
-            writeInt(types.length);
-            for (short type : types) {
-                writeShort(type);
-            }
-            alignToFourBytesWithZeroFill();
-        }
-
-        /**
-         * Returns the number of bytes used by this section.
-         */
-        public int used() {
-            return data.position() - initialPosition;
-        }
     }
 
     private final class StringTable extends AbstractList<String> implements RandomAccess {
@@ -782,7 +641,8 @@ public final class Dex {
     }
 
     private final class ClassDefIterable implements Iterable<ClassDef> {
-        public Iterator<ClassDef> iterator() {
+        @Override
+		public Iterator<ClassDef> iterator() {
             return !tableOfContents.classDefs.exists()
                ? Collections.<ClassDef>emptySet().iterator()
                : new ClassDefIterator();

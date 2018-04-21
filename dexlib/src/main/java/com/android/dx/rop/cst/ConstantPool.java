@@ -67,11 +67,4 @@ public interface ConstantPool {
      * the index is in-range but invalid
      */
     public Constant getOrNull(int n);
-
-    /**
-     * Get all entries in this constant pool.
-     *
-     * @return the returned array may contain null entries.
-     */
-    public Constant[] getEntries();
 }

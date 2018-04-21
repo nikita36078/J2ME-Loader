@@ -104,7 +104,8 @@ public final class CodeItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
-    public void addContents(DexFile file) {
+    @Override
+	public void addContents(DexFile file) {
         MixedItemSection byteData = file.getByteData();
         TypeIdsSection typeIds = file.getTypeIds();
 
@@ -137,16 +138,7 @@ public final class CodeItem extends OffsettedItem {
         return ref.toHuman();
     }
 
-    /**
-     * Gets the reference to the method this instance implements.
-     *
-     * @return {@code non-null;} the method reference
-     */
-    public CstMethodRef getRef() {
-        return ref;
-    }
-
-    /**
+	/**
      * Does a human-friendly dump of this instance.
      *
      * @param out {@code non-null;} where to dump
@@ -189,7 +181,8 @@ public final class CodeItem extends OffsettedItem {
          * constants need to be assigned indices.
          */
         code.assignIndices(new DalvCode.AssignIndicesCallback() {
-                public int getIndex(Constant cst) {
+                @Override
+				public int getIndex(Constant cst) {
                     IndexedItem item = file.findItemOrNull(cst);
                     if (item == null) {
                         return -1;

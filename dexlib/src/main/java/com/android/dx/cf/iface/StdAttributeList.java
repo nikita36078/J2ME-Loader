@@ -34,12 +34,14 @@ public final class StdAttributeList extends FixedSizeList
     }
 
     /** {@inheritDoc} */
-    public Attribute get(int n) {
+    @Override
+	public Attribute get(int n) {
         return (Attribute) get0(n);
     }
 
     /** {@inheritDoc} */
-    public int byteLength() {
+    @Override
+	public int byteLength() {
         int sz = size();
         int result = 2; // u2 attributes_count
 
@@ -51,7 +53,8 @@ public final class StdAttributeList extends FixedSizeList
     }
 
     /** {@inheritDoc} */
-    public Attribute findFirst(String name) {
+    @Override
+	public Attribute findFirst(String name) {
         int sz = size();
 
         for (int i = 0; i < sz; i++) {
@@ -65,7 +68,8 @@ public final class StdAttributeList extends FixedSizeList
     }
 
     /** {@inheritDoc} */
-    public Attribute findNext(Attribute attrib) {
+    @Override
+	public Attribute findNext(Attribute attrib) {
         int sz = size();
         int at;
 

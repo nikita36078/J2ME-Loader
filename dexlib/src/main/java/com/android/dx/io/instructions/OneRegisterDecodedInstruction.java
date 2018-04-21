@@ -37,17 +37,20 @@ public final class OneRegisterDecodedInstruction extends DecodedInstruction {
     }
 
     /** {@inheritDoc} */
-    public int getRegisterCount() {
+    @Override
+	public int getRegisterCount() {
         return 1;
     }
 
     /** {@inheritDoc} */
-    public int getA() {
+    @Override
+	public int getA() {
         return a;
     }
 
     /** {@inheritDoc} */
-    public DecodedInstruction withIndex(int newIndex) {
+    @Override
+	public DecodedInstruction withIndex(int newIndex) {
         return new OneRegisterDecodedInstruction(
                 getFormat(), getOpcode(), newIndex, getIndexType(),
                 getTarget(), getLiteral(), a);

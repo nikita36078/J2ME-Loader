@@ -129,7 +129,8 @@ public final class CstNat extends Constant {
      *
      * @return {@code non-null;} the human form
      */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return name.toHuman() + ':' + descriptor.toHuman();
     }
 

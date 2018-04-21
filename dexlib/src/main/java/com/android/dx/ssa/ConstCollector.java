@@ -240,7 +240,8 @@ public class ConstCollector {
 
         // Sort by use, with most used at the beginning of the list.
         Collections.sort(constantList, new Comparator<Constant>() {
-            public int compare(Constant a, Constant b) {
+            @Override
+			public int compare(Constant a, Constant b) {
                 int ret;
                 ret = countUses.get(b) - countUses.get(a);
 

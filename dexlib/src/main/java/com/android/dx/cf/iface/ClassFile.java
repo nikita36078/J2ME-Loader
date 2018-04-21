@@ -37,20 +37,6 @@ public interface ClassFile extends HasAttribute {
     public int getMagic();
 
     /**
-     * Gets the field {@code minor_version}.
-     *
-     * @return the value in question
-     */
-    public int getMinorVersion();
-
-    /**
-     * Gets the field {@code major_version}.
-     *
-     * @return the value in question
-     */
-    public int getMajorVersion();
-
-    /**
      * Gets the field {@code access_flags}.
      *
      * @return the value in question
@@ -110,7 +96,8 @@ public interface ClassFile extends HasAttribute {
      *
      * @return {@code non-null;} the list of attributes
      */
-    public AttributeList getAttributes();
+    @Override
+	public AttributeList getAttributes();
 
     /**
      * Gets the name out of the {@code SourceFile} attribute of this

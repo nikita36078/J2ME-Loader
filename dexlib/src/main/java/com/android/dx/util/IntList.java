@@ -305,18 +305,6 @@ public final class IntList extends MutabilityControl {
     }
 
     /**
-     * Pops N elements off the end of the list and decreasing the size by N.
-     *
-     * @param n {@code >= 0;} number of elements to remove from end
-     * @throws IndexOutOfBoundsException if stack is smaller than N
-     */
-    public void pop(int n) {
-        throwIfImmutable();
-
-        size -= n;
-    }
-
-    /**
      * Shrinks the size of the list.
      *
      * @param newSize {@code >= 0;} the new size

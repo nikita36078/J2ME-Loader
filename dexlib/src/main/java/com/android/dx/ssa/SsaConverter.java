@@ -74,49 +74,6 @@ public class SsaConverter {
     }
 
     /**
-     * Returns an SSA represention with only the edge-splitter run.
-     *
-     * @param rmeth method to process
-     * @param paramWidth width of all arguments in the method
-     * @param isStatic {@code true} if this method has no {@code this}
-     * pointer argument
-     * @return an SSA represention with only the edge-splitter run
-     */
-    public static SsaMethod testEdgeSplit (RopMethod rmeth, int paramWidth,
-            boolean isStatic) {
-        SsaMethod result;
-
-        result = SsaMethod.newFromRopMethod(rmeth, paramWidth, isStatic);
-
-        edgeSplit(result);
-        return result;
-    }
-
-    /**
-     * Returns an SSA represention with only the steps through the
-     * phi placement run.
-     *
-     * @param rmeth method to process
-     * @param paramWidth width of all arguments in the method
-     * @param isStatic {@code true} if this method has no {@code this}
-     * pointer argument
-     * @return an SSA represention with only the edge-splitter run
-     */
-    public static SsaMethod testPhiPlacement (RopMethod rmeth, int paramWidth,
-            boolean isStatic) {
-        SsaMethod result;
-
-        result = SsaMethod.newFromRopMethod(rmeth, paramWidth, isStatic);
-
-        edgeSplit(result);
-
-        LocalVariableInfo localInfo = LocalVariableExtractor.extract(result);
-
-        placePhiFunctions(result, localInfo, 0);
-        return result;
-    }
-
-    /**
      * See Appel section 19.1:
      *
      * Converts CFG into "edge-split" form, such that each node either a

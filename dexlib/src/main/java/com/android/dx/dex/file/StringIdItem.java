@@ -64,7 +64,8 @@ public final class StringIdItem
     }
 
     /** {@inheritDoc} */
-    public int compareTo(Object other) {
+    @Override
+	public int compareTo(Object other) {
         StringIdItem otherString = (StringIdItem) other;
         return value.compareTo(otherString.value);
     }
@@ -114,13 +115,4 @@ public final class StringIdItem
         return value;
     }
 
-    /**
-     * Gets the associated data object for this instance, if known.
-     *
-     * @return {@code null-ok;} the associated data object or {@code null}
-     * if not yet known
-     */
-    public StringDataItem getData() {
-        return data;
-    }
 }

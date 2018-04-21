@@ -76,7 +76,8 @@ public final class NameValuePair implements Comparable<NameValuePair> {
      * <p>Instances of this class compare in name-major and value-minor
      * order.</p>
      */
-    public int compareTo(NameValuePair other) {
+    @Override
+	public int compareTo(NameValuePair other) {
         int result = name.compareTo(other.name);
 
         if (result != 0) {

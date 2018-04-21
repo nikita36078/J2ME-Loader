@@ -93,7 +93,8 @@ public final class ParameterAnnotationStruct
     }
 
     /** {@inheritDoc} */
-    public int compareTo(ParameterAnnotationStruct other) {
+    @Override
+	public int compareTo(ParameterAnnotationStruct other) {
         return method.compareTo(other.method);
     }
 
@@ -123,7 +124,8 @@ public final class ParameterAnnotationStruct
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         StringBuilder sb = new StringBuilder();
 
         sb.append(method.toHuman());

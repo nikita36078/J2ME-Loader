@@ -125,26 +125,6 @@ public final class Rop {
     }
 
     /**
-     * Constructs an instance. The constructed instance is never a
-     * call-like op (see {@link #isCallLike}).
-     *
-     * @param opcode the opcode; one of the constants in {@link RegOps}
-     * @param result {@code non-null;} result type of this operation; {@link
-     * Type#VOID} for no-result operations
-     * @param sources {@code non-null;} types of all the sources of this operation
-     * @param exceptions {@code non-null;} list of possible types thrown by this
-     * operation
-     * @param branchingness the branchingness of this op; one of the
-     * {@code BRANCH_*} constants
-     * @param nickname {@code null-ok;} optional nickname (used for debugging)
-     */
-    public Rop(int opcode, Type result, TypeList sources,
-               TypeList exceptions, int branchingness, String nickname) {
-        this(opcode, result, sources, exceptions, branchingness, false,
-             nickname);
-    }
-
-    /**
      * Constructs a no-exception instance. The constructed instance is never a
      * call-like op (see {@link #isCallLike}).
      *
@@ -330,15 +310,6 @@ public final class Rop {
      */
     public TypeList getSources() {
         return sources;
-    }
-
-    /**
-     * Gets the list of exception types that might be thrown.
-     *
-     * @return {@code non-null;} the list of exception types
-     */
-    public TypeList getExceptions() {
-        return exceptions;
     }
 
     /**

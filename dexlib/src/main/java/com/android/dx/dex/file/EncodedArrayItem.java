@@ -83,7 +83,8 @@ public final class EncodedArrayItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
-    public void addContents(DexFile file) {
+    @Override
+	public void addContents(DexFile file) {
         ValueEncoder.addContents(file, array);
     }
 

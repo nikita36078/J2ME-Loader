@@ -49,7 +49,8 @@ public final class AttInnerClasses extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
-    public int byteLength() {
+    @Override
+	public int byteLength() {
         return 8 + innerClasses.size() * 8;
     }
 

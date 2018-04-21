@@ -62,18 +62,21 @@ public class CodeObserver implements BytecodeArray.Visitor {
     }
 
     /** {@inheritDoc} */
-    public void visitInvalid(int opcode, int offset, int length) {
+    @Override
+	public void visitInvalid(int opcode, int offset, int length) {
         observer.parsed(bytes, offset, length, header(offset));
     }
 
     /** {@inheritDoc} */
-    public void visitNoArgs(int opcode, int offset, int length, Type type) {
+    @Override
+	public void visitNoArgs(int opcode, int offset, int length, Type type) {
         observer.parsed(bytes, offset, length, header(offset));
     }
 
     /** {@inheritDoc} */
-    public void visitLocal(int opcode, int offset, int length,
-            int idx, Type type, int value) {
+    @Override
+	public void visitLocal(int opcode, int offset, int length,
+						   int idx, Type type, int value) {
         String idxStr = (length <= 3) ? Hex.u1(idx) : Hex.u2(idx);
         boolean argComment = (length == 1);
         String valueStr = "";
@@ -94,8 +97,9 @@ public class CodeObserver implements BytecodeArray.Visitor {
     }
 
     /** {@inheritDoc} */
-    public void visitConstant(int opcode, int offset, int length,
-            Constant cst, int value) {
+    @Override
+	public void visitConstant(int opcode, int offset, int length,
+							  Constant cst, int value) {
         if (cst instanceof CstKnownNull) {
             // This is aconst_null.
             visitNoArgs(opcode, offset, length, null);
@@ -140,16 +144,18 @@ public class CodeObserver implements BytecodeArray.Visitor {
     }
 
     /** {@inheritDoc} */
-    public void visitBranch(int opcode, int offset, int length,
-                            int target) {
+    @Override
+	public void visitBranch(int opcode, int offset, int length,
+							int target) {
         String targetStr = (length <= 3) ? Hex.u2(target) : Hex.u4(target);
         observer.parsed(bytes, offset, length,
                         header(offset) + " " + targetStr);
     }
 
     /** {@inheritDoc} */
-    public void visitSwitch(int opcode, int offset, int length,
-            SwitchList cases, int padding) {
+    @Override
+	public void visitSwitch(int opcode, int offset, int length,
+							SwitchList cases, int padding) {
         int sz = cases.size();
         StringBuffer sb = new StringBuffer(sz * 20 + 100);
 
@@ -174,8 +180,9 @@ public class CodeObserver implements BytecodeArray.Visitor {
     }
 
     /** {@inheritDoc} */
-    public void visitNewarray(int offset, int length, CstType cst,
-            ArrayList<Constant> intVals) {
+    @Override
+	public void visitNewarray(int offset, int length, CstType cst,
+							  ArrayList<Constant> intVals) {
         String commentOrSpace = (length == 1) ? " // " : " ";
         String typeName = cst.getClassType().getComponentType().toHuman();
 
@@ -184,12 +191,14 @@ public class CodeObserver implements BytecodeArray.Visitor {
     }
 
     /** {@inheritDoc} */
-    public void setPreviousOffset(int offset) {
+    @Override
+	public void setPreviousOffset(int offset) {
         // Do nothing
     }
 
     /** {@inheritDoc} */
-    public int getPreviousOffset() {
+    @Override
+	public int getPreviousOffset() {
         return -1;
     }
 

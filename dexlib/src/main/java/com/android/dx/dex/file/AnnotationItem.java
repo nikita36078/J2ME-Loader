@@ -67,7 +67,8 @@ public final class AnnotationItem extends OffsettedItem {
      */
     private static class TypeIdSorter implements Comparator<AnnotationItem> {
         /** {@inheritDoc} */
-        public int compare(AnnotationItem item1, AnnotationItem item2) {
+        @Override
+		public int compare(AnnotationItem item1, AnnotationItem item2) {
             int index1 = item1.type.getIndex();
             int index2 = item2.type.getIndex();
 
@@ -142,7 +143,8 @@ public final class AnnotationItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
-    public void addContents(DexFile file) {
+    @Override
+	public void addContents(DexFile file) {
         type = file.getTypeIds().intern(annotation.getType());
         ValueEncoder.addContents(file, annotation);
     }

@@ -40,7 +40,8 @@ public final class StdField extends StdMember implements Field {
     }
 
     /** {@inheritDoc} */
-    public TypedConstant getConstantValue() {
+    @Override
+	public TypedConstant getConstantValue() {
         AttributeList attribs = getAttributes();
         AttConstantValue cval = (AttConstantValue)
             attribs.findFirst(AttConstantValue.ATTRIBUTE_NAME);

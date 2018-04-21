@@ -111,7 +111,8 @@ public abstract class OffsettedItem extends Item
      * classes don't match then the objects are not equal), with
      * {@link #compareTo0} deciding same-class comparisons.
      */
-    public final int compareTo(OffsettedItem other) {
+    @Override
+	public final int compareTo(OffsettedItem other) {
         if (this == other) {
             return 0;
         }
@@ -178,22 +179,7 @@ public abstract class OffsettedItem extends Item
         writeTo0(file, out);
     }
 
-    /**
-     * Gets the relative item offset. The offset is from the start of
-     * the section which the instance was written to.
-     *
-     * @return {@code >= 0;} the offset
-     * @throws RuntimeException thrown if the offset is not yet known
-     */
-    public final int getRelativeOffset() {
-        if (offset < 0) {
-            throw new RuntimeException("offset not yet known");
-        }
-
-        return offset;
-    }
-
-    /**
+	/**
      * Gets the absolute item offset. The offset is from the start of
      * the file which the instance was written to.
      *

@@ -70,5 +70,6 @@ public interface Member extends HasAttribute {
      *
      * @return {@code non-null;} the constant pool
      */
-    public AttributeList getAttributes();
+    @Override
+	public AttributeList getAttributes();
 }

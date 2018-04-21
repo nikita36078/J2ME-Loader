@@ -33,11 +33,7 @@ public final class EncodedValue implements Comparable<EncodedValue> {
         return new ByteArrayByteInput(data);
     }
 
-    public byte[] getBytes() {
-        return data;
-    }
-
-    public void writeTo(Dex.Section out) {
+	public void writeTo(Dex.Section out) {
         out.write(data);
     }
 

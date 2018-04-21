@@ -49,7 +49,8 @@ public final class StdMethod extends StdMember implements Method {
     }
 
     /** {@inheritDoc} */
-    public Prototype getEffectiveDescriptor() {
+    @Override
+	public Prototype getEffectiveDescriptor() {
         return effectiveDescriptor;
     }
 }

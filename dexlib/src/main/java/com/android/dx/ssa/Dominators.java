@@ -91,15 +91,7 @@ public final class Dominators {
         return result;
     }
 
-    private BitSet getSuccs(SsaBasicBlock block) {
-        if (postdom) {
-            return block.getPredecessors();
-        } else {
-            return block.getSuccessors();
-        }
-    }
-
-    private BitSet getPreds(SsaBasicBlock block) {
+	private BitSet getPreds(SsaBasicBlock block) {
         if (postdom) {
             return block.getSuccessors();
         } else {
@@ -255,7 +247,8 @@ public final class Dominators {
     private class DfsWalker implements SsaBasicBlock.Visitor {
         private int dfsNum = 0;
 
-        public void visitBlock(SsaBasicBlock v, SsaBasicBlock parent) {
+        @Override
+		public void visitBlock(SsaBasicBlock v, SsaBasicBlock parent) {
             DFSInfo bbInfo = new DFSInfo();
             bbInfo.semidom = ++dfsNum;
             bbInfo.rep = v;

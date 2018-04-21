@@ -28,18 +28,6 @@ public final class FileUtils {
     }
 
     /**
-     * Reads the named file, translating {@link IOException} to a
-     * {@link RuntimeException} of some sort.
-     *
-     * @param fileName {@code non-null;} name of the file to read
-     * @return {@code non-null;} contents of the file
-     */
-    public static byte[] readFile(String fileName) {
-        File file = new File(fileName);
-        return readFile(file);
-    }
-
-    /**
      * Reads the given file, translating {@link IOException} to a
      * {@link RuntimeException} of some sort.
      *

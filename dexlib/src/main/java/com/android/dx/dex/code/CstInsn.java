@@ -152,33 +152,7 @@ public final class CstInsn extends FixedSizeInsn {
         this.index = index;
     }
 
-    /**
-     * Gets the constant's class index. It is only valid to call this after
-     * {@link #setClassIndex} has been called.
-     *
-     * @return {@code >= 0;} the constant's class's constant pool index
-     */
-    public int getClassIndex() {
-        if (classIndex < 0) {
-            throw new IllegalStateException("class index not yet set");
-        }
-
-        return classIndex;
-    }
-
-    /**
-     * Returns whether the constant's class index has been set for this
-     * instance.
-     *
-     * @see #setClassIndex
-     *
-     * @return {@code true} iff the index has been set
-     */
-    public boolean hasClassIndex() {
-        return (classIndex >= 0);
-    }
-
-    /**
+	/**
      * Sets the constant's class index. This is the constant pool index
      * for the class referred to by this instance's constant. Only
      * reference constants have a class, so it is only on instances

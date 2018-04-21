@@ -40,7 +40,8 @@ public enum AnnotationVisibility implements ToHuman {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return human;
     }
 }

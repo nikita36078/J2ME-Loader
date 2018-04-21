@@ -38,15 +38,8 @@ import java.util.ArrayList;
  * between themselves.</p>
  */
 public class Simulator {
-    /**
-     * {@code non-null;} canned error message for local variable
-     * table mismatches
-     */
-    private static final String LOCAL_MISMATCH_ERROR =
-        "This is symptomatic of .class transformation tools that ignore " +
-        "local variable information.";
 
-    /** {@code non-null;} machine to use when simulating */
+	/** {@code non-null;} machine to use when simulating */
     private final Machine machine;
 
     /** {@code non-null;} array of bytecode */
@@ -106,19 +99,6 @@ public class Simulator {
             frame.annotate(ex);
             throw ex;
         }
-    }
-
-    /**
-     * Simulates the effect of the instruction at the given offset, by
-     * making appropriate calls on the given frame.
-     *
-     * @param offset {@code offset >= 0;} offset of the instruction to simulate
-     * @param frame {@code non-null;} frame to operate on
-     * @return the length of the instruction, in bytes
-     */
-    public int simulate(int offset, Frame frame) {
-        visitor.setFrame(frame);
-        return code.parseInstruction(offset, visitor);
     }
 
     /**
@@ -236,13 +216,15 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void visitInvalid(int opcode, int offset, int length) {
+        @Override
+		public void visitInvalid(int opcode, int offset, int length) {
             throw new SimException("invalid opcode " + Hex.u1(opcode));
         }
 
         /** {@inheritDoc} */
-        public void visitNoArgs(int opcode, int offset, int length,
-                Type type) {
+        @Override
+		public void visitNoArgs(int opcode, int offset, int length,
+								Type type) {
             switch (opcode) {
                 case ByteOps.NOP: {
                     machine.clearArgs();
@@ -562,8 +544,9 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void visitLocal(int opcode, int offset, int length,
-                int idx, Type type, int value) {
+        @Override
+		public void visitLocal(int opcode, int offset, int length,
+							   int idx, Type type, int value) {
             /*
              * Note that the "type" parameter is always the simplest
              * type based on the original opcode, e.g., "int" for
@@ -632,8 +615,9 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void visitConstant(int opcode, int offset, int length,
-                Constant cst, int value) {
+        @Override
+		public void visitConstant(int opcode, int offset, int length,
+								  Constant cst, int value) {
             switch (opcode) {
                 case ByteOps.ANEWARRAY: {
                     machine.popArgs(frame, Type.INT);
@@ -730,8 +714,9 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void visitBranch(int opcode, int offset, int length,
-                int target) {
+        @Override
+		public void visitBranch(int opcode, int offset, int length,
+								int target) {
             switch (opcode) {
                 case ByteOps.IFEQ:
                 case ByteOps.IFNE:
@@ -779,8 +764,9 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void visitSwitch(int opcode, int offset, int length,
-                SwitchList cases, int padding) {
+        @Override
+		public void visitSwitch(int opcode, int offset, int length,
+								SwitchList cases, int padding) {
             machine.popArgs(frame, Type.INT);
             machine.auxIntArg(padding);
             machine.auxSwitchArg(cases);
@@ -788,8 +774,9 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void visitNewarray(int offset, int length, CstType type,
-                ArrayList<Constant> initValues) {
+        @Override
+		public void visitNewarray(int offset, int length, CstType type,
+								  ArrayList<Constant> initValues) {
             machine.popArgs(frame, Type.INT);
             machine.auxInitValues(initValues);
             machine.auxCstArg(type);
@@ -797,12 +784,14 @@ public class Simulator {
         }
 
         /** {@inheritDoc} */
-        public void setPreviousOffset(int offset) {
+        @Override
+		public void setPreviousOffset(int offset) {
             previousOffset = offset;
         }
 
         /** {@inheritDoc} */
-        public int getPreviousOffset() {
+        @Override
+		public int getPreviousOffset() {
             return previousOffset;
         }
     }

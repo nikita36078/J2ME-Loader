@@ -47,14 +47,6 @@ public final class EncodedValueReader {
     private int annotationType;
     private int arg;
 
-    public EncodedValueReader(ByteInput in) {
-        this.in = in;
-    }
-
-    public EncodedValueReader(EncodedValue in) {
-        this(in.asByteInput());
-    }
-
     /**
      * Creates a new encoded value reader whose only value is the specified
      * known type. This is useful for encoded values without a type prefix,

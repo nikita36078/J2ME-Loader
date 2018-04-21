@@ -90,7 +90,8 @@ public final class CstInteger
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.INT;
     }
 
@@ -101,7 +102,8 @@ public final class CstInteger
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return Integer.toString(getIntBits());
     }
 

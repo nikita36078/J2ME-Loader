@@ -22,11 +22,7 @@ import com.android.dx.util.MutabilityControl;
  * Set of {@link RegisterSpec} instances, where a given register number
  * may appear only once in the set.
  */
-public final class RegisterSpecSet
-        extends MutabilityControl {
-    /** {@code non-null;} no-element instance */
-    public static final RegisterSpecSet EMPTY = new RegisterSpecSet(0);
-
+public final class RegisterSpecSet extends MutabilityControl {
     /**
      * {@code non-null;} array of register specs, where each element is
      * {@code null} or is an instance whose {@code reg}

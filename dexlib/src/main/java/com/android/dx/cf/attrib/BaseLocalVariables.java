@@ -50,7 +50,8 @@ public abstract class BaseLocalVariables extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
-    public final int byteLength() {
+    @Override
+	public final int byteLength() {
         return 8 + localVariables.size() * 10;
     }
 

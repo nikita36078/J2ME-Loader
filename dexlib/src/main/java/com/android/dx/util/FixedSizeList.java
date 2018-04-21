@@ -82,7 +82,8 @@ public class FixedSizeList
      * This method will only work if every element of the list
      * implements {@link ToHuman}.
      */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         String name = getClass().getName();
 
         return toString0(name.substring(name.lastIndexOf('.') + 1) + '{',

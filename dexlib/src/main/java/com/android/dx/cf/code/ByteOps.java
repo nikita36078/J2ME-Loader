@@ -311,9 +311,6 @@ public class ByteOps {
     /** "W": {@code wide ...} */
     public static final int FMT_WIDE = 19;
 
-    /** mask for the bits representing the opcode format */
-    public static final int FMT_MASK = 0x1f;
-
     /** "I": flag bit for valid cp type for {@code Integer} */
     public static final int CPOK_Integer = 0x20;
 

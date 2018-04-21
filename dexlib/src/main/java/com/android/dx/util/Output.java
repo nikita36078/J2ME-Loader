@@ -46,7 +46,8 @@ public interface Output extends ByteOutput {
      *
      * @param value the value to write; all but the low 8 bits are ignored
      */
-    public void writeByte(int value);
+    @Override
+	public void writeByte(int value);
 
     /**
      * Writes a {@code short} to this instance.

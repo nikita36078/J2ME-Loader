@@ -58,11 +58,14 @@ public class MoveParamCombiner {
         final HashSet<SsaInsn> deletedInsns = new HashSet();
 
         ssaMeth.forEachInsn(new SsaInsn.Visitor() {
-            public void visitMoveInsn (NormalSsaInsn insn) {
+            @Override
+			public void visitMoveInsn (NormalSsaInsn insn) {
             }
-            public void visitPhiInsn (PhiInsn phi) {
+            @Override
+			public void visitPhiInsn (PhiInsn phi) {
             }
-            public void visitNonMoveInsn (NormalSsaInsn insn) {
+            @Override
+			public void visitNonMoveInsn (NormalSsaInsn insn) {
                 if (insn.getOpcode().getOpcode() != RegOps.MOVE_PARAM) {
                     return;
                 }
@@ -105,12 +108,14 @@ public class MoveParamCombiner {
 
                     RegisterMapper mapper = new RegisterMapper() {
                         /** {@inheritDoc} */
-                        public int getNewRegisterCount() {
+                        @Override
+						public int getNewRegisterCount() {
                             return ssaMeth.getRegCount();
                         }
 
                         /** {@inheritDoc} */
-                        public RegisterSpec map(RegisterSpec registerSpec) {
+                        @Override
+						public RegisterSpec map(RegisterSpec registerSpec) {
                             if (registerSpec.getReg() == specB.getReg()) {
                                 return specA;
                             }

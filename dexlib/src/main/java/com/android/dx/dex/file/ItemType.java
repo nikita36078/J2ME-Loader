@@ -41,9 +41,7 @@ public enum ItemType implements ToHuman {
     TYPE_ENCODED_ARRAY_ITEM(        0x2005, "encoded_array_item"),
     TYPE_ANNOTATIONS_DIRECTORY_ITEM(0x2006, "annotations_directory_item"),
     TYPE_MAP_ITEM(                  -1,     "map_item"),
-    TYPE_TYPE_ITEM(                 -1,     "type_item"),
-    TYPE_EXCEPTION_HANDLER_ITEM(    -1,     "exception_handler_item"),
-    TYPE_ANNOTATION_SET_REF_ITEM(   -1,     "annotation_set_ref_item");
+	TYPE_ANNOTATION_SET_REF_ITEM(   -1,     "annotation_set_ref_item");
 
     /** value when represented in a {@link MapItem} */
     private final int mapValue;
@@ -91,7 +89,8 @@ public enum ItemType implements ToHuman {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return humanName;
     }
 }

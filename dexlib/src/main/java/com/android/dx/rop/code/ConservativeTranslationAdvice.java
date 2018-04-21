@@ -34,19 +34,22 @@ public final class ConservativeTranslationAdvice
     }
 
     /** {@inheritDoc} */
-    public boolean hasConstantOperation(Rop opcode,
-            RegisterSpec sourceA, RegisterSpec sourceB) {
+    @Override
+	public boolean hasConstantOperation(Rop opcode,
+										RegisterSpec sourceA, RegisterSpec sourceB) {
         return false;
     }
 
     /** {@inheritDoc} */
-    public boolean requiresSourcesInOrder(Rop opcode,
-            RegisterSpecList sources) {
+    @Override
+	public boolean requiresSourcesInOrder(Rop opcode,
+										  RegisterSpecList sources) {
         return false;
     }
 
     /** {@inheritDoc} */
-    public int getMaxOptimalRegisterCount() {
+    @Override
+	public int getMaxOptimalRegisterCount() {
         return Integer.MAX_VALUE;
     }
 }

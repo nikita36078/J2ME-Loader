@@ -38,7 +38,8 @@ public class ValueAwareMachine extends BaseMachine {
     }
 
     /** {@inheritDoc} */
-    public void run(Frame frame, int offset, int opcode) {
+    @Override
+	public void run(Frame frame, int offset, int opcode) {
         switch (opcode) {
             case ByteOps.NOP:
             case ByteOps.IASTORE:

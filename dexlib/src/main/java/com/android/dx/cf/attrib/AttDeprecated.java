@@ -31,7 +31,8 @@ public final class AttDeprecated extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
-    public int byteLength() {
+    @Override
+	public int byteLength() {
         return 6;
     }
 }

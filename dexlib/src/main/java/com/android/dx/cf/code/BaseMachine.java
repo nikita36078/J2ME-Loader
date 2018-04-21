@@ -96,12 +96,14 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public Prototype getPrototype() {
+    @Override
+	public Prototype getPrototype() {
         return prototype;
     }
 
     /** {@inheritDoc} */
-    public final void clearArgs() {
+    @Override
+	public final void clearArgs() {
         argCount = 0;
         auxType = null;
         auxInt = 0;
@@ -116,7 +118,8 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void popArgs(Frame frame, int count) {
+    @Override
+	public final void popArgs(Frame frame, int count) {
         ExecutionStack stack = frame.getStack();
 
         clearArgs();
@@ -134,7 +137,8 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public void popArgs(Frame frame, Prototype prototype) {
+    @Override
+	public void popArgs(Frame frame, Prototype prototype) {
         StdTypeList types = prototype.getParameterTypes();
         int size = types.size();
 
@@ -152,7 +156,8 @@ public abstract class BaseMachine implements Machine {
         }
     }
 
-    public final void popArgs(Frame frame, Type type) {
+    @Override
+	public final void popArgs(Frame frame, Type type) {
         // Use the above method to do the actual popping...
         popArgs(frame, 1);
 
@@ -164,7 +169,8 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void popArgs(Frame frame, Type type1, Type type2) {
+    @Override
+	public final void popArgs(Frame frame, Type type1, Type type2) {
         // Use the above method to do the actual popping...
         popArgs(frame, 2);
 
@@ -182,8 +188,9 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void popArgs(Frame frame, Type type1, Type type2,
-            Type type3) {
+    @Override
+	public final void popArgs(Frame frame, Type type1, Type type2,
+							  Type type3) {
         // Use the above method to do the actual popping...
         popArgs(frame, 3);
 
@@ -206,7 +213,8 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void localArg(Frame frame, int idx) {
+    @Override
+	public final void localArg(Frame frame, int idx) {
         clearArgs();
         args[0] = frame.getLocals().get(idx);
         argCount = 1;
@@ -214,22 +222,26 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void localInfo(boolean local) {
+    @Override
+	public final void localInfo(boolean local) {
         localInfo = local;
     }
 
     /** {@inheritDoc} */
-    public final void auxType(Type type) {
+    @Override
+	public final void auxType(Type type) {
         auxType = type;
     }
 
     /** {@inheritDoc} */
-    public final void auxIntArg(int value) {
+    @Override
+	public final void auxIntArg(int value) {
         auxInt = value;
     }
 
     /** {@inheritDoc} */
-    public final void auxCstArg(Constant cst) {
+    @Override
+	public final void auxCstArg(Constant cst) {
         if (cst == null) {
             throw new NullPointerException("cst == null");
         }
@@ -238,12 +250,14 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void auxTargetArg(int target) {
+    @Override
+	public final void auxTargetArg(int target) {
         auxTarget = target;
     }
 
     /** {@inheritDoc} */
-    public final void auxSwitchArg(SwitchList cases) {
+    @Override
+	public final void auxSwitchArg(SwitchList cases) {
         if (cases == null) {
             throw new NullPointerException("cases == null");
         }
@@ -252,12 +266,14 @@ public abstract class BaseMachine implements Machine {
     }
 
     /** {@inheritDoc} */
-    public final void auxInitValues(ArrayList<Constant> initValues) {
+    @Override
+	public final void auxInitValues(ArrayList<Constant> initValues) {
         auxInitValues = initValues;
     }
 
     /** {@inheritDoc} */
-    public final void localTarget(int idx, Type type, LocalItem local) {
+    @Override
+	public final void localTarget(int idx, Type type, LocalItem local) {
         localTarget = RegisterSpec.makeLocalOptional(idx, type, local);
     }
 
@@ -268,22 +284,6 @@ public abstract class BaseMachine implements Machine {
      */
     protected final int argCount() {
         return argCount;
-    }
-
-    /**
-     * Gets the width of the arguments (where a category-2 value counts as
-     * two).
-     *
-     * @return {@code >= 0;} the argument width
-     */
-    protected final int argWidth() {
-        int result = 0;
-
-        for (int i = 0; i < argCount; i++) {
-            result += args[i].getType().getCategory();
-        }
-
-        return result;
     }
 
     /**
@@ -366,15 +366,6 @@ public abstract class BaseMachine implements Machine {
      */
     protected final int getLocalIndex() {
         return localIndex;
-    }
-
-    /**
-     * Gets whether the loaded local has info in the local variable table.
-     *
-     * @return {@code true} if local arg has info in the local variable table
-     */
-    protected final boolean getLocalInfo() {
-        return localInfo;
     }
 
     /**
@@ -487,22 +478,6 @@ public abstract class BaseMachine implements Machine {
         }
 
         return resultCount;
-    }
-
-    /**
-     * Gets the width of the results (where a category-2 value counts as
-     * two).
-     *
-     * @return {@code >= 0;} the result width
-     */
-    protected final int resultWidth() {
-        int width = 0;
-
-        for (int i = 0; i < resultCount; i++) {
-            width += results[i].getType().getCategory();
-        }
-
-        return width;
     }
 
     /**

@@ -206,16 +206,7 @@ public class DirectClassFile implements ClassFile {
         this(new ByteArray(bytes), filePath, strictParse);
     }
 
-    /**
-     * Sets the parse observer for this instance.
-     *
-     * @param observer {@code null-ok;} the observer
-     */
-    public void setObserver(ParseObserver observer) {
-        this.observer = observer;
-    }
-
-    /**
+	/**
      * Sets the attribute factory to use.
      *
      * @param attributeFactory {@code non-null;} the attribute factory
@@ -247,73 +238,71 @@ public class DirectClassFile implements ClassFile {
     }
 
     /** {@inheritDoc} */
-    public int getMagic() {
+    @Override
+	public int getMagic() {
         parseToInterfacesIfNecessary();
         return getMagic0();
     }
 
     /** {@inheritDoc} */
-    public int getMinorVersion() {
-        parseToInterfacesIfNecessary();
-        return getMinorVersion0();
-    }
-
-    /** {@inheritDoc} */
-    public int getMajorVersion() {
-        parseToInterfacesIfNecessary();
-        return getMajorVersion0();
-    }
-
-    /** {@inheritDoc} */
-    public int getAccessFlags() {
+    @Override
+	public int getAccessFlags() {
         parseToInterfacesIfNecessary();
         return accessFlags;
     }
 
     /** {@inheritDoc} */
-    public CstType getThisClass() {
+    @Override
+	public CstType getThisClass() {
         parseToInterfacesIfNecessary();
         return thisClass;
     }
 
     /** {@inheritDoc} */
-    public CstType getSuperclass() {
+    @Override
+	public CstType getSuperclass() {
         parseToInterfacesIfNecessary();
         return superClass;
     }
 
     /** {@inheritDoc} */
-    public ConstantPool getConstantPool() {
+    @Override
+	public ConstantPool getConstantPool() {
         parseToInterfacesIfNecessary();
         return pool;
     }
 
     /** {@inheritDoc} */
-    public TypeList getInterfaces() {
+    @Override
+	public TypeList getInterfaces() {
         parseToInterfacesIfNecessary();
         return interfaces;
     }
 
     /** {@inheritDoc} */
-    public FieldList getFields() {
+    @Override
+	public FieldList getFields() {
         parseToEndIfNecessary();
         return fields;
     }
 
     /** {@inheritDoc} */
-    public MethodList getMethods() {
+    @Override
+	public MethodList getMethods() {
         parseToEndIfNecessary();
         return methods;
     }
 
     /** {@inheritDoc} */
-    public AttributeList getAttributes() {
+    @Override
+	public AttributeList getAttributes() {
         parseToEndIfNecessary();
         return attributes;
     }
 
     /** {@inheritDoc} */
-    public CstString getSourceFile() {
+    @Override
+	public CstString getSourceFile() {
         AttributeList attribs = getAttributes();
         Attribute attSf = attribs.findFirst(AttSourceFile.ATTRIBUTE_NAME);
 
@@ -626,29 +615,34 @@ public class DirectClassFile implements ClassFile {
         }
 
         /** {@inheritDoc} */
-        public boolean isMutable() {
+        @Override
+		public boolean isMutable() {
             return false;
         }
 
         /** {@inheritDoc} */
-        public int size() {
+        @Override
+		public int size() {
             return size;
         }
 
         /** {@inheritDoc} */
-        public int getWordCount() {
+        @Override
+		public int getWordCount() {
             // It is the same as size because all elements are classes.
             return size;
         }
 
         /** {@inheritDoc} */
-        public Type getType(int n) {
+        @Override
+		public Type getType(int n) {
             int idx = bytes.getUnsignedShort(n * 2);
             return ((CstType) pool.get(idx)).getClassType();
         }
 
         /** {@inheritDoc} */
-        public TypeList withAddedType(Type type) {
+        @Override
+		public TypeList withAddedType(Type type) {
             throw new UnsupportedOperationException("unsupported");
         }
     }

@@ -31,7 +31,8 @@ public final class AttSynthetic extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
-    public int byteLength() {
+    @Override
+	public int byteLength() {
         return 6;
     }
 }

@@ -179,29 +179,7 @@ public final class DexFile {
         }
     }
 
-    /**
-     * Writes the contents of this instance as either a binary or a
-     * human-readable form, or both.
-     *
-     * @param out {@code null-ok;} where to write to
-     * @param humanOut {@code null-ok;} where to write human-oriented output to
-     * @param verbose whether to be verbose when writing human-oriented output
-     */
-    public void writeTo(OutputStream out, Writer humanOut, boolean verbose)
-        throws IOException {
-        boolean annotate = (humanOut != null);
-        ByteArrayAnnotatedOutput result = toDex0(annotate, verbose);
-
-        if (out != null) {
-            out.write(result.getArray());
-        }
-
-        if (annotate) {
-            result.writeAnnotationsTo(humanOut);
-        }
-    }
-
-    /**
+	/**
      * Returns the contents of this instance as a {@code .dex} file,
      * in {@code byte[]} form.
      *
@@ -467,7 +445,6 @@ public final class DexFile {
      * item, or {@code null} if it's not that sort of constant
      */
     /*package*/ IndexedItem findItemOrNull(Constant cst) {
-        IndexedItem item;
 
         if (cst instanceof CstString) {
             return stringIds.get(cst);

@@ -46,21 +46,7 @@ public final class ClassData {
         return virtualMethods;
     }
 
-    public Field[] allFields() {
-        Field[] result = new Field[staticFields.length + instanceFields.length];
-        System.arraycopy(staticFields, 0, result, 0, staticFields.length);
-        System.arraycopy(instanceFields, 0, result, staticFields.length, instanceFields.length);
-        return result;
-    }
-
-    public Method[] allMethods() {
-        Method[] result = new Method[directMethods.length + virtualMethods.length];
-        System.arraycopy(directMethods, 0, result, 0, directMethods.length);
-        System.arraycopy(virtualMethods, 0, result, directMethods.length, virtualMethods.length);
-        return result;
-    }
-
-    public static class Field {
+	public static class Field {
         private final int fieldIndex;
         private final int accessFlags;
 

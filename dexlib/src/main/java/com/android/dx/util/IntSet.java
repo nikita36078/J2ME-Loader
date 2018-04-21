@@ -29,13 +29,6 @@ public interface IntSet {
     void add(int value);
 
     /**
-     * Removes an int from a set.
-     *
-     * @param value int to remove
-     */
-    void remove(int value);
-
-    /**
      * Checks to see if a value is in the set
      *
      * @param value int to check

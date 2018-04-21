@@ -318,7 +318,6 @@ public final class AnnotationParser {
             }
             case 'C': {
                 CstInteger value = (CstInteger) parseConstant();
-                int intValue = value.getValue();
                 return CstChar.make(value.getValue());
             }
             case 'D': {

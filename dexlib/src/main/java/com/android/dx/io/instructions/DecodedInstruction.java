@@ -266,22 +266,7 @@ public abstract class DecodedInstruction {
         return 0;
     }
 
-    /**
-     * Gets the register count, as a code unit. This will throw if the
-     * value is out of the range of an unsigned code unit.
-     */
-    public final short getRegisterCountUnit() {
-        int registerCount = getRegisterCount();
-
-        if ((registerCount & ~0xffff) != 0) {
-            throw new DexException("Register count out of range: "
-                    + Hex.u8(registerCount));
-        }
-
-        return (short) registerCount;
-    }
-
-    /**
+	/**
      * Gets the A register number, as a code unit. This will throw if the
      * value is out of the range of an unsigned code unit.
      */
@@ -295,35 +280,7 @@ public abstract class DecodedInstruction {
         return (short) a;
     }
 
-    /**
-     * Gets the A register number, as a byte. This will throw if the
-     * value is out of the range of an unsigned byte.
-     */
-    public final short getAByte() {
-        int a = getA();
-
-        if ((a & ~0xff) != 0) {
-            throw new DexException("Register A out of range: " + Hex.u8(a));
-        }
-
-        return (short) a;
-    }
-
-    /**
-     * Gets the A register number, as a nibble. This will throw if the
-     * value is out of the range of an unsigned nibble.
-     */
-    public final short getANibble() {
-        int a = getA();
-
-        if ((a & ~0xf) != 0) {
-            throw new DexException("Register A out of range: " + Hex.u8(a));
-        }
-
-        return (short) a;
-    }
-
-    /**
+	/**
      * Gets the B register number, as a code unit. This will throw if the
      * value is out of the range of an unsigned code unit.
      */
@@ -337,133 +294,7 @@ public abstract class DecodedInstruction {
         return (short) b;
     }
 
-    /**
-     * Gets the B register number, as a byte. This will throw if the
-     * value is out of the range of an unsigned byte.
-     */
-    public final short getBByte() {
-        int b = getB();
-
-        if ((b & ~0xff) != 0) {
-            throw new DexException("Register B out of range: " + Hex.u8(b));
-        }
-
-        return (short) b;
-    }
-
-    /**
-     * Gets the B register number, as a nibble. This will throw if the
-     * value is out of the range of an unsigned nibble.
-     */
-    public final short getBNibble() {
-        int b = getB();
-
-        if ((b & ~0xf) != 0) {
-            throw new DexException("Register B out of range: " + Hex.u8(b));
-        }
-
-        return (short) b;
-    }
-
-    /**
-     * Gets the C register number, as a code unit. This will throw if the
-     * value is out of the range of an unsigned code unit.
-     */
-    public final short getCUnit() {
-        int c = getC();
-
-        if ((c & ~0xffff) != 0) {
-            throw new DexException("Register C out of range: " + Hex.u8(c));
-        }
-
-        return (short) c;
-    }
-
-    /**
-     * Gets the C register number, as a byte. This will throw if the
-     * value is out of the range of an unsigned byte.
-     */
-    public final short getCByte() {
-        int c = getC();
-
-        if ((c & ~0xff) != 0) {
-            throw new DexException("Register C out of range: " + Hex.u8(c));
-        }
-
-        return (short) c;
-    }
-
-    /**
-     * Gets the C register number, as a nibble. This will throw if the
-     * value is out of the range of an unsigned nibble.
-     */
-    public final short getCNibble() {
-        int c = getC();
-
-        if ((c & ~0xf) != 0) {
-            throw new DexException("Register C out of range: " + Hex.u8(c));
-        }
-
-        return (short) c;
-    }
-
-    /**
-     * Gets the D register number, as a code unit. This will throw if the
-     * value is out of the range of an unsigned code unit.
-     */
-    public final short getDUnit() {
-        int d = getD();
-
-        if ((d & ~0xffff) != 0) {
-            throw new DexException("Register D out of range: " + Hex.u8(d));
-        }
-
-        return (short) d;
-    }
-
-    /**
-     * Gets the D register number, as a byte. This will throw if the
-     * value is out of the range of an unsigned byte.
-     */
-    public final short getDByte() {
-        int d = getD();
-
-        if ((d & ~0xff) != 0) {
-            throw new DexException("Register D out of range: " + Hex.u8(d));
-        }
-
-        return (short) d;
-    }
-
-    /**
-     * Gets the D register number, as a nibble. This will throw if the
-     * value is out of the range of an unsigned nibble.
-     */
-    public final short getDNibble() {
-        int d = getD();
-
-        if ((d & ~0xf) != 0) {
-            throw new DexException("Register D out of range: " + Hex.u8(d));
-        }
-
-        return (short) d;
-    }
-
-    /**
-     * Gets the E register number, as a nibble. This will throw if the
-     * value is out of the range of an unsigned nibble.
-     */
-    public final short getENibble() {
-        int e = getE();
-
-        if ((e & ~0xf) != 0) {
-            throw new DexException("Register E out of range: " + Hex.u8(e));
-        }
-
-        return (short) e;
-    }
-
-    /**
+	/**
      * Encodes this instance to the given output.
      */
     public final void encode(CodeOutput out) {

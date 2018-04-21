@@ -31,13 +31,6 @@ public interface AttributeList {
     public boolean isMutable();
 
     /**
-     * Get the number of attributes in the list.
-     *
-     * @return the size
-     */
-    public int size();
-
-    /**
      * Get the {@code n}th attribute.
      *
      * @param n {@code n >= 0, n < size();} which attribute

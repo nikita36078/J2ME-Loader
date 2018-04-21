@@ -81,7 +81,8 @@ public final class CstAnnotation extends Constant {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return annotation.toString();
     }
 

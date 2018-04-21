@@ -144,12 +144,14 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public int getCursor() {
+    @Override
+	public int getCursor() {
         return cursor;
     }
 
     /** {@inheritDoc} */
-    public void assertCursor(int expectedCursor) {
+    @Override
+	public void assertCursor(int expectedCursor) {
         if (cursor != expectedCursor) {
             throw new ExceptionWithContext("expected cursor " +
                     expectedCursor + "; actual value: " + cursor);
@@ -157,7 +159,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void writeByte(int value) {
+    @Override
+	public void writeByte(int value) {
         int writeAt = cursor;
         int end = writeAt + 1;
 
@@ -173,7 +176,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void writeShort(int value) {
+    @Override
+	public void writeShort(int value) {
         int writeAt = cursor;
         int end = writeAt + 2;
 
@@ -190,7 +194,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void writeInt(int value) {
+    @Override
+	public void writeInt(int value) {
         int writeAt = cursor;
         int end = writeAt + 4;
 
@@ -209,7 +214,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void writeLong(long value) {
+    @Override
+	public void writeLong(long value) {
         int writeAt = cursor;
         int end = writeAt + 8;
 
@@ -236,7 +242,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public int writeUleb128(int value) {
+    @Override
+	public int writeUleb128(int value) {
         if (stretchy) {
             ensureCapacity(cursor + 5); // pessimistic
         }
@@ -246,7 +253,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public int writeSleb128(int value) {
+    @Override
+	public int writeSleb128(int value) {
         if (stretchy) {
             ensureCapacity(cursor + 5); // pessimistic
         }
@@ -256,7 +264,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void write(ByteArray bytes) {
+    @Override
+	public void write(ByteArray bytes) {
         int blen = bytes.size();
         int writeAt = cursor;
         int end = writeAt + blen;
@@ -273,7 +282,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void write(byte[] bytes, int offset, int length) {
+    @Override
+	public void write(byte[] bytes, int offset, int length) {
         int writeAt = cursor;
         int end = writeAt + length;
         int bytesEnd = offset + length;
@@ -297,12 +307,14 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void write(byte[] bytes) {
+    @Override
+	public void write(byte[] bytes) {
         write(bytes, 0, bytes.length);
     }
 
     /** {@inheritDoc} */
-    public void writeZeroes(int count) {
+    @Override
+	public void writeZeroes(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("count < 0");
         }
@@ -325,7 +337,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void alignTo(int alignment) {
+    @Override
+	public void alignTo(int alignment) {
         int mask = alignment - 1;
 
         if ((alignment < 0) || ((mask & alignment) != 0)) {
@@ -350,17 +363,20 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public boolean annotates() {
+    @Override
+	public boolean annotates() {
         return (annotations != null);
     }
 
     /** {@inheritDoc} */
-    public boolean isVerbose() {
+    @Override
+	public boolean isVerbose() {
         return verbose;
     }
 
     /** {@inheritDoc} */
-    public void annotate(String msg) {
+    @Override
+	public void annotate(String msg) {
         if (annotations == null) {
             return;
         }
@@ -370,7 +386,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void annotate(int amt, String msg) {
+    @Override
+	public void annotate(int amt, String msg) {
         if (annotations == null) {
             return;
         }
@@ -391,7 +408,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public void endAnnotation() {
+    @Override
+	public void endAnnotation() {
         if (annotations == null) {
             return;
         }
@@ -404,7 +422,8 @@ public final class ByteArrayAnnotatedOutput
     }
 
     /** {@inheritDoc} */
-    public int getAnnotationWidth() {
+    @Override
+	public int getAnnotationWidth() {
         int leftWidth = 8 + (hexCols * 2) + (hexCols / 2);
 
         return annotationWidth - leftWidth;

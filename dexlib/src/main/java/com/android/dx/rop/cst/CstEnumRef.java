@@ -49,7 +49,8 @@ public final class CstEnumRef extends CstMemberRef {
      *
      * <b>Note:</b> This returns the enumerated type.
      */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return getDefiningClass().getClassType();
     }
 

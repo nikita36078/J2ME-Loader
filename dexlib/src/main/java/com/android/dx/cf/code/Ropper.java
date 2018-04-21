@@ -1354,7 +1354,8 @@ public final class Ropper {
          * Start at label 0 --  the param assignment block has nothing for us
          */
         forEachNonSubBlockDepthFirst(0, new BasicBlock.Visitor() {
-            public void visitBlock(BasicBlock b) {
+            @Override
+			public void visitBlock(BasicBlock b) {
                 if (isSubroutineCaller(b)) {
                     reachableSubroutineCallerLabels.add(b.getLabel());
                 }
@@ -1411,7 +1412,8 @@ public final class Ropper {
         forEachNonSubBlockDepthFirst(getSpecialLabel(PARAM_ASSIGNMENT),
                 new BasicBlock.Visitor() {
 
-            public void visitBlock(BasicBlock b) {
+            @Override
+			public void visitBlock(BasicBlock b) {
                 reachableLabels.add(b.getLabel());
             }
         });

@@ -58,7 +58,8 @@ public final class CstKnownNull extends CstLiteralBits {
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.KNOWN_NULL;
     }
 
@@ -75,7 +76,8 @@ public final class CstKnownNull extends CstLiteralBits {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return "null";
     }
 

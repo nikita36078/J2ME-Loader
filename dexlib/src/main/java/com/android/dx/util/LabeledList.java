@@ -115,32 +115,7 @@ public class LabeledList extends FixedSizeList {
         }
     }
 
-    /**
-     * Gets an array containing all of the labels used in this instance,
-     * in order. The returned array is freshly-allocated and so may be
-     * modified safely by the caller without impacting this instance.
-     *
-     * @return {@code non-null;} ordered array of labels
-     * @throws NullPointerException thrown if there are any {@code null}
-     * items in this instance
-     */
-    public final int[] getLabelsInOrder() {
-        int sz = size();
-        int[] result = new int[sz];
-
-        for (int i = 0; i < sz; i++) {
-            LabeledItem li = (LabeledItem) get0(i);
-            if (li == null) {
-                throw new NullPointerException("null at index " + i);
-            }
-            result[i] = li.getLabel();
-        }
-
-        Arrays.sort(result);
-        return result;
-    }
-
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
     public void shrinkToFit() {
         super.shrinkToFit();

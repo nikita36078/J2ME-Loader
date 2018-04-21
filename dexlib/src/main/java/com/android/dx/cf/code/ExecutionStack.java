@@ -113,15 +113,6 @@ public final class ExecutionStack extends MutabilityControl {
     }
 
     /**
-     * Gets the maximum stack size for this instance.
-     *
-     * @return {@code >= 0;} the max stack size
-     */
-    public int getMaxStack() {
-        return stack.length;
-    }
-
-    /**
      * Gets the current stack size.
      *
      * @return {@code >= 0, < getMaxStack();} the current stack size

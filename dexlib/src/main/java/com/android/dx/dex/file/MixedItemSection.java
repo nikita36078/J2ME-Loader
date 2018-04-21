@@ -52,7 +52,8 @@ public final class MixedItemSection extends Section {
     /** {@code non-null;} sorter which sorts instances by type */
     private static final Comparator<OffsettedItem> TYPE_SORTER =
         new Comparator<OffsettedItem>() {
-        public int compare(OffsettedItem item1, OffsettedItem item2) {
+        @Override
+		public int compare(OffsettedItem item1, OffsettedItem item2) {
             ItemType type1 = item1.itemType();
             ItemType type2 = item2.itemType();
             return type1.compareTo(type2);
@@ -114,50 +115,7 @@ public final class MixedItemSection extends Section {
         return oi.getAbsoluteOffset();
     }
 
-    /**
-     * Gets the size of this instance, in items.
-     *
-     * @return {@code >= 0;} the size
-     */
-    public int size() {
-        return items.size();
-    }
-
-    /**
-     * Writes the portion of the file header that refers to this instance.
-     *
-     * @param out {@code non-null;} where to write
-     */
-    public void writeHeaderPart(AnnotatedOutput out) {
-        throwIfNotPrepared();
-
-        if (writeSize == -1) {
-            throw new RuntimeException("write size not yet set");
-        }
-
-        int sz = writeSize;
-        int offset = (sz == 0) ? 0 : getFileOffset();
-        String name = getName();
-
-        if (name == null) {
-            name = "<unnamed>";
-        }
-
-        int spaceCount = 15 - name.length();
-        char[] spaceArr = new char[spaceCount];
-        Arrays.fill(spaceArr, ' ');
-        String spaces = new String(spaceArr);
-
-        if (out.annotates()) {
-            out.annotate(4, name + "_size:" + spaces + Hex.u4(sz));
-            out.annotate(4, name + "_off: " + spaces + Hex.u4(offset));
-        }
-
-        out.writeInt(sz);
-        out.writeInt(offset);
-    }
-
-    /**
+	/**
      * Adds an item to this instance. This will in turn tell the given item
      * that it has been added to this instance. It is invalid to add the
      * same item to more than one instance, nor to add the same items
@@ -203,25 +161,7 @@ public final class MixedItemSection extends Section {
         return item;
     }
 
-    /**
-     * Gets an item which was previously interned.
-     *
-     * @param item {@code non-null;} the item to look for
-     * @return {@code non-null;} the equivalent already-interned instance
-     */
-    public <T extends OffsettedItem> T get(T item) {
-        throwIfNotPrepared();
-
-        OffsettedItem result = interns.get(item);
-
-        if (result != null) {
-            return (T) result;
-        }
-
-        throw new NoSuchElementException(item.toString());
-    }
-
-    /**
+	/**
      * Writes an index of contents of the items in this instance of the
      * given type. If there are none, this writes nothing. If there are any,
      * then the index is preceded by the given intro string.

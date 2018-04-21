@@ -93,7 +93,8 @@ public final class AttCode extends BaseAttribute {
         this.attributes = attributes;
     }
 
-    public int byteLength() {
+    @Override
+	public int byteLength() {
         return 10 + code.byteLength() + catches.byteLength() +
             attributes.byteLength();
     }

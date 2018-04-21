@@ -60,7 +60,8 @@ public final class CatchTable extends FixedSizeList
     }
 
     /** {@inheritDoc} */
-    public int compareTo(CatchTable other) {
+    @Override
+	public int compareTo(CatchTable other) {
         if (this == other) {
             // Easy out.
             return 0;
@@ -145,7 +146,8 @@ public final class CatchTable extends FixedSizeList
         }
 
         /** {@inheritDoc} */
-        public int compareTo(Entry other) {
+        @Override
+		public int compareTo(Entry other) {
             if (start < other.start) {
                 return -1;
             } else if (start > other.start) {

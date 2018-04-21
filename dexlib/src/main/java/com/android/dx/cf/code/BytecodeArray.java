@@ -116,28 +116,7 @@ public final class BytecodeArray {
         }
     }
 
-    /**
-     * Finds the offset to each instruction in the bytecode array. The
-     * result is a bit set with the offset of each opcode-per-se flipped on.
-     *
-     * @see Bits
-     * @return {@code non-null;} appropriately constructed bit set
-     */
-    public int[] getInstructionOffsets() {
-        int sz = bytes.size();
-        int[] result = Bits.makeBitSet(sz);
-        int at = 0;
-
-        while (at < sz) {
-            Bits.set(result, at, true);
-            int length = parseInstruction(at, null);
-            at += length;
-        }
-
-        return result;
-    }
-
-    /**
+	/**
      * Processes the given "work set" by repeatedly finding the lowest bit
      * in the set, clearing it, and parsing and visiting the instruction at
      * the indicated offset (that is, the bit index), repeating until the
@@ -221,8 +200,6 @@ public final class BytecodeArray {
 
         try {
             int opcode = bytes.getUnsignedByte(offset);
-            int info = ByteOps.opInfo(opcode);
-            int fmt = info & ByteOps.FMT_MASK;
 
             switch (opcode) {
                 case ByteOps.NOP: {
@@ -1292,53 +1269,62 @@ public final class BytecodeArray {
         }
 
         /** {@inheritDoc} */
-        public void visitInvalid(int opcode, int offset, int length) {
+        @Override
+		public void visitInvalid(int opcode, int offset, int length) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void visitNoArgs(int opcode, int offset, int length,
-                Type type) {
+        @Override
+		public void visitNoArgs(int opcode, int offset, int length,
+								Type type) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void visitLocal(int opcode, int offset, int length,
-                int idx, Type type, int value) {
+        @Override
+		public void visitLocal(int opcode, int offset, int length,
+							   int idx, Type type, int value) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void visitConstant(int opcode, int offset, int length,
-                Constant cst, int value) {
+        @Override
+		public void visitConstant(int opcode, int offset, int length,
+								  Constant cst, int value) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void visitBranch(int opcode, int offset, int length,
-                int target) {
+        @Override
+		public void visitBranch(int opcode, int offset, int length,
+								int target) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void visitSwitch(int opcode, int offset, int length,
-                SwitchList cases, int padding) {
+        @Override
+		public void visitSwitch(int opcode, int offset, int length,
+								SwitchList cases, int padding) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void visitNewarray(int offset, int length, CstType type,
-                ArrayList<Constant> initValues) {
+        @Override
+		public void visitNewarray(int offset, int length, CstType type,
+								  ArrayList<Constant> initValues) {
             // This space intentionally left blank.
         }
 
         /** {@inheritDoc} */
-        public void setPreviousOffset(int offset) {
+        @Override
+		public void setPreviousOffset(int offset) {
             previousOffset = offset;
         }
 
         /** {@inheritDoc} */
-        public int getPreviousOffset() {
+        @Override
+		public int getPreviousOffset() {
             return previousOffset;
         }
     }

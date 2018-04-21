@@ -62,12 +62,7 @@ public final class SizeOf {
      */
     public static final int TYPE_ID_ITEM = UINT;
 
-    /**
-     * type_idx ushort
-     */
-    public static final int TYPE_ITEM = USHORT;
-
-    /**
+	/**
      * shorty_idx uint
      * return_type_idx uint
      * return_type_idx uint

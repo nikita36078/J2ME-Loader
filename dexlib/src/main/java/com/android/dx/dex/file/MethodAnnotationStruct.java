@@ -68,7 +68,8 @@ public final class MethodAnnotationStruct
     }
 
     /** {@inheritDoc} */
-    public int compareTo(MethodAnnotationStruct other) {
+    @Override
+	public int compareTo(MethodAnnotationStruct other) {
         return method.compareTo(other.method);
     }
 
@@ -98,7 +99,8 @@ public final class MethodAnnotationStruct
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return method.toHuman() + ": " + annotations;
     }
 

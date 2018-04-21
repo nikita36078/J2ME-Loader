@@ -102,20 +102,7 @@ public class ClassPathOpener {
         }
     };
 
-    /**
-     * Constructs an instance.
-     *
-     * @param pathname {@code non-null;} path element to process
-     * @param sort if true, sort such that classes appear before their inner
-     * classes and "package-info" occurs before all other classes in that
-     * package.
-     * @param consumer {@code non-null;} callback interface
-     */
-    public ClassPathOpener(String pathname, boolean sort, Consumer consumer) {
-        this(pathname, sort, acceptAll, consumer);
-    }
-
-    /**
+	/**
      * Constructs an instance.
      *
      * @param pathname {@code non-null;} path element to process
@@ -219,7 +206,8 @@ public class ClassPathOpener {
 
         if (sort) {
             Arrays.sort(files, new Comparator<File>() {
-                public int compare(File a, File b) {
+                @Override
+				public int compare(File a, File b) {
                     return compareClassNames(a.getName(), b.getName());
                 }
             });
@@ -248,7 +236,8 @@ public class ClassPathOpener {
 
         if (sort) {
             Collections.sort(entriesList, new Comparator<ZipEntry>() {
-               public int compare (ZipEntry a, ZipEntry b) {
+               @Override
+			   public int compare (ZipEntry a, ZipEntry b) {
                    return compareClassNames(a.getName(), b.getName());
                }
             });

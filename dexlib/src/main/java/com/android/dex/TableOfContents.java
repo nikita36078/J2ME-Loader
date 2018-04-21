@@ -230,7 +230,8 @@ public final class TableOfContents {
             return size > 0;
         }
 
-        public int compareTo(Section section) {
+        @Override
+		public int compareTo(Section section) {
             if (off != section.off) {
                 return off < section.off ? -1 : 1;
             }

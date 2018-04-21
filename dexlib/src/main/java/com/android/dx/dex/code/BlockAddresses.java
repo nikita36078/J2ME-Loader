@@ -88,17 +88,6 @@ public final class BlockAddresses {
     }
 
     /**
-     * Gets the instance for the final instruction of the block with
-     * the given label.
-     *
-     * @param label {@code non-null;} the label of the block in question
-     * @return {@code non-null;} the appropriate instance
-     */
-    public CodeAddress getLast(int label) {
-        return lasts[label];
-    }
-
-    /**
      * Gets the instance for the end (address after the final instruction)
      * of the given block.
      *
@@ -107,17 +96,6 @@ public final class BlockAddresses {
      */
     public CodeAddress getEnd(BasicBlock block) {
         return ends[block.getLabel()];
-    }
-
-    /**
-     * Gets the instance for the end (address after the final instruction)
-     * of the block with the given label.
-     *
-     * @param label {@code non-null;} the label of the block in question
-     * @return {@code non-null;} the appropriate instance
-     */
-    public CodeAddress getEnd(int label) {
-        return ends[label];
     }
 
     /**

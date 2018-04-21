@@ -239,7 +239,8 @@ public class DeadCodeRemover {
         }
 
         /** {@inheritDoc} */
-        public void visitMoveInsn (NormalSsaInsn insn) {
+        @Override
+		public void visitMoveInsn (NormalSsaInsn insn) {
             // If we're tracking local vars, some moves have side effects.
             if (!hasSideEffect(insn)) {
                 noSideEffectRegs.set(insn.getResult().getReg());
@@ -247,7 +248,8 @@ public class DeadCodeRemover {
         }
 
         /** {@inheritDoc} */
-        public void visitPhiInsn (PhiInsn phi) {
+        @Override
+		public void visitPhiInsn (PhiInsn phi) {
             // If we're tracking local vars, then some phis have side effects.
             if (!hasSideEffect(phi)) {
                 noSideEffectRegs.set(phi.getResult().getReg());
@@ -255,7 +257,8 @@ public class DeadCodeRemover {
         }
 
         /** {@inheritDoc} */
-        public void visitNonMoveInsn (NormalSsaInsn insn) {
+        @Override
+		public void visitNonMoveInsn (NormalSsaInsn insn) {
             RegisterSpec result = insn.getResult();
             if (!hasSideEffect(insn) && result != null) {
                 noSideEffectRegs.set(result.getReg());

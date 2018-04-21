@@ -35,12 +35,6 @@ import java.util.BitSet;
  * representing such translations.
  */
 public abstract class InsnFormat {
-    /**
-     * flag to enable/disable the new extended opcode formats; meant as a
-     * temporary measure until VM support for the salient opcodes is
-     * added. TODO: Remove this declaration when the VM can deal.
-     */
-    public static final boolean ALLOW_EXTENDED_OPCODES = true;
 
     /**
      * Returns the string form, suitable for inclusion in a listing
@@ -413,23 +407,6 @@ public abstract class InsnFormat {
     }
 
     /**
-     * Helper method to extract the callout-argument index from an
-     * appropriate instruction.
-     *
-     * @param insn {@code non-null;} the instruction
-     * @return {@code >= 0;} the callout argument index
-     */
-    protected static int argIndex(DalvInsn insn) {
-        int arg = ((CstInteger) ((CstInsn) insn).getConstant()).getValue();
-
-        if (arg < 0) {
-            throw new IllegalArgumentException("bogus insn");
-        }
-
-        return arg;
-    }
-
-    /**
      * Helper method to combine an opcode and a second byte of data into
      * the appropriate form for emitting into a code buffer.
      *
@@ -449,25 +426,6 @@ public abstract class InsnFormat {
         }
 
         return (short) (opcode | (arg << 8));
-    }
-
-    /**
-     * Helper method to get an extended (16-bit) opcode out of an
-     * instruction, returning it as a code unit. The opcode
-     * <i>must</i> be an extended opcode.
-     *
-     * @param insn {@code non-null;} the instruction containing the
-     * extended opcode
-     * @return the opcode as a code unit
-     */
-    protected static short opcodeUnit(DalvInsn insn) {
-        int opcode = insn.getOpcode().getOpcode();
-
-        if ((opcode < 0x100) || (opcode > 0xffff)) {
-            throw new IllegalArgumentException("opcode out of range 0..65535");
-        }
-
-        return (short) opcode;
     }
 
     /**
@@ -621,37 +579,6 @@ public abstract class InsnFormat {
      */
     protected static void write(AnnotatedOutput out, short c0, int c1c2) {
         write(out, c0, (short) c1c2, (short) (c1c2 >> 16));
-    }
-
-    /**
-     * Writes four code units to the given output destination, where the
-     * second and third are represented as single <code>int</code> and emitted
-     * in little-endian order.
-     *
-     * @param out {@code non-null;} where to write to
-     * @param c0 code unit to write
-     * @param c1c2 code unit pair to write
-     * @param c3 code unit to write
-     */
-    protected static void write(AnnotatedOutput out, short c0, int c1c2,
-            short c3) {
-        write(out, c0, (short) c1c2, (short) (c1c2 >> 16), c3);
-    }
-
-    /**
-     * Writes five code units to the given output destination, where the
-     * second and third are represented as single <code>int</code> and emitted
-     * in little-endian order.
-     *
-     * @param out {@code non-null;} where to write to
-     * @param c0 code unit to write
-     * @param c1c2 code unit pair to write
-     * @param c3 code unit to write
-     * @param c4 code unit to write
-     */
-    protected static void write(AnnotatedOutput out, short c0, int c1c2,
-            short c3, short c4) {
-        write(out, c0, (short) c1c2, (short) (c1c2 >> 16), c3, c4);
     }
 
     /**

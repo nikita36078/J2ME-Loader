@@ -75,7 +75,8 @@ public final class EncodedField extends EncodedMember
      * case that two different items with the same method constant
      * ever appear in the same list (or same file, even).</p>
      */
-    public int compareTo(EncodedField other) {
+    @Override
+	public int compareTo(EncodedField other) {
         return field.compareTo(other.field);
     }
 
@@ -107,7 +108,8 @@ public final class EncodedField extends EncodedMember
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return field.toHuman();
     }
 

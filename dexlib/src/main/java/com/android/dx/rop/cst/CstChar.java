@@ -73,7 +73,8 @@ public final class CstChar
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.CHAR;
     }
 
@@ -84,16 +85,9 @@ public final class CstChar
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return Integer.toString(getIntBits());
     }
 
-    /**
-     * Gets the {@code char} value.
-     *
-     * @return the value
-     */
-    public char getValue() {
-        return (char) getIntBits();
-    }
 }

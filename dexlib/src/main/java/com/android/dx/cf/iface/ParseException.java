@@ -31,7 +31,4 @@ public class ParseException
         super(cause);
     }
 
-    public ParseException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

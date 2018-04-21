@@ -33,7 +33,8 @@ public final class StdMethodList extends FixedSizeList implements MethodList {
     }
 
     /** {@inheritDoc} */
-    public Method get(int n) {
+    @Override
+	public Method get(int n) {
         return (Method) get0(n);
     }
 

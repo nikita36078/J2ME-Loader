@@ -98,7 +98,8 @@ public abstract class CstMemberRef extends TypedConstant {
     }
 
     /** {@inheritDoc} */
-    public final String toHuman() {
+    @Override
+	public final String toHuman() {
         return definingClass.toHuman() + '.' + nat.toHuman();
     }
 

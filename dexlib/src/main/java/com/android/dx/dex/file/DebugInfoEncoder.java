@@ -501,7 +501,8 @@ public final class DebugInfoEncoder {
 
         // Sort ascending by address.
         Collections.sort (result, new Comparator<PositionList.Entry>() {
-            public int compare (PositionList.Entry a, PositionList.Entry b) {
+            @Override
+			public int compare (PositionList.Entry a, PositionList.Entry b) {
                 return a.getAddress() - b.getAddress();
             }
 
@@ -558,7 +559,8 @@ public final class DebugInfoEncoder {
 
         // Sort by ascending register.
         Collections.sort(result, new Comparator<LocalList.Entry>() {
-            public int compare(LocalList.Entry a, LocalList.Entry b) {
+            @Override
+			public int compare(LocalList.Entry a, LocalList.Entry b) {
                 return a.getRegister() - b.getRegister();
             }
 

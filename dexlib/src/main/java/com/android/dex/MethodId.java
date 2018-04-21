@@ -43,7 +43,8 @@ public final class MethodId implements Comparable<MethodId> {
         return nameIndex;
     }
 
-    public int compareTo(MethodId other) {
+    @Override
+	public int compareTo(MethodId other) {
         if (declaringClassIndex != other.declaringClassIndex) {
             return Unsigned.compare(declaringClassIndex, other.declaringClassIndex);
         }

@@ -83,8 +83,6 @@ public class DomFront {
             }
         }
 
-        Dominators methDom = Dominators.make(meth, domInfos, false);
-
         if (DEBUG) {
             for (int i = 0; i < szNodes; i++) {
                 DomInfo info = domInfos[i];

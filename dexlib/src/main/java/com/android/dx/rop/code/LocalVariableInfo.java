@@ -106,7 +106,6 @@ public final class LocalVariableInfo
      */
     public boolean mergeStarts(int label, RegisterSpecSet specs) {
         RegisterSpecSet start = getStarts0(label);
-        boolean changed = false;
 
         if (start == null) {
             setStarts(label, specs);
@@ -220,21 +219,7 @@ public final class LocalVariableInfo
         return insnAssignments.size();
     }
 
-    public void debugDump() {
-        for (int label = 0 ; label < blockStarts.length; label++) {
-            if (blockStarts[label] == null) {
-                continue;
-            }
-
-            if (blockStarts[label] == emptySet) {
-                System.out.printf("%04x: empty set\n", label);
-            } else {
-                System.out.printf("%04x: %s\n", label, blockStarts[label]);
-            }
-        }
-    }
-
-    /**
+	/**
      * Helper method, to get the starts for a label, throwing the
      * right exception for range problems.
      *

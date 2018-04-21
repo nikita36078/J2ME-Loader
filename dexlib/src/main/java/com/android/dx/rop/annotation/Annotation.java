@@ -87,7 +87,8 @@ public final class Annotation extends MutabilityControl
     }
 
     /** {@inheritDoc} */
-    public int compareTo(Annotation other) {
+    @Override
+	public int compareTo(Annotation other) {
         int result = type.compareTo(other.type);
 
         if (result != 0) {
@@ -129,7 +130,8 @@ public final class Annotation extends MutabilityControl
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         StringBuilder sb = new StringBuilder();
 
         sb.append(visibility.toHuman());

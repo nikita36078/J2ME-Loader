@@ -35,7 +35,8 @@ public class ListIntSet implements IntSet {
     }
 
     /** {@inheritDoc} */
-    public void add(int value) {
+    @Override
+	public void add(int value) {
         int index = ints.binarysearch(value);
 
         if (index < 0) {
@@ -44,21 +45,14 @@ public class ListIntSet implements IntSet {
     }
 
     /** {@inheritDoc} */
-    public void remove(int value) {
-        int index = ints.indexOf(value);
-
-        if (index >= 0) {
-            ints.removeIndex(index);
-        }
-    }
-
-    /** {@inheritDoc} */
-    public boolean has(int value) {
+    @Override
+	public boolean has(int value) {
         return ints.indexOf(value) >= 0;
     }
 
     /** {@inheritDoc} */
-    public void merge(IntSet other) {
+    @Override
+	public void merge(IntSet other) {
         if (other instanceof ListIntSet) {
             ListIntSet o = (ListIntSet) other;
             int szThis = ints.size();
@@ -100,22 +94,26 @@ public class ListIntSet implements IntSet {
     }
 
     /** {@inheritDoc} */
-    public int elements() {
+    @Override
+	public int elements() {
         return ints.size();
     }
 
     /** {@inheritDoc} */
-    public IntIterator iterator() {
+    @Override
+	public IntIterator iterator() {
         return new IntIterator() {
             private int idx = 0;
 
             /** {@inheritDoc} */
-            public boolean hasNext() {
+            @Override
+			public boolean hasNext() {
                 return idx < ints.size();
             }
 
             /** {@inheritDoc} */
-            public int next() {
+            @Override
+			public int next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }

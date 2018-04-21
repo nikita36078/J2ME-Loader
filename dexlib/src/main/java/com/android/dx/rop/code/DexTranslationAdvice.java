@@ -29,11 +29,7 @@ public final class DexTranslationAdvice
     public static final DexTranslationAdvice THE_ONE =
         new DexTranslationAdvice();
 
-    /** debug advice for disabling invoke-range optimization */
-    public static final DexTranslationAdvice NO_SOURCES_IN_ORDER =
-        new DexTranslationAdvice(true);
-
-    /**
+	/**
      * The minimum source width, in register units, for an invoke
      * instruction that requires its sources to be in order and contiguous.
      */
@@ -49,13 +45,10 @@ public final class DexTranslationAdvice
         disableSourcesInOrder = false;
     }
 
-    private DexTranslationAdvice(boolean disableInvokeRange) {
-        this.disableSourcesInOrder = disableInvokeRange;
-    }
-
     /** {@inheritDoc} */
-    public boolean hasConstantOperation(Rop opcode,
-            RegisterSpec sourceA, RegisterSpec sourceB) {
+    @Override
+	public boolean hasConstantOperation(Rop opcode,
+										RegisterSpec sourceA, RegisterSpec sourceB) {
         if (sourceA.getType() != Type.INT) {
             return false;
         }
@@ -99,8 +92,9 @@ public final class DexTranslationAdvice
     }
 
     /** {@inheritDoc} */
-    public boolean requiresSourcesInOrder(Rop opcode,
-            RegisterSpecList sources) {
+    @Override
+	public boolean requiresSourcesInOrder(Rop opcode,
+										  RegisterSpecList sources) {
 
         return !disableSourcesInOrder && opcode.isCallLike()
                 && totalRopWidth(sources) >= MIN_INVOKE_IN_ORDER;
@@ -124,7 +118,8 @@ public final class DexTranslationAdvice
     }
 
     /** {@inheritDoc} */
-    public int getMaxOptimalRegisterCount() {
+    @Override
+	public int getMaxOptimalRegisterCount() {
         return 16;
     }
 }

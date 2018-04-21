@@ -380,18 +380,6 @@ public final class RegisterSpec
     }
 
     /**
-     * Gets whether this instance's type is category 1. This is just a
-     * convenient shorthand for {@code getType().isCategory1()}.
-     *
-     * @see #getCategory
-     * @see #isCategory2
-     * @return whether or not this instance's type is of category 1
-     */
-    public boolean isCategory1() {
-        return type.getType().isCategory1();
-    }
-
-    /**
      * Gets whether this instance's type is category 2. This is just a
      * convenient shorthand for {@code getType().isCategory2()}.
      *

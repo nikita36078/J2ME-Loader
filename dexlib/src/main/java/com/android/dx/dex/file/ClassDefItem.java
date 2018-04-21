@@ -228,15 +228,6 @@ public final class ClassDefItem extends IndexedItem {
     }
 
     /**
-     * Gets the access flags.
-     *
-     * @return the access flags
-     */
-    public int getAccessFlags() {
-        return accessFlags;
-    }
-
-    /**
      * Gets the superclass.
      *
      * @return {@code null-ok;} the superclass or {@code null} if
@@ -386,27 +377,4 @@ public final class ClassDefItem extends IndexedItem {
         return annotationsDirectory.getParameterAnnotations(method);
     }
 
-    /**
-     * Prints out the contents of this instance, in a debugging-friendly
-     * way.
-     *
-     * @param out {@code non-null;} where to output to
-     * @param verbose whether to be verbose with the output
-     */
-    public void debugPrint(Writer out, boolean verbose) {
-        PrintWriter pw = Writers.printWriterFor(out);
-
-        pw.println(getClass().getName() + " {");
-        pw.println("  accessFlags: " + Hex.u2(accessFlags));
-        pw.println("  superclass: " + superclass);
-        pw.println("  interfaces: " +
-                ((interfaces == null) ? "<none>" : interfaces));
-        pw.println("  sourceFile: " +
-                ((sourceFile == null) ? "<none>" : sourceFile.toQuoted()));
-
-        classData.debugPrint(out, verbose);
-        annotationsDirectory.debugPrint(pw);
-
-        pw.println("}");
-    }
 }

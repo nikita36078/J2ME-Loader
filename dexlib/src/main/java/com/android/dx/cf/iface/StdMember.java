@@ -79,32 +79,38 @@ public abstract class StdMember implements Member {
     }
 
     /** {@inheritDoc} */
-    public final CstType getDefiningClass() {
+    @Override
+	public final CstType getDefiningClass() {
         return definingClass;
     }
 
     /** {@inheritDoc} */
-    public final int getAccessFlags() {
+    @Override
+	public final int getAccessFlags() {
         return accessFlags;
     }
 
     /** {@inheritDoc} */
-    public final CstNat getNat() {
+    @Override
+	public final CstNat getNat() {
         return nat;
     }
 
     /** {@inheritDoc} */
-    public final CstString getName() {
+    @Override
+	public final CstString getName() {
         return nat.getName();
     }
 
     /** {@inheritDoc} */
-    public final CstString getDescriptor() {
+    @Override
+	public final CstString getDescriptor() {
         return nat.getDescriptor();
     }
 
     /** {@inheritDoc} */
-    public final AttributeList getAttributes() {
+    @Override
+	public final AttributeList getAttributes() {
         return attributes;
     }
 }

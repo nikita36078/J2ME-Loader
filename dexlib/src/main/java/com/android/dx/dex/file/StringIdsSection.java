@@ -90,18 +90,7 @@ public final class StringIdsSection
         out.writeInt(offset);
     }
 
-    /**
-     * Interns an element into this instance.
-     *
-     * @param string {@code non-null;} the string to intern, as a regular Java
-     * {@code String}
-     * @return {@code non-null;} the interned string
-     */
-    public StringIdItem intern(String string) {
-        return intern(new StringIdItem(new CstString(string)));
-    }
-
-    /**
+	/**
      * Interns an element into this instance.
      *
      * @param string {@code non-null;} the string to intern, as a constant
@@ -135,17 +124,7 @@ public final class StringIdsSection
         return string;
     }
 
-    /**
-     * Interns the components of a name-and-type into this instance.
-     *
-     * @param nat {@code non-null;} the name-and-type
-     */
-    public synchronized void intern(CstNat nat) {
-        intern(nat.getName());
-        intern(nat.getDescriptor());
-    }
-
-    /**
+	/**
      * Gets the index of the given string, which must have been added
      * to this instance.
      *

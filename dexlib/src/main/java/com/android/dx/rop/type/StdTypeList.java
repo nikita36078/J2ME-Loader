@@ -333,12 +333,14 @@ public final class StdTypeList
     }
 
     /** {@inheritDoc} */
-    public Type getType(int n) {
+    @Override
+	public Type getType(int n) {
         return get(n);
     }
 
     /** {@inheritDoc} */
-    public int getWordCount() {
+    @Override
+	public int getWordCount() {
         int sz = size();
         int result = 0;
 
@@ -350,7 +352,8 @@ public final class StdTypeList
     }
 
     /** {@inheritDoc} */
-    public TypeList withAddedType(Type type) {
+    @Override
+	public TypeList withAddedType(Type type) {
         int sz = size();
         StdTypeList result = new StdTypeList(sz + 1);
 

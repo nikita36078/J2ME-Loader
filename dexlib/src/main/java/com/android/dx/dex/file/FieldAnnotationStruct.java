@@ -68,7 +68,8 @@ public final class FieldAnnotationStruct
     }
 
     /** {@inheritDoc} */
-    public int compareTo(FieldAnnotationStruct other) {
+    @Override
+	public int compareTo(FieldAnnotationStruct other) {
         return field.compareTo(other.field);
     }
 
@@ -98,25 +99,9 @@ public final class FieldAnnotationStruct
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return field.toHuman() + ": " + annotations;
     }
 
-    /**
-     * Gets the field this item is for.
-     *
-     * @return {@code non-null;} the field
-     */
-    public CstFieldRef getField() {
-        return field;
-    }
-
-    /**
-     * Gets the associated annotations.
-     *
-     * @return {@code non-null;} the annotations
-     */
-    public Annotations getAnnotations() {
-        return annotations.getAnnotations();
-    }
 }

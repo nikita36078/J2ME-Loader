@@ -107,7 +107,6 @@ public class LocalVariableInfo         extends MutabilityControl {
      */
     public boolean mergeStarts(int index, RegisterSpecSet specs) {
         RegisterSpecSet start = getStarts0(index);
-        boolean changed = false;
 
         if (start == null) {
             setStarts(index, specs);
@@ -139,18 +138,6 @@ public class LocalVariableInfo         extends MutabilityControl {
         RegisterSpecSet result = getStarts0(index);
 
         return (result != null) ? result : emptySet;
-    }
-
-    /**
-     * Gets the register set associated with the start of the given
-     * block. This is just convenient shorthand for
-     * {@code getStarts(block.getLabel())}.
-     *
-     * @param block {@code non-null;} the block in question
-     * @return {@code non-null;} the associated register set
-     */
-    public RegisterSpecSet getStarts(SsaBasicBlock block) {
-        return getStarts(block.getIndex());
     }
 
     /**
@@ -195,40 +182,6 @@ public class LocalVariableInfo         extends MutabilityControl {
         }
 
         insnAssignments.put(insn, spec);
-    }
-
-    /**
-     * Gets the named register being assigned by the given instruction, if
-     * previously stored in this instance.
-     *
-     * @param insn {@code non-null;} instruction in question
-     * @return {@code null-ok;} the named register being assigned, if any
-     */
-    public RegisterSpec getAssignment(SsaInsn insn) {
-        return insnAssignments.get(insn);
-    }
-
-    /**
-     * Gets the number of assignments recorded by this instance.
-     *
-     * @return {@code >= 0;} the number of assignments
-     */
-    public int getAssignmentCount() {
-        return insnAssignments.size();
-    }
-
-    public void debugDump() {
-        for (int index = 0 ; index < blockStarts.length; index++) {
-            if (blockStarts[index] == null) {
-                continue;
-            }
-
-            if (blockStarts[index] == emptySet) {
-                System.out.printf("%04x: empty set\n", index);
-            } else {
-                System.out.printf("%04x: %s\n", index, blockStarts[index]);
-            }
-        }
     }
 
     /**

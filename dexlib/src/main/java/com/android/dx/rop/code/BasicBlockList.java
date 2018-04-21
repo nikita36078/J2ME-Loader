@@ -180,34 +180,7 @@ public final class BasicBlockList extends LabeledList {
         }
     }
 
-    /**
-     * Returns an instance that is identical to this one, except that
-     * the registers in each instruction are offset by the given
-     * amount. Mutability of the result is inherited from the
-     * original.
-     *
-     * @param delta the amount to offset register numbers by
-     * @return {@code non-null;} an appropriately-constructed instance
-     */
-    public BasicBlockList withRegisterOffset(int delta) {
-        int sz = size();
-        BasicBlockList result = new BasicBlockList(sz);
-
-        for (int i = 0; i < sz; i++) {
-            BasicBlock one = (BasicBlock) get0(i);
-            if (one != null) {
-                result.set(i, one.withRegisterOffset(delta));
-            }
-        }
-
-        if (isImmutable()) {
-            result.setImmutable();
-        }
-
-        return result;
-    }
-
-    /**
+	/**
      * Returns a mutable copy of this list.
      *
      * @return {@code non-null;} an appropriately-constructed instance
@@ -247,66 +220,7 @@ public final class BasicBlockList extends LabeledList {
         }
     }
 
-    /**
-     * Compares the catches of two blocks for equality. This includes
-     * both the catch types and target labels.
-     *
-     * @param block1 {@code non-null;} one block to compare
-     * @param block2 {@code non-null;} the other block to compare
-     * @return {@code true} if the two blocks' non-primary successors
-     * are identical
-     */
-    public boolean catchesEqual(BasicBlock block1, BasicBlock block2) {
-        TypeList catches1 = block1.getExceptionHandlerTypes();
-        TypeList catches2 = block2.getExceptionHandlerTypes();
-
-        if (!StdTypeList.equalContents(catches1, catches2)) {
-            return false;
-        }
-
-        IntList succ1 = block1.getSuccessors();
-        IntList succ2 = block2.getSuccessors();
-        int size = succ1.size(); // Both are guaranteed to be the same size.
-
-        int primary1 = block1.getPrimarySuccessor();
-        int primary2 = block2.getPrimarySuccessor();
-
-        if (((primary1 == -1) || (primary2 == -1))
-                && (primary1 != primary2)) {
-            /*
-             * For the current purpose, both blocks in question must
-             * either both have a primary or both not have a primary to
-             * be considered equal, and it turns out here that that's not
-             * the case.
-             */
-            return false;
-        }
-
-        for (int i = 0; i < size; i++) {
-            int label1 = succ1.get(i);
-            int label2 = succ2.get(i);
-
-            if (label1 == primary1) {
-                /*
-                 * It should be the case that block2's primary is at the
-                 * same index. If not, we consider the blocks unequal for
-                 * the current purpose.
-                 */
-                if (label2 != primary2) {
-                    return false;
-                }
-                continue;
-            }
-
-            if (label1 != label2) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
+	/**
      * Instruction visitor class for counting registers used.
      */
     private static class RegCountVisitor
@@ -331,37 +245,44 @@ public final class BasicBlockList extends LabeledList {
         }
 
         /** {@inheritDoc} */
-        public void visitPlainInsn(PlainInsn insn) {
+        @Override
+		public void visitPlainInsn(PlainInsn insn) {
             visit(insn);
         }
 
         /** {@inheritDoc} */
-        public void visitPlainCstInsn(PlainCstInsn insn) {
+        @Override
+		public void visitPlainCstInsn(PlainCstInsn insn) {
             visit(insn);
         }
 
         /** {@inheritDoc} */
-        public void visitSwitchInsn(SwitchInsn insn) {
+        @Override
+		public void visitSwitchInsn(SwitchInsn insn) {
             visit(insn);
         }
 
         /** {@inheritDoc} */
-        public void visitThrowingCstInsn(ThrowingCstInsn insn) {
+        @Override
+		public void visitThrowingCstInsn(ThrowingCstInsn insn) {
             visit(insn);
         }
 
         /** {@inheritDoc} */
-        public void visitThrowingInsn(ThrowingInsn insn) {
+        @Override
+		public void visitThrowingInsn(ThrowingInsn insn) {
             visit(insn);
         }
 
         /** {@inheritDoc} */
-        public void visitFillArrayDataInsn(FillArrayDataInsn insn) {
+        @Override
+		public void visitFillArrayDataInsn(FillArrayDataInsn insn) {
             visit(insn);
         }
 
         /** {@inheritDoc} */
-        public void visitInvokePolymorphicInsn(InvokePolymorphicInsn insn) {
+        @Override
+		public void visitInvokePolymorphicInsn(InvokePolymorphicInsn insn) {
             visit(insn);
         }
 

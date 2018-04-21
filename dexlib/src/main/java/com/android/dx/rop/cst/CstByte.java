@@ -73,7 +73,8 @@ public final class CstByte
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.BYTE;
     }
 
@@ -84,16 +85,9 @@ public final class CstByte
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return Integer.toString(getIntBits());
     }
 
-    /**
-     * Gets the {@code byte} value.
-     *
-     * @return the value
-     */
-    public byte getValue() {
-        return (byte) getIntBits();
-    }
 }

@@ -689,18 +689,22 @@ public class EscapeAnalysis {
      */
     private void run() {
         ssaMeth.forEachBlockDepthFirstDom(new SsaBasicBlock.Visitor() {
-            public void visitBlock (SsaBasicBlock block,
-                    SsaBasicBlock unused) {
+            @Override
+			public void visitBlock (SsaBasicBlock block,
+									SsaBasicBlock unused) {
                 block.forEachInsn(new SsaInsn.Visitor() {
-                    public void visitMoveInsn(NormalSsaInsn insn) {
+                    @Override
+					public void visitMoveInsn(NormalSsaInsn insn) {
                         // do nothing
                     }
 
-                    public void visitPhiInsn(PhiInsn insn) {
+                    @Override
+					public void visitPhiInsn(PhiInsn insn) {
                         // do nothing
                     }
 
-                    public void visitNonMoveInsn(NormalSsaInsn insn) {
+                    @Override
+					public void visitNonMoveInsn(NormalSsaInsn insn) {
                         processInsn(insn);
                     }
                 });

@@ -74,7 +74,8 @@ public final class CstShort
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.SHORT;
     }
 
@@ -85,16 +86,9 @@ public final class CstShort
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return Integer.toString(getIntBits());
     }
 
-    /**
-     * Gets the {@code short} value.
-     *
-     * @return the value
-     */
-    public short getValue() {
-        return (short) getIntBits();
-    }
 }

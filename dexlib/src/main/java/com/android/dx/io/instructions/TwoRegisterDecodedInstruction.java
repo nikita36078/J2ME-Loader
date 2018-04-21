@@ -41,22 +41,26 @@ public final class TwoRegisterDecodedInstruction extends DecodedInstruction {
     }
 
     /** {@inheritDoc} */
-    public int getRegisterCount() {
+    @Override
+	public int getRegisterCount() {
         return 2;
     }
 
     /** {@inheritDoc} */
-    public int getA() {
+    @Override
+	public int getA() {
         return a;
     }
 
     /** {@inheritDoc} */
-    public int getB() {
+    @Override
+	public int getB() {
         return b;
     }
 
     /** {@inheritDoc} */
-    public DecodedInstruction withIndex(int newIndex) {
+    @Override
+	public DecodedInstruction withIndex(int newIndex) {
         return new TwoRegisterDecodedInstruction(
                 getFormat(), getOpcode(), newIndex, getIndexType(),
                 getTarget(), getLiteral(), a, b);

@@ -31,7 +31,8 @@ public final class ProtoId implements Comparable<ProtoId> {
         this.parametersOffset = parametersOffset;
     }
 
-    public int compareTo(ProtoId other) {
+    @Override
+	public int compareTo(ProtoId other) {
         if (returnTypeIndex != other.returnTypeIndex) {
             return Unsigned.compare(returnTypeIndex, other.returnTypeIndex);
         }

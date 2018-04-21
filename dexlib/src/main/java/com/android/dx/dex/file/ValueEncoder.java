@@ -126,7 +126,6 @@ public final class ValueEncoder {
      */
     public void writeConstant(Constant cst) {
         int type = constantToValueType(cst);
-        int arg;
 
         switch (type) {
             case VALUE_BYTE:

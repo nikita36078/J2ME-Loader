@@ -85,7 +85,6 @@ public final class Form3rc extends InsnFormat {
         }
 
         RegisterSpecList regs = ci.getRegisters();
-        int sz = regs.size();
 
         return (regs.size() == 0) ||
             (isRegListSequential(regs) &&

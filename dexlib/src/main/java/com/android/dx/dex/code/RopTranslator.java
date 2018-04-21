@@ -47,10 +47,8 @@ import java.util.ArrayList;
  * #translate} method is the thing to call on this class.
  */
 public final class RopTranslator {
-    /** {@code non-null;} options for dex output */
-    private final DexOptions dexOptions;
 
-    /** {@code non-null;} method to translate */
+	/** {@code non-null;} method to translate */
     private final RopMethod method;
 
     /**
@@ -119,8 +117,7 @@ public final class RopTranslator {
      */
     private RopTranslator(RopMethod method, int positionInfo, LocalVariableInfo locals,
             int paramSize, DexOptions dexOptions) {
-        this.dexOptions = dexOptions;
-        this.method = method;
+		this.method = method;
         this.positionInfo = positionInfo;
         this.locals = locals;
         this.addresses = new BlockAddresses(method);
@@ -527,7 +524,8 @@ public final class RopTranslator {
         }
 
         /** {@inheritDoc} */
-        public void visitPlainInsn(PlainInsn insn) {
+        @Override
+		public void visitPlainInsn(PlainInsn insn) {
             Rop rop = insn.getOpcode();
             if (rop.getOpcode() == RegOps.MARK_LOCAL) {
                 /*
@@ -794,7 +792,8 @@ public final class RopTranslator {
         }
 
         /** {@inheritDoc} */
-        public void visitFillArrayDataInsn(FillArrayDataInsn insn) {
+        @Override
+		public void visitFillArrayDataInsn(FillArrayDataInsn insn) {
             SourcePosition pos = insn.getPosition();
             Constant cst = insn.getConstant();
             ArrayList<Constant> values = insn.getInitValues();

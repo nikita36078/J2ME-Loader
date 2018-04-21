@@ -81,7 +81,8 @@ public final class CstArray extends Constant {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return list.toHuman("{", ", ", "}");
     }
 
@@ -110,7 +111,8 @@ public final class CstArray extends Constant {
         }
 
         /** {@inheritDoc} */
-        public int compareTo(List other) {
+        @Override
+		public int compareTo(List other) {
             int thisSize = size();
             int otherSize = other.size();
             int compareSize = (thisSize < otherSize) ? thisSize : otherSize;

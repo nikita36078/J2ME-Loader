@@ -40,14 +40,8 @@ import java.util.List;
  * An SSA representation of a basic block.
  */
 public final class SsaBasicBlock {
-    /**
-     * {@code non-null;} comparator for instances of this class that
-     * just compares block labels
-     */
-    public static final Comparator<SsaBasicBlock> LABEL_COMPARATOR =
-        new LabelComparator();
 
-    /** {@code non-null;} insn list associated with this instance */
+	/** {@code non-null;} insn list associated with this instance */
     private ArrayList<SsaInsn> insns;
 
     /** {@code non-null;} predecessor set (by block list index) */
@@ -809,20 +803,7 @@ public final class SsaBasicBlock {
         liveIn.add(regV);
     }
 
-    /**
-     * Returns the set of live-in registers. Valid after register
-     * interference graph has been generated, otherwise empty.
-     *
-     * @return {@code non-null;} live-in register set.
-     */
-    public IntSet getLiveInRegs() {
-        if (liveIn == null) {
-            liveIn = SetFactory.makeLivenessSet(parent.getRegCount());
-        }
-        return liveIn;
-    }
-
-    /**
+	/**
      * Returns the set of live-out registers. Valid after register
      * interference graph has been generated, otherwise empty.
      *
@@ -1009,23 +990,4 @@ public final class SsaBasicBlock {
         void visitBlock (SsaBasicBlock v, SsaBasicBlock parent);
     }
 
-    /**
-     * Label comparator.
-     */
-    public static final class LabelComparator
-            implements Comparator<SsaBasicBlock> {
-        /** {@inheritDoc} */
-        public int compare(SsaBasicBlock b1, SsaBasicBlock b2) {
-            int label1 = b1.ropLabel;
-            int label2 = b2.ropLabel;
-
-            if (label1 < label2) {
-                return -1;
-            } else if (label1 > label2) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
 }

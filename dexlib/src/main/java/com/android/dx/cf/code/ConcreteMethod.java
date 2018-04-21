@@ -138,37 +138,44 @@ public final class ConcreteMethod implements Method {
     }
 
     /** {@inheritDoc} */
-    public CstNat getNat() {
+    @Override
+	public CstNat getNat() {
         return method.getNat();
     }
 
     /** {@inheritDoc} */
-    public CstString getName() {
+    @Override
+	public CstString getName() {
         return method.getName();
     }
 
     /** {@inheritDoc} */
-    public CstString getDescriptor() {
+    @Override
+	public CstString getDescriptor() {
         return method.getDescriptor();
     }
 
     /** {@inheritDoc} */
-    public int getAccessFlags() {
+    @Override
+	public int getAccessFlags() {
         return method.getAccessFlags();
     }
 
     /** {@inheritDoc} */
-    public AttributeList getAttributes() {
+    @Override
+	public AttributeList getAttributes() {
         return method.getAttributes();
     }
 
     /** {@inheritDoc} */
-    public CstType getDefiningClass() {
+    @Override
+	public CstType getDefiningClass() {
         return method.getDefiningClass();
     }
 
     /** {@inheritDoc} */
-    public Prototype getEffectiveDescriptor() {
+    @Override
+	public Prototype getEffectiveDescriptor() {
         return method.getEffectiveDescriptor();
     }
 
@@ -208,16 +215,7 @@ public final class ConcreteMethod implements Method {
         return attCode.getCatches();
     }
 
-    /**
-     * Gets the line number list.
-     *
-     * @return {@code non-null;} the line number list
-     */
-    public LineNumberList getLineNumbers() {
-        return lineNumbers;
-    }
-
-    /**
+	/**
      * Gets the local variable list.
      *
      * @return {@code non-null;} the local variable list

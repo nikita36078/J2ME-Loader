@@ -52,32 +52,38 @@ public final class ReturnAddress implements TypeBearer {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return toString();
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.RETURN_ADDRESS;
     }
 
     /** {@inheritDoc} */
-    public TypeBearer getFrameType() {
+    @Override
+	public TypeBearer getFrameType() {
         return this;
     }
 
     /** {@inheritDoc} */
-    public int getBasicType() {
+    @Override
+	public int getBasicType() {
         return Type.RETURN_ADDRESS.getBasicType();
     }
 
     /** {@inheritDoc} */
-    public int getBasicFrameType() {
+    @Override
+	public int getBasicFrameType() {
         return Type.RETURN_ADDRESS.getBasicFrameType();
     }
 
     /** {@inheritDoc} */
-    public boolean isConstant() {
+    @Override
+	public boolean isConstant() {
         return false;
     }
 

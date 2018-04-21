@@ -299,16 +299,7 @@ public final class SsaMethod {
         return paramWidth;
     }
 
-    /**
-     * Returns {@code true} if this is a static method.
-     *
-     * @return {@code true} if this is a static method
-     */
-    public boolean isStatic() {
-        return isStatic;
-    }
-
-    /**
+	/**
      * Borrows a register to use as a temp. Used in the phi removal process.
      * Call returnSpareRegisters() when done.
      *
@@ -417,13 +408,16 @@ public final class SsaMethod {
         definitionList = new SsaInsn[getRegCount()];
 
         forEachInsn(new SsaInsn.Visitor() {
-            public void visitMoveInsn (NormalSsaInsn insn) {
+            @Override
+			public void visitMoveInsn (NormalSsaInsn insn) {
                 definitionList[insn.getResult().getReg()] = insn;
             }
-            public void visitPhiInsn (PhiInsn phi) {
+            @Override
+			public void visitPhiInsn (PhiInsn phi) {
                 definitionList[phi.getResult().getReg()] = phi;
             }
-            public void visitNonMoveInsn (NormalSsaInsn insn) {
+            @Override
+			public void visitNonMoveInsn (NormalSsaInsn insn) {
                 RegisterSpec result = insn.getResult();
                 if (result != null) {
                     definitionList[insn.getResult().getReg()] = insn;
@@ -450,15 +444,18 @@ public final class SsaMethod {
 
         forEachInsn(new SsaInsn.Visitor() {
             /** {@inheritDoc} */
-            public void visitMoveInsn (NormalSsaInsn insn) {
+            @Override
+			public void visitMoveInsn (NormalSsaInsn insn) {
                 addToUses(insn);
             }
             /** {@inheritDoc} */
-            public void visitPhiInsn (PhiInsn phi) {
+            @Override
+			public void visitPhiInsn (PhiInsn phi) {
                 addToUses(phi);
             }
             /** {@inheritDoc} */
-            public void visitNonMoveInsn (NormalSsaInsn insn) {
+            @Override
+			public void visitNonMoveInsn (NormalSsaInsn insn) {
                 addToUses(insn);
             }
             /**
@@ -729,19 +726,8 @@ public final class SsaMethod {
         }
     }
 
-    /**
-     * Visits each phi insn in this method
-     * @param v {@code non-null;} callback.
-     *
-     */
-    public void forEachPhiInsn(PhiInsn.Visitor v) {
-        for (SsaBasicBlock block : blocks) {
-            block.forEachPhiInsn(v);
-        }
-    }
 
-
-    /**
+	/**
      * Walks the basic block tree in depth-first order, calling the visitor
      * method once for every block. This depth-first walk may be run forward
      * from the method entry point or backwards from the method exit points.

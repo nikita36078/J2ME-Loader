@@ -185,7 +185,8 @@ public final class LocalList extends FixedSizeList {
          * @param other {@code non-null;} entry to compare to
          * @return {@code -1..1;} standard result of comparison
          */
-        public int compareTo(Entry other) {
+        @Override
+		public int compareTo(Entry other) {
             if (address < other.address) {
                 return -1;
             } else if (address > other.address) {

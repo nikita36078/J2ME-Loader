@@ -85,7 +85,8 @@ public final class EncodedMethod extends EncodedMember
      * case that two different items with the same method constant
      * ever appear in the same list (or same file, even).</p>
      */
-    public int compareTo(EncodedMethod other) {
+    @Override
+	public int compareTo(EncodedMethod other) {
         return method.compareTo(other.method);
     }
 
@@ -124,7 +125,8 @@ public final class EncodedMethod extends EncodedMember
     }
 
     /** {@inheritDoc} */
-    public final String toHuman() {
+    @Override
+	public final String toHuman() {
         return method.toHuman();
     }
 

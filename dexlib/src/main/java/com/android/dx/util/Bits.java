@@ -212,25 +212,4 @@ public final class Bits {
         }
     }
 
-    public static String toHuman(int[] bits) {
-        StringBuilder sb = new StringBuilder();
-
-        boolean needsComma = false;
-
-        sb.append('{');
-
-        int bitsLength = 32 * bits.length;
-        for (int i = 0; i < bitsLength; i++) {
-            if (Bits.get(bits, i)) {
-                if (needsComma) {
-                    sb.append(',');
-                }
-                needsComma = true;
-                sb.append(i);
-            }
-        }
-        sb.append('}');
-
-        return sb.toString();
-    }
 }

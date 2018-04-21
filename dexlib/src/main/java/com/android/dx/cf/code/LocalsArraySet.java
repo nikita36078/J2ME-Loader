@@ -138,7 +138,8 @@ public class LocalsArraySet extends LocalsArray {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("(locals array set; primary)\n");

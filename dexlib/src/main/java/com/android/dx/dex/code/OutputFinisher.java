@@ -247,18 +247,7 @@ public final class OutputFinisher {
     }
 
     /**
-     * Inserts an instruction in the output at the given offset.
-     *
-     * @param at {@code at >= 0;} what index to insert at
-     * @param insn {@code non-null;} the instruction to insert
-     */
-    public void insert(int at, DalvInsn insn) {
-        insns.add(at, insn);
-        updateInfo(insn);
-    }
-
-    /**
-     * Helper for {@link #add} and {@link #insert},
+     * Helper for {@link #add},
      * which updates the position and local info flags.
      *
      * @param insn {@code non-null;} an instruction that was just introduced

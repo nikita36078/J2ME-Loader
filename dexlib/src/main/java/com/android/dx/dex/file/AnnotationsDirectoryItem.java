@@ -241,7 +241,8 @@ public final class AnnotationsDirectoryItem extends OffsettedItem {
     }
 
     /** {@inheritDoc} */
-    public void addContents(DexFile file) {
+    @Override
+	public void addContents(DexFile file) {
         MixedItemSection wordData = file.getWordData();
 
         if (classAnnotations != null) {

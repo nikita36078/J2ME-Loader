@@ -64,28 +64,10 @@ public final class RawAttribute extends BaseAttribute {
         this(name, data.slice(offset, offset + length), pool);
     }
 
-    /**
-     * Get the raw data of the attribute.
-     *
-     * @return {@code non-null;} the data
-     */
-    public ByteArray getData() {
-        return data;
-    }
-
-    /** {@inheritDoc} */
-    public int byteLength() {
+	/** {@inheritDoc} */
+    @Override
+	public int byteLength() {
         return data.size() + 6;
     }
 
-    /**
-     * Gets the constant pool to use for cpi resolution, if any. It
-     * presumably came from the class file that this attribute came
-     * from.
-     *
-     * @return {@code null-ok;} the constant pool
-     */
-    public ConstantPool getPool() {
-        return pool;
-    }
 }

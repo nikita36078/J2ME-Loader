@@ -790,20 +790,7 @@ public final class Type implements TypeBearer, Comparable<Type> {
         return (newAt >= 0);
     }
 
-    /**
-     * Gets the bytecode index at which this uninitialized type was
-     * allocated.  This returns {@code Integer.MAX_VALUE} if this
-     * type is an uninitialized incoming parameter (i.e., the
-     * {@code this} of an {@code <init>} method) or
-     * {@code -1} if this type is in fact <i>initialized</i>.
-     *
-     * @return {@code >= -1;} the allocation bytecode index
-     */
-    public int getNewAt() {
-        return newAt;
-    }
-
-    /**
+	/**
      * Gets the initialized type corresponding to this instance, but only
      * if this instance is in fact an uninitialized object type.
      *

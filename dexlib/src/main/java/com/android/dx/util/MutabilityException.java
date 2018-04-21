@@ -27,11 +27,4 @@ public class MutabilityException
         super(message);
     }
 
-    public MutabilityException(Throwable cause) {
-        super(cause);
-    }
-
-    public MutabilityException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

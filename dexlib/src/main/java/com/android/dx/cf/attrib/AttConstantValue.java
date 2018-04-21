@@ -59,7 +59,8 @@ public final class AttConstantValue extends BaseAttribute {
     }
 
     /** {@inheritDoc} */
-    public int byteLength() {
+    @Override
+	public int byteLength() {
         return 8;
     }
 

@@ -57,43 +57,6 @@ public final class RegisterSpecList
     }
 
     /**
-     * Makes a three-element instance.
-     *
-     * @param spec0 {@code non-null;} the first element
-     * @param spec1 {@code non-null;} the second element
-     * @param spec2 {@code non-null;} the third element
-     * @return {@code non-null;} an appropriately-constructed instance
-     */
-    public static RegisterSpecList make(RegisterSpec spec0, RegisterSpec spec1,
-                                        RegisterSpec spec2) {
-        RegisterSpecList result = new RegisterSpecList(3);
-        result.set(0, spec0);
-        result.set(1, spec1);
-        result.set(2, spec2);
-        return result;
-    }
-
-    /**
-     * Makes a four-element instance.
-     *
-     * @param spec0 {@code non-null;} the first element
-     * @param spec1 {@code non-null;} the second element
-     * @param spec2 {@code non-null;} the third element
-     * @param spec3 {@code non-null;} the fourth element
-     * @return {@code non-null;} an appropriately-constructed instance
-     */
-    public static RegisterSpecList make(RegisterSpec spec0, RegisterSpec spec1,
-                                        RegisterSpec spec2,
-                                        RegisterSpec spec3) {
-        RegisterSpecList result = new RegisterSpecList(4);
-        result.set(0, spec0);
-        result.set(1, spec1);
-        result.set(2, spec2);
-        result.set(3, spec3);
-        return result;
-    }
-
-    /**
      * Constructs an instance. All indices initially contain {@code null}.
      *
      * @param size the size of the list
@@ -103,12 +66,14 @@ public final class RegisterSpecList
     }
 
     /** {@inheritDoc} */
-    public Type getType(int n) {
+    @Override
+	public Type getType(int n) {
         return get(n).getType().getType();
     }
 
     /** {@inheritDoc} */
-    public int getWordCount() {
+    @Override
+	public int getWordCount() {
         int sz = size();
         int result = 0;
 
@@ -120,7 +85,8 @@ public final class RegisterSpecList
     }
 
     /** {@inheritDoc} */
-    public TypeList withAddedType(Type type) {
+    @Override
+	public TypeList withAddedType(Type type) {
         throw new UnsupportedOperationException("unsupported");
     }
 
@@ -186,31 +152,6 @@ public final class RegisterSpecList
      */
     public void set(int n, RegisterSpec spec) {
         set0(n, spec);
-    }
-
-    /**
-     * Gets the minimum required register count implied by this
-     * instance. This is equal to the highest register number referred
-     * to plus the widest width (largest category) of the type used in
-     * that register.
-     *
-     * @return {@code >= 0;} the required registers size
-     */
-    public int getRegistersSize() {
-        int sz = size();
-        int result = 0;
-
-        for (int i = 0; i < sz; i++) {
-            RegisterSpec spec = (RegisterSpec) get0(i);
-            if (spec != null) {
-                int min = spec.getNextReg();
-                if (min > result) {
-                    result = min;
-                }
-            }
-        }
-
-        return result;
     }
 
     /**

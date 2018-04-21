@@ -17,8 +17,6 @@
 package com.android.dx.util;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -115,20 +113,7 @@ public final class TwoColumnOutput {
             new IndentingWriter(rightWriter, rightWidth, spacer);
     }
 
-    /**
-     * Constructs an instance.
-     *
-     * @param out {@code non-null;} stream to send final output to
-     * @param leftWidth {@code >= 1;} width of the left column, in characters
-     * @param rightWidth {@code >= 1;} width of the right column, in characters
-     * @param spacer {@code non-null;} spacer string to sit between the two columns
-     */
-    public TwoColumnOutput(OutputStream out, int leftWidth, int rightWidth,
-                           String spacer) {
-        this(new OutputStreamWriter(out), leftWidth, rightWidth, spacer);
-    }
-
-    /**
+	/**
      * Gets the writer to use to write to the left column.
      *
      * @return {@code non-null;} the left column writer

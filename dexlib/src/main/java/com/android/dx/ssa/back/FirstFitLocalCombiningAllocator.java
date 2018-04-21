@@ -118,10 +118,7 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
     /** set of rop registers that have been used by anything */
     private final BitSet usedRopRegs;
 
-    /** true if converter should take steps to minimize rop-form registers */
-    private final boolean minimizeRegisters;
-
-    /**
+	/**
      * Constructs instance.
      *
      * @param ssaMeth {@code non-null;} method to process
@@ -139,9 +136,7 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
         mapper = new InterferenceRegisterMapper(
                 interference, ssaMeth.getRegCount());
 
-        this.minimizeRegisters = minimizeRegisters;
-
-        /*
+		/*
          * Reserve space for the params at the bottom of the register
          * space. Later, we'll flip the params to the end of the register
          * space.
@@ -397,19 +392,7 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
         return false;
     }
 
-    /**
-     * Returns true if given rop register represents the {@code this} pointer
-     * for a non-static method.
-     *
-     * @param startReg rop register
-     * @return true if the "this" pointer is located here.
-     */
-    private boolean isThisPointerReg(int startReg) {
-        // "this" is always the first parameter.
-        return startReg == 0 && !ssaMeth.isStatic();
-    }
-
-    /**
+	/**
      * Return the register alignment constraint to have 64-bits registers that will be align on even
      * dalvik registers after that parameter registers are move up to the top of the frame to match
      * the calling convention.
@@ -698,17 +681,20 @@ public class FirstFitLocalCombiningAllocator extends RegisterAllocator {
     private void analyzeInstructions() {
         ssaMeth.forEachInsn(new SsaInsn.Visitor() {
             /** {@inheritDoc} */
-            public void visitMoveInsn(NormalSsaInsn insn) {
+            @Override
+			public void visitMoveInsn(NormalSsaInsn insn) {
                 processInsn(insn);
             }
 
             /** {@inheritDoc} */
-            public void visitPhiInsn(PhiInsn insn) {
+            @Override
+			public void visitPhiInsn(PhiInsn insn) {
                 processInsn(insn);
             }
 
             /** {@inheritDoc} */
-            public void visitNonMoveInsn(NormalSsaInsn insn) {
+            @Override
+			public void visitNonMoveInsn(NormalSsaInsn insn) {
                 processInsn(insn);
             }
 

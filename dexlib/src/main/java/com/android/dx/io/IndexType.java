@@ -20,16 +20,11 @@ package com.android.dx.io;
  * The various types that an index in a Dalvik instruction might refer to.
  */
 public enum IndexType {
-    /** "Unknown." Used for undefined opcodes. */
-    UNKNOWN,
 
-    /** no index used */
+	/** no index used */
     NONE,
 
-    /** "It depends." Used for {@code throw-verification-error}. */
-    VARIES,
-
-    /** type reference index */
+	/** type reference index */
     TYPE_REF,
 
     /** string reference index */
@@ -45,14 +40,5 @@ public enum IndexType {
     METHOD_AND_PROTO_REF,
 
     /** call site reference index */
-    CALL_SITE_REF,
-
-    /** inline method index (for inline linked method invocations) */
-    INLINE_METHOD,
-
-    /** direct vtable offset (for static linked method invocations) */
-    VTABLE_OFFSET,
-
-    /** direct field offset (for static linked field accesses) */
-    FIELD_OFFSET;
+    CALL_SITE_REF;
 }

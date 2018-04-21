@@ -48,12 +48,14 @@ public final class StdConstantPool
     }
 
     /** {@inheritDoc} */
-    public int size() {
+    @Override
+	public int size() {
         return entries.length;
     }
 
     /** {@inheritDoc} */
-    public Constant getOrNull(int n) {
+    @Override
+	public Constant getOrNull(int n) {
         try {
             return entries[n];
         } catch (IndexOutOfBoundsException ex) {
@@ -63,7 +65,8 @@ public final class StdConstantPool
     }
 
     /** {@inheritDoc} */
-    public Constant get0Ok(int n) {
+    @Override
+	public Constant get0Ok(int n) {
         if (n == 0) {
             return null;
         }
@@ -72,7 +75,8 @@ public final class StdConstantPool
     }
 
     /** {@inheritDoc} */
-    public Constant get(int n) {
+    @Override
+	public Constant get(int n) {
         try {
             Constant result = entries[n];
 

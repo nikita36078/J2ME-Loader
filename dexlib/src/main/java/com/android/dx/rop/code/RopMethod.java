@@ -103,47 +103,8 @@ public final class RopMethod {
         return result;
     }
 
-    /**
-     * Gets the exit predecessors for this instance.
-     *
-     * @return {@code non-null;} the exit predecessors
-     */
-    public IntList getExitPredecessors() {
-        if (exitPredecessors == null) {
-            calcPredecessors();
-        }
 
-        return exitPredecessors;
-    }
-
-
-    /**
-     * Returns an instance that is identical to this one, except that
-     * the registers in each instruction are offset by the given
-     * amount.
-     *
-     * @param delta the amount to offset register numbers by
-     * @return {@code non-null;} an appropriately-constructed instance
-     */
-    public RopMethod withRegisterOffset(int delta) {
-        RopMethod result = new RopMethod(blocks.withRegisterOffset(delta),
-                                         firstLabel);
-
-        if (exitPredecessors != null) {
-            /*
-             * The predecessors have been calculated. It's safe to
-             * inject these into the new instance, since the
-             * transformation being applied doesn't affect the
-             * predecessors.
-             */
-            result.exitPredecessors = exitPredecessors;
-            result.predecessors = predecessors;
-        }
-
-        return result;
-    }
-
-    /**
+	/**
      * Calculates the predecessor sets for each block as well as for the
      * exit.
      */

@@ -24,13 +24,8 @@ import com.android.dx.util.Hex;
  * Constants of type {@code CONSTANT_Utf8_info} or {@code CONSTANT_String_info}.
  */
 public final class CstString extends TypedConstant {
-    /**
-     * {@code non-null;} instance representing {@code ""}, that is, the
-     * empty string
-     */
-    public static final CstString EMPTY_STRING = new CstString("");
 
-    /** {@code non-null;} the UTF-8 value as a string */
+	/** {@code non-null;} the UTF-8 value as a string */
     private final String string;
 
     /** {@code non-null;} the UTF-8 value as bytes */
@@ -241,7 +236,8 @@ public final class CstString extends TypedConstant {
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         int len = string.length();
         StringBuilder sb = new StringBuilder(len * 3 / 2);
 
@@ -369,7 +365,8 @@ public final class CstString extends TypedConstant {
         return string.length();
     }
 
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.STRING;
     }
 }

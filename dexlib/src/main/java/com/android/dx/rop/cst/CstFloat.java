@@ -65,7 +65,8 @@ public final class CstFloat
     }
 
     /** {@inheritDoc} */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return Type.FLOAT;
     }
 
@@ -76,16 +77,9 @@ public final class CstFloat
     }
 
     /** {@inheritDoc} */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return Float.toString(Float.intBitsToFloat(getIntBits()));
     }
 
-    /**
-     * Gets the {@code float} value.
-     *
-     * @return the value
-     */
-    public float getValue() {
-        return Float.intBitsToFloat(getIntBits());
-    }
 }

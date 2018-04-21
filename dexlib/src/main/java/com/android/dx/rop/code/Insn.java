@@ -102,7 +102,8 @@ public abstract class Insn implements ToHuman {
      *
      * @return {@code non-null;} the human string form
      */
-    public String toHuman() {
+    @Override
+	public String toHuman() {
         return toHumanWithInline(getInlineString());
     }
 
@@ -246,17 +247,8 @@ public abstract class Insn implements ToHuman {
         return this;
     }
 
-    /**
-     * Returns an exact copy of this Insn
-     *
-     * @return {@code non-null;} an appropriately-constructed instance
-     */
-    public Insn copy() {
-        return withRegisterOffset(0);
-    }
 
-
-    /**
+	/**
      * Compares, handling nulls safely
      *
      * @param a first object

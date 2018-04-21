@@ -20,15 +20,6 @@ package com.android.dx.cf.iface;
  * Interface for lists of methods.
  */
 public interface MethodList {
-    /**
-     * Get whether this instance is mutable. Note that the
-     * {@code MethodList} interface itself doesn't provide any means
-     * of mutation, but that doesn't mean that there isn't a non-interface
-     * way of mutating an instance.
-     *
-     * @return {@code true} iff this instance is somehow mutable
-     */
-    public boolean isMutable();
 
     /**
      * Get the number of methods in the list.

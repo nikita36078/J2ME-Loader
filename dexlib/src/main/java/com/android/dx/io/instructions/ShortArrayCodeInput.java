@@ -43,7 +43,8 @@ public final class ShortArrayCodeInput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public int read() throws EOFException {
+    @Override
+	public int read() throws EOFException {
         try {
             int value = array[cursor()];
             advance(1);
@@ -54,7 +55,8 @@ public final class ShortArrayCodeInput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public int readInt() throws EOFException {
+    @Override
+	public int readInt() throws EOFException {
         int short0 = read();
         int short1 = read();
 
@@ -62,7 +64,8 @@ public final class ShortArrayCodeInput extends BaseCodeCursor
     }
 
     /** {@inheritDoc} */
-    public long readLong() throws EOFException {
+    @Override
+	public long readLong() throws EOFException {
         long short0 = read();
         long short1 = read();
         long short2 = read();

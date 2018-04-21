@@ -58,7 +58,8 @@ public final class CstFieldRef extends CstMemberRef {
      *
      * @return {@code non-null;} the field's type
      */
-    public Type getType() {
+    @Override
+	public Type getType() {
         return getNat().getFieldType();
     }
 

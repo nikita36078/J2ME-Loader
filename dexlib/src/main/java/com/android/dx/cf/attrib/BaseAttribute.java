@@ -40,7 +40,8 @@ public abstract class BaseAttribute implements Attribute {
     }
 
     /** {@inheritDoc} */
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 }

@@ -24,7 +24,4 @@ public final class DexIndexOverflowException extends DexException {
         super(message);
     }
 
-    public DexIndexOverflowException(Throwable cause) {
-        super(cause);
-    }
 }

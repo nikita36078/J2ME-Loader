@@ -139,7 +139,8 @@ public final class BasicBlock implements LabeledItem {
      *
      * @return {@code >= 0;} the label
      */
-    public int getLabel() {
+    @Override
+	public int getLabel() {
         return label;
     }
 
@@ -234,21 +235,6 @@ public final class BasicBlock implements LabeledItem {
     public boolean hasExceptionHandlers() {
         Insn lastInsn = insns.getLast();
         return lastInsn.getCatches().size() != 0;
-    }
-
-    /**
-     * Returns the exception handler types associated with this block,
-     * if any. This is just a shorthand for inspecting the last
-     * instruction in the block to see if it could throw, and if so,
-     * grabbing the catch list out of it. If not, this returns an
-     * empty list (not {@code null}).
-     *
-     * @return {@code non-null;} the exception handler types associated with
-     * this block
-     */
-    public TypeList getExceptionHandlerTypes() {
-        Insn lastInsn = insns.getLast();
-        return lastInsn.getCatches();
     }
 
     /**

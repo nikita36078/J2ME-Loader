@@ -28,22 +28,26 @@ public abstract class TypedConstant
      *
      * This implementation always returns {@code this}.
      */
-    public final TypeBearer getFrameType() {
+    @Override
+	public final TypeBearer getFrameType() {
         return this;
     }
 
     /** {@inheritDoc} */
-    public final int getBasicType() {
+    @Override
+	public final int getBasicType() {
         return getType().getBasicType();
     }
 
     /** {@inheritDoc} */
-    public final int getBasicFrameType() {
+    @Override
+	public final int getBasicFrameType() {
         return getType().getBasicFrameType();
     }
 
     /** {@inheritDoc} */
-    public final boolean isConstant() {
+    @Override
+	public final boolean isConstant() {
         return true;
     }
 }

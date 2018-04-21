@@ -161,23 +161,7 @@ public final class MultiCstInsn extends FixedSizeInsn {
         this.index[position] = index;
     }
 
-    /**
-     * Gets the class index associated with this instance. The class index
-     * may be set only once and for one of the constants associated with this
-     * instance (e.g. a CstMethodRef). It is only valid to
-     * call this after {@link #setClassIndex} has been called.
-     *
-     * @return {@code >= 0;} the constant pool index of the class.
-     */
-    public int getClassIndex() {
-        if (!hasClassIndex()) {
-            throw new IllegalStateException("class index not yet set");
-        }
-
-        return classIndex;
-    }
-
-    /**
+	/**
      * Returns whether the class index associated with this instruction has
      * been set.
      *

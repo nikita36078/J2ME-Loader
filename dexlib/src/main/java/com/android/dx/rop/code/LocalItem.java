@@ -88,7 +88,8 @@ public class LocalItem implements Comparable<LocalItem> {
     }
 
     /** {@inheritDoc} */
-    public int compareTo(LocalItem local) {
+    @Override
+	public int compareTo(LocalItem local) {
         int ret;
 
         ret = compareHandlesNulls(name, local.name);

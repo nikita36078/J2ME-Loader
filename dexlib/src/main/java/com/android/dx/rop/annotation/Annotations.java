@@ -105,7 +105,8 @@ public final class Annotations extends MutabilityControl
     }
 
     /** {@inheritDoc} */
-    public int compareTo(Annotations other) {
+    @Override
+	public int compareTo(Annotations other) {
         Iterator<Annotation> thisIter = annotations.values().iterator();
         Iterator<Annotation> otherIter = other.annotations.values().iterator();
 

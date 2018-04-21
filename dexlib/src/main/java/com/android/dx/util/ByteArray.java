@@ -99,24 +99,6 @@ public final class ByteArray {
     }
 
     /**
-     * Returns the offset into the given array represented by the given
-     * offset into this instance.
-     *
-     * @param offset offset into this instance
-     * @param bytes {@code non-null;} (alleged) underlying array
-     * @return corresponding offset into {@code bytes}
-     * @throws IllegalArgumentException thrown if {@code bytes} is
-     * not the underlying array of this instance
-     */
-    public int underlyingOffset(int offset, byte[] bytes) {
-        if (bytes != this.bytes) {
-            throw new IllegalArgumentException("wrong bytes");
-        }
-
-        return start + offset;
-    }
-
-    /**
      * Gets the {@code signed byte} value at a particular offset.
      *
      * @param off {@code >= 0, < size();} offset to fetch
@@ -274,18 +256,6 @@ public final class ByteArray {
     }
 
     /**
-     * Helper interface that allows one to get the cursor (of a stream).
-     */
-    public interface GetCursor {
-        /**
-         * Gets the current cursor.
-         *
-         * @return {@code 0..size();} the cursor
-         */
-        public int getCursor();
-    }
-
-    /**
      * Helper class for {@link #makeInputStream}, which implements the
      * stream functionality.
      */
@@ -301,7 +271,8 @@ public final class ByteArray {
             mark = 0;
         }
 
-        public int read() throws IOException {
+        @Override
+		public int read() throws IOException {
             if (cursor >= size) {
                 return -1;
             }
@@ -311,7 +282,8 @@ public final class ByteArray {
             return result;
         }
 
-        public int read(byte[] arr, int offset, int length) {
+        @Override
+		public int read(byte[] arr, int offset, int length) {
             if ((offset + length) > arr.length) {
                 length = arr.length - offset;
             }
@@ -326,19 +298,23 @@ public final class ByteArray {
             return length;
         }
 
-        public int available() {
+        @Override
+		public int available() {
             return size - cursor;
         }
 
-        public void mark(int reserve) {
+        @Override
+		public void mark(int reserve) {
             mark = cursor;
         }
 
-        public void reset() {
+        @Override
+		public void reset() {
             cursor = mark;
         }
 
-        public boolean markSupported() {
+        @Override
+		public boolean markSupported() {
             return true;
         }
     }
@@ -349,13 +325,9 @@ public final class ByteArray {
      * instance may be easily determined.
      */
     public static class MyDataInputStream extends DataInputStream {
-        /** {@code non-null;} the underlying {@link MyInputStream} */
-        private final MyInputStream wrapped;
 
         public MyDataInputStream(MyInputStream wrapped) {
             super(wrapped);
-
-            this.wrapped = wrapped;
         }
     }
 }

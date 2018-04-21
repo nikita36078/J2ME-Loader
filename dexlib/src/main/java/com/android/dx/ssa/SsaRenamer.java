@@ -158,11 +158,13 @@ public class SsaRenamer implements Runnable {
      * Performs renaming transformation, modifying the method's instructions
      * in-place.
      */
-    public void run() {
+    @Override
+	public void run() {
         // Rename each block in dom-tree DFS order.
         ssaMeth.forEachBlockDepthFirstDom(new SsaBasicBlock.Visitor() {
-            public void visitBlock (SsaBasicBlock block,
-                    SsaBasicBlock unused) {
+            @Override
+			public void visitBlock (SsaBasicBlock block,
+									SsaBasicBlock unused) {
                 new BlockRenamer(block).process();
             }
         });
@@ -471,7 +473,8 @@ public class SsaRenamer implements Runnable {
          *
          * Phi insns have their result registers renamed.
          */
-        public void visitPhiInsn(PhiInsn phi) {
+        @Override
+		public void visitPhiInsn(PhiInsn phi) {
             /* don't process sources for phi's */
             processResultReg(phi);
         }
@@ -484,7 +487,8 @@ public class SsaRenamer implements Runnable {
          * assignment. If they represent a local variable assignement, they
          * are preserved.
          */
-        public void visitMoveInsn(NormalSsaInsn insn) {
+        @Override
+		public void visitMoveInsn(NormalSsaInsn insn) {
             /*
              * For moves: copy propogate the move if we can, but don't
              * if we need to preserve local variable info and the
@@ -584,7 +588,8 @@ public class SsaRenamer implements Runnable {
          * renamed to a new SSA register which is then added to the current
          * register mapping.
          */
-        public void visitNonMoveInsn(NormalSsaInsn insn) {
+        @Override
+		public void visitNonMoveInsn(NormalSsaInsn insn) {
             /* for each use of some variable X in S */
             insn.mapSourceRegisters(mapper);
 
@@ -626,7 +631,8 @@ public class SsaRenamer implements Runnable {
          */
         private void updateSuccessorPhis() {
             PhiInsn.Visitor visitor = new PhiInsn.Visitor() {
-                public void visitPhiInsn (PhiInsn insn) {
+                @Override
+				public void visitPhiInsn (PhiInsn insn) {
                     int ropReg;
 
                     ropReg = insn.getRopResultReg();

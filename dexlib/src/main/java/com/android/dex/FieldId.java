@@ -43,7 +43,8 @@ public final class FieldId implements Comparable<FieldId> {
         return nameIndex;
     }
 
-    public int compareTo(FieldId other) {
+    @Override
+	public int compareTo(FieldId other) {
         if (declaringClassIndex != other.declaringClassIndex) {
             return Unsigned.compare(declaringClassIndex, other.declaringClassIndex);
         }
