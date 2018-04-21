@@ -24,10 +24,13 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -78,11 +81,20 @@ public class ContextHolder {
 		return currentActivity;
 	}
 
-	public static InputStream getResourceAsStream(Class className, String resName) {
+	public static InputStream getResourceAsStream(Class resClass, String resName) {
+		if (resName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
+			String className = resClass.getPackage().getName().replace('.', '/');
+			resName = className + "/" + resName;
+		}
 		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		try {
-			return new MIDletResourceInputStream(new File(MyClassLoader.getResFolder(), resName));
-		} catch (FileNotFoundException e) {
+			File resFile = new File(MyClassLoader.getResFolder(), resName);
+			byte[] data = new byte[(int) resFile.length()];
+			DataInputStream dis = new DataInputStream(new FileInputStream(resFile));
+			dis.readFully(data);
+			dis.close();
+			return new ByteArrayInputStream(data);
+		} catch (IOException e) {
 			Log.d(TAG, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
 			return null;
 		}
