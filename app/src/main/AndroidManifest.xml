@@ -63,7 +63,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
-            android:name=".settings.SettingsActivity" />
+            android:name=".settings.SettingsActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".donations.DonationsActivity" />
         <activity
