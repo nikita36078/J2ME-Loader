@@ -66,6 +66,8 @@ public class FileSystemFileConnection implements FileConnection {
 
 	private final static String ROOT_INTERNAL_DIR = "c:/";
 
+	private final static String ROOT_INTERNAL_DIR_SIEMENS = "0:/";
+
 	private final static char DIR_SEP = '/';
 
 	private final static String DIR_SEP_STR = "/";
@@ -93,7 +95,8 @@ public class FileSystemFileConnection implements FileConnection {
 
 
 	private static File getRoot(String path) {
-		if (path.toLowerCase().startsWith(ROOT_INTERNAL_DIR)) {
+		if (path.toLowerCase().startsWith(ROOT_INTERNAL_DIR)
+				|| path.toLowerCase().startsWith(ROOT_INTERNAL_DIR_SIEMENS)) {
 			File fsRoot = new File(System.getProperty("user.home"));
 			return fsRoot;
 		} else {

@@ -39,9 +39,6 @@ public class FileSystemRegistry {
 		impl = (FileSystemRegistryDelegate) ImplFactory.getImplementation(FileSystemRegistry.class, FileSystemRegistryDelegate.class);
 	}
 
-	private FileSystemRegistry() {
-	}
-
 	public static boolean addFileSystemListener(FileSystemListener listener) {
 		return impl.addFileSystemListener(listener);
 	}

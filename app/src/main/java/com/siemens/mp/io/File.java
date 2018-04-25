@@ -13,21 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.siemens.mp.io;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import javax.microedition.shell.ConfigActivity;
-import javax.microedition.shell.MyClassLoader;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class File {
 
+	public static final int INSIDE_STORAGE_PATH = 1;
+	public static final int OUTSIDE_STORAGE_PATH = 0;
+	public static final String STORAGE_DRIVE = "a:";
+
+	private final static String ROOT_SEP_STR = ":/";
 	private FileInputStream inputStream;
 	private FileOutputStream outputStream;
 
@@ -42,27 +48,70 @@ public class File {
 	}
 
 	public static int copy(String source, String dest) throws IOException {
-		FileUtils.copyFileUsingChannel(ContextHolder.getFileByName(source),
-				ContextHolder.getFileByName(dest));
+		FileUtils.copyFileUsingChannel(getFile(source), getFile(dest));
 		return 1;
 	}
 
 	public static int debugWrite(String fileName, String infoString) throws IOException {
-		FileWriter writer = new FileWriter(ContextHolder.getFileByName(fileName), true);
+		FileWriter writer = new FileWriter(getFile(fileName), true);
 		writer.append(infoString).close();
 		return 1;
 	}
 
 	public static int delete(String fileName) {
-		if (ContextHolder.getFileByName(fileName).delete()) {
+		if (getFile(fileName).delete()) {
 			return 1;
 		} else {
 			return -1;
 		}
 	}
 
+	public static int exists(String fileName) throws IOException {
+		java.io.File file = getFile(fileName);
+		if (file.exists()) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+
+	public static boolean getIsHidden(String fileName) throws IOException {
+		java.io.File file = getFile(fileName);
+		return file.isHidden();
+	}
+
+	public static long getLastModified(String fileName) throws IOException {
+		java.io.File file = getFile(fileName);
+		return file.lastModified();
+	}
+
+	public static boolean isDirectory(String fileName) throws IOException {
+		java.io.File file = getFile(fileName);
+		return file.isDirectory();
+	}
+
+	public int length(int fileDescriptor) throws IOException {
+		return inputStream.available();
+	}
+
+	public static String[] list(String pathName) throws IOException {
+		return list(pathName, false);
+	}
+
+	public static String[] list(String pathName, boolean includeHidden) throws IOException {
+		java.io.File[] files = getFile(pathName).listFiles();
+		Arrays.sort(files);
+		ArrayList<String> list = new ArrayList<>();
+		for (java.io.File file : files) {
+			if (!includeHidden || !file.isHidden()) {
+				list.add(file.getName());
+			}
+		}
+		return list.toArray(new String[0]);
+	}
+
 	public int open(String fileName) throws IOException {
-		java.io.File file = ContextHolder.getFileByName(fileName);
+		java.io.File file = getFile(fileName);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
@@ -76,7 +125,7 @@ public class File {
 	}
 
 	public static int rename(String source, String dest) {
-		if (ContextHolder.getFileByName(source).renameTo(ContextHolder.getFileByName(dest))) {
+		if (getFile(source).renameTo(getFile(dest))) {
 			return 1;
 		} else {
 			return -1;
@@ -86,5 +135,14 @@ public class File {
 	public int write(int fileDescriptor, byte[] buf, int offset, int numBytes) throws IOException {
 		outputStream.write(buf, offset, numBytes);
 		return 1;
+	}
+
+	private static java.io.File getFile(String fileName) {
+		if (!fileName.contains(":/")) {
+			return ContextHolder.getFileByName(fileName);
+		} else {
+			fileName = fileName.replace(OUTSIDE_STORAGE_PATH + ROOT_SEP_STR, "");
+			return new java.io.File(System.getProperty("user.home"), fileName);
+		}
 	}
 }
