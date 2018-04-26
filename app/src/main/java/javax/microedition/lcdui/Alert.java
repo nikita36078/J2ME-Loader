@@ -33,6 +33,7 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 	private Image image;
 	private AlertType type;
 	private int timeout;
+	private Gauge indicator;
 
 	private Form form;
 
@@ -70,6 +71,10 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 
 	public Image getImage() {
 		return image;
+	}
+
+	public void setIndicator(Gauge indicator) {
+		this.indicator = indicator;
 	}
 
 	public void setTimeout(int timeout) {
