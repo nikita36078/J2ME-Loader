@@ -265,7 +265,7 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public void mkdir() throws IOException {
 		throwClosed();
-		if (!file.mkdir()) {
+		if (!file.mkdirs()) {
 			throw new IOException("Can't create directory " + file.getAbsolutePath());
 		}
 	}
