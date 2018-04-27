@@ -262,6 +262,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		System.setProperty("microedition.encoding", "ISO-8859-1");
 		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
 		System.setProperty("com.siemens.IMEI", "000000000000000");
+		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/Ringtones");
+		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/Pictures");
 		System.setProperty("device.imei", "000000000000000");
 	}
 
