@@ -86,7 +86,7 @@ public class AppItem {
 	}
 
 	public void setImagePathExt(String imagePath) {
-		if (!imagePath.contains("/")) {
+		if (imagePath.charAt(0) != '/') {
 			imagePath = "/" + imagePath;
 		}
 		this.imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
