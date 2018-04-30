@@ -28,7 +28,11 @@ public class Manager {
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
 	public static Player createPlayer(String locator) throws IOException {
-		return new BasePlayer();
+		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
+			return new MidiPlayer();
+		} else {
+			return new BasePlayer();
+		}
 	}
 
 	public static Player createPlayer(DataSource source) throws IOException {

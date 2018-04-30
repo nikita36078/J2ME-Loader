@@ -16,9 +16,37 @@
 
 package javax.microedition.media;
 
+import org.billthefarmer.mididriver.MidiDriver;
+
+import java.util.HashMap;
+
 import javax.microedition.media.control.MIDIControl;
 
-public class InternalMIDIControl implements MIDIControl {
+public class MidiPlayer extends BasePlayer implements MIDIControl {
+
+	private HashMap<String, Control> controls;
+	private MidiDriver midiDriver;
+
+	public MidiPlayer() {
+		midiDriver = new MidiDriver();
+		midiDriver.start();
+		controls = new HashMap<>();
+		controls.put(MIDIControl.class.getName(), this);
+	}
+
+	@Override
+	public Control getControl(String controlType) {
+		if (!controlType.contains(".")) {
+			controlType = "javax.microedition.media.control." + controlType;
+		}
+		return controls.get(controlType);
+	}
+
+	@Override
+	public Control[] getControls() {
+		return controls.values().toArray(new Control[0]);
+	}
+
 	@Override
 	public int[] getBankList(boolean custom) {
 		return new int[0];
@@ -26,7 +54,7 @@ public class InternalMIDIControl implements MIDIControl {
 
 	@Override
 	public int getChannelVolume(int channel) {
-		return 0;
+		return -1;
 	}
 
 	@Override
@@ -46,7 +74,7 @@ public class InternalMIDIControl implements MIDIControl {
 
 	@Override
 	public String getProgramName(int bank, int prog) {
-		return null;
+		return "";
 	}
 
 	@Override
@@ -56,21 +84,24 @@ public class InternalMIDIControl implements MIDIControl {
 
 	@Override
 	public int longMidiEvent(byte[] data, int offset, int length) {
-		return 0;
+		if (midiDriver.write(data)) {
+			return data.length;
+		} else {
+			return -1;
+		}
 	}
 
 	@Override
 	public void setChannelVolume(int channel, int volume) {
-
 	}
 
 	@Override
 	public void setProgram(int channel, int bank, int program) {
-
 	}
 
 	@Override
 	public void shortMidiEvent(int type, int data1, int data2) {
-
+		byte[] event = new byte[]{(byte) type, (byte) data1, (byte) data2};
+		midiDriver.write(event);
 	}
 }

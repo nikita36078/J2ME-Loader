@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
-import javax.microedition.media.control.MIDIControl;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.PanControl;
 import javax.microedition.media.control.ToneControl;
@@ -65,7 +64,6 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 		metadata = new InternalMetaData();
 		InternalEqualizer equalizer = new InternalEqualizer();
-		InternalMIDIControl midiControl = new InternalMIDIControl();
 		InternalToneControl toneControl = new InternalToneControl();
 
 		listeners = new ArrayList<>();
@@ -75,7 +73,6 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		controls.put(PanControl.class.getName(), this);
 		controls.put(MetaDataControl.class.getName(), metadata);
 		controls.put(EqualizerControl.class.getName(), equalizer);
-		controls.put(MIDIControl.class.getName(), midiControl);
 		controls.put(ToneControl.class.getName(), toneControl);
 	}
 
