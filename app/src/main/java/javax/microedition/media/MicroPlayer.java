@@ -32,7 +32,7 @@ import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
 
-public class MicroPlayer implements Player, MediaPlayer.OnCompletionListener,
+public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener,
 		VolumeControl, PanControl {
 	protected DataSource source;
 	protected int state;

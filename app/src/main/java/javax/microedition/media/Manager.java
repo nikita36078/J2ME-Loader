@@ -28,11 +28,11 @@ public class Manager {
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
 	public static Player createPlayer(String locator) throws IOException {
-		return new NullPlayer();
+		return new BasePlayer();
 	}
 
 	public static Player createPlayer(DataSource source) throws IOException {
-		return new NullPlayer();
+		return new BasePlayer();
 	}
 
 	public static Player createPlayer(final InputStream stream, String type) throws IOException {
@@ -40,7 +40,7 @@ public class Manager {
 		if (Arrays.asList(supportedTypes).contains(type)) {
 			return new MicroPlayer(new InternalDataSource(stream, type));
 		} else {
-			return new NullPlayer();
+			return new BasePlayer();
 		}
 	}
 

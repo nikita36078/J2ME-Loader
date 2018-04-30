@@ -16,7 +16,7 @@
 
 package javax.microedition.media;
 
-public class NullPlayer implements Player {
+public class BasePlayer implements Player {
 	@Override
 	public void realize() throws MediaException {
 	}
