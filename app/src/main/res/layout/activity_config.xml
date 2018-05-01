@@ -17,7 +17,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr">
 
             <EditText
                 android:id="@+id/tfScreenWidth"
@@ -27,7 +28,8 @@
                 android:gravity="center"
                 android:hint="@string/PREF_WIDTH"
                 android:inputType="numberSigned"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textDirection="ltr" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,7 +45,8 @@
                 android:gravity="center"
                 android:hint="@string/PREF_HEIGHT"
                 android:inputType="numberSigned"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textDirection="ltr" />
         </LinearLayout>
 
         <LinearLayout
@@ -83,7 +86,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="@string/PREF_COLOR_HINT" />
+                android:hint="@string/PREF_COLOR_HINT"
+                android:textDirection="ltr" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="2"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textDirection="ltr" />
 
         </LinearLayout>
 
@@ -184,7 +189,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr">
 
             <EditText
                 android:id="@+id/tfFontSizeSmall"
@@ -193,7 +199,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_FONT_SMALL"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textDirection="ltr" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -208,7 +215,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_FONT_MEDIUM"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textDirection="ltr" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -223,7 +231,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/PREF_FONT_LARGE"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textDirection="ltr" />
         </LinearLayout>
 
         <Button
@@ -251,7 +260,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/PREF_SYS_PROPS_HINT"
             android:inputType="textMultiLine"
-            android:lines="2" />
+            android:lines="2"
+            android:textDirection="ltr" />
 
         <TextView
             android:layout_width="match_parent"
@@ -326,7 +336,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:hint="@string/_MINUS_ONE"
-                    android:inputType="number|numberSigned" />
+                    android:inputType="number|numberSigned"
+                    android:textDirection="ltr" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -355,7 +366,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"
+                    android:textDirection="ltr" />
             </TableRow>
 
             <TableRow>
@@ -372,7 +384,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"
+                    android:textDirection="ltr" />
             </TableRow>
 
             <TableRow>
@@ -389,7 +402,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"
+                    android:textDirection="ltr" />
             </TableRow>
 
             <TableRow>
@@ -406,7 +420,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"
+                    android:textDirection="ltr" />
             </TableRow>
 
             <TableRow>
@@ -423,7 +438,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:hint="@string/PREF_COLOR_HINT" />
+                    android:hint="@string/PREF_COLOR_HINT"
+                    android:textDirection="ltr" />
             </TableRow>
         </TableLayout>
     </LinearLayout>
