@@ -45,7 +45,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_RIGHT = "\u2192";
 	private static final String ARROW_DOWN = "\u2193";
 	private static final String ARROW_UP_LEFT = "\u2196";
-	private static final String ARROW_UP_RIGHT= "\u2197";
+	private static final String ARROW_UP_RIGHT = "\u2197";
 	private static final String ARROW_DOWN_LEFT = "\u2199";
 	private static final String ARROW_DOWN_RIGHT = "\u2198";
 
@@ -109,14 +109,22 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		public void paint(Graphics g) {
 			if (label != null && visible) {
 				g.setColor(colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
-				g.fillArc(rect, 0, 360);
+				if (shape == SQUARE_SHAPE) {
+					g.fillRect(rect);
+				} else {
+					g.fillArc(rect, 0, 360);
+				}
 
 				g.setColor(colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
 				g.setFont(font);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
 				g.setColor(colors[OUTLINE]);
-				g.drawArc(rect, 0, 360);
+				if (shape == SQUARE_SHAPE) {
+					g.drawRect(rect);
+				} else {
+					g.drawArc(rect, 0, 360);
+				}
 			}
 		}
 
@@ -178,6 +186,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected Font font;
 	private int delay = -1;
 	private int overlayAlpha = 64;
+	private int shape;
+
+	public static final int ROUND_SHAPE = 0;
+	public static final int SQUARE_SHAPE = 1;
 
 	public static final int BACKGROUND = 0;
 	public static final int FOREGROUND = 1;
@@ -976,5 +988,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setHasHapticFeedback(boolean feedback) {
 		this.feedback = feedback;
+	}
+
+	public void setButtonShape(int shape) {
+		this.shape = shape;
 	}
 }

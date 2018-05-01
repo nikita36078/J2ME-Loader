@@ -26,6 +26,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -461,6 +462,16 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
 		vk.setHasHapticFeedback(vkFeedback);
+
+		String shapeStr = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+				.getString("pref_button_shape", "round");
+		int shape;
+		if (shapeStr.equals("square")) {
+			shape = VirtualKeyboard.SQUARE_SHAPE;
+		} else {
+			shape = VirtualKeyboard.ROUND_SHAPE;
+		}
+		vk.setButtonShape(shape);
 
 		if (keylayoutFile.exists()) {
 			try {
