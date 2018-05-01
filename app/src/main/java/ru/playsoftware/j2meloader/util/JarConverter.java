@@ -164,7 +164,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private File fixJar(File inputJar) throws IOException {
 		File fixedJar = new File(dirTmp, inputJar.getName() + ".jar");
 		try {
-			AndroidProducer.processJar(inputJar, fixedJar, true);
+			AndroidProducer.processJar(inputJar, fixedJar);
 		} catch (ZipException e) {
 			File unpackedJarFolder = new File(context.getApplicationInfo().dataDir, TEMP_FIX_FOLDER_NAME);
 			ZipUtils.unzip(inputJar, unpackedJarFolder);
@@ -172,7 +172,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			File repackedJar = new File(dirTmp, inputJar.getName());
 			ZipUtils.zipFileAtPath(unpackedJarFolder, repackedJar);
 
-			AndroidProducer.processJar(repackedJar, fixedJar, true);
+			AndroidProducer.processJar(repackedJar, fixedJar);
 			FileUtils.deleteDirectory(unpackedJarFolder);
 			repackedJar.delete();
 		}

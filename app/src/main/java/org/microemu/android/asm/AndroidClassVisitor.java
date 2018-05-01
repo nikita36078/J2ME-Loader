@@ -39,8 +39,6 @@ import java.util.TreeMap;
 
 public class AndroidClassVisitor extends ClassVisitor {
 
-	private boolean isMidlet;
-
 	private String className;
 
 	private HashMap<String, ArrayList<String>> classesHierarchy;
@@ -72,9 +70,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 		@Override
 		public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-			if (isMidlet &&
-					(opcode == Opcodes.GETFIELD || opcode == Opcodes.GETSTATIC || opcode == Opcodes.PUTFIELD || opcode == Opcodes.PUTSTATIC)) {
-
+			if (opcode == Opcodes.GETFIELD || opcode == Opcodes.GETSTATIC || opcode == Opcodes.PUTFIELD || opcode == Opcodes.PUTSTATIC) {
 				String targetName = getTargetName(owner, name, desc);
 				if (targetName != null) {
 					mv.visitFieldInsn(opcode, owner, targetName, desc);
@@ -94,7 +90,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 					if (classFields != null) {
 						String targetName = classFields.get(new FieldNodeExt(new FieldNode(-1, name, desc, null, null)));
 						if (targetName != null) {
-							//System.out.println("a1: " + owner +"+"+ searchInClass +"+"+ targetName);
 							return targetName;
 						}
 					}
@@ -105,7 +100,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 					if (!owner.equals(searchInClass)) {
 						String targetName = getTargetName(searchInClass, name, desc);
 						if (targetName != null) {
-							//System.out.println("a2: " + owner +"+"+ searchInClass +"+"+ name +"+"+ targetName);
 							return targetName;
 						}
 					}
@@ -137,19 +131,29 @@ public class AndroidClassVisitor extends ClassVisitor {
 		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			visitInsn();
-			if (isMidlet) {
-				if (opcode == Opcodes.INVOKEVIRTUAL) {
-					if ((name.equals("getResourceAsStream")) && (owner.equals("java/lang/Class"))) {
-						mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name,
-								"(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
-						return;
-					}
-				}
-				ArrayList<String> methods = methodTranslations.get(owner);
-				if (methods != null && opcode == Opcodes.INVOKESPECIAL && methods.contains(name + desc) && owner.equals(className)) {
-					mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
+			if (owner.equals("java/lang/Class")) {
+				if (name.equals("getResourceAsStream")) {
+					mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name,
+							"(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
 					return;
 				}
+			} else if (owner.equals("java/lang/String")) {
+				String encoding = "ISO-8859-1"; // microedition.encoding
+				if (name.equals("<init>") && desc.startsWith("([B") && !desc.endsWith("Ljava/lang/String;)V")) {
+					mv.visitLdcInsn(encoding);
+					mv.visitMethodInsn(opcode, owner, name,
+							new StringBuffer().append(desc.substring(0, desc.length() - 2)).append("Ljava/lang/String;)V").toString());
+					return;
+				} else if (name.equals("getBytes") && desc.startsWith("()")) {
+					mv.visitLdcInsn(encoding);
+					mv.visitMethodInsn(opcode, owner, name, "(Ljava/lang/String;)[B");
+					return;
+				}
+			}
+			ArrayList<String> methods = methodTranslations.get(owner);
+			if (methods != null && opcode == Opcodes.INVOKESPECIAL && methods.contains(name + desc) && owner.equals(className)) {
+				mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
+				return;
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc, itf);
 		}
@@ -164,12 +168,11 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 	}
 
-	public AndroidClassVisitor(ClassVisitor cv, boolean isMidlet, HashMap<String, ArrayList<String>> classesHierarchy,
+	public AndroidClassVisitor(ClassVisitor cv, HashMap<String, ArrayList<String>> classesHierarchy,
 							   HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations,
 							   HashMap<String, ArrayList<String>> methodTranslations) {
 		super(Opcodes.ASM5, cv);
 
-		this.isMidlet = isMidlet;
 		this.classesHierarchy = classesHierarchy;
 		this.fieldTranslations = fieldTranslations;
 		this.methodTranslations = methodTranslations;

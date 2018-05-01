@@ -58,16 +58,16 @@ public class AndroidProducer {
 		cr.accept(cv, 0);
 	}
 
-	private static byte[] instrument(String name, final InputStream classInputStream, boolean isMidlet) throws IOException {
+	private static byte[] instrument(String name, final InputStream classInputStream) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
-		ClassWriter cw = new ClassWriter(0);
-		ClassVisitor cv = new AndroidClassVisitor(cw, isMidlet, classesHierarchy, fieldTranslations, methodTranslations);
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		ClassVisitor cv = new AndroidClassVisitor(cw, classesHierarchy, fieldTranslations, methodTranslations);
 		cr.accept(cv, 0);
 
 		return cw.toByteArray();
 	}
 
-	public static void processJar(File jarInputFile, File jarOutputFile, boolean isMidlet) throws IOException {
+	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
 		ZipInputStream zis = null;
 		ZipOutputStream zos = null;
 		HashMap<String, byte[]> resources = new HashMap<>();
@@ -106,7 +106,7 @@ public class AndroidProducer {
 				byte[] inBuffer = resources.get(name);
 				byte[] outBuffer = inBuffer;
 				if (name.endsWith(".class")) {
-					outBuffer = instrument(name, new ByteArrayInputStream(inBuffer), isMidlet);
+					outBuffer = instrument(name, new ByteArrayInputStream(inBuffer));
 				}
 				zos.putNextEntry(new ZipEntry(name));
 				zos.write(outBuffer);

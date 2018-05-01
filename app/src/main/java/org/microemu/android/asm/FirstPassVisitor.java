@@ -27,10 +27,7 @@
 
 package org.microemu.android.asm;
 
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -59,26 +56,8 @@ public class FirstPassVisitor extends ClassVisitor {
 	}
 
 	@Override
-	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-		return null;
-	}
-
-	@Override
-	public void visitAttribute(Attribute attr) {
-	}
-
-	@Override
 	public void visitEnd() {
 		methodTranslations.put(name, methods);
-	}
-
-	@Override
-	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-		return null;
-	}
-
-	@Override
-	public void visitInnerClass(String name, String outerName, String innerName, int access) {
 	}
 
 	@Override
@@ -87,14 +66,6 @@ public class FirstPassVisitor extends ClassVisitor {
 			methods.add(name + desc);
 		}
 		return null;
-	}
-
-	@Override
-	public void visitOuterClass(String owner, String name, String desc) {
-	}
-
-	@Override
-	public void visitSource(String source, String debug) {
 	}
 
 }
