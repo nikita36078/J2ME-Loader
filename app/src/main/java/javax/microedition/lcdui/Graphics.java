@@ -146,10 +146,6 @@ public class Graphics {
 		return (getRedComponent() + getGreenComponent() + getBlueComponent()) / 3;
 	}
 
-	public int getAlphaComponent() {
-		return drawPaint.getAlpha();
-	}
-
 	public int getRedComponent() {
 		return (drawPaint.getColor() >> 16) & 0xFF;
 	}
@@ -216,11 +212,6 @@ public class Graphics {
 	public void clipRect(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
 		canvas.clipRect(intRect, Region.Op.INTERSECT);
-	}
-
-	public void subtractClip(int x, int y, int width, int height) {
-		intRect.set(x, y, x + width, y + height);
-		canvas.clipRect(intRect, Region.Op.DIFFERENCE);
 	}
 
 	public int getClipX() {
@@ -300,16 +291,8 @@ public class Graphics {
 		canvas.drawRect(x, y, x + width, y + height, drawPaint);
 	}
 
-	public void drawRect(RectF rect) {
-		canvas.drawRect(rect, drawPaint);
-	}
-
 	public void fillRect(int x, int y, int width, int height) {
 		canvas.drawRect(x, y, x + width, y + height, fillPaint);
-	}
-
-	public void fillRect(RectF rect) {
-		canvas.drawRect(rect, fillPaint);
 	}
 
 	public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {

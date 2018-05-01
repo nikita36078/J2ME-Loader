@@ -110,7 +110,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (label != null && visible) {
 				g.setColor(colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				if (shape == SQUARE_SHAPE) {
-					g.fillRect(rect);
+					g.fillRoundRect(rect, 0, 0);
 				} else {
 					g.fillArc(rect, 0, 360);
 				}
@@ -121,7 +121,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 				g.setColor(colors[OUTLINE]);
 				if (shape == SQUARE_SHAPE) {
-					g.drawRect(rect);
+					g.drawRoundRect(rect, 0, 0);
 				} else {
 					g.drawArc(rect, 0, 360);
 				}
