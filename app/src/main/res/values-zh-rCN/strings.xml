@@ -92,6 +92,11 @@
   <string name="pref_requires_restart_summary">需要重启本程序</string>
   <string name="pref_enable_actionbar_title">隐藏操作栏</string>
   <string name="pref_enable_actionbar_summary">在应用中全屏</string>
+  <string name="pref_button_shape_title">按钮形状</string>
+  <string-array name="pref_button_shape_entries">
+    <item>圆形</item>
+    <item>矩形</item>
+  </string-array>
   <string name="pref_app_sort_title">应用排序</string>
   <string-array name="pref_app_sort_entries">
     <item>名称</item>

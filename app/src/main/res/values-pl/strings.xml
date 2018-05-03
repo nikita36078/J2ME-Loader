@@ -92,6 +92,11 @@
   <string name="pref_requires_restart_summary">Wymaga restartu</string>
   <string name="pref_enable_actionbar_title">Włącz ActionBar</string>
   <string name="pref_enable_actionbar_summary">W aplikacjach pełnoekranowych</string>
+  <string name="pref_button_shape_title">Kształt przycisków</string>
+  <string-array name="pref_button_shape_entries">
+    <item>Okrągłe</item>
+    <item>Kwadratowe</item>
+  </string-array>
   <string name="pref_app_sort_title">Kolejność sortowania aplikacji</string>
   <string-array name="pref_app_sort_entries">
     <item>Nazwa</item>
