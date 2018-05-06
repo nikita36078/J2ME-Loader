@@ -12,6 +12,10 @@
         android:key="pref_actionbar_switch"
         android:summary="@string/pref_enable_actionbar_summary"
         android:title="@string/pref_enable_actionbar_title" />
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="pref_wakelock_switch"
+        android:title="@string/pref_wakelock_title" />
     <ListPreference
         android:defaultValue="round"
         android:entries="@array/pref_button_shape_entries"

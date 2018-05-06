@@ -85,6 +85,10 @@ public class MicroActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
+		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
+		if (wakelockEnabled) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 		Intent intent = getIntent();
 		int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
 		setOrientation(orientation);
