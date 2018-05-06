@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.siemens.mp.lcdui;
+package com.siemens.mp.resource;
 
-public class Command extends javax.microedition.lcdui.Command {
+public class Resource {
 
-	public Command(String shortLabel, String longLabel, int commandType, int priority, char iconId) {
-		super(shortLabel, longLabel, commandType, priority);
+	public static char getCenterKeyIcon(int id) {
+		return 0;
 	}
 
 }
