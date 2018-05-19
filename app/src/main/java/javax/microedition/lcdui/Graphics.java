@@ -27,8 +27,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 
-import java.lang.reflect.Field;
-
 public class Graphics {
 	public static final int HCENTER = 1;
 	public static final int VCENTER = 2;
@@ -42,6 +40,7 @@ public class Graphics {
 	public static final int DOTTED = 1;
 
 	private Canvas canvas;
+	private Bitmap canvasBitmap;
 
 	private Paint drawPaint;
 	private Paint fillPaint;
@@ -83,11 +82,6 @@ public class Graphics {
 		path = new Path();
 	}
 
-	public Graphics(Canvas canvas) {
-		this();
-		setCanvas(canvas);
-	}
-
 	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
 		if (nPoints > 0) {
 			Path path = computePath(xPoints, xOffset, yPoints, yOffset, nPoints);
@@ -112,8 +106,9 @@ public class Graphics {
 		return path;
 	}
 
-	public void setCanvas(Canvas canvas) {
+	public void setCanvas(Canvas canvas, Bitmap canvasBitmap) {
 		this.canvas = canvas;
+		this.canvasBitmap = canvasBitmap;
 	}
 
 	public Canvas getCanvas() {
@@ -430,16 +425,7 @@ public class Graphics {
 
 	public void copyArea(int x_src, int y_src, int width, int height,
 						 int x_dest, int y_dest, int anchor) {
-		try {
-			Field field = canvas.getClass().getDeclaredField("mBitmap");
-			field.setAccessible(true);
-			Bitmap bitmap = (Bitmap) field.get(canvas);
-			Bitmap newBitmap = Bitmap.createBitmap(bitmap, x_src, y_src, width, height);
-			drawImage(new Image(newBitmap), x_dest, y_dest, anchor);
-		} catch (IllegalAccessException iae) {
-			iae.printStackTrace();
-		} catch (NoSuchFieldException nsfe) {
-			nsfe.printStackTrace();
-		}
+		Bitmap bitmap = Bitmap.createBitmap(canvasBitmap, x_src, y_src, width, height);
+		drawRegion(new Image(bitmap), x_src, y_src, width, height, 0, x_dest, y_dest, anchor);
 	}
 }

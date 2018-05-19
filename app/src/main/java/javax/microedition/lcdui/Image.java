@@ -92,7 +92,9 @@ public class Image {
 	}
 
 	public Graphics getGraphics() {
-		return new Graphics(getCanvas());
+		Graphics graphics = new Graphics();
+		graphics.setCanvas(getCanvas(), bitmap);
+		return graphics;
 	}
 
 	public boolean isMutable() {

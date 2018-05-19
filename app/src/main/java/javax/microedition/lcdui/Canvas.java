@@ -273,7 +273,7 @@ public abstract class Canvas extends Displayable {
 				if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 					return;
 				}
-				graphics.setCanvas(offscreen.getCanvas());
+				graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
 				graphics.resetTranslation();
 				graphics.resetClip();
 				try {
@@ -283,7 +283,7 @@ public abstract class Canvas extends Displayable {
 					graphics.resetTranslation();
 					graphics.resetClip();
 				}
-				graphics.setCanvas(lockCanvas());
+				graphics.setCanvas(lockCanvas(), null);
 				if (graphics.hasCanvas()) {
 					graphics.clear(backgroundColor);
 					graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
@@ -596,7 +596,7 @@ public abstract class Canvas extends Displayable {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
 			}
-			graphics.setCanvas(lockCanvas());
+			graphics.setCanvas(lockCanvas(), null);
 			if (graphics.hasCanvas()) {
 				graphics.clear(backgroundColor);
 				graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
