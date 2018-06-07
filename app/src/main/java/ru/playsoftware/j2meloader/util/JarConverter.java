@@ -131,7 +131,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			e.printStackTrace();
 		}
 		// Extract other resources from jar.
-		FileUtils.moveFiles(dirTmp.getPath(), ConfigActivity.APP_DIR + appDir + ConfigActivity.MIDLET_RES_DIR,
+		FileUtils.copyFiles(dirTmp.getPath(), ConfigActivity.APP_DIR + appDir + ConfigActivity.MIDLET_RES_DIR,
 				(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
 		deleteTemp();
 		return true;

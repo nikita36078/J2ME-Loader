@@ -51,7 +51,7 @@ public class FileUtils {
 	private static String TAG = FileUtils.class.getName();
 	private static final int BUFFER_SIZE = 1024;
 
-	public static void moveFiles(String src, String dest, FilenameFilter filter) {
+	public static void copyFiles(String src, String dest, FilenameFilter filter) {
 		File fsrc = new File(src);
 		File fdest = new File(dest);
 		fdest.mkdirs();
@@ -60,7 +60,7 @@ public class FileUtils {
 		for (File entry : list) {
 			to = entry.getPath().replace(src, dest);
 			if (entry.isDirectory()) {
-				moveFiles(entry.getPath(), to, filter);
+				copyFiles(entry.getPath(), to, filter);
 			} else {
 				try {
 					copyFileUsingChannel(entry, new File(to));
