@@ -164,7 +164,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void loadMIDlet() throws Exception {
 		ArrayList<String> midlets = new ArrayList<>();
-		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + ConfigActivity.MIDLET_CONF_FILE));
+		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + ConfigActivity.MIDLET_MANIFEST_FILE));
 		MIDlet.initProps(params);
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {

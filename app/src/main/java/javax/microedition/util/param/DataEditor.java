@@ -33,8 +33,4 @@ public interface DataEditor {
 	public DataEditor putString(String key, String value);
 
 	public void apply();
-
-	public boolean commit();
-
-	public void close();
 }

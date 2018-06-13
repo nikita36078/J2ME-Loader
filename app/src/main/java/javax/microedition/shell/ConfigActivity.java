@@ -19,7 +19,6 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -110,12 +109,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public static final String MIDLET_DIR = "/converted/";
 	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
 	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
+	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
 	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
 	public static final String TEMP_DEX_DIR = "/tmp_dex";
 	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
 	public static final String MIDLET_RES_DIR = "/res";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
-	public static final String MIDLET_CONF_FILE = MIDLET_DEX_FILE + ".conf";
+	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
+	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
+	public static final String MIDLET_CONFIG_FILE = "/config.xml";
 	public static final String MIDLET_PATH_KEY = "path";
 	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
@@ -131,9 +133,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
 		dataDir = new File(DATA_DIR + appName);
 		dataDir.mkdirs();
-		keylayoutFile = new File(dataDir, "VirtualKeyboardLayout");
+		File configDir = new File(CONFIGS_DIR + appName);
+		configDir.mkdirs();
+		keylayoutFile = new File(configDir, MIDLET_KEYLAYOUT_FILE);
 
-		params = new SharedPreferencesContainer(appName, Context.MODE_PRIVATE, this);
+		params = new SharedPreferencesContainer(configDir);
+		boolean loaded = params.load();
 
 		setProperties();
 
@@ -236,9 +241,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 		});
 
-		File appSettings = new File(getFilesDir().getParent() + File.separator + "shared_prefs",
-				appName + ".xml");
-		if (appSettings.exists() && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
+		if (loaded && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
 			startMIDlet();
 		}
 	}
@@ -336,7 +339,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
 		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
 		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
-		tfSystemProperties.setText(params.getString("SystemProperties"));
+		tfSystemProperties.setText(params.getString("SystemProperties", ""));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
@@ -397,7 +400,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 					Integer.parseInt(tfVKOutline.getText().toString(), 16));
 
 			params.apply();
-			params.close();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -523,8 +525,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				FileUtils.deleteDirectory(dataDir);
 				break;
 			case R.id.action_reset_settings:
-				params.edit().clear().commit();
-				params.close();
+				params.edit().clear().apply();
 				loadParams(params);
 				break;
 			case R.id.action_reset_layout:

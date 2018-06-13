@@ -126,7 +126,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
 		}
 		try {
-			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_CONF_FILE));
+			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_MANIFEST_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

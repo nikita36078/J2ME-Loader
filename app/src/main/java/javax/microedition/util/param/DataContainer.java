@@ -18,6 +18,8 @@
 package javax.microedition.util.param;
 
 public interface DataContainer {
+	public boolean load();
+
 	public DataEditor edit();
 
 	public boolean contains(String key);
@@ -31,14 +33,4 @@ public interface DataContainer {
 	public long getLong(String key, long defValue);
 
 	public String getString(String key, String defValue);
-
-	public boolean getBoolean(String key);
-
-	public float getFloat(String key);
-
-	public int getInt(String key);
-
-	public long getLong(String key);
-
-	public String getString(String key);
 }

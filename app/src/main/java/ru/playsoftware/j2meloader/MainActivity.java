@@ -56,6 +56,7 @@ import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
+import ru.playsoftware.j2meloader.util.MigrationUtils;
 
 public class MainActivity extends BaseActivity {
 
@@ -98,6 +99,7 @@ public class MainActivity extends BaseActivity {
 	private void setupActivity() {
 		initFolders();
 		checkActionBar();
+		MigrationUtils.check(this);
 		appsListFragment = new AppsListFragment();
 		ArrayList<AppItem> apps = new ArrayList<>();
 		AppsListAdapter adapter = new AppsListAdapter(this, apps);

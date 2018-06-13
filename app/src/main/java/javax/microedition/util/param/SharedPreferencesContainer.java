@@ -17,135 +17,135 @@
 
 package javax.microedition.util.param;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.microedition.shell.ConfigActivity;
+
+import ru.playsoftware.j2meloader.util.XmlUtils;
 
 public class SharedPreferencesContainer implements DataContainer, DataEditor {
-	protected SharedPreferences prefs;
-	protected SharedPreferences.Editor editor;
+	private HashMap<String, Object> configMap;
+	private File configFile;
 
-	public SharedPreferencesContainer(String name, int mode, Context context) {
-		prefs = context.getSharedPreferences(name, mode);
+	public SharedPreferencesContainer(File configDir) {
+		configMap = new HashMap<>();
+		configFile = new File(configDir, ConfigActivity.MIDLET_CONFIG_FILE);
+	}
+
+	@Override
+	public boolean load() {
+		boolean loaded = false;
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(configFile);
+			configMap = XmlUtils.readMapXml(fis);
+			loaded = true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
+		return loaded;
 	}
 
 	@Override
 	public DataEditor edit() {
-		if (editor == null) {
-			editor = prefs.edit();
-		}
-
 		return this;
 	}
 
 	@Override
 	public boolean contains(String key) {
-		return prefs.contains(key);
+		return configMap.containsKey(key);
 	}
 
 	@Override
 	public boolean getBoolean(String key, boolean defValue) {
-		return prefs.getBoolean(key, defValue);
+		Boolean v = (Boolean) configMap.get(key);
+		return v != null ? v : defValue;
 	}
 
 	@Override
 	public float getFloat(String key, float defValue) {
-		return prefs.getFloat(key, defValue);
+		Float v = (Float) configMap.get(key);
+		return v != null ? v : defValue;
 	}
 
 	@Override
 	public int getInt(String key, int defValue) {
-		return prefs.getInt(key, defValue);
+		Integer v = (Integer) configMap.get(key);
+		return v != null ? v : defValue;
 	}
 
 	@Override
 	public long getLong(String key, long defValue) {
-		return prefs.getLong(key, defValue);
+		Long v = (Long) configMap.get(key);
+		return v != null ? v : defValue;
 	}
 
 	@Override
 	public String getString(String key, String defValue) {
-		return prefs.getString(key, defValue);
-	}
-
-	@Override
-	public boolean getBoolean(String key) {
-		return prefs.getBoolean(key, false);
-	}
-
-	@Override
-	public float getFloat(String key) {
-		return prefs.getFloat(key, 0);
-	}
-
-	@Override
-	public int getInt(String key) {
-		return prefs.getInt(key, 0);
-	}
-
-	@Override
-	public long getLong(String key) {
-		return prefs.getLong(key, 0);
-	}
-
-	@Override
-	public String getString(String key) {
-		return prefs.getString(key, "");
+		String v = (String) configMap.get(key);
+		return v != null ? v : defValue;
 	}
 
 	@Override
 	public DataEditor clear() {
-		editor.clear();
+		configMap.clear();
 		return this;
 	}
 
 	@Override
 	public DataEditor remove(String key) {
-		editor.remove(key);
+		configMap.remove(key);
 		return this;
 	}
 
 	@Override
 	public DataEditor putBoolean(String key, boolean value) {
-		editor.putBoolean(key, value);
+		configMap.put(key, value);
 		return this;
 	}
 
 	@Override
 	public DataEditor putFloat(String key, float value) {
-		editor.putFloat(key, value);
+		configMap.put(key, value);
 		return this;
 	}
 
 	@Override
 	public DataEditor putInt(String key, int value) {
-		editor.putInt(key, value);
+		configMap.put(key, value);
 		return this;
 	}
 
 	@Override
 	public DataEditor putLong(String key, long value) {
-		editor.putLong(key, value);
+		configMap.put(key, value);
 		return this;
 	}
 
 	@Override
 	public DataEditor putString(String key, String value) {
-		editor.putString(key, value);
+		configMap.put(key, value);
 		return this;
 	}
 
 	@Override
 	public void apply() {
-		editor.apply();
-	}
-
-	@Override
-	public boolean commit() {
-		return editor.commit();
-	}
-
-	@Override
-	public void close() {
-		editor = null;
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(configFile);
+			XmlUtils.writeMapXml(configMap, fos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
 	}
 }

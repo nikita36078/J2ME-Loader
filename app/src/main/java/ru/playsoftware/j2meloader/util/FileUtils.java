@@ -169,7 +169,7 @@ public class FileUtils {
 
 	public static AppItem getApp(File file) {
 		LinkedHashMap<String, String> params = FileUtils
-				.loadManifest(new File(file.getAbsolutePath(), ConfigActivity.MIDLET_CONF_FILE));
+				.loadManifest(new File(file.getAbsolutePath(), ConfigActivity.MIDLET_MANIFEST_FILE));
 		String imagePath = params.get("MIDlet-Icon");
 		if (imagePath == null) {
 			imagePath = params.get("MIDlet-1").split(",")[1];
