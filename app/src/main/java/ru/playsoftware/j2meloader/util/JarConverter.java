@@ -32,7 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipException;
 
-import javax.microedition.shell.ConfigActivity;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;

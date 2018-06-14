@@ -43,7 +43,7 @@ import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotFoundException;
 import javax.microedition.rms.RecordStoreNotOpenException;
-import javax.microedition.shell.ConfigActivity;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 import javax.microedition.util.ContextHolder;
 

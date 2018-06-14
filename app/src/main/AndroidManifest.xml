@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="javax.microedition.shell.ConfigActivity"
+            android:name=".config.ConfigActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden" />
         <activity

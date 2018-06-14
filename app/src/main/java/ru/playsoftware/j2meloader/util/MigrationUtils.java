@@ -26,7 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.microedition.shell.ConfigActivity;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 public class MigrationUtils {
 

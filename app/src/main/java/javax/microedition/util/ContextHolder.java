@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.shell.ConfigActivity;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 
 import ru.playsoftware.j2meloader.MainActivity;

@@ -56,6 +56,7 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class MicroActivity extends AppCompatActivity {
