@@ -111,7 +111,7 @@ public class AppsListFragment extends ListFragment {
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					String title = editText.getText().toString().trim();
 					if (title.equals("")) {
-						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT);
+						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
 						item.setTitle(title);
 						((MainActivity) getActivity()).addApp(item);

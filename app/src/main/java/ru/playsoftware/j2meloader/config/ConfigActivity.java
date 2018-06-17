@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -55,7 +56,6 @@ import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
-import javax.microedition.util.param.DataContainer;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import ru.playsoftware.j2meloader.R;
@@ -108,10 +108,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File dataDir;
 	private SharedPreferencesContainer params;
 	private String pathToMidletDir;
+	private String appName;
+	private FragmentManager fragmentManager;
+
 	public static final String MIDLET_DIR = "/converted/";
 	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
 	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
 	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
+	public static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
 	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
 	public static final String TEMP_DEX_DIR = "/tmp_dex";
 	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
@@ -120,9 +124,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
+
 	public static final String MIDLET_PATH_KEY = "path";
 	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
+	public static final String MIDLET_NAME_KEY = "name";
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -131,8 +137,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		setContentView(R.layout.activity_config);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ContextHolder.setCurrentActivity(this);
+		fragmentManager = getSupportFragmentManager();
 		pathToMidletDir = getIntent().getDataString();
-		String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
+		appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
+		getSupportActionBar().setTitle(appName);
 		dataDir = new File(DATA_DIR + appName);
 		dataDir.mkdirs();
 		File configDir = new File(CONFIGS_DIR + appName);
@@ -228,7 +236,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 		});
 
-		loadParams(params);
+		loadParams();
 		applyConfiguration();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -280,6 +288,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	@Override
+	protected void onResume() {
+		loadParams();
+		super.onResume();
+	}
+
+	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		fillScreenSizePresets(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight());
@@ -323,7 +337,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	@SuppressLint("SetTextI18n")
-	private void loadParams(DataContainer params) {
+	private void loadParams() {
 		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
 		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
 		tfScreenBack.setText(Integer.toHexString(params.
@@ -358,6 +372,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF)).toUpperCase());
 		tfVKOutline.setText(Integer.toHexString(
 				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF)).toUpperCase());
+	}
+
+	public void loadParamsFromFile() {
+		params.load();
+		loadParams();
 	}
 
 	private void saveParams() {
@@ -528,10 +547,25 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				break;
 			case R.id.action_reset_settings:
 				params.edit().clear().apply();
-				loadParams(params);
+				loadParams();
 				break;
 			case R.id.action_reset_layout:
 				keylayoutFile.delete();
+				break;
+			case R.id.action_load_template:
+				LoadTemplateDialogFragment loadTemplateFragment = new LoadTemplateDialogFragment();
+				Bundle bundleLoad = new Bundle();
+				bundleLoad.putString(MIDLET_NAME_KEY, appName);
+				loadTemplateFragment.setArguments(bundleLoad);
+				loadTemplateFragment.show(fragmentManager, "load_template");
+				break;
+			case R.id.action_save_template:
+				saveParams();
+				SaveTemplateDialogFragment saveTemplateFragment = new SaveTemplateDialogFragment();
+				Bundle bundleSave = new Bundle();
+				bundleSave.putString(MIDLET_NAME_KEY, appName);
+				saveTemplateFragment.setArguments(bundleSave);
+				saveTemplateFragment.show(fragmentManager, "save_template");
 				break;
 			case android.R.id.home:
 				finish();

@@ -17,5 +17,13 @@
         android:id="@+id/action_reset_layout"
         android:title="@string/RESET_LAYOUT_CMD"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_load_template"
+        android:title="@string/LOAD_TEMPLATE_CMD"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_save_template"
+        android:title="@string/SAVE_TEMPLATE_CMD"
+        app:showAsAction="never" />
 
 </menu>

@@ -46,6 +46,8 @@
     <string name="CLEAR_DATA_CMD">Clear data</string>
     <string name="RESET_SETTINGS_CMD">Reset settings</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
+    <string name="LOAD_TEMPLATE_CMD">Load template</string>
+    <string name="SAVE_TEMPLATE_CMD">Save template</string>
     <string name="PREF_SCREEN_OPTIONS">Screen options</string>
     <string name="PREF_SCALE_RATIO">Scale(%)</string>
     <string name="PREF_SCALE_TO_FIT">Scale to fit</string>
