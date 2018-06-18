@@ -40,11 +40,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.playsoftware.j2meloader.config.ConfigActivity;
-
-import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
+import ru.playsoftware.j2meloader.applist.AppsListFragment;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 public class FileUtils {
 
@@ -181,7 +180,7 @@ public class FileUtils {
 		return item;
 	}
 
-	public static boolean checkDb(Context context, List<AppItem> items) {
+	public static boolean checkDb(AppsListFragment fragment, List<AppItem> items) {
 		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
 		int itemsNum = items.size();
 		// If db is empty
@@ -193,7 +192,7 @@ public class FileUtils {
 			}
 		} else if (appFolders == null || appFolders.length == 0) {
 			// Else if app folder is empty
-			((MainActivity) context).deleteAllApps();
+			fragment.deleteAllApps();
 			return true;
 		}
 		List<String> appFoldersList = Arrays.asList(appFolders);
@@ -204,7 +203,7 @@ public class FileUtils {
 			AppItem item = iterator.next();
 			if (!appFoldersList.contains(item.getPath())) {
 				result = false;
-				((MainActivity) context).deleteApp(item);
+				fragment.deleteApp(item);
 				iterator.remove();
 			}
 		}

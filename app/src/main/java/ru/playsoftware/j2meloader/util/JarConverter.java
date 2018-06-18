@@ -18,7 +18,6 @@
 package ru.playsoftware.j2meloader.util;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,10 +31,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipException;
 
-import ru.playsoftware.j2meloader.config.ConfigActivity;
-
-import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.applist.AppsListFragment;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 
@@ -46,18 +44,20 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private static final String TEMP_FOLDER_NAME = "tmp";
 	private static final String TAG = JarConverter.class.getName();
 
-	private final Context context;
+	private final AppsListFragment fragment;
 	private String err = "Void error";
 	private ProgressDialog dialog;
 
-	private String appDir;
-	private final File dirTmp;
+	private String appDirPath;
+	private String dataDirPath;
+	private final File tmpDir;
 	private File appConverted;
 
-	public JarConverter(MainActivity context) {
-		this.context = context;
-		dirTmp = new File(context.getApplicationInfo().dataDir, TEMP_FOLDER_NAME);
-		dirTmp.mkdir();
+	public JarConverter(AppsListFragment fragment) {
+		this.fragment = fragment;
+		dataDirPath = fragment.getActivity().getApplicationInfo().dataDir;
+		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
+		tmpDir.mkdir();
 	}
 
 	@Override
@@ -88,23 +88,23 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			return false;
 		}
 		try {
-			ZipUtils.unzip(fixedJar, dirTmp);
+			ZipUtils.unzip(fixedJar, tmpDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 			err = "Brocken jar";
 			deleteTemp();
 			return false;
 		}
-		appDir = FileUtils.loadManifest(
-				new File(dirTmp, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
-		if (appDir == null) {
+		appDirPath = FileUtils.loadManifest(
+				new File(tmpDir, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
+		if (appDirPath == null) {
 			err = "Brocken manifest";
 			deleteTemp();
 			return false;
 		}
 		// Remove invalid characters from app path
-		appDir = appDir.replace(":", "").replace("/", "");
-		appConverted = new File(ConfigActivity.APP_DIR, appDir);
+		appDirPath = appDirPath.replace(":", "").replace("/", "");
+		appConverted = new File(ConfigActivity.APP_DIR, appDirPath);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
 		Log.d(TAG, "appConverted=" + appConverted.getPath());
@@ -123,7 +123,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		if (jadInstall) {
 			conf = new File(pathToJad);
 		} else {
-			conf = new File(dirTmp, "/META-INF/MANIFEST.MF");
+			conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
 		}
 		try {
 			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_MANIFEST_FILE));
@@ -131,7 +131,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			e.printStackTrace();
 		}
 		// Extract other resources from jar.
-		FileUtils.copyFiles(dirTmp.getPath(), ConfigActivity.APP_DIR + appDir + ConfigActivity.MIDLET_RES_DIR,
+		FileUtils.copyFiles(tmpDir.getPath(), ConfigActivity.APP_DIR + appDirPath + ConfigActivity.MIDLET_RES_DIR,
 				(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
 		deleteTemp();
 		return true;
@@ -139,11 +139,11 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	@Override
 	public void onPreExecute() {
-		dialog = new ProgressDialog(context);
+		dialog = new ProgressDialog(fragment.getActivity());
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		dialog.setCancelable(false);
-		dialog.setMessage(context.getText(R.string.converting_message));
+		dialog.setMessage(fragment.getText(R.string.converting_message));
 		dialog.setTitle(R.string.converting_wait);
 		dialog.show();
 	}
@@ -152,24 +152,25 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	public void onPostExecute(Boolean result) {
 		Toast toast;
 		if (result) {
-			toast = Toast.makeText(context, context.getResources().getString(R.string.convert_complete) + " " + appDir, Toast.LENGTH_LONG);
-			((MainActivity) context).addApp(FileUtils.getApp(appConverted));
+			toast = Toast.makeText(fragment.getActivity(),
+					fragment.getResources().getString(R.string.convert_complete) + " " + appDirPath, Toast.LENGTH_LONG);
+			fragment.addApp(FileUtils.getApp(appConverted));
 		} else {
-			toast = Toast.makeText(context, err, Toast.LENGTH_LONG);
+			toast = Toast.makeText(fragment.getActivity(), err, Toast.LENGTH_LONG);
 		}
 		dialog.dismiss();
 		toast.show();
 	}
 
 	private File fixJar(File inputJar) throws IOException {
-		File fixedJar = new File(dirTmp, inputJar.getName() + ".jar");
+		File fixedJar = new File(tmpDir, inputJar.getName() + ".jar");
 		try {
 			AndroidProducer.processJar(inputJar, fixedJar);
 		} catch (ZipException e) {
-			File unpackedJarFolder = new File(context.getApplicationInfo().dataDir, TEMP_FIX_FOLDER_NAME);
+			File unpackedJarFolder = new File(dataDirPath, TEMP_FIX_FOLDER_NAME);
 			ZipUtils.unzip(inputJar, unpackedJarFolder);
 
-			File repackedJar = new File(dirTmp, inputJar.getName());
+			File repackedJar = new File(tmpDir, inputJar.getName());
 			ZipUtils.zipFileAtPath(unpackedJarFolder, repackedJar);
 
 			AndroidProducer.processJar(repackedJar, fixedJar);
@@ -181,8 +182,8 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 
 	private void deleteTemp() {
 		// Delete temp files
-		FileUtils.deleteDirectory(dirTmp);
-		File uriFolder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
+		FileUtils.deleteDirectory(tmpDir);
+		File uriFolder = new File(dataDirPath, JarConverter.TEMP_URI_FOLDER_NAME);
 		FileUtils.deleteDirectory(uriFolder);
 	}
 }

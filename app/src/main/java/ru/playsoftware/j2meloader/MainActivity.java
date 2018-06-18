@@ -18,8 +18,6 @@
 package ru.playsoftware.j2meloader;
 
 import android.Manifest;
-import android.arch.persistence.room.Room;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,37 +28,23 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import ru.playsoftware.j2meloader.config.ConfigActivity;
-
-import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.applist.AppsListAdapter;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
-import ru.playsoftware.j2meloader.appsdb.AppDatabase;
-import ru.playsoftware.j2meloader.appsdb.AppItemDao;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
-import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
-import ru.playsoftware.j2meloader.donations.DonationsActivity;
-import ru.playsoftware.j2meloader.settings.SettingsActivity;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
-import ru.playsoftware.j2meloader.util.JarConverter;
 import ru.playsoftware.j2meloader.util.MigrationUtils;
 
 public class MainActivity extends BaseActivity {
 
-	private AppItemDao appItemDao;
+	public static final String APP_SORT_KEY = "appSort";
+
 	private AppsListFragment appsListFragment;
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
@@ -86,9 +70,8 @@ public class MainActivity extends BaseActivity {
 		} else {
 			setupActivity();
 			if (savedInstanceState == null && uri != null) {
-				JarConverter converter = new JarConverter(this);
 				try {
-					converter.execute(FileUtils.getJarPath(this, uri));
+					appsListFragment.convertJar(FileUtils.getJarPath(this, uri));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -100,14 +83,14 @@ public class MainActivity extends BaseActivity {
 		initFolders();
 		checkActionBar();
 		MigrationUtils.check(this);
+		String appSort = sp.getString("pref_app_sort", "name");
+		Bundle bundleLoad = new Bundle();
+		bundleLoad.putString(APP_SORT_KEY, appSort);
 		appsListFragment = new AppsListFragment();
-		ArrayList<AppItem> apps = new ArrayList<>();
-		AppsListAdapter adapter = new AppsListAdapter(this, apps);
-		appsListFragment.setListAdapter(adapter);
+		appsListFragment.setArguments(bundleLoad);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
-		initDb();
 	}
 
 	@Override
@@ -123,16 +106,6 @@ public class MainActivity extends BaseActivity {
 				}
 				break;
 		}
-	}
-
-	private void initDb() {
-		AppDatabase db = Room.databaseBuilder(this,
-				AppDatabase.class, "apps-database.db").allowMainThreadQueries().build();
-		appItemDao = db.appItemDao();
-		if (!FileUtils.checkDb(this, appItemDao.getAllByName())) {
-			appItemDao.insertAll(FileUtils.getAppsList(this));
-		}
-		updateAppsList();
 	}
 
 	private void initFolders() {
@@ -155,65 +128,5 @@ public class MainActivity extends BaseActivity {
 			}
 			sp.edit().putBoolean("pref_first_start", false).apply();
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.action_about:
-				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-				aboutDialogFragment.show(getSupportFragmentManager(), "about");
-				break;
-			case R.id.action_settings:
-				Intent settingsIntent = new Intent(this, SettingsActivity.class);
-				startActivity(settingsIntent);
-				break;
-			case R.id.action_help:
-				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
-				helpDialogFragment.show(getSupportFragmentManager(), "help");
-				break;
-			case R.id.action_donate:
-				Intent donationsIntent = new Intent(this, DonationsActivity.class);
-				startActivity(donationsIntent);
-				break;
-			case R.id.action_exit_app:
-				finish();
-				break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	public void addApp(AppItem item) {
-		appItemDao.insert(item);
-		updateAppsList();
-	}
-
-	public void deleteApp(AppItem item) {
-		appItemDao.delete(item);
-		updateAppsList();
-	}
-
-	public void deleteAllApps() {
-		appItemDao.deleteAll();
-	}
-
-	private void updateAppsList() {
-		String appSort = sp.getString("pref_app_sort", "name");
-		List<AppItem> apps;
-		if (appSort.equals("name")) {
-			apps = appItemDao.getAllByName();
-		} else {
-			apps = appItemDao.getAllByDate();
-		}
-		AppsListAdapter adapter = (AppsListAdapter) appsListFragment.getListAdapter();
-		adapter.setItems(apps);
-		adapter.notifyDataSetChanged();
 	}
 }

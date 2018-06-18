@@ -18,6 +18,7 @@
 package ru.playsoftware.j2meloader.applist;
 
 import android.app.Activity;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,13 +33,13 @@ import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,27 +47,29 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-
-import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.appsdb.AppDatabase;
+import ru.playsoftware.j2meloader.appsdb.AppItemDao;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
+import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
+import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
+import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class AppsListFragment extends ListFragment {
 
+	private AppItemDao appItemDao;
 	private AppsListAdapter adapter;
+	private String appSort;
 	private static final int FILE_CODE = 0;
-
-	@Override
-	public void setListAdapter(ListAdapter adapter) {
-		super.setListAdapter(adapter);
-		this.adapter = (AppsListAdapter) adapter;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +79,13 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
+		ArrayList<AppItem> apps = new ArrayList<>();
+		adapter = new AppsListAdapter(getActivity(), apps);
+		setListAdapter(adapter);
+		initDb();
 		registerForContextMenu(getListView());
+		setHasOptionsMenu(true);
 		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
 		fab.setOnClickListener(v -> {
 			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
@@ -89,16 +98,55 @@ public class AppsListFragment extends ListFragment {
 		});
 	}
 
+	public void addApp(AppItem item) {
+		appItemDao.insert(item);
+		updateAppsList();
+	}
+
+	public void deleteApp(AppItem item) {
+		appItemDao.delete(item);
+		updateAppsList();
+	}
+
+	public void deleteAllApps() {
+		appItemDao.deleteAll();
+	}
+
+	private void updateAppsList() {
+		List<AppItem> apps;
+		if (appSort.equals("name")) {
+			apps = appItemDao.getAllByName();
+		} else {
+			apps = appItemDao.getAllByDate();
+		}
+		adapter.setItems(apps);
+		adapter.notifyDataSetChanged();
+	}
+
+	private void initDb() {
+		AppDatabase db = Room.databaseBuilder(getActivity(),
+				AppDatabase.class, "apps-database.db").allowMainThreadQueries().build();
+		appItemDao = db.appItemDao();
+		if (!FileUtils.checkDb(this, appItemDao.getAllByName())) {
+			appItemDao.insertAll(FileUtils.getAppsList(getActivity()));
+		}
+		updateAppsList();
+	}
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
-			JarConverter converter = new JarConverter((MainActivity) getActivity());
 			for (Uri uri : files) {
 				File file = Utils.getFileForUri(uri);
-				converter.execute(file.getAbsolutePath());
+				convertJar(file.getAbsolutePath());
 			}
 		}
+	}
+
+	public void convertJar(String path) {
+		JarConverter converter = new JarConverter(this);
+		converter.execute(path);
 	}
 
 	private void showRenameDialog(final int id) {
@@ -114,7 +162,7 @@ public class AppsListFragment extends ListFragment {
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
 						item.setTitle(title);
-						((MainActivity) getActivity()).addApp(item);
+						addApp(item);
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
@@ -134,7 +182,7 @@ public class AppsListFragment extends ListFragment {
 					File appSettings = new File(getActivity().getFilesDir().getParent() +
 							File.separator + "shared_prefs", item.getTitle() + ".xml");
 					appSettings.delete();
-					((MainActivity) getActivity()).deleteApp(item);
+					deleteApp(item);
 				})
 				.setNegativeButton(android.R.string.no, null);
 		builder.show();
@@ -186,6 +234,38 @@ public class AppsListFragment extends ListFragment {
 				break;
 		}
 		return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.main, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_about:
+				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+				aboutDialogFragment.show(getFragmentManager(), "about");
+				break;
+			case R.id.action_settings:
+				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+				startActivity(settingsIntent);
+				break;
+			case R.id.action_help:
+				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
+				helpDialogFragment.show(getFragmentManager(), "help");
+				break;
+			case R.id.action_donate:
+				Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);
+				startActivity(donationsIntent);
+				break;
+			case R.id.action_exit_app:
+				getActivity().finish();
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }
