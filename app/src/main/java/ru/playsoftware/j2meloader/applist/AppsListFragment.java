@@ -179,9 +179,8 @@ public class AppsListFragment extends ListFragment {
 					FileUtils.deleteDirectory(appDir);
 					File appSaveDir = new File(ConfigActivity.DATA_DIR, item.getTitle());
 					FileUtils.deleteDirectory(appSaveDir);
-					File appSettings = new File(getActivity().getFilesDir().getParent() +
-							File.separator + "shared_prefs", item.getTitle() + ".xml");
-					appSettings.delete();
+					File appConfigsDir = new File(ConfigActivity.CONFIGS_DIR, item.getTitle());
+					FileUtils.deleteDirectory(appConfigsDir);
 					deleteApp(item);
 				})
 				.setNegativeButton(android.R.string.no, null);
