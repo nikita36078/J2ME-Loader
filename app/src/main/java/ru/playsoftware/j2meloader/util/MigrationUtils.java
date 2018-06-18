@@ -45,6 +45,9 @@ public class MigrationUtils {
 			}
 		}
 		File srcDataDir = new File(ConfigActivity.DATA_DIR);
+		if (!srcDataDir.exists()) {
+			return;
+		}
 		for (File srcData : srcDataDir.listFiles()) {
 			File srcKeylayout = new File(srcData, ConfigActivity.MIDLET_KEYLAYOUT_FILE);
 			if (!srcKeylayout.exists()) {
