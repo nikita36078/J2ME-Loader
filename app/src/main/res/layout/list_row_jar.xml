@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dip"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="5dip"
         android:padding="3dip">
 
         <ImageView
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="15sp"
         android:textStyle="bold" />
@@ -37,6 +40,8 @@
         android:layout_below="@id/list_title"
         android:layout_marginRight="5sp"
         android:layout_toRightOf="@+id/thumbnail"
+        android:layout_marginEnd="5sp"
+        android:layout_toEndOf="@+id/thumbnail"
         android:padding="3dip">
 
         <TextView
@@ -44,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="10sp"
             tools:ignore="SmallSp" />
@@ -53,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="10sp"
             tools:ignore="SmallSp" />
