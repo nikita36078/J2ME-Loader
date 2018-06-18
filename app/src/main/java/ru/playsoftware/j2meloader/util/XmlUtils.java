@@ -26,7 +26,6 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +50,7 @@ public class XmlUtils {
 	public static final void writeMapXml(Map val, OutputStream out)
 			throws XmlPullParserException, java.io.IOException {
 		XmlSerializer serializer = new FastXmlSerializer();
-		serializer.setOutput(out, StandardCharsets.UTF_8.name());
+		serializer.setOutput(out, "UTF-8");
 		serializer.startDocument(null, true);
 		serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
 		writeMapXml(val, null, serializer);
@@ -560,7 +559,7 @@ public class XmlUtils {
 	public static final HashMap<String, Object> readMapXml(InputStream in)
 			throws XmlPullParserException, java.io.IOException {
 		XmlPullParser parser = Xml.newPullParser();
-		parser.setInput(in, StandardCharsets.UTF_8.name());
+		parser.setInput(in, "UTF-8");
 		return (HashMap<String, Object>) readValueXml(parser, new String[1]);
 	}
 
