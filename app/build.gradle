@@ -8,8 +8,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 43
-        versionName "1.2.9"
+        versionCode 44
+        versionName "1.2.9.1"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
