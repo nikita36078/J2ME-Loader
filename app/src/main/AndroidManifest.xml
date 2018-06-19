@@ -77,6 +77,8 @@
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />
+        <activity
+            android:name=".config.TemplatesActivity" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

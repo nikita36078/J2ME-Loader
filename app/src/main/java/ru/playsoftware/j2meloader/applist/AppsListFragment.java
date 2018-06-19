@@ -55,6 +55,7 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppDatabase;
 import ru.playsoftware.j2meloader.appsdb.AppItemDao;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.TemplatesActivity;
 import ru.playsoftware.j2meloader.dialogs.AboutDialogFragment;
 import ru.playsoftware.j2meloader.dialogs.HelpDialogFragment;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
@@ -120,7 +121,6 @@ public class AppsListFragment extends ListFragment {
 			apps = appItemDao.getAllByDate();
 		}
 		adapter.setItems(apps);
-		adapter.notifyDataSetChanged();
 	}
 
 	private void initDb() {
@@ -251,6 +251,10 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_settings:
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
 				startActivity(settingsIntent);
+				break;
+			case R.id.action_templates:
+				Intent templatesIntent = new Intent(getActivity(), TemplatesActivity.class);
+				startActivity(templatesIntent);
 				break;
 			case R.id.action_help:
 				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();

@@ -12,6 +12,10 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_templates"
+        android:title="@string/templates"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_help"
         android:title="@string/help"
         app:showAsAction="never" />

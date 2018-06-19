@@ -1,6 +1,5 @@
 /*
- * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +14,25 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.applist;
+package ru.playsoftware.j2meloader.config;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import ru.playsoftware.j2meloader.R;
 
-public class AppsListAdapter extends BaseAdapter {
-
-	private List<AppItem> list;
+public class TemplatesAdapter extends BaseAdapter {
+	private ArrayList<String> list;
 	private final LayoutInflater layoutInflater;
 	private Context context;
 
-	public AppsListAdapter(Context context, List<AppItem> list) {
+	public TemplatesAdapter(Context context, ArrayList<String> list) {
 		if (list != null) {
 			this.list = list;
 		}
@@ -61,42 +57,31 @@ public class AppsListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup viewGroup) {
-		ViewHolder holder;
+		TemplatesAdapter.ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_jar, null);
-			holder = new ViewHolder();
-			holder.icon = view.findViewById(R.id.list_image);
-			holder.name = view.findViewById(R.id.list_title);
-			holder.author = view.findViewById(R.id.list_author);
-			holder.version = view.findViewById(R.id.list_version);
+			view = layoutInflater.inflate(R.layout.list_row_template, null);
+			holder = new TemplatesAdapter.ViewHolder();
+			holder.name = view.findViewById(R.id.list_name);
 			view.setTag(holder);
 		} else {
-			holder = (ViewHolder) view.getTag();
+			holder = (TemplatesAdapter.ViewHolder) view.getTag();
 		}
-		AppItem item = list.get(position);
-
-		BitmapDrawable iconDrawable = new BitmapDrawable(context.getResources(), item.getImagePathExt());
-		if (iconDrawable.getBitmap() == null) {
-			holder.icon.setImageResource(R.mipmap.ic_launcher);
-		} else {
-			holder.icon.setImageDrawable(iconDrawable);
-		}
-		holder.name.setText(item.getTitle());
-		holder.author.setText(item.getAuthorExt(context));
-		holder.version.setText(item.getVersionExt(context));
+		holder.name.setText(list.get(position));
 
 		return view;
 	}
 
-	public void setItems(List<AppItem> items) {
-		list = items;
+	public void removeItem(int position) {
+		list.remove(position);
+		notifyDataSetChanged();
+	}
+
+	public void renameItem(int position, String name) {
+		list.set(position, name);
 		notifyDataSetChanged();
 	}
 
 	private static class ViewHolder {
-		ImageView icon;
 		TextView name;
-		TextView author;
-		TextView version;
 	}
 }
