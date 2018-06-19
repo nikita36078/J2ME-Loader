@@ -92,13 +92,18 @@
   <string name="pref_requires_restart_summary">Yeniden başlatma gerektirir</string>
   <string name="pref_enable_actionbar_title">Başlık çubuğunu etkinleştir</string>
   <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
+  <string name="pref_button_shape_title">Tuş şekli</string>
+  <string-array name="pref_button_shape_entries">
+    <item>Yuvarlak</item>
+    <item>Kare</item>
+  </string-array>
   <string name="pref_app_sort_title">Uygulamaları sırala</string>
   <string-array name="pref_app_sort_entries">
     <item>Ada göre</item>
     <item>Tarihe göre</item>
   </string-array>
-  <string name="pref_map_keys">Tuş düzenlemesi</string>
+  <string name="pref_map_keys">Tuş atamaları</string>
   <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
-  <string name="mapping_dialog_message" formatted="false">Şimdiki düzenleme: %1$s</string>
+  <string name="mapping_dialog_message" formatted="false">Mevcut atama: %1$s</string>
   <string name="reset_mapping">Sıfırla</string>
 </resources>
