@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">In-app-donaties worden niet ondersteund.</string>
     <string name="donations__google_android_market_not_supported">Helaas, in-app-donaties worden niet ondersteund. Is de Google Play Store correct geïnstalleerd?</string>
     <string name="donations__google_android_market_description">Google neemt 30% van de donatie</string>
-    <string name="donations__google_android_market_donate_button">Doneren!</string>
+    <string name="donations__google_android_market_donate_button">Doneren</string>
     <string name="donations__google_android_market_text">Hoeveel?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Na het aanraken van de knop kunt u zelf kiezen hoeveel u wilt doneren!</string>

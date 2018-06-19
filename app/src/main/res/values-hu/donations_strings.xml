@@ -6,7 +6,7 @@
     <string name="donations__google_android_market">Google Play Áruház</string>
     <string name="donations__google_android_market_not_supported_title">Az alkalmazáson belüli adományozás nem támogatott.</string>
     <string name="donations__google_android_market_not_supported">Az alkalmazáson belüli adományozás nem támogatott. A Google Android Market megfelelően van telepítve?</string>
-    <string name="donations__google_android_market_donate_button">Adományozok!</string>
+    <string name="donations__google_android_market_donate_button">Adományozok</string>
     <string name="donations__google_android_market_text">Mennyi?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Az adományozott összeget megválaszthatod a gombra való kattintás után!</string>

@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">Донирање унутар апликације није доступно.</string>
     <string name="donations__google_android_market_not_supported">Донирање унутар апликације није доступно. Да ли је Гуглова плеј-продавница инсталирана?</string>
     <string name="donations__google_android_market_description">Гугл узима провизију од 30%</string>
-    <string name="donations__google_android_market_donate_button">Донирај!</string>
+    <string name="donations__google_android_market_donate_button">Донирај</string>
     <string name="donations__google_android_market_text">Колико?</string>
     <string name="donations__paypal">Пејпал</string>
     <string name="donations__paypal_description">Одредите износ за донацију кликом на дугме!</string>

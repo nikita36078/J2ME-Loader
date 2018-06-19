@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">In-App пожертвования не поддерживаются.</string>
     <string name="donations__google_android_market_not_supported">Пожертвования через приложение не поддерживаются. Google Play Store установлен правильно?</string>
     <string name="donations__google_android_market_description">Google взимает 30% комиссии с каждого пожертвования!</string>
-    <string name="donations__google_android_market_donate_button">Пожертвовать!</string>
+    <string name="donations__google_android_market_donate_button">Пожертвовать</string>
     <string name="donations__google_android_market_text">Сколько?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">После нажатия на кнопку вы можете выбрать сколько хотите пожертвовать!</string>

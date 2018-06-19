@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">Donasjoner innebygd i programmer støttes ikke.</string>
     <string name="donations__google_android_market_not_supported">Donasjoner innebygd i programmer støttes ikke. Er Google Play-butikken installert rett?</string>
     <string name="donations__google_android_market_description">Google tar en avgift på 30%</string>
-    <string name="donations__google_android_market_donate_button">Doner!</string>
+    <string name="donations__google_android_market_donate_button">Doner</string>
     <string name="donations__google_android_market_text">Hvor mye?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Du kan velge hvor mye du vil donere etter å ha klikket på knappen!</string>

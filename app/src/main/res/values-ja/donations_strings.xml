@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">アプリ内寄付は非対応です</string>
     <string name="donations__google_android_market_not_supported">アプリ内寄付は非対応です。GooglePlayストアはインストールされていますか?</string>
     <string name="donations__google_android_market_description">Google は 30% の手数料がかかります</string>
-    <string name="donations__google_android_market_donate_button">寄付する!</string>
+    <string name="donations__google_android_market_donate_button">寄付する</string>
     <string name="donations__google_android_market_text">いくら?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">ボタンを押した後寄付したい額を選べます!</string>

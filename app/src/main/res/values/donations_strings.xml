@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">In-App Donations are not supported.</string>
     <string name="donations__google_android_market_not_supported">In-App Donations are not supported. Is Google Play Store installed correctly?</string>
     <string name="donations__google_android_market_description">Google charges a fee of 30%</string>
-    <string name="donations__google_android_market_donate_button">Donate!</string>
+    <string name="donations__google_android_market_donate_button">Donate</string>
     <string name="donations__google_android_market_text">How much?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">You can choose how much you want to donate after clicking the button!</string>

@@ -9,7 +9,7 @@
     <string name="donations__google_android_market_not_supported_title">Програмні пожертви не підтримуються.</string>
     <string name="donations__google_android_market_not_supported">Пожертвування через програму не підтримуються. Магазин Google Play встановлений правильно?</string>
     <string name="donations__google_android_market_description">Google знімає 30% комісії</string>
-    <string name="donations__google_android_market_donate_button">Пожертвувати!</string>
+    <string name="donations__google_android_market_donate_button">Пожертвувати</string>
     <string name="donations__google_android_market_text">Скільки?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Після натискання на кнопку ви можете вибрати скільки хочете пожертвувати!</string>
