@@ -22,7 +22,6 @@
 -keep class com.nokia.mid.** { *; }
 -keep class com.vodafone.util.** { *; }
 -keep class org.microemu.** { *; }
--keep class ru.playsoftware.** { *; }
 -keepclasseswithmembernames class * {
     native <methods>;
 }
