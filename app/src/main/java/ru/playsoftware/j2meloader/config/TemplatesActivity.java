@@ -92,20 +92,20 @@ public class TemplatesActivity extends BaseActivity {
 	}
 
 	private void deleteTemplate(final int id) {
-		File templateDir = new File(ConfigActivity.TEMPLATES_DIR, (String) adapter.getItem(id));
+		File templateDir = new File(Config.TEMPLATES_DIR, (String) adapter.getItem(id));
 		FileUtils.deleteDirectory(templateDir);
 		adapter.removeItem(id);
 	}
 
 	private void renameTemplate(final int id, String newName) {
-		File srcTemplateDir = new File(ConfigActivity.TEMPLATES_DIR, (String) adapter.getItem(id));
-		File dstTemplateDir = new File(ConfigActivity.TEMPLATES_DIR, newName);
+		File srcTemplateDir = new File(Config.TEMPLATES_DIR, (String) adapter.getItem(id));
+		File dstTemplateDir = new File(Config.TEMPLATES_DIR, newName);
 		srcTemplateDir.renameTo(dstTemplateDir);
 		adapter.renameItem(id, dstTemplateDir.getName());
 	}
 
 	private ArrayList<String> getTemplatesList() {
-		File templatesDir = new File(ConfigActivity.TEMPLATES_DIR);
+		File templatesDir = new File(Config.TEMPLATES_DIR);
 		File[] templatesList = templatesDir.listFiles();
 		if (templatesList == null) {
 			return new ArrayList<String>();

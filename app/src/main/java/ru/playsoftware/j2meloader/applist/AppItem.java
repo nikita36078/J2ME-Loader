@@ -23,9 +23,8 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
-import ru.playsoftware.j2meloader.config.ConfigActivity;
-
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.Config;
 
 @Entity(tableName = "apps", indices = {@Index(value = {"path"}, unique = true)})
 public class AppItem {
@@ -82,18 +81,18 @@ public class AppItem {
 	}
 
 	public String getPathExt() {
-		return ConfigActivity.APP_DIR + path;
+		return Config.APP_DIR + path;
 	}
 
 	public void setImagePathExt(String imagePath) {
 		if (imagePath.length() > 0 && imagePath.charAt(0) != '/') {
 			imagePath = "/" + imagePath;
 		}
-		this.imagePath = path + ConfigActivity.MIDLET_RES_DIR + imagePath.replace(" ", "");
+		this.imagePath = path + Config.MIDLET_RES_DIR + imagePath.replace(" ", "");
 	}
 
 	public String getImagePathExt() {
-		return ConfigActivity.APP_DIR + imagePath;
+		return Config.APP_DIR + imagePath;
 	}
 
 	public String getAuthorExt(Context context) {

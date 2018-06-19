@@ -23,7 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.Config;
 
 public class MigrationUtils {
 
@@ -36,7 +36,7 @@ public class MigrationUtils {
 			if (fileName.equals("ru.playsoftware.j2meloader_preferences")) {
 				continue;
 			}
-			File dstConf = new File(ConfigActivity.CONFIGS_DIR, fileName + ConfigActivity.MIDLET_CONFIG_FILE);
+			File dstConf = new File(Config.CONFIGS_DIR, fileName + Config.MIDLET_CONFIG_FILE);
 			try {
 				FileUtils.copyFileUsingChannel(srcConf, dstConf);
 				srcConf.delete();
@@ -44,17 +44,17 @@ public class MigrationUtils {
 				e.printStackTrace();
 			}
 		}
-		File srcDataDir = new File(ConfigActivity.DATA_DIR);
+		File srcDataDir = new File(Config.DATA_DIR);
 		if (!srcDataDir.exists()) {
 			return;
 		}
 		for (File srcData : srcDataDir.listFiles()) {
-			File srcKeylayout = new File(srcData, ConfigActivity.MIDLET_KEYLAYOUT_FILE);
+			File srcKeylayout = new File(srcData, Config.MIDLET_KEYLAYOUT_FILE);
 			if (!srcKeylayout.exists()) {
 				continue;
 			}
-			File dstKeylayout = new File(ConfigActivity.CONFIGS_DIR,
-					srcData.getName() + ConfigActivity.MIDLET_KEYLAYOUT_FILE);
+			File dstKeylayout = new File(Config.CONFIGS_DIR,
+					srcData.getName() + Config.MIDLET_KEYLAYOUT_FILE);
 			try {
 				FileUtils.copyFileUsingChannel(srcKeylayout, dstKeylayout);
 				srcKeylayout.delete();
@@ -85,7 +85,7 @@ public class MigrationUtils {
 	}
 
 	public static void check(Context context) {
-		File file = new File(ConfigActivity.EMULATOR_DIR, "DATA_VERSION");
+		File file = new File(Config.EMULATOR_DIR, "DATA_VERSION");
 		int version = 0;
 		try {
 			version = readVersion(file);

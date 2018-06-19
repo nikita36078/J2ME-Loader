@@ -56,6 +56,7 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
@@ -165,7 +166,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void loadMIDlet() throws Exception {
 		ArrayList<String> midlets = new ArrayList<>();
-		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + ConfigActivity.MIDLET_MANIFEST_FILE));
+		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + Config.MIDLET_MANIFEST_FILE));
 		MIDlet.initProps(params);
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {
@@ -198,22 +199,22 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void startMidlet(String mainClass) {
-		File dexSource = new File(pathToMidletDir, ConfigActivity.MIDLET_DEX_FILE);
-		File dexTargetDir = new File(getApplicationInfo().dataDir, ConfigActivity.TEMP_DEX_DIR);
+		File dexSource = new File(pathToMidletDir, Config.MIDLET_DEX_FILE);
+		File dexTargetDir = new File(getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
 		if (dexTargetDir.exists()) {
 			FileUtils.deleteDirectory(dexTargetDir);
 		}
 		dexTargetDir.mkdir();
-		File dexTargetOptDir = new File(getApplicationInfo().dataDir, ConfigActivity.TEMP_DEX_OPT_DIR);
+		File dexTargetOptDir = new File(getApplicationInfo().dataDir, Config.TEMP_DEX_OPT_DIR);
 		if (dexTargetOptDir.exists()) {
 			FileUtils.deleteDirectory(dexTargetOptDir);
 		}
 		dexTargetOptDir.mkdir();
-		File dexTarget = new File(dexTargetDir, ConfigActivity.MIDLET_DEX_FILE);
+		File dexTarget = new File(dexTargetDir, Config.MIDLET_DEX_FILE);
 		try {
 			FileUtils.copyFileUsingChannel(dexSource, dexTarget);
 			ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
-					dexTargetOptDir.getAbsolutePath(), null, getClassLoader(), pathToMidletDir + ConfigActivity.MIDLET_RES_DIR);
+					dexTargetOptDir.getAbsolutePath(), null, getClassLoader(), pathToMidletDir + Config.MIDLET_RES_DIR);
 			Log.i(TAG, "load main: " + mainClass + " from dex:" + dexTarget.getPath());
 			final MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 			// Start midlet in Thread

@@ -111,20 +111,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private String appName;
 	private FragmentManager fragmentManager;
 
-	public static final String MIDLET_DIR = "/converted/";
-	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
-	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
-	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
-	public static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
-	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
-	public static final String TEMP_DEX_DIR = "/tmp_dex";
-	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
-	public static final String MIDLET_RES_DIR = "/res";
-	public static final String MIDLET_DEX_FILE = "/converted.dex";
-	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
-	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
-	public static final String MIDLET_CONFIG_FILE = "/config.xml";
-
 	public static final String MIDLET_PATH_KEY = "path";
 	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
@@ -141,11 +127,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		pathToMidletDir = getIntent().getDataString();
 		appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
 		getSupportActionBar().setTitle(appName);
-		dataDir = new File(DATA_DIR + appName);
+		dataDir = new File(Config.DATA_DIR + appName);
 		dataDir.mkdirs();
-		File configDir = new File(CONFIGS_DIR + appName);
+		File configDir = new File(Config.CONFIGS_DIR + appName);
 		configDir.mkdirs();
-		keylayoutFile = new File(configDir, MIDLET_KEYLAYOUT_FILE);
+		keylayoutFile = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load();

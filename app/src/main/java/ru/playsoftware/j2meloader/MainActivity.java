@@ -37,7 +37,7 @@ import java.io.IOException;
 
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.MigrationUtils;
 
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void initFolders() {
-		File nomedia = new File(ConfigActivity.EMULATOR_DIR, ".nomedia");
+		File nomedia = new File(Config.EMULATOR_DIR, ".nomedia");
 		if (!nomedia.exists()) {
 			try {
 				nomedia.getParentFile().mkdirs();

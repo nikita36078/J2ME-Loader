@@ -54,13 +54,14 @@ import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppDatabase;
 import ru.playsoftware.j2meloader.appsdb.AppItemDao;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.TemplatesActivity;
-import ru.playsoftware.j2meloader.info.AboutDialogFragment;
-import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
+import ru.playsoftware.j2meloader.info.AboutDialogFragment;
+import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
@@ -177,9 +178,9 @@ public class AppsListFragment extends ListFragment {
 				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
 					File appDir = new File(item.getPathExt());
 					FileUtils.deleteDirectory(appDir);
-					File appSaveDir = new File(ConfigActivity.DATA_DIR, item.getTitle());
+					File appSaveDir = new File(Config.DATA_DIR, item.getTitle());
 					FileUtils.deleteDirectory(appSaveDir);
-					File appConfigsDir = new File(ConfigActivity.CONFIGS_DIR, item.getTitle());
+					File appConfigsDir = new File(Config.CONFIGS_DIR, item.getTitle());
 					FileUtils.deleteDirectory(appConfigsDir);
 					deleteApp(item);
 				})
@@ -190,7 +191,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = (AppItem) adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), ConfigActivity.class);
+		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), Config.class);
 		startActivity(i);
 	}
 
@@ -209,7 +210,7 @@ public class AppsListFragment extends ListFragment {
 		switch (item.getItemId()) {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
-				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), Config.class);
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder = new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 						.setIntent(launchIntent)
 						.setShortLabel(appItem.getTitle());
@@ -224,7 +225,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), Config.class);
 				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 				startActivity(i);
 				break;

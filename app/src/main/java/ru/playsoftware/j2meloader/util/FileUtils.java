@@ -43,7 +43,7 @@ import java.util.Map;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.Config;
 
 public class FileUtils {
 
@@ -145,10 +145,10 @@ public class FileUtils {
 
 	public static ArrayList<AppItem> getAppsList(Context context) {
 		ArrayList<AppItem> apps = new ArrayList<>();
-		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
+		String[] appFolders = new File(Config.APP_DIR).list();
 		if (appFolders != null) {
 			for (String appFolder : appFolders) {
-				File temp = new File(ConfigActivity.APP_DIR, appFolder);
+				File temp = new File(Config.APP_DIR, appFolder);
 				try {
 					if (temp.isDirectory() && temp.list().length > 0) {
 						AppItem item = getApp(temp);
@@ -168,7 +168,7 @@ public class FileUtils {
 
 	public static AppItem getApp(File file) {
 		LinkedHashMap<String, String> params = FileUtils
-				.loadManifest(new File(file.getAbsolutePath(), ConfigActivity.MIDLET_MANIFEST_FILE));
+				.loadManifest(new File(file.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
 		String imagePath = params.get("MIDlet-Icon");
 		if (imagePath == null) {
 			imagePath = params.get("MIDlet-1").split(",")[1];
@@ -181,7 +181,7 @@ public class FileUtils {
 	}
 
 	public static boolean checkDb(AppsListFragment fragment, List<AppItem> items) {
-		String[] appFolders = new File(ConfigActivity.APP_DIR).list();
+		String[] appFolders = new File(Config.APP_DIR).list();
 		int itemsNum = items.size();
 		// If db is empty
 		if (itemsNum == 0) {

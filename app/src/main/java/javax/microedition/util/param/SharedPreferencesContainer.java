@@ -25,8 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import ru.playsoftware.j2meloader.config.ConfigActivity;
-
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.XmlUtils;
 
 public class SharedPreferencesContainer implements DataContainer, DataEditor {
@@ -35,7 +34,7 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 
 	public SharedPreferencesContainer(File configDir) {
 		configMap = new HashMap<>();
-		configFile = new File(configDir, ConfigActivity.MIDLET_CONFIG_FILE);
+		configFile = new File(configDir, Config.MIDLET_CONFIG_FILE);
 	}
 
 	@Override

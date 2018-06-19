@@ -33,7 +33,7 @@ import java.util.zip.ZipException;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.Config;
 
 public class JarConverter extends AsyncTask<String, String, Boolean> {
 
@@ -104,14 +104,14 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		}
 		// Remove invalid characters from app path
 		appDirPath = appDirPath.replace(":", "").replace("/", "");
-		appConverted = new File(ConfigActivity.APP_DIR, appDirPath);
+		appConverted = new File(Config.APP_DIR, appDirPath);
 		FileUtils.deleteDirectory(appConverted);
 		appConverted.mkdirs();
 		Log.d(TAG, "appConverted=" + appConverted.getPath());
 		try {
 			Main.main(new String[]{
 					"--no-optimize", "--output=" + appConverted.getPath()
-					+ ConfigActivity.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
+					+ Config.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
 		} catch (IOException e) {
 			e.printStackTrace();
 			err = "Can't convert";
@@ -126,12 +126,12 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
 		}
 		try {
-			FileUtils.copyFileUsingChannel(conf, new File(appConverted, ConfigActivity.MIDLET_MANIFEST_FILE));
+			FileUtils.copyFileUsingChannel(conf, new File(appConverted, Config.MIDLET_MANIFEST_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		// Extract other resources from jar.
-		FileUtils.copyFiles(tmpDir.getPath(), ConfigActivity.APP_DIR + appDirPath + ConfigActivity.MIDLET_RES_DIR,
+		FileUtils.copyFiles(tmpDir.getPath(), Config.APP_DIR + appDirPath + Config.MIDLET_RES_DIR,
 				(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
 		deleteTemp();
 		return true;

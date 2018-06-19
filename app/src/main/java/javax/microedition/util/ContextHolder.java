@@ -34,10 +34,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
 import javax.microedition.shell.MyClassLoader;
 
 import ru.playsoftware.j2meloader.MainActivity;
+import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -113,7 +113,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(ConfigActivity.DATA_DIR + MyClassLoader.getName(), name);
+		return new File(Config.DATA_DIR + MyClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {

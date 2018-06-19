@@ -62,7 +62,7 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 	}
 
 	private String[] getTemplatesList() {
-		File templatesDir = new File(ConfigActivity.TEMPLATES_DIR);
+		File templatesDir = new File(Config.TEMPLATES_DIR);
 		File[] templatesList = templatesDir.listFiles();
 		if (templatesList == null) {
 			return new String[0];
@@ -79,10 +79,10 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 		if (!templateSettings && !templateKeyboard) {
 			return;
 		}
-		File srcConfig = new File(ConfigActivity.TEMPLATES_DIR, template + ConfigActivity.MIDLET_CONFIG_FILE);
-		File srcKeylayout = new File(ConfigActivity.TEMPLATES_DIR, template + ConfigActivity.MIDLET_KEYLAYOUT_FILE);
-		File dstConfig = new File(ConfigActivity.CONFIGS_DIR, appName + ConfigActivity.MIDLET_CONFIG_FILE);
-		File dstKeylayout = new File(ConfigActivity.CONFIGS_DIR, appName + ConfigActivity.MIDLET_KEYLAYOUT_FILE);
+		File srcConfig = new File(Config.TEMPLATES_DIR, template + Config.MIDLET_CONFIG_FILE);
+		File srcKeylayout = new File(Config.TEMPLATES_DIR, template + Config.MIDLET_KEYLAYOUT_FILE);
+		File dstConfig = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
+		File dstKeylayout = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
 		try {
 			if (templateSettings) FileUtils.copyFileUsingChannel(srcConfig, dstConfig);
 			if (templateKeyboard) FileUtils.copyFileUsingChannel(srcKeylayout, dstKeylayout);
