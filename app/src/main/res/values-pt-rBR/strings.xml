@@ -12,22 +12,22 @@
   <string name="version">Versão: </string>
   <string name="no_data_for_display">Sem dados</string>
   <string name="message_delete">Deseja excluir o jogo?</string>
-  <string name="converting_wait">Convertendo JAR...</string>
-  <string name="convert_complete">Completo</string>
+  <string name="converting_wait">Convertendo o jogo ...</string>
+  <string name="convert_complete">Conversão completa</string>
   <string name="converting_message">Processando...</string>
   <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento</string>
   <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
   <string name="action_context_shortcut">Adicionar atalho</string>
   <string name="action_settings">Configurações</string>
   <string name="action_context_delete">Excluir</string>
-  <string name="action_context_rename">Mudar o nome</string>
+  <string name="action_context_rename">Renomear</string>
   <string name="donate">Faça uma doação</string>
   <string name="START_CMD">Iniciar</string>
   <string name="CANCEL_CMD">Cancelar</string>
   <string name="CLEAR_DATA_CMD">Limpar Dados</string>
-  <string name="RESET_SETTINGS_CMD">Redefinir configurações</string>
+  <string name="RESET_SETTINGS_CMD">Configuração de fábrica</string>
   <string name="RESET_LAYOUT_CMD">Resetar teclado</string>
-  <string name="PREF_SCREEN_OPTIONS">Opções de tela</string>
+  <string name="PREF_SCREEN_OPTIONS">Opções da tela</string>
   <string name="PREF_SCALE_RATIO">Escala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Redimensionar tela</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Manter a proporção</string>
@@ -92,6 +92,11 @@
   <string name="pref_requires_restart_summary">Requer reinicialização</string>
   <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
   <string name="pref_enable_actionbar_summary">Assistente para jogos em tela completa</string>
+  <string name="pref_button_shape_title">Formato dos botões</string>
+  <string-array name="pref_button_shape_entries">
+    <item>Redondos</item>
+    <item>Quadrados</item>
+  </string-array>
   <string name="pref_app_sort_title">Organizar jogos</string>
   <string-array name="pref_app_sort_entries">
     <item>Nome</item>
