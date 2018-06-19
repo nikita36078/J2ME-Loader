@@ -191,7 +191,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = (AppItem) adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), Config.class);
+		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), ConfigActivity.class);
 		startActivity(i);
 	}
 
@@ -225,7 +225,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), Config.class);
+				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
 				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 				startActivity(i);
 				break;
