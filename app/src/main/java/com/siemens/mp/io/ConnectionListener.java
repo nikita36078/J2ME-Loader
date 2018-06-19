@@ -22,18 +22,8 @@
  *  limitations.
  */
 
-package com.siemens.mp.game;
+package com.siemens.mp.io;
 
-import javax.microedition.lcdui.Display;
-
-public class Vibrator {
-	public static void startVibrator() {
-	}
-
-	public static void stopVibrator() {
-	}
-
-	public static void triggerVibrator(int duration) {
-		Display.getDisplay(null).vibrate(duration);
-	}
+public interface ConnectionListener {
+	public void receiveData(byte[] data);
 }

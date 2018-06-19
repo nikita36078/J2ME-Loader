@@ -29,13 +29,16 @@ public class Connection implements InputConnection, ConnectionImplementation {
 
 	private final static String PROTOCOL = "resource://";
 
+	private final static String PROTOCOL2 = "resource:";
+
 	private String path;
 
 	private InputStream stream;
 
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
-		path = name.substring(PROTOCOL.length());
+		path = name.replace(PROTOCOL, "").replace(PROTOCOL2, "")
+				.replace('\\', '/');
 		return this;
 	}
 

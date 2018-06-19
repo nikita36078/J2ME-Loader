@@ -68,7 +68,7 @@ public class FileSystemFileConnection implements FileConnection {
 
 	private final static String ROOT_INTERNAL_DIR_SIEMENS = "0:/";
 
-	private final static String ROOT_INTERNAL_DIR_SIEMENS_2 = "fs/";
+	private final static String ROOT_INTERNAL_DIR_SIEMENS_2 = "fs/MyStuff/";
 
 	private final static char DIR_SEP = '/';
 
@@ -265,7 +265,7 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public void mkdir() throws IOException {
 		throwClosed();
-		if (!file.mkdirs()) {
+		if (!file.mkdir()) {
 			throw new IOException("Can't create directory " + file.getAbsolutePath());
 		}
 	}

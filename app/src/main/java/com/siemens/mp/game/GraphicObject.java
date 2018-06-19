@@ -24,16 +24,19 @@
 
 package com.siemens.mp.game;
 
-import javax.microedition.lcdui.Display;
+public class GraphicObject extends com.siemens.mp.misc.NativeMem {
+	private boolean visible;
 
-public class Vibrator {
-	public static void startVibrator() {
+	protected GraphicObject() {
+		super();
 	}
 
-	public static void stopVibrator() {
+	public boolean getVisible() {
+		return this.visible;
 	}
 
-	public static void triggerVibrator(int duration) {
-		Display.getDisplay(null).vibrate(duration);
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
+
 }

@@ -24,16 +24,38 @@
 
 package com.siemens.mp.game;
 
-import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 
-public class Vibrator {
-	public static void startVibrator() {
+public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
+	private Image image;
+
+	public ExtendedImage(Image image) {
+		this.image = image;
 	}
 
-	public static void stopVibrator() {
+	public void clear(byte color) {
+		Graphics g = image.getGraphics();
+		g.setColor(color);
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 	}
 
-	public static void triggerVibrator(int duration) {
-		Display.getDisplay(null).vibrate(duration);
+	public Image getImage() {
+		return image;
+	}
+
+	public int getPixel(int x, int y) {
+		return 0;
+	}
+
+	public void getPixelBytes(byte[] pixels, int x, int y, int width, int height) {
+	}
+
+	public void setPixel(int x, int y, byte color) {
+	}
+
+	public void setPixels(byte[] pixels, int x, int y, int width, int height) {
+		Image img = com.siemens.mp.ui.Image.createImageFromBitmap(pixels, width, height);
+		image.getGraphics().drawImage(img, x, y, 0);
 	}
 }

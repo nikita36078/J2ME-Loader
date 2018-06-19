@@ -24,16 +24,10 @@
 
 package com.siemens.mp.game;
 
-import javax.microedition.lcdui.Display;
-
-public class Vibrator {
-	public static void startVibrator() {
+public class Melody {
+	public void play() {
 	}
 
-	public static void stopVibrator() {
-	}
-
-	public static void triggerVibrator(int duration) {
-		Display.getDisplay(null).vibrate(duration);
+	public static void stop() {
 	}
 }

@@ -22,18 +22,23 @@
  *  limitations.
  */
 
-package com.siemens.mp.game;
+package com.siemens.mp.io;
 
-import javax.microedition.lcdui.Display;
+public class Connection extends com.siemens.mp.misc.NativeMem {
 
-public class Vibrator {
-	public static void startVibrator() {
+	private ConnectionListener listener;
+
+	public Connection(String connectTo) {
 	}
 
-	public static void stopVibrator() {
+	public ConnectionListener getListener() {
+		return listener;
 	}
 
-	public static void triggerVibrator(int duration) {
-		Display.getDisplay(null).vibrate(duration);
+	public void send(byte[] data) {
+	}
+
+	public void setListener(ConnectionListener listener) {
+		this.listener = listener;
 	}
 }
