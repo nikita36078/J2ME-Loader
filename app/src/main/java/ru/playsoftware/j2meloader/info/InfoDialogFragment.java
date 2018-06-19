@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.dialogs;
+package ru.playsoftware.j2meloader.info;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -27,17 +27,17 @@ import android.widget.TextView;
 
 import ru.playsoftware.j2meloader.R;
 
-public class HelpDialogFragment extends DialogFragment {
+public class InfoDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		TextView tv = new TextView(getActivity());
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		tv.setText(Html.fromHtml(getString(R.string.help_message)));
+		tv.setText(Html.fromHtml(getString(R.string.about_message)));
 		tv.setTextSize(16);
-		tv.setPadding(10, 10, 10, 10);
+		tv.setPadding(10, 15, 10, 10);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.help)
+		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(tv);
 		return builder.create();

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.dialogs;
+package ru.playsoftware.j2meloader.info;
 
 import android.app.Dialog;
 import android.os.Bundle;

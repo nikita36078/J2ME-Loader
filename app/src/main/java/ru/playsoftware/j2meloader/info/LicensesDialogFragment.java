@@ -14,32 +14,27 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.dialogs;
+package ru.playsoftware.j2meloader.info;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
+import android.webkit.WebView;
 
 import ru.playsoftware.j2meloader.R;
 
-public class InfoDialogFragment extends DialogFragment {
+public class LicensesDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		TextView tv = new TextView(getActivity());
-		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		tv.setText(Html.fromHtml(getString(R.string.about_message)));
-		tv.setTextSize(16);
-		tv.setPadding(10, 15, 10, 10);
+		WebView view = new WebView(getActivity());
+		view.loadUrl("file:///android_asset/licenses.html");
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.app_name)
+		builder.setTitle(R.string.licenses)
 				.setIcon(R.mipmap.ic_launcher)
-				.setView(tv);
+				.setView(view);
 		return builder.create();
 	}
 }
