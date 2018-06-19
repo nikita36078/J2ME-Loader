@@ -61,6 +61,9 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 	}
 
 	private void saveTemplate(String template, String appName, boolean templateSettings, boolean templateKeyboard) {
+		if (!templateSettings && !templateKeyboard) {
+			return;
+		}
 		File templateDir = new File(ConfigActivity.TEMPLATES_DIR, template);
 		templateDir.mkdirs();
 		File srcConfig = new File(ConfigActivity.CONFIGS_DIR, appName + ConfigActivity.MIDLET_CONFIG_FILE);

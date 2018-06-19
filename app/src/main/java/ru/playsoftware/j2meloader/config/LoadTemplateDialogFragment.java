@@ -76,6 +76,9 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 	}
 
 	private void loadTemplate(String template, String appName, boolean templateSettings, boolean templateKeyboard) {
+		if (!templateSettings && !templateKeyboard) {
+			return;
+		}
 		File srcConfig = new File(ConfigActivity.TEMPLATES_DIR, template + ConfigActivity.MIDLET_CONFIG_FILE);
 		File srcKeylayout = new File(ConfigActivity.TEMPLATES_DIR, template + ConfigActivity.MIDLET_KEYLAYOUT_FILE);
 		File dstConfig = new File(ConfigActivity.CONFIGS_DIR, appName + ConfigActivity.MIDLET_CONFIG_FILE);
