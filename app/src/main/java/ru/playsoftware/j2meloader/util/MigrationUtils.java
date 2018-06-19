@@ -37,6 +37,7 @@ public class MigrationUtils {
 				continue;
 			}
 			File dstConf = new File(Config.CONFIGS_DIR, fileName + Config.MIDLET_CONFIG_FILE);
+			dstConf.getParentFile().mkdirs();
 			try {
 				FileUtils.copyFileUsingChannel(srcConf, dstConf);
 				srcConf.delete();
@@ -55,6 +56,7 @@ public class MigrationUtils {
 			}
 			File dstKeylayout = new File(Config.CONFIGS_DIR,
 					srcData.getName() + Config.MIDLET_KEYLAYOUT_FILE);
+			dstKeylayout.getParentFile().mkdirs();
 			try {
 				FileUtils.copyFileUsingChannel(srcKeylayout, dstKeylayout);
 				srcKeylayout.delete();

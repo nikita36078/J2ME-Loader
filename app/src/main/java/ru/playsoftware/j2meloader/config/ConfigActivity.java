@@ -129,7 +129,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		getSupportActionBar().setTitle(appName);
 		dataDir = new File(Config.DATA_DIR + appName);
 		dataDir.mkdirs();
-		File configDir = new File(Config.CONFIGS_DIR + appName);
+		File configDir = new File(Config.CONFIGS_DIR, appName);
 		configDir.mkdirs();
 		keylayoutFile = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
 
