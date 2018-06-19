@@ -6,7 +6,7 @@
     <string name="donations__google_android_market">Google Play 商店</string>
     <string name="donations__google_android_market_not_supported_title">不支援程式內贊助。</string>
     <string name="donations__google_android_market_not_supported">不支援程式內贊助， Google Play 商店是否安裝正確？</string>
-    <string name="donations__google_android_market_donate_button">贊助！</string>
+    <string name="donations__google_android_market_donate_button">贊助</string>
     <string name="donations__google_android_market_text">多少？</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">你可以選擇你想捐出多少後點擊按鈕！</string>

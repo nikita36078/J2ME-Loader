@@ -6,7 +6,7 @@
     <string name="donations__google_android_market">Google Play 商店</string>
     <string name="donations__google_android_market_not_supported_title">不支持 In-App 捐赠。</string>
     <string name="donations__google_android_market_not_supported">不支持 In-App 捐赠。你的 Google Play 商店是否安装正确了呢？</string>
-    <string name="donations__google_android_market_donate_button">捐赠！</string>
+    <string name="donations__google_android_market_donate_button">捐赠</string>
     <string name="donations__google_android_market_text">捐赠多少？</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">点击这个按钮之后选择你想要捐赠多少！</string>

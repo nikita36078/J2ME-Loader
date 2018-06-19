@@ -6,7 +6,7 @@
     <string name="donations__google_android_market">Google Play магазин</string>
     <string name="donations__google_android_market_not_supported_title">Дарения чрез приложението не се поддържат.</string>
     <string name="donations__google_android_market_not_supported">Дарения чрез приложението не се поддържат. Инсталиран ли е правилно магазина Google Play?</string>
-    <string name="donations__google_android_market_donate_button">Дарете!</string>
+    <string name="donations__google_android_market_donate_button">Дарете</string>
     <string name="donations__google_android_market_text">Колко?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Можете да изберете колко искате да дарите след натискане на бутона!</string>

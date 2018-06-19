@@ -6,7 +6,7 @@
     <string name="donations__google_android_market">Google Play Butik</string>
     <string name="donations__google_android_market_not_supported_title">In-App-donationer stödjs inte.</string>
     <string name="donations__google_android_market_not_supported">In-App-donationer stödjs inte. Är Google Play Butik installerad korrekt?</string>
-    <string name="donations__google_android_market_donate_button">Donera!</string>
+    <string name="donations__google_android_market_donate_button">Donera</string>
     <string name="donations__google_android_market_text">Hur mycket?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Du kan välja hur mycket du vill donera efter du har tryckt på knappen!</string>

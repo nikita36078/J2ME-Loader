@@ -6,7 +6,7 @@
     <string name="donations__google_android_market">Sklep Google Play</string>
     <string name="donations__google_android_market_not_supported_title">Wsparcie poprzez płatność z aplikacji nie jest dostępne.</string>
     <string name="donations__google_android_market_not_supported">Brak wsparcia dla wbudowanych płatności. Czy aplikacja Sklep Google Play jest zainstalowana prawidłowo?</string>
-    <string name="donations__google_android_market_donate_button">Przekaż!</string>
+    <string name="donations__google_android_market_donate_button">Przekaż</string>
     <string name="donations__google_android_market_text">Kwota do przekazania?</string>
     <string name="donations__paypal">PayPal</string>
     <string name="donations__paypal_description">Wybór kwoty do przekazania nastąpi po kliknięciu przycisku \"Przekaż\"!</string>
