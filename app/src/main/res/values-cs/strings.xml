@@ -93,6 +93,11 @@
   <string name="pref_requires_restart_summary">Vyžaduje restart</string>
   <string name="pref_enable_actionbar_title">Aktivovat ActionBar</string>
   <string name="pref_enable_actionbar_summary">V celoobrazovkových aplikacích</string>
+  <string name="pref_button_shape_title">Tvar tlačítka</string>
+  <string-array name="pref_button_shape_entries">
+    <item>Kolo</item>
+    <item>Čtverec</item>
+  </string-array>
   <string name="pref_app_sort_title">Pořadí řazení aplikací</string>
   <string-array name="pref_app_sort_entries">
     <item>Název</item>
