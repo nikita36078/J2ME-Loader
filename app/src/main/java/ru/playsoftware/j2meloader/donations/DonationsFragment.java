@@ -70,7 +70,6 @@ public class DonationsFragment extends Fragment {
 			"android.test.canceled", "android.test.refunded", "android.test.item_unavailable"};
 
 	private Spinner mGoogleSpinner;
-	private TextView mFlattrUrlTextView;
 
 	// Google Play helper object
 	private IabHelper mHelper;
@@ -184,10 +183,10 @@ public class DonationsFragment extends Fragment {
 					R.id.donations__google_android_market_spinner);
 			ArrayAdapter<CharSequence> adapter;
 			if (mDebug) {
-				adapter = new ArrayAdapter<CharSequence>(getActivity(),
+				adapter = new ArrayAdapter<>(getActivity(),
 						android.R.layout.simple_spinner_item, CATALOG_DEBUG);
 			} else {
-				adapter = new ArrayAdapter<CharSequence>(getActivity(),
+				adapter = new ArrayAdapter<>(getActivity(),
 						android.R.layout.simple_spinner_item, mGoogleCatalogValues);
 			}
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -450,7 +449,7 @@ public class DonationsFragment extends Fragment {
 		String htmlStart = "<html> <head><style type='text/css'>*{color: #FFFFFF; background-color: transparent;}</style>";
 
 		// set url of flattr link
-		mFlattrUrlTextView = getActivity().findViewById(R.id.donations__flattr_url);
+		TextView mFlattrUrlTextView = getActivity().findViewById(R.id.donations__flattr_url);
 		mFlattrUrlTextView.setText("https://" + mFlattrUrl);
 
 		String flattrJavascript = "<script type='text/javascript'>"

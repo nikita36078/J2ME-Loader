@@ -190,7 +190,7 @@ public class IabHelper {
 		 *
 		 * @param result The result of the setup process.
 		 */
-		public void onIabSetupFinished(IabResult result);
+		void onIabSetupFinished(IabResult result);
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class IabHelper {
 		 * @param result The result of the purchase.
 		 * @param info   The purchase information (null if purchase failed)
 		 */
-		public void onIabPurchaseFinished(IabResult result, Purchase info);
+		void onIabPurchaseFinished(IabResult result, Purchase info);
 	}
 
 	// The listener registered on launchPurchaseFlow, which we have to call back when
@@ -584,7 +584,7 @@ public class IabHelper {
 		 * @param result The result of the operation.
 		 * @param inv    The inventory.
 		 */
-		public void onQueryInventoryFinished(IabResult result, Inventory inv);
+		void onQueryInventoryFinished(IabResult result, Inventory inv);
 	}
 
 
@@ -683,7 +683,7 @@ public class IabHelper {
 		 * @param purchase The purchase that was (or was to be) consumed.
 		 * @param result   The result of the consumption operation.
 		 */
-		public void onConsumeFinished(Purchase purchase, IabResult result);
+		void onConsumeFinished(Purchase purchase, IabResult result);
 	}
 
 	/**
@@ -697,7 +697,7 @@ public class IabHelper {
 		 * @param results   The results of each consumption operation, corresponding to each
 		 *                  sku.
 		 */
-		public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results);
+		void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results);
 	}
 
 	/**
@@ -880,8 +880,7 @@ public class IabHelper {
 	int querySkuDetails(String itemType, Inventory inv, List<String> moreSkus)
 			throws RemoteException, JSONException {
 		logDebug("Querying SKU details.");
-		ArrayList<String> skuList = new ArrayList<>();
-		skuList.addAll(inv.getAllOwnedSkus(itemType));
+		ArrayList<String> skuList = new ArrayList<>(inv.getAllOwnedSkus(itemType));
 		if (moreSkus != null) {
 			for (String sku : moreSkus) {
 				if (!skuList.contains(sku)) {
@@ -929,7 +928,7 @@ public class IabHelper {
 		final Handler handler = new Handler();
 		flagStartAsync("consume");
 		(new Thread(() -> {
-			final List<IabResult> results = new ArrayList<IabResult>();
+			final List<IabResult> results = new ArrayList<>();
 			for (Purchase purchase : purchases) {
 				try {
 					consume(purchase);
