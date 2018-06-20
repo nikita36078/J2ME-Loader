@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity {
 		appsListFragment.setArguments(bundleLoad);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
-				.replace(R.id.container, appsListFragment).commitAllowingStateLoss();
+				.replace(R.id.container, appsListFragment).commitNowAllowingStateLoss();
 	}
 
 	@Override
