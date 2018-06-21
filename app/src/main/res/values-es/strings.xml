@@ -6,6 +6,7 @@
   <string name="help">Ayuda</string>
   <string name="more">Más detalles</string>
   <string name="licenses">Licencias</string>
+  <string name="templates">Plantillas</string>
   <string name="about_message">Esta aplicación te permite ejecutar aplicaciones y juegos J2ME en Android. Es compatible con la mayoría de juegos 2D y también 3D con algunas limitaciones.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Habilitar el filtrado en algunos casos puede reducir enormemente el rendimiento. Desactive esta opción si el juego es demasiado lento.&lt;BR&gt;&#8226; Los problemas de parpadeo de la imagen se pueden solucionar activando la opción \"Modo de procesamiento inmediato\".</string>
   <string name="author">Autor: </string>
@@ -27,6 +28,8 @@
   <string name="CLEAR_DATA_CMD">Borrar datos</string>
   <string name="RESET_SETTINGS_CMD">Restablecer la configuración</string>
   <string name="RESET_LAYOUT_CMD">Reiniciar disposición del teclado</string>
+  <string name="LOAD_TEMPLATE_CMD">Cargar plantilla</string>
+  <string name="SAVE_TEMPLATE_CMD">Guardar plantilla</string>
   <string name="PREF_SCREEN_OPTIONS">Opciones de pantalla</string>
   <string name="PREF_SCALE_RATIO">Escala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Escala de ajuste</string>
@@ -38,18 +41,18 @@
   <string name="PREF_HEIGHT">Alto</string>
   <string name="PREF_FONT_SMALL">Pequeño</string>
   <string name="PREF_FONT_MEDIUM">Mediano</string>
-  <string name="PREF_FONT_LARGE">Large</string>
-  <string name="PREF_FONT_SIZE_IN_SP">Values are in Scaled Pixels</string>
+  <string name="PREF_FONT_LARGE">Grande</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Los valores están en Píxeles escalados</string>
   <string name="PREF_BACKGROUND">Fondo</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
-  <string name="PREF_VK_SHOW">Elija teclado</string>
+  <string name="PREF_VK_SHOW">Mostrar teclado</string>
   <string name="PREF_VK_FEEDBACK">Respuesta háptica</string>
   <string name="PREF_TOUCH_INPUT">Entrada táctil</string>
   <string name="PREF_HW_ACCELERATION">Aceleración por Hardware (Inestable)</string>
   <string name="PREF_VK_BACK">Botones</string>
   <string name="PREF_VK_FORE">Etiquetas personales</string>
   <string name="PREF_VK_OUTLINE">Trazado</string>
-  <string name="PREF_VK_ALPHA">Opacidad:</string>
+  <string name="PREF_VK_ALPHA">&amp;Opacidad:</string>
   <string name="PREF_VK_HIDE_DELAY">Ocultar retraso: </string>
   <string name="PREF_UNIT_MS">ms</string>
   <string name="PREF_VK_SEL_FORE">Etiquetas  </string>
@@ -63,9 +66,9 @@
   <string name="SIZE_PRESETS">Plantillas</string>
   <string name="SWAP_SIZES">Intercambiar tamaños</string>
   <string name="PREF_SYS_PROPS">Propiedades del sistema</string>
-  <string name="PREF_ORIENTATION">Screen orientation</string>
+  <string name="PREF_ORIENTATION">Orientacion de la pantalla</string>
   <string-array name="PREF_ORIENTATION_ENTRIES">
-    <item>Default</item>
+    <item>Por defecto</item>
     <item>Auto</item>
     <item>Vertical</item>
     <item>Horizontal</item>
@@ -80,7 +83,7 @@
   <string name="layout_edit_finished">Modo de edición terminado</string>
   <string name="layout_edit_finish">Terminar modo de edición</string>
   <string name="layout_edit_mode">Modo de edición de disposición del teclado</string>
-  <string name="layout_scale_mode">Modo de cambiar el tamaño de disposición del teclado</string>
+  <string name="layout_scale_mode">Modo de cambio de tamaño del teclado</string>
   <string name="layout_switch">Cambiar disposición del teclado</string>
   <string name="hide_buttons">Ocultar botones</string>
   <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
@@ -92,7 +95,8 @@
   <string name="pref_requires_restart_summary">Requiere reinicio</string>
   <string name="pref_enable_actionbar_title">Permitir barra de acción</string>
   <string name="pref_enable_actionbar_summary">En aplicaciones de pantalla completa</string>
-  <string name="pref_button_shape_title">Button shape</string>
+  <string name="pref_wakelock_title">Mantener pantalla encendida</string>
+  <string name="pref_button_shape_title">Forma del botón</string>
   <string-array name="pref_button_shape_entries">
     <item>Circular</item>
     <item>Cuadrado</item>

@@ -6,6 +6,7 @@
   <string name="help">Bantuan</string>
   <string name="more">Lainnya</string>
   <string name="licenses">Lisensi</string>
+  <string name="templates">Kelola Template</string>
   <string name="about_message">Aplikasi ini digunakan untuk meluncurkan permainan dan aplikasi J2ME di Android. Mendukung kebanyakan permainan 2D dan juga beberapa permainan 3D dengan sebagaian keterbatasan.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
   <string name="author">Vendor: </string>
@@ -27,6 +28,8 @@
   <string name="CLEAR_DATA_CMD">Hapus data</string>
   <string name="RESET_SETTINGS_CMD">Setel ulang pengaturan</string>
   <string name="RESET_LAYOUT_CMD">Reset letak tombol</string>
+  <string name="LOAD_TEMPLATE_CMD">Memakai template</string>
+  <string name="SAVE_TEMPLATE_CMD">Simpan template</string>
   <string name="PREF_SCREEN_OPTIONS">Opsi layar</string>
   <string name="PREF_SCALE_RATIO">Skala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
@@ -91,7 +94,7 @@
   </string-array>
   <string name="pref_requires_restart_summary">Perubahan hanya berlaku setelah mengulang J2ME Loader</string>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
-  <string name="pref_enable_actionbar_summary">Aplikasi dalam layar penuh</string>
+  <string name="pref_enable_actionbar_summary">ActionBar menampilkan nama MIDlet dan menu. Non-aktifkan ini jika ingin dalam keadaan layar penuh.</string>
   <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
   <string name="pref_button_shape_title">Bentuk tombol</string>
   <string-array name="pref_button_shape_entries">
