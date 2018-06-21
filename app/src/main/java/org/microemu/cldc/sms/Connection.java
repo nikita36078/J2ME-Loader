@@ -28,15 +28,19 @@ import javax.wireless.messaging.MessageListener;
 public class Connection implements MessageConnection, ConnectionImplementation {
 
 	private MessageListener listener;
+	private String name;
+	private boolean noMessages;
+	private boolean closed;
 
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
+		this.name = name;
 		return this;
 	}
 
 	@Override
 	public Message newMessage(String type) {
-		return new MessageImpl(type, null);
+		return new MessageImpl(type, name);
 	}
 
 	@Override
@@ -46,20 +50,28 @@ public class Connection implements MessageConnection, ConnectionImplementation {
 
 	@Override
 	public int numberOfSegments(Message message) {
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public Message receive() throws IOException, InterruptedIOException {
-		MessageImpl message = new MessageImpl(MessageConnection.TEXT_MESSAGE, "addr");
+		while (noMessages && !closed) {
+			try {
+				Thread.sleep(60000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		MessageImpl message = new MessageImpl(MessageConnection.TEXT_MESSAGE, name);
 		message.setPayloadText("sms");
+		noMessages = true;
 		return message;
 	}
 
 	@Override
 	public void send(Message message) throws IOException, InterruptedIOException {
 		if (listener != null) {
-			Connection connection = (Connection) openConnection(null, 0, false);
+			Connection connection = (Connection) openConnection(name, 0, false);
 			listener.notifyIncomingMessage(connection);
 		}
 	}
@@ -71,5 +83,6 @@ public class Connection implements MessageConnection, ConnectionImplementation {
 
 	@Override
 	public void close() throws IOException {
+		closed = true;
 	}
 }
