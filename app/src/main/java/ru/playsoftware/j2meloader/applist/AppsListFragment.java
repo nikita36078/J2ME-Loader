@@ -210,10 +210,12 @@ public class AppsListFragment extends ListFragment {
 		switch (item.getItemId()) {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
-				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), Config.class);
-				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder = new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
-						.setIntent(launchIntent)
-						.setShortLabel(appItem.getTitle());
+				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
+						Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
+						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
+								.setIntent(launchIntent)
+								.setShortLabel(appItem.getTitle());
 				if (bitmap != null) {
 					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
 				} else {
