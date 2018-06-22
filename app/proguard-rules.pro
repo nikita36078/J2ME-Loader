@@ -22,6 +22,9 @@
 -keep class com.nokia.mid.** { *; }
 -keep class com.vodafone.util.** { *; }
 -keep class org.microemu.** { *; }
+# Keep the BuildConfig
+-keep class ru.playsoftware.j2meloader.BuildConfig { *; }
+
 -keepclasseswithmembernames class * {
     native <methods>;
 }
