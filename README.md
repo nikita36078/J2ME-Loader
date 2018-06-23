@@ -14,6 +14,8 @@ System requirements: Android 4.0+
 
 <a href="https://play.google.com/store/apps/details?id=ru.playsoftware.j2meloader">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
+<a href="https://f-droid.org/app/ru.playsoftware.j2meloader">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
 
 ## Compatibility
 [List of the tested Java Games (Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Touchscreen))  
