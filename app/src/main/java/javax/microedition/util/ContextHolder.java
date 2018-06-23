@@ -86,6 +86,8 @@ public class ContextHolder {
 			String className = resClass.getPackage().getName().replace('.', '/');
 			resName = className + "/" + resName;
 		}
+		// Add support for Siemens file path
+		resName = resName.replace('\\', '/');
 		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		try {
 			File resFile = new File(MyClassLoader.getResFolder(), resName);

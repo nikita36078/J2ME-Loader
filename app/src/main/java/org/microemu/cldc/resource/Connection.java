@@ -37,8 +37,7 @@ public class Connection implements InputConnection, ConnectionImplementation {
 
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
-		path = name.replace(PROTOCOL, "").replace(PROTOCOL2, "")
-				.replace('\\', '/');
+		path = name.replace(PROTOCOL, "").replace(PROTOCOL2, "");
 		return this;
 	}
 
