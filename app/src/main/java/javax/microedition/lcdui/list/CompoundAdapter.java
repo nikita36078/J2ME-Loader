@@ -27,11 +27,35 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.ViewHandler;
+import javax.microedition.lcdui.event.SimpleEvent;
 
 public abstract class CompoundAdapter implements Adapter {
 	private ArrayList<CompoundItem> items;
 	private ArrayList<DataSetObserver> observers;
 	protected Context context;
+
+	private SimpleEvent msgDataSetChanged = new SimpleEvent() {
+		@Override
+		public void process() {
+			for (DataSetObserver observer : observers) {
+				try {
+					observer.onChanged();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	};
+
+	private SimpleEvent msgDataSetInvalidated = new SimpleEvent() {
+		@Override
+		public void process() {
+			for (DataSetObserver observer : observers) {
+				observer.onInvalidated();
+			}
+		}
+	};
 
 	public CompoundAdapter(Context context) {
 		this.context = context;
@@ -136,18 +160,10 @@ public abstract class CompoundAdapter implements Adapter {
 	}
 
 	public void notifyDataSetChanged() {
-		for (DataSetObserver observer : observers) {
-			try {
-				observer.onChanged();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		ViewHandler.postEvent(msgDataSetChanged);
 	}
 
 	public void notifyDataSetInvalidated() {
-		for (DataSetObserver observer : observers) {
-			observer.onInvalidated();
-		}
+		ViewHandler.postEvent(msgDataSetInvalidated);
 	}
 }
