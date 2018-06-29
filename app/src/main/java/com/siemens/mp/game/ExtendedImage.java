@@ -34,6 +34,9 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 		this.image = image;
 	}
 
+	public void blitToScreen(int x, int y) {
+	}
+
 	public void clear(byte color) {
 		Graphics g = image.getGraphics();
 		g.setColor(color);

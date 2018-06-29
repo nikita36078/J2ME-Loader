@@ -58,22 +58,22 @@ public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 		return v.indexOf(gobject);
 	}
 
-
 	public void insertObject(GraphicObject gobject, int position) {
 		v.insertElementAt(gobject, position);
 	}
 
-
 	public void paint(ExtendedImage eimage, int x, int y) {
-		this.paint(eimage.getImage(), x, y);
+		paint(eimage.getImage(), x, y);
 	}
-
 
 	public void paint(Image image, int x, int y) {
 		Graphics g = image.getGraphics();
 
 		for (int i = 0; i < v.size(); i++) {
 			GraphicObject go = (GraphicObject) v.elementAt(i);
+			if (go instanceof Sprite && go.getVisible()) {
+				((Sprite) go).paint(g);
+			}
 		}
 
 	}
