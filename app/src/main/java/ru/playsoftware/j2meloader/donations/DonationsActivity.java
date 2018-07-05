@@ -24,6 +24,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import org.sufficientlysecure.donations.DonationsFragment;
+
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
@@ -42,7 +44,7 @@ public class DonationsActivity extends BaseActivity {
 	 * PayPal
 	 */
 	private static final String PAYPAL_USER = "nikita36078@mail.ru";
-	private static final String PAYPAL_CURRENCY_CODE = "RUB";
+	private static final String PAYPAL_CURRENCY_CODE = "USD";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,11 @@ public class DonationsActivity extends BaseActivity {
 		if (BuildConfig.DONATIONS_GOOGLE) {
 			donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, true, GOOGLE_PUBKEY, GOOGLE_CATALOG,
 					getResources().getStringArray(R.array.donation_google_catalog_values), false, null, null,
-					null, false, null, null);
+					null, false, null, null, false, null);
 		} else {
 			donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null,
 					null, true, PAYPAL_USER, PAYPAL_CURRENCY_CODE,
-					getString(R.string.donation_paypal_item), false, null, null);
+					getString(R.string.donation_paypal_item), false, null, null, false, null);
 		}
 
 		ft.replace(R.id.donations_activity_container, donationsFragment, "donationsFragment");
