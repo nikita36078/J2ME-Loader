@@ -1,6 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,15 @@
 
 package javax.microedition.lcdui;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import java.util.Arrays;
 
-public class Alert extends Screen implements Runnable, DialogInterface.OnClickListener {
+public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public static final int FOREVER = -2;
 	public static final Command DISMISS_COMMAND = new Command("", Command.OK, 0);
 
@@ -36,6 +36,7 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 	private Gauge indicator;
 
 	private Form form;
+	private Displayable nextDisplayable;
 
 	private Command[] commands;
 	private int positive, negative, neutral;
@@ -89,23 +90,15 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 		return timeout >= 0 && countCommands() < 2;
 	}
 
-	@Override
-	public void run() {
-		try {
-			Thread.sleep(timeout);
-			Display display = Display.getDisplay(null);
-			display.setCurrent(display.getCurrent());
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
-		}
-	}
-
 	public AlertDialog.Builder prepareDialog() {
 		Context context = getParentActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
+		builder.setOnDismissListener(dialog -> {
+			Display.getDisplay(null).setCurrent(nextDisplayable);
+		});
 
 		if (image != null) {
 			builder.setIcon(new BitmapDrawable(context.getResources(), image.getBitmap()));
@@ -143,6 +136,10 @@ public class Alert extends Screen implements Runnable, DialogInterface.OnClickLi
 		}
 
 		return builder;
+	}
+
+	public void setNextDisplayable(Displayable nextDisplayable) {
+		this.nextDisplayable = nextDisplayable;
 	}
 
 	@Override

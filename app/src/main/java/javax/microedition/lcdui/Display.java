@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 
 import android.content.Context;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import javax.microedition.lcdui.event.RunnableEvent;
@@ -74,7 +75,7 @@ public class Display {
 	}
 
 	public void setCurrent(Displayable disp) {
-		if (disp == null) {
+		if (disp == null || disp == current) {
 			return;
 		}
 		if (disp instanceof Alert) {
@@ -86,11 +87,26 @@ public class Display {
 	}
 
 	public void setCurrent(final Alert alert, Displayable disp) {
-		changeCurrent(disp);
-		activity.runOnUiThread(() -> alert.prepareDialog().show());
-		if (alert.finiteTimeout()) {
-			(new Thread(alert)).start();
+		if (disp == null) {
+			throw new NullPointerException();
+		} else if (disp instanceof Alert) {
+			throw new IllegalArgumentException();
 		}
+		alert.setNextDisplayable(disp);
+		activity.runOnUiThread(() -> {
+			AlertDialog alertDialog = alert.prepareDialog().create();
+			alertDialog.show();
+			if (alert.finiteTimeout()) {
+				(new Thread(() -> {
+					try {
+						Thread.sleep(alert.getTimeout());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					alertDialog.dismiss();
+				})).start();
+			}
+		});
 	}
 
 	private void changeCurrent(Displayable disp) {
