@@ -91,7 +91,7 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 			ZipUtils.unzip(fixedJar, tmpDir);
 		} catch (IOException e) {
 			e.printStackTrace();
-			err = "Brocken jar";
+			err = "Broken jar";
 			deleteTemp();
 			return false;
 		}
