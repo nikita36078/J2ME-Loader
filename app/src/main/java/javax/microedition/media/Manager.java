@@ -41,7 +41,7 @@ public class Manager {
 
 	public static Player createPlayer(final InputStream stream, String type) throws IOException {
 		String[] supportedTypes = getSupportedContentTypes(null);
-		if (Arrays.asList(supportedTypes).contains(type)) {
+		if (Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
 			return new MicroPlayer(new InternalDataSource(stream, type));
 		} else {
 			return new BasePlayer();
