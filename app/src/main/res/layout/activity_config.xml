@@ -391,13 +391,13 @@
             <TableRow>
 
                 <Button
-                    android:id="@+id/cmdVKSelBack"
+                    android:id="@+id/cmdVKSelFore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/PREF_VK_SEL_FORE" />
 
                 <EditText
-                    android:id="@+id/tfVKSelBack"
+                    android:id="@+id/tfVKSelFore"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -409,13 +409,13 @@
             <TableRow>
 
                 <Button
-                    android:id="@+id/cmdVKSelFore"
+                    android:id="@+id/cmdVKSelBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/PREF_VK_SEL_BACK" />
 
                 <EditText
-                    android:id="@+id/tfVKSelFore"
+                    android:id="@+id/tfVKSelBack"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
