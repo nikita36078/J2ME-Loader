@@ -20,7 +20,6 @@ package ru.playsoftware.j2meloader.util;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,9 +39,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.applist.AppsListFragment;
+import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class FileUtils {
@@ -143,7 +141,7 @@ public class FileUtils {
 		return file.getPath();
 	}
 
-	public static ArrayList<AppItem> getAppsList(Context context) {
+	private static ArrayList<AppItem> getAppsList() {
 		ArrayList<AppItem> apps = new ArrayList<>();
 		String[] appFolders = new File(Config.APP_DIR).list();
 		if (appFolders != null) {
@@ -151,24 +149,24 @@ public class FileUtils {
 				File temp = new File(Config.APP_DIR, appFolder);
 				try {
 					if (temp.isDirectory() && temp.list().length > 0) {
-						AppItem item = getApp(temp);
+						AppItem item = getApp(temp.getName());
 						apps.add(item);
 					} else {
 						temp.delete();
 					}
 				} catch (RuntimeException re) {
 					re.printStackTrace();
-					FileUtils.deleteDirectory(temp);
-					Toast.makeText(context, R.string.error, Toast.LENGTH_SHORT).show();
+					deleteDirectory(temp);
 				}
 			}
 		}
 		return apps;
 	}
 
-	public static AppItem getApp(File file) {
-		LinkedHashMap<String, String> params = FileUtils
-				.loadManifest(new File(file.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
+	public static AppItem getApp(String path) {
+		File file = new File(Config.APP_DIR, path);
+		LinkedHashMap<String, String> params =
+				loadManifest(new File(file.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
 		String imagePath = params.get("MIDlet-Icon");
 		if (imagePath == null) {
 			imagePath = params.get("MIDlet-1").split(",")[1];
@@ -180,20 +178,25 @@ public class FileUtils {
 		return item;
 	}
 
-	public static boolean checkDb(AppsListFragment fragment, List<AppItem> items) {
+	public static void deleteApp(AppItem item) {
+		File appDir = new File(item.getPathExt());
+		deleteDirectory(appDir);
+		File appSaveDir = new File(Config.DATA_DIR, item.getTitle());
+		deleteDirectory(appSaveDir);
+		File appConfigsDir = new File(Config.CONFIGS_DIR, item.getTitle());
+		deleteDirectory(appConfigsDir);
+	}
+
+	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
 		String[] appFolders = new File(Config.APP_DIR).list();
 		int itemsNum = items.size();
-		// If db is empty
-		if (itemsNum == 0) {
-			if (appFolders == null || appFolders.length == 0) {
-				return true;
-			} else {
-				return false;
+		if (appFolders == null || appFolders.length == 0) {
+			// If db isn't empty
+			if (itemsNum != 0) {
+				appRepository.deleteAll();
 			}
-		} else if (appFolders == null || appFolders.length == 0) {
-			// Else if app folder is empty
-			fragment.deleteAllApps();
-			return true;
+			appRepository.insertAll(getAppsList());
+			return;
 		}
 		List<String> appFoldersList = Arrays.asList(appFolders);
 		boolean result = true;
@@ -203,13 +206,15 @@ public class FileUtils {
 			AppItem item = iterator.next();
 			if (!appFoldersList.contains(item.getPath())) {
 				result = false;
-				fragment.deleteApp(item);
+				appRepository.delete(item);
 				iterator.remove();
 			}
 		}
 		if (appFolders.length != items.size()) {
 			result = false;
 		}
-		return result;
+		if (!result) {
+			appRepository.insertAll(getAppsList());
+		}
 	}
 }

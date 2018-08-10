@@ -25,18 +25,16 @@ import android.arch.persistence.room.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Dao
 public interface AppItemDao {
 	@Query("SELECT * FROM apps ORDER BY title COLLATE NOCASE ASC")
-	List<AppItem> getAllByName();
+	Flowable<List<AppItem>> getAllByName();
 
 	@Query("SELECT * FROM apps ORDER BY id ASC")
-	List<AppItem> getAllByDate();
-
-	@Query("SELECT count(*) FROM apps")
-	int getSize();
+	Flowable<List<AppItem>> getAllByDate();
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	void insert(AppItem item);

@@ -44,8 +44,8 @@ import ru.playsoftware.j2meloader.util.MigrationUtils;
 public class MainActivity extends BaseActivity {
 
 	public static final String APP_SORT_KEY = "appSort";
+	public static final String JAR_PATH_KEY = "jarPath";
 
-	private AppsListFragment appsListFragment;
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 
@@ -68,25 +68,19 @@ public class MainActivity extends BaseActivity {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
 					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 		} else {
-			setupActivity();
-			if (savedInstanceState == null && uri != null) {
-				try {
-					appsListFragment.convertJar(FileUtils.getJarPath(this, uri));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
+			setupActivity(savedInstanceState == null && uri != null);
 		}
 	}
 
-	private void setupActivity() {
+	private void setupActivity(boolean intentUri) {
 		initFolders();
 		checkActionBar();
 		MigrationUtils.check(this);
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
-		appsListFragment = new AppsListFragment();
+		if (intentUri) bundleLoad.putString(JAR_PATH_KEY, getJarPath());
+		AppsListFragment appsListFragment = new AppsListFragment();
 		appsListFragment.setArguments(bundleLoad);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
@@ -99,7 +93,7 @@ public class MainActivity extends BaseActivity {
 		switch (requestCode) {
 			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					setupActivity();
+					setupActivity(true);
 				} else {
 					Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 					finish();
@@ -127,6 +121,16 @@ public class MainActivity extends BaseActivity {
 				sp.edit().putBoolean("pref_actionbar_switch", true).apply();
 			}
 			sp.edit().putBoolean("pref_first_start", false).apply();
+		}
+	}
+
+	private String getJarPath() {
+		try {
+			return FileUtils.getJarPath(this, getIntent().getData());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+			return null;
 		}
 	}
 }

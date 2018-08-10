@@ -17,11 +17,27 @@
 package ru.playsoftware.j2meloader.appsdb;
 
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.content.Context;
 
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Database(entities = {AppItem.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
+	private static AppDatabase instance;
+
 	public abstract AppItemDao appItemDao();
+
+	static AppDatabase getDatabase(Context context) {
+		if (instance == null) {
+			synchronized (AppDatabase.class) {
+				if (instance == null) {
+					instance = Room.databaseBuilder(context.getApplicationContext(),
+							AppDatabase.class, "apps-database.db").build();
+				}
+			}
+		}
+		return instance;
+	}
 }

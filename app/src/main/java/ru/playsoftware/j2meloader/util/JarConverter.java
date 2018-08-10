@@ -17,10 +17,7 @@
 
 package ru.playsoftware.j2meloader.util;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.dx.command.dexer.Main;
 
@@ -31,11 +28,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipException;
 
-import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.applist.AppsListFragment;
+import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
 
-public class JarConverter extends AsyncTask<String, String, Boolean> {
+public class JarConverter {
 
 	public static final String TEMP_JAR_NAME = "tmp.jar";
 	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
@@ -44,122 +40,14 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 	private static final String TEMP_FOLDER_NAME = "tmp";
 	private static final String TAG = JarConverter.class.getName();
 
-	private final AppsListFragment fragment;
-	private String err = "Void error";
-	private ProgressDialog dialog;
-
 	private String appDirPath;
 	private String dataDirPath;
 	private final File tmpDir;
 	private File appConverted;
 
-	public JarConverter(AppsListFragment fragment) {
-		this.fragment = fragment;
-		dataDirPath = fragment.getActivity().getApplicationInfo().dataDir;
+	public JarConverter(String dataDirPath) {
+		this.dataDirPath = dataDirPath;
 		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
-		tmpDir.mkdir();
-	}
-
-	@Override
-	protected Boolean doInBackground(String... p1) {
-		boolean jadInstall = false;
-		String pathToJad = null;
-		String pathToJar = p1[0];
-		// Add jar name to ACRA
-		String targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
-		ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
-		Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar);
-		// Check extension
-		String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());
-		if (extension.equalsIgnoreCase(".jad")) {
-			jadInstall = true;
-			// Fix path to jar
-			pathToJad = pathToJar;
-			pathToJar = pathToJar.substring(0, pathToJar.length() - 1).concat("r");
-		}
-		File inputJar = new File(pathToJar);
-		File fixedJar;
-		try {
-			fixedJar = fixJar(inputJar);
-		} catch (Exception e) {
-			e.printStackTrace();
-			err = "Can't convert";
-			deleteTemp();
-			return false;
-		}
-		try {
-			ZipUtils.unzip(fixedJar, tmpDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-			err = "Broken jar";
-			deleteTemp();
-			return false;
-		}
-		appDirPath = FileUtils.loadManifest(
-				new File(tmpDir, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
-		if (appDirPath == null) {
-			err = "Brocken manifest";
-			deleteTemp();
-			return false;
-		}
-		// Remove invalid characters from app path
-		appDirPath = appDirPath.replace(":", "").replace("/", "");
-		appConverted = new File(Config.APP_DIR, appDirPath);
-		FileUtils.deleteDirectory(appConverted);
-		appConverted.mkdirs();
-		Log.d(TAG, "appConverted=" + appConverted.getPath());
-		try {
-			Main.main(new String[]{
-					"--no-optimize", "--output=" + appConverted.getPath()
-					+ Config.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
-		} catch (IOException e) {
-			e.printStackTrace();
-			err = "Can't convert";
-			deleteTemp();
-			return false;
-		}
-		// Get midlet config file
-		File conf;
-		if (jadInstall) {
-			conf = new File(pathToJad);
-		} else {
-			conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
-		}
-		try {
-			FileUtils.copyFileUsingChannel(conf, new File(appConverted, Config.MIDLET_MANIFEST_FILE));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		// Extract other resources from jar.
-		FileUtils.copyFiles(tmpDir.getPath(), Config.APP_DIR + appDirPath + Config.MIDLET_RES_DIR,
-				(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
-		deleteTemp();
-		return true;
-	}
-
-	@Override
-	public void onPreExecute() {
-		dialog = new ProgressDialog(fragment.getActivity());
-		dialog.setIndeterminate(true);
-		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setCancelable(false);
-		dialog.setMessage(fragment.getText(R.string.converting_message));
-		dialog.setTitle(R.string.converting_wait);
-		dialog.show();
-	}
-
-	@Override
-	public void onPostExecute(Boolean result) {
-		Toast toast;
-		if (result) {
-			toast = Toast.makeText(fragment.getActivity(),
-					fragment.getResources().getString(R.string.convert_complete) + " " + appDirPath, Toast.LENGTH_LONG);
-			fragment.addApp(FileUtils.getApp(appConverted));
-		} else {
-			toast = Toast.makeText(fragment.getActivity(), err, Toast.LENGTH_LONG);
-		}
-		dialog.dismiss();
-		toast.show();
 	}
 
 	private File fixJar(File inputJar) throws IOException {
@@ -185,5 +73,81 @@ public class JarConverter extends AsyncTask<String, String, Boolean> {
 		FileUtils.deleteDirectory(tmpDir);
 		File uriFolder = new File(dataDirPath, JarConverter.TEMP_URI_FOLDER_NAME);
 		FileUtils.deleteDirectory(uriFolder);
+	}
+
+	public Single<String> convert(final String path) {
+		return Single.create(emitter -> {
+			boolean jadInstall = false;
+			String pathToJad = null;
+			String pathToJar = path;
+			tmpDir.mkdir();
+
+			// Add jar name to ACRA
+			String targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
+			ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
+			Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar);
+			// Check extension
+			String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());
+			if (extension.equalsIgnoreCase(".jad")) {
+				jadInstall = true;
+				// Fix path to jar
+				pathToJad = pathToJar;
+				pathToJar = pathToJar.substring(0, pathToJar.length() - 1).concat("r");
+			}
+
+			File inputJar = new File(pathToJar);
+			File fixedJar;
+			try {
+				fixedJar = fixJar(inputJar);
+			} catch (Exception e) {
+				deleteTemp();
+				throw new ConverterException("Can't convert", e);
+			}
+			try {
+				ZipUtils.unzip(fixedJar, tmpDir);
+			} catch (IOException e) {
+				deleteTemp();
+				throw new ConverterException("Broken jar", e);
+			}
+
+			appDirPath = FileUtils.loadManifest(
+					new File(tmpDir, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
+			if (appDirPath == null) {
+				deleteTemp();
+				throw new ConverterException("Broken manifest");
+			}
+			// Remove invalid characters from app path
+			appDirPath = appDirPath.replace(":", "").replace("/", "");
+			appConverted = new File(Config.APP_DIR, appDirPath);
+			FileUtils.deleteDirectory(appConverted);
+			appConverted.mkdirs();
+			Log.d(TAG, "appConverted=" + appConverted.getPath());
+
+			try {
+				Main.main(new String[]{
+						"--no-optimize", "--output=" + appConverted.getPath()
+						+ Config.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
+			} catch (IOException e) {
+				deleteTemp();
+				throw new ConverterException("Can't convert", e);
+			}
+			// Get midlet config file
+			File conf;
+			if (jadInstall) {
+				conf = new File(pathToJad);
+			} else {
+				conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
+			}
+			try {
+				FileUtils.copyFileUsingChannel(conf, new File(appConverted, Config.MIDLET_MANIFEST_FILE));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			// Extract other resources from jar.
+			FileUtils.copyFiles(tmpDir.getPath(), Config.APP_DIR + appDirPath + Config.MIDLET_RES_DIR,
+					(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
+			deleteTemp();
+			emitter.onSuccess(appDirPath);
+		});
 	}
 }

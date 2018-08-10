@@ -17,14 +17,16 @@
 
 package ru.playsoftware.j2meloader.applist;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.arch.persistence.room.Room;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.pm.ShortcutInfoCompat;
@@ -50,11 +52,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.flowables.ConnectableFlowable;
+import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.appsdb.AppDatabase;
-import ru.playsoftware.j2meloader.appsdb.AppItemDao;
-import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.TemplatesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
@@ -68,10 +74,24 @@ import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class AppsListFragment extends ListFragment {
 
-	private AppItemDao appItemDao;
+	private AppRepository appRepository;
+	private CompositeDisposable compositeDisposable;
 	private AppsListAdapter adapter;
+	private JarConverter converter;
 	private String appSort;
+	private String jarPath;
 	private static final int FILE_CODE = 0;
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		compositeDisposable = new CompositeDisposable();
+		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
+		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
+		jarPath = getArguments().getString(MainActivity.JAR_PATH_KEY);
+		ArrayList<AppItem> apps = new ArrayList<>();
+		adapter = new AppsListAdapter(getActivity(), apps);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,13 +101,10 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
-		ArrayList<AppItem> apps = new ArrayList<>();
-		adapter = new AppsListAdapter(getActivity(), apps);
-		setListAdapter(adapter);
-		initDb();
 		registerForContextMenu(getListView());
 		setHasOptionsMenu(true);
+		setListAdapter(adapter);
+		initDb();
 		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
 		fab.setOnClickListener(v -> {
 			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
@@ -100,38 +117,33 @@ public class AppsListFragment extends ListFragment {
 		});
 	}
 
-	public void addApp(AppItem item) {
-		appItemDao.insert(item);
-		updateAppsList();
-	}
-
-	public void deleteApp(AppItem item) {
-		appItemDao.delete(item);
-		updateAppsList();
-	}
-
-	public void deleteAllApps() {
-		appItemDao.deleteAll();
-	}
-
-	private void updateAppsList() {
-		List<AppItem> apps;
-		if (appSort.equals("name")) {
-			apps = appItemDao.getAllByName();
-		} else {
-			apps = appItemDao.getAllByDate();
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (jarPath != null) {
+			convertJar(jarPath);
+			jarPath = null;
 		}
-		adapter.setItems(apps);
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		compositeDisposable.clear();
+	}
+
+	@SuppressLint("CheckResult")
 	private void initDb() {
-		AppDatabase db = Room.databaseBuilder(getActivity(),
-				AppDatabase.class, "apps-database.db").allowMainThreadQueries().build();
-		appItemDao = db.appItemDao();
-		if (!FileUtils.checkDb(this, appItemDao.getAllByName())) {
-			appItemDao.insertAll(FileUtils.getAppsList(getActivity()));
-		}
-		updateAppsList();
+		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
+		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
+				.subscribeOn(Schedulers.io()).publish();
+		listConnectableFlowable
+				.firstElement()
+				.subscribe(list -> FileUtils.updateDb(appRepository, list));
+		listConnectableFlowable
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(list -> adapter.setItems(list));
+		compositeDisposable.add(listConnectableFlowable.connect());
 	}
 
 	@Override
@@ -145,9 +157,38 @@ public class AppsListFragment extends ListFragment {
 		}
 	}
 
-	public void convertJar(String path) {
-		JarConverter converter = new JarConverter(this);
-		converter.execute(path);
+	@SuppressLint("CheckResult")
+	private void convertJar(String path) {
+		ProgressDialog dialog = new ProgressDialog(getActivity());
+		dialog.setIndeterminate(true);
+		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		dialog.setCancelable(false);
+		dialog.setMessage(getText(R.string.converting_message));
+		dialog.setTitle(R.string.converting_wait);
+		converter.convert(path)
+				.subscribeOn(Schedulers.computation())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new SingleObserver<String>() {
+					@Override
+					public void onSubscribe(Disposable d) {
+						dialog.show();
+					}
+
+					@Override
+					public void onSuccess(String s) {
+						Toast.makeText(getActivity(), getString(R.string.convert_complete)
+								+ " " + s, Toast.LENGTH_LONG).show();
+						appRepository.insert(FileUtils.getApp(s));
+						dialog.dismiss();
+					}
+
+					@Override
+					public void onError(Throwable e) {
+						e.printStackTrace();
+						Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+						dialog.dismiss();
+					}
+				});
 	}
 
 	private void showRenameDialog(final int id) {
@@ -163,7 +204,7 @@ public class AppsListFragment extends ListFragment {
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
 						item.setTitle(title);
-						addApp(item);
+						appRepository.insert(item);
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
@@ -176,13 +217,8 @@ public class AppsListFragment extends ListFragment {
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
 				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
-					File appDir = new File(item.getPathExt());
-					FileUtils.deleteDirectory(appDir);
-					File appSaveDir = new File(Config.DATA_DIR, item.getTitle());
-					FileUtils.deleteDirectory(appSaveDir);
-					File appConfigsDir = new File(Config.CONFIGS_DIR, item.getTitle());
-					FileUtils.deleteDirectory(appConfigsDir);
-					deleteApp(item);
+					FileUtils.deleteApp(item);
+					appRepository.delete(item);
 				})
 				.setNegativeButton(android.R.string.no, null);
 		builder.show();
