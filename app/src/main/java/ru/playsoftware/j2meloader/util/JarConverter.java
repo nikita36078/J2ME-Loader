@@ -59,7 +59,7 @@ public class JarConverter {
 			ZipUtils.unzip(inputJar, unpackedJarFolder);
 
 			File repackedJar = new File(tmpDir, inputJar.getName());
-			ZipUtils.zipFileAtPath(unpackedJarFolder, repackedJar);
+			ZipUtils.zip(unpackedJarFolder, repackedJar);
 
 			AndroidProducer.processJar(repackedJar, fixedJar);
 			FileUtils.deleteDirectory(unpackedJarFolder);

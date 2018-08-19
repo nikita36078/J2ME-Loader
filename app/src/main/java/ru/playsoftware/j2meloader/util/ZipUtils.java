@@ -30,27 +30,11 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtils {
 
 	private static final int BUFFER_SIZE = 2048;
-	private static String sourceFolder;
 
-	public static void zipFileAtPath(File sourceFile, File toLocation) throws IOException {
-		BufferedInputStream origin;
-		FileOutputStream dest = new FileOutputStream(toLocation);
-		ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-				dest));
-		sourceFolder = "/" + sourceFile.getName() + "/";
-		if (sourceFile.isDirectory()) {
-			zipSubFolder(out, sourceFile, sourceFile.getParent().length());
-		} else {
-			byte data[] = new byte[BUFFER_SIZE];
-			FileInputStream fi = new FileInputStream(sourceFile);
-			origin = new BufferedInputStream(fi, BUFFER_SIZE);
-			ZipEntry entry = new ZipEntry(sourceFile.getName());
-			out.putNextEntry(entry);
-			int count;
-			while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
-				out.write(data, 0, count);
-			}
-		}
+	public static void zip(File sourceFolder, File zipFile) throws IOException {
+		FileOutputStream dest = new FileOutputStream(zipFile);
+		ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+		zipSubFolder(out, sourceFolder, sourceFolder.getPath().length() + 1);
 		out.close();
 	}
 
@@ -64,9 +48,7 @@ public class ZipUtils {
 			} else {
 				byte data[] = new byte[BUFFER_SIZE];
 				String unmodifiedFilePath = file.getPath();
-				String relativePath = unmodifiedFilePath
-						.substring(basePathLength);
-				relativePath = relativePath.replace(sourceFolder, "");
+				String relativePath = unmodifiedFilePath.substring(basePathLength);
 				FileInputStream fi = new FileInputStream(unmodifiedFilePath);
 				origin = new BufferedInputStream(fi, BUFFER_SIZE);
 				ZipEntry entry = new ZipEntry(relativePath);
