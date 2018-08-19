@@ -197,7 +197,7 @@ public class EventQueue implements Runnable {
 		enabled = true;
 
 		if (thread == null) {
-			thread = new Thread(this);
+			thread = new Thread(this, "MIDletEventQueue");
 			thread.start();
 		}
 	}

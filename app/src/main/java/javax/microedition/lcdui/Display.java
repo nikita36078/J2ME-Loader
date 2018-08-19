@@ -104,7 +104,7 @@ public class Display {
 						e.printStackTrace();
 					}
 					alertDialog.dismiss();
-				})).start();
+				}, "MIDletAlertThread")).start();
 			}
 		});
 	}
@@ -154,7 +154,7 @@ public class Display {
 		if (current != null) {
 			current.postEvent(RunnableEvent.getInstance(r));
 		} else {
-			(new Thread(r)).start();
+			(new Thread(r, "MIDletDisplayThread")).start();
 		}
 	}
 

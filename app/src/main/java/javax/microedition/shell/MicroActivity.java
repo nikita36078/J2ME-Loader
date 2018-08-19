@@ -227,7 +227,7 @@ public class MicroActivity extends AppCompatActivity {
 					ContextHolder.notifyDestroyed();
 				}
 			};
-			(new Thread(r)).start();
+			(new Thread(r, "MIDletLoader")).start();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			showErrorDialog(t.getMessage());
@@ -336,7 +336,7 @@ public class MicroActivity extends AppCompatActivity {
 						}
 						ContextHolder.notifyDestroyed();
 					};
-					(new Thread(r)).start();
+					(new Thread(r, "MIDletDestroyThread")).start();
 				})
 				.setNegativeButton(android.R.string.no, null);
 		alertBuilder.create().show();

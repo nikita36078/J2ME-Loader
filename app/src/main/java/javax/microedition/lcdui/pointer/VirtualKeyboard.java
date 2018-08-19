@@ -342,7 +342,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
 		offscreenChanged = true;
-		hider = new Thread(this);
+		hider = new Thread(this, "MIDletVirtualKeyboard");
 		hider.start();
 		repeater = new KeyRepeater();
 	}

@@ -37,7 +37,7 @@ public class KeyRepeater implements Runnable {
 	public KeyRepeater() {
 		waiter = new Object();
 
-		thread = new Thread(this);
+		thread = new Thread(this, "MIDletKeyRepeater");
 		thread.start();
 	}
 
