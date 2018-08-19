@@ -20,12 +20,14 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.os.Build;
 
 public class Graphics {
 	public static final int HCENTER = 1;
@@ -107,6 +109,10 @@ public class Graphics {
 	}
 
 	public void setCanvas(Canvas canvas, Bitmap canvasBitmap) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canvas != null
+				&& canvas.getSaveCount() == 1) {
+			canvas.save();
+		}
 		this.canvas = canvas;
 		this.canvasBitmap = canvasBitmap;
 	}
@@ -201,12 +207,20 @@ public class Graphics {
 
 	public void setClip(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
-		canvas.clipRect(intRect, Region.Op.REPLACE);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			Matrix matrix = canvas.getMatrix();
+			canvas.restore();
+			canvas.setMatrix(matrix);
+			canvas.save();
+			canvas.clipRect(intRect);
+		} else {
+			canvas.clipRect(intRect, Region.Op.REPLACE);
+		}
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
-		canvas.clipRect(intRect, Region.Op.INTERSECT);
+		canvas.clipRect(intRect);
 	}
 
 	public int getClipX() {
