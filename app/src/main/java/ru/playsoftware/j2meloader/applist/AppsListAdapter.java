@@ -23,35 +23,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.playsoftware.j2meloader.R;
 
-public class AppsListAdapter extends BaseAdapter {
+public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 	private List<AppItem> list;
+	private List<AppItem> filteredList;
 	private final LayoutInflater layoutInflater;
 	private Context context;
+	private AppFilter appFilter;
 
-	public AppsListAdapter(Context context, List<AppItem> list) {
-		if (list != null) {
-			this.list = list;
-		}
+	public AppsListAdapter(Context context) {
+		this.list = new ArrayList<>();
+		this.filteredList = new ArrayList<>();
 		this.layoutInflater = LayoutInflater.from(context);
 		this.context = context;
+		this.appFilter = new AppFilter();
 	}
 
 	@Override
 	public int getCount() {
-		return list.size();
+		return filteredList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return list.get(position);
+		return filteredList.get(position);
 	}
 
 	@Override
@@ -73,7 +78,7 @@ public class AppsListAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		AppItem item = list.get(position);
+		AppItem item = filteredList.get(position);
 
 		BitmapDrawable iconDrawable = new BitmapDrawable(context.getResources(), item.getImagePathExt());
 		if (iconDrawable.getBitmap() == null) {
@@ -90,7 +95,13 @@ public class AppsListAdapter extends BaseAdapter {
 
 	public void setItems(List<AppItem> items) {
 		list = items;
+		filteredList = items;
 		notifyDataSetChanged();
+	}
+
+	@Override
+	public Filter getFilter() {
+		return appFilter;
 	}
 
 	private static class ViewHolder {
@@ -98,5 +109,33 @@ public class AppsListAdapter extends BaseAdapter {
 		TextView name;
 		TextView author;
 		TextView version;
+	}
+
+	private class AppFilter extends Filter {
+
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			FilterResults results = new FilterResults();
+			if (constraint.equals("")) {
+				results.count = list.size();
+				results.values = list;
+			} else {
+				ArrayList<AppItem> resultList = new ArrayList<>();
+				for (AppItem item : list) {
+					if (item.getTitle().toLowerCase().contains(constraint.toString().toLowerCase())) {
+						resultList.add(item);
+					}
+				}
+				results.count = resultList.size();
+				results.values = resultList;
+			}
+			return results;
+		}
+
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			filteredList = (List<AppItem>) results.values;
+			notifyDataSetChanged();
+		}
 	}
 }

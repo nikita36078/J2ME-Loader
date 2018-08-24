@@ -9,6 +9,7 @@
     <string name="about">About</string>
     <string name="help">Help</string>
     <string name="more">More</string>
+    <string name="search">Search</string>
     <string name="licenses">Licenses</string>
     <string name="templates">Templates</string>
     <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.&lt;BR></string>

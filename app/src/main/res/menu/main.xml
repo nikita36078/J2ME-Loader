@@ -4,9 +4,14 @@
     tools:context="ru.playsoftware.j2meloader.MainActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:title="@string/search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_about"
         android:title="@string/about"
-        app:showAsAction="withText|ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
