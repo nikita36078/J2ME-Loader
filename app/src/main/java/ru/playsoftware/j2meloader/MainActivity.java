@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity {
 		switch (requestCode) {
 			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					setupActivity(true);
+					setupActivity(getIntent().getData() != null);
 				} else {
 					Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 					finish();
