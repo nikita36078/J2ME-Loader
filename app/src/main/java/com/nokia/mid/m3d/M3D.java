@@ -84,13 +84,13 @@ public class M3D {
 	public void removeBuffers() {
 	} // runs only on app shutdown
 
-	public void cullFace(int a) {
+	public void cullFace(int mode) {
 	} // guessing front or back facing? set to 1029
 
 	public void viewport(int x, int y, int w, int h) {
 	} // called once, always 0, 0, 96, 65
 
-	public void clear(int a) // what is a? c.z (Get Ready) passes 0x4100 (16640)
+	public void clear(int mask) // GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT (16640)
 	{
 		gc.setColor(clearcolor);
 		gc.fillRect(0, 0, width, height);
@@ -112,11 +112,11 @@ public class M3D {
 		identity(matrix);
 	}
 
-	public void frustumxi(int left, int right, int top, int bottom, int near, int far) //-3,3, -2,2, 3,1000
+	public void frustumxi(int left, int right, int bottom, int top, int near, int far) //-3,3, -2,2, 3,1000
 	{
 		//System.out.println("frustrumxi("+a+", "+b+", "+c+", "+d+", "+near+", "+far+");");
 		// c.c: bu.frustumxi(-bp << 11, bp << 11, -bo << 11, bo << 11, 196608, 65536000);
-		projection(projm, width, height, 30, near, far);
+		projection(projm, width, height, 60, near, far);
 	}
 
 	public void scalexi(int x, int y, int z) {
@@ -378,9 +378,7 @@ public class M3D {
 	}
 
 	private void clone(double[] m1, double[] m2) {
-		for (int i = 0; i < 16; i++) {
-			m1[i] = m2[i];
-		}
+		System.arraycopy(m2, 0, m1, 0, 16);
 	}
 
 	private void matmul(double[] m1, double[] m2) {

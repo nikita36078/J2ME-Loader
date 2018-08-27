@@ -40,17 +40,13 @@ public class Texture {
 	public Texture() {
 	}
 
-	public Texture(int a, int b, Image c) {
+	public Texture(int target, int format, Image c) {
+		// target = GL_TEXTURE_2D (3553), format = GL_LUMINANCE8_EXT (32832)
 		texture = c;
 		width = texture.getWidth();
 		height = texture.getHeight();
 		imagedata = new int[width * height];
 		texture.getRGB(imagedata, 0, width, 0, 0, width, height);
-		// Fix Alpha //
-		for (int i = 0; i < imagedata.length; i++) {
-			imagedata[i] |= 0x00000000;
-			imagedata[i] &= 0xFFFFFFFF;
-		}
 	}
 
 	// Texture mapping stuff //
@@ -104,9 +100,7 @@ public class Texture {
 	}
 
 	private void clone(double[] m1, double[] m2) {
-		for (int i = 0; i < 9; i++) {
-			m1[i] = m2[i];
-		}
+		System.arraycopy(m2, 0, m1, 0, 9);
 	}
 
 	private void inverse(double[] m) // invert 3x3 matrix
