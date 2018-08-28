@@ -168,6 +168,9 @@ public class DirectGraphicsImp implements DirectGraphics {
 		if (width < 0 || height < 0) {
 			throw new IllegalArgumentException();
 		}
+		if (width == 0 || height == 0) {
+			return;
+		}
 
 		int transform = getTransformation(manipulation);
 		int[] pixres = new int[height * width];
@@ -208,7 +211,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 				break;
 			}
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Illegal format: " + format);
 		}
 
 		Image image = Image.createRGBImage(pixres, width, height, true);
@@ -229,8 +232,17 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	@Override
 	public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+		if (pix == null) {
+			throw new NullPointerException();
+		}
 		if (format != TYPE_USHORT_4444_ARGB && format != TYPE_USHORT_444_RGB) {
 			throw new IllegalArgumentException("Illegal format: " + format);
+		}
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (width == 0 || height == 0) {
+			return;
 		}
 
 		int transform = getTransformation(manipulation);
@@ -263,8 +275,17 @@ public class DirectGraphicsImp implements DirectGraphics {
 	 */
 	@Override
 	public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+		if (pix == null) {
+			throw new NullPointerException();
+		}
 		if (format != TYPE_INT_888_RGB && format != TYPE_INT_8888_ARGB) {
 			throw new IllegalArgumentException("Illegal format: " + format);
+		}
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (width == 0 || height == 0) {
+			return;
 		}
 
 		int transform = getTransformation(manipulation);
