@@ -39,20 +39,10 @@ public class DirectGraphicsImp implements DirectGraphics {
 	private Graphics graphics;
 	private int alphaComponent;
 
-	/**
-	 * @param g
-	 */
 	public DirectGraphicsImp(Graphics g) {
 		graphics = g;
 	}
 
-	/**
-	 * @param img
-	 * @param x
-	 * @param y
-	 * @param anchor
-	 * @param manipulation ignored, since manipulations are not supported at the moment
-	 */
 	@Override
 	public void drawImage(Image img, int x, int y, int anchor, int manipulation) {
 		if (img == null) {
@@ -67,99 +57,44 @@ public class DirectGraphicsImp implements DirectGraphics {
 		}
 	}
 
-	/**
-	 * @param argb
-	 */
 	@Override
 	public void setARGBColor(int argb) {
 		alphaComponent = (argb >> 24 & 0xff);
 		graphics.setColorAlpha(argb);
 	}
 
-	/**
-	 * @return
-	 */
 	@Override
 	public int getAlphaComponent() {
 		return alphaComponent;
 	}
 
-	/**
-	 * @return
-	 */
 	@Override
 	public int getNativePixelFormat() {
 		return TYPE_INT_8888_ARGB;
 	}
 
-	/**
-	 * @param xPoints
-	 * @param xOffset
-	 * @param yPoints
-	 * @param yOffset
-	 * @param nPoints
-	 * @param argbColor
-	 */
 	@Override
 	public void drawPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
 
-	/**
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param x3
-	 * @param y3
-	 * @param argbColor
-	 */
 	@Override
 	public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
 		drawPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
 
-	/**
-	 * @param xPoints
-	 * @param xOffset
-	 * @param yPoints
-	 * @param yOffset
-	 * @param nPoints
-	 * @param argbColor
-	 */
 	@Override
 	public void fillPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.fillPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
 
-	/**
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param x3
-	 * @param y3
-	 * @param argbColor
-	 */
 	@Override
 	public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
 		fillPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3, argbColor);
 	}
 
-	/**
-	 * @param pix
-	 * @param alpha
-	 * @param off
-	 * @param scanlen
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param manipulation ignored, since manipulations are not supported at the moment
-	 * @param format
-	 */
 	@Override
 	public void drawPixels(byte[] pix, byte[] alpha, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
@@ -218,18 +153,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
-	/**
-	 * @param pix
-	 * @param trans
-	 * @param off
-	 * @param scanlen
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param manipulation
-	 * @param format
-	 */
 	@Override
 	public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
@@ -250,7 +173,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
-				int c = toARGB(pix[off + ix + iy * scanlen], format);
+				int c = toARGB32(pix[off + ix + iy * scanlen], format);
 				if (format == TYPE_USHORT_444_RGB) {
 					c |= (0xFF << 24);
 				}
@@ -261,18 +184,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
-	/**
-	 * @param pix
-	 * @param trans
-	 * @param off
-	 * @param scanlen
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param manipulation
-	 * @param format
-	 */
 	@Override
 	public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
@@ -304,51 +215,66 @@ public class DirectGraphicsImp implements DirectGraphics {
 		graphics.drawRegion(image, 0, 0, width, height, transform, x, y, 0);
 	}
 
-	/**
-	 * @param pix
-	 * @param alpha
-	 * @param offset
-	 * @param scanlen
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param format
-	 */
 	@Override
 	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height,
 						  int format) {
 		Log.e(TAG, "public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
 	}
 
-	/**
-	 * @param pix
-	 * @param offset
-	 * @param scanlen
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param format
-	 */
 	@Override
 	public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
-		Log.e(TAG, "public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format)");
+		if (pix == null) {
+			throw new NullPointerException();
+		}
+		if (format != TYPE_USHORT_444_RGB && format != TYPE_USHORT_4444_ARGB) {
+			throw new IllegalArgumentException("Illegal format: " + format);
+		}
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (width == 0 || height == 0) {
+			return;
+		}
+
+		int[] pixres = new int[width * height];
+		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
+		for (int iy = 0; iy < height; iy++) {
+			for (int ix = 0; ix < width; ix++) {
+				short c = toARGB16(pixres[offset + ix + iy * scanlen], format);
+				if (format == TYPE_USHORT_444_RGB) {
+					c |= (0xF << 12);
+				}
+				pix[offset + iy * scanlen + ix] = c;
+			}
+		}
 	}
 
-	/**
-	 * @param pix
-	 * @param offset
-	 * @param scanlen
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param format
-	 */
 	@Override
 	public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
-		Log.e(TAG, "public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format");
+		if (pix == null) {
+			throw new NullPointerException();
+		}
+		if (format != TYPE_INT_888_RGB && format != TYPE_INT_8888_ARGB) {
+			throw new IllegalArgumentException("Illegal format: " + format);
+		}
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (width == 0 || height == 0) {
+			return;
+		}
+
+		int[] pixres = new int[width * height];
+		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
+		for (int iy = 0; iy < height; iy++) {
+			for (int ix = 0; ix < width; ix++) {
+				int c = pixres[offset + ix + iy * scanlen];
+				if (format == TYPE_INT_888_RGB) {
+					c |= (0xFF << 24);
+				}
+				pix[offset + iy * scanlen + ix] = c;
+			}
+		}
 	}
 
 	private static int doAlpha(byte[] pix, byte[] alpha, int pos, int shift) {
@@ -369,7 +295,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 		return ((b & (byte) (1 << pos)) != 0);
 	}
 
-	private static int toARGB(int s, int type) {
+	private static int toARGB32(short s, int type) {
+		int result = 0;
 		switch (type) {
 			case TYPE_USHORT_4444_ARGB: {
 				int a = ((s) & 0xF000) >>> 12;
@@ -377,7 +304,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 				int g = ((s) & 0x00F0) >>> 4;
 				int b = ((s) & 0x000F);
 
-				s = ((a * 15) << 24) | ((r * 15) << 16) | ((g * 15) << 8) | (b * 15);
+				result = (a << 28) | (r << 20) | (g << 12) | (b << 4);
 				break;
 			}
 			case TYPE_USHORT_444_RGB: {
@@ -385,11 +312,35 @@ public class DirectGraphicsImp implements DirectGraphics {
 				int g = ((s) & 0x00F0) >>> 4;
 				int b = ((s) & 0x000F);
 
-				s = ((r * 15) << 16) | ((g * 15) << 8) | (b * 15);
+				result = (r << 20) | (g << 12) | (b << 4);
 				break;
 			}
 		}
-		return s;
+		return result;
+	}
+
+	private static short toARGB16(int s, int type) {
+		short result = 0;
+		switch (type) {
+			case TYPE_USHORT_4444_ARGB: {
+				int a = ((s) & 0xFF000000) >>> 28;
+				int r = ((s) & 0x00FF0000) >>> 20;
+				int g = ((s) & 0x0000FF00) >>> 12;
+				int b = ((s) & 0x000000FF) >>> 4;
+
+				result = (short) ((a << 12) | (r << 8) | (g << 4) | b);
+				break;
+			}
+			case TYPE_USHORT_444_RGB: {
+				int r = ((s) & 0x00FF0000) >>> 20;
+				int g = ((s) & 0x0000FF00) >>> 12;
+				int b = ((s) & 0x000000FF) >>> 4;
+
+				result = (short) ((r << 8) | (g << 4) | b);
+				break;
+			}
+		}
+		return result;
 	}
 
 	private static boolean isTransparent(int s) {

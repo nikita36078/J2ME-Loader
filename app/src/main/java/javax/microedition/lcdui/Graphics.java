@@ -442,4 +442,9 @@ public class Graphics {
 		Bitmap bitmap = Bitmap.createBitmap(canvasBitmap, x_src, y_src, width, height);
 		drawRegion(new Image(bitmap), x_src, y_src, width, height, 0, x_dest, y_dest, anchor);
 	}
+
+	public void getPixels(int[] pixels, int offset, int stride,
+						  int x, int y, int width, int height) {
+		canvasBitmap.getPixels(pixels, offset, stride, x, y, width, height);
+	}
 }
