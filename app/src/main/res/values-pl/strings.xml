@@ -6,6 +6,7 @@
   <string name="help">Pomoc</string>
   <string name="more">Więcej</string>
   <string name="licenses">Licencje</string>
+  <string name="templates">Szablony</string>
   <string name="about_message">Ta aplikacja pozwala uruchamiać aplikacje i gry J2ME na urządzeniu z systemem Android. Obsługuje większość gier 2D, a także 3D z pewnymi ograniczeniami.&lt;BR&gt;</string>
   <string name="help_message">&#8226;Włączenie filtrowania w niektórych przypadkach może negatywnie wpłynąć na wydajność. Wyłącz tą opcję jeśli gra działa zbyt wolno.&lt;BR&gt;&#8226;Problem migotania obrazu może być naprawiony poprzez zaznaczenie opcji \"Tryb natychmiastowego przetwarzania\".</string>
   <string name="author">Autor: </string>
@@ -27,6 +28,8 @@
   <string name="CLEAR_DATA_CMD">Wyczyść dane</string>
   <string name="RESET_SETTINGS_CMD">Zresetuj ustawienia</string>
   <string name="RESET_LAYOUT_CMD">Zresetuj układ przycisków</string>
+  <string name="LOAD_TEMPLATE_CMD">Wczytaj szablon</string>
+  <string name="SAVE_TEMPLATE_CMD">Zapisz szablon</string>
   <string name="PREF_SCREEN_OPTIONS">Opcje ekranu</string>
   <string name="PREF_SCALE_RATIO">Skala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Skaluj, aby dopasować</string>
@@ -92,6 +95,7 @@
   <string name="pref_requires_restart_summary">Wymaga restartu</string>
   <string name="pref_enable_actionbar_title">Włącz ActionBar</string>
   <string name="pref_enable_actionbar_summary">W aplikacjach pełnoekranowych</string>
+  <string name="pref_wakelock_title">Pozostaw ekran włączony</string>
   <string name="pref_button_shape_title">Kształt przycisków</string>
   <string-array name="pref_button_shape_entries">
     <item>Okrągłe</item>
