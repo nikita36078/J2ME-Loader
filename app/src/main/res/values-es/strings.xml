@@ -52,11 +52,11 @@
   <string name="PREF_VK_BACK">Botones</string>
   <string name="PREF_VK_FORE">Etiquetas personales</string>
   <string name="PREF_VK_OUTLINE">Trazado</string>
-  <string name="PREF_VK_ALPHA">&amp;Opacidad:</string>
+  <string name="PREF_VK_ALPHA">Opacidad: </string>
   <string name="PREF_VK_HIDE_DELAY">Ocultar retraso: </string>
   <string name="PREF_UNIT_MS">ms</string>
-  <string name="PREF_VK_SEL_FORE">Etiquetas  </string>
-  <string name="PREF_VK_SEL_BACK">Botones)</string>
+  <string name="PREF_VK_SEL_FORE">Etiquetas (P)</string>
+  <string name="PREF_VK_SEL_BACK">Botones (P)</string>
   <string name="PREF_VK_KEY_SIZES">Tamaño de teclas</string>
   <string name="PREF_VK_NAV_KEYS">Joystick: </string>
   <string name="PREF_VK_SOFT_KEYS">Teclas programables: </string>
