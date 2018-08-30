@@ -27,6 +27,8 @@
   <string name="CLEAR_DATA_CMD">ล้างข้อมูล</string>
   <string name="RESET_SETTINGS_CMD">ตั้งค่าใหม่</string>
   <string name="RESET_LAYOUT_CMD">รีเซ็ต keylayout</string>
+  <string name="LOAD_TEMPLATE_CMD">โหลดแม่แบบ</string>
+  <string name="SAVE_TEMPLATE_CMD">บันทึกแม่แบบ</string>
   <string name="PREF_SCREEN_OPTIONS">ตัวเลือกหน้าจอ</string>
   <string name="PREF_SCALE_RATIO">ขนาด(%)</string>
   <string name="PREF_SCALE_TO_FIT">ปรับพอดี</string>
