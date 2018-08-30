@@ -31,7 +31,7 @@
   <string name="LOAD_TEMPLATE_CMD">加载模板</string>
   <string name="SAVE_TEMPLATE_CMD">保存模板</string>
   <string name="PREF_SCREEN_OPTIONS">屏幕选项</string>
-  <string name="PREF_SCALE_RATIO">比例</string>
+  <string name="PREF_SCALE_RATIO">比例(%)</string>
   <string name="PREF_SCALE_TO_FIT">自适应屏幕</string>
   <string name="PREF_KEEP_ASPECT_RATIO">保持长宽比</string>
   <string name="PREF_FILTER">图像虚化</string>
@@ -52,7 +52,7 @@
   <string name="PREF_VK_BACK">按键</string>
   <string name="PREF_VK_FORE">标签</string>
   <string name="PREF_VK_OUTLINE">边框</string>
-  <string name="PREF_VK_ALPHA">透明度</string>
+  <string name="PREF_VK_ALPHA">透明度: </string>
   <string name="PREF_VK_HIDE_DELAY">隐藏延迟 </string>
   <string name="PREF_UNIT_MS">毫秒</string>
   <string name="PREF_VK_SEL_FORE">标签 (P)</string>
