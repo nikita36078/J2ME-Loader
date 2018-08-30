@@ -8,6 +8,7 @@
   <string name="licenses">Лицензи</string>
   <string name="templates">Шаблони</string>
   <string name="about_message">Това приложение ви позволява да стартирате J2ME приложения и игри на Android.Поддържа повечето дву измерни и три измерни игри със някои лимитации.&lt;BR&gt;</string>
+  <string name="help_message">&#8226; Включването на филтри може значително да подобри производителността.Изключете тази опция ако играта е прекалено бавна.&lt;BR&gt;&#8226; Премигвания на екрана могат да бъдат поправени като изключите опцията за незабавна обработка.</string>
   <string name="author">Автор: </string>
   <string name="version">Версия: </string>
   <string name="no_data_for_display">Няма данни</string>
@@ -27,17 +28,21 @@
   <string name="CLEAR_DATA_CMD">Изчистване на данните</string>
   <string name="RESET_SETTINGS_CMD">Нулиране на настройките</string>
   <string name="RESET_LAYOUT_CMD">Нулиране на подредбата за клавиатурата</string>
+  <string name="LOAD_TEMPLATE_CMD">Отваряне на шаблон</string>
+  <string name="SAVE_TEMPLATE_CMD">Запазване на шаблон</string>
   <string name="PREF_SCREEN_OPTIONS">Опции на екрана</string>
   <string name="PREF_SCALE_RATIO">Мащаб(%)</string>
   <string name="PREF_SCALE_TO_FIT">Мащабиране до напасване</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Запази пропорцията</string>
   <string name="PREF_FILTER">Филтър</string>
+  <string name="PREF_IMMEDIATE">Режим на незабавна обработка</string>
   <string name="PREF_FONT_OPTIONS">Опции за шрифта</string>
   <string name="PREF_WIDTH">Широчина</string>
   <string name="PREF_HEIGHT">Височина</string>
   <string name="PREF_FONT_SMALL">Малък</string>
   <string name="PREF_FONT_MEDIUM">Среден</string>
   <string name="PREF_FONT_LARGE">Голям</string>
+  <string name="PREF_FONT_SIZE_IN_SP">Стойностите са в мащабирани пиксели</string>
   <string name="PREF_BACKGROUND">Фон</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуална клавиатура</string>
   <string name="PREF_VK_SHOW">Покажи клавиатура</string>
@@ -52,5 +57,57 @@
   <string name="PREF_UNIT_MS">мс</string>
   <string name="PREF_VK_SEL_FORE">Етикети (P)</string>
   <string name="PREF_VK_SEL_BACK">Бутони (P)</string>
+  <string name="PREF_VK_KEY_SIZES">Размер на клавишите</string>
+  <string name="PREF_VK_NAV_KEYS">Джойстик: </string>
+  <string name="PREF_VK_SOFT_KEYS">Клавиши меню: </string>
+  <string name="PREF_VK_NUM_KEYS">Цифри: </string>
+  <string name="PREF_VK_FIRE_KEY">Стреляй: </string>
+  <string name="PREF_VK_SIZE_HINT">Размер</string>
+  <string name="SIZE_PRESETS">Шаблони</string>
+  <string name="SWAP_SIZES">Размяна на размерите</string>
+  <string name="PREF_SYS_PROPS">Свойства на системата</string>
+  <string name="PREF_ORIENTATION">Ориентация на екрана</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>По подразбиране</item>
+    <item>Авто</item>
+    <item>Портрет</item>
+    <item>Пейзаж</item>
+  </string-array>
+  <string name="error">Грешка</string>
+  <string name="FORCE_CLOSE_CONFIRMATION">Принудителното затваряне може да предизвика загуба на данни или проблем в приложението!\nПродължи?</string>
+  <string name="CONFIRMATION_REQUIRED">Изисква се потвърждение</string>
+  <string name="select_dialog_title">Изберете MIDlet</string>
+  <string name="crash_dialog_message">Искате ли да изпратите отчет за грешки на разработчика?</string>
+  <string name="crash_dialog_title">Открита е грешка</string>
+  <string name="report_crash">Изпрати</string>
+  <string name="layout_edit_finished">Режим на редактиране е приключен</string>
+  <string name="layout_edit_finish">Завърши режим на редактиране</string>
+  <string name="layout_edit_mode">Режим за редактиране на клавишите</string>
+  <string name="layout_scale_mode">Режим за оразмеряване на клавишите</string>
+  <string name="layout_switch">Смяна на подредбата</string>
+  <string name="hide_buttons">Скриване на бутони</string>
+  <string name="common_settings">[ОБЩИ НАСТРОЙКИ]</string>
+  <string name="pref_theme_title">Тема</string>
+  <string-array name="pref_theme_entries">
+    <item>Светла</item>
+    <item>Тъмна</item>
+  </string-array>
+  <string name="pref_requires_restart_summary">Изисква се рестартиране</string>
+  <string name="pref_enable_actionbar_title">Включване на ActionBar</string>
+  <string name="pref_enable_actionbar_summary">Приложения на цял екран</string>
+  <string name="pref_wakelock_title">Поддържане на включен екран</string>
+  <string name="pref_button_shape_title">Форма на бутона</string>
+  <string-array name="pref_button_shape_entries">
+    <item>Закръглен</item>
+    <item>Квадрат</item>
+  </string-array>
+  <string name="pref_app_sort_title">Ред за сортиране на приложения</string>
+  <string-array name="pref_app_sort_entries">
+    <item>Име</item>
+    <item>Дата</item>
+  </string-array>
+  <string name="pref_map_keys">Клавишни настройки</string>
+  <string name="mapping_dialog_title">Натиснете клавиш</string>
+  <string name="mapping_dialog_message" formatted="false">Текущи настройки: %1$s</string>
   <string name="reset_mapping">Нулиране</string>
 </resources>

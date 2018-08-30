@@ -43,7 +43,7 @@
   <string name="PREF_BACKGROUND">Hình nền</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Bàn phím ảo</string>
   <string name="PREF_VK_SHOW">Chế độ bàn phím ảo</string>
-  <string name="PREF_VK_FEEDBACK">rung khi chạm</string>
+  <string name="PREF_VK_FEEDBACK">Rung khi chạm</string>
   <string name="PREF_TOUCH_INPUT">Chế độ cảm ứng</string>
   <string name="PREF_HW_ACCELERATION">Tăng tốc HW (không ổn định)</string>
   <string name="PREF_VK_BACK">Nút</string>
