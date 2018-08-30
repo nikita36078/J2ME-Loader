@@ -35,7 +35,7 @@
   <string name="PREF_IMMEDIATE">Azonnali feldolgozás mód</string>
   <string name="PREF_FONT_OPTIONS">Betűtípus beállítások</string>
   <string name="PREF_WIDTH">Szélesség</string>
-  <string name="PREF_HEIGHT">Magasság:</string>
+  <string name="PREF_HEIGHT">Magasság</string>
   <string name="PREF_FONT_SMALL">Kicsi</string>
   <string name="PREF_FONT_MEDIUM">Közepes</string>
   <string name="PREF_FONT_LARGE">Nagy</string>
@@ -49,7 +49,7 @@
   <string name="PREF_VK_BACK">Gombok</string>
   <string name="PREF_VK_FORE">Címkék</string>
   <string name="PREF_VK_OUTLINE">Körvonal</string>
-  <string name="PREF_VK_ALPHA">Áttetszőség:</string>
+  <string name="PREF_VK_ALPHA">Áttetszőség: </string>
   <string name="PREF_VK_HIDE_DELAY">Elrejtés késése: </string>
   <string name="PREF_UNIT_MS">ms</string>
   <string name="PREF_VK_SEL_FORE">Címkék (P)</string>
@@ -75,7 +75,7 @@
   <string name="CONFIRMATION_REQUIRED">Megerősítés szükséges</string>
   <string name="select_dialog_title">Válassza ki a MIDlet</string>
   <string name="crash_dialog_message">Szeretné elküldeni a hibajelentést a fejlesztőknek?</string>
-  <string name="crash_dialog_title">Hiba észlelhető </string>
+  <string name="crash_dialog_title">Hiba észlelhető</string>
   <string name="report_crash">Küldés</string>
   <string name="layout_edit_finished">Szerkesztés mód kész</string>
   <string name="layout_edit_finish">Szerkesztési mód befejezése</string>
