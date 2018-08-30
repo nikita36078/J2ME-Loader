@@ -3,7 +3,12 @@
 <resources>
   <string name="exit">Sortir</string>
   <string name="about">À propos de</string>
+  <string name="help">Guide</string>
+  <string name="more">Plus</string>
+  <string name="licenses">Licence</string>
+  <string name="templates">Modèles </string>
   <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android. Il prend en charge la plupart des jeux 2D et 3D avec certaines limitations.&lt;BR&gt;</string>
+  <string name="help_message">&#8226;Activer un filtre peut réduire les performances. À désactiver si le jeu fonctionne lentement. &lt;BR&gt;&#8226;Les problèmes d\'image vacillante peuvent être résolus en activant l\'option « mode de traitement immédiat ».</string>
   <string name="author">Auteur: </string>
   <string name="version">Version: </string>
   <string name="no_data_for_display">Pas de données</string>
@@ -12,12 +17,19 @@
   <string name="convert_complete">Complété</string>
   <string name="converting_message">Traitement en cours...</string>
   <string name="permission_request_failed">Cette application nécessite l’autorisation d’écriture de stockage</string>
+  <string name="external_storage_not_mounted">Cette application nécessite le stockage externe</string>
   <string name="action_context_shortcut">Ajouter un raccourci</string>
   <string name="action_settings">Paramètres</string>
   <string name="action_context_delete">Supprimer</string>
+  <string name="action_context_rename">Renommer</string>
+  <string name="donate">Donner</string>
   <string name="START_CMD">Commencer</string>
   <string name="CANCEL_CMD">Annuler</string>
+  <string name="CLEAR_DATA_CMD">Effacer les données</string>
+  <string name="RESET_SETTINGS_CMD">Réinitialiser les paramètres</string>
   <string name="RESET_LAYOUT_CMD">Réinitialiser le keylayout</string>
+  <string name="LOAD_TEMPLATE_CMD">Charger un modèle</string>
+  <string name="SAVE_TEMPLATE_CMD">Sauvegarder le modèle</string>
   <string name="PREF_SCREEN_OPTIONS">Options d\'écran</string>
   <string name="PREF_SCALE_RATIO">Échelle(%)</string>
   <string name="PREF_SCALE_TO_FIT">Ajuster a l\'écran</string>
@@ -34,6 +46,9 @@
   <string name="PREF_BACKGROUND">Fond</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Clavier virtuel</string>
   <string name="PREF_VK_SHOW">Afficher le clavier</string>
+  <string name="PREF_VK_FEEDBACK">Retour haptique</string>
+  <string name="PREF_TOUCH_INPUT">Saisie tactile</string>
+  <string name="PREF_HW_ACCELERATION">Accélération Matérielle (instable)</string>
   <string name="PREF_VK_BACK">Boutons</string>
   <string name="PREF_VK_FORE">Étiquettes</string>
   <string name="PREF_VK_OUTLINE">Contour</string>
@@ -50,9 +65,18 @@
   <string name="PREF_VK_SIZE_HINT">Taille</string>
   <string name="SIZE_PRESETS">Pré-définis</string>
   <string name="SWAP_SIZES">Echanger tailles</string>
+  <string name="PREF_SYS_PROPS">Propriétés système</string>
+  <string name="PREF_ORIENTATION">Orientation de l\'écran</string>
+  <string-array name="PREF_ORIENTATION_ENTRIES">
+    <item>Par défaut</item>
+    <item>Automatique</item>
+    <item>Portrait</item>
+    <item>Paysage</item>
+  </string-array>
   <string name="error">Erreur</string>
   <string name="FORCE_CLOSE_CONFIRMATION">La fermeture forcée de l\'application peut entraîner une perte de données ou même la casser complètement!\nDévelopper?</string>
   <string name="CONFIRMATION_REQUIRED">Confirmation requise</string>
+  <string name="select_dialog_title">Choisir MIDlet</string>
   <string name="crash_dialog_message">Vous voulez envoyer le rapport d’erreur pour le développeur?</string>
   <string name="crash_dialog_title">Erreur détectée</string>
   <string name="report_crash">Envoyer</string>
@@ -61,7 +85,29 @@
   <string name="layout_edit_mode">Mode d’édition Keylayout</string>
   <string name="layout_scale_mode">Mode de redimensionnement Keylayout</string>
   <string name="layout_switch">Interrupteur keylayout</string>
+  <string name="hide_buttons">Masquer les boutons</string>
   <string name="common_settings">[PARAMÈTRES COMMUNS]</string>
+  <string name="pref_theme_title">Thème</string>
+  <string-array name="pref_theme_entries">
+    <item>Clair</item>
+    <item>Nuit</item>
+  </string-array>
+  <string name="pref_requires_restart_summary">Redémarrage requis</string>
   <string name="pref_enable_actionbar_title">Activez ActionBar</string>
   <string name="pref_enable_actionbar_summary">Dans les applications plein écran</string>
+  <string name="pref_wakelock_title">Laisser l\'écran allumé</string>
+  <string name="pref_button_shape_title">Forme du bouton</string>
+  <string-array name="pref_button_shape_entries">
+    <item>Rond</item>
+    <item>Carré</item>
+  </string-array>
+  <string name="pref_app_sort_title">Tri des applications</string>
+  <string-array name="pref_app_sort_entries">
+    <item>Nom</item>
+    <item>Date</item>
+  </string-array>
+  <string name="pref_map_keys">Mappage des touches</string>
+  <string name="mapping_dialog_title">Appuyez sur une touche</string>
+  <string name="mapping_dialog_message" formatted="false">Mappage actuel : %1$s</string>
+  <string name="reset_mapping">Réinitialiser</string>
 </resources>
