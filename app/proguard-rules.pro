@@ -25,6 +25,8 @@
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
 
+-keep class android.support.v7.widget.SearchView { *; }
+
 -keepclasseswithmembernames class * {
     native <methods>;
 }
