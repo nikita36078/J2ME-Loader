@@ -6,6 +6,7 @@
   <string name="help">Ajuda</string>
   <string name="more">Mais</string>
   <string name="licenses">Licenças</string>
+  <string name="templates">Templante</string>
   <string name="about_message">Este aplicativo permite emular jogos e aplicativos Java (J2ME), ele suporta a maioria dos jogos 2D, mas em alguns jogos 3D ainda existem algumas limitações.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Permitir a filtragem pode reduzir muito o desempenho em alguns jogos, desative essa opção se o jogo estiver enfrentando Lags. &lt;BR&gt; &#8226; Se a Imagem estiver falhando ou piscando, ative a opção de \"modo de processamento imediato\".</string>
   <string name="author">Criador: </string>
@@ -27,6 +28,8 @@
   <string name="CLEAR_DATA_CMD">Limpar Dados</string>
   <string name="RESET_SETTINGS_CMD">Configuração de fábrica</string>
   <string name="RESET_LAYOUT_CMD">Resetar teclado</string>
+  <string name="LOAD_TEMPLATE_CMD">Carregar templante</string>
+  <string name="SAVE_TEMPLATE_CMD">Salvar modelo</string>
   <string name="PREF_SCREEN_OPTIONS">Opções da tela</string>
   <string name="PREF_SCALE_RATIO">Escala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Redimensionar tela</string>
@@ -92,6 +95,7 @@
   <string name="pref_requires_restart_summary">Requer reinicialização</string>
   <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
   <string name="pref_enable_actionbar_summary">Assistente para jogos em tela completa</string>
+  <string name="pref_wakelock_title">Manter tela ligada</string>
   <string name="pref_button_shape_title">Formato dos botões</string>
   <string-array name="pref_button_shape_entries">
     <item>Redondos</item>
