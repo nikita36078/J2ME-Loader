@@ -97,14 +97,8 @@ public class FileSystemFileConnection implements FileConnection {
 
 
 	private static File getRoot(String path) {
-		if (path.toLowerCase().startsWith(ROOT_INTERNAL_DIR)
-				|| path.toLowerCase().startsWith(ROOT_INTERNAL_DIR_SIEMENS)
-				|| path.toLowerCase().startsWith(ROOT_INTERNAL_DIR_SIEMENS_2)) {
-			File fsRoot = new File(System.getProperty("user.home"));
-			return fsRoot;
-		} else {
-			return null;
-		}
+		File fsRoot = new File(System.getProperty("user.home"));
+		return fsRoot;
 	}
 
 	static Enumeration listRoots() {
