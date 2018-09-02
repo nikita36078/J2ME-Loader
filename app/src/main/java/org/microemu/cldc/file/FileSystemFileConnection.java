@@ -303,10 +303,10 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 
 		File[] files = this.file.listFiles(filenameFilter);
-		Arrays.sort(files);
 		if (files == null) { // null if security restricted
 			return (new Vector()).elements();
 		}
+		Arrays.sort(files);
 		Vector list = new Vector();
 		for (File child : files) {
 			if ((!includeHidden) && (child.isHidden())) {
