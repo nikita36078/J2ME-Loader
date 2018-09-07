@@ -141,12 +141,13 @@ public class AndroidClassVisitor extends ClassVisitor {
 				String encoding = "ISO-8859-1"; // microedition.encoding
 				if (name.equals("<init>") && desc.startsWith("([B") && !desc.endsWith("Ljava/lang/String;)V")) {
 					mv.visitLdcInsn(encoding);
-					mv.visitMethodInsn(opcode, owner, name,
-							new StringBuffer().append(desc.substring(0, desc.length() - 2)).append("Ljava/lang/String;)V").toString());
+					mv.visitMethodInsn(opcode, owner, name, new StringBuffer()
+							.append(desc, 0, desc.length() - 2)
+							.append("Ljava/lang/String;)V").toString(), itf);
 					return;
 				} else if (name.equals("getBytes") && desc.startsWith("()")) {
 					mv.visitLdcInsn(encoding);
-					mv.visitMethodInsn(opcode, owner, name, "(Ljava/lang/String;)[B");
+					mv.visitMethodInsn(opcode, owner, name, "(Ljava/lang/String;)[B", itf);
 					return;
 				}
 			}
