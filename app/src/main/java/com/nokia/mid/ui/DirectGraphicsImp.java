@@ -236,7 +236,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 			return;
 		}
 
-		int[] pixres = new int[width * height];
+		int[] pixres = new int[offset + scanlen * height];
 		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
@@ -264,7 +264,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 			return;
 		}
 
-		int[] pixres = new int[width * height];
+		int[] pixres = new int[offset + scanlen * height];
 		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
