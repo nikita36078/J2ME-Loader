@@ -22,23 +22,17 @@ import javax.microedition.lcdui.Image;
 public class M3D {
 	private double[] matrix = new double[16];
 
-	private double[] scalem = new double[16];
-
-	private double[] stackm = new double[16];
-
-	private double[] transm = new double[16];
-
-	private double[] rotm = new double[16];
-
-	private double[] stackr = new double[16];
-
-	private double[] stackt = new double[16];
+	private double[] stack = new double[16];
 
 	private double[] tempm = new double[16];
 
 	private double[] tempr = new double[16];
 
 	private double[] tempt = new double[16];
+
+	private double[] temps = new double[16];
+
+	private double[] rotm = new double[16];
 
 	private double[] projm = new double[16];
 
@@ -95,10 +89,8 @@ public class M3D {
 		gc.setColor(clearcolor);
 		gc.fillRect(0, 0, width, height);
 		gc.setColor(color);
-		identity(rotm);
-		identity(transm);
-		identity(stackr);
-		identity(stackt);
+		identity(matrix);
+		identity(stack);
 		for (int i = 0; i < zbuffer.length; i++) {
 			zbuffer[i] = -500;
 		}
@@ -116,16 +108,46 @@ public class M3D {
 	{
 		//System.out.println("frustrumxi("+a+", "+b+", "+c+", "+d+", "+near+", "+far+");");
 		// c.c: bu.frustumxi(-bp << 11, bp << 11, -bo << 11, bo << 11, 196608, 65536000);
-		projection(projm, width, height, 60, near, far);
+		double r = right / 2048;
+		double l = left / 2048;
+		double t = top / 2048;
+		double b = bottom / 2048;
+
+		double n = near / 65536;
+		double f = far / 65536;
+		projection(projm, r - l, t - b, 90, n, f);
 	}
 
-	public void scalexi(int x, int y, int z) {
+	public void scalexi(int X, int Y, int Z) {
+		double x = (X / 65536.0);
+		double y = (Y / 65536.0);
+		double z = (Z / 65536.0);
+
+		temps[0] = x;
+		temps[1] = 0;
+		temps[2] = 0;
+		temps[3] = 0;
+		temps[4] = 0;
+		temps[5] = y;
+		temps[6] = 0;
+		temps[7] = 0;
+		temps[8] = 0;
+		temps[9] = 0;
+		temps[10] = z;
+		temps[11] = 0;
+		temps[12] = 0;
+		temps[13] = 0;
+		temps[14] = 0;
+		temps[15] = 1;
+
+		matmul(temps, matrix);
+		clone(matrix, temps);
 	}
 
-	public void translatexi(int x, int y, int z) {
-		x = (x / 65536);
-		y = (y / 65536);
-		z = (z / 65536);
+	public void translatexi(int X, int Y, int Z) {
+		double x = (X / 65536.0);
+		double y = (Y / 65536.0);
+		double z = (Z / 65536.0);
 		tempt[0] = 1;
 		tempt[1] = 0;
 		tempt[2] = 0;
@@ -143,7 +165,8 @@ public class M3D {
 		tempt[14] = z;
 		tempt[15] = 1;
 
-		clone(transm, tempt);
+		matmul(tempt, matrix);
+		clone(matrix, tempt);
 	}
 
 	public void rotatexi(int Y, int Z, int X, int W) // probably not a quaternion 
@@ -154,9 +177,9 @@ public class M3D {
 		// from d:1347 rotatexi(c0, 65536, 0, 0);
 		// from d:1354 rotatexi(cx * 90, 0, 65536, 0);
 
-		double x = (X / 65536) * 0.0174533;
-		double y = (Y / 65536) * 0.0174533;
-		double z = (Z / 65536) * 0.0174533;
+		double x = (X / 65536.0) * 0.0174533;
+		double y = ((Y / 65536.0) - 10) * 0.0174533;
+		double z = (Z / 65536.0) * 0.0174533;
 
 		// rotate on y
 		tempr[0] = Math.cos(y);
@@ -196,27 +219,36 @@ public class M3D {
 		tempr[15] = 1;
 		matmul(rotm, tempr);
 
-		/*
 		// rotate on z
-		tempr[0]  =  Math.cos(z); tempr[1]  =  Math.sin(z); tempr[2]  =  0; tempr[3]  =  0;
-		tempr[4]  = -Math.sin(z); tempr[5]  =  Math.cos(z); tempr[6]  =  0; tempr[7]  =  0;
-		tempr[8]  =  0;           tempr[9]  =  0;           tempr[10] =  1; tempr[11] =  0;
-		tempr[12] =  0;           tempr[13] =  0;           tempr[14] =  0; tempr[15] =  1;
+		tempr[0] = Math.cos(z);
+		tempr[1] = Math.sin(z);
+		tempr[2] = 0;
+		tempr[3] = 0;
+		tempr[4] = -Math.sin(z);
+		tempr[5] = Math.cos(z);
+		tempr[6] = 0;
+		tempr[7] = 0;
+		tempr[8] = 0;
+		tempr[9] = 0;
+		tempr[10] = 1;
+		tempr[11] = 0;
+		tempr[12] = 0;
+		tempr[13] = 0;
+		tempr[14] = 0;
+		tempr[15] = 1;
 		matmul(rotm, tempr);
-		*/
+
+		matmul(rotm, matrix);
+		clone(matrix, rotm);
 	}
 
 	public void pushMatrix() // game doesn't seem to push more than one thing at a time
 	{
-		clone(stackr, rotm);
-		clone(stackt, transm);
-		identity(rotm);
-		identity(transm);
+		clone(stack, matrix);
 	}
 
 	public void popMatrix() {
-		clone(rotm, stackr);
-		clone(transm, stackt);
+		clone(matrix, stack);
 	}
 
 	public void vertexPointerub(int a, int b, byte[] vertices) {
@@ -239,47 +271,45 @@ public class M3D {
 
 		double x, y, z, theta;
 
-		identity(matrix);
-		matmul(matrix, rotm);
-		matmul(matrix, transm);
-		matmul(matrix, stackt);
-		matmul(matrix, stackr);
 		applyMatrix(matrix);
 
 		for (int i = 0; i < vertCount; i += 3) // projection
 		{
 			x = verts[i];
 			y = verts[i + 1];
-			z = verts[i + 2];
+			z = verts[i + 2] + 15;
 			z = -((z - 30) / 90);
-			verts[i] = x / z;
-			verts[i + 1] = (-y) / z;
+			if (z > 0) {
+				verts[i] = x / z;
+				verts[i + 1] = (-y) / z;
+				verts[i + 2] += 15;
+			}
 		}
 
 		// draw elements
-		int x1, y1, z1, x2, y2, z2, x3, y3, z3;
-		x1 = 0;
-		y1 = 0;
-		z1 = 0;
-		int ox = width / 2;
-		int oy = height / 2;
+		double x1, y1, z1, x2, y2, z2, x3, y3, z3;
+		double ox = width / 2;
+		double oy = height / 2;
+
 		for (int i = 0; i < faces.length; i += 3) {
-			x1 = (int) verts[(faces[i] * 3)];
-			y1 = (int) verts[(faces[i] * 3) + 1];
-			z1 = (int) verts[(faces[i] * 3) + 2];
+			x1 = verts[(faces[i] * 3)];
+			y1 = verts[(faces[i] * 3) + 1];
+			z1 = verts[(faces[i] * 3) + 2];
 
-			x2 = (int) verts[(faces[i + 1] * 3)];
-			y2 = (int) verts[(faces[i + 1] * 3) + 1];
-			z2 = (int) verts[(faces[i + 1] * 3) + 2];
+			x2 = verts[(faces[i + 1] * 3)];
+			y2 = verts[(faces[i + 1] * 3) + 1];
+			z2 = verts[(faces[i + 1] * 3) + 2];
 
-			x3 = (int) verts[(faces[i + 2] * 3)];
-			y3 = (int) verts[(faces[i + 2] * 3) + 1];
-			z3 = (int) verts[(faces[i + 2] * 3) + 2];
+			x3 = verts[(faces[i + 2] * 3)];
+			y3 = verts[(faces[i + 2] * 3) + 1];
+			z3 = verts[(faces[i + 2] * 3) + 2];
 
-			if (z3 > 0 && z2 > 0 && z1 > 0) {
+			// clip
+			if (z3 > 15 && z2 > 15 && z1 > 15) {
 				continue;
 			}
 
+			// center on screen
 			x1 = x1 + ox;
 			x2 = x2 + ox;
 			x3 = x3 + ox;
@@ -287,9 +317,19 @@ public class M3D {
 			y2 = y2 + oy;
 			y3 = y3 + oy;
 
+			// backface culling (weird trick) //
+			/*
+			if( (x2-x1)!=0 && (x3-x1)!=0 )
+			{
+				boolean t1 = ((y2-y1)/(x2-x1) - (y3-y1)/(x3-x1)) < 0;
+				boolean t2 = (x1 <= x2) == (x1 > x3);
+				if (t1 ^ t2) { continue; }
+			}
+			*/
+			// draw
 			if (boundTexture) {
 				texture.setUVs((int) UVs[(faces[i] * 2)], (int) UVs[(faces[i] * 2) + 1], (int) UVs[(faces[i + 1] * 2)], (int) UVs[(faces[i + 1] * 2) + 1], (int) UVs[(faces[i + 2] * 2)], (int) UVs[(faces[i + 2] * 2) + 1]);
-				texture.mapto(x1, y1, x2, y2, x3, y3);
+				texture.mapto((int) x1, (int) y1, (int) x2, (int) y2, (int) x3, (int) y3);
 			}
 			fillTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);
 		}
@@ -333,7 +373,6 @@ public class M3D {
 		g.drawImage(platformImage, x, y, Graphics.LEFT | Graphics.TOP);
 	}
 
-
 	private void identity(double[] m) {
 		m[0] = 1;
 		m[1] = 0;
@@ -354,17 +393,21 @@ public class M3D {
 	}
 
 	private void projection(double[] m, double w, double h, double fov, double near, double far) {
-		double a = 1 / Math.tan(fov / 2);
-		double b = a / (h / w);
-		double c = -(far + near) / (far - near);
-		double d = -((2 * far * near) / (far - near));
+		fov = fov * 0.0174533;
+		double aspect = h / w;
+		double sy = 1 / Math.tan(fov / 2);
+		double sx = sy / aspect;
+		double c = (far + near) / (near - far);
+		double d = -1;
+		double e = (2 * far * near) / (near - far);
+		double f = 0;
 
-		m[0] = a;
+		m[0] = sx;
 		m[1] = 0;
 		m[2] = 0;
 		m[3] = 0;
 		m[4] = 0;
-		m[5] = b;
+		m[5] = -sy;
 		m[6] = 0;
 		m[7] = 0;
 		m[8] = 0;
@@ -373,8 +416,8 @@ public class M3D {
 		m[11] = d;
 		m[12] = 0;
 		m[13] = 0;
-		m[14] = -1;
-		m[15] = 0;
+		m[14] = e;
+		m[15] = f;
 	}
 
 	private void clone(double[] m1, double[] m2) {
@@ -445,39 +488,42 @@ public class M3D {
 	}
 
 	private void applyMatrix(double[] m) {
+		double x, y, z;
 		for (int i = 0; i < vertCount; i += 3) {
-			double x = verts[i];
-			double y = verts[i + 1];
-			double z = verts[i + 2];
+			x = verts[i];
+			y = verts[i + 1];
+			z = verts[i + 2];
 			verts[i] = x * m[0] + y * m[4] + z * m[8] + m[12];
 			verts[i + 1] = x * m[1] + y * m[5] + z * m[9] + m[13];
 			verts[i + 2] = x * m[2] + y * m[6] + z * m[10] + m[14];
 		}
 	}
 
-	private void fillTriangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3) {
+	private void fillTriangle(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
 		double a, b, c, d;
-		double depth = Math.min(Math.min(z1, z2), z3);
+		double depth = 0;
 
-		int maxX = Math.max(x1, Math.max(x2, x3));
-		int minX = Math.min(x1, Math.min(x2, x3));
-		int maxY = Math.max(y1, Math.max(y2, y3));
-		int minY = Math.min(y1, Math.min(y2, y3));
+		// find rect, clip to screen
+		int maxX = (int) Math.min(Math.max(x1, Math.max(x2, x3)), width - 1);
+		int maxY = (int) Math.min(Math.max(y1, Math.max(y2, y3)), height - 1);
+		int minX = (int) Math.max(Math.min(x1, Math.min(x2, x3)), 0);
+		int minY = (int) Math.max(Math.min(y1, Math.min(y2, y3)), 0);
 
-		if (minX >= width || minY >= height || maxX < 0 || maxY < 0) {
+		if (minX > (width - 1) || minY > (height - 1) || maxX < 0 || maxY < 0) {
 			return;
 		}
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
+				// point in triangle
 				d = ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3));
 				a = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / d;
 				b = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / d;
 				c = 1 - a - b;
 				if ((a >= 0) && (a <= 1) && (b >= 0) && (b <= 1) && (c >= 0) && (c <= 1) && (x >= 0 && x < width && y >= 0 && y < height)) {
 					// plot
-					depth = z1 * a + z2 * b + z3 * c;
-					if (zbuffer[x + (y * width)] <= depth) {
+					depth = z1 * a + z2 * b + z3 * c; // fragment depth
+					if (zbuffer[x + (y * width)] <= depth && depth < 5) {
 						zbuffer[x + (y * width)] = depth;
 						if (boundTexture) {
 							gc.setColorAlpha(texture.map(x, y));
