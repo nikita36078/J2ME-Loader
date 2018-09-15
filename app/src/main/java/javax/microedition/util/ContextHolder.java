@@ -82,13 +82,17 @@ public class ContextHolder {
 	}
 
 	public static InputStream getResourceAsStream(Class resClass, String resName) {
+		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
+		if (resName == null || resName.equals("")) {
+			Log.d(TAG, "Can't load res on empty path");
+			return null;
+		}
 		if (resName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
 			String className = resClass.getPackage().getName().replace('.', '/');
 			resName = className + "/" + resName;
 		}
 		// Add support for Siemens file path
 		resName = resName.replace('\\', '/');
-		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		try {
 			File resFile = new File(MyClassLoader.getResFolder(), resName);
 			byte[] data = new byte[(int) resFile.length()];
