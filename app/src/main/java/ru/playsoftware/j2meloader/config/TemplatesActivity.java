@@ -30,13 +30,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class TemplatesActivity extends BaseActivity {
 
@@ -50,7 +47,7 @@ public class TemplatesActivity extends BaseActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle(R.string.templates);
 
-		ArrayList<String> templates = getTemplatesList();
+		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
 		ListView listView = findViewById(R.id.list_view);
 		TextView emptyView = findViewById(R.id.empty_view);
 		listView.setEmptyView(emptyView);
@@ -92,36 +89,15 @@ public class TemplatesActivity extends BaseActivity {
 	}
 
 	private void deleteTemplate(final int id) {
-		File templateDir = new File(Config.TEMPLATES_DIR, (String) adapter.getItem(id));
-		FileUtils.deleteDirectory(templateDir);
+		Template template = (Template) adapter.getItem(id);
+		template.delete();
 		adapter.removeItem(id);
 	}
 
-	private void renameTemplate(final int id, String newName) {
-		File srcTemplateDir = new File(Config.TEMPLATES_DIR, (String) adapter.getItem(id));
-		File dstTemplateDir = new File(Config.TEMPLATES_DIR, newName);
-		srcTemplateDir.renameTo(dstTemplateDir);
-		adapter.renameItem(id, dstTemplateDir.getName());
-	}
-
-	private ArrayList<String> getTemplatesList() {
-		File templatesDir = new File(Config.TEMPLATES_DIR);
-		File[] templatesList = templatesDir.listFiles();
-		if (templatesList == null) {
-			return new ArrayList<String>();
-		}
-		int size = templatesList.length;
-		String[] templates = new String[size];
-		for (int i = 0; i < size; i++) {
-			templates[i] = templatesList[i].getName();
-		}
-		return new ArrayList(Arrays.asList(templates));
-	}
-
 	private void showRenameDialog(final int id) {
-		String name = (String) adapter.getItem(id);
+		Template template = (Template) adapter.getItem(id);
 		EditText editText = new EditText(this);
-		editText.setText(name);
+		editText.setText(template.getName());
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.action_context_rename)
 				.setView(editText)
@@ -130,7 +106,8 @@ public class TemplatesActivity extends BaseActivity {
 					if (newName.equals("")) {
 						Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
-						renameTemplate(id, newName);
+						template.renameTo(newName);
+						adapter.renameItem(id, template);
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);

@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import ru.playsoftware.j2meloader.R;
 
 public class TemplatesAdapter extends BaseAdapter {
-	private ArrayList<String> list;
+	private ArrayList<Template> list;
 	private final LayoutInflater layoutInflater;
 	private Context context;
 
-	public TemplatesAdapter(Context context, ArrayList<String> list) {
+	public TemplatesAdapter(Context context, ArrayList<Template> list) {
 		if (list != null) {
 			this.list = list;
 		}
@@ -66,7 +66,7 @@ public class TemplatesAdapter extends BaseAdapter {
 		} else {
 			holder = (TemplatesAdapter.ViewHolder) view.getTag();
 		}
-		holder.name.setText(list.get(position));
+		holder.name.setText(list.get(position).getName());
 
 		return view;
 	}
@@ -76,8 +76,8 @@ public class TemplatesAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void renameItem(int position, String name) {
-		list.set(position, name);
+	public void renameItem(int position, Template item) {
+		list.set(position, item);
 		notifyDataSetChanged();
 	}
 

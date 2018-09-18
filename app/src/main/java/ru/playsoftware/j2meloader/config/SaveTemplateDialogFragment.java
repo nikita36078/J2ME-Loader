@@ -27,12 +27,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class SaveTemplateDialogFragment extends DialogFragment {
 	@NonNull
@@ -48,36 +45,21 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 		builder.setTitle(R.string.SAVE_TEMPLATE_CMD)
 				.setView(v)
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-					String template = etTemplateName.getText().toString().trim();
-					if (template.equals("")) {
+					String templateName = etTemplateName.getText().toString().trim();
+					if (templateName.equals("")) {
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
-						saveTemplate(template, appName,
-								cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
+						try {
+							Template template = new Template(templateName);
+							TemplatesManager.saveTemplate(template, appName,
+									cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
+						} catch (IOException e) {
+							e.printStackTrace();
+							Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+						}
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
 		return builder.create();
-	}
-
-	private void saveTemplate(String template, String appName, boolean templateSettings, boolean templateKeyboard) {
-		if (!templateSettings && !templateKeyboard) {
-			return;
-		}
-		File templateDir = new File(Config.TEMPLATES_DIR, template);
-		templateDir.mkdirs();
-		File srcConfig = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
-		File srcKeylayout = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
-		File dstConfig = new File(Config.TEMPLATES_DIR, template + Config.MIDLET_CONFIG_FILE);
-		File dstKeylayout = new File(Config.TEMPLATES_DIR, template + Config.MIDLET_KEYLAYOUT_FILE);
-		try {
-			if (templateSettings) FileUtils.copyFileUsingChannel(srcConfig, dstConfig);
-			if (templateKeyboard) FileUtils.copyFileUsingChannel(srcKeylayout, dstKeylayout);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-			Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
-		}
 	}
 }
