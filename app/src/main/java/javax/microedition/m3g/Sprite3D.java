@@ -40,7 +40,7 @@ public class Sprite3D extends Node {
 
 	/**
 	 */
-	Sprite3D(int handle) {
+	Sprite3D(long handle) {
 		super(handle);
 		image = (Image2D) getInstance(_getImage(handle));
 		appearance = (Appearance) getInstance(_getAppearance(handle));
@@ -98,24 +98,24 @@ public class Sprite3D extends Node {
 
 	// Native methods
 
-	private static native int _ctor(int hInterface,
+	private static native long _ctor(long hInterface,
 									boolean scaled,
-									int hImage,
-									int hAppearance);
+									long hImage,
+									long hAppearance);
 
-	private static native boolean _isScaled(int handle);
+	private static native boolean _isScaled(long handle);
 
-	private static native void _setAppearance(int handle, int hAppearance);
+	private static native void _setAppearance(long handle, long hAppearance);
 
-	private static native void _setImage(int handle, int hImage);
+	private static native void _setImage(long handle, long hImage);
 
-	private static native void _setCrop(int handle,
+	private static native void _setCrop(long handle,
 										int cropX, int cropY,
 										int width, int height);
 
-	private static native int _getCrop(int handle, int which);
+	private static native int _getCrop(long handle, int which);
 
-	private static native int _getAppearance(int handle);
+	private static native long _getAppearance(long handle);
 
-	private static native int _getImage(int handle);
+	private static native long _getImage(long handle);
 }

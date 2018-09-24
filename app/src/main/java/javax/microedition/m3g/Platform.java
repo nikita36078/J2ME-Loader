@@ -121,15 +121,15 @@ class Platform {
 	/**
 	 * Finalizes the native peer of an interface
 	 */
-	static final native void finalizeInterface(int handle);
+	static final native void finalizeInterface(long handle);
 
 	/**
 	 * Finalizes the native peer of an object
 	 * JCF: added this wrapper method so we could pass the toolkit handle to the native method.
 	 */
-	static final void finalizeObject(int handle) {
+	static final void finalizeObject(long handle) {
 		try {
-			final int finalHandle = handle;
+			final long finalHandle = handle;
 			executeInUIThread(
 					new M3gRunnable() {
 						@Override
@@ -146,9 +146,9 @@ class Platform {
 	 * Finalizes the native peer of an object associated with
 	 * given Interface instance
 	 */
-	static final void finalizeObject(int handle, Interface aInterface) {
+	static final void finalizeObject(long handle, Interface aInterface) {
 		try {
-			final int finalHandle = handle;
+			final long finalHandle = handle;
 			executeInUIThread(
 					new M3gRunnable() {
 						@Override
@@ -172,6 +172,6 @@ class Platform {
 	static final void heuristicGC() {
 	}
 
-	private static final native void _finalizeObject(int handle);
+	private static final native void _finalizeObject(long handle);
 }
 

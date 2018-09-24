@@ -41,7 +41,7 @@ public class Background extends Object3D {
 
 	/**
 	 */
-	Background(int handle) {
+	Background(long handle) {
 		super(handle);
 		image = (Image2D) getInstance(_getImage(handle));
 	}
@@ -120,25 +120,25 @@ public class Background extends Object3D {
 	//------------------------------------------------------------------
 
 	// Native functions
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _setColor(int handle, int ARGB);
+	private static native void _setColor(long handle, int ARGB);
 
-	private static native int _getColor(int handle);
+	private static native int _getColor(long handle);
 
-	private static native void _setImage(int handle, int hImage);
+	private static native void _setImage(long handle, long hImage);
 
-	private static native int _getImage(int handle);
+	private static native long _getImage(long handle);
 
-	private static native void _setImageMode(int handle, int modeX, int modeY);
+	private static native void _setImageMode(long handle, int modeX, int modeY);
 
-	private static native int _getImageMode(int handle, int which);
+	private static native int _getImageMode(long handle, int which);
 
-	private static native void _enable(int handle, int which, boolean enable);
+	private static native void _enable(long handle, int which, boolean enable);
 
-	private static native boolean _isEnabled(int handle, int which);
+	private static native boolean _isEnabled(long handle, int which);
 
-	private static native void _setCrop(int handle, int cropX, int cropY, int width, int height);
+	private static native void _setCrop(long handle, int cropX, int cropY, int width, int height);
 
-	private static native int _getCrop(int handle, int which);
+	private static native int _getCrop(long handle, int which);
 }

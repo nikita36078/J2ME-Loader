@@ -37,7 +37,7 @@ public class Material extends Object3D {
 
 	/**
 	 */
-	Material(int handle) {
+	Material(long handle) {
 		super(handle);
 	}
 
@@ -73,17 +73,17 @@ public class Material extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private native static int _ctor(int hInstance);
+	private native static long _ctor(long hInstance);
 
-	private native static void _setColor(int handle, int target, int ARGB);
+	private native static void _setColor(long handle, int target, int ARGB);
 
-	private native static int _getColor(int handle, int target);
+	private native static int _getColor(long handle, int target);
 
-	private native static void _setShininess(int handle, float shininess);
+	private native static void _setShininess(long handle, float shininess);
 
-	private native static float _getShininess(int handle);
+	private native static float _getShininess(long handle);
 
-	private native static void _setVertexColorTrackingEnable(int handle, boolean enable);
+	private native static void _setVertexColorTrackingEnable(long handle, boolean enable);
 
-	private native static boolean _isVertexColorTrackingEnabled(int handle);
+	private native static boolean _isVertexColorTrackingEnabled(long handle);
 }

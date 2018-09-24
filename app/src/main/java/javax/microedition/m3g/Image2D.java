@@ -28,7 +28,7 @@ public class Image2D extends Object3D {
 	public static final int RGB = 99;
 	public static final int RGBA = 100;
 
-	static int tempHandle;
+	static long tempHandle;
 
 	//------------------------------------------------------------------
 	// Constructor(s)
@@ -57,7 +57,7 @@ public class Image2D extends Object3D {
 		super(createHandle(format, width, height));
 	}
 
-	Image2D(int handle) {
+	Image2D(long handle) {
 		super(handle);
 	}
 
@@ -109,7 +109,7 @@ public class Image2D extends Object3D {
 		}
 	}
 
-	private static int checkAndCreate(int format, Object image) {
+	private static long checkAndCreate(int format, Object image) {
 		if (image == null) {
 			throw new NullPointerException();
 		}
@@ -178,7 +178,7 @@ public class Image2D extends Object3D {
 //          return tempHandle;
 
 
-	private static int createHandle(int format, int width, int height, byte[] image) {
+	private static long createHandle(int format, int width, int height, byte[] image) {
 		Platform.heuristicGC();
 		return _ctorSizePixels(Interface.getHandle(),
 				format,
@@ -186,7 +186,7 @@ public class Image2D extends Object3D {
 				image);
 	}
 
-	private static int createHandle(int format,
+	private static long createHandle(int format,
 									int width, int height,
 									byte[] image,
 									byte[] palette) {
@@ -197,40 +197,40 @@ public class Image2D extends Object3D {
 				image, palette);
 	}
 
-	private static int createHandle(int format, int width, int height) {
+	private static long createHandle(int format, int width, int height) {
 		Platform.heuristicGC();
 		return _ctorSize(Interface.getHandle(), format, width, height);
 	}
 
 	// Native methods
-	private native static int _ctorImage(/*int eventSourceHandle,*/
-			int hInterface,
+	private native static long _ctorImage(/*int eventSourceHandle,*/
+			long hInterface,
 			int format,
-			int imageHandle);
+			long imageHandle);
 
-	private native static int _ctorSizePixels(int hInterface,
+	private native static long _ctorSizePixels(long hInterface,
 											  int format,
 											  int width, int height,
 											  byte[] image);
 
-	private native static int _ctorSizePixelsPalette(int hInterface,
+	private native static long _ctorSizePixelsPalette(long hInterface,
 													 int format,
 													 int width, int height,
 													 byte[] image,
 													 byte[] palette);
 
-	private native static int _ctorSize(int hInterface,
+	private native static long _ctorSize(long hInterface,
 										int format,
 										int width, int height);
 
-	private native static void _set(int handle, int x, int y, int width,
+	private native static void _set(long handle, int x, int y, int width,
 									int height, byte[] image);
 
-	private native static boolean _isMutable(int handle);
+	private native static boolean _isMutable(long handle);
 
-	private native static int _getFormat(int handle);
+	private native static int _getFormat(long handle);
 
-	private native static int _getWidth(int handle);
+	private native static int _getWidth(long handle);
 
-	private native static int _getHeight(int handle);
+	private native static int _getHeight(long handle);
 }

@@ -36,7 +36,7 @@ public class Camera extends Node {
 
 	/**
 	 */
-	Camera(int handle) {
+	Camera(long handle) {
 		super(handle);
 	}
 
@@ -69,15 +69,15 @@ public class Camera extends Node {
 	//------------------------------------------------------------------
 
 	// Native methods
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _setParallel(int handle, float height, float aspectRatio, float near, float far);
+	private static native void _setParallel(long handle, float height, float aspectRatio, float near, float far);
 
-	private static native void _setPerspective(int handle, float fovy, float aspectRatio, float near, float far);
+	private static native void _setPerspective(long handle, float fovy, float aspectRatio, float near, float far);
 
-	private static native void _setGeneric(int handle, byte[] transform);
+	private static native void _setGeneric(long handle, byte[] transform);
 
-	private static native int _getProjectionAsTransform(int handle, byte[] transform);
+	private static native int _getProjectionAsTransform(long handle, byte[] transform);
 
-	private static native int _getProjectionAsParams(int handle, float[] params);
+	private static native int _getProjectionAsParams(long handle, float[] params);
 }

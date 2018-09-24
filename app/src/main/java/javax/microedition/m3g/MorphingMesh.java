@@ -56,7 +56,7 @@ public class MorphingMesh extends Mesh {
 
 	/**
 	 */
-	MorphingMesh(int handle) {
+	MorphingMesh(long handle) {
 		super(handle);
 		targets = new VertexBuffer[_getMorphTargetCount(handle)];
 		for (int i = 0; i < targets.length; i++) {
@@ -84,7 +84,7 @@ public class MorphingMesh extends Mesh {
 	// Private methods
 	//------------------------------------------------------------------
 
-	static int createHandle(VertexBuffer base,
+	static long createHandle(VertexBuffer base,
 							VertexBuffer[] targets,
 							IndexBuffer triangles,
 							Appearance appearance) {
@@ -94,23 +94,23 @@ public class MorphingMesh extends Mesh {
 
 		verifyParams(base, triangles);
 
-		int[] hTargets = new int[targets.length];
-		int[] hTriangles;
-		int[] hAppearances = null;
+		long[] hTargets = new long[targets.length];
+		long[] hTriangles;
+		long[] hAppearances = null;
 
 		for (int i = 0; i < targets.length; i++) {
 			hTargets[i] = targets[i].handle;
 		}
 
-		hTriangles = new int[1];
+		hTriangles = new long[1];
 		hTriangles[0] = triangles.handle;
 
 		if (appearance != null) {
-			hAppearances = new int[1];
+			hAppearances = new long[1];
 			hAppearances[0] = appearance.handle;
 		}
 
-		int ret = _ctor(Interface.getHandle(),
+		long ret = _ctor(Interface.getHandle(),
 				base.handle,
 				hTargets,
 				hTriangles,
@@ -122,7 +122,7 @@ public class MorphingMesh extends Mesh {
 		return ret;
 	}
 
-	static int createHandle(VertexBuffer base,
+	static long createHandle(VertexBuffer base,
 							VertexBuffer[] targets,
 							IndexBuffer[] triangles,
 							Appearance[] appearances) {
@@ -133,18 +133,18 @@ public class MorphingMesh extends Mesh {
 
 		verifyParams(base, triangles, appearances);
 
-		int[] hTargets = new int[targets.length];
-		int[] hTriangles;
-		int[] hAppearances = null;
+		long[] hTargets = new long[targets.length];
+		long[] hTriangles;
+		long[] hAppearances = null;
 
 		for (int i = 0; i < targets.length; i++) {
 			hTargets[i] = targets[i].handle;
 		}
 
-		hTriangles = new int[triangles.length];
+		hTriangles = new long[triangles.length];
 
 		if (appearances != null) {
-			hAppearances = new int[appearances.length];
+			hAppearances = new long[appearances.length];
 		}
 
 		for (int i = 0; i < triangles.length; i++) {
@@ -155,7 +155,7 @@ public class MorphingMesh extends Mesh {
 			}
 		}
 
-		int ret = _ctor(Interface.getHandle(),
+		long ret = _ctor(Interface.getHandle(),
 				base.handle,
 				hTargets,
 				hTriangles,
@@ -169,17 +169,17 @@ public class MorphingMesh extends Mesh {
 	}
 
 	// Native methods
-	private static native int _ctor(int hInstance,
-									int handle,
-									int[] hTargets,
-									int[] hTriangles,
-									int[] hAppearances);
+	private static native long _ctor(long hInstance,
+									long handle,
+									long[] hTargets,
+									long[] hTriangles,
+									long[] hAppearances);
 
-	private static native void _setWeights(int handle, float[] weights);
+	private static native void _setWeights(long handle, float[] weights);
 
-	private static native void _getWeights(int handle, float[] weights);
+	private static native void _getWeights(long handle, float[] weights);
 
-	private static native int _getMorphTarget(int handle, int index);
+	private static native long _getMorphTarget(long handle, int index);
 
-	private static native int _getMorphTargetCount(int handle);
+	private static native int _getMorphTargetCount(long handle);
 }

@@ -21,7 +21,7 @@ public abstract class IndexBuffer extends Object3D {
 	/**
 	 * Only a package private constructor exists for this class.
 	 */
-	IndexBuffer(int handle) {
+	IndexBuffer(long handle) {
 		super(handle);
 	}
 

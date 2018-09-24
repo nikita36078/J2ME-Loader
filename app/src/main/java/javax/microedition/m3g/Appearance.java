@@ -38,7 +38,7 @@ public class Appearance extends Object3D {
 
 	/**
 	 */
-	Appearance(int handle) {
+	Appearance(long handle) {
 		super(handle);
 
 		compositingMode = (CompositingMode) getInstance(_getCompositingMode(handle));
@@ -121,31 +121,31 @@ public class Appearance extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native int _getCompositingMode(int hApp);
+	private static native long _getCompositingMode(long hApp);
 
-	private static native int _getFog(int hApp);
+	private static native long _getFog(long hApp);
 
-	private static native int _getLayer(int hApp);
+	private static native int _getLayer(long hApp);
 
-	private static native int _getMaterial(int hApp);
+	private static native long _getMaterial(long hApp);
 
-	private static native int _getPolygonMode(int hApp);
+	private static native long _getPolygonMode(long hApp);
 
-	private static native int _getTexture(int hApp, int unit);
+	private static native long _getTexture(long hApp, int unit);
 
-	private static native void _setCompositingMode(int hApp, int hMode);
+	private static native void _setCompositingMode(long hApp, long hMode);
 
-	private static native void _setFog(int hApp, int hFog);
+	private static native void _setFog(long hApp, long hFog);
 
-	private static native void _setLayer(int hApp, int layer);
+	private static native void _setLayer(long hApp, int layer);
 
-	private static native void _setMaterial(int hApp, int hMaterial);
+	private static native void _setMaterial(long hApp, long hMaterial);
 
-	private static native void _setPolygonMode(int hApp, int hMode);
+	private static native void _setPolygonMode(long hApp, long hMode);
 
-	private static native void _setTexture(int hApp,
+	private static native void _setTexture(long hApp,
 										   int unit,
-										   int hTexture);
+										   long hTexture);
 }

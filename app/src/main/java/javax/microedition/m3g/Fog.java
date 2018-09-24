@@ -27,7 +27,7 @@ public class Fog extends Object3D {
 
 	/**
 	 */
-	Fog(int handle) {
+	Fog(long handle) {
 		super(handle);
 	}
 
@@ -68,21 +68,21 @@ public class Fog extends Object3D {
 	}
 
 	// Native methods
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _setMode(int handle, int mode);
+	private static native void _setMode(long handle, int mode);
 
-	private static native int _getMode(int handle);
+	private static native int _getMode(long handle);
 
-	private static native void _setLinear(int handle, float near, float far);
+	private static native void _setLinear(long handle, float near, float far);
 
-	private static native float _getDistance(int handle, int which);
+	private static native float _getDistance(long handle, int which);
 
-	private static native void _setDensity(int handle, float density);
+	private static native void _setDensity(long handle, float density);
 
-	private static native float _getDensity(int handle);
+	private static native float _getDensity(long handle);
 
-	private static native void _setColor(int handle, int RGB);
+	private static native void _setColor(long handle, int RGB);
 
-	private static native int _getColor(int handle);
+	private static native int _getColor(long handle);
 }

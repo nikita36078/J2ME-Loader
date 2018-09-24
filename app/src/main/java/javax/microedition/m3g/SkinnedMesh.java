@@ -55,7 +55,7 @@ public class SkinnedMesh extends Mesh {
 
 	/**
 	 */
-	SkinnedMesh(int handle) {
+	SkinnedMesh(long handle) {
 		super(handle);
 		skeleton = (Group) getInstance(_getSkeleton(handle));
 	}
@@ -93,7 +93,7 @@ public class SkinnedMesh extends Mesh {
 	// Private methods
 	//------------------------------------------------------------------
 
-	static int createHandle(VertexBuffer vertices,
+	static long createHandle(VertexBuffer vertices,
 							IndexBuffer[] triangles,
 							Appearance[] appearances,
 							Group skeleton) {
@@ -111,15 +111,15 @@ public class SkinnedMesh extends Mesh {
 			throw new IllegalArgumentException();
 		}
 
-		int[] hTri = new int[triangles.length];
-		int[] hApp = new int[triangles.length];
+		long[] hTri = new long[triangles.length];
+		long[] hApp = new long[triangles.length];
 		for (int i = 0; i < triangles.length; i++) {
 			hTri[i] = triangles[i].handle;
 			if (appearances != null && i < appearances.length) {
 				hApp[i] = appearances[i] != null ? appearances[i].handle : 0;
 			}
 		}
-		int ret = _ctor(Interface.getHandle(),
+		long ret = _ctor(Interface.getHandle(),
 				vertices.handle,
 				hTri,
 				hApp,
@@ -131,7 +131,7 @@ public class SkinnedMesh extends Mesh {
 		return ret;
 	}
 
-	static int createHandle(VertexBuffer vertices,
+	static long createHandle(VertexBuffer vertices,
 							IndexBuffer triangles,
 							Appearance appearance,
 							Group skeleton) {
@@ -147,9 +147,9 @@ public class SkinnedMesh extends Mesh {
 		if (skeleton.getParent() != null || skeleton instanceof World) {
 			throw new IllegalArgumentException();
 		}
-		int[] hTri = {triangles.handle};
-		int[] hApp = {appearance != null ? appearance.handle : 0};
-		int ret = _ctor(Interface.getHandle(),
+		long[] hTri = {triangles.handle};
+		long[] hApp = {appearance != null ? appearance.handle : 0};
+		long ret = _ctor(Interface.getHandle(),
 				vertices.handle,
 				hTri,
 				hApp,
@@ -162,27 +162,27 @@ public class SkinnedMesh extends Mesh {
 	}
 
 	// Native methods
-	private native static int _ctor(int hInstance,
-									int hVertices,
-									int[] hTriangles,
-									int[] hAppearances,
-									int hSkeleton);
+	private native static long _ctor(long hInstance,
+									long hVertices,
+									long[] hTriangles,
+									long[] hAppearances,
+									long hSkeleton);
 
-	private native static void _addTransform(int handle,
-											 int hBone,
+	private native static void _addTransform(long handle,
+											 long hBone,
 											 int weight,
 											 int firstVertex,
 											 int numVertices);
 
-	private native static int _getSkeleton(int handle);
+	private native static long _getSkeleton(long handle);
 
 	// M3G 1.1 Maintenance release getters
-	private native static void _getBoneTransform(int handle,
-												 int hBone,
+	private native static void _getBoneTransform(long handle,
+												 long hBone,
 												 byte[] transform);
 
-	private native static int _getBoneVertices(int handle,
-											   int hBone,
+	private native static int _getBoneVertices(long handle,
+											   long hBone,
 											   int[] indices,
 											   float[] weights);
 

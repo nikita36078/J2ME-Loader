@@ -50,7 +50,7 @@ public class Texture2D extends Transformable {
 
 	/**
 	 */
-	Texture2D(int handle) {
+	Texture2D(long handle) {
 		super(handle);
 		image = (Image2D) getInstance(_getImage(handle));
 	}
@@ -111,30 +111,30 @@ public class Texture2D extends Transformable {
 	}
 
 	// Native methods
-	private native static int _ctor(int hInterface, int imageHandle);
+	private native static long _ctor(long hInterface, long imageHandle);
 
-	private native static void _setImage(int handle, int imageHandle);
+	private native static void _setImage(long handle, long imageHandle);
 
-	private native static int _getImage(int handle);
+	private native static long _getImage(long handle);
 
-	private native static void _setFiltering(int handle, int levelFilter, int imageFilter);
+	private native static void _setFiltering(long handle, int levelFilter, int imageFilter);
 
-	private native static void _setWrapping(int handle, int wrapS, int wrapT);
+	private native static void _setWrapping(long handle, int wrapS, int wrapT);
 
-	private native static int _getWrappingS(int handle);
+	private native static int _getWrappingS(long handle);
 
-	private native static int _getWrappingT(int handle);
+	private native static int _getWrappingT(long handle);
 
-	private native static void _setBlending(int handle, int func);
+	private native static void _setBlending(long handle, int func);
 
-	private native static int _getBlending(int handle);
+	private native static int _getBlending(long handle);
 
-	private native static void _setBlendColor(int handle, int RGB);
+	private native static void _setBlendColor(long handle, int RGB);
 
-	private native static int _getBlendColor(int handle);
+	private native static int _getBlendColor(long handle);
 
 	// M3G 1.1 Maintenance release getters
-	private native static int _getImageFilter(int handle);
+	private native static int _getImageFilter(long handle);
 
-	private native static int _getLevelFilter(int handle);
+	private native static int _getLevelFilter(long handle);
 }

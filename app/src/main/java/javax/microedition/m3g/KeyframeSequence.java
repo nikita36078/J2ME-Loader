@@ -46,7 +46,7 @@ public class KeyframeSequence extends Object3D {
 
 	/**
 	 */
-	KeyframeSequence(int handle) {
+	KeyframeSequence(long handle) {
 		super(handle);
 	}
 
@@ -113,33 +113,33 @@ public class KeyframeSequence extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private native static int _ctor(int hInterface,
+	private native static long _ctor(long hInterface,
 									int numKeyframes,
 									int numComponents,
 									int interpolation);
 
-	private native static void _setValidRange(int handle, int first, int last);
+	private native static void _setValidRange(long handle, int first, int last);
 
-	private native static void _setKeyframe(int handle, int index, int time, float[] value);
+	private native static void _setKeyframe(long handle, int index, int time, float[] value);
 
-	private native static void _setDuration(int handle, int duration);
+	private native static void _setDuration(long handle, int duration);
 
-	private native static int _getDuration(int handle);
+	private native static int _getDuration(long handle);
 
-	private native static void _setRepeatMode(int handle, int mode);
+	private native static void _setRepeatMode(long handle, int mode);
 
-	private native static int _getRepeatMode(int handle);
+	private native static int _getRepeatMode(long handle);
 
 	// M3G 1.1 Maintenance release getters
-	private native static int _getComponentCount(int handle);
+	private native static int _getComponentCount(long handle);
 
-	private native static int _getInterpolationType(int handle);
+	private native static int _getInterpolationType(long handle);
 
-	private native static int _getKeyframe(int handle, int index, float[] value);
+	private native static int _getKeyframe(long handle, int index, float[] value);
 
-	private native static int _getKeyframeCount(int handle);
+	private native static int _getKeyframeCount(long handle);
 
-	private native static int _getValidRangeFirst(int handle);
+	private native static int _getValidRangeFirst(long handle);
 
-	private native static int _getValidRangeLast(int handle);
+	private native static int _getValidRangeLast(long handle);
 }

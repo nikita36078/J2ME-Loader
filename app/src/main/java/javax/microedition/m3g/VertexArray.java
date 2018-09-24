@@ -30,7 +30,7 @@ public class VertexArray extends Object3D {
 
 	/**
 	 */
-	VertexArray(int handle) {
+	VertexArray(long handle) {
 		super(handle);
 	}
 
@@ -71,7 +71,7 @@ public class VertexArray extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private static int createHandle(int numVertices, int numComponents, int componentSize) {
+	private static long createHandle(int numVertices, int numComponents, int componentSize) {
 		Platform.heuristicGC();
 		return _ctor(Interface.getHandle(),
 				numVertices,
@@ -80,35 +80,35 @@ public class VertexArray extends Object3D {
 	}
 
 	// Native methods
-	private native static int _ctor(int hInterface,
+	private native static long _ctor(long hInterface,
 									int numVertices,
 									int numComponents,
 									int componentSize);
 
-	private native static void _setByte(int handle,
+	private native static void _setByte(long handle,
 										int first,
 										int count,
 										byte[] src);
 
-	private native static void _setShort(int handle,
+	private native static void _setShort(long handle,
 										 int first,
 										 int count,
 										 short[] src);
 
 	// M3G 1.1 Maintenance release getters
-	private native static void _getByte(int handle,
+	private native static void _getByte(long handle,
 										int firstVertex,
 										int numVertices,
 										byte[] values);
 
-	private native static void _getShort(int handle,
+	private native static void _getShort(long handle,
 										 int firstVertex,
 										 int numVertices,
 										 short[] values);
 
-	private native static int _getComponentCount(int handle);
+	private native static int _getComponentCount(long handle);
 
-	private native static int _getComponentType(int handle);
+	private native static int _getComponentType(long handle);
 
-	private native static int _getVertexCount(int handle);
+	private native static int _getVertexCount(long handle);
 }

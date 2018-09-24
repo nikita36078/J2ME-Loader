@@ -41,7 +41,7 @@ public class PolygonMode extends Object3D {
 
 	/**
 	 */
-	PolygonMode(int handle) {
+	PolygonMode(long handle) {
 		super(handle);
 	}
 
@@ -103,32 +103,32 @@ public class PolygonMode extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private native static int _ctor(int hInterface);
+	private native static long _ctor(long hInterface);
 
-	private native static void _setLocalCameraLightingEnable(int handle, boolean enable);
+	private native static void _setLocalCameraLightingEnable(long handle, boolean enable);
 
-	private native static void _setPerspectiveCorrectionEnable(int handle, boolean enable);
+	private native static void _setPerspectiveCorrectionEnable(long handle, boolean enable);
 
-	private native static void _setCulling(int handle, int mode);
+	private native static void _setCulling(long handle, int mode);
 
-	private native static int _getCulling(int handle);
+	private native static int _getCulling(long handle);
 
-	private native static void _setWinding(int handle, int mode);
+	private native static void _setWinding(long handle, int mode);
 
-	private native static int _getWinding(int handle);
+	private native static int _getWinding(long handle);
 
-	private native static void _setShading(int handle, int mode);
+	private native static void _setShading(long handle, int mode);
 
-	private native static int _getShading(int handle);
+	private native static int _getShading(long handle);
 
-	private native static void _setTwoSidedLightingEnable(int handle, boolean enable);
+	private native static void _setTwoSidedLightingEnable(long handle, boolean enable);
 
-	private native static boolean _isTwoSidedLightingEnabled(int handle);
+	private native static boolean _isTwoSidedLightingEnabled(long handle);
 
 	// M3G 1.1 Maintenance release getters
-	private native static boolean _isLocalCameraLightingEnabled(int handle);
+	private native static boolean _isLocalCameraLightingEnabled(long handle);
 
-	private native static boolean _isPerspectiveCorrectionEnabled(int handle);
+	private native static boolean _isPerspectiveCorrectionEnabled(long handle);
 
 }
 

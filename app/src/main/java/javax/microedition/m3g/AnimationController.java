@@ -28,7 +28,7 @@ public class AnimationController extends Object3D {
 
 	/**
 	 */
-	AnimationController(int handle) {
+	AnimationController(long handle) {
 		super(handle);
 	}
 
@@ -79,27 +79,27 @@ public class AnimationController extends Object3D {
 
 
 	// Native methods
-	private native static int _ctor(int hInterface);
+	private native static long _ctor(long hInterface);
 
-	private native static void _setActiveInterval(int handle, int worldTimeMin, int worldTimeMax);
+	private native static void _setActiveInterval(long handle, int worldTimeMin, int worldTimeMax);
 
-	private native static int _getActiveIntervalStart(int handle);
+	private native static int _getActiveIntervalStart(long handle);
 
-	private native static int _getActiveIntervalEnd(int handle);
+	private native static int _getActiveIntervalEnd(long handle);
 
-	private native static void _setSpeed(int handle, float factor, int worldTime);
+	private native static void _setSpeed(long handle, float factor, int worldTime);
 
-	private native static float _getSpeed(int handle);
+	private native static float _getSpeed(long handle);
 
-	private native static void _setPosition(int handle, float time, int worldTime);
+	private native static void _setPosition(long handle, float time, int worldTime);
 
-	private native static float _getPosition(int handle, int worldTime);
+	private native static float _getPosition(long handle, int worldTime);
 
-	private native static void _setWeight(int handle, float weight);
+	private native static void _setWeight(long handle, float weight);
 
-	private native static float _getWeight(int handle);
+	private native static float _getWeight(long handle);
 
 	// M3G maintenance version 1.1
-	private native static int _getRefWorldTime(int handle);
+	private native static int _getRefWorldTime(long handle);
 
 }

@@ -100,7 +100,7 @@ public class RayIntersection {
 		return new float[1 + 1 + 2 * Defs.NUM_TEXTURE_UNITS + 3 + 6];
 	}
 
-	void fill(int hIntersected, float[] result) {
+	void fill(long hIntersected, float[] result) {
 		intersected = (Node) Object3D.getInstance(hIntersected);
 		distance = result[0];
 		submeshIndex = (int) result[1];

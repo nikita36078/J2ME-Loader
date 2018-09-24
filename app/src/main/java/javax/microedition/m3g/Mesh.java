@@ -36,7 +36,7 @@ public class Mesh extends Node {
 	// Constructor(s)
 	//------------------------------------------------------------------
 
-	Mesh(int handle) {
+	Mesh(long handle) {
 		super(handle);
 		updateReferences();
 	}
@@ -120,7 +120,7 @@ public class Mesh extends Node {
 		}
 	}
 
-	static int createHandle(VertexBuffer vertices,
+	static long createHandle(VertexBuffer vertices,
 							IndexBuffer[] triangles,
 							Appearance[] appearances) {
 
@@ -131,11 +131,11 @@ public class Mesh extends Node {
 		verifyParams(vertices, triangles, appearances);
 
 		// Init the native side
-		int[] hTriangles = new int[triangles.length];
-		int[] hAppearances = null;
+		long[] hTriangles = new long[triangles.length];
+		long[] hAppearances = null;
 
 		if (appearances != null) {
-			hAppearances = new int[appearances.length];
+			hAppearances = new long[appearances.length];
 		}
 
 		for (int i = 0; i < triangles.length; i++) {
@@ -146,7 +146,7 @@ public class Mesh extends Node {
 			}
 		}
 
-		int ret = _ctor(Interface.getHandle(),
+		long ret = _ctor(Interface.getHandle(),
 				vertices.handle,
 				hTriangles,
 				hAppearances);
@@ -159,7 +159,7 @@ public class Mesh extends Node {
 
 	}
 
-	static int createHandle(VertexBuffer vertices,
+	static long createHandle(VertexBuffer vertices,
 							IndexBuffer triangles,
 							Appearance appearance) {
 
@@ -169,17 +169,17 @@ public class Mesh extends Node {
 		verifyParams(vertices, triangles);
 
 		// Init the native side
-		int[] hTriangles = new int[1];
-		int[] hAppearances = null;
+		long[] hTriangles = new long[1];
+		long[] hAppearances = null;
 
 		hTriangles[0] = triangles.handle;
 
 		if (appearance != null) {
-			hAppearances = new int[1];
+			hAppearances = new long[1];
 			hAppearances[0] = appearance.handle;
 		}
 
-		int ret = _ctor(Interface.getHandle(),
+		long ret = _ctor(Interface.getHandle(),
 				vertices.handle,
 				hTriangles,
 				hAppearances);
@@ -194,18 +194,18 @@ public class Mesh extends Node {
 	}
 
 	// Native methods
-	private static native int _ctor(int hInstance,
-									int hVertices,
-									int[] hTriangles,
-									int[] hAppearances);
+	private static native long _ctor(long hInstance,
+									long hVertices,
+									long[] hTriangles,
+									long[] hAppearances);
 
-	private static native void _setAppearance(int handle, int index, int hAppearance);
+	private static native void _setAppearance(long handle, int index, long hAppearance);
 
-	private static native int _getAppearance(int handle, int index);
+	private static native long _getAppearance(long handle, int index);
 
-	private static native int _getIndexBuffer(int handle, int index);
+	private static native long _getIndexBuffer(long handle, int index);
 
-	private static native int _getVertexBuffer(int handle);
+	private static native long _getVertexBuffer(long handle);
 
-	private static native int _getSubmeshCount(int handle);
+	private static native int _getSubmeshCount(long handle);
 }

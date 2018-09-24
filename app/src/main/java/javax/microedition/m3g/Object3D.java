@@ -26,7 +26,7 @@ public abstract class Object3D {
 	// Instance data
 	//------------------------------------------------------------------
 
-	int handle;
+	long handle;
 
 	private Object userObject;
 	private Vector animTracks;
@@ -44,7 +44,7 @@ public abstract class Object3D {
 	/**
 	 * <p>Only a package private constructor exists for this class.</p>
 	 */
-	Object3D(int handle) {
+	Object3D(long handle) {
 		if (handle != 0) {
 			this.handle = handle;
 			_addRef(handle);
@@ -72,7 +72,7 @@ public abstract class Object3D {
 		if (this instanceof Node) {
 			numRef = ((Node) this)._getSubtreeSize(handle);
 		}
-		int[] handles = new int[numRef * 2];
+		long[] handles = new long[numRef * 2];
 		Object3D obj = getInstance(_duplicate(handle, handles));
 		for (int i = 0; i < numRef; i++) {
 			Object userObj = getInstance(handles[i * 2]).getUserObject();
@@ -85,9 +85,9 @@ public abstract class Object3D {
 	}
 
 	public int getReferences(Object3D[] references) {
-		int[] handles = null;
+		long[] handles = null;
 		if (references != null) {
-			handles = new int[references.length];
+			handles = new long[references.length];
 		}
 		int num = _getReferences(handle, handles);
 		if (references != null) {
@@ -154,7 +154,7 @@ public abstract class Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	static final Object3D getInstance(int handle) {
+	static final Object3D getInstance(long handle) {
 		return Interface.getObjectInstance(handle);
 	}
 
@@ -184,25 +184,25 @@ public abstract class Object3D {
 	}
 
 	// Native methods
-	private static native int _addAnimationTrack(int hObject, int hAnimationTrack);
+	private static native int _addAnimationTrack(long hObject, long hAnimationTrack);
 
-	private static native void _removeAnimationTrack(int hObject, int hAnimationTrack);
+	private static native void _removeAnimationTrack(long hObject, long hAnimationTrack);
 
-	private static native int _getAnimationTrackCount(int hObject);
+	private static native int _getAnimationTrackCount(long hObject);
 
-	private static native int _animate(int hObject, int time);
+	private static native int _animate(long hObject, int time);
 
-	private static native void _setUserID(int hObject, int userID);
+	private static native void _setUserID(long hObject, int userID);
 
-	private static native int _getUserID(int hObject);
+	private static native int _getUserID(long hObject);
 
-	private static native void _addRef(int hObject);
+	private static native void _addRef(long hObject);
 
-	private static native int _getAnimationTrack(int hObject, int index);
+	private static native long _getAnimationTrack(long hObject, int index);
 
-	private static native int _duplicate(int hObject, int[] handles);
+	private static native long _duplicate(long hObject, long[] handles);
 
-	private static native int _getReferences(int hObject, int[] handles);
+	private static native int _getReferences(long hObject, long[] handles);
 
-	private static native int _find(int hObject, int userID);
+	private static native long _find(long hObject, int userID);
 }

@@ -32,7 +32,7 @@ public class TriangleStripArray extends IndexBuffer {
 		super(_createExplicit(Interface.getHandle(), indices, stripLengths));
 	}
 
-	TriangleStripArray(int handle) {
+	TriangleStripArray(long handle) {
 		super(handle);
 	}
 
@@ -56,17 +56,17 @@ public class TriangleStripArray extends IndexBuffer {
 	//------------------------------------------------------------------
 
 	// Native methods
-	private native static int _createImplicit(int hInterface,
+	private native static long _createImplicit(long hInterface,
 											  int first,
 											  final int[] lengths);
 
-	private native static int _createExplicit(int hInterface,
+	private native static long _createExplicit(long hInterface,
 											  final int[] indices,
 											  final int[] lengths);
 
 	// M3G 1.1 Maintenance release getters
-	private native static int _getIndexCount(int handle);
+	private native static int _getIndexCount(long handle);
 
-	private native static void _getIndices(int handle, int[] indices);
+	private native static void _getIndices(long handle, int[] indices);
 
 }

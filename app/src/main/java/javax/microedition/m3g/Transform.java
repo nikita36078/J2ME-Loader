@@ -154,5 +154,5 @@ public class Transform {
 
 	private static native void _transformTable(byte[] matrix, float[] v);
 
-	private static native void _transformArray(byte[] matrix, int handle, float[] out, boolean W);
+	private static native void _transformArray(byte[] matrix, long handle, float[] out, boolean W);
 }

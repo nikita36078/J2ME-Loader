@@ -48,7 +48,7 @@ public abstract class Node extends Transformable {
 	 * There is only a package private constructor. Applications can not extend
 	 * this class directly.</p>
 	 */
-	Node(int handle) {
+	Node(long handle) {
 		super(handle);
 		parent = (Node) getInstance(_getParent(handle));
 		zRef = (Node) getInstance(_getZRef(handle));
@@ -141,36 +141,36 @@ public abstract class Node extends Transformable {
 	}
 
 	// Native methods
-	private static native boolean _getTransformTo(int handle,
-												  int hTarget,
+	private static native boolean _getTransformTo(long handle,
+												  long hTarget,
 												  byte[] transform);
 
-	private static native void _align(int handle, int refHandle);
+	private static native void _align(long handle, long refHandle);
 
-	private static native void _setAlignment(int handle,
-											 int hZReference, int zTarget,
-											 int hYReference, int yTarget);
+	private static native void _setAlignment(long handle,
+											 long hZReference, int zTarget,
+											 long hYReference, int yTarget);
 
-	private static native void _setAlphaFactor(int handle, float alphaFactor);
+	private static native void _setAlphaFactor(long handle, float alphaFactor);
 
-	private static native float _getAlphaFactor(int handle);
+	private static native float _getAlphaFactor(long handle);
 
-	private static native void _enable(int handle, int which, boolean enable);
+	private static native void _enable(long handle, int which, boolean enable);
 
-	private static native boolean _isEnabled(int handle, int which);
+	private static native boolean _isEnabled(long handle, int which);
 
-	private static native void _setScope(int handle, int id);
+	private static native void _setScope(long handle, int id);
 
-	private static native int _getScope(int handle);
+	private static native int _getScope(long handle);
 
-	private static native int _getParent(int handle);
+	private static native long _getParent(long handle);
 
-	private static native int _getZRef(int handle);
+	private static native long _getZRef(long handle);
 
-	private static native int _getYRef(int handle);
+	private static native long _getYRef(long handle);
 
-	static native int _getSubtreeSize(int handle);
+	static native int _getSubtreeSize(long handle);
 
 	// M3G 1.1 Maintenance release getters
-	private static native int _getAlignmentTarget(int handle, int axis);
+	private static native int _getAlignmentTarget(long handle, int axis);
 }

@@ -35,7 +35,7 @@ public class World extends Group {
 
 	/**
 	 */
-	World(int handle) {
+	World(long handle) {
 		super(handle);
 		background = (Background) getInstance(_getBackground(handle));
 		activeCamera = (Camera) getInstance(_getActiveCamera(handle));
@@ -64,13 +64,13 @@ public class World extends Group {
 	}
 
 	// Native methods
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _setActiveCamera(int handle, int hCamera);
+	private static native void _setActiveCamera(long handle, long hCamera);
 
-	private static native void _setBackground(int handle, int hBackground);
+	private static native void _setBackground(long handle, long hBackground);
 
-	private static native int _getActiveCamera(int handle);
+	private static native long _getActiveCamera(long handle);
 
-	private static native int _getBackground(int handle);
+	private static native long _getBackground(long handle);
 }

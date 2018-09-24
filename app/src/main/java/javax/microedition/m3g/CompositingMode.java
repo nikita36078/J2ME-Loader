@@ -38,7 +38,7 @@ public class CompositingMode extends Object3D {
 
 	/**
 	 */
-	CompositingMode(int handle) {
+	CompositingMode(long handle) {
 		super(handle);
 	}
 
@@ -110,35 +110,35 @@ public class CompositingMode extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private native static int _ctor(int hInterface);
+	private native static long _ctor(long hInterface);
 
-	private native static void _setBlending(int handle, int mode);
+	private native static void _setBlending(long handle, int mode);
 
-	private native static int _getBlending(int handle);
+	private native static int _getBlending(long handle);
 
-	private native static void _setAlphaThreshold(int handle, float threshold);
+	private native static void _setAlphaThreshold(long handle, float threshold);
 
-	private native static float _getAlphaThreshold(int handle);
+	private native static float _getAlphaThreshold(long handle);
 
-	private native static void _setAlphaWriteEnable(int handle, boolean enable);
+	private native static void _setAlphaWriteEnable(long handle, boolean enable);
 
-	private native static boolean _isAlphaWriteEnabled(int handle);
+	private native static boolean _isAlphaWriteEnabled(long handle);
 
-	private native static void _enableDepthTest(int handle, boolean enable);
+	private native static void _enableDepthTest(long handle, boolean enable);
 
-	private native static boolean _isDepthTestEnabled(int handle);
+	private native static boolean _isDepthTestEnabled(long handle);
 
-	private native static void _enableDepthWrite(int handle, boolean enable);
+	private native static void _enableDepthWrite(long handle, boolean enable);
 
-	private native static boolean _isDepthWriteEnabled(int handle);
+	private native static boolean _isDepthWriteEnabled(long handle);
 
-	private native static void _enableColorWrite(int handle, boolean enable);
+	private native static void _enableColorWrite(long handle, boolean enable);
 
-	private native static boolean _isColorWriteEnabled(int handle);
+	private native static boolean _isColorWriteEnabled(long handle);
 
-	private native static void _setDepthOffset(int handle, float factor, float units);
+	private native static void _setDepthOffset(long handle, float factor, float units);
 
-	private native static float _getDepthOffsetFactor(int handle);
+	private native static float _getDepthOffsetFactor(long handle);
 
-	private native static float _getDepthOffsetUnits(int handle);
+	private native static float _getDepthOffsetUnits(long handle);
 }

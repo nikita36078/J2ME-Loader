@@ -29,7 +29,7 @@ public class Light extends Node {
 
 	/**
 	 */
-	Light(int handle) {
+	Light(long handle) {
 		super(handle);
 	}
 
@@ -90,29 +90,29 @@ public class Light extends Node {
 	}
 
 	// Native methods
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _setIntensity(int handle, float intensity);
+	private static native void _setIntensity(long handle, float intensity);
 
-	private static native float _getIntensity(int handle);
+	private static native float _getIntensity(long handle);
 
-	private static native void _setColor(int handle, int RGB);
+	private static native void _setColor(long handle, int RGB);
 
-	private static native int _getColor(int handle);
+	private static native int _getColor(long handle);
 
-	private static native void _setMode(int handle, int mode);
+	private static native void _setMode(long handle, int mode);
 
-	private static native int _getMode(int handle);
+	private static native int _getMode(long handle);
 
-	private static native void _setSpotAngle(int handle, float angle);
+	private static native void _setSpotAngle(long handle, float angle);
 
-	private static native float _getSpotAngle(int handle);
+	private static native float _getSpotAngle(long handle);
 
-	private static native void _setSpotExponent(int handle, float exponent);
+	private static native void _setSpotExponent(long handle, float exponent);
 
-	private static native float _getSpotExponent(int handle);
+	private static native float _getSpotExponent(long handle);
 
-	private static native void _setAttenuation(int handle, float constant, float linear, float quadratic);
+	private static native void _setAttenuation(long handle, float constant, float linear, float quadratic);
 
-	private static native float _getAttenuation(int handle, int type);
+	private static native float _getAttenuation(long handle, int type);
 }

@@ -37,7 +37,7 @@ public class Group extends Node {
 		super(_ctor(Interface.getHandle()));
 	}
 
-	Group(int handle) {
+	Group(long handle) {
 		super(handle);
 		int n = _getChildCount(handle);
 		while (n-- > 0) {
@@ -84,7 +84,7 @@ public class Group extends Node {
 						RayIntersection ri) {
 		float[] result = RayIntersection.createResult();
 		float[] ray = {ox, oy, oz, dx, dy, dz};
-		int hIntersected;
+		long hIntersected;
 
 		hIntersected = _pick3D(handle, mask, ray, result);
 
@@ -100,7 +100,7 @@ public class Group extends Node {
 
 	public boolean pick(int mask, float x, float y, Camera camera, RayIntersection ri) {
 		float[] result = RayIntersection.createResult();
-		int hIntersected;
+		long hIntersected;
 
 		hIntersected = _pick2D(handle, mask, x, y, camera != null ? camera.handle : 0, result);
 
@@ -153,17 +153,17 @@ public class Group extends Node {
 	}
 
 	// Native methods
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _addChild(int handle, int hNode);
+	private static native void _addChild(long handle, long hNode);
 
-	private static native void _removeChild(int handle, int hNode);
+	private static native void _removeChild(long handle, long hNode);
 
-	private static native int _getChildCount(int handle);
+	private static native int _getChildCount(long handle);
 
-	private static native int _getChild(int handle, int index);
+	private static native long _getChild(long handle, int index);
 
-	private static native int _pick3D(int handle, int mask, float[] ray, float[] result);
+	private static native long _pick3D(long handle, int mask, float[] ray, float[] result);
 
-	private static native int _pick2D(int handle, int mask, float x, float y, int hCamera, float[] result);
+	private static native long _pick2D(long handle, int mask, float x, float y, long hCamera, float[] result);
 }

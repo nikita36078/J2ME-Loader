@@ -37,7 +37,7 @@ public class VertexBuffer extends Object3D {
 
 	/**
 	 */
-	VertexBuffer(int handle) {
+	VertexBuffer(long handle) {
 		super(handle);
 
 		positions = (VertexArray) getInstance(_getArray(handle, Defs.GET_POSITIONS, null));
@@ -128,21 +128,21 @@ public class VertexBuffer extends Object3D {
 	//------------------------------------------------------------------
 
 	// Native methods
-	private static native int _ctor(int hInterface);
+	private static native long _ctor(long hInterface);
 
-	private static native void _setColors(int hBuffer, int hArray);
+	private static native void _setColors(long hBuffer, long hArray);
 
-	private static native void _setNormals(int hBuffer, int hArray);
+	private static native void _setNormals(long hBuffer, long hArray);
 
-	private static native void _setTexCoords(int hBuffer, int unit, int hArray, float scale, float[] bias);
+	private static native void _setTexCoords(long hBuffer, int unit, long hArray, float scale, float[] bias);
 
-	private static native void _setVertices(int hBuffer, int hArray, float scale, float[] bias);
+	private static native void _setVertices(long hBuffer, long hArray, float scale, float[] bias);
 
-	private static native void _setDefaultColor(int hBuffer, int ARGB);
+	private static native void _setDefaultColor(long hBuffer, int ARGB);
 
-	private static native int _getDefaultColor(int hBuffer);
+	private static native int _getDefaultColor(long hBuffer);
 
-	private static native int _getArray(int hBuffer, int which, float[] scaleBias);
+	private static native long _getArray(long hBuffer, int which, float[] scaleBias);
 
-	private static native int _getVertexCount(int hBuffer);
+	private static native int _getVertexCount(long hBuffer);
 }

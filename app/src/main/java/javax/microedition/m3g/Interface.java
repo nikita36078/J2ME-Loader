@@ -73,7 +73,7 @@ class Interface {
 	/**
 	 * Handle of the native interface object.
 	 */
-	private int handle;
+	private long handle;
 
 	/**
 	 * Global handle-to-Object3D map used to both find the Java
@@ -132,7 +132,7 @@ class Interface {
 	/**
 	 * Returns the native handle of the current Interface instance.
 	 */
-	static final int getHandle() {
+	static final long getHandle() {
 		getInstance().integrityCheck();
 		return getInstance().handle;
 	}
@@ -144,12 +144,12 @@ class Interface {
 	 * set at this point!
 	 */
 	static final void register(Object3D obj) {
-		getInstance().liveObjects.put(new Integer(obj.handle),
+		getInstance().liveObjects.put(new Long(obj.handle),
 				new WeakReference(obj));
 	}
 
 	static final void register(Loader obj) {
-		getInstance().liveObjects.put(new Integer(obj.handle),
+		getInstance().liveObjects.put(new Long(obj.handle),
 				new WeakReference(obj));
 	}
 
@@ -158,9 +158,9 @@ class Interface {
 	 * removes dead objects (that is, null references) from the map
 	 * upon encountering them.
 	 */
-	static final Object3D findObject(int handle) {
+	static final Object3D findObject(long handle) {
 		Interface self = getInstance();
-		Integer iHandle = new Integer(handle);
+		Long iHandle = new Long(handle);
 		Object ref = self.liveObjects.get(iHandle);
 
 		if (ref != null) {
@@ -178,7 +178,7 @@ class Interface {
 	 * Returns the Java object representing a native object, or
 	 * creates a new proxy/peer if one doesn't exist yet.
 	 */
-	static final Object3D getObjectInstance(int handle) {
+	static final Object3D getObjectInstance(long handle) {
 
 		// A zero handle equals null
 
@@ -253,7 +253,7 @@ class Interface {
 	 * Forces removal of an object from the handle-to-object map.
 	 */
 	static final void deregister(Object3D obj, Interface self) {
-		self.liveObjects.remove(new Integer(obj.handle));
+		self.liveObjects.remove(new Long(obj.handle));
 		if (self.liveObjects.isEmpty() && self.iShutdown) {
 			self.registeredFinalize();
 		}
@@ -263,7 +263,7 @@ class Interface {
 	 * Forces removal of an object from the handle-to-object map.
 	 */
 	static final void deregister(Loader obj, Interface self) {
-		self.liveObjects.remove(new Integer(obj.handle));
+		self.liveObjects.remove(new Long(obj.handle));
 		if (self.liveObjects.isEmpty() && self.iShutdown) {
 			self.registeredFinalize();
 		}
@@ -348,8 +348,8 @@ class Interface {
 	}
 
 	// Native constructor
-	private static native int _ctor();
+	private static native long _ctor();
 
 	// Native class ID resolver
-	private static native int _getClassID(int hObject);
+	private static native int _getClassID(long hObject);
 }

@@ -72,7 +72,7 @@ public class Loader {
 	private static final int AVG_XREF_SEC_LENGTH = 128;
 
 	// Instance specific
-	int handle;
+	long handle;
 
 	private Vector iLoadedObjects = new Vector();
 	private Vector iFileHistory = new Vector();
@@ -465,7 +465,7 @@ public class Loader {
 			loadExternalRefs(aStream);
 			if (iLoadedObjects.size() > 0)   // Load and set external references
 			{
-				int[] xRef = new int[iLoadedObjects.size()];
+				long[] xRef = new long[iLoadedObjects.size()];
 				for (int i = 0; i < xRef.length; i++)
 					xRef[i] = ((Object3D) iLoadedObjects.elementAt(i)).handle;
 				_setExternalReferences(handle, xRef);
@@ -510,7 +510,7 @@ public class Loader {
 		Object3D[] objects = null;
 		int num = _getLoadedObjects(handle, null);
 		if (num > 0) {
-			int[] obj = new int[num];
+			long[] obj = new long[num];
 			_getLoadedObjects(handle, obj);
 			objects = new Object3D[num];
 			for (int i = 0; i < objects.length; i++) {
@@ -526,9 +526,9 @@ public class Loader {
 	 */
 	private void setUserObjects() throws IOException {
 		int numObjects = _getObjectsWithUserParameters(handle, null);
-		int[] obj = null;
+		long[] obj = null;
 		if (numObjects > 0) {
-			obj = new int[numObjects];
+			obj = new long[numObjects];
 			_getObjectsWithUserParameters(handle, obj);
 		}
 		for (int i = 0; i < numObjects; i++) {
@@ -951,17 +951,17 @@ public class Loader {
 	private native static boolean _inflate(byte[] data, byte[] buffer);
 
 	// native loader
-	private native static int _ctor(int handle);
+	private native static long _ctor(long handle);
 
-	private native static int _decodeData(int handle, int offset, byte[] data);
+	private native static int _decodeData(long handle, int offset, byte[] data);
 
-	private native static void _setExternalReferences(int handle, int[] references);
+	private native static void _setExternalReferences(long handle, long[] references);
 
-	private native static int _getLoadedObjects(int handle, int[] objects);
+	private native static int _getLoadedObjects(long handle, long[] objects);
 
-	private native static int _getObjectsWithUserParameters(int handle, int[] objects);
+	private native static int _getObjectsWithUserParameters(long handle, long[] objects);
 
-	private native static int _getNumUserParameters(int handle, int obj);
+	private native static int _getNumUserParameters(long handle, int obj);
 
-	private native static int _getUserParameter(int handle, int obj, int index, byte[] data);
+	private native static int _getUserParameter(long handle, int obj, int index, byte[] data);
 }

@@ -41,7 +41,7 @@ public class Graphics3D {
 	// Instance data
 	//------------------------------------------------------------------
 
-	private int handle;
+	private long handle;
 	private int[] pixels;
 	private int cur_width, cur_height;
 
@@ -192,7 +192,7 @@ public class Graphics3D {
 			Image2D img = (Image2D) target;
 
 			offsetX = offsetY = 0;
-			final int imageHandle = img.handle;
+			final long imageHandle = img.handle;
 
 			Platform.executeInUIThread(
 					new M3gRunnable() {
@@ -554,16 +554,16 @@ public class Graphics3D {
 	//------------------------------------------------------------------
 	// Native implementation methods
 	//------------------------------------------------------------------
-	private native static int _ctor(int hInterface);
+	private native static long _ctor(long hInterface);
 
-	private native static void _addRef(int hObject);
+	private native static void _addRef(long hObject);
 
-	private native static int _addLight(int handle,
-										int hLight,
+	private native static int _addLight(long handle,
+										long hLight,
 										byte[] transform);
 
-	private native static boolean _bindGraphics(int handle,
-												int surfaceHandle,
+	private native static boolean _bindGraphics(long handle,
+												long surfaceHandle,
 												int width, int height,
 												int clipX, int clipY,
 												int clipW, int clipH,
@@ -572,79 +572,79 @@ public class Graphics3D {
 												boolean aIsProperRenderer,
 												int[] pixels);
 
-	private native static void _bindImage(int handle, int imgHandle, boolean depth, int hintBits);
+	private native static void _bindImage(long handle, long imgHandle, boolean depth, int hintBits);
 
-	private native static void _releaseGraphics(int handle,
-												int surfaceHandle,
+	private native static void _releaseGraphics(long handle,
+												long surfaceHandle,
 												boolean aIsImageTarget,
 												boolean aIsProperRenderer,
 												int[] pixels);
 
-	private native static void _releaseImage(int handle);
+	private native static void _releaseImage(long handle);
 
-	private native static void _resetLights(int handle);
+	private native static void _resetLights(long handle);
 
-	private native static void _clear(int handle, int hBackground);
+	private native static void _clear(long handle, long hBackground);
 
-	private native static void _render(int handle,
-									   int hVtxBuffer,
-									   int hIdxBuffer,
-									   int hAppearance,
+	private native static void _render(long handle,
+									   long hVtxBuffer,
+									   long hIdxBuffer,
+									   long hAppearance,
 									   byte[] transform,
 									   int scope);
 
-	private native static void _renderNode(int handle, int hNode, byte[] transform);
+	private native static void _renderNode(long handle, long hNode, byte[] transform);
 
-	private native static void _renderWorld(int handle, int hWorld);
+	private native static void _renderWorld(long handle, long hWorld);
 
-	private native static void _setCamera(int handle,
-										  int hCamera,
+	private native static void _setCamera(long handle,
+										  long hCamera,
 										  byte[] transform);
 
-	private native static void _setViewport(int handle,
+	private native static void _setViewport(long handle,
 											int x, int y,
 											int width, int height);
 
-	private native static void _setLight(int handle,
+	private native static void _setLight(long handle,
 										 int index,
-										 int hLight,
+										 long hLight,
 										 byte[] transform);
 
-	private native static void _setDepthRange(int handle,
+	private native static void _setDepthRange(long handle,
 											  float near,
 											  float far);
 
 	// M3G 1.1
 	// Maintenance release getters
 
-	private native static void _getViewTransform(int handle,
+	private native static void _getViewTransform(long handle,
 												 byte[] transform);
 
-	private native static int _getCamera(int handle);
+	private native static long _getCamera(long handle);
 
-	private native static int _getLightTransform(int handle,
+	private native static long _getLightTransform(long handle,
 												 int index,
 												 byte[] transform);
 
-	private native static int _getLightCount(int handle);
+	private native static int _getLightCount(long handle);
 
-	private native static float _getDepthRangeNear(int handle);
+	private native static float _getDepthRangeNear(long handle);
 
-	private native static float _getDepthRangeFar(int handle);
+	private native static float _getDepthRangeFar(long handle);
 
-	private native static int _getViewportX(int handle);
+	private native static int _getViewportX(long handle);
 
-	private native static int _getViewportY(int handle);
+	private native static int _getViewportY(long handle);
 
-	private native static int _getViewportWidth(int handle);
+	private native static int _getViewportWidth(long handle);
 
-	private native static int _getViewportHeight(int handle);
+	private native static int _getViewportHeight(long handle);
 
 	/* Statistics support, MUST be disabled in official releases! */
     /*
         public native static int getStatistics(int[] statistics);
     */
-	private native static boolean _isAASupported(int handle);
+	private native static boolean _isAASupported(long handle);
 
 	private native static boolean _isProperRenderer();
 }

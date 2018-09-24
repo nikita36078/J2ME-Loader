@@ -25,7 +25,7 @@ public abstract class Transformable extends Object3D {
 	// Constructor(s)
 	//------------------------------------------------------------------
 
-	Transformable(int handle) {
+	Transformable(long handle) {
 		super(handle);
 	}
 
@@ -90,32 +90,32 @@ public abstract class Transformable extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private static native void _setOrientation(int handle,
+	private static native void _setOrientation(long handle,
 											   float angle,
 											   float ax, float ay, float az,
 											   boolean absolute);
 
-	private static native void _preRotate(int handle,
+	private static native void _preRotate(long handle,
 										  float angle,
 										  float ax, float ay, float az);
 
-	private static native void _getOrientation(int handle, float[] angleAxis);
+	private static native void _getOrientation(long handle, float[] angleAxis);
 
-	private static native void _setScale(int handle,
+	private static native void _setScale(long handle,
 										 float sx, float sy, float sz,
 										 boolean absolute);
 
-	private static native void _getScale(int handle, float[] scale);
+	private static native void _getScale(long handle, float[] scale);
 
-	private static native void _setTranslation(int handle,
+	private static native void _setTranslation(long handle,
 											   float tx, float ty, float tz,
 											   boolean absolute);
 
-	private static native void _getTranslation(int handle, float[] translation);
+	private static native void _getTranslation(long handle, float[] translation);
 
-	private static native void _setTransform(int handle, byte[] transform);
+	private static native void _setTransform(long handle, byte[] transform);
 
-	private static native void _getTransform(int handle, byte[] transform);
+	private static native void _getTransform(long handle, byte[] transform);
 
-	private static native void _getComposite(int handle, byte[] transform);
+	private static native void _getComposite(long handle, byte[] transform);
 }

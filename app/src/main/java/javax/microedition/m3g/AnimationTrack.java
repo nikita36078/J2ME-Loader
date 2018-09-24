@@ -55,7 +55,7 @@ public class AnimationTrack extends Object3D {
 	// Constructors
 	//------------------------------------------------------------------
 
-	AnimationTrack(int handle) {
+	AnimationTrack(long handle) {
 		super(handle);
 		controller = (AnimationController) getInstance(_getController(handle));
 		sequence = (KeyframeSequence) getInstance(_getSequence(handle));
@@ -92,15 +92,15 @@ public class AnimationTrack extends Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	private native static int _ctor(int hInterface,
-									int hSequence,
+	private native static long _ctor(long hInterface,
+									long hSequence,
 									int property);
 
-	private native static int _getController(int handle);
+	private native static long _getController(long handle);
 
-	private native static int _getSequence(int handle);
+	private native static long _getSequence(long handle);
 
-	private native static int _getTargetProperty(int handle);
+	private native static int _getTargetProperty(long handle);
 
-	private native static void _setController(int handle, int hController);
+	private native static void _setController(long handle, long hController);
 }
