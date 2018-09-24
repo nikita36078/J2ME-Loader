@@ -189,7 +189,7 @@ typedef struct
 #else /* !M3G_DEBUG */
 
 /*@notfunction@*/
-#   define INSTRUMENTATED_SIZE(bytes)   ((M3Guint)(bytes))
+#   define INSTRUMENTATED_SIZE(bytes)   ((M3Gpointer)(bytes))
 /*@notfunction@*/
 #   define PAYLOAD_BLOCK(ptr)           (ptr)
 /*@notfunction@*/
@@ -992,7 +992,7 @@ static void m3gGetObjectsWithClassID(Interface *m3g, M3GClass classID, PointerAr
  * The objects will be deleted when a GL context is next made current.
  *
  */
-static void m3gDeleteGLTextures(Interface *m3g, M3Gsizei n, M3Guint *t)
+static void m3gDeleteGLTextures(Interface *m3g, M3Gsizei n, M3Gpointer *t)
 {
     PointerArray *objs = &m3g->deadGLObjects;
     while (n--) {

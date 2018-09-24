@@ -1382,7 +1382,7 @@ static EGLSurface m3gSelectGLSurface(RenderContext *ctx)
  */
 static void m3gDeleteGLSurfaces(RenderContext *ctx,
                                 M3Gbitmask type,
-                                M3Guint handle)
+                                M3Gpointer handle)
 {
     int i;
     M3G_VALIDATE_OBJECT(ctx);
@@ -1623,7 +1623,7 @@ M3G_API void m3gInvalidateBitmapTarget(M3GRenderContext hCtx,
     M3G_LOG1(M3G_LOG_RENDERING, "Invalidating bitmap 0x%08X\n",
              (unsigned) hBitmap);
     
-    m3gDeleteGLSurfaces(ctx, (M3Gbitmask) SURFACE_BITMAP, (M3Guint) hBitmap);
+    m3gDeleteGLSurfaces(ctx, (M3Gbitmask) SURFACE_BITMAP, (M3Gpointer) hBitmap);
 }
 
 /*!
@@ -1646,7 +1646,7 @@ M3G_API void m3gInvalidateWindowTarget(M3GRenderContext hCtx,
     M3G_LOG1(M3G_LOG_RENDERING, "Invalidating window 0x%08X\n",
              (unsigned) hWindow);
     
-    m3gDeleteGLSurfaces(ctx, (M3Gbitmask) SURFACE_WINDOW, (M3Guint) hWindow);
+    m3gDeleteGLSurfaces(ctx, (M3Gbitmask) SURFACE_WINDOW, (M3Gpointer) hWindow);
 }
 
 /*!
@@ -1667,5 +1667,5 @@ M3G_API void m3gInvalidateMemoryTarget(M3GRenderContext hCtx,
     M3G_LOG1(M3G_LOG_RENDERING, "Invalidating memory target 0x%08X\n",
              (unsigned) pixels);
     
-    m3gDeleteGLSurfaces(ctx, (M3Gbitmask) SURFACE_MEMORY, (M3Guint) pixels);
+    m3gDeleteGLSurfaces(ctx, (M3Gbitmask) SURFACE_MEMORY, (M3Gpointer) pixels);
 }

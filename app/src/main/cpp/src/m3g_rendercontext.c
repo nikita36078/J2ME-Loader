@@ -72,7 +72,7 @@ typedef struct {
     M3Guint width;
     M3Guint height;
     M3Guint format;
-    M3Guint targetHandle;
+    M3Gpointer targetHandle;
     void* pixels;
     M3Guint lastUseTime;
 } GLSurfaceRecord;
@@ -89,7 +89,7 @@ typedef struct
     M3Guint stride;
     /*@shared@*/ void *pixels, *lockedPixels;
     EGLSurface surface;
-    M3Guint handle;
+    M3Gpointer handle;
     M3Guint userData;
     
     /*!
@@ -217,7 +217,7 @@ static M3Gbool m3gBindRenderTarget(RenderContext *ctx,
                                    M3Genum targetType,
                                    M3Gint width, M3Gint height,
                                    M3GPixelFormat format,
-                                   M3Guint handle);
+                                   M3Gpointer handle);
 static void m3gResetRectangles(RenderContext *ctx);
 static void m3gSetGLDefaults(void);
 static void m3gUpdateScissor(RenderContext *ctx);
@@ -483,7 +483,7 @@ static M3Gbool m3gBindRenderTarget(RenderContext *ctx,
                                    M3Genum targetType,
                                    M3Gint width, M3Gint height,
                                    M3GPixelFormat format,
-                                   M3Guint handle)
+                                   M3Gpointer handle)
 {
     /* Check for generic errors */
     
@@ -1270,7 +1270,7 @@ M3G_API void m3gBindImageTarget(M3GRenderContext hCtx, M3GImage hImage)
                              SURFACE_IMAGE,
                              img->width, img->height,
                              img->internalFormat,
-                             (M3Guint) hImage)) {
+                             (M3Gpointer) hImage)) {
         return; /* appropriate error raised automatically */
     }
 

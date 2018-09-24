@@ -18,6 +18,8 @@
 #ifndef __M3G_CORE_H__
 #define __M3G_CORE_H__
 
+#include <stdint.h>
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -368,6 +370,7 @@ typedef unsigned        M3Guint;    /*!< \brief 32-bit unsigned integer */
 typedef unsigned short  M3Gushort;  /*!< \brief 16-bit unsigned integer */
 typedef unsigned char   M3Gubyte;   /*!< \brief  8-bit unsigned integer */
 typedef float           M3Gfloat;   /*!< \brief 32-bit IEEE float */
+typedef uintptr_t       M3Gpointer;
 
 typedef M3Gint   M3Genum;
 typedef M3Guint  M3Gbitmask;
@@ -412,7 +415,7 @@ typedef struct M3GObjectImpl *M3GObject;
     typedef struct M3GVertexArrayImpl *M3GVertexArray;
     typedef struct M3GVertexBufferImpl *M3GVertexBuffer;
 
-typedef /*@abstract@*/ M3Gint M3GMemObject;
+typedef /*@abstract@*/ M3Gpointer M3GMemObject;
 
 /*----------------------------------------------------------------------
  * Abstracted OpenGL rendering target types
@@ -575,11 +578,11 @@ M3G_API void	m3gSetQuatRotation (M3GQuat *quat, const M3GVec3 *from, const M3GVe
  * Interface callback types
  *--------------------------------------------------------------------*/
 
-typedef /*@only@*//*@null@*/ void* (m3gMallocFunc) (M3Guint bytes);
+typedef /*@only@*//*@null@*/ void* (m3gMallocFunc) (M3Gpointer bytes);
 
 typedef void    (m3gFreeFunc)   (/*@only@*//*@null@*//*@out@*/ void *ptr);
 
-typedef M3GMemObject (m3gObjectAllocator)    (M3Guint bytes);
+typedef M3GMemObject (m3gObjectAllocator)    (M3Gpointer bytes);
 typedef /*@dependent@*/ void*   (m3gObjectResolver)     (M3GMemObject handle);
 typedef void    (m3gObjectDeallocator)(M3GMemObject handle);
     

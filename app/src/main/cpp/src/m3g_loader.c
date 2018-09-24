@@ -713,7 +713,7 @@ static M3Gbool m3gCheckSectionDataLength(Loader *loader, const M3Gubyte *data, M
  */
 static void m3gReferenceLoaded(PointerArray *array, M3Gint idx)
 {
-    M3Guint ptr = (M3Guint)m3gGetArrayElement(array, idx);
+    M3Gpointer ptr = (M3Gpointer)m3gGetArrayElement(array, idx);
     ptr |= 1;
     m3gSetArrayElement(array, idx, (void *)ptr);
 }
@@ -725,7 +725,7 @@ static void m3gReferenceLoaded(PointerArray *array, M3Gint idx)
  */
 static M3GObject m3gGetLoadedPtr(PointerArray *array, M3Gint idx, M3Gbool *referenced)
 {
-    M3Guint ptr = (M3Guint)m3gGetArrayElement(array, idx);
+    M3Gpointer ptr = (M3Gpointer)m3gGetArrayElement(array, idx);
     if (referenced != NULL) {
         *referenced = ptr & 1;
     }
