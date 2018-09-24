@@ -20,130 +20,130 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_CompositingMode__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_CompositingMode__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _setBlending
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1setBlending
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _getBlending
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_CompositingMode__1getBlending
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _setAlphaThreshold
- * Signature: (IF)V
+ * Signature: (JF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1setAlphaThreshold
-  (JNIEnv *, jclass, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _getAlphaThreshold
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_CompositingMode__1getAlphaThreshold
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _setAlphaWriteEnable
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1setAlphaWriteEnable
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _isAlphaWriteEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_CompositingMode__1isAlphaWriteEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _enableDepthTest
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1enableDepthTest
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _isDepthTestEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_CompositingMode__1isDepthTestEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _enableDepthWrite
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1enableDepthWrite
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _isDepthWriteEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_CompositingMode__1isDepthWriteEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _enableColorWrite
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1enableColorWrite
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _isColorWriteEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_CompositingMode__1isColorWriteEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _setDepthOffset
- * Signature: (IFF)V
+ * Signature: (JFF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_CompositingMode__1setDepthOffset
-  (JNIEnv *, jclass, jint, jfloat, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _getDepthOffsetFactor
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_CompositingMode__1getDepthOffsetFactor
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_CompositingMode
  * Method:    _getDepthOffsetUnits
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_CompositingMode__1getDepthOffsetUnits
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

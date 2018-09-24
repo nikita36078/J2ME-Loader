@@ -58,18 +58,18 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Interface
  * Method:    _ctor
- * Signature: ()I
+ * Signature: ()J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Interface__1ctor
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Interface__1ctor
   (JNIEnv *, jclass);
 
 /*
  * Class:     javax_microedition_m3g_Interface
  * Method:    _getClassID
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Interface__1getClassID
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

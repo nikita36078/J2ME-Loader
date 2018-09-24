@@ -14,74 +14,74 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Fog__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _setMode
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setMode
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _getMode
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1getMode
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _setLinear
- * Signature: (IFF)V
+ * Signature: (JFF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setLinear
-  (JNIEnv *, jclass, jint, jfloat, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _getDistance
- * Signature: (II)F
+ * Signature: (JI)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Fog__1getDistance
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _setDensity
- * Signature: (IF)V
+ * Signature: (JF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setDensity
-  (JNIEnv *, jclass, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _getDensity
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Fog__1getDensity
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _setColor
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setColor
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Fog
  * Method:    _getColor
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1getColor
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

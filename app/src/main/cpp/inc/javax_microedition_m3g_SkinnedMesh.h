@@ -20,42 +20,42 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_SkinnedMesh
  * Method:    _ctor
- * Signature: (II[I[II)I
+ * Signature: (JJ[J[JJ)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
-  (JNIEnv *, jclass, jint, jint, jintArray, jintArray, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
+  (JNIEnv *, jclass, jlong, jlong, jlongArray, jlongArray, jlong);
 
 /*
  * Class:     javax_microedition_m3g_SkinnedMesh
  * Method:    _addTransform
- * Signature: (IIIII)V
+ * Signature: (JJIII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_SkinnedMesh__1addTransform
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong, jint, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_SkinnedMesh
  * Method:    _getSkeleton
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getSkeleton
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getSkeleton
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_SkinnedMesh
  * Method:    _getBoneTransform
- * Signature: (II[B)V
+ * Signature: (JJ[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getBoneTransform
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_SkinnedMesh
  * Method:    _getBoneVertices
- * Signature: (II[I[F)I
+ * Signature: (JJ[I[F)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getBoneVertices
-  (JNIEnv *, jclass, jint, jint, jintArray, jfloatArray);
+  (JNIEnv *, jclass, jlong, jlong, jintArray, jfloatArray);
 
 #ifdef __cplusplus
 }

@@ -10,74 +10,74 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_VertexBuffer__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _setColors
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setColors
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _setNormals
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setNormals
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _setTexCoords
- * Signature: (IIIF[F)V
+ * Signature: (JIJF[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setTexCoords
-  (JNIEnv *, jclass, jint, jint, jint, jfloat, jfloatArray);
+  (JNIEnv *, jclass, jlong, jint, jlong, jfloat, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _setVertices
- * Signature: (IIF[F)V
+ * Signature: (JJF[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setVertices
-  (JNIEnv *, jclass, jint, jint, jfloat, jfloatArray);
+  (JNIEnv *, jclass, jlong, jlong, jfloat, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _setDefaultColor
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setDefaultColor
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _getDefaultColor
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getDefaultColor
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _getArray
- * Signature: (II[F)I
+ * Signature: (JI[F)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getArray
-  (JNIEnv *, jclass, jint, jint, jfloatArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_VertexBuffer__1getArray
+  (JNIEnv *, jclass, jlong, jint, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexBuffer
  * Method:    _getVertexCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getVertexCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

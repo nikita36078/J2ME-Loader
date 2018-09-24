@@ -10,34 +10,34 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_TriangleStripArray
  * Method:    _createImplicit
- * Signature: (II[I)I
+ * Signature: (JI[I)I
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createImplicit
-  (JNIEnv *, jclass, jint, jint, jintArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createImplicit
+  (JNIEnv *, jclass, jlong, jint, jintArray);
 
 /*
  * Class:     javax_microedition_m3g_TriangleStripArray
  * Method:    _createExplicit
- * Signature: (I[I[I)I
+ * Signature: (J[I[I)I
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createExplicit
-  (JNIEnv *, jclass, jint, jintArray, jintArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createExplicit
+  (JNIEnv *, jclass, jlong, jintArray, jintArray);
 
 /*
  * Class:     javax_microedition_m3g_TriangleStripArray
  * Method:    _getIndexCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1getIndexCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_TriangleStripArray
  * Method:    _getIndices
- * Signature: (I[I)V
+ * Signature: (J[I)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_TriangleStripArray__1getIndices
-  (JNIEnv *, jclass, jint, jintArray);
+  (JNIEnv *, jclass, jlong, jintArray);
 
 #ifdef __cplusplus
 }

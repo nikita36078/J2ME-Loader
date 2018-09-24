@@ -20,42 +20,42 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_MorphingMesh
  * Method:    _ctor
- * Signature: (II[I[I[I)I
+ * Signature: (JJ[J[J[J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
-  (JNIEnv *, jclass, jint, jint, jintArray, jintArray, jintArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
+  (JNIEnv *, jclass, jlong, jlong, jlongArray, jlongArray, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_MorphingMesh
  * Method:    _setWeights
- * Signature: (I[F)V
+ * Signature: (J[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_MorphingMesh__1setWeights
-  (JNIEnv *, jclass, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_MorphingMesh
  * Method:    _getWeights
- * Signature: (I[F)V
+ * Signature: (J[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_MorphingMesh__1getWeights
-  (JNIEnv *, jclass, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_MorphingMesh
  * Method:    _getMorphTarget
- * Signature: (II)I
+ * Signature: (JI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTarget
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTarget
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_MorphingMesh
  * Method:    _getMorphTargetCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTargetCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

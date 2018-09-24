@@ -30,106 +30,106 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _ctor
- * Signature: (II)I
+ * Signature: (JJ)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1ctor
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Texture2D__1ctor
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _setImage
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setImage
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getImage
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getImage
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Texture2D__1getImage
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _setFiltering
- * Signature: (III)V
+ * Signature: (JII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setFiltering
-  (JNIEnv *, jclass, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _setWrapping
- * Signature: (III)V
+ * Signature: (JII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setWrapping
-  (JNIEnv *, jclass, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getWrappingS
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getWrappingS
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getWrappingT
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getWrappingT
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _setBlending
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setBlending
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getBlending
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getBlending
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _setBlendColor
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setBlendColor
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getBlendColor
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getBlendColor
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getImageFilter
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getImageFilter
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Texture2D
  * Method:    _getLevelFilter
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getLevelFilter
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

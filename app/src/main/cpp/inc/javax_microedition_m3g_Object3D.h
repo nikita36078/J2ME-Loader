@@ -10,90 +10,90 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _addAnimationTrack
- * Signature: (II)I
+ * Signature: (JJ)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1addAnimationTrack
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _removeAnimationTrack
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1removeAnimationTrack
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _getAnimationTrackCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrackCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _animate
- * Signature: (II)I
+ * Signature: (JI)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1animate
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _setUserID
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1setUserID
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _getUserID
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getUserID
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _addRef
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1addRef
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _getAnimationTrack
- * Signature: (II)I
+ * Signature: (JI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrack
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrack
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _duplicate
- * Signature: (I[I)I
+ * Signature: (J[J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1duplicate
-  (JNIEnv *, jclass, jint, jintArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1duplicate
+  (JNIEnv *, jclass, jlong, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _getReferences
- * Signature: (I[I)I
+ * Signature: (J[J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getReferences
-  (JNIEnv *, jclass, jint, jintArray);
+  (JNIEnv *, jclass, jlong, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_Object3D
  * Method:    _find
- * Signature: (II)I
+ * Signature: (JI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1find
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1find
+  (JNIEnv *, jclass, jlong, jint);
 
 #ifdef __cplusplus
 }

@@ -20,114 +20,114 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getTransformTo
- * Signature: (II[B)Z
+ * Signature: (JJ[B)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Node__1getTransformTo
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _align
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1align
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _setAlignment
- * Signature: (IIIII)V
+ * Signature: (JJIJI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setAlignment
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong, jint, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _setAlphaFactor
- * Signature: (IF)V
+ * Signature: (JF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setAlphaFactor
-  (JNIEnv *, jclass, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getAlphaFactor
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Node__1getAlphaFactor
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _enable
- * Signature: (IIZ)V
+ * Signature: (JIZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1enable
-  (JNIEnv *, jclass, jint, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jint, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _isEnabled
- * Signature: (II)Z
+ * Signature: (JI)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Node__1isEnabled
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _setScope
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setScope
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getScope
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getScope
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getParent
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getParent
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Node__1getParent
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getZRef
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getZRef
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Node__1getZRef
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getYRef
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getYRef
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Node__1getYRef
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getSubtreeSize
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getSubtreeSize
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Node
  * Method:    _getAlignmentTarget
- * Signature: (II)I
+ * Signature: (JI)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getAlignmentTarget
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 #ifdef __cplusplus
 }

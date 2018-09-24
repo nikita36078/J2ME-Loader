@@ -24,106 +24,106 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_PolygonMode__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _setLocalCameraLightingEnable
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setLocalCameraLightingEnable
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _setPerspectiveCorrectionEnable
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setPerspectiveCorrectionEnable
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _setCulling
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setCulling
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _getCulling
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getCulling
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _setWinding
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setWinding
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _getWinding
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getWinding
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _setShading
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setShading
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _getShading
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getShading
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _setTwoSidedLightingEnable
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setTwoSidedLightingEnable
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _isTwoSidedLightingEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isTwoSidedLightingEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _isLocalCameraLightingEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isLocalCameraLightingEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_PolygonMode
  * Method:    _isPerspectiveCorrectionEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isPerspectiveCorrectionEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

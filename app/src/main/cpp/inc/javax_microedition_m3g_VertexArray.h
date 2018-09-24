@@ -10,66 +10,66 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _ctor
- * Signature: (IIII)I
+ * Signature: (JIII)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1ctor
-  (JNIEnv *, jclass, jint, jint, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_VertexArray__1ctor
+  (JNIEnv *, jclass, jlong, jint, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _setByte
- * Signature: (III[B)V
+ * Signature: (JII[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1setByte
-  (JNIEnv *, jclass, jint, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _setShort
- * Signature: (III[S)V
+ * Signature: (JII[S)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1setShort
-  (JNIEnv *, jclass, jint, jint, jint, jshortArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jshortArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _getByte
- * Signature: (III[B)V
+ * Signature: (JII[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1getByte
-  (JNIEnv *, jclass, jint, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _getShort
- * Signature: (III[S)V
+ * Signature: (JII[S)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1getShort
-  (JNIEnv *, jclass, jint, jint, jint, jshortArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jshortArray);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _getComponentCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getComponentCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _getComponentType
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getComponentType
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_VertexArray
  * Method:    _getVertexCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getVertexCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

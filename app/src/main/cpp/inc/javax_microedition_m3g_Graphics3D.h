@@ -18,218 +18,218 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Graphics3D__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _addRef
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1addRef
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _addLight
- * Signature: (II[B)I
+ * Signature: (JJ[B)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1addLight
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _bindGraphics
- * Signature: (IIIIIIZIZ[I)Z
+ * Signature: (JJIIIIIIZIZ[I)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jboolean, jint, jboolean, jintArray);
+  (JNIEnv *, jclass, jlong, jlong, jint, jint, jint, jint, jint, jint, jboolean, jint, jboolean, jintArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _bindImage
- * Signature: (IIZI)V
+ * Signature: (JJZI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1bindImage
-  (JNIEnv *, jclass, jint, jint, jboolean, jint);
+  (JNIEnv *, jclass, jlong, jlong, jboolean, jint);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _releaseGraphics
- * Signature: (IIZZ[I)V
+ * Signature: (JJZZ[I)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseGraphics
-  (JNIEnv *, jclass, jint, jint, jboolean, jboolean, jintArray);
+  (JNIEnv *, jclass, jlong, jlong, jboolean, jboolean, jintArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _releaseImage
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseImage
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _resetLights
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1resetLights
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _clear
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1clear
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _render
- * Signature: (IIII[BI)V
+ * Signature: (JJJJ[BI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1render
-  (JNIEnv *, jclass, jint, jint, jint, jint, jbyteArray, jint);
+  (JNIEnv *, jclass, jlong, jlong, jlong, jlong, jbyteArray, jint);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _renderNode
- * Signature: (II[B)V
+ * Signature: (JJ[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1renderNode
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _renderWorld
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1renderWorld
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _setCamera
- * Signature: (II[B)V
+ * Signature: (JJ[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setCamera
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _setViewport
- * Signature: (IIIII)V
+ * Signature: (JIIII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setViewport
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _setLight
- * Signature: (III[B)V
+ * Signature: (JIJ[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setLight
-  (JNIEnv *, jclass, jint, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jint, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _setDepthRange
- * Signature: (IFF)V
+ * Signature: (JFF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setDepthRange
-  (JNIEnv *, jclass, jint, jfloat, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getViewTransform
- * Signature: (I[B)V
+ * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewTransform
-  (JNIEnv *, jclass, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getCamera
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getCamera
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Graphics3D__1getCamera
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getLightTransform
- * Signature: (II[B)I
+ * Signature: (JI[B)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightTransform
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightTransform
+  (JNIEnv *, jclass, jlong, jint, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getLightCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getDepthRangeNear
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Graphics3D__1getDepthRangeNear
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getDepthRangeFar
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Graphics3D__1getDepthRangeFar
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getViewportX
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportX
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getViewportY
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportY
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getViewportWidth
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportWidth
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _getViewportHeight
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportHeight
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D
  * Method:    _isAASupported
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1isAASupported
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Graphics3D

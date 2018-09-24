@@ -26,50 +26,50 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Camera
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Camera__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Camera
  * Method:    _setParallel
- * Signature: (IFFFF)V
+ * Signature: (JFFFF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setParallel
-  (JNIEnv *, jclass, jint, jfloat, jfloat, jfloat, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Camera
  * Method:    _setPerspective
- * Signature: (IFFFF)V
+ * Signature: (JFFFF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setPerspective
-  (JNIEnv *, jclass, jint, jfloat, jfloat, jfloat, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Camera
  * Method:    _setGeneric
- * Signature: (I[B)V
+ * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setGeneric
-  (JNIEnv *, jclass, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Camera
  * Method:    _getProjectionAsTransform
- * Signature: (I[B)I
+ * Signature: (J[B)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1getProjectionAsTransform
-  (JNIEnv *, jclass, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Camera
  * Method:    _getProjectionAsParams
- * Signature: (I[F)I
+ * Signature: (J[F)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1getProjectionAsParams
-  (JNIEnv *, jclass, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jfloatArray);
 
 #ifdef __cplusplus
 }

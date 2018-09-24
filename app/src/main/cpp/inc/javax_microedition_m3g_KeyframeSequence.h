@@ -24,106 +24,106 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _ctor
- * Signature: (IIII)I
+ * Signature: (JIII)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1ctor
-  (JNIEnv *, jclass, jint, jint, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_KeyframeSequence__1ctor
+  (JNIEnv *, jclass, jlong, jint, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _setValidRange
- * Signature: (III)V
+ * Signature: (JII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setValidRange
-  (JNIEnv *, jclass, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _setKeyframe
- * Signature: (III[F)V
+ * Signature: (JII[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setKeyframe
-  (JNIEnv *, jclass, jint, jint, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _setDuration
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setDuration
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getDuration
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getDuration
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _setRepeatMode
- * Signature: (II)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setRepeatMode
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getRepeatMode
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getRepeatMode
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getComponentCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getComponentCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getInterpolationType
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getInterpolationType
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getKeyframe
- * Signature: (II[F)I
+ * Signature: (JI[F)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getKeyframe
-  (JNIEnv *, jclass, jint, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jint, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getKeyframeCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getKeyframeCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getValidRangeFirst
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getValidRangeFirst
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_KeyframeSequence
  * Method:    _getValidRangeLast
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getValidRangeLast
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

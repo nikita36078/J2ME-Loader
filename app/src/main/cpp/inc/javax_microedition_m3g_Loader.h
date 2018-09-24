@@ -42,58 +42,58 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Loader__1inflate
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Loader__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _decodeData
- * Signature: (II[B)I
+ * Signature: (JI[B)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1decodeData
-  (JNIEnv *, jclass, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jint, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _setExternalReferences
- * Signature: (I[I)V
+ * Signature: (J[J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Loader__1setExternalReferences
-  (JNIEnv *, jclass, jint, jintArray);
+  (JNIEnv *, jclass, jlong, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _getLoadedObjects
- * Signature: (I[I)I
+ * Signature: (J[J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getLoadedObjects
-  (JNIEnv *, jclass, jint, jintArray);
+  (JNIEnv *, jclass, jlong, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _getObjectsWithUserParameters
- * Signature: (I[I)I
+ * Signature: (J[J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getObjectsWithUserParameters
-  (JNIEnv *, jclass, jint, jintArray);
+  (JNIEnv *, jclass, jlong, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _getNumUserParameters
- * Signature: (II)I
+ * Signature: (JI)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getNumUserParameters
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Loader
  * Method:    _getUserParameter
- * Signature: (III[B)I
+ * Signature: (JII[B)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getUserParameter
-  (JNIEnv *, jclass, jint, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jbyteArray);
 
 #ifdef __cplusplus
 }

@@ -20,66 +20,66 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _ctor
- * Signature: (IZII)I
+ * Signature: (JZJJ)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1ctor
-  (JNIEnv *, jclass, jint, jboolean, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Sprite3D__1ctor
+  (JNIEnv *, jclass, jlong, jboolean, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _isScaled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Sprite3D__1isScaled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _setAppearance
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setAppearance
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _setImage
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setImage
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _setCrop
- * Signature: (IIIII)V
+ * Signature: (JIIII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setCrop
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _getCrop
- * Signature: (II)I
+ * Signature: (JI)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getCrop
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _getAppearance
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getAppearance
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Sprite3D__1getAppearance
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Sprite3D
  * Method:    _getImage
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getImage
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Sprite3D__1getImage
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

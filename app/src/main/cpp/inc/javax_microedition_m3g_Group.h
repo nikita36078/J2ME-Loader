@@ -20,58 +20,58 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _addChild
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Group__1addChild
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _removeChild
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Group__1removeChild
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _getChildCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1getChildCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _getChild
- * Signature: (II)I
+ * Signature: (JI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1getChild
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1getChild
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _pick3D
- * Signature: (II[F[F)I
+ * Signature: (JI[F[F)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick3D
-  (JNIEnv *, jclass, jint, jint, jfloatArray, jfloatArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1pick3D
+  (JNIEnv *, jclass, jlong, jint, jfloatArray, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_Group
  * Method:    _pick2D
- * Signature: (IIFFI[F)I
+ * Signature: (JIFFJ[F)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick2D
-  (JNIEnv *, jclass, jint, jint, jfloat, jfloat, jint, jfloatArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1pick2D
+  (JNIEnv *, jclass, jlong, jint, jfloat, jfloat, jlong, jfloatArray);
 
 #ifdef __cplusplus
 }

@@ -98,10 +98,10 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transform__1transformTable
 /*
  * Class:     javax_microedition_m3g_Transform
  * Method:    _transformArray
- * Signature: ([BI[FZ)V
+ * Signature: ([BJ[FZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transform__1transformArray
-  (JNIEnv *, jclass, jbyteArray, jint, jfloatArray, jboolean);
+  (JNIEnv *, jclass, jbyteArray, jlong, jfloatArray, jboolean);
 
 #ifdef __cplusplus
 }

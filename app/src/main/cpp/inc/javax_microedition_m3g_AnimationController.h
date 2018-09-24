@@ -10,90 +10,90 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_AnimationController__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _setActiveInterval
- * Signature: (III)V
+ * Signature: (JII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setActiveInterval
-  (JNIEnv *, jclass, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _getActiveIntervalStart
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getActiveIntervalStart
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _getActiveIntervalEnd
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getActiveIntervalEnd
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _setSpeed
- * Signature: (IFI)V
+ * Signature: (JFI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setSpeed
-  (JNIEnv *, jclass, jint, jfloat, jint);
+  (JNIEnv *, jclass, jlong, jfloat, jint);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _getSpeed
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getSpeed
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _setPosition
- * Signature: (IFI)V
+ * Signature: (JFI)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setPosition
-  (JNIEnv *, jclass, jint, jfloat, jint);
+  (JNIEnv *, jclass, jlong, jfloat, jint);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _getPosition
- * Signature: (II)F
+ * Signature: (JI)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getPosition
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _setWeight
- * Signature: (IF)V
+ * Signature: (JF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setWeight
-  (JNIEnv *, jclass, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _getWeight
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getWeight
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationController
  * Method:    _getRefWorldTime
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getRefWorldTime
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

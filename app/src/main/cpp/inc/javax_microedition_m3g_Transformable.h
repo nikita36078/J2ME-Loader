@@ -10,82 +10,82 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _setOrientation
- * Signature: (IFFFFZ)V
+ * Signature: (JFFFFZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setOrientation
-  (JNIEnv *, jclass, jint, jfloat, jfloat, jfloat, jfloat, jboolean);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jfloat, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _preRotate
- * Signature: (IFFFF)V
+ * Signature: (JFFFF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1preRotate
-  (JNIEnv *, jclass, jint, jfloat, jfloat, jfloat, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _getOrientation
- * Signature: (I[F)V
+ * Signature: (J[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getOrientation
-  (JNIEnv *, jclass, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _setScale
- * Signature: (IFFFZ)V
+ * Signature: (JFFFZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setScale
-  (JNIEnv *, jclass, jint, jfloat, jfloat, jfloat, jboolean);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _getScale
- * Signature: (I[F)V
+ * Signature: (J[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getScale
-  (JNIEnv *, jclass, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _setTranslation
- * Signature: (IFFFZ)V
+ * Signature: (JFFFZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setTranslation
-  (JNIEnv *, jclass, jint, jfloat, jfloat, jfloat, jboolean);
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _getTranslation
- * Signature: (I[F)V
+ * Signature: (J[F)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getTranslation
-  (JNIEnv *, jclass, jint, jfloatArray);
+  (JNIEnv *, jclass, jlong, jfloatArray);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _setTransform
- * Signature: (I[B)V
+ * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setTransform
-  (JNIEnv *, jclass, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _getTransform
- * Signature: (I[B)V
+ * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getTransform
-  (JNIEnv *, jclass, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Transformable
  * Method:    _getComposite
- * Signature: (I[B)V
+ * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getComposite
-  (JNIEnv *, jclass, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jbyteArray);
 
 #ifdef __cplusplus
 }

@@ -52,42 +52,42 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_AnimationTrack
  * Method:    _ctor
- * Signature: (III)I
+ * Signature: (JJI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationTrack__1ctor
-  (JNIEnv *, jclass, jint, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_AnimationTrack__1ctor
+  (JNIEnv *, jclass, jlong, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_AnimationTrack
  * Method:    _getController
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationTrack__1getController
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_AnimationTrack__1getController
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationTrack
  * Method:    _getSequence
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationTrack__1getSequence
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_AnimationTrack__1getSequence
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationTrack
  * Method:    _getTargetProperty
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationTrack__1getTargetProperty
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_AnimationTrack
  * Method:    _setController
- * Signature: (II)V
+ * Signature: (JJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationTrack__1setController
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong);
 
 #ifdef __cplusplus
 }

@@ -10,18 +10,18 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Platform
  * Method:    finalizeInterface
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Platform_finalizeInterface
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Platform
  * Method:    _finalizeObject
- * Signature: (I)V
+ * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Platform__1finalizeObject
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

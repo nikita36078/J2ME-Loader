@@ -20,74 +20,74 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _ctorImage
- * Signature: (III)I
+ * Signature: (JIJ)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorImage
-  (JNIEnv *, jclass, jint, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorImage
+  (JNIEnv *, jclass, jlong, jint, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _ctorSizePixels
- * Signature: (IIII[B)I
+ * Signature: (JIII[B)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixels
-  (JNIEnv *, jclass, jint, jint, jint, jint, jbyteArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixels
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _ctorSizePixelsPalette
- * Signature: (IIII[B[B)I
+ * Signature: (JIII[B[B)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixelsPalette
-  (JNIEnv *, jclass, jint, jint, jint, jint, jbyteArray, jbyteArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixelsPalette
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jbyteArray, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _ctorSize
- * Signature: (IIII)I
+ * Signature: (JIII)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSize
-  (JNIEnv *, jclass, jint, jint, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorSize
+  (JNIEnv *, jclass, jlong, jint, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _set
- * Signature: (IIIII[B)V
+ * Signature: (JIIII[B)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Image2D__1set
-  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jbyteArray);
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jint, jbyteArray);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _isMutable
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Image2D__1isMutable
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _getFormat
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getFormat
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _getWidth
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getWidth
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Image2D
  * Method:    _getHeight
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getHeight
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

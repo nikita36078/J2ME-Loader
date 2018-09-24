@@ -18,58 +18,58 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _ctor
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Material__1ctor
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Material__1ctor
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _setColor
- * Signature: (III)V
+ * Signature: (JII)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setColor
-  (JNIEnv *, jclass, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint);
 
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _getColor
- * Signature: (II)I
+ * Signature: (JI)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Material__1getColor
-  (JNIEnv *, jclass, jint, jint);
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _setShininess
- * Signature: (IF)V
+ * Signature: (JF)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setShininess
-  (JNIEnv *, jclass, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jfloat);
 
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _getShininess
- * Signature: (I)F
+ * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Material__1getShininess
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _setVertexColorTrackingEnable
- * Signature: (IZ)V
+ * Signature: (JZ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setVertexColorTrackingEnable
-  (JNIEnv *, jclass, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jboolean);
 
 /*
  * Class:     javax_microedition_m3g_Material
  * Method:    _isVertexColorTrackingEnabled
- * Signature: (I)Z
+ * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Material__1isVertexColorTrackingEnabled
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

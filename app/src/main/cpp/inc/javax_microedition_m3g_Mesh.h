@@ -20,50 +20,50 @@ extern "C" {
 /*
  * Class:     javax_microedition_m3g_Mesh
  * Method:    _ctor
- * Signature: (II[I[I)I
+ * Signature: (JJ[J[J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Mesh__1ctor
-  (JNIEnv *, jclass, jint, jint, jintArray, jintArray);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Mesh__1ctor
+  (JNIEnv *, jclass, jlong, jlong, jlongArray, jlongArray);
 
 /*
  * Class:     javax_microedition_m3g_Mesh
  * Method:    _setAppearance
- * Signature: (III)V
+ * Signature: (JIJ)V
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Mesh__1setAppearance
-  (JNIEnv *, jclass, jint, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Mesh
  * Method:    _getAppearance
- * Signature: (II)I
+ * Signature: (JI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Mesh__1getAppearance
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Mesh__1getAppearance
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Mesh
  * Method:    _getIndexBuffer
- * Signature: (II)I
+ * Signature: (JI)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Mesh__1getIndexBuffer
-  (JNIEnv *, jclass, jint, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Mesh__1getIndexBuffer
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     javax_microedition_m3g_Mesh
  * Method:    _getVertexBuffer
- * Signature: (I)I
+ * Signature: (J)J
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Mesh__1getVertexBuffer
-  (JNIEnv *, jclass, jint);
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Mesh__1getVertexBuffer
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     javax_microedition_m3g_Mesh
  * Method:    _getSubmeshCount
- * Signature: (I)I
+ * Signature: (J)I
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Mesh__1getSubmeshCount
-  (JNIEnv *, jclass, jint);
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }
