@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Transformable.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1preRotate
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aAngle, jfloat aAx, jfloat aAy, jfloat aAz)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aAngle, jfloat aAx, jfloat aAy, jfloat aAz)
 {
     M3G_DO_LOCK
     m3gPreRotate((M3GTransformable)aHandle, aAngle, aAx, aAy, aAz);
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1preRotate
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getComposite
-(JNIEnv* aEnv, jclass, jint aHandle, jbyteArray aDstArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jbyteArray aDstArray)
 {
     if (validateArray(aEnv, aDstArray, sizeof(M3GMatrix)))
     {
@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getComposite
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setTransform
-(JNIEnv* aEnv, jclass, jint aHandle, jbyteArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jbyteArray aSrcArray)
 {
     if (aSrcArray != NULL)
     {
@@ -69,7 +69,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setTransform
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setTranslation
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aTx, jfloat aTy, jfloat aTz, jboolean aAbsolute)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aTx, jfloat aTy, jfloat aTz, jboolean aAbsolute)
 {
 
     if (aAbsolute)
@@ -87,7 +87,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setTranslatio
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setOrientation
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aAngle, jfloat aAx, jfloat aAy, jfloat aAz, jboolean aAbsolute)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aAngle, jfloat aAx, jfloat aAy, jfloat aAz, jboolean aAbsolute)
 {
 
     if (aAbsolute)
@@ -105,7 +105,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setOrientatio
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getTransform
-(JNIEnv* aEnv, jclass, jint aHandle, jbyteArray aDstArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jbyteArray aDstArray)
 {
     if (validateArray(aEnv, aDstArray, sizeof(M3GMatrix)))
     {
@@ -123,7 +123,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getTransform
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setScale
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aSx, jfloat aSy, jfloat aSz, jboolean aAbsolute)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aSx, jfloat aSy, jfloat aSz, jboolean aAbsolute)
 {
 
     if (aAbsolute)
@@ -141,7 +141,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1setScale
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getTranslation
-(JNIEnv* aEnv, jclass, jint aHandle, jfloatArray aDstArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloatArray aDstArray)
 {
     if (validateArray(aEnv, (jbyteArray)aDstArray, 3))
     {
@@ -159,7 +159,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getTranslatio
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getScale
-(JNIEnv* aEnv, jclass, jint aHandle, jfloatArray aDstArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloatArray aDstArray)
 {
     if (validateArray(aEnv, (jbyteArray)aDstArray, 3))
     {
@@ -177,7 +177,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getScale
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transformable__1getOrientation
-(JNIEnv* aEnv, jclass, jint aHandle, jfloatArray aDstArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloatArray aDstArray)
 {
     if (validateArray(aEnv, (jbyteArray)aDstArray, 4))
     {

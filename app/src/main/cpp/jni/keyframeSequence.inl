@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_KeyframeSequence.h"
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getRepeatMode
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint mode = (jint)m3gGetRepeatMode((M3GKeyframeSequence)aHandle);
@@ -26,7 +26,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getRepeatM
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setKeyframe
-(JNIEnv* aEnv, jclass, jint aHandle, jint aIndex, jint aTime, jfloatArray aValue)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aIndex, jint aTime, jfloatArray aValue)
 {
     jfloat* elems = NULL;
     if (aValue)
@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setKeyfram
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setRepeatMode
-(JNIEnv* aEnv, jclass, jint aHandle, jint aMode)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aMode)
 {
     M3G_DO_LOCK
     m3gSetRepeatMode((M3GKeyframeSequence)aHandle, (M3Genum)aMode);
@@ -62,25 +62,25 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setRepeatM
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setDuration
-(JNIEnv* aEnv, jclass, jint aHandle, jint aDuration)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aDuration)
 {
     M3G_DO_LOCK
     m3gSetDuration((M3GKeyframeSequence)aHandle, (int)aDuration);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g, jint aNumKeyframes, jint aNumComponents, jint aInterpolation)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_KeyframeSequence__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g, jint aNumKeyframes, jint aNumComponents, jint aInterpolation)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateKeyframeSequence((M3GInterface)aM3g, aNumKeyframes,
+    jlong handle = (jlong)m3gCreateKeyframeSequence((M3GInterface)aM3g, aNumKeyframes,
                   aNumComponents, aInterpolation);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setValidRange
-(JNIEnv* aEnv, jclass, jint aHandle, jint aFirst, jint aLast)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aFirst, jint aLast)
 {
     M3G_DO_LOCK
     m3gSetValidRange((M3GKeyframeSequence)aHandle, aFirst, aLast);
@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_KeyframeSequence__1setValidRa
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getDuration
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint duration = (jint)m3gGetDuration((M3GKeyframeSequence)aHandle);
@@ -99,7 +99,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getDuratio
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getComponentCount
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint count = (jint)m3gGetComponentCount((M3GKeyframeSequence)aHandle);
@@ -108,7 +108,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getCompone
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getInterpolationType
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint type = (jint)m3gGetInterpolationType((M3GKeyframeSequence)aHandle);
@@ -117,7 +117,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getInterpo
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getKeyframe
-(JNIEnv* aEnv, jclass, jint aHandle, jint aIndex, jfloatArray aValue)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aIndex, jfloatArray aValue)
 {
     jfloat* elems = NULL;
     if (aValue)
@@ -156,7 +156,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getKeyfram
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getKeyframeCount
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint count = (jint)m3gGetKeyframeCount((M3GKeyframeSequence)aHandle);
@@ -165,7 +165,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getKeyfram
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getValidRangeFirst
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     int first = 0;
     int last = 0;
@@ -176,7 +176,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getValidRa
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_KeyframeSequence__1getValidRangeLast
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     int first = 0;
     int last = 0;

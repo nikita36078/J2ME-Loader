@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Sprite3D.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setImage
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHImage)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHImage)
 {
     M3G_DO_LOCK
     m3gSetSpriteImage((M3GSprite)aHandle, (M3GImage)aHImage);
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setImage
 }
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Sprite3D__1isScaled
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jboolean scaled = (jboolean)m3gIsScaledSprite((M3GSprite)aHandle);
@@ -34,35 +34,35 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Sprite3D__1isScaled
     return scaled;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getImage
-(JNIEnv* aEnv, jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Sprite3D__1getImage
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint image = (M3Guint)m3gGetSpriteImage((M3GSprite)aHandle);
+    jlong image = (jlong)m3gGetSpriteImage((M3GSprite)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return image;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g, jboolean aScaled, jint aHImage, jint aHAppearance)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Sprite3D__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g, jboolean aScaled, jlong aHImage, jlong aHAppearance)
 {
     M3G_DO_LOCK
-    jint handle = (M3Guint)m3gCreateSprite((M3GInterface)aM3g, aScaled, (M3GImage)aHImage, (M3GAppearance)aHAppearance);
+    jlong handle = (jlong)m3gCreateSprite((M3GInterface)aM3g, aScaled, (M3GImage)aHImage, (M3GAppearance)aHAppearance);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getAppearance
-(JNIEnv* aEnv, jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Sprite3D__1getAppearance
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint appearence = (M3Guint)m3gGetSpriteAppearance((M3GSprite)aHandle);
+    jlong appearence = (jlong)m3gGetSpriteAppearance((M3GSprite)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return appearence;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getCrop
-(JNIEnv* aEnv, jclass, jint aHandle, jint aWhich)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aWhich)
 {
     M3G_DO_LOCK
     jint crop = (jint)m3gGetCrop((M3GSprite)aHandle, aWhich);
@@ -71,7 +71,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Sprite3D__1getCrop
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setCrop
-(JNIEnv* aEnv, jclass, jint aHandle, jint aCropX, jint aCropY, jint aWidth, jint aHeight)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aCropX, jint aCropY, jint aWidth, jint aHeight)
 {
     M3G_DO_LOCK
     m3gSetCrop((M3GSprite)aHandle, aCropX, aCropY, aWidth, aHeight);
@@ -79,7 +79,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setCrop
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Sprite3D__1setAppearance
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHAppearance)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHAppearance)
 {
     M3G_DO_LOCK
     m3gSetSpriteAppearance((M3GSprite)aHandle, (M3GAppearance)aHAppearance);

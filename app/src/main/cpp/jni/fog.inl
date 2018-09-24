@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Fog.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setMode
-(JNIEnv* aEnv, jclass, jint aHandle, jint aMode)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aMode)
 {
     M3G_DO_LOCK
     m3gSetFogMode((M3GFog)aHandle, aMode);
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setMode
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setLinear
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aNear, jfloat aFar)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aNear, jfloat aFar)
 {
     M3G_DO_LOCK
     m3gSetFogLinear((M3GFog)aHandle, aNear, aFar);
@@ -34,7 +34,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setLinear
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Fog__1getDistance
-(JNIEnv* aEnv, jclass, jint aHandle, jint aWhich)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aWhich)
 {
     M3G_DO_LOCK
     jfloat distance = (jfloat)m3gGetFogDistance((M3GFog)aHandle, aWhich);
@@ -42,17 +42,17 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Fog__1getDistance
     return distance;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Fog__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateFog((M3GInterface)aM3g);
+    jlong handle = (jlong)m3gCreateFog((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1getMode
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint mode = (jint)m3gGetFogMode((M3GFog)aHandle);
@@ -61,7 +61,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1getMode
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setDensity
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aDensity)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aDensity)
 {
     M3G_DO_LOCK
     m3gSetFogDensity((M3GFog)aHandle, aDensity);
@@ -69,7 +69,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setDensity
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Fog__1getDensity
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jfloat density = (jfloat)m3gGetFogDensity((M3GFog)aHandle);
@@ -78,7 +78,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Fog__1getDensity
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setColor
-(JNIEnv* aEnv, jclass, jint aHandle, jint aRGB)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aRGB)
 {
     M3G_DO_LOCK
     m3gSetFogColor((M3GFog)aHandle, aRGB);
@@ -86,7 +86,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Fog__1setColor
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Fog__1getColor
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint color = (jint)m3gGetFogColor((M3GFog)aHandle);

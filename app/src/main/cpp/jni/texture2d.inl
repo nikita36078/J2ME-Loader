@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_Texture2D.h"
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getBlending
-(JNIEnv* aEnv, jclass, jint aHTexture2D)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D)
 {
     M3G_DO_LOCK
     jint blending = (jint)m3gTextureGetBlending((M3GTexture)aHTexture2D);
@@ -26,7 +26,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getBlending
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getWrappingT
-(JNIEnv* aEnv, jclass, jint aHTexture2D)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D)
 {
     M3G_DO_LOCK
     jint wrapping = (jint)m3gGetWrappingT((M3GTexture)aHTexture2D);
@@ -35,7 +35,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getWrappingT
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getWrappingS
-(JNIEnv* aEnv, jclass, jint aHTexture2D)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D)
 {
     M3G_DO_LOCK
     jint wrapping = (jint)m3gGetWrappingS((M3GTexture)aHTexture2D);
@@ -44,7 +44,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getWrappingS
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setFiltering
-(JNIEnv* aEnv, jclass, jint aHTexture2D, jint aLevelFilter, jint aImageFilter)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D, jint aLevelFilter, jint aImageFilter)
 {
     M3G_DO_LOCK
     m3gSetFiltering((M3GTexture)aHTexture2D, aLevelFilter, aImageFilter);
@@ -52,7 +52,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setFiltering
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getBlendColor
-(JNIEnv* aEnv, jclass, jint aHTexture2D)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D)
 {
     M3G_DO_LOCK
     jint color = (jint)m3gGetBlendColor((M3GTexture)aHTexture2D);
@@ -61,24 +61,24 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getBlendColor
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setBlendColor
-(JNIEnv* aEnv, jclass, jint aHTexture2D, jint aRGB)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D, jint aRGB)
 {
     M3G_DO_LOCK
     m3gSetBlendColor((M3GTexture)aHTexture2D, aRGB);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g, jint aHImage)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Texture2D__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g, jlong aHImage)
 {
     M3G_DO_LOCK
-    jint handle = (M3Guint)m3gCreateTexture((M3GInterface)aM3g, (M3GImage)aHImage);
+    jlong handle = (jlong)m3gCreateTexture((M3GInterface)aM3g, (M3GImage)aHImage);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setWrapping
-(JNIEnv* aEnv, jclass, jint aHTexture2D, jint aWrapS, jint aWrapT)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D, jint aWrapS, jint aWrapT)
 {
     M3G_DO_LOCK
     m3gSetWrapping((M3GTexture)aHTexture2D, aWrapS, aWrapT);
@@ -86,7 +86,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setWrapping
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setImage
-(JNIEnv* aEnv, jclass, jint aHTex, jint aHImg)
+(JNIEnv* aEnv, jclass, jlong aHTex, jlong aHImg)
 {
     M3G_DO_LOCK
     m3gSetTextureImage((M3GTexture)aHTex, (M3GImage)aHImg);
@@ -94,18 +94,18 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setImage
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Texture2D__1setBlending
-(JNIEnv* aEnv, jclass, jint aHTexture2D, jint aFunc)
+(JNIEnv* aEnv, jclass, jlong aHTexture2D, jint aFunc)
 {
     M3G_DO_LOCK
     m3gTextureSetBlending((M3GTexture)aHTexture2D, aFunc);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getImage
-(JNIEnv* aEnv, jclass, jint aHTex)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Texture2D__1getImage
+(JNIEnv* aEnv, jclass, jlong aHTex)
 {
     M3G_DO_LOCK
-    jint image = (M3Guint) m3gGetTextureImage((M3GTexture)aHTex);
+    jlong image = (jlong) m3gGetTextureImage((M3GTexture)aHTex);
     M3G_DO_UNLOCK(aEnv)
     return image;
 }
@@ -113,7 +113,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getImage
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getImageFilter
-(JNIEnv* aEnv, jclass, jint aHTex)
+(JNIEnv* aEnv, jclass, jlong aHTex)
 {
     M3Gint levelFilter = 0;
     M3Gint imageFilter = 0;
@@ -124,7 +124,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getImageFilter
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Texture2D__1getLevelFilter
-(JNIEnv* aEnv, jclass, jint aHTex)
+(JNIEnv* aEnv, jclass, jlong aHTex)
 {
     M3Gint levelFilter = 0;
     M3Gint imageFilter = 0;

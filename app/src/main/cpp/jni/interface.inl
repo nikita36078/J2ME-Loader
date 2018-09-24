@@ -37,7 +37,7 @@ static int createInterface(M3Gparams* aCs)
 /*
  * Must be executed in UI thread
  */
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEnv, jclass)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEnv, jclass)
 {
     /*EGLDisplay oldDisplay = eglGetCurrentDisplay();
     EGLSurface oldDrawSurface = eglGetCurrentSurface(EGL_DRAW);
@@ -85,8 +85,8 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEnv
     M3G_DO_LOCK
     /* Call to the Eventserver side */
     //CJavaM3GEventSource* eventSource = JavaUnhand<CJavaM3GEventSource>(aEventSourceHandle);
-    //jint handle = eventSource->Execute(&createInterface, &cs);
-    jint handle = (unsigned)m3gCreateInterface(&cs);
+    //jlong handle = eventSource->Execute(&createInterface, &cs);
+    jlong handle = (jlong)m3gCreateInterface(&cs);
     M3G_DO_UNLOCK(aEnv);
     
     //eglMakeCurrent( EGL_DEFAULT_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT );
@@ -96,7 +96,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEnv
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Interface__1getClassID
-(JNIEnv* aEnv, jclass, jint aHObject)
+(JNIEnv* aEnv, jclass, jlong aHObject)
 {
     M3G_DO_LOCK
     jint handle = m3gGetClass((M3GObject)aHObject);

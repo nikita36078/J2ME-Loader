@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Camera.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setPerspective
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aFovy, jfloat aAspectRatio, jfloat aNear, jfloat aFar)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aFovy, jfloat aAspectRatio, jfloat aNear, jfloat aFar)
 {
     M3G_DO_LOCK
     m3gSetPerspective((M3GCamera)aHandle, aFovy, aAspectRatio, aNear, aFar);
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setPerspective
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setGeneric
-(JNIEnv* aEnv, jclass, jint aHandle, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHandle, jbyteArray aTransform)
 {
     jbyte* elems = NULL;
     if (aTransform)
@@ -47,7 +47,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setGeneric
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1getProjectionAsParams
-(JNIEnv* aEnv, jclass, jint aHandle, jfloatArray aParams)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloatArray aParams)
 {
     jfloat* elems = NULL;
 
@@ -80,24 +80,24 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1getProjectionAsParam
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Camera__1setParallel
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aHeight, jfloat aAspectRatio, jfloat aNear, jfloat aFar)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aHeight, jfloat aAspectRatio, jfloat aNear, jfloat aFar)
 {
     M3G_DO_LOCK
     m3gSetParallel((M3GCamera)aHandle, aHeight, aAspectRatio, aNear, aFar);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Camera__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateCamera((M3GInterface)aM3g);
+    jlong handle = (jlong)m3gCreateCamera((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Camera__1getProjectionAsTransform
-(JNIEnv* aEnv, jclass, jint aHandle, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHandle, jbyteArray aTransform)
 {
     jbyte* elems = NULL;
     if (aTransform)

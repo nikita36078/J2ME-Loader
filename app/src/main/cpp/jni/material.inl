@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Material.h"
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Material__1isVertexColorTrackingEnabled
-(JNIEnv* aEnv, jclass, jint aHMaterial)
+(JNIEnv* aEnv, jclass, jlong aHMaterial)
 {
     M3G_DO_LOCK
     jboolean enabled = (jboolean)m3gIsVertexColorTrackingEnabled((M3GMaterial)aHMaterial);
@@ -27,7 +27,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Material__1isVertexColorT
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Material__1getShininess
-(JNIEnv* aEnv, jclass, jint aHMaterial)
+(JNIEnv* aEnv, jclass, jlong aHMaterial)
 {
     M3G_DO_LOCK
     jfloat shininess = (jfloat)m3gGetShininess((M3GMaterial)aHMaterial);
@@ -36,24 +36,24 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Material__1getShininess
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setVertexColorTrackingEnable
-(JNIEnv* aEnv, jclass, jint aHMaterial, jboolean aEnable)
+(JNIEnv* aEnv, jclass, jlong aHMaterial, jboolean aEnable)
 {
     M3G_DO_LOCK
     m3gSetVertexColorTrackingEnable((M3GMaterial)aHMaterial, (M3Gbool)aEnable);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Material__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Material__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
     M3GMaterial material = (M3GMaterial)m3gCreateMaterial((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
-    return (M3Guint)material;
+    return (jlong)material;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setColor
-(JNIEnv* aEnv, jclass, jint aHMaterial, jint aTarget, jint aARGB)
+(JNIEnv* aEnv, jclass, jlong aHMaterial, jint aTarget, jint aARGB)
 {
     M3G_DO_LOCK
     m3gSetColor((M3GMaterial)aHMaterial, aTarget, aARGB);
@@ -61,7 +61,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setColor
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setShininess
-(JNIEnv* aEnv, jclass, jint aHMaterial, jfloat aShininess)
+(JNIEnv* aEnv, jclass, jlong aHMaterial, jfloat aShininess)
 {
     M3G_DO_LOCK
     m3gSetShininess((M3GMaterial)aHMaterial, (M3Gfloat)aShininess);
@@ -69,7 +69,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Material__1setShininess
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Material__1getColor
-(JNIEnv* aEnv, jclass, jint aHMaterial, jint aTarget)
+(JNIEnv* aEnv, jclass, jlong aHMaterial, jint aTarget)
 {
     M3G_DO_LOCK
     jint color = (jint)m3gGetColor((M3GMaterial)aHMaterial, aTarget);

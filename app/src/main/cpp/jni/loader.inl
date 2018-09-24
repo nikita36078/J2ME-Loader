@@ -93,17 +93,17 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Loader__1inflate
 }
 
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Loader__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
     M3GLoader loader = (M3GLoader)m3gCreateLoader((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
-    return (M3Guint)loader;
+    return (jlong)loader;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1decodeData
-(JNIEnv* aEnv, jclass, jint aLoader, jint aOffset, jbyteArray aDataArray)
+(JNIEnv* aEnv, jclass, jlong aLoader, jint aOffset, jbyteArray aDataArray)
 {
     /* null array is never passed */
     M3Gubyte *data = (M3Gubyte *)aEnv->GetByteArrayElements(aDataArray, NULL);
@@ -129,12 +129,12 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1decodeData
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getLoadedObjects
-(JNIEnv* aEnv, jclass, jint aLoader, jintArray aObjectArray)
+(JNIEnv* aEnv, jclass, jlong aLoader, jlongArray aObjectArray)
 {
     M3GObject *objects = NULL;
     if (aObjectArray)
     {
-        objects = (M3GObject *)aEnv->GetIntArrayElements(aObjectArray, NULL);
+        objects = (M3GObject *)aEnv->GetLongArrayElements(aObjectArray, NULL);
         if (objects == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -150,17 +150,17 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getLoadedObjects
 
     if (aObjectArray)
     {
-        aEnv->ReleaseIntArrayElements(aObjectArray, (jint*)objects, 0);
+        aEnv->ReleaseLongArrayElements(aObjectArray, (jlong*)objects, 0);
     }
 
     return retVal;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Loader__1setExternalReferences
-(JNIEnv* aEnv, jclass, jint aLoader, jintArray aObjectArray)
+(JNIEnv* aEnv, jclass, jlong aLoader, jlongArray aObjectArray)
 {
     /* null array is never passed */
-    M3GObject *xRefs = (M3GObject *)aEnv->GetIntArrayElements(aObjectArray, NULL);
+    M3GObject *xRefs = (M3GObject *)aEnv->GetLongArrayElements(aObjectArray, NULL);
     if (xRefs == NULL)
     {
         M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -174,16 +174,16 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Loader__1setExternalReference
     m3gImportObjects(loader, numXRefs, xRefs);
     M3G_DO_UNLOCK(aEnv)
 
-    aEnv->ReleaseIntArrayElements(aObjectArray, (jint*)xRefs, JNI_ABORT);
+    aEnv->ReleaseLongArrayElements(aObjectArray, (jlong*)xRefs, JNI_ABORT);
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getObjectsWithUserParameters
-(JNIEnv* aEnv, jclass, jint aLoader, jintArray aObjectArray)
+(JNIEnv* aEnv, jclass, jlong aLoader, jlongArray aObjectArray)
 {
     M3GObject *objects = NULL;
     if (aObjectArray)
     {
-        objects = (M3GObject *)aEnv->GetIntArrayElements(aObjectArray, NULL);
+        objects = (M3GObject *)aEnv->GetLongArrayElements(aObjectArray, NULL);
         if (objects == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -199,14 +199,14 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getObjectsWithUserPa
 
     if (objects)
     {
-        aEnv->ReleaseIntArrayElements(aObjectArray, (jint*)objects, 0);
+        aEnv->ReleaseLongArrayElements(aObjectArray, (jlong*)objects, 0);
     }
 
     return retVal;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getNumUserParameters
-(JNIEnv* aEnv, jclass, jint aLoader, jint aObj)
+(JNIEnv* aEnv, jclass, jlong aLoader, jint aObj)
 {
     M3GLoader loader = (M3GLoader)aLoader;
     M3G_DO_LOCK
@@ -216,7 +216,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getNumUserParameters
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getUserParameter
-(JNIEnv* aEnv, jclass, jint aLoader, jint aObj, jint aIndex, jbyteArray aDataArray)
+(JNIEnv* aEnv, jclass, jlong aLoader, jint aObj, jint aIndex, jbyteArray aDataArray)
 {
     M3Gbyte *data = NULL;
     if (aDataArray)

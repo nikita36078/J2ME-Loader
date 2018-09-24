@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_Transform.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Transform__1transformArray
-(JNIEnv* aEnv, jclass, jbyteArray aMatrix, jint aHArray, jfloatArray aOutArray, jboolean aW)
+(JNIEnv* aEnv, jclass, jbyteArray aMatrix, jlong aHArray, jfloatArray aOutArray, jboolean aW)
 {
     // null pointers are never passed
     Matrix* matrix = (Matrix *)(aEnv->GetByteArrayElements(aMatrix, NULL));

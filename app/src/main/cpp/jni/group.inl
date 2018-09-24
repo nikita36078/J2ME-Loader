@@ -18,24 +18,24 @@
 #include "javax_microedition_m3g_Group.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Group__1addChild
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHNode)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHNode)
 {
     M3G_DO_LOCK
     m3gAddChild((M3GGroup)aHandle, (M3GNode)aHNode);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateGroup((M3GInterface)aM3g);
+    jlong handle = (jlong)m3gCreateGroup((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick2D
-(JNIEnv* aEnv, jclass, jint aHandle, jint aMask, jfloat aX, jfloat aY, jint aHCamera, jfloatArray aResult)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1pick2D
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aMask, jfloat aX, jfloat aY, jlong aHCamera, jfloatArray aResult)
 {
     jfloat* elems = NULL;
     if (aResult)
@@ -50,7 +50,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick2D
 
     M3G_BEGIN_PROFILE(M3G_PROFILE_PICK);
     M3G_DO_LOCK
-    jint ret = (jint)m3gPick2D((M3GGroup)aHandle, aMask, aX, aY, (M3GCamera)aHCamera, (jfloat*)elems);
+    jlong ret = (jlong)m3gPick2D((M3GGroup)aHandle, aMask, aX, aY, (M3GCamera)aHCamera, (jfloat*)elems);
     M3G_DO_UNLOCK(aEnv)
     M3G_END_PROFILE(M3G_PROFILE_PICK);
 
@@ -59,17 +59,17 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick2D
     return ret;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1getChild
-(JNIEnv* aEnv, jclass, jint aHandle, jint aIndex)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1getChild
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aIndex)
 {
     M3G_DO_LOCK
-    jint child = (jint)m3gGetChild((M3GGroup)aHandle, aIndex);
+    jlong child = (jlong)m3gGetChild((M3GGroup)aHandle, aIndex);
     M3G_DO_UNLOCK(aEnv)
     return child;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick3D
-(JNIEnv* aEnv, jclass, jint aHandle, jint aMask, jfloatArray aRay, jfloatArray aResult)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Group__1pick3D
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aMask, jfloatArray aRay, jfloatArray aResult)
 {
     jfloat* rayElems = NULL;
     if (aRay)
@@ -97,7 +97,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick3D
 
     M3G_BEGIN_PROFILE(M3G_PROFILE_PICK);
     M3G_DO_LOCK
-    jint ret = (jint)m3gPick3D((M3GGroup)aHandle, aMask, (jfloat*)rayElems, (jfloat*)resultElems);
+    jlong ret = (jlong)m3gPick3D((M3GGroup)aHandle, aMask, (jfloat*)rayElems, (jfloat*)resultElems);
     M3G_DO_UNLOCK(aEnv)
     M3G_END_PROFILE(M3G_PROFILE_PICK);
 
@@ -109,7 +109,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1pick3D
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1getChildCount
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint count =(jint)m3gGetChildCount((M3GGroup)aHandle);
@@ -118,7 +118,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Group__1getChildCount
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Group__1removeChild
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHNode)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHNode)
 {
     M3G_DO_LOCK
     m3gRemoveChild((M3GGroup)aHandle, (M3GNode)aHNode);

@@ -17,20 +17,20 @@
 #include "javax_microedition_m3g_SkinnedMesh.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_SkinnedMesh__1addTransform
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHBone, jint aWeight, jint aFirstVertex, jint aNumVertices)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHBone, jint aWeight, jint aFirstVertex, jint aNumVertices)
 {
     M3G_DO_LOCK
     m3gAddTransform((M3GSkinnedMesh)aHandle, (M3GNode)aHBone, aWeight, aFirstVertex, aNumVertices);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g, jint aHVertices, jintArray aHTriangles, jintArray aHAppearances, jint aHSkeleton)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g, jlong aHVertices, jlongArray aHTriangles, jlongArray aHAppearances, jlong aHSkeleton)
 {
-    jint* appearances = NULL;
+    jlong* appearances = NULL;
     if (aHAppearances)
     {
-        appearances = aEnv->GetIntArrayElements(aHAppearances, NULL);
+        appearances = aEnv->GetLongArrayElements(aHAppearances, NULL);
         if (appearances == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -38,15 +38,15 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
         }
     }
 
-    jint* triangles = NULL;
+    jlong* triangles = NULL;
     if (aHTriangles)
     {
-        triangles = aEnv->GetIntArrayElements(aHTriangles, NULL);
+        triangles = aEnv->GetLongArrayElements(aHTriangles, NULL);
         if (triangles == NULL)
         {
             if (appearances)
             {
-                aEnv->ReleaseIntArrayElements(aHAppearances, appearances, JNI_ABORT);
+                aEnv->ReleaseLongArrayElements(aHAppearances, appearances, JNI_ABORT);
             }
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
             return 0;
@@ -56,7 +56,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
     M3GInterface m3g = (M3GInterface) aM3g;
 
     M3G_DO_LOCK
-    M3Guint ret = (M3Guint)m3gCreateSkinnedMesh(m3g,
+    M3GSkinnedMesh ret = m3gCreateSkinnedMesh(m3g,
                   (M3GVertexBuffer)aHVertices,
                   (M3GIndexBuffer*)triangles,
                   (M3GAppearance *)appearances,
@@ -66,21 +66,21 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
 
     if (appearances)
     {
-        aEnv->ReleaseIntArrayElements(aHAppearances, appearances, JNI_ABORT);
+        aEnv->ReleaseLongArrayElements(aHAppearances, appearances, JNI_ABORT);
     }
     if (triangles)
     {
-        aEnv->ReleaseIntArrayElements(aHTriangles, triangles, JNI_ABORT);
+        aEnv->ReleaseLongArrayElements(aHTriangles, triangles, JNI_ABORT);
     }
 
-    return ret;
+    return (jlong)ret;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getSkeleton
-(JNIEnv* aEnv, jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getSkeleton
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint skeleton = (M3Guint)m3gGetSkeleton((M3GSkinnedMesh)aHandle);
+    jlong skeleton = (jlong)m3gGetSkeleton((M3GSkinnedMesh)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return skeleton;
 }
@@ -88,7 +88,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getSkeleton
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getBoneTransform
-(JNIEnv* aEnv, jclass, jint aHandle, jint aBone, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aBone, jbyteArray aTransform)
 {
     jbyte *transform = NULL;
     if (aTransform)
@@ -113,7 +113,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getBoneTransfor
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_SkinnedMesh__1getBoneVertices
-(JNIEnv* aEnv, jclass, jint aHandle, jint aBone, jintArray aIndices, jfloatArray aWeights)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aBone, jintArray aIndices, jfloatArray aWeights)
 {
     int *indices = NULL;
     float *weights = NULL;

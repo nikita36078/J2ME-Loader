@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_PolygonMode.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setCulling
-(JNIEnv* aEnv, jclass, jint aHPolygonMode, jint aModeBits)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode, jint aModeBits)
 {
     M3G_DO_LOCK
     m3gSetCulling((M3GPolygonMode)aHPolygonMode, aModeBits);
@@ -25,7 +25,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setCulling
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getCulling
-(JNIEnv* aEnv, jclass, jint aHPolygonMode)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode)
 {
     M3G_DO_LOCK
     jint culling = (jint)m3gGetCulling((M3GPolygonMode)aHPolygonMode);
@@ -34,7 +34,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getCulling
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setWinding
-(JNIEnv* aEnv, jclass, jint aHPolygonMode, jint aModeBits)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode, jint aModeBits)
 {
     M3G_DO_LOCK
     m3gSetWinding((M3GPolygonMode)aHPolygonMode, aModeBits);
@@ -42,7 +42,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setWinding
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getWinding
-(JNIEnv* aEnv, jclass, jint aHPolygonMode)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode)
 {
     M3G_DO_LOCK
     jint winding = (jint)m3gGetWinding((M3GPolygonMode)aHPolygonMode);
@@ -51,7 +51,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getWinding
 }
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isTwoSidedLightingEnabled
-(JNIEnv* aEnv, jclass, jint aHPolygonMode)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode)
 {
     M3G_DO_LOCK
     jboolean enabled = (jboolean)m3gIsTwoSidedLightingEnabled((M3GPolygonMode)aHPolygonMode);
@@ -60,7 +60,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isTwoSidedL
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setTwoSidedLightingEnable
-(JNIEnv* aEnv, jclass, jint aHPolygonMode, jboolean aEnable)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode, jboolean aEnable)
 {
     M3G_DO_LOCK
     m3gSetTwoSidedLightingEnable((M3GPolygonMode)aHPolygonMode, (M3Gbool)aEnable);
@@ -68,24 +68,24 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setTwoSidedLigh
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setPerspectiveCorrectionEnable
-(JNIEnv* aEnv, jclass, jint aHPolygonMode, jboolean aEnable)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode, jboolean aEnable)
 {
     M3G_DO_LOCK
     m3gSetPerspectiveCorrectionEnable((M3GPolygonMode)aHPolygonMode, (M3Gbool)aEnable);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_PolygonMode__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
     M3GPolygonMode gm = m3gCreatePolygonMode((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
-    return (M3Guint)gm;
+    return (jlong)gm;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setLocalCameraLightingEnable
-(JNIEnv* aEnv, jclass, jint aHPolygonMode, jboolean aEnable)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode, jboolean aEnable)
 {
     M3G_DO_LOCK
     m3gSetLocalCameraLightingEnable((M3GPolygonMode)aHPolygonMode, (M3Gbool)aEnable);
@@ -93,7 +93,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setLocalCameraL
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setShading
-(JNIEnv* aEnv, jclass, jint aHPolygonMode, jint aModeBits)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode, jint aModeBits)
 {
     M3G_DO_LOCK
     m3gSetShading((M3GPolygonMode)aHPolygonMode, aModeBits);
@@ -101,7 +101,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_PolygonMode__1setShading
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getShading
-(JNIEnv* aEnv, jclass, jint aHPolygonMode)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode)
 {
     M3G_DO_LOCK
     jint shading = (jint)m3gGetShading((M3GPolygonMode)aHPolygonMode);
@@ -112,7 +112,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_PolygonMode__1getShading
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isLocalCameraLightingEnabled
-(JNIEnv* aEnv, jclass, jint aHPolygonMode)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode)
 {
     M3G_DO_LOCK
     jboolean enabled = (jboolean)m3gIsLocalCameraLightingEnabled((M3GPolygonMode)aHPolygonMode);
@@ -121,7 +121,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isLocalCame
 }
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_PolygonMode__1isPerspectiveCorrectionEnabled
-(JNIEnv* aEnv, jclass, jint aHPolygonMode)
+(JNIEnv* aEnv, jclass, jlong aHPolygonMode)
 {
     M3G_DO_LOCK
     jboolean enabled = (jboolean)m3gIsPerspectiveCorrectionEnabled((M3GPolygonMode)aHPolygonMode);

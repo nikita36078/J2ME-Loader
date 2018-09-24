@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_VertexBuffer.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setTexCoords
-(JNIEnv* aEnv, jclass, jint aHBuffer, jint aTexUnit, jint aHArray, jfloat aScale, jfloatArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHBuffer, jint aTexUnit, jlong aHArray, jfloat aScale, jfloatArray aSrcArray)
 {
     int biasLength = 0;
     float *bias = NULL;
@@ -44,8 +44,8 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setTexCoords
     }
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getArray
-(JNIEnv* aEnv, jclass, jint aHBuffer, jint aWhich, jfloatArray aDstArray)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_VertexBuffer__1getArray
+(JNIEnv* aEnv, jclass, jlong aHBuffer, jint aWhich, jfloatArray aDstArray)
 {
     int dstLength = 0;
     float *dstData = NULL;
@@ -62,7 +62,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getArray
     dstLength = aDstArray ? aEnv->GetArrayLength(aDstArray) : 0;
 
     M3G_DO_LOCK
-    M3Guint ret = (M3Guint)m3gGetVertexArray((M3GVertexBuffer)aHBuffer, aWhich, dstData, dstLength);
+    jlong ret = (jlong)m3gGetVertexArray((M3GVertexBuffer)aHBuffer, aWhich, dstData, dstLength);
     M3G_DO_UNLOCK(aEnv)
 
     if (aDstArray)
@@ -74,7 +74,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getArray
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getDefaultColor
-(JNIEnv* aEnv, jclass, jint aHBuffer)
+(JNIEnv* aEnv, jclass, jlong aHBuffer)
 {
     M3G_DO_LOCK
     jint color = (M3Guint)m3gGetVertexDefaultColor((M3GVertexBuffer)aHBuffer);
@@ -82,17 +82,17 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getDefaultColo
     return color;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_VertexBuffer__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
     M3GVertexBuffer vb = m3gCreateVertexBuffer((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
-    return (M3Guint) vb;
+    return (jlong) vb;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setNormals
-(JNIEnv* aEnv, jclass, jint aHBuffer, jint aHArray)
+(JNIEnv* aEnv, jclass, jlong aHBuffer, jlong aHArray)
 {
     M3G_DO_LOCK
     m3gSetNormalArray((M3GVertexBuffer) aHBuffer, (M3GVertexArray) aHArray);
@@ -100,7 +100,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setNormals
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setDefaultColor
-(JNIEnv* aEnv, jclass, jint aHBuffer, jint aARGB)
+(JNIEnv* aEnv, jclass, jlong aHBuffer, jint aARGB)
 {
     M3G_DO_LOCK
     m3gSetVertexDefaultColor((M3GVertexBuffer)aHBuffer, aARGB);
@@ -108,7 +108,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setDefaultColo
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setColors
-(JNIEnv* aEnv, jclass, jint aHBuffer, jint aHArray)
+(JNIEnv* aEnv, jclass, jlong aHBuffer, jlong aHArray)
 {
     M3G_DO_LOCK
     m3gSetColorArray((M3GVertexBuffer) aHBuffer, (M3GVertexArray) aHArray);
@@ -116,7 +116,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setColors
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setVertices
-(JNIEnv* aEnv, jclass, jint aHBuffer, jint aHArray, jfloat aScale, jfloatArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHBuffer, jlong aHArray, jfloat aScale, jfloatArray aSrcArray)
 {
     int biasLength = 0;
     float *bias = NULL;
@@ -143,7 +143,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexBuffer__1setVertices
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexBuffer__1getVertexCount
-(JNIEnv* aEnv, jclass, jint aHBuffer)
+(JNIEnv* aEnv, jclass, jlong aHBuffer)
 {
     M3G_DO_LOCK
     jint count = (M3Guint)m3gGetVertexCount((M3GVertexBuffer)aHBuffer);

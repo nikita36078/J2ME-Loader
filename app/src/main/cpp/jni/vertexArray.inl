@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_VertexArray.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1setShort
-(JNIEnv* aEnv, jclass, jint aHandle, jint aFirst, jint aCount, jshortArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aFirst, jint aCount, jshortArray aSrcArray)
 {
     int srcLength = 0;
     unsigned short *srcData = NULL;
@@ -44,22 +44,22 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1setShort
     }
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g, jint aNumVertices, jint aNumComponents, jint aComponentSize)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_VertexArray__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g, jint aNumVertices, jint aNumComponents, jint aComponentSize)
 {
     M3G_DO_LOCK
-    M3GVertexArray va = m3gCreateVertexArray((M3GInterface)aM3g,
+    jlong va = (jlong)m3gCreateVertexArray((M3GInterface)aM3g,
                         aNumVertices,
                         aNumComponents,
                         (aComponentSize == 1) ? M3G_BYTE :
                         (aComponentSize == 2) ? M3G_SHORT :
                         M3G_INT);
     M3G_DO_UNLOCK(aEnv)
-    return (M3Guint) va;
+    return (jlong) va;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1setByte
-(JNIEnv* aEnv, jclass, jint aHandle, jint aFirst, jint aCount, jbyteArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aFirst, jint aCount, jbyteArray aSrcArray)
 {
     int srcLength = 0;
     unsigned char *srcData = NULL;
@@ -92,7 +92,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1setByte
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1getByte
-(JNIEnv* aEnv, jclass, jint aHandle, jint aFirstVertex, jint aNumVertices, jbyteArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aFirstVertex, jint aNumVertices, jbyteArray aSrcArray)
 {
     int dstLength = 0;
     unsigned char *dstData = NULL;
@@ -124,7 +124,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1getByte
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1getShort
-(JNIEnv* aEnv, jclass, jint aHandle, jint aFirstVertex, jint aNumVertices, jshortArray aSrcArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aFirstVertex, jint aNumVertices, jshortArray aSrcArray)
 {
     int dstLength = 0;
     unsigned short *dstData = NULL;
@@ -156,7 +156,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_VertexArray__1getShort
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getComponentCount
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3Gsizei size;
     M3G_DO_LOCK
@@ -166,7 +166,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getComponentCou
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getComponentType
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3Gdatatype type;
     M3G_DO_LOCK
@@ -177,7 +177,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getComponentTyp
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_VertexArray__1getVertexCount
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3Gsizei count;
     M3G_DO_LOCK

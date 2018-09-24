@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Background.h"
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Background__1isEnabled
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aWhich)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aWhich)
 {
     M3G_DO_LOCK
     jboolean enabled = (jboolean)m3gIsBgEnabled((M3GBackground)aHandle, aWhich);
@@ -27,7 +27,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Background__1isEnabled
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setCrop
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aCropX, jint aCropY, jint aWidth, jint aHeight)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aCropX, jint aCropY, jint aWidth, jint aHeight)
 {
     M3G_DO_LOCK
     m3gSetBgCrop((M3GBackground)aHandle, (M3Gint)aCropX, (M3Gint)aCropY, (M3Gint)aWidth, (M3Gint)aHeight);
@@ -35,24 +35,24 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setCrop
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setImageMode
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aModeX, jint aModeY)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aModeX, jint aModeY)
 {
     M3G_DO_LOCK
     m3gSetBgMode((M3GBackground)aHandle, aModeX, aModeY);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1ctor
-(JNIEnv* aEnv,   jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Background__1ctor
+(JNIEnv* aEnv,   jclass, jlong aM3g)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateBackground((M3GInterface)aM3g);
+    jlong handle = (jlong)m3gCreateBackground((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1getCrop
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aWhich)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aWhich)
 {
     M3G_DO_LOCK
     jint crop = (jint)m3gGetBgCrop((M3GBackground)aHandle, aWhich);
@@ -61,7 +61,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1getCrop
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1getImageMode
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aWhich)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aWhich)
 {
     M3G_DO_LOCK
     jint mode = (jint)m3gGetBgMode((M3GBackground)aHandle, aWhich);
@@ -70,7 +70,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1getImageMode
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setImage
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aHImage)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jlong aHImage)
 {
     M3G_DO_LOCK
     m3gSetBgImage((M3GBackground)aHandle, (M3GImage)aHImage);
@@ -78,7 +78,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setImage
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setColor
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aARGB)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aARGB)
 {
     M3G_DO_LOCK
     m3gSetBgColor((M3GBackground)aHandle, aARGB);
@@ -86,24 +86,24 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1setColor
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Background__1enable
-(JNIEnv* aEnv,   jclass, jint aHandle, jint aWhich, jboolean aEnable)
+(JNIEnv* aEnv,   jclass, jlong aHandle, jint aWhich, jboolean aEnable)
 {
     M3G_DO_LOCK
     m3gSetBgEnable((M3GBackground)aHandle, aWhich, aEnable);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1getImage
-(JNIEnv* aEnv,   jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Background__1getImage
+(JNIEnv* aEnv,   jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint image = (jint)m3gGetBgImage((M3GBackground)aHandle);
+    jlong image = (jlong)m3gGetBgImage((M3GBackground)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return image;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Background__1getColor
-(JNIEnv* aEnv,   jclass, jint aHandle)
+(JNIEnv* aEnv,   jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint color = (jint)m3gGetBgColor((M3GBackground)aHandle);

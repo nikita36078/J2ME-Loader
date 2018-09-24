@@ -16,8 +16,8 @@
 */
 #include "javax_microedition_m3g_TriangleStripArray.h"
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createImplicit
-(JNIEnv* aEnv, jclass, jint aM3g, jint first, jintArray aLengthArray)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createImplicit
+(JNIEnv* aEnv, jclass, jlong aM3g, jint first, jintArray aLengthArray)
 {
     M3GIndexBuffer buffer;
 
@@ -45,11 +45,11 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createIm
         aEnv->ReleaseIntArrayElements(aLengthArray, lengths, JNI_ABORT);
     }
 
-    return (M3Guint) buffer;
+    return (jlong) buffer;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createExplicit
-(JNIEnv* aEnv, jclass, jint aM3g, jintArray aIndices, jintArray aLengths)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createExplicit
+(JNIEnv* aEnv, jclass, jlong aM3g, jintArray aIndices, jintArray aLengths)
 {
     M3GIndexBuffer buffer;
 
@@ -98,13 +98,13 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1createEx
         aEnv->ReleaseIntArrayElements(aLengths, lengths, JNI_ABORT);
     }
 
-    return (M3Guint) buffer;
+    return (jlong) buffer;
 }
 
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1getIndexCount
-(JNIEnv* aEnv, jclass, jint aHTsa)
+(JNIEnv* aEnv, jclass, jlong aHTsa)
 {
     M3G_DO_LOCK
     jint size = (jint)m3gGetBatchSize((M3GIndexBuffer)aHTsa, 0);
@@ -113,7 +113,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_TriangleStripArray__1getIndex
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_TriangleStripArray__1getIndices
-(JNIEnv* aEnv, jclass, jint aHTsa, jintArray aIndices)
+(JNIEnv* aEnv, jclass, jlong aHTsa, jintArray aIndices)
 {
     jint* indices = NULL;
 

@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_AnimationController.h"
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getPosition
-(JNIEnv* aEnv, jclass, jint aHController, jint aWorldTime)
+(JNIEnv* aEnv, jclass, jlong aHController, jint aWorldTime)
 {
     M3G_DO_LOCK
     jfloat position = (jfloat)m3gGetPosition((M3GAnimationController)aHController, aWorldTime);
@@ -26,7 +26,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getPo
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setWeight
-(JNIEnv* aEnv, jclass, jint aHController, jfloat aWeight)
+(JNIEnv* aEnv, jclass, jlong aHController, jfloat aWeight)
 {
     M3G_DO_LOCK
     m3gSetWeight((M3GAnimationController)aHController, aWeight);
@@ -34,7 +34,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setWeig
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setActiveInterval
-(JNIEnv* aEnv, jclass, jint aHController, jint aWorldTimeMin, jint aWorldTimeMax)
+(JNIEnv* aEnv, jclass, jlong aHController, jint aWorldTimeMin, jint aWorldTimeMax)
 {
     M3G_DO_LOCK
     m3gSetActiveInterval((M3GAnimationController)aHController, aWorldTimeMin, aWorldTimeMax);
@@ -42,7 +42,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setActi
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getActiveIntervalStart
-(JNIEnv* aEnv, jclass, jint aHController)
+(JNIEnv* aEnv, jclass, jlong aHController)
 {
     M3G_DO_LOCK
     jint start = (jint)m3gGetActiveIntervalStart((M3GAnimationController)aHController);
@@ -50,17 +50,17 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getActi
     return start;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_AnimationController__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateAnimationController((M3GInterface)aM3g);
+    jlong handle = (jlong)m3gCreateAnimationController((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setPosition
-(JNIEnv* aEnv, jclass, jint aHController, jfloat aTime, jint aWorldTime)
+(JNIEnv* aEnv, jclass, jlong aHController, jfloat aTime, jint aWorldTime)
 {
     M3G_DO_LOCK
     m3gSetPosition((M3GAnimationController)aHController, aTime, aWorldTime);
@@ -68,7 +68,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setPosi
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setSpeed
-(JNIEnv* aEnv, jclass, jint aHController, jfloat aFactor, jint aWorldTime)
+(JNIEnv* aEnv, jclass, jlong aHController, jfloat aFactor, jint aWorldTime)
 {
     M3G_DO_LOCK
     m3gSetSpeed((M3GAnimationController)aHController, aFactor, aWorldTime);
@@ -76,7 +76,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_AnimationController__1setSpee
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getSpeed
-(JNIEnv* aEnv, jclass, jint aHController)
+(JNIEnv* aEnv, jclass, jlong aHController)
 {
     M3G_DO_LOCK
     jfloat speed = (jfloat)m3gGetSpeed((M3GAnimationController)aHController);
@@ -85,7 +85,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getSp
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getActiveIntervalEnd
-(JNIEnv* aEnv, jclass, jint aHController)
+(JNIEnv* aEnv, jclass, jlong aHController)
 {
     M3G_DO_LOCK
     jint end = (jint)m3gGetActiveIntervalEnd((M3GAnimationController)aHController);
@@ -94,7 +94,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getActi
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getWeight
-(JNIEnv* aEnv, jclass, jint aHController)
+(JNIEnv* aEnv, jclass, jlong aHController)
 {
     M3G_DO_LOCK
     jfloat weight = (jfloat)m3gGetWeight((M3GAnimationController)aHController);
@@ -105,7 +105,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_AnimationController__1getWe
 /* M3G 1.1 JNI Calls*/
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_AnimationController__1getRefWorldTime
-(JNIEnv* aEnv, jclass, jint aHController)
+(JNIEnv* aEnv, jclass, jlong aHController)
 {
     M3G_DO_LOCK
     jint time = (jint)m3gGetRefWorldTime((M3GAnimationController)aHController);

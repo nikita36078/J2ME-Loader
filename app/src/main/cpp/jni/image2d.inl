@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_Image2D.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Image2D__1set
-(JNIEnv* aEnv, jclass, jint aHImage2D, jint aX, jint aY, jint aWidth, jint aHeight, jbyteArray aImageArray)
+(JNIEnv* aEnv, jclass, jlong aHImage2D, jint aX, jint aY, jint aWidth, jint aHeight, jbyteArray aImageArray)
 {
     jbyte* imageArray = NULL;
     if (aImageArray)
@@ -30,7 +30,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Image2D__1set
         }
     }
     M3G_DO_LOCK
-    m3gSetSubImage((M3GImage)aHImage2D, aX, aY, aWidth, aHeight, aImageArray ? aEnv->GetArrayLength(aImageArray) : NULL, imageArray);
+    m3gSetSubImage((M3GImage)aHImage2D, aX, aY, aWidth, aHeight, aImageArray ? aEnv->GetArrayLength(aImageArray) : 0, imageArray);
     M3G_DO_UNLOCK(aEnv)
 
     if (imageArray)
@@ -60,7 +60,7 @@ static void getImageScanline(const QImage* qtImage,
  * Must be excuted in UI thread
  */
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorImage
-(JNIEnv* aEnv, jclass, jint aHM3g, jint aFormat, jint aImageHandle)
+(JNIEnv* aEnv, jclass, jlong aHM3g, jint aFormat, jint aImageHandle)
 {
 
     if (aImageHandle != 0)
@@ -130,7 +130,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorImage
 #endif
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getFormat
-(JNIEnv* aEnv, jclass, jint aHImage2D)
+(JNIEnv* aEnv, jclass, jlong aHImage2D)
 {
     M3G_DO_LOCK
     jint format = (jint)m3gGetFormat((M3GImage)aHImage2D);
@@ -138,8 +138,8 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getFormat
     return format;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixelsPalette
-(JNIEnv* aEnv, jclass, jint aM3g, jint aFormat, jint aWidth, jint aHeight, jbyteArray aImage, jbyteArray aPalette)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixelsPalette
+(JNIEnv* aEnv, jclass, jlong aM3g, jint aFormat, jint aWidth, jint aHeight, jbyteArray aImage, jbyteArray aPalette)
 {
     M3GImageFormat format = (M3GImageFormat)aFormat;
 
@@ -212,14 +212,14 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixelsPalet
                 }
             }
             M3G_DO_UNLOCK(aEnv)
-            return ((unsigned) hImg);
+            return ((jlong) hImg);
         }
     }
     return 0;
 }
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Image2D__1isMutable
-(JNIEnv* aEnv, jclass, jint aHImage2D)
+(JNIEnv* aEnv, jclass, jlong aHImage2D)
 {
     M3G_DO_LOCK
     jboolean isMutable = (jboolean)m3gIsMutable((M3GImage)aHImage2D);
@@ -228,7 +228,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Image2D__1isMutable
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getHeight
-(JNIEnv* aEnv, jclass, jint aHImage2D)
+(JNIEnv* aEnv, jclass, jlong aHImage2D)
 {
     M3G_DO_LOCK
     jint height = (jint)m3gGetHeight((M3GImage)aHImage2D);
@@ -236,11 +236,11 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getHeight
     return height;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSize
-(JNIEnv* aEnv, jclass, jint aM3g, jint aFormat, jint aWidth, jint aHeight)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorSize
+(JNIEnv* aEnv, jclass, jlong aM3g, jint aFormat, jint aWidth, jint aHeight)
 {
     M3G_DO_LOCK
-    jint handle = (M3Guint) m3gCreateImage((M3GInterface)aM3g,
+    jlong handle = (jlong) m3gCreateImage((M3GInterface)aM3g,
                                            (M3GImageFormat)aFormat,
                                            aWidth, aHeight,
                                            M3G_DYNAMIC|M3G_RENDERING_TARGET);
@@ -249,7 +249,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSize
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getWidth
-(JNIEnv* aEnv, jclass, jint aHImage2D)
+(JNIEnv* aEnv, jclass, jlong aHImage2D)
 {
     M3G_DO_LOCK
     jint width = (jint)m3gGetWidth((M3GImage)aHImage2D);
@@ -258,8 +258,8 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1getWidth
 }
 
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixels
-(JNIEnv* aEnv, jclass, jint aM3g, jint aFormat, jint aWidth, jint aHeight, jbyteArray aImage)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixels
+(JNIEnv* aEnv, jclass, jlong aM3g, jint aFormat, jint aWidth, jint aHeight, jbyteArray aImage)
 {
     M3GImageFormat format = (M3GImageFormat)aFormat;
 
@@ -284,7 +284,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Image2D__1ctorSizePixels
             free(imageScanline);
         }
         M3G_DO_UNLOCK(aEnv)
-        return (unsigned) hImg;
+        return (jlong) hImg;
     }
     return 0;
 }

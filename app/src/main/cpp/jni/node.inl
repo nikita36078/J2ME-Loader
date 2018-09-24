@@ -17,7 +17,7 @@
 #include "javax_microedition_m3g_Node.h"
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Node__1isEnabled
-(JNIEnv* aEnv, jclass, jint aHandle, jint aWhich)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aWhich)
 {
     M3G_DO_LOCK
     jboolean enabled = (jboolean)m3gIsEnabled((M3GNode)aHandle, aWhich);
@@ -26,7 +26,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Node__1isEnabled
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Node__1getAlphaFactor
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jfloat alpha = (jfloat)m3gGetAlphaFactor((M3GNode)aHandle);
@@ -34,17 +34,17 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Node__1getAlphaFactor
     return alpha;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getParent
-(JNIEnv* aEnv, jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Node__1getParent
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint parent = (M3Guint)m3gGetParent((M3GNode)aHandle);
+    jlong parent = (jlong)m3gGetParent((M3GNode)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return parent;
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setScope
-(JNIEnv* aEnv, jclass, jint aHandle, jint aId)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aId)
 {
     M3G_DO_LOCK
     m3gSetScope((M3GNode)aHandle, aId);
@@ -52,7 +52,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setScope
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getScope
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint scope = (jint)m3gGetScope((M3GNode)aHandle);
@@ -61,7 +61,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getScope
 }
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Node__1getTransformTo
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHTarget, jbyteArray aDstArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHTarget, jbyteArray aDstArray)
 {
     jboolean ret = 0;
     if (aDstArray != NULL && aHTarget != 0)
@@ -88,7 +88,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Node__1getTransformTo
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1align
-(JNIEnv* aEnv, jclass, jint aHNode, jint aHRef)
+(JNIEnv* aEnv, jclass, jlong aHNode, jlong aHRef)
 {
     M3G_BEGIN_PROFILE(M3G_PROFILE_ALIGN);
     M3G_DO_LOCK
@@ -98,7 +98,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1align
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setAlphaFactor
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aAlphaFactor)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aAlphaFactor)
 {
     M3G_DO_LOCK
     m3gSetAlphaFactor((M3GNode)aHandle, aAlphaFactor);
@@ -106,7 +106,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setAlphaFactor
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1enable
-(JNIEnv* aEnv, jclass, jint aHandle, jint aWhich, jboolean aEnabled)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aWhich, jboolean aEnabled)
 {
     M3G_DO_LOCK
     m3gEnable((M3GNode)aHandle, aWhich, (jint)aEnabled);
@@ -114,33 +114,33 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1enable
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Node__1setAlignment
-(JNIEnv* aEnv, jclass, jint aHandle, jint aHZReference, jint aZTarget, jint aHYReference, jint aYTarget)
+(JNIEnv* aEnv, jclass, jlong aHandle, jlong aHZReference, jint aZTarget, jlong aHYReference, jint aYTarget)
 {
     M3G_DO_LOCK
     m3gSetAlignment((M3GNode)aHandle, (M3GNode)aHZReference, aZTarget, (M3GNode)aHYReference, aYTarget);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getZRef
-(JNIEnv* aEnv, jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Node__1getZRef
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint zRef = (M3Guint)m3gGetZRef((M3GNode)aHandle);
+    jlong zRef = (jlong)m3gGetZRef((M3GNode)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return zRef;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getYRef
-(JNIEnv* aEnv, jclass, jint aHandle)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Node__1getYRef
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
-    jint yRef = (M3Guint)m3gGetYRef((M3GNode)aHandle);
+    jlong yRef = (jlong)m3gGetYRef((M3GNode)aHandle);
     M3G_DO_UNLOCK(aEnv)
     return yRef;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getSubtreeSize
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint size = (M3Guint)m3gGetSubtreeSize((M3GNode)aHandle);
@@ -151,7 +151,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getSubtreeSize
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Node__1getAlignmentTarget
-(JNIEnv* aEnv, jclass, jint aHandle, jint aAxis)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aAxis)
 {
     M3G_DO_LOCK
     jint target = (jint)m3gGetAlignmentTarget((M3GNode)aHandle, aAxis);

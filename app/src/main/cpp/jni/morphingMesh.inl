@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_MorphingMesh.h"
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_MorphingMesh__1setWeights
-(JNIEnv* aEnv, jclass, jint aHandle, jfloatArray aWeightArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloatArray aWeightArray)
 {
     if (aWeightArray != NULL)
     {
@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_MorphingMesh__1setWeights
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTargetCount
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint count = (M3Guint)m3gGetMorphTargetCount((M3GMorphingMesh)aHandle);
@@ -54,7 +54,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTarget
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_MorphingMesh__1getWeights
-(JNIEnv* aEnv, jclass, jint aHandle, jfloatArray aWeightArray)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloatArray aWeightArray)
 {
     if (aWeightArray != NULL)
     {
@@ -80,8 +80,8 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_MorphingMesh__1getWeights
     }
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g, jint aHVertices, jintArray aHTargets, jintArray aHTriangles, jintArray aHAppearances)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g, jlong aHVertices, jlongArray aHTargets, jlongArray aHTriangles, jlongArray aHAppearances)
 {
     if (aHVertices == 0 || aHTargets == NULL || aHTriangles == NULL)
     {
@@ -108,30 +108,30 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
         }
     }
 
-    jint* targets = aEnv->GetIntArrayElements(aHTargets, NULL);
+    jlong* targets = aEnv->GetLongArrayElements(aHTargets, NULL);
     if (targets == NULL)
     {
         M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
         return 0;
     }
 
-    jint* triangles = aEnv->GetIntArrayElements(aHTriangles, NULL);
+    jlong* triangles = aEnv->GetLongArrayElements(aHTriangles, NULL);
     if (triangles == NULL)
     {
-        aEnv->ReleaseIntArrayElements(aHTargets, targets, JNI_ABORT);
+        aEnv->ReleaseLongArrayElements(aHTargets, targets, JNI_ABORT);
 
         M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
         return 0;
     }
 
-    jint* appearances = NULL;
+    jlong* appearances = NULL;
     if (aHAppearances)
     {
-        appearances = aEnv->GetIntArrayElements(aHAppearances, NULL);
+        appearances = aEnv->GetLongArrayElements(aHAppearances, NULL);
         if (appearances == NULL)
         {
-            aEnv->ReleaseIntArrayElements(aHTargets, targets, JNI_ABORT);
-            aEnv->ReleaseIntArrayElements(aHTriangles, triangles, JNI_ABORT);
+            aEnv->ReleaseLongArrayElements(aHTargets, targets, JNI_ABORT);
+            aEnv->ReleaseLongArrayElements(aHTriangles, triangles, JNI_ABORT);
 
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
             return 0;
@@ -139,7 +139,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
     }
 
     M3G_DO_LOCK
-    M3Guint ret = (M3Guint)m3gCreateMorphingMesh((M3GInterface)aM3g,
+    jlong ret = (jlong)m3gCreateMorphingMesh((M3GInterface)aM3g,
                   (M3GVertexBuffer)aHVertices,
                   (M3GVertexBuffer*)targets,
                   (M3GIndexBuffer*)triangles,
@@ -148,21 +148,21 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
                   targetsLen);
     M3G_DO_UNLOCK(aEnv)
 
-    aEnv->ReleaseIntArrayElements(aHTargets, targets, JNI_ABORT);
-    aEnv->ReleaseIntArrayElements(aHTriangles, triangles, JNI_ABORT);
+    aEnv->ReleaseLongArrayElements(aHTargets, targets, JNI_ABORT);
+    aEnv->ReleaseLongArrayElements(aHTriangles, triangles, JNI_ABORT);
     if (appearances)
     {
-        aEnv->ReleaseIntArrayElements(aHAppearances, appearances, JNI_ABORT);
+        aEnv->ReleaseLongArrayElements(aHAppearances, appearances, JNI_ABORT);
     }
 
     return ret;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTarget
-(JNIEnv* aEnv, jclass, jint aHandle, jint aIndex)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_MorphingMesh__1getMorphTarget
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aIndex)
 {
     M3G_DO_LOCK
-    jint target = (M3Guint)m3gGetMorphTarget((M3GMorphingMesh)aHandle, aIndex);
+    jlong target = (jlong)m3gGetMorphTarget((M3GMorphingMesh)aHandle, aIndex);
     M3G_DO_UNLOCK(aEnv)
     return target;
 }

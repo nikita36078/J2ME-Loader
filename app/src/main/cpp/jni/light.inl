@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Light.h"
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getSpotAngle
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jfloat angle = (jfloat)m3gGetSpotAngle((M3GLight)aHandle);
@@ -27,7 +27,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getSpotAngle
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setSpotExponent
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aExponent)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aExponent)
 {
     M3G_DO_LOCK
     m3gSetSpotExponent((M3GLight)aHandle, aExponent);
@@ -35,7 +35,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setSpotExponent
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setMode
-(JNIEnv* aEnv, jclass, jint aHandle, jint aMode)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aMode)
 {
     M3G_DO_LOCK
     m3gSetLightMode((M3GLight)aHandle, (int)aMode);
@@ -43,7 +43,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setMode
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setAttenuation
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aConstant, jfloat aLinear, jfloat aQuadratic)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aConstant, jfloat aLinear, jfloat aQuadratic)
 {
     M3G_DO_LOCK
     m3gSetAttenuation((M3GLight)aHandle, aConstant, aLinear, aQuadratic);
@@ -51,24 +51,24 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setAttenuation
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setIntensity
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aIntensity)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aIntensity)
 {
     M3G_DO_LOCK
     m3gSetIntensity((M3GLight)aHandle, aIntensity);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Light__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Light__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
-    jint handle = (jint)m3gCreateLight((M3GInterface)aM3g);
+    jlong handle = (jlong)m3gCreateLight((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Light__1getMode
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint mode = (jint)m3gGetLightMode((M3GLight)aHandle);
@@ -77,7 +77,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Light__1getMode
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getAttenuation
-(JNIEnv* aEnv, jclass, jint aHandle, jint aType)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aType)
 {
     M3G_DO_LOCK
     jfloat att = (jfloat)m3gGetAttenuation((M3GLight)aHandle, aType);
@@ -86,7 +86,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getAttenuation
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getSpotExponent
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jfloat spotExp = (jfloat)m3gGetSpotExponent((M3GLight)aHandle);
@@ -95,7 +95,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getSpotExponent
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setSpotAngle
-(JNIEnv* aEnv, jclass, jint aHandle, jfloat aAngle)
+(JNIEnv* aEnv, jclass, jlong aHandle, jfloat aAngle)
 {
     M3G_DO_LOCK
     m3gSetSpotAngle((M3GLight)aHandle, aAngle);
@@ -103,7 +103,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setSpotAngle
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getIntensity
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jfloat intensity = (jfloat)m3gGetIntensity((M3GLight)aHandle);
@@ -112,7 +112,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Light__1getIntensity
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setColor
-(JNIEnv* aEnv, jclass, jint aHandle, jint aRGB)
+(JNIEnv* aEnv, jclass, jlong aHandle, jint aRGB)
 {
     M3G_DO_LOCK
     m3gSetLightColor((M3GLight)aHandle, aRGB);
@@ -120,7 +120,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Light__1setColor
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Light__1getColor
-(JNIEnv* aEnv, jclass, jint aHandle)
+(JNIEnv* aEnv, jclass, jlong aHandle)
 {
     M3G_DO_LOCK
     jint color = (jint)m3gGetLightColor((M3GLight)aHandle);

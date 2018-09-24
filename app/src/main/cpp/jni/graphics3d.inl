@@ -89,7 +89,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1isProperRend
  * Must be executed in UI thread
  */
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
-(JNIEnv* aEnv, jclass, jint aCtx, jint aSurfaceHandle, jint aWidth, jint aHeight,
+(JNIEnv* aEnv, jclass, jlong aCtx, jlong aSurfaceHandle, jint aWidth, jint aHeight,
  jint aClipX, jint aClipY, jint aClipW, jint aClipH,
  jboolean aDepth, jint aHintBits, jboolean aIsProperRenderer, jintArray pixels)
 {
@@ -135,7 +135,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setViewport
-(JNIEnv* aEnv, jclass, jint aHContext, jint aX, jint aY,
+(JNIEnv* aEnv, jclass, jlong aHContext, jint aX, jint aY,
  jint aWidth, jint aHeight)
 {
     M3G_DO_LOCK
@@ -196,8 +196,8 @@ static void releaseGraphicsTarget(M3GRenderContext aCtx, CMIDGraphics *aGraphics
     }
 */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseGraphics
-(JNIEnv* aEnv, jclass, jint aHandle,
- jint aSurfaceHandle, jboolean /*aIsImageTarget*/, jboolean /*aIsProperRenderer*/, jintArray pixels)
+(JNIEnv* aEnv, jclass, jlong aHandle,
+ jlong aSurfaceHandle, jboolean /*aIsImageTarget*/, jboolean /*aIsProperRenderer*/, jintArray pixels)
 {
     M3G_DO_LOCK
 
@@ -222,7 +222,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseGraphics
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setCamera
-(JNIEnv* aEnv, jclass, jint aHContext, jint aHCamera, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHContext, jlong aHCamera, jbyteArray aTransform)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -254,7 +254,7 @@ static void renderWorld(M3GRenderContext aHContext,
 */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1renderWorld
-(JNIEnv* aEnv, jclass, jint aHContext, jint aHWorld)
+(JNIEnv* aEnv, jclass, jlong aHContext, jlong aHWorld)
 {
     M3G_DO_LOCK
 
@@ -269,14 +269,14 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1renderWorld
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1ctor
-(JNIEnv* aEnv, jclass, jint aM3g)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Graphics3D__1ctor
+(JNIEnv* aEnv, jclass, jlong aM3g)
 {
     M3G_DO_LOCK
     M3GRenderContext ctx = m3gCreateContext((M3GInterface)aM3g);
     M3G_DO_UNLOCK(aEnv)
 
-    return (jint)ctx;
+    return (jlong)ctx;
 }
 
 struct RenderStruct
@@ -303,8 +303,8 @@ static void renderImmediate(M3GRenderContext aHContext, RenderStruct *aR, jint a
  */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1render
-(JNIEnv* aEnv, jclass, jint aHContext,
- jint aHVertices, jint aHIndices, jint aHAppearance, jbyteArray aTransform, jint aScope)
+(JNIEnv* aEnv, jclass, jlong aHContext,
+ jlong aHVertices, jlong aHIndices, jlong aHAppearance, jbyteArray aTransform, jint aScope)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -355,7 +355,7 @@ static void clear(M3GRenderContext aHContext, M3GBackground aHBackground)
  * Must be executed in UI thread
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1clear
-(JNIEnv* aEnv, jclass, jint aCtx, jint aBg)
+(JNIEnv* aEnv, jclass, jlong aCtx, jlong aBg)
 {
     M3G_DO_LOCK
     m3gClear((M3GRenderContext)aCtx, (M3GBackground)aBg);
@@ -368,7 +368,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1clear
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseImage
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     M3G_DO_LOCK
 
@@ -382,7 +382,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseImage
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1addRef
-(JNIEnv* aEnv, jclass, jint aObject)
+(JNIEnv* aEnv, jclass, jlong aObject)
 {
     M3G_DO_LOCK
     m3gAddRef((M3GObject) aObject);
@@ -390,7 +390,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1addRef
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1addLight
-(JNIEnv* aEnv, jclass, jint aHContext, jint aHLight, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHContext, jlong aHLight, jbyteArray aTransform)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -424,7 +424,7 @@ static void bindImage(M3GRenderContext hCtx, M3GImage hImg, M3Gbool depth, M3Gbi
 */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1bindImage
-(JNIEnv* aEnv, jclass, jint aHCtx, jint aImageHandle, jboolean aDepth, jint aHintBits)
+(JNIEnv* aEnv, jclass, jlong aHCtx, jlong aImageHandle, jboolean aDepth, jint aHintBits)
 {
     M3G_DO_LOCK
 
@@ -439,7 +439,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1bindImage
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1resetLights
-(JNIEnv* aEnv, jclass, jint aHContext)
+(JNIEnv* aEnv, jclass, jlong aHContext)
 {
     M3G_DO_LOCK
     m3gClearLights((M3GRenderContext) aHContext);
@@ -447,7 +447,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1resetLights
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setDepthRange
-(JNIEnv* aEnv, jclass, jint aHContext, jfloat aDepthNear, jfloat aDepthFar)
+(JNIEnv* aEnv, jclass, jlong aHContext, jfloat aDepthNear, jfloat aDepthFar)
 {
     M3G_DO_LOCK
     m3gSetDepthRange((M3GRenderContext) aHContext, aDepthNear, aDepthFar);
@@ -455,7 +455,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setDepthRange
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1setLight
-(JNIEnv* aEnv, jclass, jint aHContext, jint aLightIndex, jint aHLight, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHContext, jint aLightIndex, jlong aHLight, jbyteArray aTransform)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -488,7 +488,7 @@ static void renderNode(M3GRenderContext aHCtx,
 */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1renderNode
-(JNIEnv* aEnv, jclass, jint aHCtx, jint aHNode, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHCtx, jlong aHNode, jbyteArray aTransform)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -547,7 +547,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getStatistics
 /* M3G 1.1 JNI Calls */
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewTransform
-(JNIEnv* aEnv, jclass, jint aHCtx, jbyteArray aTransform)
+(JNIEnv* aEnv, jclass, jlong aHCtx, jbyteArray aTransform)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -571,18 +571,18 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewTransform
     }
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getCamera
-(JNIEnv* aEnv, jclass, jint aHCtx)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Graphics3D__1getCamera
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     M3G_DO_LOCK
-    jint camera = (jint)m3gGetCamera((M3GRenderContext)aHCtx);
+    jlong camera = (jlong)m3gGetCamera((M3GRenderContext)aHCtx);
     M3G_DO_UNLOCK(aEnv)
 
     return camera;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightTransform
-(JNIEnv* aEnv, jclass, jint aHCtx, jint aLightIndex, jbyteArray aTransform)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightTransform
+(JNIEnv* aEnv, jclass, jlong aHCtx, jint aLightIndex, jbyteArray aTransform)
 {
     M3GMatrix *transform = NULL;
     if (aTransform)
@@ -595,7 +595,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightTransfor
         }
     }
     M3G_DO_LOCK
-    int lightTransform = (M3Guint)m3gGetLightTransform((M3GRenderContext)aHCtx, aLightIndex, transform);
+    jlong lightTransform = (jlong)m3gGetLightTransform((M3GRenderContext)aHCtx, aLightIndex, transform);
     M3G_DO_UNLOCK(aEnv)
 
     if (transform)
@@ -603,11 +603,11 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightTransfor
         aEnv->ReleaseByteArrayElements(aTransform, (jbyte*)transform, 0);
     }
 
-    return (jint)lightTransform;
+    return (jlong)lightTransform;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightCount
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     M3G_DO_LOCK
     jint lightCount = (jint)m3gGetLightCount((M3GRenderContext)aHCtx);
@@ -617,7 +617,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getLightCount
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Graphics3D__1getDepthRangeNear
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     float depthNear = 0;
     float depthFar = 0;
@@ -630,7 +630,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Graphics3D__1getDepthRangeN
 }
 
 JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Graphics3D__1getDepthRangeFar
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     float depthNear = 0;
     float depthFar = 0;
@@ -643,7 +643,7 @@ JNIEXPORT jfloat JNICALL Java_javax_microedition_m3g_Graphics3D__1getDepthRangeF
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportX
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     int viewport[4];
 
@@ -658,7 +658,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportX
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportY
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     int viewport[4];
 
@@ -673,7 +673,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportY
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportWidth
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     int viewport[4];
 
@@ -688,7 +688,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportWidth
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportHeight
-(JNIEnv* aEnv, jclass, jint aHCtx)
+(JNIEnv* aEnv, jclass, jlong aHCtx)
 {
     int viewport[4];
 
@@ -703,7 +703,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Graphics3D__1getViewportHeigh
 }
 
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1isAASupported
-(JNIEnv* /*aEnv*/, jclass, jint aM3g)
+(JNIEnv* /*aEnv*/, jclass, jlong aM3g)
 {
     M3Gbool aaSupport = M3G_FALSE;
 

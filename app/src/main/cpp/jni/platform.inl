@@ -20,7 +20,7 @@
  * Must be excuted in UI thread
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Platform_finalizeInterface
-(JNIEnv* aEnv, jclass, jint aHObj)
+(JNIEnv* aEnv, jclass, jlong aHObj)
 {
     M3G_DO_LOCK
     m3gDeleteInterface((M3GInterface)aHObj);
@@ -31,7 +31,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Platform_finalizeInterface
  * Must be excuted in UI thread
  */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Platform__1finalizeObject
-(JNIEnv* aEnv, jclass, jint aHObj)
+(JNIEnv* aEnv, jclass, jlong aHObj)
 {
     M3G_DO_LOCK
     m3gDeleteObject((M3GObject)aHObj);

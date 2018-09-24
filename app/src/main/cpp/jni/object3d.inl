@@ -18,7 +18,7 @@
 #include "javax_microedition_m3g_Object3D.h"
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1animate
-(JNIEnv* aEnv, jclass, jint aHObject, jint aTime)
+(JNIEnv* aEnv, jclass, jlong aHObject, jint aTime)
 {
     M3G_DO_LOCK
     jint anim = (jint)m3gAnimate((M3GObject)aHObject, aTime);
@@ -26,26 +26,26 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1animate
     return anim;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrack
-(JNIEnv* aEnv, jclass, jint aHObject, jint aIndex)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrack
+(JNIEnv* aEnv, jclass, jlong aHObject, jint aIndex)
 {
     M3G_DO_LOCK
-    jint handle = (M3Guint)m3gGetAnimationTrack((M3GObject)aHObject, aIndex);
+    jlong handle = (jlong)m3gGetAnimationTrack((M3GObject)aHObject, aIndex);
     M3G_DO_UNLOCK(aEnv)
     return handle;
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1find
-(JNIEnv* aEnv, jclass, jint aHObject, jint aUserID)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1find
+(JNIEnv* aEnv, jclass, jlong aHObject, jint aUserID)
 {
     M3G_DO_LOCK
-    jint target = (M3Guint)m3gFind((M3GObject)aHObject, aUserID);
+    jlong target = (jlong)m3gFind((M3GObject)aHObject, aUserID);
     M3G_DO_UNLOCK(aEnv)
     return target;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getUserID
-(JNIEnv* aEnv, jclass, jint aHObject)
+(JNIEnv* aEnv, jclass, jlong aHObject)
 {
     M3G_DO_LOCK
     jint id = (jint)m3gGetUserID((M3GObject)aHObject);
@@ -54,7 +54,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getUserID
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1addAnimationTrack
-(JNIEnv* aEnv, jclass, jint aHObject, jint aHTrack)
+(JNIEnv* aEnv, jclass, jlong aHObject, jlong aHTrack)
 {
     M3G_DO_LOCK
     jint ret = (jint)m3gAddAnimationTrack((M3GObject)aHObject, (M3GAnimationTrack)aHTrack);
@@ -63,7 +63,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1addAnimationTrack
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrackCount
-(JNIEnv* aEnv, jclass, jint aHObject)
+(JNIEnv* aEnv, jclass, jlong aHObject)
 {
     M3G_DO_LOCK
     jint count = (jint)m3gGetAnimationTrackCount((M3GObject)aHObject);
@@ -72,7 +72,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getAnimationTrackC
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1removeAnimationTrack
-(JNIEnv* aEnv, jclass, jint aHObject, jint aHTrack)
+(JNIEnv* aEnv, jclass, jlong aHObject, jlong aHTrack)
 {
     M3G_DO_LOCK
     m3gRemoveAnimationTrack((M3GObject)aHObject, (M3GAnimationTrack)aHTrack);
@@ -80,7 +80,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1removeAnimationTra
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1setUserID
-(JNIEnv* aEnv, jclass, jint aHObject, jint aUserID)
+(JNIEnv* aEnv, jclass, jlong aHObject, jint aUserID)
 {
     M3G_DO_LOCK
     m3gSetUserID((M3GObject)aHObject, aUserID);
@@ -88,20 +88,20 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1setUserID
 }
 
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Object3D__1addRef
-(JNIEnv* aEnv, jclass, jint aObject)
+(JNIEnv* aEnv, jclass, jlong aObject)
 {
     M3G_DO_LOCK
     m3gAddRef((M3GObject) aObject);
     M3G_DO_UNLOCK(aEnv)
 }
 
-JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1duplicate
-(JNIEnv* aEnv, jclass, jint aHObject, jintArray aHReferences)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1duplicate
+(JNIEnv* aEnv, jclass, jlong aHObject, jlongArray aHReferences)
 {
-    jint* references = NULL;
+    jlong* references = NULL;
     if (aHReferences)
     {
-        references = aEnv->GetIntArrayElements(aHReferences, NULL);
+        references = aEnv->GetLongArrayElements(aHReferences, NULL);
         if (references == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -110,24 +110,24 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1duplicate
     }
 
     M3G_DO_LOCK
-    M3Guint ret = (M3Guint)m3gDuplicate((M3GObject)aHObject, (M3GObject *)references);
+    jlong ret = (jlong)m3gDuplicate((M3GObject)aHObject, (M3GObject *)references);
     M3G_DO_UNLOCK(aEnv)
 
     if (references)
     {
-        aEnv->ReleaseIntArrayElements(aHReferences, references, 0);
+        aEnv->ReleaseLongArrayElements(aHReferences, references, 0);
     }
 
     return ret;
 }
 
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getReferences
-(JNIEnv* aEnv, jclass, jint aHObject, jintArray aHReferences)
+(JNIEnv* aEnv, jclass, jlong aHObject, jlongArray aHReferences)
 {
-    jint* references = NULL;
+    jlong* references = NULL;
     if (aHReferences)
     {
-        references = aEnv->GetIntArrayElements(aHReferences, NULL);
+        references = aEnv->GetLongArrayElements(aHReferences, NULL);
         if (references == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -142,7 +142,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getReferences
 
     if (references)
     {
-        aEnv->ReleaseIntArrayElements(aHReferences, references, 0);
+        aEnv->ReleaseLongArrayElements(aHReferences, references, 0);
     }
 
     return ret;
