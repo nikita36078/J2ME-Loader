@@ -27,10 +27,6 @@
 
 -keep class android.support.v7.widget.SearchView { *; }
 
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
 -dontnote android.net.http.*
 -dontnote org.apache.commons.codec.**
 -dontnote org.apache.http.**
