@@ -1616,8 +1616,8 @@ static M3Gbool m3gLoadMesh(Loader *loader)
 {
     M3Guint subMeshCount, i;
     M3GVertexBuffer vb;
-    M3GIndexBuffer *ib = NULL;
-    M3GAppearance *ap = NULL;
+    M3Gulong *ib = NULL;
+    M3Gulong *ap = NULL;
     M3Gubyte *data;
     M3GMesh obj = NULL;
 
@@ -1639,8 +1639,8 @@ static M3Gbool m3gLoadMesh(Loader *loader)
     }
 
     if (m3gCheckSectionDataLength(loader, data, subMeshCount * 8) == M3G_FALSE) return M3G_FALSE;
-    ib = m3gAllocZ(M3G_INTERFACE(loader), sizeof(*ib) * subMeshCount);
-    ap = m3gAllocZ(M3G_INTERFACE(loader), sizeof(*ap) * subMeshCount);
+    ib = m3gAllocZ(M3G_INTERFACE(loader), sizeof(M3Gulong) * subMeshCount);
+    ap = m3gAllocZ(M3G_INTERFACE(loader), sizeof(M3Gulong) * subMeshCount);
     if (!ib || !ap) goto cleanup;
 
     for (i = 0; i < subMeshCount; i++) {
@@ -1650,9 +1650,9 @@ static M3Gbool m3gLoadMesh(Loader *loader)
             loader->triCount += indexBuffer->indexCount;
             if (loader->triCount > loader->triConstraint) goto cleanup;
         }
-        ib[i] = indexBuffer;
+        ib[i] = (M3Gulong)indexBuffer;
         data += 4;
-        ap[i] = (M3GAppearance)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_APPEARANCE);
+        ap[i] = (M3Gulong)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_APPEARANCE);
         data += 4;
     }
 
@@ -2257,8 +2257,8 @@ static M3Gbool m3gLoadSkinnedMesh(Loader *loader)
     M3GVertexBuffer vb;
     M3Guint i, subMeshCount, transformReferenceCount, firstVertex, vertexCount;
     M3Gint weight;
-    M3GIndexBuffer *ib = NULL;
-    M3GAppearance *ap = NULL;
+    M3Gulong *ib = NULL;
+    M3Gulong *ap = NULL;
     M3GGroup skeleton;
     M3GNode bone;
     M3Gubyte *data;
@@ -2282,14 +2282,14 @@ static M3Gbool m3gLoadSkinnedMesh(Loader *loader)
     }
 
     if (m3gCheckSectionDataLength(loader, data, subMeshCount * 8) == M3G_FALSE) return M3G_FALSE;
-    ib = m3gAllocZ(M3G_INTERFACE(loader), sizeof(*ib) * subMeshCount);
-    ap = m3gAllocZ(M3G_INTERFACE(loader), sizeof(*ap) * subMeshCount);
+    ib = m3gAllocZ(M3G_INTERFACE(loader), sizeof(M3Gulong) * subMeshCount);
+    ap = m3gAllocZ(M3G_INTERFACE(loader), sizeof(M3Gulong) * subMeshCount);
     if (!ib || !ap) goto cleanup;
 
     for (i = 0; i < subMeshCount; i++) {
-        ib[i] = (M3GIndexBuffer)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_INDEX_BUFFER);
+        ib[i] = (M3Gulong)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_INDEX_BUFFER);
         data += 4;
-        ap[i] = (M3GAppearance)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_APPEARANCE);
+        ap[i] = (M3Gulong)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_APPEARANCE);
         data += 4;
     }
 
@@ -2349,11 +2349,12 @@ cleanup:
  */
 static M3Gbool m3gLoadMorphingMesh(Loader *loader)
 {
-    M3GVertexBuffer vb, *targets = NULL;
+    M3GVertexBuffer vb;
+    M3Gulong *targets = NULL;
     M3Guint i, subMeshCount, targetCount;
     M3Gfloat *weights = NULL;
-    M3GIndexBuffer *ib = NULL;
-    M3GAppearance *ap = NULL;
+    M3Gulong *ib = NULL;
+    M3Gulong *ap = NULL;
     M3Gubyte *data;
     M3GMorphingMesh obj = NULL;
 
@@ -2375,14 +2376,14 @@ static M3Gbool m3gLoadMorphingMesh(Loader *loader)
     }
 
     if (m3gCheckSectionDataLength(loader, data, subMeshCount * 8) == M3G_FALSE) return M3G_FALSE;
-    ib = m3gAllocZ(M3G_INTERFACE(loader), sizeof(*ib) * subMeshCount);
-    ap = m3gAllocZ(M3G_INTERFACE(loader), sizeof(*ap) * subMeshCount);
+    ib = m3gAllocZ(M3G_INTERFACE(loader), sizeof(M3Gulong) * subMeshCount);
+    ap = m3gAllocZ(M3G_INTERFACE(loader), sizeof(M3Gulong) * subMeshCount);
     if (!ib || !ap) goto cleanup;
 
     for (i = 0; i < subMeshCount; i++) {
-        ib[i] = (M3GIndexBuffer)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_INDEX_BUFFER);
+        ib[i] = (M3Gulong)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_INDEX_BUFFER);
         data += 4;
-        ap[i] = (M3GAppearance)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_APPEARANCE);
+        ap[i] = (M3Gulong)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_APPEARANCE);
         data += 4;
     }
 
@@ -2401,7 +2402,7 @@ static M3Gbool m3gLoadMorphingMesh(Loader *loader)
     if (!weights || !targets) goto cleanup;
 
     for (i = 0; i < targetCount; i++) {
-        targets[i] = (M3GVertexBuffer)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_VERTEX_BUFFER);
+        targets[i] = (M3Gulong)m3gGetLoaded(loader, m3gLoadInt(data), M3G_CLASS_VERTEX_BUFFER);
         data += 4;
         if (!m3gLoadFloat(data, &weights[i])) goto cleanup;
         data += 4;
@@ -2799,7 +2800,7 @@ M3G_API M3GLoader m3gCreateLoader(M3GInterface m3g)
  * This is intended for passing in external references, decoded in
  * Java
  */
-M3G_API void m3gImportObjects(M3GLoader loader, M3Gint n, M3GObject *refs)
+M3G_API void m3gImportObjects(M3GLoader loader, M3Gint n, M3Gulong *refs)
 {
     int i;
     M3G_VALIDATE_OBJECT(loader);
@@ -2809,11 +2810,11 @@ M3G_API void m3gImportObjects(M3GLoader loader, M3Gint n, M3GObject *refs)
     for (i = 0; i < n; ++i) {
         /* For loop is interrupted in case of OOM */
         if (m3gArrayAppend(&loader->refArray,
-                           refs[i],
+                           (void *) refs[i],
                            M3G_INTERFACE(loader)) == -1) {
             break;
         }
-        m3gAddRef(refs[i]);
+        m3gAddRef((M3GObject) refs[i]);
     }
 }
 
@@ -2828,12 +2829,12 @@ M3G_API void m3gImportObjects(M3GLoader loader, M3Gint n, M3GObject *refs)
  *               the number of unreferenced objects
  * \return number of unreferenced objects
  */
-M3G_API M3Gint m3gGetLoadedObjects(M3GLoader loader, M3GObject *buffer)
+M3G_API M3Gint m3gGetLoadedObjects(M3GLoader loader, M3Gulong *buffer)
 {
     PointerArray *refs;
     int i, n, unref = 0;
     M3Gbool referenced;
-    M3GObject obj, *dst = buffer;
+    M3Gulong obj, *dst = buffer;
     M3G_VALIDATE_OBJECT(loader);
 
     /* If error in decoding, reset and return 0 objects */
@@ -2846,7 +2847,7 @@ M3G_API M3Gint m3gGetLoadedObjects(M3GLoader loader, M3GObject *buffer)
 
     /* Scan unreferenced objects */
     for (i = 0; i < n; ++i) {
-        obj = m3gGetLoadedPtr(refs, i, &referenced);
+        obj = (M3Gulong) m3gGetLoadedPtr(refs, i, &referenced);
         if (!referenced) {
             unref++;
             if (dst != NULL) {
@@ -2975,7 +2976,7 @@ M3G_API M3Gsizei m3gDecodeData(M3GLoader loader,
  *
  * \return Number of objects with user parameters
  */
-M3G_API M3Gint m3gGetObjectsWithUserParameters(M3GLoader loader, M3GObject *objects) {
+M3G_API M3Gint m3gGetObjectsWithUserParameters(M3GLoader loader, M3Gulong *objects) {
     const Loader *ldr = (const Loader *) loader;
     M3G_VALIDATE_OBJECT(ldr);
     {
@@ -2986,7 +2987,7 @@ M3G_API M3Gint m3gGetObjectsWithUserParameters(M3GLoader loader, M3GObject *obje
             for (i = 0; i < n; ++i)
             {
                 const UserData *data = (const UserData *)m3gGetArrayElement(&ldr->userDataArray, i);
-                objects[i] = data->object;
+                objects[i] = (M3Gulong) data->object;
             }
         return n;
     }

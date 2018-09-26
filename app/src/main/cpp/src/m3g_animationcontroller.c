@@ -115,7 +115,7 @@ static M3Gint m3gTimeToDeactivation(const AnimationController *controller,
  */
 static M3Gbool m3gAnimationControllerDuplicate(const Object *originalObj,
                                                Object **cloneObj,
-                                               Object **pairs,
+                                               M3Gulong *pairs,
                                                M3Gint *numPairs)
 {
     const AnimationController *original = (AnimationController *)originalObj;

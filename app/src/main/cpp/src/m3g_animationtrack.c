@@ -194,18 +194,18 @@ static M3Gbool m3gIsValidSize(Interface *m3g, M3Gint property, M3Gint numCompone
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gAnimationTrackDoGetReferences(Object *self, Object **references)
+static M3Gint m3gAnimationTrackDoGetReferences(Object *self, M3Gulong *references)
 {
     AnimationTrack *track = (AnimationTrack *) self;
     M3Gint num = m3gObjectDoGetReferences(self, references);
     if (track->sequence != NULL) {
         if (references != NULL)
-            references[num] = (Object *)track->sequence;
+            references[num] = (M3Gulong)track->sequence;
         num++;
     }
     if (track->controller != NULL) {
         if (references != NULL)
-            references[num] = (Object *)track->controller;
+            references[num] = (M3Gulong)track->controller;
         num++;
     }
     return num;
@@ -240,7 +240,7 @@ static Object *m3gAnimationTrackFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gAnimationTrackDuplicate(const Object *originalObj,
                                           Object **cloneObj,
-                                          Object **pairs,
+                                          M3Gulong *pairs,
                                           M3Gint *numPairs)
 {
     AnimationTrack *original = (AnimationTrack *)originalObj;

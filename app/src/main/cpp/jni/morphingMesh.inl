@@ -141,9 +141,9 @@ JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_MorphingMesh__1ctor
     M3G_DO_LOCK
     jlong ret = (jlong)m3gCreateMorphingMesh((M3GInterface)aM3g,
                   (M3GVertexBuffer)aHVertices,
-                  (M3GVertexBuffer*)targets,
-                  (M3GIndexBuffer*)triangles,
-                  (M3GAppearance*)appearances,
+                  (M3Gulong*)targets,
+                  (M3Gulong*)triangles,
+                  (M3Gulong*)appearances,
                   trianglesLen,
                   targetsLen);
     M3G_DO_UNLOCK(aEnv)

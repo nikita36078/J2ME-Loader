@@ -313,34 +313,34 @@ static Object *m3gAppearanceFindID(Object *self, M3Gint userID)
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gAppearanceDoGetReferences(Object *self, Object **references)
+static M3Gint m3gAppearanceDoGetReferences(Object *self, M3Gulong *references)
 {
     Appearance *app = (Appearance *)self;
     M3Gint i, num = m3gObjectDoGetReferences(self, references);
     if (app->compositingMode != NULL) {
         if (references != NULL)
-            references[num] = (Object *)app->compositingMode;
+            references[num] = (M3Gulong)app->compositingMode;
         num++;
     }
     if (app->polygonMode != NULL) {
         if (references != NULL)
-            references[num] = (Object *)app->polygonMode;
+            references[num] = (M3Gulong)app->polygonMode;
         num++;
     }
     if (app->fog != NULL) {
         if (references != NULL)
-            references[num] = (Object *)app->fog;
+            references[num] = (M3Gulong)app->fog;
         num++;
     }
     if (app->material != NULL) {
         if (references != NULL)
-            references[num] = (Object *)app->material;
+            references[num] = (M3Gulong)app->material;
         num++;
     }
     for (i = 0; i < M3G_NUM_TEXTURE_UNITS; i++) {
         if (app->texture[i] != NULL) {
             if (references != NULL)
-                references[num] = (Object *)app->texture[i];
+                references[num] = (M3Gulong)app->texture[i];
             num++;
         }
     }
@@ -359,7 +359,7 @@ static M3Gint m3gAppearanceDoGetReferences(Object *self, Object **references)
  */
 static M3Gbool m3gAppearanceDuplicate(const Object *originalObj,
                                       Object **cloneObj,
-                                      Object **pairs,
+                                      M3Gulong *pairs,
                                       M3Gint *numPairs)
 {
     M3Gint i;

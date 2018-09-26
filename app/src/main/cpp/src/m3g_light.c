@@ -140,7 +140,7 @@ static void m3gLightUpdateProperty(Object *self,
  */
 static M3Gbool m3gLightDuplicate(const Object *originalObj,
                                  Object **cloneObj,
-                                 Object **pairs,
+                                 M3Gulong *pairs,
                                  M3Gint *numPairs)
 {
     const Light *original = (const Light *) originalObj;

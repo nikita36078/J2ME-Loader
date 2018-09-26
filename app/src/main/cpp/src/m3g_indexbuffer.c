@@ -131,7 +131,7 @@ static M3Gbool m3gGetIndices(const IndexBuffer *buf,
  */
 static M3Gbool m3gIndexBufferDuplicate(const Object *originalObj,
                                        Object **cloneObj,
-                                       Object **pairs,
+                                       M3Gulong *pairs,
                                        M3Gint *numPairs)
 {
     M3Gint size;

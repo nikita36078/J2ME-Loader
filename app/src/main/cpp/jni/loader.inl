@@ -131,10 +131,10 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1decodeData
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getLoadedObjects
 (JNIEnv* aEnv, jclass, jlong aLoader, jlongArray aObjectArray)
 {
-    M3GObject *objects = NULL;
+    M3Gulong *objects = NULL;
     if (aObjectArray)
     {
-        objects = (M3GObject *)aEnv->GetLongArrayElements(aObjectArray, NULL);
+        objects = (M3Gulong *)aEnv->GetLongArrayElements(aObjectArray, NULL);
         if (objects == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -160,7 +160,7 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Loader__1setExternalReference
 (JNIEnv* aEnv, jclass, jlong aLoader, jlongArray aObjectArray)
 {
     /* null array is never passed */
-    M3GObject *xRefs = (M3GObject *)aEnv->GetLongArrayElements(aObjectArray, NULL);
+    M3Gulong *xRefs = (M3Gulong *)aEnv->GetLongArrayElements(aObjectArray, NULL);
     if (xRefs == NULL)
     {
         M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -180,10 +180,10 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Loader__1setExternalReference
 JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getObjectsWithUserParameters
 (JNIEnv* aEnv, jclass, jlong aLoader, jlongArray aObjectArray)
 {
-    M3GObject *objects = NULL;
+    M3Gulong *objects = NULL;
     if (aObjectArray)
     {
-        objects = (M3GObject *)aEnv->GetLongArrayElements(aObjectArray, NULL);
+        objects = (M3Gulong *)aEnv->GetLongArrayElements(aObjectArray, NULL);
         if (objects == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -221,7 +221,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getUserParameter
     M3Gbyte *data = NULL;
     if (aDataArray)
     {
-        data = (M3Gbyte *)aEnv->GetByteArrayElements(aDataArray, NULL);
+        data = aEnv->GetByteArrayElements(aDataArray, NULL);
         if (data == NULL)
         {
             M3G_RAISE_EXCEPTION(aEnv, "java/lang/OutOfMemoryError");
@@ -236,7 +236,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Loader__1getUserParameter
 
     if (data)
     {
-        aEnv->ReleaseByteArrayElements(aDataArray, (jbyte*)data, 0);
+        aEnv->ReleaseByteArrayElements(aDataArray, data, 0);
     }
 
     return retVal;

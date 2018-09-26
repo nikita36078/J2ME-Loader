@@ -385,29 +385,29 @@ static void m3gUpdateArray(VertexBuffer *buffer,
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gVertexBufferDoGetReferences(Object *self, Object **references)
+static M3Gint m3gVertexBufferDoGetReferences(Object *self, M3Gulong *references)
 {
     VertexBuffer *vb = (VertexBuffer *)self;
     M3Gint i, num = m3gObjectDoGetReferences(self, references);
     if (vb->vertices != NULL) {
         if (references != NULL)
-            references[num] = (Object *)vb->vertices;
+            references[num] = (M3Gulong)vb->vertices;
         num++;
     }
     if (vb->normals != NULL) {
         if (references != NULL)
-            references[num] = (Object *)vb->normals;
+            references[num] = (M3Gulong)vb->normals;
         num++;
     }
     if (vb->colors != NULL) {
         if (references != NULL)
-            references[num] = (Object *)vb->colors;
+            references[num] = (M3Gulong)vb->colors;
         num++;
     }
     for (i = 0; i < M3G_NUM_TEXTURE_UNITS; i++) {
         if (vb->texCoords[i] != NULL) {
             if (references != NULL)
-                references[num] = (Object *)vb->texCoords[i];
+                references[num] = (M3Gulong)vb->texCoords[i];
             num++;
         }
     }
@@ -482,7 +482,7 @@ static void m3gDuplicateVertexBufferData(VertexBuffer *clone,
  */
 static M3Gbool m3gVertexBufferDuplicate(const Object *originalObj,
                                         Object **cloneObj,
-                                        Object **pairs,
+                                        M3Gulong *pairs,
                                         M3Gint *numPairs)
 {
     VertexBuffer *original = (VertexBuffer*) originalObj;

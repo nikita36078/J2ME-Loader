@@ -106,7 +106,7 @@ typedef void    (*m3gDoRenderFuncPtr)		    (Node *self, RenderContext *ctx, cons
 typedef M3Gint  (*m3gGetBBoxFuncPtr)            (Node *self, AABB *bbox);
 typedef M3Gbool (*m3gRayIntersectFuncPtr)       (Node *self, M3Gint mask, M3Gfloat *ray, RayIntersection *ri, Matrix *toGroup);
 typedef M3Gbool (*m3gSetupRenderFuncPtr)	    (Node *self, const Node *caller, SetupRenderState *rs, RenderQueue *renderQueue);
-typedef void    (*m3gUpdateDuplicateRefFuncPtr)	(Node *self, Object **pairs, M3Gint numPairs);
+typedef void    (*m3gUpdateDuplicateRefFuncPtr)	(Node *self, M3Gulong *pairs, M3Gint numPairs);
 typedef M3Gbool (*m3gValidate)                  (Node *self, M3Gbitmask state, M3Gint scope);
 
 /*!
@@ -185,12 +185,12 @@ M3G_CT_ASSERT(sizeof(Node) == sizeof(Transformable) + 28);
 
 static void m3gDestroyNode(Object *obj);
 static M3Gbool m3gNodeAlign(Node *self, const Node *refNode);
-static M3Gbool m3gNodeDuplicate(const Object *original, Object **clone, Object **pairs, M3Gint *numPairs);
+static M3Gbool m3gNodeDuplicate(const Object *original, Object **clone, M3Gulong *pairs, M3Gint *numPairs);
 static M3Gint m3gNodeGetBBox(Node *self, AABB *bbox);
 static M3Gbool m3gNodeIsCompatible(M3Gint property);
 static M3Gbool m3gNodeRayIntersect(Node *self, M3Gint mask, M3Gfloat *ray, RayIntersection *ri, Matrix *toGroup);
 static void m3gNodeUpdateProperty(Object *self, M3Gint property, M3Gint valueSize, const M3Gfloat *value);
-static void m3gNodeUpdateDuplicateReferences(Node *self, Object **pairs, M3Gint numPairs);
+static void m3gNodeUpdateDuplicateReferences(Node *self, M3Gulong *pairs, M3Gint numPairs);
 static M3Gbool m3gNodeValidate(Node *self, M3Gbitmask stateBits, M3Gint scope);
 
 
@@ -221,7 +221,7 @@ typedef void    (*NodeFuncPtr)  (Node *node, void *params);
 static void     m3gForSubtree   (Node *node, NodeFuncPtr func, void *params);
 
 static void     m3gSetParent    (Node *node, Node *parent);
-static Node *m3gGetDuplicatedInstance(Node *self, Object **references, M3Gint numRef);
+static Node *m3gGetDuplicatedInstance(Node *self, M3Gulong *references, M3Gint numRef);
 
 #if defined(M3G_ENABLE_VF_CULLING)           
 static void m3gUpdateCullingMask(SetupRenderState *s, const Camera *cam, const AABB *bbox);

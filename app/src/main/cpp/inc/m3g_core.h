@@ -371,6 +371,7 @@ typedef unsigned short  M3Gushort;  /*!< \brief 16-bit unsigned integer */
 typedef unsigned char   M3Gubyte;   /*!< \brief  8-bit unsigned integer */
 typedef float           M3Gfloat;   /*!< \brief 32-bit IEEE float */
 typedef uintptr_t       M3Gpointer;
+typedef uint64_t        M3Gulong;
 
 typedef M3Gint   M3Genum;
 typedef M3Guint  M3Gbitmask;
@@ -795,9 +796,9 @@ M3G_API M3Gint          m3gGetScopeMask     (M3GLight handle);
 
 M3G_API M3GLoader       m3gCreateLoader(M3GInterface m3g);
 M3G_API M3Gsizei        m3gDecodeData(M3GLoader loader, M3Gsizei bytes, const M3Gubyte *data);
-M3G_API M3Gint          m3gGetLoadedObjects(M3GLoader loader, M3GObject *buffer);
-M3G_API void            m3gImportObjects(M3GLoader loader, M3Gint n, M3GObject *refs);
-M3G_API M3Gint          m3gGetObjectsWithUserParameters(M3GLoader loader, M3GObject *objects);
+M3G_API M3Gint          m3gGetLoadedObjects(M3GLoader loader, M3Gulong *buffer);
+M3G_API void            m3gImportObjects(M3GLoader loader, M3Gint n, M3Gulong *refs);
+M3G_API M3Gint          m3gGetObjectsWithUserParameters(M3GLoader loader, M3Gulong *objects);
 M3G_API M3Gint          m3gGetNumUserParameters(M3GLoader loader, M3Gint object);
 M3G_API M3Gint          m3gGetUserParameter(M3GLoader loader, M3Gint object, M3Gint index, M3Gbyte *buffer);
 M3G_API void            m3gSetConstraints(M3GLoader loader, M3Gint triConstraint);
@@ -815,7 +816,7 @@ M3G_API M3Gbool         m3gIsVertexColorTrackingEnabled (M3GMaterial material);
     
 /* -------- Mesh -------- */
 
-M3G_API M3GMesh         m3gCreateMesh       (M3GInterface hInterface, M3GVertexBuffer hVertices, M3GIndexBuffer *hTriangles, M3GAppearance *hAppearances, M3Gint trianglePatchCount);
+M3G_API M3GMesh         m3gCreateMesh       (M3GInterface hInterface, M3GVertexBuffer hVertices, M3Gulong *hTriangles, M3Gulong *hAppearances, M3Gint trianglePatchCount);
 M3G_API void            m3gSetAppearance    (M3GMesh handle, M3Gint appearanceIndex, M3GAppearance hAppearance);
 M3G_API M3GAppearance   m3gGetAppearance    (M3GMesh handle, M3Gint idx);
 M3G_API M3GIndexBuffer  m3gGetIndexBuffer   (M3GMesh handle, M3Gint idx);
@@ -825,7 +826,7 @@ M3G_API M3Gint          m3gGetSubmeshCount  (M3GMesh handle);
     
 /* -------- MorphingMesh -------- */
 
-M3G_API M3GMorphingMesh m3gCreateMorphingMesh  (M3GInterface hInterface, M3GVertexBuffer hVertices, M3GVertexBuffer *hTargets, M3GIndexBuffer *hTriangles, M3GAppearance *hAppearances, M3Gint trianglePatchCount, M3Gint targetCount);
+M3G_API M3GMorphingMesh m3gCreateMorphingMesh  (M3GInterface hInterface, M3GVertexBuffer hVertices, M3Gulong *hTargets, M3Gulong *hTriangles, M3Gulong *hAppearances, M3Gint trianglePatchCount, M3Gint targetCount);
 M3G_API void            m3gSetWeights          (M3GMorphingMesh handle, M3Gfloat *weights, M3Gint numWeights);
 M3G_API void            m3gGetWeights          (M3GMorphingMesh handle, M3Gfloat *weights, M3Gint numWeights);
 M3G_API M3GVertexBuffer m3gGetMorphTarget      (M3GMorphingMesh handle, M3Gint idx);
@@ -862,9 +863,9 @@ M3G_API M3Gint          m3gAnimate              (M3GObject hObject, M3Gint time)
 M3G_API void            m3gSetUserID            (M3GObject hObject, M3Gint userID);
 M3G_API M3Gint          m3gGetUserID            (M3GObject hObject);
 M3G_API M3GAnimationTrack m3gGetAnimationTrack  (M3GObject hObject, M3Gint idx);
-M3G_API M3GObject       m3gDuplicate            (M3GObject hObject, M3GObject *hReferences);
+M3G_API M3GObject       m3gDuplicate            (M3GObject hObject, M3Gulong *hReferences);
 M3G_API M3GInterface    m3gGetObjectInterface   (M3GObject hObject);
-M3G_API M3Gint          m3gGetReferences        (M3GObject hObject, M3GObject *references, M3Gint length);
+M3G_API M3Gint          m3gGetReferences        (M3GObject hObject, M3Gulong *references, M3Gint length);
 M3G_API M3GObject       m3gFind                 (M3GObject hObject, M3Gint userID);
 
 #define m3gGetInterface(obj) m3gGetObjectInterface((M3GObject)(obj))
@@ -925,7 +926,7 @@ M3G_API void    m3gFreeGLESResources    (M3GRenderContext ctx);
 
 /* -------- SkinnedMesh -------- */
 
-M3G_API M3GSkinnedMesh  m3gCreateSkinnedMesh    (M3GInterface hInterface, M3GVertexBuffer hVertices, M3GIndexBuffer *hTriangles, M3GAppearance *hAppearances, M3Gint trianglePatchCount, M3GGroup hSkeleton);
+M3G_API M3GSkinnedMesh  m3gCreateSkinnedMesh    (M3GInterface hInterface, M3GVertexBuffer hVertices, M3Gulong *hTriangles, M3Gulong *hAppearances, M3Gint trianglePatchCount, M3GGroup hSkeleton);
 M3G_API void            m3gAddTransform         (M3GSkinnedMesh handle, M3GNode hBone, M3Gint weight, M3Gint firstVertex, M3Gint numVertices);
 M3G_API M3GGroup        m3gGetSkeleton          (M3GSkinnedMesh handle);
 M3G_API void            m3gGetBoneTransform     (M3GSkinnedMesh handle, M3GNode hBone, M3GMatrix *transform);

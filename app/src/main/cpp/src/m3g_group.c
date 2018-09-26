@@ -413,7 +413,7 @@ static void m3gFillPickResult(RayIntersection *ri, M3Gfloat *ray, M3Gfloat *resu
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gGroupDoGetReferences(Object *self, Object **references)
+static M3Gint m3gGroupDoGetReferences(Object *self, M3Gulong *references)
 {
     Group *group = (Group *)self;
     M3Gint num = m3gObjectDoGetReferences(self, references);
@@ -421,7 +421,7 @@ static M3Gint m3gGroupDoGetReferences(Object *self, Object **references)
     if (child) {
         do {
             if (references != NULL)
-                references[num] = (Object *)child;
+                references[num] = (M3Gulong)child;
             child = child->right;
             num++;
         } while (child != group->firstChild);
@@ -463,7 +463,7 @@ static Object *m3gGroupFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gGroupDuplicate(const Object *originalObj,
                                  Object **cloneObj,
-                                 Object **pairs,
+                                 M3Gulong *pairs,
                                  M3Gint *numPairs)
 {
     Node *child;
@@ -646,7 +646,7 @@ static M3Gbool m3gGroupValidate(Node *self, M3Gbitmask stateBits, M3Gint scope)
  * \param pairs array for all object-duplicate pairs
  * \param numPairs number of pairs
  */
-static void m3gGroupUpdateDuplicateReferences(Node *self, Object **pairs, M3Gint numPairs)
+static void m3gGroupUpdateDuplicateReferences(Node *self, M3Gulong *pairs, M3Gint numPairs)
 {
     Group *group = (Group *)self;
     Node *child = group->firstChild;

@@ -73,7 +73,7 @@ static M3Gbool  m3gGetInverseCompositeTransform (M3GTransformable handle,
                                                  M3GMatrix *transform);
 static M3Gbool  m3gTransformableIsCompatible    (M3Gint property);
 static void     m3gTransformableUpdateProperty  (Object *self, M3Gint property, M3Gint valueSize, const M3Gfloat *value);
-static M3Gbool  m3gTransformableDuplicate       (const Object *original, Object **clone, Object **pairs, M3Gint *numPairs);
+static M3Gbool  m3gTransformableDuplicate       (const Object *original, Object **clone, M3Gulong *pairs, M3Gint *numPairs);
 
 static void m3gInvalidateTransformable(Transformable *self);
 

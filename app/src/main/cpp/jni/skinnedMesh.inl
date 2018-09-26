@@ -58,8 +58,8 @@ JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_SkinnedMesh__1ctor
     M3G_DO_LOCK
     M3GSkinnedMesh ret = m3gCreateSkinnedMesh(m3g,
                   (M3GVertexBuffer)aHVertices,
-                  (M3GIndexBuffer*)triangles,
-                  (M3GAppearance *)appearances,
+                  (M3Gulong*)triangles,
+                  (M3Gulong *)appearances,
                   numTriangles,
                   (M3GGroup)aHSkeleton);
     M3G_DO_UNLOCK(aEnv)

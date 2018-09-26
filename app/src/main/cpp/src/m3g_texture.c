@@ -249,13 +249,13 @@ static void m3gTextureUpdateProperty(Object *self,
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gTextureDoGetReferences(Object *self, Object **references)
+static M3Gint m3gTextureDoGetReferences(Object *self, M3Gulong *references)
 {
     Texture *texture = (Texture *)self;
     M3Gint num = m3gObjectDoGetReferences(self, references);
     if (texture->image != NULL) {
         if (references != NULL)
-            references[num] = (Object *)texture->image;
+            references[num] = (M3Gulong)texture->image;
         num++;
     }
     return num;
@@ -287,7 +287,7 @@ static Object *m3gTextureFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gTextureDuplicate(const Object *originalObj,
                                    Object **cloneObj,
-                                   Object **pairs,
+                                   M3Gulong *pairs,
                                    M3Gint *numPairs)
 {
     Texture *original = (Texture *)originalObj;

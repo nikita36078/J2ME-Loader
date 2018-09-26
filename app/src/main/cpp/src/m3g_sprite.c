@@ -668,18 +668,18 @@ static M3Gbool m3gSpriteRayIntersect(Node *self,
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gSpriteDoGetReferences(Object *self, Object **references)
+static M3Gint m3gSpriteDoGetReferences(Object *self, M3Gulong *references)
 {
     Sprite *sprite = (Sprite *)self;
     int num = m3gObjectDoGetReferences(self, references);
     if (sprite->image != NULL) {
         if (references != NULL)
-            references[num] = (Object *)sprite->image;
+            references[num] = (M3Gulong)sprite->image;
         num++;
     }
     if (sprite->appearance != NULL) {
         if (references != NULL)
-            references[num] = (Object *)sprite->appearance;
+            references[num] = (M3Gulong)sprite->appearance;
         num++;
     }
     return num;
@@ -714,7 +714,7 @@ static Object *m3gSpriteFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gSpriteDuplicate(const Object *originalObj,
                                   Object **cloneObj,
-                                  Object **pairs,
+                                  M3Gulong *pairs,
                                   M3Gint *numPairs)
 {
     Sprite *original = (Sprite *)originalObj;

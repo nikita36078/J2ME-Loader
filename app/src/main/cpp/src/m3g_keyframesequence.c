@@ -66,7 +66,7 @@ static void m3gDestroyKeyframeSequence(Object *obj)
  */
 static M3Gbool m3gKeyframeSequenceDuplicate(const Object *originalObj,
                                             Object **cloneObj,
-                                            Object **pairs,
+                                            M3Gulong *pairs,
                                             M3Gint *numPairs)
 {
     KeyframeSequence *original = (KeyframeSequence *)originalObj;

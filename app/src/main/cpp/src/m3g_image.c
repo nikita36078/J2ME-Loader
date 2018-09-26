@@ -662,7 +662,7 @@ static void m3gDownsample(M3GPixelFormat format,
                         + (temp[0][k+1] & RB_MASK)
                         + (temp[1][k+1] & RB_MASK);
 
-                    /* Shift to divide by 4, adding ½ for rounding */
+                    /* Shift to divide by 4, adding ï¿½ for rounding */
                     
                     temp[0][k>>1] = ((((ag + 0x00020002u) << 6) & AG_MASK) |
                                      (((rb + 0x00020002u) >> 2) & RB_MASK));
@@ -970,7 +970,7 @@ static void m3gInvalidateImage(Image *img)
  */
 static M3Gbool m3gImageDuplicate(const Object *originalObj,
                                  Object **cloneObj,
-                                 Object **pairs,
+                                 M3Gulong *pairs,
                                  M3Gint *numPairs)
 {
     Image *original = (Image *)originalObj;

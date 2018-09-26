@@ -38,7 +38,7 @@ struct M3GMorphingMeshImpl
     M3Gfloat *floatWeights;
 	M3Gint *weights;
 	M3Gint sumWeights;
-	VertexBuffer **targets;
+	M3Gulong *targets;
 	VertexBuffer *base;
     VertexBuffer *morphed;
 	M3Gint numTargets;

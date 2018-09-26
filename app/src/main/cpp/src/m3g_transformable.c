@@ -183,7 +183,7 @@ static void m3gTransformableUpdateProperty(Object *self,
  */
 static M3Gbool m3gTransformableDuplicate(const Object *originalObj,
                                          Object **cloneObj,
-                                         Object **pairs,
+                                         M3Gulong *pairs,
                                          M3Gint *numPairs)
 {
     Transformable *original = (Transformable *)originalObj;

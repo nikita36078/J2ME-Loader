@@ -298,7 +298,7 @@ static M3Gbool m3gCameraSetupRender(Node *self,
  */
 static M3Gbool m3gCameraDuplicate(const Object *originalObj,
                                   Object **cloneObj,
-                                  Object **pairs,
+                                  M3Gulong *pairs,
                                   M3Gint *numPairs)
 {
     Camera *original = (Camera *)originalObj;

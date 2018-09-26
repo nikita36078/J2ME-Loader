@@ -119,7 +119,7 @@ static void m3gFogUpdateProperty(Object *self,
  */
 static M3Gbool m3gFogDuplicate(const Object *originalObj,
                                Object **cloneObj,
-                               Object **pairs,
+                               M3Gulong *pairs,
                                M3Gint *numPairs)
 {
     Fog *original = (Fog *)originalObj;

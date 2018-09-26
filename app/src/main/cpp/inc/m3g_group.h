@@ -55,12 +55,12 @@ static M3Gbool m3gGroupRayIntersect(	Node *self,
 								M3Gfloat *ray,
 								RayIntersection *ri,
 								Matrix *toGroup);
-static M3Gint m3gGroupDoGetReferences(Object *self, Object **references);
+static M3Gint m3gGroupDoGetReferences(Object *self, M3Gulong *references);
 static M3Gint m3gGroupGetBBox(Node *self, AABB *bbox);
 static Object *m3gGroupFindID(Object *self, M3Gint userID);
-static M3Gbool m3gGroupDuplicate(const Object *original, Object **clone, Object **pairs, M3Gint *numPairs);
+static M3Gbool m3gGroupDuplicate(const Object *original, Object **clone, M3Gulong *pairs, M3Gint *numPairs);
 static M3Gbool m3gGroupValidate(Node *self, M3Gbitmask stateBits, M3Gint scope);
-static void m3gGroupUpdateDuplicateReferences(Node *self, Object **pairs, M3Gint numPairs);
+static void m3gGroupUpdateDuplicateReferences(Node *self, M3Gulong *pairs, M3Gint numPairs);
 
 /*----------------------------------------------------------------------
  * Internal functions

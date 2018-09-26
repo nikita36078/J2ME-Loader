@@ -262,13 +262,13 @@ static void m3gObjectUpdateProperty(Object *self,
  * \internal
  * \brief Default \c getReferences function implementation
  */
-static M3Gint m3gObjectDoGetReferences(Object *self, Object **references)
+static M3Gint m3gObjectDoGetReferences(Object *self, M3Gulong *references)
 {
     M3Gint i;
     if (self->animTracks != NULL) {
         if (references != NULL) {
             for (i = 0; i < m3gArraySize(self->animTracks); ++i) {
-                references[i] = (Object *)m3gGetArrayElement(self->animTracks, i);
+                references[i] = (M3Gulong)m3gGetArrayElement(self->animTracks, i);
             }
         }
         return m3gArraySize(self->animTracks);
@@ -308,14 +308,14 @@ static Object *m3gObjectFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gObjectDuplicate(const Object *original,
                                   Object **clone,
-                                  Object **pairs,
+                                  M3Gulong *pairs,
                                   M3Gint *numPairs)
 {
     Interface *m3g = original->interface;
     M3G_ASSERT_PTR(*clone); /* abstract class, must be derived */
 
-    pairs[2 * (*numPairs)] = (Object *)original;
-    pairs[2 * (*numPairs) + 1] = *clone;
+    pairs[2 * (*numPairs)] = (M3Gulong)original;
+    pairs[2 * (*numPairs) + 1] = (M3Gulong)*clone;
     (*numPairs)++;
 
     /* Copy basic object properties */
@@ -700,9 +700,9 @@ M3G_API M3Gint m3gGetUserID(M3GObject hObject)
 /*!
  * \brief Creates a duplicate of this Object3D
 */
-M3G_API M3GObject m3gDuplicate(M3GObject hObject, M3GObject *hReferences)
+M3G_API M3GObject m3gDuplicate(M3GObject hObject, M3Gulong *hReferences)
 {
-    Object **references = (Object **)hReferences;
+    M3Gulong *references = hReferences;
     const Object *obj = (const Object *) hObject;
     Object *clone = NULL;
     M3Gint numRef = 0;
@@ -741,7 +741,7 @@ M3G_API M3GObject m3gDuplicate(M3GObject hObject, M3GObject *hReferences)
  * getReferences
  */
 M3G_API M3Gint m3gGetReferences(M3GObject hObject,
-                                M3GObject *references,
+                                M3Gulong *references,
                                 M3Gint length)
 {
     Object *obj = (Object *) hObject;
@@ -753,7 +753,7 @@ M3G_API M3Gint m3gGetReferences(M3GObject hObject,
             return 0;
         }
     }
-    return M3G_VFUNC(Object, obj, getReferences)(obj, (Object **)references);
+    return M3G_VFUNC(Object, obj, getReferences)(obj, (M3Gulong *)references);
 }
 
 /*!

@@ -74,8 +74,8 @@ JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Mesh__1ctor
     M3G_DO_LOCK
     jlong ret = (jlong)m3gCreateMesh((M3GInterface)aM3g,
                                          (M3GVertexBuffer)aHVertices,
-                                         (M3GIndexBuffer*)triangle,
-                                         (M3GAppearance*)appearance,
+                                         (M3Gulong*)triangle,
+                                         (M3Gulong*)appearance,
                                          trianglesLen);
     M3G_DO_UNLOCK(aEnv)
 

@@ -35,8 +35,8 @@ struct M3GMeshImpl
 	Node node;
     
 	VertexBuffer *vertexBuffer;
-	Appearance **appearances;
-	IndexBuffer **indexBuffers;
+	M3Gulong *appearances;
+	M3Gulong *indexBuffers;
 
     M3Gint vbTimestamp;
     
@@ -54,13 +54,13 @@ static M3Gint m3gMeshApplyAnimation(Object *self, M3Gint time);
 static M3Gbool m3gInitMesh(Interface *m3g,
                            Mesh *mesh,
                            M3GVertexBuffer hVertices,
-                           M3GIndexBuffer *hTriangles,
-                           M3GAppearance *hAppearances,
+                           M3Gulong *hTriangles,
+                           M3Gulong *hAppearances,
                            M3Gint trianglePatchCount,
                            M3GClass classID);
-static M3Gint m3gMeshDoGetReferences(Object *self, Object **references);
+static M3Gint m3gMeshDoGetReferences(Object *self, M3Gulong *references);
 static Object *m3gMeshFindID(Object *self, M3Gint userID);
-static M3Gbool m3gMeshDuplicate(const Object *original, Object **clone, Object **pairs, M3Gint *numPairs);
+static M3Gbool m3gMeshDuplicate(const Object *original, Object **clone, M3Gulong *pairs, M3Gint *numPairs);
 static M3Gbool m3gMeshValidate(Node *self, M3Gbitmask stateBits, M3Gint scope);
 
 static M3Gbool m3gMeshRayIntersectInternal(	Mesh *mesh,

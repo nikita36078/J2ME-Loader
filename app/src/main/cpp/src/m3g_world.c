@@ -81,18 +81,18 @@ static M3Gint m3gWorldApplyAnimation(Object *self, M3Gint time)
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gWorldDoGetReferences(Object *self, Object **references)
+static M3Gint m3gWorldDoGetReferences(Object *self, M3Gulong *references)
 {
     World *world = (World *)self;
     M3Gint num = m3gGroupDoGetReferences(self, references);
     if (world->activeCamera != NULL) {
         if (references != NULL)
-            references[num] = (Object *)world->activeCamera;
+            references[num] = (M3Gulong)world->activeCamera;
         num++;
     }
     if (world->background != NULL) {
         if (references != NULL)
-            references[num] = (Object *)world->background;
+            references[num] = (M3Gulong)world->background;
         num++;
     }
     return num;
@@ -127,7 +127,7 @@ static Object *m3gWorldFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gWorldDuplicate(const Object *originalObj,
                                  Object **cloneObj,
-                                 Object **pairs,
+                                 M3Gulong *pairs,
                                  M3Gint *numPairs)
 {
     World *original = (World *)originalObj;
@@ -164,7 +164,7 @@ static M3Gbool m3gWorldDuplicate(const Object *originalObj,
  * \param pairs array for all object-duplicate pairs
  * \param numPairs number of pairs
  */
-static void m3gWorldUpdateDuplicateReferences(Node *self, Object **pairs, M3Gint numPairs)
+static void m3gWorldUpdateDuplicateReferences(Node *self, M3Gulong *pairs, M3Gint numPairs)
 {
     World *world = (World *)self;
     m3gGroupUpdateDuplicateReferences(self, pairs, numPairs);

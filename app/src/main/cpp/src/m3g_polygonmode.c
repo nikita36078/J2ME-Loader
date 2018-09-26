@@ -128,7 +128,7 @@ static void m3gApplyPolygonMode(PolygonMode *polygonMode)
  */
 static M3Gbool m3gPolygonModeDuplicate(const Object *originalObj,
                                        Object **cloneObj,
-                                       Object **pairs,
+                                       M3Gulong *pairs,
                                        M3Gint *numPairs)
 {
     PolygonMode *original = (PolygonMode *)originalObj;

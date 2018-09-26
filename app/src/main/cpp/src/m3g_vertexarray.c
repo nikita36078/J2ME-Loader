@@ -426,7 +426,7 @@ static M3Gbool m3gIsCompatible(const VertexArray *array, const VertexArray *othe
  */
 static M3Gbool m3gVertexArrayDuplicate(const Object *originalObj,
                                        Object **cloneObj,
-                                       Object **pairs,
+                                       M3Gulong *pairs,
                                        M3Gint *numPairs)
 {
     VertexArray *clone = m3gCloneVertexArray((VertexArray *)originalObj);

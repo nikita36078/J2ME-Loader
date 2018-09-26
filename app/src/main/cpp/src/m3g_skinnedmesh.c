@@ -391,7 +391,7 @@ static void m3gNormalizeWeights(SkinnedMesh *mesh)
                 mesh->normalizedWeights[k][vi] = (M3Gubyte) normalized;
             }
             
-            /* NOTE there is a maximum of ½ rounding error per
+            /* NOTE there is a maximum of ï¿½ rounding error per
              * component, plus the rounding error from the reciprocal
              * calculation, so the sum of weights will often not sum
              * to 128 exactly! We therefore only assert against
@@ -1390,8 +1390,8 @@ static void m3gSkinnedMeshDoRender(Node *self,
                                    int patchIndex)
 {
     SkinnedMesh *mesh = (SkinnedMesh *)self;
-    IndexBuffer *indexBuffer = mesh->mesh.indexBuffers[patchIndex];
-    Appearance *appearance = mesh->mesh.appearances[patchIndex];
+    IndexBuffer *indexBuffer = (IndexBuffer *) mesh->mesh.indexBuffers[patchIndex];
+    Appearance *appearance = (Appearance *) mesh->mesh.appearances[patchIndex];
 
     if (indexBuffer == NULL || appearance == NULL)
         return;
@@ -1476,14 +1476,14 @@ static M3Gint m3gSkinnedMeshApplyAnimation(Object *self, M3Gint time)
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gSkinnedMeshDoGetReferences(Object *self, Object **references)
+static M3Gint m3gSkinnedMeshDoGetReferences(Object *self, M3Gulong *references)
 {
     SkinnedMesh *smesh = (SkinnedMesh *)self;
     M3Gint num = m3gMeshDoGetReferences(self, references);
     if (smesh->skeleton != NULL)
     {
         if (references != NULL)
-            references[num] = (Object *)smesh->skeleton;
+            references[num] = (M3Gulong)smesh->skeleton;
         num++;
     }
     return num;
@@ -1515,7 +1515,7 @@ static Object *m3gSkinnedMeshFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gSkinnedMeshDuplicate(const Object *originalObj,
                                        Object **cloneObj,
-                                       Object **pairs,
+                                       M3Gulong *pairs,
                                        M3Gint *numPairs)
 {
     M3Gint i;
@@ -1704,7 +1704,7 @@ static M3Gbool m3gSkinnedMeshValidate(Node *self, M3Gbitmask stateBits, M3Gint s
  * \param pairs array for all object-duplicate pairs
  * \param numPairs number of pairs
  */
-static void m3gSkinnedMeshUpdateDuplicateReferences(Node *self, Object **pairs, M3Gint numPairs)
+static void m3gSkinnedMeshUpdateDuplicateReferences(Node *self, M3Gulong *pairs, M3Gint numPairs)
 {
     SkinnedMesh *skinned = (SkinnedMesh *)self;
     SkinnedMesh *duplicate = (SkinnedMesh *)m3gGetDuplicatedInstance(self, pairs, numPairs);
@@ -1743,8 +1743,8 @@ static void m3gSkinnedMeshUpdateDuplicateReferences(Node *self, Object **pairs, 
 static M3Gbool m3gInitSkinnedMesh(Interface *m3g,
                                   SkinnedMesh *mesh,
                                   M3GVertexBuffer hVertices,
-                                  M3GIndexBuffer *hTriangles,
-                                  M3GAppearance *hAppearances,
+                                  M3Gulong *hTriangles,
+                                  M3Gulong *hAppearances,
                                   M3Gint trianglePatchCount,
                                   M3GGroup hSkeleton)
 {
@@ -1823,8 +1823,8 @@ static const NodeVFTable m3gvf_SkinnedMesh = {
  */
 M3G_API M3GSkinnedMesh m3gCreateSkinnedMesh(M3GInterface interface,
                                             M3GVertexBuffer hVertices,
-                                            M3GIndexBuffer *hTriangles,
-                                            M3GAppearance *hAppearances,
+                                            M3Gulong *hTriangles,
+                                            M3Gulong *hAppearances,
                                             M3Gint trianglePatchCount,
                                             M3GGroup hSkeleton)
 {

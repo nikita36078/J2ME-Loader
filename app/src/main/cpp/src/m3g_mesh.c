@@ -85,7 +85,7 @@ static M3Gbool m3gQueueMesh(Mesh *mesh, const Matrix *toCamera,
                                    (Node*) mesh,
                                    toCamera,
                                    i,
-                                   m3gGetAppearanceSortKey(mesh->appearances[i])))
+                                   m3gGetAppearanceSortKey(((Appearance*)mesh->appearances[i]))))
                 return M3G_FALSE;
         }
     }
@@ -159,8 +159,8 @@ static void m3gMeshDoRender(Node *self,
 
 	m3gDrawMesh(ctx,
                 mesh->vertexBuffer,
-                mesh->indexBuffers[patchIndex],
-                mesh->appearances[patchIndex],
+                (const IndexBuffer *) mesh->indexBuffers[patchIndex],
+                (const Appearance *) mesh->appearances[patchIndex],
                 toCamera,
                 mesh->totalAlphaFactor + 1,
                 self->scope);
@@ -261,14 +261,14 @@ static M3Gbool m3gMeshRayIntersectInternal(	Mesh *mesh,
             mesh->indexBuffers[i] == NULL) continue;
 
         /* Validate indices versus vertex buffer */
-        if (m3gGetMaxIndex(mesh->indexBuffers[i]) >= m3gGetNumVertices(vertices)) {
+        if (m3gGetMaxIndex((const IndexBuffer *) mesh->indexBuffers[i]) >= m3gGetNumVertices(vertices)) {
             m3gRaiseError(M3G_INTERFACE(mesh), M3G_INVALID_OPERATION);
             return M3G_FALSE;
         }
 
-        if (mesh->appearances[i]->polygonMode != NULL) {
-            cullMode = m3gGetWinding(mesh->appearances[i]->polygonMode) == M3G_WINDING_CCW ? 0 : 1;
-            switch(m3gGetCulling(mesh->appearances[i]->polygonMode)) {
+        if (((Appearance*)mesh->appearances[i])->polygonMode != NULL) {
+            cullMode = m3gGetWinding(((Appearance*)mesh->appearances[i])->polygonMode) == M3G_WINDING_CCW ? 0 : 1;
+            switch(m3gGetCulling(((Appearance*)mesh->appearances[i])->polygonMode)) {
             case M3G_CULL_FRONT: cullMode ^= 1; break;
             case M3G_CULL_NONE:  cullMode  = 2; break;
             }
@@ -278,7 +278,7 @@ static M3Gbool m3gMeshRayIntersectInternal(	Mesh *mesh,
         }
 
         /* Go through all triangels */
-        for (j = 0; m3gGetIndices(mesh->indexBuffers[i], j, indices); j++) {
+        for (j = 0; m3gGetIndices((const IndexBuffer *) mesh->indexBuffers[i], j, indices); j++) {
             /* Ignore zero area triangles */
             if ( indices[0] == indices[1] ||
                  indices[0] == indices[2] ||
@@ -350,8 +350,8 @@ static M3Gbool m3gMeshRayIntersectInternal(	Mesh *mesh,
                         transformed.w = 1;
 
                         /* Transform and * 1/w */
-                        if (mesh->appearances[i]->texture[k] != NULL) {
-                            m3gGetCompositeTransform((Transformable *)mesh->appearances[i]->texture[k], &t);
+                        if (((Appearance*)mesh->appearances[i])->texture[k] != NULL) {
+                            m3gGetCompositeTransform((Transformable *)((Appearance*)mesh->appearances[i])->texture[k], &t);
                             m3gTransformVec4(&t, &transformed);
                             m3gScaleVec4(&transformed, m3gRcp(transformed.w));
                         }
@@ -413,8 +413,8 @@ static M3Gbool m3gMeshRayIntersect( Node *self,
 static M3Gbool m3gInitMesh(Interface *m3g,
                            Mesh *mesh,
                            M3GVertexBuffer hVertices,
-                           M3GIndexBuffer *hTriangles,
-                           M3GAppearance *hAppearances,
+                           M3Gulong *hTriangles,
+                           M3Gulong *hAppearances,
                            M3Gint trianglePatchCount,
                            M3GClass classID)
 {
@@ -434,13 +434,13 @@ static M3Gbool m3gInitMesh(Interface *m3g,
 	}
 
 	mesh->indexBuffers =
-        m3gAllocZ(m3g, sizeof(IndexBuffer *) * trianglePatchCount);
+        m3gAllocZ(m3g, sizeof(M3Gulong) * trianglePatchCount);
 	if (!mesh->indexBuffers) {
 		return M3G_FALSE;
 	}
 
 	mesh->appearances =
-        m3gAllocZ(m3g, sizeof(Appearance *) * trianglePatchCount);
+        m3gAllocZ(m3g, sizeof(M3Gulong) * trianglePatchCount);
 	if (!mesh->appearances) {
 		m3gFree(m3g, mesh->indexBuffers);
 		return M3G_FALSE;
@@ -465,7 +465,7 @@ static M3Gbool m3gInitMesh(Interface *m3g,
     }
 	
     M3G_ASSIGN_REF(mesh->vertexBuffer, hVertices);
-	mesh->trianglePatchCount = (M3Gshort) trianglePatchCount;
+	mesh->trianglePatchCount = (M3Gushort) trianglePatchCount;
 
     m3gIncStat(M3G_INTERFACE(mesh), M3G_STAT_RENDERABLES, 1);
     
@@ -480,22 +480,22 @@ static M3Gbool m3gInitMesh(Interface *m3g,
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gMeshDoGetReferences(Object *self, Object **references)
+static M3Gint m3gMeshDoGetReferences(Object *self, M3Gulong *references)
 {
     Mesh *mesh = (Mesh *)self;
     M3Gint i, num = m3gObjectDoGetReferences(self, references);
     if (references != NULL)
-        references[num] = (Object *)mesh->vertexBuffer;
+        references[num] = (M3Gulong)mesh->vertexBuffer;
     num++;
     for (i = 0; i < mesh->trianglePatchCount; i++) {
         if (mesh->indexBuffers[i] != NULL) {
             if (references != NULL)
-                references[num] = (Object *)mesh->indexBuffers[i];
+                references[num] = (M3Gulong)mesh->indexBuffers[i];
             num++;
         }
         if (mesh->appearances[i] != NULL) {
             if (references != NULL)
-                references[num] = (Object *)mesh->appearances[i];
+                references[num] = (M3Gulong)mesh->appearances[i];
             num++;
         }
     }
@@ -537,7 +537,7 @@ static Object *m3gMeshFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gMeshDuplicate(const Object *originalObj,
                                 Object **cloneObj,
-                                Object **pairs,
+                                M3Gulong *pairs,
                                 M3Gint *numPairs)
 {
     /* Create the clone if it doesn't exist; otherwise we'll be all
@@ -635,10 +635,10 @@ static M3Gbool m3gMeshValidate(Node *self, M3Gbitmask stateBits, M3Gint scope)
             /* Validate vertex buffer components */
             
             for (i = 0; i < mesh->trianglePatchCount; ++i) {
-                Appearance *app = mesh->appearances[i];
+                Appearance *app = ((Appearance*)mesh->appearances[i]);
                 if (app) {
                     if (!m3gValidateVertexBuffer(
-                            vb, app, m3gGetMaxIndex(mesh->indexBuffers[i]))) {
+                            vb, app, m3gGetMaxIndex((const IndexBuffer *) mesh->indexBuffers[i]))) {
                         m3gRaiseError(M3G_INTERFACE(mesh), M3G_INVALID_OPERATION);
                         return M3G_FALSE;
                     }
@@ -721,8 +721,8 @@ static const NodeVFTable m3gvf_Mesh = {
  */
 M3G_API M3GMesh m3gCreateMesh(M3GInterface interface,
                               M3GVertexBuffer hVertices,
-                              M3GIndexBuffer *hTriangles,
-                              M3GAppearance *hAppearances,
+                              M3Gulong *hTriangles,
+                              M3Gulong *hAppearances,
                               M3Gint trianglePatchCount)
 {
     Interface *m3g = (Interface *) interface;
@@ -785,7 +785,7 @@ M3G_API M3GAppearance m3gGetAppearance(M3GMesh handle,
         return NULL;
 	}
 
-    return mesh->appearances[idx];
+    return (M3GAppearance) mesh->appearances[idx];
 }
 
 /*!
@@ -806,7 +806,7 @@ M3G_API M3GIndexBuffer m3gGetIndexBuffer(M3GMesh handle,
         return NULL;
 	}
 
-    return mesh->indexBuffers[idx];
+    return (M3GIndexBuffer) mesh->indexBuffers[idx];
 }
 
 /*!

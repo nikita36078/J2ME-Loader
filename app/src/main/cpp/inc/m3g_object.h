@@ -47,9 +47,9 @@
 typedef M3Gint  (*m3gApplyAnimationFuncPtr)     (Object *self, M3Gint time);
 typedef M3Gbool (*m3gIsCompatibleFuncPtr)       (M3Gint property);
 typedef void    (*m3gUpdatePropertyFuncPtr)     (Object *self, M3Gint property, M3Gint valueSize, const M3Gfloat *value);
-typedef M3Gint  (*m3gGetReferencesFuncPtr)      (Object *self, Object **references);
+typedef M3Gint  (*m3gGetReferencesFuncPtr)      (Object *self, M3Gulong *references);
 typedef Object* (*m3gFindFuncPtr)               (Object *self, M3Gint userID);
-typedef M3Gbool (*m3gDuplicateFuncPtr)          (const Object *original, Object **clone, Object **pairs, M3Gint *numPairs);
+typedef M3Gbool (*m3gDuplicateFuncPtr)          (const Object *original, Object **clone, M3Gulong *pairs, M3Gint *numPairs);
 
 typedef void    (*m3gDestroyFuncPtr)            (Object *obj);
 
@@ -171,9 +171,9 @@ static void m3gSetRef(Object **ref, Object *obj);
 static M3Gint   m3gObjectApplyAnimation (Object *self, M3Gint time);
 static M3Gbool  m3gObjectIsCompatible   (M3Gint property);
 static void     m3gObjectUpdateProperty (Object *self, M3Gint property, M3Gint valueSize, const M3Gfloat *value);
-static M3Gint   m3gObjectDoGetReferences(Object *self, Object **references);
+static M3Gint   m3gObjectDoGetReferences(Object *self, M3Gulong *references);
 static Object*  m3gObjectFindID         (Object *self, M3Gint userID);
-static M3Gbool  m3gObjectDuplicate      (const Object *original, Object **clone, Object **pairs, M3Gint *numPairs);
+static M3Gbool  m3gObjectDuplicate      (const Object *original, Object **clone, M3Gulong *pairs, M3Gint *numPairs);
 static void     m3gDestroyObject        (Object *object);
 
 #if defined(M3G_LOGLEVEL)

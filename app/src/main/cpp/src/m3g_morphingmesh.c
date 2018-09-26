@@ -152,8 +152,8 @@ static void m3gMorphingMeshDoRender(Node *self,
 
     m3gDrawMesh(ctx,
                 momesh->morphed,
-                mesh->indexBuffers[patchIndex],
-                mesh->appearances[patchIndex],
+                (const IndexBuffer *) mesh->indexBuffers[patchIndex],
+                (const Appearance *) mesh->appearances[patchIndex],
                 toCamera,
                 mesh->totalAlphaFactor + 1,
                 self->scope);
@@ -449,7 +449,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
     if (momesh->base->vertices != NULL) {
         nullValues = 0;
         for (i = 0; i < momesh->numTargets; i++) {
-            if (momesh->targets[i]->vertices == NULL) {
+            if (((VertexBuffer*)momesh->targets[i])->vertices == NULL) {
                 nullValues++;
             }           
         }
@@ -483,7 +483,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
     }
     else {
         for (i = 0; i < momesh->numTargets; i++) {
-            if (momesh->targets[i]->vertices != NULL) {
+            if (((VertexBuffer*)momesh->targets[i])->vertices != NULL) {
                 m3gRaiseError(M3G_INTERFACE(momesh), M3G_INVALID_OPERATION);
                 return M3G_FALSE;
             }           
@@ -493,7 +493,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
     if (momesh->base->normals != NULL) {
         nullValues = 0;
         for (i = 0; i < momesh->numTargets; i++) {
-            if (momesh->targets[i]->normals == NULL) {
+            if (((VertexBuffer*)momesh->targets[i])->normals == NULL) {
                 nullValues++;
             }           
         }
@@ -527,7 +527,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
     }
     else {
         for (i = 0; i < momesh->numTargets; i++) {
-            if (momesh->targets[i]->normals != NULL) {
+            if (((VertexBuffer*)momesh->targets[i])->normals != NULL) {
                 m3gRaiseError(M3G_INTERFACE(momesh), M3G_INVALID_OPERATION);
                 return M3G_FALSE;
             }           
@@ -537,7 +537,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
     if (momesh->base->colors != NULL) {
         nullValues = 0;
         for (i = 0; i < momesh->numTargets; i++) {
-            if (momesh->targets[i]->colors == NULL) {
+            if (((VertexBuffer*)momesh->targets[i])->colors == NULL) {
                 nullValues++;
             }           
         }
@@ -567,7 +567,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
         M3Gint r, g, b, a;
         
         for (i = 0; i < momesh->numTargets; i++) {
-            if (momesh->targets[i]->colors != NULL) {
+            if (((VertexBuffer*)momesh->targets[i])->colors != NULL) {
                 m3gRaiseError(M3G_INTERFACE(momesh), M3G_INVALID_OPERATION);
                 return M3G_FALSE;
             }           
@@ -579,10 +579,10 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
         a = momesh->base->defaultColor.a * momesh->sumWeights;
 
         for (i = 0; i < momesh->numTargets; i++) {
-            r += momesh->targets[i]->defaultColor.r * momesh->weights[i];
-            g += momesh->targets[i]->defaultColor.g * momesh->weights[i];
-            b += momesh->targets[i]->defaultColor.b * momesh->weights[i];
-            a += momesh->targets[i]->defaultColor.a * momesh->weights[i];
+            r += ((VertexBuffer*)momesh->targets[i])->defaultColor.r * momesh->weights[i];
+            g += ((VertexBuffer*)momesh->targets[i])->defaultColor.g * momesh->weights[i];
+            b += ((VertexBuffer*)momesh->targets[i])->defaultColor.b * momesh->weights[i];
+            a += ((VertexBuffer*)momesh->targets[i])->defaultColor.a * momesh->weights[i];
         }       
 
         /* Clamp values*/
@@ -606,7 +606,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
         if (momesh->base->texCoords[i] != NULL) {
             nullValues = 0;
             for (j = 0; j < momesh->numTargets; j++) {
-                if (momesh->targets[j]->texCoords[i] == NULL) {
+                if (((VertexBuffer*)momesh->targets[j])->texCoords[i] == NULL) {
                     nullValues++;
                 }           
             }
@@ -640,7 +640,7 @@ static M3Gbool m3gMorph(MorphingMesh *momesh)
         }
         else {
             for (j = 0; j < momesh->numTargets; j++) {
-                if (momesh->targets[j]->texCoords[i] != NULL) {
+                if (((VertexBuffer*)momesh->targets[j])->texCoords[i] != NULL) {
                     m3gRaiseError(M3G_INTERFACE(momesh), M3G_INVALID_OPERATION);
                     return M3G_FALSE;
                 }           
@@ -705,10 +705,10 @@ static M3Gint m3gMorphingMeshGetBBox(Node *self, AABB *bbox)
             /* Blend with target bounding boxes */
             
             for (i = 0; i < m->numTargets; i++) {
-                if (m->targets[i]->vertices) {
+                if (((VertexBuffer*)m->targets[i])->vertices) {
                     M3Gfloat w = m->floatWeights[i];
 
-                    m3gGetArrayValueRange(m->targets[i]->vertices,
+                    m3gGetArrayValueRange(((VertexBuffer*)m->targets[i])->vertices,
                                           &vMin, &vMax);
                     if (w < 0) {
                         M3Gint t = vMin;
@@ -896,14 +896,14 @@ static M3Gbool m3gCreateClones(VertexBuffer *vertices, VertexBuffer *morphed)
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gMorphingMeshDoGetReferences(Object *self, Object **references)
+static M3Gint m3gMorphingMeshDoGetReferences(Object *self, M3Gulong *references)
 {
     MorphingMesh *mmesh = (MorphingMesh *)self;
     M3Gint i, num = m3gMeshDoGetReferences(self, references);
     for (i = 0; i < mmesh->numTargets; i++) {
         if (mmesh->targets[i] != NULL) {
             if (references != NULL)
-                references[num] = (Object *)mmesh->targets[i];
+                references[num] = (M3Gulong)mmesh->targets[i];
             num++;
         }
     }
@@ -939,7 +939,7 @@ static Object *m3gMorphingMeshFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gMorphingMeshDuplicate(const Object *originalObj,
                                         Object **cloneObj,
-                                        Object **pairs,
+                                        M3Gulong *pairs,
                                         M3Gint *numPairs)
 {
     MorphingMesh *original = (MorphingMesh *)originalObj;
@@ -1022,9 +1022,9 @@ static M3Gbool m3gMorphingMeshValidate(Node *self, M3Gbitmask stateBits, M3Gint 
 static M3Gbool m3gInitMorphingMesh( Interface *m3g,
                                     MorphingMesh *momesh,
                                     M3GVertexBuffer hVertices,
-                                    M3GVertexBuffer *hTargets,
-                                    M3GIndexBuffer *hTriangles,
-                                    M3GAppearance *hAppearances,
+                                    M3Gulong *hTargets,
+                                    M3Gulong *hTriangles,
+                                    M3Gulong *hAppearances,
                                     M3Gint trianglePatchCount,
                                     M3Gint targetCount )
 {
@@ -1063,7 +1063,7 @@ static M3Gbool m3gInitMorphingMesh( Interface *m3g,
         return M3G_FALSE;        
     }
 
-    momesh->targets = m3gAllocZ(m3g, sizeof(VertexBuffer *) * targetCount);
+    momesh->targets = m3gAllocZ(m3g, sizeof(M3Gulong) * targetCount);
     momesh->weights = m3gAllocZ(m3g, sizeof(M3Gint) * targetCount);
     momesh->floatWeights = m3gAllocZ(m3g, sizeof(M3Gfloat) * targetCount);
 
@@ -1136,9 +1136,9 @@ static const NodeVFTable m3gvf_MorphingMesh = {
  */
 M3G_API M3GMorphingMesh m3gCreateMorphingMesh(M3GInterface interface,
                                               M3GVertexBuffer hVertices,
-                                              M3GVertexBuffer *hTargets,
-                                              M3GIndexBuffer *hTriangles,
-                                              M3GAppearance *hAppearances,
+                                              M3Gulong *hTargets,
+                                              M3Gulong *hTriangles,
+                                              M3Gulong *hAppearances,
                                               M3Gint trianglePatchCount,
                                               M3Gint targetCount)
 {
@@ -1235,7 +1235,7 @@ M3G_API M3GVertexBuffer m3gGetMorphTarget(M3GMorphingMesh handle, M3Gint idx)
         return NULL;
     }
 
-    return momesh->targets[idx];
+    return (M3GVertexBuffer) momesh->targets[idx];
 }
 
 /*!

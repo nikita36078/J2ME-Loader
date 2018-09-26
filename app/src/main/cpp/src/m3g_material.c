@@ -178,7 +178,7 @@ static void m3gMaterialUpdateProperty(Object *self,
  */
 static M3Gbool m3gMaterialDuplicate(const Object *originalObj,
                                     Object **cloneObj,
-                                    Object **pairs,
+                                    M3Gulong *pairs,
                                     M3Gint *numPairs)
 {
     const Material *original = (const Material *)originalObj;

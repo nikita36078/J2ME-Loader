@@ -110,7 +110,7 @@ JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Object3D__1duplicate
     }
 
     M3G_DO_LOCK
-    jlong ret = (jlong)m3gDuplicate((M3GObject)aHObject, (M3GObject *)references);
+    jlong ret = (jlong)m3gDuplicate((M3GObject)aHObject, (M3Gulong *)references);
     M3G_DO_UNLOCK(aEnv)
 
     if (references)
@@ -137,7 +137,7 @@ JNIEXPORT jint JNICALL Java_javax_microedition_m3g_Object3D__1getReferences
     jint numReferences = aHReferences ? aEnv->GetArrayLength(aHReferences) : 0;
 
     M3G_DO_LOCK
-    jint ret = m3gGetReferences((M3GObject)aHObject, (M3GObject *)references, numReferences);
+    jint ret = m3gGetReferences((M3GObject)aHObject, (M3Gulong *)references, numReferences);
     M3G_DO_UNLOCK(aEnv)
 
     if (references)

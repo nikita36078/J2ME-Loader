@@ -268,7 +268,7 @@ static void m3gNodeUpdateProperty(Object *self,
  */
 static M3Gbool m3gNodeDuplicate(const Object *originalObj,
                                 Object **cloneObj,
-                                Object **pairs,
+                                M3Gulong *pairs,
                                 M3Gint *numPairs)
 {
     Node *original = (Node *)originalObj;
@@ -304,11 +304,11 @@ static M3Gbool m3gNodeDuplicate(const Object *originalObj,
  * \param pairs array for all object-duplicate pairs
  * \param numPairs number of pairs
  */
-static Node *m3gGetDuplicatedInstance(Node *node, Object **pairs, M3Gint numPairs)
+static Node *m3gGetDuplicatedInstance(Node *node, M3Gulong *pairs, M3Gint numPairs)
 {
     M3Gint i;
     for (i = 0; i < numPairs; i++)
-        if (pairs[i * 2] == (Object *)node)
+        if (pairs[i * 2] == (M3Gulong)node)
             return (Node *)pairs[i * 2 + 1];
     return NULL;
 }
@@ -326,7 +326,7 @@ static Node *m3gGetDuplicatedInstance(Node *node, Object **pairs, M3Gint numPair
  * \param pairs array for all object-duplicate pairs
  * \param numPairs number of pairs
  */
-static void m3gNodeUpdateDuplicateReferences(Node *self, Object **pairs, M3Gint numPairs)
+static void m3gNodeUpdateDuplicateReferences(Node *self, M3Gulong *pairs, M3Gint numPairs)
 {
     if (self->zTarget != TARGET_NONE && self->zReference != NULL) {
         Node *duplicatedInstance = m3gGetDuplicatedInstance(self, pairs, numPairs);

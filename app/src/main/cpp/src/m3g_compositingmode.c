@@ -143,7 +143,7 @@ static void m3gApplyCompositingMode(CompositingMode *compositingMode, RenderCont
  */
 static M3Gbool m3gCompositingModeDuplicate(const Object *originalObj,
                                            Object **cloneObj,
-                                           Object **pairs,
+                                           M3Gulong *pairs,
                                            M3Gint *numPairs)
 {
     CompositingMode *original = (CompositingMode *)originalObj;

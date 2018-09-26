@@ -305,13 +305,13 @@ static void m3gBackgroundUpdateProperty(Object *self,
  * \param references array of reference objects
  * \return number of references
  */
-static M3Gint m3gBackgroundDoGetReferences(Object *self, Object **references)
+static M3Gint m3gBackgroundDoGetReferences(Object *self, M3Gulong *references)
 {
     Background *bg = (Background *)self;
     M3Gint num = m3gObjectDoGetReferences(self, references);
     if (bg->image != NULL) {
         if (references != NULL)
-            references[num] = (Object *)bg->image;
+            references[num] = (M3Gulong)bg->image;
         num++;
     }
     return num;
@@ -343,7 +343,7 @@ static Object *m3gBackgroundFindID(Object *self, M3Gint userID)
  */
 static M3Gbool m3gBackgroundDuplicate(const Object *originalObj,
                                       Object **cloneObj,
-                                      Object **pairs,
+                                      M3Gulong *pairs,
                                       M3Gint *numPairs)
 {
     Background *original = (Background *)originalObj;
