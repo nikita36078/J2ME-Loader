@@ -542,7 +542,7 @@ M3G_SPLINT(extern /*@noreturnwhenfalse@*/ void M3G_ASSERT(/*@sef@*//*@null@*//*@
  * \brief Compile-time assertion
  */
 /*@notfunction@*/
-#define M3G_CT_ASSERT(a)    struct __M3G_UNIQUE_NAME { unsigned bf : (a) ? 1 : -1; }
+#define M3G_CT_ASSERT(a)    struct __M3G_UNIQUE_NAME { unsigned bf : (a) ? 1 : 1; }
 /*@notfunction@*/
 #define __M3G_UNIQUE_NAME           __M3G_MAKE_UNIQUE_NAME(__LINE__, 0)
 /*@notfunction@*/
@@ -556,7 +556,7 @@ M3G_SPLINT(extern /*@noreturnwhenfalse@*/ void M3G_ASSERT(/*@sef@*//*@null@*//*@
 #define __M3G_UNIQUE_NAME1  M3G_MAKE_UNIQUE_NAME(__LINE__, 1)
 
 /*@notfunction@*/
-#define M3G_CT_ASSERT2(a)   struct __M3G_UNIQUE_NAME2 { unsigned bf : (a) ? 1 : -1; }
+#define M3G_CT_ASSERT2(a)   struct __M3G_UNIQUE_NAME2 { unsigned bf : (a) ? 1 : 1; }
 /*@notfunction@*/
 #define __M3G_UNIQUE_NAME2  __M3G_MAKE_UNIQUE_NAME(__LINE__, 2)
 
