@@ -44,6 +44,9 @@ android {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             versionNameSuffix "-open"
         }
+        fdroid {
+            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+        }
     }
 
     externalNativeBuild {
