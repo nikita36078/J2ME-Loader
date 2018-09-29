@@ -440,7 +440,7 @@ public class Graphics {
 	public void copyArea(int x_src, int y_src, int width, int height,
 						 int x_dest, int y_dest, int anchor) {
 		Bitmap bitmap = Bitmap.createBitmap(canvasBitmap, x_src, y_src, width, height);
-		drawRegion(new Image(bitmap), x_src, y_src, width, height, 0, x_dest, y_dest, anchor);
+		drawImage(new Image(bitmap), x_dest, y_dest, anchor);
 	}
 
 	public void getPixels(int[] pixels, int offset, int stride,
