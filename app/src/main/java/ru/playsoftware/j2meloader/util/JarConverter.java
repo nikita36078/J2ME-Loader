@@ -25,7 +25,12 @@ import org.acra.ACRA;
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.zip.ZipException;
 
 import io.reactivex.Single;
@@ -75,6 +80,25 @@ public class JarConverter {
 		FileUtils.deleteDirectory(uriFolder);
 	}
 
+	private void download(String urlStr, File outputJar) throws IOException {
+		// Download jar if it is referenced in jad file
+		URL url = new URL(urlStr);
+		Log.d(TAG, "Downloading " + outputJar.getPath());
+		URLConnection connection = url.openConnection();
+		connection.setReadTimeout(30000);
+		connection.setConnectTimeout(15000);
+		InputStream inputStream = connection.getInputStream();
+		OutputStream outputStream = new FileOutputStream(outputJar);
+		byte[] buffer = new byte[2048];
+		int length;
+		while ((length = inputStream.read(buffer)) > 0) {
+			outputStream.write(buffer, 0, length);
+		}
+		inputStream.close();
+		outputStream.close();
+		Log.d(TAG, "Download complete");
+	}
+
 	public Single<String> convert(final String path) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
@@ -94,8 +118,26 @@ public class JarConverter {
 				pathToJad = pathToJar;
 				pathToJar = pathToJar.substring(0, pathToJar.length() - 1).concat("r");
 			}
+			// Get midlet config file
+			File conf;
+			if (jadInstall) {
+				conf = new File(pathToJad);
+			} else {
+				conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
+			}
 
 			File inputJar = new File(pathToJar);
+			// Check if jar exists
+			if (jadInstall && !inputJar.exists()) {
+				String url = FileUtils.loadManifest(conf).get("MIDlet-Jar-URL");
+				try {
+					download(url, inputJar);
+				} catch (IOException e) {
+					inputJar.delete();
+					deleteTemp();
+					throw new ConverterException("Can't download jar", e);
+				}
+			}
 			File fixedJar;
 			try {
 				fixedJar = fixJar(inputJar);
@@ -110,8 +152,7 @@ public class JarConverter {
 				throw new ConverterException("Broken jar", e);
 			}
 
-			appDirPath = FileUtils.loadManifest(
-					new File(tmpDir, "/META-INF/MANIFEST.MF")).get("MIDlet-Name");
+			appDirPath = FileUtils.loadManifest(conf).get("MIDlet-Name");
 			if (appDirPath == null) {
 				deleteTemp();
 				throw new ConverterException("Broken manifest");
@@ -130,13 +171,6 @@ public class JarConverter {
 			} catch (IOException e) {
 				deleteTemp();
 				throw new ConverterException("Can't convert", e);
-			}
-			// Get midlet config file
-			File conf;
-			if (jadInstall) {
-				conf = new File(pathToJad);
-			} else {
-				conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
 			}
 			try {
 				FileUtils.copyFileUsingChannel(conf, new File(appConverted, Config.MIDLET_MANIFEST_FILE));
