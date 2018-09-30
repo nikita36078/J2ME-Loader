@@ -5,6 +5,7 @@
   <string name="about">Info</string>
   <string name="help">Guida</string>
   <string name="more">Altro</string>
+  <string name="search">Cerca</string>
   <string name="licenses">Licenze</string>
   <string name="templates">Modelli</string>
   <string name="about_message">Questa applicazione consente di avviare applicazioni e giochi J2ME su Android. Supporta la maggior parte dei giochi 2D e anche 3D, con alcune limitazioni.&lt;BR&gt;</string>
