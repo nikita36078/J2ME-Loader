@@ -5,6 +5,7 @@
   <string name="about">Hakkında</string>
   <string name="help">Yardım</string>
   <string name="more">Daha Fazla</string>
+  <string name="search">Ara</string>
   <string name="licenses">Lisanslar</string>
   <string name="templates">Şablonlar</string>
   <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
@@ -46,7 +47,7 @@
   <string name="PREF_BACKGROUND">Arka plan</string>
   <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Sanal klavye</string>
   <string name="PREF_VK_SHOW">Klavyeyi göster</string>
-  <string name="PREF_VK_FEEDBACK">Haptik Geribildirim</string>
+  <string name="PREF_VK_FEEDBACK">Haptik geri bildirim</string>
   <string name="PREF_TOUCH_INPUT">Dokunma girişi</string>
   <string name="PREF_HW_ACCELERATION">Donanımsal hızlandırma (kararsız)</string>
   <string name="PREF_VK_BACK">Tuşlar</string>
