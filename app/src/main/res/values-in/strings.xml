@@ -5,37 +5,38 @@
   <string name="about">Tentang</string>
   <string name="help">Bantuan</string>
   <string name="more">Lainnya</string>
+  <string name="search">Telusuri</string>
   <string name="licenses">Lisensi</string>
-  <string name="templates">Kelola Berkas sementara</string>
+  <string name="templates">Kelola Template</string>
   <string name="about_message">Aplikasi ini digunakan untuk meluncurkan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga beberapa permainan 3D dengan beberapa keterbatasan.&lt;BR&gt;</string>
   <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
-  <string name="author">Penulis: </string>
+  <string name="author">Vendor: </string>
   <string name="version">Versi: </string>
-  <string name="no_data_for_display">Tidak ada data</string>
+  <string name="no_data_for_display">Tidak ada database yang ditampilkan</string>
   <string name="message_delete">Apakah Anda benar-benar ingin menghapus aplikasi ini?</string>
   <string name="converting_wait">Mengkonversi JAR...</string>
   <string name="convert_complete">Selesai</string>
   <string name="converting_message">Memproses...</string>
   <string name="permission_request_failed">Aplikasi ini membutuhkan izin untuk menulis berkas</string>
   <string name="external_storage_not_mounted">Aplikasi ini membutuhkan penyimpanan eksternal</string>
-  <string name="action_context_shortcut">Tambahkan ke pintasan/beranda</string>
+  <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
   <string name="action_settings">Pengaturan</string>
   <string name="action_context_delete">Hapus</string>
-  <string name="action_context_rename">Ganti nama</string>
-  <string name="donate">Sumbangan</string>
+  <string name="action_context_rename">Ubah nama</string>
+  <string name="donate">Donasi</string>
   <string name="START_CMD">Mulai</string>
   <string name="CANCEL_CMD">Batal</string>
   <string name="CLEAR_DATA_CMD">Hapus data</string>
-  <string name="RESET_SETTINGS_CMD">Pulihkan pengaturan</string>
+  <string name="RESET_SETTINGS_CMD">Setel ulang pengaturan</string>
   <string name="RESET_LAYOUT_CMD">Reset letak tombol</string>
-  <string name="LOAD_TEMPLATE_CMD">Muat berkas sementara</string>
-  <string name="SAVE_TEMPLATE_CMD">Simpan berkas sementara</string>
+  <string name="LOAD_TEMPLATE_CMD">Memilih template</string>
+  <string name="SAVE_TEMPLATE_CMD">Simpan template</string>
   <string name="PREF_SCREEN_OPTIONS">Opsi layar</string>
   <string name="PREF_SCALE_RATIO">Skala(%)</string>
   <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
   <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
-  <string name="PREF_FILTER">Saring</string>
-  <string name="PREF_IMMEDIATE">Mode pemerosesan cepat</string>
+  <string name="PREF_FILTER">Menyaring</string>
+  <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
   <string name="PREF_FONT_OPTIONS">Opsi font</string>
   <string name="PREF_WIDTH">Lebar</string>
   <string name="PREF_HEIGHT">Tinggi</string>
@@ -44,31 +45,31 @@
   <string name="PREF_FONT_LARGE">Besar</string>
   <string name="PREF_FONT_SIZE_IN_SP">Nilai dalam Skala Piksel</string>
   <string name="PREF_BACKGROUND">Latar belakang</string>
-  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Papan tombol virtual</string>
-  <string name="PREF_VK_SHOW">Tampilkan papan tombol</string>
+  <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keypad</string>
+  <string name="PREF_VK_SHOW">Tampilkan keypad</string>
   <string name="PREF_VK_FEEDBACK">Respon sentuh</string>
-  <string name="PREF_TOUCH_INPUT">Masukkan sentuhan</string>
+  <string name="PREF_TOUCH_INPUT">Memakai sentuh</string>
   <string name="PREF_HW_ACCELERATION">Akselerasi HW (tidak stabil)</string>
   <string name="PREF_VK_BACK">Tombol</string>
   <string name="PREF_VK_FORE">Label</string>
-  <string name="PREF_VK_OUTLINE">Garis besar</string>
+  <string name="PREF_VK_OUTLINE">Pinggiran</string>
   <string name="PREF_VK_ALPHA">Keburaman: </string>
   <string name="PREF_VK_HIDE_DELAY">Sembunyikan penundaan: </string>
   <string name="PREF_UNIT_MS">ms</string>
   <string name="PREF_VK_SEL_FORE">Label (P)</string>
   <string name="PREF_VK_SEL_BACK">Tombol (P)</string>
   <string name="PREF_VK_KEY_SIZES">Ukuran tombol</string>
-  <string name="PREF_VK_NAV_KEYS">Tuas pengendali: </string>
+  <string name="PREF_VK_NAV_KEYS">Joystick: </string>
   <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
   <string name="PREF_VK_NUM_KEYS">Angka: </string>
-  <string name="PREF_VK_FIRE_KEY">Pengapian: </string>
+  <string name="PREF_VK_FIRE_KEY">Fire/OK: </string>
   <string name="PREF_VK_SIZE_HINT">Ukuran</string>
   <string name="SIZE_PRESETS">Prasetel</string>
   <string name="SWAP_SIZES">Tukar ukuran</string>
   <string name="PREF_SYS_PROPS">Properti sistem</string>
   <string name="PREF_ORIENTATION">Orientasi layar</string>
   <string-array name="PREF_ORIENTATION_ENTRIES">
-    <item>Standar</item>
+    <item>Sistem Bawaan</item>
     <item>Otomatis</item>
     <item>Potret</item>
     <item>Lanskap</item>
@@ -80,21 +81,21 @@
   <string name="crash_dialog_message">Apakah Anda ingin mengirim laporan bug kepada pengembang?</string>
   <string name="crash_dialog_title">Kesalahan terdeteksi</string>
   <string name="report_crash">Kirim</string>
-  <string name="layout_edit_finished">Mode pengubahan selesai</string>
+  <string name="layout_edit_finished">Mode ubah telah selesai</string>
   <string name="layout_edit_finish">Akhiri mode pengubahan</string>
   <string name="layout_edit_mode">Ubah letak tombol</string>
   <string name="layout_scale_mode">Ubah ukuran tombol</string>
   <string name="layout_switch">Tukar letak tombol</string>
-  <string name="hide_buttons">Sembunyikan tombol</string>
+  <string name="hide_buttons">Tombol yang tersembunyi</string>
   <string name="common_settings">[PENGATURAN UMUM]</string>
   <string name="pref_theme_title">Tema</string>
   <string-array name="pref_theme_entries">
-    <item>Penerangan</item>
+    <item>Terang</item>
     <item>Gelap</item>
   </string-array>
-  <string name="pref_requires_restart_summary">Perubahan terterapkan setelah memulai ulang J2ME Loader</string>
+  <string name="pref_requires_restart_summary">Perubahan tersimpan setelah mengulang J2ME Loader</string>
   <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
-  <string name="pref_enable_actionbar_summary">Aplikasikan di layar penuh</string>
+  <string name="pref_enable_actionbar_summary">ActionBar menampilkan nama MIDlet dan menu. Non-aktifkan ini jika ingin dalam keadaan layar penuh.</string>
   <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
   <string name="pref_button_shape_title">Bentuk tombol</string>
   <string-array name="pref_button_shape_entries">
@@ -108,6 +109,6 @@
   </string-array>
   <string name="pref_map_keys">Pemetaan tombol</string>
   <string name="mapping_dialog_title">Tekan tombol</string>
-  <string name="mapping_dialog_message" formatted="false">Pemetaan arus: %1$s</string>
+  <string name="mapping_dialog_message" formatted="false">Pemetaan saat ini: %1$s</string>
   <string name="reset_mapping">Setel ulang</string>
 </resources>
