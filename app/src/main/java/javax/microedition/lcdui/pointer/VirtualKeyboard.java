@@ -950,6 +950,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		for (VirtualKey aKeypad : keypad) {
 			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
 				aKeypad.setSelected(true);
+				break;
 			}
 		}
 		return false;
@@ -965,6 +966,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		for (VirtualKey aKeypad : keypad) {
 			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
 				aKeypad.setSelected(false);
+				break;
 			}
 		}
 		return false;

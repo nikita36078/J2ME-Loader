@@ -126,7 +126,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private static int convertAndroidKeyCode(int keyCode) {
-		return androidToMIDP.get(keyCode, -(keyCode << 8));
+		return androidToMIDP.get(keyCode, Integer.MAX_VALUE);
 	}
 
 	public int getKeyCode(int gameAction) {
@@ -167,6 +167,9 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
+			if (keyCode == Integer.MAX_VALUE) {
+				return false;
+			}
 			if (event.getRepeatCount() == 0) {
 				if (overlay == null || !overlay.keyPressed(keyCode)) {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_PRESSED, keyCode));
@@ -176,16 +179,19 @@ public abstract class Canvas extends Displayable {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_REPEATED, keyCode));
 				}
 			}
-			return super.onKeyDown(keyCode, event);
+			return true;
 		}
 
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
+			if (keyCode == Integer.MAX_VALUE) {
+				return false;
+			}
 			if (overlay == null || !overlay.keyReleased(keyCode)) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_RELEASED, keyCode));
 			}
-			return super.onKeyUp(keyCode, event);
+			return true;
 		}
 
 		@Override
