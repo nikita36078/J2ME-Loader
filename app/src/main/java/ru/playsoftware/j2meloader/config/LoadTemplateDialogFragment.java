@@ -56,7 +56,7 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), appName,
 								cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
 						((ConfigActivity) getActivity()).loadParamsFromFile();
-					} catch (IOException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					}
