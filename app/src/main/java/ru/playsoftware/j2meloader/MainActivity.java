@@ -44,7 +44,7 @@ import ru.playsoftware.j2meloader.util.MigrationUtils;
 public class MainActivity extends BaseActivity {
 
 	public static final String APP_SORT_KEY = "appSort";
-	public static final String JAR_PATH_KEY = "jarPath";
+	public static final String APP_PATH_KEY = "appPath";
 
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
-		if (intentUri) bundleLoad.putString(JAR_PATH_KEY, getJarPath());
+		if (intentUri) bundleLoad.putString(APP_PATH_KEY, getAppPath());
 		AppsListFragment appsListFragment = new AppsListFragment();
 		appsListFragment.setArguments(bundleLoad);
 		FragmentManager fragmentManager = getSupportFragmentManager();
@@ -124,9 +124,9 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private String getJarPath() {
+	private String getAppPath() {
 		try {
-			return FileUtils.getJarPath(this, getIntent().getData());
+			return FileUtils.getAppPath(this, getIntent().getData());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();

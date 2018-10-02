@@ -81,7 +81,7 @@ public class AppsListFragment extends ListFragment {
 	private AppsListAdapter adapter;
 	private JarConverter converter;
 	private String appSort;
-	private String jarPath;
+	private String appPath;
 	private static final int FILE_CODE = 0;
 
 	@Override
@@ -90,7 +90,7 @@ public class AppsListFragment extends ListFragment {
 		compositeDisposable = new CompositeDisposable();
 		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
 		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
-		jarPath = getArguments().getString(MainActivity.JAR_PATH_KEY);
+		appPath = getArguments().getString(MainActivity.APP_PATH_KEY);
 		adapter = new AppsListAdapter(getActivity());
 	}
 
@@ -121,9 +121,9 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (jarPath != null) {
-			convertJar(jarPath);
-			jarPath = null;
+		if (appPath != null) {
+			convertJar(appPath);
+			appPath = null;
 		}
 	}
 

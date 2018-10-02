@@ -39,6 +39,7 @@ import ru.playsoftware.j2meloader.config.Config;
 public class JarConverter {
 
 	public static final String TEMP_JAR_NAME = "tmp.jar";
+	public static final String TEMP_JAD_NAME = "tmp.jad";
 	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
 
 	private static final String TEMP_FIX_FOLDER_NAME = "tmp_fix";

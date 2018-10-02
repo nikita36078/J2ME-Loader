@@ -33,6 +33,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:mimeType="application/java-archive" />
+                <data android:mimeType="text/vnd.sun.j2me.app-descriptor" />
                 <data android:host="*" />
                 <data android:scheme="file" />
                 <data android:scheme="content" />
@@ -53,6 +54,14 @@
                 <data android:pathPattern=".*\\..*\\.JAR" />
                 <data android:pathPattern=".*\\..*\\..*\\.JAR" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.JAR" />
+                <data android:pathPattern=".*\\.jad" />
+                <data android:pathPattern=".*\\..*\\.jad" />
+                <data android:pathPattern=".*\\..*\\..*\\.jad" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.jad" />
+                <data android:pathPattern=".*\\.JAD" />
+                <data android:pathPattern=".*\\..*\\.JAD" />
+                <data android:pathPattern=".*\\..*\\..*\\.JAD" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.JAD" />
             </intent-filter>
         </activity>
         <activity

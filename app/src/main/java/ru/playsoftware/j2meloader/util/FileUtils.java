@@ -113,12 +113,20 @@ public class FileUtils {
 		return params;
 	}
 
-	public static String getJarPath(Context context, Uri uri) throws FileNotFoundException {
+	public static String getAppPath(Context context, Uri uri) throws FileNotFoundException {
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		OutputStream out = null;
 		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
 		folder.mkdir();
-		File file = new File(folder, JarConverter.TEMP_JAR_NAME);
+		String uriPath = uri.getPath();
+		String extension = uriPath.substring(uriPath.lastIndexOf('.'));
+		File file;
+		if (extension.equalsIgnoreCase(".jar")) {
+			file = new File(folder, JarConverter.TEMP_JAR_NAME);
+		}
+		else {
+			file = new File(folder, JarConverter.TEMP_JAD_NAME);
+		}
 		try {
 			out = new FileOutputStream(file);
 			byte[] buf = new byte[BUFFER_SIZE];
