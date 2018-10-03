@@ -16,6 +16,7 @@
 
 package javax.microedition.media;
 
+import org.billthefarmer.mididriver.MidiConstants;
 import org.billthefarmer.mididriver.MidiDriver;
 
 import java.util.HashMap;
@@ -97,6 +98,8 @@ public class MidiPlayer extends BasePlayer implements MIDIControl {
 
 	@Override
 	public void setProgram(int channel, int bank, int program) {
+		byte[] event = new byte[]{(byte) (MidiConstants.PROGRAM_CHANGE | channel), (byte) program};
+		midiDriver.write(event);
 	}
 
 	@Override
