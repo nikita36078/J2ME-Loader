@@ -119,12 +119,16 @@ public class FileUtils {
 		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
 		folder.mkdir();
 		String uriPath = uri.getPath();
-		String extension = uriPath.substring(uriPath.lastIndexOf('.'));
+		String extension;
+		if (uriPath == null || uriPath.lastIndexOf('.') == -1) {
+			extension = ".jar";
+		} else {
+			extension = uriPath.substring(uriPath.lastIndexOf('.'));
+		}
 		File file;
 		if (extension.equalsIgnoreCase(".jar")) {
 			file = new File(folder, JarConverter.TEMP_JAR_NAME);
-		}
-		else {
+		} else {
 			file = new File(folder, JarConverter.TEMP_JAD_NAME);
 		}
 		try {
