@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.list.CompoundSpinnerAdapter;
 
 public class ChoiceGroup extends Item implements Choice {
@@ -47,6 +48,13 @@ public class ChoiceGroup extends Item implements Choice {
 	private int choiceType;
 	private int selectedIndex = -1;
 	private int fitPolicy;
+
+	private SimpleEvent msgSetSelection = new SimpleEvent() {
+		@Override
+		public void process() {
+			spinner.setSelection(selectedIndex);
+		}
+	};
 
 	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
 		@Override
@@ -362,7 +370,7 @@ public class ChoiceGroup extends Item implements Choice {
 				buttons.get(elementNum).setChecked(flag);
 			} else if (spinner != null) {
 				if (flag) {
-					spinner.setSelection(elementNum);
+					ViewHandler.postEvent(msgSetSelection);
 				}
 			}
 		}

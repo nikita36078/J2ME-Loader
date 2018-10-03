@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.list.CompoundListAdapter;
 import javax.microedition.lcdui.list.ItemSelector;
 
@@ -44,6 +45,13 @@ public class List extends Screen implements Choice, ItemSelector {
 	private int fitPolicy;
 
 	private Command selectCommand = SELECT_COMMAND;
+
+	private SimpleEvent msgSetSelection = new SimpleEvent() {
+		@Override
+		public void process() {
+			list.setSelection(selectedIndex);
+		}
+	};
 
 	private class ClickListener implements AdapterView.OnItemClickListener {
 		@Override
@@ -298,7 +306,7 @@ public class List extends Screen implements Choice, ItemSelector {
 
 			if (list != null) {
 				if (flag) {
-					list.setSelection(elementNum);
+					ViewHandler.postEvent(msgSetSelection);
 				}
 			}
 		}
