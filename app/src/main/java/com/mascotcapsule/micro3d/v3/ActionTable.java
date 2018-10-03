@@ -55,7 +55,7 @@ public class ActionTable {
 
 	public final int getNumFrames(int idx) {
 		if (idx >= 0 && idx < getNumAction()) {
-			return 0;
+			return 60;
 		} else {
 			throw new IllegalArgumentException();
 		}
