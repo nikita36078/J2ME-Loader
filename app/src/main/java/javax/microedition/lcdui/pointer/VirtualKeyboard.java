@@ -608,7 +608,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		obscuresVirtualScreen = false;
 		for (int i = 0; i < keypad.length; i++) {
 			snapKey(i, 0);
-			if (RectF.intersects(keypad[i].getRect(), virtualScreen)) {
+			if (keypad[i].visible && RectF.intersects(keypad[i].getRect(), virtualScreen)) {
 				obscuresVirtualScreen = true;
 			}
 		}
