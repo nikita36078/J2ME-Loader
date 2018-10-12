@@ -146,4 +146,17 @@ public abstract class Displayable {
 	public Ticker getTicker() {
 		return ticker;
 	}
+
+	public boolean menuItemSelected(int id) {
+		if (listener == null) {
+			return true;
+		}
+
+		for (Command cmd : commands) {
+			if (cmd.hashCode() == id) {
+				postEvent(CommandActionEvent.getInstance(listener, cmd, this));
+			}
+		}
+		return true;
+	}
 }

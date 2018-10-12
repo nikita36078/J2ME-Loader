@@ -28,7 +28,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,31 +36,22 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
-import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class MicroActivity extends AppCompatActivity {
-	private static final String TAG = MicroActivity.class.getName();
 	private static final int ORIENTATION_DEFAULT = 0;
 	private static final int ORIENTATION_AUTO = 1;
 	private static final int ORIENTATION_PORTRAIT = 2;
@@ -74,7 +64,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean actionBarEnabled;
 	private LinearLayout layout;
 	private Toolbar toolbar;
-	private String pathToMidletDir;
+	private MicroLoader microLoader;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -94,8 +84,9 @@ public class MicroActivity extends AppCompatActivity {
 		Intent intent = getIntent();
 		int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
 		setOrientation(orientation);
-		pathToMidletDir = intent.getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
-		initEmulator();
+		String pathToMidletDir = intent.getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
+		microLoader = new MicroLoader(this, pathToMidletDir);
+		microLoader.init();
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
@@ -134,7 +125,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus && current != null && current instanceof Canvas) {
+		if (hasFocus && current instanceof Canvas) {
 			hideSystemUI();
 		}
 	}
@@ -165,22 +156,10 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void loadMIDlet() throws Exception {
-		ArrayList<String> midlets = new ArrayList<>();
-		LinkedHashMap<String, String> params = FileUtils.loadManifest(new File(pathToMidletDir + Config.MIDLET_MANIFEST_FILE));
-		MIDlet.initProps(params);
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			if (entry.getKey().matches("MIDlet-[0-9]+")) {
-				midlets.add(entry.getValue());
-			}
-		}
+		LinkedHashMap<String, String> midlets = microLoader.loadMIDletList();
 		int size = midlets.size();
-		String[] midletsNameArray = new String[size];
-		String[] midletsClassArray = new String[size];
-		for (int i = 0; i < size; i++) {
-			String tmp = midlets.get(i);
-			midletsClassArray[i] = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
-			midletsNameArray[i] = tmp.substring(0, tmp.indexOf(',')).trim();
-		}
+		String[] midletsNameArray = midlets.values().toArray(new String[0]);
+		String[] midletsClassArray = midlets.keySet().toArray(new String[0]);
 		if (size == 0) {
 			throw new Exception();
 		} else if (size == 1) {
@@ -199,24 +178,8 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void startMidlet(String mainClass) {
-		File dexSource = new File(pathToMidletDir, Config.MIDLET_DEX_FILE);
-		File dexTargetDir = new File(getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
-		if (dexTargetDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetDir);
-		}
-		dexTargetDir.mkdir();
-		File dexTargetOptDir = new File(getApplicationInfo().dataDir, Config.TEMP_DEX_OPT_DIR);
-		if (dexTargetOptDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetOptDir);
-		}
-		dexTargetOptDir.mkdir();
-		File dexTarget = new File(dexTargetDir, Config.MIDLET_DEX_FILE);
 		try {
-			FileUtils.copyFileUsingChannel(dexSource, dexTarget);
-			ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
-					dexTargetOptDir.getAbsolutePath(), null, getClassLoader(), pathToMidletDir + Config.MIDLET_RES_DIR);
-			Log.i(TAG, "load main: " + mainClass + " from dex:" + dexTarget.getPath());
-			final MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
+			MIDlet midlet = microLoader.loadMIDlet(mainClass);
 			// Start midlet in Thread
 			Runnable r = () -> {
 				try {
@@ -231,17 +194,6 @@ public class MicroActivity extends AppCompatActivity {
 		} catch (Throwable t) {
 			t.printStackTrace();
 			showErrorDialog(t.getMessage());
-		}
-	}
-
-	private void initEmulator() {
-		Display.initDisplay();
-		Graphics3D.initGraphics3D();
-		File cacheDir = ContextHolder.getCacheDir();
-		if (cacheDir.exists()) {
-			for (File temp : cacheDir.listFiles()) {
-				temp.delete();
-			}
 		}
 	}
 
@@ -298,7 +250,8 @@ public class MicroActivity extends AppCompatActivity {
 							| View.SYSTEM_UI_FLAG_FULLSCREEN
 							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 		} else {
-			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 	}
 
@@ -395,18 +348,7 @@ public class MicroActivity extends AppCompatActivity {
 				}
 				return true;
 			}
-
-			CommandListener listener = current.getCommandListener();
-			if (listener == null) {
-				return false;
-			}
-
-			for (Command cmd : current.getCommands()) {
-				if (cmd.hashCode() == id) {
-					current.postEvent(CommandActionEvent.getInstance(listener, cmd, current));
-					return true;
-				}
-			}
+			return current.menuItemSelected(id);
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -416,7 +358,8 @@ public class MicroActivity extends AppCompatActivity {
 		final VirtualKeyboard vk = ContextHolder.getVk();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.hide_buttons)
-				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(), (dialogInterface, i, b) -> vk.setKeyVisibility(i, b))
+				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(),
+						(dialogInterface, i, b) -> vk.setKeyVisibility(i, b))
 				.setPositiveButton(android.R.string.ok, null);
 		builder.show();
 	}
