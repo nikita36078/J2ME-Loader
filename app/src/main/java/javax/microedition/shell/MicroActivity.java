@@ -43,6 +43,7 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
@@ -206,7 +207,7 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private SimpleEvent msgSetCurent = new SimpleEvent() {
+	private SimpleEvent msgSetCurrent = new SimpleEvent() {
 		@Override
 		public void process() {
 			current.setParentActivity(MicroActivity.this);
@@ -265,7 +266,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	public void setCurrent(Displayable disp) {
 		current = disp;
-		runOnUiThread(msgSetCurent);
+		ViewHandler.postEvent(msgSetCurrent);
 	}
 
 	public Displayable getCurrent() {
