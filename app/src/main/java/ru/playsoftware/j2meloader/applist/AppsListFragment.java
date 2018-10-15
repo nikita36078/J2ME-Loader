@@ -71,7 +71,7 @@ import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
-import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class AppsListFragment extends ListFragment {
@@ -140,7 +140,7 @@ public class AppsListFragment extends ListFragment {
 				.subscribeOn(Schedulers.io()).publish();
 		listConnectableFlowable
 				.firstElement()
-				.subscribe(list -> FileUtils.updateDb(appRepository, list));
+				.subscribe(list -> AppUtils.updateDb(appRepository, list));
 		listConnectableFlowable
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(list -> adapter.setItems(list));
@@ -179,7 +179,7 @@ public class AppsListFragment extends ListFragment {
 					public void onSuccess(String s) {
 						Toast.makeText(getActivity(), getString(R.string.convert_complete)
 								+ " " + s, Toast.LENGTH_LONG).show();
-						appRepository.insert(FileUtils.getApp(s));
+						appRepository.insert(AppUtils.getApp(s));
 						dialog.dismiss();
 					}
 
@@ -218,7 +218,7 @@ public class AppsListFragment extends ListFragment {
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
 				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
-					FileUtils.deleteApp(item);
+					AppUtils.deleteApp(item);
 					appRepository.delete(item);
 				})
 				.setNegativeButton(android.R.string.no, null);
