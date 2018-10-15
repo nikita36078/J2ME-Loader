@@ -24,7 +24,6 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -32,6 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -106,20 +106,16 @@ public class FileUtils {
 		return params;
 	}
 
-	public static String getAppPath(Context context, Uri uri) throws FileNotFoundException {
+	public static String getAppPath(Context context, Uri uri) throws IOException {
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		OutputStream out = null;
 		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);
 		folder.mkdir();
-		String uriPath = uri.getPath();
-		String extension;
-		if (uriPath == null || uriPath.lastIndexOf('.') == -1) {
-			extension = ".jar";
-		} else {
-			extension = uriPath.substring(uriPath.lastIndexOf('.'));
-		}
+		byte[] signature = new byte[2];
+		byte[] jarSignature = new byte[]{0x50, 0x4B};
+		in.read(signature);
 		File file;
-		if (extension.equalsIgnoreCase(".jar")) {
+		if (Arrays.equals(signature, jarSignature)) {
 			file = new File(folder, JarConverter.TEMP_JAR_NAME);
 		} else {
 			file = new File(folder, JarConverter.TEMP_JAD_NAME);
@@ -128,6 +124,7 @@ public class FileUtils {
 			out = new FileOutputStream(file);
 			byte[] buf = new byte[BUFFER_SIZE];
 			int len;
+			out.write(signature);
 			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);
 			}

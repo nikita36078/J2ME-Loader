@@ -32,7 +32,6 @@ import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
@@ -127,7 +126,7 @@ public class MainActivity extends BaseActivity {
 	private String getAppPath() {
 		try {
 			return FileUtils.getAppPath(this, getIntent().getData());
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 			return null;
