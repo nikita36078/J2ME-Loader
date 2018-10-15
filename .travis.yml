@@ -12,6 +12,7 @@ android:
     - build-tools-28.0.3
     - android-28
     - extra-google-m2repository
+    - sys-img-armeabi-v7a-android-23
 before_install:
   - pushd ~
   - wget -q https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip
@@ -21,6 +22,11 @@ before_install:
   - yes | sdkmanager "platforms;android-28"
   - yes | sdkmanager "build-tools;28.0.3"
   - chmod +x gradlew
+before_script:
+  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
