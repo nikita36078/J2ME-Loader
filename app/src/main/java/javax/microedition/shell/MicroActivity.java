@@ -35,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.LinkedHashMap;
 
@@ -331,13 +332,19 @@ public class MicroActivity extends AppCompatActivity {
 					VirtualKeyboard vk = ContextHolder.getVk();
 					switch (id) {
 						case R.id.action_layout_edit_mode:
-							vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+							vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+							Toast.makeText(this, R.string.layout_edit_mode,
+									Toast.LENGTH_SHORT).show();
 							break;
 						case R.id.action_layout_scale_mode:
-							vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+							vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+							Toast.makeText(this, R.string.layout_scale_mode,
+									Toast.LENGTH_SHORT).show();
 							break;
 						case R.id.action_layout_edit_finish:
-							vk.switchLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+							vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+							Toast.makeText(this, R.string.layout_edit_finished,
+									Toast.LENGTH_SHORT).show();
 							break;
 						case R.id.action_layout_switch:
 							vk.switchLayout();

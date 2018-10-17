@@ -16,11 +16,9 @@
  */
 package javax.microedition.lcdui.pointer;
 
-import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -33,9 +31,6 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.Overlay;
 import javax.microedition.lcdui.event.CanvasEvent;
-import javax.microedition.util.ContextHolder;
-
-import ru.playsoftware.j2meloader.R;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
@@ -263,7 +258,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	};
 
 	protected Canvas target;
-	protected Context context;
 
 	private Image offscreen;
 	private Graphics offgraphics;
@@ -300,7 +294,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
-		context = ContextHolder.getContext();
 		font = new Font();
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // у среднестатистического пользователя обычно не более 10 пальцев...
@@ -625,7 +618,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	private void setLayoutEditMode(int mode) {
+	public void setLayoutEditMode(int mode) {
 		if ((layoutEditMode != LAYOUT_EOF) && (mode == LAYOUT_EOF) && listener != null) {
 			listener.layoutChanged(this);
 		}
@@ -640,21 +633,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				break;
 		}
 		show();
-	}
-
-	public void switchLayoutEditMode(int newMode) {
-		setLayoutEditMode(newMode);
-		switch (newMode) {
-			case LAYOUT_KEYS:
-				Toast.makeText(context, R.string.layout_edit_mode, Toast.LENGTH_SHORT).show();
-				break;
-			case LAYOUT_SCALES:
-				Toast.makeText(context, R.string.layout_scale_mode, Toast.LENGTH_SHORT).show();
-				break;
-			case LAYOUT_EOF:
-				Toast.makeText(context, R.string.layout_edit_finished, Toast.LENGTH_SHORT).show();
-				break;
-		}
 	}
 
 	private void resizeKey(int key, float size) {
