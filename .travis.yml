@@ -11,6 +11,7 @@ android:
     - platform-tools
     - build-tools-28.0.3
     - android-28
+    - android-23
     - extra-google-m2repository
     - sys-img-armeabi-v7a-android-23
 before_install:
