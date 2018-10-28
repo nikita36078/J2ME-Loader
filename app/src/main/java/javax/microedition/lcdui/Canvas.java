@@ -688,9 +688,6 @@ public abstract class Canvas extends Displayable {
 	public void hideNotify() {
 	}
 
-	public void sizeChanged(int w, int h) {
-	}
-
 	public void keyPressed(int keyCode) {
 	}
 

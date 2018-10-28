@@ -147,6 +147,9 @@ public abstract class Displayable {
 		return ticker;
 	}
 
+	protected void sizeChanged(int w, int h) {
+	}
+
 	public boolean menuItemSelected(int id) {
 		if (listener == null) {
 			return true;
