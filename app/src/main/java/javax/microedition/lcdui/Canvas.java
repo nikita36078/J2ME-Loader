@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
@@ -343,7 +344,7 @@ public abstract class Canvas extends Displayable {
 	private PaintEvent paintEvent = new PaintEvent();
 	private boolean surfaceCreated = false;
 
-	private InnerView view;
+	private LinearLayout layout;
 	private SurfaceHolder holder;
 	private Graphics graphics = new Graphics();
 
@@ -546,17 +547,21 @@ public abstract class Canvas extends Displayable {
 
 	@Override
 	public View getDisplayableView() {
-		if (view == null) {
-			view = new InnerView(getParentActivity());
-			holder = view.getHolder();
+		if (layout == null) {
+			layout = (LinearLayout) super.getDisplayableView();
+
+			InnerView innerView = new InnerView(getParentActivity());
+			holder = innerView.getHolder();
+			layout.addView(innerView);
 		}
-		return view;
+		return layout;
 	}
 
 	@Override
 	public void clearDisplayableView() {
 		synchronized (paintsync) {
-			view = null;
+			super.clearDisplayableView();
+			layout = null;
 			holder = null;
 		}
 	}

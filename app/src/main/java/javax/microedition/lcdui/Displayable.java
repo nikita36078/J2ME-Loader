@@ -18,15 +18,19 @@
 
 package javax.microedition.lcdui;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
@@ -36,9 +40,35 @@ public abstract class Displayable {
 
 	private ArrayList<Command> commands;
 	private CommandListener listener;
+
+	private int tickermode;
 	private Ticker ticker;
+	private LinearLayout layout;
+	private TextView marquee;
 
 	private static EventQueue queue;
+
+	private static final int TICKER_NO_ACTION = 0;
+	private static final int TICKER_SHOW = 1;
+	private static final int TICKER_HIDE = 2;
+
+	private SimpleEvent msgSetTicker = new SimpleEvent() {
+		@Override
+		public void process() {
+			if (ticker != null) {
+				marquee.setText(ticker.getString());
+			}
+			switch (tickermode) {
+				case TICKER_SHOW:
+					layout.addView(marquee, 0);
+					break;
+				case TICKER_HIDE:
+					layout.removeView(marquee);
+					break;
+			}
+			tickermode = TICKER_NO_ACTION;
+		}
+	};
 
 	static {
 		queue = new EventQueue();
@@ -83,9 +113,32 @@ public abstract class Displayable {
 		return false;
 	}
 
-	public abstract View getDisplayableView();
+	public View getDisplayableView() {
+		if (layout == null) {
+			Context context = getParentActivity();
 
-	public abstract void clearDisplayableView();
+			layout = new LinearLayout(context);
+			layout.setOrientation(LinearLayout.VERTICAL);
+
+			marquee = new TextView(context);
+			marquee.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+			marquee.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+			marquee.setSelected(true);
+			marquee.setSingleLine();
+
+			if (ticker != null) {
+				marquee.setText(ticker.getString());
+				layout.addView(marquee);
+			}
+		}
+
+		return layout;
+	}
+
+	public void clearDisplayableView() {
+		layout = null;
+		marquee = null;
+	}
 
 	public void addCommand(Command cmd) {
 		if (cmd == null) {
@@ -138,16 +191,27 @@ public abstract class Displayable {
 		return ContextHolder.getDisplayHeight();
 	}
 
-	public void setTicker(Ticker ticker) {
-		this.ticker = ticker;
-		Toast.makeText(parent, ticker.getString(), Toast.LENGTH_LONG).show();
+	public void setTicker(Ticker newticker) {
+		if (layout != null) {
+			if (ticker == null && newticker != null) {
+				tickermode = TICKER_SHOW;
+			} else if (ticker != null && newticker == null) {
+				tickermode = TICKER_HIDE;
+			}
+
+			ticker = newticker;
+
+			ViewHandler.postEvent(msgSetTicker);
+		} else {
+			ticker = newticker;
+		}
 	}
 
 	public Ticker getTicker() {
 		return ticker;
 	}
 
-	protected void sizeChanged(int w, int h) {
+	public void sizeChanged(int w, int h) {
 	}
 
 	public boolean menuItemSelected(int id) {

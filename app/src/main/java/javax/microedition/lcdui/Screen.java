@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,85 +17,17 @@
 
 package javax.microedition.lcdui;
 
-import android.content.Context;
-import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import javax.microedition.lcdui.event.SimpleEvent;
 
 public abstract class Screen extends Displayable {
-	private static final int TICKER_NO_ACTION = 0;
-	private static final int TICKER_SHOW = 1;
-	private static final int TICKER_HIDE = 2;
-
-	private Ticker ticker;
 
 	private LinearLayout layout;
-	private TextView marquee;
-	private int tickermode;
-
-	private SimpleEvent msgSetTicker = new SimpleEvent() {
-		@Override
-		public void process() {
-			if (ticker != null) {
-				marquee.setText(ticker.getString());
-			}
-
-			switch (tickermode) {
-				case TICKER_SHOW:
-					layout.addView(marquee, 0);
-					break;
-
-				case TICKER_HIDE:
-					layout.removeView(marquee);
-					break;
-			}
-
-			tickermode = TICKER_NO_ACTION;
-		}
-	};
-
-	@Override
-	public void setTicker(Ticker newticker) {
-		if (layout != null) {
-			if (ticker == null && newticker != null) {
-				tickermode = TICKER_SHOW;
-			} else if (ticker != null && newticker == null) {
-				tickermode = TICKER_HIDE;
-			}
-
-			ticker = newticker;
-
-			ViewHandler.postEvent(msgSetTicker);
-		} else {
-			ticker = newticker;
-		}
-	}
-
-	@Override
-	public Ticker getTicker() {
-		return ticker;
-	}
 
 	@Override
 	public View getDisplayableView() {
 		if (layout == null) {
-			Context context = getParentActivity();
-
-			layout = new LinearLayout(context);
-			layout.setOrientation(LinearLayout.VERTICAL);
-
-			marquee = new TextView(context);
-			marquee.setTextAppearance(context, android.R.style.TextAppearance_Medium);
-			marquee.setEllipsize(TruncateAt.MARQUEE);
-			marquee.setSelected(true);
-
-			if (ticker != null) {
-				marquee.setText(ticker.getString());
-				layout.addView(marquee);
-			}
+			layout = (LinearLayout) super.getDisplayableView();
 
 			layout.addView(getScreenView());
 		}
@@ -104,9 +37,8 @@ public abstract class Screen extends Displayable {
 
 	@Override
 	public void clearDisplayableView() {
+		super.clearDisplayableView();
 		layout = null;
-		marquee = null;
-
 		clearScreenView();
 	}
 
