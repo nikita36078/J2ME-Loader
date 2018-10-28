@@ -62,10 +62,8 @@ public class List extends Screen implements Choice, ItemSelector {
 					fireCommandAction(selectCommand, List.this);
 					break;
 				case EXCLUSIVE:
-					if (selectedIndex >= 0 && selectedIndex < selected.size()) {
-						selected.set(selectedIndex, Boolean.FALSE);
-					}
 					if (position >= 0 && position < selected.size()) {
+						Collections.fill(selected, Boolean.FALSE);
 						selected.set(position, Boolean.TRUE);
 					}
 					break;
