@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,40 +17,33 @@
 
 package javax.microedition.lcdui.list;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import javax.microedition.lcdui.Image;
 
 public class CompoundItem {
-	protected String stringPart;
-
-	protected Image imagePart;
-	protected Drawable imageDrawable;
+	private String stringPart;
+	private Image imagePart;
+	private Drawable imageDrawable;
 
 	public CompoundItem(String stringPart, Image imagePart) {
 		this.stringPart = stringPart;
 		this.imagePart = imagePart;
 	}
 
-	public void setString(String stringPart) {
-		this.stringPart = stringPart;
-	}
-
 	public String getString() {
 		return stringPart;
 	}
 
-	public void setImage(Image imagePart) {
-		this.imagePart = imagePart;
-		this.imageDrawable = new BitmapDrawable(imagePart.getBitmap());
-	}
-
-	public Image getImage() {
-		return imagePart;
-	}
-
-	public Drawable getDrawable() {
+	public Drawable getDrawable(int height) {
+		if (imageDrawable == null && imagePart != null) {
+			Bitmap bitmap = imagePart.getBitmap();
+			int width = height / bitmap.getHeight() * bitmap.getWidth();
+			Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+			imageDrawable = new BitmapDrawable(scaledBitmap);
+		}
 		return imageDrawable;
 	}
 }

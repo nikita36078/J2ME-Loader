@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,7 +128,7 @@ public abstract class CompoundAdapter implements Adapter {
 	protected View getView(int position, View convertView, ViewGroup parent, int viewResourceID, boolean useImagePart) {
 		TextView textview;
 
-		if (convertView != null && convertView instanceof TextView) {
+		if (convertView instanceof TextView) {
 			textview = (TextView) convertView;
 		} else {
 			textview = (TextView) LayoutInflater.from(context).inflate(viewResourceID, null);
@@ -137,8 +138,11 @@ public abstract class CompoundAdapter implements Adapter {
 		textview.setText(item.getString());
 
 		if (useImagePart) {
-			textview.setCompoundDrawablesWithIntrinsicBounds(item.getDrawable(), null, null, null);
-			textview.setCompoundDrawablePadding(textview.getPaddingLeft());
+			textview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+				textview.setCompoundDrawablesWithIntrinsicBounds(item.getDrawable(textview.getHeight()),
+						null, null, null);
+				textview.setCompoundDrawablePadding(textview.getPaddingLeft());
+			});
 		}
 
 		return textview;
