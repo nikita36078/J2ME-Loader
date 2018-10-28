@@ -17,10 +17,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -155,27 +151,6 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setLayout(int value) {
-	}
-
-	public static Drawable createBackground(Context context, int color) {
-		float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BORDER_RADIUS, context.getResources().getDisplayMetrics());
-		float[] radii = new float[8];
-
-		for (int i = 0; i < 8; i++) {
-			radii[i] = radius;
-		}
-
-		ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(radii, null, null));
-		Paint paint = drawable.getPaint();
-
-		paint.setColor(color);
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setStrokeWidth(2);
-
-		int padding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BORDER_PADDING, context.getResources().getDisplayMetrics()));
-		drawable.setPadding(padding, padding, padding, padding);
-
-		return drawable;
 	}
 
 	/**
