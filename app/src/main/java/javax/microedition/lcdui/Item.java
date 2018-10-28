@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +52,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	public static final int LAYOUT_VEXPAND = 8192;
 	public static final int LAYOUT_2 = 16384;
 
+	private static final int HORIZONTAL_GRAVITY_MASK = 3;
+	private static final int VERTICAL_GRAVITY_MASK = 48;
+
 	private static final float BORDER_PADDING = 7;
 	private static final float BORDER_RADIUS = 4;
 
@@ -65,6 +69,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	private TextView labelview;
 	private int labelmode;
 	private int preferredWidth, preferredHeight;
+	private int layoutmode;
 
 	private Form owner;
 
@@ -151,6 +156,11 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setLayout(int value) {
+		layoutmode = value;
+	}
+
+	public int getLayout() {
+		return layoutmode;
 	}
 
 	/**
@@ -173,16 +183,56 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 			labelview.setText(label);
 
 			if (label != null) {
-				layout.addView(labelview, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				layout.addView(labelview, getLayoutParams());
 			}
 
 			contentview = getItemContentView();
-			layout.addView(contentview);
+			layout.addView(contentview, getLayoutParams());
 
 			ViewHandler.postEvent(msgSetContextMenuListener);
 		}
 
 		return layout;
+	}
+
+	private LinearLayout.LayoutParams getLayoutParams() {
+		int hwrap = LayoutParams.MATCH_PARENT;
+		int vwrap = LayoutParams.MATCH_PARENT;
+		int gravity = 0;
+
+		if ((layoutmode & LAYOUT_SHRINK) != 0) {
+			hwrap |= LayoutParams.WRAP_CONTENT;
+		} else if ((layoutmode & LAYOUT_EXPAND) != 0) {
+			hwrap |= LayoutParams.MATCH_PARENT;
+		}
+
+		if ((layoutmode & LAYOUT_VSHRINK) != 0) {
+			vwrap |= LayoutParams.WRAP_CONTENT;
+		} else if ((layoutmode & LAYOUT_VEXPAND) != 0) {
+			vwrap |= LayoutParams.MATCH_PARENT;
+		}
+
+		int horizontal = layoutmode & HORIZONTAL_GRAVITY_MASK;
+		if (horizontal == LAYOUT_CENTER) {
+			gravity |= Gravity.CENTER_HORIZONTAL;
+		} else if (horizontal == LAYOUT_RIGHT) {
+			gravity |= Gravity.RIGHT;
+		} else if (horizontal == LAYOUT_LEFT) {
+			gravity |= Gravity.LEFT;
+		}
+
+		int vertical = layoutmode & VERTICAL_GRAVITY_MASK;
+		if (vertical == LAYOUT_VCENTER) {
+			gravity |= Gravity.CENTER_VERTICAL;
+		} else if (vertical == LAYOUT_BOTTOM) {
+			gravity |= Gravity.BOTTOM;
+		} else if (vertical == LAYOUT_TOP) {
+			gravity |= Gravity.TOP;
+		}
+
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(hwrap, vwrap);
+		layoutParams.gravity = gravity;
+		return layoutParams;
 	}
 
 	public void clearItemView() {
