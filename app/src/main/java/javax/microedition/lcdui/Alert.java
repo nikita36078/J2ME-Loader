@@ -51,10 +51,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		this.text = text;
 		this.image = image;
 		this.type = type;
+		this.timeout = FOREVER;
 	}
 
 	public void setType(AlertType type) {
-		//TODO where it used
 		this.type = type;
 	}
 
@@ -87,7 +87,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public boolean finiteTimeout() {
-		return timeout >= 0 && countCommands() < 2;
+		return timeout > 0 && countCommands() < 2;
 	}
 
 	public AlertDialog.Builder prepareDialog() {
