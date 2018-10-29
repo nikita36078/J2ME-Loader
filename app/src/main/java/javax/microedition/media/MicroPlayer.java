@@ -46,10 +46,6 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	private InternalMetaData metadata;
 
-	public MicroPlayer() {
-		this(null);
-	}
-
 	public MicroPlayer(DataSource datasource) {
 		player = new MediaPlayer();
 		player.setOnCompletionListener(this);
@@ -227,24 +223,35 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-
-		int time = (int) now / 1000;
-		if (time != player.getCurrentPosition()) {
-			player.seekTo(time);
+		if (state < PREFETCHED) {
+			return 0;
+		} else {
+			int time = (int) now / 1000;
+			if (time != player.getCurrentPosition()) {
+				player.seekTo(time);
+			}
+			return getMediaTime();
 		}
-		return getMediaTime();
 	}
 
 	@Override
 	public long getMediaTime() {
 		checkClosed();
-		return player.getCurrentPosition() * 1000;
+		if (state < PREFETCHED) {
+			return TIME_UNKNOWN;
+		} else {
+			return player.getCurrentPosition() * 1000;
+		}
 	}
 
 	@Override
 	public long getDuration() {
 		checkClosed();
-		return player.getDuration() * 1000;
+		if (state < PREFETCHED) {
+			return TIME_UNKNOWN;
+		} else {
+			return player.getDuration() * 1000;
+		}
 	}
 
 	@Override
