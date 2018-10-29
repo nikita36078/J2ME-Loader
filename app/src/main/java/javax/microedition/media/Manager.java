@@ -17,19 +17,29 @@
 
 package javax.microedition.media;
 
+import android.webkit.MimeTypeMap;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import javax.microedition.io.Connector;
 import javax.microedition.media.protocol.DataSource;
 
 public class Manager {
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
+	private static final String FILE_DEVICE_LOCATOR = "file://";
+
 	public static Player createPlayer(String locator) throws IOException {
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
 			return new MidiPlayer();
+		} else if (locator.startsWith(FILE_DEVICE_LOCATOR)) {
+			InputStream stream = Connector.openInputStream(locator);
+			String extension = locator.substring(locator.lastIndexOf('.') + 1);
+			String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+			return createPlayer(stream, type);
 		} else {
 			return new BasePlayer();
 		}
