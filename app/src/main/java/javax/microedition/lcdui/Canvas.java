@@ -597,11 +597,11 @@ public abstract class Canvas extends Displayable {
 
 	public abstract void paint(Graphics g);
 
-	public void repaint() {
+	public final void repaint() {
 		repaint(0, 0, width, height);
 	}
 
-	public void repaint(int x, int y, int width, int height) {
+	public final void repaint(int x, int y, int width, int height) {
 		postEvent(paintEvent);
 	}
 
@@ -643,7 +643,7 @@ public abstract class Canvas extends Displayable {
 	 * После вызова этого метода гарантированно произойдет немедленная перерисовка,
 	 * причем вызывающий поток блокируется до ее завершения.
 	 */
-	public void serviceRepaints() {
+	public final void serviceRepaints() {
 		EventQueue queue = getEventQueue();
 
 		/*
