@@ -28,7 +28,7 @@ public class MyClassLoader extends DexClassLoader {
 	private static File resFolder;
 
 	public MyClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
-		super(paths, tmpDir, null, parent);
+		super(paths, tmpDir, null, new MyCoreClassLoader(parent));
 		resFolder = resDir;
 		ACRA.getErrorReporter().putCustomData("Running app", getName());
 	}
