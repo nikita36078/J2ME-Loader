@@ -20,9 +20,6 @@ package javax.microedition.shell;
 import org.acra.ACRA;
 
 import java.io.File;
-import java.io.InputStream;
-
-import javax.microedition.util.ContextHolder;
 
 import dalvik.system.DexClassLoader;
 
@@ -30,15 +27,10 @@ public class MyClassLoader extends DexClassLoader {
 
 	private static File resFolder;
 
-	public MyClassLoader(String paths, String tmpDir, String libs, ClassLoader parent, String resDir) {
-		super(paths, tmpDir, libs, parent);
-		resFolder = new File(resDir);
+	public MyClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
+		super(paths, tmpDir, null, parent);
+		resFolder = resDir;
 		ACRA.getErrorReporter().putCustomData("Running app", getName());
-	}
-
-	@Override
-	public InputStream getResourceAsStream(String resName) {
-		return ContextHolder.getResourceAsStream(null, resName);
 	}
 
 	public static File getResFolder() {

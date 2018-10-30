@@ -85,9 +85,9 @@ public class MicroLoader {
 		dexTargetOptDir.mkdir();
 		File dexTarget = new File(dexTargetDir, Config.MIDLET_DEX_FILE);
 		FileUtils.copyFileUsingChannel(dexSource, dexTarget);
+		File resDir = new File(path, Config.MIDLET_RES_DIR);
 		ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
-				dexTargetOptDir.getAbsolutePath(), null, context.getClassLoader(),
-				path + Config.MIDLET_RES_DIR);
+				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
 		final MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 		return midlet;
