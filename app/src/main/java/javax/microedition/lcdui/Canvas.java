@@ -31,6 +31,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
@@ -294,6 +297,7 @@ public abstract class Canvas extends Displayable {
 					graphics.resetTranslation();
 					graphics.resetClip();
 				}
+				if (showFps) drawFps(graphics);
 				graphics.setCanvas(lockCanvas(), null);
 				if (graphics.hasCanvas()) {
 					graphics.clear(backgroundColor);
@@ -302,6 +306,7 @@ public abstract class Canvas extends Displayable {
 						overlay.paint(graphics);
 					}
 					unlockCanvasAndPost(graphics.getCanvas());
+					if (showFps) totalFrameCount++;
 				}
 			}
 		}
@@ -361,11 +366,14 @@ public abstract class Canvas extends Displayable {
 	private static boolean filter;
 	private static boolean touchInput;
 	private static boolean hardwareAcceleration;
+	private static boolean showFps = true;
 	private static int backgroundColor;
 	private static int scaleRatio;
 
 	private Image offscreen;
 	private int onX, onY, onWidth, onHeight;
+	private int totalFrameCount = 0;
+	private int prevFrameCount = 0;
 
 	private Overlay overlay;
 
@@ -373,8 +381,26 @@ public abstract class Canvas extends Displayable {
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
 		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
+		if (showFps) startFpsCounter();
 
 		updateSize();
+	}
+
+	private void startFpsCounter() {
+		TimerTask updateFPS = new TimerTask() {
+			public void run() {
+				prevFrameCount = totalFrameCount;
+				totalFrameCount = 0;
+			}
+		};
+		Timer t = new Timer();
+		t.scheduleAtFixedRate(updateFPS, 0, 1000);
+	}
+
+	private void drawFps(Graphics g) {
+		String fps = String.valueOf(prevFrameCount);
+		g.setColor(0, 255, 0);
+		g.drawString(fps, 0, 0, 0);
 	}
 
 	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
@@ -404,6 +430,10 @@ public abstract class Canvas extends Displayable {
 
 	public static void setHardwareAcceleration(boolean hardwareAcceleration) {
 		Canvas.hardwareAcceleration = hardwareAcceleration;
+	}
+
+	public static void setShowFps(boolean showFps) {
+		Canvas.showFps = showFps;
 	}
 
 	public void setOverlay(Overlay ov) {
@@ -611,6 +641,7 @@ public abstract class Canvas extends Displayable {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
 			}
+			if (showFps) drawFps(image.getGraphics());
 			graphics.setCanvas(lockCanvas(), null);
 			if (graphics.hasCanvas()) {
 				graphics.clear(backgroundColor);
@@ -619,6 +650,7 @@ public abstract class Canvas extends Displayable {
 					overlay.paint(graphics);
 				}
 				unlockCanvasAndPost(graphics.getCanvas());
+				if (showFps) totalFrameCount++;
 			}
 		}
 	}

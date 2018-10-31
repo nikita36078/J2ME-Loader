@@ -77,6 +77,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxFilter;
 	protected CheckBox cxImmediate;
 	protected CheckBox cxHwAcceleration;
+	protected CheckBox cxShowFps;
 
 	protected EditText tfFontSizeSmall;
 	protected EditText tfFontSizeMedium;
@@ -149,6 +150,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
 		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
+		cxShowFps = findViewById(R.id.cxShowFps);
 
 		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
@@ -337,6 +339,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", false));
 		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
 		cxHwAcceleration.setChecked(params.getBoolean("HwAcceleration", false));
+		cxShowFps.setChecked(params.getBoolean("ShowFps", false));
 
 		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall", 18)));
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
@@ -380,6 +383,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("ScreenFilter", cxFilter.isChecked());
 			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
 			params.putBoolean("HwAcceleration", cxHwAcceleration.isChecked());
+			params.putBoolean("ShowFps", cxShowFps.isChecked());
 
 			params.putInt("FontSizeSmall",
 					Integer.parseInt(tfFontSizeSmall.getText().toString()));
@@ -430,6 +434,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			boolean immediateMode = cxImmediate.isChecked();
 			boolean touchInput = cxTouchInput.isChecked();
 			boolean hwAcceleration = cxHwAcceleration.isChecked();
+			boolean showFps = cxShowFps.isChecked();
 			SparseIntArray intArray = KeyMapper.getArrayPref(this);
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
@@ -453,6 +458,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			Canvas.setBackgroundColor(screenBackgroundColor);
 			Canvas.setKeyMapping(intArray);
 			Canvas.setHasTouchInput(touchInput);
+			Canvas.setShowFps(showFps);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

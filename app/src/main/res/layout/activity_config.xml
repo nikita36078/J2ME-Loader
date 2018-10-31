@@ -180,6 +180,13 @@
             android:text="@string/PREF_HW_ACCELERATION"
             android:visibility="gone" />
 
+        <CheckBox
+            android:id="@+id/cxShowFps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/PREF_SHOW_FPS" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
