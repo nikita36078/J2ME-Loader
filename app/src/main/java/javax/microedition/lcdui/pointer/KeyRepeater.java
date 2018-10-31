@@ -21,7 +21,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.event.CanvasEvent;
 
 public class KeyRepeater implements Runnable {
-	private static final long INTERVAL = 500;
+	private static final long INTERVAL = 200;
 
 	protected Canvas target;
 
@@ -83,11 +83,14 @@ public class KeyRepeater implements Runnable {
 
 					isrunning = true;
 				}
-				Thread.sleep(INTERVAL);
 
-				target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, keyCode));
-				if (secondKeyCode != 0) {
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, secondKeyCode));
+				while (enabled) {
+					Thread.sleep(INTERVAL);
+
+					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, keyCode));
+					if (secondKeyCode != 0) {
+						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, secondKeyCode));
+					}
 				}
 			} catch (InterruptedException ie) {
 				// Don't need to print stacktrace here
