@@ -24,6 +24,8 @@
 
 package com.siemens.mp.game;
 
+import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -35,6 +37,7 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public void blitToScreen(int x, int y) {
+		((Canvas) Display.getDisplay(null).getCurrent()).flushBuffer(image);
 	}
 
 	public void clear(byte color) {

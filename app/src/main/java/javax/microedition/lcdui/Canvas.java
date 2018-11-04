@@ -636,7 +636,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	// GameCanvas
-	protected void flushBuffer(Image image) {
+	public void flushBuffer(Image image) {
 		synchronized (paintsync) {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
