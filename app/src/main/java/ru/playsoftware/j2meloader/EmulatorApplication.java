@@ -33,6 +33,6 @@ public class EmulatorApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
-		ACRA.init(this);
+		if (!BuildConfig.DEBUG) ACRA.init(this);
 	}
 }
