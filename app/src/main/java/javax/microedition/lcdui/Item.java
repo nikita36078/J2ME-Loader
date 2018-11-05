@@ -94,8 +94,6 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	private SimpleEvent msgSetLabel = new SimpleEvent() {
 		@Override
 		public void process() {
-//			System.out.println("Changing label from " + Thread.currentThread());
-
 			labelview.setText(label);
 
 			switch (labelmode) {
@@ -111,6 +109,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 			labelmode = LABEL_NO_ACTION;
 		}
 	};
+
+	public Item() {
+		setLayout(LAYOUT_DEFAULT);
+	}
 
 	public void setLabel(String value) {
 		if (layout != null) {
@@ -197,19 +199,19 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 	private LinearLayout.LayoutParams getLayoutParams() {
 		int hwrap = LayoutParams.MATCH_PARENT;
-		int vwrap = LayoutParams.MATCH_PARENT;
+		int vwrap = LayoutParams.WRAP_CONTENT;
 		int gravity = 0;
 
 		if ((layoutmode & LAYOUT_SHRINK) != 0) {
-			hwrap |= LayoutParams.WRAP_CONTENT;
+			hwrap = LayoutParams.WRAP_CONTENT;
 		} else if ((layoutmode & LAYOUT_EXPAND) != 0) {
-			hwrap |= LayoutParams.MATCH_PARENT;
+			hwrap = LayoutParams.MATCH_PARENT;
 		}
 
 		if ((layoutmode & LAYOUT_VSHRINK) != 0) {
-			vwrap |= LayoutParams.WRAP_CONTENT;
+			vwrap = LayoutParams.WRAP_CONTENT;
 		} else if ((layoutmode & LAYOUT_VEXPAND) != 0) {
-			vwrap |= LayoutParams.MATCH_PARENT;
+			vwrap = LayoutParams.MATCH_PARENT;
 		}
 
 		int horizontal = layoutmode & HORIZONTAL_GRAVITY_MASK;
@@ -217,8 +219,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 			gravity |= Gravity.CENTER_HORIZONTAL;
 		} else if (horizontal == LAYOUT_RIGHT) {
 			gravity |= Gravity.RIGHT;
+			hwrap = LayoutParams.WRAP_CONTENT;
 		} else if (horizontal == LAYOUT_LEFT) {
 			gravity |= Gravity.LEFT;
+			hwrap = LayoutParams.WRAP_CONTENT;
 		}
 
 		int vertical = layoutmode & VERTICAL_GRAVITY_MASK;
@@ -226,8 +230,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 			gravity |= Gravity.CENTER_VERTICAL;
 		} else if (vertical == LAYOUT_BOTTOM) {
 			gravity |= Gravity.BOTTOM;
+			vwrap = LayoutParams.WRAP_CONTENT;
 		} else if (vertical == LAYOUT_TOP) {
 			gravity |= Gravity.TOP;
+			vwrap = LayoutParams.WRAP_CONTENT;
 		}
 
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(hwrap, vwrap);
@@ -315,11 +321,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 				if (owner != null) {
 					owner.postEvent(CommandActionEvent.getInstance(listener, cmd, this));
 				}
-
 				return true;
 			}
 		}
-
 		return false;
 	}
 }
