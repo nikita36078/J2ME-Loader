@@ -19,8 +19,10 @@ package javax.microedition.lcdui;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
@@ -98,10 +100,6 @@ public class TextField extends Item {
 	}
 
 	public String getString() {
-		if (textview != null) {
-			text = textview.getText().toString();
-		}
-
 		return text;
 	}
 
@@ -202,6 +200,20 @@ public class TextField extends Item {
 			Context context = getOwnerForm().getParentActivity();
 
 			textview = new InternalEditText(context);
+			textview.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					text = s.toString();
+				}
+			});
 
 			setMaxSize(maxSize);
 			setConstraints(constraints);
