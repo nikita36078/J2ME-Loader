@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-public class Command implements Comparable<Command> {
+public class Command {
 	public static final int SCREEN = 1;
 	public static final int BACK = 2;
 	public static final int CANCEL = 3;
@@ -50,6 +50,26 @@ public class Command implements Comparable<Command> {
 		return longLabel;
 	}
 
+	public String getAndroidLabel() {
+		if (shortLabel.length() > 0) {
+			return shortLabel;
+		} else {
+			String label;
+			switch (commandType) {
+				case BACK:
+					label = "Back";
+					break;
+				case OK:
+					label = "OK";
+					break;
+				default:
+					label = shortLabel;
+					break;
+			}
+			return label;
+		}
+	}
+
 	public int getCommandType() {
 		return commandType;
 	}
@@ -67,44 +87,5 @@ public class Command implements Comparable<Command> {
 		hash = 97 * hash + priority;
 
 		return hash;
-	}
-
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		final Command other = (Command) obj;
-
-		if ((shortLabel == null) ? (other.shortLabel != null) : !shortLabel.equals(other.shortLabel)) {
-			return false;
-		}
-
-		if ((longLabel == null) ? (other.longLabel != null) : !longLabel.equals(other.longLabel)) {
-			return false;
-		}
-
-		if (commandType != other.commandType) {
-			return false;
-		}
-
-		if (priority != other.priority) {
-			return false;
-		}
-
-		return true;
-	}
-
-	@Override
-	public int compareTo(Command cmd) {
-		return cmd.getPriority() - priority;
-	}
-
-	public String toString() {
-		return "Command(\"" + shortLabel + "\", " + commandType + ", " + priority + ")";
 	}
 }

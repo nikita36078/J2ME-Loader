@@ -161,10 +161,6 @@ public abstract class Displayable {
 		return commands.toArray(new Command[0]);
 	}
 
-	public CommandListener getCommandListener() {
-		return listener;
-	}
-
 	public void setCommandListener(CommandListener listener) {
 		this.listener = listener;
 	}

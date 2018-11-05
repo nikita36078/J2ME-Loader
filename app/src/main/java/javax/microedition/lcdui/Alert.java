@@ -46,7 +46,8 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public Alert(String title, String text, Image image, AlertType type) {
-		setTitle(title);
+		super.addCommand(DISMISS_COMMAND);
+		super.setTitle(title);
 
 		this.text = text;
 		this.image = image;
@@ -124,15 +125,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 
 		if (positive >= 0) {
-			builder.setPositiveButton(commands[positive].getLabel(), this);
+			builder.setPositiveButton(commands[positive].getAndroidLabel(), this);
 		}
 
 		if (negative >= 0) {
-			builder.setNegativeButton(commands[negative].getLabel(), this);
+			builder.setNegativeButton(commands[negative].getAndroidLabel(), this);
 		}
 
 		if (neutral >= 0) {
-			builder.setNeutralButton(commands[neutral].getLabel(), this);
+			builder.setNeutralButton(commands[neutral].getAndroidLabel(), this);
 		}
 
 		return builder;
@@ -140,6 +141,24 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	public void setNextDisplayable(Displayable nextDisplayable) {
 		this.nextDisplayable = nextDisplayable;
+	}
+
+	@Override
+	public void addCommand(Command cmd) {
+		if (cmd != DISMISS_COMMAND) {
+			super.addCommand(cmd);
+			super.removeCommand(DISMISS_COMMAND);
+		}
+	}
+
+	@Override
+	public void removeCommand(Command cmd) {
+		if (cmd != DISMISS_COMMAND) {
+			super.removeCommand(cmd);
+			if (countCommands() == 0) {
+				super.addCommand(DISMISS_COMMAND);
+			}
+		}
 	}
 
 	@Override

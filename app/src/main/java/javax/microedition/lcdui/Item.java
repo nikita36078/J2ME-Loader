@@ -299,7 +299,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		menu.clear();
 
 		for (Command cmd : commands) {
-			menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getLabel());
+			menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getAndroidLabel());
 		}
 	}
 
