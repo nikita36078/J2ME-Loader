@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,6 +29,8 @@ import android.widget.ScrollView;
 import java.util.ArrayList;
 
 public class Form extends Screen {
+	private static final float BORDER_PADDING = 7;
+
 	private ScrollView scrollview;
 	private LinearLayout layout;
 
@@ -155,6 +158,9 @@ public class Form extends Screen {
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
+
+			int padding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BORDER_PADDING, context.getResources().getDisplayMetrics()));
+			layout.setPadding(padding, padding, padding, padding);
 
 			scrollview = new ScrollView(context);
 			scrollview.addView(layout);

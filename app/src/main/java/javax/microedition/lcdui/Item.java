@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -54,9 +53,6 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 	private static final int HORIZONTAL_GRAVITY_MASK = 3;
 	private static final int VERTICAL_GRAVITY_MASK = 48;
-
-	private static final float BORDER_PADDING = 7;
-	private static final float BORDER_RADIUS = 4;
 
 	private static final int LABEL_NO_ACTION = 0;
 	private static final int LABEL_SHOW = 1;
@@ -176,9 +172,6 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
-
-			int padding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, BORDER_PADDING, context.getResources().getDisplayMetrics()));
-			layout.setPadding(padding, padding, padding, padding);
 
 			labelview = new TextView(context);
 			labelview.setTextAppearance(context, android.R.style.TextAppearance_Medium);
