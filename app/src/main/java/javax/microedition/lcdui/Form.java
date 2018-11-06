@@ -185,7 +185,7 @@ public class Form extends Screen {
 
 	public boolean contextMenuItemSelected(MenuItem menuitem) {
 		for (Item item : items) {
-			if (item.contextMenuItemSelected(menuitem)) {
+			if (menuitem.getGroupId() == item.hashCode() && item.contextMenuItemSelected(menuitem)) {
 				return true;
 			}
 		}

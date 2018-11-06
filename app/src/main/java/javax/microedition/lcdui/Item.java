@@ -19,7 +19,6 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.view.ContextMenu;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -76,12 +75,8 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		@Override
 		public void process() {
 			if (listener != null) {
-				layout.setOnCreateContextMenuListener(Item.this);
-				labelview.setOnCreateContextMenuListener(Item.this);
 				contentview.setOnCreateContextMenuListener(Item.this);
 			} else {
-				layout.setLongClickable(false);
-				labelview.setLongClickable(false);
 				contentview.setLongClickable(false);
 			}
 		}
@@ -250,7 +245,12 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	protected abstract void clearItemContentView();
 
 	public void addCommand(Command cmd) {
-		commands.add(cmd);
+		if (cmd == null) {
+			throw new NullPointerException();
+		}
+		if (!commands.contains(cmd)) {
+			commands.add(cmd);
+		}
 	}
 
 	public void removeCommand(Command cmd) {
@@ -258,6 +258,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setDefaultCommand(Command cmd) {
+		if (cmd == null) {
+			return;
+		}
+		addCommand(cmd);
 	}
 
 	public void removeAllCommands() {
@@ -298,7 +302,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		menu.clear();
 
 		for (Command cmd : commands) {
-			menu.add(Menu.NONE, cmd.hashCode(), cmd.getPriority(), cmd.getAndroidLabel());
+			menu.add(hashCode(), cmd.hashCode(), cmd.getPriority(), cmd.getAndroidLabel());
 		}
 	}
 
