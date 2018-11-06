@@ -200,6 +200,11 @@ public class TextField extends Item {
 			Context context = getOwnerForm().getParentActivity();
 
 			textview = new InternalEditText(context);
+
+			setMaxSize(maxSize);
+			setConstraints(constraints);
+			setString(text);
+
 			textview.addTextChangedListener(new TextWatcher() {
 				@Override
 				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -214,10 +219,6 @@ public class TextField extends Item {
 					text = s.toString();
 				}
 			});
-
-			setMaxSize(maxSize);
-			setConstraints(constraints);
-			setString(text);
 		}
 
 		return textview;

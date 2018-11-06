@@ -173,6 +173,11 @@ public class TextBox extends Screen {
 			Context context = getParentActivity();
 
 			textview = new EditText(context);
+
+			setMaxSize(maxSize);
+			setConstraints(constraints);
+			setString(text);
+
 			textview.addTextChangedListener(new TextWatcher() {
 				@Override
 				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -184,14 +189,9 @@ public class TextBox extends Screen {
 
 				@Override
 				public void afterTextChanged(Editable s) {
-					text = textview.getText().toString();
+					text = s.toString();
 				}
 			});
-
-			setMaxSize(maxSize);
-			setConstraints(constraints);
-			setString(text);
-
 			scrollview = new ScrollView(context);
 			scrollview.addView(textview);
 		}
