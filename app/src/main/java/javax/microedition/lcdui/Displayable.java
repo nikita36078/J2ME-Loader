@@ -82,8 +82,6 @@ public abstract class Displayable {
 
 	public void setParentActivity(MicroActivity activity) {
 		parent = activity;
-
-		clearDisplayableView();
 	}
 
 	public AppCompatActivity getParentActivity() {

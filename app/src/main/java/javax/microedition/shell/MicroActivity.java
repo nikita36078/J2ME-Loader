@@ -212,6 +212,7 @@ public class MicroActivity extends AppCompatActivity {
 		@Override
 		public void process() {
 			current.setParentActivity(MicroActivity.this);
+			current.clearDisplayableView();
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
 			invalidateOptionsMenu();

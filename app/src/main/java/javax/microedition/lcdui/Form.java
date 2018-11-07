@@ -57,21 +57,19 @@ public class Form extends Screen {
 	}
 
 	public int append(String text) {
-		append(new StringItem(null, text));
-		return items.size() - 1;
+		return append(new StringItem(null, text));
 	}
 
 	public int append(Image img) {
-		append(new ImageItem(null, img, ImageItem.LAYOUT_DEFAULT, null));
-		return items.size() - 1;
+		return append(new ImageItem(null, img, ImageItem.LAYOUT_DEFAULT, null));
 	}
 
 	public int append(final Item item) {
-		items.add(item);
-
 		if (item.hasOwnerForm()) {
 			throw new IllegalStateException();
 		}
+
+		items.add(item);
 		item.setOwnerForm(this);
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
@@ -83,11 +81,11 @@ public class Form extends Screen {
 	}
 
 	public void insert(final int index, final Item item) {
-		items.add(index, item);
-
 		if (item.hasOwnerForm()) {
 			throw new IllegalStateException();
 		}
+
+		items.add(index, item);
 		item.setOwnerForm(this);
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
@@ -98,11 +96,11 @@ public class Form extends Screen {
 	}
 
 	public void set(final int index, final Item item) {
-		items.set(index, item).setOwnerForm(null);
-
 		if (item.hasOwnerForm()) {
 			throw new IllegalStateException();
 		}
+
+		items.set(index, item).setOwnerForm(null);
 		item.setOwnerForm(this);
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
