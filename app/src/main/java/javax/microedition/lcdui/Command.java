@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-public class Command {
+public class Command implements Comparable<Command> {
 	public static final int SCREEN = 1;
 	public static final int BACK = 2;
 	public static final int CANCEL = 3;
@@ -56,11 +56,29 @@ public class Command {
 		} else {
 			String label;
 			switch (commandType) {
+				case SCREEN:
+					label = "Screen";
+					break;
 				case BACK:
 					label = "Back";
 					break;
+				case CANCEL:
+					label = "Cancel";
+					break;
 				case OK:
 					label = "OK";
+					break;
+				case HELP:
+					label = "Help";
+					break;
+				case STOP:
+					label = "Stop";
+					break;
+				case EXIT:
+					label = "Exit";
+					break;
+				case ITEM:
+					label = "Item";
 					break;
 				default:
 					label = shortLabel;
@@ -87,5 +105,10 @@ public class Command {
 		hash = 97 * hash + priority;
 
 		return hash;
+	}
+
+	@Override
+	public int compareTo(Command cmd) {
+		return cmd.getPriority() - priority;
 	}
 }
