@@ -366,7 +366,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean filter;
 	private static boolean touchInput;
 	private static boolean hardwareAcceleration;
-	private static boolean showFps = true;
+	private static boolean showFps;
 	private static int backgroundColor;
 	private static int scaleRatio;
 
