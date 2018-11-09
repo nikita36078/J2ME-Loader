@@ -376,11 +376,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_DIAL, KEY_NUM1, RectSnap.EXT_NORTH);
 				setSnap(KEY_CANCEL, KEY_NUM3, RectSnap.EXT_NORTH);
 
-				for (int i = KEY_NUM1; i < 12; i++) {
+				for (int i = KEY_NUM1; i < KEYBOARD_SIZE; i++) {
 					keypad[i].setVisible(true);
 				}
-				keypad[KEY_DIAL].setVisible(true);
-				keypad[KEY_CANCEL].setVisible(true);
+				keypad[KEY_DIAL].setVisible(false);
+				keypad[KEY_CANCEL].setVisible(false);
 				break;
 			case 1:
 				keyScales[SCALE_JOYSTICK] = 1;
@@ -401,8 +401,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_SOFT_LEFT, KEY_UP_LEFT, RectSnap.EXT_WEST);
 				setSnap(KEY_SOFT_RIGHT, KEY_UP_RIGHT, RectSnap.EXT_EAST);
 
-				for (int i = KEY_NUM1; i < 12; i++) {
+				for (int i = KEY_NUM1; i < KEY_SOFT_LEFT; i++) {
 					keypad[i].setVisible(false);
+				}
+				for (int i = KEY_SOFT_LEFT; i < KEYBOARD_SIZE; i++) {
+					keypad[i].setVisible(true);
 				}
 				keypad[KEY_DIAL].setVisible(false);
 				keypad[KEY_CANCEL].setVisible(false);
@@ -601,7 +604,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		obscuresVirtualScreen = false;
 		for (int i = 0; i < keypad.length; i++) {
 			snapKey(i, 0);
-			if (keypad[i].visible && RectF.intersects(keypad[i].getRect(), virtualScreen)) {
+			if (keypad[i].isVisible() && RectF.intersects(keypad[i].getRect(), virtualScreen)) {
 				obscuresVirtualScreen = true;
 			}
 		}
