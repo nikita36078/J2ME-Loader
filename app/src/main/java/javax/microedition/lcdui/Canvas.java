@@ -399,6 +399,9 @@ public abstract class Canvas extends Displayable {
 
 	private void drawFps(Graphics g) {
 		String fps = String.valueOf(prevFrameCount);
+		Font font = graphics.getFont();
+		g.setColorAlpha(0x90000000);
+		g.fillRect(0, 0, font.stringWidth(fps), font.getHeight());
 		g.setColor(0, 255, 0);
 		g.drawString(fps, 0, 0, 0);
 	}
