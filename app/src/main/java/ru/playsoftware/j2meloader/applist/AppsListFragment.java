@@ -20,8 +20,6 @@ package ru.playsoftware.j2meloader.applist;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -48,11 +46,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -279,22 +279,14 @@ public class AppsListFragment extends ListFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.main, menu);
-		SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				return false;
-			}
-
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				adapter.getFilter().filter(newText);
-				return true;
-			}
-		});
+		Disposable searchViewDisposable = RxSearchView.queryTextChanges(searchView)
+				.debounce(300, TimeUnit.MILLISECONDS)
+				.distinctUntilChanged()
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
+		compositeDisposable.add(searchViewDisposable);
 	}
 
 	@Override
