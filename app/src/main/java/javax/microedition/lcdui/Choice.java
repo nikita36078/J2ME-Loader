@@ -32,6 +32,10 @@ public interface Choice {
 
 	public void deleteAll();
 
+	public int getFitPolicy();
+
+	public Font getFont(int elementNum);
+
 	public Image getImage(int elementNum);
 
 	public int getSelectedFlags(boolean[] selectedArray_return);
@@ -45,6 +49,10 @@ public interface Choice {
 	public boolean isSelected(int elementNum);
 
 	public void set(int elementNum, String stringPart, Image imagePart);
+
+	public void setFitPolicy(int fitPolicy);
+
+	public void setFont(int elementNum, Font font);
 
 	public void setSelectedFlags(boolean[] selectedArray);
 

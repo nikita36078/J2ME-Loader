@@ -376,17 +376,21 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	}
 
+	@Override
 	public void setFont(int elementNum, Font font) {
 	}
 
+	@Override
 	public Font getFont(int elementNum) {
 		return Font.getDefaultFont();
 	}
 
+	@Override
 	public void setFitPolicy(int fitPolicy) {
 		this.fitPolicy = fitPolicy;
 	}
 
+	@Override
 	public int getFitPolicy() {
 		return fitPolicy;
 	}
