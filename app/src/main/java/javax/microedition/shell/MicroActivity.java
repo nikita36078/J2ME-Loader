@@ -313,7 +313,11 @@ public class MicroActivity extends AppCompatActivity {
 		if (current != null) {
 			menu.clear();
 			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.midlet, menu);
+			if (current instanceof Canvas) {
+				inflater.inflate(R.menu.midlet_canvas, menu);
+			} else {
+				inflater.inflate(R.menu.midlet_displayable, menu);
+			}
 			for (Command cmd : current.getCommands()) {
 				menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getAndroidLabel());
 			}
