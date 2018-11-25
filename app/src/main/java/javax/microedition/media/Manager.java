@@ -25,17 +25,18 @@ import java.util.Arrays;
 
 import javax.microedition.io.Connector;
 import javax.microedition.media.protocol.DataSource;
+import javax.microedition.media.protocol.SourceStream;
 
 public class Manager {
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
-	private static final String FILE_DEVICE_LOCATOR = "file://";
+	private static final String FILE_LOCATOR = "file://";
 
 	public static Player createPlayer(String locator) throws IOException {
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
 			return new MidiPlayer();
-		} else if (locator.startsWith(FILE_DEVICE_LOCATOR)) {
+		} else if (locator.startsWith(FILE_LOCATOR)) {
 			InputStream stream = Connector.openInputStream(locator);
 			String extension = locator.substring(locator.lastIndexOf('.') + 1);
 			String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
@@ -45,8 +46,21 @@ public class Manager {
 		}
 	}
 
-	public static Player createPlayer(DataSource source) throws IOException {
-		return new BasePlayer();
+	public static Player createPlayer(DataSource source) throws IOException, MediaException {
+		String type = source.getContentType();
+		String[] supportedTypes = getSupportedContentTypes(null);
+		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
+			source.connect();
+			SourceStream[] sourceStreams = source.getStreams();
+			if (sourceStreams == null || sourceStreams.length == 0) {
+				throw new MediaException();
+			}
+			SourceStream sourceStream = sourceStreams[0];
+			InputStream stream = new InternalSourceStream(sourceStream);
+			return new MicroPlayer(new InternalDataSource(stream, type));
+		} else {
+			return new BasePlayer();
+		}
 	}
 
 	public static Player createPlayer(final InputStream stream, String type) throws IOException {

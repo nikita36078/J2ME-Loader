@@ -130,7 +130,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 				source.connect();
 				player.setDataSource(source.getLocator());
 			} catch (IOException e) {
-				throw new MediaException(e);
+				throw new MediaException(e.getMessage());
 			}
 
 			state = REALIZED;
@@ -156,7 +156,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 				state = PREFETCHED;
 			} catch (IOException e) {
-				throw new MediaException(e);
+				throw new MediaException(e.getMessage());
 			}
 		}
 	}
