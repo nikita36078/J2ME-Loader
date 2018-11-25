@@ -37,17 +37,12 @@ public class InternalDataSource extends DataSource {
 
 	public InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
 		super(null);
-		if (type != null) {
-			type = MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
-			if (type != null) {
-				type = "." + type;
-			}
-		}
 		if (stream == null) {
 			throw new IllegalArgumentException();
 		}
 
-		this.mediaFile = File.createTempFile("media", type, ContextHolder.getCacheDir());
+		String extension = "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
+		this.mediaFile = File.createTempFile("media", extension, ContextHolder.getCacheDir());
 		this.type = type;
 
 		final RandomAccessFile raf = new RandomAccessFile(mediaFile, "rw");
