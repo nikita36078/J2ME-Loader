@@ -26,7 +26,6 @@
 #   error This file is for the OES API only
 #endif
 
-#include <EGL/egl.h>
 #include "m3g_image.h"
 
 /*----------------------------------------------------------------------

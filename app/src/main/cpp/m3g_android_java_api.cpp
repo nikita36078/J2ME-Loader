@@ -29,8 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <GLES/egl.h>
-
 #define M3G_ASSERT(a)           ((void)(a))
 #define M3G_BEGIN_PROFILE(a)    ((void)(a))
 #define M3G_END_PROFILE(a)      ((void)(a))
