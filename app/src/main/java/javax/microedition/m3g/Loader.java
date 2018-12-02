@@ -14,7 +14,7 @@ import javax.microedition.util.ContextHolder;
 
 public class Loader {
 	private DataInputStream dis;
-	private Vector objs;
+	private Vector<Object3D> objs;
 	private String resName;
 	private int readed = 0;
 
@@ -54,23 +54,12 @@ public class Loader {
 			dis.skip(offset);
 	}
 
-	public static Object3D[] load(byte[] data, int offset) {
-		try {
-			return new Loader(data, offset).load();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	public static Object3D[] load(byte[] data, int offset) throws IOException {
+		return new Loader(data, offset).load();
 	}
 
 	private Loader(String name) throws IOException {
-		InputStream is;
-		if (name.startsWith("/")) {
-			is = ContextHolder.getResourceAsStream(Loader.class, name);
-		} else {
-			// TODO
-			is = null;
-		}
+		InputStream is = ContextHolder.getResourceAsStream(null, name);
 
 		if (is == null) {
 			throw new IOException("Can't load " + name);
@@ -79,13 +68,8 @@ public class Loader {
 		dis = new DataInputStream(new BufferedInputStream(is));
 	}
 
-	public static Object3D[] load(String name) {
-		try {
-			return new Loader(name).load();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	public static Object3D[] load(String name) throws IOException {
+		return new Loader(name).load();
 	}
 
 	private Object3D[] loadPNG() throws IOException {
@@ -209,7 +193,7 @@ public class Loader {
 		return buildImage2D(format);
 	}
 
-	private Object3D[] buildImage2D(int aColourFormat) throws IOException {
+	private Object3D[] buildImage2D(int aColourFormat) {
 		// Create an image object
 		Image2D i2d;
 		try {
@@ -759,7 +743,7 @@ public class Loader {
 	}
 
 	private Object3D[] loadM3G() throws IOException {
-		objs = new Vector();
+		objs = new Vector<>();
 
 		readed = 0;
 		// First section must be header
@@ -820,14 +804,11 @@ public class Loader {
 		}
 		dis.close();
 
-		Object3D[] obj = new Object3D[objs.size()];
-		for (int i = 0; i < objs.size(); i++)
-			obj[i] = (Object3D) objs.elementAt(i);
-		return obj;
+		return objs.toArray(new Object3D[0]);
 	}
 
 
-	private Object3D[] load() {
+	private Object3D[] load() throws IOException {
 		try {
 			// Check header
 			dis.mark(12);
@@ -848,11 +829,7 @@ public class Loader {
 			e.printStackTrace();
 		}
 
-		Object3D[] obj = new Object3D[objs.size()];
-		for (int i = 0; i < objs.size(); i++) {
-			obj[i] = (Object3D) objs.elementAt(i);
-		}
-		return obj;
+		throw new IOException();
 	}
 
 	private int readByte() throws IOException {
