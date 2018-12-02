@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.zip.Inflater;
 
@@ -764,9 +765,7 @@ public class Loader {
 		int checkSum = readInt();
 
 		int read = readed + M3G_FILE_IDENTIFIER.length;
-		int size = (dis.available() != 0) ? (dis.available() + readed) : 2048;
 		while (read < totalFileSize) {
-			//while (dis.available() > 0) {
 			compressionScheme = readByte();
 			totalSectionLength = readInt();
 			uncompressedLength = readInt();
@@ -803,10 +802,20 @@ public class Loader {
 			read += totalSectionLength;
 		}
 		dis.close();
+		removeReferencedObjects();
 
 		return objs.toArray(new Object3D[0]);
 	}
 
+	private void removeReferencedObjects() {
+		Iterator<Object3D> iterator = objs.iterator();
+		while (iterator.hasNext()) {
+			Object3D object3D = iterator.next();
+			if (object3D.referenced) {
+				iterator.remove();
+			}
+		}
+	}
 
 	private Object3D[] load() throws IOException {
 		try {
@@ -916,7 +925,9 @@ public class Loader {
 	private Object getObject(int index) {
 		if (index == 0)
 			return null;
-		return objs.elementAt(index - 2);
+		Object3D object3D = objs.elementAt(index - 2);
+		object3D.referenced = true;
+		return object3D;
 	}
 
 	private void loadObject3D(Object3D object) throws IOException {

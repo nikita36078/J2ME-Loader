@@ -7,6 +7,7 @@ public abstract class Object3D {
 	protected int userID = 0;
 	protected Object userObject = null;
 	Vector animationTracks = new Vector();
+	boolean referenced = false;
 
 	void updateProperty(int property, float[] value) {
 	}
