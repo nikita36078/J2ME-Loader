@@ -1,98 +1,187 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
-public class Image2D extends Object3D {
-	//------------------------------------------------------------------
-	// Static data
-	//------------------------------------------------------------------
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Vector;
 
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.lcdui.Image;
+
+public class Image2D extends Object3D {
 	public static final int ALPHA = 96;
 	public static final int LUMINANCE = 97;
 	public static final int LUMINANCE_ALPHA = 98;
 	public static final int RGB = 99;
 	public static final int RGBA = 100;
 
-	static long tempHandle;
+	private int format;
+	private boolean isMutable;
+	private int width;
+	private int height;
+	private ByteBuffer pixels;
+	private int[] id = new int[]{0};
+	private boolean dirty = true;
+	static Vector recycledTextures = new Vector();
 
-	//------------------------------------------------------------------
-	// Constructor(s)
-	//------------------------------------------------------------------
-
-	public Image2D(int format, Object image) {
-		// If image is instance of lcdui.Image then checkAndCreate
-		// builds the image and returns the handle to native image,
-		// otherwise throws exception Done this way because class of
-		// image cannot be checked befor calling super()
-		super(Image2D.checkAndCreate(format, image));
+	@Override
+	public void finalize() {
+		if (id[0] != 0)
+			recycledTextures.add(this);
 	}
 
-	public Image2D(int format, int width, int height, byte[] image) {
-		super(createHandle(format, width, height, image));
-	}
-
-	public Image2D(int format,
-				   int width, int height,
-				   byte[] image,
-				   byte[] palette) {
-		super(createHandle(format, width, height, image, palette));
+	void releaseTexture(GL10 gl) {
+		if (id[0] != 0) {
+			gl.glDeleteTextures(1, id, 0);
+			id[0] = 0;
+		}
 	}
 
 	public Image2D(int format, int width, int height) {
-		super(createHandle(format, width, height));
+		this.isMutable = true;
+		this.format = format;
+		this.width = width;
+		this.height = height;
+
+		int bpp = getBytesPerPixel();
+
+		pixels = ByteBuffer.allocateDirect(width * height * bpp).order(ByteOrder.nativeOrder());
+		pixels.clear();
 	}
 
-	Image2D(long handle) {
-		super(handle);
+	public Image2D(int format, int width, int height, byte[] image) {
+		this.isMutable = false;
+		this.format = format;
+		this.width = width;
+		this.height = height;
+
+		int bpp = getBytesPerPixel();
+
+		if (image.length < width * height * bpp)
+			throw new IllegalArgumentException("image.length != width*height");
+
+		pixels = ByteBuffer.allocateDirect(width * height * bpp).order(ByteOrder.nativeOrder());
+		pixels.put(image, 0, width * height * bpp);
+		pixels.flip();
 	}
 
-	//------------------------------------------------------------------
-	// Public methods
-	//------------------------------------------------------------------
+	public Image2D(int format, int width, int height, byte[] image, byte[] palette) {
+		this.isMutable = false;
+		this.format = format;
+		this.width = width;
+		this.height = height;
 
-	public void set(int x, int y, int width, int height, byte[] image) {
-		if (image == null) {
-			throw new NullPointerException();
+		if (image.length < width * height)
+			throw new IllegalArgumentException("image.length != width*height");
+
+		int bytesPerPixel = getBytesPerPixel();
+		pixels = ByteBuffer.allocateDirect(width * height * bytesPerPixel).order(ByteOrder.nativeOrder());
+		for (int i = 0; i < width * height; ++i) {
+			for (int c = 0; c < bytesPerPixel; ++c) {
+				int index = ((int) image[i] & 0xFF) * bytesPerPixel + c;
+				pixels.put(palette[index]);
+			}
 		}
-		_set(handle, x, y, width, height, image);
+		pixels.flip();
 	}
 
-	public boolean isMutable() {
-		return _isMutable(handle);
+	public Image2D(int format, Object image) {
+		this.isMutable = false;
+		this.format = format;
+
+		if (image instanceof Image) {
+			loadFromImage((Image) image);
+		} else {
+			throw new IllegalArgumentException("Unrecognized image object.");
+		}
 	}
 
-	public int getFormat() {
-		return _getFormat(handle);
+	@Override
+	Object3D duplicateImpl() {
+		Image2D copy = new Image2D(format, width, height);
+		pixels.rewind();
+		copy.pixels.put(pixels);
+		copy.pixels.flip();
+		copy.isMutable = isMutable;
+		return copy;
+	}
+
+	public void set(int px, int py, int wid, int hei, byte[] image) {
+		int bpp = getBytesPerPixel();
+		if (px == 0 && py == 0 && wid == this.width && hei == this.height) {
+			pixels.rewind();
+			pixels.put(image, 0, wid * hei * bpp);
+		} else {
+			for (int y = 0; y < hei; y++) {
+				pixels.position((y + py) * this.width * bpp + px * bpp);
+				pixels.put(image, y * wid * bpp, wid * bpp);
+			}
+		}
+		pixels.rewind();
+		dirty = true;
+	}
+
+	private void loadFromImage(Image image) {
+		this.width = image.getWidth();
+		this.height = image.getHeight();
+
+		if (width == -1 || height == -1)
+			throw new IllegalArgumentException("Failed to get width/height.");
+
+		int[] packedPixels = new int[width * height];
+		image.getRGB(packedPixels, 0, width, 0, 0, width, height);
+
+		int bpp = getBytesPerPixel();
+		pixels = ByteBuffer.allocateDirect(packedPixels.length * bpp).order(ByteOrder.nativeOrder());
+
+		for (int row = 0; row < height; ++row) {
+			for (int col = 0; col < width; ++col) {
+				int packedPixel = packedPixels[row * width + col];
+				if (bpp == 1)
+					pixels.put((byte) ((packedPixel >> 24) & 0xFF));
+				else if (bpp == 2) {
+					// TODO
+				} else if (bpp >= 3) {
+					pixels.put((byte) ((packedPixel >> 16) & 0xFF));
+					pixels.put((byte) ((packedPixel >> 8) & 0xFF));
+					pixels.put((byte) ((packedPixel >> 0) & 0xFF));
+					if (bpp >= 4)
+						pixels.put((byte) ((packedPixel >> 24) & 0xFF));
+				}
+			}
+		}
+		pixels.flip();
+
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 	public int getWidth() {
-		return _getWidth(handle);
+		return width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	public int getHeight() {
-		return _getHeight(handle);
+		return height;
 	}
 
-	//------------------------------------------------------------------
-	// Private methods
-	//------------------------------------------------------------------
+	public boolean isMutable() {
+		return isMutable;
+	}
 
-	private static int getBytesPerPixel(int format) {
+	public int getFormat() {
+		return format;
+	}
+
+	ByteBuffer getPixels() {
+		return pixels;
+	}
+
+	int getBytesPerPixel() {
 		switch (format) {
 			case ALPHA:
 				return 1;
@@ -109,128 +198,32 @@ public class Image2D extends Object3D {
 		}
 	}
 
-	private static long checkAndCreate(int format, Object image) {
-		if (image == null) {
-			throw new NullPointerException();
+	int getGLFormat() {
+		switch (format) {
+			case ALPHA:
+				return GL10.GL_ALPHA;
+			case LUMINANCE:
+				return GL10.GL_LUMINANCE;
+			case LUMINANCE_ALPHA:
+				return GL10.GL_LUMINANCE_ALPHA;
+			case RGB:
+				return GL10.GL_RGB;
+			case RGBA:
+				return GL10.GL_RGBA;
+			default:
+				throw new RuntimeException("Invalid format on image");
 		}
-		if (!(image instanceof javax.microedition.lcdui.Image)) {
-			throw new IllegalArgumentException();
+	}
+
+	void setupGL(GL10 gl) {
+		if (id[0] == 0) {
+			gl.glGenTextures(1, id, 0);
+			dirty = true;
 		}
-
-		final int finalFormat = format;
-		tempHandle = 0;
-
-		// TODO
-		if (image instanceof javax.microedition.lcdui.Image) {
-			final javax.microedition.lcdui.Image cgfxImage = (javax.microedition.lcdui.Image) image;
-
-			int bpp = getBytesPerPixel(finalFormat);
-			int[] argbArr = new int[cgfxImage.getWidth() * cgfxImage.getHeight()];
-			final byte[] byteArr = new byte[cgfxImage.getWidth() * cgfxImage.getHeight() * bpp];
-			int index = 0;
-
-			cgfxImage.getRGB(argbArr, 0, cgfxImage.getWidth(), 0, 0, cgfxImage.getWidth(), cgfxImage.getHeight());
-
-			for (int row = 0; row < cgfxImage.getHeight(); ++row) {
-				for (int col = 0; col < cgfxImage.getWidth(); ++col) {
-					int packedPixel = argbArr[row * cgfxImage.getWidth() + col];
-					if (bpp == 1)
-						byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
-					else if (bpp == 2) {
-						// TODO
-					} else if (bpp >= 3) {
-						byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
-						byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
-						byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
-						if (bpp >= 4)
-							byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
-					}
-				}
-			}
-
-			// excute in UI thread
-			Platform.executeInUIThread(
-					new M3gRunnable() {
-						@Override
-						void doRun() {
-							tempHandle = createHandle(finalFormat, cgfxImage.getWidth(), cgfxImage.getHeight(), byteArr);
-						}
-					});
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, id[0]);
+		if (dirty) {
+			gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, getGLFormat(), getWidth(), getHeight(), 0, getGLFormat(), GL10.GL_UNSIGNED_BYTE, getPixels());
+			dirty = false;
 		}
-		return tempHandle;
 	}
-
-	//Platform.heuristicGC();
-	//ToolkitInvoker invoker = ToolkitInvoker.getToolkitInvoker();
-
-	// Decide if trueAlpha
-	//Image i = (Image)image;
-	//boolean trueAlpha = !(i.isMutable() && format == ALPHA);
-
-	//Platform.sync((Image) image);
-
-//        Platform.getUIThread().syncExec(
-//                    new Runnable() {
-//                        public void run() {
-//                                               tempHandle = _ctorImage(/*Interface.getEventSourceHandle(),*/ Interface.getHandle(), finalFormat, /*invoker.imageGetHandle(image)*/ 5);
-//                                          }
-//                                  });
-//          return tempHandle;
-
-
-	private static long createHandle(int format, int width, int height, byte[] image) {
-		Platform.heuristicGC();
-		return _ctorSizePixels(Interface.getHandle(),
-				format,
-				width, height,
-				image);
-	}
-
-	private static long createHandle(int format,
-									int width, int height,
-									byte[] image,
-									byte[] palette) {
-		Platform.heuristicGC();
-		return _ctorSizePixelsPalette(Interface.getHandle(),
-				format,
-				width, height,
-				image, palette);
-	}
-
-	private static long createHandle(int format, int width, int height) {
-		Platform.heuristicGC();
-		return _ctorSize(Interface.getHandle(), format, width, height);
-	}
-
-	// Native methods
-	private native static long _ctorImage(/*int eventSourceHandle,*/
-			long hInterface,
-			int format,
-			long imageHandle);
-
-	private native static long _ctorSizePixels(long hInterface,
-											  int format,
-											  int width, int height,
-											  byte[] image);
-
-	private native static long _ctorSizePixelsPalette(long hInterface,
-													 int format,
-													 int width, int height,
-													 byte[] image,
-													 byte[] palette);
-
-	private native static long _ctorSize(long hInterface,
-										int format,
-										int width, int height);
-
-	private native static void _set(long handle, int x, int y, int width,
-									int height, byte[] image);
-
-	private native static boolean _isMutable(long handle);
-
-	private native static int _getFormat(long handle);
-
-	private native static int _getWidth(long handle);
-
-	private native static int _getHeight(long handle);
 }

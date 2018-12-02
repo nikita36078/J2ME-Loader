@@ -1,105 +1,94 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
 public class AnimationController extends Object3D {
-	//------------------------------------------------------------------
-	// Constructor
-	//------------------------------------------------------------------
 
-	public AnimationController() {
-		super(_ctor(Interface.getHandle()));
+	private int activationTime = 0;
+	private int deactivationTime = 0;
+	private float speed = 1.0f;
+	private int refWorldTime = 0;
+	private float refSequenceTime = 0;
+	private float weight = 1.0f;
+
+	@Override
+	Object3D duplicateImpl() {
+		AnimationController copy = new AnimationController();
+		copy.activationTime = activationTime;
+		copy.deactivationTime = deactivationTime;
+		copy.weight = weight;
+		copy.speed = speed;
+		copy.refWorldTime = refWorldTime;
+		copy.refSequenceTime = refSequenceTime;
+		return copy;
 	}
 
-	/**
-	 */
-	AnimationController(long handle) {
-		super(handle);
+	int timeToActivation(int worldTime) {
+		if (worldTime < activationTime)
+			return activationTime - worldTime;
+		else if (worldTime < deactivationTime)
+			return 0;
+
+		return 0x7FFFFFFF;
 	}
 
-	//------------------------------------------------------------------
-	// Public methods
-	//------------------------------------------------------------------
+	int timeToDeactivation(int worldTime) {
+		if (worldTime < deactivationTime)
+			return deactivationTime - worldTime;
+		return 0x7FFFFFFF;
+	}
 
-	public void setActiveInterval(int worldTimeMin, int worldTimeMax) {
-		_setActiveInterval(handle, worldTimeMin, worldTimeMax);
+	boolean isActive(int worldTime) {
+		if (activationTime == deactivationTime)
+			return true;
+		return (worldTime >= activationTime && worldTime < deactivationTime);
+	}
+
+	public void setActiveInterval(int start, int end) {
+		if (start > end)
+			throw new IllegalArgumentException("Start time must be inferior to end time");
+
+		activationTime = start;
+		deactivationTime = end;
 	}
 
 	public int getActiveIntervalStart() {
-		return _getActiveIntervalStart(handle);
+		return activationTime;
 	}
 
 	public int getActiveIntervalEnd() {
-		return _getActiveIntervalEnd(handle);
+		return deactivationTime;
 	}
 
-	public void setSpeed(float factor, int worldTime) {
-		_setSpeed(handle, factor, worldTime);
+	public void setSpeed(float speed, int worldTime) {
+		this.refSequenceTime = getPosition(worldTime);
+		this.refWorldTime = worldTime;
+		this.speed = speed;
 	}
 
 	public float getSpeed() {
-		return _getSpeed(handle);
+		return speed;
 	}
 
-	public void setPosition(float time, int worldTime) {
-		_setPosition(handle, time, worldTime);
+	public void setPosition(float sequenceTime, int worldTime) {
+		this.refSequenceTime = sequenceTime;
+		this.refWorldTime = worldTime;
 	}
 
 	public float getPosition(int worldTime) {
-		return _getPosition(handle, worldTime);
+		return (refSequenceTime + (speed * (float) (worldTime - refWorldTime)));
+	}
+
+	public int getRefWorldTime() {
+		return refWorldTime;
 	}
 
 	public void setWeight(float weight) {
-		_setWeight(handle, weight);
+		if (weight < 0)
+			throw new IllegalArgumentException("Weight must be positive or zero");
+		this.weight = weight;
 	}
 
 	public float getWeight() {
-		return _getWeight(handle);
+		return weight;
 	}
-
-	// M3G maintenance version 1.1
-	public int getRefWorldTime() {
-		return _getRefWorldTime(handle);
-	}
-
-
-	// Native methods
-	private native static long _ctor(long hInterface);
-
-	private native static void _setActiveInterval(long handle, int worldTimeMin, int worldTimeMax);
-
-	private native static int _getActiveIntervalStart(long handle);
-
-	private native static int _getActiveIntervalEnd(long handle);
-
-	private native static void _setSpeed(long handle, float factor, int worldTime);
-
-	private native static float _getSpeed(long handle);
-
-	private native static void _setPosition(long handle, float time, int worldTime);
-
-	private native static float _getPosition(long handle, int worldTime);
-
-	private native static void _setWeight(long handle, float weight);
-
-	private native static float _getWeight(long handle);
-
-	// M3G maintenance version 1.1
-	private native static int _getRefWorldTime(long handle);
 
 }

@@ -1,189 +1,93 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
 public class SkinnedMesh extends Mesh {
-	//------------------------------------------------------------------
-	// Instance data
-	//------------------------------------------------------------------
 
-	private Group skeleton;
+	Group skeleton;
 
-	static private IndexBuffer[] tempTrianglesArray;
-	static private Appearance[] tempAppearanceArray;
-
-	static private IndexBuffer tempTriangles;
-	static private Appearance tempAppearance;
-
-
-	//------------------------------------------------------------------
-	// Constructor(s)
-	//------------------------------------------------------------------
-
-	public SkinnedMesh(VertexBuffer vertices,
-					   IndexBuffer[] triangles,
-					   Appearance[] appearances,
-					   Group skeleton) {
-		super(createHandle(vertices, triangles, appearances, skeleton));
-		skeleton.setParent(this);
+	public SkinnedMesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances, Group skeleton) {
+		super(vertices, submeshes, appearances);
+		checkSkeleton(skeleton);
 		this.skeleton = skeleton;
 	}
 
-	public SkinnedMesh(VertexBuffer vertices,
-					   IndexBuffer triangles,
-					   Appearance appearance,
-					   Group skeleton) {
-		super(createHandle(vertices, triangles, appearance, skeleton));
-		skeleton.setParent(this);
+	public SkinnedMesh(VertexBuffer vertices, IndexBuffer submeshes, Appearance appearances, Group skeleton) {
+		super(vertices, submeshes, appearances);
+		checkSkeleton(skeleton);
 		this.skeleton = skeleton;
 	}
 
-	/**
-	 */
-	SkinnedMesh(long handle) {
-		super(handle);
-		skeleton = (Group) getInstance(_getSkeleton(handle));
+	private SkinnedMesh() {
 	}
 
-	//------------------------------------------------------------------
-	// Public methods
-	//------------------------------------------------------------------
+	@Override
+	Object3D duplicateImpl() {
+		Group skeleton = (Group) this.skeleton.duplicate();
+		SkinnedMesh copy = new SkinnedMesh();
+		super.duplicate(copy);
+		copy.skeleton = skeleton;
+		return copy;
+	}
 
-	public void addTransform(Node bone,
-							 int weight,
-							 int firstVertex,
-							 int numVertices) {
-		_addTransform(handle,
-				bone != null ? bone.handle : 0,
-				weight,
-				firstVertex,
-				numVertices);
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		if (skeleton != null) {
+			if (references != null)
+				references[num] = skeleton;
+			num++;
+		}
+		return num;
+	}
+
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+
+		if ((found == null) && (skeleton != null))
+			found = skeleton.findID(userID);
+		return found;
+	}
+
+	@Override
+	int applyAnimation(int time) {
+		int validity = super.applyAnimation(time);
+
+		if (validity > 0) {
+			int validity2 = skeleton.applyAnimation(time);
+			return Math.min(validity, validity2);
+		}
+		return 0;
+	}
+
+	public void addTransform(Node bone, int weight, int firstVertex, int numVertices) {
+		if (bone == null)
+			throw new NullPointerException();
+		if ((weight <= 0) || (numVertices <= 0))
+			throw new IllegalArgumentException();
+		if ((firstVertex < 0) || (firstVertex + numVertices > 65535))
+			throw new IndexOutOfBoundsException();
+	}
+
+	public void getBoneTransform(Node bone, Transform transform) {
+		if ((bone == null) || (transform == null))
+			throw new NullPointerException();
+	}
+
+	public int getBoneVertices(Node bone, int[] indices, float[] weights) {
+		if (bone == null)
+			throw new NullPointerException();
+		return 0;
 	}
 
 	public Group getSkeleton() {
 		return skeleton;
 	}
 
-	// M3G 1.1 Maintenance release getters
-
-	public void getBoneTransform(Node bone, Transform transform) {
-		_getBoneTransform(handle, bone.handle, transform.matrix);
-	}
-
-	public int getBoneVertices(Node bone, int[] indices, float[] weights) {
-		return _getBoneVertices(handle, bone.handle, indices, weights);
-	}
-
-	//------------------------------------------------------------------
-	// Private methods
-	//------------------------------------------------------------------
-
-	static long createHandle(VertexBuffer vertices,
-							IndexBuffer[] triangles,
-							Appearance[] appearances,
-							Group skeleton) {
-
-		tempTrianglesArray = triangles;
-		tempAppearanceArray = appearances;
-
-		verifyParams(vertices, triangles, appearances);
-
-		if (skeleton == null) {
+	private void checkSkeleton(Group skeleton) {
+		if (skeleton == null)
 			throw new NullPointerException();
-		}
-
-		if (skeleton.getParent() != null || skeleton instanceof World) {
-			throw new IllegalArgumentException();
-		}
-
-		long[] hTri = new long[triangles.length];
-		long[] hApp = new long[triangles.length];
-		for (int i = 0; i < triangles.length; i++) {
-			hTri[i] = triangles[i].handle;
-			if (appearances != null && i < appearances.length) {
-				hApp[i] = appearances[i] != null ? appearances[i].handle : 0;
-			}
-		}
-		long ret = _ctor(Interface.getHandle(),
-				vertices.handle,
-				hTri,
-				hApp,
-				skeleton.handle);
-
-		tempTrianglesArray = triangles;
-		tempAppearanceArray = appearances;
-
-		return ret;
+		if (skeleton.getParent() != null)
+			throw new IllegalArgumentException("Skeleton already has a parent");
 	}
-
-	static long createHandle(VertexBuffer vertices,
-							IndexBuffer triangles,
-							Appearance appearance,
-							Group skeleton) {
-
-		tempTriangles = triangles;
-		tempAppearance = appearance;
-
-		verifyParams(vertices, triangles);
-
-		if (skeleton == null) {
-			throw new NullPointerException();
-		}
-		if (skeleton.getParent() != null || skeleton instanceof World) {
-			throw new IllegalArgumentException();
-		}
-		long[] hTri = {triangles.handle};
-		long[] hApp = {appearance != null ? appearance.handle : 0};
-		long ret = _ctor(Interface.getHandle(),
-				vertices.handle,
-				hTri,
-				hApp,
-				skeleton.handle);
-
-		tempTriangles = null;
-		tempAppearance = null;
-
-		return ret;
-	}
-
-	// Native methods
-	private native static long _ctor(long hInstance,
-									long hVertices,
-									long[] hTriangles,
-									long[] hAppearances,
-									long hSkeleton);
-
-	private native static void _addTransform(long handle,
-											 long hBone,
-											 int weight,
-											 int firstVertex,
-											 int numVertices);
-
-	private native static long _getSkeleton(long handle);
-
-	// M3G 1.1 Maintenance release getters
-	private native static void _getBoneTransform(long handle,
-												 long hBone,
-												 byte[] transform);
-
-	private native static int _getBoneVertices(long handle,
-											   long hBone,
-											   int[] indices,
-											   float[] weights);
 
 }

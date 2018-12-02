@@ -1,31 +1,23 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+
 public abstract class IndexBuffer extends Object3D {
-	/**
-	 * Only a package private constructor exists for this class.
-	 */
-	IndexBuffer(long handle) {
-		super(handle);
-	}
+	protected IntBuffer buffer = null;
+	int indexCount;
 
 	public abstract int getIndexCount();
 
 	public abstract void getIndices(int[] indices);
+
+	protected void allocate(int numElements) {
+		ByteBuffer buf = ByteBuffer.allocateDirect(numElements * 4).order(ByteOrder.nativeOrder());
+		buffer = buf.asIntBuffer();
+	}
+
+	IntBuffer getBuffer() {
+		return buffer;
+	}
 }

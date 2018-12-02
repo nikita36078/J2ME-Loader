@@ -1,134 +1,110 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class PolygonMode extends Object3D {
 
-	//------------------------------------------------------------------
-	// Static data
-	//------------------------------------------------------------------
+	public static final int CULL_BACK = 160;
+	public static final int CULL_FRONT = 161;
+	public static final int CULL_NONE = 162;
+	public static final int SHADE_FLAT = 164;
+	public static final int SHADE_SMOOTH = 165;
+	public static final int WINDING_CCW = 168;
+	public static final int WINDING_CW = 169;
 
-	public static final int CULL_BACK = 0xA0;
-	public static final int CULL_FRONT = CULL_BACK + 1;
-	public static final int CULL_NONE = CULL_FRONT + 1;
-	public static final int SHADE_FLAT = 0xA4;
-	public static final int SHADE_SMOOTH = SHADE_FLAT + 1;
-	public static final int WINDING_CCW = 0xA8;
-	public static final int WINDING_CW = WINDING_CCW + 1;
+	private int culling = CULL_BACK;
+	private int shading = SHADE_SMOOTH;
+	private int winding = WINDING_CCW;
+	private boolean twoSidedLightingEnabled = false;
+	private boolean localCameraLightingEnabled = false;
+	private boolean perspectiveCorrectionEnabled = true;
 
-	//------------------------------------------------------------------
-	// Constructor(s)
-	//------------------------------------------------------------------
-
-	public PolygonMode() {
-		super(_ctor(Interface.getHandle()));
+	@Override
+	Object3D duplicateImpl() {
+		PolygonMode copy = new PolygonMode();
+		copy.culling = culling;
+		copy.shading = shading;
+		copy.winding = winding;
+		copy.twoSidedLightingEnabled = twoSidedLightingEnabled;
+		copy.localCameraLightingEnabled = localCameraLightingEnabled;
+		copy.perspectiveCorrectionEnabled = perspectiveCorrectionEnabled;
+		return copy;
 	}
 
-	/**
-	 */
-	PolygonMode(long handle) {
-		super(handle);
-	}
-
-	//------------------------------------------------------------------
-	// Public methods
-	//------------------------------------------------------------------
-
-	public void setCulling(int mode) {
-		_setCulling(handle, mode);
+	public void setCulling(int culling) {
+		this.culling = culling;
 	}
 
 	public int getCulling() {
-		return _getCulling(handle);
+		return culling;
 	}
 
-	public void setWinding(int mode) {
-		_setWinding(handle, mode);
-	}
-
-	public int getWinding() {
-		return _getWinding(handle);
-	}
-
-	public void setShading(int mode) {
-		_setShading(handle, mode);
+	public void setShading(int shading) {
+		this.shading = shading;
 	}
 
 	public int getShading() {
-		return _getShading(handle);
+		return shading;
+	}
+
+	public void setWinding(int winding) {
+		this.winding = winding;
+	}
+
+	public int getWinding() {
+		return winding;
 	}
 
 	public void setTwoSidedLightingEnable(boolean enable) {
-		_setTwoSidedLightingEnable(handle, enable);
+		this.twoSidedLightingEnabled = enable;
 	}
 
 	public boolean isTwoSidedLightingEnabled() {
-		return _isTwoSidedLightingEnabled(handle);
+		return twoSidedLightingEnabled;
 	}
 
 	public void setLocalCameraLightingEnable(boolean enable) {
-		_setLocalCameraLightingEnable(handle, enable);
+		this.localCameraLightingEnabled = enable;
+	}
+
+	public boolean isLocalCameraLightingEnabled() {
+		return localCameraLightingEnabled;
 	}
 
 	public void setPerspectiveCorrectionEnable(boolean enable) {
-		_setPerspectiveCorrectionEnable(handle, enable);
-	}
-
-	// M3G 1.1 Maintenance release getters
-	public boolean isLocalCameraLightingEnabled() {
-		return _isLocalCameraLightingEnabled(handle);
+		this.perspectiveCorrectionEnabled = enable;
 	}
 
 	public boolean isPerspectiveCorrectionEnabled() {
-		return _isPerspectiveCorrectionEnabled(handle);
+		return perspectiveCorrectionEnabled;
 	}
 
+	void setupGL(GL10 gl) {
+		// Setup culling
+		if (culling == CULL_NONE)
+			gl.glDisable(GL10.GL_CULL_FACE);
+		else {
+			gl.glCullFace((culling == CULL_BACK) ? GL10.GL_BACK : GL10.GL_FRONT);
+			gl.glEnable(GL10.GL_CULL_FACE);
+		}
 
-	//------------------------------------------------------------------
-	// Private methods
-	//------------------------------------------------------------------
+		// Setup two sided lighting
+		gl.glLightModelf(GL10.GL_LIGHT_MODEL_TWO_SIDE, twoSidedLightingEnabled ? GL10.GL_TRUE : GL10.GL_FALSE);
 
-	private native static long _ctor(long hInterface);
+		// Setup shading
+		gl.glShadeModel((shading == SHADE_FLAT) ? GL10.GL_FLAT : GL10.GL_SMOOTH);
 
-	private native static void _setLocalCameraLightingEnable(long handle, boolean enable);
+		// Setup winding
+		gl.glFrontFace((winding == WINDING_CW) ? GL10.GL_CW : GL10.GL_CCW);
 
-	private native static void _setPerspectiveCorrectionEnable(long handle, boolean enable);
+		// Setup perspective correction
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, perspectiveCorrectionEnabled ? GL10.GL_NICEST : GL10.GL_FASTEST);
+	}
 
-	private native static void _setCulling(long handle, int mode);
-
-	private native static int _getCulling(long handle);
-
-	private native static void _setWinding(long handle, int mode);
-
-	private native static int _getWinding(long handle);
-
-	private native static void _setShading(long handle, int mode);
-
-	private native static int _getShading(long handle);
-
-	private native static void _setTwoSidedLightingEnable(long handle, boolean enable);
-
-	private native static boolean _isTwoSidedLightingEnabled(long handle);
-
-	// M3G 1.1 Maintenance release getters
-	private native static boolean _isLocalCameraLightingEnabled(long handle);
-
-	private native static boolean _isPerspectiveCorrectionEnabled(long handle);
-
+	int getLightTarget() {
+		if (isTwoSidedLightingEnabled())
+			return GL10.GL_FRONT_AND_BACK;
+		else
+			return GL10.GL_FRONT;
+	}
 }
-

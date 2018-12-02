@@ -1,257 +1,107 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.zip.Inflater;
 
-import javax.microedition.io.Connector;
-import javax.microedition.io.HttpConnection;
-import javax.microedition.io.InputConnection;
 import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;
 
 public class Loader {
+	private DataInputStream dis;
+	private Vector objs;
+	private String resName;
+	private int readed = 0;
+
 	// M3G
-	static final byte[] M3G_FILE_IDENTIFIER =
+	private static final byte[] M3G_FILE_IDENTIFIER =
 			{
 					-85, 74, 83, 82, 49, 56, 52, -69, 13, 10, 26, 10
 			};
 	// PNG
-	static final byte[] PNG_FILE_IDENTIFIER =
+	private static final byte[] PNG_FILE_IDENTIFIER =
 			{
 					-119, 80, 78, 71, 13, 10, 26, 10
 			};
-	static final int PNG_IHDR = ((73 << 24) + (72 << 16) + (68 << 8) + 82);
-	static final int PNG_tRNS = ((116 << 24) + (82 << 16) + (78 << 8) + 83);
-	static final int PNG_IDAT = ((73 << 24) + (68 << 16) + (65 << 8) + 84);
 
 	// JPEG
-	static final byte[] JPEG_FILE_IDENTIFIER =
+	private static final byte[] JPEG_FILE_IDENTIFIER =
 			{
 					-1, -40
 			};
-	static final int JPEG_JFIF = ((74 << 24) + (70 << 16) + (73 << 8) + 70);
-	// Bytes before colour info in a frame header 'SOFn':
-	// length (2 bytes), precision (1 byte), image height & width (4 bytes)
-	static final int JPEG_SOFn_DELTA = 7;
-	static final int JPEG_INVALID_COLOUR_FORMAT = -1;
 
-	// File identifier types
 	private static final int INVALID_HEADER_TYPE = -1;
 	private static final int M3G_TYPE = 0;
 	private static final int PNG_TYPE = 1;
 	private static final int JPEG_TYPE = 2;
 
-	// Misc.
-	private static final int MAX_IDENTIFIER_LENGTH = M3G_FILE_IDENTIFIER.length;
+	private static final int PNG_IHDR = ((73 << 24) + (72 << 16) + (68 << 8) + 82);
+	private static final int PNG_tRNS = ((116 << 24) + (82 << 16) + (78 << 8) + 83);
+	private static final int PNG_IDAT = ((73 << 24) + (68 << 16) + (65 << 8) + 84);
 
-	// Initial buffer length for the header
-	private static final int AVG_HEADER_SEC_LENGTH = 64;
+	private static final int JPEG_JFIF = ((74 << 24) + (70 << 16) + (73 << 8) + 70);
+	private static final int JPEG_SOFn_DELTA = 7;
+	private static final int JPEG_INVALID_COLOUR_FORMAT = -1;
 
-	// Initial buffer length for the xref section
-	private static final int AVG_XREF_SEC_LENGTH = 128;
-
-	// Instance specific
-	long handle;
-
-	private Vector iLoadedObjects = new Vector();
-	private Vector iFileHistory = new Vector();
-	private String iResourceName = null;
-	private String iParentResourceName = null;
-
-	private int iTotalFileSize = 0;
-	private int iBytesRead = M3G_FILE_IDENTIFIER.length;
-
-	private byte[] iStreamData = null;
-	private int iStreamOffset = 0;
-
-	private Interface iInterface;
-
-	//#ifdef RD_JAVA_OMJ
-	@Override
-	protected void finalize() {
-		doFinalize();
-	}
-//#endif // RD_JAVA_OMJ
-
-	/**
-	 * Default ctor
-	 */
-	private Loader() {
-		iInterface = Interface.getInstance();
+	private Loader(byte[] data, int offset) throws IOException {
+		dis = new DataInputStream(new ByteArrayInputStream(data));
+		if (offset > 0)
+			dis.skip(offset);
 	}
 
-	/**
-	 * Ctor
-	 *
-	 * @param aFileHistory        File storage
-	 * @param aParentResourceName Resource name
-	 */
-	private Loader(Vector aFileHistory, String aParentResourceName) {
-		iParentResourceName = aParentResourceName;
-		iFileHistory = aFileHistory;
-		iInterface = Interface.getInstance();
-	}
-
-	public static Object3D[] load(String name) throws IOException {
-		if (name == null) {
-			throw new NullPointerException();
-		}
-
+	public static Object3D[] load(byte[] data, int offset) {
 		try {
-			return (new Loader()).loadFromStream(name);
-		} catch (SecurityException e) {
-			throw e;
-		} catch (IOException e) {
-			throw e;
+			return new Loader(data, offset).load();
 		} catch (Exception e) {
-			throw new IOException("Load error " + e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public static Object3D[] load(byte[] data, int offset) throws IOException {
-		if (data == null) {
-			throw new NullPointerException();
+	private Loader(String name) throws IOException {
+		InputStream is;
+		if (name.startsWith("/")) {
+			is = ContextHolder.getResourceAsStream(Loader.class, name);
+		} else {
+			// TODO
+			is = null;
 		}
 
-		if (offset < 0 || offset >= data.length) {
-			throw new IndexOutOfBoundsException();
+		if (is == null) {
+			throw new IOException("Can't load " + name);
 		}
+		this.resName = name;
+		dis = new DataInputStream(new BufferedInputStream(is));
+	}
+
+	public static Object3D[] load(String name) {
 		try {
-			return (new Loader()).loadFromByteArray(data, offset);
-		} catch (SecurityException e) {
-			throw e;
-		} catch (IOException e) {
-			throw e;
+			return new Loader(name).load();
 		} catch (Exception e) {
-			throw new IOException("Load error " + e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	/**
-	 * @see javax.microedition.m3g.Loader#load(String)
-	 */
-	private Object3D[] loadFromStream(String aName) throws IOException {
-		if (aName == null) {
-			throw new NullPointerException();
-		}
-
-		if (inFileHistory(aName)) {
-			throw new IOException("Reference loop detected.");
-		}
-		iResourceName = aName;
-		iFileHistory.addElement(aName);
-		PeekInputStream stream = new PeekInputStream(
-				getInputStream(aName), MAX_IDENTIFIER_LENGTH);
-		// png, jpeg or m3g
-		int type = getIdentifierType(stream);
-		stream.rewind();
-		iStreamData = null;
-		iStreamOffset = 0;
-
-		Object3D[] objects;
-		try {
-			objects = doLoad(stream, type);
-		} finally {
-			try {
-				stream.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		// Finally, remove file from history
-		iFileHistory.removeElement(aName);
-		return objects;
-	}
-
-	/**
-	 * @see javax.microedition.m3g.Loader#load(byte[], int)
-	 */
-	private Object3D[] loadFromByteArray(byte[] aData, int aOffset) throws IOException {
-		if (aData == null) {
-			throw new NullPointerException("Resource byte array is null.");
-		}
-		int type = getIdentifierType(aData, aOffset);
-		ByteArrayInputStream stream =
-				new ByteArrayInputStream(aData, aOffset, aData.length - aOffset);
-		iStreamData = aData;
-		iStreamOffset = aOffset;
-		iResourceName = "ByteArray";
-
-		Object3D[] objects;
-		try {
-			objects = doLoad(stream, type);
-		} finally {
-			try {
-				stream.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return objects;
-	}
-
-	/**
-	 * Dispatcher
-	 *
-	 * @param aStream Source stream
-	 * @param aType   Resource type
-	 */
-	private Object3D[] doLoad(InputStream aStream, int aType) throws IOException {
-		switch (aType) {
-			case M3G_TYPE:
-				return loadM3G(aStream);
-			case PNG_TYPE:
-				return loadPNG(aStream);
-			case JPEG_TYPE:
-				return loadJPEG(aStream);
-		}
-		throw new IOException("File not recognized.");
-	}
-
-	/**
-	 * PNG resource loader
-	 *
-	 * @param aStream Resource stream
-	 * @return An array of newly created Object3D instances
-	 */
-	private Object3D[] loadPNG(InputStream aStream) throws IOException {
+	private Object3D[] loadPNG() throws IOException {
 		int format = Image2D.RGB;
-		DataInputStream in = new DataInputStream(aStream);
-
-		// Scan chuncs that have effect on Image2D format
-		in.skip(PNG_FILE_IDENTIFIER.length);
-
+		dis.mark(Integer.MAX_VALUE);
+		// Scan chunks that have effect on Image2D format
+		dis.skip(PNG_FILE_IDENTIFIER.length);
 		try {
 			while (true) {
-				int length = in.readInt();
-				int type = in.readInt();
+				int length = dis.readInt();
+				int type = dis.readInt();
 				// IHDR
 				if (type == PNG_IHDR) {
-					in.skip(9);
-					int colourType = in.readUnsignedByte();
+					dis.skip(9);
+					int colourType = dis.readUnsignedByte();
 					length -= 10;
-
 					switch (colourType) {
 						case 0:
 							format = Image2D.LUMINANCE;
@@ -285,62 +135,30 @@ public class Loader {
 				if (type == PNG_IDAT) {
 					break;
 				}
-
-				in.skip(length + 4);
+				dis.skip(length + 4);
 			}
 		}
 		// EOF
 		catch (Exception e) {
 		}
-		// Close the data stream
-		try {
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		dis.reset();
 		return buildImage2D(format);
 	}
 
-	/**
-	 * JPEG (with the same detailed definitions about the JPEG image format as defined in the
-	 * JSR 118 MIDP 2.1 specification for LCDUI) MUST be supported by compliant
-	 * implementations as a 2D bitmap image format for the Image2D class using the
-	 * javax.microedition.m3g.Loader class, and for M3G content files referencing bitmap images.
-	 * For colour JPEG images, the pixel format of the returned Image2D object MUST be
-	 * Image2D.RGB and for monochrome JPEG images, the pixel format MUST be
-	 * Image2D.LUMINANCE.
-	 * <p>
-	 * JPEG marker: A two-byte code in which the first byte is 0xFF and the second
-	 * byte is a value between 1 and 0xFE.
-	 * <p>
-	 * A JFIF file uses APP0 (0xe0) marker segments and constrains certain parameters in the frame.
-	 * <p>
-	 * A frame header:
-	 * - 0xff, 'SOFn'
-	 * - length (2 bytes, Hi-Lo)
-	 * - data precision (1 byte)
-	 * - image height (2 bytes, Hi-Lo)
-	 * - image width (2 bytes, Hi-Lo)
-	 * - number of components (1 byte): 1 = grey scaled, 3 = color YCbCr or YIQ, 4 = color CMYK)
-	 *
-	 * @param aStream Resource stream
-	 * @return An array of newly created Object3D instances
-	 */
-	private Object3D[] loadJPEG(InputStream aStream) throws IOException {
+	private Object3D[] loadJPEG() throws IOException {
 		int format = JPEG_INVALID_COLOUR_FORMAT;
-		DataInputStream in = new DataInputStream(aStream);
+		dis.mark(Integer.MAX_VALUE);
 		// Skip file identifier
-		in.skip(JPEG_FILE_IDENTIFIER.length);
+		dis.skip(JPEG_FILE_IDENTIFIER.length);
 		try {
 			int marker;
 			do {
 				// Find marker
-				while (in.readUnsignedByte() != 0xff) ;
+				while (dis.readUnsignedByte() != 0xff) ;
 				do {
-					marker = in.readUnsignedByte();
+					marker = dis.readUnsignedByte();
 				}
 				while (marker == 0xff);
-
 				// Parse marker
 				switch (marker) {
 					// 'SOFn' (Start Of Frame n)
@@ -358,8 +176,8 @@ public class Loader {
 					case 0xCE:
 					case 0xCF:
 						// Skip length(2), precicion(1), width(2), height(2)
-						in.skip(JPEG_SOFn_DELTA);
-						switch (in.readUnsignedByte()) {
+						dis.skip(JPEG_SOFn_DELTA);
+						switch (dis.readUnsignedByte()) {
 							case 1:
 								format = Image2D.LUMINANCE;
 								break;
@@ -372,360 +190,40 @@ public class Loader {
 						break;
 					// APP0 (0xe0) marker segments and constrains certain parameters in the frame.
 					case 0xe0:
-						int length = in.readUnsignedShort();
-						if (JPEG_JFIF != in.readInt()) {
+						int length = dis.readUnsignedShort();
+						if (JPEG_JFIF != dis.readInt()) {
 							throw new IOException("Not a valid JPG file.");
 						}
-						in.skip(length - 4 - 2);
+						dis.skip(length - 4 - 2);
 						break;
 					default:
 						// Skip variable data
-						in.skip(in.readUnsignedShort() - 2);
+						dis.skip(dis.readUnsignedShort() - 2);
 						break;
 				}
 			}
 			while (format == JPEG_INVALID_COLOUR_FORMAT);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		// Close the data stream
-		try {
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		dis.reset();
 		return buildImage2D(format);
 	}
 
-	/**
-	 * Image2D builder
-	 *
-	 * @param aColourFormat Colour format
-	 * @return An array of newly created Object3D instances
-	 */
 	private Object3D[] buildImage2D(int aColourFormat) throws IOException {
-		InputStream stream;
-		if (iStreamData == null) {
-			stream = getInputStream(iResourceName);
-		} else {
-			stream = new ByteArrayInputStream(iStreamData, iStreamOffset, iStreamData.length - iStreamOffset);
-		}
 		// Create an image object
 		Image2D i2d;
 		try {
-			i2d = new Image2D(aColourFormat, Image.createImage(stream));
+			i2d = new Image2D(aColourFormat, Image.createImage(dis));
 		} finally {
 			try {
-				stream.close();
+				dis.close();
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 		return new Object3D[]{i2d};
 	}
 
-
-	/**
-	 * M3G resource loader
-	 *
-	 * @param aStream Resource stream
-	 * @return An array of newly created Object3D instances
-	 */
-	private Object3D[] loadM3G(InputStream aStream) throws IOException {
-		aStream.skip(M3G_FILE_IDENTIFIER.length);
-		if (aStream instanceof PeekInputStream)
-			((PeekInputStream) aStream).increasePeekBuffer(AVG_HEADER_SEC_LENGTH);
-
-		// Read header
-		int compressionScheme = readByte(aStream);
-		int totalSectionLength = readUInt32(aStream);
-		if (aStream instanceof PeekInputStream && totalSectionLength > AVG_HEADER_SEC_LENGTH)
-			((PeekInputStream) aStream).increasePeekBuffer(totalSectionLength - AVG_HEADER_SEC_LENGTH);
-		int uncompressedLength = readUInt32(aStream);
-
-		int objectType = readByte(aStream);
-		int length = readUInt32(aStream);
-
-		byte vMajor = (byte) readByte(aStream);
-		byte vMinor = (byte) readByte(aStream);
-		boolean externalLinks = readBoolean(aStream);
-		iTotalFileSize = readUInt32(aStream);
-		int approximateContentSize = readUInt32(aStream);
-		String authoringField = readString(aStream);
-
-		int checksum = readUInt32(aStream);
-
-		/* Create and register a new native Loader */
-		handle = _ctor(Interface.getHandle());
-		Interface.register(this);
-
-		if (externalLinks) {
-			if (aStream instanceof PeekInputStream)
-				((PeekInputStream) aStream).increasePeekBuffer(AVG_XREF_SEC_LENGTH);
-			loadExternalRefs(aStream);
-			if (iLoadedObjects.size() > 0)   // Load and set external references
-			{
-				long[] xRef = new long[iLoadedObjects.size()];
-				for (int i = 0; i < xRef.length; i++)
-					xRef[i] = ((Object3D) iLoadedObjects.elementAt(i)).handle;
-				_setExternalReferences(handle, xRef);
-			} else {
-				throw new IOException("No external sections [" + iResourceName + "].");
-			}
-		}
-
-		// Reset stream
-		if (aStream instanceof PeekInputStream)
-			((PeekInputStream) aStream).rewind();
-		else if (aStream.markSupported())
-			aStream.reset(); // Reset is supported in ByteArrayInputStreams
-
-		int read = 0;
-		int size = aStream.available();
-
-		if (size == 0) {
-			size = 2048;    // start with some size
-		}
-
-		while (read < iTotalFileSize) {
-			if (read + size > iTotalFileSize) {
-				size = iTotalFileSize - read;
-			}
-			// Use native loader to load objects
-			byte[] data = new byte[size];
-			if (aStream.read(data) == -1) {
-				break;
-			}
-			read += size;
-
-			size = _decodeData(handle, 0, data);
-			if (size > 0 && aStream.available() > size) {
-				size = aStream.available();
-			}
-		}
-		if (size != 0 || read != iTotalFileSize) {
-			throw new IOException("Invalid file length [" + iResourceName + "].");
-		}
-
-		Object3D[] objects = null;
-		int num = _getLoadedObjects(handle, null);
-		if (num > 0) {
-			long[] obj = new long[num];
-			_getLoadedObjects(handle, obj);
-			objects = new Object3D[num];
-			for (int i = 0; i < objects.length; i++) {
-				objects[i] = Interface.getObjectInstance(obj[i]);
-			}
-			setUserObjects();
-		}
-		return objects;
-	}
-
-	/**
-	 *
-	 */
-	private void setUserObjects() throws IOException {
-		int numObjects = _getObjectsWithUserParameters(handle, null);
-		long[] obj = null;
-		if (numObjects > 0) {
-			obj = new long[numObjects];
-			_getObjectsWithUserParameters(handle, obj);
-		}
-		for (int i = 0; i < numObjects; i++) {
-			int num = _getNumUserParameters(handle, i);
-			if (num > 0) {
-				Hashtable hash = new Hashtable();
-				for (int j = 0; j < num; j++) {
-					int len = _getUserParameter(handle, i, j, null);
-					byte[] data = new byte[len];
-					int id = _getUserParameter(handle, i, j, data);
-					if (hash.put(new Integer(id), data) != null)
-						throw new IOException("Duplicate id in user data [" + iResourceName + "].");
-				}
-				Object3D object = Interface.getObjectInstance(obj[i]);
-				object.setUserObject(hash);
-			}
-		}
-	}
-
-	/**
-	 * Load external resources
-	 */
-	private void loadExternalRefs(InputStream aStream) throws IOException {
-		// Check for the end of the aStream or file
-		int firstByte = readByte(aStream);
-		if (firstByte == -1 || (iTotalFileSize != 0 && iBytesRead >= iTotalFileSize)) {
-			return;
-		}
-
-		int compressionScheme = firstByte;
-
-		int totalSectionLength = readUInt32(aStream);
-		iBytesRead += totalSectionLength;
-		if (aStream instanceof PeekInputStream && totalSectionLength > AVG_XREF_SEC_LENGTH)
-			((PeekInputStream) aStream).increasePeekBuffer(totalSectionLength - AVG_XREF_SEC_LENGTH);
-		int uncompressedLength = readUInt32(aStream);
-		int expectedCount = totalSectionLength;
-
-		// Decompress data if necessary
-		CountedInputStream uncompressedStream;
-		if (compressionScheme == 0) {
-			uncompressedStream = new CountedInputStream(aStream);
-			if (uncompressedLength != totalSectionLength - 13) {
-				throw new IOException("Section length mismatch [" + iResourceName + "].");
-			}
-		} else if (compressionScheme == 1) {
-			if (uncompressedLength == 0 && totalSectionLength - 13 == 0) {
-				uncompressedStream = new CountedInputStream(null);
-			} else {
-				if (uncompressedLength <= 0 || totalSectionLength - 13 <= 0) {
-					throw new IOException("Section length mismatch [" + iResourceName + "].");
-				}
-				byte[] compressed = new byte[totalSectionLength - 13];
-				aStream.read(compressed);
-
-				byte[] uncompressed = new byte[uncompressedLength];
-
-				// zlib decompression
-				if (!_inflate(compressed, uncompressed)) {
-					throw new IOException("Decompression error.");
-				}
-				uncompressedStream = new CountedInputStream(
-						new ByteArrayInputStream(uncompressed));
-			}
-		} else {
-			throw new IOException("Unrecognized compression scheme [" + iResourceName + "].");
-		}
-
-		// load all objects in this section
-		uncompressedStream.resetCounter();
-
-		while (uncompressedStream.getCounter() < uncompressedLength) {
-			iLoadedObjects.addElement(loadObject(uncompressedStream));
-		}
-
-		if (uncompressedStream.getCounter() != uncompressedLength) {
-			throw new IOException("Section length mismatch [" + iResourceName + "].");
-		}
-
-		// read checksum
-		int checksum = readUInt32(aStream);
-	}
-
-	private Object3D loadObject(CountedInputStream aStream) throws IOException {
-		int objectType = readByte(aStream);
-		int length = readUInt32(aStream);
-
-		int expectedCount = aStream.getCounter() + length;
-		Object3D newObject;
-
-		if (objectType == 255) {
-			String xref = readString(aStream);
-			newObject = (new Loader(iFileHistory, iResourceName)).loadFromStream(xref)[0];
-		} else {
-			throw new IOException("Invalid external section [" + iResourceName + "].");
-		}
-
-		if (expectedCount != aStream.getCounter()) {
-			throw new IOException("Object length mismatch [" + iResourceName + "].");
-		}
-
-		return newObject;
-	}
-
-	/**
-	 * Read a byte integer from a stream
-	 */
-	private static final int readByte(InputStream aStream) throws IOException {
-		return aStream.read();
-	}
-
-	/**
-	 * Read a boolean from a stream
-	 */
-	private static boolean readBoolean(InputStream aStream) throws IOException {
-		int b = aStream.read();
-		if (b == 0) {
-			return false;
-		}
-		if (b != 1) {
-			throw new IOException("Malformed boolean.");
-		}
-		return true;
-	}
-
-	/**
-	 * Read a unsigned integer from a stream
-	 */
-	private static final int readUInt32(InputStream aStream) throws IOException {
-		return aStream.read()
-				+ (aStream.read() << 8)
-				+ (aStream.read() << 16)
-				+ (aStream.read() << 24);
-	}
-
-	/**
-	 * Read a string from a stream
-	 */
-	private static String readString(InputStream aStream) throws IOException {
-		StringBuilder result = new StringBuilder();
-		for (int c = aStream.read(); c != 0; c = aStream.read()) {
-			if ((c & 0x80) == 0)   // 0xxxxxxx => 1 byte
-			{
-				result.append((char) (c & 0x00FF));
-			} else if ((c & 0xE0) == 0xC0)   // 110xxxxx => 2 bytes
-			{
-				int c2 = aStream.read();
-				if ((c2 & 0xC0) != 0x80)   // second byte is not 10yyyyyy
-				{
-					throw new IOException("Invalid UTF-8 string.");
-				} else   // 110xxxxx 10yyyyyy
-				{
-					result.append((char) (((c & 0x1F) << 6) | (c2 & 0x3F)));
-				}
-			} else if ((c & 0xF0) == 0xE0)   // 1110 xxxx => 3 bytes
-			{
-				int c2 = aStream.read();
-				int c3 = aStream.read();
-				if (((c2 & 0xC0) != 0x80) || // second byte is not 10yyyyyy
-						((c3 & 0xC0) != 0x80))   // third byte is not 10zzzzzz
-				{
-					throw new IOException("Invalid UTF-8 string.");
-				} else   // 1110xxxx 10yyyyyy 10zzzzzz
-				{
-					result.append((char) (((c & 0x0F) << 12) |
-							((c2 & 0x3F) << 6) |
-							(c3 & 0x3F)));
-				}
-			} else   // none of above
-			{
-				throw new IOException("Invalid UTF-8 string.");
-			}
-		}
-
-		return result.toString();
-	}
-
-	/**
-	 * Solve an identifier of the given data
-	 *
-	 * @param aStream Stream
-	 * @return solved identifier.
-	 */
-	private int getIdentifierType(InputStream aStream) throws IOException {
-		byte[] data = new byte[MAX_IDENTIFIER_LENGTH];
-		aStream.read(data);
-		return getIdentifierType(data, 0);
-	}
-
-	/**
-	 * Solve an identifier of the given data
-	 *
-	 * @param aData   Data
-	 * @param aOffset Data offset
-	 * @return solved identifier.
-	 */
-	private static int getIdentifierType(byte[] aData, int aOffset) {
+	private int getIdentifierType(byte[] aData, int aOffset) {
 		// Try the JPEG/JFIF identifier
 		if (parseIdentifier(aData, aOffset, JPEG_FILE_IDENTIFIER)) {
 			return JPEG_TYPE;
@@ -741,15 +239,7 @@ public class Loader {
 		return INVALID_HEADER_TYPE;
 	}
 
-	/**
-	 * Parse identifier from a data
-	 *
-	 * @param aData       Source data
-	 * @param aOffset     Source data offset
-	 * @param aIdentifier Identifier
-	 * @return true if the data contains the given identifier
-	 */
-	private static boolean parseIdentifier(byte[] aData, int aOffset, byte[] aIdentifier) {
+	private boolean parseIdentifier(byte[] aData, int aOffset, byte[] aIdentifier) {
 		if ((aData.length - aOffset) < aIdentifier.length) {
 			return false;
 		}
@@ -761,207 +251,767 @@ public class Loader {
 		return true;
 	}
 
-	/**
-	 * File name storage for preventing multiple referencing
-	 *
-	 * @param name File name
-	 * @return true if the storage contains the given file name
-	 */
-	private boolean inFileHistory(String name) {
-		for (int i = 0; i < iFileHistory.size(); i++)
-			if ((iFileHistory.elementAt(i)).equals(name)) {
-				return true;
-			}
-		return false;
+	private Loader(byte[] data, Vector objects) {
+		this.dis = new DataInputStream(new ByteArrayInputStream(data));
+		this.objs = objects;
 	}
 
-	/*
-	 * InputStream-related helper functions
-	 */
+	private void loadM3GSectionData() throws IOException {
+		while (dis.available() > 0) {
+			int objectType = readByte();
+			int length = readInt();
+			readed = 0;
 
-	/**
-	 * Open a HTTP stream and check its MIME type
-	 *
-	 * @param name Resource name
-	 * @return a http stream and checks the MIME type
-	 */
-	private InputStream getHttpInputStream(String name) throws IOException {
-		InputConnection ic = (InputConnection) Connector.open(name);
-		// Content-Type is available for http and https connections
-		if (ic instanceof HttpConnection) {
-			HttpConnection hc = (HttpConnection) ic;
-			// Check MIME type
-			String type = hc.getHeaderField("Content-Type");
-			if (type != null &&
-					!type.equals("application/m3g") &&
-					!type.equals("image/png") &&
-					!type.equals("image/jpeg")) {
-				throw new IOException("Wrong MIME type: " + type + ".");
+			System.out.println("objectType: " + objectType);
+			System.out.println("length: " + length);
+
+			dis.mark(Integer.MAX_VALUE);
+
+			if (objectType == 0) { // Header
+				int versionHigh = readByte();
+				int versionLow = readByte();
+				boolean hasExternalReferences = readBoolean();
+				int totalFileSize = readInt();
+				int approximateContentSize = readInt();
+				String authoringField = readString();
+			} else if (objectType == 1) { // AnimationController
+				AnimationController cont = new AnimationController();
+				loadObject3D(cont);
+				float speed = readFloat();
+				float weight = readFloat();
+				int start = readInt();
+				int end = readInt();
+				cont.setActiveInterval(start, end);
+				float referenceSeqTime = readFloat();
+				int referenceWorldTime = readInt();
+				cont.setPosition(referenceSeqTime, referenceWorldTime);
+				cont.setSpeed(speed, referenceWorldTime);
+				cont.setWeight(weight);
+				objs.addElement(cont);
+			} else if (objectType == 2) { // AnimationTrack
+				loadObject3D(new Group());
+				readed = 0;
+				KeyframeSequence ks = (KeyframeSequence) getObject(readInt());
+				AnimationController cont = (AnimationController) getObject(readInt());
+				int property = readInt();
+				AnimationTrack track = new AnimationTrack(ks, property);
+				track.setController(cont);
+				dis.reset();
+				loadObject3D(track);
+				objs.addElement(track);
+			} else if (objectType == 3) { // Appearance
+				Appearance appearance = new Appearance();
+				loadObject3D(appearance);
+				appearance.setLayer(readByte());
+				appearance.setCompositingMode((CompositingMode) getObject(readInt()));
+				appearance.setFog((Fog) getObject(readInt()));
+				appearance.setPolygonMode((PolygonMode) getObject(readInt()));
+				appearance.setMaterial((Material) getObject(readInt()));
+				int numTextures = readInt();
+				for (int i = 0; i < numTextures; ++i)
+					appearance.setTexture(i, (Texture2D) getObject(readInt()));
+				objs.addElement(appearance);
+			} else if (objectType == 4) { // Background
+				Background background = new Background();
+				loadObject3D(background);
+				background.setColor(readRGBA());
+				background.setImage((Image2D) getObject(readInt()));
+				int modeX = readByte();
+				int modeY = readByte();
+				background.setImageMode(modeX, modeY);
+				int cropX = readInt();
+				int cropY = readInt();
+				int cropWidth = readInt();
+				int cropHeight = readInt();
+				background.setCrop(cropX, cropY, cropWidth, cropHeight);
+				background.setDepthClearEnable(readBoolean());
+				background.setColorClearEnable(readBoolean());
+				objs.addElement(background); // dummy
+			} else if (objectType == 5) { // Camera
+				Camera camera = new Camera();
+				loadNode(camera);
+
+				int projectionType = readByte();
+				if (projectionType == Camera.GENERIC) {
+					Transform t = new Transform();
+					t.set(readMatrix());
+					camera.setGeneric(t);
+				} else {
+					float fovy = readFloat();
+					float aspect = readFloat();
+					float near = readFloat();
+					float far = readFloat();
+					if (projectionType == Camera.PARALLEL)
+						camera.setParallel(fovy, aspect, near, far);
+					else
+						camera.setPerspective(fovy, aspect, near, far);
+				}
+				objs.addElement(camera);
+			} else if (objectType == 6) { // CompositingMode
+				CompositingMode compositingMode = new CompositingMode();
+				loadObject3D(compositingMode);
+				compositingMode.setDepthTestEnable(readBoolean());
+				compositingMode.setDepthWriteEnable(readBoolean());
+				compositingMode.setColorWriteEnable(readBoolean());
+				compositingMode.setAlphaWriteEnable(readBoolean());
+				compositingMode.setBlending(readByte());
+				compositingMode.setAlphaThreshold((float) readByte() / 255.0f);
+				compositingMode.setDepthOffsetFactor(readFloat());
+				compositingMode.setDepthOffsetUnits(readFloat());
+				objs.addElement(compositingMode);
+			} else if (objectType == 7) { // Fog
+				Fog fog = new Fog();
+				loadObject3D(fog);
+				fog.setColor(readRGB());
+				fog.setMode(readByte());
+				if (fog.getMode() == Fog.EXPONENTIAL)
+					fog.setDensity(readFloat());
+				else {
+					fog.setNearDistance(readFloat());
+					fog.setFarDistance(readFloat());
+				}
+				objs.addElement(fog);
+			} else if (objectType == 8) { // PolygonMode
+				PolygonMode polygonMode = new PolygonMode();
+				loadObject3D(polygonMode);
+				polygonMode.setCulling(readByte());
+				polygonMode.setShading(readByte());
+				polygonMode.setWinding(readByte());
+				polygonMode.setTwoSidedLightingEnable(readBoolean());
+				polygonMode.setLocalCameraLightingEnable(readBoolean());
+				polygonMode.setPerspectiveCorrectionEnable(readBoolean());
+				objs.addElement(polygonMode);
+			} else if (objectType == 9) { // Group
+				Group group = new Group();
+				loadGroup(group);
+				objs.addElement(group);
+			} else if (objectType == 10) { // Image2D
+				Image2D image = null;
+				loadObject3D(new Group()); // dummy
+				readed = 0;
+				int format = readByte();
+				boolean isMutable = readBoolean();
+				int width = readInt();
+				int height = readInt();
+				if (!isMutable) {
+					int paletteSize = readInt();
+					byte[] palette = null;
+					if (paletteSize > 0) {
+						palette = new byte[paletteSize];
+						dis.readFully(palette);
+						readed += paletteSize;
+					}
+
+					int pixelSize = readInt();
+					byte[] pixel = new byte[pixelSize];
+					dis.readFully(pixel);
+					readed += pixelSize;
+					if (palette != null)
+						image = new Image2D(format, width, height, pixel, palette);
+					else
+						image = new Image2D(format, width, height, pixel);
+				} else
+					image = new Image2D(format, width, height);
+
+				dis.reset();
+				loadObject3D(image);
+
+				objs.addElement(image);
+			} else if (objectType == 11) { // TriangleStripArray
+				loadObject3D(new Group()); // dummy
+				readed = 0;
+
+				int encoding = readByte();
+				int firstIndex = 0;
+				int[] indices = null;
+				if (encoding == 0)
+					firstIndex = readInt();
+				else if (encoding == 1)
+					firstIndex = readByte();
+				else if (encoding == 2)
+					firstIndex = readShort();
+				else if (encoding == 128) {
+					int numIndices = readInt();
+					indices = new int[numIndices];
+					for (int i = 0; i < numIndices; ++i)
+						indices[i] = readInt();
+				} else if (encoding == 129) {
+					int numIndices = readInt();
+					indices = new int[numIndices];
+					for (int i = 0; i < numIndices; ++i)
+						indices[i] = readByte();
+				} else if (encoding == 130) {
+					int numIndices = readInt();
+					indices = new int[numIndices];
+					for (int i = 0; i < numIndices; ++i)
+						indices[i] = readShort();
+				}
+
+				int numStripLengths = readInt();
+				int[] stripLengths = new int[numStripLengths];
+				for (int i = 0; i < numStripLengths; i++)
+					stripLengths[i] = readInt();
+
+				dis.reset();
+
+				TriangleStripArray triStrip = null;
+				if (indices == null)
+					triStrip = new TriangleStripArray(firstIndex, stripLengths);
+				else
+					triStrip = new TriangleStripArray(indices, stripLengths);
+
+				loadObject3D(triStrip);
+
+				objs.addElement(triStrip);
+			} else if (objectType == 12) { // Light
+				Light light = new Light();
+				loadNode(light);
+				float constant = readFloat();
+				float linear = readFloat();
+				float quadratic = readFloat();
+				light.setAttenuation(constant, linear, quadratic);
+				light.setColor(readRGB());
+				light.setMode(readByte());
+				light.setIntensity(readFloat());
+				light.setSpotAngle(readFloat());
+				light.setSpotExponent(readFloat());
+				objs.addElement(light);
+			} else if (objectType == 13) { // Material
+				Material material = new Material();
+				loadObject3D(material);
+				material.setColor(Material.AMBIENT, readRGB());
+				material.setColor(Material.DIFFUSE, readRGBA());
+				material.setColor(Material.EMISSIVE, readRGB());
+				material.setColor(Material.SPECULAR, readRGB());
+				material.setShininess(readFloat());
+				material.setVertexColorTrackingEnable(readBoolean());
+				objs.addElement(material);
+			} else if (objectType == 14) { // Mesh
+				loadNode(new Group()); // dummy
+				readed = 0;
+
+				VertexBuffer vertices = (VertexBuffer) getObject(readInt());
+				int submeshCount = readInt();
+
+				IndexBuffer[] submeshes = new IndexBuffer[submeshCount];
+				Appearance[] appearances = new Appearance[submeshCount];
+				for (int i = 0; i < submeshCount; ++i) {
+					submeshes[i] = (IndexBuffer) getObject(readInt());
+					appearances[i] = (Appearance) getObject(readInt());
+				}
+				Mesh mesh = new Mesh(vertices, submeshes, appearances);
+
+				dis.reset();
+				loadNode(mesh);
+
+				objs.addElement(mesh);
+			} else if (objectType == 15) { // MorphingMesh
+				loadNode(new Group());
+				readed = 0;
+				VertexBuffer vb = (VertexBuffer) getObject(readInt());
+				int subMeshCount = readInt();
+				IndexBuffer[] ib = new IndexBuffer[subMeshCount];
+				Appearance[] ap = new Appearance[subMeshCount];
+
+				for (int i = 0; i < subMeshCount; i++) {
+					ib[i] = (IndexBuffer) getObject(readInt());
+					ap[i] = (Appearance) getObject(readInt());
+				}
+
+				int targetCount = readInt();
+				float[] weights = new float[targetCount];
+				VertexBuffer[] targets = new VertexBuffer[targetCount];
+
+				for (int i = 0; i < targetCount; i++) {
+					targets[i] = (VertexBuffer) getObject(readInt());
+					weights[i] = readFloat();
+				}
+
+				MorphingMesh mesh = new MorphingMesh(vb, targets, ib, ap);
+				dis.reset();
+				loadNode(mesh);
+
+				objs.addElement(mesh);
+			} else if (objectType == 16) { // SkinnedMesh
+				loadNode(new Group());
+				readed = 0;
+				VertexBuffer vb = (VertexBuffer) getObject(readInt());
+				int subMeshCount = readInt();
+				IndexBuffer[] ib = new IndexBuffer[subMeshCount];
+				Appearance[] ap = new Appearance[subMeshCount];
+
+				for (int i = 0; i < subMeshCount; i++) {
+					ib[i] = (IndexBuffer) getObject(readInt());
+					ap[i] = (Appearance) getObject(readInt());
+				}
+
+				Group skeleton = (Group) getObject(readInt());
+
+				SkinnedMesh mesh = new SkinnedMesh(vb, ib, ap, skeleton);
+				int transformReferenceCount = readInt();
+
+				for (int i = 0; i < transformReferenceCount; i++) {
+					Node bone = (Node) getObject(readInt());
+					int firstVertex = readInt();
+					int vertexCount = readInt();
+					int weight = readInt();
+					mesh.addTransform(bone, weight, firstVertex, vertexCount);
+				}
+
+				dis.reset();
+				loadNode(mesh);
+				objs.addElement(mesh);
+			} else if (objectType == 17) { // Texture2D
+				loadTransformable(new Group()); // dummy
+				readed = 0;
+				Texture2D texture = new Texture2D((Image2D) getObject(readInt()));
+				texture.setBlendColor(readRGB());
+				texture.setBlending(readByte());
+				int wrapS = readByte();
+				int wrapT = readByte();
+				texture.setWrapping(wrapS, wrapT);
+				int levelFilter = readByte();
+				int imageFilter = readByte();
+				texture.setFiltering(levelFilter, imageFilter);
+
+				dis.reset();
+				loadTransformable(texture);
+
+				objs.addElement(texture);
+			} else if (objectType == 18) { // Sprite
+				loadNode(new Group());
+				readed = 0;
+				Image2D image = (Image2D) getObject(readInt());
+				Appearance ap = (Appearance) getObject(readInt());
+				Sprite3D sprite = new Sprite3D(readBoolean(), image, ap);
+				int x = readInt();
+				int y = readInt();
+				int width = readInt();
+				int height = readInt();
+				sprite.setCrop(x, y, width, height);
+				dis.reset();
+				loadNode(sprite);
+				objs.addElement(sprite);
+			} else if (objectType == 19) { // KeyframeSequence
+				loadObject3D(new Group());
+				readed = 0;
+				int interpolation = readByte();
+				int repeatMode = readByte();
+				int encoding = readByte();
+				int duration = readInt();
+				int rangeFirst = readInt();
+				int rangeLast = readInt();
+				int components = readInt();
+				int keyFrames = readInt();
+				int size = (encoding == 0) ? (keyFrames * (4 + components * 4)) : (components * 8 + keyFrames * (4 + components * (encoding == 1 ? 1 : 2)));
+
+				KeyframeSequence seq = new KeyframeSequence(keyFrames, components, interpolation);
+				seq.setRepeatMode(repeatMode);
+				seq.setDuration(duration);
+				seq.setValidRange(rangeFirst, rangeLast);
+				float[] values = new float[components];
+				if (encoding == 0) {
+					for (int i = 0; i < keyFrames; i++) {
+						int time = readInt();
+
+						for (int j = 0; j < components; j++) {
+							values[j] = readFloat();
+						}
+
+						seq.setKeyframe(i, time, values);
+					}
+				} else {
+					float[] vectorBiasScale = new float[components * 2];
+					for (int i = 0; i < components; i++) {
+						vectorBiasScale[i] = readFloat();
+					}
+
+					for (int i = 0; i < components; i++) {
+						vectorBiasScale[i + components] = readFloat();
+					}
+
+					for (int i = 0; i < keyFrames; i++) {
+						int time = readInt();
+						if (encoding == 1) {
+							for (int j = 0; j < components; j++) {
+								int v = readByte();
+								values[j] = vectorBiasScale[j] + ((vectorBiasScale[j + components] * v) / 255.0f);
+							}
+						} else {
+							for (int j = 0; j < components; j++) {
+								int v = readShort();
+								values[j] = vectorBiasScale[j] + ((vectorBiasScale[j + components] * v) / 65535.0f);
+							}
+						}
+						seq.setKeyframe(i, time, values);
+					}
+				}
+				dis.reset();
+				loadObject3D(seq);
+				objs.addElement(seq);
+			} else if (objectType == 20) { // VertexArray
+				loadObject3D(new Group()); // dummy
+				readed = 0;
+
+				int componentSize = readByte();
+				int components = readByte();
+				int encoding = readByte();
+				int vertices = readShort();
+
+				VertexArray va = new VertexArray(vertices, components, componentSize);
+				int size = vertices * components;
+
+				if (componentSize == 1) {
+					byte[] values = new byte[size];
+					if (encoding == 0) {
+						dis.readFully(values);
+						readed += size;
+					} else {
+						byte last = 0;
+						for (int i = 0; i < size; ++i) {
+							last += readByte();
+							values[i] = last;
+						}
+					}
+					va.set(0, vertices, values);
+				} else {
+					short last = 0;
+					short[] values = new short[size];
+					for (int i = 0; i < size; ++i) {
+						if (encoding == 0)
+							values[i] = (short) readShort();
+						else {
+							last += (short) readShort();
+							values[i] = last;
+						}
+					}
+					va.set(0, vertices, values);
+				}
+
+				dis.reset();
+				loadObject3D(va);
+
+				objs.addElement(va);
+			} else if (objectType == 21) { // VertexBuffer
+				VertexBuffer vertices = new VertexBuffer();
+				loadObject3D(vertices);
+
+				vertices.setDefaultColor(readRGBA());
+
+				VertexArray positions = (VertexArray) getObject(readInt());
+				float[] bias = new float[3];
+				bias[0] = readFloat();
+				bias[1] = readFloat();
+				bias[2] = readFloat();
+				float scale = readFloat();
+				vertices.setPositions(positions, scale, bias);
+
+				vertices.setNormals((VertexArray) getObject(readInt()));
+				vertices.setColors((VertexArray) getObject(readInt()));
+
+				int texCoordArrayCount = readInt();
+				for (int i = 0; i < texCoordArrayCount; ++i) {
+					VertexArray texcoords = (VertexArray) getObject(readInt());
+					bias[0] = readFloat();
+					bias[1] = readFloat();
+					bias[2] = readFloat();
+					scale = readFloat();
+					vertices.setTexCoords(i, texcoords, scale, bias);
+				}
+
+				objs.addElement(vertices);
+			} else if (objectType == 22) { // World
+				World world = new World();
+				loadGroup(world);
+
+				world.setActiveCamera((Camera) getObject(readInt()));
+				world.setBackground((Background) getObject(readInt()));
+				objs.addElement(world);
+			} else if (objectType == 255) { // External resource
+				String uri = readString();
+				Object3D[] objArray;
+
+				if (resName != null) {
+					if (uri.charAt(0) == '/')
+						objArray = Loader.load(uri);
+					else
+						objArray = Loader.load(resName.substring(resName.lastIndexOf("/") + 1) + uri);
+				} else {
+					if (uri.charAt(0) == '/')
+						objArray = Loader.load(uri);
+					else
+						// Assume we're in root
+						objArray = Loader.load("/" + uri);
+				}
+
+				for (int i = 0; i < objArray.length; i++)
+					objs.addElement(objArray[i]);
+			} else {
+				System.out.println("Loader: unsupported objectType " + objectType + ".");
 			}
-		}
 
-		InputStream is;
+			dis.reset();
+			if (readed != length)
+				System.out.println("Warning: length mismatch, expected: " + length + ", readed: " + readed + ", objectType: " + objectType);
+			dis.skipBytes(length);
+		}
+	}
+
+	private Object3D[] loadM3G() throws IOException {
+		objs = new Vector();
+
+		readed = 0;
+		// First section must be header
+		int compressionScheme = readByte();
+		int totalSectionLength = readInt();
+		int uncompressedLength = readInt();
+
+		int objectType = readByte();
+		int length = readInt();
+
+		int versionHigh = readByte();
+		int versionLow = readByte();
+		boolean hasExternalReferences = readBoolean();
+		int totalFileSize = readInt();
+		int approximateContentSize = readInt();
+		String authoringField = readString();
+
+		int checkSum = readInt();
+
+		int read = readed + M3G_FILE_IDENTIFIER.length;
+		int size = (dis.available() != 0) ? (dis.available() + readed) : 2048;
+		while (read < totalFileSize) {
+			//while (dis.available() > 0) {
+			compressionScheme = readByte();
+			totalSectionLength = readInt();
+			uncompressedLength = readInt();
+
+			byte[] uncompressedData = new byte[uncompressedLength];
+
+			if (compressionScheme == 0) {
+				dis.readFully(uncompressedData);
+			} else if (compressionScheme == 1) {
+				int compressedLength = totalSectionLength - 13;
+				byte[] compressedData = new byte[compressedLength];
+				dis.readFully(compressedData);
+
+				Inflater decompresser = new Inflater();
+				decompresser.setInput(compressedData, 0, compressedLength);
+				int resultLength = 0;
+				try {
+					resultLength = decompresser.inflate(uncompressedData);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				decompresser.end();
+
+				if (resultLength != uncompressedLength)
+					throw new IOException("Unable to decompress data.");
+			} else {
+				throw new IOException("Unknown compression scheme.");
+			}
+
+			checkSum = readInt();
+
+			new Loader(uncompressedData, objs).loadM3GSectionData();
+
+			read += totalSectionLength;
+		}
+		dis.close();
+
+		Object3D[] obj = new Object3D[objs.size()];
+		for (int i = 0; i < objs.size(); i++)
+			obj[i] = (Object3D) objs.elementAt(i);
+		return obj;
+	}
+
+
+	private Object3D[] load() {
 		try {
-			is = ic.openInputStream();
-		} finally {
-			try {
-				ic.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+			// Check header
+			dis.mark(12);
+			byte[] identifier = new byte[12];
+			int read = dis.read(identifier, 0, 12);
+			int type = getIdentifierType(identifier, 0);
+			dis.reset();
+			if (type == M3G_TYPE) {
+				dis.skip(M3G_FILE_IDENTIFIER.length);
+				return loadM3G();
+			} else if (type == PNG_TYPE) {
+				return loadPNG();
+			} else if (type == JPEG_TYPE) {
+				return loadJPEG();
 			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
-		return is;
+
+		Object3D[] obj = new Object3D[objs.size()];
+		for (int i = 0; i < objs.size(); i++) {
+			obj[i] = (Object3D) objs.elementAt(i);
+		}
+		return obj;
 	}
 
-	// returns a stream built from the specified file or URI
-	private InputStream getInputStream(String name) throws IOException {
-		if (name.indexOf(':') != -1)   // absolute URI reference
+	private int readByte() throws IOException {
+		readed++;
+		return dis.readUnsignedByte();
+	}
+
+	private int readShort() throws IOException {
+		int a = readByte();
+		int b = readByte();
+		return (b << 8) | a;
+	}
+
+	private int readRGB() throws IOException {
+		byte r = dis.readByte();
+		byte g = dis.readByte();
+		byte b = dis.readByte();
+		readed += 3;
+		return (r << 16) | (g << 8) | b;
+	}
+
+	private int readRGBA() throws IOException {
+		byte r = dis.readByte();
+		byte g = dis.readByte();
+		byte b = dis.readByte();
+		byte a = dis.readByte();
+		readed += 4;
+		return (a << 24) | (r << 16) | (g << 8) | b;
+	}
+
+	private float readFloat() throws IOException {
+		return Float.intBitsToFloat(readInt());
+	}
+
+	private int readInt() throws IOException {
+		int a = dis.readUnsignedByte();
+		int b = dis.readUnsignedByte();
+		int c = dis.readUnsignedByte();
+		int d = dis.readUnsignedByte();
+		int i = (d << 24) | (c << 16) | (b << 8) | a;
+		readed += 4;
+		return i;
+	}
+
+	private boolean readBoolean() throws IOException {
+		return readByte() == 1;
+	}
+
+	private String readString() throws IOException {
+		StringBuffer result = new StringBuffer();
+		int i = 0;
+		for (int c = readByte(); c != 0; c = readByte()) {
+			if ((c & 0x80) == 0)
+				result.append((char) (c & 0x00FF));
+			else if ((c & 0xE0) == 0xC0) {
+				int c2 = readByte();
+				if ((c2 & 0xC0) != 0x80)
+					throw new IOException("Invalid UTF-8 string.");
+				else
+					result.append((char) (((c & 0x1F) << 6) | (c2 & 0x3F)));
+			} else if ((c & 0xF0) == 0xE0) {
+				int c2 = readByte();
+				int c3 = readByte();
+				if (((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
+					throw new IOException("Invalid UTF-8 string.");
+				else
+					result.append((char) (((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | (c3 & 0x3F)));
+			} else
+				throw new IOException("Invalid UTF-8 string.");
+		}
+
+		String ret = result.toString();
+		System.out.println("String: " + ret);
+		return ret;
+	}
+
+	private float[] readMatrix() throws IOException {
+		float[] m = new float[16];
+		for (int i = 0; i < 16; ++i)
+			m[i] = readFloat();
+		return m;
+	}
+
+	private Object getObject(int index) {
+		if (index == 0)
+			return null;
+		return objs.elementAt(index - 2);
+	}
+
+	private void loadObject3D(Object3D object) throws IOException {
+		object.setUserID(readInt());
+
+		int animationTracks = readInt();
+		for (int i = 0; i < animationTracks; ++i)
+			object.addAnimationTrack((AnimationTrack) getObject(readInt()));
+
+		int userParams = readInt();
+		if (userParams != 0) {
+			Hashtable hashtable = new Hashtable();
+			for (int i = 0; i < userParams; ++i) {
+				int parameterID = readInt();
+				int numBytes = readInt();
+				byte[] parameterBytes = new byte[numBytes];
+				dis.readFully(parameterBytes);
+				readed += numBytes;
+
+				hashtable.put(new Integer(parameterID), parameterBytes);
+			}
+			object.setUserObject(hashtable);
+			System.out.println("Loaded " + userParams + " user objects");
+		}
+	}
+
+	private void loadTransformable(Transformable transformable) throws IOException {
+		loadObject3D(transformable);
+		if (readBoolean()) // hasComponentTransform
 		{
-			return getHttpInputStream(name);
+			float tx = readFloat();
+			float ty = readFloat();
+			float tz = readFloat();
+			transformable.setTranslation(tx, ty, tz);
+			float sx = readFloat();
+			float sy = readFloat();
+			float sz = readFloat();
+			transformable.setScale(sx, sy, sz);
+			float angle = readFloat();
+			float ax = readFloat();
+			float ay = readFloat();
+			float az = readFloat();
+			transformable.setOrientation(angle, ax, ay, az);
 		}
-
-		if (name.charAt(0) == '/' || iParentResourceName == null)   // absolute file reference
+		if (readBoolean()) // hasGeneralTransform
 		{
-			return (ContextHolder.getResourceAsStream(null, name));
-		}
-
-		String uri = iParentResourceName.substring(0, iParentResourceName.lastIndexOf('/') + 1) + name;
-
-		if (uri.charAt(0) == '/') {
-			return (ContextHolder.getResourceAsStream(null, uri));
-		} else {
-			return getHttpInputStream(uri);
+			Transform t = new Transform();
+			t.set(readMatrix());
+			transformable.setTransform(t);
 		}
 	}
 
-	class PeekInputStream extends InputStream {
-		private int[] iPeekBuffer;
-		private InputStream iStream;
-		private int iBuffered;
-		private int iCounter;
-
-		PeekInputStream(InputStream aStream, int aLength) {
-			iStream = aStream;
-			iPeekBuffer = new int[aLength];
-		}
-
-		@Override
-		public int read() throws IOException {
-			if (iCounter < iBuffered) {
-				return iPeekBuffer[iCounter++];
-			}
-
-			int nv = iStream.read();
-
-			if (iBuffered < iPeekBuffer.length) {
-				iPeekBuffer[iBuffered] = nv;
-				iBuffered++;
-			}
-
-			iCounter++;
-			return nv;
-		}
-
-		public void increasePeekBuffer(int aLength) {
-			int[] temp = new int[iPeekBuffer.length + aLength];
-			System.arraycopy(iPeekBuffer, 0, temp, 0, iBuffered);
-			iPeekBuffer = temp;
-		}
-
-		@Override
-		public int available() throws IOException {
-			if (iCounter < iBuffered) {
-				return iBuffered - iCounter + iStream.available();
-			}
-			return iStream.available();
-		}
-
-		@Override
-		public void close() {
-			try {
-				iStream.close();
-			} catch (IOException ioe) {
-				// Intentionally left empty
-			}
-		}
-
-		public void rewind() throws IOException {
-			if (iCounter > iBuffered) {
-				throw new IOException("Peek buffer overrun.");
-			}
-			iCounter = 0;
+	private void loadNode(Node node) throws IOException {
+		loadTransformable(node);
+		node.setRenderingEnable(readBoolean());
+		node.setPickingEnable(readBoolean());
+		int alpha = readByte();
+		node.setAlphaFactor((float) alpha / 255.0f);
+		node.setScope(readInt());
+		if (readBoolean()) // hasAlignment
+		{
+			int zTarget = readByte();
+			int yTarget = readByte();
+			Node zReference = (Node) getObject(readInt());
+			Node yReference = (Node) getObject(readInt());
+			node.setAlignment(zReference, zTarget, yReference, yTarget);
 		}
 	}
 
-	class CountedInputStream extends InputStream {
-		private InputStream iStream;
-		private int iCounter;
-
-		public CountedInputStream(InputStream aStream) {
-			iStream = aStream;
-			resetCounter();
-		}
-
-		@Override
-		public int read() throws IOException {
-			iCounter++;
-			return iStream.read();
-		}
-
-		public void resetCounter() {
-			iCounter = 0;
-		}
-
-		public int getCounter() {
-			return iCounter;
-		}
-
-		@Override
-		public void close() {
-			try {
-				iStream.close();
-			} catch (IOException ioe) {
-				// Intentionally left empty
-			}
-		}
-
-		@Override
-		public int available() throws IOException {
-			return iStream.available();
-		}
+	private void loadGroup(Group group) throws IOException {
+		loadNode(group);
+		int count = readInt();
+		for (int i = 0; i < count; ++i)
+			group.addChild((Node) getObject(readInt()));
 	}
-
-	//#ifdef RD_JAVA_OMJ
-	private void doFinalize() {
-		registeredFinalize();
-	}
-//#endif // RD_JAVA_OMJ
-
-	// Finalization method for Symbian
-	private void registeredFinalize() {
-		if (handle != 0) {
-			Platform.finalizeObject(handle, iInterface);
-			Interface.deregister(this, iInterface);
-			iInterface = null;
-			handle = 0;
-		}
-	}
-
-	// zlib decompression
-	private native static boolean _inflate(byte[] data, byte[] buffer);
-
-	// native loader
-	private native static long _ctor(long handle);
-
-	private native static int _decodeData(long handle, int offset, byte[] data);
-
-	private native static void _setExternalReferences(long handle, long[] references);
-
-	private native static int _getLoadedObjects(long handle, long[] objects);
-
-	private native static int _getObjectsWithUserParameters(long handle, long[] objects);
-
-	private native static int _getNumUserParameters(long handle, int obj);
-
-	private native static int _getUserParameter(long handle, int obj, int index, byte[] data);
 }

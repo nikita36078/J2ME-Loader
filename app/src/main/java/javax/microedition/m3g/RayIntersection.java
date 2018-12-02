@@ -1,28 +1,11 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
 public class RayIntersection {
 	private Node intersected = null;
 	private float distance = 0.f;
 	private int submeshIndex = 0;
-	private float[] textureS = new float[Defs.NUM_TEXTURE_UNITS];
-	private float[] textureT = new float[Defs.NUM_TEXTURE_UNITS];
+	private float[] textureS = new float[Graphics3D.getInstance().getTextureUnitCount()];
+	private float[] textureT = new float[Graphics3D.getInstance().getTextureUnitCount()];
 	private float[] normal = new float[3];
 	private float[] ray = new float[6];
 
@@ -92,30 +75,7 @@ public class RayIntersection {
 		ray[5] = this.ray[5];
 	}
 
-	//------------------------------------------------------------------
-	// Private methods
-	//------------------------------------------------------------------
-
 	static float[] createResult() {
-		return new float[1 + 1 + 2 * Defs.NUM_TEXTURE_UNITS + 3 + 6];
-	}
-
-	void fill(long hIntersected, float[] result) {
-		intersected = (Node) Object3D.getInstance(hIntersected);
-		distance = result[0];
-		submeshIndex = (int) result[1];
-		textureS[0] = result[2];
-		textureS[1] = result[3];
-		textureT[0] = result[4];
-		textureT[1] = result[5];
-		normal[0] = result[6];
-		normal[1] = result[7];
-		normal[2] = result[8];
-		ray[0] = result[9];
-		ray[1] = result[10];
-		ray[2] = result[11];
-		ray[3] = result[12];
-		ray[4] = result[13];
-		ray[5] = result[14];
+		return new float[1 + 1 + 2 * Graphics3D.getInstance().getTextureUnitCount() + 3 + 6];
 	}
 }

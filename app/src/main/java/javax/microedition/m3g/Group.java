@@ -1,169 +1,164 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
-import java.util.Vector;
-
 public class Group extends Node {
-	//------------------------------------------------------------------
-	// Instance data
-	//------------------------------------------------------------------
 
-	// The child links are duplicated on the Java side for the same
-	// reason as the other node->node references; see Node.java
+	Node firstChild;
+	int numNonCullables = 0, numRenderables = 0;
 
-	Vector children;
-
-	//------------------------------------------------------------------
-	// Constructors
-	//------------------------------------------------------------------
-
-	public Group() {
-		super(_ctor(Interface.getHandle()));
+	@Override
+	Object3D duplicateImpl() {
+		Group copy = new Group();
+		duplicate(copy);
+		return copy;
 	}
 
-	Group(long handle) {
-		super(handle);
-		int n = _getChildCount(handle);
-		while (n-- > 0) {
-			linkChild((Node) getInstance(_getChild(handle, n)));
+	void duplicate(Group copy) {
+		super.duplicate(copy);
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				Node temp = (Node) child.duplicate();
+				copy.addChild(temp);
+				child = child.right;
+			} while (child != firstChild);
 		}
 	}
-
-	//------------------------------------------------------------------
-	// Public methods
-	//------------------------------------------------------------------
 
 	public void addChild(Node child) {
-		_addChild(handle, child != null ? child.handle : 0);
-		if (child != null) {
-			linkChild(child);
+		if (child == null)
+			throw new NullPointerException("child can not be null");
+		if (child == this)
+			throw new IllegalArgumentException("can not add self as child");
+
+		if (child.parent == null) {
+			if (firstChild == null) {
+				firstChild = child;
+				child.left = child;
+				child.right = child;
+			} else {
+				Node linkChild = firstChild;
+				child.left = linkChild.left;
+				linkChild.left.right = child;
+
+				child.right = linkChild;
+				linkChild.left = child;
+			}
+			child.setParent(this);
 		}
 	}
 
-	public void removeChild(Node child) {
-		if (child != null) {
-			_removeChild(handle, child.handle);
-			detachChild(child);
+	public Node getChild(int idx) {
+		if (idx < 0)
+			throw new IllegalArgumentException();
+
+		Node n = firstChild;
+		while (idx-- > 0) {
+			n = n.right;
+			if (n == firstChild)
+				throw new IllegalArgumentException();
 		}
+		return n;
 	}
 
 	public int getChildCount() {
-		return _getChildCount(handle);
+		int count = 0;
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				++count;
+				child = child.right;
+			} while (child != firstChild);
+		}
+		return count;
 	}
 
-	public Node getChild(int index) {
-
-		/* Instead of trying to match the indexing of children on the
-		 * native side, we just call the native getter. This may have
-		 * some performance penalty, but likely not enough to make it
-		 * worth the extra maintenance burden of duplicating the
-		 * native ordering here. */
-
-		return (Node) getInstance(_getChild(handle, index));
+	@Override
+	int doGetReferences(Object3D[] references) {
+		int num = super.doGetReferences(references);
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				if (references != null)
+					references[num] = child;
+				child = child.right;
+				num++;
+			} while (child != firstChild);
+		}
+		return num;
 	}
 
-	public boolean pick(int mask,
-						float ox, float oy, float oz,
-						float dx, float dy, float dz,
-						RayIntersection ri) {
-		float[] result = RayIntersection.createResult();
-		float[] ray = {ox, oy, oz, dx, dy, dz};
-		long hIntersected;
+	@Override
+	Object3D findID(int userID) {
+		Object3D found = super.findID(userID);
+		Node child = firstChild;
+		if (child != null && found == null) {
+			do {
+				found = child.findID(userID);
+				child = child.right;
+			} while (found == null && child != firstChild);
+		}
+		return found;
+	}
 
-		hIntersected = _pick3D(handle, mask, ray, result);
+	@Override
+	int applyAnimation(int time) {
+		int minValidity = super.applyAnimation(time);
+		Node child = firstChild;
+		int validity;
+		if (child != null && minValidity > 0) {
+			do {
+				validity = child.applyAnimation(time);
+				minValidity = Math.min(validity, minValidity);
+				child = child.right;
+			} while (minValidity > 0 && child != firstChild);
+		}
+		return minValidity;
+	}
 
-		if (hIntersected != 0) {
-			if (ri != null) {
-				ri.fill(hIntersected, result);
-			}
-			return true;
-		} else {
+	@Override
+	boolean doAlign(Node ref) {
+		if (!super.doAlign(ref))
 			return false;
+
+		Node child = firstChild;
+		if (child != null) {
+			do {
+				if (!child.doAlign(ref))
+					return false;
+				child = child.right;
+			} while (child != firstChild);
 		}
+		return true;
 	}
 
-	public boolean pick(int mask, float x, float y, Camera camera, RayIntersection ri) {
-		float[] result = RayIntersection.createResult();
-		long hIntersected;
-
-		hIntersected = _pick2D(handle, mask, x, y, camera != null ? camera.handle : 0, result);
-
-		if (hIntersected != 0) {
-			if (ri != null) {
-				ri.fill(hIntersected, result);
-			}
-			return true;
-		} else {
-			return false;
-		}
+	public boolean pick(int scope, float x, float y, Camera camera, RayIntersection ri) {
+		// TODO
+		return false;
 	}
 
-	//------------------------------------------------------------------
-	// Private methods
-	//------------------------------------------------------------------
-
-	/**
-	 * Adds a Java-side child link in this Group.
-	 */
-	private void linkChild(Node child) {
-		if (child == null) {
-			throw new Error(); // DEBUG
-		}
-		if (children == null) {
-			children = new Vector();
-		}
-		children.addElement(child);
-		child.setParent(this);
+	public boolean pick(int scope, float ox, float oy, float oz, float dx, float dy, float dz, RayIntersection ri) {
+		// TODO
+		return false;
 	}
 
-	/**
-	 * Removes a Java-side child link from this Group.
-	 */
-	private void detachChild(Node child) {
-		if (children != null) {
-			if (children.removeElement(child)) {
-				/* If no children remain, we delete the array to free some
-				 * memory. If a Group is frequently cleared and
-				 * re-populated, this should be covered by the free list
-				 * used by most VM implementations without causing
-				 * significant performance degradation. */
-				if (children.isEmpty()) {
-					children = null;
+	public void removeChild(Node child) {
+		if (child != null && firstChild != null) {
+			Node n = firstChild;
+			do {
+				if (n == child) {
+					n.right.left = n.left;
+					n.left.right = n.right;
+
+					if (firstChild == n)
+						firstChild = (n.right != n) ? n.right : null;
+
+					n.left = null;
+					n.right = null;
+					n.setParent(null);
+					return;
 				}
-
-				child.setParent(null);
-			}
+				n = n.right;
+			} while (n != firstChild);
 		}
 	}
-
-	// Native methods
-	private static native long _ctor(long hInterface);
-
-	private static native void _addChild(long handle, long hNode);
-
-	private static native void _removeChild(long handle, long hNode);
-
-	private static native int _getChildCount(long handle);
-
-	private static native long _getChild(long handle, int index);
-
-	private static native long _pick3D(long handle, int mask, float[] ray, float[] result);
-
-	private static native long _pick2D(long handle, int mask, float x, float y, long hCamera, float[] result);
 }

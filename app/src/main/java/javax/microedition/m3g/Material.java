@@ -1,89 +1,131 @@
-/*
- * Copyright (c) 2003 Nokia Corporation and/or its subsidiary(-ies).
- * All rights reserved.
- * This component and the accompanying materials are made available
- * under the terms of "Eclipse Public License v1.0"
- * which accompanies this distribution, and is available
- * at the URL "http://www.eclipse.org/legal/epl-v10.html".
- *
- * Initial Contributors:
- * Nokia Corporation - initial contribution.
- *
- * Contributors:
- *
- * Description:
- *
- */
-
 package javax.microedition.m3g;
 
-public class Material extends Object3D {
-	//------------------------------------------------------------------
-	// Static data
-	//------------------------------------------------------------------
+import javax.microedition.khronos.opengles.GL10;
 
+public class Material extends Object3D {
 	public static final int AMBIENT = 1024;
 	public static final int DIFFUSE = 2048;
 	public static final int EMISSIVE = 4096;
 	public static final int SPECULAR = 8192;
 
-	//------------------------------------------------------------------
-	// Constructor(s)
-	//------------------------------------------------------------------
+	private int ambientColor = 0x00333333;
+	private int diffuseColor = 0xFFCCCCCC;
+	private int emissiveColor = 0;
+	private int specularColor = 0;
+	private float shininess = 0.0f;
+	private boolean isVertexColorTrackingEnabled = false;
 
 	public Material() {
-		super(_ctor(Interface.getHandle()));
 	}
 
-	/**
-	 */
-	Material(long handle) {
-		super(handle);
+	@Override
+	Object3D duplicateImpl() {
+		Material copy = new Material();
+		copy.ambientColor = ambientColor;
+		copy.diffuseColor = diffuseColor;
+		copy.emissiveColor = emissiveColor;
+		copy.specularColor = specularColor;
+		copy.shininess = shininess;
+		copy.isVertexColorTrackingEnabled = isVertexColorTrackingEnabled;
+		return copy;
 	}
 
-	//------------------------------------------------------------------
-	// Public methods
-	//------------------------------------------------------------------
+	@Override
+	void updateProperty(int property, float[] value) {
+		switch (property) {
+			case AnimationTrack.ALPHA:
+				diffuseColor = (diffuseColor | 0xFF000000) & (ColConv.alpha1f(value[0]) << 24);
+				break;
+			case AnimationTrack.AMBIENT_COLOR:
+				ambientColor = ColConv.color3f(value[0], value[1], value[2]);
+				break;
+			case AnimationTrack.DIFFUSE_COLOR:
+				diffuseColor = (diffuseColor | 0x00FFFFFF) & (ColConv.color3f(value[0], value[1], value[2]));
+				break;
+			case AnimationTrack.EMISSIVE_COLOR:
+				emissiveColor = (ColConv.color3f(value[0], value[1], value[2]) & 0x00FFFFFF);
+				break;
+			case AnimationTrack.SHININESS:
+				shininess = Math.max(0.f, Math.min(128.f, value[0]));
+				break;
+			case AnimationTrack.SPECULAR_COLOR:
+				specularColor = ColConv.color3f(value[0], value[1], value[2]);
+				break;
+			default:
+				super.updateProperty(property, value);
+		}
+	}
 
-	public void setColor(int target, int ARGB) {
-		_setColor(handle, target, ARGB);
+	public void setColor(int target, int color) {
+		if ((target & AMBIENT) != 0)
+			this.ambientColor = color;
+		if ((target & DIFFUSE) != 0)
+			this.diffuseColor = color;
+		if ((target & EMISSIVE) != 0)
+			this.emissiveColor = color;
+		if ((target & SPECULAR) != 0)
+			this.specularColor = color;
 	}
 
 	public int getColor(int target) {
-		return _getColor(handle, target);
+		switch (target) {
+			case AMBIENT:
+				return ambientColor;
+			case DIFFUSE:
+				return diffuseColor;
+			case EMISSIVE:
+				return emissiveColor;
+			case SPECULAR:
+				return specularColor;
+			default:
+				throw new IllegalArgumentException("Invalid color target");
+		}
 	}
 
 	public void setShininess(float shininess) {
-		_setShininess(handle, shininess);
+		this.shininess = shininess;
 	}
 
 	public float getShininess() {
-		return _getShininess(handle);
+		return shininess;
 	}
 
-	public void setVertexColorTrackingEnable(boolean enable) {
-		_setVertexColorTrackingEnable(handle, enable);
+	public void setVertexColorTrackingEnable(boolean isVertexColorTrackingEnabled) {
+		this.isVertexColorTrackingEnabled = isVertexColorTrackingEnabled;
 	}
 
 	public boolean isVertexColorTrackingEnabled() {
-		return _isVertexColorTrackingEnabled(handle);
+		return isVertexColorTrackingEnabled;
 	}
 
-	//------------------------------------------------------------------
-	// Private methods
-	//------------------------------------------------------------------
+	void setupGL(GL10 gl) {
+		if (isVertexColorTrackingEnabled)
+			gl.glEnable(GL10.GL_COLOR_MATERIAL);
+		else {
+			gl.glDisable(GL10.GL_COLOR_MATERIAL);
 
-	private native static long _ctor(long hInstance);
+			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, Color.intToFloatArray(ambientColor), 0);
+			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, Color.intToFloatArray(diffuseColor), 0);
+		}
+		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, Color.intToFloatArray(emissiveColor), 0);
+		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, Color.intToFloatArray(specularColor), 0);
+		gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, shininess);
 
-	private native static void _setColor(long handle, int target, int ARGB);
+		gl.glEnable(GL10.GL_LIGHTING);
+	}
 
-	private native static int _getColor(long handle, int target);
-
-	private native static void _setShininess(long handle, float shininess);
-
-	private native static float _getShininess(long handle);
-
-	private native static void _setVertexColorTrackingEnable(long handle, boolean enable);
-
-	private native static boolean _isVertexColorTrackingEnabled(long handle);
+	@Override
+	boolean isCompatible(AnimationTrack track) {
+		switch (track.getTargetProperty()) {
+			case AnimationTrack.ALPHA:
+			case AnimationTrack.AMBIENT_COLOR:
+			case AnimationTrack.DIFFUSE_COLOR:
+			case AnimationTrack.EMISSIVE_COLOR:
+			case AnimationTrack.SHININESS:
+			case AnimationTrack.SPECULAR_COLOR:
+				return true;
+			default:
+				return super.isCompatible(track);
+		}
+	}
 }
