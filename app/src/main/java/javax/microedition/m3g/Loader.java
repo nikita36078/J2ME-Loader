@@ -251,7 +251,8 @@ public class Loader {
 		return true;
 	}
 
-	private Loader(byte[] data, Vector objects) {
+	private Loader(String name, byte[] data, Vector objects) {
+		this.resName = name;
 		this.dis = new DataInputStream(new ByteArrayInputStream(data));
 		this.objs = objects;
 	}
@@ -735,7 +736,7 @@ public class Loader {
 					if (uri.charAt(0) == '/')
 						objArray = Loader.load(uri);
 					else
-						objArray = Loader.load(resName.substring(resName.lastIndexOf("/") + 1) + uri);
+						objArray = Loader.load(resName.substring(0, resName.lastIndexOf("/") + 1) + uri);
 				} else {
 					if (uri.charAt(0) == '/')
 						objArray = Loader.load(uri);
@@ -813,7 +814,7 @@ public class Loader {
 
 			checkSum = readInt();
 
-			new Loader(uncompressedData, objs).loadM3GSectionData();
+			new Loader(resName, uncompressedData, objs).loadM3GSectionData();
 
 			read += totalSectionLength;
 		}
