@@ -37,31 +37,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class AndroidProducer {
 
-	private static HashMap<String, ArrayList<String>> classesHierarchy = new HashMap<>();
-
-	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations = new HashMap<>();
-
-	private static HashMap<String, ArrayList<String>> methodTranslations = new HashMap<>();
-
-	private static void analyze(String className, final InputStream classInputStream) throws IOException {
-		ClassReader cr = new ClassReader(classInputStream);
-		FirstPassVisitor cv = new FirstPassVisitor(classesHierarchy, methodTranslations);
-		cr.accept(cv, 0);
-	}
-
-	private static byte[] instrument(String name, final InputStream classInputStream) throws IOException {
+	private static byte[] instrument(final InputStream classInputStream) throws IOException {
 		ClassReader cr = new ClassReader(classInputStream);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassVisitor cv = new AndroidClassVisitor(cw, classesHierarchy, fieldTranslations, methodTranslations);
+		ClassVisitor cv = new AndroidClassVisitor(cw);
 		cr.accept(cv, 0);
 
 		return cw.toByteArray();
@@ -96,9 +82,6 @@ public class AndroidProducer {
 					byte[] inBuffer = new byte[size];
 					System.arraycopy(buffer, 0, inBuffer, 0, size);
 					resources.put(name, inBuffer);
-					if (name.endsWith(".class")) {
-						analyze(name.substring(0, name.length() - ".class".length()), new ByteArrayInputStream(inBuffer));
-					}
 				}
 			}
 
@@ -106,7 +89,7 @@ public class AndroidProducer {
 				byte[] inBuffer = resources.get(name);
 				byte[] outBuffer = inBuffer;
 				if (name.endsWith(".class")) {
-					outBuffer = instrument(name, new ByteArrayInputStream(inBuffer));
+					outBuffer = instrument(new ByteArrayInputStream(inBuffer));
 				}
 				zos.putNextEntry(new ZipEntry(name));
 				zos.write(outBuffer);

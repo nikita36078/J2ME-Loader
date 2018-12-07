@@ -31,21 +31,8 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.FieldNode;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 public class AndroidClassVisitor extends ClassVisitor {
-
-	private String className;
-
-	private HashMap<String, ArrayList<String>> classesHierarchy;
-
-	private HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations;
-
-	private HashMap<String, ArrayList<String>> methodTranslations;
 
 	public class AndroidMethodVisitor extends PatternMethodAdapter {
 
@@ -66,47 +53,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 		@Override
 		protected void visitInsn() {
 			state = SEEN_NOTHING;
-		}
-
-		@Override
-		public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-			if (opcode == Opcodes.GETFIELD || opcode == Opcodes.GETSTATIC || opcode == Opcodes.PUTFIELD || opcode == Opcodes.PUTSTATIC) {
-				String targetName = getTargetName(owner, name, desc);
-				if (targetName != null) {
-					mv.visitFieldInsn(opcode, owner, targetName, desc);
-					return;
-				}
-			}
-
-			super.visitFieldInsn(opcode, owner, name, desc);
-		}
-
-		private String getTargetName(String owner, String name, String desc) {
-			ArrayList<String> classHierarchy = classesHierarchy.get(owner);
-			if (classHierarchy != null) {
-				for (int i = 0; i < classHierarchy.size(); i++) {
-					String searchInClass = classHierarchy.get(i);
-					TreeMap<FieldNodeExt, String> classFields = fieldTranslations.get(searchInClass);
-					if (classFields != null) {
-						String targetName = classFields.get(new FieldNodeExt(new FieldNode(-1, name, desc, null, null)));
-						if (targetName != null) {
-							return targetName;
-						}
-					}
-				}
-
-				for (int i = 0; i < classHierarchy.size(); i++) {
-					String searchInClass = classHierarchy.get(i);
-					if (!owner.equals(searchInClass)) {
-						String targetName = getTargetName(searchInClass, name, desc);
-						if (targetName != null) {
-							return targetName;
-						}
-					}
-				}
-			}
-
-			return null;
 		}
 
 		@Override
@@ -151,11 +97,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 					return;
 				}
 			}
-			ArrayList<String> methods = methodTranslations.get(owner);
-			if (methods != null && opcode == Opcodes.INVOKESPECIAL && methods.contains(name + desc) && owner.equals(className)) {
-				mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, desc, itf);
-				return;
-			}
 			mv.visitMethodInsn(opcode, owner, name, desc, itf);
 		}
 
@@ -169,20 +110,8 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 	}
 
-	public AndroidClassVisitor(ClassVisitor cv, HashMap<String, ArrayList<String>> classesHierarchy,
-							   HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations,
-							   HashMap<String, ArrayList<String>> methodTranslations) {
+	public AndroidClassVisitor(ClassVisitor cv) {
 		super(Opcodes.ASM5, cv);
-
-		this.classesHierarchy = classesHierarchy;
-		this.fieldTranslations = fieldTranslations;
-		this.methodTranslations = methodTranslations;
-	}
-
-	@Override
-	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-		className = name;
-		super.visit(version, access, name, signature, superName, interfaces);
 	}
 
 	@Override
