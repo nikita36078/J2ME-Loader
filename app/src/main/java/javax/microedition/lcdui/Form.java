@@ -176,7 +176,8 @@ public class Form extends Screen {
 		scrollview = null;
 		layout = null;
 
-		for (Item item : items) {
+		Item[] array = items.toArray(new Item[0]);
+		for (Item item : array) {
 			item.clearItemView();
 		}
 	}

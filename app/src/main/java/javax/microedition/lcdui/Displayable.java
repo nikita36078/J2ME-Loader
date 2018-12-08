@@ -213,7 +213,8 @@ public abstract class Displayable {
 			return true;
 		}
 
-		for (Command cmd : commands) {
+		Command[] array = commands.toArray(new Command[0]);
+		for (Command cmd : array) {
 			if (cmd.hashCode() == id) {
 				postEvent(CommandActionEvent.getInstance(listener, cmd, this));
 			}
