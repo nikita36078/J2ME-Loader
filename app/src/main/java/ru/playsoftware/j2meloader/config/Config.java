@@ -22,6 +22,8 @@ public class Config {
 
 	public static final String MIDLET_DIR = "/converted/";
 	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
+	public static final String SCREENSHOTS_DIR =
+			Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/J2ME-Loader";
 	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
 	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
 	public static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";

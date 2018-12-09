@@ -22,6 +22,9 @@
                 <item
                     android:id="@+id/action_hide_buttons"
                     android:title="@string/hide_buttons" />
+                <item
+                    android:id="@+id/action_take_screenshot"
+                    android:title="@string/take_screenshot" />
             </group>
         </menu>
     </item>

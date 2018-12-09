@@ -110,6 +110,7 @@
     <string name="layout_scale_mode">Keylayout resize mode</string>
     <string name="layout_switch">Switch keylayout</string>
     <string name="hide_buttons">Hide buttons</string>
+    <string name="take_screenshot">Take screenshot</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_theme_title">Theme</string>

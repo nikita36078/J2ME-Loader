@@ -461,6 +461,15 @@ public abstract class Canvas extends Displayable {
 		overlay = ov;
 	}
 
+	public Image getOffscreenCopy() {
+		Image image = Image.createImage(onWidth, onHeight);
+		Graphics g = image.getGraphics();
+		synchronized (paintsync) {
+			g.drawImage(offscreenCopy, 0, 0, onWidth, onHeight, filter, 255);
+		}
+		return image;
+	}
+
 	/**
 	 * Обновить размер и положение виртуального экрана относительно реального.
 	 */

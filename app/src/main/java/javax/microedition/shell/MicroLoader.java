@@ -16,11 +16,17 @@
 
 package javax.microedition.shell;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -91,5 +97,23 @@ public class MicroLoader {
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
 		final MIDlet midlet = (MIDlet) loader.loadClass(mainClass).newInstance();
 		return midlet;
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	public void takeScreenshot(Bitmap bitmap) {
+		Calendar calendar = Calendar.getInstance();
+		Date now = calendar.getTime();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+		String fileName = "Screenshot_" + simpleDateFormat.format(now) + ".png";
+		File screenshotDir = new File(Config.SCREENSHOTS_DIR);
+		File screenshotFile = new File(screenshotDir, fileName);
+		if (!screenshotDir.exists()) {
+			screenshotDir.mkdirs();
+		}
+		try (FileOutputStream out = new FileOutputStream(screenshotFile)) {
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
