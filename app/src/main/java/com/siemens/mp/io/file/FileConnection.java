@@ -16,7 +16,5 @@
 
 package com.siemens.mp.io.file;
 
-import javax.microedition.io.Connection;
-
 public interface FileConnection extends javax.microedition.io.file.FileConnection {
 }

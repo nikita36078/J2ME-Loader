@@ -16,6 +16,7 @@
 
 package ru.playsoftware.j2meloader.base;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import ru.playsoftware.j2meloader.R;
 
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
 	@Override

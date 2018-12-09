@@ -56,17 +56,13 @@ public class InternalDataSource extends DataSource {
 			Log.d(TAG, "Changing file size to " + length + " bytes: " + name);
 		}
 
-		final Object sync = new Object();
-
 		byte[] buf = new byte[0x10000];
 		int read;
 		try {
 			while (true) {
 				read = stream.read(buf);
 				if (read > 0) {
-					synchronized (sync) {
-						raf.write(buf, 0, read);
-					}
+					raf.write(buf, 0, read);
 				} else if (read < 0) {
 					break;
 				}

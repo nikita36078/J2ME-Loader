@@ -54,12 +54,8 @@ public class AndroidProducer {
 	}
 
 	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
-		ZipInputStream zis = null;
-		ZipOutputStream zos = null;
 		HashMap<String, byte[]> resources = new HashMap<>();
-		try {
-			zis = new ZipInputStream(new FileInputStream(jarInputFile));
-			zos = new ZipOutputStream(new FileOutputStream(jarOutputFile));
+		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(jarInputFile)); ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
 
 			byte[] buffer = new byte[1024];
 			ZipEntry zipEntry;
@@ -93,13 +89,6 @@ public class AndroidProducer {
 				}
 				zos.putNextEntry(new ZipEntry(name));
 				zos.write(outBuffer);
-			}
-		} finally {
-			if (zis != null) {
-				zis.close();
-			}
-			if (zos != null) {
-				zos.close();
 			}
 		}
 	}

@@ -97,9 +97,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
-		builder.setOnDismissListener(dialog -> {
-			Display.getDisplay(null).setCurrent(nextDisplayable);
-		});
+		builder.setOnDismissListener(dialog -> Display.getDisplay(null).setCurrent(nextDisplayable));
 
 		if (image != null) {
 			builder.setIcon(new BitmapDrawable(context.getResources(), image.getBitmap()));
@@ -186,15 +184,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
 				fireCommandAction(commands[positive], this);
-				return;
+				break;
 
 			case DialogInterface.BUTTON_NEGATIVE:
 				fireCommandAction(commands[negative], this);
-				return;
+				break;
 
 			case DialogInterface.BUTTON_NEUTRAL:
 				fireCommandAction(commands[neutral], this);
-				return;
+				break;
 		}
 	}
 }

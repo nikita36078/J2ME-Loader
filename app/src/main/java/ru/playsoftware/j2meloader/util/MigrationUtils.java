@@ -68,21 +68,15 @@ public class MigrationUtils {
 
 	private static int readVersion(File file) throws IOException {
 		int version = 0;
-		FileInputStream in = new FileInputStream(file);
-		try {
+		try (FileInputStream in = new FileInputStream(file)) {
 			version = in.read();
-		} finally {
-			in.close();
 		}
 		return version;
 	}
 
 	private static void writeVersion(File file, int version) throws IOException {
-		FileOutputStream stream = new FileOutputStream(file);
-		try {
+		try (FileOutputStream stream = new FileOutputStream(file)) {
 			stream.write(version);
-		} finally {
-			stream.close();
 		}
 	}
 

@@ -114,7 +114,7 @@ public class CanvasEvent extends Event {
 				} else {
 					canvas.keyPressed(keyCode);
 				}
-				return;
+				break;
 
 			case KEY_REPEATED:
 				if (canvas instanceof GameCanvas) {
@@ -122,7 +122,7 @@ public class CanvasEvent extends Event {
 				} else {
 					canvas.keyRepeated(keyCode);
 				}
-				return;
+				break;
 
 			case KEY_RELEASED:
 				if (canvas instanceof GameCanvas) {
@@ -130,31 +130,31 @@ public class CanvasEvent extends Event {
 				} else {
 					canvas.keyReleased(keyCode);
 				}
-				return;
+				break;
 
 			case POINTER_PRESSED:
 				canvas.pointerPressed(pointer, x, y);
-				return;
+				break;
 
 			case POINTER_DRAGGED:
 				canvas.pointerDragged(pointer, x, y);
-				return;
+				break;
 
 			case POINTER_RELEASED:
 				canvas.pointerReleased(pointer, x, y);
-				return;
+				break;
 
 			case SHOW_NOTIFY:
 				canvas.showNotify();
-				return;
+				break;
 
 			case HIDE_NOTIFY:
 				canvas.hideNotify();
-				return;
+				break;
 
 			case SIZE_CHANGED:
 				canvas.sizeChanged(width, height);
-				return;
+				break;
 		}
 	}
 

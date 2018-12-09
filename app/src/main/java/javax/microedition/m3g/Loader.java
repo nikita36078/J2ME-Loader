@@ -291,6 +291,7 @@ public class Loader {
 		}
 		// EOF
 		catch (Exception e) {
+			e.printStackTrace();
 		}
 		// Close the data stream
 		try {

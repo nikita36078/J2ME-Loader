@@ -28,7 +28,6 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import ru.playsoftware.j2meloader.R;

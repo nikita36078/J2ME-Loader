@@ -129,10 +129,9 @@ public class XmlUtils {
 		}
 
 		Set s = val.entrySet();
-		Iterator i = s.iterator();
 
-		while (i.hasNext()) {
-			Map.Entry e = (Map.Entry) i.next();
+		for (Object value : s) {
+			Map.Entry e = (Map.Entry) value;
 			writeValueXml(e.getValue(), (String) e.getKey(), out, callback);
 		}
 	}
@@ -579,7 +578,7 @@ public class XmlUtils {
 	public static final HashMap<String, ?> readThisMapXml(XmlPullParser parser, String endTag,
 														  String[] name, ReadMapCallback callback)
 			throws XmlPullParserException, java.io.IOException {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		HashMap<String, Object> map = new HashMap<>();
 
 		int eventType = parser.getEventType();
 		do {
@@ -1118,19 +1117,19 @@ public class XmlUtils {
 		if (tagName.equals("null")) {
 			res = null;
 		} else if (tagName.equals("string")) {
-			String value = "";
+			StringBuilder value = new StringBuilder();
 			int eventType;
 			while ((eventType = parser.next()) != parser.END_DOCUMENT) {
 				if (eventType == parser.END_TAG) {
 					if (parser.getName().equals("string")) {
 						name[0] = valueName;
 						//System.out.println("Returning value for " + valueName + ": " + value);
-						return value;
+						return value.toString();
 					}
 					throw new XmlPullParserException(
 							"Unexpected end tag in <string>: " + parser.getName());
 				} else if (eventType == parser.TEXT) {
-					value += parser.getText();
+					value.append(parser.getText());
 				} else if (eventType == parser.START_TAG) {
 					throw new XmlPullParserException(
 							"Unexpected start tag in <string>: " + parser.getName());
@@ -1224,18 +1223,19 @@ public class XmlUtils {
 	private static final Object readThisPrimitiveValueXml(XmlPullParser parser, String tagName)
 			throws XmlPullParserException, java.io.IOException {
 		try {
-			if (tagName.equals("int")) {
-				return Integer.parseInt(parser.getAttributeValue(null, "value"));
-			} else if (tagName.equals("long")) {
-				return Long.valueOf(parser.getAttributeValue(null, "value"));
-			} else if (tagName.equals("float")) {
-				return new Float(parser.getAttributeValue(null, "value"));
-			} else if (tagName.equals("double")) {
-				return new Double(parser.getAttributeValue(null, "value"));
-			} else if (tagName.equals("boolean")) {
-				return Boolean.valueOf(parser.getAttributeValue(null, "value"));
-			} else {
-				return null;
+			switch (tagName) {
+				case "int":
+					return Integer.parseInt(parser.getAttributeValue(null, "value"));
+				case "long":
+					return Long.valueOf(parser.getAttributeValue(null, "value"));
+				case "float":
+					return new Float(parser.getAttributeValue(null, "value"));
+				case "double":
+					return new Double(parser.getAttributeValue(null, "value"));
+				case "boolean":
+					return Boolean.valueOf(parser.getAttributeValue(null, "value"));
+				default:
+					return null;
 			}
 		} catch (NullPointerException e) {
 			throw new XmlPullParserException("Need value attribute in <" + tagName + ">");
