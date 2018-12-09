@@ -5,11 +5,13 @@
     <string name="about">Про додаток</string>
     <string name="help">Довідка</string>
     <string name="more">Більше</string>
+    <string name="search">Пошук</string>
     <string name="licenses">Ліцензія</string>
+    <string name="templates">Шаблони</string>
     <string name="about_message">Дана програма дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
-    <string name="author">Автор:</string>
-    <string name="version">Версія:</string>
+    <string name="author">Автор: </string>
+    <string name="version">Версія: </string>
     <string name="no_data_for_display">Немає даних</string>
     <string name="message_delete">Ви дійсно хочете видалити дану програму?</string>
     <string name="converting_wait">Перетворення JAR...</string>
@@ -27,12 +29,15 @@
     <string name="CLEAR_DATA_CMD">Очистити дані</string>
     <string name="RESET_SETTINGS_CMD">Скинути налаштування</string>
     <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
+    <string name="LOAD_TEMPLATE_CMD">Завантажити шаблон</string>
+    <string name="SAVE_TEMPLATE_CMD">Зберегти шаблон</string>
     <string name="PREF_SCREEN_OPTIONS">Параметри екрану</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Зберігати пропорції</string>
     <string name="PREF_FILTER">Фільтрація</string>
     <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
+    <string name="PREF_SHOW_FPS">Показувати FPS</string>
     <string name="PREF_FONT_OPTIONS">Параметри шрифту</string>
     <string name="PREF_WIDTH">Ширина</string>
     <string name="PREF_HEIGHT">Висота</string>
@@ -49,16 +54,16 @@
     <string name="PREF_VK_BACK">Клавіші</string>
     <string name="PREF_VK_FORE">Позначки</string>
     <string name="PREF_VK_OUTLINE">Контур</string>
-    <string name="PREF_VK_ALPHA">Прозорість:</string>
-    <string name="PREF_VK_HIDE_DELAY">Затримка приховування:</string>
+    <string name="PREF_VK_ALPHA">Прозорість: </string>
+    <string name="PREF_VK_HIDE_DELAY">Затримка приховування: </string>
     <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Позначки (P)</string>
     <string name="PREF_VK_SEL_BACK">Клавіші (P)</string>
     <string name="PREF_VK_KEY_SIZES">Розмір клавіш</string>
-    <string name="PREF_VK_NAV_KEYS">Джойстик:</string>
-    <string name="PREF_VK_SOFT_KEYS">Софт-клавіші:</string>
-    <string name="PREF_VK_NUM_KEYS">Цифри:</string>
-    <string name="PREF_VK_FIRE_KEY">Вогонь:</string>
+    <string name="PREF_VK_NAV_KEYS">Джойстик: </string>
+    <string name="PREF_VK_SOFT_KEYS">Софт-клавіші: </string>
+    <string name="PREF_VK_NUM_KEYS">Цифри: </string>
+    <string name="PREF_VK_FIRE_KEY">Вогонь: </string>
     <string name="PREF_VK_SIZE_HINT">Розмір</string>
     <string name="SIZE_PRESETS">Шаблони</string>
     <string name="SWAP_SIZES">Поміняти розміри</string>
@@ -92,6 +97,12 @@
     <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
     <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
     <string name="pref_enable_actionbar_summary">У повноекранних програмах</string>
+    <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
+    <string name="pref_button_shape_title">Форма кнопки</string>
+    <string-array name="pref_button_shape_entries">
+        <item>Кругла</item>
+        <item>Квадратна</item>
+    </string-array>
     <string name="pref_app_sort_title">Порядок сортування програм</string>
     <string-array name="pref_app_sort_entries">
         <item>Назва</item>
