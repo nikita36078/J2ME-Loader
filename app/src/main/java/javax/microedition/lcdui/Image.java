@@ -51,11 +51,6 @@ public class Image {
 		return canvas;
 	}
 
-	public Image copy() {
-		Bitmap dstBitmap = bitmap.copy(bitmap.getConfig(), bitmap.isMutable());
-		return new Image(dstBitmap);
-	}
-
 	public static Image createImage(int width, int height) {
 		return new Image(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
 	}

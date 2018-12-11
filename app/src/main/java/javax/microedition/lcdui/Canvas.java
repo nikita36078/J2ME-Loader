@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.RectF;
+import android.os.Build;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -165,25 +166,6 @@ public abstract class Canvas extends Displayable {
 			getHolder().addCallback(this);
 			getHolder().setFormat(android.graphics.PixelFormat.RGBA_8888);
 			setFocusableInTouchMode(true);
-			if (hardwareAcceleration) setWillNotDraw(false);
-		}
-
-		@Override
-		protected void onDraw(android.graphics.Canvas canvas) {
-			synchronized (paintsync) {
-				if (offscreenCopy == null) {
-					return;
-				}
-				graphics.setCanvas(canvas, null);
-				if (graphics.hasCanvas()) {
-					graphics.clear(backgroundColor);
-					graphics.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
-					if (overlay != null) {
-						overlay.paint(graphics);
-					}
-					if (showFps) totalFrameCount++;
-				}
-			}
 		}
 
 		@Override
@@ -316,8 +298,16 @@ public abstract class Canvas extends Displayable {
 					graphics.resetClip();
 				}
 				if (showFps) drawFps(graphics);
-				offscreenCopy = offscreen.copy();
-				drawOnCanvas();
+				graphics.setCanvas(lockCanvas(), null);
+				if (graphics.hasCanvas()) {
+					graphics.clear(backgroundColor);
+					graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
+					if (overlay != null) {
+						overlay.paint(graphics);
+					}
+					unlockCanvasAndPost(graphics.getCanvas());
+					if (showFps) totalFrameCount++;
+				}
 			}
 		}
 
@@ -360,7 +350,6 @@ public abstract class Canvas extends Displayable {
 	private boolean surfaceCreated = false;
 
 	private LinearLayout layout;
-	private InnerView view;
 	private SurfaceHolder holder;
 	private Graphics graphics = new Graphics();
 
@@ -382,7 +371,6 @@ public abstract class Canvas extends Displayable {
 	private static int scaleRatio;
 
 	private Image offscreen;
-	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
 	private int totalFrameCount = 0;
 	private int prevFrameCount = 0;
@@ -604,9 +592,9 @@ public abstract class Canvas extends Displayable {
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
 
-			view = new InnerView(getParentActivity());
-			holder = view.getHolder();
-			layout.addView(view);
+			InnerView innerView = new InnerView(getParentActivity());
+			holder = innerView.getHolder();
+			layout.addView(innerView);
 		}
 		return layout;
 	}
@@ -615,8 +603,8 @@ public abstract class Canvas extends Displayable {
 	public void clearDisplayableView() {
 		synchronized (paintsync) {
 			super.clearDisplayableView();
-			view = null;
 			layout = null;
+			holder = null;
 		}
 	}
 
@@ -666,25 +654,32 @@ public abstract class Canvas extends Displayable {
 				return;
 			}
 			if (showFps) drawFps(image.getGraphics());
-			offscreenCopy = image.copy();
-			drawOnCanvas();
-		}
-	}
-
-	private void drawOnCanvas() {
-		if (hardwareAcceleration) {
-			view.postInvalidate();
-		} else {
-			graphics.setCanvas(holder.lockCanvas(), null);
+			graphics.setCanvas(lockCanvas(), null);
 			if (graphics.hasCanvas()) {
 				graphics.clear(backgroundColor);
-				graphics.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
+				graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
 				if (overlay != null) {
 					overlay.paint(graphics);
 				}
-				holder.unlockCanvasAndPost(graphics.getCanvas());
+				unlockCanvasAndPost(graphics.getCanvas());
 				if (showFps) totalFrameCount++;
 			}
+		}
+	}
+
+	private android.graphics.Canvas lockCanvas() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hardwareAcceleration) {
+			return holder.getSurface().lockHardwareCanvas();
+		} else {
+			return holder.lockCanvas();
+		}
+	}
+
+	private void unlockCanvasAndPost(android.graphics.Canvas canvas) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hardwareAcceleration) {
+			holder.getSurface().unlockCanvasAndPost(canvas);
+		} else {
+			holder.unlockCanvasAndPost(canvas);
 		}
 	}
 
