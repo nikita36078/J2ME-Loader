@@ -358,7 +358,7 @@ public class MicroActivity extends AppCompatActivity {
 							showHideButtonDialog();
 							break;
 						case R.id.action_take_screenshot:
-							microLoader.takeScreenshot(((Canvas) current).getOffscreenCopy().getBitmap());
+							microLoader.takeScreenshot((Canvas) current);
 							break;
 					}
 				}

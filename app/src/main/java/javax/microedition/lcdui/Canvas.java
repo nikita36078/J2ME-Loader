@@ -297,6 +297,7 @@ public abstract class Canvas extends Displayable {
 					graphics.resetTranslation();
 					graphics.resetClip();
 				}
+				offscreenCopy = offscreen.copy();
 				if (showFps) drawFps(graphics);
 				graphics.setCanvas(lockCanvas(), null);
 				if (graphics.hasCanvas()) {
@@ -371,6 +372,7 @@ public abstract class Canvas extends Displayable {
 	private static int scaleRatio;
 
 	private Image offscreen;
+	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
 	private int totalFrameCount = 0;
 	private int prevFrameCount = 0;
@@ -653,6 +655,7 @@ public abstract class Canvas extends Displayable {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
 			}
+			offscreenCopy = image.copy();
 			if (showFps) drawFps(image.getGraphics());
 			graphics.setCanvas(lockCanvas(), null);
 			if (graphics.hasCanvas()) {

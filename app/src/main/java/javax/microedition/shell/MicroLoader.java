@@ -30,11 +30,14 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
@@ -100,20 +103,23 @@ public class MicroLoader {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public void takeScreenshot(Bitmap bitmap) {
-		Calendar calendar = Calendar.getInstance();
-		Date now = calendar.getTime();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
-		String fileName = "Screenshot_" + simpleDateFormat.format(now) + ".png";
-		File screenshotDir = new File(Config.SCREENSHOTS_DIR);
-		File screenshotFile = new File(screenshotDir, fileName);
-		if (!screenshotDir.exists()) {
-			screenshotDir.mkdirs();
-		}
-		try (FileOutputStream out = new FileOutputStream(screenshotFile)) {
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void takeScreenshot(Canvas canvas) {
+		Completable.fromAction(() -> {
+			Bitmap bitmap = canvas.getOffscreenCopy().getBitmap();
+			Calendar calendar = Calendar.getInstance();
+			Date now = calendar.getTime();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+			String fileName = "Screenshot_" + simpleDateFormat.format(now) + ".png";
+			File screenshotDir = new File(Config.SCREENSHOTS_DIR);
+			File screenshotFile = new File(screenshotDir, fileName);
+			if (!screenshotDir.exists()) {
+				screenshotDir.mkdirs();
+			}
+			try (FileOutputStream out = new FileOutputStream(screenshotFile)) {
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}).subscribeOn(Schedulers.computation()).subscribe();
 	}
 }
