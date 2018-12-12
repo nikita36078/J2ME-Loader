@@ -333,7 +333,9 @@ public class MicroActivity extends AppCompatActivity {
 			if (item.getGroupId() == R.id.action_group_common_settings) {
 				if (id == R.id.action_exit_midlet) {
 					showExitConfirmation();
-				} else if (current instanceof Canvas && ContextHolder.getVk() != null) {
+				} else if (id == R.id.action_take_screenshot) {
+					microLoader.takeScreenshot((Canvas) current);
+				} else if (ContextHolder.getVk() != null) {
 					VirtualKeyboard vk = ContextHolder.getVk();
 					switch (id) {
 						case R.id.action_layout_edit_mode:
@@ -356,9 +358,6 @@ public class MicroActivity extends AppCompatActivity {
 							break;
 						case R.id.action_hide_buttons:
 							showHideButtonDialog();
-							break;
-						case R.id.action_take_screenshot:
-							microLoader.takeScreenshot((Canvas) current);
 							break;
 					}
 				}
