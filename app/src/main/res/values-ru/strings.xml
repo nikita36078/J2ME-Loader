@@ -88,6 +88,7 @@
     <string name="layout_scale_mode">Режим масштабирования раскладки</string>
     <string name="layout_switch">Сменить раскладку</string>
     <string name="hide_buttons">Скрыть кнопки</string>
+    <string name="take_screenshot">Сделать скриншот</string>
     <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
     <string name="pref_theme_title">Тема</string>
     <string-array name="pref_theme_entries">
