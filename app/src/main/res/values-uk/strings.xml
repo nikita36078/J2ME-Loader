@@ -88,6 +88,7 @@
     <string name="layout_scale_mode">Режим зміни розмірів клавіатури</string>
     <string name="layout_switch">Переключення розкладки клавіатури</string>
     <string name="hide_buttons">Приховати клавіші</string>
+    <string name="take_screenshot">Зробити скріншот</string>
     <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
     <string name="pref_theme_title">Тема</string>
     <string-array name="pref_theme_entries">
