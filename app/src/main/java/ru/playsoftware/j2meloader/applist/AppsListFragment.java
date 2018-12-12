@@ -177,15 +177,17 @@ public class AppsListFragment extends ListFragment {
 
 					@Override
 					public void onSuccess(String s) {
+						appRepository.insert(AppUtils.getApp(s));
+						if (!isAdded()) return;
 						Toast.makeText(getActivity(), getString(R.string.convert_complete)
 								+ " " + s, Toast.LENGTH_LONG).show();
-						appRepository.insert(AppUtils.getApp(s));
 						dialog.dismiss();
 					}
 
 					@Override
 					public void onError(Throwable e) {
 						e.printStackTrace();
+						if (!isAdded()) return;
 						Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
 						dialog.dismiss();
 					}
