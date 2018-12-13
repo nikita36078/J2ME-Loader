@@ -31,6 +31,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -297,7 +298,10 @@ public abstract class Canvas extends Displayable {
 					graphics.resetTranslation();
 					graphics.resetClip();
 				}
-				offscreenCopy = offscreen.copy();
+
+				offscreen.getBitmap().copyPixelsToBuffer(offscreenBuffer);
+				offscreenBuffer.position(0);
+
 				if (showFps) drawFps(graphics);
 				graphics.setCanvas(lockCanvas(), null);
 				if (graphics.hasCanvas()) {
@@ -372,7 +376,7 @@ public abstract class Canvas extends Displayable {
 	private static int scaleRatio;
 
 	private Image offscreen;
-	private Image offscreenCopy;
+	private ByteBuffer offscreenBuffer;
 	private int onX, onY, onWidth, onHeight;
 	private int totalFrameCount = 0;
 	private int prevFrameCount = 0;
@@ -452,12 +456,15 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public Image getOffscreenCopy() {
-		Image image = Image.createImage(onWidth, onHeight);
-		Graphics g = image.getGraphics();
 		synchronized (paintsync) {
+			Image image = Image.createImage(onWidth, onHeight);
+			Image offscreenCopy = Image.createImage(width, height);
+			Graphics g = image.getGraphics();
+			offscreenCopy.getBitmap().copyPixelsFromBuffer(offscreenBuffer);
+			offscreenBuffer.position(0);
 			g.drawImage(offscreenCopy, 0, 0, onWidth, onHeight, filter, 255);
+			return image;
 		}
-		return image;
 	}
 
 	/**
@@ -563,6 +570,7 @@ public abstract class Canvas extends Displayable {
 
 		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
 			offscreen = Image.createImage(width, height);
+			offscreenBuffer = ByteBuffer.allocate(offscreen.getBitmap().getByteCount());
 		}
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
@@ -655,7 +663,10 @@ public abstract class Canvas extends Displayable {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
 			}
-			offscreenCopy = image.copy();
+
+			image.getBitmap().copyPixelsToBuffer(offscreenBuffer);
+			offscreenBuffer.position(0);
+
 			if (showFps) drawFps(image.getGraphics());
 			graphics.setCanvas(lockCanvas(), null);
 			if (graphics.hasCanvas()) {
