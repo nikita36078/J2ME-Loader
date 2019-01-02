@@ -302,7 +302,6 @@ public abstract class Canvas extends Displayable {
 				offscreen.getBitmap().copyPixelsToBuffer(offscreenBuffer);
 				offscreenBuffer.position(0);
 
-				if (showFps) drawFps(graphics);
 				graphics.setCanvas(lockCanvas(), null);
 				if (graphics.hasCanvas()) {
 					graphics.clear(backgroundColor);
@@ -310,6 +309,7 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.paint(graphics);
 					}
+					if (showFps) drawFps(graphics);
 					unlockCanvasAndPost(graphics.getCanvas());
 					if (showFps) totalFrameCount++;
 				}
@@ -376,6 +376,7 @@ public abstract class Canvas extends Displayable {
 	private static int scaleRatio;
 
 	private Image offscreen;
+	private Font fpsFont = new Font();
 	private ByteBuffer offscreenBuffer;
 	private int onX, onY, onWidth, onHeight;
 	private int totalFrameCount = 0;
@@ -405,9 +406,9 @@ public abstract class Canvas extends Displayable {
 
 	private void drawFps(Graphics g) {
 		String fps = String.valueOf(prevFrameCount);
-		Font font = graphics.getFont();
+		g.setFont(fpsFont);
 		g.setColorAlpha(0x90000000);
-		g.fillRect(0, 0, font.stringWidth(fps), font.getHeight());
+		g.fillRect(0, 0, fpsFont.stringWidth(fps), fpsFont.getHeight());
 		g.setColor(0, 255, 0);
 		g.drawString(fps, 0, 0, 0);
 	}
@@ -667,7 +668,6 @@ public abstract class Canvas extends Displayable {
 			image.getBitmap().copyPixelsToBuffer(offscreenBuffer);
 			offscreenBuffer.position(0);
 
-			if (showFps) drawFps(image.getGraphics());
 			graphics.setCanvas(lockCanvas(), null);
 			if (graphics.hasCanvas()) {
 				graphics.clear(backgroundColor);
@@ -675,6 +675,7 @@ public abstract class Canvas extends Displayable {
 				if (overlay != null) {
 					overlay.paint(graphics);
 				}
+				if (showFps) drawFps(graphics);
 				unlockCanvasAndPost(graphics.getCanvas());
 				if (showFps) totalFrameCount++;
 			}
