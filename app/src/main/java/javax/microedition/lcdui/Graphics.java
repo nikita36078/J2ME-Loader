@@ -193,6 +193,9 @@ public class Graphics {
 	}
 
 	public void setFont(Font font) {
+		if (font == null) {
+			font = Font.getDefaultFont();
+		}
 		this.font = font;
 		font.copyInto(drawPaint);
 	}
