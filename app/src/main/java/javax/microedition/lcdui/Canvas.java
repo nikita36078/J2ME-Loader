@@ -298,21 +298,7 @@ public abstract class Canvas extends Displayable {
 					graphics.resetTranslation();
 					graphics.resetClip();
 				}
-
-				offscreen.getBitmap().copyPixelsToBuffer(offscreenBuffer);
-				offscreenBuffer.position(0);
-
-				graphics.setCanvas(lockCanvas(), null);
-				if (graphics.hasCanvas()) {
-					graphics.clear(backgroundColor);
-					graphics.drawImage(offscreen, onX, onY, onWidth, onHeight, filter, 255);
-					if (overlay != null) {
-						overlay.paint(graphics);
-					}
-					if (showFps) drawFps(graphics);
-					unlockCanvasAndPost(graphics.getCanvas());
-					if (showFps) totalFrameCount++;
-				}
+				blit(offscreen);
 			}
 		}
 
@@ -664,21 +650,24 @@ public abstract class Canvas extends Displayable {
 			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
 				return;
 			}
+			blit(image);
+		}
+	}
 
-			image.getBitmap().copyPixelsToBuffer(offscreenBuffer);
-			offscreenBuffer.position(0);
+	private void blit(Image image) {
+		image.getBitmap().copyPixelsToBuffer(offscreenBuffer);
+		offscreenBuffer.position(0);
 
-			graphics.setCanvas(lockCanvas(), null);
-			if (graphics.hasCanvas()) {
-				graphics.clear(backgroundColor);
-				graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
-				if (overlay != null) {
-					overlay.paint(graphics);
-				}
-				if (showFps) drawFps(graphics);
-				unlockCanvasAndPost(graphics.getCanvas());
-				if (showFps) totalFrameCount++;
+		graphics.setCanvas(lockCanvas(), null);
+		if (graphics.hasCanvas()) {
+			graphics.clear(backgroundColor);
+			graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
+			if (overlay != null) {
+				overlay.paint(graphics);
 			}
+			if (showFps) drawFps(graphics);
+			unlockCanvasAndPost(graphics.getCanvas());
+			if (showFps) totalFrameCount++;
 		}
 	}
 
