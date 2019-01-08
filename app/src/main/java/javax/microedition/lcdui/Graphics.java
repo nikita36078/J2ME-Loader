@@ -29,6 +29,8 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 
+import javax.microedition.lcdui.game.Sprite;
+
 public class Graphics {
 	public static final int HCENTER = 1;
 	public static final int VCENTER = 2;
@@ -401,7 +403,28 @@ public class Graphics {
 		if (width == 0 || height == 0) return;
 
 		if (transform != 0) {
-			drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
+			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
+			RectF dstR = new RectF(0, 0, width, height);
+			RectF deviceR = new RectF();
+			Matrix matrix = Sprite.transformMatrix(transform, width / 2, height / 2);
+			matrix.mapRect(deviceR, dstR);
+
+			if ((anchor & Graphics.RIGHT) != 0) {
+				dstx -= deviceR.width();
+			} else if ((anchor & Graphics.HCENTER) != 0) {
+				dstx -= deviceR.width() / 2;
+			}
+			if ((anchor & Graphics.BOTTOM) != 0) {
+				dsty -= deviceR.height();
+			} else if ((anchor & Graphics.VCENTER) != 0) {
+				dsty -= deviceR.height() / 2;
+			}
+
+			canvas.save();
+			canvas.translate(-deviceR.left + dstx, -deviceR.top + dsty);
+			canvas.concat(matrix);
+			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+			canvas.restore();
 		} else {
 			if ((anchor & Graphics.RIGHT) != 0) {
 				dstx -= width;
@@ -413,6 +436,7 @@ public class Graphics {
 			} else if ((anchor & Graphics.VCENTER) != 0) {
 				dsty -= height / 2;
 			}
+
 			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
 			RectF dstR = new RectF(dstx, dsty, dstx + width, dsty + height);
 			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
