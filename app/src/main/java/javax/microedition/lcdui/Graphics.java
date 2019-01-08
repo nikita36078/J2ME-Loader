@@ -213,10 +213,9 @@ public class Graphics {
 	public void setClip(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			Matrix matrix = canvas.getMatrix();
 			canvas.restore();
-			canvas.setMatrix(matrix);
 			canvas.save();
+			canvas.translate(translateX, translateY);
 			canvas.clipRect(intRect);
 		} else {
 			canvas.clipRect(intRect, Region.Op.REPLACE);
