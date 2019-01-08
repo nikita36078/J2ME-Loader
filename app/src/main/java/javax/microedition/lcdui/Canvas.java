@@ -289,14 +289,11 @@ public abstract class Canvas extends Displayable {
 					return;
 				}
 				graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
-				graphics.resetTranslation();
-				graphics.resetClip();
+				graphics.reset();
 				try {
 					paint(graphics);
 				} catch (Throwable t) {
 					t.printStackTrace();
-					graphics.resetTranslation();
-					graphics.resetClip();
 				}
 				blit(offscreen);
 			}
@@ -658,7 +655,7 @@ public abstract class Canvas extends Displayable {
 		image.getBitmap().copyPixelsToBuffer(offscreenBuffer);
 		offscreenBuffer.position(0);
 
-		graphics.setCanvas(lockCanvas(), null);
+		graphics.setSurfaceCanvas(lockCanvas());
 		if (graphics.hasCanvas()) {
 			graphics.clear(backgroundColor);
 			graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);

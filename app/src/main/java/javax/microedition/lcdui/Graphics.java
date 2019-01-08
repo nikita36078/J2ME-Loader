@@ -86,6 +86,47 @@ public class Graphics {
 		path = new Path();
 	}
 
+	public void reset() {
+		setColor(0);
+		setFont(Font.getDefaultFont());
+		setStrokeStyle(SOLID);
+		resetClip();
+		resetTranslation();
+	}
+
+	private void resetTranslation() {
+		translateX = 0;
+		translateY = 0;
+	}
+
+	private void resetClip() {
+		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
+	}
+
+	public void setCanvas(Canvas canvas, Bitmap canvasBitmap) {
+		if (canvas.getSaveCount() > 1) {
+			canvas.restoreToCount(1);
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			canvas.save();
+		}
+		canvas.save();
+		this.canvas = canvas;
+		this.canvasBitmap = canvasBitmap;
+	}
+
+	public void setSurfaceCanvas(Canvas canvas) {
+		this.canvas = canvas;
+	}
+
+	public Canvas getCanvas() {
+		return canvas;
+	}
+
+	public boolean hasCanvas() {
+		return canvas != null;
+	}
+
 	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
 		if (nPoints > 0) {
 			Path path = computePath(xPoints, xOffset, yPoints, yOffset, nPoints);
@@ -108,23 +149,6 @@ public class Graphics {
 		}
 		path.close();
 		return path;
-	}
-
-	public void setCanvas(Canvas canvas, Bitmap canvasBitmap) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canvas != null
-				&& canvas.getSaveCount() == 1) {
-			canvas.save();
-		}
-		this.canvas = canvas;
-		this.canvasBitmap = canvasBitmap;
-	}
-
-	public Canvas getCanvas() {
-		return canvas;
-	}
-
-	public boolean hasCanvas() {
-		return canvas != null;
 	}
 
 	public void setColor(int color) {
@@ -206,10 +230,6 @@ public class Graphics {
 		return font;
 	}
 
-	protected void resetClip() {
-		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
-	}
-
 	public void setClip(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -248,10 +268,6 @@ public class Graphics {
 		translateY += dy;
 
 		canvas.translate(dx, dy);
-	}
-
-	protected void resetTranslation() {
-		translate(-translateX, -translateY);
 	}
 
 	public int getTranslateX() {

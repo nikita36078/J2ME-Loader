@@ -23,7 +23,6 @@ import javax.microedition.lcdui.Image;
 public class GameCanvas extends Canvas {
 
 	private Image image;
-	private Graphics graphics;
 	private int key;
 	private int repeatedKey;
 	private boolean suppressCommands;
@@ -41,7 +40,6 @@ public class GameCanvas extends Canvas {
 		super();
 		this.suppressCommands = suppressCommands;
 		image = Image.createImage(width, height);
-		graphics = image.getGraphics();
 	}
 
 	@Override
@@ -109,7 +107,7 @@ public class GameCanvas extends Canvas {
 	}
 
 	public Graphics getGraphics() {
-		return graphics;
+		return image.getGraphics();
 	}
 
 	public void flushGraphics() {
