@@ -568,7 +568,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void startMIDlet() {
-		// Теперь применяем конфигурацию к запускаемому мидлету.
+		// Apply configuration to the launching MIDlet
 		if (cxShowKeyboard.isChecked()) {
 			setVirtualKeyboard();
 		} else {

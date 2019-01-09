@@ -127,7 +127,7 @@ public class ContextHolder {
 	}
 
 	/**
-	 * Закрыть все Activity и завершить процесс, в котором они выполнялись.
+	 * Restart the emulator.
 	 */
 	public static void notifyDestroyed() {
 		Intent intent = new Intent(currentActivity, MainActivity.class);

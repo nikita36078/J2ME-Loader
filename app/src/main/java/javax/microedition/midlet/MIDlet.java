@@ -40,16 +40,16 @@ public abstract class MIDlet {
 	}
 
 	/**
-	 * Сообщить оболочке, что мидлет готов перейти в состояние паузы.
+	 * Report the shell that the MIDlet is ready to go into a pause.
 	 */
 	public final void notifyPaused() {
 	}
 
 	/**
-	 * Сообщить оболочке, что мидлет завершил работу. При этом оболочка будет
-	 * закрыта.
+	 * Report the shell that the MIDlet has completed its work. In this case, the shell will be
+	 * closed.
 	 * <p>
-	 * Вызовы этого метода из destroyApp() игнорируются.
+	 * Calls to this method from destroyApp() are ignored.
 	 */
 	public final void notifyDestroyed() {
 		if (!destroyAppCalled) {
@@ -58,31 +58,31 @@ public abstract class MIDlet {
 	}
 
 	/**
-	 * Вызывается каждый раз, когда мидлет становится активным: при запуске
-	 * после initApp(), при восстановлении из свернутого состояния, ...
+	 * Called every time the MIDlet becomes active: at startup
+	 * after initApp(), when recovering from a minimized state.
 	 */
 	public abstract void startApp() throws MIDletStateChangeException;
 
 	/**
-	 * Вызывается каждый раз, когда мидлет становится на паузу: при сворачивании
-	 * в фоновый режим, ...
+	 * Called every time the MIDlet pauses: when minimized
+	 * to background.
 	 */
 	public abstract void pauseApp();
 
 	/**
-	 * Вызывается при завершении работы приложения.
+	 * Called when the application terminates.
 	 *
-	 * @param unconditional флаг безусловного завершения, для Android не имеет особого
-	 *                      смысла
+	 * @param unconditional unconditional completion flag, has no particular
+	 * sense for Android.
 	 */
 	public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
 
 	/**
-	 * Корректно вызвать destroyApp(). Во время выполнения этого метода вызовы
-	 * notifyDestroyed() игнорируются.
+	 * Correctly call destroyApp(). During the execution of this method,
+	 * notifyDestroyed() calls are ignored.
 	 *
-	 * @param unconditional флаг безусловного завершения, для Android не имеет особого
-	 *                      смысла
+	 * @param unconditional unconditional completion flag, has no particular
+	 * sense for Android.
 	 */
 	public final void callDestroyApp(boolean unconditional) {
 		destroyAppCalled = true;

@@ -18,9 +18,9 @@
 package javax.microedition.util;
 
 /**
- * Элемент связного списка.
+ * The linked list element.
  *
- * @param <E> что он содержит
+ * @param <E> what it contains
  */
 public class LinkedEntry<E> {
 	private LinkedEntry<E> prev;
@@ -29,46 +29,46 @@ public class LinkedEntry<E> {
 	private E element;
 
 	/**
-	 * Присвоить элементу значение.
+	 * Assign value to the element.
 	 *
-	 * @param element новое значение
+	 * @param element new value
 	 */
 	public void setElement(E element) {
 		this.element = element;
 	}
 
 	/**
-	 * @return текущее значение элемента
+	 * @return the current value of the element
 	 */
 	public E getElement() {
 		return element;
 	}
 
 	/**
-	 * @return элемент, предшествующий данному; или null, если такого элемента нет
+	 * @return the element preceding this; or null if there is no such element
 	 */
 	public LinkedEntry<E> prevEntry() {
 		return prev;
 	}
 
 	/**
-	 * @return элемент, следующий за данным; null, если такого элемента нет
+	 * @return the element following the data; null if there is no such element
 	 */
 	public LinkedEntry<E> nextEntry() {
 		return next;
 	}
 
 	/**
-	 * Изъять этот элемент из списка.
-	 * Смежные элементы при этом соединяются между собой.
+	 * Remove this item from the list.
+	 * The adjacent elements are interconnected.
 	 */
 	public void remove() {
 		if (prev != null) {
-			prev.next = next;    // следующий за предыдущим = следующий за этим
+			prev.next = next;    // following the previous element = following this element
 		}
 
 		if (next != null) {
-			next.prev = prev;    // предшествующий следующему = предшествующий этому
+			next.prev = prev;    // preceding next element = preceding this element
 		}
 
 		prev = null;
@@ -76,10 +76,10 @@ public class LinkedEntry<E> {
 	}
 
 	/**
-	 * Восстановить двунаправленность связей для этого элемента.
+	 * Restore bidirectional links for this item.
 	 * <p>
-	 * То есть, если перед нами кто-то есть, то мы стоим за ним;
-	 * если кто-то есть после нас, то мы стоим перед ним.
+	 * That is, if there is someone in front of us, then we stand behind him;
+	 * if someone is after us, then we are standing in front of him.
 	 */
 	private void updateLinks() {
 		if (prev != null) {
@@ -92,17 +92,17 @@ public class LinkedEntry<E> {
 	}
 
 	/**
-	 * Вставить этот элемент перед указанным.
-	 * Предполагается, что указанный элемент входит в состав некоторого списка.
+	 * Insert this item before the specified one.
+	 * It is assumed that the specified element is part of a list.
 	 *
 	 * @param entry
 	 */
 	public void insertBefore(LinkedEntry<E> entry) {
-		remove();            // элемент не можеть быть одновременно в двух местах в списке
+		remove();            // item cannot be in two places in the list at the same time
 
-		prev = entry.prev;    // предыдущий для указанного - теперь наш предыдущий
-		next = entry;        // сам указанный - теперь наш следующий
+		prev = entry.prev;    // previous for the specified element - our previous one now
+		next = entry;        // the specified element - our next one now
 
-		updateLinks();        // доносим эти изменения до наших новых соседей
+		updateLinks();        // bring these changes to our new neighbors
 	}
 }

@@ -296,7 +296,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public VirtualKeyboard() {
 		font = new Font();
 		keypad = new VirtualKey[KEYBOARD_SIZE];
-		associatedKeys = new VirtualKey[10]; // у среднестатистического пользователя обычно не более 10 пальцев...
+		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
 
 		for (int i = KEY_NUM1; i < 9; i++) {
 			keypad[i] = new VirtualKey(Canvas.KEY_NUM1 + i, Integer.toString(1 + i));
@@ -702,15 +702,16 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	/**
-	 * Проверить, было ли нами обработано нажатие указателя.
+	 * Check if we have processed the pointer touch.
 	 * <p>
-	 * Считается, что не было, если оно пришлось на виртуальный экран: в этом
-	 * случае оно достанется и мидлету. А вот нажатия вне виртуального экрана
-	 * мидлету не передаются в целях оптимизации.
+	 * The pointer touch is not processed if it is on the virtual screen:
+	 * in this case, it will be handled by the midlet.
+	 * But clicking outside the virtual screen is not transmitted
+	 * to the midlet for optimization purposes.
 	 *
-	 * @param x координаты нажатия
-	 * @param y координаты нажатия
-	 * @return true, если нажатие пришлось на виртуальный экран мидлета
+	 * @param x the touch coordinates
+	 * @param y the touch coordinates
+	 * @return true, if the touch point is on the virtual screen
 	 */
 	private boolean checkPointerHandled(float x, float y) {
 		return !virtualScreen.contains(x, y);

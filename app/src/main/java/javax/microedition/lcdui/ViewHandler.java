@@ -20,8 +20,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 /**
- * Класс для централизованного создания и изменения View.
- * Необходим, потому что чертов Android не дает изменять View из разных потоков.
+ * Class for centrally creating and modifying View.
+ * Needed, because Android does not allow to change the View from different threads.
  */
 public class ViewHandler {
 	private static Handler handler;

@@ -157,9 +157,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	/**
-	 * Получить весь элемент, то есть
+	 * Get the whole item
 	 *
-	 * @return LinearLayout с меткой в первом ряду и некоторым содержимым во втором
+	 * @return LinearLayout with a label in the first row and some content in the second row
 	 */
 	public View getItemView() {
 		if (layout == null) {
@@ -238,7 +238,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	/**
-	 * Получить только содержимое элемента.
+	 * Get the item content
 	 */
 	protected abstract View getItemContentView();
 

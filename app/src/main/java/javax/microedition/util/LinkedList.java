@@ -18,9 +18,9 @@
 package javax.microedition.util;
 
 /**
- * Двусвязный список.
+ * The doubly linked list.
  *
- * @param <E> из чего он составлен
+ * @param <E> what it contains
  */
 public class LinkedList<E> {
 	private ArrayStack<LinkedEntry<E>> pool;
@@ -38,53 +38,53 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Проверить, есть ли что в списке.
+	 * Check if there is anything in the list.
 	 *
-	 * @return true, если список пуст
+	 * @return true, if the list is empty
 	 */
 	public boolean isEmpty() {
 		return head.nextEntry() == tail;
 	}
 
 	/**
-	 * Очистить список
+	 * Clear the list
 	 */
 	public void clear() {
 		/*
-		 * отсоединяем голову и хвост от предыдущего списка
+		 * disconnect the head and tail from the previous list
 		 */
 
 		head.remove();
 		tail.remove();
 
-		head.insertBefore(tail);    // образуем из головы и хвоста новый список
+		head.insertBefore(tail);    // form a new list from the head and tail
 	}
 
 	/**
-	 * @return первый элемент списка
+	 * @return the first list item
 	 */
 	public LinkedEntry<E> firstEntry() {
 		return head.nextEntry();
 	}
 
 	/**
-	 * @return последний элемент списка
+	 * @return the last list item
 	 */
 	public LinkedEntry<E> lastEntry() {
 		return tail.prevEntry();
 	}
 
 	/**
-	 * @return первое значение в списке
+	 * @return the first value in the list
 	 */
 	public E getFirst() {
 		return head.nextEntry().getElement();
 	}
 
 	/**
-	 * Удалить первое значение в списке.
+	 * Delete the first value in the list.
 	 *
-	 * @return бывшее первое значение в списке; null, если такого значения не было
+	 * @return the previous first value in the list; null if no such value
 	 */
 	public E removeFirst() {
 		LinkedEntry<E> entry = head.nextEntry();
@@ -97,30 +97,30 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * @return последнее значение в списке
+	 * @return the last value in the list
 	 */
 	public E getLast() {
 		return tail.prevEntry().getElement();
 	}
 
 	/**
-	 * Добавить значение в конец списка.
+	 * Add value to the end of the list.
 	 *
-	 * @param element новое значение
+	 * @param element the new value
 	 */
 	public void addLast(E element) {
 		getEntryInstance(element).insertBefore(tail);
 	}
 
 	/**
-	 * Достать экземпляр LinkedEntry.
+	 * Get an instance of LinkedEntry.
 	 * <p>
-	 * Здесь оптимизация:
-	 * если у нас есть свободные экземпляры в пуле, достаем из пула;
-	 * если свободных нет, так и быть, создаем новый экземпляр.
+	 * Here is the optimization:
+	 * if we have free copies in the pool, we get them from the pool;
+	 * if not - create a new instance.
 	 *
-	 * @param element значение, которым инициализировать экземпляр
-	 * @return экземпляр LinkedEntry
+	 * @param element the value to initialize the instance
+	 * @return the instance of LinkedEntry
 	 */
 	public LinkedEntry<E> getEntryInstance(E element) {
 		LinkedEntry<E> entry = pool.pop();
@@ -135,12 +135,12 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Сдать экземпляр LinkedEntry в утиль.
+	 * Recycle an LinkedEntry instance
 	 * <p>
-	 * При этом экземпляр обнуляется и возвращается в пул.
+	 * In this case, the copy is reset and returned to the pool.
 	 *
-	 * @param entry экземпляр LinkedEntry для утилизации
-	 * @return значение, содержавшееся в этом экземпляре
+	 * @param entry the LinkedEntry instance for recycling
+	 * @return the value contained in this instance
 	 */
 	public E recycleEntry(LinkedEntry<E> entry) {
 		E element = entry.getElement();

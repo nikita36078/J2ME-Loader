@@ -316,10 +316,10 @@ public abstract class Canvas extends Displayable {
 		}
 
 		/**
-		 * В очереди должно быть не более двух перерисовок.
+		 * The queue should contain no more than two repaint events
 		 * <p>
-		 * Одна не обеспечит плавности, а если делать больше двух,
-		 * то как определить, насколько именно больше двух их нужно сделать?
+		 * One won't be smooth enough, and if you add more than two,
+		 * then how to determine exactly how many of them need to be added?
 		 */
 		@Override
 		public boolean placeableAfter(Event event) {
@@ -452,77 +452,75 @@ public abstract class Canvas extends Displayable {
 	}
 
 	/**
-	 * Обновить размер и положение виртуального экрана относительно реального.
+	 * Update the size and position of the virtual screen relative to the real one.
 	 */
 	private void updateSize() {
 		/*
-		 * Превращаем размеры виртуального экрана
-		 * в размеры видимого для мидлета холста.
+		 * We turn the sizes of the virtual screen into the sizes of the visible canvas.
 		 *
-		 * При этом учитываем, что один или оба виртуальных размера могут быть
-		 * меньше нуля, что означает автоподбор этого размера так,
-		 * чтобы получившийся холст имел то же соотношение сторон,
-		 * что и реальный экран устройства.
+		 * At the same time, we take into account that one or both virtual sizes can be less
+		 * than zero, which means auto-selection of this size so that the resulting canvas
+		 * has the same aspect ratio as the actual screen of the device.
 		 */
 		if (virtualWidth < 0) {
 			if (virtualHeight < 0) {
 				/*
-				 * не задано ничего - холст размером в экран
+				 * nothing is set - screen-sized canvas
 				 */
 				width = displayWidth;
 				height = displayHeight;
 			} else {
 				/*
-				 * задана только высота холста
-				 * ширина подбирается по соотношению сторон реального экрана
+				 * only the canvas height is set
+				 * width is selected by the ratio of the real screen
 				 */
 				width = displayWidth * virtualHeight / displayHeight;
 				height = virtualHeight;
 			}
 		} else if (virtualHeight < 0) {
 			/*
-			 * задана только ширина холста
-			 * высота подбирается по соотношению сторон реального экрана
+			 * only the canvas width is set
+			 * height is selected by the ratio of the real screen
 			 */
 			width = virtualWidth;
 			height = displayHeight * virtualWidth / displayWidth;
 		} else {
 			/*
-			 * ширина и высота холста жестко заданы
+			 * the width and height of the canvas are strictly set
 			 */
 			width = virtualWidth;
 			height = virtualHeight;
 		}
 		/*
-		 * Превращаем размеры холста в размер картинки,
-		 * которая будет отображаться на экране устройсва.
+		 * We turn the size of the canvas into the size of the image
+		 * that will be displayed on the screen of the device.
 		 */
 		if (scaleToFit) {
 			if (keepAspectRatio) {
 				/*
-				 * пробуем вписать по ширине
+				 * try to fit in width
 				 */
 				onWidth = displayWidth;
 				onHeight = height * displayWidth / width;
 				if (onHeight > displayHeight) {
 					/*
-					 * если при этом не влезли по высоте,
-					 * то вписываем по высоте
+					 * if height is too big,
+					 * then fit in height
 					 */
 					onHeight = displayHeight;
 					onWidth = width * displayHeight / height;
 				}
 			} else {
 				/*
-				 * масштабирование без сохранения соотношения сторон:
-				 * просто растягиваем картинку на весь экран
+				 * scaling without preserving the aspect ratio:
+				 * just stretch the picture to full screen
 				 */
 				onWidth = displayWidth;
 				onHeight = displayHeight;
 			}
 		} else {
 			/*
-			 * без масштабирования
+			 * without scaling
 			 */
 			onWidth = width;
 			onHeight = height;
@@ -533,17 +531,15 @@ public abstract class Canvas extends Displayable {
 
 		if (displayWidth >= displayHeight) {
 			/*
-			 * Если мы держим экран горизонтально,
-			 * то скорее всего мы держим его за левый и правый края.
-			 * Размещаем экран мидлета в центре.
+			 * If we hold the screen horizontally, then most likely we hold it by the left and right edges.
+			 * Place the midlet screen in the center.
 			 */
 			onX = (displayWidth - onWidth) / 2;
 			onY = (displayHeight - onHeight) / 2;
 		} else {
 			/*
-			 * Если мы держим экран вертикально,
-			 * то скорее всего мы держим его за нижний край.
-			 * Сдвигаем экран мидлета к верхнему краю.
+			 * If we hold the screen vertically, then most likely we hold it by the bottom edge.
+			 * Shift the midlet screen to the top.
 			 */
 			onX = (displayWidth - onWidth) / 2;
 			onY = 0;
@@ -562,20 +558,20 @@ public abstract class Canvas extends Displayable {
 	}
 
 	/**
-	 * Привести экранные координаты указателя к виртуальным.
+	 * Convert the screen coordinates of the pointer into the virtual ones.
 	 *
-	 * @param x координата указателя на реальном экране
-	 * @return соответствующая координата указателя на виртуальном экране
+	 * @param x the pointer coordinate on the real screen
+	 * @return the corresponding pointer coordinate on the virtual screen
 	 */
 	private float convertPointerX(float x) {
 		return (x - onX) * virtualWidth / onWidth;
 	}
 
 	/**
-	 * Привести экранные координаты указателя к виртуальным.
+	 * Convert the screen coordinates of the pointer into the virtual ones.
 	 *
-	 * @param y координата указателя на реальном экране
-	 * @return соответствующая координата указателя на виртуальном экране
+	 * @param y the pointer coordinate on the real screen
+	 * @return the corresponding pointer coordinate on the virtual screen
 	 */
 	private float convertPointerY(float y) {
 		return (y - onY) * virtualHeight / onHeight;
@@ -685,34 +681,34 @@ public abstract class Canvas extends Displayable {
 	}
 
 	/**
-	 * После вызова этого метода гарантированно произойдет немедленная перерисовка,
-	 * причем вызывающий поток блокируется до ее завершения.
+	 * After calling this method, an immediate redraw is guaranteed to occur,
+	 * and the calling thread is blocked until it is completed.
 	 */
 	public final void serviceRepaints() {
 		EventQueue queue = getEventQueue();
 
 		/*
-		 * порядок блокировки:
+		 * blocking order:
 		 *
 		 * 1 - queue.this
 		 * 2 - queue.queue
 		 *
-		 * соответственно, внутри EventQueue порядок должен быть такой же,
-		 * иначе возможна взаимная блокировка двух потоков (все повиснет)
+		 * accordingly, inside the EventQueue, the order must be the same,
+		 * otherwise mutual blocking of two threads is possible (everything will hang)
 		 */
 
 		synchronized (queue) {
 			/*
-			 * Такая синхронизация фактически приостанавливает обработку событий
-			 * непосредственно перед изменением значения currentEvent()
+			 * This synchronization actually stops the events processing
+			 * just before changing the value of currentEvent()
 			 *
-			 * Тогда остается всего два варианта:
+			 * Then there are only two options:
 			 */
 
 			if (queue.currentEvent() == paintEvent) {
 				/*
-				 * если там сейчас обрабатывается repaint(),
-				 * то здесь нужно просто подождать его завершения
+				 * if repaint() is being processed there now,
+				 * then you just need to wait for it to finish
 				 */
 
 				try {
@@ -722,9 +718,9 @@ public abstract class Canvas extends Displayable {
 				}
 			} else if (queue.removeEvents(paintEvent)) {
 				/*
-				 * если же сейчас там обрабатывается что-то другое (не repaint),
-				 * но repaint в очереди все же был (и был оттуда удален),
-				 * то его нужно синхронно вызвать отсюда
+				 * if now something else is being processed there (not repaint),
+				 * but the repaint was in the queue (and was removed from there),
+				 * then it needs to be synchronously called from here
 				 */
 
 				paintEvent.run();

@@ -20,96 +20,94 @@ import android.graphics.RectF;
 
 public interface Overlay {
 	/**
-	 * Нацелить оверлей на указанный Canvas
+	 * Target the overlay at the specified Canvas
 	 *
-	 * @param canvas Canvas, которому при необходимости следует передавать
-	 *               нажатия клавиш и движения указателя
+	 * @param canvas Canvas, which, if necessary, should handle key pressings and pointer movement
 	 */
 	public void setTarget(Canvas canvas);
 
 	/**
-	 * Вызывается при изменении размера реального (например, при повороте)
-	 * или виртуального экранов.
+	 * Called when resizing real (for example, after rotation) or virtual screens.
 	 *
-	 * @param screen        размер реального экрана устройства
-	 * @param virtualScreen размер виртуального экрана, который доступен мидлету
+	 * @param screen        the size of the device real screen
+	 * @param virtualScreen the size of the virtual screen that is available to the midlet
 	 */
 	public void resize(RectF screen, RectF virtualScreen);
 
 	/**
-	 * Вызывается при перерисовке экрана.
-	 * См. метод paint() в Canvas.
+	 * Called when the screen is redrawn.
+	 * See the paint() method in Canvas.
 	 *
-	 * @param g Graphics, через который следует вести рисование
+	 * @param g the Graphics object to be used for rendering
 	 */
 	public void paint(Graphics g);
 
 	/**
-	 * Вызывается при первом нажатии аппаратной клавиши.
+	 * Called when the hardware key is pressed for the first time.
 	 *
-	 * @param keyCode код нажатой клавиши
-	 * @return true, если нажатие обработано здесь и дальше его передавать не нужно
+	 * @param keyCode the code of the pressed key
+	 * @return true, if the pressing is processed here and no further handling is necessary
 	 */
 	public boolean keyPressed(int keyCode);
 
 	/**
-	 * Вызывается при повторном (2, 3, и т.д.) нажатии аппаратной клавиши.
+	 * Called when the hardware key is pressed again (2, 3, etc.).
 	 *
-	 * @param keyCode код нажатой клавиши
-	 * @return true, если нажатие обработано здесь и дальше его передавать не нужно
+	 * @param keyCode the code of the pressed key
+	 * @return true, if the pressing is processed here and no further handling is necessary
 	 */
 	public boolean keyRepeated(int keyCode);
 
 	/**
-	 * Вызывается при отпускании аппаратной клавиши.
+	 * Called when the hardware key is released.
 	 *
-	 * @param keyCode код нажатой клавиши
-	 * @return true, если нажатие обработано здесь и дальше его передавать не нужно
+	 * @param keyCode the code of the pressed key
+	 * @return true, if the pressing is processed here and no further handling is necessary
 	 */
 	public boolean keyReleased(int keyCode);
 
 	/**
-	 * Вызывается при касании экрана указателем.
+	 * Called when the pointer touches the screen.
 	 *
-	 * @param pointer индекс указателя (всегда 0, если указатель один;
-	 *                может быть больше 0, если устройство поддерживает мультитач)
-	 * @param x       горизонтальная координата точки касания указателя на экране
-	 * @param y       вертикальная координата точки касания указателя на экране
-	 * @return true, если касание обработано здесь и дальше его передавать не нужно
+	 * @param pointer index of the pointer (always 0 if there is one pointer;
+	 *                may be greater than 0 if the device supports multitouch)
+	 * @param x       the horizontal coordinate of the pointer touch point on the screen
+	 * @param y       the vertical coordinate of the pointer touch point on the screen
+	 * @return true, if the touch is processed here and no further handling is necessary
 	 */
 	public boolean pointerPressed(int pointer, float x, float y);
 
 	/**
-	 * Вызывается при перемещении указателя по экрану.
+	 * Called when the pointer moves around the screen.
 	 *
-	 * @param pointer индекс указателя (всегда 0, если указатель один;
-	 *                может быть больше 0, если устройство поддерживает мультитач)
-	 * @param x       горизонтальная координата точки касания указателя на экране
-	 * @param y       вертикальная координата точки касания указателя на экране
-	 * @return true, если движение обработано здесь и дальше его передавать не нужно
+	 * @param pointer index of the pointer (always 0 if there is one pointer;
+	 *                may be greater than 0 if the device supports multitouch)
+	 * @param x       the horizontal coordinate of the pointer touch point on the screen
+	 * @param y       the vertical coordinate of the pointer touch point on the screen
+	 * @return true, if the movement is processed here and no further handling is necessary
 	 */
 	public boolean pointerDragged(int pointer, float x, float y);
 
 	/**
-	 * Вызывается при отпускании указателя.
+	 * Called when the pointer is released.
 	 *
-	 * @param pointer индекс указателя (всегда 0, если указатель один;
-	 *                может быть больше 0, если устройство поддерживает мультитач)
-	 * @param x       горизонтальная координата точки касания указателя на экране
-	 * @param y       вертикальная координата точки касания указателя на экране
-	 * @return true, если касание обработано здесь и дальше его передавать не нужно
+	 * @param pointer index of the pointer (always 0 if there is one pointer;
+	 *                may be greater than 0 if the device supports multitouch)
+	 * @param x       the horizontal coordinate of the pointer touch point on the screen
+	 * @param y       the vertical coordinate of the pointer touch point on the screen
+	 * @return true, if the touch is processed here and no further handling is necessary
 	 */
 	public boolean pointerReleased(int pointer, float x, float y);
 
 	/**
-	 * Показать оверлей.
-	 * Вызывается Canvas'ом при первом касании экрана указателем.
+	 * Show overlay.
+	 * Called by the Canvas at the first touch of the screen with a pointer.
 	 */
 	public void show();
 
 	/**
-	 * Скрыть оверлей.
-	 * Вызывается Canvas'ом при отпускании с экрана последнего указателя.
+	 * Hide overlay.
+	 * Called by the Canvas when the last pointer is released from the screen.
 	 */
 	public void hide();
 }
