@@ -82,47 +82,6 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Задать первое значение в списке.
-	 *
-	 * @param element новое значение для первого элемента
-	 * @return предыдущее значение; null, если его не было
-	 */
-	public E setFirst(E element) {
-		LinkedEntry<E> entry = head.nextEntry();
-
-		if (entry != tail) // за головой не сразу хвост идет (список не пустой)
-		{
-			/*
-			 * там что-то было, значит,
-			 * заменяем это что-то на новое значение
-			 */
-
-			E former = entry.getElement();
-			entry.setElement(element);
-
-			return former;
-		} else // за головой идет сразу хвост (список пустой)
-		{
-			/*
-			 * голову с хвостом не трогаем,
-			 * вставляем новый элемент
-			 */
-
-			addFirst(element);
-			return null;
-		}
-	}
-
-	/**
-	 * Добавить значение в начало списка.
-	 *
-	 * @param element новое значение
-	 */
-	public void addFirst(E element) {
-		getEntryInstance(element).insertAfter(head);
-	}
-
-	/**
 	 * Удалить первое значение в списке.
 	 *
 	 * @return бывшее первое значение в списке; null, если такого значения не было
@@ -145,59 +104,12 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Задать последнее значение в списке.
-	 *
-	 * @param element новое значение для последнего элемента
-	 * @return предыдущее значение; null, если его не было
-	 */
-	public E setLast(E element) {
-		LinkedEntry<E> entry = tail.prevEntry();
-
-		if (entry != head) // перед хвостом не сразу голова идет (список не пустой)
-		{
-			/*
-			 * там что-то было, значит,
-			 * заменяем это что-то на новое значение
-			 */
-
-			E former = entry.getElement();
-			entry.setElement(element);
-
-			return former;
-		} else // перед хвостом идет сразу голова (список пустой)
-		{
-			/*
-			 * голову с хвостом не трогаем,
-			 * вставляем новый элемент
-			 */
-
-			addFirst(element);
-			return null;
-		}
-	}
-
-	/**
 	 * Добавить значение в конец списка.
 	 *
 	 * @param element новое значение
 	 */
 	public void addLast(E element) {
 		getEntryInstance(element).insertBefore(tail);
-	}
-
-	/**
-	 * Удалить последнее значение в списке.
-	 *
-	 * @return бывшее последнее значение в списке; null, если такого значения не было
-	 */
-	public E removeLast() {
-		LinkedEntry<E> entry = tail.prevEntry();
-
-		if (entry != head) {
-			return recycleEntry(entry);
-		} else {
-			return null;
-		}
 	}
 
 	/**
