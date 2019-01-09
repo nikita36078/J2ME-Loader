@@ -74,7 +74,8 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(() -> layout.addView(item.getItemView()));
+				View v = item.getItemView();
+				a.runOnUiThread(() -> layout.addView(v));
 			}
 		}
 		return items.size() - 1;
@@ -90,7 +91,8 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(() -> layout.addView(item.getItemView(), index));
+				View v = item.getItemView();
+				a.runOnUiThread(() -> layout.addView(v, index));
 			}
 		}
 	}
@@ -106,8 +108,9 @@ public class Form extends Screen {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(() -> {
+					View v = item.getItemView();
 					layout.removeViewAt(index);
-					layout.addView(item.getItemView(), index);
+					layout.addView(v, index);
 				});
 			}
 		}
