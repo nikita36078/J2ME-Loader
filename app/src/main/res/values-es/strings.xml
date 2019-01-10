@@ -14,7 +14,7 @@
     <string name="version">Versión: </string>
     <string name="no_data_for_display">Sin datos</string>
     <string name="message_delete">¿Realmente desea eliminar esta aplicación?</string>
-    <string name="converting_wait">Convirtiendo JAR...</string>
+    <string name="converting_wait">Convirtiendo...</string>
     <string name="convert_complete">Completo</string>
     <string name="converting_message">Cargando...</string>
     <string name="permission_request_failed">Esta aplicación requiere permisos de escritura de almacenamiento</string>
@@ -37,6 +37,7 @@
     <string name="PREF_KEEP_ASPECT_RATIO">Mantener la relación de aspecto</string>
     <string name="PREF_FILTER">Filtro</string>
     <string name="PREF_IMMEDIATE">Modo de procesamiento de páginas</string>
+    <string name="PREF_SHOW_FPS">Mostrar FPS</string>
     <string name="PREF_FONT_OPTIONS">Opciones de fuente</string>
     <string name="PREF_WIDTH">Ancho</string>
     <string name="PREF_HEIGHT">Alto</string>
@@ -87,6 +88,7 @@
     <string name="layout_scale_mode">Modo de cambio de tamaño del teclado</string>
     <string name="layout_switch">Cambiar disposición del teclado</string>
     <string name="hide_buttons">Ocultar botones</string>
+    <string name="take_screenshot">Tomar Captura De Pantalla</string>
     <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">

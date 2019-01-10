@@ -37,6 +37,7 @@
     <string name="PREF_KEEP_ASPECT_RATIO">En boy oranını koru</string>
     <string name="PREF_FILTER">Filtre</string>
     <string name="PREF_IMMEDIATE">Acil işleme modu</string>
+    <string name="PREF_SHOW_FPS">FPS\'i göster</string>
     <string name="PREF_FONT_OPTIONS">Yazı tipi seçenekleri</string>
     <string name="PREF_WIDTH">Genişlik</string>
     <string name="PREF_HEIGHT">Yükseklik</string>
@@ -87,6 +88,7 @@
     <string name="layout_scale_mode">Tuş düzenini yeniden boyutlandırma modu</string>
     <string name="layout_switch">Tuş düzenini değiştir</string>
     <string name="hide_buttons">Tuşları gizle</string>
+    <string name="take_screenshot">Ekran görüntüsü al</string>
     <string name="common_settings">[GENEL AYARLAR]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
