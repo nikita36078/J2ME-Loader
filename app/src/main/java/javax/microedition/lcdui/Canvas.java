@@ -711,6 +711,10 @@ public abstract class Canvas extends Displayable {
 				 * then you just need to wait for it to finish
 				 */
 
+				if (Thread.holdsLock(paintsync)) { // Avoid deadlock
+					return;
+				}
+
 				try {
 					queue.wait();
 				} catch (InterruptedException ie) {
