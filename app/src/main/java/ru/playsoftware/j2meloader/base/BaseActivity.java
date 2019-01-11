@@ -18,6 +18,8 @@ package ru.playsoftware.j2meloader.base;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -33,10 +35,20 @@ public class BaseActivity extends AppCompatActivity {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String theme = preferences.getString("pref_theme", "light");
 		if (theme.equals("dark")) {
+		    setNavigationBarColor();
 			setTheme(R.style.AppTheme);
 		} else {
 			setTheme(R.style.AppTheme_Light);
 		}
-		super.onCreate(savedInstanceState);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setElevation(getResources().getDisplayMetrics().density*2);
+        }
+        super.onCreate(savedInstanceState);
 	}
+
+	private void setNavigationBarColor(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(Color.BLACK);
+        }
+    }
 }

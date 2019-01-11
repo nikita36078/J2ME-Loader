@@ -33,6 +33,7 @@ import android.support.v4.content.pm.ShortcutInfoCompat;
 import android.support.v4.content.pm.ShortcutManagerCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -105,7 +106,8 @@ public class AppsListFragment extends ListFragment {
 		registerForContextMenu(getListView());
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
-		initDb();
+        getListView().setDividerHeight(1);
+        initDb();
 		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
 		fab.setOnClickListener(v -> {
 			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);

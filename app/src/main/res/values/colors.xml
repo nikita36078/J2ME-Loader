@@ -4,5 +4,6 @@
     <color name="primary">#212121</color>
     <color name="ic_launcher_background">#525AA0</color>
     <color name="fab_material_red_500">#f44336</color>
-    <color name="file_picker_accent">#cddc39</color>
+    <color name="file_picker_accent">#ffb62e</color>
+    <color name="nnn">#2f2f2f</color>
 </resources>

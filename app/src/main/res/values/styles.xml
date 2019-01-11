@@ -1,10 +1,20 @@
 <resources>
 
     <style name="AppTheme" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">#00aaff</item>
+        <item name="colorPrimary">#262e37</item>
+        <item name="colorPrimaryDark">#20272f</item>
+        <item name="android:listDivider">@color/dark_divider</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="colorButtonNormal">#253241</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:colorBackground">@color/nnn</item>
     </style>
 
     <style name="AppTheme.Light" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">#ff2e51</item>
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryDark">#1c1c1c</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
@@ -38,6 +48,8 @@
     </style>
 
     <style name="FilePickerTheme.Light" parent="NNF_BaseTheme.Light">
+        <item name="colorAAA">#faf</item>
+        <item name="colorPrimaryDark">#000</item>
         <item name="colorAccent">@color/file_picker_accent</item>
         <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme.Light</item>
     </style>
@@ -46,4 +58,5 @@
         <item name="colorAccent">@color/file_picker_accent</item>
     </style>
 
+    <color name="dark_divider">#0fffffff</color>
 </resources>

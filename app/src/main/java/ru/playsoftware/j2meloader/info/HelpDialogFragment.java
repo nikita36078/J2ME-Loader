@@ -35,7 +35,9 @@ public class HelpDialogFragment extends DialogFragment {
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(getString(R.string.help_message)));
 		tv.setTextSize(16);
-		tv.setPadding(10, 10, 10, 10);
+		float density = getResources().getDisplayMetrics().density;
+		int padding = (int) (density * 16);
+		tv.setPadding(padding, padding, padding, padding);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.help)
 				.setIcon(R.mipmap.ic_launcher)
