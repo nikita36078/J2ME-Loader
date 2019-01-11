@@ -138,8 +138,12 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
-			filteredList = (List<AppItem>) results.values;
-			notifyDataSetChanged();
+			if (results.values != null) {
+				filteredList = (List<AppItem>) results.values;
+				notifyDataSetChanged();
+			} else {
+				notifyDataSetInvalidated();
+			}
 		}
 	}
 }
