@@ -44,9 +44,10 @@ public class AboutDialogFragment extends DialogFragment {
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(message.toString()));
 		tv.setTextSize(16);
-        float density = getResources().getDisplayMetrics().density;
-        int padding = (int) (density * 16);
-        tv.setPadding(padding, padding, padding, 0);
+		float density = getResources().getDisplayMetrics().density;
+		int paddingHorizontal = (int) (density * 20);
+		int paddingVertical = (int) (density * 14);
+		tv.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, 0);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)

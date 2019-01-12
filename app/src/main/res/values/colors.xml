@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_dark">#000000</color>
-    <color name="primary">#212121</color>
     <color name="ic_launcher_background">#525AA0</color>
     <color name="fab_material_red_500">#f44336</color>
     <color name="file_picker_accent">#ffb62e</color>
-    <color name="nnn">#2f2f2f</color>
+
+    <color name="light_color_primary">#212121</color>
+    <color name="light_color_primary_dark">#1c1c1c</color>
+    <color name="light_color_accent">#ff2e51</color>
+    <color name="dark_color_background">#20272f</color>
+
+    <color name="dark_color_primary">#262e37</color>
+    <color name="dark_color_primary_dark">#20272f</color>
+    <color name="dark_color_accent">#0099ff</color>
+    <color name="light_color_background">#fafafa</color>
+
+    <color name="dark_list_divider">#0fffffff</color>
 </resources>

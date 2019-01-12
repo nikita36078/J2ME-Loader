@@ -18,8 +18,6 @@ package ru.playsoftware.j2meloader.base;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -30,25 +28,18 @@ import ru.playsoftware.j2meloader.R;
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
-	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String theme = preferences.getString("pref_theme", "light");
-		if (theme.equals("dark")) {
-		    setNavigationBarColor();
-			setTheme(R.style.AppTheme);
-		} else {
-			setTheme(R.style.AppTheme_Light);
-		}
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String theme = preferences.getString("pref_theme", "light");
+        if (theme.equals("dark")) {
+            setTheme(R.style.AppTheme);
+        } else {
+            setTheme(R.style.AppTheme_Light);
+        }
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setElevation(getResources().getDisplayMetrics().density*2);
+            getSupportActionBar().setElevation(getResources().getDisplayMetrics().density * 2);
         }
         super.onCreate(savedInstanceState);
-	}
-
-	private void setNavigationBarColor(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(Color.BLACK);
-        }
     }
 }

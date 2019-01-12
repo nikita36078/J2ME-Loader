@@ -4,32 +4,39 @@
         android:defaultValue="light"
         android:entries="@array/pref_theme_entries"
         android:entryValues="@array/pref_theme_values"
+        android:icon="@drawable/ic_setting_theme"
         android:key="pref_theme"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_theme_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_enable_action_bar"
         android:key="pref_actionbar_switch"
         android:summary="@string/pref_enable_actionbar_summary"
         android:title="@string/pref_enable_actionbar_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_keep_screen_on"
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />
     <ListPreference
         android:defaultValue="round"
         android:entries="@array/pref_button_shape_entries"
         android:entryValues="@array/pref_button_shape_values"
+        android:icon="@drawable/ic_setting_button_shape"
         android:key="pref_button_shape"
         android:title="@string/pref_button_shape_title" />
     <ListPreference
         android:defaultValue="name"
         android:entries="@array/pref_app_sort_entries"
         android:entryValues="@array/pref_app_sort_values"
+        android:icon="@drawable/ic_setting_sort"
         android:key="pref_app_sort"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_app_sort_title" />
-    <Preference android:title="@string/pref_map_keys">
+    <Preference
+        android:icon="@drawable/ic_setting_key_map"
+        android:title="@string/pref_map_keys">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="ru.playsoftware.j2meloader.settings.KeyMapperActivity"

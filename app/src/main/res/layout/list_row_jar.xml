@@ -34,7 +34,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp">
+            android:alpha=".7"
+            android:layout_marginTop="2dp">
 
             <TextView
                 android:id="@+id/list_author"
@@ -43,7 +44,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 tools:ignore="SmallSp" />
 
             <TextView
@@ -53,7 +54,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 tools:ignore="SmallSp" />
         </RelativeLayout>
     </LinearLayout>

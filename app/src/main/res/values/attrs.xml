@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorAAA" format="color"/>
+    <attr name="textColorPrimary" format="color" />
+    <attr name="textColorSecondary" format="color" />
+    <attr name="textColorTertiary" format="color" />
+    <attr name="configCardBgColor" format="color" />
+    <attr name="buttonTextColor" format="color" />
+    <attr name="buttonBgColorNormal" format="color" />
+    <attr name="buttonBgColorPressed" format="color" />
+    <attr name="editTextLineColorNormal" format="color" />
+    <attr name="editTextLineColorFocused" format="color" />
 </resources>
