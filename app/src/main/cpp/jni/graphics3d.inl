@@ -15,9 +15,13 @@
 *
 */
 #include "javax_microedition_m3g_Graphics3D.h"
+#include <android/log.h>
+#include <android/bitmap.h>
 
-jintArray g_pixels = 0;
-jint* pixels_ptr;
+#define  LOG_TAG    "M3G"
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
+void* pixels_ptr;
 
 /*
  * Must be executed in UI thread
@@ -91,7 +95,7 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1isProperRend
 JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
 (JNIEnv* aEnv, jclass, jlong aCtx, jlong aSurfaceHandle, jint aWidth, jint aHeight,
  jint aClipX, jint aClipY, jint aClipW, jint aClipH,
- jboolean aDepth, jint aHintBits, jboolean aIsProperRenderer, jintArray pixels)
+ jboolean aDepth, jint aHintBits, jboolean aIsProperRenderer, jobject bitmap)
 {
     M3GRenderContext ctx = (M3GRenderContext)aCtx;
 
@@ -115,9 +119,13 @@ JNIEXPORT jboolean JNICALL Java_javax_microedition_m3g_Graphics3D__1bindGraphics
                             M3G_COLOR_BUFFER_BIT|M3G_DEPTH_BUFFER_BIT :
                             M3G_COLOR_BUFFER_BIT) && m3gSetRenderHints((M3GRenderContext)aCtx, aHintBits))
     {
-	    g_pixels = (jintArray) aEnv->NewGlobalRef(pixels);
-	    pixels_ptr = aEnv->GetIntArrayElements(g_pixels, NULL);
-	    m3gBindMemoryTarget((M3GRenderContext)aCtx, pixels_ptr, aWidth, aHeight, M3G_ARGB8, (M3Guint)(aWidth * 4), 0);
+        int ret = AndroidBitmap_lockPixels(aEnv, bitmap, &pixels_ptr);
+        if (ret < 0) {
+            LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+            M3G_RAISE_EXCEPTION(aEnv, "java/lang/IllegalStateException")
+            return isImageTarget;
+        }
+	    m3gBindMemoryTarget((M3GRenderContext)aCtx, pixels_ptr, aWidth, aHeight, M3G_RGB8_32, (M3Guint)(aWidth * 4), 0);
 	    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
         m3gSetClipRect((M3GRenderContext)aCtx, aClipX, aClipY, aClipW, aClipH);
@@ -197,7 +205,7 @@ static void releaseGraphicsTarget(M3GRenderContext aCtx, CMIDGraphics *aGraphics
 */
 JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseGraphics
 (JNIEnv* aEnv, jclass, jlong aHandle,
- jlong aSurfaceHandle, jboolean /*aIsImageTarget*/, jboolean /*aIsProperRenderer*/, jintArray pixels)
+ jlong aSurfaceHandle, jboolean /*aIsImageTarget*/, jboolean /*aIsProperRenderer*/, jobject bitmap)
 {
     M3G_DO_LOCK
 
@@ -205,10 +213,11 @@ JNIEXPORT void JNICALL Java_javax_microedition_m3g_Graphics3D__1releaseGraphics
 
     // Release used target surface
 
-    if (g_pixels) {
-	aEnv->ReleaseIntArrayElements(g_pixels, pixels_ptr, JNI_ABORT);
-	aEnv->DeleteGlobalRef(g_pixels);
-	pixels_ptr = NULL;
+    int ret = AndroidBitmap_unlockPixels(aEnv, bitmap);
+    pixels_ptr = NULL;
+    if (ret < 0) {
+        LOGE("AndroidBitmap_unlockPixels() failed ! error=%d", ret);
+        M3G_RAISE_EXCEPTION(aEnv, "java/lang/IllegalStateException");
     }
     /*
     CMIDGraphics *cmidGraphics = MIDUnhandObject<CMIDGraphics>(aGraphicsHandle);

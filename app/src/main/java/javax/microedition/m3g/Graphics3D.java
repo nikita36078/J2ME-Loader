@@ -17,6 +17,9 @@
 
 package javax.microedition.m3g;
 
+import android.graphics.Bitmap;
+import android.graphics.Rect;
+
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -42,7 +45,7 @@ public class Graphics3D {
 	//------------------------------------------------------------------
 
 	private long handle;
-	private int[] pixels;
+	private Bitmap buffer;
 	private int cur_width, cur_height;
 
 	private Camera camera = null;
@@ -144,18 +147,16 @@ public class Graphics3D {
 
 		if (target instanceof Graphics) {
 			final Graphics finalG = (Graphics) target;
-			if (finalG.getClipWidth() > Defs.MAX_VIEWPORT_WIDTH ||
-					finalG.getClipHeight() > Defs.MAX_VIEWPORT_HEIGHT) {
+			android.graphics.Canvas canvas = finalG.getCanvas();
+			Rect bounds = canvas.getClipBounds();
+			if (bounds.width() > Defs.MAX_VIEWPORT_WIDTH ||
+					bounds.height() > Defs.MAX_VIEWPORT_HEIGHT) {
 				throw new IllegalArgumentException();
 			}
 
-			android.graphics.Canvas canvas = finalG.getCanvas();
 			final int width = canvas.getWidth();
 			final int height = canvas.getHeight();
-			if (pixels == null || width != cur_width || height != cur_height)
-				pixels = new int[width * height];
-			else
-				java.util.Arrays.fill(pixels, 0);
+			buffer = finalG.getBitmap();
 
 			// TODO: draw on background? Probably should fix alpha
 			/*
@@ -178,11 +179,11 @@ public class Graphics3D {
 							iIsImageTarget = _bindGraphics(
 									handle,
 									0, width, height,
-									finalG.getClipX(), finalG.getClipY(),
-									finalG.getClipWidth(), finalG.getClipHeight(),
+									bounds.left, bounds.top,
+									bounds.width(), bounds.height(),
 									finalDepth, finalFlags,
 									iIsProperRenderer,
-									pixels);
+									buffer);
 						}
 					});
 			currentTarget = finalG;
@@ -224,10 +225,8 @@ public class Graphics3D {
 					new M3gRunnable() {
 						@Override
 						public void doRun() {
-							Graphics g = (Graphics) currentTarget;
 							_releaseGraphics(handle,
-									0, iIsImageTarget, iIsProperRenderer, pixels);
-							g.drawRGB(pixels, 0, cur_width, 0, 0, cur_width, cur_height, true);
+									0, iIsImageTarget, iIsProperRenderer, buffer);
 						}
 					});
 		} else if (currentTarget instanceof Image2D) {
@@ -570,7 +569,7 @@ public class Graphics3D {
 												boolean depth,
 												int hintBits,
 												boolean aIsProperRenderer,
-												int[] pixels);
+												Bitmap pixels);
 
 	private native static void _bindImage(long handle, long imgHandle, boolean depth, int hintBits);
 
@@ -578,7 +577,7 @@ public class Graphics3D {
 												long surfaceHandle,
 												boolean aIsImageTarget,
 												boolean aIsProperRenderer,
-												int[] pixels);
+												Bitmap pixels);
 
 	private native static void _releaseImage(long handle);
 

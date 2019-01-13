@@ -489,4 +489,8 @@ public class Graphics {
 						  int x, int y, int width, int height) {
 		canvasBitmap.getPixels(pixels, offset, stride, x, y, width, height);
 	}
+
+	public Bitmap getBitmap() {
+		return canvasBitmap;
+	}
 }

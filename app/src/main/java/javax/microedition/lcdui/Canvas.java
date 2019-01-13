@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.v4.util.SparseArrayCompat;
@@ -165,7 +166,7 @@ public abstract class Canvas extends Displayable {
 		public InnerView(Context context) {
 			super(context);
 			getHolder().addCallback(this);
-			getHolder().setFormat(android.graphics.PixelFormat.RGBA_8888);
+			getHolder().setFormat(PixelFormat.RGBA_8888);
 			setFocusableInTouchMode(true);
 		}
 
@@ -554,6 +555,7 @@ public abstract class Canvas extends Displayable {
 
 		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
 			offscreen = Image.createImage(width, height);
+			offscreen.getBitmap().setHasAlpha(false);
 			offscreenBuffer = ByteBuffer.allocate(offscreen.getBitmap().getByteCount());
 		}
 		if (overlay != null) {
