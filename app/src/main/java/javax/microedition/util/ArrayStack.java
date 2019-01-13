@@ -20,14 +20,14 @@ package javax.microedition.util;
 public class ArrayStack<E> {
 	public static final int DELTA = 100;
 
-	protected Object[] data;
-	protected int index;
+	private Object[] data;
+	private int index;
 
 	public ArrayStack() {
 		clear();
 	}
 
-	public void push(E value) {
+	public synchronized void push(E value) {
 		if (index >= data.length - 1) {
 			Object[] temp = new Object[data.length + DELTA];
 			System.arraycopy(data, 0, temp, 0, data.length);
@@ -37,7 +37,7 @@ public class ArrayStack<E> {
 		data[++index] = value;
 	}
 
-	public E pop() {
+	public synchronized E pop() {
 		if (index < 0) {
 			return null;
 		}
@@ -45,7 +45,7 @@ public class ArrayStack<E> {
 		return (E) data[index--];
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		data = new Object[0];
 		index = -1;
 	}
