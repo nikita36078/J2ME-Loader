@@ -18,6 +18,7 @@ package javax.microedition.lcdui.pointer;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.DataInputStream;
@@ -44,6 +45,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_DOWN_LEFT = "\u2199";
 	private static final String ARROW_DOWN_RIGHT = "\u2198";
 
+	private static final long KEY_REPEAT_INTERVAL = 150;
+
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
 	}
@@ -55,6 +58,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private String label;
 		private boolean selected;
 		private boolean visible;
+		private long lastActionTime;
 
 		public VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
@@ -78,6 +82,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		public void setSelected(boolean flag) {
 			selected = flag;
+			lastActionTime = SystemClock.uptimeMillis();
 		}
 
 		public void setVisible(boolean flag) {
@@ -290,7 +295,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private VirtualKey[] keypad;
 	private VirtualKey[] associatedKeys;
 
-	private KeyRepeater repeater;
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
@@ -337,7 +341,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		offscreenChanged = true;
 		hider = new Thread(this, "MIDletVirtualKeyboard");
 		hider.start();
-		repeater = new KeyRepeater();
 	}
 
 	private void resetLayout(int variant) {
@@ -547,7 +550,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void setTarget(Canvas canvas) {
 		target = canvas;
-		repeater.setTarget(canvas);
 		highlightGroup(-1);
 	}
 
@@ -567,7 +569,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (snapModes[target] != RectSnap.NO_SNAP) {
 			snapOrigins[target] = origin;
 			snapOffsets[target].set(0, 0);
-			for (VirtualKey aKeypad : keypad) {
+			for (VirtualKey ignored : keypad) {
 				origin = snapOrigins[origin];
 				if (origin == SCREEN) {
 					return true;
@@ -737,7 +739,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						if (aKeypad.getSecondKeyCode() != 0) {
 							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getSecondKeyCode()));
 						}
-						repeater.start(aKeypad.getKeyCode(), aKeypad.getSecondKeyCode());
 						repaint();
 						break;
 					}
@@ -787,18 +788,24 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (pointer > associatedKeys.length) {
 					return checkPointerHandled(x, y);
 				}
-				if (associatedKeys[pointer] == null) {
+				VirtualKey key = associatedKeys[pointer];
+				if (key == null) {
 					pointerPressed(pointer, x, y);
-				} else if (!associatedKeys[pointer].contains(x, y)) {
-					repeater.stop();
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
-					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
+				} else if (!key.contains(x, y)) {
+					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, key.getKeyCode()));
+					if (key.getSecondKeyCode() != 0) {
+						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, key.getSecondKeyCode()));
 					}
-					associatedKeys[pointer].setSelected(false);
+					key.setSelected(false);
 					associatedKeys[pointer] = null;
 					repaint();
 					pointerPressed(pointer, x, y);
+				} else if (SystemClock.uptimeMillis() - key.lastActionTime >= KEY_REPEAT_INTERVAL) {
+					key.lastActionTime = SystemClock.uptimeMillis();
+					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getKeyCode()));
+					if (key.getSecondKeyCode() != 0) {
+						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getSecondKeyCode()));
+					}
 				}
 				break;
 			case LAYOUT_KEYS:
@@ -866,7 +873,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				return checkPointerHandled(x, y);
 			}
 			if (associatedKeys[pointer] != null) {
-				repeater.stop();
 				target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
