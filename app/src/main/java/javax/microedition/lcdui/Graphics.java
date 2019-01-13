@@ -46,44 +46,32 @@ public class Graphics {
 	private Canvas canvas;
 	private Bitmap canvasBitmap;
 
-	private Paint drawPaint;
-	private Paint fillPaint;
-	private Paint imagePaint;
+	private Paint drawPaint = new Paint();
+	private Paint fillPaint = new Paint();
+	private Paint imagePaint = new Paint();
 
 	private int translateX;
 	private int translateY;
+	private final Rect clip = new Rect();
 
-	private Rect intRect;
-	private RectF floatRect;
-	private Path path;
+	private Rect intRect = new Rect();
+	private RectF floatRect = new RectF();
+	private Path path = new Path();
 
-	private DashPathEffect dpeffect;
+	private DashPathEffect dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
 	private int stroke;
 
 	private boolean drawAntiAlias;
 	private boolean textAntiAlias;
 
-	private Font font;
+	private Font font = Font.getDefaultFont();
 
 	public Graphics() {
-		drawPaint = new Paint();
-		fillPaint = new Paint();
-		imagePaint = new Paint();
-
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
-
-		dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
 		setStrokeStyle(SOLID);
-
 		setAntiAlias(false);
 		setAntiAliasText(true);
-
-		font = Font.getDefaultFont();
-
-		intRect = new Rect();
-		floatRect = new RectF();
-		path = new Path();
 	}
 
 	public void reset() {
@@ -113,10 +101,14 @@ public class Graphics {
 		canvas.save();
 		this.canvas = canvas;
 		this.canvasBitmap = canvasBitmap;
+		canvas.getClipBounds(clip);
 	}
 
 	public void setSurfaceCanvas(Canvas canvas) {
 		this.canvas = canvas;
+		if (canvas != null) {
+			canvas.getClipBounds(clip);
+		}
 	}
 
 	public Canvas getCanvas() {
@@ -231,36 +223,36 @@ public class Graphics {
 	}
 
 	public void setClip(int x, int y, int width, int height) {
-		intRect.set(x, y, x + width, y + height);
+		clip.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			canvas.restore();
 			canvas.save();
 			canvas.translate(translateX, translateY);
-			canvas.clipRect(intRect);
+			canvas.clipRect(clip);
 		} else {
-			canvas.clipRect(intRect, Region.Op.REPLACE);
+			canvas.clipRect(clip, Region.Op.REPLACE);
 		}
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
-		intRect.set(x, y, x + width, y + height);
-		canvas.clipRect(intRect);
+		clip.set(x, y, x + width, y + height);
+		canvas.clipRect(clip);
 	}
 
 	public int getClipX() {
-		return canvas.getClipBounds().left;
+		return clip.left;
 	}
 
 	public int getClipY() {
-		return canvas.getClipBounds().top;
+		return clip.top;
 	}
 
 	public int getClipWidth() {
-		return canvas.getClipBounds().width();
+		return clip.width();
 	}
 
 	public int getClipHeight() {
-		return canvas.getClipBounds().height();
+		return clip.height();
 	}
 
 	public void translate(int dx, int dy) {
