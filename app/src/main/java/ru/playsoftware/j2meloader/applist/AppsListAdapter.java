@@ -57,7 +57,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public AppItem getItem(int position) {
 		return filteredList.get(position);
 	}
 
@@ -70,7 +70,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_jar, null);
+			view = layoutInflater.inflate(R.layout.list_row_jar, viewGroup, false);
 			holder = new ViewHolder();
 			holder.icon = view.findViewById(R.id.list_image);
 			holder.name = view.findViewById(R.id.list_title);

@@ -23,6 +23,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -178,11 +179,11 @@ public class AppsListFragment extends ListFragment {
 
 					@Override
 					public void onSuccess(String s) {
-						appRepository.insert(AppUtils.getApp(s));
-						if (!isAdded()) return;
-						Toast.makeText(getActivity(), getString(R.string.convert_complete)
-								+ " " + s, Toast.LENGTH_LONG).show();
+						AppItem app = AppUtils.getApp(s);
+						appRepository.insert(app);
 						dialog.dismiss();
+						if (!isAdded()) return;
+						showStartDialog(app);
 					}
 
 					@Override
@@ -195,8 +196,28 @@ public class AppsListFragment extends ListFragment {
 				});
 	}
 
+	private void showStartDialog(AppItem app) {
+		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+		StringBuilder text = new StringBuilder()
+				.append(getString(R.string.author)).append(' ')
+				.append(app.getAuthor()).append('\n')
+				.append(getString(R.string.version)).append(' ')
+				.append(app.getVersion()).append('\n');
+		dialog.setMessage(text);
+		dialog.setTitle(app.getTitle());
+		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
+		if (drawable != null) dialog.setIcon(drawable);
+		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
+			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPathExt()));
+			intent.setClass(getActivity(), ConfigActivity.class);
+			startActivity(intent);
+		});
+		dialog.setNegativeButton(R.string.close, null);
+		dialog.show();
+	}
+
 	private void showRenameDialog(final int id) {
-		AppItem item = (AppItem) adapter.getItem(id);
+		AppItem item = adapter.getItem(id);
 		EditText editText = new EditText(getActivity());
 		editText.setText(item.getTitle());
 		float density = getResources().getDisplayMetrics().density;
@@ -226,7 +247,7 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private void showDeleteDialog(final int id) {
-		AppItem item = (AppItem) adapter.getItem(id);
+		AppItem item = adapter.getItem(id);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
@@ -240,8 +261,9 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		AppItem item = (AppItem) adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), ConfigActivity.class);
+		AppItem item = adapter.getItem(position);
+		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()));
+		i.setClass(getActivity(), ConfigActivity.class);
 		startActivity(i);
 	}
 
@@ -256,7 +278,7 @@ public class AppsListFragment extends ListFragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
-		AppItem appItem = (AppItem) adapter.getItem(index);
+		AppItem appItem = adapter.getItem(index);
 		switch (item.getItemId()) {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());

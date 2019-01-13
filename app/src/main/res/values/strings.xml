@@ -5,6 +5,7 @@
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
+    <string name="close">Close</string>
     <string name="exit">Exit</string>
     <string name="about">About</string>
     <string name="help">Help</string>
