@@ -210,8 +210,9 @@ public abstract class Canvas extends Displayable {
 				case MotionEvent.ACTION_POINTER_DOWN:
 					int index = event.getActionIndex();
 					int id = event.getPointerId(index);
-					if ((overlay == null || !overlay.pointerPressed(id, event.getX(index), event.getY(index))) && touchInput) {
-						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, index,
+					if ((overlay == null || !overlay.pointerPressed(id, event.getX(index), event.getY(index)))
+							&& touchInput && id == 0) {
+						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, id,
 								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
@@ -221,16 +222,18 @@ public abstract class Canvas extends Displayable {
 					for (int h = 0; h < historySize; h++) {
 						for (int p = 0; p < pointerCount; p++) {
 							id = event.getPointerId(p);
-							if ((overlay == null || !overlay.pointerDragged(id, event.getHistoricalX(p, h), event.getHistoricalY(p, h))) && touchInput) {
-								postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p,
+							if ((overlay == null || !overlay.pointerDragged(id, event.getHistoricalX(p, h), event.getHistoricalY(p, h)))
+									&& touchInput && id == 0) {
+								postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
 										convertPointerX(event.getHistoricalX(p, h)), convertPointerY(event.getHistoricalY(p, h))));
 							}
 						}
 					}
 					for (int p = 0; p < pointerCount; p++) {
 						id = event.getPointerId(p);
-						if ((overlay == null || !overlay.pointerDragged(id, event.getX(p), event.getY(p))) && touchInput) {
-							postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, p,
+						if ((overlay == null || !overlay.pointerDragged(id, event.getX(p), event.getY(p)))
+								&& touchInput && id == 0) {
+							postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
 									convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
 						}
 					}
@@ -242,8 +245,9 @@ public abstract class Canvas extends Displayable {
 				case MotionEvent.ACTION_POINTER_UP:
 					index = event.getActionIndex();
 					id = event.getPointerId(index);
-					if ((overlay == null || !overlay.pointerReleased(id, event.getX(index), event.getY(index))) && touchInput) {
-						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, index,
+					if ((overlay == null || !overlay.pointerReleased(id, event.getX(index), event.getY(index)))
+							&& touchInput && id == 0) {
+						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, id,
 								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
