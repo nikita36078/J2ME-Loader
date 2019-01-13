@@ -92,12 +92,10 @@ public class ContextHolder {
 		}
 		// Add support for Siemens file path
 		resName = resName.replace('\\', '/');
-		try {
-			File resFile = new File(MyClassLoader.getResFolder(), resName);
-			byte[] data = new byte[(int) resFile.length()];
-			DataInputStream dis = new DataInputStream(new FileInputStream(resFile));
+		File resFile = new File(MyClassLoader.getResFolder(), resName);
+		byte[] data = new byte[(int) resFile.length()];
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(resFile))) {
 			dis.readFully(data);
-			dis.close();
 			return new ByteArrayInputStream(data);
 		} catch (IOException e) {
 			Log.d(TAG, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
