@@ -17,7 +17,7 @@
 package javax.microedition.sensor;
 
 public final class ObjectCondition implements Condition {
-	public ObjectCondition(Object obj) {
+	public ObjectCondition(Object limit) {
 	}
 
 	public final Object getLimit() {
@@ -25,12 +25,12 @@ public final class ObjectCondition implements Condition {
 	}
 
 	@Override
-	public final boolean isMet(double d) {
+	public boolean isMet(double value) {
 		return false;
 	}
 
 	@Override
-	public final boolean isMet(Object obj) {
+	public boolean isMet(Object value) {
 		return false;
 	}
 }

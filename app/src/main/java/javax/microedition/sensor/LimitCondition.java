@@ -26,12 +26,12 @@ public final class LimitCondition implements Condition {
 	}
 
 	@Override
-	public boolean isMet(double d) {
+	public boolean isMet(double value) {
 		return false;
 	}
 
 	@Override
-	public final boolean isMet(Object obj) {
+	public boolean isMet(Object value) {
 		return false;
 	}
 }

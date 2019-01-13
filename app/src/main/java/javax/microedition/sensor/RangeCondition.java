@@ -17,7 +17,6 @@
 package javax.microedition.sensor;
 
 public final class RangeCondition implements Condition {
-
 	public final double getLowerLimit() {
 		return 0;
 	}
@@ -35,12 +34,12 @@ public final class RangeCondition implements Condition {
 	}
 
 	@Override
-	public final boolean isMet(double d) {
+	public boolean isMet(double value) {
 		return false;
 	}
 
 	@Override
-	public final boolean isMet(Object obj) {
+	public boolean isMet(Object value) {
 		return false;
 	}
 }

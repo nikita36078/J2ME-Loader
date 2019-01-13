@@ -17,11 +17,7 @@
 package javax.microedition.sensor;
 
 public class Unit {
-
-	private Unit(String str) {
-	}
-
-	public static Unit getUnit(String str) {
+	public static Unit getUnit(String symbol) {
 		return null;
 	}
 

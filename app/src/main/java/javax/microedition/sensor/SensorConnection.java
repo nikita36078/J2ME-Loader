@@ -23,23 +23,25 @@ public interface SensorConnection extends Connection {
 	public static final int STATE_LISTENING = 2;
 	public static final int STATE_OPENED = 1;
 
-	Channel getChannel(ChannelInfo channelInfo);
+	public Channel getChannel(ChannelInfo channelInfo);
 
-	Data[] getData(int i);
+	public Data[] getData(int bufferSize);
 
-	Data[] getData(int i, long j, boolean z, boolean z2, boolean z3);
+	public Data[] getData(int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
+						  boolean isUncertaintyIncluded, boolean isValidityIncluded);
 
-	int[] getErrorCodes();
+	public int[] getErrorCodes();
 
-	String getErrorText(int i);
+	public String getErrorText(int bufferSize);
 
-	SensorInfo getSensorInfo();
+	public SensorInfo getSensorInfo();
 
-	int getState();
+	public int getState();
 
-	void removeDataListener();
+	public void removeDataListener();
 
-	void setDataListener(DataListener dataListener, int i);
+	public void setDataListener(DataListener listener, int bufferSize);
 
-	void setDataListener(DataListener dataListener, int i, long j, boolean z, boolean z2, boolean z3);
+	public void setDataListener(DataListener listener, int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
+								boolean isUncertaintyIncluded, boolean isValidityIncluded);
 }

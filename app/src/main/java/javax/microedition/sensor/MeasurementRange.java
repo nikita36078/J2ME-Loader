@@ -17,7 +17,7 @@
 package javax.microedition.sensor;
 
 public class MeasurementRange {
-	public MeasurementRange(double d, double d2, double d3) {
+	public MeasurementRange(double smallest, double largest, double resolution) {
 	}
 
 	public double getLargestValue() {

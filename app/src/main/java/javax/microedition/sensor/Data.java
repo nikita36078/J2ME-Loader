@@ -17,17 +17,17 @@
 package javax.microedition.sensor;
 
 public interface Data {
-	ChannelInfo getChannelInfo();
+	public ChannelInfo getChannelInfo();
 
-	double[] getDoubleValues();
+	public double[] getDoubleValues();
 
-	int[] getIntValues();
+	public int[] getIntValues();
 
-	Object[] getObjectValues();
+	public Object[] getObjectValues();
 
-	long getTimestamp(int i);
+	public long getTimestamp(int index);
 
-	float getUncertainty(int i);
+	public float getUncertainty(int index);
 
-	boolean isValid(int i);
+	public boolean isValid(int index);
 }

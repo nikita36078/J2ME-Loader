@@ -17,23 +17,20 @@
 package javax.microedition.sensor;
 
 public final class SensorManager {
-	private SensorManager() {
+	public static void addSensorListener(SensorListener listener, String str) {
 	}
 
-	public static void addSensorListener(SensorListener sensorListener, String str) {
+	public static void addSensorListener(SensorListener listener, SensorInfo info) {
 	}
 
-	public static void addSensorListener(SensorListener sensorListener, SensorInfo sensorInfo) {
-	}
-
-	public static SensorInfo[] findSensors(String str) {
+	public static SensorInfo[] findSensors(String url) {
 		return null;
 	}
 
-	public static SensorInfo[] findSensors(String str, String str2) {
+	public static SensorInfo[] findSensors(String quantity, String contextType) {
 		return null;
 	}
 
-	public static void removeSensorListener(SensorListener sensorListener) {
+	public static void removeSensorListener(SensorListener listener) {
 	}
 }
