@@ -568,7 +568,7 @@ public abstract class Canvas extends Displayable {
 	 * @return the corresponding pointer coordinate on the virtual screen
 	 */
 	private float convertPointerX(float x) {
-		return (x - onX) * virtualWidth / onWidth;
+		return (x - onX) * width / onWidth;
 	}
 
 	/**
@@ -578,7 +578,7 @@ public abstract class Canvas extends Displayable {
 	 * @return the corresponding pointer coordinate on the virtual screen
 	 */
 	private float convertPointerY(float y) {
-		return (y - onY) * virtualHeight / onHeight;
+		return (y - onY) * height / onHeight;
 	}
 
 	@Override
