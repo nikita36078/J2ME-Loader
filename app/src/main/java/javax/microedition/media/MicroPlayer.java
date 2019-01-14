@@ -156,7 +156,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 				state = PREFETCHED;
 			} catch (IOException e) {
-				throw new MediaException(e.getMessage());
+				/*
+				 * Only 32 instances of MediaPlayer can be prepared at once, don't throw the MediaException here
+				 * if we can't prepare it now
+				 */
+				e.printStackTrace();
 			}
 		}
 	}
