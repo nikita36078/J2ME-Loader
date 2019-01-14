@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2019 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,19 @@
 
 package javax.microedition.sensor;
 
-public class Unit {
-	private String symbol;
+import android.hardware.Sensor;
 
-	public Unit(String symbol) {
-		this.symbol = symbol;
-	}
-
-	public static Unit getUnit(String symbol) {
-		return new Unit(symbol);
-	}
-
-	public String toString() {
-		return symbol;
+public class AndroidSensorManager {
+	public static int getSensorType(String quantity) {
+		int type;
+		switch (quantity) {
+			case "acceleration":
+				type = Sensor.TYPE_ACCELEROMETER;
+				break;
+			default:
+				type = 0;
+				break;
+		}
+		return type;
 	}
 }

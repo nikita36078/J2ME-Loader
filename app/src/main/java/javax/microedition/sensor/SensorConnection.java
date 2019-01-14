@@ -16,6 +16,8 @@
 
 package javax.microedition.sensor;
 
+import java.io.IOException;
+
 import javax.microedition.io.Connection;
 
 public interface SensorConnection extends Connection {
@@ -25,10 +27,10 @@ public interface SensorConnection extends Connection {
 
 	public Channel getChannel(ChannelInfo channelInfo);
 
-	public Data[] getData(int bufferSize);
+	public Data[] getData(int bufferSize) throws IOException;
 
 	public Data[] getData(int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
-						  boolean isUncertaintyIncluded, boolean isValidityIncluded);
+						  boolean isUncertaintyIncluded, boolean isValidityIncluded) throws IOException;
 
 	public int[] getErrorCodes();
 

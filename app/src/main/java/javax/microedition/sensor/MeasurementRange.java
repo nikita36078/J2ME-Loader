@@ -17,18 +17,28 @@
 package javax.microedition.sensor;
 
 public class MeasurementRange {
+	private double smallest;
+	private double largest;
+	private double resolution;
+
 	public MeasurementRange(double smallest, double largest, double resolution) {
+		if (smallest > largest || resolution < 0) {
+			throw new IllegalArgumentException();
+		}
+		this.smallest = smallest;
+		this.largest = largest;
+		this.resolution = resolution;
 	}
 
 	public double getLargestValue() {
-		return 0;
+		return largest;
 	}
 
 	public double getResolution() {
-		return 0;
+		return resolution;
 	}
 
 	public double getSmallestValue() {
-		return 0;
+		return smallest;
 	}
 }
