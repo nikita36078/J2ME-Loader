@@ -22,26 +22,20 @@ package ru.playsoftware.j2meloader.config;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseIntArray;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -249,55 +243,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
             startMIDlet();
         }
 
-        setControlBackgroundTint(findViewById(android.R.id.content));
-    }
-
-    private ColorStateList btnColorStateList = null;
-    private int cardBgColor;
-
-    private void setControlBackgroundTint(ViewGroup viewGroup) {
-        if (btnColorStateList == null) {
-            //button
-            int btnColorNormal = getThemeAttributeColorInt(R.attr.buttonBgColorNormal);
-            int btnColorPressed = getThemeAttributeColorInt(R.attr.buttonBgColorPressed);
-            btnColorStateList =
-                    new ColorStateList(new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{}},
-                            new int[]{btnColorPressed, btnColorNormal});
-            //card
-            cardBgColor = getThemeAttributeColorInt(R.attr.configCardBgColor);
-        }
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            Drawable background = child.getBackground();
-            if (child.getTag() != null && background != null) {
-                if (child.getTag().equals(getString(R.string.tag_theme_button))) {
-                    //set button background
-                    Drawable wrap = DrawableCompat.wrap(background);
-                    DrawableCompat.setTintList(wrap, btnColorStateList);
-                    child.setBackgroundDrawable(wrap);
-                } else if (child.getTag().equals(getString(R.string.tag_theme_card))) {
-                    //set card background
-                    DrawableCompat.setTint(DrawableCompat.wrap(child.getBackground()),
-                            cardBgColor);
-                }
-            }
-            if (child instanceof ViewGroup) {
-                setControlBackgroundTint((ViewGroup) child);
-            }
-        }
-    }
-
-    private int getThemeAttributeColorInt(int attr) {
-        TypedValue outValue = new TypedValue();
-        //default color
-        int color = ContextCompat.getColor(this, R.color.light_color_primary);
-        if (getTheme().resolveAttribute(attr, outValue, false)) {
-            if (outValue.type == TypedValue.TYPE_REFERENCE)
-                color = ContextCompat.getColor(this, outValue.data);
-            else
-                color = outValue.data;
-        }
-        return color;
+        setControlColorTint(findViewById(android.R.id.content));
     }
 
     private void setProperties() {
