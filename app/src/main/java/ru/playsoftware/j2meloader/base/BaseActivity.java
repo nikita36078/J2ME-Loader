@@ -35,66 +35,66 @@ import ru.playsoftware.j2meloader.R;
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
-    private ColorStateList btnColorStateList = null;
-    private int cardBgColor;
+	private ColorStateList btnColorStateList = null;
+	private int cardBgColor;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String theme = preferences.getString("pref_theme", "light");
-        if (theme.equals("dark")) {
-            setTheme(R.style.AppTheme);
-        } else {
-            setTheme(R.style.AppTheme_Light);
-        }
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setElevation(getResources().getDisplayMetrics().density * 2);
-        }
-        super.onCreate(savedInstanceState);
-    }
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String theme = preferences.getString("pref_theme", "light");
+		if (theme.equals("dark")) {
+			setTheme(R.style.AppTheme);
+		} else {
+			setTheme(R.style.AppTheme_Light);
+		}
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setElevation(getResources().getDisplayMetrics().density * 2);
+		}
+		super.onCreate(savedInstanceState);
+	}
 
-    protected void setControlColorTint(ViewGroup viewGroup) {
-        if (btnColorStateList == null) {
-            //button
-            int btnColorNormal = getThemeAttributeColorInt(R.attr.buttonBgColorNormal);
-            int btnColorPressed = getThemeAttributeColorInt(R.attr.buttonBgColorPressed);
-            btnColorStateList =
-                    new ColorStateList(new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{}},
-                            new int[]{btnColorPressed, btnColorNormal});
-            //card
-            cardBgColor = getThemeAttributeColorInt(R.attr.configCardBgColor);
-        }
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            Drawable background = child.getBackground();
-            if (child.getTag() != null && background != null) {
-                if (child.getTag().equals(getString(R.string.tag_theme_button))) {
-                    //set button background
-                    Drawable wrap = DrawableCompat.wrap(background);
-                    DrawableCompat.setTintList(wrap, btnColorStateList);
-                    child.setBackgroundDrawable(wrap);
-                } else if (child.getTag().equals(getString(R.string.tag_theme_card))) {
-                    //set card background
-                    DrawableCompat.setTint(DrawableCompat.wrap(child.getBackground()),
-                            cardBgColor);
-                }
-            }
-            if (child instanceof ViewGroup) {
-                setControlColorTint((ViewGroup) child);
-            }
-        }
-    }
+	protected void setControlColorTint(ViewGroup viewGroup) {
+		if (btnColorStateList == null) {
+			//button
+			int btnColorNormal = getThemeAttributeColorInt(R.attr.buttonBgColorNormal);
+			int btnColorPressed = getThemeAttributeColorInt(R.attr.buttonBgColorPressed);
+			btnColorStateList =
+					new ColorStateList(new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{}},
+							new int[]{btnColorPressed, btnColorNormal});
+			//card
+			cardBgColor = getThemeAttributeColorInt(R.attr.configCardBgColor);
+		}
+		for (int i = 0; i < viewGroup.getChildCount(); i++) {
+			View child = viewGroup.getChildAt(i);
+			Drawable background = child.getBackground();
+			if (child.getTag() != null && background != null) {
+				if (child.getTag().equals(getString(R.string.tag_theme_button))) {
+					//set button background
+					Drawable wrap = DrawableCompat.wrap(background);
+					DrawableCompat.setTintList(wrap, btnColorStateList);
+					child.setBackgroundDrawable(wrap);
+				} else if (child.getTag().equals(getString(R.string.tag_theme_card))) {
+					//set card background
+					DrawableCompat.setTint(DrawableCompat.wrap(child.getBackground()),
+							cardBgColor);
+				}
+			}
+			if (child instanceof ViewGroup) {
+				setControlColorTint((ViewGroup) child);
+			}
+		}
+	}
 
-    private int getThemeAttributeColorInt(int attr) {
-        TypedValue outValue = new TypedValue();
-        //default color
-        int color = ContextCompat.getColor(this, R.color.light_color_primary);
-        if (getTheme().resolveAttribute(attr, outValue, false)) {
-            if (outValue.type == TypedValue.TYPE_REFERENCE)
-                color = ContextCompat.getColor(this, outValue.data);
-            else
-                color = outValue.data;
-        }
-        return color;
-    }
+	private int getThemeAttributeColorInt(int attr) {
+		TypedValue outValue = new TypedValue();
+		//default color
+		int color = ContextCompat.getColor(this, R.color.light_color_primary);
+		if (getTheme().resolveAttribute(attr, outValue, false)) {
+			if (outValue.type == TypedValue.TYPE_REFERENCE)
+				color = ContextCompat.getColor(this, outValue.data);
+			else
+				color = outValue.data;
+		}
+		return color;
+	}
 }
