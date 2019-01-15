@@ -94,7 +94,7 @@
         <item>深色</item>
     </string-array>
     <string name="pref_requires_restart_summary">需要重启本程序</string>
-    <string name="pref_enable_actionbar_title">启用操作栏</string>
+    <string name="pref_enable_actionbar_title">隐藏操作栏</string>
     <string name="pref_enable_actionbar_summary">在应用中全屏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
     <string name="pref_button_shape_title">按钮形状</string>
@@ -107,7 +107,7 @@
         <item>名称</item>
         <item>日期</item>
     </string-array>
-    <string name="pref_map_keys">按键映射</string>
+    <string name="pref_map_keys">快捷键</string>
     <string name="mapping_dialog_title">按下一个按键</string>
     <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
     <string name="reset_mapping">重置</string>
