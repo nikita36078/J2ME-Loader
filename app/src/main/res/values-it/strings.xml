@@ -88,6 +88,7 @@
     <string name="layout_scale_mode">Modalità ridimensionamento tasti</string>
     <string name="layout_switch">Cambia disposizione tasti</string>
     <string name="hide_buttons">Nascondi tasti</string>
+    <string name="take_screenshot">Cattura schermata</string>
     <string name="common_settings">[IMPOSTAZIONI COMUNI]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
