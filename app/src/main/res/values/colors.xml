@@ -9,13 +9,10 @@
     <color name="light_color_primary_dark">#1c1c1c</color>
     <color name="light_color_accent">#ff2e51</color>
     <color name="light_color_background">#fafafa</color>
-    <color name="light_color_control_normal">#9a9a9a</color>
     <color name="light_color_text_primary">#000000</color>
     <color name="light_color_text_secondary">#353535</color>
-    <color name="light_color_text_tertiary">#6c6c6c</color>
     <color name="light_color_btn_bg_normal">#2e2e2e</color>
     <color name="light_color_btn_bg_pressed">#191919</color>
-    <color name="light_color_btn_text">#ffffff</color>
     <color name="light_color_config_card">#ffffff</color>
 
     <!--dark theme color-->
@@ -23,14 +20,11 @@
     <color name="dark_color_primary_dark">#20272f</color>
     <color name="dark_color_accent">#0099ff</color>
     <color name="dark_color_background">#20272f</color>
-    <color name="dark_list_divider">#0fffffff</color>
     <color name="dark_color_control_normal">#516985</color>
-    <color name="dark_color_btn_bg_normal">#0099ff</color>
-    <color name="dark_color_btn_bg_pressed">#008bd1</color>
-    <color name="dark_color_btn_text">#ffffff</color>
     <color name="dark_color_text_primary">#ffffff</color>
     <color name="dark_color_text_secondary">#dedede</color>
-    <color name="dark_color_text_tertiary">#a7a7a7</color>
+    <color name="dark_color_btn_bg_normal">#0099ff</color>
+    <color name="dark_color_btn_bg_pressed">#008bd1</color>
     <color name="dark_color_config_card">#262e37</color>
 
 </resources>

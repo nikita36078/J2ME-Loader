@@ -106,7 +106,6 @@ public class AppsListFragment extends ListFragment {
 		registerForContextMenu(getListView());
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
-		getListView().setDividerHeight(1);
 		initDb();
 		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
 		fab.setOnClickListener(v -> {

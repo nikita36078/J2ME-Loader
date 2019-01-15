@@ -66,7 +66,6 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		setupButton(R.id.virtual_key_star, Canvas.KEY_STAR);
 		setupButton(R.id.virtual_key_pound, Canvas.KEY_POUND);
 		androidToMIDP = KeyMapper.getArrayPref(this);
-		setControlColorTint(findViewById(android.R.id.content));
 	}
 
 	private void setupButton(int resId, int index) {

@@ -239,8 +239,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (loaded && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
 			startMIDlet();
 		}
-
-		setControlColorTint(findViewById(android.R.id.content));
 	}
 
 	private void setProperties() {

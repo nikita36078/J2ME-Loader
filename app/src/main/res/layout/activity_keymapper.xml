@@ -14,7 +14,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -26,20 +25,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_left_soft"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_left_soft" />
 
                 <Button
                     android:id="@+id/virtual_key_up"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_up" />
 
                 <Button
                     android:id="@+id/virtual_key_right_soft"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_right_soft" />
 
             </LinearLayout>
@@ -51,20 +53,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_left"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_left" />
 
                 <Button
                     android:id="@+id/virtual_key_f"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_f" />
 
                 <Button
                     android:id="@+id/virtual_key_right"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_right" />
 
             </LinearLayout>
@@ -76,20 +81,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_d"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_d" />
 
                 <Button
                     android:id="@+id/virtual_key_down"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_down" />
 
                 <Button
                     android:id="@+id/virtual_key_c"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_c" />
 
             </LinearLayout>
@@ -102,20 +110,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_1"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_1" />
 
                 <Button
                     android:id="@+id/virtual_key_2"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_2" />
 
                 <Button
                     android:id="@+id/virtual_key_3"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_3" />
 
             </LinearLayout>
@@ -127,20 +138,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_4"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_4" />
 
                 <Button
                     android:id="@+id/virtual_key_5"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_5" />
 
                 <Button
                     android:id="@+id/virtual_key_6"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_6" />
 
             </LinearLayout>
@@ -152,20 +166,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_7"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_7" />
 
                 <Button
                     android:id="@+id/virtual_key_8"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_8" />
 
                 <Button
                     android:id="@+id/virtual_key_9"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_9" />
 
             </LinearLayout>
@@ -177,20 +194,23 @@
 
                 <Button
                     android:id="@+id/virtual_key_star"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_star" />
 
                 <Button
                     android:id="@+id/virtual_key_0"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_0" />
 
                 <Button
                     android:id="@+id/virtual_key_pound"
-                    style="@style/ButtonStyle.KeyMap"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:text="@string/virtual_key_pound" />
 
             </LinearLayout>

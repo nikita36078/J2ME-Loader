@@ -7,21 +7,12 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:colorBackground">@color/dark_color_background</item>
         <item name="android:windowBackground">@color/dark_color_background</item>
-        <item name="colorBackgroundFloating">@color/dark_color_background</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
-        <item name="android:listDivider">@color/dark_list_divider</item>
-        <item name="colorButtonNormal">@color/dark_color_btn_bg_normal</item>
-        <item name="colorControlNormal">@color/dark_color_control_normal</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
 
         <!--custom theme attrs-->
-        <item name="configCardBgColor">@color/dark_color_config_card</item>
+        <item name="bg_config_card">@drawable/bg_config_card_dark</item>
         <item name="textColorPrimary">@color/dark_color_text_primary</item>
         <item name="textColorSecondary">@color/dark_color_text_secondary</item>
-        <item name="textColorTertiary">@color/dark_color_text_tertiary</item>
-        <item name="buttonTextColor">@color/dark_color_btn_text</item>
-        <item name="buttonBgColorNormal">@color/dark_color_btn_bg_normal</item>
-        <item name="buttonBgColorPressed">@color/dark_color_btn_bg_pressed</item>
     </style>
 
     <style name="AppTheme.Light" parent="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -31,18 +22,12 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:colorBackground">@color/light_color_background</item>
         <item name="android:windowBackground">@color/light_color_background</item>
-        <item name="colorButtonNormal">@color/light_color_btn_bg_normal</item>
-        <item name="colorControlNormal">@color/light_color_control_normal</item>
-        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="buttonStyle">@style/ButtonStyle.Light</item>
 
         <!--custom theme attrs-->
-        <item name="configCardBgColor">@color/light_color_config_card</item>
+        <item name="bg_config_card">@drawable/bg_config_card_light</item>
         <item name="textColorPrimary">@color/light_color_text_primary</item>
         <item name="textColorSecondary">@color/light_color_text_secondary</item>
-        <item name="textColorTertiary">@color/light_color_text_tertiary</item>
-        <item name="buttonTextColor">@color/light_color_btn_text</item>
-        <item name="buttonBgColorNormal">@color/light_color_btn_bg_normal</item>
-        <item name="buttonBgColorPressed">@color/light_color_btn_bg_pressed</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.NoActionBar">
@@ -111,33 +96,25 @@
     <style name="EditTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:minHeight">38dp</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColorHint">#b0b0b0</item>
         <item name="android:textColor">?attr/textColorPrimary</item>
     </style>
 
-    <style name="ButtonTextStyle">
-        <item name="android:textColor">?attr/buttonTextColor</item>
-    </style>
-
-    <style name="ButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">38dp</item>
+    <style name="ButtonStyle.Base" parent="Widget.AppCompat.Button.Colored">
         <item name="android:maxHeight">38dp</item>
-        <item name="android:tag">@string/tag_theme_button</item>
         <item name="android:paddingLeft">6dp</item>
         <item name="android:paddingRight">6dp</item>
-        <item name="android:textColor">?attr/buttonTextColor</item>
         <item name="android:elevation" tools:ignore="NewApi">1dp</item>
-        <item name="android:background">@drawable/bg_button</item>
     </style>
 
-    <style name="ButtonStyle.KeyMap">
-        <item name="android:layout_height">34dp</item>
-        <item name="android:layout_margin">2dp</item>
+    <style name="ButtonStyle" parent="ButtonStyle.Base">
+        <item name="android:background">@drawable/bg_button_dark</item>
+    </style>
+
+    <style name="ButtonStyle.Light" parent="ButtonStyle.Base">
+        <item name="android:background">@drawable/bg_button_light</item>
     </style>
 
 </resources>

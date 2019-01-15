@@ -20,14 +20,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/bg_config_card"
+            android:background="?attr/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-            android:tag="@string/tag_theme_card"
             tools:ignore="UnusedAttribute">
 
 
@@ -76,8 +75,8 @@
 
                 <Button
                     android:id="@+id/cmdScreenSizePresets"
-                    style="@style/ButtonStyle"
                     android:layout_width="0dp"
+                    android:layout_height="38dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
@@ -87,8 +86,8 @@
 
                 <Button
                     android:id="@+id/cmdSwapSizes"
-                    style="@style/ButtonStyle"
                     android:layout_width="0dp"
+                    android:layout_height="38dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="10dp"
@@ -107,8 +106,8 @@
 
                 <Button
                     android:id="@+id/cmdScreenBack"
-                    style="@style/ButtonStyle"
                     android:layout_width="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
@@ -249,14 +248,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/bg_config_card"
+            android:background="?attr/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-            android:tag="@string/tag_theme_card"
             tools:ignore="UnusedAttribute">
 
             <LinearLayout
@@ -311,8 +309,8 @@
 
             <Button
                 android:id="@+id/cmdFontSizePresets"
-                style="@style/ButtonStyle"
                 android:layout_width="match_parent"
+                android:layout_height="38dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="6dp"
                 android:text="@string/SIZE_PRESETS" />
@@ -335,14 +333,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/bg_config_card"
+            android:background="?attr/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-            android:tag="@string/tag_theme_card"
             tools:ignore="UnusedAttribute">
 
             <EditText
@@ -367,14 +364,13 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_config_card"
+            android:background="?attr/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:tag="@string/tag_theme_card">
+            android:paddingBottom="10dp">
 
             <CheckBox
                 android:id="@+id/cxIsShowKeyboard"
@@ -474,8 +470,8 @@
 
                     <Button
                         android:id="@+id/cmdVKFore"
-                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
+                        android:layout_height="38dp"
                         android:layout_margin="4dp"
                         android:text="@string/PREF_VK_FORE" />
 
@@ -483,6 +479,7 @@
                         android:id="@+id/tfVKFore"
                         style="@style/EditTextStyle"
                         android:layout_width="0dp"
+                        android:layout_height="38dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginEnd="6dp"
@@ -497,8 +494,8 @@
 
                     <Button
                         android:id="@+id/cmdVKBack"
-                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
+                        android:layout_height="38dp"
                         android:layout_margin="4dp"
                         android:text="@string/PREF_VK_BACK" />
 
@@ -506,6 +503,7 @@
                         android:id="@+id/tfVKBack"
                         style="@style/EditTextStyle"
                         android:layout_width="0dp"
+                        android:layout_height="38dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginEnd="6dp"
@@ -520,8 +518,8 @@
 
                     <Button
                         android:id="@+id/cmdVKSelFore"
-                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
+                        android:layout_height="38dp"
                         android:layout_margin="4dp"
                         android:text="@string/PREF_VK_SEL_FORE" />
 
@@ -543,8 +541,8 @@
 
                     <Button
                         android:id="@+id/cmdVKSelBack"
-                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
+                        android:layout_height="38dp"
                         android:layout_margin="4dp"
                         android:text="@string/PREF_VK_SEL_BACK" />
 
@@ -566,8 +564,8 @@
 
                     <Button
                         android:id="@+id/cmdVKOutline"
-                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
+                        android:layout_height="38dp"
                         android:layout_margin="4dp"
                         android:text="@string/PREF_VK_OUTLINE" />
 
