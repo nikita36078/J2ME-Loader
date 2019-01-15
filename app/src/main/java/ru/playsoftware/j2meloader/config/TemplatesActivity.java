@@ -24,8 +24,10 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,9 +100,19 @@ public class TemplatesActivity extends BaseActivity {
 		Template template = (Template) adapter.getItem(id);
 		EditText editText = new EditText(this);
 		editText.setText(template.getName());
+		float density = getResources().getDisplayMetrics().density;
+		LinearLayout linearLayout = new LinearLayout(this);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT);
+		int margin = (int) (density * 20);
+		params.setMargins(margin, 0, margin, 0);
+		linearLayout.addView(editText, params);
+		int paddingVertical = (int) (density * 16);
+		int paddingHorizontal = (int) (density * 8);
+		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.action_context_rename)
-				.setView(editText)
+				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					String newName = editText.getText().toString().trim();
 					if (newName.equals("")) {

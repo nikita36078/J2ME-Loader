@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -198,9 +199,19 @@ public class AppsListFragment extends ListFragment {
 		AppItem item = (AppItem) adapter.getItem(id);
 		EditText editText = new EditText(getActivity());
 		editText.setText(item.getTitle());
+		float density = getResources().getDisplayMetrics().density;
+		LinearLayout linearLayout = new LinearLayout(getContext());
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT);
+		int margin = (int) (density * 20);
+		params.setMargins(margin, 0, margin, 0);
+		linearLayout.addView(editText, params);
+		int paddingVertical = (int) (density * 16);
+		int paddingHorizontal = (int) (density * 8);
+		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.action_context_rename)
-				.setView(editText)
+				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					String title = editText.getText().toString().trim();
 					if (title.equals("")) {
@@ -296,7 +307,7 @@ public class AppsListFragment extends ListFragment {
 		switch (item.getItemId()) {
 			case R.id.action_about:
 				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-				aboutDialogFragment.show(getFragmentManager(), "about");
+				aboutDialogFragment.show(getChildFragmentManager(), "about");
 				break;
 			case R.id.action_settings:
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
@@ -308,7 +319,7 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_help:
 				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
-				helpDialogFragment.show(getFragmentManager(), "help");
+				helpDialogFragment.show(getChildFragmentManager(), "help");
 				break;
 			case R.id.action_donate:
 				Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);

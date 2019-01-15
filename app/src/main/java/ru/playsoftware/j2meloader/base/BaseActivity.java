@@ -37,6 +37,9 @@ public class BaseActivity extends AppCompatActivity {
 		} else {
 			setTheme(R.style.AppTheme_Light);
 		}
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setElevation(getResources().getDisplayMetrics().density * 2);
+		}
 		super.onCreate(savedInstanceState);
 	}
 }
