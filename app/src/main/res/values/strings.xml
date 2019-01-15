@@ -173,6 +173,8 @@
     <string name="mapping_dialog_title">Press a key</string>
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
+    <string name="tag_theme_card">theme_card</string>
+    <string name="tag_theme_button">theme_btn</string>
 
 
 </resources>

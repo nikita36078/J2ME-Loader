@@ -18,22 +18,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
-            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
             android:paddingTop="6dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="10dp">
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:tag="@string/tag_theme_card"
+            tools:ignore="UnusedAttribute">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:layoutDirection="ltr">
 
                 <EditText
@@ -69,8 +71,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp">
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp">
 
                 <Button
                     android:id="@+id/cmdScreenSizePresets"
@@ -99,8 +101,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:gravity="center_vertical">
 
                 <Button
@@ -118,7 +120,6 @@
                     style="@style/EditTextStyle"
                     android:layout_width="0dip"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_edit_text"
                     android:gravity="center"
                     android:hint="@string/PREF_COLOR_HINT"
                     android:textDirection="ltr" />
@@ -127,7 +128,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,7 +144,7 @@
                 <SeekBar
                     android:id="@+id/sbScaleRatio"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="30"
                     android:max="100" />
 
@@ -168,6 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:text="@string/PREF_ORIENTATION"
@@ -244,15 +247,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
-            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
             android:paddingTop="6dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="10dp">
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:tag="@string/tag_theme_card"
+            tools:ignore="UnusedAttribute">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -328,15 +333,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
-            android:paddingStart="10dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="12dp">
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:tag="@string/tag_theme_card"
+            tools:ignore="UnusedAttribute">
 
             <EditText
                 android:id="@+id/tfSystemProperties"
@@ -357,16 +364,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/bg_config_card"
             android:elevation="1dp"
             android:orientation="vertical"
-            android:paddingStart="10dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="10dp">
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:tag="@string/tag_theme_card">
 
             <CheckBox
                 android:id="@+id/cxIsShowKeyboard"
@@ -394,7 +402,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -409,7 +418,7 @@
                 <SeekBar
                     android:id="@+id/sbVKAlpha"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="30"
                     android:max="255" />
             </LinearLayout>
@@ -438,8 +447,8 @@
                         android:id="@+id/tfVKHideDelay"
                         style="@style/EditTextStyle"
                         android:layout_width="0dip"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:hint="@string/_MINUS_ONE"
@@ -449,6 +458,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/PREF_UNIT_MS"
                         android:textColor="?attr/textColorSecondary"
