@@ -31,7 +31,7 @@ import javax.microedition.lcdui.Image;
 
 public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 
-	private Vector v = new Vector();
+	private Vector<GraphicObject> v = new Vector<>();
 
 	public void addObject(GraphicObject gobject) {
 		v.addElement(gobject);
@@ -50,8 +50,7 @@ public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public GraphicObject getObjectAt(int index) {
-		Object o = v.elementAt(index);
-		return (GraphicObject) o;
+		return v.elementAt(index);
 	}
 
 	public int getObjectPosition(GraphicObject gobject) {
@@ -70,7 +69,7 @@ public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 		Graphics g = image.getGraphics();
 
 		for (int i = 0; i < v.size(); i++) {
-			GraphicObject go = (GraphicObject) v.elementAt(i);
+			GraphicObject go = v.elementAt(i);
 			if (go instanceof Sprite && go.getVisible()) {
 				((Sprite) go).paint(g);
 			}

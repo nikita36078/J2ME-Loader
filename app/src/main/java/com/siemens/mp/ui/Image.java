@@ -24,7 +24,7 @@
 
 package com.siemens.mp.ui;
 
-public class Image {
+public class Image extends com.siemens.mp.misc.NativeMem {
 
 	public static javax.microedition.lcdui.Image createImageFromBitmap(byte[] imageData, int imageWidth, int imageHeight) {
 		return createImageFromBitmap(imageData, null, imageWidth, imageHeight);
@@ -62,7 +62,7 @@ public class Image {
 		for (int y = 0; y < imageHeight; y++) {
 			for (int x = 0; x < imageWidth / 4; x++) {
 				for (int b = 7; b >= 0; b -= 2) {
-					int c = doAlpha(imageData, null, y * imageWidth / 4 + x, b);
+					int c = doAlpha(imageData, y * imageWidth / 4 + x, b);
 					pixres[x * 4 + 3 - b / 2 + y * imageWidth] = c;
 				}
 			}
@@ -73,6 +73,20 @@ public class Image {
 
 	private static boolean isBitSet(byte b, int pos) {
 		return ((b & (byte) (1 << pos)) != 0);
+	}
+
+	private static int doAlpha(byte[] pix, int pos, int shift) {
+		int p;
+		int a;
+		if (isBitSet(pix[pos], shift))
+			p = 0;
+		else
+			p = 0x00FFFFFF;
+		if (isBitSet(pix[pos], shift) || isBitSet(pix[pos], shift - 1))
+			a = 0xFF000000;
+		else
+			a = 0;
+		return p | a;
 	}
 
 	private static int doAlpha(byte[] pix, byte[] alpha, int pos, int shift) {
