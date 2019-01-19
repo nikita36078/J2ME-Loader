@@ -56,7 +56,7 @@ public class AppUtils {
 		LinkedHashMap<String, String> params =
 				FileUtils.loadManifest(new File(file.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
 		String imagePath = params.get("MIDlet-Icon");
-		if (imagePath == null) {
+		if (imagePath == null && params.containsKey("MIDlet-1")) {
 			imagePath = params.get("MIDlet-1").split(",")[1];
 		}
 		AppItem item = new AppItem(file.getName(), params.get("MIDlet-Name"),
