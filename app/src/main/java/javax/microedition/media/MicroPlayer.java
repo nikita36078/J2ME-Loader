@@ -74,6 +74,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public Control getControl(String controlType) {
+		checkRealized();
 		if (!controlType.contains(".")) {
 			controlType = "javax.microedition.media.control." + controlType;
 		}
@@ -82,6 +83,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public Control[] getControls() {
+		checkRealized();
 		return controls.values().toArray(new Control[0]);
 	}
 
