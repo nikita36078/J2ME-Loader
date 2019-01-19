@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package javax.microedition.media.control;
+package javax.microedition.amms.control;
 
 import javax.microedition.media.Control;
 
