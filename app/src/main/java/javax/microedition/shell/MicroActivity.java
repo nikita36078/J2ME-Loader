@@ -17,6 +17,7 @@
 
 package javax.microedition.shell;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -50,6 +51,10 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 
@@ -334,7 +339,7 @@ public class MicroActivity extends AppCompatActivity {
 				if (id == R.id.action_exit_midlet) {
 					showExitConfirmation();
 				} else if (id == R.id.action_take_screenshot) {
-					microLoader.takeScreenshot((Canvas) current);
+					takeScreenshot();
 				} else if (ContextHolder.getVk() != null) {
 					VirtualKeyboard vk = ContextHolder.getVk();
 					switch (id) {
@@ -367,6 +372,30 @@ public class MicroActivity extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@SuppressLint("CheckResult")
+	private void takeScreenshot() {
+		microLoader.takeScreenshot((Canvas) current)
+				.subscribeOn(Schedulers.computation())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new SingleObserver<String>() {
+					@Override
+					public void onSubscribe(Disposable d) {
+					}
+
+					@Override
+					public void onSuccess(String s) {
+						Toast.makeText(MicroActivity.this, getString(R.string.screenshot_saved)
+								+ " " + s, Toast.LENGTH_LONG).show();
+					}
+
+					@Override
+					public void onError(Throwable e) {
+						e.printStackTrace();
+						Toast.makeText(MicroActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+					}
+				});
 	}
 
 	private void showHideButtonDialog() {

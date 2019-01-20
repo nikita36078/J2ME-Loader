@@ -36,8 +36,7 @@ import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
-import io.reactivex.Completable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
@@ -103,8 +102,8 @@ public class MicroLoader {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public void takeScreenshot(Canvas canvas) {
-		Completable.fromAction(() -> {
+	public Single<String> takeScreenshot(Canvas canvas) {
+		return Single.create(emitter -> {
 			Bitmap bitmap = canvas.getOffscreenCopy().getBitmap();
 			Calendar calendar = Calendar.getInstance();
 			Date now = calendar.getTime();
@@ -115,11 +114,9 @@ public class MicroLoader {
 			if (!screenshotDir.exists()) {
 				screenshotDir.mkdirs();
 			}
-			try (FileOutputStream out = new FileOutputStream(screenshotFile)) {
-				bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}).subscribeOn(Schedulers.computation()).subscribe();
+			FileOutputStream out = new FileOutputStream(screenshotFile);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+			emitter.onSuccess(screenshotFile.getAbsolutePath());
+		});
 	}
 }
