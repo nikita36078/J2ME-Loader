@@ -315,6 +315,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public void setMute(boolean mute) {
+		if (state == CLOSED) {
+			// Avoid IllegalStateException in MediaPlayer.setVolume()
+			return;
+		}
+
 		this.mute = mute;
 		updateVolume();
 	}
@@ -326,6 +331,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public int setLevel(int level) {
+		if (state == CLOSED) {
+			// Avoid IllegalStateException in MediaPlayer.setVolume()
+			return this.level;
+		}
+
 		if (level < 0) {
 			level = 0;
 		} else if (level > 100) {
