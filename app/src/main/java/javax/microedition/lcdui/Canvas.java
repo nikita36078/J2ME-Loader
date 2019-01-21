@@ -391,7 +391,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean keepAspectRatio;
 	private static boolean filter;
 	private static boolean touchInput;
-	private static boolean hardwareAcceleration;
+	private static boolean hwaEnabled;
 	private static boolean hwaOldEnabled;
 	private static boolean parallelRedraw;
 	private static boolean showFps;
@@ -468,9 +468,9 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public static void setHardwareAcceleration(boolean hardwareAcceleration, boolean parallel) {
-		Canvas.hardwareAcceleration = hardwareAcceleration;
+		Canvas.hwaEnabled = hardwareAcceleration;
 		Canvas.hwaOldEnabled = hardwareAcceleration && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
-		parallelRedraw = parallel;
+		Canvas.parallelRedraw = parallel;
 	}
 
 	public static void setShowFps(boolean showFps) {
@@ -703,7 +703,7 @@ public abstract class Canvas extends Displayable {
 			return true;
 		}
 		try {
-			android.graphics.Canvas canvas = hardwareAcceleration ?
+			android.graphics.Canvas canvas = hwaEnabled ?
 					surface.lockHardwareCanvas() : surface.lockCanvas(null);
 			if (canvas == null) {
 				return true;
