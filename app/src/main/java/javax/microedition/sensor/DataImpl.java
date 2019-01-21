@@ -27,10 +27,20 @@ public class DataImpl implements Data {
 		this.channelInfo = channelInfo;
 	}
 
-	public DataImpl(ChannelInfo channelInfo, double[] doubleValues, int[] intValues, Object[] objectValues, long[] timestamps) {
+	public DataImpl(ChannelInfo channelInfo, double[] doubleValues, long[] timestamps) {
 		this.channelInfo = channelInfo;
 		this.doubleValues = doubleValues;
+		this.timestamps = timestamps;
+	}
+
+	public DataImpl(ChannelInfo channelInfo, int[] intValues, long[] timestamps) {
+		this.channelInfo = channelInfo;
 		this.intValues = intValues;
+		this.timestamps = timestamps;
+	}
+
+	public DataImpl(ChannelInfo channelInfo, Object[] objectValues, long[] timestamps) {
+		this.channelInfo = channelInfo;
 		this.objectValues = objectValues;
 		this.timestamps = timestamps;
 	}

@@ -29,17 +29,18 @@ public final class SensorManager {
 	private static final char SCHEME_SEMICOLON = ';';
 	private static final char SCHEME_EQUALS = '=';
 
-	private static MeasurementRange[] accelerometerMeasurementRanges = new MeasurementRange[]{
-			new MeasurementRange(-9.8, 9.8, 0.01)
+	private static final int ACCELEROMETER_SCALE = 1000;
+	private static final MeasurementRange[] accelerometerMeasurementRanges = new MeasurementRange[]{
+			new MeasurementRange(-9.8 * ACCELEROMETER_SCALE, 9.8 * ACCELEROMETER_SCALE, 0.01 * ACCELEROMETER_SCALE)
 	};
-	private static ChannelInfo[] accelerometerChannelInfo = new ChannelInfo[]{
-			new ChannelInfoImpl(-1.0f, ChannelInfo.TYPE_INT, accelerometerMeasurementRanges, "axis_x", 1000, Unit.getUnit("m/s^2")),
-			new ChannelInfoImpl(-1.0f, ChannelInfo.TYPE_INT, accelerometerMeasurementRanges, "axis_y", 1000, Unit.getUnit("m/s^2")),
-			new ChannelInfoImpl(-1.0f, ChannelInfo.TYPE_INT, accelerometerMeasurementRanges, "axis_z", 1000, Unit.getUnit("m/s^2")),
+	private static final ChannelInfo[] accelerometerChannelInfo = new ChannelInfo[]{
+			new ChannelInfoImpl(-1.0f, ChannelInfo.TYPE_INT, accelerometerMeasurementRanges, "axis_x", ACCELEROMETER_SCALE, Unit.getUnit("m/s^2")),
+			new ChannelInfoImpl(-1.0f, ChannelInfo.TYPE_INT, accelerometerMeasurementRanges, "axis_y", ACCELEROMETER_SCALE, Unit.getUnit("m/s^2")),
+			new ChannelInfoImpl(-1.0f, ChannelInfo.TYPE_INT, accelerometerMeasurementRanges, "axis_z", ACCELEROMETER_SCALE, Unit.getUnit("m/s^2")),
 	};
-	private static SensorInfo accelerometerSensorInfo = new SensorInfoImpl(accelerometerChannelInfo, SensorInfo.CONN_EMBEDDED,
+	private static final SensorInfo accelerometerSensorInfo = new SensorInfoImpl(accelerometerChannelInfo, SensorInfo.CONN_EMBEDDED,
 			SensorInfo.CONTEXT_TYPE_USER, "Accelerometer data", "default", "acceleration");
-	private static SensorInfo[] sensorInfos = new SensorInfo[]{accelerometerSensorInfo};
+	private static final SensorInfo[] sensorInfos = new SensorInfo[]{accelerometerSensorInfo};
 
 	public static void addSensorListener(SensorListener listener, String str) {
 	}

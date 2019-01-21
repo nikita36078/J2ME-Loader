@@ -169,8 +169,14 @@ public class Connection implements SensorConnection, ConnectionImplementation, S
 			if (eventsNum >= bufferSize) {
 				Arrays.fill(timestamps, event.timestamp);
 				for (int i = 0; i < dataLength; i++) {
-					data[i] = new DataImpl(channelInfos[i], null,
-							new int[]{(int) event.values[i]}, null, timestamps);
+					float value = event.values[i] * channelInfos[i].getScale();
+					if (channelInfos[i].getDataType() == ChannelInfo.TYPE_DOUBLE) {
+						data[i] = new DataImpl(channelInfos[i], new double[]{value}, timestamps);
+					} else if (channelInfos[i].getDataType() == ChannelInfo.TYPE_INT) {
+						data[i] = new DataImpl(channelInfos[i], new int[]{(int) value}, timestamps);
+					} else {
+						data[i] = new DataImpl(channelInfos[i], new Object[]{value}, timestamps);
+					}
 				}
 				listener.dataReceived(this, data, false);
 				eventsNum = 0;
