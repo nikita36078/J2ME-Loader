@@ -368,6 +368,7 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
+	private static final String TAG = Canvas.class.getName();
 	private final Object paintsync = new Object();
 
 	private PaintEvent paintEvent = new PaintEvent();
@@ -719,7 +720,7 @@ public abstract class Canvas extends Displayable {
 			}
 			surface.unlockCanvasAndPost(canvas);
 		} catch (Exception e) {
-			Log.w("Canvas", "repaintScreen: " + e.getMessage());
+			Log.w(TAG, "repaintScreen: " + e.getMessage());
 		}
 		return true;
 	}
