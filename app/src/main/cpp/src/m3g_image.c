@@ -328,13 +328,7 @@ static void convertRGBA8ToARGB(const M3Gubyte *src, M3Gsizei count, M3Guint *dst
         argb  = ((M3Guint)(*src++)) << 16;
         argb |= ((M3Guint)(*src++)) <<  8;
         argb |=  (M3Guint)(*src++);
-        // Workaround for Android
-        // TODO fix it
-        M3Guint alpha = (M3Guint)(*src++);
-        if (argb != 0 && alpha == 0) {
-            alpha = 0xFF;
-        }
-        argb |= alpha << 24;
+        argb |= ((M3Guint)(*src++)) << 24;
         *dst++ = argb;
     }
 }
