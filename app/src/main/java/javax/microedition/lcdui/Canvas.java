@@ -297,6 +297,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		protected void onDraw(android.graphics.Canvas canvas) {
+			if (!hwaOldEnabled) return; // Fix for Android Pie
 			Graphics g = mGraphics;
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
