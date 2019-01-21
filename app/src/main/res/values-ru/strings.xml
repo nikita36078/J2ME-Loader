@@ -115,4 +115,5 @@
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
+    <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
 </resources>

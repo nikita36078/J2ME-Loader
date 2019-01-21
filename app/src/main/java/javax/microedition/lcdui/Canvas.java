@@ -22,6 +22,8 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -325,7 +327,11 @@ public abstract class Canvas extends Displayable {
 					t.printStackTrace();
 				}
 				offscreen.copyPixels(offscreenCopy);
-				repaintScreen();
+				if (parallelRedraw) {
+					uiHandler.sendEmptyMessage(0);
+				} else {
+					repaintScreen();
+				}
 			}
 		}
 
@@ -385,6 +391,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean touchInput;
 	private static boolean hardwareAcceleration;
 	private static boolean hwaOldEnabled;
+	private static boolean parallelRedraw;
 	private static boolean showFps;
 	private static int backgroundColor;
 	private static int scaleRatio;
@@ -395,9 +402,16 @@ public abstract class Canvas extends Displayable {
 	private int totalFrameCount = 0;
 	private String prevFrameCount = "0";
 
+	private Handler uiHandler;
+
 	private Overlay overlay;
 
 	public Canvas() {
+		if (parallelRedraw) {
+			HandlerThread thread = new HandlerThread("MIDlet UI", Thread.MAX_PRIORITY);
+			thread.start();
+			uiHandler = new Handler(thread.getLooper(), msg -> repaintScreen());
+		}
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
 		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
@@ -451,9 +465,10 @@ public abstract class Canvas extends Displayable {
 		Canvas.touchInput = touchInput;
 	}
 
-	public static void setHardwareAcceleration(boolean hardwareAcceleration) {
+	public static void setHardwareAcceleration(boolean hardwareAcceleration, boolean parallel) {
 		Canvas.hardwareAcceleration = hardwareAcceleration;
 		Canvas.hwaOldEnabled = hardwareAcceleration && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
+		parallelRedraw = parallel;
 	}
 
 	public static void setShowFps(boolean showFps) {
@@ -665,27 +680,31 @@ public abstract class Canvas extends Displayable {
 	public void flushBuffer(Image image) {
 		synchronized (paintsync) {
 			image.copyPixels(offscreenCopy);
-			repaintScreen();
+			if (parallelRedraw) {
+				uiHandler.sendEmptyMessage(0);
+			} else {
+				repaintScreen();
+			}
 		}
 	}
 
 	@SuppressLint("NewApi")
-	private void repaintScreen() {
+	private boolean repaintScreen() {
 		if (hwaOldEnabled) {
 			if (innerView != null) {
 				innerView.postInvalidate();
 			}
-			return;
+			return true;
 		}
 		Surface surface = this.surface;
 		if (surface == null || !surface.isValid()) {
-			return;
+			return true;
 		}
 		try {
 			android.graphics.Canvas canvas = hardwareAcceleration ?
 					surface.lockHardwareCanvas() : surface.lockCanvas(null);
 			if (canvas == null) {
-				return;
+				return true;
 			}
 			Graphics g = this.graphics;
 			g.setSurfaceCanvas(canvas);
@@ -702,6 +721,7 @@ public abstract class Canvas extends Displayable {
 		} catch (Exception e) {
 			Log.w("Canvas", "repaintScreen: " + e.getMessage());
 		}
+		return true;
 	}
 
 	/**
