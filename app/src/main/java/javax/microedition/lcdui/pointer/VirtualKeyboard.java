@@ -116,7 +116,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 
 				g.setColor(colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
-				g.setFont(font);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
 				g.setColor(colors[OUTLINE]);
@@ -183,7 +182,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			LAYOUT_SCALES = 1,
 			LAYOUT_COLORS = 2;
 
-	protected Font font;
 	private int delay = -1;
 	private int overlayAlpha = 64;
 	private int shape;
@@ -298,7 +296,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
-		font = new Font();
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
 
@@ -661,6 +658,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
 			offscreen = Image.createImage(width, height);
 			offgraphics = offscreen.getGraphics();
+			offgraphics.setFont(new Font());
 		}
 		snapRadius = keyScales[0];
 		for (int i = 1; i < keyScales.length; i++) {
@@ -690,11 +688,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 				g.drawImage(offscreen, 0, 0, -1, -1, false, overlayAlpha);
 			} else {
-				Font prevFont = g.getFont();
 				for (VirtualKey aKeypad : keypad) {
 					aKeypad.paint(g);
 				}
-				g.setFont(prevFont);
 			}
 		}
 	}

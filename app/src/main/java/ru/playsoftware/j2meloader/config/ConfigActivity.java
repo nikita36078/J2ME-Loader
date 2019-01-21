@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -224,9 +223,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		loadParams();
 		applyConfiguration();
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			cxHwAcceleration.setVisibility(View.VISIBLE);
-		}
 		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxShowKeyboard.setOnClickListener(v -> {
 			if (!((CheckBox) v).isChecked()) {

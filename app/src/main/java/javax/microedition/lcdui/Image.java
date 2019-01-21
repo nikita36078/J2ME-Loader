@@ -49,6 +49,18 @@ public class Image {
 		this.bitmap = bitmap;
 	}
 
+	public static Image createImage(int width, int height, boolean hasAlpha, Image reuse) {
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		bitmap.setHasAlpha(hasAlpha);
+		if (reuse == null) {
+			return new Image(bitmap);
+		}
+		reuse.getCanvas().setBitmap(bitmap);
+		reuse.copyPixels(reuse);
+		reuse.bitmap = bitmap;
+		return new Image(bitmap);
+	}
+
 	public Bitmap getBitmap() {
 		return bitmap;
 	}
@@ -130,5 +142,9 @@ public class Image {
 
 	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
 		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
+	}
+
+	void copyPixels(Image dst) {
+		dst.getCanvas().drawBitmap(bitmap, 0, 0, null);
 	}
 }
