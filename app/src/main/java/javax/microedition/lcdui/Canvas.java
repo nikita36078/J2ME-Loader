@@ -27,12 +27,12 @@ import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -163,11 +163,19 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {
+
+		private Graphics mGraphics;
+
 		public InnerView(Context context) {
 			super(context);
 			getHolder().addCallback(this);
 			getHolder().setFormat(PixelFormat.RGBA_8888);
 			setFocusableInTouchMode(true);
+			if (hwaOldEnabled) {
+				setWillNotDraw(false);
+				mGraphics = new Graphics();
+				mGraphics.setFont(new Font());
+			}
 		}
 
 		@Override
@@ -271,7 +279,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			surfaceCreated = true;
+			surface = holder.getSurface();
 			synchronized (paintsync) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			}
@@ -279,28 +287,45 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			surfaceCreated = false;
+			surface = null;
 			synchronized (paintsync) {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
+			}
+		}
+
+		@Override
+		protected void onDraw(android.graphics.Canvas canvas) {
+			Graphics g = mGraphics;
+			g.setSurfaceCanvas(canvas);
+			g.clear(backgroundColor);
+			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
+			if (overlay != null) {
+				overlay.paint(g);
+			}
+			if (showFps) {
+				drawFps(g);
+				totalFrameCount++;
 			}
 		}
 	}
 
 	private class PaintEvent extends Event implements EventFilter {
+
+		private Graphics mGraphics = new Graphics();
+
 		@Override
 		public void process() {
 			synchronized (paintsync) {
-				if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
-					return;
-				}
-				graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
-				graphics.reset();
+				Graphics g = this.mGraphics;
+				g.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
+				g.reset();
 				try {
-					paint(graphics);
+					paint(g);
 				} catch (Throwable t) {
 					t.printStackTrace();
 				}
-				blit(offscreen);
+				offscreen.copyPixels(offscreenCopy);
+				repaintScreen();
 			}
 		}
 
@@ -340,10 +365,10 @@ public abstract class Canvas extends Displayable {
 	private final Object paintsync = new Object();
 
 	private PaintEvent paintEvent = new PaintEvent();
-	private boolean surfaceCreated = false;
 
 	private LinearLayout layout;
-	private SurfaceHolder holder;
+	private InnerView innerView;
+	private Surface surface;
 	private Graphics graphics = new Graphics();
 
 	protected int width, height;
@@ -359,16 +384,16 @@ public abstract class Canvas extends Displayable {
 	private static boolean filter;
 	private static boolean touchInput;
 	private static boolean hardwareAcceleration;
+	private static boolean hwaOldEnabled;
 	private static boolean showFps;
 	private static int backgroundColor;
 	private static int scaleRatio;
 
 	private Image offscreen;
-	private Font fpsFont = new Font();
-	private ByteBuffer offscreenBuffer;
+	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
 	private int totalFrameCount = 0;
-	private int prevFrameCount = 0;
+	private String prevFrameCount = "0";
 
 	private Overlay overlay;
 
@@ -377,14 +402,14 @@ public abstract class Canvas extends Displayable {
 		displayHeight = ContextHolder.getDisplayHeight();
 		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
 		if (showFps) startFpsCounter();
-
+		graphics.setFont(new Font());
 		updateSize();
 	}
 
 	private void startFpsCounter() {
 		TimerTask updateFPS = new TimerTask() {
 			public void run() {
-				prevFrameCount = totalFrameCount;
+				prevFrameCount = String.valueOf(totalFrameCount);
 				totalFrameCount = 0;
 			}
 		};
@@ -393,10 +418,10 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private void drawFps(Graphics g) {
-		String fps = String.valueOf(prevFrameCount);
-		g.setFont(fpsFont);
+		String fps = prevFrameCount;
+		Font font = g.getFont();
 		g.setColorAlpha(0x90000000);
-		g.fillRect(0, 0, fpsFont.stringWidth(fps), fpsFont.getHeight());
+		g.fillRect(0, 0, font.stringWidth(fps), font.getHeight());
 		g.setColor(0, 255, 0);
 		g.drawString(fps, 0, 0, 0);
 	}
@@ -428,6 +453,7 @@ public abstract class Canvas extends Displayable {
 
 	public static void setHardwareAcceleration(boolean hardwareAcceleration) {
 		Canvas.hardwareAcceleration = hardwareAcceleration;
+		Canvas.hwaOldEnabled = hardwareAcceleration && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
 	}
 
 	public static void setShowFps(boolean showFps) {
@@ -445,15 +471,10 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public Image getOffscreenCopy() {
-		synchronized (paintsync) {
-			Image image = Image.createImage(onWidth, onHeight);
-			Image offscreenCopy = Image.createImage(width, height);
-			Graphics g = image.getGraphics();
-			offscreenCopy.getBitmap().copyPixelsFromBuffer(offscreenBuffer);
-			offscreenBuffer.position(0);
-			g.drawImage(offscreenCopy, 0, 0, onWidth, onHeight, filter, 255);
-			return image;
-		}
+		Image image = Image.createImage(onWidth, onHeight);
+		Graphics g = image.getGraphics();
+		g.drawImage(offscreenCopy, 0, 0, onWidth, onHeight, filter, 255);
+		return image;
 	}
 
 	/**
@@ -554,9 +575,8 @@ public abstract class Canvas extends Displayable {
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
 
 		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen = Image.createImage(width, height);
-			offscreen.getBitmap().setHasAlpha(false);
-			offscreenBuffer = ByteBuffer.allocate(offscreen.getBitmap().getByteCount());
+			offscreen = Image.createImage(width, height, false, offscreen);
+			offscreenCopy = Image.createImage(width, height, false, offscreenCopy);
 		}
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
@@ -587,9 +607,7 @@ public abstract class Canvas extends Displayable {
 	public View getDisplayableView() {
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
-
-			InnerView innerView = new InnerView(getParentActivity());
-			holder = innerView.getHolder();
+			innerView = new InnerView(getParentActivity());
 			layout.addView(innerView);
 		}
 		return layout;
@@ -600,7 +618,7 @@ public abstract class Canvas extends Displayable {
 		synchronized (paintsync) {
 			super.clearDisplayableView();
 			layout = null;
-			holder = null;
+			innerView = null;
 		}
 	}
 
@@ -646,43 +664,43 @@ public abstract class Canvas extends Displayable {
 	// GameCanvas
 	public void flushBuffer(Image image) {
 		synchronized (paintsync) {
-			if (holder == null || !holder.getSurface().isValid() || !surfaceCreated) {
+			image.copyPixels(offscreenCopy);
+			repaintScreen();
+		}
+	}
+
+	@SuppressLint("NewApi")
+	private void repaintScreen() {
+		if (hwaOldEnabled) {
+			if (innerView != null) {
+				innerView.postInvalidate();
+			}
+			return;
+		}
+		Surface surface = this.surface;
+		if (surface == null || !surface.isValid()) {
+			return;
+		}
+		try {
+			android.graphics.Canvas canvas = hardwareAcceleration ?
+					surface.lockHardwareCanvas() : surface.lockCanvas(null);
+			if (canvas == null) {
 				return;
 			}
-			blit(image);
-		}
-	}
-
-	private void blit(Image image) {
-		image.getBitmap().copyPixelsToBuffer(offscreenBuffer);
-		offscreenBuffer.position(0);
-
-		graphics.setSurfaceCanvas(lockCanvas());
-		if (graphics.hasCanvas()) {
-			graphics.clear(backgroundColor);
-			graphics.drawImage(image, onX, onY, onWidth, onHeight, filter, 255);
+			Graphics g = this.graphics;
+			g.setSurfaceCanvas(canvas);
+			g.clear(backgroundColor);
+			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
 			if (overlay != null) {
-				overlay.paint(graphics);
+				overlay.paint(g);
 			}
-			if (showFps) drawFps(graphics);
-			unlockCanvasAndPost(graphics.getCanvas());
-			if (showFps) totalFrameCount++;
-		}
-	}
-
-	private android.graphics.Canvas lockCanvas() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hardwareAcceleration) {
-			return holder.getSurface().lockHardwareCanvas();
-		} else {
-			return holder.lockCanvas();
-		}
-	}
-
-	private void unlockCanvasAndPost(android.graphics.Canvas canvas) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && hardwareAcceleration) {
-			holder.getSurface().unlockCanvasAndPost(canvas);
-		} else {
-			holder.unlockCanvasAndPost(canvas);
+			if (showFps) {
+				drawFps(g);
+				totalFrameCount++;
+			}
+			surface.unlockCanvasAndPost(canvas);
+		} catch (Exception e) {
+			Log.w("Canvas", "repaintScreen: " + e.getMessage());
 		}
 	}
 
