@@ -214,22 +214,25 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				Integer enteredProgress = Integer.valueOf(s.toString());
-				sbScaleRatio.setProgress(enteredProgress);
+				sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			if (isChecked && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-				cxParallel.setChecked(false);
-				cxParallel.setVisibility(View.GONE);
-			} else {
-				cxParallel.setVisibility(View.VISIBLE);
-			}
-		});
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
+				if (isChecked) {
+					cxParallel.setChecked(false);
+				}
+			});
+			cxParallel.setOnCheckedChangeListener((buttonView, isChecked) -> {
+				if (isChecked) {
+					cxHwAcceleration.setChecked(false);
+				}
+			});
+		}
 
 		loadParams();
 		applyConfiguration();
