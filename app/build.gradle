@@ -48,6 +48,10 @@ android {
         fdroid {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
         }
+        dev {
+            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            versionNameSuffix "-dev-" + generateVersionCode()
+        }
     }
 
     externalNativeBuild {
@@ -55,6 +59,11 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
+}
+
+static def generateVersionCode() {
+    def result = "git rev-list HEAD --count".execute().text.trim()
+    return result.toInteger()
 }
 
 dependencies {

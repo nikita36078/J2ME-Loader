@@ -1,6 +1,6 @@
 # J2ME-Loader 
 
-[![Travis CI](https://travis-ci.org/nikita36078/J2ME-Loader.svg?branch=master)](https://travis-ci.org/nikita36078/J2ME-Loader)
+[![Build Status](https://app.bitrise.io/app/d9254be52c74982a/status.svg?token=DIHxcpAPIg0VXSHpeXsHHA&branch=master)](https://app.bitrise.io/app/d9254be52c74982a)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/j2me-loader/localized.svg)](https://crowdin.com/project/j2me-loader)
 [![GitHub release](https://img.shields.io/github/release/nikita36078/J2ME-Loader.svg)](https://github.com/nikita36078/J2ME-Loader/releases)
 [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/nikita36078)
