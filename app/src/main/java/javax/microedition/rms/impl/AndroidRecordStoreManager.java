@@ -113,6 +113,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		ContextHolder.deleteFile(getHeaderFileName(recordStoreName));
 
 		recordStores.remove(recordStoreName);
+		Log.d(TAG, "RecordStore " + recordStoreName + " deleted");
 	}
 
 	@Override
@@ -141,6 +142,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 		recordStores.put(recordStoreName, recordStoreImpl);
 
+		Log.d(TAG, "RecordStore " + recordStoreName + " opened");
 		return recordStoreImpl;
 	}
 
