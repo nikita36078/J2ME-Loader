@@ -23,7 +23,7 @@ import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
-import android.os.HandlerThread;
+import android.os.Looper;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -328,7 +328,7 @@ public abstract class Canvas extends Displayable {
 					t.printStackTrace();
 				}
 				offscreen.copyPixels(offscreenCopy);
-				if (parallelRedraw) {
+				if (parallelRedraw && !uiHandler.hasMessages(0)) {
 					uiHandler.sendEmptyMessage(0);
 				} else {
 					repaintScreen();
@@ -410,9 +410,7 @@ public abstract class Canvas extends Displayable {
 
 	public Canvas() {
 		if (parallelRedraw) {
-			HandlerThread thread = new HandlerThread("MIDlet UI", Thread.MAX_PRIORITY);
-			thread.start();
-			uiHandler = new Handler(thread.getLooper(), msg -> repaintScreen());
+			uiHandler = new Handler(Looper.getMainLooper(), msg -> repaintScreen());
 		}
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
@@ -682,7 +680,7 @@ public abstract class Canvas extends Displayable {
 	public void flushBuffer(Image image) {
 		synchronized (paintsync) {
 			image.copyPixels(offscreenCopy);
-			if (parallelRedraw) {
+			if (parallelRedraw && !uiHandler.hasMessages(0)) {
 				uiHandler.sendEmptyMessage(0);
 			} else {
 				repaintScreen();
@@ -721,7 +719,7 @@ public abstract class Canvas extends Displayable {
 			}
 			surface.unlockCanvasAndPost(canvas);
 		} catch (Exception e) {
-			Log.w(TAG, "repaintScreen: " + e.getMessage());
+			Log.w(TAG, "repaintScreen: " + e);
 		}
 		return true;
 	}
