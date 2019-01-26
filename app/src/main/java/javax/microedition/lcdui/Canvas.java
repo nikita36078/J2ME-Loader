@@ -24,6 +24,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -177,6 +178,15 @@ public abstract class Canvas extends Displayable {
 				setWillNotDraw(false);
 				mGraphics = new Graphics();
 				mGraphics.setFont(new Font());
+			}
+		}
+
+		@Override
+		protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+			super.onVisibilityChanged(changedView, visibility);
+			// Fix keyboard issue on Blackberry
+			if (visibility == VISIBLE) {
+				requestFocus();
 			}
 		}
 
