@@ -338,8 +338,10 @@ public abstract class Canvas extends Displayable {
 					t.printStackTrace();
 				}
 				offscreen.copyPixels(offscreenCopy);
-				if (parallelRedraw && !uiHandler.hasMessages(0)) {
-					uiHandler.sendEmptyMessage(0);
+				if (parallelRedraw) {
+					if (!uiHandler.hasMessages(0)) {
+						uiHandler.sendEmptyMessage(0);
+					}
 				} else {
 					repaintScreen();
 				}
@@ -690,8 +692,10 @@ public abstract class Canvas extends Displayable {
 	public void flushBuffer(Image image) {
 		synchronized (paintsync) {
 			image.copyPixels(offscreenCopy);
-			if (parallelRedraw && !uiHandler.hasMessages(0)) {
-				uiHandler.sendEmptyMessage(0);
+			if (parallelRedraw) {
+				if (!uiHandler.hasMessages(0)) {
+					uiHandler.sendEmptyMessage(0);
+				}
 			} else {
 				repaintScreen();
 			}
