@@ -39,13 +39,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
@@ -310,6 +308,10 @@ public abstract class Canvas extends Displayable {
 				surface = holder.getSurface();
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			}
+			if (showFps) {
+				fpsCounter = new FpsCounter(overlayView);
+				overlayView.addLayer(fpsCounter);
+			}
 			overlayView.setVisibility(true);
 		}
 
@@ -318,6 +320,11 @@ public abstract class Canvas extends Displayable {
 			synchronized (paintsync) {
 				surface = null;
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
+				if (fpsCounter != null) {
+					fpsCounter.stop();
+					overlayView.removeLayer(fpsCounter);
+					fpsCounter = null;
+				}
 			}
 			overlayView.setVisibility(false);
 		}
@@ -329,9 +336,8 @@ public abstract class Canvas extends Displayable {
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
 			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
-			if (showFps) {
-				drawFps(g);
-				totalFrameCount++;
+			if (fpsCounter != null) {
+				fpsCounter.increment();
 			}
 		}
 	}
@@ -425,11 +431,10 @@ public abstract class Canvas extends Displayable {
 	private Image offscreen;
 	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
-	private int totalFrameCount = 0;
-	private String prevFrameCount = "0";
 
 	private Handler uiHandler;
 	private Overlay overlay;
+	private FpsCounter fpsCounter;
 
 	public Canvas() {
 		if (parallelRedraw) {
@@ -438,29 +443,7 @@ public abstract class Canvas extends Displayable {
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
 		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
-		if (showFps) startFpsCounter();
-		graphics.setFont(new Font());
 		updateSize();
-	}
-
-	private void startFpsCounter() {
-		TimerTask updateFPS = new TimerTask() {
-			public void run() {
-				prevFrameCount = String.valueOf(totalFrameCount);
-				totalFrameCount = 0;
-			}
-		};
-		Timer t = new Timer();
-		t.scheduleAtFixedRate(updateFPS, 0, 1000);
-	}
-
-	private void drawFps(Graphics g) {
-		String fps = prevFrameCount;
-		Font font = g.getFont();
-		g.setColorAlpha(0x90000000);
-		g.fillRect(0, 0, font.stringWidth(fps), font.getHeight());
-		g.setColor(0, 255, 0);
-		g.drawString(fps, 0, 0, 0);
 	}
 
 	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
@@ -730,11 +713,10 @@ public abstract class Canvas extends Displayable {
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
 			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
-			if (showFps) {
-				drawFps(g);
-				totalFrameCount++;
-			}
 			surface.unlockCanvasAndPost(canvas);
+			if (fpsCounter != null) {
+				fpsCounter.increment();
+			}
 		} catch (Exception e) {
 			Log.w(TAG, "repaintScreen: " + e);
 		}
