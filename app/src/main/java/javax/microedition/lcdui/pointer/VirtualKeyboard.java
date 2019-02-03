@@ -28,9 +28,7 @@ import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
-import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.overlay.Overlay;
 
@@ -109,17 +107,18 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		public void paint(Graphics g) {
 			if (label != null && visible) {
-				g.setColor(colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
+				int alpha = obscuresVirtualScreen ? overlayAlpha : 0xFF000000;
+				g.setColorAlpha(alpha | colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				if (shape == SQUARE_SHAPE) {
 					g.fillRoundRect(rect, 0, 0);
 				} else {
 					g.fillArc(rect, 0, 360);
 				}
 
-				g.setColor(colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
+				g.setColorAlpha(alpha | colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
-				g.setColor(colors[OUTLINE]);
+				g.setColorAlpha(alpha | colors[OUTLINE]);
 				if (shape == SQUARE_SHAPE) {
 					g.drawRoundRect(rect, 0, 0);
 				} else {
@@ -184,7 +183,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public static final int LAYOUT_COLORS = 2;
 
 	private int delay = -1;
-	private int overlayAlpha = 64;
+	private int overlayAlpha = 64 << 24;
 	private int shape;
 
 	public static final int ROUND_SHAPE = 0;
@@ -261,10 +260,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected Canvas target;
 
 	private View overlayView;
-	private Image offscreen;
-	private Graphics offgraphics;
 	private boolean obscuresVirtualScreen;
-	private boolean offscreenChanged;
 	private boolean feedback;
 	private static final int FEEDBACK_DURATION = 50;
 
@@ -334,7 +330,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		resetLayout(layoutVariant = 0);
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
-		offscreenChanged = true;
 		hider = new Thread(this, "MIDletVirtualKeyboard");
 		hider.start();
 	}
@@ -654,11 +649,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		this.virtualScreen = virtualScreen;
 		int width = Math.round(screen.width());
 		int height = Math.round(screen.height());
-		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen = Image.createImage(width, height);
-			offgraphics = offscreen.getGraphics();
-			offgraphics.setFont(new Font());
-		}
 		snapRadius = keyScales[0];
 		for (int i = 1; i < keyScales.length; i++) {
 			if (keyScales[i] < snapRadius) {
@@ -677,25 +667,13 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void paint(Graphics g) {
 		if (visible) {
-			if (obscuresVirtualScreen && overlayAlpha <= 250) {
-				if (offscreenChanged) {
-					offgraphics.clear(0);
-					for (VirtualKey aKeypad : keypad) {
-						aKeypad.paint(offgraphics);
-					}
-					offscreenChanged = false;
-				}
-				g.drawImage(offscreen, 0, 0, -1, -1, false, overlayAlpha);
-			} else {
-				for (VirtualKey aKeypad : keypad) {
-					aKeypad.paint(g);
-				}
+			for (VirtualKey aKeypad : keypad) {
+				aKeypad.paint(g);
 			}
 		}
 	}
 
 	private void repaint() {
-		offscreenChanged = true;
 		overlayView.postInvalidate();
 	}
 
@@ -967,7 +945,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public void setOverlayAlpha(int overlayAlpha) {
-		this.overlayAlpha = overlayAlpha;
+		this.overlayAlpha = overlayAlpha << 24;
 	}
 
 	public void setColor(int color, int value) {
