@@ -47,6 +47,7 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -78,8 +79,14 @@ public class MicroActivity extends AppCompatActivity {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		setTheme(sp.getString("pref_theme", "light"));
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_micro);
 		ContextHolder.setCurrentActivity(this);
+		setContentView(R.layout.activity_micro);
+		OverlayView overlayView = findViewById(R.id.vOverlay);
+		VirtualKeyboard vk = ContextHolder.getVk();
+		if (vk != null) {
+			vk.setView(overlayView);
+			overlayView.addLayer(vk);
+		}
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);

@@ -18,8 +18,10 @@
 package javax.microedition.lcdui;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import java.util.Timer;
@@ -44,7 +47,10 @@ import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.overlay.Overlay;
+import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.R;
 
 public abstract class Canvas extends Displayable {
 	public static final int KEY_POUND = 35;
@@ -168,10 +174,14 @@ public abstract class Canvas extends Displayable {
 
 	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {
 
+		OverlayView overlayView;
+		private FrameLayout rootView;
 		private Graphics mGraphics;
 
 		public InnerView(Context context) {
 			super(context);
+			rootView = ((Activity) context).findViewById(R.id.midletFrame);
+			overlayView = rootView.findViewById(R.id.vOverlay);
 			getHolder().addCallback(this);
 			getHolder().setFormat(PixelFormat.RGBA_8888);
 			setFocusableInTouchMode(true);
@@ -281,7 +291,11 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int newwidth, int newheight) {
+			Rect offsetViewBounds = new Rect(0, 0, newwidth, newheight);
+			// calculates the relative coordinates to the parent
+			rootView.offsetDescendantRectToMyCoords(this, offsetViewBounds);
 			synchronized (paintsync) {
+				overlayView.setTargetBounds(offsetViewBounds);
 				displayWidth = newwidth;
 				displayHeight = newheight;
 				updateSize();
@@ -292,18 +306,20 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			surface = holder.getSurface();
 			synchronized (paintsync) {
+				surface = holder.getSurface();
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			}
+			overlayView.setVisibility(true);
 		}
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			surface = null;
 			synchronized (paintsync) {
+				surface = null;
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
 			}
+			overlayView.setVisibility(false);
 		}
 
 		@Override
@@ -313,9 +329,6 @@ public abstract class Canvas extends Displayable {
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
 			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
-			if (overlay != null) {
-				overlay.paint(g);
-			}
 			if (showFps) {
 				drawFps(g);
 				totalFrameCount++;
@@ -339,12 +352,10 @@ public abstract class Canvas extends Displayable {
 					t.printStackTrace();
 				}
 				offscreen.copyPixels(offscreenCopy);
-				if (parallelRedraw) {
-					if (!uiHandler.hasMessages(0)) {
-						uiHandler.sendEmptyMessage(0);
-					}
-				} else {
+				if (!parallelRedraw) {
 					repaintScreen();
+				} else if (!uiHandler.hasMessages(0)) {
+					uiHandler.sendEmptyMessage(0);
 				}
 			}
 		}
@@ -418,7 +429,6 @@ public abstract class Canvas extends Displayable {
 	private String prevFrameCount = "0";
 
 	private Handler uiHandler;
-
 	private Overlay overlay;
 
 	public Canvas() {
@@ -489,9 +499,6 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void setOverlay(Overlay ov) {
-		if (overlay != null) {
-			overlay.setTarget(null);
-		}
 		if (ov != null) {
 			ov.setTarget(this);
 		}
@@ -693,12 +700,10 @@ public abstract class Canvas extends Displayable {
 	public void flushBuffer(Image image) {
 		synchronized (paintsync) {
 			image.copyPixels(offscreenCopy);
-			if (parallelRedraw) {
-				if (!uiHandler.hasMessages(0)) {
-					uiHandler.sendEmptyMessage(0);
-				}
-			} else {
+			if (!parallelRedraw) {
 				repaintScreen();
+			} else if (!uiHandler.hasMessages(0)) {
+				uiHandler.sendEmptyMessage(0);
 			}
 		}
 	}
@@ -725,9 +730,6 @@ public abstract class Canvas extends Displayable {
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
 			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
-			if (overlay != null) {
-				overlay.paint(g);
-			}
 			if (showFps) {
 				drawFps(g);
 				totalFrameCount++;

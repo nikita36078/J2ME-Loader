@@ -20,6 +20,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -35,7 +36,7 @@ import javax.microedition.lcdui.overlay.Overlay;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
-	private static String TAG = VirtualKeyboard.class.getName();
+	private static final String TAG = VirtualKeyboard.class.getName();
 	private static final String ARROW_LEFT = "\u2190";
 	private static final String ARROW_UP = "\u2191";
 	private static final String ARROW_RIGHT = "\u2192";
@@ -60,27 +61,27 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private boolean visible;
 		private long lastActionTime;
 
-		public VirtualKey(int keyCode, String label) {
+		VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
 			this.label = label;
 			this.visible = true;
 			rect = new RectF();
 		}
 
-		public VirtualKey(int keyCode, int secondKeyCode, String label) {
+		VirtualKey(int keyCode, int secondKeyCode, String label) {
 			this(keyCode, label);
 			this.secondKeyCode = secondKeyCode;
 		}
 
-		public int getKeyCode() {
+		int getKeyCode() {
 			return keyCode;
 		}
 
-		public int getSecondKeyCode() {
+		int getSecondKeyCode() {
 			return secondKeyCode;
 		}
 
-		public void setSelected(boolean flag) {
+		void setSelected(boolean flag) {
 			selected = flag;
 			lastActionTime = SystemClock.uptimeMillis();
 		}
@@ -97,7 +98,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			return rect;
 		}
 
-		public void resize(float size) {
+		void resize(float size) {
 			rect.right = rect.left + size;
 			rect.bottom = rect.top + size;
 		}
@@ -147,40 +148,40 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int KEYBOARD_SIZE = 25;
 	private static final int SCREEN = -1;
 
-	private static final int KEY_NUM1 = 0,
-			KEY_NUM2 = 1,
-			KEY_NUM3 = 2,
-			KEY_NUM4 = 3,
-			KEY_NUM5 = 4,
-			KEY_NUM6 = 5,
-			KEY_NUM7 = 6,
-			KEY_NUM8 = 7,
-			KEY_NUM9 = 8,
-			KEY_NUM0 = 9,
-			KEY_STAR = 10,
-			KEY_POUND = 11,
-			KEY_SOFT_LEFT = 12,
-			KEY_SOFT_RIGHT = 13,
-			KEY_DIAL = 14,
-			KEY_CANCEL = 15,
-			KEY_UP_LEFT = 16,
-			KEY_UP = 17,
-			KEY_UP_RIGHT = 18,
-			KEY_LEFT = 19,
-			KEY_RIGHT = 20,
-			KEY_DOWN_LEFT = 21,
-			KEY_DOWN = 22,
-			KEY_DOWN_RIGHT = 23,
-			KEY_FIRE = 24;
+	private static final int KEY_NUM1 = 0;
+	private static final int KEY_NUM2 = 1;
+	private static final int KEY_NUM3 = 2;
+	private static final int KEY_NUM4 = 3;
+	private static final int KEY_NUM5 = 4;
+	private static final int KEY_NUM6 = 5;
+	private static final int KEY_NUM7 = 6;
+	private static final int KEY_NUM8 = 7;
+	private static final int KEY_NUM9 = 8;
+	private static final int KEY_NUM0 = 9;
+	private static final int KEY_STAR = 10;
+	private static final int KEY_POUND = 11;
+	private static final int KEY_SOFT_LEFT = 12;
+	private static final int KEY_SOFT_RIGHT = 13;
+	private static final int KEY_DIAL = 14;
+	private static final int KEY_CANCEL = 15;
+	private static final int KEY_UP_LEFT = 16;
+	private static final int KEY_UP = 17;
+	private static final int KEY_UP_RIGHT = 18;
+	private static final int KEY_LEFT = 19;
+	private static final int KEY_RIGHT = 20;
+	private static final int KEY_DOWN_LEFT = 21;
+	private static final int KEY_DOWN = 22;
+	private static final int KEY_DOWN_RIGHT = 23;
+	private static final int KEY_FIRE = 24;
 
 	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
 	private static final int LAYOUT_OLD_VERSION = 1;
 	private static final int LAYOUT_VERSION = 2;
 
 	public static final int LAYOUT_EOF = -1;
-	public static final int LAYOUT_KEYS = 0,
-			LAYOUT_SCALES = 1,
-			LAYOUT_COLORS = 2;
+	public static final int LAYOUT_KEYS = 0;
+	public static final int LAYOUT_SCALES = 1;
+	public static final int LAYOUT_COLORS = 2;
 
 	private int delay = -1;
 	private int overlayAlpha = 64;
@@ -195,8 +196,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public static final int FOREGROUND_SELECTED = 3;
 	public static final int OUTLINE = 4;
 
-	private int[] colors
-			= {
+	private int[] colors = {
 			0xD0D0D0,
 			0x000080,
 			0x000080,
@@ -212,8 +212,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private static final float SCALE_SNAP_RADIUS = 0.05f;
 
-	private float[] keyScales
-			= {
+	private float[] keyScales = {
 			1,
 			1,
 			1,
@@ -221,8 +220,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			1.5f
 	};
 
-	private int[][] keyScaleGroups
-			= {
+	private int[][] keyScaleGroups = {
 			{
 					KEY_UP_LEFT,
 					KEY_UP,
@@ -262,6 +260,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	protected Canvas target;
 
+	private View overlayView;
 	private Image offscreen;
 	private Graphics offgraphics;
 	private boolean obscuresVirtualScreen;
@@ -697,6 +696,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private void repaint() {
 		offscreenChanged = true;
+		overlayView.postInvalidate();
 	}
 
 	/**
@@ -934,6 +934,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		for (VirtualKey aKeypad : keypad) {
 			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
 				aKeypad.setSelected(true);
+				repaint();
 				break;
 			}
 		}
@@ -950,6 +951,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		for (VirtualKey aKeypad : keypad) {
 			if (aKeypad.getKeyCode() == keyCode && aKeypad.getSecondKeyCode() == 0) {
 				aKeypad.setSelected(false);
+				repaint();
 				break;
 			}
 		}
@@ -978,5 +980,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setButtonShape(int shape) {
 		this.shape = shape;
+	}
+
+	public void setView(View view) {
+		overlayView = view;
 	}
 }
