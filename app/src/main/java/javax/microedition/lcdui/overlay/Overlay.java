@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package javax.microedition.lcdui;
+package javax.microedition.lcdui.overlay;
 
 import android.graphics.RectF;
 
-public interface Overlay {
+import javax.microedition.lcdui.Canvas;
+
+public interface Overlay extends Layer {
 	/**
 	 * Target the overlay at the specified Canvas
 	 *
@@ -33,14 +35,6 @@ public interface Overlay {
 	 * @param virtualScreen the size of the virtual screen that is available to the midlet
 	 */
 	public void resize(RectF screen, RectF virtualScreen);
-
-	/**
-	 * Called when the screen is redrawn.
-	 * See the paint() method in Canvas.
-	 *
-	 * @param g the Graphics object to be used for rendering
-	 */
-	public void paint(Graphics g);
 
 	/**
 	 * Called when the hardware key is pressed for the first time.

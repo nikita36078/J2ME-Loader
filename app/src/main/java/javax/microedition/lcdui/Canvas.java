@@ -43,6 +43,7 @@ import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.util.ContextHolder;
 
 public abstract class Canvas extends Displayable {

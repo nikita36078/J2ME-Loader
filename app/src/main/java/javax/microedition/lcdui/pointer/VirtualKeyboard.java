@@ -30,8 +30,8 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.Overlay;
 import javax.microedition.lcdui.event.CanvasEvent;
+import javax.microedition.lcdui.overlay.Overlay;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
