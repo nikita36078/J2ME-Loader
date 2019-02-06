@@ -139,7 +139,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus && current instanceof Canvas) {
+		if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
 			hideSystemUI();
 		}
 	}
@@ -308,6 +308,14 @@ public class MicroActivity extends AppCompatActivity {
 				})
 				.setNegativeButton(android.R.string.no, null);
 		alertBuilder.create().show();
+	}
+
+	@Override
+	public void openOptionsMenu() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
+			showSystemUI();
+		}
+		super.openOptionsMenu();
 	}
 
 	@Override
