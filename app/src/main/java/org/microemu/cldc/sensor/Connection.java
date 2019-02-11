@@ -178,7 +178,11 @@ public class Connection implements SensorConnection, ConnectionImplementation, S
 						data[i] = new DataImpl(channelInfos[i], new Object[]{value}, timestamps);
 					}
 				}
-				listener.dataReceived(this, data, false);
+				try {
+					listener.dataReceived(this, data, false);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				eventsNum = 0;
 			}
 		}
