@@ -52,7 +52,6 @@ public class Graphics {
 
 	private int translateX;
 	private int translateY;
-	private final Rect clip = new Rect();
 
 	private Rect intRect = new Rect();
 	private RectF floatRect = new RectF();
@@ -101,14 +100,10 @@ public class Graphics {
 		canvas.save();
 		this.canvas = canvas;
 		this.canvasBitmap = canvasBitmap;
-		canvas.getClipBounds(clip);
 	}
 
 	public void setSurfaceCanvas(Canvas canvas) {
 		this.canvas = canvas;
-		if (canvas != null) {
-			canvas.getClipBounds(clip);
-		}
 	}
 
 	public Canvas getCanvas() {
@@ -223,36 +218,40 @@ public class Graphics {
 	}
 
 	public void setClip(int x, int y, int width, int height) {
-		clip.set(x, y, x + width, y + height);
+		intRect.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			canvas.restore();
 			canvas.save();
 			canvas.translate(translateX, translateY);
-			canvas.clipRect(clip);
+			canvas.clipRect(intRect);
 		} else {
-			canvas.clipRect(clip, Region.Op.REPLACE);
+			canvas.clipRect(intRect, Region.Op.REPLACE);
 		}
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
-		clip.set(x, y, x + width, y + height);
-		canvas.clipRect(clip);
+		intRect.set(x, y, x + width, y + height);
+		canvas.clipRect(intRect);
 	}
 
 	public int getClipX() {
-		return clip.left;
+		canvas.getClipBounds(intRect);
+		return intRect.left;
 	}
 
 	public int getClipY() {
-		return clip.top;
+		canvas.getClipBounds(intRect);
+		return intRect.top;
 	}
 
 	public int getClipWidth() {
-		return clip.width();
+		canvas.getClipBounds(intRect);
+		return intRect.width();
 	}
 
 	public int getClipHeight() {
-		return clip.height();
+		canvas.getClipBounds(intRect);
+		return intRect.height();
 	}
 
 	public void translate(int dx, int dy) {
