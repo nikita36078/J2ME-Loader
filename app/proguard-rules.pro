@@ -20,6 +20,7 @@
 -keep class com.samsung.util.** { *; }
 -keep class com.mascotcapsule.micro3d.v3.** { *; }
 -keep class com.nokia.mid.** { *; }
+-keep class com.sun.midp.midlet.** { *; }
 -keep class com.vodafone.util.** { *; }
 -keep class org.microemu.** { *; }
 # Keep the BuildConfig
