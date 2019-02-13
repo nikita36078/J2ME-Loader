@@ -25,72 +25,35 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.list.CompoundItem;
 import javax.microedition.lcdui.list.CompoundListAdapter;
-import javax.microedition.lcdui.list.ItemSelector;
 
-public class List extends Screen implements Choice, ItemSelector, View.OnCreateContextMenuListener {
+public class List extends Screen implements Choice {
 	public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
-	private ArrayList<String> strings = new ArrayList<>();
-	private ArrayList<Image> images = new ArrayList<>();
-	private final ArrayList<Boolean> selected = new ArrayList<>();
-
 	private ListView list;
-	private CompoundListAdapter adapter;
+	private final CompoundListAdapter adapter;
 
-	private int listType;
+	private final int listType;
 	private int selectedIndex = -1;
 	private int fitPolicy;
 
 	private Command selectCommand = SELECT_COMMAND;
 
-	private SimpleEvent msgSetSelection = new SimpleEvent() {
-		@Override
-		public void process() {
-			list.setSelection(selectedIndex);
-		}
-	};
-
-	private SimpleEvent msgSetContextMenuListener = new SimpleEvent() {
+	private final SimpleEvent msgSetContextMenuListener = new SimpleEvent() {
 		@Override
 		public void process() {
 			if (listener != null) {
-				list.setOnCreateContextMenuListener(List.this);
+				list.setOnCreateContextMenuListener(List.this::onCreateContextMenu);
 			} else {
 				list.setLongClickable(false);
 			}
 		}
 	};
 
-	private class ClickListener implements AdapterView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView parent, View view, int position, long id) {
-			selectedIndex = position;
-			switch (listType) {
-				case IMPLICIT:
-					fireCommandAction(selectCommand, List.this);
-					break;
-				case EXCLUSIVE:
-					if (position >= 0 && position < selected.size()) {
-						Collections.fill(selected, Boolean.FALSE);
-						selected.set(position, Boolean.TRUE);
-					}
-					break;
-				case MULTIPLE:
-					if (position >= 0 && position < selected.size()) {
-						selected.set(position, !selected.get(position));
-					}
-					break;
-			}
-			adapter.notifyDataSetChanged();
-		}
-	}
-
-	private ClickListener clicklistener = new ClickListener();
+	private int mSize;
 
 	public List(String title, int listType) {
 		switch (listType) {
@@ -99,42 +62,40 @@ public class List extends Screen implements Choice, ItemSelector, View.OnCreateC
 			case MULTIPLE:
 				this.listType = listType;
 				break;
-
 			default:
 				throw new IllegalArgumentException("list type " + listType + " is not supported");
 		}
-
+		adapter = new CompoundListAdapter(listType);
 		setTitle(title);
 	}
 
 	public List(String title, int listType, String[] stringElements, Image[] imageElements) {
 		this(title, listType);
-
-		if (stringElements != null && imageElements != null && imageElements.length != stringElements.length) {
-			throw new IllegalArgumentException("string and image arrays have different length");
+		if (stringElements == null) {
+			throw new NullPointerException("String elements array is NULL");
 		}
-
-		if (stringElements != null) {
-			strings.addAll(Arrays.asList(stringElements));
+		int size = stringElements.length;
+		for (int i = 0; i < size; i++) {
+			String s = stringElements[i];
+			if (s == null) {
+				throw new NullPointerException("String element [" + i + "] is NULL");
+			}
 		}
-
+		if (imageElements != null && imageElements.length != size) {
+			throw new IllegalArgumentException("String and image arrays have different length");
+		}
+		ArrayList<CompoundItem> items = new ArrayList<>(size);
 		if (imageElements != null) {
-			images.addAll(Arrays.asList(imageElements));
-		}
-
-		int size = Math.max(strings.size(), images.size());
-
-		if (size > 0) {
-			selected.addAll(Collections.nCopies(size, Boolean.FALSE));
-
-			if (strings.size() == 0) {
-				strings.addAll(Collections.nCopies(size, null));
+			for (int i = 0; i < size; i++) {
+				items.add(new CompoundItem(stringElements[i], imageElements[i]));
 			}
-
-			if (images.size() == 0) {
-				images.addAll(Collections.nCopies(size, null));
+		} else {
+			for (String stringElement : stringElements) {
+				items.add(new CompoundItem(stringElement));
 			}
 		}
+		adapter.setAll(items);
+		mSize = size;
 	}
 
 	public void setSelectCommand(Command cmd) {
@@ -150,140 +111,115 @@ public class List extends Screen implements Choice, ItemSelector, View.OnCreateC
 	}
 
 	@Override
-	public int append(String stringPart, Image imagePart) {
-		synchronized (selected) {
-			int index = selected.size();
-			boolean select = index == 0 && listType != MULTIPLE;
-
-			strings.add(stringPart);
-			images.add(imagePart);
-			selected.add(select);
-
-			if (select) {
-				selectedIndex = index;
-			}
-
-			if (list != null) {
-				adapter.append(stringPart, imagePart);
-			}
-
-			return index;
-		}
+	public synchronized int append(String stringPart, Image imagePart) {
+		int index = mSize;
+		insert(index, stringPart, imagePart);
+		return index;
 	}
 
 	@Override
-	public void delete(int elementNum) {
-		synchronized (selected) {
-			strings.remove(elementNum);
-			images.remove(elementNum);
-			selected.remove(elementNum);
-
-			if (selected.size() == 0) {
-				selectedIndex = -1;
-			}
-
-			if (list != null) {
-				adapter.delete(elementNum);
-			}
+	public synchronized void delete(int elementNum) {
+		if (elementNum < 0 || elementNum >= mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
 		}
-	}
-
-	@Override
-	public void deleteAll() {
-		synchronized (selected) {
-			strings.clear();
-			images.clear();
-			selected.clear();
-
+		if (--mSize == 0) {
 			selectedIndex = -1;
+		}
+		adapter.delete(elementNum);
+	}
 
-			if (list != null) {
-				adapter.deleteAll();
+	@Override
+	public synchronized void deleteAll() {
+		mSize = 0;
+		selectedIndex = -1;
+		adapter.deleteAll();
+	}
+
+	@Override
+	public synchronized Image getImage(int elementNum) {
+		if (elementNum < 0 || elementNum >= mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
+		}
+		return adapter.getItem(elementNum).getImage();
+	}
+
+	@Override
+	public synchronized int getSelectedFlags(boolean[] selectedArray) {
+		int size = mSize;
+		if (selectedArray.length < size) {
+			throw new IllegalArgumentException("return array is too short");
+		}
+
+		int index = 0;
+		int selectedCount = 0;
+
+		while (index < size) {
+			boolean flag = adapter.getItem(index).isSelected();
+			selectedArray[index++] = flag;
+			if (flag) {
+				selectedCount++;
 			}
 		}
-	}
 
-	@Override
-	public Image getImage(int elementNum) {
-		return images.get(elementNum);
-	}
-
-	@Override
-	public int getSelectedFlags(boolean[] selectedArray) {
-		synchronized (selected) {
-			if (selectedArray.length < selected.size()) {
-				throw new IllegalArgumentException("return array is too short");
-			}
-
-			int index = 0;
-			int selectedCount = 0;
-
-			for (Boolean flag : selected) {
-				if (flag) {
-					selectedCount++;
-				}
-
-				selectedArray[index++] = flag;
-			}
-
-			while (index < selectedArray.length) {
-				selectedArray[index++] = false;
-			}
-
-			return selectedCount;
+		while (index < selectedArray.length) {
+			selectedArray[index++] = false;
 		}
+
+		return selectedCount;
 	}
 
 	@Override
-	public int getSelectedIndex() {
+	public synchronized int getSelectedIndex() {
 		return selectedIndex;
 	}
 
 	@Override
-	public String getString(int elementNum) {
-		return strings.get(elementNum);
-	}
-
-	@Override
-	public void insert(int elementNum, String stringPart, Image imagePart) {
-		synchronized (selected) {
-			boolean select = selected.size() == 0 && listType != MULTIPLE;
-
-			strings.add(elementNum, stringPart);
-			images.add(elementNum, imagePart);
-			selected.add(elementNum, select);
-
-			if (select) {
-				selectedIndex = elementNum;
-			}
-
-			if (list != null) {
-				adapter.insert(elementNum, stringPart, imagePart);
-			}
+	public synchronized String getString(int elementNum) {
+		if (elementNum < 0 || elementNum >= mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
 		}
+		return adapter.getItem(elementNum).getString();
 	}
 
 	@Override
-	public boolean isSelected(int elementNum) {
-		synchronized (selected) {
-			return selected.get(elementNum);
+	public synchronized void insert(int elementNum, String stringPart, Image imagePart) {
+		if (elementNum < 0 || elementNum > mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
 		}
-	}
+		CompoundItem item = new CompoundItem(stringPart, imagePart);
+		boolean select = mSize == 0 && listType != MULTIPLE;
 
-	@Override
-	public void set(int elementNum, String stringPart, Image imagePart) {
-		synchronized (selected) {
-			strings.set(elementNum, stringPart);
-			images.set(elementNum, imagePart);
-
-			if (list != null) {
-				adapter.set(elementNum, stringPart, imagePart);
-			}
+		if (select) {
+			selectedIndex = elementNum;
+			item.setSelected(true);
 		}
+
+		adapter.insert(elementNum, item, select);
+		mSize++;
 	}
 
 	@Override
-	public void setSelectedFlags(boolean[] selectedArray) {
+	public synchronized boolean isSelected(int elementNum) {
+		if (elementNum < 0 || elementNum >= mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
+		}
+		return adapter.getItem(elementNum).isSelected();
+	}
+
+	@Override
+	public synchronized void set(int elementNum, String stringPart, Image imagePart) {
+		if (elementNum < 0 || elementNum >= mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
+		}
+		adapter.set(elementNum, stringPart, imagePart);
+	}
+
+	@Override
+	public synchronized void setSelectedFlags(boolean[] selectedArray) {
+		if (selectedArray.length < mSize) {
+			throw new IllegalArgumentException("array is too short");
+		}
+
 		if (listType == EXCLUSIVE || listType == IMPLICIT) {
 			for (int i = 0; i < selectedArray.length; i++) {
 				if (selectedArray[i]) {
@@ -292,44 +228,31 @@ public class List extends Screen implements Choice, ItemSelector, View.OnCreateC
 				}
 			}
 		}
+		adapter.setSelectionFlags(selectedArray);
+	}
 
-		synchronized (selected) {
-			if (selectedArray.length < selected.size()) {
-				throw new IllegalArgumentException("array is too short");
-			}
-
-			int size = selected.size();
-
-			for (int i = 0; i < size; i++) {
-				selected.set(i, selectedArray[i]);
-			}
+	@Override
+	public synchronized void setSelectedIndex(int elementNum, boolean flag) {
+		if (!flag && listType != MULTIPLE) return;
+		selectedIndex = elementNum;
+		if (listType == MULTIPLE) {
+			adapter.setSelection(elementNum, flag);
+		} else {
+			adapter.setExclusiveSelection(elementNum);
 		}
 	}
 
 	@Override
-	public void setSelectedIndex(int elementNum, boolean flag) {
-		synchronized (selected) {
-			selected.set(elementNum, flag);
-
-			if (flag) {
-				selectedIndex = elementNum;
-			}
-
-			if (list != null) {
-				if (flag) {
-					ViewHandler.postEvent(msgSetSelection);
-				}
-			}
+	public synchronized void setFont(int elementNum, Font font) {
+		if (elementNum < 0 || elementNum >= mSize) {
+			throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + mSize);
 		}
+		adapter.setFont(elementNum, font);
 	}
 
 	@Override
-	public void setFont(int elementNum, Font font) {
-	}
-
-	@Override
-	public Font getFont(int elementNum) {
-		return Font.getDefaultFont();
+	public synchronized Font getFont(int elementNum) {
+		return adapter.getItem(elementNum).getFont();
 	}
 
 	@Override
@@ -343,45 +266,33 @@ public class List extends Screen implements Choice, ItemSelector, View.OnCreateC
 	}
 
 	@Override
-	public int size() {
-		synchronized (selected) {
-			return selected.size();
-		}
+	public synchronized int size() {
+		return mSize;
 	}
 
 	@Override
 	public View getScreenView() {
 		Context context = getParentActivity();
 
-		adapter = new CompoundListAdapter(context, this, listType);
-
 		list = new ListView(context);
 		list.setAdapter(adapter);
 
-		int size = selected.size();
-
-		for (int i = 0; i < size; i++) {
-			adapter.append(strings.get(i), images.get(i));
-		}
-
-		if (listType == IMPLICIT && selectedIndex >= 0 && selectedIndex < selected.size()) {
+		if (listType == IMPLICIT && selectedIndex >= 0 && selectedIndex < mSize) {
 			list.setSelection(selectedIndex);
 		}
 
-		list.setOnItemClickListener(clicklistener);
-		ViewHandler.postEvent(msgSetContextMenuListener);
-
+		list.setOnItemClickListener(this::onItemClick);
+		list.setOnItemLongClickListener(this::onItemLongClick);
+		list.setOnCreateContextMenuListener(this::onCreateContextMenu);
 		return list;
 	}
 
 	@Override
 	public void clearScreenView() {
 		list = null;
-		adapter = null;
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+	private void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		menu.clear();
 
 		for (Command cmd : getCommands()) {
@@ -404,5 +315,17 @@ public class List extends Screen implements Choice, ItemSelector, View.OnCreateC
 			}
 		}
 		return false;
+	}
+
+	private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		setSelectedIndex(position, true);
+		if (listType == IMPLICIT) {
+			fireCommandAction(selectCommand, List.this);
+		}
+	}
+
+	private boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		setSelectedIndex(position, true);
+		return getCommands().length == 0;
 	}
 }

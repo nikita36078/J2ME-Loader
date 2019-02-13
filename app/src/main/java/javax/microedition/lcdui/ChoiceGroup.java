@@ -184,7 +184,7 @@ public class ChoiceGroup extends Item implements Choice {
 			if (buttongroup != null) {
 				addButton(index, stringPart, imagePart, select);
 			} else if (spinner != null) {
-				adapter.append(stringPart, imagePart);
+				adapter.add(stringPart, imagePart);
 
 				if (select) {
 					spinner.setSelection(index);
@@ -433,7 +433,7 @@ public class ChoiceGroup extends Item implements Choice {
 
 			case POPUP:
 				if (spinner == null) {
-					adapter = new CompoundSpinnerAdapter(context);
+					adapter = new CompoundSpinnerAdapter();
 
 					spinner = new Spinner(context);
 					spinner.setAdapter(adapter);
@@ -441,7 +441,7 @@ public class ChoiceGroup extends Item implements Choice {
 					int size = selected.size();
 
 					for (int i = 0; i < size; i++) {
-						adapter.append(strings.get(i), images.get(i));
+						adapter.add(strings.get(i), images.get(i));
 					}
 
 					if (selectedIndex >= 0 && selectedIndex < selected.size()) {

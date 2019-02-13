@@ -16,15 +16,11 @@
 
 package javax.microedition.lcdui.list;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 
 public class CompoundSpinnerAdapter extends CompoundAdapter implements SpinnerAdapter {
-	public CompoundSpinnerAdapter(Context context) {
-		super(context);
-	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

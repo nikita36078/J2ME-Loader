@@ -21,29 +21,59 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
 
 public class CompoundItem {
-	private String stringPart;
-	private Image imagePart;
+	private final String text;
+	private final Image icon;
 	private Drawable imageDrawable;
+	private boolean selected = false;
+	private Font mFont = Font.getDefaultFont();
+
+	public CompoundItem(String stringPart) {
+		this(stringPart, null);
+	}
 
 	public CompoundItem(String stringPart, Image imagePart) {
-		this.stringPart = stringPart;
-		this.imagePart = imagePart;
+		this.text = stringPart;
+		this.icon = imagePart;
 	}
 
 	public String getString() {
-		return stringPart;
+		return text;
+	}
+
+	public Image getImage() {
+		return icon;
 	}
 
 	public Drawable getDrawable(int height) {
-		if (imageDrawable == null && imagePart != null) {
-			Bitmap bitmap = imagePart.getBitmap();
+		if (imageDrawable == null && icon != null) {
+			Bitmap bitmap = icon.getBitmap();
 			int width = height / bitmap.getHeight() * bitmap.getWidth();
 			Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
 			imageDrawable = new BitmapDrawable(scaledBitmap);
 		}
 		return imageDrawable;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public Font getFont() {
+		return mFont;
+	}
+
+	public void setFont(Font font) {
+		if (font == null) {
+			font = Font.getDefaultFont();
+		}
+		mFont = font;
 	}
 }

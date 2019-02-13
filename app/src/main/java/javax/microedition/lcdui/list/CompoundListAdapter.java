@@ -18,7 +18,7 @@
 package javax.microedition.lcdui.list;
 
 import android.R.layout;
-import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
@@ -29,13 +29,9 @@ import javax.microedition.lcdui.Choice;
 public class CompoundListAdapter extends CompoundAdapter implements ListAdapter {
 	protected int listType;
 	protected int viewResourceID;
-	protected ItemSelector selector;
 
-	public CompoundListAdapter(Context context, ItemSelector selector, int type) {
-		super(context);
-
+	public CompoundListAdapter(int type) {
 		this.listType = type;
-		this.selector = selector;
 
 		switch (type) {
 			case Choice.IMPLICIT:
@@ -53,18 +49,19 @@ public class CompoundListAdapter extends CompoundAdapter implements ListAdapter 
 			default:
 				throw new IllegalArgumentException("list type " + type + " is not supported");
 		}
-
-		if (type != Choice.IMPLICIT && selector == null) {
-			throw new IllegalArgumentException("ItemSelector is requered for this list type");
-		}
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = getView(position, convertView, parent, viewResourceID, true);
 
-		if (listType != Choice.IMPLICIT && convertView instanceof CheckedTextView) {
-			((CheckedTextView) convertView).setChecked(selector.isSelected(position));
+		boolean selected = getItem(position).isSelected();
+		if (listType != Choice.IMPLICIT) {
+			((CheckedTextView) convertView).setChecked(selected);
+		} else if (selected) {
+			convertView.setBackgroundColor(0x999999FF);
+		} else {
+			convertView.setBackgroundColor(Color.TRANSPARENT);
 		}
 
 		return convertView;
