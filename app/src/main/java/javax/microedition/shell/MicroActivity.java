@@ -311,8 +311,17 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
+			onKeyDown(event.getKeyCode(), event);
+			return true;
+		}
+		return super.dispatchKeyEvent(event);
+	}
+
+	@Override
 	public void openOptionsMenu() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
+		if (!actionBarEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
 			showSystemUI();
 		}
 		super.openOptionsMenu();
@@ -322,6 +331,7 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
+			case KeyEvent.KEYCODE_MENU:
 				openOptionsMenu();
 				return true;
 		}
