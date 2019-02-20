@@ -34,7 +34,7 @@ import org.objectweb.asm.Opcodes;
 public abstract class PatternMethodAdapter extends MethodVisitor {
 
 	public PatternMethodAdapter(MethodVisitor mv) {
-		super(Opcodes.ASM5, mv);
+		super(Opcodes.ASM7, mv);
 	}
 
 	protected abstract void visitInsn();

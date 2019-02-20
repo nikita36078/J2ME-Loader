@@ -111,7 +111,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 	}
 
 	public AndroidClassVisitor(ClassVisitor cv) {
-		super(Opcodes.ASM5, cv);
+		super(Opcodes.ASM7, cv);
 	}
 
 	@Override
