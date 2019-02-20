@@ -18,6 +18,7 @@
         android:resizeableActivity="false"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         tools:targetApi="o">
         <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity
