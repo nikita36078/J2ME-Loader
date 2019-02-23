@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import android.content.Context;
+import android.graphics.Canvas;
 import android.view.View;
 
 public abstract class CustomItem extends Item {
@@ -29,7 +31,23 @@ public abstract class CustomItem extends Item {
 	protected static final int TRAVERSE_HORIZONTAL = 1;
 	protected static final int TRAVERSE_VERTICAL = 2;
 
-	private View view;
+	private InnerView view;
+	private Image offscreen;
+	private Graphics graphics = new Graphics();
+
+	private class InnerView extends View {
+		public InnerView(Context context) {
+			super(context);
+			setWillNotDraw(false);
+		}
+
+		@Override
+		protected void onDraw(Canvas canvas) {
+			super.onDraw(canvas);
+			graphics.setSurfaceCanvas(canvas);
+			graphics.drawImage(offscreen, 0, 0, getMinContentWidth(), getMinContentHeight(), false, 255);
+		}
+	}
 
 	protected CustomItem(String label) {
 		setLabel(label);
@@ -60,10 +78,19 @@ public abstract class CustomItem extends Item {
 	}
 
 	protected final void repaint() {
-		repaint(0, 0, 0, 0);
+		repaint(0, 0, getMinContentWidth(), getMinContentHeight());
 	}
 
 	protected final void repaint(int x, int y, int width, int height) {
+		graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
+		graphics.reset();
+		graphics.setClip(x, y, width, height);
+		try {
+			paint(graphics, width, height);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		view.postInvalidate();
 	}
 
 	protected boolean traverse(int dir, int viewportWidth, int viewportHeight, int[] visRect_inout) {
@@ -100,7 +127,23 @@ public abstract class CustomItem extends Item {
 	@Override
 	protected View getItemContentView() {
 		if (view == null) {
-			view = new View(getOwnerForm().getParentActivity());
+			view = new InnerView(getOwnerForm().getParentActivity());
+			view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+				@Override
+				public void onViewAttachedToWindow(View v) {
+					repaint();
+				}
+
+				@Override
+				public void onViewDetachedFromWindow(View v) {
+
+				}
+			});
+			int width = getMinContentWidth();
+			int height = getMinContentHeight();
+			view.setMinimumWidth(width);
+			view.setMinimumHeight(height);
+			offscreen = Image.createImage(width, height);
 		}
 
 		return view;
