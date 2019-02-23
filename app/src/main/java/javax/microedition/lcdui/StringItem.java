@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import javax.microedition.lcdui.event.SimpleEvent;
@@ -73,7 +74,12 @@ public class StringItem extends Item {
 		if (textview == null) {
 			Context context = getOwnerForm().getParentActivity();
 
-			textview = new TextView(context);
+			if (appearanceMode == BUTTON) {
+				textview = new Button(context);
+			} else {
+				textview = new TextView(context);
+			}
+
 			textview.setTextAppearance(context, android.R.style.TextAppearance_Small);
 			textview.setText(text);
 			textview.setOnClickListener(v -> fireDefaultCommandAction());
