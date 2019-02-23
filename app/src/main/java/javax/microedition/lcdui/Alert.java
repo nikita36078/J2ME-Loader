@@ -97,7 +97,9 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
-		builder.setOnDismissListener(dialog -> Display.getDisplay(null).setCurrent(nextDisplayable));
+		builder.setOnDismissListener(dialog -> {
+			if (nextDisplayable != null) Display.getDisplay(null).setCurrent(nextDisplayable);
+		});
 
 		if (image != null) {
 			builder.setIcon(new BitmapDrawable(context.getResources(), image.getBitmap()));

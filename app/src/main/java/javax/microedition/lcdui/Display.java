@@ -79,7 +79,9 @@ public class Display {
 			return;
 		}
 		if (disp instanceof Alert) {
-			setCurrent((Alert) disp, current);
+			Alert alert = (Alert) disp;
+			alert.setNextDisplayable(current);
+			showAlert(alert);
 		} else {
 			changeCurrent(disp);
 			showCurrent();
@@ -93,6 +95,10 @@ public class Display {
 			throw new IllegalArgumentException();
 		}
 		alert.setNextDisplayable(disp);
+		showAlert(alert);
+	}
+
+	private void showAlert(Alert alert) {
 		activity.runOnUiThread(() -> {
 			AlertDialog alertDialog = alert.prepareDialog().create();
 			alertDialog.show();
