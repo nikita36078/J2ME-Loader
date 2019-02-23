@@ -264,10 +264,6 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		addCommand(cmd);
 	}
 
-	public void removeAllCommands() {
-		commands.clear();
-	}
-
 	public void setItemCommandListener(ItemCommandListener listener) {
 		this.listener = listener;
 
