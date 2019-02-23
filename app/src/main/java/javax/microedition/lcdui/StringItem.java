@@ -76,6 +76,7 @@ public class StringItem extends Item {
 			textview = new TextView(context);
 			textview.setTextAppearance(context, android.R.style.TextAppearance_Small);
 			textview.setText(text);
+			textview.setOnClickListener(v -> fireDefaultCommandAction());
 		}
 
 		return textview;

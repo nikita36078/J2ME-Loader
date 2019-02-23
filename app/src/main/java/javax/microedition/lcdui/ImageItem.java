@@ -66,6 +66,7 @@ public class ImageItem extends Item {
 		if (imgview == null) {
 			imgview = new ImageView(getOwnerForm().getParentActivity());
 			imgview.setImageBitmap(image != null ? image.getBitmap() : null);
+			imgview.setOnClickListener(v -> fireDefaultCommandAction());
 		}
 
 		return imgview;

@@ -319,4 +319,11 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		}
 		return false;
 	}
+
+	public void fireDefaultCommandAction() {
+		if (commands.size() > 0) {
+			Command cmd = commands.get(0);
+			owner.postEvent(CommandActionEvent.getInstance(listener, cmd, this));
+		}
+	}
 }
