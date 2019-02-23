@@ -26,6 +26,7 @@ import javax.microedition.lcdui.event.SimpleEvent;
 public class StringItem extends Item {
 	private String text;
 	private TextView textview;
+	private int appearanceMode;
 
 	private SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
@@ -41,6 +42,7 @@ public class StringItem extends Item {
 	public StringItem(String label, String text, int appearanceMode) {
 		setLabel(label);
 		setText(text);
+		this.appearanceMode = appearanceMode;
 	}
 
 	public void setText(String text) {
@@ -53,6 +55,17 @@ public class StringItem extends Item {
 
 	public String getText() {
 		return text;
+	}
+
+	public Font getFont() {
+		return Font.getDefaultFont();
+	}
+
+	public void setFont(Font font) {
+	}
+
+	public int getAppearanceMode() {
+		return appearanceMode;
 	}
 
 	@Override
@@ -71,12 +84,5 @@ public class StringItem extends Item {
 	@Override
 	public void clearItemContentView() {
 		textview = null;
-	}
-
-	public Font getFont() {
-		return Font.getDefaultFont();
-	}
-
-	public void setFont(Font font) {
 	}
 }

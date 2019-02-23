@@ -22,6 +22,8 @@ import android.widget.ImageView;
 public class ImageItem extends Item {
 	private Image image;
 	private ImageView imgview;
+	private String altText;
+	private int appearanceMode;
 
 	public ImageItem(String label, Image image, int layout, String altText) {
 		this(label, image, layout, altText, PLAIN);
@@ -31,6 +33,8 @@ public class ImageItem extends Item {
 		setLabel(label);
 		setImage(image);
 		setLayout(layout);
+		setAltText(altText);
+		this.appearanceMode = appearanceMode;
 	}
 
 	public void setImage(Image img) {
@@ -43,6 +47,18 @@ public class ImageItem extends Item {
 
 	public Image getImage() {
 		return image;
+	}
+
+	public String getAltText() {
+		return altText;
+	}
+
+	public void setAltText(String text) {
+		altText = text;
+	}
+
+	public int getAppearanceMode() {
+		return appearanceMode;
 	}
 
 	@Override
