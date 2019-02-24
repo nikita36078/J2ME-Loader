@@ -33,6 +33,7 @@ public abstract class CustomItem extends Item {
 
 	private InnerView view;
 	private Image offscreen;
+	private int onWidth, onHeight;
 	private Graphics graphics = new Graphics();
 
 	private class InnerView extends View {
@@ -42,10 +43,18 @@ public abstract class CustomItem extends Item {
 		}
 
 		@Override
+		protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+			super.onSizeChanged(w, h, oldw, oldh);
+			updateSize();
+			repaint();
+		}
+
+		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
+			view.setMinimumHeight(onHeight);
 			graphics.setSurfaceCanvas(canvas);
-			graphics.drawImage(offscreen, 0, 0, getMinContentWidth(), getMinContentHeight(), false, 255);
+			graphics.drawImage(offscreen, 0, 0, onWidth, onHeight, false, 255);
 		}
 	}
 
@@ -124,21 +133,16 @@ public abstract class CustomItem extends Item {
 	protected void pointerReleased(int x, int y) {
 	}
 
+	private void updateSize() {
+		float mult = view.getWidth() / (float) getMinContentWidth();
+		onWidth = (int) (getMinContentWidth() * mult);
+		onHeight = (int) (getMinContentHeight() * mult);
+	}
+
 	@Override
 	protected View getItemContentView() {
 		if (view == null) {
 			view = new InnerView(getOwnerForm().getParentActivity());
-			view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-				@Override
-				public void onViewAttachedToWindow(View v) {
-					repaint();
-				}
-
-				@Override
-				public void onViewDetachedFromWindow(View v) {
-
-				}
-			});
 			int width = getMinContentWidth();
 			int height = getMinContentHeight();
 			view.setMinimumWidth(width);
