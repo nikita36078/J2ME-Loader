@@ -103,7 +103,6 @@ public class EventQueue implements Runnable {
 			} else {
 				// it is more correct, but additional checks are required
 				// queue.setLast(event).recycle(); // remove the previous event and add the new one.
-				event.leaveQueue();
 				event.recycle(); // more reliable // leave the previous event, recycle the new one.
 			}
 		}
