@@ -18,6 +18,9 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,7 +35,13 @@ public class StringItem extends Item {
 	private SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
 		public void process() {
-			textview.setText(text);
+			if (appearanceMode == HYPERLINK && text != null) {
+				SpannableStringBuilder s = new SpannableStringBuilder(text);
+				s.setSpan(new URLSpan(text), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+				textview.setText(s);
+			} else {
+				textview.setText(text);
+			}
 		}
 	};
 
@@ -81,7 +90,13 @@ public class StringItem extends Item {
 			}
 
 			textview.setTextAppearance(context, android.R.style.TextAppearance_Small);
-			textview.setText(text);
+			if (appearanceMode == HYPERLINK && text != null) {
+				SpannableStringBuilder s = new SpannableStringBuilder(text);
+				s.setSpan(new URLSpan(text), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+				textview.setText(s);
+			} else {
+				textview.setText(text);
+			}
 			textview.setOnClickListener(v -> fireDefaultCommandAction());
 		}
 
