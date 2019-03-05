@@ -70,7 +70,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 
 	private void setupButton(int resId, int index) {
 		idToCanvasKey.put(resId, index);
-		Button button = findViewById(resId);
+		Button button = (Button) findViewById(resId);
 		button.setOnClickListener(this);
 	}
 
@@ -86,7 +86,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		int id = androidToMIDP.indexOfValue(canvasKey);
 		String keyName = "";
 		if (id >= 0) {
-			keyName = KeyEvent.keyCodeToString(androidToMIDP.keyAt(id));
+			keyName = String.valueOf(androidToMIDP.keyAt(id));
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.mapping_dialog_title)

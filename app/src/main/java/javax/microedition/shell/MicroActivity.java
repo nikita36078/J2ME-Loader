@@ -81,14 +81,14 @@ public class MicroActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
-		OverlayView overlayView = findViewById(R.id.vOverlay);
+		OverlayView overlayView = (OverlayView) findViewById(R.id.vOverlay);
 		VirtualKeyboard vk = ContextHolder.getVk();
 		if (vk != null) {
 			vk.setView(overlayView);
 			overlayView.addLayer(vk);
 		}
-		layout = findViewById(R.id.displayable_container);
-		toolbar = findViewById(R.id.toolbar);
+		layout = (LinearLayout) findViewById(R.id.displayable_container);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);

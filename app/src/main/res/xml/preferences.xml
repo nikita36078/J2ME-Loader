@@ -8,13 +8,13 @@
         android:key="pref_theme"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_theme_title" />
-    <SwitchPreferenceCompat
+    <CheckBoxPreference
         android:defaultValue="false"
         android:icon="@drawable/ic_setting_enable_action_bar"
         android:key="pref_actionbar_switch"
         android:summary="@string/pref_enable_actionbar_summary"
         android:title="@string/pref_enable_actionbar_title" />
-    <SwitchPreferenceCompat
+    <CheckBoxPreference
         android:defaultValue="false"
         android:icon="@drawable/ic_setting_keep_screen_on"
         android:key="pref_wakelock_switch"

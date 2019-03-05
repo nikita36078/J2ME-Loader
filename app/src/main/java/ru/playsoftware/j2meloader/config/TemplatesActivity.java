@@ -50,8 +50,8 @@ public class TemplatesActivity extends BaseActivity {
 		actionBar.setTitle(R.string.templates);
 
 		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
-		ListView listView = findViewById(R.id.list_view);
-		TextView emptyView = findViewById(R.id.empty_view);
+		ListView listView = (ListView) findViewById(R.id.list_view);
+		TextView emptyView = (TextView) findViewById(R.id.empty_view);
 		listView.setEmptyView(emptyView);
 		registerForContextMenu(listView);
 		adapter = new TemplatesAdapter(this, templates);

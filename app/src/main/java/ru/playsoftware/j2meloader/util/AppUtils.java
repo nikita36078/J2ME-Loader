@@ -18,18 +18,14 @@ package ru.playsoftware.j2meloader.util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class AppUtils {
 
-	private static ArrayList<AppItem> getAppsList() {
+	public static ArrayList<AppItem> getAppsList() {
 		ArrayList<AppItem> apps = new ArrayList<>();
 		String[] appFolders = new File(Config.APP_DIR).list();
 		if (appFolders != null) {
@@ -66,6 +62,15 @@ public class AppUtils {
 		return item;
 	}
 
+	public static void renameApp(String oldName, String newName) {
+		File appSaveDirOld = new File(Config.DATA_DIR, oldName);
+		File appSaveDirNew = new File(Config.DATA_DIR, newName);
+		appSaveDirOld.renameTo(appSaveDirNew);
+		File appConfigsDirOld = new File(Config.CONFIGS_DIR, oldName);
+		File appConfigsDirNew = new File(Config.CONFIGS_DIR, newName);
+		appConfigsDirOld.renameTo(appConfigsDirNew);
+	}
+
 	public static void deleteApp(AppItem item) {
 		File appDir = new File(item.getPathExt());
 		FileUtils.deleteDirectory(appDir);
@@ -73,36 +78,5 @@ public class AppUtils {
 		FileUtils.deleteDirectory(appSaveDir);
 		File appConfigsDir = new File(Config.CONFIGS_DIR, item.getTitle());
 		FileUtils.deleteDirectory(appConfigsDir);
-	}
-
-	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
-		String[] appFolders = new File(Config.APP_DIR).list();
-		int itemsNum = items.size();
-		if (appFolders == null || appFolders.length == 0) {
-			// If db isn't empty
-			if (itemsNum != 0) {
-				appRepository.deleteAll();
-			}
-			appRepository.insertAll(getAppsList());
-			return;
-		}
-		List<String> appFoldersList = Arrays.asList(appFolders);
-		boolean result = true;
-		// Delete invalid app items from db
-		Iterator<AppItem> iterator = items.iterator();
-		while (iterator.hasNext()) {
-			AppItem item = iterator.next();
-			if (!appFoldersList.contains(item.getPath())) {
-				result = false;
-				appRepository.delete(item);
-				iterator.remove();
-			}
-		}
-		if (appFolders.length != items.size()) {
-			result = false;
-		}
-		if (!result) {
-			appRepository.insertAll(getAppsList());
-		}
 	}
 }

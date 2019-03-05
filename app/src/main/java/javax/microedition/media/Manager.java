@@ -35,7 +35,7 @@ public class Manager {
 
 	public static Player createPlayer(String locator) throws IOException {
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
-			return new MidiPlayer();
+			return new BasePlayer();
 		} else if (locator.startsWith(FILE_LOCATOR)) {
 			InputStream stream = Connector.openInputStream(locator);
 			String extension = locator.substring(locator.lastIndexOf('.') + 1);

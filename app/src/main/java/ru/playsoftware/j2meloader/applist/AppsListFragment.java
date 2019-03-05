@@ -21,8 +21,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,9 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
-import android.support.v4.content.pm.ShortcutInfoCompat;
-import android.support.v4.content.pm.ShortcutManagerCompat;
-import android.support.v4.graphics.drawable.IconCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.ContextMenu;
@@ -48,23 +44,18 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.TemplatesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
@@ -78,8 +69,6 @@ import ru.playsoftware.j2meloader.util.JarConverter;
 
 public class AppsListFragment extends ListFragment {
 
-	private AppRepository appRepository;
-	private CompositeDisposable compositeDisposable;
 	private AppsListAdapter adapter;
 	private JarConverter converter;
 	private String appSort;
@@ -89,7 +78,6 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		compositeDisposable = new CompositeDisposable();
 		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
 		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
 		appPath = getArguments().getString(MainActivity.APP_PATH_KEY);
@@ -129,24 +117,9 @@ public class AppsListFragment extends ListFragment {
 		}
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		compositeDisposable.clear();
-	}
-
 	@SuppressLint("CheckResult")
 	private void initDb() {
-		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
-		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
-				.subscribeOn(Schedulers.io()).publish();
-		listConnectableFlowable
-				.firstElement()
-				.subscribe(list -> AppUtils.updateDb(appRepository, list));
-		listConnectableFlowable
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(list -> adapter.setItems(list));
-		compositeDisposable.add(listConnectableFlowable.connect());
+		adapter.setItems(AppUtils.getAppsList());
 	}
 
 	@Override
@@ -180,7 +153,7 @@ public class AppsListFragment extends ListFragment {
 					@Override
 					public void onSuccess(String s) {
 						AppItem app = AppUtils.getApp(s);
-						appRepository.insert(app);
+						adapter.setItems(AppUtils.getAppsList());
 						dialog.dismiss();
 						if (!isAdded()) return;
 						showStartDialog(app);
@@ -238,8 +211,8 @@ public class AppsListFragment extends ListFragment {
 					if (title.equals("")) {
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
-						item.setTitle(title);
-						appRepository.insert(item);
+						AppUtils.renameApp(item.getTitle(), title);
+						adapter.setItems(AppUtils.getAppsList());
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
@@ -253,7 +226,7 @@ public class AppsListFragment extends ListFragment {
 				.setMessage(R.string.message_delete)
 				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
 					AppUtils.deleteApp(item);
-					appRepository.delete(item);
+					adapter.setItems(AppUtils.getAppsList());
 				})
 				.setNegativeButton(android.R.string.no, null);
 		builder.show();
@@ -280,21 +253,6 @@ public class AppsListFragment extends ListFragment {
 		int index = info.position;
 		AppItem appItem = adapter.getItem(index);
 		switch (item.getItemId()) {
-			case R.id.action_context_shortcut:
-				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
-				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
-						Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
-						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
-								.setIntent(launchIntent)
-								.setShortLabel(appItem.getTitle());
-				if (bitmap != null) {
-					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
-				} else {
-					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.mipmap.ic_launcher));
-				}
-				ShortcutManagerCompat.requestPinShortcut(getActivity(), shortcutInfoCompatBuilder.build(), null);
-				break;
 			case R.id.action_context_rename:
 				showRenameDialog(index);
 				break;
@@ -315,13 +273,19 @@ public class AppsListFragment extends ListFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
-		SearchView searchView = (SearchView) searchItem.getActionView();
-		Disposable searchViewDisposable = RxSearchView.queryTextChanges(searchView)
-				.debounce(300, TimeUnit.MILLISECONDS)
-				.distinctUntilChanged()
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
-		compositeDisposable.add(searchViewDisposable);
+		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				adapter.getFilter().filter(newText);
+				return true;
+			}
+		});
 	}
 
 	@Override

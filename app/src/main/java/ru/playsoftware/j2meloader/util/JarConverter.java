@@ -21,7 +21,6 @@ import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
 
-import org.acra.ACRA;
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.File;
@@ -109,7 +108,6 @@ public class JarConverter {
 
 			// Add jar name to ACRA
 			String targetJarName = pathToJar.substring(pathToJar.lastIndexOf('/') + 1);
-			ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
 			Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar);
 			// Check extension
 			String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());

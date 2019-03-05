@@ -28,7 +28,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
@@ -38,7 +37,6 @@ import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
-import ru.playsoftware.j2meloader.util.MigrationUtils;
 
 public class MainActivity extends BaseActivity {
 
@@ -73,8 +71,6 @@ public class MainActivity extends BaseActivity {
 
 	private void setupActivity(boolean intentUri) {
 		initFolders();
-		checkActionBar();
-		MigrationUtils.check(this);
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
@@ -110,16 +106,6 @@ public class MainActivity extends BaseActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private void checkActionBar() {
-		boolean firstStart = sp.getBoolean("pref_first_start", true);
-		if (firstStart) {
-			if (!ViewConfiguration.get(this).hasPermanentMenuKey()) {
-				sp.edit().putBoolean("pref_actionbar_switch", true).apply();
-			}
-			sp.edit().putBoolean("pref_first_start", false).apply();
 		}
 	}
 

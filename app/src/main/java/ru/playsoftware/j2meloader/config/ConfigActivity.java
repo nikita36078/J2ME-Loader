@@ -137,36 +137,36 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		setProperties();
 
-		tfScreenWidth = findViewById(R.id.tfScreenWidth);
-		tfScreenHeight = findViewById(R.id.tfScreenHeight);
-		tfScreenBack = findViewById(R.id.tfScreenBack);
-		cxScaleToFit = findViewById(R.id.cxScaleToFit);
-		sbScaleRatio = findViewById(R.id.sbScaleRatio);
-		tfScaleRatioValue = findViewById(R.id.tfScaleRatioValue);
-		spOrientation = findViewById(R.id.spOrientation);
-		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
-		cxFilter = findViewById(R.id.cxFilter);
-		cxImmediate = findViewById(R.id.cxImmediate);
-		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
-		cxParallel = findViewById(R.id.cxParallel);
-		cxShowFps = findViewById(R.id.cxShowFps);
+		tfScreenWidth = (EditText)findViewById(R.id.tfScreenWidth);
+		tfScreenHeight = (EditText)findViewById(R.id.tfScreenHeight);
+		tfScreenBack = (EditText)findViewById(R.id.tfScreenBack);
+		cxScaleToFit = (CheckBox)findViewById(R.id.cxScaleToFit);
+		sbScaleRatio = (SeekBar) findViewById(R.id.sbScaleRatio);
+		tfScaleRatioValue = (EditText)findViewById(R.id.tfScaleRatioValue);
+		spOrientation = (Spinner) findViewById(R.id.spOrientation);
+		cxKeepAspectRatio = (CheckBox)findViewById(R.id.cxKeepAspectRatio);
+		cxFilter = (CheckBox)findViewById(R.id.cxFilter);
+		cxImmediate = (CheckBox)findViewById(R.id.cxImmediate);
+		cxHwAcceleration =(CheckBox) findViewById(R.id.cxHwAcceleration);
+		cxParallel =(CheckBox) findViewById(R.id.cxParallel);
+		cxShowFps =(CheckBox) findViewById(R.id.cxShowFps);
 
-		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
-		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
-		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
-		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
-		tfSystemProperties = findViewById(R.id.tfSystemProperties);
-		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
-		cxVKFeedback = findViewById(R.id.cxVKFeedback);
-		cxTouchInput = findViewById(R.id.cxTouchInput);
+		tfFontSizeSmall = (EditText)findViewById(R.id.tfFontSizeSmall);
+		tfFontSizeMedium =(EditText) findViewById(R.id.tfFontSizeMedium);
+		tfFontSizeLarge = (EditText)findViewById(R.id.tfFontSizeLarge);
+		cxFontSizeInSP = (CheckBox)findViewById(R.id.cxFontSizeInSP);
+		tfSystemProperties =(EditText) findViewById(R.id.tfSystemProperties);
+		cxShowKeyboard = (CheckBox)findViewById(R.id.cxIsShowKeyboard);
+		cxVKFeedback =(CheckBox)findViewById(R.id.cxVKFeedback);
+		cxTouchInput = (CheckBox) findViewById(R.id.cxTouchInput);
 
-		sbVKAlpha = findViewById(R.id.sbVKAlpha);
-		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
-		tfVKFore = findViewById(R.id.tfVKFore);
-		tfVKBack = findViewById(R.id.tfVKBack);
-		tfVKSelFore = findViewById(R.id.tfVKSelFore);
-		tfVKSelBack = findViewById(R.id.tfVKSelBack);
-		tfVKOutline = findViewById(R.id.tfVKOutline);
+		sbVKAlpha = (SeekBar) findViewById(R.id.sbVKAlpha);
+		tfVKHideDelay = (EditText)findViewById(R.id.tfVKHideDelay);
+		tfVKFore =(EditText) findViewById(R.id.tfVKFore);
+		tfVKBack =(EditText) findViewById(R.id.tfVKBack);
+		tfVKSelFore = (EditText) findViewById(R.id.tfVKSelFore);
+		tfVKSelBack = (EditText) findViewById(R.id.tfVKSelBack);
+		tfVKOutline = (EditText) findViewById(R.id.tfVKOutline);
 
 		screenWidths = new ArrayList<>();
 		screenHeights = new ArrayList<>();

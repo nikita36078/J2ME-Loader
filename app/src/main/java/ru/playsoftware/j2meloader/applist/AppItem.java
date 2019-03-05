@@ -17,24 +17,17 @@
 
 package ru.playsoftware.j2meloader.applist;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 
-@Entity(tableName = "apps", indices = {@Index(value = {"path"}, unique = true)})
 public class AppItem {
-	@PrimaryKey(autoGenerate = true)
 	private int id;
 	private String imagePath;
 	private String title;
 	private String author;
 	private String version;
-	@ColumnInfo(name = "path")
 	private String path;
 
 	public AppItem(String path, String title, String author, String version) {

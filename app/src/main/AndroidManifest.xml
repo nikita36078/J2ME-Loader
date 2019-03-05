@@ -9,7 +9,6 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <application
-        android:name=".EmulatorApplication"
         android:allowBackup="false"
         android:appCategory="game"
         android:icon="@mipmap/ic_launcher"
