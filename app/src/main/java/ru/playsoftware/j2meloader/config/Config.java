@@ -31,7 +31,7 @@ public class Config {
 	public static final String TEMP_DEX_DIR = "/tmp_dex";
 	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
 	public static final String MIDLET_RES_DIR = "/res";
-	public static final String MIDLET_DEX_FILE = "/converted.dex";
+	public static final String MIDLET_DEX_FILE = "/converted.jar";
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";

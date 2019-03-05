@@ -8,11 +8,12 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        maxSdkVersion 10
         versionCode 59
-        versionName "1.4.2"
+        versionName "1.4.2-vk-2.3"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
-            abiFilters 'x86', 'armeabi-v7a'
+            abiFilters 'armeabi', 'armeabi-v7a'
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -72,6 +73,7 @@ dependencies {
     implementation "com.android.support:design:$supportLibVersion"
     implementation "com.android.support:preference-v7:$supportLibVersion"
     implementation "com.android.support:support-v4:$supportLibVersion"
+    implementation "com.android.support:support-annotations:$supportLibVersion"
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'org.sufficientlysecure:donations:2.5'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
@@ -80,5 +82,4 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.1'
     implementation 'org.ow2.asm:asm:7.0'
     implementation project(':dexlib')
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }

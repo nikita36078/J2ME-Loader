@@ -83,19 +83,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 							"(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
 					return;
 				}
-			} else if (owner.equals("java/lang/String")) {
-				String encoding = "ISO-8859-1"; // microedition.encoding
-				if (name.equals("<init>") && desc.startsWith("([B") && !desc.endsWith("Ljava/lang/String;)V")) {
-					mv.visitLdcInsn(encoding);
-					mv.visitMethodInsn(opcode, owner, name, new StringBuffer()
-							.append(desc, 0, desc.length() - 2)
-							.append("Ljava/lang/String;)V").toString(), itf);
-					return;
-				} else if (name.equals("getBytes") && desc.startsWith("()")) {
-					mv.visitLdcInsn(encoding);
-					mv.visitMethodInsn(opcode, owner, name, "(Ljava/lang/String;)[B", itf);
-					return;
-				}
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc, itf);
 		}

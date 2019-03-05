@@ -138,7 +138,7 @@ public abstract class CompoundAdapter implements Adapter {
 		textview.setText(item.getString());
 
 		if (useImagePart) {
-			textview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+			textview.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
 				textview.setCompoundDrawablesWithIntrinsicBounds(item.getDrawable(textview.getHeight()),
 						null, null, null);
 				textview.setCompoundDrawablePadding(textview.getPaddingLeft());

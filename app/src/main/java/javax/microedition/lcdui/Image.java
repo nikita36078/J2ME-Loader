@@ -30,14 +30,6 @@ import javax.microedition.util.ContextHolder;
 
 public class Image {
 
-	private static final int CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() >> 2); // 1/4 heap max
-	private static final LruCache<String, Bitmap> CACHE = new LruCache<String, Bitmap>(CACHE_SIZE) {
-		@Override
-		protected int sizeOf(String key, Bitmap value) {
-			return value.getByteCount();
-		}
-	};
-
 	private Bitmap bitmap;
 	private Canvas canvas;
 
@@ -51,7 +43,6 @@ public class Image {
 
 	public static Image createImage(int width, int height, boolean hasAlpha, Image reuse) {
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		bitmap.setHasAlpha(hasAlpha);
 		if (reuse == null) {
 			return new Image(bitmap);
 		}
@@ -78,22 +69,12 @@ public class Image {
 	}
 
 	public static Image createImage(String resname) throws IOException {
-		synchronized (CACHE) {
-			Bitmap b = CACHE.get(resname);
-			if (b != null) {
-				return new Image(b);
-			}
-			InputStream stream = ContextHolder.getResourceAsStream(null, resname);
-			if (stream == null) {
-				throw new IOException("Can't read image: " + resname);
-			}
-			b = BitmapFactory.decodeStream(stream);
-			if (b == null) {
-				throw new IOException("Can't decode image: " + resname);
-			}
-			CACHE.put(resname, b);
-			return new Image(b);
+		InputStream stream = ContextHolder.getResourceAsStream(null, resname);
+		if (stream == null) {
+			throw new IOException("Can't read image: " + resname);
 		}
+		Bitmap b = BitmapFactory.decodeStream(stream);
+		return new Image(b);
 	}
 
 	public static Image createImage(InputStream stream) {
