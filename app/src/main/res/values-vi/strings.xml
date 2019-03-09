@@ -11,7 +11,7 @@
     <string name="templates">Mẫu</string>
     <string name="about_message">Ứng dụng này cho phép bạn khởi động các ứng dụng và game J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D với một số hạn chế.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bật bộ lọc trong một số trường hợp có thể làm giảm hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\".</string>
-    <string name="author">Tác giả: </string>
+    <string name="author">Nhà phát triển: </string>
     <string name="version">Phiên bản: </string>
     <string name="no_data_for_display">Không có dữ liệu</string>
     <string name="message_delete">Bạn thực sự muốn xoá ứng dụng này?</string>
