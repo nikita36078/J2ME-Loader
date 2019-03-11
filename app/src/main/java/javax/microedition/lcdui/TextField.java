@@ -56,7 +56,7 @@ public class TextField extends Item {
 		}
 	};
 
-	private class InternalEditText extends android.support.v7.widget.AppCompatEditText {
+	private class InternalEditText extends androidx.appcompat.widget.AppCompatEditText {
 		public InternalEditText(Context context) {
 			super(context);
 		}
