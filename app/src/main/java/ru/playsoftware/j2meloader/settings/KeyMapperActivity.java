@@ -17,9 +17,6 @@
 package ru.playsoftware.j2meloader.settings;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,6 +27,9 @@ import android.widget.Button;
 
 import javax.microedition.lcdui.Canvas;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 

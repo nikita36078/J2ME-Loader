@@ -19,7 +19,6 @@ package javax.microedition.util;
 
 import android.content.Context;
 import android.os.Process;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -36,6 +35,7 @@ import java.io.InputStream;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
 
+import androidx.appcompat.app.AppCompatActivity;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {

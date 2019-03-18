@@ -19,7 +19,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Form extends Screen {
 	private static final float BORDER_PADDING = 7;

@@ -18,12 +18,13 @@
 package javax.microedition.media;
 
 import android.media.MediaMetadataRetriever;
-import androidx.collection.SparseArrayCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.microedition.media.control.MetaDataControl;
+
+import androidx.collection.SparseArrayCompat;
 
 public class InternalMetaData implements MetaDataControl {
 	private static ArrayList<Integer> androidMetaKeys;

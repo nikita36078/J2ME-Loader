@@ -20,10 +20,11 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
-import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 
 import java.util.Arrays;
+
+import androidx.appcompat.app.AlertDialog;
 
 public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public static final int FOREVER = -2;

@@ -26,8 +26,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.NonNull;
-import androidx.collection.SparseArrayCompat;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
@@ -48,6 +46,8 @@ import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
 
+import androidx.annotation.NonNull;
+import androidx.collection.SparseArrayCompat;
 import ru.playsoftware.j2meloader.R;
 
 public abstract class Canvas extends Displayable {

@@ -24,8 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseIntArray;
@@ -55,6 +53,8 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapper;

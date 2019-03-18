@@ -19,7 +19,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,6 +32,8 @@ import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class Displayable {
 	private MicroActivity parent;

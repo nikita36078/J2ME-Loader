@@ -19,14 +19,15 @@ package javax.microedition.lcdui;
 
 import android.content.Context;
 import android.os.Vibrator;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Display {
 	public static final int LIST_ELEMENT = 1;

@@ -18,9 +18,6 @@ package ru.playsoftware.j2meloader.config;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,6 +27,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import ru.playsoftware.j2meloader.R;
 
 public class LoadTemplateDialogFragment extends DialogFragment {
