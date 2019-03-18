@@ -37,9 +37,6 @@ public class Texture {
 
 	private int[] colors = {0xFFFFFFFF, 0xFF000000};
 
-	public Texture() {
-	}
-
 	public Texture(int target, int format, Image c) {
 		// target = GL_TEXTURE_2D (3553), format = GL_LUMINANCE8_EXT (32832)
 		texture = c;
@@ -65,22 +62,14 @@ public class Texture {
 	public void mapto(int x1, int y1, int x2, int y2, int x3, int y3) {
 		// find transformation matrix for this triangle to UVs
 		// Tm = UVm x Sm^-1
-		sourcem[0] = x1;
-		sourcem[1] = x2;
-		sourcem[2] = x3;
-		sourcem[3] = y1;
-		sourcem[4] = y2;
-		sourcem[5] = y3;
-		sourcem[6] = 1;
-		sourcem[7] = 1;
-		sourcem[8] = 1;
+		sourcem[0] = x1; sourcem[1] = x2; sourcem[2] = x3;
+		sourcem[3] = y1; sourcem[4] = y2; sourcem[5] = y3;
+		sourcem[6] =  1; sourcem[7] =  1; sourcem[8] =  1;
 
 		inverse(sourcem);
 		clone(transm, uvm);
 		matmul(transm, sourcem);
-		transm[6] = 0;
-		transm[7] = 0;
-		transm[8] = 1;
+		transm[6] = 0; transm[7] = 0; transm[8] = 1;
 	}
 
 	public void setUVs(int u1, int v1, int u2, int v2, int u3, int v3) {
