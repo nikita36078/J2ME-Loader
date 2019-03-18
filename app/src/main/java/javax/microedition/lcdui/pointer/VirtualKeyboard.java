@@ -404,11 +404,44 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keypad[KEY_DIAL].setVisible(false);
 				keypad[KEY_CANCEL].setVisible(false);
 				break;
+			case 2:
+				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_FIRE_KEY] = 1;
+
+				setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_WEST);
+				setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_EAST);
+
+				setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
+				setSnap(KEY_NUM0, SCREEN, RectSnap.INT_SOUTH);
+				setSnap(KEY_POUND, KEY_NUM0, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM7, KEY_STAR, RectSnap.EXT_NORTH);
+				setSnap(KEY_NUM8, KEY_NUM7, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM9, KEY_NUM8, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM4, KEY_NUM7, RectSnap.EXT_NORTH);
+				setSnap(KEY_NUM5, KEY_NUM4, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM6, KEY_NUM5, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM1, KEY_NUM4, RectSnap.EXT_NORTH);
+				setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
+
+				for (int i = KEY_NUM1; i < KEY_DIAL; i++) {
+					keypad[i].setVisible(true);
+				}
+				for (int i = KEY_DIAL; i < KEYBOARD_SIZE; i++) {
+					keypad[i].setVisible(false);
+				}
+				break;
 		}
 	}
 
 	public void switchLayout() {
-		layoutVariant ^= 1;
+		layoutVariant++;
+		if (layoutVariant > 2) {
+			layoutVariant = 0;
+		}
 		resetLayout(layoutVariant);
 		for (int group = 0; group < keyScaleGroups.length; group++) {
 			resizeKeyGroup(group);
