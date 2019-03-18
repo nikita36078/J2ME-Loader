@@ -18,7 +18,7 @@
 package javax.microedition.media;
 
 import android.media.MediaMetadataRetriever;
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;

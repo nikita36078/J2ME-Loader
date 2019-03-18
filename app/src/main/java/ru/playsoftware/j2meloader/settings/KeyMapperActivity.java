@@ -17,9 +17,9 @@
 package ru.playsoftware.j2meloader.settings;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
