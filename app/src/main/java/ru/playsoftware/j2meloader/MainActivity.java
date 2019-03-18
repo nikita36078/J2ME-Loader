@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity {
 
 	private void setupActivity(boolean intentUri) {
 		initFolders();
+		checkActionBar();
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
@@ -106,6 +107,14 @@ public class MainActivity extends BaseActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void checkActionBar() {
+		boolean firstStart = sp.getBoolean("pref_first_start", true);
+		if (firstStart) {
+			sp.edit().putBoolean("pref_actionbar_switch", true).apply();
+			sp.edit().putBoolean("pref_first_start", false).apply();
 		}
 	}
 

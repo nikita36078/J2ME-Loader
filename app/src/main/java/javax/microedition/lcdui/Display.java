@@ -172,7 +172,7 @@ public class Display {
 		if (vibrator == null) {
 			vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 		}
-		if (!vibrator.hasVibrator()) {
+		if (vibrator == null) {
 			return false;
 		}
 		if (duration > 0) {

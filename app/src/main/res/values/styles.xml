@@ -33,21 +33,11 @@
     <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/dark_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
-        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
-    </style>
-
-    <style name="AppTheme.OverflowMenu" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
-        <item name="overlapAnchor">false</item>
     </style>
 
     <style name="AppTheme.Light.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/light_color_primary</item>
         <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
-        <item name="actionOverflowMenuStyle">@style/AppTheme.Light.OverflowMenu</item>
-    </style>
-
-    <style name="AppTheme.Light.OverflowMenu" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
-        <item name="overlapAnchor">false</item>
     </style>
 
     <style name="FilePickerTheme" parent="NNF_BaseTheme">
