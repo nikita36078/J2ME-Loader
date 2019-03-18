@@ -125,8 +125,8 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 			} else {
 				ArrayList<AppItem> resultList = new ArrayList<>();
 				for (AppItem item : list) {
-					if (item.getTitle().toLowerCase().contains(constraint.toString().toLowerCase())
-							|| item.getAuthor().toLowerCase().contains(constraint.toString().toLowerCase())) {
+					if (item.getTitle().toLowerCase().contains(constraint)
+							|| item.getAuthor().toLowerCase().contains(constraint)) {
 						resultList.add(item);
 					}
 				}

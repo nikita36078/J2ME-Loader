@@ -40,7 +40,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
@@ -56,6 +55,8 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.ListFragment;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -316,8 +317,22 @@ public class AppsListFragment extends ListFragment {
 		inflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		Disposable searchViewDisposable = RxSearchView.queryTextChanges(searchView)
-				.debounce(300, TimeUnit.MILLISECONDS)
+		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter -> {
+			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					emitter.onNext(query);
+					return true;
+				}
+
+				@Override
+				public boolean onQueryTextChange(String newText) {
+					emitter.onNext(newText);
+					return true;
+				}
+			});
+		}).debounce(300, TimeUnit.MILLISECONDS)
+				.map(String::toLowerCase)
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
