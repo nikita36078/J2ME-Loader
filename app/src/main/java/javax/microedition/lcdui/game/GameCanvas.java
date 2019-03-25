@@ -65,27 +65,35 @@ public class GameCanvas extends Canvas {
 			case KEY_FIRE:
 			case KEY_NUM5:
 				return FIRE_PRESSED;
+			case KEY_NUM7:
+				return GAME_A_PRESSED;
+			case KEY_NUM9:
+				return GAME_B_PRESSED;
+			case KEY_STAR:
+				return GAME_C_PRESSED;
+			case KEY_POUND:
+				return GAME_D_PRESSED;
 			default:
 				return 0;
 		}
 	}
 
 	public void gameKeyPressed(int keyCode) {
-		if (!suppressCommands || checkGameAction(keyCode)) {
+		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyPressed(keyCode);
 		}
 		key |= convertGameKeyCode(keyCode);
 	}
 
 	public void gameKeyReleased(int keyCode) {
-		if (!suppressCommands || checkGameAction(keyCode)) {
+		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyReleased(keyCode);
 		}
 		repeatedKey &= ~convertGameKeyCode(keyCode);
 	}
 
 	public void gameKeyRepeated(int keyCode) {
-		if (!suppressCommands || checkGameAction(keyCode)) {
+		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyRepeated(keyCode);
 		}
 		repeatedKey |= convertGameKeyCode(keyCode);
