@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import javax.microedition.lcdui.Canvas;
@@ -58,6 +59,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.util.LogUtils;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_DEFAULT = 0;
@@ -388,6 +390,14 @@ public class MicroActivity extends AppCompatActivity {
 							break;
 						case R.id.action_hide_buttons:
 							showHideButtonDialog();
+							break;
+						case R.id.action_save_log:
+							try {
+								LogUtils.writeLog();
+							} catch (IOException e) {
+								e.printStackTrace();
+								Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+							}
 							break;
 					}
 				}

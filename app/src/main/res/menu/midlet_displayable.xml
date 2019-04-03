@@ -7,6 +7,9 @@
                 <item
                     android:id="@+id/action_exit_midlet"
                     android:title="@string/exit" />
+                <item
+                    android:id="@+id/action_save_log"
+                    android:title="@string/save_log" />
             </group>
         </menu>
     </item>

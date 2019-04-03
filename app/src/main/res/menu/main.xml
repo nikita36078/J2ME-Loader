@@ -29,6 +29,10 @@
         android:title="@string/donate"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_save_log"
+        android:title="@string/save_log"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_exit_app"
         android:title="@string/exit"
         app:showAsAction="never" />

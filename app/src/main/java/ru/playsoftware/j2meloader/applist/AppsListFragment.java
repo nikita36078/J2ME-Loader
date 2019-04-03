@@ -44,6 +44,7 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -76,6 +77,7 @@ import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
+import ru.playsoftware.j2meloader.util.LogUtils;
 
 public class AppsListFragment extends ListFragment {
 
@@ -361,6 +363,14 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_donate:
 				Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);
 				startActivity(donationsIntent);
+				break;
+			case R.id.action_save_log:
+				try {
+					LogUtils.writeLog();
+				} catch (IOException e) {
+					e.printStackTrace();
+					Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+				}
 				break;
 			case R.id.action_exit_app:
 				getActivity().finish();

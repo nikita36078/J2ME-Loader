@@ -25,6 +25,9 @@
                 <item
                     android:id="@+id/action_take_screenshot"
                     android:title="@string/take_screenshot" />
+                <item
+                    android:id="@+id/action_save_log"
+                    android:title="@string/save_log" />
             </group>
         </menu>
     </item>
