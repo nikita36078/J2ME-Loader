@@ -428,7 +428,7 @@ public class MicroActivity extends AppCompatActivity {
 					@Override
 					public void onError(Throwable e) {
 						e.printStackTrace();
-						Toast.makeText(MicroActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+						Toast.makeText(MicroActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
 					}
 				});
 	}
