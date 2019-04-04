@@ -367,6 +367,7 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_save_log:
 				try {
 					LogUtils.writeLog();
+					Toast.makeText(getActivity(), R.string.log_saved, Toast.LENGTH_SHORT).show();
 				} catch (IOException e) {
 					e.printStackTrace();
 					Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();

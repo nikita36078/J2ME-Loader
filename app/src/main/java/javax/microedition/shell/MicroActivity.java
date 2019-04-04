@@ -394,6 +394,7 @@ public class MicroActivity extends AppCompatActivity {
 						case R.id.action_save_log:
 							try {
 								LogUtils.writeLog();
+								Toast.makeText(this, R.string.log_saved, Toast.LENGTH_SHORT).show();
 							} catch (IOException e) {
 								e.printStackTrace();
 								Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();

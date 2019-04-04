@@ -114,6 +114,7 @@
     <string name="hide_buttons">Hide buttons</string>
     <string name="take_screenshot">Take screenshot</string>
     <string name="screenshot_saved">Screenshot has been saved to</string>
+    <string name="log_saved">Log has been saved</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_theme_title">Theme</string>
