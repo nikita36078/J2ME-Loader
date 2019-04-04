@@ -31,12 +31,10 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -44,18 +42,19 @@ import java.util.zip.ZipOutputStream;
 
 public class AndroidProducer {
 
-	private static byte[] instrument(final InputStream classInputStream) throws IOException {
-		ClassReader cr = new ClassReader(classInputStream);
+	private static byte[] instrument(final byte[] classFile) {
+		ClassReader cr = new ClassReader(classFile);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		ClassVisitor cv = new AndroidClassVisitor(cw);
-		cr.accept(cv, 0);
+		cr.accept(cv, ClassReader.SKIP_DEBUG);
 
 		return cw.toByteArray();
 	}
 
 	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
 		HashMap<String, byte[]> resources = new HashMap<>();
-		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(jarInputFile)); ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
+		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(jarInputFile));
+			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
 
 			byte[] buffer = new byte[1024];
 			ZipEntry zipEntry;
@@ -84,11 +83,15 @@ public class AndroidProducer {
 			for (String name : resources.keySet()) {
 				byte[] inBuffer = resources.get(name);
 				byte[] outBuffer = inBuffer;
-				if (name.endsWith(".class")) {
-					outBuffer = instrument(new ByteArrayInputStream(inBuffer));
+				try {
+					if (name.endsWith(".class")) {
+						outBuffer = instrument(inBuffer);
+					}
+					zos.putNextEntry(new ZipEntry(name));
+					zos.write(outBuffer);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				zos.putNextEntry(new ZipEntry(name));
-				zos.write(outBuffer);
 			}
 		}
 	}
