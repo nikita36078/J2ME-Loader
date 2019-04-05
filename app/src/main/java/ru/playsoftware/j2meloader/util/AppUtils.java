@@ -52,18 +52,36 @@ public class AppUtils {
 	}
 
 	public static AppItem getApp(String path) {
-		File file = new File(Config.APP_DIR, path);
+		File appDir = new File(Config.APP_DIR, path);
 		LinkedHashMap<String, String> params =
-				FileUtils.loadManifest(new File(file.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
-		String imagePath = params.get("MIDlet-Icon");
-		if (imagePath == null) {
-			imagePath = params.get("MIDlet-1").split(",")[1];
-		}
-		AppItem item = new AppItem(file.getName(), params.get("MIDlet-Name"),
+				FileUtils.loadManifest(new File(appDir.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
+		AppItem item = new AppItem(appDir.getName(), params.get("MIDlet-Name"),
 				params.get("MIDlet-Vendor"),
 				params.get("MIDlet-Version"));
-		item.setImagePathExt(imagePath);
+		item.setImagePathExt(getImagePath(appDir, params));
 		return item;
+	}
+
+	private static String getImagePath(File appDir, LinkedHashMap<String, String> params) {
+		File defaultImage = new File(appDir.getAbsolutePath(), Config.MIDLET_ICON_FILE);
+		String imagePath;
+		if (defaultImage.exists()) {
+			imagePath = defaultImage.getName();
+		} else {
+			imagePath = Config.MIDLET_RES_DIR + getImagePathFromManifest(params);
+		}
+		return imagePath;
+	}
+
+	public static String getImagePathFromManifest(LinkedHashMap<String, String> params) {
+		String tmp;
+		String imagePath = "";
+		if ((tmp = params.get("MIDlet-Icon")) != null) {
+			imagePath = tmp;
+		} else if ((tmp = params.get("MIDlet-1").split(",")[1]) != null) {
+			imagePath = tmp;
+		}
+		return imagePath.replace(" ", "");
 	}
 
 	public static void deleteApp(AppItem item) {

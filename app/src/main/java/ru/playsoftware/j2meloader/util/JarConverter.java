@@ -31,7 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.zip.ZipException;
+import java.util.LinkedHashMap;
 
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
@@ -42,7 +42,6 @@ public class JarConverter {
 	public static final String TEMP_JAD_NAME = "tmp.jad";
 	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
 
-	private static final String TEMP_FIX_FOLDER_NAME = "tmp_fix";
 	private static final String TEMP_FOLDER_NAME = "tmp";
 	private static final String TAG = JarConverter.class.getName();
 
@@ -58,19 +57,7 @@ public class JarConverter {
 
 	private File fixJar(File inputJar) throws IOException {
 		File fixedJar = new File(tmpDir, inputJar.getName() + ".jar");
-		try {
-			AndroidProducer.processJar(inputJar, fixedJar);
-		} catch (ZipException e) {
-			File unpackedJarFolder = new File(dataDirPath, TEMP_FIX_FOLDER_NAME);
-			ZipUtils.unzip(inputJar, unpackedJarFolder);
-
-			File repackedJar = new File(tmpDir, inputJar.getName());
-			ZipUtils.zip(unpackedJarFolder, repackedJar);
-
-			AndroidProducer.processJar(repackedJar, fixedJar);
-			FileUtils.deleteDirectory(unpackedJarFolder);
-			repackedJar.delete();
-		}
+		AndroidProducer.processJar(inputJar, fixedJar);
 		return fixedJar;
 	}
 
@@ -153,7 +140,8 @@ public class JarConverter {
 				throw new ConverterException("Broken jar", e);
 			}
 
-			appDirPath = FileUtils.loadManifest(conf).get("MIDlet-Name");
+			LinkedHashMap<String, String> params = FileUtils.loadManifest(conf);
+			appDirPath = params.get("MIDlet-Name");
 			if (appDirPath == null) {
 				deleteTemp();
 				throw new ConverterException("Broken manifest");
@@ -173,14 +161,15 @@ public class JarConverter {
 				deleteTemp();
 				throw new ConverterException("Can't convert", e);
 			}
+			// Copy other resources from jar.
 			try {
 				FileUtils.copyFileUsingChannel(conf, new File(appConverted, Config.MIDLET_MANIFEST_FILE));
-			} catch (IOException e) {
+				File image = new File(tmpDir, AppUtils.getImagePathFromManifest(params));
+				FileUtils.copyFileUsingChannel(image, new File(appConverted, Config.MIDLET_ICON_FILE));
+			} catch (IOException | NullPointerException e) {
 				e.printStackTrace();
 			}
-			// Extract other resources from jar.
-			FileUtils.copyFiles(tmpDir.getPath(), Config.APP_DIR + appDirPath + Config.MIDLET_RES_DIR,
-					(dir, fname) -> !(fname.endsWith(".class") || fname.endsWith(".jar.jar")));
+			FileUtils.copyFileUsingChannel(inputJar, new File(appConverted, Config.MIDLET_RES_FILE));
 			deleteTemp();
 			emitter.onSuccess(appDirPath);
 		});
