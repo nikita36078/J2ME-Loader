@@ -367,7 +367,10 @@ public class MicroActivity extends AppCompatActivity {
 					showExitConfirmation();
 				} else if (id == R.id.action_take_screenshot) {
 					takeScreenshot();
+				} else if (id == R.id.action_save_log) {
+					saveLog();
 				} else if (ContextHolder.getVk() != null) {
+					// Handled only when virtual keyboard is enabled
 					VirtualKeyboard vk = ContextHolder.getVk();
 					switch (id) {
 						case R.id.action_layout_edit_mode:
@@ -390,15 +393,6 @@ public class MicroActivity extends AppCompatActivity {
 							break;
 						case R.id.action_hide_buttons:
 							showHideButtonDialog();
-							break;
-						case R.id.action_save_log:
-							try {
-								LogUtils.writeLog();
-								Toast.makeText(this, R.string.log_saved, Toast.LENGTH_SHORT).show();
-							} catch (IOException e) {
-								e.printStackTrace();
-								Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-							}
 							break;
 					}
 				}
@@ -432,6 +426,16 @@ public class MicroActivity extends AppCompatActivity {
 						Toast.makeText(MicroActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
 					}
 				});
+	}
+
+	private void saveLog() {
+		try {
+			LogUtils.writeLog();
+			Toast.makeText(this, R.string.log_saved, Toast.LENGTH_SHORT).show();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void showHideButtonDialog() {
