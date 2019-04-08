@@ -9,32 +9,32 @@
     <string name="search">Pesquisar</string>
     <string name="licenses">Licenças</string>
     <string name="templates">Modelos</string>
-    <string name="about_message">Este aplicativo permite rodar aplicativos e jogos Java2ME no Android. Ele suporta a maioria dos jogos 2D além de jogos 3D, porém com algumas limitações.&lt;BR&gt;</string>
+    <string name="about_message">Este aplicativo permite você de abrir aplicativos e jogos J2ME no Android. Ele suporta a maioria dos jogos 2D além dos 3D, mas com algumas limitações.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Ativar filtragem em alguns casos pode reduzir muito o desempenho. Desative esta opção se o jogo estiver muito lento.&lt;BR&gt;&#8226; Problemas de exibição de imagens podem ser corrigidos ao ativar a opção \"Modo de processamento imediato\".</string>
-    <string name="author">Criador: </string>
+    <string name="author">Autor: </string>
     <string name="version">Versão: </string>
     <string name="no_data_for_display">Sem dados</string>
-    <string name="message_delete">Deseja excluir o jogo?</string>
+    <string name="message_delete">Tem certeza que deseja excluir este aplicativo?</string>
     <string name="converting_wait">Convertendo JAR...</string>
-    <string name="convert_complete">Concluído</string>
+    <string name="convert_complete">Completo</string>
     <string name="converting_message">Processando...</string>
     <string name="permission_request_failed">Este aplicativo requer permissão de gravação no Armazenamento interno</string>
     <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
     <string name="action_context_shortcut">Adicionar atalho</string>
-    <string name="action_settings">Configurações</string>
+    <string name="action_settings">Ajustes</string>
     <string name="action_context_delete">Apagar</string>
     <string name="action_context_rename">Renomear</string>
     <string name="donate">Doar</string>
     <string name="START_CMD">Iniciar</string>
     <string name="CANCEL_CMD">Cancelar</string>
     <string name="CLEAR_DATA_CMD">Limpar dados</string>
-    <string name="RESET_SETTINGS_CMD">Redefinir configurações</string>
-    <string name="RESET_LAYOUT_CMD">Redefinir teclado</string>
+    <string name="RESET_SETTINGS_CMD">Redefinir ajustes</string>
+    <string name="RESET_LAYOUT_CMD">Redefinir layout dos botões</string>
     <string name="LOAD_TEMPLATE_CMD">Carregar modelo</string>
     <string name="SAVE_TEMPLATE_CMD">Salvar modelo</string>
-    <string name="PREF_SCREEN_OPTIONS">Opções de tela</string>
+    <string name="PREF_SCREEN_OPTIONS">Opções de Tela</string>
     <string name="PREF_SCALE_RATIO">Escala(%)</string>
-    <string name="PREF_SCALE_TO_FIT">Redimencionar para caber</string>
+    <string name="PREF_SCALE_TO_FIT">Escalar para caber</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Manter proporção</string>
     <string name="PREF_FILTER">Filtro</string>
     <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>
@@ -45,10 +45,10 @@
     <string name="PREF_FONT_SMALL">Pequeno</string>
     <string name="PREF_FONT_MEDIUM">Médio</string>
     <string name="PREF_FONT_LARGE">Grande</string>
-    <string name="PREF_FONT_SIZE_IN_SP">Os valores estão em Pixels Escalonados</string>
-    <string name="PREF_BACKGROUND">Fundo do Jogo</string>
+    <string name="PREF_FONT_SIZE_IN_SP">Valores estão em Pixels Escalonados</string>
+    <string name="PREF_BACKGROUND">Fundo</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
-    <string name="PREF_VK_SHOW">Mostrar o teclado</string>
+    <string name="PREF_VK_SHOW">Exibir o teclado</string>
     <string name="PREF_VK_FEEDBACK">Resposta ao toque</string>
     <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
     <string name="PREF_HW_ACCELERATION">Aceleração de HW (instável)</string>
@@ -60,60 +60,60 @@
     <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etiquetas (P)</string>
     <string name="PREF_VK_SEL_BACK">Botões (P)</string>
-    <string name="PREF_VK_KEY_SIZES">Tamanho da chave</string>
+    <string name="PREF_VK_KEY_SIZES">Tamanho dos botões</string>
     <string name="PREF_VK_NAV_KEYS">Controle: </string>
     <string name="PREF_VK_SOFT_KEYS">Teclas: </string>
     <string name="PREF_VK_NUM_KEYS">Dígitos: </string>
-    <string name="PREF_VK_FIRE_KEY">Escolher: </string>
+    <string name="PREF_VK_FIRE_KEY">Atirar: </string>
     <string name="PREF_VK_SIZE_HINT">Tamanho</string>
     <string name="SIZE_PRESETS">Predefinições</string>
     <string name="SWAP_SIZES">Inverter dimensões</string>
     <string name="PREF_SYS_PROPS">Propriedades do sistema</string>
     <string name="PREF_ORIENTATION">Orientação de tela</string>
     <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Predefinição</item>
+        <item>Padrão</item>
         <item>Automático</item>
         <item>Retrato</item>
         <item>Paisagem</item>
     </string-array>
     <string name="error">Erro</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Força o fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">Forçar o fechamento, pode resultar em perda de dados ou danificar totalmente! \nContinuar?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
     <string name="select_dialog_title">Selecionar MIDlet</string>
-    <string name="crash_dialog_message">Você quer enviar o relatório de erro para o desenvolvedor?</string>
+    <string name="crash_dialog_message">Você deseja enviar o relatório de erro para o desenvolvedor?</string>
     <string name="crash_dialog_title">Erro detectado</string>
     <string name="report_crash">Enviar</string>
-    <string name="layout_edit_finished">Modo de edição encerrado</string>
-    <string name="layout_edit_finish">Encerrar o modo de edição</string>
-    <string name="layout_edit_mode">Editar botões</string>
-    <string name="layout_scale_mode">Editar tamanho dos botões</string>
-    <string name="layout_switch">Alternar layout</string>
+    <string name="layout_edit_finished">Modo de edição terminado</string>
+    <string name="layout_edit_finish">Terminar o Modo de edição</string>
+    <string name="layout_edit_mode">Modo de edição de botões</string>
+    <string name="layout_scale_mode">Modo de escala de botões</string>
+    <string name="layout_switch">Trocar layout de botões</string>
     <string name="hide_buttons">Ocultar botões</string>
     <string name="take_screenshot">Capturar tela</string>
     <string name="screenshot_saved">A Captura de tela foi salva em</string>
-    <string name="common_settings">[AJUSTES]</string>
-    <string name="pref_theme_title">Tema</string>
+    <string name="common_settings">[CONFIGURAÇÕES]</string>
+    <string name="pref_theme_title">Temas</string>
     <string-array name="pref_theme_entries">
         <item>Claro</item>
         <item>Escuro</item>
     </string-array>
-    <string name="pref_requires_restart_summary">Requer reinicialização</string>
-    <string name="pref_enable_actionbar_title">Habilitar Barra de Ação</string>
-    <string name="pref_enable_actionbar_summary">Assistente para jogos em tela cheia</string>
-    <string name="pref_wakelock_title">Manter tela ligada</string>
-    <string name="pref_button_shape_title">Formato dos botões</string>
+    <string name="pref_requires_restart_summary">Requer reinício</string>
+    <string name="pref_enable_actionbar_title">Ativar Barra de Ação</string>
+    <string name="pref_enable_actionbar_summary">Aplicativos em tela cheia</string>
+    <string name="pref_wakelock_title">Manter a tela ligada</string>
+    <string name="pref_button_shape_title">Forma dos botões</string>
     <string-array name="pref_button_shape_entries">
         <item>Redondos</item>
         <item>Quadrados</item>
     </string-array>
-    <string name="pref_app_sort_title">Ordenar jogos</string>
+    <string name="pref_app_sort_title">Organizar aplicativos</string>
     <string-array name="pref_app_sort_entries">
         <item>Nome</item>
         <item>Data</item>
     </string-array>
-    <string name="pref_map_keys">Mapear teclas</string>
-    <string name="mapping_dialog_title">Aperte qualquer tecla</string>
+    <string name="pref_map_keys">Mapeamento dos botões</string>
+    <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
-    <string name="parallel_screen_redrawing">Desenho paralelo de tela</string>
+    <string name="parallel_screen_redrawing">Renderização paralela de tela</string>
 </resources>

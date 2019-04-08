@@ -115,4 +115,5 @@
     <string name="mapping_dialog_title">按下一个按键</string>
     <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
     <string name="reset_mapping">重置</string>
+    <string name="parallel_screen_redrawing">同步画面绘制</string>
 </resources>
