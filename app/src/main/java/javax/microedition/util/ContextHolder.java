@@ -96,6 +96,8 @@ public class ContextHolder {
 		}
 		// Add support for Siemens file path
 		resName = resName.replace('\\', '/');
+		// Remove double slashes
+		resName = resName.replace("//", "/");
 		try {
 			return getResource(resName);
 		} catch (IOException | NullPointerException e) {
