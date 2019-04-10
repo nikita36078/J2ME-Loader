@@ -427,10 +427,12 @@ public abstract class Canvas extends Displayable {
 	private static boolean showFps;
 	private static int backgroundColor;
 	private static int scaleRatio;
+	private static int fpsLimit;
 
 	private Image offscreen;
 	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
+	private long lastFrameTime = System.currentTimeMillis();
 
 	private Handler uiHandler;
 	private Overlay overlay;
@@ -479,6 +481,10 @@ public abstract class Canvas extends Displayable {
 
 	public static void setShowFps(boolean showFps) {
 		Canvas.showFps = showFps;
+	}
+
+	public static void setLimitFps(boolean limitFps, int fpsLimit) {
+		Canvas.fpsLimit = limitFps ? fpsLimit : 0;
 	}
 
 	public void setOverlay(Overlay ov) {
@@ -676,11 +682,13 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public final void repaint(int x, int y, int width, int height) {
+		limitFps();
 		postEvent(paintEvent);
 	}
 
 	// GameCanvas
 	public void flushBuffer(Image image) {
+		limitFps();
 		synchronized (paintsync) {
 			image.copyPixels(offscreenCopy);
 			if (!parallelRedraw) {
@@ -689,6 +697,17 @@ public abstract class Canvas extends Displayable {
 				uiHandler.sendEmptyMessage(0);
 			}
 		}
+	}
+
+	private void limitFps() {
+		if (fpsLimit == 0) return;
+		try {
+			long millis = (1000 / fpsLimit) - (System.currentTimeMillis() - lastFrameTime);
+			if (millis > 0) Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		lastFrameTime = System.currentTimeMillis();
 	}
 
 	@SuppressLint("NewApi")

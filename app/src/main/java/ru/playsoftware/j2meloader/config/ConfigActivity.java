@@ -76,6 +76,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxHwAcceleration;
 	protected CheckBox cxParallel;
 	protected CheckBox cxShowFps;
+	protected CheckBox cxLimitFps;
+	protected EditText tfFpsLimit;
 
 	protected EditText tfFontSizeSmall;
 	protected EditText tfFontSizeMedium;
@@ -150,6 +152,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
 		cxParallel = findViewById(R.id.cxParallel);
 		cxShowFps = findViewById(R.id.cxShowFps);
+		cxLimitFps = findViewById(R.id.cxLimitFps);
+		tfFpsLimit = findViewById(R.id.tfFpsLimit);
 
 		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
@@ -348,6 +352,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxParallel.setChecked(params.getBoolean("ParallelRedrawScreen", false));
 		cxHwAcceleration.setChecked(params.getBoolean("HwAcceleration", false));
 		cxShowFps.setChecked(params.getBoolean("ShowFps", false));
+		cxLimitFps.setChecked(params.getBoolean("LimitFps", false));
 
 		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall", 18)));
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
@@ -357,6 +362,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
+		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
@@ -393,6 +399,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("HwAcceleration", cxHwAcceleration.isChecked());
 			params.putBoolean("ParallelRedrawScreen", cxParallel.isChecked());
 			params.putBoolean("ShowFps", cxShowFps.isChecked());
+			params.putBoolean("LimitFps", cxLimitFps.isChecked());
+			params.putInt("FpsLimit", Integer.parseInt(tfFpsLimit.getText().toString()));
 
 			params.putInt("FontSizeSmall",
 					Integer.parseInt(tfFontSizeSmall.getText().toString()));
@@ -445,7 +453,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			boolean hwAcceleration = cxHwAcceleration.isChecked();
 			boolean parallel = cxParallel.isChecked();
 			boolean showFps = cxShowFps.isChecked();
-			SparseIntArray intArray = KeyMapper.getArrayPref(this);
+			boolean limitFps = cxLimitFps.isChecked();
+			int fpsLimit = Integer.parseInt(tfFpsLimit.getText().toString());
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
 			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
@@ -460,6 +469,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				}
 			}
 
+			SparseIntArray intArray = KeyMapper.getArrayPref(this);
 			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
 					screenKeepAspectRatio, screenScaleRatio);
 			Canvas.setFilterBitmap(screenFilter);
@@ -469,6 +479,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			Canvas.setKeyMapping(intArray);
 			Canvas.setHasTouchInput(touchInput);
 			Canvas.setShowFps(showFps);
+			Canvas.setLimitFps(limitFps, fpsLimit);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
