@@ -5,13 +5,14 @@
     <string name="exit">Kilépés</string>
     <string name="about">Infó</string>
     <string name="help">Súgó</string>
-    <string name="more">Egyebek</string>
+    <string name="more">Továbbiak</string>
     <string name="search">Keresés</string>
     <string name="licenses">Licencek</string>
     <string name="templates">Sablonok</string>
+    <string name="save_log">Napló mentése</string>
     <string name="about_message">Ez az app lehetővé teszi a J2ME alkalmazások és játékok indítását Androidon. Támogatja a legtöbb 2D-s játékot, illetve a 3D-seket némi korlátozással.&lt;BR&gt;</string>
     <string name="help_message">&#8226; A szűrés engedélyezése esetenként jelentősen csökkentheti a teljesítményt. Tiltsa le, ha a játék túl lassú.&lt;BR&gt;&#8226; A kép villódzása javítható az \"Azonnali feldolgozás\" lehetőséggel.</string>
-    <string name="author">Szerző: </string>
+    <string name="author">Fejlesztő: </string>
     <string name="version">Verzió: </string>
     <string name="no_data_for_display">Nincs adat</string>
     <string name="message_delete">Biztosan törli ezt az alkalmazást?</string>
@@ -66,7 +67,7 @@
     <string name="PREF_VK_NUM_KEYS">Számok: </string>
     <string name="PREF_VK_FIRE_KEY">Tűz: </string>
     <string name="PREF_VK_SIZE_HINT">Méret</string>
-    <string name="SIZE_PRESETS">Előzetesen beállított értékek</string>
+    <string name="SIZE_PRESETS">Előbeállítások</string>
     <string name="SWAP_SIZES">Méretcsere</string>
     <string name="PREF_SYS_PROPS">Rendszertulajdonságok</string>
     <string name="PREF_ORIENTATION">Képernyőtájolás</string>
@@ -91,6 +92,7 @@
     <string name="hide_buttons">Gombok elrejtése</string>
     <string name="take_screenshot">Képernyőmentés készítése</string>
     <string name="screenshot_saved">A kép mentési helye:</string>
+    <string name="log_saved">A naplófájl mentésre került</string>
     <string name="common_settings">[ÁLTALÁNOS BEÁLLÍTÁSOK]</string>
     <string name="pref_theme_title">Téma</string>
     <string-array name="pref_theme_entries">
@@ -106,7 +108,7 @@
         <item>Kerek</item>
         <item>Négyszögletes</item>
     </string-array>
-    <string name="pref_app_sort_title">App rendezési sorrend</string>
+    <string name="pref_app_sort_title">Alkalmazásrendezési sorrend</string>
     <string-array name="pref_app_sort_entries">
         <item>Név</item>
         <item>Dátum</item>
