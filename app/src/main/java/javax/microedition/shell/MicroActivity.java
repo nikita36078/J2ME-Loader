@@ -29,6 +29,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -345,10 +346,13 @@ public class MicroActivity extends AppCompatActivity {
 		if (current != null) {
 			menu.clear();
 			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.menu.midlet_displayable, menu);
 			if (current instanceof Canvas) {
-				inflater.inflate(R.menu.midlet_canvas, menu);
-			} else {
-				inflater.inflate(R.menu.midlet_displayable, menu);
+				SubMenu group = menu.getItem(0).getSubMenu();
+				inflater.inflate(R.menu.midlet_canvas_no_keys, group);
+				if (ContextHolder.getVk() != null) {
+					inflater.inflate(R.menu.midlet_canvas, group);
+				}
 			}
 			for (Command cmd : current.getCommands()) {
 				menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getAndroidLabel());
@@ -371,30 +375,7 @@ public class MicroActivity extends AppCompatActivity {
 					saveLog();
 				} else if (ContextHolder.getVk() != null) {
 					// Handled only when virtual keyboard is enabled
-					VirtualKeyboard vk = ContextHolder.getVk();
-					switch (id) {
-						case R.id.action_layout_edit_mode:
-							vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
-							Toast.makeText(this, R.string.layout_edit_mode,
-									Toast.LENGTH_SHORT).show();
-							break;
-						case R.id.action_layout_scale_mode:
-							vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
-							Toast.makeText(this, R.string.layout_scale_mode,
-									Toast.LENGTH_SHORT).show();
-							break;
-						case R.id.action_layout_edit_finish:
-							vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-							Toast.makeText(this, R.string.layout_edit_finished,
-									Toast.LENGTH_SHORT).show();
-							break;
-						case R.id.action_layout_switch:
-							vk.switchLayout();
-							break;
-						case R.id.action_hide_buttons:
-							showHideButtonDialog();
-							break;
-					}
+					handleVkOptions(id);
 				}
 				return true;
 			}
@@ -402,6 +383,33 @@ public class MicroActivity extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void handleVkOptions(int id) {
+		VirtualKeyboard vk = ContextHolder.getVk();
+		switch (id) {
+			case R.id.action_layout_edit_mode:
+				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+				Toast.makeText(this, R.string.layout_edit_mode,
+						Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.action_layout_scale_mode:
+				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+				Toast.makeText(this, R.string.layout_scale_mode,
+						Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.action_layout_edit_finish:
+				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+				Toast.makeText(this, R.string.layout_edit_finished,
+						Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.action_layout_switch:
+				vk.switchLayout();
+				break;
+			case R.id.action_hide_buttons:
+				showHideButtonDialog();
+				break;
+		}
 	}
 
 	@SuppressLint("CheckResult")

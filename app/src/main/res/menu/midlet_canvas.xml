@@ -1,34 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_common_settings"
-        android:title="@string/common_settings">
-        <menu>
-            <group android:id="@+id/action_group_common_settings">
-                <item
-                    android:id="@+id/action_exit_midlet"
-                    android:title="@string/exit" />
-                <item
-                    android:id="@+id/action_layout_edit_mode"
-                    android:title="@string/layout_edit_mode" />
-                <item
-                    android:id="@+id/action_layout_scale_mode"
-                    android:title="@string/layout_scale_mode" />
-                <item
-                    android:id="@+id/action_layout_edit_finish"
-                    android:title="@string/layout_edit_finish" />
-                <item
-                    android:id="@+id/action_layout_switch"
-                    android:title="@string/layout_switch" />
-                <item
-                    android:id="@+id/action_hide_buttons"
-                    android:title="@string/hide_buttons" />
-                <item
-                    android:id="@+id/action_take_screenshot"
-                    android:title="@string/take_screenshot" />
-                <item
-                    android:id="@+id/action_save_log"
-                    android:title="@string/save_log" />
-            </group>
-        </menu>
-    </item>
+    <group android:id="@+id/action_group_common_settings">
+        <item
+            android:id="@+id/action_layout_edit_mode"
+            android:title="@string/layout_edit_mode" />
+        <item
+            android:id="@+id/action_layout_scale_mode"
+            android:title="@string/layout_scale_mode" />
+        <item
+            android:id="@+id/action_layout_edit_finish"
+            android:title="@string/layout_edit_finish" />
+        <item
+            android:id="@+id/action_layout_switch"
+            android:title="@string/layout_switch" />
+        <item
+            android:id="@+id/action_hide_buttons"
+            android:title="@string/hide_buttons" />
+    </group>
 </menu>
