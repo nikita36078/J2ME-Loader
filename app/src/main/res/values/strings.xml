@@ -100,6 +100,7 @@
         <item>Landscape</item>
     </string-array>
     <string name="error">Error</string>
+    <string name="message_clear_data">Do you really want to clear app data?</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>

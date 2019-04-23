@@ -557,7 +557,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				startMIDlet();
 				break;
 			case R.id.action_clear_data:
-				FileUtils.deleteDirectory(dataDir);
+				showClearDataDialog();
 				break;
 			case R.id.action_reset_settings:
 				params.edit().clear().apply();
@@ -586,6 +586,17 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void showClearDataDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(android.R.string.dialog_alert_title)
+				.setMessage(R.string.message_clear_data)
+				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+					FileUtils.deleteDirectory(dataDir);
+				})
+				.setNegativeButton(android.R.string.no, null);
+		builder.show();
 	}
 
 	private void startMIDlet() {
