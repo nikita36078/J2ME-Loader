@@ -40,6 +40,7 @@
     <string name="PREF_FILTER">Фильтрация</string>
     <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
+    <string name="PREF_LIMIT_FPS">Ограничить FPS</string>
     <string name="PREF_FONT_OPTIONS">Параметры шрифтов</string>
     <string name="PREF_WIDTH">Ширина</string>
     <string name="PREF_HEIGHT">Высота</string>
