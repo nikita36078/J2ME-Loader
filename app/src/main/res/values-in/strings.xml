@@ -6,10 +6,10 @@
     <string name="about">Tentang</string>
     <string name="help">Bantuan</string>
     <string name="more">Lainnya</string>
-    <string name="search">Cari</string>
+    <string name="search">Pencarian</string>
     <string name="licenses">Lisensi</string>
     <string name="templates">Kelola Template</string>
-    <string name="save_log">Simpan catatan</string>
+    <string name="save_log">Simpan log</string>
     <string name="about_message">Aplikasi ini berguna untuk menjalankan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga beberapa permainan 3D dengan beberapa keterbatasan.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
     <string name="author">Vendor: </string>
@@ -39,7 +39,8 @@
     <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
     <string name="PREF_FILTER">Menyaring</string>
     <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
-    <string name="PREF_SHOW_FPS">Tampilkan FPS \n•Kecepatan kinerja aplikasi, \nsemakin tinggi semakin bagus</string>
+    <string name="PREF_SHOW_FPS">Tampilkan FPS</string>
+    <string name="PREF_LIMIT_FPS">Batas FPS</string>
     <string name="PREF_FONT_OPTIONS">Opsi font</string>
     <string name="PREF_WIDTH">Lebar</string>
     <string name="PREF_HEIGHT">Tinggi</string>
@@ -50,7 +51,7 @@
     <string name="PREF_BACKGROUND">Latar belakang</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keypad</string>
     <string name="PREF_VK_SHOW">Tampilkan keypad</string>
-    <string name="PREF_VK_FEEDBACK">Respon getaran tombol</string>
+    <string name="PREF_VK_FEEDBACK">Respon keypad (vibrasi)</string>
     <string name="PREF_TOUCH_INPUT">Memakai sentuh</string>
     <string name="PREF_HW_ACCELERATION">Akselerasi HW (tidak stabil)</string>
     <string name="PREF_VK_BACK">Tombol</string>
@@ -92,7 +93,7 @@
     <string name="hide_buttons">Tombol yang tersembunyi</string>
     <string name="take_screenshot">Ambil screenshot</string>
     <string name="screenshot_saved">Screenshot telah tersimpan ke</string>
-    <string name="log_saved">Log sudah dihidupkan</string>
+    <string name="log_saved">Log telah disimpan</string>
     <string name="common_settings">[PENGATURAN UMUM]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
