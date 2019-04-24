@@ -79,6 +79,7 @@
         <item>Lanskap</item>
     </string-array>
     <string name="error">Kesalahan</string>
+    <string name="message_clear_data">Yakin ingin menghapus data aplikasi?</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
     <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>
     <string name="select_dialog_title">Pilih MIDlet</string>
@@ -115,6 +116,7 @@
         <item>Tanggal</item>
     </string-array>
     <string name="pref_map_keys">Pemetaan tombol</string>
+    <string name="pref_encoding_title">Pengkodean</string>
     <string name="mapping_dialog_title">Tekan tombol</string>
     <string name="mapping_dialog_message" formatted="false">Pemetaan saat ini: %1$s</string>
     <string name="reset_mapping">Setel ulang</string>
