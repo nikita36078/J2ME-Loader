@@ -42,4 +42,11 @@
             android:targetClass="ru.playsoftware.j2meloader.settings.KeyMapperActivity"
             android:targetPackage="ru.playsoftware.j2meloader" />
     </Preference>
+    <ListPreference
+        android:defaultValue="ISO-8859-1"
+        android:entries="@array/pref_encoding_entries"
+        android:entryValues="@array/pref_encoding_values"
+        android:icon="@drawable/ic_setting_encoding"
+        android:key="pref_encoding"
+        android:title="@string/pref_encoding_title" />
 </androidx.preference.PreferenceScreen>

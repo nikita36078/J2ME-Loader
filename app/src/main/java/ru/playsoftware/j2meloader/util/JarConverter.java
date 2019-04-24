@@ -55,9 +55,9 @@ public class JarConverter {
 		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
 	}
 
-	private File fixJar(File inputJar) throws IOException {
+	private File fixJar(File inputJar, String encoding) throws IOException {
 		File fixedJar = new File(tmpDir, inputJar.getName() + ".jar");
-		AndroidProducer.processJar(inputJar, fixedJar);
+		AndroidProducer.processJar(inputJar, fixedJar, encoding);
 		return fixedJar;
 	}
 
@@ -87,7 +87,7 @@ public class JarConverter {
 		Log.d(TAG, "Download complete");
 	}
 
-	public Single<String> convert(final String path) {
+	public Single<String> convert(final String path, final String encoding) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
 			String pathToJad = null;
@@ -128,7 +128,7 @@ public class JarConverter {
 			}
 			File fixedJar;
 			try {
-				fixedJar = fixJar(inputJar);
+				fixedJar = fixJar(inputJar, encoding);
 			} catch (Exception e) {
 				deleteTemp();
 				throw new ConverterException("Can't convert", e);

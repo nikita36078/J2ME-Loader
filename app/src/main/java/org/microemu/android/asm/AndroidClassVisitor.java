@@ -34,6 +34,8 @@ import org.objectweb.asm.Opcodes;
 
 public class AndroidClassVisitor extends ClassVisitor {
 
+	private String encoding;
+
 	public class AndroidMethodVisitor extends PatternMethodAdapter {
 
 		private final static int SEEN_NOTHING = 0;
@@ -84,7 +86,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 					return;
 				}
 			} else if (owner.equals("java/lang/String")) {
-				String encoding = "ISO-8859-1"; // microedition.encoding
 				if (name.equals("<init>") && desc.startsWith("([B") && !desc.endsWith("Ljava/lang/String;)V")) {
 					mv.visitLdcInsn(encoding);
 					mv.visitMethodInsn(opcode, owner, name, new StringBuffer()
@@ -110,8 +111,9 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 	}
 
-	public AndroidClassVisitor(ClassVisitor cv) {
+	public AndroidClassVisitor(ClassVisitor cv, String encoding) {
 		super(Opcodes.ASM7, cv);
+		this.encoding = encoding;
 	}
 
 	@Override
