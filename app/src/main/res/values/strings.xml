@@ -152,7 +152,7 @@
     </string-array>
     <string name="pref_map_keys">Key mappings</string>
     <string name="pref_encoding_title">Encoding</string>
-    <string-array name="pref_encoding_entries">
+    <string-array name="pref_encoding_entries" translatable="false">
         <item>UTF-8</item>
         <item>ISO-8859-1</item>
     </string-array>
