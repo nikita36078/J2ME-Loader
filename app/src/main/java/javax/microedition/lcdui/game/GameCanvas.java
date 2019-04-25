@@ -22,10 +22,6 @@ import javax.microedition.lcdui.Image;
 
 public class GameCanvas extends Canvas {
 
-	private Image image;
-	private int key;
-	private int repeatedKey;
-	private boolean suppressCommands;
 	public static final int UP_PRESSED = 1 << Canvas.UP;
 	public static final int DOWN_PRESSED = 1 << Canvas.DOWN;
 	public static final int LEFT_PRESSED = 1 << Canvas.LEFT;
@@ -35,6 +31,11 @@ public class GameCanvas extends Canvas {
 	public static final int GAME_B_PRESSED = 1 << Canvas.GAME_B;
 	public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
+
+	private Image image;
+	private int key;
+	private int repeatedKey;
+	private boolean suppressCommands;
 
 	public GameCanvas(boolean suppressCommands) {
 		super();
