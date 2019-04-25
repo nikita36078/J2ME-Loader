@@ -9,7 +9,7 @@
     <string name="search">Пошук</string>
     <string name="licenses">Ліцензії</string>
     <string name="templates">Шаблони</string>
-    <string name="save_log">Зберегти лог</string>
+    <string name="save_log">Зберегти журнал помилок</string>
     <string name="about_message">Данний додаток дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
     <string name="author">Автор: </string>
@@ -79,7 +79,7 @@
         <item>Альбомна</item>
     </string-array>
     <string name="error">Помилка</string>
-    <string name="message_clear_data">Ви дійсно хочете видалити дані програми?</string>
+    <string name="message_clear_data">Ви дійсно хочете очистити програмні дані?</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання додатку може призвести до втрати даних або навіть до повного виведення його з ладу! \nПродовжити?</string>
     <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
     <string name="select_dialog_title">Обрати MIDlet</string>
@@ -94,7 +94,7 @@
     <string name="hide_buttons">Приховати клавіші</string>
     <string name="take_screenshot">Зробити скріншот</string>
     <string name="screenshot_saved">Скріншот було збережено до</string>
-    <string name="log_saved">Лог збережено</string>
+    <string name="log_saved">Журнал помилок збережено</string>
     <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
     <string name="pref_theme_title">Тема</string>
     <string-array name="pref_theme_entries">
