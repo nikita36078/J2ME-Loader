@@ -691,6 +691,34 @@
             android:paddingBottom="10dp"
             tools:ignore="UnusedAttribute">
 
+            <!-- Encoding -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="4dp"
+                android:minHeight="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/pref_encoding_title"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?attr/textColorSecondary"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/spEncoding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:textColor="?attr/textColorSecondary"
+                    android:textSize="15sp" />
+            </LinearLayout><!-- Encoding -->
+
             <EditText
                 android:id="@+id/tfSystemProperties"
                 style="@style/EditTextStyle"

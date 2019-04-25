@@ -21,7 +21,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -57,7 +56,6 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.ListFragment;
-import androidx.preference.PreferenceManager;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.SingleObserver;
@@ -168,15 +166,13 @@ public class AppsListFragment extends ListFragment {
 
 	@SuppressLint("CheckResult")
 	private void convertJar(String path) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-		String encoding = sp.getString("pref_encoding", "ISO-8859-1");
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		dialog.setCancelable(false);
 		dialog.setMessage(getText(R.string.converting_message));
 		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path, encoding)
+		converter.convert(path)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SingleObserver<String>() {

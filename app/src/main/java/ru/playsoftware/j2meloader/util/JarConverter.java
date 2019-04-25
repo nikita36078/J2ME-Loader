@@ -21,6 +21,8 @@ import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
 
+import net.lingala.zip4j.exception.ZipException;
+
 import org.acra.ACRA;
 import org.microemu.android.asm.AndroidProducer;
 
@@ -32,7 +34,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedHashMap;
-import java.util.zip.ZipException;
 
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
@@ -56,9 +57,9 @@ public class JarConverter {
 		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
 	}
 
-	private File patchJar(File inputJar, String encoding) throws IOException {
+	private File patchJar(File inputJar) throws IOException {
 		File patchedJar = new File(tmpDir, inputJar.getName() + ".jar");
-		AndroidProducer.processJar(inputJar, patchedJar, encoding);
+		AndroidProducer.processJar(inputJar, patchedJar);
 		return patchedJar;
 	}
 
@@ -124,7 +125,7 @@ public class JarConverter {
 		return null;
 	}
 
-	public Single<String> convert(final String path, final String encoding) {
+	public Single<String> convert(final String path) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
 			String pathToJad = null;
@@ -164,7 +165,7 @@ public class JarConverter {
 			// Patch and unzip
 			File patchedJar;
 			try {
-				patchedJar = patchJar(inputJar, encoding);
+				patchedJar = patchJar(inputJar);
 			} catch (ZipException e) {
 				deleteTemp();
 				throw new ConverterException("Invalid jar", e);

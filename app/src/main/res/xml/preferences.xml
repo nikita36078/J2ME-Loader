@@ -40,13 +40,6 @@
         android:key="pref_app_sort"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_app_sort_title" />
-    <ListPreference
-        android:defaultValue="ISO-8859-1"
-        android:entries="@array/pref_encoding_entries"
-        android:entryValues="@array/pref_encoding_values"
-        android:icon="@drawable/ic_setting_encoding"
-        android:key="pref_encoding"
-        android:title="@string/pref_encoding_title" />
     <Preference
         android:key="pref_default_settings"
         android:icon="@drawable/ic_setting_default"

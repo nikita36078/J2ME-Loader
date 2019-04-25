@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -218,6 +219,11 @@ public class MicroLoader {
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
 				}
+			}
+			try {
+				Charset.forName(System.getProperty("microedition.encoding"));
+			} catch (Exception e) {
+				System.setProperty("microedition.encoding", "ISO-8859-1");
 			}
 
 			SparseIntArray intArray = KeyMapper.getArrayPref(params);

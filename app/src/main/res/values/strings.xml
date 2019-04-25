@@ -167,14 +167,6 @@
     </string-array>
     <string name="pref_map_keys">Key mappings</string>
     <string name="pref_encoding_title">Encoding</string>
-    <string-array name="pref_encoding_entries" translatable="false">
-        <item>UTF-8</item>
-        <item>ISO-8859-1</item>
-    </string-array>
-    <string-array name="pref_encoding_values" translatable="false">
-        <item>UTF-8</item>
-        <item>ISO-8859-1</item>
-    </string-array>
     <string name="pref_default_settings">Default settings</string>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
