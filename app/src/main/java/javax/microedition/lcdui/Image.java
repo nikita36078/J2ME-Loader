@@ -124,7 +124,7 @@ public class Image {
 
 	public Graphics getGraphics() {
 		Graphics graphics = new Graphics();
-		graphics.setCanvas(getCanvas(), bitmap);
+		graphics.setCanvas(new Canvas(bitmap), bitmap);
 		return graphics;
 	}
 
