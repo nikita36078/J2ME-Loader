@@ -9,6 +9,7 @@
     <string name="search">Търсене</string>
     <string name="licenses">Лицензи</string>
     <string name="templates">Шаблони</string>
+    <string name="save_log">Запиши регистрационния файл</string>
     <string name="about_message">Това приложение ви позволява да стартирате J2ME приложения и игри на Android.Поддържа повечето дву измерни и три измерни игри със някои лимитации.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Включването на филтри може значително да подобри производителността.Изключете тази опция ако играта е прекалено бавна.&lt;BR&gt;&#8226; Премигвания на екрана могат да бъдат поправени като изключите опцията за незабавна обработка.</string>
     <string name="author">Автор: </string>

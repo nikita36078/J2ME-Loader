@@ -40,6 +40,7 @@
     <string name="PREF_FILTER">Фильтрация</string>
     <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
+    <string name="PREF_LIMIT_FPS">Ограничить FPS</string>
     <string name="PREF_FONT_OPTIONS">Параметры шрифтов</string>
     <string name="PREF_WIDTH">Ширина</string>
     <string name="PREF_HEIGHT">Высота</string>
@@ -78,6 +79,7 @@
         <item>Альбом</item>
     </string-array>
     <string name="error">Ошибка</string>
+    <string name="message_clear_data">Вы действительно хотите очистить данные приложения?</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
     <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
     <string name="select_dialog_title">Выберите MIDlet</string>
@@ -114,6 +116,7 @@
         <item>Дата</item>
     </string-array>
     <string name="pref_map_keys">Назначение кнопок</string>
+    <string name="pref_encoding_title">Кодировка</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
