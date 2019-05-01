@@ -124,6 +124,13 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 				neutral = i;
 			}
 		}
+		for (int i = 0; i < commands.length; i++) {
+			if (positive < 0 && negative != i && neutral != i) {
+				positive = i;
+			} else if (negative < 0 && positive != i && neutral != i) {
+				negative = i;
+			}
+		}
 
 		if (positive >= 0) {
 			builder.setPositiveButton(commands[positive].getAndroidLabel(), this);
