@@ -349,6 +349,9 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void process() {
 			synchronized (paintsync) {
+				if (surface == null || !surface.isValid()) {
+					return;
+				}
 				Graphics g = this.mGraphics;
 				g.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
 				g.reset();
@@ -718,7 +721,6 @@ public abstract class Canvas extends Displayable {
 			}
 			return true;
 		}
-		Surface surface = this.surface;
 		if (surface == null || !surface.isValid()) {
 			return true;
 		}
