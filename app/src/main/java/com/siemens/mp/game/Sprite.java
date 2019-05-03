@@ -28,8 +28,8 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public class Sprite extends GraphicObject {
-	private Image pixels[];
-	private Image mask[];
+	private Image[] pixels;
+	private Image[] mask;
 	private int x;
 	private int y;
 	private int frame;
