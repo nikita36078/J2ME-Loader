@@ -180,7 +180,7 @@ public class MicroActivity extends AppCompatActivity {
 		String[] midletsNameArray = midlets.values().toArray(new String[0]);
 		String[] midletsClassArray = midlets.keySet().toArray(new String[0]);
 		if (size == 0) {
-			throw new Exception();
+			throw new Exception("No MIDlets found");
 		} else if (size == 1) {
 			startMidlet(midletsClassArray[0]);
 		} else {
