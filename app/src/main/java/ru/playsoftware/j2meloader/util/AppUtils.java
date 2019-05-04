@@ -78,8 +78,8 @@ public class AppUtils {
 		String imagePath = "";
 		if ((tmp = params.get("MIDlet-Icon")) != null) {
 			imagePath = tmp;
-		} else if ((tmp = params.get("MIDlet-1").split(",")[1]) != null) {
-			imagePath = tmp;
+		} else if ((tmp = params.get("MIDlet-1")) != null) {
+			imagePath = tmp.split(",")[1];
 		}
 		return imagePath.replace(" ", "");
 	}
