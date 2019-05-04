@@ -101,7 +101,7 @@ public class Display {
 
 	private void showAlert(Alert alert) {
 		activity.runOnUiThread(() -> {
-			AlertDialog alertDialog = alert.prepareDialog().create();
+			AlertDialog alertDialog = alert.prepareDialog();
 			alertDialog.show();
 			if (alert.finiteTimeout()) {
 				(new Thread(() -> {

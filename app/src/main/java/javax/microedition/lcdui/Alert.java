@@ -24,6 +24,8 @@ import android.view.View;
 
 import java.util.Arrays;
 
+import javax.microedition.lcdui.event.SimpleEvent;
+
 import androidx.appcompat.app.AlertDialog;
 
 public class Alert extends Screen implements DialogInterface.OnClickListener {
@@ -35,12 +37,28 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	private AlertType type;
 	private int timeout;
 	private Gauge indicator;
+	private AlertDialog alertDialog;
 
 	private Form form;
 	private Displayable nextDisplayable;
 
 	private Command[] commands;
 	private int positive, negative, neutral;
+
+	private SimpleEvent msgSetString = new SimpleEvent() {
+		@Override
+		public void process() {
+			alertDialog.setMessage(text);
+		}
+	};
+
+	private SimpleEvent msgSetImage = new SimpleEvent() {
+		@Override
+		public void process() {
+			BitmapDrawable bitmapDrawable = new BitmapDrawable(image.getBitmap());
+			alertDialog.setIcon(bitmapDrawable);
+		}
+	};
 
 	public Alert(String title) {
 		this(title, null, null, null);
@@ -62,6 +80,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	public void setString(String str) {
 		text = str;
+
+		if (alertDialog != null) {
+			ViewHandler.postEvent(msgSetString);
+		}
 	}
 
 	public String getString() {
@@ -70,6 +92,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	public void setImage(Image img) {
 		image = img;
+
+		if (alertDialog != null) {
+			ViewHandler.postEvent(msgSetImage);
+		}
 	}
 
 	public Image getImage() {
@@ -92,7 +118,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		return timeout > 0 && countCommands() < 2;
 	}
 
-	public AlertDialog.Builder prepareDialog() {
+	public AlertDialog prepareDialog() {
 		Context context = getParentActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -100,6 +126,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		builder.setMessage(getString());
 		builder.setOnDismissListener(dialog -> {
 			if (nextDisplayable != null) Display.getDisplay(null).setCurrent(nextDisplayable);
+			alertDialog = null;
 		});
 
 		if (image != null) {
@@ -144,7 +171,8 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 			builder.setNeutralButton(commands[neutral].getAndroidLabel(), this);
 		}
 
-		return builder;
+		alertDialog = builder.create();
+		return alertDialog;
 	}
 
 	public void setNextDisplayable(Displayable nextDisplayable) {
