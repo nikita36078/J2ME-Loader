@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.overlay.OverlayView;
@@ -460,6 +462,9 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		if (current instanceof Form) {
 			((Form) current).contextMenuItemSelected(item);
+		} else if (current instanceof List) {
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+			((List) current).contextMenuItemSelected(item, info.position);
 		}
 
 		return super.onContextItemSelected(item);

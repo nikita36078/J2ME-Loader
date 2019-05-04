@@ -18,6 +18,8 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -30,7 +32,7 @@ import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.list.CompoundListAdapter;
 import javax.microedition.lcdui.list.ItemSelector;
 
-public class List extends Screen implements Choice, ItemSelector {
+public class List extends Screen implements Choice, ItemSelector, View.OnCreateContextMenuListener {
 	public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
 	private ArrayList<String> strings = new ArrayList<>();
@@ -50,6 +52,17 @@ public class List extends Screen implements Choice, ItemSelector {
 		@Override
 		public void process() {
 			list.setSelection(selectedIndex);
+		}
+	};
+
+	private SimpleEvent msgSetContextMenuListener = new SimpleEvent() {
+		@Override
+		public void process() {
+			if (listener != null) {
+				list.setOnCreateContextMenuListener(List.this);
+			} else {
+				list.setLongClickable(false);
+			}
 		}
 	};
 
@@ -356,6 +369,7 @@ public class List extends Screen implements Choice, ItemSelector {
 		}
 
 		list.setOnItemClickListener(clicklistener);
+		ViewHandler.postEvent(msgSetContextMenuListener);
 
 		return list;
 	}
@@ -364,5 +378,31 @@ public class List extends Screen implements Choice, ItemSelector {
 	public void clearScreenView() {
 		list = null;
 		adapter = null;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		menu.clear();
+
+		for (Command cmd : getCommands()) {
+			menu.add(hashCode(), cmd.hashCode(), cmd.getPriority(), cmd.getAndroidLabel());
+		}
+	}
+
+	public boolean contextMenuItemSelected(MenuItem item, int selectedIndex) {
+		if (listener == null) {
+			return false;
+		}
+		this.selectedIndex = selectedIndex;
+
+		int id = item.getItemId();
+
+		for (Command cmd : getCommands()) {
+			if (cmd.hashCode() == id) {
+				fireCommandAction(cmd, this);
+				return true;
+			}
+		}
+		return false;
 	}
 }
