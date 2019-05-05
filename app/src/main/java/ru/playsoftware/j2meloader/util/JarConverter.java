@@ -55,10 +55,10 @@ public class JarConverter {
 		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
 	}
 
-	private File fixJar(File inputJar, String encoding) throws IOException {
-		File fixedJar = new File(tmpDir, inputJar.getName() + ".jar");
-		AndroidProducer.processJar(inputJar, fixedJar, encoding);
-		return fixedJar;
+	private File patchJar(File inputJar, String encoding) throws IOException {
+		File patchedJar = new File(tmpDir, inputJar.getName() + ".jar");
+		AndroidProducer.processJar(inputJar, patchedJar, encoding);
+		return patchedJar;
 	}
 
 	private void deleteTemp() {
@@ -124,19 +124,17 @@ public class JarConverter {
 			ACRA.getErrorReporter().putCustomData("Last installed app", targetJarName);
 			Log.d(TAG, "doInBackground$ pathToJar=" + pathToJar);
 			// Check extension
-			String extension = pathToJar.substring(pathToJar.lastIndexOf('.'), pathToJar.length());
+			String extension = pathToJar.substring(pathToJar.lastIndexOf('.'));
 			if (extension.equalsIgnoreCase(".jad")) {
 				jadInstall = true;
 				// Fix path to jar
 				pathToJad = pathToJar;
 				pathToJar = pathToJar.substring(0, pathToJar.length() - 1).concat("r");
 			}
-			// Get midlet config file
-			File conf;
+			// Get jad file
+			File conf = null;
 			if (jadInstall) {
 				conf = new File(pathToJad);
-			} else {
-				conf = new File(tmpDir, "/META-INF/MANIFEST.MF");
 			}
 
 			File inputJar = new File(pathToJar);
@@ -151,18 +149,19 @@ public class JarConverter {
 					throw new ConverterException("Can't download jar", e);
 				}
 			}
-			File fixedJar;
+			// Patch and unzip
+			File patchedJar;
 			try {
-				fixedJar = fixJar(inputJar, encoding);
+				patchedJar = patchJar(inputJar, encoding);
 			} catch (Exception e) {
 				deleteTemp();
-				throw new ConverterException("Can't convert", e);
+				throw new ConverterException("Can't patch", e);
 			}
 			try {
-				ZipUtils.unzip(fixedJar, tmpDir);
+				ZipUtils.unzip(patchedJar, tmpDir);
 			} catch (IOException e) {
 				deleteTemp();
-				throw new ConverterException("Broken jar", e);
+				throw new ConverterException("Invalid jar", e);
 			}
 
 			// Find manifest file and load it
@@ -177,19 +176,21 @@ public class JarConverter {
 			appDirPath = params.get("MIDlet-Name");
 			if (appDirPath == null) {
 				deleteTemp();
-				throw new ConverterException("Broken manifest");
+				throw new ConverterException("Invalid manifest");
 			}
 			// Remove invalid characters from app path
 			appDirPath = appDirPath.replace(":", "").replace("/", "");
 			appConverted = new File(Config.APP_DIR, appDirPath);
+			// Create target directory
 			FileUtils.deleteDirectory(appConverted);
 			appConverted.mkdirs();
 			Log.d(TAG, "appConverted=" + appConverted.getPath());
 
+			// Convert jar
 			try {
 				Main.main(new String[]{
 						"--no-optimize", "--output=" + appConverted.getPath()
-						+ Config.MIDLET_DEX_FILE, fixedJar.getAbsolutePath()});
+						+ Config.MIDLET_DEX_FILE, patchedJar.getAbsolutePath()});
 			} catch (IOException e) {
 				deleteTemp();
 				throw new ConverterException("Can't convert", e);
