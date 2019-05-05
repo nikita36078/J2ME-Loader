@@ -87,6 +87,31 @@ public class JarConverter {
 		Log.d(TAG, "Download complete");
 	}
 
+	private File findManifest(File tmpDir) {
+		String confName = "/META-INF/MANIFEST.MF";
+		File conf = new File(tmpDir, confName);
+		if (conf.exists()) {
+			return conf;
+		}
+		// Manifest filename isn't in uppercase
+		File parent = null;
+		for (File file : tmpDir.listFiles()) {
+			if (file.getName().equalsIgnoreCase(conf.getParentFile().getName())) {
+				parent = file;
+				break;
+			}
+		}
+		if (parent == null) {
+			return null;
+		}
+		for (File file : parent.listFiles()) {
+			if (file.getName().equalsIgnoreCase(conf.getName())) {
+				return file;
+			}
+		}
+		return null;
+	}
+
 	public Single<String> convert(final String path, final String encoding) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
@@ -140,6 +165,14 @@ public class JarConverter {
 				throw new ConverterException("Broken jar", e);
 			}
 
+			// Find manifest file and load it
+			if (!jadInstall) {
+				conf = findManifest(tmpDir);
+				if (conf == null) {
+					deleteTemp();
+					throw new ConverterException("Manifest not found");
+				}
+			}
 			LinkedHashMap<String, String> params = FileUtils.loadManifest(conf);
 			appDirPath = params.get("MIDlet-Name");
 			if (appDirPath == null) {
