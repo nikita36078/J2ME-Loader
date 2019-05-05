@@ -18,6 +18,7 @@
 package javax.microedition.util;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 import android.view.Display;
@@ -31,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -112,7 +114,12 @@ public class ContextHolder {
 		File midletResFile = new File(Config.APP_DIR,
 				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
-			ZipFile zipFile = new ZipFile(midletResFile);
+			ZipFile zipFile;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				zipFile = new ZipFile(midletResFile, StandardCharsets.ISO_8859_1);
+			} else {
+				zipFile = new ZipFile(midletResFile);
+			}
 			ZipEntry entry = zipFile.getEntry(resName);
 			is = zipFile.getInputStream(entry);
 			data = new byte[(int) entry.getSize()];

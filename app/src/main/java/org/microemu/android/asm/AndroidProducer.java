@@ -27,6 +27,8 @@
 
 package org.microemu.android.asm;
 
+import android.os.Build;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -35,6 +37,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.zip.ZipEntry;
@@ -62,7 +65,12 @@ public class AndroidProducer {
 		HashMap<String, byte[]> resources = new HashMap<>();
 		ZipEntry zipEntry;
 		InputStream zis;
-		ZipFile zip = new ZipFile(jarInputFile);
+		ZipFile zip;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			zip = new ZipFile(jarInputFile, StandardCharsets.ISO_8859_1);
+		} else {
+			zip = new ZipFile(jarInputFile);
+		}
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
 			byte[] buffer = new byte[BUFFER_SIZE];
 			Enumeration zipFileEntries = zip.entries();
