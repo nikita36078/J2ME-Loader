@@ -9,6 +9,7 @@
     <string name="search">Cerca</string>
     <string name="licenses">Licenze</string>
     <string name="templates">Modelli</string>
+    <string name="save_log">Salva log</string>
     <string name="about_message">Questa applicazione consente di avviare applicazioni e giochi J2ME su Android. Supporta la maggior parte dei giochi 2D e anche 3D, con alcune limitazioni.&lt;BR&gt;</string>
     <string name="help_message">&#8226; L\'abilitazione del filtro in alcuni casi può ridurre notevolmente le prestazioni. Disabilitare questa opzione se il gioco è troppo lento.&lt;BR&gt;&#8226; Problemi di tremolio dell\'immagine possono essere risolti abilitando l\'opzione \"modalità di elaborazione immediata\".</string>
     <string name="author">Autore: </string>
@@ -39,6 +40,7 @@
     <string name="PREF_FILTER">Filtro</string>
     <string name="PREF_IMMEDIATE">Modalità di elaborazione immediata</string>
     <string name="PREF_SHOW_FPS">Mostra FPS</string>
+    <string name="PREF_LIMIT_FPS">Limita FPS</string>
     <string name="PREF_FONT_OPTIONS">Opzioni carattere</string>
     <string name="PREF_WIDTH">Larghezza</string>
     <string name="PREF_HEIGHT">Altezza</string>
@@ -77,6 +79,7 @@
         <item>Panoramico</item>
     </string-array>
     <string name="error">Errore</string>
+    <string name="message_clear_data">Vuoi davvero cancellare i dati dell\'applicazione?</string>
     <string name="FORCE_CLOSE_CONFIRMATION">La chiusura forzata dell\'applicazione potrebbe causare una perdita di dati o la loro perdita completa!\nProcedere?</string>
     <string name="CONFIRMATION_REQUIRED">Conferma richiesta</string>
     <string name="select_dialog_title">Scegli MIDlet</string>
@@ -91,6 +94,7 @@
     <string name="hide_buttons">Nascondi tasti</string>
     <string name="take_screenshot">Cattura schermata</string>
     <string name="screenshot_saved">La schermata è stata salvata in</string>
+    <string name="log_saved">Il log è stato salvato</string>
     <string name="common_settings">[IMPOSTAZIONI COMUNI]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
@@ -112,6 +116,7 @@
         <item>Data</item>
     </string-array>
     <string name="pref_map_keys">Mappature dei tasti</string>
+    <string name="pref_encoding_title">Codifica testo</string>
     <string name="mapping_dialog_title">Premi un tasto</string>
     <string name="mapping_dialog_message" formatted="false">Mappatura corrente: %1$s</string>
     <string name="reset_mapping">Reimposta</string>
