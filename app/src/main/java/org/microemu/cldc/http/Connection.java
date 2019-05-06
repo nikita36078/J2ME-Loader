@@ -58,6 +58,8 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 			throw new IOException(ex.toString());
 		}
 		cn = url.openConnection();
+		// Add encoding info to the header
+		cn.setRequestProperty("Accept-Encoding", "gzip,deflate,identity;q=0.9");
 		// J2ME do not follow redirects. Test this url
 		// http://www.microemu.org/test/r/
 		if (cn instanceof HttpURLConnection) {
