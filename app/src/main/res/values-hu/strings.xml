@@ -40,6 +40,7 @@
     <string name="PREF_FILTER">Szűrő</string>
     <string name="PREF_IMMEDIATE">Azonnali feldolgozás mód</string>
     <string name="PREF_SHOW_FPS">FPS kijelzése</string>
+    <string name="PREF_LIMIT_FPS">FPS-korlát</string>
     <string name="PREF_FONT_OPTIONS">Betűtípus beállítások</string>
     <string name="PREF_WIDTH">Szélesség</string>
     <string name="PREF_HEIGHT">Magasság</string>
@@ -78,6 +79,7 @@
         <item>Fekvő</item>
     </string-array>
     <string name="error">Hiba</string>
+    <string name="message_clear_data">Tényleg törölni szeretné az alkalmazás adatait?</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Az alkalmazás erőltetett bezárása adatvesztéshez, vagy akár teljesen működésképtelenné váláshoz vezethet!\nFolytatja?</string>
     <string name="CONFIRMATION_REQUIRED">Megerősítés szükséges</string>
     <string name="select_dialog_title">Válassza ki a MIDlet</string>
@@ -114,7 +116,9 @@
         <item>Dátum</item>
     </string-array>
     <string name="pref_map_keys">Billentyűkiosztás</string>
+    <string name="pref_encoding_title">Kódolás</string>
     <string name="mapping_dialog_title">Nyomjon meg egy billentyűt</string>
     <string name="mapping_dialog_message" formatted="false">Jelenlegi hozzárendelés: %1$s</string>
     <string name="reset_mapping">Alaphelyzetbe állítás</string>
+    <string name="parallel_screen_redrawing">Párhuzamos képernyő-újrarajzolás</string>
 </resources>

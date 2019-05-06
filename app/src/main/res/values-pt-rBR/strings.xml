@@ -79,6 +79,7 @@
         <item>Paisagem</item>
     </string-array>
     <string name="error">Erro</string>
+    <string name="message_clear_data">Você tem certeza que deseja limpar os dados do aplicativo?</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Forçar o fechamento, pode resultar em perda de dados ou danificar totalmente! \nContinuar?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
     <string name="select_dialog_title">Selecionar MIDlet</string>
@@ -115,6 +116,7 @@
         <item>Data</item>
     </string-array>
     <string name="pref_map_keys">Mapeamento dos botões</string>
+    <string name="pref_encoding_title">Codificação</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
