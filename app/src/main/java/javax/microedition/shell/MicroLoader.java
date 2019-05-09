@@ -55,7 +55,8 @@ public class MicroLoader {
 		Display.initDisplay();
 		Graphics3D.initGraphics3D();
 		File cacheDir = ContextHolder.getCacheDir();
-		if (cacheDir.exists()) {
+		// Some phones return null here
+		if (cacheDir != null && cacheDir.exists()) {
 			for (File temp : cacheDir.listFiles()) {
 				temp.delete();
 			}
