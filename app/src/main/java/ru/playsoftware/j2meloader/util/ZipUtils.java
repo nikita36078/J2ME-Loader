@@ -72,7 +72,7 @@ public class ZipUtils {
 			File destFile = new File(extractFolder, currentEntry);
 			File destinationParent = destFile.getParentFile();
 			destinationParent.mkdirs();
-			if (!entry.isDirectory() && !destFile.exists()) {
+			if (!entry.isDirectory() && !destFile.exists() && !entry.getName().endsWith(".class")) {
 				BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
 				int currentByte;
 				byte data[] = new byte[BUFFER_SIZE];

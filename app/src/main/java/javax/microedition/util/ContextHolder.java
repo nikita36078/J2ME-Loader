@@ -18,7 +18,6 @@
 package javax.microedition.util;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 import android.view.Display;
@@ -32,15 +31,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
 
 import androidx.appcompat.app.AppCompatActivity;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -114,12 +112,7 @@ public class ContextHolder {
 		File midletResFile = new File(Config.APP_DIR,
 				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
-			ZipFile zipFile;
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-				zipFile = new ZipFile(midletResFile, StandardCharsets.ISO_8859_1);
-			} else {
-				zipFile = new ZipFile(midletResFile);
-			}
+			ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
 			ZipEntry entry = zipFile.getEntry(resName);
 			is = zipFile.getInputStream(entry);
 			data = new byte[(int) entry.getSize()];
@@ -130,6 +123,7 @@ public class ContextHolder {
 		}
 		DataInputStream dis = new DataInputStream(is);
 		dis.readFully(data);
+		dis.close();
 		return new ByteArrayInputStream(data);
 	}
 
