@@ -86,4 +86,5 @@ dependencies {
     implementation 'org.ow2.asm:asm:7.0'
     implementation project(':dexlib')
     androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
 }
