@@ -48,6 +48,7 @@ import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.overlay.OverlayView;
+import javax.microedition.lcdui.pointer.FixedKeyboard;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -101,8 +102,12 @@ public class MicroActivity extends AppCompatActivity {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 		Intent intent = getIntent();
-		int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
-		setOrientation(orientation);
+		if (ContextHolder.getVk() instanceof FixedKeyboard) {
+			setOrientation(ORIENTATION_PORTRAIT);
+		} else {
+			int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
+			setOrientation(orientation);
+		}
 		String pathToMidletDir = intent.getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
 		microLoader = new MicroLoader(this, pathToMidletDir);
 		microLoader.init();
@@ -352,7 +357,8 @@ public class MicroActivity extends AppCompatActivity {
 			if (current instanceof Canvas) {
 				SubMenu group = menu.getItem(0).getSubMenu();
 				inflater.inflate(R.menu.midlet_canvas_no_keys, group);
-				if (ContextHolder.getVk() != null) {
+				VirtualKeyboard vk = ContextHolder.getVk();
+				if (vk != null && !(vk instanceof FixedKeyboard)) {
 					inflater.inflate(R.menu.midlet_canvas, group);
 				}
 			}

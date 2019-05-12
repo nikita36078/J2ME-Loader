@@ -50,7 +50,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		void layoutChanged(VirtualKeyboard vk);
 	}
 
-	private class VirtualKey {
+	protected class VirtualKey {
 
 		private RectF rect;
 		private int keyCode, secondKeyCode;
@@ -96,9 +96,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			return rect;
 		}
 
-		void resize(float size) {
-			rect.right = rect.left + size;
-			rect.bottom = rect.top + size;
+		void resize(float width, float height) {
+			rect.right = rect.left + width;
+			rect.bottom = rect.top + height;
 		}
 
 		public boolean contains(float x, float y) {
@@ -145,33 +145,33 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private static final int KEYBOARD_SIZE = 25;
-	private static final int SCREEN = -1;
+	protected static final int SCREEN = -1;
 
-	private static final int KEY_NUM1 = 0;
-	private static final int KEY_NUM2 = 1;
-	private static final int KEY_NUM3 = 2;
-	private static final int KEY_NUM4 = 3;
-	private static final int KEY_NUM5 = 4;
-	private static final int KEY_NUM6 = 5;
-	private static final int KEY_NUM7 = 6;
-	private static final int KEY_NUM8 = 7;
-	private static final int KEY_NUM9 = 8;
-	private static final int KEY_NUM0 = 9;
-	private static final int KEY_STAR = 10;
-	private static final int KEY_POUND = 11;
-	private static final int KEY_SOFT_LEFT = 12;
-	private static final int KEY_SOFT_RIGHT = 13;
-	private static final int KEY_DIAL = 14;
-	private static final int KEY_CANCEL = 15;
-	private static final int KEY_UP_LEFT = 16;
-	private static final int KEY_UP = 17;
-	private static final int KEY_UP_RIGHT = 18;
-	private static final int KEY_LEFT = 19;
-	private static final int KEY_RIGHT = 20;
-	private static final int KEY_DOWN_LEFT = 21;
-	private static final int KEY_DOWN = 22;
-	private static final int KEY_DOWN_RIGHT = 23;
-	private static final int KEY_FIRE = 24;
+	protected static final int KEY_NUM1 = 0;
+	protected static final int KEY_NUM2 = 1;
+	protected static final int KEY_NUM3 = 2;
+	protected static final int KEY_NUM4 = 3;
+	protected static final int KEY_NUM5 = 4;
+	protected static final int KEY_NUM6 = 5;
+	protected static final int KEY_NUM7 = 6;
+	protected static final int KEY_NUM8 = 7;
+	protected static final int KEY_NUM9 = 8;
+	protected static final int KEY_NUM0 = 9;
+	protected static final int KEY_STAR = 10;
+	protected static final int KEY_POUND = 11;
+	protected static final int KEY_SOFT_LEFT = 12;
+	protected static final int KEY_SOFT_RIGHT = 13;
+	protected static final int KEY_DIAL = 14;
+	protected static final int KEY_CANCEL = 15;
+	protected static final int KEY_UP_LEFT = 16;
+	protected static final int KEY_UP = 17;
+	protected static final int KEY_UP_RIGHT = 18;
+	protected static final int KEY_LEFT = 19;
+	protected static final int KEY_RIGHT = 20;
+	protected static final int KEY_DOWN_LEFT = 21;
+	protected static final int KEY_DOWN = 22;
+	protected static final int KEY_DOWN_RIGHT = 23;
+	protected static final int KEY_FIRE = 24;
 
 	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
 	private static final int LAYOUT_OLD_VERSION = 1;
@@ -184,7 +184,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private int delay = -1;
 	private int overlayAlpha = 64 << 24;
-	private int shape;
+	protected int shape;
+
+	public static final int CUSTOMIZABLE_TYPE = 0;
+	public static final int PHONE_TYPE = 1;
 
 	public static final int ROUND_SHAPE = 0;
 	public static final int SQUARE_SHAPE = 1;
@@ -281,11 +284,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private int layoutVariant;
 
 	protected RectF screen;
-	private RectF virtualScreen;
+	protected RectF virtualScreen;
 	private float keySize;
 	private float snapRadius;
 
-	private VirtualKey[] keypad;
+	protected VirtualKey[] keypad;
 	private VirtualKey[] associatedKeys;
 
 	protected LayoutListener listener;
@@ -334,7 +337,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		hider.start();
 	}
 
-	private void resetLayout(int variant) {
+	protected void resetLayout(int variant) {
 		switch (variant) {
 			case 0:
 				keyScales[SCALE_JOYSTICK] = 1;
@@ -581,7 +584,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		this.listener = listener;
 	}
 
-	private void setSnap(int key, int origin, int mode) {
+	protected void setSnap(int key, int origin, int mode) {
 		snapOrigins[key] = origin;
 		snapModes[key] = mode;
 		snapOffsets[key] = new PointF();
@@ -626,7 +629,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	private void snapKeys() {
+	protected void snapKeys() {
 		obscuresVirtualScreen = false;
 		for (int i = 0; i < keypad.length; i++) {
 			snapKey(i, 0);
@@ -665,7 +668,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private void resizeKey(int key, float size) {
-		keypad[key].resize(size);
+		keypad[key].resize(size, size);
 		snapValid[key] = false;
 	}
 
@@ -706,7 +709,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	private void repaint() {
+	protected void repaint() {
 		overlayView.postInvalidate();
 	}
 

@@ -48,6 +48,7 @@ import java.util.Locale;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.pointer.FixedKeyboard;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
@@ -88,6 +89,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxVKFeedback;
 	protected CheckBox cxTouchInput;
 
+	protected Spinner spVKType;
 	protected SeekBar sbVKAlpha;
 	protected EditText tfVKHideDelay;
 	protected EditText tfVKFore;
@@ -164,6 +166,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 
+		spVKType = findViewById(R.id.spVKType);
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
 		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
 		tfVKFore = findViewById(R.id.tfVKFore);
@@ -364,6 +367,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
+		spVKType.setSelection(params.getInt("VirtualKeyboardType", 0));
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
 		tfVKBack.setText(Integer.toHexString(
@@ -414,6 +418,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("VirtualKeyboardFeedback", cxVKFeedback.isChecked());
 			params.putBoolean("TouchInput", cxTouchInput.isChecked());
 
+			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
 			params.putInt("VirtualKeyboardDelay",
 					Integer.parseInt(tfVKHideDelay.getText().toString()));
@@ -486,6 +491,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void setVirtualKeyboard() {
+		int vkType = spVKType.getSelectedItemPosition();
 		int vkAlpha = sbVKAlpha.getProgress();
 		int vkDelay = Integer.parseInt(tfVKHideDelay.getText().toString());
 		int vkColorBackground = Integer.parseInt(tfVKBack.getText().toString(), 16);
@@ -495,7 +501,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		int vkColorOutline = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 		boolean vkFeedback = cxVKFeedback.isChecked();
 
-		VirtualKeyboard vk = new VirtualKeyboard();
+		VirtualKeyboard vk;
+		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
+			vk = new VirtualKeyboard();
+		} else {
+			vk = new FixedKeyboard();
+		}
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
 		vk.setHasHapticFeedback(vkFeedback);
