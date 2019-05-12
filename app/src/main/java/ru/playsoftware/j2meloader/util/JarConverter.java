@@ -202,6 +202,9 @@ public class JarConverter {
 				FileUtils.copyFileUsingChannel(image, new File(appConverted, Config.MIDLET_ICON_FILE));
 			} catch (IOException | NullPointerException e) {
 				e.printStackTrace();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				deleteTemp();
+				throw new ConverterException("Invalid manifest");
 			}
 			FileUtils.copyFileUsingChannel(inputJar, new File(appConverted, Config.MIDLET_RES_FILE));
 			deleteTemp();
