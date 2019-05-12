@@ -54,6 +54,18 @@ android {
         }
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
     externalNativeBuild {
         ndkBuild {
             path 'src/main/cpp/Android.mk'
