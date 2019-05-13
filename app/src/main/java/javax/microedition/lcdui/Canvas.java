@@ -44,6 +44,7 @@ import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
+import javax.microedition.lcdui.pointer.FixedKeyboard;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
@@ -515,19 +516,29 @@ public abstract class Canvas extends Displayable {
 		 * than zero, which means auto-selection of this size so that the resulting canvas
 		 * has the same aspect ratio as the actual screen of the device.
 		 */
+		int scaledDisplayHeight;
+		/*
+		 * If FixedKeyboard is active, then scale down the virtual screen
+		 */
+		if (ContextHolder.getVk() instanceof FixedKeyboard) {
+			scaledDisplayHeight = (int) (displayHeight - 5 * (displayWidth /
+					(FixedKeyboard.KEY_WIDTH_RATIO * FixedKeyboard.KEY_HEIGHT_RATIO)) - 1);
+		} else {
+			scaledDisplayHeight = displayHeight;
+		}
 		if (virtualWidth < 0) {
 			if (virtualHeight < 0) {
 				/*
 				 * nothing is set - screen-sized canvas
 				 */
 				width = displayWidth;
-				height = displayHeight;
+				height = scaledDisplayHeight;
 			} else {
 				/*
 				 * only the canvas height is set
 				 * width is selected by the ratio of the real screen
 				 */
-				width = displayWidth * virtualHeight / displayHeight;
+				width = displayWidth * virtualHeight / scaledDisplayHeight;
 				height = virtualHeight;
 			}
 		} else if (virtualHeight < 0) {
@@ -536,7 +547,7 @@ public abstract class Canvas extends Displayable {
 			 * height is selected by the ratio of the real screen
 			 */
 			width = virtualWidth;
-			height = displayHeight * virtualWidth / displayWidth;
+			height = scaledDisplayHeight * virtualWidth / displayWidth;
 		} else {
 			/*
 			 * the width and height of the canvas are strictly set
@@ -555,13 +566,13 @@ public abstract class Canvas extends Displayable {
 				 */
 				onWidth = displayWidth;
 				onHeight = height * displayWidth / width;
-				if (onHeight > displayHeight) {
+				if (onHeight > scaledDisplayHeight) {
 					/*
 					 * if height is too big,
 					 * then fit in height
 					 */
-					onHeight = displayHeight;
-					onWidth = width * displayHeight / height;
+					onHeight = scaledDisplayHeight;
+					onWidth = width * scaledDisplayHeight / height;
 				}
 			} else {
 				/*
@@ -569,7 +580,7 @@ public abstract class Canvas extends Displayable {
 				 * just stretch the picture to full screen
 				 */
 				onWidth = displayWidth;
-				onHeight = displayHeight;
+				onHeight = scaledDisplayHeight;
 			}
 		} else {
 			/*

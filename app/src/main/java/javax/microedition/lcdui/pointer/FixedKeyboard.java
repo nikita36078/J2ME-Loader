@@ -24,6 +24,9 @@ import java.io.IOException;
 
 public class FixedKeyboard extends VirtualKeyboard {
 
+	public final static float KEY_WIDTH_RATIO = 3;
+	public final static float KEY_HEIGHT_RATIO = 2.7f;
+
 	public FixedKeyboard() {
 		super();
 		shape = SQUARE_SHAPE;
@@ -31,12 +34,8 @@ public class FixedKeyboard extends VirtualKeyboard {
 
 	@Override
 	protected void resetLayout(int variant) {
-		setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_NORTH);
-		setSnap(KEY_FIRE, KEY_NUM2, RectSnap.EXT_NORTH);
-		setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_NORTH);
-
-		setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
 		setSnap(KEY_NUM0, SCREEN, RectSnap.INT_SOUTH);
+		setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
 		setSnap(KEY_POUND, KEY_NUM0, RectSnap.EXT_EAST);
 		setSnap(KEY_NUM7, KEY_STAR, RectSnap.EXT_NORTH);
 		setSnap(KEY_NUM8, KEY_NUM7, RectSnap.EXT_EAST);
@@ -47,6 +46,10 @@ public class FixedKeyboard extends VirtualKeyboard {
 		setSnap(KEY_NUM1, KEY_NUM4, RectSnap.EXT_NORTH);
 		setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST);
 		setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
+
+		setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_NORTH);
+		setSnap(KEY_FIRE, KEY_NUM2, RectSnap.EXT_NORTH);
+		setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_NORTH);
 
 		for (int i = KEY_NUM1; i < KEY_DIAL; i++) {
 			keypad[i].setVisible(true);
@@ -60,10 +63,11 @@ public class FixedKeyboard extends VirtualKeyboard {
 	public void resize(RectF screen, RectF virtualScreen) {
 		this.screen = screen;
 		this.virtualScreen = virtualScreen;
-		float keyWidth = screen.width() / 3;
-		float keyHeight = keyWidth / 2.5f;
-		for (VirtualKey aKeypad : keypad) {
-			aKeypad.resize(keyWidth, keyHeight);
+		float keyWidth = screen.width() / KEY_WIDTH_RATIO;
+		float keyHeight = keyWidth / KEY_HEIGHT_RATIO;
+		for (int i = 0; i < keypad.length; i++) {
+			keypad[i].resize(keyWidth, keyHeight);
+			snapValid[i] = false;
 		}
 		snapKeys();
 		repaint();

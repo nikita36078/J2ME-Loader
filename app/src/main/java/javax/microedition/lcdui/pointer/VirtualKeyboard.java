@@ -274,7 +274,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private int[] snapOrigins;
 	private int[] snapModes;
 	private PointF[] snapOffsets;
-	private boolean[] snapValid;
+	protected boolean[] snapValid;
 	private int[] snapStack;
 
 	private int layoutEditMode;
