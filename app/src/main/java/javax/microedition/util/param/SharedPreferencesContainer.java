@@ -41,26 +41,19 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 	}
 
 	@Override
-	public boolean load(boolean defaultConfig) {
-		boolean loaded;
-		File defaultConfigFile;
-		if (!defaultConfig && !configFile.exists()) {
-			defaultConfigFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_CONFIG_FILE);
-			loaded = false;
-		} else {
-			defaultConfigFile = configFile;
-			loaded = true;
+	public boolean load() {
+		if (!configFile.exists()) {
+			return false;
 		}
-		try (FileInputStream fis = new FileInputStream(defaultConfigFile)) {
+		try (FileInputStream fis = new FileInputStream(configFile)) {
 			configMap = XmlUtils.readMapXml(fis);
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
-			loaded = false;
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
-			loaded = false;
 		}
-		return loaded;
+		return false;
 	}
 
 	@Override

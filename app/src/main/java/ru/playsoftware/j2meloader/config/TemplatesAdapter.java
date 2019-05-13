@@ -24,20 +24,21 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ru.playsoftware.j2meloader.R;
 
 public class TemplatesAdapter extends BaseAdapter {
 	private ArrayList<Template> list;
 	private final LayoutInflater layoutInflater;
-	private Context context;
+	private int defaultIndex = -1;
 
-	public TemplatesAdapter(Context context, ArrayList<Template> list) {
+	TemplatesAdapter(Context context, ArrayList<Template> list) {
 		if (list != null) {
 			this.list = list;
+			Collections.sort(list);
 		}
 		this.layoutInflater = LayoutInflater.from(context);
-		this.context = context;
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class TemplatesAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public Template getItem(int position) {
 		return list.get(position);
 	}
 
@@ -59,25 +60,36 @@ public class TemplatesAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		TemplatesAdapter.ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_template, null);
+			view = layoutInflater.inflate(R.layout.list_row_template, viewGroup, false);
 			holder = new TemplatesAdapter.ViewHolder();
-			holder.name = view.findViewById(R.id.list_name);
+			holder.name = (TextView) view;
 			view.setTag(holder);
 		} else {
 			holder = (TemplatesAdapter.ViewHolder) view.getTag();
 		}
-		holder.name.setText(list.get(position).getName());
+
+		String name = list.get(position).getName();
+		if (position == defaultIndex) {
+			name = view.getResources().getString(R.string.default_template, name);
+		}
+		holder.name.setText(name);
 
 		return view;
 	}
 
-	public void removeItem(int position) {
+	void removeItem(int position) {
 		list.remove(position);
 		notifyDataSetChanged();
 	}
 
-	public void renameItem(int position, Template item) {
+	void renameItem(int position, Template item) {
 		list.set(position, item);
+		Collections.sort(list);
+		notifyDataSetChanged();
+	}
+
+	public void setDefault(int index) {
+		defaultIndex = index;
 		notifyDataSetChanged();
 	}
 

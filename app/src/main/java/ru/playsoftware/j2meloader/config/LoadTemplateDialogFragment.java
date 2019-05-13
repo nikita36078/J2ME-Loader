@@ -16,6 +16,7 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,25 +37,26 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String configPath = getArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
+		String configPath = requireArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_load_template, null);
 		Spinner spTemplate = v.findViewById(R.id.spTemplate);
 		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
-		ArrayAdapter<Template> adapter = new ArrayAdapter<>(getActivity(),
+		ArrayAdapter<Template> adapter = new ArrayAdapter<>(requireActivity(),
 				android.R.layout.simple_spinner_item, templates);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spTemplate.setAdapter(adapter);
 		CheckBox cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
 		CheckBox cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 		builder.setTitle(R.string.LOAD_TEMPLATE_CMD)
 				.setView(v)
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 					try {
 						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), configPath,
 								cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
-						((ConfigActivity) getActivity()).loadParams();
+						((ConfigActivity) requireActivity()).loadParams();
 					} catch (Exception e) {
 						e.printStackTrace();
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();

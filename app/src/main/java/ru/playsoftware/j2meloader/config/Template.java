@@ -18,9 +18,10 @@ package ru.playsoftware.j2meloader.config;
 
 import java.io.File;
 
+import androidx.annotation.NonNull;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
-public class Template {
+public class Template implements Comparable<Template> {
 
 	private String name;
 
@@ -62,5 +63,10 @@ public class Template {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public int compareTo(@NonNull Template o) {
+		return name.compareTo(o.name);
 	}
 }

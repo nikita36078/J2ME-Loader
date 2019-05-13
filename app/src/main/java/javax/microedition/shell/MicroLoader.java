@@ -88,7 +88,7 @@ public class MicroLoader {
 				.penaltyLog()
 				.build();
 		StrictMode.setThreadPolicy(policy);
-		params.load(false);
+		params.load();
 	}
 
 	public LinkedHashMap<String, String> loadMIDletList() {

@@ -75,7 +75,7 @@ public class MigrationUtils {
 	private static void moveKeyMappings(Context context) {
 		File defaultConfigDir = new File(Config.DEFAULT_CONFIG_DIR);
 		SharedPreferencesContainer container = new SharedPreferencesContainer(defaultConfigDir);
-		container.load(true);
+		container.load();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString("pref_key_mapping", null);
 		prefs.edit().remove("pref_key_mapping").apply();
@@ -83,7 +83,7 @@ public class MigrationUtils {
 	}
 
 	private static int readVersion(File file) throws IOException {
-		int version = 0;
+		int version;
 		try (FileInputStream in = new FileInputStream(file)) {
 			version = in.read();
 		}

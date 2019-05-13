@@ -198,8 +198,11 @@
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
+    <string name="default_template">"%s (default)"</string>
     <string name="saved">Saved</string>
     <string name="not_saved_exists">Not saved: already exists</string>
-
+    <string name="error_name">Enter a name!</string>
+    <string name="set_as_default">Set as default</string>
+    <string name="edit">Edit</string>
 
 </resources>

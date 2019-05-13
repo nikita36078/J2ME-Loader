@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <TextView
-        android:id="@+id/list_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="30dp"
-        android:gravity="center_vertical"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:textSize="15sp" />
-
-</RelativeLayout>
+    android:layout_height="?listPreferredItemHeightSmall"
+    android:textAppearance="?textAppearanceListItem"
+    android:gravity="center_vertical"
+    android:paddingStart="?listPreferredItemPaddingStart"
+    android:paddingEnd="?listPreferredItemPaddingEnd"
+    android:paddingLeft="?listPreferredItemPaddingLeft"
+    android:paddingRight="?listPreferredItemPaddingRight"
+    tools:text="Template (default)"/>

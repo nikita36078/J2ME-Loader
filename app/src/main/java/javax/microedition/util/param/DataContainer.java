@@ -18,19 +18,19 @@
 package javax.microedition.util.param;
 
 public interface DataContainer {
-	public boolean load(boolean defaultConfig);
+	boolean load();
 
-	public DataEditor edit();
+	DataEditor edit();
 
-	public boolean contains(String key);
+	boolean contains(String key);
 
-	public boolean getBoolean(String key, boolean defValue);
+	boolean getBoolean(String key, boolean defValue);
 
-	public float getFloat(String key, float defValue);
+	float getFloat(String key, float defValue);
 
-	public int getInt(String key, int defValue);
+	int getInt(String key, int defValue);
 
-	public long getLong(String key, long defValue);
+	long getLong(String key, long defValue);
 
-	public String getString(String key, String defValue);
+	String getString(String key, String defValue);
 }

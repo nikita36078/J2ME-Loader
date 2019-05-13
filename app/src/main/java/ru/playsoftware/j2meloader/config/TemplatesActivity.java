@@ -16,6 +16,9 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -34,36 +37,51 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
 public class TemplatesActivity extends BaseActivity {
 
 	private TemplatesAdapter adapter;
+	private ListView listView;
+	private SharedPreferences preferences;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_templates);
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle(R.string.templates);
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		setTitle(R.string.templates);
 
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
-		ListView listView = findViewById(R.id.list_view);
+		listView = findViewById(R.id.list_view);
 		TextView emptyView = findViewById(R.id.empty_view);
 		listView.setEmptyView(emptyView);
 		registerForContextMenu(listView);
 		adapter = new TemplatesAdapter(this, templates);
 		listView.setAdapter(adapter);
+		final String def = preferences.getString(Config.DEFAULT_TEMPLATE_KEY, null);
+		if (def != null) {
+			for (int i = 0, templatesSize = templates.size(); i < templatesSize; i++) {
+				Template template = templates.get(i);
+				if (template.getName().equals(def)) {
+					adapter.setDefault(i);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
+		if (item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -73,6 +91,12 @@ public class TemplatesActivity extends BaseActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.context_tempates, menu);
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		final Template template = adapter.getItem(info.position);
+		if (!template.getConfig().exists()) {
+			menu.findItem(R.id.action_context_default).setVisible(false);
+			menu.findItem(R.id.action_context_edit).setVisible(false);
+		}
 	}
 
 	@Override
@@ -80,6 +104,19 @@ public class TemplatesActivity extends BaseActivity {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
 		switch (item.getItemId()) {
+			case R.id.action_context_default: {
+				final Template template = adapter.getItem(index);
+				preferences.edit().putString(Config.DEFAULT_TEMPLATE_KEY, template.getName()).apply();
+				adapter.setDefault(index);
+				return true;
+			}
+			case R.id.action_context_edit:
+				final Template template = adapter.getItem(index);
+				final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_TEMPLATE,
+						Uri.parse(template.getName()),
+						getApplicationContext(), ConfigActivity.class);
+				startActivity(intent);
+				return true;
 			case R.id.action_context_rename:
 				showRenameDialog(index);
 				break;
