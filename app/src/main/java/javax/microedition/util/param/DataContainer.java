@@ -18,7 +18,7 @@
 package javax.microedition.util.param;
 
 public interface DataContainer {
-	public boolean load();
+	public boolean load(boolean defaultConfig);
 
 	public DataEditor edit();
 

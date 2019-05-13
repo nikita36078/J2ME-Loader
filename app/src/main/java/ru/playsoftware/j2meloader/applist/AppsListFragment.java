@@ -215,8 +215,8 @@ public class AppsListFragment extends ListFragment {
 		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 		if (drawable != null) dialog.setIcon(drawable);
 		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPathExt()));
-			intent.setClass(getActivity(), ConfigActivity.class);
+			Intent intent = new Intent(getActivity(), ConfigActivity.class);
+			intent.putExtra(ConfigActivity.MIDLET_PATH_KEY, app.getPathExt());
 			startActivity(intent);
 		});
 		dialog.setNegativeButton(R.string.close, null);
@@ -269,8 +269,8 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()));
-		i.setClass(getActivity(), ConfigActivity.class);
+		Intent i = new Intent(getActivity(), ConfigActivity.class);
+		i.putExtra(ConfigActivity.MIDLET_PATH_KEY, item.getPathExt());
 		startActivity(i);
 	}
 
@@ -306,7 +306,8 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+				Intent i = new Intent(getActivity(), ConfigActivity.class);
+				i.putExtra(ConfigActivity.MIDLET_PATH_KEY, appItem.getPathExt());
 				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 				startActivity(i);
 				break;

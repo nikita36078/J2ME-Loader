@@ -36,7 +36,7 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String appName = getArguments().getString(ConfigActivity.MIDLET_NAME_KEY);
+		String configPath = getArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View v = inflater.inflate(R.layout.dialog_load_template, null);
 		Spinner spTemplate = v.findViewById(R.id.spTemplate);
@@ -52,7 +52,7 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 				.setView(v)
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 					try {
-						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), appName,
+						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), configPath,
 								cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
 						((ConfigActivity) getActivity()).loadParamsFromFile();
 					} catch (Exception e) {

@@ -49,4 +49,9 @@
         android:icon="@drawable/ic_setting_encoding"
         android:key="pref_encoding"
         android:title="@string/pref_encoding_title" />
+    <Preference
+        android:key="pref_default_settings"
+        android:icon="@drawable/ic_setting_default"
+        android:title="@string/pref_default_settings">
+    </Preference>
 </androidx.preference.PreferenceScreen>

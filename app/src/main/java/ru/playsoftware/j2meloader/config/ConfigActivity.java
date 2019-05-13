@@ -111,13 +111,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File dataDir;
 	private SharedPreferencesContainer params;
 	private String pathToMidletDir;
-	private String appName;
 	private FragmentManager fragmentManager;
+	private boolean defaultConfig;
 
-	public static final String MIDLET_PATH_KEY = "path";
+	public static final String DEFAULT_CONFIG_KEY = "default";
+	public static final String CONFIG_PATH_KEY = "configPath";
+	public static final String MIDLET_PATH_KEY = "midletPath";
 	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
-	public static final String MIDLET_NAME_KEY = "name";
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -126,18 +127,28 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		setContentView(R.layout.activity_config);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ContextHolder.setCurrentActivity(this);
+		Intent intent = getIntent();
 		fragmentManager = getSupportFragmentManager();
-		pathToMidletDir = getIntent().getDataString();
-		appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
-		getSupportActionBar().setTitle(appName);
-		dataDir = new File(Config.DATA_DIR + appName);
-		dataDir.mkdirs();
-		File configDir = new File(Config.CONFIGS_DIR, appName);
+		defaultConfig = intent.getBooleanExtra(DEFAULT_CONFIG_KEY, false);
+		File configDir;
+		boolean showSettings;
+		if (defaultConfig) {
+			showSettings = true;
+			configDir = new File(Config.DEFAULT_CONFIG_DIR);
+		} else {
+			showSettings = intent.getBooleanExtra(SHOW_SETTINGS_KEY, false);
+			pathToMidletDir = intent.getStringExtra(MIDLET_PATH_KEY);
+			String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
+			getSupportActionBar().setTitle(appName);
+			dataDir = new File(Config.DATA_DIR, appName);
+			dataDir.mkdirs();
+			configDir = new File(Config.CONFIGS_DIR, appName);
+		}
 		configDir.mkdirs();
-		keylayoutFile = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
+		keylayoutFile = loadKeylayout(configDir);
 
 		params = new SharedPreferencesContainer(configDir);
-		boolean loaded = params.load();
+		boolean loaded = params.load(defaultConfig);
 
 		setProperties();
 
@@ -253,9 +264,22 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 		});
 
-		if (loaded && !getIntent().getBooleanExtra(SHOW_SETTINGS_KEY, false)) {
+		if (loaded && !showSettings) {
 			startMIDlet();
 		}
+	}
+
+	private File loadKeylayout(File configDir) {
+		File file = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
+		if (!defaultConfig && !file.exists()) {
+			File defaultKeylayoutFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_KEYLAYOUT_FILE);
+			try {
+				FileUtils.copyFileUsingChannel(defaultKeylayoutFile, file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return file;
 	}
 
 	private void setProperties() {
@@ -383,7 +407,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	public void loadParamsFromFile() {
-		params.load();
+		params.load(defaultConfig);
 		loadParams();
 	}
 
@@ -521,15 +545,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		vk.setButtonShape(shape);
 
-		if (keylayoutFile.exists()) {
-			try {
-				FileInputStream fis = new FileInputStream(keylayoutFile);
-				DataInputStream dis = new DataInputStream(fis);
-				vk.readLayout(dis);
-				fis.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
+		try {
+			FileInputStream fis = new FileInputStream(keylayoutFile);
+			DataInputStream dis = new DataInputStream(fis);
+			vk.readLayout(dis);
+			fis.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);
@@ -558,6 +580,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.config, menu);
+		if (defaultConfig) {
+			menu.findItem(R.id.action_start).setVisible(false);
+			menu.findItem(R.id.action_clear_data).setVisible(false);
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -580,7 +606,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			case R.id.action_load_template:
 				LoadTemplateDialogFragment loadTemplateFragment = new LoadTemplateDialogFragment();
 				Bundle bundleLoad = new Bundle();
-				bundleLoad.putString(MIDLET_NAME_KEY, appName);
+				bundleLoad.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
 				loadTemplateFragment.setArguments(bundleLoad);
 				loadTemplateFragment.show(fragmentManager, "load_template");
 				break;
@@ -588,7 +614,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				saveParams();
 				SaveTemplateDialogFragment saveTemplateFragment = new SaveTemplateDialogFragment();
 				Bundle bundleSave = new Bundle();
-				bundleSave.putString(MIDLET_NAME_KEY, appName);
+				bundleSave.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
 				saveTemplateFragment.setArguments(bundleSave);
 				saveTemplateFragment.show(fragmentManager, "save_template");
 				break;
