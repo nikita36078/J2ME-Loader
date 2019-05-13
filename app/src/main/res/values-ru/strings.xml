@@ -80,6 +80,11 @@
     </string-array>
     <string name="error">Ошибка</string>
     <string name="message_clear_data">Вы действительно хотите очистить данные приложения?</string>
+    <string name="PREF_VK_TYPE">Тип клавиатуры</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Настраиваемая</item>
+        <item>Телефонная</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
     <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
     <string name="select_dialog_title">Выберите MIDlet</string>
@@ -117,6 +122,7 @@
     </string-array>
     <string name="pref_map_keys">Назначение кнопок</string>
     <string name="pref_encoding_title">Кодировка</string>
+    <string name="pref_default_settings">Стандартные настройки</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
