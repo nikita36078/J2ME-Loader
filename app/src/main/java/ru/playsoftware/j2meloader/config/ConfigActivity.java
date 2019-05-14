@@ -137,7 +137,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			configDir = new File(Config.DEFAULT_CONFIG_DIR);
 		} else {
 			showSettings = intent.getBooleanExtra(SHOW_SETTINGS_KEY, false);
-			pathToMidletDir = intent.getStringExtra(MIDLET_PATH_KEY);
+			pathToMidletDir = intent.getDataString();
 			String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
 			getSupportActionBar().setTitle(appName);
 			dataDir = new File(Config.DATA_DIR, appName);
