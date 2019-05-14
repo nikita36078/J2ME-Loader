@@ -119,7 +119,7 @@
     </style>
 
     <style name="ButtonStyle.Base" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:maxHeight">38dp</item>
+        <item name="android:minHeight">38dp</item>
         <item name="android:paddingLeft">6dp</item>
         <item name="android:paddingRight">6dp</item>
         <item name="android:elevation" tools:ignore="NewApi">1dp</item>
@@ -131,6 +131,12 @@
 
     <style name="ButtonStyle.Light" parent="ButtonStyle.Base">
         <item name="android:background">@drawable/bg_button_light</item>
+    </style>
+
+    <style name="ImageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:minHeight">38dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:tint">?colorAccent</item>
     </style>
 
 </resources>
