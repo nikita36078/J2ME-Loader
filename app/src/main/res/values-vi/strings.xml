@@ -9,8 +9,9 @@
     <string name="search">Tìm kiếm</string>
     <string name="licenses">Giấy phép</string>
     <string name="templates">Mẫu</string>
-    <string name="about_message">Ứng dụng này cho phép bạn khởi động các ứng dụng và game J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D với một số hạn chế.&lt;BR&gt;</string>
-    <string name="help_message">&#8226; Bật bộ lọc trong một số trường hợp có thể làm giảm hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\".</string>
+    <string name="save_log">Lưu nhật ký</string>
+    <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng J2ME và các trò chơi trên Android. Nó hỗ trợ hầu hết các trò chơi 2D và 3D với một số hạn chế.&lt;BR&gt;</string>
+    <string name="help_message">&#8226; Bật tính năng bộ lọc trong một số trường hợp có thể giảm đáng kể hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\" tuỳ chỉnh.</string>
     <string name="author">Nhà phát triển: </string>
     <string name="version">Phiên bản: </string>
     <string name="no_data_for_display">Không có dữ liệu</string>
@@ -18,8 +19,8 @@
     <string name="converting_wait">Đang chuyển đổi JAR...</string>
     <string name="convert_complete">Hoàn thành</string>
     <string name="converting_message">Đang xử lý...</string>
-    <string name="permission_request_failed">Cho phép ứng dụng này ghi vào bộ nhớ</string>
-    <string name="external_storage_not_mounted">Ứng dụng này truy cập vào bộ nhớ ngoài</string>
+    <string name="permission_request_failed">Ứng dụng này yêu cầu quyền ghi vào bộ nhớ</string>
+    <string name="external_storage_not_mounted">Ứng dụng này yêu cầu bộ nhớ ngoài</string>
     <string name="action_context_shortcut">Thêm lối tắt</string>
     <string name="action_settings">Thiết lập</string>
     <string name="action_context_delete">Xóa</string>
@@ -34,11 +35,12 @@
     <string name="SAVE_TEMPLATE_CMD">Lưu mẫu</string>
     <string name="PREF_SCREEN_OPTIONS">Tùy chọn màn hình</string>
     <string name="PREF_SCALE_RATIO">Tỉ lệ(%)</string>
-    <string name="PREF_SCALE_TO_FIT">Mở rộng màn hình</string>
-    <string name="PREF_KEEP_ASPECT_RATIO">Giữ tỉ lệ hình ảnh</string>
+    <string name="PREF_SCALE_TO_FIT">Mở rộng để phù hợp</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">Giữ tỷ lệ khung hình</string>
     <string name="PREF_FILTER">Bộ lọc</string>
     <string name="PREF_IMMEDIATE">Chế độ xử lý ngay lập tức</string>
     <string name="PREF_SHOW_FPS">Hiển thị FPS</string>
+    <string name="PREF_LIMIT_FPS">Giới hạn FPS</string>
     <string name="PREF_FONT_OPTIONS">Tùy chọn phông chữ</string>
     <string name="PREF_WIDTH">Chiều rộng</string>
     <string name="PREF_HEIGHT">Chiều cao</string>
@@ -63,21 +65,27 @@
     <string name="PREF_VK_KEY_SIZES">Kích thước bàn phím</string>
     <string name="PREF_VK_NAV_KEYS">Cần điều khiển: </string>
     <string name="PREF_VK_SOFT_KEYS">Phím mềm: </string>
-    <string name="PREF_VK_NUM_KEYS">Chữ số: </string>
+    <string name="PREF_VK_NUM_KEYS">Số: </string>
     <string name="PREF_VK_FIRE_KEY">Lửa: </string>
     <string name="PREF_VK_SIZE_HINT">Kích thước</string>
-    <string name="SIZE_PRESETS">Có sẵn</string>
+    <string name="SIZE_PRESETS">Đặt trước</string>
     <string name="SWAP_SIZES">Hoán đổi K. thước</string>
     <string name="PREF_SYS_PROPS">Thuộc tính hệ thống</string>
     <string name="PREF_ORIENTATION">Định hướng màn hình</string>
     <string-array name="PREF_ORIENTATION_ENTRIES">
         <item>Mặc định</item>
         <item>Tự động</item>
-        <item>Màn hình đứng</item>
-        <item>Màn hình ngang</item>
+        <item>Chiều dọc</item>
+        <item>Chiều ngang</item>
     </string-array>
     <string name="error">Lỗi</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Lực đóng lấi ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí hư hại hoàn toàn!\nTiến hành?</string>
+    <string name="message_clear_data">Bạn thực sự muốn xóa dữ liệu ứng dụng?</string>
+    <string name="PREF_VK_TYPE">Kiểu bàn phím</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Tùy chỉnh</item>
+        <item>Điện thoại</item>
+    </string-array>
+    <string name="FORCE_CLOSE_CONFIRMATION">Buộc đóng ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí hư hại hoàn toàn!\nTiến hành?</string>
     <string name="CONFIRMATION_REQUIRED">Yêu cầu xác nhận</string>
     <string name="select_dialog_title">Chọn MIDlet</string>
     <string name="crash_dialog_message">Bạn có muốn gửi báo cáo lỗi đến nhà phát triển không?</string>
@@ -89,8 +97,9 @@
     <string name="layout_scale_mode">Chế độ thay đổi kích thước phím khoá</string>
     <string name="layout_switch">Công tắc phím khoá</string>
     <string name="hide_buttons">Ẩn nút</string>
-    <string name="take_screenshot">Chụp ảnh</string>
-    <string name="screenshot_saved">Ảnh chụp đã được lưu</string>
+    <string name="take_screenshot">Chụp ảnh màn hình</string>
+    <string name="screenshot_saved">Ảnh chụp đã được lưu tới</string>
+    <string name="log_saved">Nhật ký đã được lưu</string>
     <string name="common_settings">[THIẾT LẬP CHUNG]</string>
     <string name="pref_theme_title">Chủ đề</string>
     <string-array name="pref_theme_entries">
@@ -100,7 +109,7 @@
     <string name="pref_requires_restart_summary">Yêu cầu khởi động lại</string>
     <string name="pref_enable_actionbar_title">Bật thanh hành động</string>
     <string name="pref_enable_actionbar_summary">Trong các ứng dụng toàn màn hình</string>
-    <string name="pref_wakelock_title">Giữ màn hình bật</string>
+    <string name="pref_wakelock_title">Giữ màn hình mở</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
     <string-array name="pref_button_shape_entries">
         <item>Tròn</item>
@@ -112,8 +121,10 @@
         <item>Ngày</item>
     </string-array>
     <string name="pref_map_keys">Thiết lập phím bấm</string>
+    <string name="pref_encoding_title">Mã hóa</string>
+    <string name="pref_default_settings">Thiết lập mặc định</string>
     <string name="mapping_dialog_title">Bấm một phím</string>
-    <string name="mapping_dialog_message" formatted="false">Dòng bản đồ: %1$s</string>
+    <string name="mapping_dialog_message" formatted="false">Phím hiện tại là: %1$s</string>
     <string name="reset_mapping">Cài lại</string>
     <string name="parallel_screen_redrawing">Kéo ngược màn hình song song</string>
 </resources>
