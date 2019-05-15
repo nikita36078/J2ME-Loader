@@ -193,6 +193,7 @@ public class JarConverter {
 						+ Config.MIDLET_DEX_FILE, patchedJar.getAbsolutePath()});
 			} catch (IOException e) {
 				deleteTemp();
+				FileUtils.deleteDirectory(appConverted);
 				throw new ConverterException("Can't convert", e);
 			}
 			// Copy other resources from jar.
@@ -204,6 +205,7 @@ public class JarConverter {
 				e.printStackTrace();
 			} catch (ArrayIndexOutOfBoundsException e) {
 				deleteTemp();
+				FileUtils.deleteDirectory(appConverted);
 				throw new ConverterException("Invalid manifest");
 			}
 			FileUtils.copyFileUsingChannel(inputJar, new File(appConverted, Config.MIDLET_RES_FILE));
