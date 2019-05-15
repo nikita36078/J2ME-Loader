@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.XmlUtils;
 
 public class SharedPreferencesContainer implements DataContainer, DataEditor {
@@ -41,20 +40,15 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 	@Override
 	public boolean load(boolean defaultConfig) {
 		boolean loaded;
-		FileInputStream fis;
+		File defaultConfigFile;
 		if (!defaultConfig && !configFile.exists()) {
-			File defaultConfigFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_CONFIG_FILE);
-			try {
-				FileUtils.copyFileUsingChannel(defaultConfigFile, configFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			defaultConfigFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_CONFIG_FILE);
 			loaded = false;
 		} else {
+			defaultConfigFile = configFile;
 			loaded = true;
 		}
-		try {
-			fis = new FileInputStream(configFile);
+		try (FileInputStream fis = new FileInputStream(defaultConfigFile)) {
 			configMap = XmlUtils.readMapXml(fis);
 		} catch (IOException e) {
 			e.printStackTrace();
