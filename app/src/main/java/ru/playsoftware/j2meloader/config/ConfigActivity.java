@@ -273,10 +273,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		File file = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
 		if (!defaultConfig && !file.exists()) {
 			File defaultKeylayoutFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_KEYLAYOUT_FILE);
-			try {
-				FileUtils.copyFileUsingChannel(defaultKeylayoutFile, file);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (defaultKeylayoutFile.exists()) {
+				try {
+					FileUtils.copyFileUsingChannel(defaultKeylayoutFile, file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return file;
@@ -545,13 +547,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		vk.setButtonShape(shape);
 
-		try {
-			FileInputStream fis = new FileInputStream(keylayoutFile);
-			DataInputStream dis = new DataInputStream(fis);
-			vk.readLayout(dis);
-			fis.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		if (keylayoutFile.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(keylayoutFile);
+				DataInputStream dis = new DataInputStream(fis);
+				vk.readLayout(dis);
+				fis.close();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
 
 		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);
