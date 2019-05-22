@@ -530,8 +530,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		VirtualKeyboard vk;
 		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
 			vk = new VirtualKeyboard();
+		} else if (vkType == VirtualKeyboard.PHONE_DIGITS_TYPE) {
+			vk = new FixedKeyboard(0);
 		} else {
-			vk = new FixedKeyboard();
+			vk = new FixedKeyboard(1);
 		}
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);

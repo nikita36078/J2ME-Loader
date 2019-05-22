@@ -187,7 +187,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected int shape;
 
 	public static final int CUSTOMIZABLE_TYPE = 0;
-	public static final int PHONE_TYPE = 1;
+	public static final int PHONE_DIGITS_TYPE = 1;
+	public static final int PHONE_ARROWS_TYPE = 2;
 
 	public static final int ROUND_SHAPE = 0;
 	public static final int SQUARE_SHAPE = 1;
@@ -294,6 +295,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
+		this(0);
+	}
+
+	public VirtualKeyboard(int variant) {
+		layoutVariant = variant;
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
 
@@ -330,7 +336,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapValid = new boolean[keypad.length];
 		snapStack = new int[keypad.length];
 
-		resetLayout(layoutVariant = 0);
+		resetLayout(layoutVariant);
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
 		hider = new Thread(this, "MIDletVirtualKeyboard");
