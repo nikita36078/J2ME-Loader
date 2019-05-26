@@ -84,6 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Персонализация</item>
         <item>Телефон</item>
+        <item>Phone (arrows)</item>
     </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Принудителното затваряне може да предизвика загуба на данни или проблем в приложението!\nПродължи?</string>
     <string name="CONFIRMATION_REQUIRED">Изисква се потвърждение</string>
