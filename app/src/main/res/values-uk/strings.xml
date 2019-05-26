@@ -84,6 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Настроюваний</item>
         <item>Телефон</item>
+        <item>Phone (arrows)</item>
     </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання додатку може призвести до втрати даних або навіть до повного виведення його з ладу! \nПродовжити?</string>
     <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
