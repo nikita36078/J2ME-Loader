@@ -15,7 +15,7 @@
     <string name="author">Autor: </string>
     <string name="version">Versão: </string>
     <string name="no_data_for_display">Sem dados</string>
-    <string name="message_delete">Tem certeza que deseja excluir este aplicativo?</string>
+    <string name="message_delete">Você tem certeza que deseja excluir este aplicativo?</string>
     <string name="converting_wait">Convertendo JAR...</string>
     <string name="convert_complete">Completo</string>
     <string name="converting_message">Processando...</string>
@@ -33,7 +33,7 @@
     <string name="RESET_LAYOUT_CMD">Redefinir layout dos botões</string>
     <string name="LOAD_TEMPLATE_CMD">Carregar modelo</string>
     <string name="SAVE_TEMPLATE_CMD">Salvar modelo</string>
-    <string name="PREF_SCREEN_OPTIONS">Opções de Tela</string>
+    <string name="PREF_SCREEN_OPTIONS">Opções de tela</string>
     <string name="PREF_SCALE_RATIO">Escala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Escalar para caber</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Manter proporção</string>
@@ -48,7 +48,7 @@
     <string name="PREF_FONT_MEDIUM">Médio</string>
     <string name="PREF_FONT_LARGE">Grande</string>
     <string name="PREF_FONT_SIZE_IN_SP">Valores estão em Pixels Escalonados</string>
-    <string name="PREF_BACKGROUND">Fundo</string>
+    <string name="PREF_BACKGROUND">Cor de fundo</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
     <string name="PREF_VK_SHOW">Exibir o teclado</string>
     <string name="PREF_VK_FEEDBACK">Resposta ao toque</string>
@@ -66,9 +66,9 @@
     <string name="PREF_VK_NAV_KEYS">Controle: </string>
     <string name="PREF_VK_SOFT_KEYS">Teclas: </string>
     <string name="PREF_VK_NUM_KEYS">Dígitos: </string>
-    <string name="PREF_VK_FIRE_KEY">Atirar: </string>
+    <string name="PREF_VK_FIRE_KEY">Escolher: </string>
     <string name="PREF_VK_SIZE_HINT">Tamanho</string>
-    <string name="SIZE_PRESETS">Predefinições</string>
+    <string name="SIZE_PRESETS">Resoluções</string>
     <string name="SWAP_SIZES">Inverter dimensões</string>
     <string name="PREF_SYS_PROPS">Propriedades do sistema</string>
     <string name="PREF_ORIENTATION">Orientação de tela</string>
@@ -80,17 +80,23 @@
     </string-array>
     <string name="error">Erro</string>
     <string name="message_clear_data">Você tem certeza que deseja limpar os dados do aplicativo?</string>
+    <string name="PREF_VK_TYPE">Tipo de teclado</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Personalizável</item>
+        <item>Telefone</item>
+        <item>Phone (arrows)</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Forçar o fechamento, pode resultar em perda de dados ou danificar totalmente! \nContinuar?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
     <string name="select_dialog_title">Selecionar MIDlet</string>
     <string name="crash_dialog_message">Você deseja enviar o relatório de erro para o desenvolvedor?</string>
     <string name="crash_dialog_title">Erro detectado</string>
     <string name="report_crash">Enviar</string>
-    <string name="layout_edit_finished">Modo de edição terminado</string>
-    <string name="layout_edit_finish">Terminar o Modo de edição</string>
-    <string name="layout_edit_mode">Modo de edição de botões</string>
-    <string name="layout_scale_mode">Modo de escala de botões</string>
-    <string name="layout_switch">Trocar layout de botões</string>
+    <string name="layout_edit_finished">Modo de edição encerrado</string>
+    <string name="layout_edit_finish">Encerrar o modo de edição</string>
+    <string name="layout_edit_mode">Editar botões</string>
+    <string name="layout_scale_mode">Editar tamanho dos botões</string>
+    <string name="layout_switch">Alternar layout</string>
     <string name="hide_buttons">Ocultar botões</string>
     <string name="take_screenshot">Capturar tela</string>
     <string name="screenshot_saved">A Captura de tela foi salva em</string>
@@ -101,22 +107,23 @@
         <item>Claro</item>
         <item>Escuro</item>
     </string-array>
-    <string name="pref_requires_restart_summary">Requer reinício</string>
+    <string name="pref_requires_restart_summary">Requer reinicialização</string>
     <string name="pref_enable_actionbar_title">Ativar Barra de Ação</string>
-    <string name="pref_enable_actionbar_summary">Aplicativos em tela cheia</string>
+    <string name="pref_enable_actionbar_summary">Assistente para jogos em tela cheia</string>
     <string name="pref_wakelock_title">Manter a tela ligada</string>
-    <string name="pref_button_shape_title">Forma dos botões</string>
+    <string name="pref_button_shape_title">Formato dos botões</string>
     <string-array name="pref_button_shape_entries">
         <item>Redondos</item>
         <item>Quadrados</item>
     </string-array>
-    <string name="pref_app_sort_title">Organizar aplicativos</string>
+    <string name="pref_app_sort_title">Ordenar jogos</string>
     <string-array name="pref_app_sort_entries">
         <item>Nome</item>
         <item>Data</item>
     </string-array>
     <string name="pref_map_keys">Mapeamento dos botões</string>
     <string name="pref_encoding_title">Codificação</string>
+    <string name="pref_default_settings">Ajustes padrão</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
