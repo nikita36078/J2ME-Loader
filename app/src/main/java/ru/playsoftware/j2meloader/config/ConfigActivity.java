@@ -213,8 +213,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
 		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-				tfScaleRatioValue.setText(String.valueOf(progress));
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				if (fromUser) tfScaleRatioValue.setText(String.valueOf(progress));
 			}
 
 			@Override
