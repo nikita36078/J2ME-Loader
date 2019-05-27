@@ -127,4 +127,5 @@
     <string name="mapping_dialog_title">Presiona una tecla</string>
     <string name="mapping_dialog_message" formatted="false">Mapeo actual: %1$s</string>
     <string name="reset_mapping">Reiniciar</string>
+    <string name="parallel_screen_redrawing">Dibujado de pantalla paralelo</string>
 </resources>
