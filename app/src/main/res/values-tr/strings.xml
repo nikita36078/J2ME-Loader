@@ -9,6 +9,7 @@
     <string name="search">Ara</string>
     <string name="licenses">Lisanslar</string>
     <string name="templates">Şablonlar</string>
+    <string name="save_log">Günlüğü kaydet</string>
     <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
     <string name="author">Geliştirici: </string>
@@ -39,6 +40,7 @@
     <string name="PREF_FILTER">Filtre</string>
     <string name="PREF_IMMEDIATE">Acil işleme modu</string>
     <string name="PREF_SHOW_FPS">FPS\'i göster</string>
+    <string name="PREF_LIMIT_FPS">FPS\'i sınırla</string>
     <string name="PREF_FONT_OPTIONS">Yazı tipi seçenekleri</string>
     <string name="PREF_WIDTH">Genişlik</string>
     <string name="PREF_HEIGHT">Yükseklik</string>
@@ -77,6 +79,13 @@
         <item>Yatay</item>
     </string-array>
     <string name="error">Hata</string>
+    <string name="message_clear_data">Gerçekten uygulama önbelleğini temizlemek istiyor musunuz?</string>
+    <string name="PREF_VK_TYPE">Klavye tipi</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Özelleştirilebilir</item>
+        <item>Telefon</item>
+        <item>Telefon (oklar)</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
     <string name="CONFIRMATION_REQUIRED">Onaylama gerekli</string>
     <string name="select_dialog_title">MIDlet seçin</string>
@@ -91,6 +100,7 @@
     <string name="hide_buttons">Tuşları gizle</string>
     <string name="take_screenshot">Ekran görüntüsü al</string>
     <string name="screenshot_saved">Ekran görüntüsü şuraya kaydedildi</string>
+    <string name="log_saved">Günlük kaydedildi</string>
     <string name="common_settings">[GENEL AYARLAR]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
@@ -112,6 +122,8 @@
         <item>Tarihe göre</item>
     </string-array>
     <string name="pref_map_keys">Tuş atamaları</string>
+    <string name="pref_encoding_title">Kodlama</string>
+    <string name="pref_default_settings">Varsayılan ayarlar</string>
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
     <string name="mapping_dialog_message" formatted="false">Mevcut atama: %1$s</string>
     <string name="reset_mapping">Sıfırla</string>
