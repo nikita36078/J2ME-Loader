@@ -298,7 +298,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		if (mute) {
 			left = right = 0;
 		} else {
-			left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
+			if (level == 100) {
+				left = right = 1.0f;
+			} else {
+				left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
+			}
 
 			if (pan >= 0) {
 				left *= (float) (100 - pan) / 100f;
