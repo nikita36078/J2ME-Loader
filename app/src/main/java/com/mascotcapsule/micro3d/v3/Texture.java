@@ -17,29 +17,27 @@
 package com.mascotcapsule.micro3d.v3;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import javax.microedition.util.ContextHolder;
+import javax.microedition.lcdui.Image;
 
 public class Texture {
 	protected boolean isModel;
+	protected Image image;
 
 	public Texture(byte[] b, boolean isForModel) {
 		if (b == null) {
 			throw new RuntimeException();
 		}
 		this.isModel = isForModel;
+		this.image = Image.createImage(b, 0, b.length);
 	}
 
 	public Texture(String name, boolean isForModel) throws IOException {
 		if (name == null) {
 			throw new NullPointerException();
 		}
-		InputStream is = ContextHolder.getResourceAsStream(null, name);
-		if (is == null) {
-			throw new IOException();
-		}
 		this.isModel = isForModel;
+		this.image = Image.createImage(name);
 	}
 
 	public final void dispose() {

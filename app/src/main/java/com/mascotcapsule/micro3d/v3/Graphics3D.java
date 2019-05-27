@@ -16,6 +16,8 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import com.mascotcapsule.micro3d.v3.impl.Renderer;
+
 import javax.microedition.lcdui.Graphics;
 
 public class Graphics3D {
@@ -66,33 +68,36 @@ public class Graphics3D {
 	public static final int PRIMITVE_POINT_SPRITES = 83886080;
 	public static final int PRIMITVE_QUADS = 67108864;
 	public static final int PRIMITVE_TRIANGLES = 50331648;
-	private static int ID = 0;
-	private static boolean mIsBound = false;
-	private Graphics mGraphics;
+	private boolean bound = false;
+	private Graphics graphics;
+	private Renderer renderer;
 
 	private final void checkTargetIsValid() throws IllegalStateException {
-		if (this.mGraphics == null) {
+		if (!bound) {
 			throw new IllegalStateException("No target is bound");
 		}
 	}
 
 	public Graphics3D() {
+		renderer = new Renderer();
 	}
 
 	public final synchronized void bind(Graphics graphics) throws IllegalStateException, NullPointerException {
-		if (mIsBound) {
+		if (bound) {
 			throw new IllegalStateException("Target already bound");
 		}
-		this.mGraphics = graphics;
-		mIsBound = true;
+		boolean changed = this.graphics != graphics;
+		renderer.bind(graphics, changed);
+		this.graphics = graphics;
+		this.bound = true;
 	}
 
 	public final synchronized void release(Graphics graphics) throws IllegalArgumentException, NullPointerException {
-		if (graphics != this.mGraphics) {
+		if (graphics != this.graphics) {
 			throw new IllegalArgumentException("Unknown target");
-		} else if (graphics == this.mGraphics && mIsBound) {
-			this.mGraphics = null;
-			mIsBound = false;
+		} else if (bound) {
+			renderer.release(graphics);
+			bound = false;
 		}
 	}
 
@@ -106,6 +111,7 @@ public class Graphics3D {
 		} else if (numPrimitives <= 0 || numPrimitives >= 256) {
 			throw new IllegalArgumentException();
 		}
+		renderer.render();
 	}
 
 	public final void drawCommandList(Texture[] textures, int x, int y, FigureLayout layout, Effect3D effect, int[] commandList) {
@@ -122,6 +128,7 @@ public class Graphics3D {
 		if (commandList == null) {
 			throw new NullPointerException();
 		}
+		renderer.render();
 	}
 
 	public final void drawCommandList(Texture texture, int x, int y, FigureLayout layout, Effect3D effect, int[] commandList) {
@@ -137,13 +144,12 @@ public class Graphics3D {
 		if (figure == null || layout == null || effect == null) {
 			throw new NullPointerException();
 		}
+		renderer.render(figure, layout);
 	}
 
 	public final void drawFigure(Figure figure, int x, int y, FigureLayout layout, Effect3D effect) throws IllegalStateException {
-		checkTargetIsValid();
-		if (figure == null || layout == null || effect == null) {
-			throw new NullPointerException();
-		}
+		renderFigure(figure, x, y, layout, effect);
+		flush();
 	}
 
 	public final void flush() throws IllegalStateException {

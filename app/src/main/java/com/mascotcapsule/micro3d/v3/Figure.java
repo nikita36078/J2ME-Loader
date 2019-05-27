@@ -16,18 +16,29 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import com.mascotcapsule.micro3d.v3.impl.FigureImpl;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.util.ContextHolder;
 
 public class Figure {
+	public FigureImpl figure;
 	private Texture[] myTextureArray;
 	private Texture myTextureNow;
 
 	public Figure(byte[] b) {
 		if (b == null) {
 			throw new NullPointerException();
+		}
+		try {
+			figure = new FigureImpl(new ByteArrayInputStream(b));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Loading error");
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -38,6 +49,13 @@ public class Figure {
 		InputStream is = ContextHolder.getResourceAsStream(null, name);
 		if (is == null) {
 			throw new IOException();
+		}
+		try {
+			figure = new FigureImpl(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Loading error");
+			throw new RuntimeException(e);
 		}
 	}
 

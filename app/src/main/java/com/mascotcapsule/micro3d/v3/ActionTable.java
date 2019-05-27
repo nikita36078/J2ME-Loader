@@ -16,15 +16,27 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import com.mascotcapsule.micro3d.v3.impl.ActionTableImpl;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.util.ContextHolder;
 
 public class ActionTable {
-	public ActionTable(byte[] b) {
+	private ActionTableImpl actionTable;
+
+	public ActionTable(byte[] b) throws RuntimeException {
 		if (b == null) {
 			throw new NullPointerException();
+		}
+		try {
+			actionTable = new ActionTableImpl(new ByteArrayInputStream(b));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Loading error");
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -36,6 +48,13 @@ public class ActionTable {
 		if (is == null) {
 			throw new IOException();
 		}
+		try {
+			actionTable = new ActionTableImpl(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Loading error");
+			throw new RuntimeException(e);
+		}
 	}
 
 	public final void dispose() {
@@ -46,7 +65,7 @@ public class ActionTable {
 	}
 
 	public final int getNumActions() {
-		return 1;
+		return actionTable.getNumActions();
 	}
 
 	public final int getNumFrame(int idx) {
@@ -55,7 +74,7 @@ public class ActionTable {
 
 	public final int getNumFrames(int idx) {
 		if (idx >= 0 && idx < getNumAction()) {
-			return 60;
+			return actionTable.getNumFrames(idx);
 		} else {
 			throw new IllegalArgumentException();
 		}

@@ -34,8 +34,8 @@ public class Effect3D {
 
 	public Effect3D(Light light, int shading, boolean isEnableTrans, Texture tex) {
 		switch (shading) {
-			case 0:
-			case 1:
+			case NORMAL_SHADING:
+			case TOON_SHADING:
 				if (tex != null) {
 					if (tex.isModel) {
 						throw new IllegalArgumentException();
@@ -73,8 +73,8 @@ public class Effect3D {
 
 	public final void setShadingType(int shading) {
 		switch (shading) {
-			case 0:
-			case 1:
+			case NORMAL_SHADING:
+			case TOON_SHADING:
 				this.myShading = shading;
 				return;
 			default:

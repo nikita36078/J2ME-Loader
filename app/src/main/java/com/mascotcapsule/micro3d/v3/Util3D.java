@@ -22,10 +22,10 @@ public class Util3D {
 	}
 
 	public static final int sin(int p) {
-		return (int) Math.sin(p);
+		return (int) (Math.sin(p) * 1024);
 	}
 
 	public static final int cos(int p) {
-		return (int) Math.cos(p);
+		return (int) (Math.cos(p) * 1024);
 	}
 }
