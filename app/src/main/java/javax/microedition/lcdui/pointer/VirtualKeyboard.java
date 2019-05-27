@@ -282,7 +282,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private int editedIndex;
 	private float offsetX, offsetY;
 	private float prevScale;
-	private int layoutVariant;
+	protected int layoutVariant;
 
 	protected RectF screen;
 	protected RectF virtualScreen;

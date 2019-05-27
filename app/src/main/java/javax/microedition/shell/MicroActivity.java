@@ -358,7 +358,9 @@ public class MicroActivity extends AppCompatActivity {
 				SubMenu group = menu.getItem(0).getSubMenu();
 				inflater.inflate(R.menu.midlet_canvas_no_keys, group);
 				VirtualKeyboard vk = ContextHolder.getVk();
-				if (vk != null && !(vk instanceof FixedKeyboard)) {
+				if (vk instanceof FixedKeyboard) {
+					inflater.inflate(R.menu.midlet_canvas_fixed, group);
+				} else if (vk != null) {
 					inflater.inflate(R.menu.midlet_canvas, group);
 				}
 			}

@@ -101,6 +101,14 @@ public class FixedKeyboard extends VirtualKeyboard {
 	}
 
 	@Override
+	public void switchLayout() {
+		layoutVariant ^= 1;
+		resetLayout(layoutVariant);
+		snapKeys();
+		repaint();
+	}
+
+	@Override
 	public void resize(RectF screen, RectF virtualScreen) {
 		this.screen = screen;
 		this.virtualScreen = virtualScreen;
