@@ -213,8 +213,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
 		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-				tfScaleRatioValue.setText(String.valueOf(progress));
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				if (fromUser) tfScaleRatioValue.setText(String.valueOf(progress));
 			}
 
 			@Override
@@ -273,10 +273,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		File file = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
 		if (!defaultConfig && !file.exists()) {
 			File defaultKeylayoutFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_KEYLAYOUT_FILE);
-			try {
-				FileUtils.copyFileUsingChannel(defaultKeylayoutFile, file);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (defaultKeylayoutFile.exists()) {
+				try {
+					FileUtils.copyFileUsingChannel(defaultKeylayoutFile, file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return file;
@@ -528,8 +530,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		VirtualKeyboard vk;
 		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
 			vk = new VirtualKeyboard();
+		} else if (vkType == VirtualKeyboard.PHONE_DIGITS_TYPE) {
+			vk = new FixedKeyboard(0);
 		} else {
-			vk = new FixedKeyboard();
+			vk = new FixedKeyboard(1);
 		}
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
@@ -545,13 +549,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		vk.setButtonShape(shape);
 
-		try {
-			FileInputStream fis = new FileInputStream(keylayoutFile);
-			DataInputStream dis = new DataInputStream(fis);
-			vk.readLayout(dis);
-			fis.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		if (keylayoutFile.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(keylayoutFile);
+				DataInputStream dis = new DataInputStream(fis);
+				vk.readLayout(dis);
+				fis.close();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
 
 		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);

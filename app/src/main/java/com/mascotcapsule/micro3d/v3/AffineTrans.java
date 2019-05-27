@@ -76,30 +76,18 @@ public class AffineTrans {
 		} else if (offset < 0 || a.length - offset < 12) {
 			throw new IllegalArgumentException();
 		} else {
-			int i = offset + 1;
 			a[offset] = this.m00;
-			offset = i + 1;
-			a[i] = this.m01;
-			i = offset + 1;
-			a[offset] = this.m02;
-			offset = i + 1;
-			a[i] = this.m03;
-			i = offset + 1;
-			a[offset] = this.m10;
-			offset = i + 1;
-			a[i] = this.m11;
-			i = offset + 1;
-			a[offset] = this.m12;
-			offset = i + 1;
-			a[i] = this.m13;
-			i = offset + 1;
-			a[offset] = this.m20;
-			offset = i + 1;
-			a[i] = this.m21;
-			i = offset + 1;
-			a[offset] = this.m22;
-			offset = i + 1;
-			a[i] = this.m23;
+			a[offset + 1] = this.m01;
+			a[offset + 2] = this.m02;
+			a[offset + 3] = this.m03;
+			a[offset + 4] = this.m10;
+			a[offset + 5] = this.m11;
+			a[offset + 6] = this.m12;
+			a[offset + 7] = this.m13;
+			a[offset + 8] = this.m20;
+			a[offset + 9] = this.m21;
+			a[offset + 10] = this.m22;
+			a[offset + 11] = this.m23;
 		}
 	}
 
@@ -109,30 +97,18 @@ public class AffineTrans {
 		} else if (offset < 0 || a.length - offset < 12) {
 			throw new IllegalArgumentException();
 		} else {
-			int offset2 = offset + 1;
 			this.m00 = a[offset];
-			offset = offset2 + 1;
-			this.m01 = a[offset2];
-			offset2 = offset + 1;
-			this.m02 = a[offset];
-			offset = offset2 + 1;
-			this.m03 = a[offset2];
-			offset2 = offset + 1;
-			this.m10 = a[offset];
-			offset = offset2 + 1;
-			this.m11 = a[offset2];
-			offset2 = offset + 1;
-			this.m12 = a[offset];
-			offset = offset2 + 1;
-			this.m13 = a[offset2];
-			offset2 = offset + 1;
-			this.m20 = a[offset];
-			offset = offset2 + 1;
-			this.m21 = a[offset2];
-			offset2 = offset + 1;
-			this.m22 = a[offset];
-			offset = offset2 + 1;
-			this.m23 = a[offset2];
+			this.m01 = a[offset + 1];
+			this.m02 = a[offset + 2];
+			this.m03 = a[offset + 3];
+			this.m10 = a[offset + 4];
+			this.m11 = a[offset + 5];
+			this.m12 = a[offset + 6];
+			this.m13 = a[offset + 7];
+			this.m20 = a[offset + 8];
+			this.m21 = a[offset + 9];
+			this.m22 = a[offset + 10];
+			this.m23 = a[offset + 11];
 		}
 	}
 
