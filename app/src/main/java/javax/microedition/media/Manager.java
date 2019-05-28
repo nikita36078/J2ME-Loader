@@ -17,6 +17,7 @@
 
 package javax.microedition.media;
 
+import android.Manifest;
 import android.webkit.MimeTypeMap;
 
 import java.io.IOException;
@@ -26,12 +27,14 @@ import java.util.Arrays;
 import javax.microedition.io.Connector;
 import javax.microedition.media.protocol.DataSource;
 import javax.microedition.media.protocol.SourceStream;
+import javax.microedition.util.ContextHolder;
 
 public class Manager {
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
 	private static final String FILE_LOCATOR = "file://";
+	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
 
 	public static Player createPlayer(String locator) throws IOException {
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
@@ -41,6 +44,9 @@ public class Manager {
 			String extension = locator.substring(locator.lastIndexOf('.') + 1);
 			String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 			return createPlayer(stream, type);
+		} else if (locator.startsWith(CAPTURE_AUDIO_LOCATOR) &&
+				ContextHolder.requestPermission(Manifest.permission.RECORD_AUDIO)) {
+			return new RecordPlayer();
 		} else {
 			return new BasePlayer();
 		}

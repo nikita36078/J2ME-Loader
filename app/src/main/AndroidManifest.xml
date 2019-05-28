@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.playsoftware.j2meloader"
     android:installLocation="auto" >
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />

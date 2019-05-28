@@ -18,6 +18,7 @@
 package javax.microedition.util;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Process;
 import android.util.Log;
 import android.view.Display;
@@ -37,6 +38,8 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
@@ -145,6 +148,15 @@ public class ContextHolder {
 
 	public static File getCacheDir() {
 		return getContext().getExternalCacheDir();
+	}
+
+	public static boolean requestPermission(String permission) {
+		if (ContextCompat.checkSelfPermission(currentActivity, permission) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(currentActivity, new String[]{permission}, 0);
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
