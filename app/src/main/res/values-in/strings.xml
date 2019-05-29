@@ -84,6 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Disesuaikan</item>
         <item>Ponsel</item>
+        <item>Ponsel (D-pad)</item>
     </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkannya sepenuhnya! \nLanjutkan?</string>
     <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>

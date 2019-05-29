@@ -84,6 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Tùy chỉnh</item>
         <item>Điện thoại</item>
+        <item>Phone (arrows)</item>
     </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Buộc đóng ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí hư hại hoàn toàn!\nTiến hành?</string>
     <string name="CONFIRMATION_REQUIRED">Yêu cầu xác nhận</string>
