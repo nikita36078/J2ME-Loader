@@ -138,7 +138,6 @@ public class Display {
 		} catch (IllegalThreadStateException e) {
 			e.printStackTrace();
 		}
-		showCurrent();
 	}
 
 	public void activityStopped() {
