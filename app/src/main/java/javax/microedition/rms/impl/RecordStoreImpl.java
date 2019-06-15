@@ -53,7 +53,7 @@ public class RecordStoreImpl extends RecordStore {
 
 	private int size = 0;
 
-	private Hashtable records = new Hashtable();
+	private Hashtable<Integer, byte[]> records = new Hashtable<>();
 
 	private String recordStoreName;
 
@@ -65,7 +65,7 @@ public class RecordStoreImpl extends RecordStore {
 
 	private transient RecordStoreManager recordStoreManager;
 
-	private transient Vector recordListeners = new Vector();
+	private transient Vector<RecordListener> recordListeners = new Vector<>();
 
 	public RecordStoreImpl(RecordStoreManager recordStoreManager, String recordStoreName) {
 		this.recordStoreManager = recordStoreManager;
@@ -218,7 +218,7 @@ public class RecordStoreImpl extends RecordStore {
 		int result = 0;
 		Enumeration keys = records.keys();
 		while (keys.hasMoreElements()) {
-			int key = ((Integer) keys.nextElement()).intValue();
+			int key = (Integer) keys.nextElement();
 			try {
 				byte[] data = getRecord(key);
 				if (data != null) {
@@ -346,10 +346,10 @@ public class RecordStoreImpl extends RecordStore {
 		}
 
 		synchronized (this) {
-			byte[] data = (byte[]) records.get(new Integer(recordId));
+			byte[] data = records.get(new Integer(recordId));
 			if (data == null) {
 				recordStoreManager.loadRecord(this, recordId);
-				data = (byte[]) records.get(new Integer(recordId));
+				data = records.get(new Integer(recordId));
 				if (data == null) {
 					throw new InvalidRecordIDException();
 				}
