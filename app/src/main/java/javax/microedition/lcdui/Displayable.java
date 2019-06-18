@@ -39,7 +39,7 @@ public abstract class Displayable {
 	private String title;
 
 	private ArrayList<Command> commands;
-	private CommandListener listener;
+	protected CommandListener listener;
 
 	private int tickermode;
 	private Ticker ticker;
