@@ -40,7 +40,6 @@ public class AppUtils {
 					}
 				} catch (RuntimeException re) {
 					re.printStackTrace();
-					FileUtils.deleteDirectory(temp);
 				}
 			}
 		}
