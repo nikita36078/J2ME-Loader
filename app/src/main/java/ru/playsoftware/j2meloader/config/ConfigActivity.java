@@ -306,6 +306,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		System.setProperty("com.siemens.IMEI", "000000000000000");
 		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
 		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
+		System.setProperty("com.siemens.OSVersion", "11");
 		System.setProperty("device.imei", "000000000000000");
 	}
 
