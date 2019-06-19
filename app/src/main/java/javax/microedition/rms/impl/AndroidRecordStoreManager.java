@@ -186,17 +186,6 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		saveToDisk(recordStoreImpl, recordId);
 	}
 
-	public void deleteStores() {
-		String[] stores = listRecordStores();
-		for (String store : stores) {
-			try {
-				deleteRecordStore(store);
-			} catch (RecordStoreException e) {
-				Log.d(TAG, "deleteRecordStore", e);
-			}
-		}
-	}
-
 	private synchronized void deleteFromDisk(RecordStoreImpl recordStore, int recordId)
 			throws RecordStoreException {
 		try {
