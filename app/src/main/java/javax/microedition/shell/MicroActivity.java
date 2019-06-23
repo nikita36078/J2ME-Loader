@@ -76,6 +76,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean loaded;
 	private boolean started;
 	private boolean actionBarEnabled;
+	private boolean keyLongPressed;
 	private LinearLayout layout;
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
@@ -322,8 +323,8 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
-			onKeyDown(event.getKeyCode(), event);
+		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_UP) {
+			onKeyUp(event.getKeyCode(), event);
 			return true;
 		}
 		return super.dispatchKeyEvent(event);
@@ -338,14 +339,23 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-			case KeyEvent.KEYCODE_BACK:
-			case KeyEvent.KEYCODE_MENU:
-				openOptionsMenu();
-				return true;
+	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			showExitConfirmation();
+			keyLongPressed = true;
+			return true;
 		}
-		return super.onKeyDown(keyCode, event);
+		return super.onKeyLongPress(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU) && !keyLongPressed) {
+			openOptionsMenu();
+			return true;
+		}
+		keyLongPressed = false;
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override
