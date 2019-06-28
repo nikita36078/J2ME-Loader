@@ -1,5 +1,8 @@
 package com.mascotcapsule.micro3d.v3.impl;
 
+import com.mascotcapsule.micro3d.v3.AffineTrans;
+import com.mascotcapsule.micro3d.v3.Vector3D;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -10,19 +13,19 @@ import java.util.Arrays;
 
 public class FigureImpl {
 
-	public FloatBuffer triangleBuffer;
-
 	private final static int MAGNITUDE_8BIT = 0;
 	private final static int MAGNITUDE_10BIT = 1;
 	private final static int MAGNITUDE_13BIT = 2;
 	private final static int MAGNITUDE_16BIT = 3;
-	private ArrayList<Vertex> vertices = new ArrayList<>();
+	private ArrayList<Vector3D> vertices = new ArrayList<>();
 	private ArrayList<Normal> normals = new ArrayList<>();
-	private ArrayList<Polygon3> triangleFaces = new ArrayList<>();
-	private ArrayList<Polygon4> quadFaces = new ArrayList<>();
+	private ArrayList<PolygonT3> triangleFacesT = new ArrayList<>();
+	private ArrayList<PolygonT4> quadFacesT = new ArrayList<>();
 	private ArrayList<Bone> bones = new ArrayList<>();
+	public FloatBuffer vboPolyT;
+	private ArrayList<Polygon4> quadFacesF = new ArrayList<>();
+	private ArrayList<Polygon3> triangleFacesF = new ArrayList<>();
 
-	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public FigureImpl(InputStream inputStream) throws IOException {
 		BitInputStream bis = new BitInputStream(inputStream, ByteOrder.LITTLE_ENDIAN);
 		byte[] mbacMagic = new byte[2];
@@ -130,28 +133,28 @@ public class FigureImpl {
 					int x = bis.readBitsSigned(8);
 					int y = bis.readBitsSigned(8);
 					int z = bis.readBitsSigned(8);
-					vertices.add(new Vertex(x, y, z));
+					vertices.add(new Vector3D(x, y, z));
 				}
 			} else if (magnitude == MAGNITUDE_10BIT) {
 				for (int i = 0; i < count; i++) {
 					int x = bis.readBitsSigned(10);
 					int y = bis.readBitsSigned(10);
 					int z = bis.readBitsSigned(10);
-					vertices.add(new Vertex(x, y, z));
+					vertices.add(new Vector3D(x, y, z));
 				}
 			} else if (magnitude == MAGNITUDE_13BIT) {
 				for (int i = 0; i < count; i++) {
 					int x = bis.readBitsSigned(13);
 					int y = bis.readBitsSigned(13);
 					int z = bis.readBitsSigned(13);
-					vertices.add(new Vertex(x, y, z));
+					vertices.add(new Vector3D(x, y, z));
 				}
 			} else if (magnitude == MAGNITUDE_16BIT) {
 				for (int i = 0; i < count; i++) {
 					int x = bis.readBitsSigned(16);
 					int y = bis.readBitsSigned(16);
 					int z = bis.readBitsSigned(16);
-					vertices.add(new Vertex(x, y, z));
+					vertices.add(new Vector3D(x, y, z));
 				}
 			} else {
 				throw new RuntimeException();
@@ -171,8 +174,9 @@ public class FigureImpl {
 				y = bis.readBitsSigned(7) / 64;
 				int z_negative = bis.readBits(1);
 
-				if (1 - x * x - y * y >= 0) {
-					z = (int) Math.sqrt(1 - x * x - y * y) * ((z_negative > 0) ? -1 : 1);
+				int i = 1 - x * x - y * y;
+				if (i >= 0) {
+					z = (int) Math.sqrt(i) * ((z_negative > 0) ? -1 : 1);
 				} else {
 					z = 0;
 				}
@@ -201,7 +205,7 @@ public class FigureImpl {
 			int c = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			triangleFaces.add(new Polygon3(a, b, c));
+			triangleFacesF.add(new Polygon3(a, b, c));
 		}
 
 		for (int i = 0; i < num_polyf4; i++) {
@@ -212,7 +216,7 @@ public class FigureImpl {
 			int d = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			quadFaces.add(new Polygon4(a, b, c, d));
+			quadFacesF.add(new Polygon4(a, b, c, d));
 		}
 	}
 
@@ -238,7 +242,7 @@ public class FigureImpl {
 			int v2 = bis.readBits(uv_bits);
 			int u3 = bis.readBits(uv_bits);
 			int v3 = bis.readBits(uv_bits);
-			triangleFaces.add(new Polygon3(a, b, c));
+			triangleFacesT.add(new PolygonT3(a, b, c, u1, v1, u2, v2, u3, v3));
 		}
 
 		for (int i = 0; i < num_polyt4; i++) {
@@ -256,7 +260,7 @@ public class FigureImpl {
 			int v3 = bis.readBits(uv_bits);
 			int u4 = bis.readBits(uv_bits);
 			int v4 = bis.readBits(uv_bits);
-			quadFaces.add(new Polygon4(a, b, c, d));
+			quadFacesT.add(new PolygonT4(a, b, c, d, u1, v1, u2, v2, u3, v3, u4, v4));
 		}
 	}
 
@@ -283,49 +287,30 @@ public class FigureImpl {
 				throw new RuntimeException("Format error (negative parent). Please report this bug");
 			}
 
-			int[] mtx = new int[]{m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23};
-			bones.add(new Bone(parent, mtx, bone_vertices, bone_vertices + bone_vertices_sum));
+			AffineTrans parentMatrix = getParentMatrix(parent);
+			AffineTrans mtx = new AffineTrans(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23);
+			mtx.mul(parentMatrix, mtx);
+			bones.add(new Bone(parent, mtx, bone_vertices_sum, bone_vertices + bone_vertices_sum));
 
 			bone_vertices_sum += bone_vertices;
 		}
 		return bone_vertices_sum;
 	}
 
-	private int[] getBoneMatrix(Bone bone) {
-		int parent = bone.parent;
+	private AffineTrans getParentMatrix(int parent) {
 		if (parent >= bones.size()) {
 			throw new RuntimeException("Format error (invalid parent index). Please report this bug");
 		}
 
-		int[] parent_mtx;
+		AffineTrans parent_mtx;
 		if (parent < 0) {
-			parent_mtx = new int[]{
-					4096, 0, 0, 0,
-					0, 4096, 0, 0,
-					0, 0, 4096, 0};
+			parent_mtx = new AffineTrans();
+			parent_mtx.setIdentity();
 		} else {
-			parent_mtx = bone.mtx;
+			parent_mtx = bones.get(parent).mtx;
 		}
 
-		int[] a = parent_mtx;
-		int[] b = bone.mtx;
-
-		int m00 = (a[0] * b[0] + a[1] * b[4] + a[2] * b[8]) / 4096;
-		int m01 = (a[0] * b[1] + a[1] * b[5] + a[2] * b[9]) / 4096;
-		int m02 = (a[0] * b[2] + a[1] * b[6] + a[2] * b[10]) / 4096;
-		int m03 = (a[0] * b[3] + a[1] * b[7] + a[2] * b[11]) / 4096 + a[3];
-
-		int m10 = (a[4] * b[0] + a[5] * b[4] + a[6] * b[8]) / 4096;
-		int m11 = (a[4] * b[1] + a[5] * b[5] + a[6] * b[9]) / 4096;
-		int m12 = (a[4] * b[2] + a[5] * b[6] + a[6] * b[10]) / 4096;
-		int m13 = (a[4] * b[3] + a[5] * b[7] + a[6] * b[11]) / 4096 + a[7];
-
-		int m20 = (a[8] * b[0] + a[9] * b[4] + a[10] * b[8]) / 4096;
-		int m21 = (a[8] * b[1] + a[9] * b[5] + a[10] * b[9]) / 4096;
-		int m22 = (a[8] * b[2] + a[9] * b[6] + a[10] * b[10]) / 4096;
-		int m23 = (a[8] * b[3] + a[9] * b[7] + a[10] * b[11]) / 4096 + a[11];
-
-		return new int[]{m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23};
+		return parent_mtx;
 	}
 
 	private void unpackTrailer(BitInputStream bis) throws IOException {
@@ -348,71 +333,90 @@ public class FigureImpl {
 
 	private void applyBoneTransform() {
 		for (Bone bone : bones) {
-			int[] mtx = getBoneMatrix(bone);
 
 			for (int i = bone.start; i < bone.end; i++) {
-				Vertex vertex = vertices.get(i);
-				int x = vertex.x;
-				int y = vertex.y;
-				int z = vertex.z;
-				int[] m = Arrays.copyOf(mtx, mtx.length);
-				vertex.set((m[0] * x + m[1] * y + m[2] * z) / 4096 + m[3],
-						(m[4] * x + m[5] * y + m[6] * z) / 4096 + m[7],
-						(m[8] * x + m[9] * y + m[10] * z) / 4096 + m[11]);
+				Vector3D vertex = vertices.get(i);
+				Vector3D transformed = bone.mtx.transform(vertex);
+				vertex.set(transformed);
 			}
 		}
 	}
 
 	private void createVerticesArray(int num_polyt3, int num_polyt4, int num_polyf3, int num_polyf4) {
-		float[] verts3 = new float[(num_polyt3 + num_polyf3) * 3 * 3 + (num_polyt4 + num_polyf4) * 3 * 6];
 
-		int num = 0;
-		for (int i = 0; i < quadFaces.size(); i++) {
-			Polygon4 polygon4 = quadFaces.get(i);
-			verts3[num++] = vertices.get(polygon4.a).x;
-			verts3[num++] = vertices.get(polygon4.a).y;
-			verts3[num++] = vertices.get(polygon4.a).z;
+		vboPolyT = ByteBuffer.allocateDirect(num_polyt3 * 15 * 4 + num_polyt4 * 30 * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+		for (int i = 0; i < quadFacesT.size(); i++) {
+			PolygonT4 polygon4 = quadFacesT.get(i);
+			Vector3D a = vertices.get(polygon4.a);
+			Vector3D b = vertices.get(polygon4.b);
+			Vector3D c = vertices.get(polygon4.c);
+			Vector3D d = vertices.get(polygon4.d);
 
-			verts3[num++] = vertices.get(polygon4.b).x;
-			verts3[num++] = vertices.get(polygon4.b).y;
-			verts3[num++] = vertices.get(polygon4.b).z;
+			// FIXME: 28.06.2019 '256F' magic value should be replaced by texture size
+			vboPolyT.put(a.x);
+			vboPolyT.put(a.y);
+			vboPolyT.put(a.z);
+			vboPolyT.put(polygon4.u1 / 256F);
+			vboPolyT.put(polygon4.v1 / 256F);
 
-			verts3[num++] = vertices.get(polygon4.c).x;
-			verts3[num++] = vertices.get(polygon4.c).y;
-			verts3[num++] = vertices.get(polygon4.c).z;
+			vboPolyT.put(b.x);
+			vboPolyT.put(b.y);
+			vboPolyT.put(b.z);
+			vboPolyT.put(polygon4.u2 / 256F);
+			vboPolyT.put(polygon4.v2 / 256F);
+
+			vboPolyT.put(c.x);
+			vboPolyT.put(c.y);
+			vboPolyT.put(c.z);
+			vboPolyT.put(polygon4.u3 / 256F);
+			vboPolyT.put(polygon4.v3 / 256F);
 
 			//Create second triangle
 
-			verts3[num++] = vertices.get(polygon4.c).x;
-			verts3[num++] = vertices.get(polygon4.c).y;
-			verts3[num++] = vertices.get(polygon4.c).z;
+			vboPolyT.put(c.x);
+			vboPolyT.put(c.y);
+			vboPolyT.put(c.z);
+			vboPolyT.put(polygon4.u3 / 256F);
+			vboPolyT.put(polygon4.v3 / 256F);
 
-			verts3[num++] = vertices.get(polygon4.b).x;
-			verts3[num++] = vertices.get(polygon4.b).y;
-			verts3[num++] = vertices.get(polygon4.b).z;
+			vboPolyT.put(b.x);
+			vboPolyT.put(b.y);
+			vboPolyT.put(b.z);
+			vboPolyT.put(polygon4.u2 / 256F);
+			vboPolyT.put(polygon4.v2 / 256F);
 
-			verts3[num++] = vertices.get(polygon4.d).x;
-			verts3[num++] = vertices.get(polygon4.d).y;
-			verts3[num++] = vertices.get(polygon4.d).z;
+			vboPolyT.put(d.x);
+			vboPolyT.put(d.y);
+			vboPolyT.put(d.z);
+			vboPolyT.put(polygon4.u4 / 256F);
+			vboPolyT.put(polygon4.v4 / 256F);
 		}
-		for (int i = 0; i < triangleFaces.size(); i++) {
-			Polygon3 polygon3 = triangleFaces.get(i);
-			verts3[num++] = vertices.get(polygon3.a).x;
-			verts3[num++] = vertices.get(polygon3.a).y;
-			verts3[num++] = vertices.get(polygon3.a).z;
+		for (int i = 0; i < triangleFacesT.size(); i++) {
+			PolygonT3 polygon3 = triangleFacesT.get(i);
+			Vector3D a = vertices.get(polygon3.a);
+			Vector3D b = vertices.get(polygon3.b);
+			Vector3D c = vertices.get(polygon3.c);
 
-			verts3[num++] = vertices.get(polygon3.b).x;
-			verts3[num++] = vertices.get(polygon3.b).y;
-			verts3[num++] = vertices.get(polygon3.b).z;
+			vboPolyT.put(a.x);
+			vboPolyT.put(a.y);
+			vboPolyT.put(a.z);
+			vboPolyT.put(polygon3.u1 / 256F);
+			vboPolyT.put(polygon3.v1 / 256F);
 
-			verts3[num++] = vertices.get(polygon3.c).x;
-			verts3[num++] = vertices.get(polygon3.c).y;
-			verts3[num++] = vertices.get(polygon3.c).z;
+			vboPolyT.put(b.x);
+			vboPolyT.put(b.y);
+			vboPolyT.put(b.z);
+			vboPolyT.put(polygon3.u2 / 256F);
+			vboPolyT.put(polygon3.v2 / 256F);
+
+			vboPolyT.put(c.x);
+			vboPolyT.put(c.y);
+			vboPolyT.put(c.z);
+			vboPolyT.put(polygon3.u3 / 256F);
+			vboPolyT.put(polygon3.v3 / 256F);
 		}
-		ByteBuffer bb = ByteBuffer.allocateDirect(verts3.length * 4);
-		bb.order(ByteOrder.nativeOrder());
-		triangleBuffer = bb.asFloatBuffer();
-		triangleBuffer.put(verts3);
-		triangleBuffer.position(0);
+		vboPolyT.position(0);
 	}
 }

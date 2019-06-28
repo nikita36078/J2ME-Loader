@@ -11,26 +11,26 @@ public class GLUtils {
 			// This matrix member variable provides a hook to manipulate
 			// the coordinates of the objects that use this vertex shader
 			"uniform mat4 uMVPMatrix;" +
-					"attribute vec4 vPosition;" +
-					//"attribute vec4 aColor;" +
-					//"uniform vec4 vColor;" +
-					"void main() {" +
-					"  gl_Position = uMVPMatrix * vPosition;" +
-					//"  vColor = aColor;" +
-					"}";
+			"attribute vec4 vPosition;" +
+			"attribute vec2 aTexture;" +
+			"varying vec2 vTexture;" +
+			"void main() {" +
+			"  gl_Position = uMVPMatrix * vPosition;" +
+			"  vTexture = aTexture;" +
+			"}";
 
 	private static final String fragmentShaderCode =
 			"precision mediump float;" +
-					"void main() {" +
-					"  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);" +
-					"}";
+			"uniform sampler2D uTextureUnit;" +
+			"varying vec2 vTexture;" +
+			"void main() {" +
+			"  gl_FragColor = texture2D(uTextureUnit, vTexture);" +
+			"}";
 
 	public static int createProgram() {
 		// prepare shaders and OpenGL program
-		int vertexShader = GLUtils.loadShader(
-				GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-		int fragmentShader = GLUtils.loadShader(
-				GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+		int vertexShader = GLUtils.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+		int fragmentShader = GLUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
 		int mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
 		GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program

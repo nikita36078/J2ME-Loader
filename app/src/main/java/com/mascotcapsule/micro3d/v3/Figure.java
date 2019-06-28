@@ -24,6 +24,7 @@ import java.io.InputStream;
 
 import javax.microedition.util.ContextHolder;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Figure {
 	public FigureImpl figure;
 	private Texture[] myTextureArray;
@@ -65,7 +66,7 @@ public class Figure {
 	public final void setPosture(ActionTable act, int action, int frame) {
 		if (act == null) {
 			throw new NullPointerException();
-		} else if (action < 0 || action >= act.getNumAction()) {
+		} else if (action < 0 || action >= act.getNumActions()) {
 			throw new IllegalArgumentException();
 		}
 	}
@@ -101,7 +102,10 @@ public class Figure {
 				}
 			}
 			this.myTextureArray = t;
-			this.myTextureNow = null;
+			// FIXME: 27.06.2019 temporary fix:
+			//  in the original, the active texture should be selected in a different way
+//			this.myTextureNow = null;
+			this.myTextureNow = t[0];
 		}
 	}
 

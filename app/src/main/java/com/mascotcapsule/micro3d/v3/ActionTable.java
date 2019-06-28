@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2018 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +22,17 @@ import com.mascotcapsule.micro3d.v3.impl.ActionTableImpl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.IllegalArgumentException;
+import java.lang.NullPointerException;
+import java.lang.RuntimeException;
 
 import javax.microedition.util.ContextHolder;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ActionTable {
 	private ActionTableImpl actionTable;
 
-	public ActionTable(byte[] b) throws RuntimeException {
+	public ActionTable(byte[] b) {
 		if (b == null) {
 			throw new NullPointerException();
 		}
@@ -73,7 +78,7 @@ public class ActionTable {
 	}
 
 	public final int getNumFrames(int idx) {
-		if (idx >= 0 && idx < getNumAction()) {
+		if (idx >= 0 && idx < getNumActions()) {
 			return actionTable.getNumFrames(idx);
 		} else {
 			throw new IllegalArgumentException();

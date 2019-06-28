@@ -9,7 +9,6 @@ public class ActionTableImpl {
 	private int numActions;
 	private int[] keyframesArr;
 
-	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public ActionTableImpl(InputStream inputStream) throws IOException {
 		BitInputStream bis = new BitInputStream(inputStream, ByteOrder.LITTLE_ENDIAN);
 		byte[] mtraMagic = new byte[2];
@@ -36,7 +35,7 @@ public class ActionTableImpl {
 		keyframesArr = new int[numActions];
 
 		for (int l = 0; l < numActions; l++) {
-			int keyframes = bis.readUnsignedShort() << 16;
+			int keyframes = bis.readUnsignedShort();
 			keyframesArr[l] = keyframes;
 
 			for (int i = 0; i < num_segments; i++) {
@@ -61,103 +60,116 @@ public class ActionTableImpl {
 
 	private void unpackSegment(BitInputStream bis) throws IOException {
 		int type = bis.readUnsignedByte();
-		if (type == 0) {
-			System.out.println("full matrix");
-			for (int j = 0; j < 3; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
+		switch (type) {
+			case 0:
+				System.out.println("full matrix");
+				for (int j = 0; j < 3; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				break;
+			case 1:
+				System.out.println("identity");
+				break;
+			case 2: {
+				System.out.println("animation");
+				int count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				break;
 			}
-		} else if (type == 1) {
-			System.out.println("identity");
-		} else if (type == 2) {
-			System.out.println("animation");
-			int count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
+			case 3: {
+				System.out.println("unknown3");
 				bis.readUnsignedShort();
 				bis.readUnsignedShort();
 				bis.readUnsignedShort();
+				int count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
 				bis.readUnsignedShort();
+				break;
 			}
-			count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
+			case 4: {
+				System.out.println("unknown4");
+				int count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				break;
 			}
-			count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
+			case 5: {
+				System.out.println("unknown5");
+				int count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				break;
 			}
-			count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
+			case 6: {
+				System.out.println("unknown6");
+				int count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				count = bis.readUnsignedShort();
+				for (int j = 0; j < count; j++) {
+					bis.readUnsignedShort();
+					bis.readUnsignedShort();
+				}
+				break;
 			}
-		} else if (type == 3) {
-			System.out.println("unknown3");
-			bis.readUnsignedShort();
-			bis.readUnsignedShort();
-			bis.readUnsignedShort();
-			int count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-			bis.readUnsignedShort();
-		} else if (type == 4) {
-			System.out.println("unknown4");
-			int count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-			count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-		} else if (type == 5) {
-			System.out.println("unknown5");
-			int count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-		} else if (type == 6) {
-			System.out.println("unknown6");
-			int count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-			count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-			count = bis.readUnsignedShort();
-			for (int j = 0; j < count; j++) {
-				bis.readUnsignedShort();
-				bis.readUnsignedShort();
-			}
-		} else {
-			throw new RuntimeException("Animation type " + type + " is not supported");
+			default:
+				throw new RuntimeException("Animation type " + type + " is not supported");
 		}
 	}
 

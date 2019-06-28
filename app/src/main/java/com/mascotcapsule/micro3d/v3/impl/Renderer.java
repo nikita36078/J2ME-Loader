@@ -1,13 +1,15 @@
 package com.mascotcapsule.micro3d.v3.impl;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
+import android.opengl.GLUtils;
 
 import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
 
-import java.nio.IntBuffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -15,7 +17,6 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.Image;
 
 public class Renderer {
 
@@ -26,13 +27,9 @@ public class Renderer {
 	private EGLContext eglContext;
 	private int width, height;
 
-	private final float[] mvpMatrix = new float[16];
-	private final float[] projectionMatrix = new float[16];
-	private final float[] viewMatrix = new float[16];
-
-	private final float[] modelMatrix = new float[16];
-
 	private ObjectRenderer objectRenderer;
+	private ByteBuffer pixelBuf;
+	private Bitmap mBitmapBuffer;
 
 	private void init() {
 		this.egl = (EGL10) EGLContext.getEGL();
@@ -50,7 +47,7 @@ public class Renderer {
 				EGL10.EGL_GREEN_SIZE, 8,
 				EGL10.EGL_BLUE_SIZE, 8,
 				EGL10.EGL_ALPHA_SIZE, 8,
-				EGL10.EGL_DEPTH_SIZE, 8,
+				EGL10.EGL_DEPTH_SIZE, 16,
 				EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
 				EGL10.EGL_NONE};
 		EGLConfig[] eglConfigs = new EGLConfig[1];
@@ -63,15 +60,20 @@ public class Renderer {
 				EGL10.EGL_NONE
 		};
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
+		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+		GLES20.glDepthFunc(GLES20.GL_LEQUAL);
 	}
 
 	public void bind(Graphics graphics, boolean targetChanged) {
 		if (egl == null) init();
 		if (targetChanged) {
 			Canvas canvas = graphics.getCanvas();
-			width = canvas.getWidth();
-			height = canvas.getHeight();
+			int width = canvas.getWidth();
+			int height = canvas.getHeight();
 
+			if (this.width != width || this.height != height) {
+				this.width = width;
+				this.height = height;
 			if (this.eglWindowSurface != null) {
 				egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
 				egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
@@ -84,15 +86,17 @@ public class Renderer {
 			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
 			egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
 
-			float ratio = (float) width / height;
 			// this projection matrix is applied to object coordinates
-			Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 2, 7);
 			GLES20.glViewport(0, 0, width, height);
 			objectRenderer = new ObjectRenderer();
+			pixelBuf = ByteBuffer.allocateDirect(width * height * 4);
+			pixelBuf.order(ByteOrder.LITTLE_ENDIAN);
+				mBitmapBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			}
 		}
 		// Draw background color
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 	}
 
 	@Override
@@ -105,38 +109,16 @@ public class Renderer {
 		egl.eglTerminate(eglDisplay);
 	}
 
-	public void render() {
-		// Set the camera position (View matrix)
-		Matrix.setLookAtM(viewMatrix, 0, 2, 2, -6, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-		// Calculate the projection and view transformation
-		Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
-		// Create scale matrix
-		Matrix.setIdentityM(modelMatrix, 0);
-		float scaleFactor = 1f / 30;
-		Matrix.scaleM(modelMatrix, 0, scaleFactor, scaleFactor, scaleFactor);
-		// Calculate the model transformation
-		Matrix.multiplyMM(mvpMatrix, 0, mvpMatrix, 0, modelMatrix, 0);
-	}
-
 	public void render(Figure figure, FigureLayout layout) {
-		render();
 		// Draw figure
-		objectRenderer.draw(mvpMatrix, figure.figure);
+		objectRenderer.draw(figure, layout.getMatrix());
 	}
 
 	public void release(Graphics graphics) {
-		IntBuffer intBuffer = IntBuffer.allocate(width * height);
-		GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, intBuffer);
-
-		int[] intArrayO = intBuffer.array();
-		int[] intArrayR = new int[width * height];
-		for (int i = 0; i < height; i++) {
-			if (width >= 0)
-				System.arraycopy(intArrayO, i * width, intArrayR, (height - i - 1) * width, width);
-		}
-
-		Image image = Image.createImage(width, height);
-		image.getBitmap().copyPixelsFromBuffer(IntBuffer.wrap(intArrayR));
-		graphics.drawImage(image, 0, 0, 0);
+		pixelBuf.position(0);
+		GLES20.glReadPixels(0, 0, width, height, GLUtils.getInternalFormat(mBitmapBuffer), GLES20.GL_UNSIGNED_BYTE, pixelBuf);
+		pixelBuf.position(0);
+		mBitmapBuffer.copyPixelsFromBuffer(pixelBuf);
+		graphics.getCanvas().drawBitmap(mBitmapBuffer, 0, 0, null);
 	}
 }

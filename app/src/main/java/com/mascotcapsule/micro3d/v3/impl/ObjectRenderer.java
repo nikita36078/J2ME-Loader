@@ -2,52 +2,76 @@ package com.mascotcapsule.micro3d.v3.impl;
 
 import android.opengl.GLES20;
 
-public class ObjectRenderer {
+import com.mascotcapsule.micro3d.v3.Figure;
 
-	private final int program;
+import java.nio.FloatBuffer;
+
+import static android.opengl.GLES20.*;
+
+public class ObjectRenderer {
 
 	// number of coordinates per vertex in this array
 	private static final int COORDS_PER_VERTEX = 3;
 	private static final int COLORS_PER_VERTEX = 4;
+	private static final int TEX_COORDS_PER_VERTEX = 2;
+	private static final int STRIDE = (COORDS_PER_VERTEX + TEX_COORDS_PER_VERTEX) * 4;
+	private final int program;
+
+	private int aPositionLocation;
+	private int aTextureLocation;
+	private int uTextureUnitLocation;
+	private int uMatrixLocation;
 
 	public ObjectRenderer() {
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
 		program = GLUtils.createProgram();
 	}
 
-	public void draw(float[] mvpMatrix, FigureImpl figure) {
+	public void draw(Figure figure, float[] mvpMatrix) {
 		// Add program to OpenGL environment
 		GLES20.glUseProgram(program);
+		getLocations();
+		bindMatrix(mvpMatrix);
 
-		// get handle to vertex shader's vPosition member
-		int positionHandle = GLES20.glGetAttribLocation(program, "vPosition");
 
-		// Enable a handle to the triangle vertices
-		GLES20.glEnableVertexAttribArray(positionHandle);
+		// координаты вершин
+		FloatBuffer vertexData = figure.figure.vboPolyT;
+		vertexData.position(0);
+		GLES20.glVertexAttribPointer(aPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
+				false, STRIDE, vertexData);
+		GLES20.glEnableVertexAttribArray(aPositionLocation);
 
-		// Prepare the triangle coordinate data
-		GLES20.glVertexAttribPointer(
-				positionHandle, COORDS_PER_VERTEX,
-				GLES20.GL_FLOAT, false,
-				0, figure.triangleBuffer);
+		// координаты текстур
+		vertexData.position(COORDS_PER_VERTEX);
+		GLES20.glVertexAttribPointer(aTextureLocation, TEX_COORDS_PER_VERTEX, GL_FLOAT,
+				false, STRIDE, vertexData);
+		GLES20.glEnableVertexAttribArray(aTextureLocation);
 
-		//int mColorHandle = GLES20.glGetUniformLocation(program, "vColor");
+		// помещаем текстуру в target 2D юнита 0
+		GLES20.glActiveTexture(GL_TEXTURE0);
+		GLES20.glBindTexture(GL_TEXTURE_2D, figure.getTexture().getId());
 
-		// Set color for drawing the triangle
-		//GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+		// юнит текстуры
+		GLES20.glUniform1i(uTextureUnitLocation, 0);
 
-		int mvpMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
-		GLUtils.checkGlError("glGetUniformLocation");
-
-		// Apply the projection and view transformation
-		GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
-		GLUtils.checkGlError("glUniformMatrix4fv");
-
-		int count = figure.triangleBuffer.capacity() / COORDS_PER_VERTEX;
+		vertexData.position(0);
+		int count = vertexData.capacity() / (COORDS_PER_VERTEX + TEX_COORDS_PER_VERTEX);
 		// Draw the triangle
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
-
-		// Disable vertex array
-		GLES20.glDisableVertexAttribArray(positionHandle);
+		GLUtils.checkGlError("glDrawArrays");
 	}
 
+	private void getLocations() {
+		aPositionLocation = GLES20.glGetAttribLocation(program, "vPosition");
+		aTextureLocation = GLES20.glGetAttribLocation(program, "aTexture");
+		uTextureUnitLocation = GLES20.glGetUniformLocation(program, "uTextureUnit");
+		uMatrixLocation = GLES20.glGetUniformLocation(program, "uMVPMatrix");
+	}
+
+
+	private void bindMatrix(float[] mvpMatrix) {
+		glUniformMatrix4fv(uMatrixLocation, 1, false, mvpMatrix, 0);
+		GLUtils.checkGlError("glUniformMatrix4fv");
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,24 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import androidx.annotation.NonNull;
+
+@SuppressWarnings("unused, WeakerAccess")
 public class Vector3D {
 	public int x;
 	public int y;
 	public int z;
 
 	public Vector3D() {
-		this.x = 0;
-		this.y = 0;
-		this.z = 0;
 	}
 
 	public Vector3D(Vector3D v) {
-		set(v);
+		if (v == null) {
+			throw new NullPointerException();
+		}
+		this.x = v.x;
+		this.y = v.y;
+		this.z = v.z;
 	}
 
 	public Vector3D(int x, int y, int z) {
@@ -37,27 +42,69 @@ public class Vector3D {
 		this.z = z;
 	}
 
+	public static int innerProduct(Vector3D v1, Vector3D v2) {
+		if (v1 == null || v2 == null) {
+			throw new NullPointerException();
+		}
+		return v1.innerProduct(v2);
+	}
+
+	public static Vector3D outerProduct(Vector3D v1, Vector3D v2) {
+		if (v1 == null || v2 == null) {
+			throw new NullPointerException();
+		}
+		Vector3D dst = new Vector3D();
+		dst.x = v2.z * v1.y - v1.z * v2.y;
+		dst.y = v1.z * v2.x - v2.z * v1.x;
+		dst.z = v1.x * v2.y - v2.x * v1.y;
+		return dst;
+	}
+
 	public final void unit() {
+		int x = this.x;
+		int y = this.y;
+		int z = this.z;
+		int shift = Integer.numberOfLeadingZeros(Math.abs(x) | Math.abs(y) | Math.abs(z)) - 17;
+		if (shift > 0) {
+			x <<= shift;
+			y <<= shift;
+			z <<= shift;
+		} else if (shift < 0) {
+			shift = -shift;
+			x >>= shift;
+			y >>= shift;
+			z >>= shift;
+		}
+		int i = Util3D.sqrt(x * x + y * y + z * z);
+		if (i != 0) {
+			this.x = (x << 12) / i;
+			this.y = (y << 12) / i;
+			this.z = ((z << 12) / i);
+		} else {
+			this.x = 0;
+			this.y = 0;
+			this.z = 4096;
+		}
 	}
 
 	public final int getX() {
 		return this.x;
 	}
 
-	public final int getY() {
-		return this.y;
-	}
-
-	public final int getZ() {
-		return this.z;
-	}
-
 	public final void setX(int x) {
 		this.x = x;
 	}
 
+	public final int getY() {
+		return this.y;
+	}
+
 	public final void setY(int y) {
 		this.y = y;
+	}
+
+	public final int getZ() {
+		return this.z;
 	}
 
 	public final void setZ(int z) {
@@ -83,27 +130,24 @@ public class Vector3D {
 		if (v == null) {
 			throw new NullPointerException();
 		}
-		return 0;
+		return x * v.x + y * v.y + z * v.z;
 	}
 
 	public final void outerProduct(Vector3D v) {
 		if (v == null) {
 			throw new NullPointerException();
 		}
+		int x = this.y * v.z - this.z * v.y;
+		int y = this.z * v.x - this.x * v.z;
+		int z = this.x * v.y - this.y * v.x;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
-	public static final int innerProduct(Vector3D v1, Vector3D v2) {
-		if (v1 != null && v2 != null) {
-			return 0;
-		}
-		throw new NullPointerException();
-	}
-
-	public static final Vector3D outerProduct(Vector3D v1, Vector3D v2) {
-		if (v1 == null || v2 == null) {
-			throw new NullPointerException();
-		}
-		Vector3D r = new Vector3D();
-		return r;
+	@NonNull
+	@Override
+	public String toString() {
+		return "Vector3D{" + x + ", " + y + ", " + z + "}";
 	}
 }
