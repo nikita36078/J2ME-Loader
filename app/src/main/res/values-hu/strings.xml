@@ -80,6 +80,12 @@
     </string-array>
     <string name="error">Hiba</string>
     <string name="message_clear_data">Tényleg törölni szeretné az alkalmazás adatait?</string>
+    <string name="PREF_VK_TYPE">Billentyűzettípus</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Testreszabható</item>
+        <item>Telefon</item>
+        <item>Telefon (nyilakkal)</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Az alkalmazás erőltetett bezárása adatvesztéshez, vagy akár teljesen működésképtelenné váláshoz vezethet!\nFolytatja?</string>
     <string name="CONFIRMATION_REQUIRED">Megerősítés szükséges</string>
     <string name="select_dialog_title">Válassza ki a MIDlet</string>
@@ -117,6 +123,7 @@
     </string-array>
     <string name="pref_map_keys">Billentyűkiosztás</string>
     <string name="pref_encoding_title">Kódolás</string>
+    <string name="pref_default_settings">Alapértelmezett beállítások</string>
     <string name="mapping_dialog_title">Nyomjon meg egy billentyűt</string>
     <string name="mapping_dialog_message" formatted="false">Jelenlegi hozzárendelés: %1$s</string>
     <string name="reset_mapping">Alaphelyzetbe állítás</string>

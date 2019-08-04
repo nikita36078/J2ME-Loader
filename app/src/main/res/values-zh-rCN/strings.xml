@@ -40,6 +40,7 @@
     <string name="PREF_FILTER">图像虚化</string>
     <string name="PREF_IMMEDIATE">实时处理模式</string>
     <string name="PREF_SHOW_FPS">显示 FPS</string>
+    <string name="PREF_LIMIT_FPS">限制 FPS</string>
     <string name="PREF_FONT_OPTIONS">字体选项</string>
     <string name="PREF_WIDTH">宽度</string>
     <string name="PREF_HEIGHT">高度</string>
@@ -78,6 +79,13 @@
         <item>横屏</item>
     </string-array>
     <string name="error">错误</string>
+    <string name="message_clear_data">您真的想要清除应用数据吗？</string>
+    <string name="PREF_VK_TYPE">键盘类型</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>可自定义</item>
+        <item>数量</item>
+        <item>Phone (arrows)</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">强制关闭应用可能导致数据丢失或损坏！\n要继续吗？</string>
     <string name="CONFIRMATION_REQUIRED">需要确认</string>
     <string name="select_dialog_title">选择程序结构</string>
@@ -92,6 +100,7 @@
     <string name="hide_buttons">隐藏按键</string>
     <string name="take_screenshot">屏幕截图</string>
     <string name="screenshot_saved">屏幕截图已保存到</string>
+    <string name="log_saved">日志已保存</string>
     <string name="common_settings">常用设置</string>
     <string name="pref_theme_title">界面主题</string>
     <string-array name="pref_theme_entries">
@@ -113,6 +122,8 @@
         <item>日期</item>
     </string-array>
     <string name="pref_map_keys">按键映射</string>
+    <string name="pref_encoding_title">编码</string>
+    <string name="pref_default_settings">默认设置</string>
     <string name="mapping_dialog_title">按下一个按键</string>
     <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
     <string name="reset_mapping">重置</string>

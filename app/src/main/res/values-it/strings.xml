@@ -80,6 +80,12 @@
     </string-array>
     <string name="error">Errore</string>
     <string name="message_clear_data">Vuoi davvero cancellare i dati dell\'applicazione?</string>
+    <string name="PREF_VK_TYPE">Tipo di tastiera</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Personalizzabile</item>
+        <item>Telefono</item>
+        <item>Telefono (frecce)</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">La chiusura forzata dell\'applicazione potrebbe causare una perdita di dati o la loro perdita completa!\nProcedere?</string>
     <string name="CONFIRMATION_REQUIRED">Conferma richiesta</string>
     <string name="select_dialog_title">Scegli MIDlet</string>
@@ -117,6 +123,7 @@
     </string-array>
     <string name="pref_map_keys">Mappature dei tasti</string>
     <string name="pref_encoding_title">Codifica testo</string>
+    <string name="pref_default_settings">Impostazioni predefinite</string>
     <string name="mapping_dialog_title">Premi un tasto</string>
     <string name="mapping_dialog_message" formatted="false">Mappatura corrente: %1$s</string>
     <string name="reset_mapping">Reimposta</string>

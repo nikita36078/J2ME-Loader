@@ -84,7 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Personalizável</item>
         <item>Telefone</item>
-        <item>Phone (arrows)</item>
+        <item>Telefone (setas)</item>
     </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Forçar o fechamento, pode resultar em perda de dados ou danificar totalmente! \nContinuar?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
@@ -96,7 +96,7 @@
     <string name="layout_edit_finish">Encerrar o modo de edição</string>
     <string name="layout_edit_mode">Editar botões</string>
     <string name="layout_scale_mode">Editar tamanho dos botões</string>
-    <string name="layout_switch">Alternar layout</string>
+    <string name="layout_switch">Trocar layout de botões</string>
     <string name="hide_buttons">Ocultar botões</string>
     <string name="take_screenshot">Capturar tela</string>
     <string name="screenshot_saved">A Captura de tela foi salva em</string>
