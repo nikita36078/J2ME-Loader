@@ -37,9 +37,6 @@ public class InternalDataSource extends DataSource {
 
 	public InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
 		super(null);
-		if (stream == null) {
-			throw new IllegalArgumentException();
-		}
 
 		String extension = "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
 		this.mediaFile = File.createTempFile("media", extension, ContextHolder.getCacheDir());
