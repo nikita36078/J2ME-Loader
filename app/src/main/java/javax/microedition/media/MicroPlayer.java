@@ -194,9 +194,15 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	public void deallocate() {
 		stop();
 
-		if (state != UNREALIZED) {
+		if (state == PREFETCHED) {
 			player.reset();
 			state = UNREALIZED;
+
+			try {
+				realize();
+			} catch (MediaException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
