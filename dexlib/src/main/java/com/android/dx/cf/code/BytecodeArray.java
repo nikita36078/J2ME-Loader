@@ -811,10 +811,7 @@ public final class BytecodeArray {
         int high = bytes.getInt(at + 8);
         int count = high - low + 1;
         at += 12;
-
-        if (low > high) {
-            throw new SimException("low / high inversion");
-        }
+        // In J2ME low can be greater than high, don't throw an exception
 
         SwitchList cases = new SwitchList(count);
         for (int i = 0; i < count; i++) {
