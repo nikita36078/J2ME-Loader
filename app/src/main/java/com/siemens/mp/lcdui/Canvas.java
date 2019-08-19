@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2019 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,5 @@
 
 package com.siemens.mp.lcdui;
 
-import javax.microedition.lcdui.Item;
-
-public class Form extends javax.microedition.lcdui.Form {
-
-	public Form(String title) {
-		super(title);
-	}
-
-	public Form(String title, Item[] elements) {
-		super(title, elements);
-	}
-
-	public void setKeyDispatcher(KeyDispatcher dispatcher) {
-	}
+public abstract class Canvas extends javax.microedition.lcdui.Canvas {
 }
