@@ -298,7 +298,8 @@ public abstract class Canvas extends Displayable {
 				displayWidth = newwidth;
 				displayHeight = newheight;
 				updateSize();
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED, width, height));
+				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+						width, height));
 			}
 			postEvent(paintEvent);
 		}
@@ -403,6 +404,7 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
+	private static final float FULLCSREEN_HEIGHT_RATIO = 0.85f;
 	private static final String TAG = Canvas.class.getName();
 	private final Object paintsync = new Object();
 
@@ -414,9 +416,11 @@ public abstract class Canvas extends Displayable {
 	private Graphics graphics = new Graphics();
 
 	protected int width, height;
+	protected int maxHeight;
 
 	private int displayWidth;
 	private int displayHeight;
+	private boolean fullscreen;
 
 	private static int virtualWidth;
 	private static int virtualHeight;
@@ -555,6 +559,15 @@ public abstract class Canvas extends Displayable {
 			width = virtualWidth;
 			height = virtualHeight;
 		}
+
+		/*
+		 * calculate the current height
+		 */
+		maxHeight = height;
+		if (!fullscreen) {
+			height = (int) (height * FULLCSREEN_HEIGHT_RATIO);
+		}
+
 		/*
 		 * We turn the size of the canvas into the size of the image
 		 * that will be displayed on the screen of the device.
@@ -661,6 +674,12 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void setFullScreenMode(boolean flag) {
+		synchronized (paintsync) {
+			fullscreen = flag;
+			updateSize();
+			postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+					width, height));
+		}
 	}
 
 	public boolean hasPointerEvents() {

@@ -40,7 +40,7 @@ public class GameCanvas extends Canvas {
 	public GameCanvas(boolean suppressCommands) {
 		super();
 		this.suppressCommands = suppressCommands;
-		image = Image.createImage(width, height);
+		image = Image.createImage(width, maxHeight);
 		image.getBitmap().setHasAlpha(false);
 	}
 
