@@ -521,7 +521,7 @@ public abstract class Canvas extends Displayable {
 		 * If FixedKeyboard is active, then scale down the virtual screen
 		 */
 		if (ContextHolder.getVk() instanceof FixedKeyboard) {
-			scaledDisplayHeight = (int) (displayHeight - 5 * (displayWidth /
+			scaledDisplayHeight = (int) (displayHeight - FixedKeyboard.KEY_ROW_COUNT * (displayWidth /
 					(FixedKeyboard.KEY_WIDTH_RATIO * FixedKeyboard.KEY_HEIGHT_RATIO)) - 1);
 		} else {
 			scaledDisplayHeight = displayHeight;
