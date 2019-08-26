@@ -626,8 +626,8 @@ public abstract class Canvas extends Displayable {
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
 
 		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen = Image.createImage(width, height, false, offscreen);
-			offscreenCopy = Image.createImage(width, height, false, offscreenCopy);
+			offscreen = Image.createImage(width, height, offscreen);
+			offscreenCopy = Image.createImage(width, height, offscreenCopy);
 		}
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);

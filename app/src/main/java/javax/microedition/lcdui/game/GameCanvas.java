@@ -41,7 +41,6 @@ public class GameCanvas extends Canvas {
 		super();
 		this.suppressCommands = suppressCommands;
 		image = Image.createImage(width, maxHeight);
-		image.getBitmap().setHasAlpha(false);
 	}
 
 	@Override
