@@ -146,10 +146,12 @@ public class CanvasEvent extends Event {
 
 			case SHOW_NOTIFY:
 				canvas.showNotify();
+				canvas.setVisible(true);
 				break;
 
 			case HIDE_NOTIFY:
 				canvas.hideNotify();
+				canvas.setVisible(false);
 				break;
 
 			case SIZE_CHANGED:

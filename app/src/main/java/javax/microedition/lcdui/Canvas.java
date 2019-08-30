@@ -351,7 +351,7 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void process() {
 			synchronized (paintsync) {
-				if (surface == null || !surface.isValid()) {
+				if (surface == null || !surface.isValid() || !isShown()) {
 					return;
 				}
 				Graphics g = this.mGraphics;
@@ -421,6 +421,7 @@ public abstract class Canvas extends Displayable {
 	private int displayWidth;
 	private int displayHeight;
 	private boolean fullscreen;
+	private boolean visible;
 
 	private static int virtualWidth;
 	private static int virtualHeight;
@@ -719,6 +720,11 @@ public abstract class Canvas extends Displayable {
 		postEvent(paintEvent);
 	}
 
+	@Override
+	public boolean isShown() {
+		return super.isShown() && visible;
+	}
+
 	// GameCanvas
 	public void flushBuffer(Image image) {
 		limitFps();
@@ -741,6 +747,10 @@ public abstract class Canvas extends Displayable {
 			e.printStackTrace();
 		}
 		lastFrameTime = System.currentTimeMillis();
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	@SuppressLint("NewApi")
