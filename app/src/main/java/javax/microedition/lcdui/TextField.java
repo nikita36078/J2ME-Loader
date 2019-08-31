@@ -18,15 +18,7 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.graphics.Rect;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
-
-import javax.microedition.lcdui.event.SimpleEvent;
 
 public class TextField extends Item {
 	public static final int ANY = 0;
@@ -44,43 +36,10 @@ public class TextField extends Item {
 	public static final int INITIAL_CAPS_WORD = 1048576;
 	public static final int INITIAL_CAPS_SENTENCE = 2097152;
 
-	private String text;
-	private EditText textview;
-	private int maxSize;
-	private int constraints;
-
-	private SimpleEvent msgSetText = new SimpleEvent() {
-		@Override
-		public void process() {
-			textview.setText(text);
-		}
-	};
-
-	private class InternalEditText extends androidx.appcompat.widget.AppCompatEditText {
-		public InternalEditText(Context context) {
-			super(context);
-		}
-
-		@Override
-		public void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
-			super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
-
-			if (!gainFocus) {
-				notifyStateChanged();
-			}
-		}
-
-		@Override
-		public void onWindowFocusChanged(boolean hasWindowFocus) {
-			super.onWindowFocusChanged(hasWindowFocus);
-
-			if (!hasWindowFocus) {
-				notifyStateChanged();
-			}
-		}
-	}
+	private TextFieldImpl textField;
 
 	public TextField(String label, String text, int maxSize, int constraints) {
+		textField = new TextFieldImpl();
 		setLabel(label);
 		setMaxSize(maxSize);
 		setConstraints(constraints);
@@ -88,19 +47,15 @@ public class TextField extends Item {
 	}
 
 	public void setString(String text) {
-		if (text != null && text.length() > maxSize) {
-			throw new IllegalArgumentException("text length exceeds max size");
-		}
+		textField.setString(text);
+	}
 
-		this.text = text;
-
-		if (textview != null) {
-			ViewHandler.postEvent(msgSetText);
-		}
+	public void insert(String src, int pos) {
+		textField.insert(src, pos);
 	}
 
 	public String getString() {
-		return text;
+		return textField.getString();
 	}
 
 	public int size() {
@@ -108,83 +63,19 @@ public class TextField extends Item {
 	}
 
 	public int setMaxSize(int maxSize) {
-		if (maxSize <= 0) {
-			throw new IllegalArgumentException("max size must be > 0");
-		}
-
-		this.maxSize = maxSize;
-
-		if (textview != null) {
-			textview.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxSize)});
-		}
-
-		return maxSize;
+		return textField.setMaxSize(maxSize);
 	}
 
 	public int getMaxSize() {
-		return maxSize;
+		return textField.getMaxSize();
 	}
 
 	public void setConstraints(int constraints) {
-		this.constraints = constraints;
-
-		if (textview != null) {
-			int inputtype;
-
-			switch (constraints & CONSTRAINT_MASK) {
-				default:
-				case ANY:
-					inputtype = InputType.TYPE_CLASS_TEXT;
-					break;
-
-				case EMAILADDR:
-					inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-					break;
-
-				case NUMERIC:
-					inputtype = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED;
-					break;
-
-				case PHONENUMBER:
-					inputtype = InputType.TYPE_CLASS_PHONE;
-					break;
-
-				case URL:
-					inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI;
-					break;
-
-				case DECIMAL:
-					inputtype = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL;
-					break;
-			}
-
-			if ((constraints & PASSWORD) != 0 ||
-					(constraints & SENSITIVE) != 0) {
-				inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
-			}
-
-			if ((constraints & UNEDITABLE) != 0) {
-				inputtype = InputType.TYPE_NULL;
-			}
-
-			if ((constraints & NON_PREDICTIVE) != 0) {
-				inputtype |= InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
-			}
-
-			if ((constraints & INITIAL_CAPS_WORD) != 0) {
-				inputtype |= InputType.TYPE_TEXT_FLAG_CAP_WORDS;
-			}
-
-			if ((constraints & INITIAL_CAPS_SENTENCE) != 0) {
-				inputtype |= InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
-			}
-
-			textview.setInputType(inputtype);
-		}
+		textField.setConstraints(constraints);
 	}
 
 	public int getConstraints() {
-		return constraints;
+		return textField.getConstraints();
 	}
 
 	public void setInitialInputMode(String characterSubset) {
@@ -196,44 +87,16 @@ public class TextField extends Item {
 
 	@Override
 	public View getItemContentView() {
-		if (textview == null) {
-			Context context = getOwnerForm().getParentActivity();
-
-			textview = new InternalEditText(context);
-
-			setMaxSize(maxSize);
-			setConstraints(constraints);
-			setString(text);
-
-			textview.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				}
-
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {
-				}
-
-				@Override
-				public void afterTextChanged(Editable s) {
-					text = s.toString();
-				}
-			});
-		}
-
-		return textview;
+		Context context = getOwnerForm().getParentActivity();
+		return textField.getView(context, this);
 	}
 
 	@Override
 	public void clearItemContentView() {
-		textview = null;
+		textField.clearScreenView();
 	}
 
 	public int getCaretPosition() {
-		if (textview != null) {
-			return textview.getSelectionEnd();
-		} else {
-			return -1;
-		}
+		return textField.getCaretPosition();
 	}
 }
