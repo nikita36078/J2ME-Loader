@@ -23,7 +23,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -60,9 +60,8 @@ class TextFieldImpl {
 	}
 
 	void insert(String src, int pos) {
-		this.text = new StringBuilder(text).insert(pos, src).toString();
-
-		setString(text);
+		String tmp = new StringBuilder(text).insert(pos, src).toString();
+		setString(tmp);
 	}
 
 	String getString() {
@@ -148,7 +147,6 @@ class TextFieldImpl {
 			textview.setInputType(inputtype);
 			if ((constraints & TextField.CONSTRAINT_MASK) == TextField.ANY) {
 				textview.setSingleLine(false);
-				textview.setMaxLines(5);
 			}
 		}
 	}
@@ -167,6 +165,11 @@ class TextFieldImpl {
 		} else {
 			return -1;
 		}
+	}
+
+	void delete(int offset, int length) {
+		String tmp = new StringBuilder(text).delete(offset, offset + length).toString();
+		setString(tmp);
 	}
 
 	EditText getView(Context context, Item item) {
@@ -191,6 +194,16 @@ class TextFieldImpl {
 					text = s.toString();
 				}
 			});
+
+			if (item != null) {
+				textview.setOnFocusChangeListener((v, hasFocus) -> {
+					if (!hasFocus) item.notifyStateChanged();
+				});
+			} else {
+				textview.setLayoutParams(new LinearLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+				textview.setGravity(Gravity.TOP);
+			}
 		}
 		return textview;
 	}

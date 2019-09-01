@@ -21,6 +21,7 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -118,6 +119,8 @@ public abstract class Displayable {
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
+			layout.setLayoutParams(new LinearLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 			marquee = new TextView(context);
 			marquee.setTextAppearance(context, android.R.style.TextAppearance_Medium);

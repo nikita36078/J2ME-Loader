@@ -70,6 +70,14 @@ public class TextBox extends Screen {
 		textField.setChars(data, offset, length);
 	}
 
+	public int getCaretPosition() {
+		return textField.getCaretPosition();
+	}
+
+	public void delete(int offset, int length) {
+		textField.delete(offset, length);
+	}
+
 	@Override
 	public View getScreenView() {
 		Context context = getParentActivity();
@@ -79,9 +87,5 @@ public class TextBox extends Screen {
 	@Override
 	public void clearScreenView() {
 		textField.clearScreenView();
-	}
-
-	public int getCaretPosition() {
-		return textField.getCaretPosition();
 	}
 }

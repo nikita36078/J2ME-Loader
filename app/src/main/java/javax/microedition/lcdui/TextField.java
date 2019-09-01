@@ -85,6 +85,14 @@ public class TextField extends Item {
 		setString(new String(data, offset, length));
 	}
 
+	public int getCaretPosition() {
+		return textField.getCaretPosition();
+	}
+
+	public void delete(int offset, int length) {
+		textField.delete(offset, length);
+	}
+
 	@Override
 	public View getItemContentView() {
 		Context context = getOwnerForm().getParentActivity();
@@ -94,9 +102,5 @@ public class TextField extends Item {
 	@Override
 	public void clearItemContentView() {
 		textField.clearScreenView();
-	}
-
-	public int getCaretPosition() {
-		return textField.getCaretPosition();
 	}
 }
