@@ -676,10 +676,12 @@ public abstract class Canvas extends Displayable {
 
 	public void setFullScreenMode(boolean flag) {
 		synchronized (paintsync) {
-			fullscreen = flag;
-			updateSize();
-			postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
-					width, height));
+			if (fullscreen != flag) {
+				fullscreen = flag;
+				updateSize();
+				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+						width, height));
+			}
 		}
 	}
 
