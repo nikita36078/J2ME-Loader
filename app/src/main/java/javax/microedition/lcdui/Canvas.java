@@ -404,7 +404,7 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	private static final float FULLCSREEN_HEIGHT_RATIO = 0.85f;
+	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
 	private static final String TAG = Canvas.class.getName();
 	private final Object paintsync = new Object();
 
@@ -562,11 +562,14 @@ public abstract class Canvas extends Displayable {
 		}
 
 		/*
-		 * calculate the current height
+		 * calculate the maximum height
 		 */
 		maxHeight = height;
+		/*
+		 * calculate the current height
+		 */
 		if (!fullscreen) {
-			height = (int) (height * FULLCSREEN_HEIGHT_RATIO);
+			height = (int) (height * FULLSCREEN_HEIGHT_RATIO);
 		}
 
 		/*
