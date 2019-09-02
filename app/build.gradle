@@ -82,7 +82,7 @@ static def generateVersionCode() {
 }
 
 dependencies {
-    def roomVersion = '2.0.0'
+    def roomVersion = '2.1.0'
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
@@ -91,8 +91,8 @@ dependencies {
     implementation 'androidx.preference:preference:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'ch.acra:acra-dialog:5.2.0'
-    implementation 'com.github.billthefarmer:mididriver:v1.16'
+    implementation 'ch.acra:acra-dialog:5.4.0'
+    implementation 'com.github.billthefarmer:mididriver:v1.17'
     implementation 'com.github.nikita36078:donations:2.8'
     implementation 'com.github.nikita36078:filepicker:4.3.0'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
@@ -100,6 +100,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
     implementation 'org.ow2.asm:asm:7.0'
     implementation project(':dexlib')
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 }
