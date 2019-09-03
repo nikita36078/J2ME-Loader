@@ -27,20 +27,40 @@ import javax.wireless.messaging.MessageListener;
 
 public class Connection implements MessageConnection, ConnectionImplementation {
 
+	private static final int MAX_PORT = 65535;
+
 	private MessageListener listener;
 	private String name;
+	private String address;
 	private boolean noMessages;
 	private boolean closed;
 
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
+		String host, port;
+		String address = name.substring("sms://".length());
+		int portSepIndex = address.lastIndexOf(':');
+		if (portSepIndex >= 0) {
+			port = address.substring(portSepIndex + 1);
+			host = address.substring(0, portSepIndex);
+		} else {
+			port = "";
+			host = address;
+		}
+		if (host.length() > 0) {
+			validateHost(host);
+		}
+		if (port.length() > 0) {
+			validatePort(port);
+		}
 		this.name = name;
+		this.address = address;
 		return this;
 	}
 
 	@Override
 	public Message newMessage(String type) {
-		return new MessageImpl(type, name);
+		return new MessageImpl(type, address);
 	}
 
 	@Override
@@ -62,7 +82,7 @@ public class Connection implements MessageConnection, ConnectionImplementation {
 				e.printStackTrace();
 			}
 		}
-		MessageImpl message = new MessageImpl(MessageConnection.TEXT_MESSAGE, name);
+		MessageImpl message = new MessageImpl(MessageConnection.TEXT_MESSAGE, address);
 		message.setPayloadText("sms");
 		noMessages = true;
 		return message;
@@ -84,5 +104,30 @@ public class Connection implements MessageConnection, ConnectionImplementation {
 	@Override
 	public void close() throws IOException {
 		closed = true;
+	}
+
+	private void validateHost(String host) {
+		char ch;
+		for (int i = 0; i < host.length(); i++) {
+			ch = host.charAt(i);
+			if (i == 0 && ch == '+') {
+				continue;
+			}
+			if (!Character.isDigit(ch)) {
+				throw new IllegalArgumentException("Invalid SMS number");
+			}
+		}
+	}
+
+	private void validatePort(String port) {
+		for (int i = 0; i < port.length(); i++) {
+			if (!Character.isDigit(port.charAt(i))) {
+				throw new IllegalArgumentException("Invalid SMS port");
+			}
+		}
+		int portValue = Integer.parseInt(port);
+		if (portValue > MAX_PORT || portValue < 0) {
+			throw new IllegalArgumentException("Invalid SMS port");
+		}
 	}
 }
