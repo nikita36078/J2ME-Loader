@@ -90,6 +90,9 @@ public class Connection implements MessageConnection, ConnectionImplementation {
 
 	@Override
 	public void send(Message message) throws IOException, InterruptedIOException {
+		if (message == null) {
+			throw new NullPointerException();
+		}
 		if (listener != null) {
 			Connection connection = (Connection) openConnection(name, 0, false);
 			listener.notifyIncomingMessage(connection);
