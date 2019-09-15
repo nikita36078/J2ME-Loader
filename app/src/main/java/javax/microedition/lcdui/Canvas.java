@@ -297,9 +297,11 @@ public abstract class Canvas extends Displayable {
 				overlayView.setTargetBounds(offsetViewBounds);
 				displayWidth = newwidth;
 				displayHeight = newheight;
-				updateSize();
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
-						width, height));
+				if (checkSizeChanged() || !sizeChangedCalled) {
+					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+							width, height));
+					sizeChangedCalled = true;
+				}
 			}
 			postEvent(paintEvent);
 		}
@@ -422,6 +424,7 @@ public abstract class Canvas extends Displayable {
 	private int displayHeight;
 	private boolean fullscreen;
 	private boolean visible;
+	private boolean sizeChangedCalled;
 
 	private static int virtualWidth;
 	private static int virtualHeight;
@@ -508,6 +511,13 @@ public abstract class Canvas extends Displayable {
 		Graphics g = image.getGraphics();
 		g.drawImage(offscreenCopy, 0, 0, onWidth, onHeight, filter, 255);
 		return image;
+	}
+
+	private boolean checkSizeChanged() {
+		int tmpWidth = width;
+		int tmpHeight = height;
+		updateSize();
+		return width != tmpWidth || height != tmpHeight;
 	}
 
 	/**
