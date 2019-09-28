@@ -495,7 +495,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			final String[] propLines = tfSystemProperties.getText().toString().split("\n");
 			for (String line : propLines) {
-				String[] prop = line.split(":", 2);
+				String[] prop = line.split(":[ ]*", 2);
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
 				}
