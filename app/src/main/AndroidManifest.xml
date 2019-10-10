@@ -85,7 +85,8 @@
         <activity
             android:name=".donations.DonationsActivity" />
         <activity
-            android:name=".settings.KeyMapperActivity" />
+            android:name=".settings.KeyMapperActivity"
+            android:process=":midlet" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />
