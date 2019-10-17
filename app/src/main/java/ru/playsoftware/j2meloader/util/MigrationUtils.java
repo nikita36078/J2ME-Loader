@@ -78,6 +78,7 @@ public class MigrationUtils {
 		container.load(true);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString("pref_key_mapping", null);
+		prefs.edit().remove("pref_key_mapping").apply();
 		KeyMapper.saveArrayPref(container, KeyMapper.getArray(json));
 	}
 
