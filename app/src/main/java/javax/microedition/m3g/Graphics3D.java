@@ -43,7 +43,7 @@ public final class Graphics3D {
 	private static Graphics3D instance = null;
 
 	private int maxTextureUnits = 1;
-	private static int maxTextureSize;
+	private int maxTextureSize;
 
 	private int viewportX = 0;
 	private int viewportY = 0;
@@ -910,7 +910,7 @@ public final class Graphics3D {
 		return maxTextureUnits;
 	}
 
-	static int getMaxTextureSize() {
+	int getMaxTextureSize() {
 		return maxTextureSize;
 	}
 

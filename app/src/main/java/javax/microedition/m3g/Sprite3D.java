@@ -93,8 +93,11 @@ public class Sprite3D extends Node {
 		switch (property) {
 			case AnimationTrack.CROP:
 				if (value.length > 2) {
-					setCrop((int) value[0], (int) value[1], (int) Math.max(-Graphics3D.getMaxTextureSize(), Math.min(Graphics3D.getMaxTextureSize(), value[2])),
-							(int) Math.max(-Graphics3D.getMaxTextureSize(), Math.min(Graphics3D.getMaxTextureSize(), value[3])));
+					setCrop((int) value[0], (int) value[1],
+							Math.max(-Graphics3D.getInstance().getMaxTextureSize(),
+									(int) Math.min(Graphics3D.getInstance().getMaxTextureSize(), value[2])),
+							Math.max(-Graphics3D.getInstance().getMaxTextureSize(),
+									(int) Math.min(Graphics3D.getInstance().getMaxTextureSize(), value[3])));
 				} else {
 					setCrop((int) value[0], (int) value[1], getCropWidth(), getCropHeight());
 				}
