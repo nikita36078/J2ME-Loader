@@ -9,6 +9,7 @@
     <string name="search">Căutare</string>
     <string name="licenses">Licențe</string>
     <string name="templates">Șabloane</string>
+    <string name="save_log">Salvează jurnal</string>
     <string name="about_message">Această aplicație iți permite să lansezi aplicații J2ME și jocuri pe Android. Suportă majoritatea jocurilor 2D și 3D cu unele limitări. &lt;BR&gt;</string>
     <string name="help_message">&#8226; Permitand filtrarea poate reduce cu mult performanta in unele cazuri. Dezactiveaza aceasta optiune daca jocul ruleaza incet.&lt;BR&gt;&#8226; Problemele legate de imagine pot fi reparate cu ajutorul optiunii \"Mod de procesare imediata\".</string>
     <string name="author">Autor: </string>
@@ -39,6 +40,7 @@
     <string name="PREF_FILTER">Filtru</string>
     <string name="PREF_IMMEDIATE">Modul de prelucrare imediată</string>
     <string name="PREF_SHOW_FPS">Afișează FPS</string>
+    <string name="PREF_LIMIT_FPS">Limită FPS</string>
     <string name="PREF_FONT_OPTIONS">Opțiuni font</string>
     <string name="PREF_WIDTH">Lățime</string>
     <string name="PREF_HEIGHT">Înălțime</string>
@@ -77,6 +79,13 @@
         <item>Peisaj</item>
     </string-array>
     <string name="error">Eroare</string>
+    <string name="message_clear_data">Ești sigur că vrei să ștergi datele aplicației?</string>
+    <string name="PREF_VK_TYPE">Tip tastatură</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Personalizabile</item>
+        <item>Telefon (numeric)</item>
+        <item>Telefon (D-pad)</item>
+    </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">Închiderea forțată a aplicației ar putea duce la pierderea datelor!\nVrei să continui?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmare necesară</string>
     <string name="select_dialog_title">Selecteaza MIDlet</string>
@@ -91,6 +100,7 @@
     <string name="hide_buttons">Ascunde butoanele</string>
     <string name="take_screenshot">Creează o captură de ecran</string>
     <string name="screenshot_saved">Captura de ecran a fost salvată în</string>
+    <string name="log_saved">Jurnalul a fost salvat</string>
     <string name="common_settings">[SETĂRI COMUNE]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
@@ -112,6 +122,8 @@
         <item>Data</item>
     </string-array>
     <string name="pref_map_keys">Mapari taste</string>
+    <string name="pref_encoding_title">Codificare</string>
+    <string name="pref_default_settings">Setări implicite</string>
     <string name="mapping_dialog_title">Apasă o tastă</string>
     <string name="mapping_dialog_message" formatted="false">Mapari curente: %1$s</string>
     <string name="reset_mapping">Resetare</string>

@@ -3,9 +3,9 @@
 <resources>
     <string name="close">Đóng</string>
     <string name="exit">Thoát</string>
-    <string name="about">Thông tin</string>
+    <string name="about">Giới thiệu</string>
     <string name="help">Trợ giúp</string>
-    <string name="more">Xem thêm</string>
+    <string name="more">Thêm</string>
     <string name="search">Tìm kiếm</string>
     <string name="licenses">Giấy phép</string>
     <string name="templates">Mẫu</string>
@@ -28,9 +28,9 @@
     <string name="donate">Ủng hộ</string>
     <string name="START_CMD">Bắt đầu</string>
     <string name="CANCEL_CMD">Hủy</string>
-    <string name="CLEAR_DATA_CMD">Dọn dẹp dữ liệu</string>
+    <string name="CLEAR_DATA_CMD">Xóa dữ liệu</string>
     <string name="RESET_SETTINGS_CMD">Thiết lập lại</string>
-    <string name="RESET_LAYOUT_CMD">Đặt lại phím mặc định</string>
+    <string name="RESET_LAYOUT_CMD">Đặt lại cấu trúc phím mặc định</string>
     <string name="LOAD_TEMPLATE_CMD">Tải mẫu</string>
     <string name="SAVE_TEMPLATE_CMD">Lưu mẫu</string>
     <string name="PREF_SCREEN_OPTIONS">Tùy chọn màn hình</string>
@@ -47,22 +47,22 @@
     <string name="PREF_FONT_SMALL">Nhỏ</string>
     <string name="PREF_FONT_MEDIUM">Trung bình</string>
     <string name="PREF_FONT_LARGE">Lớn</string>
-    <string name="PREF_FONT_SIZE_IN_SP">Giá trị trong các tỉ lệ điểm ảnh</string>
-    <string name="PREF_BACKGROUND">Hình nền</string>
+    <string name="PREF_FONT_SIZE_IN_SP">Giá trị trong các điểm ảnh nhỏ</string>
+    <string name="PREF_BACKGROUND">Nền</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Bàn phím ảo</string>
     <string name="PREF_VK_SHOW">Hiển thị bàn phím</string>
     <string name="PREF_VK_FEEDBACK">Phản hồi Haptic</string>
     <string name="PREF_TOUCH_INPUT">Cảm ứng đầu vào</string>
     <string name="PREF_HW_ACCELERATION">Tăng tốc HW (không ổn định)</string>
     <string name="PREF_VK_BACK">Nút</string>
-    <string name="PREF_VK_FORE">Nền nút</string>
-    <string name="PREF_VK_OUTLINE">Đường viền</string>
+    <string name="PREF_VK_FORE">Đường đánh dấu</string>
+    <string name="PREF_VK_OUTLINE">Đường nét</string>
     <string name="PREF_VK_ALPHA">Độ mờ: </string>
     <string name="PREF_VK_HIDE_DELAY">Ẩn trễ: </string>
     <string name="PREF_UNIT_MS">ms</string>
-    <string name="PREF_VK_SEL_FORE">Nền nút (P)</string>
+    <string name="PREF_VK_SEL_FORE">Đường đánh dấu (P)</string>
     <string name="PREF_VK_SEL_BACK">Nút (P)</string>
-    <string name="PREF_VK_KEY_SIZES">Kích thước bàn phím</string>
+    <string name="PREF_VK_KEY_SIZES">Kích thước phím</string>
     <string name="PREF_VK_NAV_KEYS">Cần điều khiển: </string>
     <string name="PREF_VK_SOFT_KEYS">Phím mềm: </string>
     <string name="PREF_VK_NUM_KEYS">Số: </string>
@@ -79,7 +79,7 @@
         <item>Chiều ngang</item>
     </string-array>
     <string name="error">Lỗi</string>
-    <string name="message_clear_data">Bạn thực sự muốn dọn dẹp dữ liệu ứng dụng?</string>
+    <string name="message_clear_data">Bạn thực sự muốn xoá dữ liệu ứng dụng?</string>
     <string name="PREF_VK_TYPE">Kiểu bàn phím</string>
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Tùy chỉnh</item>
@@ -94,12 +94,12 @@
     <string name="report_crash">Gửi</string>
     <string name="layout_edit_finished">Đã hoàn tất chế độ chỉnh sửa</string>
     <string name="layout_edit_finish">Hoàn thành chế độ chỉnh sửa</string>
-    <string name="layout_edit_mode">Chế độ chỉnh sửa phím khoá</string>
-    <string name="layout_scale_mode">Chế độ thay đổi kích thước phím khoá</string>
-    <string name="layout_switch">Công tắc phím khoá</string>
+    <string name="layout_edit_mode">Chế độ chỉnh sửa cấu trúc bàn phím</string>
+    <string name="layout_scale_mode">Chế độ thay đổi kích thước cấu trúc phím</string>
+    <string name="layout_switch">Công tắc cấu trúc phím</string>
     <string name="hide_buttons">Ẩn nút</string>
     <string name="take_screenshot">Chụp ảnh màn hình</string>
-    <string name="screenshot_saved">Ảnh chụp màn hình đã được lưu tới</string>
+    <string name="screenshot_saved">Ảnh chụp màn hình đã được lưu đến</string>
     <string name="log_saved">Log đã được lưu</string>
     <string name="common_settings">[THIẾT LẬP CHUNG]</string>
     <string name="pref_theme_title">Chủ đề</string>
@@ -121,11 +121,11 @@
         <item>Tên</item>
         <item>Ngày</item>
     </string-array>
-    <string name="pref_map_keys">Thiết lập phím bấm</string>
+    <string name="pref_map_keys">Phím ánh xạ</string>
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>
     <string name="mapping_dialog_title">Bấm một phím</string>
-    <string name="mapping_dialog_message" formatted="false">Phím đang ấn là: %1$s</string>
+    <string name="mapping_dialog_message" formatted="false">Ánh xạ hiện tại: %1$s</string>
     <string name="reset_mapping">Thiết lập lại</string>
     <string name="parallel_screen_redrawing">Kéo ngược màn hình song song</string>
 </resources>
