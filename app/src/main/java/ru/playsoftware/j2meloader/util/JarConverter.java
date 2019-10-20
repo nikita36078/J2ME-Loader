@@ -29,8 +29,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedHashMap;
 
 import io.reactivex.Single;
@@ -70,9 +70,9 @@ public class JarConverter {
 
 	private void download(String urlStr, File outputJar) throws IOException {
 		// Download jar if it is referenced in jad file
-		URL url = new URL(urlStr);
+		URL url = new URL(getRedirect(urlStr));
 		Log.d(TAG, "Downloading " + outputJar.getPath());
-		URLConnection connection = url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setReadTimeout(30000);
 		connection.setConnectTimeout(15000);
 		InputStream inputStream = connection.getInputStream();
@@ -84,7 +84,22 @@ public class JarConverter {
 		}
 		inputStream.close();
 		outputStream.close();
+		connection.disconnect();
 		Log.d(TAG, "Download complete");
+	}
+
+	// Add support for HTTP redirects
+	private String getRedirect(String urlStr) throws IOException {
+		URL url = new URL(urlStr);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setReadTimeout(30000);
+		connection.setConnectTimeout(15000);
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM ||
+				connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
+			urlStr = connection.getHeaderField("Location");
+		}
+		connection.disconnect();
+		return urlStr;
 	}
 
 	private File findManifest(File tmpDir) {
