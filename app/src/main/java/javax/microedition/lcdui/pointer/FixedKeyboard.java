@@ -24,6 +24,7 @@ import java.io.IOException;
 
 public class FixedKeyboard extends VirtualKeyboard {
 
+	public final static float KEY_ROW_COUNT = 5;
 	public final static float KEY_WIDTH_RATIO = 3;
 	public final static float KEY_HEIGHT_RATIO = 2.7f;
 

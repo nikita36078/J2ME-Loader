@@ -297,8 +297,11 @@ public abstract class Canvas extends Displayable {
 				overlayView.setTargetBounds(offsetViewBounds);
 				displayWidth = newwidth;
 				displayHeight = newheight;
-				updateSize();
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED, width, height));
+				if (checkSizeChanged() || !sizeChangedCalled) {
+					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+							width, height));
+					sizeChangedCalled = true;
+				}
 			}
 			postEvent(paintEvent);
 		}
@@ -350,7 +353,7 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void process() {
 			synchronized (paintsync) {
-				if (surface == null || !surface.isValid()) {
+				if (surface == null || !surface.isValid() || !isShown()) {
 					return;
 				}
 				Graphics g = this.mGraphics;
@@ -403,6 +406,7 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
+	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
 	private static final String TAG = Canvas.class.getName();
 	private final Object paintsync = new Object();
 
@@ -414,9 +418,13 @@ public abstract class Canvas extends Displayable {
 	private Graphics graphics = new Graphics();
 
 	protected int width, height;
+	protected int maxHeight;
 
 	private int displayWidth;
 	private int displayHeight;
+	private boolean fullscreen;
+	private boolean visible;
+	private boolean sizeChangedCalled;
 
 	private static int virtualWidth;
 	private static int virtualHeight;
@@ -505,6 +513,13 @@ public abstract class Canvas extends Displayable {
 		return image;
 	}
 
+	private boolean checkSizeChanged() {
+		int tmpWidth = width;
+		int tmpHeight = height;
+		updateSize();
+		return width != tmpWidth || height != tmpHeight;
+	}
+
 	/**
 	 * Update the size and position of the virtual screen relative to the real one.
 	 */
@@ -521,7 +536,7 @@ public abstract class Canvas extends Displayable {
 		 * If FixedKeyboard is active, then scale down the virtual screen
 		 */
 		if (ContextHolder.getVk() instanceof FixedKeyboard) {
-			scaledDisplayHeight = (int) (displayHeight - 5 * (displayWidth /
+			scaledDisplayHeight = (int) (displayHeight - FixedKeyboard.KEY_ROW_COUNT * (displayWidth /
 					(FixedKeyboard.KEY_WIDTH_RATIO * FixedKeyboard.KEY_HEIGHT_RATIO)) - 1);
 		} else {
 			scaledDisplayHeight = displayHeight;
@@ -555,6 +570,18 @@ public abstract class Canvas extends Displayable {
 			width = virtualWidth;
 			height = virtualHeight;
 		}
+
+		/*
+		 * calculate the maximum height
+		 */
+		maxHeight = height;
+		/*
+		 * calculate the current height
+		 */
+		if (!fullscreen) {
+			height = (int) (height * FULLSCREEN_HEIGHT_RATIO);
+		}
+
 		/*
 		 * We turn the size of the canvas into the size of the image
 		 * that will be displayed on the screen of the device.
@@ -613,8 +640,8 @@ public abstract class Canvas extends Displayable {
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
 
 		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen = Image.createImage(width, height, false, offscreen);
-			offscreenCopy = Image.createImage(width, height, false, offscreenCopy);
+			offscreen = Image.createImage(width, height, offscreen);
+			offscreenCopy = Image.createImage(width, height, offscreenCopy);
 		}
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
@@ -661,6 +688,14 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void setFullScreenMode(boolean flag) {
+		synchronized (paintsync) {
+			if (fullscreen != flag) {
+				fullscreen = flag;
+				updateSize();
+				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+						width, height));
+			}
+		}
 	}
 
 	public boolean hasPointerEvents() {
@@ -700,6 +735,11 @@ public abstract class Canvas extends Displayable {
 		postEvent(paintEvent);
 	}
 
+	@Override
+	public boolean isShown() {
+		return super.isShown() && visible;
+	}
+
 	// GameCanvas
 	public void flushBuffer(Image image) {
 		limitFps();
@@ -722,6 +762,10 @@ public abstract class Canvas extends Displayable {
 			e.printStackTrace();
 		}
 		lastFrameTime = System.currentTimeMillis();
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	@SuppressLint("NewApi")

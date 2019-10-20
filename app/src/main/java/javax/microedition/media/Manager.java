@@ -37,6 +37,9 @@ public class Manager {
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
 
 	public static Player createPlayer(String locator) throws IOException {
+		if (locator == null) {
+			throw new IllegalArgumentException();
+		}
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
 			return new MidiPlayer();
 		} else if (locator.startsWith(FILE_LOCATOR)) {
@@ -53,6 +56,9 @@ public class Manager {
 	}
 
 	public static Player createPlayer(DataSource source) throws IOException, MediaException {
+		if (source == null) {
+			throw new IllegalArgumentException();
+		}
 		String type = source.getContentType();
 		String[] supportedTypes = getSupportedContentTypes(null);
 		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
@@ -70,6 +76,9 @@ public class Manager {
 	}
 
 	public static Player createPlayer(final InputStream stream, String type) throws IOException {
+		if (stream == null) {
+			throw new IllegalArgumentException();
+		}
 		String[] supportedTypes = getSupportedContentTypes(null);
 		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
 			return new MicroPlayer(new InternalDataSource(stream, type));

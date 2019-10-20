@@ -430,6 +430,7 @@ public class FileSystemFileConnection implements FileConnection {
 			throw new IOException("Unable to rename " + file.getAbsolutePath() + " to "
 					+ newFile.getAbsolutePath());
 		}
+		this.file = newFile;
 		this.fullPath = this.getPath() + newName;
 	}
 

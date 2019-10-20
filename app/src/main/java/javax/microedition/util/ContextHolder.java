@@ -91,9 +91,7 @@ public class ContextHolder {
 			Log.d(TAG, "Can't load res on empty path");
 			return null;
 		}
-		if (resName.charAt(0) == '/') {
-			resName = resName.substring(1);
-		} else if (resClass != null && resClass.getPackage() != null) {
+		if (resName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
 			String className = resClass.getPackage().getName().replace('.', '/');
 			resName = className + "/" + resName;
 		}
@@ -101,6 +99,10 @@ public class ContextHolder {
 		resName = resName.replace('\\', '/');
 		// Remove double slashes
 		resName = resName.replace("//", "/");
+		// Remove leading slash
+		if (resName.charAt(0) == '/') {
+			resName = resName.substring(1);
+		}
 		try {
 			return getResource(resName);
 		} catch (IOException | NullPointerException e) {

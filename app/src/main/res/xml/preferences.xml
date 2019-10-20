@@ -34,14 +34,6 @@
         android:key="pref_app_sort"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_app_sort_title" />
-    <Preference
-        android:icon="@drawable/ic_setting_key_map"
-        android:title="@string/pref_map_keys">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="ru.playsoftware.j2meloader.settings.KeyMapperActivity"
-            android:targetPackage="ru.playsoftware.j2meloader" />
-    </Preference>
     <ListPreference
         android:defaultValue="ISO-8859-1"
         android:entries="@array/pref_encoding_entries"

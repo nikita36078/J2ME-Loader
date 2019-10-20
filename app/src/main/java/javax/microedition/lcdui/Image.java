@@ -49,9 +49,8 @@ public class Image {
 		this.bitmap = bitmap;
 	}
 
-	public static Image createImage(int width, int height, boolean hasAlpha, Image reuse) {
+	public static Image createImage(int width, int height, Image reuse) {
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		bitmap.setHasAlpha(hasAlpha);
 		if (reuse == null) {
 			return new Image(bitmap);
 		}

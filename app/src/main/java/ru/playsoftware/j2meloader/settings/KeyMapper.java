@@ -16,9 +16,6 @@
 
 package ru.playsoftware.j2meloader.settings;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 
@@ -27,13 +24,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.util.param.SharedPreferencesContainer;
 
 public class KeyMapper {
-	private static final String PREF_KEY = "pref_key_mapping";
+	private static final String PREF_KEY = "KeyMappings";
 
-	public static void saveArrayPref(Context context, SparseIntArray intArray) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		SharedPreferences.Editor editor = prefs.edit();
+	public static void saveArrayPref(SharedPreferencesContainer container, SparseIntArray intArray) {
 		JSONArray json = new JSONArray();
 		StringBuilder  data = new StringBuilder().append("[");
 		for (int i = 0; i < intArray.size(); i++) {
@@ -47,13 +43,11 @@ public class KeyMapper {
 		}
 		data.deleteCharAt(data.length() - 1);
 		data.append("]");
-		editor.putString(PREF_KEY, intArray.size() == 0 ? null : data.toString());
-		editor.apply();
+		container.putString(PREF_KEY, intArray.size() == 0 ? null : data.toString());
+		container.apply();
 	}
 
-	public static SparseIntArray getArrayPref(Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String json = prefs.getString(PREF_KEY, null);
+	public static SparseIntArray getArray(String json) {
 		SparseIntArray intArray = new SparseIntArray();
 		if (json != null) {
 			try {
@@ -69,6 +63,10 @@ public class KeyMapper {
 			initArray(intArray);
 		}
 		return intArray;
+	}
+
+	public static SparseIntArray getArrayPref(SharedPreferencesContainer container) {
+		return getArray(container.getString(PREF_KEY, null));
 	}
 
 	public static void initArray(SparseIntArray intDict) {

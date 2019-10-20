@@ -88,7 +88,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void addPlayerListener(PlayerListener playerListener) {
+	public synchronized void addPlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		if (!listeners.contains(playerListener) && playerListener != null) {
 			listeners.add(playerListener);
@@ -96,14 +96,16 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void removePlayerListener(PlayerListener playerListener) {
+	public synchronized void removePlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		listeners.remove(playerListener);
 	}
 
-	public void postEvent(String event) {
+	public synchronized void postEvent(String event) {
 		for (PlayerListener listener : listeners) {
-			listener.playerUpdate(this, event, source.getLocator());
+			// Callbacks should be async
+			Runnable r = () -> listener.playerUpdate(this, event, source.getLocator());
+			(new Thread(r, "MIDletPlayerCallback")).start();
 		}
 	}
 
@@ -124,7 +126,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void realize() throws MediaException {
+	public synchronized void realize() throws MediaException {
 		checkClosed();
 
 		if (state == UNREALIZED) {
@@ -140,7 +142,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void prefetch() throws MediaException {
+	public synchronized void prefetch() throws MediaException {
 		checkClosed();
 
 		if (state == UNREALIZED) {
@@ -191,17 +193,23 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void deallocate() {
+	public synchronized void deallocate() {
 		stop();
 
-		if (state != UNREALIZED) {
+		if (state == PREFETCHED) {
 			player.reset();
 			state = UNREALIZED;
+
+			try {
+				realize();
+			} catch (MediaException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
-	public void close() {
+	public synchronized void close() {
 		if (state != CLOSED) {
 			player.release();
 		}

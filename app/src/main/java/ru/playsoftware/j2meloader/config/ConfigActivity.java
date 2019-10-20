@@ -59,6 +59,7 @@ import androidx.fragment.app.FragmentManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
+import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
@@ -111,12 +112,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File dataDir;
 	private SharedPreferencesContainer params;
 	private String pathToMidletDir;
+	private String appName;
 	private FragmentManager fragmentManager;
 	private boolean defaultConfig;
 
 	public static final String DEFAULT_CONFIG_KEY = "default";
 	public static final String CONFIG_PATH_KEY = "configPath";
 	public static final String MIDLET_PATH_KEY = "midletPath";
+	public static final String MIDLET_NAME_KEY = "midletName";
 	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
 
@@ -138,7 +141,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		} else {
 			showSettings = intent.getBooleanExtra(SHOW_SETTINGS_KEY, false);
 			pathToMidletDir = intent.getDataString();
-			String appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
+			appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
 			getSupportActionBar().setTitle(appName);
 			dataDir = new File(Config.DATA_DIR, appName);
 			dataDir.mkdirs();
@@ -367,7 +370,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	@SuppressLint("SetTextI18n")
-	private void loadParams() {
+	public void loadParams() {
+		params.load(defaultConfig);
 		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
 		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
 		tfScreenBack.setText(Integer.toHexString(params.
@@ -407,11 +411,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF)).toUpperCase());
 		tfVKOutline.setText(Integer.toHexString(
 				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF)).toUpperCase());
-	}
-
-	public void loadParamsFromFile() {
-		params.load(defaultConfig);
-		loadParams();
 	}
 
 	private void saveParams() {
@@ -495,13 +494,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			final String[] propLines = tfSystemProperties.getText().toString().split("\n");
 			for (String line : propLines) {
-				String[] prop = line.split(":", 2);
+				String[] prop = line.split(":[ ]*", 2);
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
 				}
 			}
 
-			SparseIntArray intArray = KeyMapper.getArrayPref(this);
+			SparseIntArray intArray = KeyMapper.getArrayPref(params);
 			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
 					screenKeepAspectRatio, screenScaleRatio);
 			Canvas.setFilterBitmap(screenFilter);
@@ -624,6 +623,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				bundleSave.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
 				saveTemplateFragment.setArguments(bundleSave);
 				saveTemplateFragment.show(fragmentManager, "save_template");
+				break;
+			case R.id.action_map_keys:
+				Intent i = new Intent(this, KeyMapperActivity.class);
+				i.putExtra(MIDLET_NAME_KEY, appName);
+				i.putExtra(DEFAULT_CONFIG_KEY, defaultConfig);
+				startActivity(i);
 				break;
 			case android.R.id.home:
 				finish();

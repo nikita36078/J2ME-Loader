@@ -16,6 +16,7 @@
 
 package com.samsung.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -42,7 +43,7 @@ public class AudioClip {
 
 	public AudioClip(int type, byte[] audioData, int audioOffset, int audioLength) {
 		try {
-			player = Manager.createPlayer(null, null);
+			player = Manager.createPlayer(new ByteArrayInputStream(audioData), "audio/mmf");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

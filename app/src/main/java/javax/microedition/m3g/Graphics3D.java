@@ -157,7 +157,6 @@ public class Graphics3D {
 			final int width = canvas.getWidth();
 			final int height = canvas.getHeight();
 			buffer = finalG.getBitmap();
-			buffer.setHasAlpha(false);
 
 			// TODO: draw on background? Probably should fix alpha
 			/*
