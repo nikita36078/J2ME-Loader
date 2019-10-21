@@ -626,6 +626,14 @@ class Matrix {
 		}
 	}
 
+	public boolean isOne(float x) {
+		return ((x >= 1.0f - Constants.EPSILON) && (x <= 1.0f + Constants.EPSILON));
+	}
+
+	public boolean isMinusOne(float x) {
+		return ((x >= -1.0f - Constants.EPSILON) && (x <= -1.0f + Constants.EPSILON));
+	}
+
 	public static byte[] getByteMask(int mask) {
 		//System.out.println("getByteMask");
 		byte[] maskArr = new byte[16];
@@ -664,9 +672,9 @@ class Matrix {
 	public byte elementClass(float x) {
 		if (x == 0)
 			return ZERO;
-		else if (x == 1)
+		else if (isOne(x))
 			return ONE;
-		else if (x == -1)
+		else if (isMinusOne(x))
 			return MINUS_ONE;
 		return ANY;
 	}
@@ -756,7 +764,7 @@ class Matrix {
 			return (elem[3] == 0.0f) &&
 					(elem[7] == 0.0f) &&
 					(elem[11] == 0.0f) &&
-					(elem[15] == 1.0f);
+					(isOne(elem[15]));
 	}
 
 	public void getMatrixColumn(int col, QVec4 dst) {
