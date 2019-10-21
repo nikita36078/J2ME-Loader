@@ -1,5 +1,7 @@
 package javax.microedition.m3g;
 
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.opengl.GLES20;
 
 import java.nio.Buffer;
@@ -60,7 +62,6 @@ public final class Graphics3D {
 	private GL10 gl = null;
 
 	private Object renderTarget;
-	private boolean targetBound = false;
 
 	private Camera camera;
 	private Transform cameraTransform;
@@ -199,47 +200,38 @@ public final class Graphics3D {
 	public void bindTarget(Object target, boolean depthBuffer, int hints) {
 		if (target == null)
 			throw new NullPointerException("Rendering target must not be null");
+		renderTarget = target;
 
-		targetBound = true;
-
-		// Create a new window surface if the target changes (i.e, for MIDP2, the target Canvas changed)
-		if (target != renderTarget) {
-			renderTarget = target;
-
-			if (this.eglWindowSurface != null) {
-				EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
-				egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
-			}
-
-			if (target instanceof Graphics) {
-				// Create an offscreen surface
-				Graphics graphics = (Graphics) target;
-				width = graphics.getCanvas().getWidth();
-				height = graphics.getCanvas().getHeight();
-			} else if (target instanceof Image2D) {
-				Image2D image = (Image2D) target;
-				width = image.getWidth();
-				height = image.getHeight();
-			}
-
-			int[] s_surfaceAttribs = {
-					EGL10.EGL_WIDTH, width,
-					EGL10.EGL_HEIGHT, height,
-					EGL10.EGL_NONE};
-			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
-			EGL_ASSERT(this.eglWindowSurface != EGL10.EGL_NO_SURFACE);
-			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
-			this.gl = (GL10) eglContext.getGL();
-
-			// Set default clipping rectangle
-			clipX0 = 0;
-			clipY0 = 0;
-			clipX1 = width;
-			clipY1 = height;
-			gl.glEnable(GL10.GL_SCISSOR_TEST);
-			gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
-			gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		if (target instanceof Graphics) {
+			Graphics graphics = (Graphics) target;
+			Canvas canvas = graphics.getCanvas();
+			Rect bounds = canvas.getClipBounds();
+			width = canvas.getWidth();
+			height = canvas.getHeight();
+			setClipRect(bounds.left, bounds.top, bounds.width(), bounds.height());
+			setViewport(bounds.left, bounds.top, bounds.width(), bounds.height());
+		} else if (target instanceof Image2D) {
+			Image2D image = (Image2D) target;
+			width = image.getWidth();
+			height = image.getHeight();
+			setClipRect(0, 0, width, height);
+			setViewport(0, 0, width, height);
 		}
+
+		// Create an offscreen surface
+		int[] s_surfaceAttribs = {
+				EGL10.EGL_WIDTH, width,
+				EGL10.EGL_HEIGHT, height,
+				EGL10.EGL_NONE};
+
+		this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, s_surfaceAttribs);
+		EGL_ASSERT(this.eglWindowSurface != EGL10.EGL_NO_SURFACE);
+		EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext));
+		this.gl = (GL10) eglContext.getGL();
+
+		gl.glEnable(GL10.GL_SCISSOR_TEST);
+		gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 		gl.glDepthMask(true);
 		gl.glColorMask(true, true, true, !overwrite);
@@ -263,7 +255,6 @@ public final class Graphics3D {
 
 		// Overwriting
 		overwrite = ((hints & OVERWRITE) != 0);
-		setViewport(0, 0, width, height);
 	}
 
 	private static void EGL_ASSERT(boolean val) {
@@ -318,7 +309,10 @@ public final class Graphics3D {
 			Image2D.recycledTextures.remove(i);
 		}
 
-		targetBound = false;
+		if (this.eglWindowSurface != null) {
+			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
+			egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
+		}
 	}
 
 	public void clear(Background background) {
@@ -394,17 +388,27 @@ public final class Graphics3D {
 		return depthBufferEnabled;
 	}
 
-	public void setViewport(int x, int y, int width, int height) {
+	private void setClipRect(int x, int y, int width, int height) {
+		this.clipX0 = x;
+		this.clipY0 = this.height - (y + height);
+		this.clipX1 = clipX0 + width;
+		this.clipY1 = clipY0 + height;
+		updateScissor();
+	}
 
+	public void setViewport(int x, int y, int width, int height) {
 		if ((width <= 0) || (height <= 0) || (width > maxViewportWidth) || (height > maxViewportHeight)) {
 			throw new IllegalArgumentException("Viewport coordinates are out of the allowed range");
 		}
 
 		this.viewportX = x;
-		this.viewportY = y;
+		this.viewportY = this.height - (y + height);
 		this.viewportWidth = width;
 		this.viewportHeight = height;
+		updateScissor();
+	}
 
+	private void updateScissor() {
 		int sx0 = Math.max(viewportX, clipX0);
 		int sy0 = Math.max(viewportY, clipY0);
 		int sx1 = Math.min(viewportX + viewportWidth, clipX1);
@@ -418,8 +422,6 @@ public final class Graphics3D {
 			scissorHeight = sy1 - sy0;
 		} else
 			scissorWidth = scissorHeight = 0;
-
-		gl.glViewport(x, y, width, height);
 	}
 
 	public int getViewportX() {
