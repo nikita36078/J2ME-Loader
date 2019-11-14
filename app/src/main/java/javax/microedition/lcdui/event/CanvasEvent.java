@@ -69,7 +69,7 @@ public class CanvasEvent extends Event {
 
 		instance.canvas = canvas;
 		instance.eventType = eventType;
-		instance.keyCode = keyCode;
+		instance.keyCode = Canvas.convertKeyCode(keyCode);
 
 		return instance;
 	}

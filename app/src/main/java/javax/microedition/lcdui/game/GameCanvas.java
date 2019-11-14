@@ -49,6 +49,7 @@ public class GameCanvas extends Canvas {
 	}
 
 	private int convertGameKeyCode(int keyCode) {
+		keyCode = convertKeyCode(keyCode);
 		switch (keyCode) {
 			case KEY_LEFT:
 			case KEY_NUM4:

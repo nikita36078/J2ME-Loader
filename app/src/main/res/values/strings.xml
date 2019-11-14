@@ -107,6 +107,11 @@
         <item>Phone</item>
         <item>Phone (arrows)</item>
     </string-array>
+    <string name="PREF_LAYOUT">Layout</string>
+    <string-array name="PREF_LAYOUT_ENTRIES" translatable="false">
+        <item>Nokia/SE</item>
+        <item>Siemens</item>
+    </string-array>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>

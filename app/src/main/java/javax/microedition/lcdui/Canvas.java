@@ -86,12 +86,24 @@ public abstract class Canvas extends Displayable {
 	public static final int GAME_C = 11;
 	public static final int GAME_D = 12;
 
+	private static final int DEFAULT_LAYOUT = 0;
+	private static final int SIEMENS_LAYOUT = 1;
+
+	private static final int SIEMENS_KEY_UP = -59;
+	private static final int SIEMENS_KEY_DOWN = -60;
+	private static final int SIEMENS_KEY_LEFT = -61;
+	private static final int SIEMENS_KEY_RIGHT = -62;
+	private static final int SIEMENS_KEY_SOFT_LEFT = -1;
+	private static final int SIEMENS_KEY_SOFT_RIGHT = -4;
+
+	private static SparseIntArray keyCodeToSiemensCode;
 	private static SparseIntArray androidToMIDP;
 	private static SparseIntArray keyCodeToGameAction;
 	private static SparseIntArray gameActionToKeyCode;
 	private static SparseArrayCompat<String> keyCodeToKeyName;
 
 	static {
+		keyCodeToSiemensCode = new SparseIntArray();
 		keyCodeToGameAction = new SparseIntArray();
 		gameActionToKeyCode = new SparseIntArray();
 		keyCodeToKeyName = new SparseArrayCompat<>();
@@ -119,15 +131,15 @@ public abstract class Canvas extends Displayable {
 		mapKeyCode(KEY_SEND, 0, "SEND");
 		mapKeyCode(KEY_END, 0, "END");
 
-		mapGameAction(UP, KEY_UP, "UP");
-		mapGameAction(LEFT, KEY_LEFT, "LEFT");
-		mapGameAction(RIGHT, KEY_RIGHT, "RIGHT");
-		mapGameAction(DOWN, KEY_DOWN, "DOWN");
-		mapGameAction(FIRE, KEY_FIRE, "SELECT");
-		mapGameAction(GAME_A, KEY_NUM7, "7");
-		mapGameAction(GAME_B, KEY_NUM9, "9");
-		mapGameAction(GAME_C, KEY_STAR, "ASTERISK");
-		mapGameAction(GAME_D, KEY_POUND, "POUND");
+		mapGameAction(UP, KEY_UP);
+		mapGameAction(LEFT, KEY_LEFT);
+		mapGameAction(RIGHT, KEY_RIGHT);
+		mapGameAction(DOWN, KEY_DOWN);
+		mapGameAction(FIRE, KEY_FIRE);
+		mapGameAction(GAME_A, KEY_NUM7);
+		mapGameAction(GAME_B, KEY_NUM9);
+		mapGameAction(GAME_C, KEY_STAR);
+		mapGameAction(GAME_D, KEY_POUND);
 	}
 
 	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
@@ -135,13 +147,22 @@ public abstract class Canvas extends Displayable {
 		keyCodeToKeyName.put(midpKeyCode, keyName);
 	}
 
-	private static void mapGameAction(int gameAction, int keyCode, String keyName) {
+	private static void mapGameAction(int gameAction, int keyCode) {
 		gameActionToKeyCode.put(gameAction, keyCode);
-		keyCodeToKeyName.put(keyCode, keyName);
 	}
 
 	private static int convertAndroidKeyCode(int keyCode) {
 		return androidToMIDP.get(keyCode, Integer.MAX_VALUE);
+	}
+
+	public static int convertKeyCode(int keyCode) {
+		int result;
+		if (layoutType == SIEMENS_LAYOUT) {
+			result = keyCodeToSiemensCode.get(keyCode, keyCode);
+		} else {
+			result = keyCode;
+		}
+		return result;
 	}
 
 	public int getKeyCode(int gameAction) {
@@ -440,6 +461,7 @@ public abstract class Canvas extends Displayable {
 	private static int backgroundColor;
 	private static int scaleRatio;
 	private static int fpsLimit;
+	private static int layoutType;
 
 	private Image offscreen;
 	private Image offscreenCopy;
@@ -477,8 +499,30 @@ public abstract class Canvas extends Displayable {
 		Canvas.filter = filter;
 	}
 
-	public static void setKeyMapping(SparseIntArray intArray) {
+	public static void setKeyMapping(int layoutType, SparseIntArray intArray) {
+		Canvas.layoutType = layoutType;
 		Canvas.androidToMIDP = intArray;
+
+		if (layoutType == SIEMENS_LAYOUT) {
+			keyCodeToSiemensCode.put(KEY_LEFT, SIEMENS_KEY_LEFT);
+			keyCodeToSiemensCode.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
+			keyCodeToSiemensCode.put(KEY_UP, SIEMENS_KEY_UP);
+			keyCodeToSiemensCode.put(KEY_DOWN, SIEMENS_KEY_DOWN);
+			keyCodeToSiemensCode.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
+			keyCodeToSiemensCode.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
+
+			mapGameAction(LEFT, SIEMENS_KEY_LEFT);
+			mapGameAction(RIGHT, SIEMENS_KEY_RIGHT);
+			mapGameAction(UP, SIEMENS_KEY_UP);
+			mapGameAction(DOWN, SIEMENS_KEY_DOWN);
+
+			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
+			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
+			mapKeyCode(SIEMENS_KEY_LEFT, LEFT, "LEFT");
+			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
+			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
+		}
 	}
 
 	public static void setHasTouchInput(boolean touchInput) {

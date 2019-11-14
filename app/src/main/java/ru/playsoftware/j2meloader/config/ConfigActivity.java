@@ -91,6 +91,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxTouchInput;
 
 	protected Spinner spVKType;
+	protected Spinner spLayout;
 	protected SeekBar sbVKAlpha;
 	protected EditText tfVKHideDelay;
 	protected EditText tfVKFore;
@@ -181,6 +182,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		spVKType = findViewById(R.id.spVKType);
+		spLayout = findViewById(R.id.spLayout);
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
 		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
 		tfVKFore = findViewById(R.id.tfVKFore);
@@ -399,6 +401,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
 		spVKType.setSelection(params.getInt("VirtualKeyboardType", 0));
+		spLayout.setSelection(params.getInt("Layout", 0));
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
 		tfVKBack.setText(Integer.toHexString(
@@ -445,6 +448,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("TouchInput", cxTouchInput.isChecked());
 
 			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
+			params.putInt("Layout", spLayout.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
 			params.putInt("VirtualKeyboardDelay",
 					Integer.parseInt(tfVKHideDelay.getText().toString()));
@@ -486,6 +490,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			boolean showFps = cxShowFps.isChecked();
 			boolean limitFps = cxLimitFps.isChecked();
 			int fpsLimit = Integer.parseInt(tfFpsLimit.getText().toString());
+			int layout = spLayout.getSelectedItemPosition();
 
 			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
 			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
@@ -507,7 +512,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setHardwareAcceleration(hwAcceleration, parallel);
 			Canvas.setBackgroundColor(screenBackgroundColor);
-			Canvas.setKeyMapping(intArray);
+			Canvas.setKeyMapping(layout, intArray);
 			Canvas.setHasTouchInput(touchInput);
 			Canvas.setShowFps(showFps);
 			Canvas.setLimitFps(limitFps, fpsLimit);
