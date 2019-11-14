@@ -82,7 +82,7 @@ static def generateVersionCode() {
 }
 
 dependencies {
-    def roomVersion = '2.1.0'
+    def roomVersion = '2.2.1'
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
