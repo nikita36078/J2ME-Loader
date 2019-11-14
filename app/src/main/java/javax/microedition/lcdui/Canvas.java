@@ -88,6 +88,7 @@ public abstract class Canvas extends Displayable {
 
 	private static final int DEFAULT_LAYOUT = 0;
 	private static final int SIEMENS_LAYOUT = 1;
+	private static final int MOTOROLA_LAYOUT = 2;
 
 	private static final int SIEMENS_KEY_UP = -59;
 	private static final int SIEMENS_KEY_DOWN = -60;
@@ -96,7 +97,16 @@ public abstract class Canvas extends Displayable {
 	private static final int SIEMENS_KEY_SOFT_LEFT = -1;
 	private static final int SIEMENS_KEY_SOFT_RIGHT = -4;
 
+	private static final int MOTOROLA_KEY_UP = -1;
+	private static final int MOTOROLA_KEY_DOWN = -6;
+	private static final int MOTOROLA_KEY_LEFT = -2;
+	private static final int MOTOROLA_KEY_RIGHT = -5;
+	private static final int MOTOROLA_KEY_FIRE = -20;
+	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
+	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
+
 	private static SparseIntArray keyCodeToSiemensCode;
+	private static SparseIntArray keyCodeToMotorolaCode;
 	private static SparseIntArray androidToMIDP;
 	private static SparseIntArray keyCodeToGameAction;
 	private static SparseIntArray gameActionToKeyCode;
@@ -104,6 +114,7 @@ public abstract class Canvas extends Displayable {
 
 	static {
 		keyCodeToSiemensCode = new SparseIntArray();
+		keyCodeToMotorolaCode = new SparseIntArray();
 		keyCodeToGameAction = new SparseIntArray();
 		gameActionToKeyCode = new SparseIntArray();
 		keyCodeToKeyName = new SparseArrayCompat<>();
@@ -159,6 +170,8 @@ public abstract class Canvas extends Displayable {
 		int result;
 		if (layoutType == SIEMENS_LAYOUT) {
 			result = keyCodeToSiemensCode.get(keyCode, keyCode);
+		} else if (layoutType == MOTOROLA_LAYOUT) {
+			result = keyCodeToMotorolaCode.get(keyCode, keyCode);
 		} else {
 			result = keyCode;
 		}
@@ -522,6 +535,22 @@ public abstract class Canvas extends Displayable {
 			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
 			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
 			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
+		} else if (layoutType == MOTOROLA_LAYOUT) {
+			keyCodeToMotorolaCode.put(KEY_UP, MOTOROLA_KEY_UP);
+			keyCodeToMotorolaCode.put(KEY_DOWN, MOTOROLA_KEY_DOWN);
+			keyCodeToMotorolaCode.put(KEY_LEFT, MOTOROLA_KEY_LEFT);
+			keyCodeToMotorolaCode.put(KEY_RIGHT, MOTOROLA_KEY_RIGHT);
+			keyCodeToMotorolaCode.put(KEY_FIRE, MOTOROLA_KEY_FIRE);
+			keyCodeToMotorolaCode.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
+			keyCodeToMotorolaCode.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
+
+			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
+			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
+			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
+			mapKeyCode(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
+			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
+			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
 		}
 	}
 
