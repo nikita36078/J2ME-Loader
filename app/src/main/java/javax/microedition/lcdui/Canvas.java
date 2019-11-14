@@ -544,6 +544,12 @@ public abstract class Canvas extends Displayable {
 			keyCodeToMotorolaCode.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
 			keyCodeToMotorolaCode.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
 
+			mapGameAction(LEFT, MOTOROLA_KEY_LEFT);
+			mapGameAction(RIGHT, MOTOROLA_KEY_RIGHT);
+			mapGameAction(UP, MOTOROLA_KEY_UP);
+			mapGameAction(DOWN, MOTOROLA_KEY_DOWN);
+			mapGameAction(FIRE, MOTOROLA_KEY_FIRE);
+
 			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
 			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
 			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
