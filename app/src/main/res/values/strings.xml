@@ -59,6 +59,7 @@
     <string name="PREF_FILTER">Filter</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="PREF_SHOW_FPS">Show FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Force fullscreen</string>
     <string name="PREF_LIMIT_FPS">Limit FPS</string>
     <string name="PREF_FONT_OPTIONS">Font options</string>
     <string name="PREF_WIDTH">Width</string>

@@ -470,6 +470,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean hwaEnabled;
 	private static boolean hwaOldEnabled;
 	private static boolean parallelRedraw;
+	private static boolean forceFullscreen;
 	private static boolean showFps;
 	private static int backgroundColor;
 	private static int scaleRatio;
@@ -492,7 +493,11 @@ public abstract class Canvas extends Displayable {
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
 		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
-		updateSize();
+		if (forceFullscreen) {
+			setFullScreenMode(true);
+		} else {
+			updateSize();
+		}
 	}
 
 	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
@@ -568,6 +573,10 @@ public abstract class Canvas extends Displayable {
 		Canvas.hwaEnabled = hardwareAcceleration;
 		Canvas.hwaOldEnabled = hardwareAcceleration && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
 		Canvas.parallelRedraw = parallel;
+	}
+
+	public static void setForceFullscreen(boolean forceFullscreen) {
+		Canvas.forceFullscreen = forceFullscreen;
 	}
 
 	public static void setShowFps(boolean showFps) {

@@ -77,6 +77,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxImmediate;
 	protected CheckBox cxHwAcceleration;
 	protected CheckBox cxParallel;
+	protected CheckBox cxForceFullscreen;
 	protected CheckBox cxShowFps;
 	protected CheckBox cxLimitFps;
 	protected EditText tfFpsLimit;
@@ -168,6 +169,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxImmediate = findViewById(R.id.cxImmediate);
 		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
 		cxParallel = findViewById(R.id.cxParallel);
+		cxForceFullscreen = findViewById(R.id.cxForceFullscreen);
 		cxShowFps = findViewById(R.id.cxShowFps);
 		cxLimitFps = findViewById(R.id.cxLimitFps);
 		tfFpsLimit = findViewById(R.id.tfFpsLimit);
@@ -386,6 +388,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxFilter.setChecked(params.getBoolean("ScreenFilter", false));
 		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
 		cxParallel.setChecked(params.getBoolean("ParallelRedrawScreen", false));
+		cxForceFullscreen.setChecked(params.getBoolean("ForceFullscreen", false));
 		cxHwAcceleration.setChecked(params.getBoolean("HwAcceleration", false));
 		cxShowFps.setChecked(params.getBoolean("ShowFps", false));
 		cxLimitFps.setChecked(params.getBoolean("LimitFps", false));
@@ -431,6 +434,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
 			params.putBoolean("HwAcceleration", cxHwAcceleration.isChecked());
 			params.putBoolean("ParallelRedrawScreen", cxParallel.isChecked());
+			params.putBoolean("ForceFullscreen", cxForceFullscreen.isChecked());
 			params.putBoolean("ShowFps", cxShowFps.isChecked());
 			params.putBoolean("LimitFps", cxLimitFps.isChecked());
 			params.putInt("FpsLimit", Integer.parseInt(tfFpsLimit.getText().toString()));
@@ -487,6 +491,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			boolean touchInput = cxTouchInput.isChecked();
 			boolean hwAcceleration = cxHwAcceleration.isChecked();
 			boolean parallel = cxParallel.isChecked();
+			boolean forceFullScreen = cxForceFullscreen.isChecked();
 			boolean showFps = cxShowFps.isChecked();
 			boolean limitFps = cxLimitFps.isChecked();
 			int fpsLimit = Integer.parseInt(tfFpsLimit.getText().toString());
@@ -514,6 +519,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			Canvas.setBackgroundColor(screenBackgroundColor);
 			Canvas.setKeyMapping(layout, intArray);
 			Canvas.setHasTouchInput(touchInput);
+			Canvas.setForceFullscreen(forceFullScreen);
 			Canvas.setShowFps(showFps);
 			Canvas.setLimitFps(limitFps, fpsLimit);
 		} catch (Exception e) {
