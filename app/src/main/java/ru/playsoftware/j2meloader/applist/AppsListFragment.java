@@ -215,7 +215,7 @@ public class AppsListFragment extends ListFragment {
 		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 		if (drawable != null) dialog.setIcon(drawable);
 		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPathExt()),
+			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPath()),
 					getActivity(), ConfigActivity.class);
 			startActivity(intent);
 		});
@@ -269,7 +269,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()),
+		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPath()),
 				getActivity(), ConfigActivity.class);
 		startActivity(i);
 	}
@@ -290,7 +290,7 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
-						Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+						Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 								.setIntent(launchIntent)
@@ -306,7 +306,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()),
+				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()),
 						getActivity(), ConfigActivity.class);
 				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 				startActivity(i);

@@ -89,11 +89,6 @@ public class MicroActivity extends AppCompatActivity {
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
 		OverlayView overlayView = findViewById(R.id.vOverlay);
-		VirtualKeyboard vk = ContextHolder.getVk();
-		if (vk != null) {
-			vk.setView(overlayView);
-			overlayView.addLayer(vk);
-		}
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -103,15 +98,21 @@ public class MicroActivity extends AppCompatActivity {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 		Intent intent = getIntent();
+		String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
+		microLoader = new MicroLoader(this, appName);
+		microLoader.init();
+		microLoader.applyConfiguration();
+		VirtualKeyboard vk = ContextHolder.getVk();
+		if (vk != null) {
+			vk.setView(overlayView);
+			overlayView.addLayer(vk);
+		}
 		if (ContextHolder.getVk() instanceof FixedKeyboard) {
 			setOrientation(ORIENTATION_PORTRAIT);
 		} else {
-			int orientation = intent.getIntExtra(ConfigActivity.MIDLET_ORIENTATION_KEY, ORIENTATION_DEFAULT);
+			int orientation = microLoader.getOrientation();
 			setOrientation(orientation);
 		}
-		String pathToMidletDir = intent.getStringExtra(ConfigActivity.MIDLET_PATH_KEY);
-		microLoader = new MicroLoader(this, pathToMidletDir);
-		microLoader.init();
 		try {
 			loadMIDlet();
 		} catch (Exception e) {

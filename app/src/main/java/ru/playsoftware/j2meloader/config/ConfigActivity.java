@@ -17,48 +17,36 @@
 package ru.playsoftware.j2meloader.config;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.SparseIntArray;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
-import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.event.EventQueue;
-import javax.microedition.lcdui.pointer.FixedKeyboard;
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
-import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
@@ -113,16 +101,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File keylayoutFile;
 	private File dataDir;
 	private SharedPreferencesContainer params;
-	private String pathToMidletDir;
 	private String appName;
 	private FragmentManager fragmentManager;
 	private boolean defaultConfig;
+	private Display display;
 
 	public static final String DEFAULT_CONFIG_KEY = "default";
 	public static final String CONFIG_PATH_KEY = "configPath";
-	public static final String MIDLET_PATH_KEY = "midletPath";
 	public static final String MIDLET_NAME_KEY = "midletName";
-	public static final String MIDLET_ORIENTATION_KEY = "orientation";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
@@ -131,8 +117,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_config);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		ContextHolder.setCurrentActivity(this);
 		Intent intent = getIntent();
+		display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		fragmentManager = getSupportFragmentManager();
 		defaultConfig = intent.getBooleanExtra(DEFAULT_CONFIG_KEY, false);
 		File configDir;
@@ -142,8 +128,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			configDir = new File(Config.DEFAULT_CONFIG_DIR);
 		} else {
 			showSettings = intent.getBooleanExtra(SHOW_SETTINGS_KEY, false);
-			pathToMidletDir = intent.getDataString();
-			appName = pathToMidletDir.substring(pathToMidletDir.lastIndexOf('/') + 1);
+			appName = intent.getDataString();
 			getSupportActionBar().setTitle(appName);
 			dataDir = new File(Config.DATA_DIR, appName);
 			dataDir.mkdirs();
@@ -154,8 +139,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load(defaultConfig);
-
-		setProperties();
 
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
@@ -197,7 +180,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		screenHeights = new ArrayList<>();
 		screenAdapter = new ArrayList<>();
 
-		fillScreenSizePresets(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight());
+		fillScreenSizePresets();
 
 		fontSmall = new ArrayList<>();
 		fontMedium = new ArrayList<>();
@@ -259,15 +242,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			});
 		}
 
-		loadParams();
-		applyConfiguration();
-
-		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxShowKeyboard.setOnClickListener(v -> {
 			if (!((CheckBox) v).isChecked()) {
 				cxVKFeedback.setEnabled(false);
 			} else {
-				cxVKFeedback.setEnabled(true);
+				cxVKFeedback.setChecked(true);
 			}
 		});
 
@@ -291,32 +270,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		return file;
 	}
 
-	private void setProperties() {
-		System.setProperty("microedition.sensor.version", "1");
-		System.setProperty("microedition.platform", "Nokia 6233");
-		System.setProperty("microedition.configuration", "CDLC-1.1");
-		System.setProperty("microedition.profiles", "MIDP-2.0");
-		System.setProperty("microedition.m3g.version", "1.1");
-		System.setProperty("microedition.media.version", "1.0");
-		System.setProperty("supports.mixing", "true");
-		System.setProperty("supports.audio.capture", "true");
-		System.setProperty("supports.video.capture", "false");
-		System.setProperty("supports.recording", "false");
-		System.setProperty("microedition.pim.version", "1.0");
-		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
-		final Locale defaultLocale = Locale.getDefault();
-		final String country = defaultLocale.getCountry();
-		System.setProperty("microedition.locale", defaultLocale.getLanguage()
-				+ (country.length() == 2 ? "-" + country : ""));
-		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
-		System.setProperty("com.siemens.IMEI", "000000000000000");
-		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
-		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
-		System.setProperty("com.siemens.OSVersion", "11");
-		System.setProperty("device.imei", "000000000000000");
-	}
-
 	@Override
 	public void onPause() {
 		saveParams();
@@ -332,10 +285,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		fillScreenSizePresets(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight());
+		fillScreenSizePresets();
 	}
 
-	private void fillScreenSizePresets(int w, int h) {
+	private void fillScreenSizePresets() {
+		int w = display.getWidth();
+		int h = display.getHeight();
+
 		screenWidths.clear();
 		screenHeights.clear();
 		screenAdapter.clear();
@@ -363,7 +319,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private void addScreenSizePreset(int width, int height) {
 		screenWidths.add(width);
 		screenHeights.add(height);
-		screenAdapter.add(Integer.toString(width) + " x " + Integer.toString(height));
+		screenAdapter.add(width + " x " + height);
 	}
 
 	private void addFontSizePreset(String title, int small, int medium, int large) {
@@ -400,6 +356,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfSystemProperties.setText(params.getString("SystemProperties", ""));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
+		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
@@ -473,126 +430,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 	}
 
-	private void applyConfiguration() {
-		try {
-			int fontSizeSmall = Integer.parseInt(tfFontSizeSmall.getText().toString());
-			int fontSizeMedium = Integer.parseInt(tfFontSizeMedium.getText().toString());
-			int fontSizeLarge = Integer.parseInt(tfFontSizeLarge.getText().toString());
-			boolean fontApplyDimensions = cxFontSizeInSP.isChecked();
-
-			int screenWidth = Integer.parseInt(tfScreenWidth.getText().toString());
-			int screenHeight = Integer.parseInt(tfScreenHeight.getText().toString());
-			int screenBackgroundColor = Integer.parseInt(tfScreenBack.getText().toString(), 16);
-			int screenScaleRatio = sbScaleRatio.getProgress();
-			boolean screenScaleToFit = cxScaleToFit.isChecked();
-			boolean screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
-			boolean screenFilter = cxFilter.isChecked();
-			boolean immediateMode = cxImmediate.isChecked();
-			boolean touchInput = cxTouchInput.isChecked();
-			boolean hwAcceleration = cxHwAcceleration.isChecked();
-			boolean parallel = cxParallel.isChecked();
-			boolean forceFullScreen = cxForceFullscreen.isChecked();
-			boolean showFps = cxShowFps.isChecked();
-			boolean limitFps = cxLimitFps.isChecked();
-			int fpsLimit = Integer.parseInt(tfFpsLimit.getText().toString());
-			int layout = spLayout.getSelectedItemPosition();
-
-			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
-			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
-			Font.setSize(Font.SIZE_LARGE, fontSizeLarge);
-			Font.setApplyDimensions(fontApplyDimensions);
-
-			final String[] propLines = tfSystemProperties.getText().toString().split("\n");
-			for (String line : propLines) {
-				String[] prop = line.split(":[ ]*", 2);
-				if (prop.length == 2) {
-					System.setProperty(prop[0], prop[1]);
-				}
-			}
-
-			SparseIntArray intArray = KeyMapper.getArrayPref(params);
-			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
-					screenKeepAspectRatio, screenScaleRatio);
-			Canvas.setFilterBitmap(screenFilter);
-			EventQueue.setImmediate(immediateMode);
-			Canvas.setHardwareAcceleration(hwAcceleration, parallel);
-			Canvas.setBackgroundColor(screenBackgroundColor);
-			Canvas.setKeyMapping(layout, intArray);
-			Canvas.setHasTouchInput(touchInput);
-			Canvas.setForceFullscreen(forceFullScreen);
-			Canvas.setShowFps(showFps);
-			Canvas.setLimitFps(limitFps, fpsLimit);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void setVirtualKeyboard() {
-		int vkType = spVKType.getSelectedItemPosition();
-		int vkAlpha = sbVKAlpha.getProgress();
-		int vkDelay = Integer.parseInt(tfVKHideDelay.getText().toString());
-		int vkColorBackground = Integer.parseInt(tfVKBack.getText().toString(), 16);
-		int vkColorForeground = Integer.parseInt(tfVKFore.getText().toString(), 16);
-		int vkColorBackgroundSelected = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
-		int vkColorForegroundSelected = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
-		int vkColorOutline = Integer.parseInt(tfVKOutline.getText().toString(), 16);
-		boolean vkFeedback = cxVKFeedback.isChecked();
-
-		VirtualKeyboard vk;
-		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
-			vk = new VirtualKeyboard();
-		} else if (vkType == VirtualKeyboard.PHONE_DIGITS_TYPE) {
-			vk = new FixedKeyboard(0);
-		} else {
-			vk = new FixedKeyboard(1);
-		}
-		vk.setOverlayAlpha(vkAlpha);
-		vk.setHideDelay(vkDelay);
-		vk.setHasHapticFeedback(vkFeedback);
-
-		String shapeStr = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-				.getString("pref_button_shape", "round");
-		int shape;
-		if (shapeStr.equals("square")) {
-			shape = VirtualKeyboard.SQUARE_SHAPE;
-		} else {
-			shape = VirtualKeyboard.ROUND_SHAPE;
-		}
-		vk.setButtonShape(shape);
-
-		if (keylayoutFile.exists()) {
-			try {
-				FileInputStream fis = new FileInputStream(keylayoutFile);
-				DataInputStream dis = new DataInputStream(fis);
-				vk.readLayout(dis);
-				fis.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
-
-		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);
-		vk.setColor(VirtualKeyboard.FOREGROUND, vkColorForeground);
-		vk.setColor(VirtualKeyboard.BACKGROUND_SELECTED,
-				vkColorBackgroundSelected);
-		vk.setColor(VirtualKeyboard.FOREGROUND_SELECTED,
-				vkColorForegroundSelected);
-		vk.setColor(VirtualKeyboard.OUTLINE, vkColorOutline);
-
-		VirtualKeyboard.LayoutListener listener = vk1 -> {
-			try {
-				FileOutputStream fos = new FileOutputStream(keylayoutFile);
-				DataOutputStream dos = new DataOutputStream(fos);
-				vk1.writeLayout(dos);
-				fos.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		};
-		vk.setLayoutListener(listener);
-		ContextHolder.setVk(vk);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -660,16 +497,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void startMIDlet() {
-		// Apply configuration to the launching MIDlet
-		if (cxShowKeyboard.isChecked()) {
-			setVirtualKeyboard();
-		} else {
-			ContextHolder.setVk(null);
-		}
-		applyConfiguration();
 		Intent i = new Intent(this, MicroActivity.class);
-		i.putExtra(MIDLET_PATH_KEY, pathToMidletDir);
-		i.putExtra(MIDLET_ORIENTATION_KEY, spOrientation.getSelectedItemPosition());
+		i.putExtra(MIDLET_NAME_KEY, appName);
 		startActivity(i);
 		finish();
 	}

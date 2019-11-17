@@ -29,11 +29,14 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.XmlUtils;
 
 public class SharedPreferencesContainer implements DataContainer, DataEditor {
-	private HashMap<String, Object> configMap;
+	private HashMap<String, Object> configMap = new HashMap<>();
 	private File configFile;
 
+	public SharedPreferencesContainer(String appName) {
+		configFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
+	}
+
 	public SharedPreferencesContainer(File configDir) {
-		configMap = new HashMap<>();
 		configFile = new File(configDir, Config.MIDLET_CONFIG_FILE);
 	}
 
@@ -144,9 +147,7 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 
 	@Override
 	public void apply() {
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(configFile);
+		try (FileOutputStream fos = new FileOutputStream(configFile)) {
 			XmlUtils.writeMapXml(configMap, fos);
 		} catch (IOException e) {
 			e.printStackTrace();
