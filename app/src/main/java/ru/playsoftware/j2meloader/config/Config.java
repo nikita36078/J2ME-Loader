@@ -16,7 +16,14 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
+
+import java.io.File;
+
+import javax.microedition.shell.MicroActivity;
 
 public class Config {
 
@@ -38,5 +45,19 @@ public class Config {
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
+
+	public static void startApp(Context context, String appName, boolean showSettings) {
+		File file = new File(Config.CONFIGS_DIR, appName);
+		if (!showSettings && file.exists()) {
+			Intent intent = new Intent(context, MicroActivity.class);
+			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appName);
+			context.startActivity(intent);
+		} else {
+			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appName),
+					context, ConfigActivity.class);
+			intent.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
+			context.startActivity(intent);
+		}
+	}
 
 }

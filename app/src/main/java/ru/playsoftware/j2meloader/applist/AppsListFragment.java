@@ -69,6 +69,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.TemplatesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
@@ -215,9 +216,7 @@ public class AppsListFragment extends ListFragment {
 		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 		if (drawable != null) dialog.setIcon(drawable);
 		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPath()),
-					getActivity(), ConfigActivity.class);
-			startActivity(intent);
+			Config.startApp(getActivity(), app.getPath(), false);
 		});
 		dialog.setNegativeButton(R.string.close, null);
 		dialog.show();
@@ -269,9 +268,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPath()),
-				getActivity(), ConfigActivity.class);
-		startActivity(i);
+		Config.startApp(getActivity(), item.getPath(), false);
 	}
 
 	@Override
@@ -306,10 +303,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPath()),
-						getActivity(), ConfigActivity.class);
-				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
-				startActivity(i);
+				Config.startApp(getActivity(), appItem.getPath(), true);
 				break;
 			case R.id.action_context_delete:
 				showDeleteDialog(index);
