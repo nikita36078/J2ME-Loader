@@ -105,6 +105,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private FragmentManager fragmentManager;
 	private boolean defaultConfig;
 	private Display display;
+	private File configDir;
 
 	public static final String DEFAULT_CONFIG_KEY = "default";
 	public static final String CONFIG_PATH_KEY = "configPath";
@@ -121,7 +122,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		fragmentManager = getSupportFragmentManager();
 		defaultConfig = intent.getBooleanExtra(DEFAULT_CONFIG_KEY, false);
-		File configDir;
 		boolean showSettings;
 		if (defaultConfig) {
 			showSettings = true;
@@ -135,7 +135,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			configDir = new File(Config.CONFIGS_DIR, appName);
 		}
 		configDir.mkdirs();
-		keylayoutFile = loadKeylayout(configDir);
+		loadKeylayout();
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load(defaultConfig);
@@ -255,7 +255,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 	}
 
-	private File loadKeylayout(File configDir) {
+	private void loadKeylayout() {
 		File file = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
 		if (!defaultConfig && !file.exists()) {
 			File defaultKeylayoutFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_KEYLAYOUT_FILE);
@@ -267,7 +267,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				}
 			}
 		}
-		return file;
+		keylayoutFile = file;
 	}
 
 	@Override
@@ -456,6 +456,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				break;
 			case R.id.action_reset_layout:
 				keylayoutFile.delete();
+				loadKeylayout();
 				break;
 			case R.id.action_load_template:
 				LoadTemplateDialogFragment loadTemplateFragment = new LoadTemplateDialogFragment();
@@ -491,6 +492,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				.setMessage(R.string.message_clear_data)
 				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
 					FileUtils.deleteDirectory(dataDir);
+					dataDir.mkdirs();
 				})
 				.setNegativeButton(android.R.string.no, null);
 		builder.show();
