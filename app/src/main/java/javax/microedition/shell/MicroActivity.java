@@ -107,7 +107,7 @@ public class MicroActivity extends AppCompatActivity {
 			vk.setView(overlayView);
 			overlayView.addLayer(vk);
 		}
-		if (ContextHolder.getVk() instanceof FixedKeyboard) {
+		if (vk instanceof FixedKeyboard) {
 			setOrientation(ORIENTATION_PORTRAIT);
 		} else {
 			int orientation = microLoader.getOrientation();
