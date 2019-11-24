@@ -10,7 +10,7 @@
     <string name="licenses">التراخيص</string>
     <string name="templates">النماذج</string>
     <string name="save_log">سجلات الحفظ</string>
-    <string name="about_message">هذا التطبيق يسمح لك بتشغيل تطبيقات والعاب J2ME على جهازك اندرويد. وهو يدعم معظم الألعاب 2D و 3D أيضا ولكن مع بعض القيود.</string>
+    <string name="about_message">هذا التطبيق يسمح لك بتشغيل تطبيقات والعاب J2ME على جهازك اندرويد. وهو يدعم معظم الألعاب 2D و 3D أيضا ولكن مع بعض القيود.&lt;BR&gt;</string>
     <string name="help_message">&#8226; تمكين التصفية في بعض الحالات يمكن أن يقلل كثيرا من الأداء.قم بتعطيل هذا الخيار إذا كانت اللعبة بطيئة جداً.&lt;BR&gt;&#8226; خفقان الصورة يمكن اصلاحه عن طريق تمكين الخيار \"وضع المعالجة الفورية\".</string>
     <string name="author">المالك: </string>
     <string name="version">الاصدار: </string>
@@ -84,7 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>قابل للتعديل</item>
         <item>الهاتف</item>
-        <item>مفاتيح الأسهم في الهاتف </item>
+        <item>مفاتيح الأسهم في الهاتف</item>
     </string-array>
     <string name="FORCE_CLOSE_CONFIRMATION">فرض اغلاق التطبيق قد يؤدي لفقد بعض البيانات او تدميرها بالكامل!\nمتابعه؟</string>
     <string name="CONFIRMATION_REQUIRED">التأكيد مطلوب</string>
