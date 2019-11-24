@@ -153,6 +153,51 @@ public abstract class Canvas extends Displayable {
 		mapGameAction(GAME_D, KEY_POUND);
 	}
 
+	private static void remapKeys() {
+		if (layoutType == SIEMENS_LAYOUT) {
+			keyCodeToSiemensCode.put(KEY_LEFT, SIEMENS_KEY_LEFT);
+			keyCodeToSiemensCode.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
+			keyCodeToSiemensCode.put(KEY_UP, SIEMENS_KEY_UP);
+			keyCodeToSiemensCode.put(KEY_DOWN, SIEMENS_KEY_DOWN);
+			keyCodeToSiemensCode.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
+			keyCodeToSiemensCode.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
+
+			mapGameAction(LEFT, SIEMENS_KEY_LEFT);
+			mapGameAction(RIGHT, SIEMENS_KEY_RIGHT);
+			mapGameAction(UP, SIEMENS_KEY_UP);
+			mapGameAction(DOWN, SIEMENS_KEY_DOWN);
+
+			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
+			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
+			mapKeyCode(SIEMENS_KEY_LEFT, LEFT, "LEFT");
+			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
+			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
+		} else if (layoutType == MOTOROLA_LAYOUT) {
+			keyCodeToMotorolaCode.put(KEY_UP, MOTOROLA_KEY_UP);
+			keyCodeToMotorolaCode.put(KEY_DOWN, MOTOROLA_KEY_DOWN);
+			keyCodeToMotorolaCode.put(KEY_LEFT, MOTOROLA_KEY_LEFT);
+			keyCodeToMotorolaCode.put(KEY_RIGHT, MOTOROLA_KEY_RIGHT);
+			keyCodeToMotorolaCode.put(KEY_FIRE, MOTOROLA_KEY_FIRE);
+			keyCodeToMotorolaCode.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
+			keyCodeToMotorolaCode.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
+
+			mapGameAction(LEFT, MOTOROLA_KEY_LEFT);
+			mapGameAction(RIGHT, MOTOROLA_KEY_RIGHT);
+			mapGameAction(UP, MOTOROLA_KEY_UP);
+			mapGameAction(DOWN, MOTOROLA_KEY_DOWN);
+			mapGameAction(FIRE, MOTOROLA_KEY_FIRE);
+
+			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
+			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
+			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
+			mapKeyCode(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
+			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
+			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
+		}
+	}
+
 	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
 		keyCodeToGameAction.put(midpKeyCode, gameAction);
 		keyCodeToKeyName.put(midpKeyCode, keyName);
@@ -520,49 +565,7 @@ public abstract class Canvas extends Displayable {
 	public static void setKeyMapping(int layoutType, SparseIntArray intArray) {
 		Canvas.layoutType = layoutType;
 		Canvas.androidToMIDP = intArray;
-
-		if (layoutType == SIEMENS_LAYOUT) {
-			keyCodeToSiemensCode.put(KEY_LEFT, SIEMENS_KEY_LEFT);
-			keyCodeToSiemensCode.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
-			keyCodeToSiemensCode.put(KEY_UP, SIEMENS_KEY_UP);
-			keyCodeToSiemensCode.put(KEY_DOWN, SIEMENS_KEY_DOWN);
-			keyCodeToSiemensCode.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
-			keyCodeToSiemensCode.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
-
-			mapGameAction(LEFT, SIEMENS_KEY_LEFT);
-			mapGameAction(RIGHT, SIEMENS_KEY_RIGHT);
-			mapGameAction(UP, SIEMENS_KEY_UP);
-			mapGameAction(DOWN, SIEMENS_KEY_DOWN);
-
-			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
-			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
-			mapKeyCode(SIEMENS_KEY_LEFT, LEFT, "LEFT");
-			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
-			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
-			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
-		} else if (layoutType == MOTOROLA_LAYOUT) {
-			keyCodeToMotorolaCode.put(KEY_UP, MOTOROLA_KEY_UP);
-			keyCodeToMotorolaCode.put(KEY_DOWN, MOTOROLA_KEY_DOWN);
-			keyCodeToMotorolaCode.put(KEY_LEFT, MOTOROLA_KEY_LEFT);
-			keyCodeToMotorolaCode.put(KEY_RIGHT, MOTOROLA_KEY_RIGHT);
-			keyCodeToMotorolaCode.put(KEY_FIRE, MOTOROLA_KEY_FIRE);
-			keyCodeToMotorolaCode.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
-			keyCodeToMotorolaCode.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
-
-			mapGameAction(LEFT, MOTOROLA_KEY_LEFT);
-			mapGameAction(RIGHT, MOTOROLA_KEY_RIGHT);
-			mapGameAction(UP, MOTOROLA_KEY_UP);
-			mapGameAction(DOWN, MOTOROLA_KEY_DOWN);
-			mapGameAction(FIRE, MOTOROLA_KEY_FIRE);
-
-			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
-			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
-			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
-			mapKeyCode(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
-			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
-			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
-			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
-		}
+		remapKeys();
 	}
 
 	public static void setHasTouchInput(boolean touchInput) {
