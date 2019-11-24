@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
@@ -53,22 +54,34 @@ public class EmulatorApplication extends Application {
 
 	@SuppressLint("PackageManagerGetSignatures")
 	private boolean isSignatureValid() {
+		boolean result = true;
 		try {
-			PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-			for (Signature signature : info.signatures) {
+			Signature[] signatures;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+				PackageInfo info = getPackageManager()
+						.getPackageInfo(getPackageName(), PackageManager.GET_SIGNING_CERTIFICATES);
+				signatures = info.signingInfo.getApkContentsSigners();
+			} else {
+				PackageInfo info = getPackageManager()
+						.getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+				signatures = info.signatures;
+			}
+			for (Signature signature : signatures) {
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(signature.toByteArray());
 				String sha1 = bytesToHex(md.digest());
 				if (!Arrays.asList(VALID_SIGNATURES).contains(sha1)) {
-					return false;
+					result = false;
 				}
 			}
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
+			result = false;
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+			result = false;
 		}
-		return true;
+		return result;
 	}
 
 	private String bytesToHex(byte[] bytes) {
