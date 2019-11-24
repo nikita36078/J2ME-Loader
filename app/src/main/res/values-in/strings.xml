@@ -6,7 +6,7 @@
     <string name="about">Tentang</string>
     <string name="help">Bantuan</string>
     <string name="more">Lainnya</string>
-    <string name="search">Pencarian</string>
+    <string name="search">Cari</string>
     <string name="licenses">Lisensi</string>
     <string name="templates">Kelola Template</string>
     <string name="save_log">Simpan log</string>
@@ -15,29 +15,29 @@
     <string name="author">Vendor: </string>
     <string name="version">Versi: </string>
     <string name="no_data_for_display">Tidak ada database yang ditampilkan</string>
-    <string name="message_delete">Apakah Anda benar-benar ingin menghapus aplikasi ini?</string>
+    <string name="message_delete">Apakah Anda ingin menghapus aplikasi ini?</string>
     <string name="converting_wait">Mengkonversi JAR...</string>
     <string name="convert_complete">Selesai</string>
     <string name="converting_message">Memproses...</string>
     <string name="permission_request_failed">Aplikasi ini membutuhkan izin untuk menulis berkas</string>
-    <string name="external_storage_not_mounted">Membutuhkan penyimpanan eksternal</string>
+    <string name="external_storage_not_mounted">Aplikasi ini membutuhkan penyimpanan eksternal</string>
     <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
     <string name="action_settings">Pengaturan</string>
     <string name="action_context_delete">Hapus</string>
     <string name="action_context_rename">Ubah nama</string>
-    <string name="donate">Donasi</string>
+    <string name="donate">Sumbangkan</string>
     <string name="START_CMD">Mulai</string>
     <string name="CANCEL_CMD">Batal</string>
     <string name="CLEAR_DATA_CMD">Hapus data</string>
     <string name="RESET_SETTINGS_CMD">Setel ulang pengaturan</string>
     <string name="RESET_LAYOUT_CMD">Reset letak tombol</string>
-    <string name="LOAD_TEMPLATE_CMD">Memilih template</string>
+    <string name="LOAD_TEMPLATE_CMD">Pilih template</string>
     <string name="SAVE_TEMPLATE_CMD">Simpan template</string>
     <string name="PREF_SCREEN_OPTIONS">Opsi layar</string>
     <string name="PREF_SCALE_RATIO">Skala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
-    <string name="PREF_FILTER">Menyaring</string>
+    <string name="PREF_FILTER">Saring</string>
     <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
     <string name="PREF_SHOW_FPS">Tampilkan FPS</string>
     <string name="PREF_LIMIT_FPS">Batas FPS</string>
@@ -52,7 +52,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual tombol keypad</string>
     <string name="PREF_VK_SHOW">Tampilkan tombol keypad</string>
     <string name="PREF_VK_FEEDBACK">Respon keypad (vibrasi)</string>
-    <string name="PREF_TOUCH_INPUT">Memakai sentuh</string>
+    <string name="PREF_TOUCH_INPUT">Pakai layar sentuh</string>
     <string name="PREF_HW_ACCELERATION">Akselerasi HW (tidak stabil)</string>
     <string name="PREF_VK_BACK">Tombol</string>
     <string name="PREF_VK_FORE">Label</string>
@@ -79,7 +79,7 @@
         <item>Lanskap</item>
     </string-array>
     <string name="error">Kesalahan</string>
-    <string name="message_clear_data">Yakin ingin menghapus data aplikasi?</string>
+    <string name="message_clear_data">Apakah Anda yakin ingin menghapus data aplikasi?</string>
     <string name="PREF_VK_TYPE">Jenis keypad</string>
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Disesuaikan</item>
@@ -116,7 +116,7 @@
         <item>Bulat</item>
         <item>Kotak</item>
     </string-array>
-    <string name="pref_app_sort_title">Mengurutkan aplikasi</string>
+    <string name="pref_app_sort_title">Urutkan aplikasi berdasarkan</string>
     <string-array name="pref_app_sort_entries">
         <item>Nama</item>
         <item>Tanggal</item>
