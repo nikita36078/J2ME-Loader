@@ -97,6 +97,14 @@ public class AndroidClassVisitor extends ClassVisitor {
 					mv.visitMethodInsn(opcode, owner, name, "(Ljava/lang/String;)[B", itf);
 					return;
 				}
+			} else if (owner.equals("java/io/InputStreamReader")) {
+				if (name.equals("<init>") && desc.endsWith("Ljava/io/InputStream;)V")) {
+					mv.visitLdcInsn(encoding);
+					mv.visitMethodInsn(opcode, owner, name, new StringBuffer()
+							.append(desc, 0, desc.length() - 2)
+							.append("Ljava/lang/String;)V").toString(), itf);
+					return;
+				}
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc, itf);
 		}
