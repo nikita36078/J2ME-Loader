@@ -40,6 +40,7 @@ public class CanvasEvent extends Event {
 	private int eventType;
 
 	private int keyCode;
+	private int originalKeycode;
 
 	private int pointer;
 	private float x, y;
@@ -69,6 +70,7 @@ public class CanvasEvent extends Event {
 
 		instance.canvas = canvas;
 		instance.eventType = eventType;
+		instance.originalKeycode = keyCode;
 		instance.keyCode = Canvas.convertKeyCode(keyCode);
 
 		return instance;
@@ -110,7 +112,7 @@ public class CanvasEvent extends Event {
 		switch (eventType) {
 			case KEY_PRESSED:
 				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyPressed(keyCode);
+					((GameCanvas) canvas).gameKeyPressed(keyCode, originalKeycode);
 				} else {
 					canvas.keyPressed(keyCode);
 				}
@@ -118,7 +120,7 @@ public class CanvasEvent extends Event {
 
 			case KEY_REPEATED:
 				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyRepeated(keyCode);
+					((GameCanvas) canvas).gameKeyRepeated(keyCode, originalKeycode);
 				} else {
 					canvas.keyRepeated(keyCode);
 				}
@@ -126,7 +128,7 @@ public class CanvasEvent extends Event {
 
 			case KEY_RELEASED:
 				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyReleased(keyCode);
+					((GameCanvas) canvas).gameKeyReleased(keyCode, originalKeycode);
 				} else {
 					canvas.keyReleased(keyCode);
 				}

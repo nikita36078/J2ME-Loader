@@ -49,7 +49,6 @@ public class GameCanvas extends Canvas {
 	}
 
 	private int convertGameKeyCode(int keyCode) {
-		keyCode = convertKeyCode(keyCode);
 		switch (keyCode) {
 			case KEY_LEFT:
 			case KEY_NUM4:
@@ -79,25 +78,25 @@ public class GameCanvas extends Canvas {
 		}
 	}
 
-	public void gameKeyPressed(int keyCode) {
+	public void gameKeyPressed(int keyCode, int originalKeycode) {
 		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyPressed(keyCode);
 		}
-		key |= convertGameKeyCode(keyCode);
+		key |= convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyReleased(int keyCode) {
+	public void gameKeyReleased(int keyCode, int originalKeycode) {
 		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyReleased(keyCode);
 		}
-		repeatedKey &= ~convertGameKeyCode(keyCode);
+		repeatedKey &= ~convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyRepeated(int keyCode) {
+	public void gameKeyRepeated(int keyCode, int originalKeycode) {
 		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyRepeated(keyCode);
 		}
-		repeatedKey |= convertGameKeyCode(keyCode);
+		repeatedKey |= convertGameKeyCode(originalKeycode);
 	}
 
 	private boolean checkGameAction(int keyCode) {
