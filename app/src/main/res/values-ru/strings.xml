@@ -40,6 +40,7 @@
     <string name="PREF_FILTER">Фильтрация</string>
     <string name="PREF_IMMEDIATE">Режим неотложной обработки</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Принудительный полный экран</string>
     <string name="PREF_LIMIT_FPS">Ограничить FPS</string>
     <string name="PREF_FONT_OPTIONS">Параметры шрифтов</string>
     <string name="PREF_WIDTH">Ширина</string>
@@ -86,6 +87,7 @@
         <item>Телефонная</item>
         <item>Телефонная (стрелки)</item>
     </string-array>
+    <string name="PREF_LAYOUT">Раскладка</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
     <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
     <string name="select_dialog_title">Выберите MIDlet</string>

@@ -68,7 +68,7 @@
     <string name="PREF_VK_NUM_KEYS">Số: </string>
     <string name="PREF_VK_FIRE_KEY">Lửa: </string>
     <string name="PREF_VK_SIZE_HINT">Kích thước</string>
-    <string name="SIZE_PRESETS">Đặt sẵn</string>
+    <string name="SIZE_PRESETS">Đặt trước</string>
     <string name="SWAP_SIZES">Hoán đổi K. thước</string>
     <string name="PREF_SYS_PROPS">Thuộc tính hệ thống</string>
     <string name="PREF_ORIENTATION">Định hướng màn hình</string>
