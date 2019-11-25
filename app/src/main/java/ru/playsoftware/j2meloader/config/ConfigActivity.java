@@ -246,7 +246,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			if (!((CheckBox) v).isChecked()) {
 				cxVKFeedback.setEnabled(false);
 			} else {
-				cxVKFeedback.setChecked(true);
+				cxVKFeedback.setEnabled(true);
 			}
 		});
 
