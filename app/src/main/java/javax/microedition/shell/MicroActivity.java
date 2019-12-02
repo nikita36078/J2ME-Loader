@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -92,6 +93,7 @@ public class MicroActivity extends AppCompatActivity {
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
 		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
 		if (wakelockEnabled) {
