@@ -36,34 +36,14 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 	private String encoding;
 
-	public class AndroidMethodVisitor extends PatternMethodAdapter {
-
-		private final static int SEEN_NOTHING = 0;
-
-		private final static int SEEN_I2B = 1;
-
-		private int state;
+	public class AndroidMethodVisitor extends MethodVisitor {
 
 		private boolean enhanceCatchBlock = false;
 
 		private Label exceptionHandler;
 
 		public AndroidMethodVisitor(MethodVisitor mv) {
-			super(mv);
-		}
-
-		@Override
-		protected void visitInsn() {
-			state = SEEN_NOTHING;
-		}
-
-		@Override
-		public void visitInsn(int opcode) {
-			visitInsn();
-			if (opcode == Opcodes.I2B) {
-				state = SEEN_I2B;
-			}
-			mv.visitInsn(opcode);
+			super(Opcodes.ASM7, mv);
 		}
 
 		@Override
@@ -78,7 +58,6 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-			visitInsn();
 			if (owner.equals("java/lang/Class")) {
 				if (name.equals("getResourceAsStream")) {
 					mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name,
