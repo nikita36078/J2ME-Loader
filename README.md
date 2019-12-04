@@ -21,7 +21,7 @@ System requirements: Android 4.0+
 ## Compatibility
 [List of the tested Java Games (Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Touchscreen))  
 [List of the tested Java Games (Non Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Non-Touchscreen))  
-[List of the Java Games with glitches](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Java-Games-with-glitches)
+[List of the Java Games with Bugs](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Java-Games-with-Bugs)
 
 ## Tips
  - Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.
