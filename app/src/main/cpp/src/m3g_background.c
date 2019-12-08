@@ -62,7 +62,7 @@ static void m3gDestroyBackground(Object *obj)
 static void m3gApplyBackground(RenderContext *ctx, Background *background)
 {
     GLbitfield glBits = 0;
-    GLfixed temp[4];
+    GLfloat temp[4];
     
     if (background->depthClearEnable) {
         glBits |= GL_DEPTH_BUFFER_BIT;
@@ -82,7 +82,7 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
         {
             glBits |= GL_COLOR_BUFFER_BIT;
             m3gGLColor(background->color, temp);
-            glClearColorx(temp[0], temp[1], temp[2], temp[3]);
+            glClearColor(temp[0], temp[1], temp[2], temp[3]);
         }
     }
     
@@ -192,17 +192,17 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
 
             /* Set wrapping */
             if (background->modeX == M3G_REPEAT) {
-                glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             }
             else {
-                glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             }
     
             if (background->modeY == M3G_REPEAT) {
-                glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             }
             else {
-                glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             }
 
             /* Texture matrix scale */

@@ -1250,9 +1250,11 @@ static void m3gConfigureGL(Interface *m3g)
 
     m3gInitializeGL(m3g);
 
-    attrib[0] = EGL_SURFACE_TYPE;
-    attrib[1] = EGL_PBUFFER_BIT;
-    attrib[2] = EGL_NONE;
+    attrib[0] = EGL_RENDERABLE_TYPE;
+    attrib[1] = EGL_OPENGL_ES2_BIT;
+    attrib[2] = EGL_SURFACE_TYPE;
+    attrib[3] = EGL_PBUFFER_BIT;
+    attrib[4] = EGL_NONE;
     
     eglChooseConfig(eglGetDisplay(0),
                     attrib,
@@ -1260,11 +1262,17 @@ static void m3gConfigureGL(Interface *m3g)
                     &numConfigs);
 
     M3G_ASSERT(numConfigs > 0);
-    
+
+    EGLint attribList[] =
+            {
+                    EGL_CONTEXT_CLIENT_VERSION, 2,
+                    EGL_NONE
+            };
+
     ctx = eglCreateContext(eglGetDisplay(0),
                            config,
                            NULL,
-                           NULL);
+                           attribList);
 
     attrib[0] = EGL_WIDTH;
     attrib[1] = 2;

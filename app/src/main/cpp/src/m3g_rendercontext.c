@@ -777,8 +777,8 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
         
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
-        glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         M3G_ASSERT_GL;
 
         glScissor(ctx->clip.x0, ctx->clip.y0,
@@ -985,8 +985,8 @@ static void m3gClearInternal(RenderContext *ctx, Background *bg)
         }
     }
     else {
-        glClearColorx(0, 0, 0, 0);
-        glClearDepthx(1 << 16);
+        glClearColor(0, 0, 0, 0);
+        glClearDepthf(1.0);
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         if (ctx->target.buffered) {
             ctx->backBuffer.contentsValid = M3G_TRUE;

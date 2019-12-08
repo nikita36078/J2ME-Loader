@@ -43,42 +43,45 @@ static EGLConfig m3gQueryEGLConfig(M3Genum format,
                                    EGLint surfaceBits,
                                    M3GNativeBitmap bitmapHandle)
 {
-    struct { int attrib, value; } attribs[10];
+    struct { int attrib, value; } attribs[11];
     int samples;
 
+    attribs[0].attrib = EGL_RENDERABLE_TYPE;
+    attribs[0].value = EGL_OPENGL_ES2_BIT;
+
     /* Determine color depth */
-    
-    attribs[0].attrib = EGL_RED_SIZE;
-    attribs[1].attrib = EGL_GREEN_SIZE;
-    attribs[2].attrib = EGL_BLUE_SIZE;
-    attribs[3].attrib = EGL_ALPHA_SIZE;
+
+    attribs[1].attrib = EGL_RED_SIZE;
+    attribs[2].attrib = EGL_GREEN_SIZE;
+    attribs[3].attrib = EGL_BLUE_SIZE;
+    attribs[4].attrib = EGL_ALPHA_SIZE;
         
     switch (format) {
     case M3G_RGB4:
-        attribs[0].value = 4;
         attribs[1].value = 4;
         attribs[2].value = 4;
-        attribs[3].value = 0;
+        attribs[3].value = 4;
+        attribs[4].value = 0;
         break;
     case M3G_RGB565:
-        attribs[0].value = 5;
-        attribs[1].value = 6;
-        attribs[2].value = 5;
-        attribs[3].value = 0;
+        attribs[1].value = 5;
+        attribs[2].value = 6;
+        attribs[3].value = 5;
+        attribs[4].value = 0;
         break;
     case M3G_RGB8:
     case M3G_BGR8_32:
-        attribs[0].value = 8;
-        attribs[1].value = 8;
-        attribs[2].value = 8;
-        attribs[3].value = 0;
-        break;
-    case M3G_RGBA8:
-    case M3G_BGRA8:
-        attribs[0].value = 8;
         attribs[1].value = 8;
         attribs[2].value = 8;
         attribs[3].value = 8;
+        attribs[4].value = 0;
+        break;
+    case M3G_RGBA8:
+    case M3G_BGRA8:
+        attribs[1].value = 8;
+        attribs[2].value = 8;
+        attribs[3].value = 8;
+        attribs[4].value = 8;
         break;
     default:
         return NULL;
@@ -86,33 +89,33 @@ static EGLConfig m3gQueryEGLConfig(M3Genum format,
 
     /* Set up the depth buffer */
     
-    attribs[4].attrib = EGL_DEPTH_SIZE;
-    attribs[4].value = (bufferBits & M3G_DEPTH_BUFFER_BIT) ? 8 : 0;
+    attribs[5].attrib = EGL_DEPTH_SIZE;
+    attribs[5].value = (bufferBits & M3G_DEPTH_BUFFER_BIT) ? 8 : 0;
     
     /* Set target surface type mask */
     
-    attribs[5].attrib = EGL_SURFACE_TYPE;
-    attribs[5].value = surfaceBits;
+    attribs[6].attrib = EGL_SURFACE_TYPE;
+    attribs[6].value = surfaceBits;
 
 
     if (bitmapHandle) {
         /* This attribute is matched only for pixmap targets */
-        attribs[6].attrib = EGL_MATCH_NATIVE_PIXMAP;
-        attribs[6].value = bitmapHandle;
+        attribs[7].attrib = EGL_MATCH_NATIVE_PIXMAP;
+        attribs[7].value = bitmapHandle;
 
+        /* Try to get multisampling if requested */
+
+        attribs[8].attrib = EGL_SAMPLE_BUFFERS;
+        attribs[9].attrib = EGL_SAMPLES;
+
+        attribs[10].attrib = EGL_NONE;
+    } else {
         /* Try to get multisampling if requested */
 
         attribs[7].attrib = EGL_SAMPLE_BUFFERS;
         attribs[8].attrib = EGL_SAMPLES;
 
         attribs[9].attrib = EGL_NONE;
-    } else {
-        /* Try to get multisampling if requested */
-
-        attribs[6].attrib = EGL_SAMPLE_BUFFERS;
-        attribs[7].attrib = EGL_SAMPLES;
-
-        attribs[8].attrib = EGL_NONE;
     }
     
     
@@ -123,21 +126,21 @@ static EGLConfig m3gQueryEGLConfig(M3Genum format,
         
         if (bitmapHandle) {
             if (samples > 1) {
+                attribs[8].value = 1;
+                attribs[9].value = samples;
+            }
+            else {
+                attribs[8].value = EGL_FALSE;
+                attribs[9].value = 0;
+            }
+        } else {
+            if (samples > 1) {
                 attribs[7].value = 1;
                 attribs[8].value = samples;
             }
             else {
                 attribs[7].value = EGL_FALSE;
                 attribs[8].value = 0;
-            }
-        } else {
-            if (samples > 1) {
-                attribs[6].value = 1;
-                attribs[7].value = samples;
-            }
-            else {
-                attribs[6].value = EGL_FALSE;
-                attribs[7].value = 0;
             }
         }
 
@@ -507,8 +510,8 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
         for (ti = 0; ti < tempTexCount; ++ti) {
             glBindTexture(GL_TEXTURE_2D, tempTexObj[ti]);
             glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-            glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             M3G_ASSERT_GL;
             
             glTexImage2D(GL_TEXTURE_2D, 0,

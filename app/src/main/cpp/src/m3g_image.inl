@@ -184,8 +184,7 @@ static void m3gBindTextureObject(Image *img, M3Gbool mipmap)
             }
             else {
 #               if defined(M3G_GL_ES_1_1)
-                glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP,
-                                mipmap ? GL_TRUE : GL_FALSE);
+                if (mipmap) glGenerateMipmap(GL_TEXTURE_2D);
 #               endif
                 glTexImage2D(GL_TEXTURE_2D,
                              0,

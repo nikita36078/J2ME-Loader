@@ -738,21 +738,21 @@ static GLenum m3gGetGLMinFilter(M3Genum levelFilter, M3Genum imageFilter)
 
 /*!
  * \internal
- * \brief Converts an internal ARGB color to four GLfixed components
+ * \brief Converts an internal ARGB color to four GLfloat components
  */
-static void m3gGLColor(M3Guint argb, GLfixed *dst)
+static void m3gGLColor(M3Guint argb, GLfloat *dst)
 {
-    GLfixed r, g, b, a;
+    GLfloat r, g, b, a;
         
-    r = (GLfixed)((argb & 0x00FF0000u) >> 16);
-    g = (GLfixed)((argb & 0x0000FF00u) >>  8);
-    b = (GLfixed)( argb & 0x000000FFu       );
-    a = (GLfixed)((argb & 0xFF000000u) >> 24);
+    r = (GLfloat)((argb & 0x00FF0000u) >> 16);
+    g = (GLfloat)((argb & 0x0000FF00u) >>  8);
+    b = (GLfloat)( argb & 0x000000FFu       );
+    a = (GLfloat)((argb & 0xFF000000u) >> 24);
 
-    dst[0] = ((r << 8) | r) + (r >> 7);
-    dst[1] = ((g << 8) | g) + (g >> 7);
-    dst[2] = ((b << 8) | b) + (b >> 7);
-    dst[3] = ((a << 8) | a) + (a >> 7);
+    dst[0] = r / 255;
+    dst[1] = g / 255;
+    dst[2] = b / 255;
+    dst[3] = a / 255;
 }
 
 /*!
@@ -778,9 +778,9 @@ static void m3gBindTextureImage(Image *img, M3Genum levelFilter, M3Genum imageFi
 
     /* Set up OpenGL texture filtering according to our flags */
 
-    glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
                     (imageFilter == M3G_FILTER_LINEAR) ? GL_LINEAR : GL_NEAREST);
-    glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                     m3gGetGLMinFilter(levelFilter, imageFilter));
     
     M3G_ASSERT_GL;

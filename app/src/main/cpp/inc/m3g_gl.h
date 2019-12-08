@@ -29,6 +29,7 @@
 
 #if !(defined(M3G_NGL_CONTEXT_API) || defined(M3G_NGL_TEXTURE_API))
 #   include <GLES2/gl2.h>
+#   include <GLES2/gl2ext.h>
 #   include <EGL/egl.h>
 #else
 
@@ -73,7 +74,7 @@ extern "C" {
  *--------------------------------------------------------------------*/
     
 static GLenum m3gGetGLFormat(M3GPixelFormat format);    /* m3g_image.inl */
-static void m3gGLColor(M3Guint argb, GLfixed *dst);     /* m3g_image.c */
+static void m3gGLColor(M3Guint argb, GLfloat *dst);     /* m3g_image.c */
 
 #if !defined(M3G_NGL_CONTEXT_API)
 static void m3gInitializeEGL(void);     /* m3g_rendercontext.inl */
