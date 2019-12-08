@@ -1204,7 +1204,12 @@ static EGLContext m3gSelectGLContext(RenderContext *ctx,
                             surface,//(EGLSurface) ctx->target.handle,
                             EGL_CONFIG_ID,
                             &configID);
-            glrc = eglCreateContext(dpy, m3gEGLConfigForConfigID(dpy, configID), shareRc, NULL);
+            EGLint attribList[] =
+                    {
+                            EGL_CONTEXT_CLIENT_VERSION, 2,
+                            EGL_NONE
+                    };
+            glrc = eglCreateContext(dpy, m3gEGLConfigForConfigID(dpy, configID), shareRc, attribList);
             //M3G_ASSERT(glrc);
         }
         /*else {

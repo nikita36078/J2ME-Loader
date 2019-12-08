@@ -28,7 +28,7 @@
 #include "m3g_defs.h"
 
 #if !(defined(M3G_NGL_CONTEXT_API) || defined(M3G_NGL_TEXTURE_API))
-#   include <GLES/gl.h>
+#   include <GLES2/gl2.h>
 #   include <EGL/egl.h>
 #else
 
