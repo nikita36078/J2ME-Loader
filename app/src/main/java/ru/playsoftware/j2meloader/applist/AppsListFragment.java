@@ -21,19 +21,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ListFragment;
-import android.support.v4.content.pm.ShortcutInfoCompat;
-import android.support.v4.content.pm.ShortcutManagerCompat;
-import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,17 +37,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
+import androidx.fragment.app.ListFragment;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -63,6 +69,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.TemplatesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
@@ -73,6 +80,7 @@ import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
+import ru.playsoftware.j2meloader.util.LogUtils;
 
 public class AppsListFragment extends ListFragment {
 
@@ -160,13 +168,15 @@ public class AppsListFragment extends ListFragment {
 
 	@SuppressLint("CheckResult")
 	private void convertJar(String path) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+		String encoding = sp.getString("pref_encoding", "ISO-8859-1");
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		dialog.setCancelable(false);
 		dialog.setMessage(getText(R.string.converting_message));
 		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path)
+		converter.convert(path, encoding)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SingleObserver<String>() {
@@ -177,28 +187,58 @@ public class AppsListFragment extends ListFragment {
 
 					@Override
 					public void onSuccess(String s) {
-						Toast.makeText(getActivity(), getString(R.string.convert_complete)
-								+ " " + s, Toast.LENGTH_LONG).show();
-						appRepository.insert(AppUtils.getApp(s));
+						AppItem app = AppUtils.getApp(s);
+						appRepository.insert(app);
 						dialog.dismiss();
+						if (!isAdded()) return;
+						showStartDialog(app);
 					}
 
 					@Override
 					public void onError(Throwable e) {
 						e.printStackTrace();
+						if (!isAdded()) return;
 						Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
 						dialog.dismiss();
 					}
 				});
 	}
 
+	private void showStartDialog(AppItem app) {
+		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+		StringBuilder text = new StringBuilder()
+				.append(getString(R.string.author)).append(' ')
+				.append(app.getAuthor()).append('\n')
+				.append(getString(R.string.version)).append(' ')
+				.append(app.getVersion()).append('\n');
+		dialog.setMessage(text);
+		dialog.setTitle(app.getTitle());
+		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
+		if (drawable != null) dialog.setIcon(drawable);
+		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
+			Config.startApp(getActivity(), app.getPath(), false);
+		});
+		dialog.setNegativeButton(R.string.close, null);
+		dialog.show();
+	}
+
 	private void showRenameDialog(final int id) {
-		AppItem item = (AppItem) adapter.getItem(id);
+		AppItem item = adapter.getItem(id);
 		EditText editText = new EditText(getActivity());
 		editText.setText(item.getTitle());
+		float density = getResources().getDisplayMetrics().density;
+		LinearLayout linearLayout = new LinearLayout(getContext());
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT);
+		int margin = (int) (density * 20);
+		params.setMargins(margin, 0, margin, 0);
+		linearLayout.addView(editText, params);
+		int paddingVertical = (int) (density * 16);
+		int paddingHorizontal = (int) (density * 8);
+		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.action_context_rename)
-				.setView(editText)
+				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					String title = editText.getText().toString().trim();
 					if (title.equals("")) {
@@ -213,7 +253,7 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private void showDeleteDialog(final int id) {
-		AppItem item = (AppItem) adapter.getItem(id);
+		AppItem item = adapter.getItem(id);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
@@ -227,9 +267,8 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		AppItem item = (AppItem) adapter.getItem(position);
-		Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(item.getPathExt()), getActivity(), ConfigActivity.class);
-		startActivity(i);
+		AppItem item = adapter.getItem(position);
+		Config.startApp(getActivity(), item.getPath(), false);
 	}
 
 	@Override
@@ -243,12 +282,12 @@ public class AppsListFragment extends ListFragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
-		AppItem appItem = (AppItem) adapter.getItem(index);
+		AppItem appItem = adapter.getItem(index);
 		switch (item.getItemId()) {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
-						Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+						Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 								.setIntent(launchIntent)
@@ -264,9 +303,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Intent i = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-				i.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
-				startActivity(i);
+				Config.startApp(getActivity(), appItem.getPath(), true);
 				break;
 			case R.id.action_context_delete:
 				showDeleteDialog(index);
@@ -281,8 +318,22 @@ public class AppsListFragment extends ListFragment {
 		inflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		Disposable searchViewDisposable = RxSearchView.queryTextChanges(searchView)
-				.debounce(300, TimeUnit.MILLISECONDS)
+		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter -> {
+			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					emitter.onNext(query);
+					return true;
+				}
+
+				@Override
+				public boolean onQueryTextChange(String newText) {
+					emitter.onNext(newText);
+					return true;
+				}
+			});
+		}).debounce(300, TimeUnit.MILLISECONDS)
+				.map(String::toLowerCase)
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
@@ -294,7 +345,7 @@ public class AppsListFragment extends ListFragment {
 		switch (item.getItemId()) {
 			case R.id.action_about:
 				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-				aboutDialogFragment.show(getFragmentManager(), "about");
+				aboutDialogFragment.show(getChildFragmentManager(), "about");
 				break;
 			case R.id.action_settings:
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
@@ -306,11 +357,20 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_help:
 				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
-				helpDialogFragment.show(getFragmentManager(), "help");
+				helpDialogFragment.show(getChildFragmentManager(), "help");
 				break;
 			case R.id.action_donate:
 				Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);
 				startActivity(donationsIntent);
+				break;
+			case R.id.action_save_log:
+				try {
+					LogUtils.writeLog();
+					Toast.makeText(getActivity(), R.string.log_saved, Toast.LENGTH_SHORT).show();
+				} catch (IOException e) {
+					e.printStackTrace();
+					Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+				}
 				break;
 			case R.id.action_exit_app:
 				getActivity().finish();

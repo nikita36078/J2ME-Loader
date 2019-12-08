@@ -25,5 +25,9 @@
         android:id="@+id/action_save_template"
         android:title="@string/SAVE_TEMPLATE_CMD"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_map_keys"
+        android:title="@string/pref_map_keys"
+        app:showAsAction="never" />
 
 </menu>

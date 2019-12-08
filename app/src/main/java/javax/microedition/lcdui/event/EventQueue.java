@@ -21,7 +21,7 @@ import javax.microedition.util.LinkedEntry;
 import javax.microedition.util.LinkedList;
 
 /**
- * Очередь событий. В целом очень хитрая штука...
+ * The event queue. A really complicated thing.
  */
 public class EventQueue implements Runnable {
 	protected LinkedList<Event> queue;
@@ -48,74 +48,70 @@ public class EventQueue implements Runnable {
 	}
 
 	/**
-	 * Включить неотложный режим обработки.
+	 * Enable immediate processing mode.
 	 * <p>
-	 * В этом режиме события обрабатываются сразу при поступлении,
-	 * очереди как таковой нет (нарушается принцип сериализации).
+	 * In this mode event are processed as soon as they arrive,
+	 * without queue (violates serialization principle).
 	 * <p>
-	 * Можно попробовать включить этот режим, если каждый FPS на счету,
-	 * но как себя при этом поведет мидлет - нужно смотреть индивидуально.
+	 * You can try to turn on this mode if every frame counts,
+	 * but the midlet behavior will be unpredictable.
 	 *
-	 * @param value должен ли быть включен неотложный режим
+	 * @param value true if the immediate processing mode shoud be enabled
 	 */
 	public static void setImmediate(boolean value) {
 		immediate = value;
 	}
 
 	/**
-	 * Добавить событие в очередь.
+	 * Add event to the queue.
 	 * <p>
-	 * Если включен неотложный режим обработки,
-	 * событие обрабатывается здесь же,
-	 * в этом случае очереди как таковой и нет.
+	 * If the immediate processing mode is enabled,
+	 * the event is processed here,
+	 * in this case there is no queue at all
 	 * <p>
-	 * Если событие было добавлено в очередь,
-	 * вызывается его метод enterQueue().
+	 * If an event has been added to the queue,
+	 * its enterQueue() method is called.
 	 *
-	 * @param event добавляемое событие
+	 * @param event the added event
 	 */
 	public void postEvent(Event event) {
-//		System.out.println("Post event " + event.getID());
 
-		if (immediate)        // включен неотложный режим
+		if (immediate)        // the immediate processing mode is enabled
 		{
-			event.run();    // обрабатываем событие на месте
-			return;            // и больше нам здесь ловить нечего
+			event.run();    // process event on the spot
+			return;            // and nothing to do here
 		}
 
 		boolean empty;
 
-		synchronized (queue)    // все операции с очередью должны быть синхронизированы (на ней самой)
+		synchronized (queue)    // all operations with the queue must be synchronized (on itself)
 		{
 			empty = queue.isEmpty();
 
 			if (empty || event.placeableAfter(queue.getLast())) {
 				/*
-				 * Если собственно очередь пустая, то это уже подразумевает, что осталось
-				 * либо ровно одно событие и оно сейчас в обработке,
-				 * либо не осталось вообще ни одного события.
+				 * If the queue itself is empty, then this already implies that either
+				 * exactly one event remains and it is now being processed,
+				 * or there is not a single event left at all.
 				 *
-				 * И в том, и в другом случае новое событие следует добавить в очередь,
-				 * независимо от значения event.placeableAfter().
+				 * In both cases, a new event should be added to the queue,
+				 * regardless of event.placeableAfter() value.
 				 */
 
 				queue.addLast(event);
 				event.enterQueue();
 			} else {
-				// так правильнее, но требуются дополнительные проверки
-				// queue.setLast(event).recycle(); // предыдущее убрать, а это - добавить
-
-				event.recycle(); // так надежнее // оставить предыдущее, новое сдать в утиль
+				// it is more correct, but additional checks are required
+				// queue.setLast(event).recycle(); // remove the previous event and add the new one.
+				event.recycle(); // more reliable // leave the previous event, recycle the new one.
 			}
-
-//			queue.dump(System.out);
 		}
 
 		if (empty) {
-			/**
-			 * с другой стороны, если очередь была непустая,
-			 * то как минимум еще на одну итерацию события есть,
-			 * и этого делать не нужно
+			/*
+			 * on the other hand, if the queue was non-empty,
+			 * there is at least one more iteration for the events,
+			 * and this is not necessary
 			 */
 
 			synchronized (waiter) {
@@ -129,10 +125,10 @@ public class EventQueue implements Runnable {
 	}
 
 	/**
-	 * Удалить из очереди события, подходящие под заданный фильтр.
+	 * Remove events from the queue that match the specified filter.
 	 *
-	 * @param filter фильтр событий для удаления
-	 * @return true, если что-то было удалено
+	 * @param filter the event filter for deletion
+	 * @return true, if something has been removed
 	 */
 	public boolean removeEvents(EventFilter filter) {
 		if (queue.isEmpty()) {
@@ -142,18 +138,19 @@ public class EventQueue implements Runnable {
 		boolean removed = false;
 
 		synchronized (queue) {
-//			System.out.println("removeEvents start");
 
 			LinkedEntry<Event> entry = queue.firstEntry();
 			LinkedEntry<Event> last = queue.lastEntry();
 			LinkedEntry<Event> next;
 
 			while (true) {
-//				queue.dump(System.out);
 
 				next = entry.nextEntry();
 
-				if (filter.accept(entry.getElement())) {
+				Event element = entry.getElement();
+				if (filter.accept(element)) {
+					element.leaveQueue();
+					element.recycle();
 					queue.recycleEntry(entry);
 					removed = true;
 				}
@@ -164,24 +161,22 @@ public class EventQueue implements Runnable {
 					break;
 				}
 			}
-
-//			System.out.println("removeEvents end");
 		}
 
 		return removed;
 	}
 
 	/**
-	 * Проверить, есть ли что-нибудь в очереди.
+	 * Check if there is anything in the queue.
 	 *
-	 * @return true, если очередь пуста
+	 * @return true, if the queue is empty
 	 */
 	public boolean isEmpty() {
 		return queue.isEmpty();
 	}
 
 	/**
-	 * Очистить очередь.
+	 * Clear the queue.
 	 */
 	public void clear() {
 		synchronized (queue) {
@@ -190,8 +185,8 @@ public class EventQueue implements Runnable {
 	}
 
 	/**
-	 * Запустить цикл обработки событий.
-	 * Повторные вызовы этого метода игнорируются.
+	 * Start the event loop.
+	 * Repeated calls to this method are ignored.
 	 */
 	public void startProcessing() {
 		enabled = true;
@@ -203,8 +198,8 @@ public class EventQueue implements Runnable {
 	}
 
 	/**
-	 * Остановить цикл обработки событий.
-	 * Этот метод блокируется до полной остановки цикла.
+	 * Stop the event loop.
+	 * This method is blocked until the loop is completely stopped.
 	 */
 	public void stopProcessing() {
 		enabled = false;
@@ -219,14 +214,14 @@ public class EventQueue implements Runnable {
 	}
 
 	/**
-	 * @return текущее обрабатываемое событие, или null
+	 * @return the current event being processed, or null
 	 */
 	public Event currentEvent() {
 		return event;
 	}
 
 	/**
-	 * Здесь крутится основной цикл обработки событий.
+	 * Here is the main event loop.
 	 */
 	@Override
 	public void run() {
@@ -235,23 +230,21 @@ public class EventQueue implements Runnable {
 
 			while (enabled) {
 				/*
-				 * порядок блокировки:
+				 * blocking order:
 				 *
 				 * 1 - this
 				 * 2 - queue
 				 *
-				 * соответственно, в Canvas.serviceRepaints() порядок должен быть такой же,
-				 * иначе возможна взаимная блокировка двух потоков (все повиснет)
+				 * accordingly, inside the Canvas.serviceRepaints(), the order must be the same,
+				 * otherwise mutual blocking of two threads is possible (everything will hang)
 				 */
 
-				synchronized (this)        // нужно для Canvas.serviceRepaints()
+				synchronized (this)        // needed for Canvas.serviceRepaints()
 				{
-					synchronized (queue)    // нужно для postEvent()
+					synchronized (queue)    // needed for postEvent()
 					{
-						event = queue.removeFirst();    // достаем первый элемент и сразу же удаляем из очереди
+						event = queue.removeFirst();    // get the first item and immediately remove from the queue
 					}
-
-					// event = queue.getFirst();
 				}
 
 				if (event != null) {
@@ -262,13 +255,10 @@ public class EventQueue implements Runnable {
 					}
 
 					synchronized (queue) {
-						// queue.removeFirst();
 
 						event.leaveQueue();
 						event.recycle();
 					}
-
-//					System.out.println("Event " + event.getID() + " processed, removed from queue and recycled");
 
 					synchronized (this) {
 						synchronized (queue) {

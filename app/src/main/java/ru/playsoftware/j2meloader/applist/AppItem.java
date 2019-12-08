@@ -17,12 +17,12 @@
 
 package ru.playsoftware.j2meloader.applist;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 
@@ -88,7 +88,7 @@ public class AppItem {
 		if (imagePath.length() > 0 && imagePath.charAt(0) != '/') {
 			imagePath = "/" + imagePath;
 		}
-		this.imagePath = path + Config.MIDLET_RES_DIR + imagePath.replace(" ", "");
+		this.imagePath = path + imagePath;
 	}
 
 	public String getImagePathExt() {

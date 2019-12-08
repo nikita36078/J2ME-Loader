@@ -20,20 +20,21 @@ package ru.playsoftware.j2meloader;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
@@ -74,6 +75,7 @@ public class MainActivity extends BaseActivity {
 	private void setupActivity(boolean intentUri) {
 		initFolders();
 		checkActionBar();
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check(this);
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();

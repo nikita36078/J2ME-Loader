@@ -28,6 +28,6 @@ public class Form extends javax.microedition.lcdui.Form {
 		super(title, elements);
 	}
 
-	public void addCommand(Command cmd) {
+	public void setKeyDispatcher(KeyDispatcher dispatcher) {
 	}
 }

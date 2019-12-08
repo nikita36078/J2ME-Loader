@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:defaultValue="light"
         android:entries="@array/pref_theme_entries"
         android:entryValues="@array/pref_theme_values"
+        android:icon="@drawable/ic_setting_theme"
         android:key="pref_theme"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_theme_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_enable_action_bar"
         android:key="pref_actionbar_switch"
         android:summary="@string/pref_enable_actionbar_summary"
         android:title="@string/pref_enable_actionbar_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_keep_screen_on"
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />
     <ListPreference
         android:defaultValue="round"
         android:entries="@array/pref_button_shape_entries"
         android:entryValues="@array/pref_button_shape_values"
+        android:icon="@drawable/ic_setting_button_shape"
         android:key="pref_button_shape"
         android:title="@string/pref_button_shape_title" />
     <ListPreference
         android:defaultValue="name"
         android:entries="@array/pref_app_sort_entries"
         android:entryValues="@array/pref_app_sort_values"
+        android:icon="@drawable/ic_setting_sort"
         android:key="pref_app_sort"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_app_sort_title" />
-    <Preference android:title="@string/pref_map_keys">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="ru.playsoftware.j2meloader.settings.KeyMapperActivity"
-            android:targetPackage="ru.playsoftware.j2meloader" />
+    <ListPreference
+        android:defaultValue="ISO-8859-1"
+        android:entries="@array/pref_encoding_entries"
+        android:entryValues="@array/pref_encoding_values"
+        android:icon="@drawable/ic_setting_encoding"
+        android:key="pref_encoding"
+        android:title="@string/pref_encoding_title" />
+    <Preference
+        android:key="pref_default_settings"
+        android:icon="@drawable/ic_setting_default"
+        android:title="@string/pref_default_settings">
     </Preference>
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

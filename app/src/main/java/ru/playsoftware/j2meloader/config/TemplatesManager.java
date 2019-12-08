@@ -40,13 +40,13 @@ public class TemplatesManager {
 		return new ArrayList<>(Arrays.asList(templates));
 	}
 
-	public static void loadTemplate(Template template, String appName,
+	public static void loadTemplate(Template template, String path,
 									boolean templateSettings, boolean templateKeyboard) throws IOException {
 		if (!templateSettings && !templateKeyboard) {
 			return;
 		}
-		File dstConfig = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
-		File dstKeylayout = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
+		File dstConfig = new File(path, Config.MIDLET_CONFIG_FILE);
+		File dstKeylayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
 		try {
 			if (templateSettings) FileUtils.copyFileUsingChannel(template.getConfig(), dstConfig);
 			if (templateKeyboard) FileUtils.copyFileUsingChannel(template.getKeylayout(), dstKeylayout);
@@ -55,14 +55,14 @@ public class TemplatesManager {
 		}
 	}
 
-	public static void saveTemplate(Template template, String appName,
+	public static void saveTemplate(Template template, String path,
 									boolean templateSettings, boolean templateKeyboard) throws IOException {
 		if (!templateSettings && !templateKeyboard) {
 			return;
 		}
 		template.create();
-		File srcConfig = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
-		File srcKeylayout = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
+		File srcConfig = new File(path, Config.MIDLET_CONFIG_FILE);
+		File srcKeylayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
 		try {
 			if (templateSettings) FileUtils.copyFileUsingChannel(srcConfig, template.getConfig());
 			if (templateKeyboard) FileUtils.copyFileUsingChannel(srcKeylayout, template.getKeylayout());

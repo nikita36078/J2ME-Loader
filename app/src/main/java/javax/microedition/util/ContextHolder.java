@@ -18,8 +18,8 @@
 package javax.microedition.util;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
+import android.os.Process;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -32,12 +32,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
 
-import ru.playsoftware.j2meloader.MainActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -93,17 +97,39 @@ public class ContextHolder {
 		}
 		// Add support for Siemens file path
 		resName = resName.replace('\\', '/');
+		// Remove double slashes
+		resName = resName.replace("//", "/");
+		// Remove leading slash
+		if (resName.charAt(0) == '/') {
+			resName = resName.substring(1);
+		}
 		try {
-			File resFile = new File(MyClassLoader.getResFolder(), resName);
-			byte[] data = new byte[(int) resFile.length()];
-			DataInputStream dis = new DataInputStream(new FileInputStream(resFile));
-			dis.readFully(data);
-			dis.close();
-			return new ByteArrayInputStream(data);
-		} catch (IOException e) {
-			Log.d(TAG, "Can't load res " + resName + " on path: " + MyClassLoader.getResFolder().getPath() + resName);
+			return getResource(resName);
+		} catch (IOException | NullPointerException e) {
+			Log.d(TAG, "Can't load res: " + resName);
 			return null;
 		}
+	}
+
+	private static InputStream getResource(String resName) throws IOException {
+		InputStream is;
+		byte[] data;
+		File midletResFile = new File(Config.APP_DIR,
+				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
+		if (midletResFile.exists()) {
+			ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
+			ZipEntry entry = zipFile.getEntry(resName);
+			is = zipFile.getInputStream(entry);
+			data = new byte[(int) entry.getSize()];
+		} else {
+			File resFile = new File(MyClassLoader.getResFolder(), resName);
+			is = new FileInputStream(resFile);
+			data = new byte[(int) resFile.length()];
+		}
+		DataInputStream dis = new DataInputStream(is);
+		dis.readFully(data);
+		dis.close();
+		return new ByteArrayInputStream(data);
 	}
 
 	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {
@@ -126,14 +152,20 @@ public class ContextHolder {
 		return getContext().getExternalCacheDir();
 	}
 
+	public static boolean requestPermission(String permission) {
+		if (ContextCompat.checkSelfPermission(currentActivity, permission) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(currentActivity, new String[]{permission}, 0);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	/**
-	 * Закрыть все Activity и завершить процесс, в котором они выполнялись.
+	 * Kill midlet process.
 	 */
 	public static void notifyDestroyed() {
-		Intent intent = new Intent(currentActivity, MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		currentActivity.startActivity(intent);
 		currentActivity.finish();
-		Runtime.getRuntime().exit(0);
+		Process.killProcess(Process.myPid());
 	}
 }

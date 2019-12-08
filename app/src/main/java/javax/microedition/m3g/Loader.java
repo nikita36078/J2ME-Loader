@@ -125,6 +125,7 @@ public class Loader {
 		}
 		// EOF
 		catch (Exception e) {
+			e.printStackTrace();
 		}
 		dis.reset();
 		return buildImage2D(format);

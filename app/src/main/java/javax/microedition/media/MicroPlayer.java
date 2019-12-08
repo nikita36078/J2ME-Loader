@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.MetaDataControl;
-import javax.microedition.media.control.PanControl;
 import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
@@ -74,6 +74,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public Control getControl(String controlType) {
+		checkRealized();
 		if (!controlType.contains(".")) {
 			controlType = "javax.microedition.media.control." + controlType;
 		}
@@ -82,11 +83,12 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public Control[] getControls() {
+		checkRealized();
 		return controls.values().toArray(new Control[0]);
 	}
 
 	@Override
-	public void addPlayerListener(PlayerListener playerListener) {
+	public synchronized void addPlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		if (!listeners.contains(playerListener) && playerListener != null) {
 			listeners.add(playerListener);
@@ -94,14 +96,16 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void removePlayerListener(PlayerListener playerListener) {
+	public synchronized void removePlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		listeners.remove(playerListener);
 	}
 
-	public void postEvent(String event) {
+	public synchronized void postEvent(String event) {
 		for (PlayerListener listener : listeners) {
-			listener.playerUpdate(this, event, source.getLocator());
+			// Callbacks should be async
+			Runnable r = () -> listener.playerUpdate(this, event, source.getLocator());
+			(new Thread(r, "MIDletPlayerCallback")).start();
 		}
 	}
 
@@ -122,7 +126,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void realize() throws MediaException {
+	public synchronized void realize() throws MediaException {
 		checkClosed();
 
 		if (state == UNREALIZED) {
@@ -138,7 +142,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void prefetch() throws MediaException {
+	public synchronized void prefetch() throws MediaException {
 		checkClosed();
 
 		if (state == UNREALIZED) {
@@ -156,7 +160,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 				state = PREFETCHED;
 			} catch (IOException e) {
-				throw new MediaException(e.getMessage());
+				/*
+				 * Only 32 instances of MediaPlayer can be prepared at once, don't throw the MediaException here
+				 * if we can't prepare it now
+				 */
+				e.printStackTrace();
 			}
 		}
 	}
@@ -185,17 +193,23 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	@Override
-	public void deallocate() {
+	public synchronized void deallocate() {
 		stop();
 
-		if (state != UNREALIZED) {
+		if (state == PREFETCHED) {
 			player.reset();
 			state = UNREALIZED;
+
+			try {
+				realize();
+			} catch (MediaException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
-	public void close() {
+	public synchronized void close() {
 		if (state != CLOSED) {
 			player.release();
 		}
@@ -292,7 +306,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		if (mute) {
 			left = right = 0;
 		} else {
-			left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
+			if (level == 100) {
+				left = right = 1.0f;
+			} else {
+				left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
+			}
 
 			if (pan >= 0) {
 				left *= (float) (100 - pan) / 100f;
@@ -309,6 +327,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public void setMute(boolean mute) {
+		if (state == CLOSED) {
+			// Avoid IllegalStateException in MediaPlayer.setVolume()
+			return;
+		}
+
 		this.mute = mute;
 		updateVolume();
 	}
@@ -320,6 +343,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public int setLevel(int level) {
+		if (state == CLOSED) {
+			// Avoid IllegalStateException in MediaPlayer.setVolume()
+			return this.level;
+		}
+
 		if (level < 0) {
 			level = 0;
 		} else if (level > 100) {

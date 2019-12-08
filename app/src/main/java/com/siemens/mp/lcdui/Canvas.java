@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2019 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-package javax.microedition.media.control;
+package com.siemens.mp.lcdui;
 
-import javax.microedition.media.Control;
-
-public interface PanControl extends Control {
-	public int setPan(int pan);
-
-	public int getPan();
+public abstract class Canvas extends javax.microedition.lcdui.Canvas {
 }

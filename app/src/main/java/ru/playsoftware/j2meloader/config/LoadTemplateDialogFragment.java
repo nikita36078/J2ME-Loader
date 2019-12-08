@@ -18,9 +18,6 @@ package ru.playsoftware.j2meloader.config;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,16 +25,18 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import ru.playsoftware.j2meloader.R;
 
 public class LoadTemplateDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String appName = getArguments().getString(ConfigActivity.MIDLET_NAME_KEY);
+		String configPath = getArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View v = inflater.inflate(R.layout.dialog_load_template, null);
 		Spinner spTemplate = v.findViewById(R.id.spTemplate);
@@ -53,9 +52,9 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 				.setView(v)
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 					try {
-						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), appName,
+						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), configPath,
 								cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
-						((ConfigActivity) getActivity()).loadParamsFromFile();
+						((ConfigActivity) getActivity()).loadParams();
 					} catch (Exception e) {
 						e.printStackTrace();
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();

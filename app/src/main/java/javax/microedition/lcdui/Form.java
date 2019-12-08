@@ -19,7 +19,6 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Form extends Screen {
 	private static final float BORDER_PADDING = 7;
@@ -74,7 +75,8 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(() -> layout.addView(item.getItemView()));
+				View v = item.getItemView();
+				a.runOnUiThread(() -> layout.addView(v));
 			}
 		}
 		return items.size() - 1;
@@ -90,7 +92,8 @@ public class Form extends Screen {
 		if (layout != null) {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
-				a.runOnUiThread(() -> layout.addView(item.getItemView(), index));
+				View v = item.getItemView();
+				a.runOnUiThread(() -> layout.addView(v, index));
 			}
 		}
 	}
@@ -106,8 +109,9 @@ public class Form extends Screen {
 			AppCompatActivity a = getParentActivity();
 			if (a != null) {
 				a.runOnUiThread(() -> {
+					View v = item.getItemView();
 					layout.removeViewAt(index);
-					layout.addView(item.getItemView(), index);
+					layout.addView(v, index);
 				});
 			}
 		}
@@ -176,7 +180,8 @@ public class Form extends Screen {
 		scrollview = null;
 		layout = null;
 
-		for (Item item : items) {
+		Item[] array = items.toArray(new Item[0]);
+		for (Item item : array) {
 			item.clearItemView();
 		}
 	}

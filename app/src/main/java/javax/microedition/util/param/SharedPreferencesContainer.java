@@ -29,26 +29,36 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.XmlUtils;
 
 public class SharedPreferencesContainer implements DataContainer, DataEditor {
-	private HashMap<String, Object> configMap;
+	private HashMap<String, Object> configMap = new HashMap<>();
 	private File configFile;
 
+	public SharedPreferencesContainer(String appName) {
+		configFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
+	}
+
 	public SharedPreferencesContainer(File configDir) {
-		configMap = new HashMap<>();
 		configFile = new File(configDir, Config.MIDLET_CONFIG_FILE);
 	}
 
 	@Override
-	public boolean load() {
-		boolean loaded = false;
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			configMap = XmlUtils.readMapXml(fis);
+	public boolean load(boolean defaultConfig) {
+		boolean loaded;
+		File defaultConfigFile;
+		if (!defaultConfig && !configFile.exists()) {
+			defaultConfigFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_CONFIG_FILE);
+			loaded = false;
+		} else {
+			defaultConfigFile = configFile;
 			loaded = true;
+		}
+		try (FileInputStream fis = new FileInputStream(defaultConfigFile)) {
+			configMap = XmlUtils.readMapXml(fis);
 		} catch (IOException e) {
 			e.printStackTrace();
+			loaded = false;
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
+			loaded = false;
 		}
 		return loaded;
 	}
@@ -137,9 +147,7 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 
 	@Override
 	public void apply() {
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(configFile);
+		try (FileOutputStream fos = new FileOutputStream(configFile)) {
 			XmlUtils.writeMapXml(configMap, fos);
 		} catch (IOException e) {
 			e.printStackTrace();

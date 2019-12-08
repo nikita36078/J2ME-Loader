@@ -22,11 +22,6 @@ import javax.microedition.lcdui.Image;
 
 public class GameCanvas extends Canvas {
 
-	private Image image;
-	private Graphics graphics;
-	private int key;
-	private int repeatedKey;
-	private boolean suppressCommands;
 	public static final int UP_PRESSED = 1 << Canvas.UP;
 	public static final int DOWN_PRESSED = 1 << Canvas.DOWN;
 	public static final int LEFT_PRESSED = 1 << Canvas.LEFT;
@@ -37,11 +32,15 @@ public class GameCanvas extends Canvas {
 	public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
+	private Image image;
+	private int key;
+	private int repeatedKey;
+	private boolean suppressCommands;
+
 	public GameCanvas(boolean suppressCommands) {
 		super();
 		this.suppressCommands = suppressCommands;
-		image = Image.createImage(width, height);
-		graphics = image.getGraphics();
+		image = Image.createImage(width, maxHeight);
 	}
 
 	@Override
@@ -66,30 +65,38 @@ public class GameCanvas extends Canvas {
 			case KEY_FIRE:
 			case KEY_NUM5:
 				return FIRE_PRESSED;
+			case KEY_NUM7:
+				return GAME_A_PRESSED;
+			case KEY_NUM9:
+				return GAME_B_PRESSED;
+			case KEY_STAR:
+				return GAME_C_PRESSED;
+			case KEY_POUND:
+				return GAME_D_PRESSED;
 			default:
 				return 0;
 		}
 	}
 
-	public void gameKeyPressed(int keyCode) {
-		if (!suppressCommands || checkGameAction(keyCode)) {
+	public void gameKeyPressed(int keyCode, int originalKeycode) {
+		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyPressed(keyCode);
 		}
-		key |= convertGameKeyCode(keyCode);
+		key |= convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyReleased(int keyCode) {
-		if (!suppressCommands || checkGameAction(keyCode)) {
+	public void gameKeyReleased(int keyCode, int originalKeycode) {
+		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyReleased(keyCode);
 		}
-		repeatedKey &= ~convertGameKeyCode(keyCode);
+		repeatedKey &= ~convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyRepeated(int keyCode) {
-		if (!suppressCommands || checkGameAction(keyCode)) {
+	public void gameKeyRepeated(int keyCode, int originalKeycode) {
+		if (!(suppressCommands && checkGameAction(keyCode))) {
 			keyRepeated(keyCode);
 		}
-		repeatedKey |= convertGameKeyCode(keyCode);
+		repeatedKey |= convertGameKeyCode(originalKeycode);
 	}
 
 	private boolean checkGameAction(int keyCode) {
@@ -109,7 +116,7 @@ public class GameCanvas extends Canvas {
 	}
 
 	public Graphics getGraphics() {
-		return graphics;
+		return image.getGraphics();
 	}
 
 	public void flushGraphics() {
@@ -117,7 +124,6 @@ public class GameCanvas extends Canvas {
 	}
 
 	public void flushGraphics(int x, int y, int width, int height) {
-		graphics.setClip(x, y, width, height);
 		flushBuffer(image);
 	}
 }

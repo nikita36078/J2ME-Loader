@@ -56,13 +56,9 @@ public class M3D {
 	private int color = 0xFF000000;
 	private int clearcolor = 0xFFFFFFFF;
 
-	private M3D() {
-	}
-
 	public static M3D createInstance() {
 		return new M3D();
 	}
-
 
 	public void setupBuffers(int flags, int displayWidth, int displayHeight) {
 		// flags c.c (init?) passes 0x20 | 0x1
@@ -123,22 +119,10 @@ public class M3D {
 		double y = (Y / 65536.0);
 		double z = (Z / 65536.0);
 
-		temps[0] = x;
-		temps[1] = 0;
-		temps[2] = 0;
-		temps[3] = 0;
-		temps[4] = 0;
-		temps[5] = y;
-		temps[6] = 0;
-		temps[7] = 0;
-		temps[8] = 0;
-		temps[9] = 0;
-		temps[10] = z;
-		temps[11] = 0;
-		temps[12] = 0;
-		temps[13] = 0;
-		temps[14] = 0;
-		temps[15] = 1;
+		temps[0]  = x; temps[1]  = 0; temps[2]  = 0; temps[3]  = 0;
+		temps[4]  = 0; temps[5]  = y; temps[6]  = 0; temps[7]  = 0;
+		temps[8]  = 0; temps[9]  = 0; temps[10] = z; temps[11] = 0;
+		temps[12] = 0; temps[13] = 0; temps[14] = 0; temps[15] = 1;
 
 		matmul(temps, matrix);
 		clone(matrix, temps);
@@ -148,22 +132,10 @@ public class M3D {
 		double x = (X / 65536.0);
 		double y = (Y / 65536.0);
 		double z = (Z / 65536.0);
-		tempt[0] = 1;
-		tempt[1] = 0;
-		tempt[2] = 0;
-		tempt[3] = 0;
-		tempt[4] = 0;
-		tempt[5] = 1;
-		tempt[6] = 0;
-		tempt[7] = 0;
-		tempt[8] = 0;
-		tempt[9] = 0;
-		tempt[10] = 1;
-		tempt[11] = 0;
-		tempt[12] = x;
-		tempt[13] = y;
-		tempt[14] = z;
-		tempt[15] = 1;
+		tempt[0]  = 1; tempt[1]  = 0; tempt[2]  = 0; tempt[3]  = 0;
+		tempt[4]  = 0; tempt[5]  = 1; tempt[6]  = 0; tempt[7]  = 0;
+		tempt[8]  = 0; tempt[9]  = 0; tempt[10] = 1; tempt[11] = 0;
+		tempt[12] = x; tempt[13] = y; tempt[14] = z; tempt[15] = 1;
 
 		matmul(tempt, matrix);
 		clone(matrix, tempt);
@@ -182,60 +154,24 @@ public class M3D {
 		double z = (Z / 65536.0) * 0.0174533;
 
 		// rotate on y
-		tempr[0] = Math.cos(y);
-		tempr[1] = 0;
-		tempr[2] = -Math.sin(y);
-		tempr[3] = 0;
-		tempr[4] = 0;
-		tempr[5] = 1;
-		tempr[6] = 0;
-		tempr[7] = 0;
-		tempr[8] = Math.sin(y);
-		tempr[9] = 0;
-		tempr[10] = Math.cos(y);
-		tempr[11] = 0;
-		tempr[12] = 0;
-		tempr[13] = 0;
-		tempr[14] = 0;
-		tempr[15] = 1;
+		tempr[0]  =  Math.cos(y); tempr[1]  =  0; tempr[2]  = -Math.sin(y); tempr[3]  =  0;
+		tempr[4]  =  0;           tempr[5]  =  1; tempr[6]  =  0;           tempr[7]  =  0;
+		tempr[8]  =  Math.sin(y); tempr[9]  =  0; tempr[10] =  Math.cos(y); tempr[11] =  0;
+		tempr[12] =  0;           tempr[13] =  0; tempr[14] =  0;           tempr[15] =  1;
 		clone(rotm, tempr);
 
 		// rotate on x
-		tempr[0] = 1;
-		tempr[1] = 0;
-		tempr[2] = 0;
-		tempr[3] = 0;
-		tempr[4] = 0;
-		tempr[5] = Math.cos(x);
-		tempr[6] = Math.sin(x);
-		tempr[7] = 0;
-		tempr[8] = 0;
-		tempr[9] = -Math.sin(x);
-		tempr[10] = Math.cos(x);
-		tempr[11] = 0;
-		tempr[12] = 0;
-		tempr[13] = 0;
-		tempr[14] = 0;
-		tempr[15] = 1;
+		tempr[0]  =  1; tempr[1]  =  0;            tempr[2]  =  0;           tempr[3]  =  0;
+		tempr[4]  =  0; tempr[5]  =  Math.cos(x);  tempr[6]  =  Math.sin(x); tempr[7]  =  0;
+		tempr[8]  =  0; tempr[9]  = -Math.sin(x);  tempr[10] =  Math.cos(x); tempr[11] =  0;
+		tempr[12] =  0; tempr[13] =  0;            tempr[14] =  0;           tempr[15] =  1;
 		matmul(rotm, tempr);
 
 		// rotate on z
-		tempr[0] = Math.cos(z);
-		tempr[1] = Math.sin(z);
-		tempr[2] = 0;
-		tempr[3] = 0;
-		tempr[4] = -Math.sin(z);
-		tempr[5] = Math.cos(z);
-		tempr[6] = 0;
-		tempr[7] = 0;
-		tempr[8] = 0;
-		tempr[9] = 0;
-		tempr[10] = 1;
-		tempr[11] = 0;
-		tempr[12] = 0;
-		tempr[13] = 0;
-		tempr[14] = 0;
-		tempr[15] = 1;
+		tempr[0]  =  Math.cos(z); tempr[1]  =  Math.sin(z); tempr[2]  =  0; tempr[3]  =  0;
+		tempr[4]  = -Math.sin(z); tempr[5]  =  Math.cos(z); tempr[6]  =  0; tempr[7]  =  0;
+		tempr[8]  =  0;           tempr[9]  =  0;           tempr[10] =  1; tempr[11] =  0;
+		tempr[12] =  0;           tempr[13] =  0;           tempr[14] =  0; tempr[15] =  1;
 		matmul(rotm, tempr);
 
 		matmul(rotm, matrix);
@@ -374,22 +310,10 @@ public class M3D {
 	}
 
 	private void identity(double[] m) {
-		m[0] = 1;
-		m[1] = 0;
-		m[2] = 0;
-		m[3] = 0;
-		m[4] = 0;
-		m[5] = 1;
-		m[6] = 0;
-		m[7] = 0;
-		m[8] = 0;
-		m[9] = 0;
-		m[10] = 1;
-		m[11] = 0;
-		m[12] = 0;
-		m[13] = 0;
-		m[14] = 0;
-		m[15] = 1;
+		m[0]  = 1; m[1]  = 0; m[2]  = 0; m[3]  = 0;
+		m[4]  = 0; m[5]  = 1; m[6]  = 0; m[7]  = 0;
+		m[8]  = 0; m[9]  = 0; m[10] = 1; m[11] = 0;
+		m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
 	}
 
 	private void projection(double[] m, double w, double h, double fov, double near, double far) {
@@ -402,22 +326,10 @@ public class M3D {
 		double e = (2 * far * near) / (near - far);
 		double f = 0;
 
-		m[0] = sx;
-		m[1] = 0;
-		m[2] = 0;
-		m[3] = 0;
-		m[4] = 0;
-		m[5] = -sy;
-		m[6] = 0;
-		m[7] = 0;
-		m[8] = 0;
-		m[9] = 0;
-		m[10] = c;
-		m[11] = d;
-		m[12] = 0;
-		m[13] = 0;
-		m[14] = e;
-		m[15] = f;
+		m[0]  = sx; m[1]  = 0;   m[2]  = 0; m[3]  = 0;
+		m[4]  = 0;  m[5]  =-sy;  m[6]  = 0; m[7]  = 0;
+		m[8]  = 0;  m[9]  = 0;   m[10] = c; m[11] = d;
+		m[12] = 0;  m[13] = 0;   m[14] = e; m[15] = f;
 	}
 
 	private void clone(double[] m1, double[] m2) {

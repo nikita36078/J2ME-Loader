@@ -28,8 +28,8 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public class Sprite extends GraphicObject {
-	private Image pixels[];
-	private Image mask[];
+	private Image[] pixels;
+	private Image[] mask;
 	private int x;
 	private int y;
 	private int frame;
@@ -85,12 +85,23 @@ public class Sprite extends GraphicObject {
 	}
 
 	public boolean isCollidingWith(Sprite other) {
-		return false;
+		int left = x + collx;
+		int right = x + collx + collw;
+		int top = y + colly;
+		int bottom = y + colly + collh;
+		int otherLeft = other.x + other.collx;
+		int otherRight = other.x + other.collx + other.collw;
+		int otherTop = other.y + other.colly;
+		int otherBottom = other.y + other.colly + other.collh;
+		return left < otherRight && otherLeft < right && top < otherBottom && otherTop < bottom;
 	}
 
 	public boolean isCollidingWithPos(int xpos, int ypos) {
-		return (xpos >= x + collx) && (xpos < x + collw) &&
-				(ypos >= y + colly) && (ypos < y + collh);
+		int left = x + collx;
+		int right = x + collx + collw;
+		int top = y + colly;
+		int bottom = y + colly + collh;
+		return (xpos >= left) && (xpos < right) && (ypos >= top) && (ypos < bottom);
 	}
 
 	public void setCollisionRectangle(int x, int y, int width, int height) {

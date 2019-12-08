@@ -57,7 +57,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public AppItem getItem(int position) {
 		return filteredList.get(position);
 	}
 
@@ -70,7 +70,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_jar, null);
+			view = layoutInflater.inflate(R.layout.list_row_jar, viewGroup, false);
 			holder = new ViewHolder();
 			holder.icon = view.findViewById(R.id.list_image);
 			holder.name = view.findViewById(R.id.list_title);
@@ -125,8 +125,8 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 			} else {
 				ArrayList<AppItem> resultList = new ArrayList<>();
 				for (AppItem item : list) {
-					if (item.getTitle().toLowerCase().contains(constraint.toString().toLowerCase())
-							|| item.getAuthor().toLowerCase().contains(constraint.toString().toLowerCase())) {
+					if (item.getTitle().toLowerCase().contains(constraint)
+							|| item.getAuthor().toLowerCase().contains(constraint)) {
 						resultList.add(item);
 					}
 				}
@@ -138,8 +138,12 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
-			filteredList = (List<AppItem>) results.values;
-			notifyDataSetChanged();
+			if (results.values != null) {
+				filteredList = (List<AppItem>) results.values;
+				notifyDataSetChanged();
+			} else {
+				notifyDataSetInvalidated();
+			}
 		}
 	}
 }

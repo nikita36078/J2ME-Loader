@@ -21,15 +21,15 @@ public interface ChannelInfo {
 	public static final int TYPE_INT = 2;
 	public static final int TYPE_OBJECT = 4;
 
-	float getAccuracy();
+	public float getAccuracy();
 
-	int getDataType();
+	public int getDataType();
 
-	MeasurementRange[] getMeasurementRanges();
+	public MeasurementRange[] getMeasurementRanges();
 
-	String getName();
+	public String getName();
 
-	int getScale();
+	public int getScale();
 
-	Unit getUnit();
+	public Unit getUnit();
 }

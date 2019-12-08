@@ -25,6 +25,8 @@
 
 package javax.microedition.rms.impl;
 
+import android.util.Log;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -43,6 +45,8 @@ import javax.microedition.rms.RecordStoreFullException;
 import javax.microedition.rms.RecordStoreNotOpenException;
 
 public class RecordStoreImpl extends RecordStore {
+	private static String TAG = RecordStoreImpl.class.getName();
+
 	private static final byte[] fileIdentifier = {0x4d, 0x49, 0x44, 0x52, 0x4d, 0x53};
 
 	private static final byte versionMajor = 0x03;
@@ -53,7 +57,7 @@ public class RecordStoreImpl extends RecordStore {
 
 	private int size = 0;
 
-	private Hashtable records = new Hashtable();
+	private Hashtable<Integer, byte[]> records = new Hashtable<>();
 
 	private String recordStoreName;
 
@@ -65,7 +69,7 @@ public class RecordStoreImpl extends RecordStore {
 
 	private transient RecordStoreManager recordStoreManager;
 
-	private transient Vector recordListeners = new Vector();
+	private transient Vector<RecordListener> recordListeners = new Vector<>();
 
 	public RecordStoreImpl(RecordStoreManager recordStoreManager, String recordStoreName) {
 		this.recordStoreManager = recordStoreManager;
@@ -169,6 +173,7 @@ public class RecordStoreImpl extends RecordStore {
 		records.clear();
 
 		open = false;
+		Log.d(TAG, "RecordStore " + recordStoreName + " closed");
 	}
 
 	@Override
@@ -218,7 +223,7 @@ public class RecordStoreImpl extends RecordStore {
 		int result = 0;
 		Enumeration keys = records.keys();
 		while (keys.hasMoreElements()) {
-			int key = ((Integer) keys.nextElement()).intValue();
+			int key = (Integer) keys.nextElement();
 			try {
 				byte[] data = getRecord(key);
 				if (data != null) {
@@ -314,6 +319,7 @@ public class RecordStoreImpl extends RecordStore {
 
 		fireRecordListener(ExtendedRecordListener.RECORD_ADD, nextRecordID);
 
+		Log.d(TAG, "Record " + recordStoreName + "." + nextRecordID + " added");
 		return nextRecordID;
 	}
 
@@ -336,6 +342,7 @@ public class RecordStoreImpl extends RecordStore {
 		recordStoreManager.deleteRecord(this, recordId);
 
 		fireRecordListener(ExtendedRecordListener.RECORD_DELETE, recordId);
+		Log.d(TAG, "Record " + recordStoreName + "." + recordId + " deleted");
 	}
 
 	@Override
@@ -346,10 +353,10 @@ public class RecordStoreImpl extends RecordStore {
 		}
 
 		synchronized (this) {
-			byte[] data = (byte[]) records.get(new Integer(recordId));
+			byte[] data = records.get(new Integer(recordId));
 			if (data == null) {
 				recordStoreManager.loadRecord(this, recordId);
-				data = (byte[]) records.get(new Integer(recordId));
+				data = records.get(new Integer(recordId));
 				if (data == null) {
 					throw new InvalidRecordIDException();
 				}
@@ -416,6 +423,7 @@ public class RecordStoreImpl extends RecordStore {
 		recordStoreManager.saveRecord(this, recordId);
 
 		fireRecordListener(ExtendedRecordListener.RECORD_CHANGE, recordId);
+		Log.d(TAG, "Record " + recordStoreName + "." + recordId + " set");
 	}
 
 	@Override
@@ -425,6 +433,7 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
+		Log.d(TAG, "Enumerate records in " + recordStoreName);
 		return new RecordEnumerationImpl(this, filter, comparator, keepUpdated);
 	}
 

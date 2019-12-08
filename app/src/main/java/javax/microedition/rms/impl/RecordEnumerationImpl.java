@@ -26,7 +26,6 @@
 package javax.microedition.rms.impl;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 
 import javax.microedition.rms.InvalidRecordIDException;
@@ -44,7 +43,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 	private RecordComparator comparator;
 	private boolean keepUpdated;
 
-	private Vector enumerationRecords = new Vector();
+	private Vector<EnumerationRecord> enumerationRecords = new Vector<>();
 	private int currentRecord;
 
 	private RecordListener recordListener = new RecordListener() {
@@ -95,7 +94,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 			throw new InvalidRecordIDException();
 		}
 
-		byte[] result = ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).value;
+		byte[] result = enumerationRecords.elementAt(currentRecord).value;
 		currentRecord++;
 
 		return result;
@@ -108,7 +107,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 			throw new InvalidRecordIDException();
 		}
 
-		int result = ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).recordId;
+		int result = enumerationRecords.elementAt(currentRecord).recordId;
 		currentRecord++;
 
 		return result;
@@ -126,7 +125,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 		currentRecord--;
 
-		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).value;
+		return enumerationRecords.elementAt(currentRecord).value;
 	}
 
 	@Override
@@ -138,7 +137,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 		currentRecord--;
 
-		return ((EnumerationRecord) enumerationRecords.elementAt(currentRecord)).recordId;
+		return enumerationRecords.elementAt(currentRecord).recordId;
 	}
 
 	@Override
@@ -193,9 +192,8 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		// sort
 		//
 		if (comparator != null) {
-			Collections.sort(enumerationRecords, (Comparator) (lhs, rhs) -> {
-				int compare = comparator.compare(((EnumerationRecord) lhs).value,
-						((EnumerationRecord) rhs).value);
+			Collections.sort(enumerationRecords, (lhs, rhs) -> {
+				int compare = comparator.compare(lhs.value, rhs.value);
 				if (compare == RecordComparator.EQUIVALENT)
 					return 0;
 				else if (compare == RecordComparator.FOLLOWS)

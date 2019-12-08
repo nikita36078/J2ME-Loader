@@ -17,5 +17,5 @@
 package javax.microedition.sensor;
 
 public interface DataListener {
-	void dataReceived(SensorConnection sensorConnection, Data[] dataArr, boolean z);
+	public void dataReceived(SensorConnection sensor, Data[] dataArr, boolean isDataLost);
 }

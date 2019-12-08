@@ -84,6 +84,11 @@ public class ChoiceGroup extends Item implements Choice {
 	private class SpinnerListener implements AdapterView.OnItemSelectedListener {
 		@Override
 		public void onItemSelected(AdapterView parent, View view, int position, long id) {
+			// prevent onItemSelected call after initializing
+			if (!spinnerInitialized) {
+				spinnerInitialized = true;
+				return;
+			}
 			synchronized (selected) {
 				if (selectedIndex >= 0 && selectedIndex < selected.size()) {
 					selected.set(selectedIndex, Boolean.FALSE);
@@ -114,6 +119,7 @@ public class ChoiceGroup extends Item implements Choice {
 	private RadioListener radiolistener = new RadioListener();
 	private CheckListener checklistener = new CheckListener();
 	private SpinnerListener spinlistener = new SpinnerListener();
+	private boolean spinnerInitialized;
 
 	public ChoiceGroup(String label, int choiceType) {
 		switch (choiceType) {
@@ -442,6 +448,7 @@ public class ChoiceGroup extends Item implements Choice {
 						spinner.setSelection(selectedIndex);
 					}
 
+					spinnerInitialized = false;
 					spinner.setOnItemSelectedListener(spinlistener);
 				}
 

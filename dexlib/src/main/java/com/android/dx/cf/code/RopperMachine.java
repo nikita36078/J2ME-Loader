@@ -968,14 +968,21 @@ import java.util.ArrayList;
                  * on "invokespecial" as well as section 4.8.2 (7th
                  * bullet point) for the gory details.
                  */
-                /* TODO: Consider checking that invoke-special target
-                 * method is private, or constructor since otherwise ART
-                 * verifier will reject it.
-                 */
                 CstMethodRef ref = (CstMethodRef) cst;
-                if (ref.isInstanceInit() ||
-                    (ref.getDefiningClass().equals(method.getDefiningClass()))) {
+                if (ref.isInstanceInit()) {
                     return RegOps.INVOKE_DIRECT;
+                } else if (ref.getDefiningClass().equals(method.getDefiningClass())) {
+                    for (int i = 0; i < methods.size(); ++i) {
+                        final Method m = methods.get(i);
+                        if (!ref.getNat().equals(m.getNat())) {
+                            continue;
+                        }
+                        if (AccessFlags.isPrivate(m.getAccessFlags())) {
+                            return RegOps.INVOKE_DIRECT;
+                        } else {
+                            return RegOps.INVOKE_VIRTUAL;
+                        }
+                    }
                 }
                 return RegOps.INVOKE_SUPER;
             }

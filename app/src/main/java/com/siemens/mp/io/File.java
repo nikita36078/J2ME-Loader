@@ -100,6 +100,9 @@ public class File {
 
 	public static String[] list(String pathName, boolean includeHidden) throws IOException {
 		java.io.File[] files = getFile(pathName).listFiles();
+		if (files == null) {
+			return new String[0];
+		}
 		Arrays.sort(files);
 		ArrayList<String> list = new ArrayList<>();
 		for (java.io.File file : files) {
@@ -130,6 +133,14 @@ public class File {
 		} else {
 			return -1;
 		}
+	}
+
+	public int seek(int fileDescriptor, int seekpos) throws IOException {
+		return (int) inputStream.skip(seekpos);
+	}
+
+	public static int spaceAvailable() throws IOException {
+		return 1024;
 	}
 
 	public int write(int fileDescriptor, byte[] buf, int offset, int numBytes) throws IOException {

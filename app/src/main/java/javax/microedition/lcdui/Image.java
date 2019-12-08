@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.LruCache;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +29,15 @@ import javax.microedition.lcdui.game.Sprite;
 import javax.microedition.util.ContextHolder;
 
 public class Image {
+
+	private static final int CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() >> 2); // 1/4 heap max
+	private static final LruCache<String, Bitmap> CACHE = new LruCache<String, Bitmap>(CACHE_SIZE) {
+		@Override
+		protected int sizeOf(String key, Bitmap value) {
+			return value.getByteCount();
+		}
+	};
+
 	private Bitmap bitmap;
 	private Canvas canvas;
 
@@ -37,6 +47,17 @@ public class Image {
 		}
 
 		this.bitmap = bitmap;
+	}
+
+	public static Image createImage(int width, int height, Image reuse) {
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		if (reuse == null) {
+			return new Image(bitmap);
+		}
+		reuse.getCanvas().setBitmap(bitmap);
+		reuse.copyPixels(reuse);
+		reuse.bitmap = bitmap;
+		return new Image(bitmap);
 	}
 
 	public Bitmap getBitmap() {
@@ -56,13 +77,22 @@ public class Image {
 	}
 
 	public static Image createImage(String resname) throws IOException {
-		InputStream is = ContextHolder.getResourceAsStream(null, resname);
-		if (is == null) {
-			throw new IOException();
+		synchronized (CACHE) {
+			Bitmap b = CACHE.get(resname);
+			if (b != null) {
+				return new Image(b);
+			}
+			InputStream stream = ContextHolder.getResourceAsStream(null, resname);
+			if (stream == null) {
+				throw new IOException("Can't read image: " + resname);
+			}
+			b = BitmapFactory.decodeStream(stream);
+			if (b == null) {
+				throw new IOException("Can't decode image: " + resname);
+			}
+			CACHE.put(resname, b);
+			return new Image(b);
 		}
-		Bitmap bitmap = BitmapFactory.decodeStream(is);
-		is.close();
-		return new Image(bitmap);
 	}
 
 	public static Image createImage(InputStream stream) {
@@ -93,7 +123,7 @@ public class Image {
 
 	public Graphics getGraphics() {
 		Graphics graphics = new Graphics();
-		graphics.setCanvas(getCanvas(), bitmap);
+		graphics.setCanvas(new Canvas(bitmap), bitmap);
 		return graphics;
 	}
 
@@ -111,5 +141,9 @@ public class Image {
 
 	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
 		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
+	}
+
+	void copyPixels(Image dst) {
+		dst.getCanvas().drawBitmap(bitmap, 0, 0, null);
 	}
 }

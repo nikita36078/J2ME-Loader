@@ -17,17 +17,23 @@
 package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.microedition.util.param.SharedPreferencesContainer;
+
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.settings.KeyMapper;
 
 public class MigrationUtils {
 
-	private static int CURRENT_VERSION = 1;
+	private static int VERSION_1 = 1;
+	private static int VERSION_2 = 2;
 
 	private static void moveConfigs(Context context) {
 		File srcConfDir = new File(context.getApplicationInfo().dataDir, "/shared_prefs");
@@ -66,23 +72,27 @@ public class MigrationUtils {
 		}
 	}
 
+	private static void moveKeyMappings(Context context) {
+		File defaultConfigDir = new File(Config.DEFAULT_CONFIG_DIR);
+		SharedPreferencesContainer container = new SharedPreferencesContainer(defaultConfigDir);
+		container.load(true);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String json = prefs.getString("pref_key_mapping", null);
+		prefs.edit().remove("pref_key_mapping").apply();
+		KeyMapper.saveArrayPref(container, KeyMapper.getArray(json));
+	}
+
 	private static int readVersion(File file) throws IOException {
 		int version = 0;
-		FileInputStream in = new FileInputStream(file);
-		try {
+		try (FileInputStream in = new FileInputStream(file)) {
 			version = in.read();
-		} finally {
-			in.close();
 		}
 		return version;
 	}
 
 	private static void writeVersion(File file, int version) throws IOException {
-		FileOutputStream stream = new FileOutputStream(file);
-		try {
+		try (FileOutputStream stream = new FileOutputStream(file)) {
 			stream.write(version);
-		} finally {
-			stream.close();
 		}
 	}
 
@@ -94,10 +104,18 @@ public class MigrationUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (version < CURRENT_VERSION) {
+		if (version < VERSION_1) {
 			try {
 				moveConfigs(context);
-				writeVersion(file, CURRENT_VERSION);
+				writeVersion(file, VERSION_1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (version < VERSION_2) {
+			try {
+				moveKeyMappings(context);
+				writeVersion(file, VERSION_2);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

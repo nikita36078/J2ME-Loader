@@ -19,12 +19,11 @@
         android:text="@string/no_data_for_display"
         android:textSize="18sp" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_add_white"
-        fab:backgroundTint="@color/fab_material_red_500" />
+        android:src="@drawable/ic_add_white" />
 </FrameLayout>

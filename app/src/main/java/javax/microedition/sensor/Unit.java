@@ -17,15 +17,17 @@
 package javax.microedition.sensor;
 
 public class Unit {
+	private String symbol;
 
-	private Unit(String str) {
+	public Unit(String symbol) {
+		this.symbol = symbol;
 	}
 
-	public static Unit getUnit(String str) {
-		return null;
+	public static Unit getUnit(String symbol) {
+		return new Unit(symbol);
 	}
 
 	public String toString() {
-		return null;
+		return symbol;
 	}
 }

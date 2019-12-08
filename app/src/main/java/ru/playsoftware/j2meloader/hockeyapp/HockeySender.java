@@ -17,7 +17,6 @@
 package ru.playsoftware.j2meloader.hockeyapp;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -32,6 +31,8 @@ import org.acra.sender.ReportSender;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
 
 public class HockeySender implements ReportSender {
 	private static final String TAG = HockeySender.class.getName();

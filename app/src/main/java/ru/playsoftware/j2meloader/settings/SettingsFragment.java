@@ -16,14 +16,22 @@
 
 package ru.playsoftware.j2meloader.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
 
+import androidx.preference.PreferenceFragmentCompat;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
+		findPreference("pref_default_settings").setOnPreferenceClickListener(preference -> {
+			Intent intent = new Intent(getActivity(), ConfigActivity.class);
+			intent.putExtra(ConfigActivity.DEFAULT_CONFIG_KEY, true);
+			startActivity(intent);
+			return true;
+		});
 	}
 }

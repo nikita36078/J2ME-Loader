@@ -113,6 +113,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		ContextHolder.deleteFile(getHeaderFileName(recordStoreName));
 
 		recordStores.remove(recordStoreName);
+		Log.d(TAG, "RecordStore " + recordStoreName + " deleted");
 	}
 
 	@Override
@@ -141,6 +142,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 		recordStores.put(recordStoreName, recordStoreImpl);
 
+		Log.d(TAG, "RecordStore " + recordStoreName + " opened");
 		return recordStoreImpl;
 	}
 
@@ -182,17 +184,6 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	public void saveRecord(RecordStoreImpl recordStoreImpl, int recordId)
 			throws RecordStoreNotOpenException, RecordStoreException {
 		saveToDisk(recordStoreImpl, recordId);
-	}
-
-	public void deleteStores() {
-		String[] stores = listRecordStores();
-		for (String store : stores) {
-			try {
-				deleteRecordStore(store);
-			} catch (RecordStoreException e) {
-				Log.d(TAG, "deleteRecordStore", e);
-			}
-		}
 	}
 
 	private synchronized void deleteFromDisk(RecordStoreImpl recordStore, int recordId)

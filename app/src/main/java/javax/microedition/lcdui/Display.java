@@ -19,14 +19,15 @@ package javax.microedition.lcdui;
 
 import android.content.Context;
 import android.os.Vibrator;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Display {
 	public static final int LIST_ELEMENT = 1;
@@ -79,7 +80,9 @@ public class Display {
 			return;
 		}
 		if (disp instanceof Alert) {
-			setCurrent((Alert) disp, current);
+			Alert alert = (Alert) disp;
+			alert.setNextDisplayable(current);
+			showAlert(alert);
 		} else {
 			changeCurrent(disp);
 			showCurrent();
@@ -93,8 +96,12 @@ public class Display {
 			throw new IllegalArgumentException();
 		}
 		alert.setNextDisplayable(disp);
+		showAlert(alert);
+	}
+
+	private void showAlert(Alert alert) {
 		activity.runOnUiThread(() -> {
-			AlertDialog alertDialog = alert.prepareDialog().create();
+			AlertDialog alertDialog = alert.prepareDialog();
 			alertDialog.show();
 			if (alert.finiteTimeout()) {
 				(new Thread(() -> {
@@ -131,7 +138,6 @@ public class Display {
 		} catch (IllegalThreadStateException e) {
 			e.printStackTrace();
 		}
-		showCurrent();
 	}
 
 	public void activityStopped() {

@@ -88,8 +88,8 @@ public class Font {
 		paint.setTypeface(Typeface.create(face, style));
 		paint.setUnderlineText(underline);
 
-		paint.setTextSize(size);                                             // сначала просто задаем размер (не важно в чем он здесь ставится)
-		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // а теперь ставим размер точно равный заданному (в пикселях)
+		paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
+		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
 	}
 
 	// Font for keyboard

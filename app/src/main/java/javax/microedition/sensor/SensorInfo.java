@@ -34,29 +34,29 @@ public interface SensorInfo {
 	public static final String PROP_VENDOR = "vendor";
 	public static final String PROP_VERSION = "version";
 
-	ChannelInfo[] getChannelInfos();
+	public ChannelInfo[] getChannelInfos();
 
-	int getConnectionType();
+	public int getConnectionType();
 
-	String getContextType();
+	public String getContextType();
 
-	String getDescription();
+	public String getDescription();
 
-	int getMaxBufferSize();
+	public int getMaxBufferSize();
 
-	String getModel();
+	public String getModel();
 
-	Object getProperty(String str);
+	public Object getProperty(String name);
 
-	String[] getPropertyNames();
+	public String[] getPropertyNames();
 
-	String getQuantity();
+	public String getQuantity();
 
-	String getUrl();
+	public String getUrl();
 
-	boolean isAvailabilityPushSupported();
+	public boolean isAvailabilityPushSupported();
 
-	boolean isAvailable();
+	public boolean isAvailable();
 
-	boolean isConditionPushSupported();
+	public boolean isConditionPushSupported();
 }

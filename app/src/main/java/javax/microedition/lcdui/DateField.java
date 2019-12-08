@@ -16,20 +16,73 @@
 
 package javax.microedition.lcdui;
 
+import android.content.Context;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
+import javax.microedition.lcdui.event.SimpleEvent;
 
 public class DateField extends Item {
 	public static final int DATE = 1;
 	public static final int DATE_TIME = 3;
 	public static final int TIME = 2;
 
-	private View view;
 	private int mode;
-	private Date date;
+	private Calendar calendar = Calendar.getInstance();
+
+	private LinearLayout layout;
+	private DatePicker datePicker;
+	private TimePicker timePicker;
+
+	private SimpleEvent msgUpdateDate = new SimpleEvent() {
+		@Override
+		public void process() {
+			datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH));
+			timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+			timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+		}
+	};
+
+	private SimpleEvent msgSetVisibility = new SimpleEvent() {
+		@Override
+		public void process() {
+			if (mode == DATE) {
+				datePicker.setVisibility(View.VISIBLE);
+				timePicker.setVisibility(View.GONE);
+			} else if (mode == TIME) {
+				datePicker.setVisibility(View.GONE);
+				timePicker.setVisibility(View.VISIBLE);
+			} else if (mode == DATE_TIME) {
+				datePicker.setVisibility(View.VISIBLE);
+				timePicker.setVisibility(View.VISIBLE);
+			}
+		}
+	};
+
+	private class DateChangedListener implements DatePicker.OnDateChangedListener {
+		@Override
+		public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			calendar.set(year, monthOfYear, dayOfMonth);
+		}
+	}
+
+	private class TimeChangedListener implements TimePicker.OnTimeChangedListener {
+		@Override
+		public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+			calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			calendar.set(Calendar.MINUTE, minute);
+		}
+	}
+
+	private DateChangedListener dateChangedListener = new DateChangedListener();
+	private TimeChangedListener timeChangedListener = new TimeChangedListener();
 
 	public DateField(String label, int mode) {
 		this(label, mode, TimeZone.getDefault());
@@ -42,7 +95,7 @@ public class DateField extends Item {
 	}
 
 	public Date getDate() {
-		return date;
+		return calendar.getTime();
 	}
 
 	public int getInputMode() {
@@ -50,24 +103,56 @@ public class DateField extends Item {
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		calendar.setTime(date);
+		if (layout != null) {
+			ViewHandler.postEvent(msgUpdateDate);
+		}
 	}
 
 	public void setInputMode(int mode) {
 		this.mode = mode;
+		if (layout != null) {
+			ViewHandler.postEvent(msgSetVisibility);
+		}
 	}
 
 	@Override
 	protected View getItemContentView() {
-		if (view == null) {
-			view = new View(getOwnerForm().getParentActivity());
+		if (layout == null) {
+			Context context = getOwnerForm().getParentActivity();
+
+			layout = new LinearLayout(context);
+			layout.setOrientation(LinearLayout.VERTICAL);
+
+			datePicker = new DatePicker(context);
+			timePicker = new TimePicker(context);
+
+			datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH), dateChangedListener);
+			timePicker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+			timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+			timePicker.setOnTimeChangedListener(timeChangedListener);
+
+			layout.addView(datePicker);
+			layout.addView(timePicker);
+
+			if (mode == DATE) {
+				datePicker.setVisibility(View.VISIBLE);
+				timePicker.setVisibility(View.GONE);
+			} else if (mode == TIME) {
+				datePicker.setVisibility(View.GONE);
+				timePicker.setVisibility(View.VISIBLE);
+			} else if (mode == DATE_TIME) {
+				datePicker.setVisibility(View.VISIBLE);
+				timePicker.setVisibility(View.VISIBLE);
+			}
 		}
 
-		return view;
+		return layout;
 	}
 
 	@Override
 	protected void clearItemContentView() {
-		view = null;
+		layout = null;
 	}
 }

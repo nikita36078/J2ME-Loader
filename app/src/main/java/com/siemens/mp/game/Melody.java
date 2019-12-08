@@ -24,7 +24,7 @@
 
 package com.siemens.mp.game;
 
-public class Melody {
+public class Melody extends com.siemens.mp.misc.NativeMem {
 	public void play() {
 	}
 

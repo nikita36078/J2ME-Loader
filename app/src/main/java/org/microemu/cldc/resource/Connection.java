@@ -50,7 +50,7 @@ public class Connection implements InputConnection, ConnectionImplementation {
 		if (stream == null) {
 			throw new IOException("File not found");
 		}
-		return stream;
+		return new ResourceInputStream(stream);
 	}
 
 	@Override
@@ -62,5 +62,26 @@ public class Connection implements InputConnection, ConnectionImplementation {
 	public void close() throws IOException {
 		stream.close();
 		stream = null;
+	}
+
+	class ResourceInputStream extends InputStream {
+
+		private InputStream inputStream;
+
+		ResourceInputStream(InputStream inputStream) {
+			this.inputStream = inputStream;
+		}
+
+		@Override
+		public int read() throws IOException {
+			return inputStream.read();
+		}
+
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {
+			int result = inputStream.read(b, off, len);
+			if (result == -1) result = 0;
+			return result;
+		}
 	}
 }

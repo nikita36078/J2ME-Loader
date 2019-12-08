@@ -29,6 +29,8 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 
+import javax.microedition.lcdui.game.Sprite;
+
 public class Graphics {
 	public static final int HCENTER = 1;
 	public static final int VCENTER = 2;
@@ -44,44 +46,72 @@ public class Graphics {
 	private Canvas canvas;
 	private Bitmap canvasBitmap;
 
-	private Paint drawPaint;
-	private Paint fillPaint;
-	private Paint imagePaint;
+	private Paint drawPaint = new Paint();
+	private Paint fillPaint = new Paint();
+	private Paint imagePaint = new Paint();
 
 	private int translateX;
 	private int translateY;
 
-	private Rect intRect;
-	private RectF floatRect;
-	private Path path;
+	private Rect intRect = new Rect();
+	private RectF floatRect = new RectF();
+	private Path path = new Path();
 
-	private DashPathEffect dpeffect;
+	private DashPathEffect dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
 	private int stroke;
 
 	private boolean drawAntiAlias;
 	private boolean textAntiAlias;
 
-	private Font font;
+	private Font font = Font.getDefaultFont();
 
 	public Graphics() {
-		drawPaint = new Paint();
-		fillPaint = new Paint();
-		imagePaint = new Paint();
-
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
-
-		dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
 		setStrokeStyle(SOLID);
-
 		setAntiAlias(false);
 		setAntiAliasText(true);
+	}
 
-		font = Font.getDefaultFont();
+	public void reset() {
+		setColor(0);
+		setFont(Font.getDefaultFont());
+		setStrokeStyle(SOLID);
+		resetClip();
+		resetTranslation();
+	}
 
-		intRect = new Rect();
-		floatRect = new RectF();
-		path = new Path();
+	private void resetTranslation() {
+		translateX = 0;
+		translateY = 0;
+	}
+
+	private void resetClip() {
+		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
+	}
+
+	public void setCanvas(Canvas canvas, Bitmap canvasBitmap) {
+		if (canvas.getSaveCount() > 1) {
+			canvas.restoreToCount(1);
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			canvas.save();
+		}
+		canvas.save();
+		this.canvas = canvas;
+		this.canvasBitmap = canvasBitmap;
+	}
+
+	public void setSurfaceCanvas(Canvas canvas) {
+		this.canvas = canvas;
+	}
+
+	public Canvas getCanvas() {
+		return canvas;
+	}
+
+	public boolean hasCanvas() {
+		return canvas != null;
 	}
 
 	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints) {
@@ -106,23 +136,6 @@ public class Graphics {
 		}
 		path.close();
 		return path;
-	}
-
-	public void setCanvas(Canvas canvas, Bitmap canvasBitmap) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canvas != null
-				&& canvas.getSaveCount() == 1) {
-			canvas.save();
-		}
-		this.canvas = canvas;
-		this.canvasBitmap = canvasBitmap;
-	}
-
-	public Canvas getCanvas() {
-		return canvas;
-	}
-
-	public boolean hasCanvas() {
-		return canvas != null;
 	}
 
 	public void setColor(int color) {
@@ -193,6 +206,9 @@ public class Graphics {
 	}
 
 	public void setFont(Font font) {
+		if (font == null) {
+			font = Font.getDefaultFont();
+		}
 		this.font = font;
 		font.copyInto(drawPaint);
 	}
@@ -201,17 +217,12 @@ public class Graphics {
 		return font;
 	}
 
-	protected void resetClip() {
-		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
-	}
-
 	public void setClip(int x, int y, int width, int height) {
 		intRect.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			Matrix matrix = canvas.getMatrix();
 			canvas.restore();
-			canvas.setMatrix(matrix);
 			canvas.save();
+			canvas.translate(translateX, translateY);
 			canvas.clipRect(intRect);
 		} else {
 			canvas.clipRect(intRect, Region.Op.REPLACE);
@@ -224,19 +235,23 @@ public class Graphics {
 	}
 
 	public int getClipX() {
-		return canvas.getClipBounds().left;
+		canvas.getClipBounds(intRect);
+		return intRect.left;
 	}
 
 	public int getClipY() {
-		return canvas.getClipBounds().top;
+		canvas.getClipBounds(intRect);
+		return intRect.top;
 	}
 
 	public int getClipWidth() {
-		return canvas.getClipBounds().width();
+		canvas.getClipBounds(intRect);
+		return intRect.width();
 	}
 
 	public int getClipHeight() {
-		return canvas.getClipBounds().height();
+		canvas.getClipBounds(intRect);
+		return intRect.height();
 	}
 
 	public void translate(int dx, int dy) {
@@ -244,10 +259,6 @@ public class Graphics {
 		translateY += dy;
 
 		canvas.translate(dx, dy);
-	}
-
-	protected void resetTranslation() {
-		translate(-translateX, -translateY);
 	}
 
 	public int getTranslateX() {
@@ -398,7 +409,28 @@ public class Graphics {
 		if (width == 0 || height == 0) return;
 
 		if (transform != 0) {
-			drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
+			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
+			RectF dstR = new RectF(0, 0, width, height);
+			RectF deviceR = new RectF();
+			Matrix matrix = Sprite.transformMatrix(transform, width / 2, height / 2);
+			matrix.mapRect(deviceR, dstR);
+
+			if ((anchor & Graphics.RIGHT) != 0) {
+				dstx -= deviceR.width();
+			} else if ((anchor & Graphics.HCENTER) != 0) {
+				dstx -= deviceR.width() / 2;
+			}
+			if ((anchor & Graphics.BOTTOM) != 0) {
+				dsty -= deviceR.height();
+			} else if ((anchor & Graphics.VCENTER) != 0) {
+				dsty -= deviceR.height() / 2;
+			}
+
+			canvas.save();
+			canvas.translate(-deviceR.left + dstx, -deviceR.top + dsty);
+			canvas.concat(matrix);
+			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+			canvas.restore();
 		} else {
 			if ((anchor & Graphics.RIGHT) != 0) {
 				dstx -= width;
@@ -410,6 +442,7 @@ public class Graphics {
 			} else if ((anchor & Graphics.VCENTER) != 0) {
 				dsty -= height / 2;
 			}
+
 			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
 			RectF dstR = new RectF(dstx, dsty, dstx + width, dsty + height);
 			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
@@ -446,5 +479,9 @@ public class Graphics {
 	public void getPixels(int[] pixels, int offset, int stride,
 						  int x, int y, int width, int height) {
 		canvasBitmap.getPixels(pixels, offset, stride, x, y, width, height);
+	}
+
+	public Bitmap getBitmap() {
+		return canvasBitmap;
 	}
 }

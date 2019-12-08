@@ -184,6 +184,20 @@ static void convertARGBToRGBA8(const M3Guint *src, M3Gsizei count, M3Gubyte *dst
 }
 
 /*!
+ * \internal \brief ARGB -> RGB8_32
+ */
+static void convertARGBToRGB832(const M3Guint *src, M3Gsizei count, M3Gubyte *dst)
+{
+    while (count--) {
+        M3Guint argb = M3G_ALPHA_MASK | *src++;
+        *dst++ = (M3Gubyte) RED(argb);
+        *dst++ = (M3Gubyte) GREEN(argb);
+        *dst++ = (M3Gubyte) BLUE(argb);
+        *dst++ = (M3Gubyte) ALPHA(argb);
+    }
+}
+
+/*!
  * \internal \brief ARGB -> BGRA
  */
 static void convertARGBToBGRA8(const M3Guint *src, M3Gsizei count, M3Gubyte *dst)
@@ -236,8 +250,10 @@ static void convertFromARGB(const M3Guint *src,
         convertARGBToRGB565(src, count, dst);
         break;
     case M3G_RGBA8:
-    case M3G_RGB8_32:
         convertARGBToRGBA8(src, count, dst);
+        break;
+    case M3G_RGB8_32:
+        convertARGBToRGB832(src, count, dst);
         break;
     case M3G_BGRA8:
     case M3G_BGR8_32:
@@ -328,14 +344,23 @@ static void convertRGBA8ToARGB(const M3Gubyte *src, M3Gsizei count, M3Guint *dst
         argb  = ((M3Guint)(*src++)) << 16;
         argb |= ((M3Guint)(*src++)) <<  8;
         argb |=  (M3Guint)(*src++);
-        // Workaround for Android
-        // TODO fix it
-        M3Guint alpha = (M3Guint)(*src++);
-        if (argb != 0 && alpha == 0) {
-            alpha = 0xFF;
-        }
-        argb |= alpha << 24;
+        argb |=  (M3Guint)(*src++)  << 24;
         *dst++ = argb;
+    }
+}
+
+/*!
+ * \internal \brief RGB8_32 -> ARGB
+ */
+static void convertRGB832ToARGB(const M3Gubyte *src, M3Gsizei count, M3Guint *dst)
+{
+    while (count--) {
+        M3Guint argb = M3G_ALPHA_MASK;
+        argb |= ((M3Guint)(*src++)) << 16;
+        argb |= ((M3Guint)(*src++)) <<  8;
+        argb |=  (M3Guint)(*src++);
+        *dst++ = argb;
+        src++;
     }
 }
 
@@ -385,8 +410,10 @@ static void convertToARGB(M3GPixelFormat srcFormat,
         convertRGB565ToARGB(src, count, dst);
         break;
     case M3G_RGBA8:
-    case M3G_RGB8_32:
         convertRGBA8ToARGB(src, count, dst);
+        break;
+    case M3G_RGB8_32:
+        convertRGB832ToARGB(src, count, dst);
         break;
     case M3G_BGRA8:
     case M3G_BGR8_32:

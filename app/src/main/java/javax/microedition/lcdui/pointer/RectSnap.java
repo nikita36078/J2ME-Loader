@@ -20,10 +20,10 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 
 /**
- * Привязка прямоугольников.
+ * The rectangles binding.
  * <p>
  * <pre>
- * Суть:
+ * The gist:
  *
  * SNAP_LEFT
  *
@@ -117,9 +117,9 @@ import android.graphics.RectF;
  *
  * </pre>
  * <p>
- * Для удобства здесь определены два набора констант по сторонам света.
- * Константы на EXT_ определяют привязку снаружи другого прямоугольника,
- * константы на INT_ определяют привязку внутри другого прямоугольника.
+ * For convenience, there are two sets of constants defined for the cardinal points.
+ * The constants with EXT_ define a binding outside of another rectangle,
+ * the constants with INT_ define a binding inside another rectangle.
  */
 public class RectSnap {
 	public static final int NO_SNAP = 0;
@@ -172,15 +172,15 @@ public class RectSnap {
 	public static final int INT_WEST = ALIGN_VCENTER | ALIGN_LEFT;
 
 	/**
-	 * Определить режим привязки двух прямоугольников (если есть).
-	 * Версия для RectF.
+	 * Determine the binding mode of two rectangles (if any).
+	 * Version for RectF.
 	 *
-	 * @param target  что привязывать
-	 * @param origin  куда привязывать
-	 * @param radius  на каком расстоянии начинает действовать привязка
-	 * @param mask    маска разрешенных привязок
-	 * @param biaxial если true, то привязка будет либо по обоим осям, либо ее вообще не будет
-	 * @return режим привязки, или NO_SNAP
+	 * @param target  what to bind
+	 * @param origin  where to bind
+	 * @param radius  the maximum distance for binding
+	 * @param mask    the allowed bindings mask
+	 * @param biaxial if true, then the binding will be either on both axes, or it will not be at all
+	 * @return the binding mode, or NO_SNAP
 	 */
 	public static int getSnap(RectF target, RectF origin, float radius, int mask, boolean biaxial) {
 		int snap = NO_SNAP;
@@ -233,14 +233,14 @@ public class RectSnap {
 	}
 
 	/**
-	 * Определить наилучшую привязку двух прямоугольников (существует всегда),
-	 * и опционально вернуть смещение от этой привязки.
-	 * Версия для RectF и PointF.
+	 * Determine the best binding for two rectangles (always exists),
+	 * and optionally return the offset from this binding.
+	 * Version for RectF and PointF.
 	 *
-	 * @param target что привязывать
-	 * @param origin куда привязывать
-	 * @param offset точка, в которую будет записано смещение от привязки (или null)
-	 * @return режим привязки
+	 * @param target what to bind
+	 * @param origin where to bind
+	 * @param offset the point to which the offset from the binding will be written (or null)
+	 * @return the binding mode
 	 */
 	public static int getSnap(RectF target, RectF origin, PointF offset) {
 		float[] rx =
@@ -317,14 +317,14 @@ public class RectSnap {
 	}
 
 	/**
-	 * Привязать один прямоугольник к другому,
-	 * опционально сместив его на некоторое расстояние от привязки.
-	 * Версия для RectF и PointF.
+	 * Snap one rectangle to another,
+	 * optionally shifting it some distance from the binding.
+	 * Version for RectF and PointF.
 	 *
-	 * @param target что привязывать
-	 * @param origin куда привязывать
-	 * @param mode   как привязывать
-	 * @param offset точка, в которой содержится смещение от привязки (или null)
+	 * @param target what to bing
+	 * @param origin where to bind
+	 * @param mode   how to bind
+	 * @param offset the point to which the offset from the binding will be written (or null)
 	 */
 	public static void snap(RectF target, RectF origin, int mode, PointF offset) {
 		float width = target.width();

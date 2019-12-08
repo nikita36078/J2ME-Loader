@@ -294,8 +294,8 @@ public class Sprite extends Layer {
 			throw new IllegalArgumentException();
 		}
 
-		for (int i = 0; i < sequence.length; i++) {
-			if (sequence[i] < 0 || sequence[i] >= numberFrames) {
+		for (int aSequence : sequence) {
+			if (aSequence < 0 || aSequence >= numberFrames) {
 				throw new ArrayIndexOutOfBoundsException();
 			}
 		}

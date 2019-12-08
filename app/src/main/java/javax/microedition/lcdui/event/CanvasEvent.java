@@ -40,6 +40,7 @@ public class CanvasEvent extends Event {
 	private int eventType;
 
 	private int keyCode;
+	private int originalKeycode;
 
 	private int pointer;
 	private float x, y;
@@ -69,7 +70,8 @@ public class CanvasEvent extends Event {
 
 		instance.canvas = canvas;
 		instance.eventType = eventType;
-		instance.keyCode = keyCode;
+		instance.originalKeycode = keyCode;
+		instance.keyCode = Canvas.convertKeyCode(keyCode);
 
 		return instance;
 	}
@@ -110,51 +112,61 @@ public class CanvasEvent extends Event {
 		switch (eventType) {
 			case KEY_PRESSED:
 				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyPressed(keyCode);
+					((GameCanvas) canvas).gameKeyPressed(keyCode, originalKeycode);
 				} else {
 					canvas.keyPressed(keyCode);
 				}
-				return;
+				break;
 
 			case KEY_REPEATED:
 				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyRepeated(keyCode);
+					((GameCanvas) canvas).gameKeyRepeated(keyCode, originalKeycode);
 				} else {
 					canvas.keyRepeated(keyCode);
 				}
-				return;
+				break;
 
 			case KEY_RELEASED:
 				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyReleased(keyCode);
+					((GameCanvas) canvas).gameKeyReleased(keyCode, originalKeycode);
 				} else {
 					canvas.keyReleased(keyCode);
 				}
-				return;
+				break;
 
 			case POINTER_PRESSED:
 				canvas.pointerPressed(pointer, x, y);
-				return;
+				break;
 
 			case POINTER_DRAGGED:
 				canvas.pointerDragged(pointer, x, y);
-				return;
+				break;
 
 			case POINTER_RELEASED:
 				canvas.pointerReleased(pointer, x, y);
-				return;
+				break;
 
 			case SHOW_NOTIFY:
-				canvas.showNotify();
-				return;
+				try {
+					canvas.showNotify();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				canvas.setVisible(true);
+				break;
 
 			case HIDE_NOTIFY:
-				canvas.hideNotify();
-				return;
+				canvas.setVisible(false);
+				try {
+					canvas.hideNotify();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
 
 			case SIZE_CHANGED:
 				canvas.sizeChanged(width, height);
-				return;
+				break;
 		}
 	}
 

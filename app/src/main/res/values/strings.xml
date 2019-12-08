@@ -5,6 +5,7 @@
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
+    <string name="close">Close</string>
     <string name="exit">Exit</string>
     <string name="about">About</string>
     <string name="help">Help</string>
@@ -12,6 +13,7 @@
     <string name="search">Search</string>
     <string name="licenses">Licenses</string>
     <string name="templates">Templates</string>
+    <string name="save_log">Save log</string>
     <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.&lt;BR></string>
     <string name="help_message">&#8226; Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.&lt;BR>&#8226; Image flickering issues can be fixed by enabling the "Immediate processing mode" option.</string>
     <string name="about_email" translatable="false">&lt;BR>Email: &lt;a href="mailto:j2me.loader@mail.ru">j2me.loader@mail.ru&lt;/a></string>
@@ -19,7 +21,7 @@
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2018 Nikita Shakarun</string>
+    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2019 Nikita Shakarun</string>
     <string name="author">Author: </string>
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
@@ -57,6 +59,8 @@
     <string name="PREF_FILTER">Filter</string>
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="PREF_SHOW_FPS">Show FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Force fullscreen</string>
+    <string name="PREF_LIMIT_FPS">Limit FPS</string>
     <string name="PREF_FONT_OPTIONS">Font options</string>
     <string name="PREF_WIDTH">Width</string>
     <string name="PREF_HEIGHT">Height</string>
@@ -97,6 +101,19 @@
         <item>Landscape</item>
     </string-array>
     <string name="error">Error</string>
+    <string name="message_clear_data">Do you really want to clear app data?</string>
+    <string name="PREF_VK_TYPE">Keyboard type</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>Customizable</item>
+        <item>Phone</item>
+        <item>Phone (arrows)</item>
+    </string-array>
+    <string name="PREF_LAYOUT">Layout</string>
+    <string-array name="PREF_LAYOUT_ENTRIES" translatable="false">
+        <item>Nokia/SE</item>
+        <item>Siemens</item>
+        <item>Motorola</item>
+    </string-array>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>
@@ -110,6 +127,9 @@
     <string name="layout_scale_mode">Keylayout resize mode</string>
     <string name="layout_switch">Switch keylayout</string>
     <string name="hide_buttons">Hide buttons</string>
+    <string name="take_screenshot">Take screenshot</string>
+    <string name="screenshot_saved">Screenshot has been saved to</string>
+    <string name="log_saved">Log has been saved</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_theme_title">Theme</string>
@@ -144,6 +164,16 @@
         <item>date</item>
     </string-array>
     <string name="pref_map_keys">Key mappings</string>
+    <string name="pref_encoding_title">Encoding</string>
+    <string-array name="pref_encoding_entries" translatable="false">
+        <item>UTF-8</item>
+        <item>ISO-8859-1</item>
+    </string-array>
+    <string-array name="pref_encoding_values" translatable="false">
+        <item>UTF-8</item>
+        <item>ISO-8859-1</item>
+    </string-array>
+    <string name="pref_default_settings">Default settings</string>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>
@@ -172,6 +202,7 @@
     <string name="mapping_dialog_title">Press a key</string>
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
+    <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
 
 
 </resources>

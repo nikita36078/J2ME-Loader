@@ -16,14 +16,16 @@
 
 package ru.playsoftware.j2meloader.base;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import ru.playsoftware.j2meloader.R;
 
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 
 	@Override
@@ -34,6 +36,9 @@ public class BaseActivity extends AppCompatActivity {
 			setTheme(R.style.AppTheme);
 		} else {
 			setTheme(R.style.AppTheme_Light);
+		}
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setElevation(getResources().getDisplayMetrics().density * 2);
 		}
 		super.onCreate(savedInstanceState);
 	}

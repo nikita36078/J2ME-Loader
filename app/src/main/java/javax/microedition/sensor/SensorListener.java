@@ -17,7 +17,7 @@
 package javax.microedition.sensor;
 
 public interface SensorListener {
-	void sensorAvailable(SensorInfo sensorInfo);
+	public void sensorAvailable(SensorInfo info);
 
-	void sensorUnavailable(SensorInfo sensorInfo);
+	public void sensorUnavailable(SensorInfo info);
 }

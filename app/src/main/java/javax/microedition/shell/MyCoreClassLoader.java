@@ -24,7 +24,8 @@ public class MyCoreClassLoader extends ClassLoader {
 
 	@Override
 	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-		if (!(name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("com."))) {
+		if (!(name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("com.")
+				|| name.startsWith("org.xml.sax"))) {
 			throw new ClassNotFoundException();
 		}
 		return super.loadClass(name, resolve);

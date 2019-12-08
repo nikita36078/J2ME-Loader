@@ -18,9 +18,6 @@ package ru.playsoftware.j2meloader.config;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -29,13 +26,16 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import ru.playsoftware.j2meloader.R;
 
 public class SaveTemplateDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String appName = getArguments().getString(ConfigActivity.MIDLET_NAME_KEY);
+		String configPath = getArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View v = inflater.inflate(R.layout.dialog_save_template, null);
 		EditText etTemplateName = v.findViewById(R.id.etTemplateName);
@@ -51,7 +51,7 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 					} else {
 						try {
 							Template template = new Template(templateName);
-							TemplatesManager.saveTemplate(template, appName,
+							TemplatesManager.saveTemplate(template, configPath,
 									cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
 						} catch (IOException e) {
 							e.printStackTrace();

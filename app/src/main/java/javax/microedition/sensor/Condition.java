@@ -23,7 +23,7 @@ public interface Condition {
 	public static final String OP_LESS_THAN = "lt";
 	public static final String OP_LESS_THAN_OR_EQUALS = "le";
 
-	boolean isMet(double d);
+	public boolean isMet(double doubleValue);
 
-	boolean isMet(Object obj);
+	public boolean isMet(Object value);
 }

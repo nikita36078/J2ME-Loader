@@ -16,11 +16,11 @@
 
 package ru.playsoftware.j2meloader.appsdb;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Database(entities = {AppItem.class}, version = 1, exportSchema = false)

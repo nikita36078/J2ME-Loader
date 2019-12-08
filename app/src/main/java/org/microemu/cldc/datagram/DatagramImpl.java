@@ -229,6 +229,7 @@ public class DatagramImpl implements Datagram {
 		return dis.readInt();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String readLine() throws IOException {
 		return dis.readLine();

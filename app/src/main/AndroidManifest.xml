@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.playsoftware.j2meloader"
     android:installLocation="auto" >
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
     <application
         android:name=".EmulatorApplication"
         android:allowBackup="false"
@@ -15,14 +17,14 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:resizeableActivity="false"
+        android:requestLegacyExternalStorage="false"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         tools:targetApi="o">
-        <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,11 +69,13 @@
         <activity
             android:name=".config.ConfigActivity"
             android:exported="true"
+            android:process=":midlet"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:process=":midlet"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize" />
         <activity
             android:name=".settings.SettingsActivity" >
             <intent-filter>
@@ -82,14 +86,15 @@
         <activity
             android:name=".donations.DonationsActivity" />
         <activity
-            android:name=".settings.KeyMapperActivity" />
+            android:name=".settings.KeyMapperActivity"
+            android:process=":midlet" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />
         <activity
             android:name=".config.TemplatesActivity" />
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

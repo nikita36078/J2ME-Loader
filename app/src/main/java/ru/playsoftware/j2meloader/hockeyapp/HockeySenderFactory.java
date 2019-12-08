@@ -17,11 +17,12 @@
 package ru.playsoftware.j2meloader.hockeyapp;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import org.acra.config.CoreConfiguration;
 import org.acra.sender.ReportSender;
 import org.acra.sender.ReportSenderFactory;
+
+import androidx.annotation.NonNull;
 
 public class HockeySenderFactory implements ReportSenderFactory {
 	@NonNull

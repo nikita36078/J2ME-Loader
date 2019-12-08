@@ -1,16 +1,38 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="@style/Theme.AppCompat">
+        <item name="colorPrimary">@color/dark_color_primary</item>
+        <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
+        <item name="colorAccent">@color/dark_color_accent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:colorBackground">@color/dark_color_background</item>
+        <item name="android:windowBackground">@color/dark_color_background</item>
+        <item name="buttonStyle">@style/ButtonStyle</item>
+
+        <!--custom theme attrs-->
+        <item name="bg_config_card">@drawable/bg_config_card_dark</item>
+        <item name="textColorPrimary">@color/dark_color_text_primary</item>
+        <item name="textColorSecondary">@color/dark_color_text_secondary</item>
     </style>
 
     <style name="AppTheme.Light" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/light_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
+        <item name="colorAccent">@color/light_color_accent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:colorBackground">@color/light_color_background</item>
+        <item name="android:windowBackground">@color/light_color_background</item>
+        <item name="buttonStyle">@style/ButtonStyle.Light</item>
+
+        <!--custom theme attrs-->
+        <item name="bg_config_card">@drawable/bg_config_card_light</item>
+        <item name="textColorPrimary">@color/light_color_text_primary</item>
+        <item name="textColorSecondary">@color/light_color_text_secondary</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimary">@color/dark_color_primary</item>
+        <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
     </style>
 
@@ -19,8 +41,8 @@
     </style>
 
     <style name="AppTheme.Light.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimary">@color/light_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.Light.OverflowMenu</item>
     </style>
 
@@ -29,7 +51,13 @@
     </style>
 
     <style name="FilePickerTheme" parent="NNF_BaseTheme">
+        <item name="colorPrimary">@color/dark_color_primary</item>
+        <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
         <item name="colorAccent">@color/file_picker_accent</item>
+        <item name="android:colorBackground">@color/dark_color_background</item>
+        <item name="android:windowBackground">@color/dark_color_background</item>
+        <item name="colorBackgroundFloating">@color/dark_color_background</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
         <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
     </style>
 
@@ -38,12 +66,55 @@
     </style>
 
     <style name="FilePickerTheme.Light" parent="NNF_BaseTheme.Light">
+        <item name="colorPrimary">@color/light_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
         <item name="colorAccent">@color/file_picker_accent</item>
+        <item name="android:colorBackground">@color/light_color_background</item>
+        <item name="android:windowBackground">@color/light_color_background</item>
+        <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme.Light</item>
     </style>
 
     <style name="FilePickerAlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/file_picker_accent</item>
+    </style>
+
+    <style name="ConfigTitleTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?attr/textColorPrimary</item>
+    </style>
+
+    <style name="CheckBoxStyle">
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:textColor">?textColorSecondary</item>
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minHeight">38dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">#b0b0b0</item>
+        <item name="android:textColor">?attr/textColorPrimary</item>
+    </style>
+
+    <style name="ButtonStyle.Base" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:maxHeight">38dp</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingRight">6dp</item>
+        <item name="android:elevation" tools:ignore="NewApi">1dp</item>
+    </style>
+
+    <style name="ButtonStyle" parent="ButtonStyle.Base">
+        <item name="android:background">@drawable/bg_button_dark</item>
+    </style>
+
+    <style name="ButtonStyle.Light" parent="ButtonStyle.Base">
+        <item name="android:background">@drawable/bg_button_light</item>
     </style>
 
 </resources>

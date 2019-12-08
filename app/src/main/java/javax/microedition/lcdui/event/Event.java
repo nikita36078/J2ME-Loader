@@ -18,25 +18,25 @@
 package javax.microedition.lcdui.event;
 
 /**
- * Базовый класс для всех событий.
+ * The base class for all events.
  */
 public abstract class Event implements Runnable {
 	/**
-	 * Обработка события.
-	 * Именно здесь нужно выполнять требуемые действия.
+	 * Event handling.
+	 * This is where you need to perform the required actions.
 	 */
 	public abstract void process();
 
 	/**
-	 * Сдача события в утиль.
+	 * Event recycling
 	 * <p>
-	 * Если предусмотрен пул событий, то здесь
-	 * событие нужно обнулить и вернуть в пул.
+	 * If a pool of events is used, then the event must be reset
+	 * and returned to the pool.
 	 */
 	public abstract void recycle();
 
 	/**
-	 * Обработать событие и сдать в утиль за один прием.
+	 * Handle the event and recycle it.
 	 */
 	@Override
 	public void run() {
@@ -45,23 +45,23 @@ public abstract class Event implements Runnable {
 	}
 
 	/**
-	 * Вызывается, когда событие вошло в очередь.
-	 * Здесь можно увеличить счетчик таких событий в очереди.
+	 * Called when an event has entered the queue.
+	 * Here you can increase the count of such events in the queue.
 	 */
 	public abstract void enterQueue();
 
 	/**
-	 * Вызывается, когда событие покинуло очередь.
-	 * Здесь можно уменьшить счетчик таких событий в очереди.
+	 * Called when an event has left the queue.
+	 * Here you can increase the count of such events in the queue.
 	 */
 	public abstract void leaveQueue();
 
 	/**
-	 * Проверить, можно ли поместить это событие в очередь
-	 * сразу за некоторым другим событием.
+	 * Check if this event can be queued
+	 * immediately after some other event.
 	 *
-	 * @param event событие, после которого нас могут поместить в очередь
-	 * @return true, если мы на это согласны
+	 * @param event event after which we can put in queue
+	 * @return true, if we agree to that
 	 */
 	public abstract boolean placeableAfter(Event event);
 }

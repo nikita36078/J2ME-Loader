@@ -31,54 +31,43 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class AndroidProducer {
 
-	private static HashMap<String, ArrayList<String>> classesHierarchy = new HashMap<>();
+	private static final int BUFFER_SIZE = 2048;
 
-	private static HashMap<String, TreeMap<FieldNodeExt, String>> fieldTranslations = new HashMap<>();
-
-	private static HashMap<String, ArrayList<String>> methodTranslations = new HashMap<>();
-
-	private static void analyze(String className, final InputStream classInputStream) throws IOException {
-		ClassReader cr = new ClassReader(classInputStream);
-		FirstPassVisitor cv = new FirstPassVisitor(classesHierarchy, methodTranslations);
-		cr.accept(cv, 0);
-	}
-
-	private static byte[] instrument(String name, final InputStream classInputStream) throws IOException {
-		ClassReader cr = new ClassReader(classInputStream);
+	private static byte[] instrument(final byte[] classFile, String classFileName, String encoding)
+			throws IllegalArgumentException {
+		ClassReader cr = new ClassReader(classFile);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassVisitor cv = new AndroidClassVisitor(cw, classesHierarchy, fieldTranslations, methodTranslations);
-		cr.accept(cv, 0);
+		ClassVisitor cv = new AndroidClassVisitor(cw, encoding);
+		if (!cr.getClassName().equals(classFileName)) {
+			throw new IllegalArgumentException("Class name does not match path");
+		}
+		cr.accept(cv, ClassReader.SKIP_DEBUG);
 
 		return cw.toByteArray();
 	}
 
-	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
-		ZipInputStream zis = null;
-		ZipOutputStream zos = null;
+	public static void processJar(File jarInputFile, File jarOutputFile, String encoding) throws IOException {
 		HashMap<String, byte[]> resources = new HashMap<>();
-		try {
-			zis = new ZipInputStream(new FileInputStream(jarInputFile));
-			zos = new ZipOutputStream(new FileOutputStream(jarOutputFile));
-
-			byte[] buffer = new byte[1024];
-			ZipEntry zipEntry;
-			while ((zipEntry = zis.getNextEntry()) != null) {
+		ZipEntry zipEntry;
+		InputStream zis;
+		try (ZipFileCompat zip = new ZipFileCompat(jarInputFile);
+			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
+			byte[] buffer = new byte[BUFFER_SIZE];
+			while ((zipEntry = zip.getNextEntry()) != null) {
 				if (!zipEntry.isDirectory()) {
+					zis = zip.getInputStream(zipEntry);
 					String name = zipEntry.getName();
 					int size = 0;
 					int read;
@@ -86,7 +75,7 @@ public class AndroidProducer {
 					while ((read = zis.read(buffer, size, length)) > 0) {
 						size += read;
 
-						length = 1024;
+						length = BUFFER_SIZE;
 						if (size + length > buffer.length) {
 							byte[] newInputBuffer = new byte[size + length];
 							System.arraycopy(buffer, 0, newInputBuffer, 0, buffer.length);
@@ -96,27 +85,22 @@ public class AndroidProducer {
 					byte[] inBuffer = new byte[size];
 					System.arraycopy(buffer, 0, inBuffer, 0, size);
 					resources.put(name, inBuffer);
-					if (name.endsWith(".class")) {
-						analyze(name.substring(0, name.length() - ".class".length()), new ByteArrayInputStream(inBuffer));
-					}
 				}
 			}
 
 			for (String name : resources.keySet()) {
 				byte[] inBuffer = resources.get(name);
 				byte[] outBuffer = inBuffer;
-				if (name.endsWith(".class")) {
-					outBuffer = instrument(name, new ByteArrayInputStream(inBuffer));
+				try {
+					if (name.endsWith(".class")) {
+						outBuffer = instrument(inBuffer,
+								name.replace(".class", ""), encoding);
+					}
+					zos.putNextEntry(new ZipEntry(name));
+					zos.write(outBuffer);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				zos.putNextEntry(new ZipEntry(name));
-				zos.write(outBuffer);
-			}
-		} finally {
-			if (zis != null) {
-				zis.close();
-			}
-			if (zos != null) {
-				zos.close();
 			}
 		}
 	}

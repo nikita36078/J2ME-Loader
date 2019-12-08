@@ -60,7 +60,7 @@ public class Sound {
 
 	public void init(int freq, long duration) {
 		try {
-			player = Manager.createPlayer(null, null);
+			player = Manager.createPlayer(Manager.TONE_DEVICE_LOCATOR);
 			postEvent(SOUND_UNINITIALIZED);
 		} catch (IOException e) {
 			e.printStackTrace();

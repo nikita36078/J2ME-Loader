@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_dark">#000000</color>
-    <color name="primary">#212121</color>
     <color name="ic_launcher_background">#525AA0</color>
     <color name="fab_material_red_500">#f44336</color>
-    <color name="file_picker_accent">#cddc39</color>
+    <color name="file_picker_accent">#ffb62e</color>
+
+    <!--light theme color-->
+    <color name="light_color_primary">#212121</color>
+    <color name="light_color_primary_dark">#1c1c1c</color>
+    <color name="light_color_accent">#ff2e51</color>
+    <color name="light_color_background">#fafafa</color>
+    <color name="light_color_text_primary">#000000</color>
+    <color name="light_color_text_secondary">#353535</color>
+    <color name="light_color_btn_bg_normal">#2e2e2e</color>
+    <color name="light_color_btn_bg_pressed">#191919</color>
+    <color name="light_color_config_card">#ffffff</color>
+
+    <!--dark theme color-->
+    <color name="dark_color_primary">#262e37</color>
+    <color name="dark_color_primary_dark">#20272f</color>
+    <color name="dark_color_accent">#0099ff</color>
+    <color name="dark_color_background">#20272f</color>
+    <color name="dark_color_control_normal">#516985</color>
+    <color name="dark_color_text_primary">#ffffff</color>
+    <color name="dark_color_text_secondary">#dedede</color>
+    <color name="dark_color_btn_bg_normal">#0099ff</color>
+    <color name="dark_color_btn_bg_pressed">#008bd1</color>
+    <color name="dark_color_config_card">#262e37</color>
+
 </resources>

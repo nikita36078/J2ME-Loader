@@ -16,10 +16,8 @@
 
 package ru.playsoftware.j2meloader.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -28,14 +26,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import javax.microedition.lcdui.Canvas;
+import java.io.File;
 
+import javax.microedition.lcdui.Canvas;
+import javax.microedition.util.param.SharedPreferencesContainer;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
+import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
 	private static SparseIntArray idToCanvasKey = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
+	private SharedPreferencesContainer params;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +51,18 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle(R.string.pref_map_keys);
+		Intent intent = getIntent();
+		File configDir;
+		boolean defaultConfig = intent.getBooleanExtra(ConfigActivity.DEFAULT_CONFIG_KEY, false);
+		if (defaultConfig) {
+			configDir = new File(Config.DEFAULT_CONFIG_DIR);
+		} else {
+			String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
+			configDir = new File(Config.CONFIGS_DIR, appName);
+		}
+		params = new SharedPreferencesContainer(configDir);
+		params.load(defaultConfig);
+
 		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
 		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);
 		setupButton(R.id.virtual_key_d, Canvas.KEY_SEND);
@@ -65,7 +84,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		setupButton(R.id.virtual_key_0, Canvas.KEY_NUM0);
 		setupButton(R.id.virtual_key_star, Canvas.KEY_STAR);
 		setupButton(R.id.virtual_key_pound, Canvas.KEY_POUND);
-		androidToMIDP = KeyMapper.getArrayPref(this);
+		androidToMIDP = KeyMapper.getArrayPref(params);
 	}
 
 	private void setupButton(int resId, int index) {
@@ -98,7 +117,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 					} else {
 						deleteDuplicates(canvasKey);
 						androidToMIDP.put(keyCode, canvasKey);
-						KeyMapper.saveArrayPref(this, androidToMIDP);
+						KeyMapper.saveArrayPref(params, androidToMIDP);
 						dialog.dismiss();
 						return true;
 					}
@@ -130,7 +149,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			case R.id.action_reset_mapping:
 				androidToMIDP.clear();
 				KeyMapper.initArray(androidToMIDP);
-				KeyMapper.saveArrayPref(this, androidToMIDP);
+				KeyMapper.saveArrayPref(params, androidToMIDP);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

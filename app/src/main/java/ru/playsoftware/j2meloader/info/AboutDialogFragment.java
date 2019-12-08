@@ -18,13 +18,13 @@ package ru.playsoftware.j2meloader.info;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 
@@ -44,7 +44,10 @@ public class AboutDialogFragment extends DialogFragment {
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(message.toString()));
 		tv.setTextSize(16);
-		tv.setPadding(10, 15, 10, 10);
+		float density = getResources().getDisplayMetrics().density;
+		int paddingHorizontal = (int) (density * 20);
+		int paddingVertical = (int) (density * 14);
+		tv.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, 0);
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)

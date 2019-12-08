@@ -19,9 +19,9 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,12 +34,14 @@ import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public abstract class Displayable {
 	private MicroActivity parent;
 	private String title;
 
 	private ArrayList<Command> commands;
-	private CommandListener listener;
+	protected CommandListener listener;
 
 	private int tickermode;
 	private Ticker ticker;
@@ -117,6 +119,8 @@ public abstract class Displayable {
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
+			layout.setLayoutParams(new LinearLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 			marquee = new TextView(context);
 			marquee.setTextAppearance(context, android.R.style.TextAppearance_Medium);
@@ -213,7 +217,8 @@ public abstract class Displayable {
 			return true;
 		}
 
-		for (Command cmd : commands) {
+		Command[] array = commands.toArray(new Command[0]);
+		for (Command cmd : array) {
 			if (cmd.hashCode() == id) {
 				postEvent(CommandActionEvent.getInstance(listener, cmd, this));
 			}

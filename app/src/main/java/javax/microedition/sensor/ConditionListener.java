@@ -17,5 +17,5 @@
 package javax.microedition.sensor;
 
 public interface ConditionListener {
-	void conditionMet(SensorConnection sensorConnection, Data data, Condition condition);
+	public void conditionMet(SensorConnection sensor, Data data, Condition condition);
 }
