@@ -176,16 +176,16 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
             glDepthMask(GL_FALSE);
 
             /* Disable color array, normals and textures*/
-            glDisableClientState(GL_COLOR_ARRAY);
-            glDisableClientState(GL_NORMAL_ARRAY);
+            //glDisableClientState(GL_COLOR_ARRAY);
+            //glDisableClientState(GL_NORMAL_ARRAY);
         
             /* Background image to texture unit 0 */
-            glClientActiveTexture(GL_TEXTURE0);
+            //glClientActiveTexture(GL_TEXTURE0);
             glActiveTexture(GL_TEXTURE0);
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            glTexCoordPointer(2, GL_SHORT, 0, texvert);
+            //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            //glTexCoordPointer(2, GL_SHORT, 0, texvert);
             glEnable(GL_TEXTURE_2D);
-            glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_REPLACE);
+            //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_REPLACE);
             m3gBindTextureImage(imagePow2,
                                 M3G_FILTER_BASE_LEVEL,
                                 m3gIsAccelerated(ctx) ? M3G_FILTER_LINEAR : M3G_FILTER_NEAREST);
@@ -206,16 +206,16 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
             }
 
             /* Texture matrix scale */
-            glMatrixMode(GL_TEXTURE);
-            glLoadIdentity();
-            glScalef(   m3gRcp((M3Gfloat)m3gGetWidth(background->image)),
+            //glMatrixMode(GL_TEXTURE);
+            //glLoadIdentity();
+            /*glScalef(   m3gRcp((M3Gfloat)m3gGetWidth(background->image)),
                         m3gRcp((M3Gfloat)m3gGetHeight(background->image)),
-                        1.f);
-            glMatrixMode(GL_MODELVIEW);
+                        1.f);*/
+            //glMatrixMode(GL_MODELVIEW);
 
             /* Load vertices */
-            glEnableClientState(GL_VERTEX_ARRAY);
-            glVertexPointer(3, GL_FIXED, 0, vert);
+            //glEnableClientState(GL_VERTEX_ARRAY);
+            //glVertexPointer(3, GL_FIXED, 0, vert);
         
             /* Set up an identity modelview and projection */
             m3gPushScreenSpace(ctx, M3G_FALSE);

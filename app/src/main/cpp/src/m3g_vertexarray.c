@@ -96,10 +96,10 @@ static void m3gLockColorArray(const VertexArray *array, M3Gint alphaFactor)
         if (type >= GL_BYTE && type <= GL_UNSIGNED_SHORT) {
             type |= 0x01; /* force type to unsigned for GL */
         }
-        glColorPointer(type == GL_UNSIGNED_BYTE ? 4 : array->elementSize,
+        /*glColorPointer(type == GL_UNSIGNED_BYTE ? 4 : array->elementSize,
                        type,
                        array->stride,
-                       m3gMapObject(m3g, array->data));
+                       m3gMapObject(m3g, array->data));*/
     }
     else {
 
@@ -151,7 +151,7 @@ static void m3gLockColorArray(const VertexArray *array, M3Gint alphaFactor)
         /* We now have the scaled colors in the cache, so just set the
          * pointer there */
         
-        glColorPointer(4, GL_UNSIGNED_BYTE, 0, cache);
+        //glColorPointer(4, GL_UNSIGNED_BYTE, 0, cache);
     }
     M3G_ASSERT_GL;
     
@@ -186,8 +186,8 @@ static void m3gLockNormalArray(const VertexArray *array)
     M3G_VALIDATE_OBJECT(array);
     M3G_ASSERT(!array->mapCount);
 
-    glNormalPointer(array->elementType, array->stride,
-                    m3gMapObject(M3G_INTERFACE(array), array->data));
+    /*glNormalPointer(array->elementType, array->stride,
+                    m3gMapObject(M3G_INTERFACE(array), array->data));*/
     M3G_ASSERT_GL;
     
     ++((VertexArray*)array)->numLocks;
@@ -204,10 +204,10 @@ static void m3gLockTexCoordArray(const VertexArray *array)
     M3G_VALIDATE_OBJECT(array);
     M3G_ASSERT(!array->mapCount);
 
-    glTexCoordPointer(array->elementSize,
+   /* glTexCoordPointer(array->elementSize,
                       array->elementType,
                       array->stride,
-                      m3gMapObject(M3G_INTERFACE(array), array->data));
+                      m3gMapObject(M3G_INTERFACE(array), array->data));*/
     M3G_ASSERT_GL;
     
     ++((VertexArray*)array)->numLocks;
@@ -224,10 +224,10 @@ static void m3gLockVertexArray(const VertexArray *array)
     M3G_VALIDATE_OBJECT(array);
     M3G_ASSERT(!array->mapCount);
 
-    glVertexPointer(array->elementSize,
+    /*glVertexPointer(array->elementSize,
                     array->elementType,
                     array->stride,
-                    m3gMapObject(M3G_INTERFACE(array), array->data));
+                    m3gMapObject(M3G_INTERFACE(array), array->data));*/
     M3G_ASSERT_GL;
     
     ++((VertexArray*)array)->numLocks;

@@ -41,8 +41,8 @@
  */
 static void m3gApplyDefaultMaterial(void)
 {
-    glDisable(GL_COLOR_MATERIAL);
-    glDisable(GL_LIGHTING);
+    //glDisable(GL_COLOR_MATERIAL);
+    //glDisable(GL_LIGHTING);
 }
 
 /*!
@@ -61,16 +61,16 @@ static void m3gApplyMaterial(Material *material, M3Gint alphaFactor)
          * any of the material colors, as they will not change if
          * tracking is enabled! */
         
-        if (material->vertexColorTracking) {
+        /*if (material->vertexColorTracking) {
             glEnable(GL_COLOR_MATERIAL);
         }
         else {
-            glDisable(GL_COLOR_MATERIAL);
+            glDisable(GL_COLOR_MATERIAL);*/
 
             /* Ambient and diffuse only need to be set when tracking
              * is disabled */
             
-            m3gFloatColor(material->ambientColor, 1.0f, colors);
+            /*m3gFloatColor(material->ambientColor, 1.0f, colors);
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, colors);
             m3gFloatColor(material->diffuseColor, 1.0f, colors);
             if (alphaFactor < 0x10000) {
@@ -86,7 +86,7 @@ static void m3gApplyMaterial(Material *material, M3Gint alphaFactor)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, colors);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
 
-        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHTING);*/
     }
     else {
         m3gApplyDefaultMaterial();

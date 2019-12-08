@@ -249,7 +249,7 @@ static void m3gSelectGLLights(const LightManager *mgr,
 {
     const PointerArray *lights;
     int i, required, total;
-    GLenum glIndex = GL_LIGHT0;
+    GLenum glIndex = 0;
     M3G_ASSERT_PTR(mgr);
 
     M3G_UNREF(x);
@@ -278,7 +278,7 @@ static void m3gSelectGLLights(const LightManager *mgr,
 
     /* Disable the leftover lights */
     
-    while (glIndex <= GL_LIGHT7) {
+    while (glIndex <= 7) {
         glDisable(glIndex++);
     }
 }

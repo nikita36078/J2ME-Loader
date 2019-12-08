@@ -48,16 +48,16 @@ static void m3gApplyDefaultPolygonMode()
     glEnable(GL_CULL_FACE);
 
     /* shading = M3G_SHADE_SMOOTH */
-    glShadeModel(GL_SMOOTH);
+//    glShadeModel(GL_SMOOTH);
 
     /*  winding = M3G_WINDING_CCW */
     glFrontFace(GL_CCW);
 
     /* perspective correction = false */
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+   // glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
     /* lighting = ONE_SIDED */
-    glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+   // glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 }
 
 /*!
@@ -82,7 +82,7 @@ static void m3gApplyPolygonMode(PolygonMode *polygonMode)
             glEnable(GL_CULL_FACE);
         }
 
-        if (m3gGetTwoSidedLightingWorkaround(M3G_INTERFACE(polygonMode))) {
+        /*if (m3gGetTwoSidedLightingWorkaround(M3G_INTERFACE(polygonMode))) {
             glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
         }
         else {
@@ -94,7 +94,7 @@ static void m3gApplyPolygonMode(PolygonMode *polygonMode)
         }
         else {
             glShadeModel(GL_SMOOTH);
-        }
+        }*/
 
         if (polygonMode->windingMode == M3G_WINDING_CW) {
             glFrontFace(GL_CW);
@@ -103,12 +103,12 @@ static void m3gApplyPolygonMode(PolygonMode *polygonMode)
             glFrontFace(GL_CCW);
         }
 
-        if (polygonMode->enablePerspectiveCorrection == GL_TRUE) {
+        /*if (polygonMode->enablePerspectiveCorrection == GL_TRUE) {
             glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
         }
         else {
             glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-        }
+        }*/
     }
     else {
         m3gApplyDefaultPolygonMode();

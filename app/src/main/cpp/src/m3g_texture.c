@@ -91,8 +91,8 @@ static void m3gDisableTextures(void)
 {
     M3Gint i;
     for (i = 0; i < M3G_NUM_TEXTURE_UNITS; ++i) {
-        glClientActiveTexture(GL_TEXTURE0 + i);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        //glClientActiveTexture(GL_TEXTURE0 + i);
+        //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glActiveTexture(GL_TEXTURE0 + i);
         glDisable(GL_TEXTURE_2D);
     }
@@ -121,17 +121,17 @@ static void m3gBindTexture(Texture *texture)
         M3Gfloat matrixValues[16];
         m3gGetCompositeTransform((Transformable *) texture, &mtx);
         m3gGetMatrixColumns(&mtx, matrixValues);
-        glMatrixMode(GL_TEXTURE);
-        glLoadMatrixf(matrixValues);
+        //glMatrixMode(GL_TEXTURE);
+        //glLoadMatrixf(matrixValues);
     }
-    glMatrixMode(GL_MODELVIEW);
+    //glMatrixMode(GL_MODELVIEW);
 
     mode = GL_REPLACE;
     switch (texture->blendFunc) {
     case M3G_FUNC_REPLACE:
         mode = GL_REPLACE;
         break;
-    case M3G_FUNC_ADD:
+    /*case M3G_FUNC_ADD:
         mode = GL_ADD;
         break;
     case M3G_FUNC_BLEND:
@@ -142,16 +142,16 @@ static void m3gBindTexture(Texture *texture)
         break;
     case M3G_FUNC_MODULATE:
         mode = GL_MODULATE;
-        break;
+        break;*/
     default:
         /* This should never happen */
         M3G_ASSERT(0);
         break;
     }
-    glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed)mode);
+    //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed)mode);
 
     m3gFloatColor(texture->blendColor, 1.f, colors);
-    glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, colors);
+    //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, colors);
 
     /* setting up wrapping */
     if (texture->wrapS  == M3G_WRAP_CLAMP) {

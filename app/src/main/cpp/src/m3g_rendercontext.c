@@ -533,9 +533,9 @@ static M3Gbool m3gBindRenderTarget(RenderContext *ctx,
 static void m3gSetGLDefaults(void)
 {
 	static const GLfloat black[] = {0.f, 0.f, 0.f, 0.f};
-    glEnable(GL_NORMALIZE);
+    //glEnable(GL_NORMALIZE);
     glEnable(GL_SCISSOR_TEST);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+	//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 }
 
@@ -618,10 +618,10 @@ static void m3gMakeCurrent(RenderContext *ctx)
     /* Enable multisampling if required */
 
     if (ctx->modeBits & M3G_ANTIALIAS_BIT) {
-        glEnable(GL_MULTISAMPLE);
+        //glEnable(GL_MULTISAMPLE);
     }
     else {
-        glDisable(GL_MULTISAMPLE);
+        //glDisable(GL_MULTISAMPLE);
     }
     
     M3G_ASSERT_GL;
@@ -652,15 +652,15 @@ static M3G_INLINE void m3gApplyLights(RenderContext *ctx, M3Gint scope)
          * the viewing matrix to the lights only */
         
         if (ctx->renderMode == RENDER_NODES) {
-            glPushMatrix();
-            glLoadMatrixf(ctx->viewTransform);
+            //glPushMatrix();
+            //glLoadMatrixf(ctx->viewTransform);
         }
         
         m3gSelectGLLights(&ctx->lightManager, 8, scope, 0, 0, 0);
         ctx->lastScope = scope;
         
         if (ctx->renderMode == RENDER_NODES) {
-            glPopMatrix();
+            //glPopMatrix();
         }
     }
 	M3G_ASSERT_GL;
@@ -709,10 +709,10 @@ static void m3gInitRender(M3GRenderContext context, M3Genum renderMode)
 
 	m3gApplyProjection(ctx->camera);
     if (renderMode == RENDER_NODES) {
-        glLoadIdentity();
+        //glLoadIdentity();
     }
     else {
-        glLoadMatrixf(ctx->viewTransform);
+        //glLoadMatrixf(ctx->viewTransform);
     }
     M3G_ASSERT_GL;
 
@@ -763,10 +763,10 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
         /* Disable any stray state we don't want */
 
         glDisable(GL_CULL_FACE);
-        glDisable(GL_ALPHA_TEST);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisable(GL_LIGHTING);
+        //glDisable(GL_ALPHA_TEST);
+        //glDisableClientState(GL_NORMAL_ARRAY);
+        //glDisableClientState(GL_COLOR_ARRAY);
+        //glDisable(GL_LIGHTING);
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glDepthMask(GL_FALSE);
         glDepthFunc(GL_ALWAYS);
@@ -785,20 +785,20 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
                   ctx->clip.x1 - ctx->clip.x0, ctx->clip.y1 - ctx->clip.y0);
         m3gPushScreenSpace(ctx, M3G_FALSE);
         glViewport(0, 0, ctx->target.width, ctx->target.height);
-        glMatrixMode(GL_PROJECTION);
-        glOrthox(0, ctx->target.width << 16,
-                 0, ctx->target.height << 16,
-                 -1 << 16, 1 << 16);
-        glMatrixMode(GL_MODELVIEW);
+        //glMatrixMode(GL_PROJECTION);
+        //glOrthox(0, ctx->target.width << 16,
+        //         0, ctx->target.height << 16,
+        //         -1 << 16, 1 << 16);
+        //glMatrixMode(GL_MODELVIEW);
             
         /* Set up texture and vertex coordinate arrays */
 
-        glClientActiveTexture(GL_TEXTURE0);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glMatrixMode(GL_TEXTURE);
-        glLoadIdentity();
-        glMatrixMode(GL_MODELVIEW);
+        //glClientActiveTexture(GL_TEXTURE0);
+        //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        //glEnableClientState(GL_VERTEX_ARRAY);
+        //glMatrixMode(GL_TEXTURE);
+        //glLoadIdentity();
+        //glMatrixMode(GL_MODELVIEW);
         M3G_ASSERT_GL;
 
         /* Blend the texture with the frame buffer */
@@ -809,8 +809,8 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
             GLfixed cm = (GLfixed)(ctx->currentColorWrite ? 0 : 1 << 16);
             GLfixed am = (GLfixed)(ctx->currentAlphaWrite ? 0 : 1 << 16);
 
-            glVertexPointer(2, GL_SHORT, 0, pos);
-            glTexCoordPointer(2, GL_BYTE, 0, tc);
+            //glVertexPointer(2, GL_SHORT, 0, pos);
+            //glTexCoordPointer(2, GL_BYTE, 0, tc);
                 
             pos[0] = (GLshort) ctx->clip.x0;
             pos[1] = (GLshort) ctx->clip.y0;
@@ -822,7 +822,7 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
             pos[7] = pos[3];
             
             glEnable(GL_BLEND);
-            glColor4x(cm, cm, cm, am);
+            //glColor4x(cm, cm, cm, am);
 
             /* Zero the masked channels */
             
@@ -832,7 +832,7 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
             /* Add the masked channels from the stored texture */
             
             glEnable(GL_TEXTURE_2D);
-            glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+            //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             glBlendFunc(GL_ONE, GL_ONE);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         }
@@ -905,17 +905,17 @@ static void m3gPushScreenSpace(RenderContext *ctx, M3Gbool realPixels)
 {
     M3G_VALIDATE_OBJECT(ctx);
     
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
+    //glMatrixMode(GL_PROJECTION);
+    //glPushMatrix();
+    //glLoadIdentity();
     if (realPixels) {
         int w = ctx->viewport.width;
         int h = ctx->viewport.height;
-        glOrthox(0, w << 16, 0, h << 16, -1 << 16, 1 << 16);
+        //glOrthox(0, w << 16, 0, h << 16, -1 << 16, 1 << 16);
     }
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
+    //glMatrixMode(GL_MODELVIEW);
+    //glPushMatrix();
+    //glLoadIdentity();
 }
 
 /*!
@@ -928,10 +928,10 @@ static void m3gPopSpace(RenderContext *ctx)
     M3G_VALIDATE_OBJECT(ctx);
     
     M3G_UNREF(ctx);
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
+    //glMatrixMode(GL_PROJECTION);
+    //glPopMatrix();
+    //glMatrixMode(GL_MODELVIEW);
+    //glPopMatrix();
 }
 
 /*!
@@ -1041,8 +1041,8 @@ static void m3gDrawMesh(RenderContext *ctx,
 		float transform[16];
 		m3gGetMatrixColumns(modelTransform, transform);
         
-        glPushMatrix();
-        glMultMatrixf(transform);
+        //glPushMatrix();
+        //glMultMatrixf(transform);
     }
 
     /* Check whether we need to create an alpha-factored color cache
@@ -1099,7 +1099,7 @@ static void m3gDrawMesh(RenderContext *ctx,
 
 RestoreModelview:
     if (modelTransform != NULL) {
-        glPopMatrix();
+        //glPopMatrix();
     }
 }
 

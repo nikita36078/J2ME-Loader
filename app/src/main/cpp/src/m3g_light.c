@@ -219,7 +219,7 @@ static void m3gApplyLight(const Light *self,
 
     /* Set light position */
     
-    if (self->mode == M3G_DIRECTIONAL) {
+    /*if (self->mode == M3G_DIRECTIONAL) {
         GLfloat temp[4];
         temp[0] = -spotDir->x;
         temp[1] = -spotDir->y;
@@ -232,11 +232,11 @@ static void m3gApplyLight(const Light *self,
         if (self->mode == M3G_SPOT) {
             glLightfv(glLight, GL_SPOT_DIRECTION, &spotDir->x);
         }
-    }
+    }*/
 
     /* Set ambient, diffuse, and specular contributions */
     
-	if (self->mode == M3G_AMBIENT) {
+	/*if (self->mode == M3G_AMBIENT) {
 		glLightfv(glLight, GL_AMBIENT, light);
 		glLightfv(glLight, GL_DIFFUSE, BLACK);
 		glLightfv(glLight, GL_SPECULAR, BLACK);
@@ -245,21 +245,21 @@ static void m3gApplyLight(const Light *self,
 		glLightfv(glLight, GL_AMBIENT, BLACK);
 		glLightfv(glLight, GL_DIFFUSE, light);
 		glLightfv(glLight, GL_SPECULAR, light);
-	}
+	}*/
 
     /* Set spot parameters */
     
-	if (self->mode == M3G_SPOT) {
+	/*if (self->mode == M3G_SPOT) {
 		glLightf(glLight, GL_SPOT_EXPONENT, self->spotExponent);
 		glLightf(glLight, GL_SPOT_CUTOFF, self->spotAngle);
 	}
 	else {
 		glLightf(glLight, GL_SPOT_CUTOFF, 180.0f);
-	}
+	}*/
 
     /* Set attenuation */
     
-	if (self->mode == M3G_OMNI || self->mode == M3G_SPOT) {
+	/*if (self->mode == M3G_OMNI || self->mode == M3G_SPOT) {
 		glLightf(glLight, GL_CONSTANT_ATTENUATION,  self->constantAttenuation);
 		glLightf(glLight, GL_LINEAR_ATTENUATION,    self->linearAttenuation);
 		glLightf(glLight, GL_QUADRATIC_ATTENUATION, self->quadraticAttenuation);
@@ -268,7 +268,7 @@ static void m3gApplyLight(const Light *self,
 		glLightf(glLight, GL_CONSTANT_ATTENUATION,  1.0f);
 		glLightf(glLight, GL_LINEAR_ATTENUATION,    0.0f);
 		glLightf(glLight, GL_QUADRATIC_ATTENUATION, 0.0f);
-	}
+	}*/
 }
 
 /*----------------------------------------------------------------------

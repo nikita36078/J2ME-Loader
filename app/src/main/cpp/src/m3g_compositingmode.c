@@ -47,8 +47,8 @@ static void m3gApplyDefaultCompositingMode(M3Gbool alphaWrite)
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, alphaWrite);
 
     /* threshold = 0.0 */
-    glAlphaFunc(GL_GEQUAL, 0.0f);
-    glDisable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GEQUAL, 0.0f);
+    //glDisable(GL_ALPHA_TEST);
 
     /* blend = REPLACE */
     glDisable(GL_BLEND);
@@ -83,11 +83,11 @@ static void m3gApplyCompositingMode(CompositingMode *compositingMode, RenderCont
         }
 
         if (compositingMode->alphaThreshold == 0.0f) {
-            glDisable(GL_ALPHA_TEST);
+            //glDisable(GL_ALPHA_TEST);
         }
         else {
-            glAlphaFunc(GL_GEQUAL, compositingMode->alphaThreshold);
-            glEnable(GL_ALPHA_TEST);
+            //glAlphaFunc(GL_GEQUAL, compositingMode->alphaThreshold);
+            //glEnable(GL_ALPHA_TEST);
         }
 
         if (compositingMode->blendingMode == M3G_REPLACE) {

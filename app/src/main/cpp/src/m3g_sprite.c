@@ -443,17 +443,17 @@ static void m3gSpriteDoRender(Node *self,
     m3gApplyDefaultPolygonMode();
 
     /* Disable color array, normals and textures*/
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
+    //glDisableClientState(GL_COLOR_ARRAY);
+    //glDisableClientState(GL_NORMAL_ARRAY);
     m3gDisableTextures();
 
     /* Sprite image to texture unit 0 */
-    glClientActiveTexture(GL_TEXTURE0);
+   // glClientActiveTexture(GL_TEXTURE0);
     glActiveTexture(GL_TEXTURE0);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_SHORT, 0, texvert);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glTexCoordPointer(2, GL_SHORT, 0, texvert);
     glEnable(GL_TEXTURE_2D);
-    glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_MODULATE);
+    //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_MODULATE);
     m3gBindTextureImage(imagePow2,
                         M3G_FILTER_BASE_LEVEL,
                         m3gIsAccelerated(ctx) ? M3G_FILTER_LINEAR : M3G_FILTER_NEAREST);
@@ -461,12 +461,12 @@ static void m3gSpriteDoRender(Node *self,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glScalef(m3gRcp((M3Gfloat) m3gGetWidth(sprite->image)),
-             m3gRcp((M3Gfloat) m3gGetHeight(sprite->image)),
-             1.f);
-    glMatrixMode(GL_MODELVIEW);
+    //glMatrixMode(GL_TEXTURE);
+    //glLoadIdentity();
+   // glScalef(m3gRcp((M3Gfloat) m3gGetWidth(sprite->image)),
+      //       m3gRcp((M3Gfloat) m3gGetHeight(sprite->image)),
+      //       1.f);
+    //glMatrixMode(GL_MODELVIEW);
 
     /* Apply fog and compositing mode */
 #ifdef M3G_USE_NGL_API
@@ -481,12 +481,12 @@ static void m3gSpriteDoRender(Node *self,
         a = (a >> (NODE_ALPHA_FACTOR_BITS - 8))
             + (a >> NODE_ALPHA_FACTOR_BITS)
             + (a >> (NODE_ALPHA_FACTOR_BITS + 7));
-        glColor4x((GLfixed) 1 << 16, (GLfixed) 1 << 16, (GLfixed) 1 << 16, a);
+        //glColor4x((GLfixed) 1 << 16, (GLfixed) 1 << 16, (GLfixed) 1 << 16, a);
     }
 
     /* Load vertices */
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FIXED, 0, vert);
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glVertexPointer(3, GL_FIXED, 0, vert);
 
     /* Store current matrices, then set up an identity modelview and
      * projection */
@@ -508,14 +508,14 @@ static void m3gSpriteDoRender(Node *self,
         m3gMatrixInverse(&invProjMatrix, projMatrix);
 		m3gGetMatrixColumns(&invProjMatrix, transform);
         
-        glMatrixMode(GL_MODELVIEW);
-        glMultMatrixf(transform);
+        //glMatrixMode(GL_MODELVIEW);
+        ///glMultMatrixf(transform);
         scaleW[0] = scaleW[5] = scaleW[10] = scaleW[15] = eyeSpace.w;
-        glMultMatrixf(scaleW);
+        //glMultMatrixf(scaleW);
 
-        glMatrixMode(GL_PROJECTION);
+        //glMatrixMode(GL_PROJECTION);
         m3gGetMatrixColumns(projMatrix, transform);
-        glLoadMatrixf(transform);
+        //glLoadMatrixf(transform);
     }
 #endif
 

@@ -356,9 +356,9 @@ static void m3gApplyProjection(const Camera *camera)
 
     m3gGetMatrixColumns(&camera->projMatrix, t);
     
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(t);
-    glMatrixMode(GL_MODELVIEW);
+    //glMatrixMode(GL_PROJECTION);
+    //glLoadMatrixf(t);
+    //glMatrixMode(GL_MODELVIEW);
 }
 
 /*!

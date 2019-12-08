@@ -81,30 +81,30 @@ static void m3gApplyScaleAndBias(const VertexBuffer *buffer)
 {
     M3G_VALIDATE_OBJECT(buffer);
     
-    glMatrixMode(GL_TEXTURE);
+    //glMatrixMode(GL_TEXTURE);
     {
         M3Gint i;
         for (i = 0; i < M3G_NUM_TEXTURE_UNITS; ++i) {
             if (buffer->texCoords[i] != NULL) {
                 glActiveTexture((GLenum)(GL_TEXTURE0 + i));
-                glTranslatef(buffer->texCoordBias[i][0],
+                /*glTranslatef(buffer->texCoordBias[i][0],
                              buffer->texCoordBias[i][1],
                              buffer->texCoordBias[i][2]);
                 glScalef(buffer->texCoordScale[i],
                          buffer->texCoordScale[i],
-                         buffer->texCoordScale[i]);
+                         buffer->texCoordScale[i]);*/
             }
         }
     }
 
-    glMatrixMode(GL_MODELVIEW);
+    //glMatrixMode(GL_MODELVIEW);
     if (buffer->vertices != NULL) {
-        glTranslatef(buffer->vertexBias[0],
+        /*glTranslatef(buffer->vertexBias[0],
                      buffer->vertexBias[1],
                      buffer->vertexBias[2]);
         glScalef(buffer->vertexScale,
                  buffer->vertexScale,
-                 buffer->vertexScale);
+                 buffer->vertexScale);*/
     }
 }
 
@@ -122,7 +122,7 @@ static void m3gLockVertexBuffer(const VertexBuffer *buffer,
     M3G_ASSERT(!buffer->locked);
 
     if (buffer->colors != NULL) {
-        glEnableClientState(GL_COLOR_ARRAY);
+        //glEnableClientState(GL_COLOR_ARRAY);
         m3gLockColorArray(buffer->colors, alphaFactor);
     }
     else {
@@ -138,38 +138,38 @@ static void m3gLockVertexBuffer(const VertexBuffer *buffer,
             + (a >> NODE_ALPHA_FACTOR_BITS)
             + (a >> (NODE_ALPHA_FACTOR_BITS + 7));
         
-        glDisableClientState(GL_COLOR_ARRAY);
-        glColor4x(r, g, b, a);
+        //glDisableClientState(GL_COLOR_ARRAY);
+        //glColor4x(r, g, b, a);
     }
 
     if (buffer->normals != NULL) {
-        glEnableClientState(GL_NORMAL_ARRAY);
+        //glEnableClientState(GL_NORMAL_ARRAY);
         m3gLockNormalArray(buffer->normals);
     }
     else {
-        glDisableClientState(GL_NORMAL_ARRAY);
+        //glDisableClientState(GL_NORMAL_ARRAY);
     }
 
     if (buffer->vertices != NULL) {
-        glEnableClientState(GL_VERTEX_ARRAY);
+        //glEnableClientState(GL_VERTEX_ARRAY);
         m3gLockVertexArray(buffer->vertices);
     }
     else {
-        glDisableClientState(GL_VERTEX_ARRAY);
+        //glDisableClientState(GL_VERTEX_ARRAY);
     }
     
     {
         M3Gint i;
         for (i = 0; i < M3G_NUM_TEXTURE_UNITS; ++i) {
             const VertexArray *array = buffer->texCoords[i];
-            glClientActiveTexture(GL_TEXTURE0 + i);
+            //glClientActiveTexture(GL_TEXTURE0 + i);
             glActiveTexture(GL_TEXTURE0 + i);
             if (array != NULL) {
-                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
                 m3gLockTexCoordArray(array);
             }
             else {
-                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+                //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
             }    
         }
     }

@@ -177,22 +177,22 @@ static void m3gApplyFog(const Fog *self)
 
 		switch (self->mode) {
 		case M3G_LINEAR_FOG:
-			glEnable(GL_FOG);
+			/*glEnable(GL_FOG);
 			glFogf(GL_FOG_MODE, GL_LINEAR);
 			glFogf(GL_FOG_START, self->start);
 			glFogf(GL_FOG_END, self->end);
-			glFogxv(GL_FOG_COLOR, temp);
+			glFogxv(GL_FOG_COLOR, temp);*/
 			break;
 		case M3G_EXPONENTIAL_FOG:
-			glEnable(GL_FOG);
+			/*glEnable(GL_FOG);
 			glFogf(GL_FOG_MODE, GL_EXP);
 			glFogf(GL_FOG_DENSITY, self->density);
-			glFogxv(GL_FOG_COLOR, temp);
+			glFogxv(GL_FOG_COLOR, temp);*/
 			break;
 		}
 	}
 	else {
-		glDisable(GL_FOG);
+		//glDisable(GL_FOG);
 	}
     M3G_ASSERT_GL;
 }

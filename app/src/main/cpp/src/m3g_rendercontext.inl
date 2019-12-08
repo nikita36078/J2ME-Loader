@@ -509,7 +509,7 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
         
         for (ti = 0; ti < tempTexCount; ++ti) {
             glBindTexture(GL_TEXTURE_2D, tempTexObj[ti]);
-            glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+            //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             M3G_ASSERT_GL;
@@ -538,14 +538,14 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
 
     /* Set up texture and vertex coordinate arrays for the image tiles */
 
-    glClientActiveTexture(GL_TEXTURE0);
-    glTexCoordPointer(2, GL_BYTE, 0, tc);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glVertexPointer(2, GL_SHORT, 0, pos);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
+    //glClientActiveTexture(GL_TEXTURE0);
+    //glTexCoordPointer(2, GL_BYTE, 0, tc);
+    //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glVertexPointer(2, GL_SHORT, 0, pos);
+    //glEnableClientState(GL_VERTEX_ARRAY);
+    //glMatrixMode(GL_TEXTURE);
+    //glLoadIdentity();
+    //glMatrixMode(GL_MODELVIEW);
     M3G_ASSERT_GL;
 
     /* Load each image tile into a texture and draw */
@@ -895,22 +895,22 @@ static void m3gBlitFrameBufferPixels(RenderContext *ctx,
 
     glScissor(xOffset, yOffset, width, height);
     glViewport(0, 0, ctx->target.width, ctx->target.height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrthox(0, ctx->target.width << 16,
-             0, ctx->target.height << 16,
-             -1 << 16, 1 << 16);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    //glMatrixMode(GL_PROJECTION);
+    //glLoadIdentity();
+    //glOrthox(0, ctx->target.width << 16,
+    //         0, ctx->target.height << 16,
+    //         -1 << 16, 1 << 16);
+    //glMatrixMode(GL_MODELVIEW);
+    //glLoadIdentity();
     
     /* Disable any stray state we don't want */
 
     glDisable(GL_CULL_FACE);
     glDisable(GL_BLEND);
-    glDisable(GL_ALPHA_TEST);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisable(GL_LIGHTING);
+    //glDisable(GL_ALPHA_TEST);
+    //glDisableClientState(GL_NORMAL_ARRAY);
+    //glDisableClientState(GL_COLOR_ARRAY);
+    //glDisable(GL_LIGHTING);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glDepthMask(GL_FALSE);
     glDepthFunc(GL_ALWAYS);
