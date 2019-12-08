@@ -20,6 +20,7 @@ package ru.playsoftware.j2meloader;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -74,6 +75,7 @@ public class MainActivity extends BaseActivity {
 	private void setupActivity(boolean intentUri) {
 		initFolders();
 		checkActionBar();
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check(this);
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
