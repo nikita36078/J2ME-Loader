@@ -183,9 +183,6 @@ static void m3gBindTextureObject(Image *img, M3Gbool mipmap)
                                        pixels);
             }
             else {
-#               if defined(M3G_GL_ES_1_1)
-                if (mipmap) glGenerateMipmap(GL_TEXTURE_2D);
-#               endif
                 glTexImage2D(GL_TEXTURE_2D,
                              0,
                              img->glFormat,
@@ -195,6 +192,7 @@ static void m3gBindTextureObject(Image *img, M3Gbool mipmap)
                              GL_UNSIGNED_BYTE,
                              pixels);
 #               if defined(M3G_GL_ES_1_1)
+                if (mipmap) glGenerateMipmap(GL_TEXTURE_2D);
                 img->mipmapsDirty = M3G_FALSE;
 #               else
                 img->mipmapsDirty = M3G_TRUE;
