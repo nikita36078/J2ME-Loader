@@ -121,6 +121,7 @@ typedef struct RenderQueueImpl  RenderQueue;
 #include "m3g_vertexarray.c"
 #include "m3g_vertexbuffer.c"
 #include "m3g_world.c"
+#include "m3g_shader.c"
 
 #else /* M3G_DEBUG */
 

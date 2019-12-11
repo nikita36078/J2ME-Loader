@@ -36,6 +36,7 @@
 #include "m3g_lightmanager.h"
 #include "m3g_vertexbuffer.h"
 #include "m3g_world.h"
+#include "m3g_shader.h"
 
 /*----------------------------------------------------------------------
  * Private data types
@@ -683,7 +684,8 @@ static void m3gInitRender(M3GRenderContext context, M3Genum renderMode)
 {
     RenderContext *ctx = (RenderContext *) context;
     M3G_VALIDATE_OBJECT(ctx);
-    
+
+    m3gInitShaders();
     m3gIncrementRenderTimeStamp(ctx);
     m3gMakeCurrent(ctx);
     m3gCollectGLObjects(M3G_INTERFACE(ctx));

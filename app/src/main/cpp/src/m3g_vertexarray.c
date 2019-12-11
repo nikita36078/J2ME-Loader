@@ -224,10 +224,10 @@ static void m3gLockVertexArray(const VertexArray *array)
     M3G_VALIDATE_OBJECT(array);
     M3G_ASSERT(!array->mapCount);
 
-    /*glVertexPointer(array->elementSize,
+    m3gLoadVertices(array->elementSize,
                     array->elementType,
                     array->stride,
-                    m3gMapObject(M3G_INTERFACE(array), array->data));*/
+                    m3gMapObject(M3G_INTERFACE(array), array->data));
     M3G_ASSERT_GL;
     
     ++((VertexArray*)array)->numLocks;

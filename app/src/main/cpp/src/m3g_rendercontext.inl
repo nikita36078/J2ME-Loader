@@ -498,7 +498,7 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
     /* Load default images into the temp texture objects */
     
     glActiveTexture(GL_TEXTURE0);
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
     {
         int ti;
         tempTexCount = ((width + tileWidth - 1) / tileWidth)
