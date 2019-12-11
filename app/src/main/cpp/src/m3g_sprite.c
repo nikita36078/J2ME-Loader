@@ -452,7 +452,7 @@ static void m3gSpriteDoRender(Node *self,
     glActiveTexture(GL_TEXTURE0);
     //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     //glTexCoordPointer(2, GL_SHORT, 0, texvert);
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
     //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_MODULATE);
     m3gBindTextureImage(imagePow2,
                         M3G_FILTER_BASE_LEVEL,

@@ -279,7 +279,7 @@ static void m3gSelectGLLights(const LightManager *mgr,
     /* Disable the leftover lights */
     
     while (glIndex <= 7) {
-        glDisable(glIndex++);
+        //glDisable(glIndex++);
     }
 }
 

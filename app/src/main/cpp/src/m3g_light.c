@@ -212,8 +212,8 @@ static void m3gApplyLight(const Light *self,
 	static const M3Gfloat BLACK[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	M3Gfloat light[4];
     
-    M3G_ASSERT(m3gInRange(glLight, GL_LIGHT0, GL_LIGHT7));
-    glEnable(glLight);
+    //M3G_ASSERT(m3gInRange(glLight, GL_LIGHT0, GL_LIGHT7));
+   // glEnable(glLight);
     
 	m3gFloatColor(self->color, self->intensity, light);
 

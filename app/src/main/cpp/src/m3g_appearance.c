@@ -47,7 +47,7 @@ static void m3gApplyAppearanceDefaults(RenderContext *ctx)
 
     for (i = 0; i < M3G_NUM_TEXTURE_UNITS; ++i) {
         glActiveTexture(GL_TEXTURE0 + i);
-        glDisable(GL_TEXTURE_2D);
+        //glDisable(GL_TEXTURE_2D);
     }
 }
 
@@ -201,11 +201,11 @@ static void m3gApplyAppearance(const Appearance *appearance,
             Texture *tex = appearance->texture[i];
             glActiveTexture(GL_TEXTURE0 + i);
             if (tex != NULL) {
-                glEnable(GL_TEXTURE_2D);
+                //glEnable(GL_TEXTURE_2D);
                 m3gBindTexture(appearance->texture[i]);
             }
             else {
-                glDisable(GL_TEXTURE_2D);
+                //glDisable(GL_TEXTURE_2D);
             }
         }
     }

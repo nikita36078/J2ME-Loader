@@ -94,7 +94,7 @@ static void m3gDisableTextures(void)
         //glClientActiveTexture(GL_TEXTURE0 + i);
         //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glActiveTexture(GL_TEXTURE0 + i);
-        glDisable(GL_TEXTURE_2D);
+        //glDisable(GL_TEXTURE_2D);
     }
 }
 
