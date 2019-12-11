@@ -71,12 +71,10 @@
         <activity
             android:name=".config.ConfigActivity"
             android:exported="true"
-            android:process=":midlet"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:process=":midlet"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize" />
         <activity
             android:name=".settings.SettingsActivity" >
@@ -88,8 +86,7 @@
         <activity
             android:name=".donations.DonationsActivity" />
         <activity
-            android:name=".settings.KeyMapperActivity"
-            android:process=":midlet" />
+            android:name=".settings.KeyMapperActivity" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />
