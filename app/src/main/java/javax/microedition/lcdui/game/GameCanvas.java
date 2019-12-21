@@ -101,8 +101,7 @@ public class GameCanvas extends Canvas {
 
 	private boolean checkGameAction(int keyCode) {
 		try {
-			getGameAction(keyCode);
-			return true;
+			return getGameAction(keyCode) != 0;
 		} catch (IllegalArgumentException iae) {
 			return false;
 		}
