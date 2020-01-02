@@ -36,7 +36,7 @@ public class ActionTableImpl {
 
 		for (int l = 0; l < numActions; l++) {
 			int keyframes = bis.readUnsignedShort();
-			keyframesArr[l] = keyframes;
+			keyframesArr[l] = keyframes << 16;
 
 			for (int i = 0; i < num_segments; i++) {
 				unpackSegment(bis);
