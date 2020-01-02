@@ -23,8 +23,9 @@ public class FigureImpl {
 	private ArrayList<PolygonT4> quadFacesT = new ArrayList<>();
 	private ArrayList<Bone> bones = new ArrayList<>();
 	public FloatBuffer vboPolyT;
-	private ArrayList<Polygon4> quadFacesF = new ArrayList<>();
-	private ArrayList<Polygon3> triangleFacesF = new ArrayList<>();
+	public FloatBuffer vboPolyF;
+	private ArrayList<PolygonF4> quadFacesF = new ArrayList<>();
+	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 
 	public FigureImpl(InputStream inputStream) throws IOException {
 		BitInputStream bis = new BitInputStream(inputStream, ByteOrder.LITTLE_ENDIAN);
@@ -186,6 +187,7 @@ public class FigureImpl {
 	}
 
 	private void unpackPolyF(BitInputStream bis, int num_color, int num_polyf3, int num_polyf4) throws IOException {
+		Color[] colors = new Color[num_color];
 		int unknown_bits = bis.readBits(8);
 		int vertex_index_bits = bis.readBits(8);
 		int color_bits = bis.readBits(8);
@@ -196,6 +198,7 @@ public class FigureImpl {
 			int r = bis.readBits(color_bits);
 			int g = bis.readBits(color_bits);
 			int b = bis.readBits(color_bits);
+			colors[i] = new Color(r, g, b, 0xFF);
 		}
 
 		for (int i = 0; i < num_polyf3; i++) {
@@ -205,7 +208,7 @@ public class FigureImpl {
 			int c = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			triangleFacesF.add(new Polygon3(a, b, c));
+			triangleFacesF.add(new PolygonF3(a, b, c, colors[color_id]));
 		}
 
 		for (int i = 0; i < num_polyf4; i++) {
@@ -216,7 +219,7 @@ public class FigureImpl {
 			int d = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			quadFacesF.add(new Polygon4(a, b, c, d));
+			quadFacesF.add(new PolygonF4(a, b, c, d, colors[color_id]));
 		}
 	}
 
@@ -347,6 +350,9 @@ public class FigureImpl {
 		vboPolyT = ByteBuffer.allocateDirect(num_polyt3 * 15 * 4 + num_polyt4 * 30 * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
+		vboPolyF = ByteBuffer.allocateDirect(num_polyf3 * 21 * 4 + num_polyf4 * 42 * 4)
+				.order(ByteOrder.nativeOrder())
+				.asFloatBuffer();
 		for (int i = 0; i < quadFacesT.size(); i++) {
 			PolygonT4 polygon4 = quadFacesT.get(i);
 			Vector3D a = vertices.get(polygon4.a);
@@ -417,6 +423,94 @@ public class FigureImpl {
 			vboPolyT.put(polygon3.u3 / 256F);
 			vboPolyT.put(polygon3.v3 / 256F);
 		}
+		for (int i = 0; i < quadFacesF.size(); i++) {
+			PolygonF4 polygon4 = quadFacesF.get(i);
+			Vector3D a = vertices.get(polygon4.a);
+			Vector3D b = vertices.get(polygon4.b);
+			Vector3D c = vertices.get(polygon4.c);
+			Vector3D d = vertices.get(polygon4.d);
+
+			vboPolyF.put(a.x);
+			vboPolyF.put(a.y);
+			vboPolyF.put(a.z);
+			vboPolyF.put(polygon4.color.r);
+			vboPolyF.put(polygon4.color.g);
+			vboPolyF.put(polygon4.color.b);
+			vboPolyF.put(polygon4.color.a);
+
+			vboPolyF.put(b.x);
+			vboPolyF.put(b.y);
+			vboPolyF.put(b.z);
+			vboPolyF.put(polygon4.color.r);
+			vboPolyF.put(polygon4.color.g);
+			vboPolyF.put(polygon4.color.b);
+			vboPolyF.put(polygon4.color.a);
+
+			vboPolyF.put(c.x);
+			vboPolyF.put(c.y);
+			vboPolyF.put(c.z);
+			vboPolyF.put(polygon4.color.r);
+			vboPolyF.put(polygon4.color.g);
+			vboPolyF.put(polygon4.color.b);
+			vboPolyF.put(polygon4.color.a);
+
+			//Create second triangle
+
+			vboPolyF.put(c.x);
+			vboPolyF.put(c.y);
+			vboPolyF.put(c.z);
+			vboPolyF.put(polygon4.color.r);
+			vboPolyF.put(polygon4.color.g);
+			vboPolyF.put(polygon4.color.b);
+			vboPolyF.put(polygon4.color.a);
+
+			vboPolyF.put(b.x);
+			vboPolyF.put(b.y);
+			vboPolyF.put(b.z);
+			vboPolyF.put(polygon4.color.r);
+			vboPolyF.put(polygon4.color.g);
+			vboPolyF.put(polygon4.color.b);
+			vboPolyF.put(polygon4.color.a);
+
+			vboPolyF.put(d.x);
+			vboPolyF.put(d.y);
+			vboPolyF.put(d.z);
+			vboPolyF.put(polygon4.color.r);
+			vboPolyF.put(polygon4.color.g);
+			vboPolyF.put(polygon4.color.b);
+			vboPolyF.put(polygon4.color.a);
+		}
+		for (int i = 0; i < triangleFacesF.size(); i++) {
+			PolygonF3 polygon3 = triangleFacesF.get(i);
+			Vector3D a = vertices.get(polygon3.a);
+			Vector3D b = vertices.get(polygon3.b);
+			Vector3D c = vertices.get(polygon3.c);
+
+			vboPolyF.put(a.x);
+			vboPolyF.put(a.y);
+			vboPolyF.put(a.z);
+			vboPolyF.put(polygon3.color.r);
+			vboPolyF.put(polygon3.color.g);
+			vboPolyF.put(polygon3.color.b);
+			vboPolyF.put(polygon3.color.a);
+
+			vboPolyF.put(b.x);
+			vboPolyF.put(b.y);
+			vboPolyF.put(b.z);
+			vboPolyF.put(polygon3.color.r);
+			vboPolyF.put(polygon3.color.g);
+			vboPolyF.put(polygon3.color.b);
+			vboPolyF.put(polygon3.color.a);
+
+			vboPolyF.put(c.x);
+			vboPolyF.put(c.y);
+			vboPolyF.put(c.z);
+			vboPolyF.put(polygon3.color.r);
+			vboPolyF.put(polygon3.color.g);
+			vboPolyF.put(polygon3.color.b);
+			vboPolyF.put(polygon3.color.a);
+		}
 		vboPolyT.position(0);
+		vboPolyF.position(0);
 	}
 }
