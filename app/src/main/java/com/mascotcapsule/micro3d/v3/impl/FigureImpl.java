@@ -188,11 +188,15 @@ public class FigureImpl {
 
 	private void unpackPolyF(BitInputStream bis, int num_color, int num_polyf3, int num_polyf4) throws IOException {
 		Color[] colors = new Color[num_color];
-		int unknown_bits = bis.readBits(8);
+		int attribute_bits = bis.readBits(8);
 		int vertex_index_bits = bis.readBits(8);
 		int color_bits = bis.readBits(8);
 		int color_id_bits = bis.readBits(8);
 		bis.readBits(8);
+
+		if (attribute_bits > 8) {
+			throw new RuntimeException("Format error. Please report this bug.");
+		}
 
 		for (int i = 0; i < num_color; i++) {
 			int r = bis.readBits(color_bits);
@@ -202,39 +206,39 @@ public class FigureImpl {
 		}
 
 		for (int i = 0; i < num_polyf3; i++) {
-			int unknown = bis.readBits(unknown_bits);
+			int attribute = bis.readBits(attribute_bits);
 			int a = bis.readBits(vertex_index_bits);
 			int b = bis.readBits(vertex_index_bits);
 			int c = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			triangleFacesF.add(new PolygonF3(a, b, c, colors[color_id]));
+			triangleFacesF.add(new PolygonF3(a, b, c, colors[color_id], attribute));
 		}
 
 		for (int i = 0; i < num_polyf4; i++) {
-			int unknown = bis.readBits(unknown_bits);
+			int attribute = bis.readBits(attribute_bits);
 			int a = bis.readBits(vertex_index_bits);
 			int b = bis.readBits(vertex_index_bits);
 			int c = bis.readBits(vertex_index_bits);
 			int d = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			quadFacesF.add(new PolygonF4(a, b, c, d, colors[color_id]));
+			quadFacesF.add(new PolygonF4(a, b, c, d, colors[color_id], attribute));
 		}
 	}
 
 	private void unpackPolyT(BitInputStream bis, int num_polyt3, int num_polyt4) throws IOException {
-		int unknown_bits = bis.readBits(8);
+		int attribute_bits = bis.readBits(8);
 		int vertex_index_bits = bis.readBits(8);
 		int uv_bits = bis.readBits(8);
 		bis.readBits(8);
 
-		if (unknown_bits > 8) {
+		if (attribute_bits > 8) {
 			throw new RuntimeException("Format error. Please report this bug.");
 		}
 
 		for (int i = 0; i < num_polyt3; i++) {
-			int unknown = bis.readBits(unknown_bits);
+			int attribute = bis.readBits(attribute_bits);
 			int a = bis.readBits(vertex_index_bits);
 			int b = bis.readBits(vertex_index_bits);
 			int c = bis.readBits(vertex_index_bits);
@@ -245,11 +249,11 @@ public class FigureImpl {
 			int v2 = bis.readBits(uv_bits);
 			int u3 = bis.readBits(uv_bits);
 			int v3 = bis.readBits(uv_bits);
-			triangleFacesT.add(new PolygonT3(a, b, c, u1, v1, u2, v2, u3, v3));
+			triangleFacesT.add(new PolygonT3(a, b, c, u1, v1, u2, v2, u3, v3, attribute));
 		}
 
 		for (int i = 0; i < num_polyt4; i++) {
-			int unknown = bis.readBits(unknown_bits);
+			int attribute = bis.readBits(attribute_bits);
 			int a = bis.readBits(vertex_index_bits);
 			int b = bis.readBits(vertex_index_bits);
 			int c = bis.readBits(vertex_index_bits);
@@ -263,7 +267,7 @@ public class FigureImpl {
 			int v3 = bis.readBits(uv_bits);
 			int u4 = bis.readBits(uv_bits);
 			int v4 = bis.readBits(uv_bits);
-			quadFacesT.add(new PolygonT4(a, b, c, d, u1, v1, u2, v2, u3, v3, u4, v4));
+			quadFacesT.add(new PolygonT4(a, b, c, d, u1, v1, u2, v2, u3, v3, u4, v4, attribute));
 		}
 	}
 

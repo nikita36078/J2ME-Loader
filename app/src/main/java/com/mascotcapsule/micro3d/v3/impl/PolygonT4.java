@@ -11,8 +11,9 @@ public class PolygonT4 extends Polygon4 {
 	public final int u4;
 	public final int v4;
 
-	public PolygonT4(int a, int b, int c, int d, int u1, int v1, int u2, int v2, int u3, int v3, int u4, int v4) {
-		super(a, b, c, d);
+	public PolygonT4(int a, int b, int c, int d, int u1, int v1, int u2, int v2,
+					 int u3, int v3, int u4, int v4, int attribute) {
+		super(a, b, c, d, attribute);
 		this.u1 = u1;
 		this.v1 = v1;
 		this.u2 = u2;
