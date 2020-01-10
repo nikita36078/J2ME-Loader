@@ -155,7 +155,7 @@ public class FigureLayout {
 		this.mPersFar = zFar;
 		this.mPersAngle = angle;
 		this.mSettingIndex = 2;
-		Matrix.perspectiveM(glProjectionMatrix, 0, angle * 360F / 4096F, 3F / 4F, zNear, zFar);
+		Matrix.perspectiveM(glProjectionMatrix, 0, angle * 480F / 4096F, 3F / 4F, zNear, zFar);
 		Matrix.translateM(glProjectionMatrix, 0, mCenterX - 120, mCenterY - 160, 0);
 	}
 
