@@ -34,10 +34,26 @@
         <item name="colorPrimary">@color/dark_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceSmall</item>
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceLarge</item>
     </style>
 
     <style name="AppTheme.OverflowMenu" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/dark_color_primary_dark</item>
         <item name="overlapAnchor">false</item>
+    </style>
+
+    <style name="PopupMenuTextAppearanceHeader" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header">
+        <item name="android:textColor">@color/dark_color_text_primary</item>
+    </style>
+
+    <style name="PopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/dark_color_text_primary</item>
+    </style>
+
+    <style name="PopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/dark_color_text_primary</item>
     </style>
 
     <style name="AppTheme.Light.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
