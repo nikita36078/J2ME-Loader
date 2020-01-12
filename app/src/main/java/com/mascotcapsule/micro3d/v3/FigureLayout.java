@@ -169,7 +169,8 @@ public class FigureLayout {
 		this.mPersWidth = width;
 		this.mPersHeight = height;
 		this.mSettingIndex = 3;
-		Matrix.frustumM(glProjectionMatrix, 0, 0, width, -height, 0, zNear, zFar);
+		Matrix.frustumM(glProjectionMatrix, 0, -width / 8192f, width / 8192f, -height / 8192f, height / 8192f, zNear, zFar);
+		Matrix.translateM(glProjectionMatrix, 0, mCenterX - 120, mCenterY - 160, 0);
 	}
 
 	public float[] getMatrix() {
