@@ -129,7 +129,7 @@ public class FigureLayout {
 		this.mParaWidth = w;
 		this.mParaHeight = h;
 		this.mSettingIndex = 1;
-		Matrix.orthoM(glProjectionMatrix, 0, 0, w, 0, -h, 1, 4096);
+		Matrix.orthoM(glProjectionMatrix, 0, -w / 2, w / 2, -h / 2, h / 2, 1, 4096);
 	}
 
 	public final int getCenterX() {
