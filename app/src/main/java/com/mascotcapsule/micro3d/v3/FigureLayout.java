@@ -39,6 +39,7 @@ public class FigureLayout {
 	private float[] glMVPMatrix = new float[16];
 	private float[] glProjectionMatrix = new float[16];
 	private float[] mTempMatrix = new float[48];
+	private float[] centerGL = new float[2];
 
 	public FigureLayout() {
 		prepareMatrices();
@@ -141,7 +142,6 @@ public class FigureLayout {
 	}
 
 	public final void setCenter(int cx, int cy) {
-		Matrix.translateM(glProjectionMatrix, 0, cx - mCenterX, cy - mCenterY, 0.0F);
 		this.mCenterX = cx;
 		this.mCenterY = cy;
 	}
@@ -156,7 +156,6 @@ public class FigureLayout {
 		this.mPersAngle = angle;
 		this.mSettingIndex = 2;
 		Matrix.perspectiveM(glProjectionMatrix, 0, angle * 480F / 4096F, 3F / 4F, zNear, zFar);
-		Matrix.translateM(glProjectionMatrix, 0, mCenterX - 120, mCenterY - 160, 0);
 	}
 
 	public final void setPerspective(int zNear, int zFar, int width, int height) {
@@ -170,7 +169,6 @@ public class FigureLayout {
 		this.mPersHeight = height;
 		this.mSettingIndex = 3;
 		Matrix.frustumM(glProjectionMatrix, 0, -width / 8192f, width / 8192f, -height / 8192f, height / 8192f, zNear, zFar);
-		Matrix.translateM(glProjectionMatrix, 0, mCenterX - 120, mCenterY - 160, 0);
 	}
 
 	public float[] getMatrix() {
@@ -187,7 +185,7 @@ public class FigureLayout {
 		return glMVPMatrix;
 	}
 
-	public void prepareMatrices() {
+	private void prepareMatrices() {
 		Matrix.setIdentityM(glMVPMatrix, 0);
 		Matrix.setIdentityM(glProjectionMatrix, 0);
 		float[] tmp = mTempMatrix;
@@ -195,4 +193,11 @@ public class FigureLayout {
 		Matrix.scaleM(tmp, 32, -1F/4096F, 1F/4096F, 1F/4096F);
 		Matrix.rotateM(tmp, 32, 180, 0, 1, 0);
 	}
+
+	public float[] getCenterGL() {
+		centerGL[0] = (mCenterX - 120) / 120f;
+		centerGL[1] = (mCenterY - 160) / 160f;
+		return centerGL;
+	}
+
 }

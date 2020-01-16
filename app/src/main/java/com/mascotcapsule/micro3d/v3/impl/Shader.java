@@ -9,8 +9,10 @@ public class Shader {
 					"attribute vec4 vPosition;" +
 					"attribute vec2 aTexture;" +
 					"varying vec2 vTexture;" +
+					"uniform vec2 uTranslationOffset;" +
 					"void main() {" +
 					"  gl_Position = uMVPMatrix * vPosition;" +
+					"  gl_Position.xy += uTranslationOffset * gl_Position.w;" +
 					"  vTexture = aTexture;" +
 					"}";
 
@@ -27,15 +29,17 @@ public class Shader {
 					"attribute vec4 vPosition;" +
 					"attribute vec4 aColor;" +
 					"varying vec4 vColor;" +
+					"uniform vec2 uTranslationOffset;" +
 					"void main() {" +
-					"gl_Position = uMVPMatrix * vPosition;" +
-					"vColor = aColor;" +
+					"  gl_Position = uMVPMatrix * vPosition;" +
+					"  gl_Position.xy += uTranslationOffset * gl_Position.w;" +
+					"  vColor = aColor;" +
 					"}";
 
 	public static final String colorFragment =
 			"precision mediump float;" +
 					"varying vec4 vColor;" +
 					"void main() {" +
-					"gl_FragColor = vColor;" +
+					"  gl_FragColor = vColor;" +
 					"}";
 }

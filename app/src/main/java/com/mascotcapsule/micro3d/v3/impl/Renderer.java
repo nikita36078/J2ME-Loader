@@ -111,7 +111,7 @@ public class Renderer {
 
 	public void render(Figure figure, FigureLayout layout) {
 		// Draw figure
-		objectRenderer.draw(figure, layout.getMatrix());
+		objectRenderer.draw(figure, layout);
 	}
 
 	public void release(Graphics graphics) {

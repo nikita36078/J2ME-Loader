@@ -3,6 +3,7 @@ package com.mascotcapsule.micro3d.v3.impl;
 import android.opengl.GLES20;
 
 import com.mascotcapsule.micro3d.v3.Figure;
+import com.mascotcapsule.micro3d.v3.FigureLayout;
 
 import java.nio.FloatBuffer;
 
@@ -23,6 +24,7 @@ public class ObjectRenderer {
 	private int aTextureLocation;
 	private int uTextureUnitLocation;
 	private int uMatrixLocation;
+	private int uOffsetLocation;
 	private int aColorLocation;
 
 	public ObjectRenderer() {
@@ -32,7 +34,8 @@ public class ObjectRenderer {
 		textureProgram = GLUtils.createProgram(Shader.textureVertex, Shader.textureFragment);
 	}
 
-	public void draw(Figure figure, float[] mvpMatrix) {
+	public void draw(Figure figure, FigureLayout layout) {
+		float[] mvpMatrix = layout.getMatrix();
 		FloatBuffer vertexData = figure.figure.vboPolyT;
 		if (vertexData.capacity() > 0) {
 			GLES20.glUseProgram(textureProgram);
@@ -57,6 +60,8 @@ public class ObjectRenderer {
 			// Texture units
 			GLES20.glUniform1i(uTextureUnitLocation, 0);
 
+			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
+
 			vertexData.position(0);
 			int count = vertexData.capacity() / (COORDS_PER_VERTEX + TEX_COORDS_PER_VERTEX);
 			// Draw the triangle
@@ -80,6 +85,8 @@ public class ObjectRenderer {
 					false, COLOR_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(aColorLocation);
 
+			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
+
 			vertexData.position(0);
 			int count = vertexData.capacity() / (COORDS_PER_VERTEX + COLORS_PER_VERTEX);
 			// Draw the triangle
@@ -93,12 +100,14 @@ public class ObjectRenderer {
 		aTextureLocation = GLES20.glGetAttribLocation(textureProgram, "aTexture");
 		uTextureUnitLocation = GLES20.glGetUniformLocation(textureProgram, "uTextureUnit");
 		uMatrixLocation = GLES20.glGetUniformLocation(textureProgram, "uMVPMatrix");
+		uOffsetLocation = GLES20.glGetUniformLocation(textureProgram, "uTranslationOffset");
 	}
 
 	private void getColorLocations() {
 		aPositionLocation = GLES20.glGetAttribLocation(colorProgram, "vPosition");
 		aColorLocation = GLES20.glGetAttribLocation(colorProgram, "aColor");
 		uMatrixLocation = GLES20.glGetUniformLocation(colorProgram, "uMVPMatrix");
+		uOffsetLocation = GLES20.glGetUniformLocation(colorProgram, "uTranslationOffset");
 	}
 
 	private void bindMatrix(float[] mvpMatrix) {
