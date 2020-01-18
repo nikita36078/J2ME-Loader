@@ -17,6 +17,14 @@ public class FigureImpl {
 	private final static int MAGNITUDE_10BIT = 1;
 	private final static int MAGNITUDE_13BIT = 2;
 	private final static int MAGNITUDE_16BIT = 3;
+	private final static int[] DIRECTIONS = new int[]{
+			0x40, 0, 0,
+			0, 0x40, 0,
+			0, 0, 0x40,
+			0xC0, 0, 0,
+			0, 0xC0, 0,
+			0, 0, 0xC0
+	};
 	private ArrayList<Vector3D> vertices = new ArrayList<>();
 	private ArrayList<Normal> normals = new ArrayList<>();
 	private ArrayList<PolygonT3> triangleFacesT = new ArrayList<>();
@@ -166,19 +174,24 @@ public class FigureImpl {
 
 	private void unpackNormals(BitInputStream bis, int num_vertices) throws IOException {
 		while (normals.size() < num_vertices) {
-			int x = bis.readBitsSigned(7);
-			int y = 0;
-			int z = 0;
-			if (x == -64) {
+			int type = bis.readBitsSigned(7);
+			int x, y, z;
+			if (type == -64) {
 				int direction = bis.readBits(3);
+				if (direction > 5) {
+					throw new RuntimeException("Invalid direction");
+				}
+				x = DIRECTIONS[direction * 3];
+				y = DIRECTIONS[direction * 3 + 1];
+				z = DIRECTIONS[direction * 3 + 2];
 			} else {
-				x = x / 64;
-				y = bis.readBitsSigned(7) / 64;
+				x = type;
+				y = bis.readBitsSigned(7);
 				int z_negative = bis.readBits(1);
 
-				int i = 1 - x * x - y * y;
-				if (i >= 0) {
-					z = (int) Math.sqrt(i) * ((z_negative > 0) ? -1 : 1);
+				int temp = 4096 - x * x - y * y;
+				if (temp >= 0) {
+					z = (int) Math.sqrt(temp) * ((z_negative > 0) ? -1 : 1);
 				} else {
 					z = 0;
 				}
