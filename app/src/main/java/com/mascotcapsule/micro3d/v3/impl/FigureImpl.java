@@ -32,6 +32,7 @@ public class FigureImpl {
 	private ArrayList<Bone> bones = new ArrayList<>();
 	public FloatBuffer vboPolyT;
 	public FloatBuffer vboPolyF;
+	public int[] texturedPolygons;
 	private ArrayList<PolygonF4> quadFacesF = new ArrayList<>();
 	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 	private int numPattern;
@@ -76,12 +77,15 @@ public class FigureImpl {
 		System.out.printf("num_polyf3=%d num_polyf4=%d num_texture=%d num_pattern=%d num_color=%d\n",
 				num_polyf3, num_polyf4, num_texture, numPattern, num_color);
 
+		texturedPolygons = new int[num_texture];
 		for (int i = 0; i < numPattern; i++) {
 			int num_unk_polyf3 = bis.readUnsignedShort();
 			int num_unk_polyf4 = bis.readUnsignedShort();
 			for (int j = 0; j < num_texture; j++) {
 				int num_textured_polyt3 = bis.readUnsignedShort();
 				int num_textured_polyt4 = bis.readUnsignedShort();
+				// Don't support an external patterns for now
+				texturedPolygons[j] += num_textured_polyt3 + num_textured_polyt4 * 2;
 			}
 		}
 

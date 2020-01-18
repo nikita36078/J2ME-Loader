@@ -102,10 +102,7 @@ public class Figure {
 				}
 			}
 			this.myTextureArray = t;
-			// FIXME: 27.06.2019 temporary fix:
-			//  in the original, the active texture should be selected in a different way
-//			this.myTextureNow = null;
-			this.myTextureNow = t[0];
+			this.myTextureNow = null;
 		}
 	}
 
@@ -130,5 +127,9 @@ public class Figure {
 	}
 
 	public final void setPattern(int idx) {
+	}
+
+	public Texture getTextureById(int idx) {
+		return myTextureArray[idx];
 	}
 }

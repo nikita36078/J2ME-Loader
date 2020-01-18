@@ -38,6 +38,9 @@ public class ObjectRenderer {
 		float[] mvpMatrix = layout.getMatrix();
 		FloatBuffer vertexData = figure.figure.vboPolyT;
 		if (vertexData.capacity() > 0) {
+			int[] texturedPolygons = figure.figure.texturedPolygons;
+			int prevCount = 0;
+
 			GLES20.glUseProgram(textureProgram);
 			getTextureLocations();
 			bindMatrix(mvpMatrix);
@@ -53,20 +56,21 @@ public class ObjectRenderer {
 					false, TEXTURE_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(aTextureLocation);
 
+			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
 			// Put the texture to the unit 0 target
 			GLES20.glActiveTexture(GL_TEXTURE0);
-			GLES20.glBindTexture(GL_TEXTURE_2D, figure.getTexture().getId());
-
 			// Texture units
 			GLES20.glUniform1i(uTextureUnitLocation, 0);
 
-			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
+			for (int i = 0; i < figure.getNumTextures() && i < texturedPolygons.length; i++) {
+				int count = texturedPolygons[i] * 3;
 
-			vertexData.position(0);
-			int count = vertexData.capacity() / (COORDS_PER_VERTEX + TEX_COORDS_PER_VERTEX);
-			// Draw the triangle
-			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
-			GLUtils.checkGlError("glDrawArrays");
+				GLES20.glBindTexture(GL_TEXTURE_2D, figure.getTextureById(i).getId());
+				// Draw the triangle
+				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, prevCount, count);
+				GLUtils.checkGlError("glDrawArrays");
+				prevCount += count;
+			}
 		}
 		vertexData = figure.figure.vboPolyF;
 		if (vertexData.capacity() > 0) {
@@ -87,7 +91,6 @@ public class ObjectRenderer {
 
 			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
 
-			vertexData.position(0);
 			int count = vertexData.capacity() / (COORDS_PER_VERTEX + COLORS_PER_VERTEX);
 			// Draw the triangle
 			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
