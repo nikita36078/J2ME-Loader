@@ -26,6 +26,7 @@ public class FigureImpl {
 	public FloatBuffer vboPolyF;
 	private ArrayList<PolygonF4> quadFacesF = new ArrayList<>();
 	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
+	private int numPattern;
 
 	public FigureImpl(InputStream inputStream) throws IOException {
 		BitInputStream bis = new BitInputStream(inputStream, ByteOrder.LITTLE_ENDIAN);
@@ -61,18 +62,18 @@ public class FigureImpl {
 
 		int num_polyf3 = bis.readUnsignedShort();
 		int num_polyf4 = bis.readUnsignedShort();
-		int matcnt = bis.readUnsignedShort();
-		int unk21 = bis.readUnsignedShort();
+		int num_texture = bis.readUnsignedShort();
+		numPattern = bis.readUnsignedShort();
 		int num_color = bis.readUnsignedShort();
-		System.out.printf("num_polyf3=%d num_polyf4=%d matcnt=%d unk21=%d num_color=%d\n",
-				num_polyf3, num_polyf4, matcnt, unk21, num_color);
+		System.out.printf("num_polyf3=%d num_polyf4=%d num_texture=%d num_pattern=%d num_color=%d\n",
+				num_polyf3, num_polyf4, num_texture, numPattern, num_color);
 
-		for (int i = 0; i < unk21; i++) {
-			int unk1 = bis.readUnsignedShort();
-			int unk2 = bis.readUnsignedShort();
-			for (int j = 0; j < matcnt; j++) {
-				int unk3 = bis.readUnsignedShort();
-				int unk4 = bis.readUnsignedShort();
+		for (int i = 0; i < numPattern; i++) {
+			int num_unk_polyf3 = bis.readUnsignedShort();
+			int num_unk_polyf4 = bis.readUnsignedShort();
+			for (int j = 0; j < num_texture; j++) {
+				int num_textured_polyt3 = bis.readUnsignedShort();
+				int num_textured_polyt4 = bis.readUnsignedShort();
 			}
 		}
 
@@ -516,5 +517,9 @@ public class FigureImpl {
 		}
 		vboPolyT.position(0);
 		vboPolyF.position(0);
+	}
+
+	public int getNumPattern() {
+		return numPattern;
 	}
 }

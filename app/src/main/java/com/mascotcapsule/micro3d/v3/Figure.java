@@ -126,7 +126,7 @@ public class Figure {
 	}
 
 	public final int getNumPattern() {
-		return 0;
+		return figure.getNumPattern();
 	}
 
 	public final void setPattern(int idx) {
