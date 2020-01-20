@@ -212,10 +212,6 @@ public class FigureImpl {
 		int color_id_bits = bis.readBits(8);
 		bis.readBits(8);
 
-		if (attribute_bits > 8) {
-			throw new RuntimeException("Format error. Please report this bug.");
-		}
-
 		for (int i = 0; i < num_color; i++) {
 			int r = bis.readBits(color_bits);
 			int g = bis.readBits(color_bits);
@@ -250,10 +246,6 @@ public class FigureImpl {
 		int vertex_index_bits = bis.readBits(8);
 		int uv_bits = bis.readBits(8);
 		bis.readBits(8);
-
-		if (attribute_bits > 8) {
-			throw new RuntimeException("Format error. Please report this bug.");
-		}
 
 		for (int i = 0; i < num_polyt3; i++) {
 			int attribute = bis.readBits(attribute_bits);
