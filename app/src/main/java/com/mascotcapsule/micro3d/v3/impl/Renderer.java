@@ -60,8 +60,6 @@ public class Renderer {
 				EGL10.EGL_NONE
 		};
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
-		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		GLES20.glDepthFunc(GLES20.GL_LEQUAL);
 	}
 
 	public void bind(Graphics graphics, boolean targetChanged) {
@@ -74,23 +72,25 @@ public class Renderer {
 			if (this.width != width || this.height != height) {
 				this.width = width;
 				this.height = height;
-			if (this.eglWindowSurface != null) {
-				egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
-				egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
-			}
+				if (this.eglWindowSurface != null) {
+					egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+					egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
+				}
 
-			int[] surface_attribs = {
-					EGL10.EGL_WIDTH, width,
-					EGL10.EGL_HEIGHT, height,
-					EGL10.EGL_NONE};
-			this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
-			egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
+				int[] surface_attribs = {
+						EGL10.EGL_WIDTH, width,
+						EGL10.EGL_HEIGHT, height,
+						EGL10.EGL_NONE};
+				this.eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
+				egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
 
-			// this projection matrix is applied to object coordinates
-			GLES20.glViewport(0, 0, width, height);
-			objectRenderer = new ObjectRenderer();
-			pixelBuf = ByteBuffer.allocateDirect(width * height * 4);
-			pixelBuf.order(ByteOrder.LITTLE_ENDIAN);
+				GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+				GLES20.glDepthFunc(GLES20.GL_LEQUAL);
+				// this projection matrix is applied to object coordinates
+				GLES20.glViewport(0, 0, width, height);
+				objectRenderer = new ObjectRenderer();
+				pixelBuf = ByteBuffer.allocateDirect(width * height * 4);
+				pixelBuf.order(ByteOrder.LITTLE_ENDIAN);
 				mBitmapBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 			}
 		}

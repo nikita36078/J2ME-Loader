@@ -32,8 +32,6 @@ public class ObjectRenderer {
 	private int acColorLocation;
 
 	public ObjectRenderer() {
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
 		colorProgram = GLUtils.createProgram(Shader.colorVertex, Shader.colorFragment);
 		textureProgram = GLUtils.createProgram(Shader.textureVertex, Shader.textureFragment);
 		getColorLocations();
