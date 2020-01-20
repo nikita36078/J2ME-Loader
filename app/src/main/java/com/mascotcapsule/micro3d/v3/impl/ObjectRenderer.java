@@ -20,18 +20,24 @@ public class ObjectRenderer {
 	private final int colorProgram;
 	private final int textureProgram;
 
-	private int aPositionLocation;
-	private int aTextureLocation;
-	private int uTextureUnitLocation;
-	private int uMatrixLocation;
-	private int uOffsetLocation;
-	private int aColorLocation;
+	private int atPositionLocation;
+	private int atTextureLocation;
+	private int utTextureUnitLocation;
+	private int utMatrixLocation;
+	private int utOffsetLocation;
+
+	private int acPositionLocation;
+	private int ucMatrixLocation;
+	private int ucOffsetLocation;
+	private int acColorLocation;
 
 	public ObjectRenderer() {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 		colorProgram = GLUtils.createProgram(Shader.colorVertex, Shader.colorFragment);
 		textureProgram = GLUtils.createProgram(Shader.textureVertex, Shader.textureFragment);
+		getColorLocations();
+		getTextureLocations();
 	}
 
 	public void draw(Figure figure, FigureLayout layout) {
@@ -42,25 +48,25 @@ public class ObjectRenderer {
 			int prevCount = 0;
 
 			GLES20.glUseProgram(textureProgram);
-			getTextureLocations();
-			bindMatrix(mvpMatrix);
+			glUniformMatrix4fv(utMatrixLocation, 1, false, mvpMatrix, 0);
+			GLUtils.checkGlError("glUniformMatrix4fv");
 			// Vertex coords
 			vertexData.position(0);
-			GLES20.glVertexAttribPointer(aPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
+			GLES20.glVertexAttribPointer(atPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
 					false, TEXTURE_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(aPositionLocation);
+			GLES20.glEnableVertexAttribArray(atPositionLocation);
 
 			// Texture coords
 			vertexData.position(COORDS_PER_VERTEX);
-			GLES20.glVertexAttribPointer(aTextureLocation, TEX_COORDS_PER_VERTEX, GL_FLOAT,
+			GLES20.glVertexAttribPointer(atTextureLocation, TEX_COORDS_PER_VERTEX, GL_FLOAT,
 					false, TEXTURE_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(aTextureLocation);
+			GLES20.glEnableVertexAttribArray(atTextureLocation);
 
-			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
+			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getCenterGL(), 0);
 			// Put the texture to the unit 0 target
 			GLES20.glActiveTexture(GL_TEXTURE0);
 			// Texture units
-			GLES20.glUniform1i(uTextureUnitLocation, 0);
+			GLES20.glUniform1i(utTextureUnitLocation, 0);
 
 			for (int i = 0; i < figure.getNumTextures() && i < texturedPolygons.length; i++) {
 				int count = texturedPolygons[i] * 3;
@@ -75,21 +81,21 @@ public class ObjectRenderer {
 		vertexData = figure.figure.vboPolyF;
 		if (vertexData.capacity() > 0) {
 			GLES20.glUseProgram(colorProgram);
-			getColorLocations();
-			bindMatrix(mvpMatrix);
+			glUniformMatrix4fv(ucMatrixLocation, 1, false, mvpMatrix, 0);
+			GLUtils.checkGlError("glUniformMatrix4fv");
 			// Vertex coords
 			vertexData.position(0);
-			GLES20.glVertexAttribPointer(aPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
+			GLES20.glVertexAttribPointer(acPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
 					false, COLOR_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(aPositionLocation);
+			GLES20.glEnableVertexAttribArray(acPositionLocation);
 
 			// Color data
 			vertexData.position(COORDS_PER_VERTEX);
-			GLES20.glVertexAttribPointer(aColorLocation, COLORS_PER_VERTEX, GL_FLOAT,
+			GLES20.glVertexAttribPointer(acColorLocation, COLORS_PER_VERTEX, GL_FLOAT,
 					false, COLOR_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(aColorLocation);
+			GLES20.glEnableVertexAttribArray(acColorLocation);
 
-			GLES20.glUniform2fv(uOffsetLocation, 1, layout.getCenterGL(), 0);
+			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getCenterGL(), 0);
 
 			int count = vertexData.capacity() / (COORDS_PER_VERTEX + COLORS_PER_VERTEX);
 			// Draw the triangle
@@ -99,22 +105,17 @@ public class ObjectRenderer {
 	}
 
 	private void getTextureLocations() {
-		aPositionLocation = GLES20.glGetAttribLocation(textureProgram, "vPosition");
-		aTextureLocation = GLES20.glGetAttribLocation(textureProgram, "aTexture");
-		uTextureUnitLocation = GLES20.glGetUniformLocation(textureProgram, "uTextureUnit");
-		uMatrixLocation = GLES20.glGetUniformLocation(textureProgram, "uMVPMatrix");
-		uOffsetLocation = GLES20.glGetUniformLocation(textureProgram, "uTranslationOffset");
+		atPositionLocation = GLES20.glGetAttribLocation(textureProgram, "vPosition");
+		atTextureLocation = GLES20.glGetAttribLocation(textureProgram, "aTexture");
+		utTextureUnitLocation = GLES20.glGetUniformLocation(textureProgram, "uTextureUnit");
+		utMatrixLocation = GLES20.glGetUniformLocation(textureProgram, "uMVPMatrix");
+		utOffsetLocation = GLES20.glGetUniformLocation(textureProgram, "uTranslationOffset");
 	}
 
 	private void getColorLocations() {
-		aPositionLocation = GLES20.glGetAttribLocation(colorProgram, "vPosition");
-		aColorLocation = GLES20.glGetAttribLocation(colorProgram, "aColor");
-		uMatrixLocation = GLES20.glGetUniformLocation(colorProgram, "uMVPMatrix");
-		uOffsetLocation = GLES20.glGetUniformLocation(colorProgram, "uTranslationOffset");
-	}
-
-	private void bindMatrix(float[] mvpMatrix) {
-		glUniformMatrix4fv(uMatrixLocation, 1, false, mvpMatrix, 0);
-		GLUtils.checkGlError("glUniformMatrix4fv");
+		acPositionLocation = GLES20.glGetAttribLocation(colorProgram, "vPosition");
+		acColorLocation = GLES20.glGetAttribLocation(colorProgram, "aColor");
+		ucMatrixLocation = GLES20.glGetUniformLocation(colorProgram, "uMVPMatrix");
+		ucOffsetLocation = GLES20.glGetUniformLocation(colorProgram, "uTranslationOffset");
 	}
 }
