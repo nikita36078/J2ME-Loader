@@ -32,6 +32,7 @@ public class Texture {
 	protected boolean isModel;
 	protected Bitmap image;
 	private int glTexId;
+	private float[] size;
 
 	public Texture(byte[] b, boolean isForModel) {
 		if (b == null) {
@@ -39,6 +40,7 @@ public class Texture {
 		}
 		this.isModel = isForModel;
 		this.image = Image.createImage(b, 0, b.length).getBitmap();
+		this.size = new float[]{image.getWidth(), image.getHeight()};
 	}
 
 	public Texture(String name, boolean isForModel) throws IOException {
@@ -47,6 +49,7 @@ public class Texture {
 		}
 		this.isModel = isForModel;
 		this.image = Image.createImage(name).getBitmap();
+		this.size = new float[]{image.getWidth(), image.getHeight()};
 	}
 
 	public static int loadTexture(Bitmap bitmap) {
@@ -91,5 +94,9 @@ public class Texture {
 			image = null;
 		}
 		return glTexId;
+	}
+
+	public float[] getSize() {
+		return size;
 	}
 }

@@ -10,10 +10,11 @@ public class Shader {
 					"attribute vec2 aTexture;" +
 					"varying vec2 vTexture;" +
 					"uniform vec2 uTranslationOffset;" +
+					"uniform vec2 uTextureSize;" +
 					"void main() {" +
 					"  gl_Position = uMVPMatrix * vPosition;" +
 					"  gl_Position.xy += uTranslationOffset * gl_Position.w;" +
-					"  vTexture = aTexture;" +
+					"  vTexture = aTexture / uTextureSize;" +
 					"}";
 
 	public static final String textureFragment =

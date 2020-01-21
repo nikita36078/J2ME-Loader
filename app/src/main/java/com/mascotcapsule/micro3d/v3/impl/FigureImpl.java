@@ -374,44 +374,43 @@ public class FigureImpl {
 			Vector3D c = vertices.get(polygon4.c);
 			Vector3D d = vertices.get(polygon4.d);
 
-			// FIXME: 28.06.2019 '256F' magic value should be replaced by texture size
 			vboPolyT.put(a.x);
 			vboPolyT.put(a.y);
 			vboPolyT.put(a.z);
-			vboPolyT.put(polygon4.u1 / 256F);
-			vboPolyT.put(polygon4.v1 / 256F);
+			vboPolyT.put(polygon4.u1);
+			vboPolyT.put(polygon4.v1);
 
 			vboPolyT.put(b.x);
 			vboPolyT.put(b.y);
 			vboPolyT.put(b.z);
-			vboPolyT.put(polygon4.u2 / 256F);
-			vboPolyT.put(polygon4.v2 / 256F);
+			vboPolyT.put(polygon4.u2);
+			vboPolyT.put(polygon4.v2);
 
 			vboPolyT.put(c.x);
 			vboPolyT.put(c.y);
 			vboPolyT.put(c.z);
-			vboPolyT.put(polygon4.u3 / 256F);
-			vboPolyT.put(polygon4.v3 / 256F);
+			vboPolyT.put(polygon4.u3);
+			vboPolyT.put(polygon4.v3);
 
 			//Create second triangle
 
 			vboPolyT.put(c.x);
 			vboPolyT.put(c.y);
 			vboPolyT.put(c.z);
-			vboPolyT.put(polygon4.u3 / 256F);
-			vboPolyT.put(polygon4.v3 / 256F);
+			vboPolyT.put(polygon4.u3);
+			vboPolyT.put(polygon4.v3);
 
 			vboPolyT.put(b.x);
 			vboPolyT.put(b.y);
 			vboPolyT.put(b.z);
-			vboPolyT.put(polygon4.u2 / 256F);
-			vboPolyT.put(polygon4.v2 / 256F);
+			vboPolyT.put(polygon4.u2);
+			vboPolyT.put(polygon4.v2);
 
 			vboPolyT.put(d.x);
 			vboPolyT.put(d.y);
 			vboPolyT.put(d.z);
-			vboPolyT.put(polygon4.u4 / 256F);
-			vboPolyT.put(polygon4.v4 / 256F);
+			vboPolyT.put(polygon4.u4);
+			vboPolyT.put(polygon4.v4);
 		}
 		for (int i = 0; i < triangleFacesT.size(); i++) {
 			PolygonT3 polygon3 = triangleFacesT.get(i);
@@ -422,20 +421,20 @@ public class FigureImpl {
 			vboPolyT.put(a.x);
 			vboPolyT.put(a.y);
 			vboPolyT.put(a.z);
-			vboPolyT.put(polygon3.u1 / 256F);
-			vboPolyT.put(polygon3.v1 / 256F);
+			vboPolyT.put(polygon3.u1);
+			vboPolyT.put(polygon3.v1);
 
 			vboPolyT.put(b.x);
 			vboPolyT.put(b.y);
 			vboPolyT.put(b.z);
-			vboPolyT.put(polygon3.u2 / 256F);
-			vboPolyT.put(polygon3.v2 / 256F);
+			vboPolyT.put(polygon3.u2);
+			vboPolyT.put(polygon3.v2);
 
 			vboPolyT.put(c.x);
 			vboPolyT.put(c.y);
 			vboPolyT.put(c.z);
-			vboPolyT.put(polygon3.u3 / 256F);
-			vboPolyT.put(polygon3.v3 / 256F);
+			vboPolyT.put(polygon3.u3);
+			vboPolyT.put(polygon3.v3);
 		}
 		for (int i = 0; i < quadFacesF.size(); i++) {
 			PolygonF4 polygon4 = quadFacesF.get(i);

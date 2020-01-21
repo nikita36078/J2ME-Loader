@@ -25,6 +25,7 @@ public class ObjectRenderer {
 	private int utTextureUnitLocation;
 	private int utMatrixLocation;
 	private int utOffsetLocation;
+	private int utTextureSizeLocation;
 
 	private int acPositionLocation;
 	private int ucMatrixLocation;
@@ -70,6 +71,7 @@ public class ObjectRenderer {
 				int count = texturedPolygons[i] * 3;
 
 				GLES20.glBindTexture(GL_TEXTURE_2D, figure.getTextureById(i).getId());
+				GLES20.glUniform2fv(utTextureSizeLocation, 1, figure.getTextureById(i).getSize(), 0);
 				// Draw the triangle
 				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, prevCount, count);
 				GLUtils.checkGlError("glDrawArrays");
@@ -108,6 +110,7 @@ public class ObjectRenderer {
 		utTextureUnitLocation = GLES20.glGetUniformLocation(textureProgram, "uTextureUnit");
 		utMatrixLocation = GLES20.glGetUniformLocation(textureProgram, "uMVPMatrix");
 		utOffsetLocation = GLES20.glGetUniformLocation(textureProgram, "uTranslationOffset");
+		utTextureSizeLocation = GLES20.glGetUniformLocation(textureProgram, "uTextureSize");
 	}
 
 	private void getColorLocations() {
