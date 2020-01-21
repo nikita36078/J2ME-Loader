@@ -127,6 +127,10 @@ public class FigureLayout {
 		if (w < 0 || h < 0) {
 			throw new IllegalArgumentException();
 		}
+		if (w == 0 || h == 0) {
+			w = 240;
+			h = 320;
+		}
 		this.mParaWidth = w;
 		this.mParaHeight = h;
 		this.mSettingIndex = 1;
