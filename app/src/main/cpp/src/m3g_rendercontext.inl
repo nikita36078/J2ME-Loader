@@ -895,13 +895,11 @@ static void m3gBlitFrameBufferPixels(RenderContext *ctx,
 
     glScissor(xOffset, yOffset, width, height);
     glViewport(0, 0, ctx->target.width, ctx->target.height);
-    //glMatrixMode(GL_PROJECTION);
-    //glLoadIdentity();
+    m3gIdentityProjectionMatrix();
     //glOrthox(0, ctx->target.width << 16,
     //         0, ctx->target.height << 16,
     //         -1 << 16, 1 << 16);
-    //glMatrixMode(GL_MODELVIEW);
-    //glLoadIdentity();
+    m3gIdentityModelMatrix();
     
     /* Disable any stray state we don't want */
 

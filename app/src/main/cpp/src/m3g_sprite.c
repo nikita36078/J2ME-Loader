@@ -507,15 +507,13 @@ static void m3gSpriteDoRender(Node *self,
 
         m3gMatrixInverse(&invProjMatrix, projMatrix);
 		m3gGetMatrixColumns(&invProjMatrix, transform);
-        
-        //glMatrixMode(GL_MODELVIEW);
-        ///glMultMatrixf(transform);
-        scaleW[0] = scaleW[5] = scaleW[10] = scaleW[15] = eyeSpace.w;
-        //glMultMatrixf(scaleW);
 
-        //glMatrixMode(GL_PROJECTION);
+        m3gMultModelMatrix(transform);
+        scaleW[0] = scaleW[5] = scaleW[10] = scaleW[15] = eyeSpace.w;
+        m3gMultModelMatrix(scaleW);
+
         m3gGetMatrixColumns(projMatrix, transform);
-        //glLoadMatrixf(transform);
+        m3gLoadProjectionMatrix(transform);
     }
 #endif
 

@@ -653,8 +653,7 @@ static M3G_INLINE void m3gApplyLights(RenderContext *ctx, M3Gint scope)
          * the viewing matrix to the lights only */
         
         if (ctx->renderMode == RENDER_NODES) {
-            //glPushMatrix();
-            //glLoadMatrixf(ctx->viewTransform);
+            m3gLoadModelMatrix(ctx->viewTransform);
         }
         
         m3gSelectGLLights(&ctx->lightManager, 8, scope, 0, 0, 0);
@@ -711,10 +710,10 @@ static void m3gInitRender(M3GRenderContext context, M3Genum renderMode)
 
 	m3gApplyProjection(ctx->camera);
     if (renderMode == RENDER_NODES) {
-        //glLoadIdentity();
+        m3gIdentityModelMatrix();
     }
     else {
-        //glLoadMatrixf(ctx->viewTransform);
+        m3gLoadModelMatrix(ctx->viewTransform);
     }
     M3G_ASSERT_GL;
 
@@ -907,17 +906,13 @@ static void m3gPushScreenSpace(RenderContext *ctx, M3Gbool realPixels)
 {
     M3G_VALIDATE_OBJECT(ctx);
     
-    //glMatrixMode(GL_PROJECTION);
-    //glPushMatrix();
-    //glLoadIdentity();
+    m3gIdentityProjectionMatrix();
     if (realPixels) {
         int w = ctx->viewport.width;
         int h = ctx->viewport.height;
         //glOrthox(0, w << 16, 0, h << 16, -1 << 16, 1 << 16);
     }
-    //glMatrixMode(GL_MODELVIEW);
-    //glPushMatrix();
-    //glLoadIdentity();
+    m3gIdentityModelMatrix();
 }
 
 /*!
@@ -1043,8 +1038,7 @@ static void m3gDrawMesh(RenderContext *ctx,
 		float transform[16];
 		m3gGetMatrixColumns(modelTransform, transform);
         
-        //glPushMatrix();
-        //glMultMatrixf(transform);
+        m3gMultModelMatrix(transform);
     }
 
     /* Check whether we need to create an alpha-factored color cache
