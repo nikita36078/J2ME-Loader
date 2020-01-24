@@ -429,7 +429,8 @@ public class MicroActivity extends AppCompatActivity {
 						Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.action_layout_switch:
-				vk.switchLayout();
+				int layout = vk.switchLayout();
+				Toast.makeText(this, String.valueOf(layout), Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.action_hide_buttons:
 				showHideButtonDialog();

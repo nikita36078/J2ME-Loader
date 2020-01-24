@@ -392,6 +392,46 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keyScales[SCALE_DIGITS] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
 
+				setSnap(KEY_DOWN_LEFT, SCREEN, RectSnap.INT_SOUTHWEST);
+				setSnap(KEY_DOWN, KEY_DOWN_LEFT, RectSnap.EXT_EAST);
+				setSnap(KEY_DOWN_RIGHT, KEY_DOWN, RectSnap.EXT_EAST);
+				setSnap(KEY_LEFT, KEY_DOWN_LEFT, RectSnap.EXT_NORTH);
+				setSnap(KEY_RIGHT, KEY_DOWN_RIGHT, RectSnap.EXT_NORTH);
+				setSnap(KEY_UP_RIGHT, KEY_RIGHT, RectSnap.EXT_NORTH);
+				setSnap(KEY_UP, KEY_UP_RIGHT, RectSnap.EXT_WEST);
+				setSnap(KEY_UP_LEFT, KEY_UP, RectSnap.EXT_WEST);
+				setSnap(KEY_FIRE, KEY_DOWN_RIGHT, RectSnap.EXT_NORTHWEST);
+				setSnap(KEY_SOFT_LEFT, KEY_UP_LEFT, RectSnap.EXT_NORTH);
+				setSnap(KEY_SOFT_RIGHT, KEY_UP_RIGHT, RectSnap.EXT_NORTH);
+
+				setSnap(KEY_POUND, SCREEN, RectSnap.INT_SOUTHEAST);
+				setSnap(KEY_NUM0, KEY_POUND, RectSnap.EXT_WEST);
+				setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
+				setSnap(KEY_NUM7, KEY_STAR, RectSnap.EXT_NORTH);
+				setSnap(KEY_NUM8, KEY_NUM7, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM9, KEY_NUM8, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM4, KEY_NUM7, RectSnap.EXT_NORTH);
+				setSnap(KEY_NUM5, KEY_NUM4, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM6, KEY_NUM5, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM1, KEY_NUM4, RectSnap.EXT_NORTH);
+				setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST);
+				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
+				setSnap(KEY_DIAL, KEY_NUM1, RectSnap.EXT_NORTH);
+				setSnap(KEY_CANCEL, KEY_NUM3, RectSnap.EXT_NORTH);
+
+				for (int i = KEY_NUM1; i < KEYBOARD_SIZE; i++) {
+					keypad[i].setVisible(true);
+				}
+				keypad[KEY_DIAL].setVisible(false);
+				keypad[KEY_CANCEL].setVisible(false);
+				break;
+			case 2:
+				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_FIRE_KEY] = 1;
+
 				setSnap(KEY_DOWN, SCREEN, RectSnap.INT_SOUTH);
 				setSnap(KEY_DOWN_RIGHT, KEY_DOWN, RectSnap.EXT_EAST);
 				setSnap(KEY_DOWN_LEFT, KEY_DOWN, RectSnap.EXT_WEST);
@@ -413,7 +453,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keypad[KEY_DIAL].setVisible(false);
 				keypad[KEY_CANCEL].setVisible(false);
 				break;
-			case 2:
+			case 3:
 				keyScales[SCALE_JOYSTICK] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
@@ -446,9 +486,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	public void switchLayout() {
+	public int switchLayout() {
 		layoutVariant++;
-		if (layoutVariant > 2) {
+		if (layoutVariant > 3) {
 			layoutVariant = 0;
 		}
 		resetLayout(layoutVariant);
@@ -458,6 +498,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapKeys();
 		repaint();
 		listener.layoutChanged(this);
+		return layoutVariant;
 	}
 
 	public void writeLayout(DataOutputStream dos) throws IOException {
