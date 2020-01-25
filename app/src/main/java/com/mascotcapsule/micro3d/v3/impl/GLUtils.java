@@ -3,6 +3,8 @@ package com.mascotcapsule.micro3d.v3.impl;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import ru.playsoftware.j2meloader.BuildConfig;
+
 public class GLUtils {
 
 	private static final String TAG = GLUtils.class.getSimpleName();
@@ -52,6 +54,7 @@ public class GLUtils {
 	 */
 	public static void checkGlError(String glOperation) {
 		int error;
+		if (!BuildConfig.DEBUG) return;
 		while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
 			Log.e(TAG, glOperation + ": glError " + error);
 			throw new RuntimeException(glOperation + ": glError " + error);
