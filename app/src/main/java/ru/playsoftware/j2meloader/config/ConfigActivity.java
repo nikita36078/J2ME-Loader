@@ -299,8 +299,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		addScreenSizePreset(128, 128);
 		addScreenSizePreset(128, 160);
 		addScreenSizePreset(132, 176);
+		addScreenSizePreset(176, 208);
 		addScreenSizePreset(176, 220);
 		addScreenSizePreset(240, 320);
+		addScreenSizePreset(240, 400);
 		addScreenSizePreset(352, 416);
 		addScreenSizePreset(640, 360);
 		addScreenSizePreset(800, 480);
