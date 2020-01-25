@@ -7,6 +7,7 @@ import android.opengl.GLUtils;
 
 import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
+import com.mascotcapsule.micro3d.v3.Texture;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -28,6 +29,7 @@ public class Renderer {
 	private int width, height;
 
 	private ObjectRenderer objectRenderer;
+	private DirectFigure directFigure;
 	private ByteBuffer pixelBuf;
 	private Bitmap mBitmapBuffer;
 
@@ -89,6 +91,7 @@ public class Renderer {
 				// this projection matrix is applied to object coordinates
 				GLES20.glViewport(0, 0, width, height);
 				objectRenderer = new ObjectRenderer();
+				directFigure = new DirectFigure();
 				pixelBuf = ByteBuffer.allocateDirect(width * height * 4);
 				pixelBuf.order(ByteOrder.LITTLE_ENDIAN);
 				mBitmapBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -107,6 +110,13 @@ public class Renderer {
 			egl.eglDestroySurface(eglDisplay, eglWindowSurface);
 		egl.eglDestroyContext(eglDisplay, eglContext);
 		egl.eglTerminate(eglDisplay);
+	}
+
+	public void render(Texture texture, FigureLayout layout, int command,
+					   int numPrimitives, int[] vertexCoords,
+					   int[] textureCoords, int[] colors) {
+		directFigure.parse(texture, command, numPrimitives, vertexCoords, textureCoords, colors);
+		objectRenderer.draw(directFigure, layout);
 	}
 
 	public void render(Figure figure, FigureLayout layout) {

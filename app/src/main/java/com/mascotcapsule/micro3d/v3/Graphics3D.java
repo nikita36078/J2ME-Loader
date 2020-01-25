@@ -112,7 +112,8 @@ public class Graphics3D {
 		} else if (numPrimitives <= 0 || numPrimitives >= 256) {
 			throw new IllegalArgumentException();
 		}
-//		renderer.render(layout.getMatrix());
+		layout.setOffset(x, y);
+		renderer.render(texture, layout, command, numPrimitives, vertexCoords, textureCoords, colors);
 	}
 
 	public final void drawCommandList(Texture[] textures,
@@ -130,7 +131,7 @@ public class Graphics3D {
 				}
 			}
 		}
-//		renderer.render(layout.getMatrix());
+//		renderer.parse(layout.getMatrix());
 	}
 
 	public final void drawCommandList(Texture texture,

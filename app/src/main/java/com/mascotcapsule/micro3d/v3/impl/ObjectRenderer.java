@@ -104,6 +104,65 @@ public class ObjectRenderer {
 		}
 	}
 
+	public void draw(DirectFigure figure, FigureLayout layout) {
+		float[] mvpMatrix = layout.getMatrix();
+		FloatBuffer vertexData = figure.vboPolyT;
+		if (figure.numPolyT > 0) {
+			GLES20.glUseProgram(textureProgram);
+			glUniformMatrix4fv(utMatrixLocation, 1, false, mvpMatrix, 0);
+			GLUtils.checkGlError("glUniformMatrix4fv");
+			// Vertex coords
+			vertexData.position(0);
+			GLES20.glVertexAttribPointer(atPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
+					false, TEXTURE_STRIDE, vertexData);
+			GLES20.glEnableVertexAttribArray(atPositionLocation);
+
+			// Texture coords
+			vertexData.position(COORDS_PER_VERTEX);
+			GLES20.glVertexAttribPointer(atTextureLocation, TEX_COORDS_PER_VERTEX, GL_FLOAT,
+					false, TEXTURE_STRIDE, vertexData);
+			GLES20.glEnableVertexAttribArray(atTextureLocation);
+
+			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getCenterGL(), 0);
+			// Put the texture to the unit 0 target
+			GLES20.glActiveTexture(GL_TEXTURE0);
+			// Texture units
+			GLES20.glUniform1i(utTextureUnitLocation, 0);
+
+			int count = figure.numPolyT * 3;
+
+			GLES20.glBindTexture(GL_TEXTURE_2D, figure.texture.getId());
+			GLES20.glUniform2fv(utTextureSizeLocation, 1, figure.texture.getSize(), 0);
+			// Draw the triangle
+			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
+			GLUtils.checkGlError("glDrawArrays");
+		}
+		vertexData = figure.vboPolyF;
+		if (figure.numPolyF > 0) {
+			GLES20.glUseProgram(colorProgram);
+			glUniformMatrix4fv(ucMatrixLocation, 1, false, mvpMatrix, 0);
+			GLUtils.checkGlError("glUniformMatrix4fv");
+			// Vertex coords
+			vertexData.position(0);
+			GLES20.glVertexAttribPointer(acPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
+					false, COLOR_STRIDE, vertexData);
+			GLES20.glEnableVertexAttribArray(acPositionLocation);
+
+			// Color data
+			vertexData.position(COORDS_PER_VERTEX);
+			GLES20.glVertexAttribPointer(acColorLocation, COLORS_PER_VERTEX, GL_FLOAT,
+					false, COLOR_STRIDE, vertexData);
+			GLES20.glEnableVertexAttribArray(acColorLocation);
+
+			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getCenterGL(), 0);
+
+			int count = figure.numPolyF * 3;
+			// Draw the triangle
+			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
+			GLUtils.checkGlError("glDrawArrays");
+		}
+	}
+
 	private void getTextureLocations() {
 		atPositionLocation = GLES20.glGetAttribLocation(textureProgram, "vPosition");
 		atTextureLocation = GLES20.glGetAttribLocation(textureProgram, "aTexture");
