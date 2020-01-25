@@ -121,4 +121,8 @@ public class Renderer {
 		mBitmapBuffer.copyPixelsFromBuffer(pixelBuf);
 		graphics.getCanvas().drawBitmap(mBitmapBuffer, 0, 0, null);
 	}
+
+	public void flush() {
+		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+	}
 }

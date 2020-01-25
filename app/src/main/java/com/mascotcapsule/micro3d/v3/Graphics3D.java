@@ -163,6 +163,7 @@ public class Graphics3D {
 
 	public final void flush() throws IllegalStateException {
 		checkTargetIsValid();
+		renderer.flush();
 	}
 
 	public final void dispose() {
