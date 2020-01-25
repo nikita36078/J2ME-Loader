@@ -26,7 +26,7 @@ public class FigureImpl {
 			0, 0, 0xC0
 	};
 	private ArrayList<Vector3D> vertices = new ArrayList<>();
-	private ArrayList<Normal> normals = new ArrayList<>();
+	private ArrayList<Vector3D> normals = new ArrayList<>();
 	private ArrayList<PolygonT3> triangleFacesT = new ArrayList<>();
 	private ArrayList<PolygonT4> quadFacesT = new ArrayList<>();
 	private ArrayList<Bone> bones = new ArrayList<>();
@@ -200,7 +200,7 @@ public class FigureImpl {
 					z = 0;
 				}
 			}
-			normals.add(new Normal(x, y, z));
+			normals.add(new Vector3D(x, y, z));
 		}
 	}
 
