@@ -153,6 +153,7 @@ public class Graphics3D {
 		if (figure == null || layout == null || effect == null) {
 			throw new NullPointerException();
 		}
+		layout.setOffset(x, y);
 		renderer.render(figure, layout);
 	}
 

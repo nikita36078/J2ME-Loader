@@ -35,6 +35,8 @@ public class FigureLayout {
 	private int mPersWidth;
 	private int mPersHeight;
 	private int mSettingIndex;
+	private int offsetX;
+	private int offsetY;
 
 	private float[] glMVPMatrix = new float[16];
 	private float[] glProjectionMatrix = new float[16];
@@ -198,9 +200,14 @@ public class FigureLayout {
 		Matrix.rotateM(tmp, 32, 180, 0, 1, 0);
 	}
 
+	public void setOffset(int offsetX, int offsetY) {
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+	}
+
 	public float[] getCenterGL() {
-		centerGL[0] = (mCenterX - 120) / 120f;
-		centerGL[1] = (mCenterY - 160) / 160f;
+		centerGL[0] = (mCenterX - 120 + offsetX) / 120f;
+		centerGL[1] = (mCenterY - 160 + offsetY) / 160f;
 		return centerGL;
 	}
 
