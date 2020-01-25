@@ -33,6 +33,8 @@ public class FigureImpl {
 	public FloatBuffer vboPolyT;
 	public FloatBuffer vboPolyF;
 	public int[] texturedPolygons;
+	public int numPolyT;
+	public int numPolyF;
 	private ArrayList<PolygonF4> quadFacesF = new ArrayList<>();
 	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 	private int numPattern;
@@ -360,11 +362,12 @@ public class FigureImpl {
 	}
 
 	private void createVerticesArray(int num_polyt3, int num_polyt4, int num_polyf3, int num_polyf4) {
-
-		vboPolyT = ByteBuffer.allocateDirect(num_polyt3 * 15 * 4 + num_polyt4 * 30 * 4)
+		numPolyT = num_polyt3 + num_polyt4 * 2;
+		numPolyF = num_polyf3 + num_polyf4 * 2;
+		vboPolyT = ByteBuffer.allocateDirect(numPolyT * 15 * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
-		vboPolyF = ByteBuffer.allocateDirect(num_polyf3 * 21 * 4 + num_polyf4 * 42 * 4)
+		vboPolyF = ByteBuffer.allocateDirect(numPolyF * 21 * 4)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
 		for (int i = 0; i < quadFacesT.size(); i++) {

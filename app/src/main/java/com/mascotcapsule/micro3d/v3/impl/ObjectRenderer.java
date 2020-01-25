@@ -42,7 +42,7 @@ public class ObjectRenderer {
 	public void draw(Figure figure, FigureLayout layout) {
 		float[] mvpMatrix = layout.getMatrix();
 		FloatBuffer vertexData = figure.figure.vboPolyT;
-		if (vertexData.capacity() > 0) {
+		if (figure.figure.numPolyT > 0) {
 			int[] texturedPolygons = figure.figure.texturedPolygons;
 			int prevCount = 0;
 
@@ -79,7 +79,7 @@ public class ObjectRenderer {
 			}
 		}
 		vertexData = figure.figure.vboPolyF;
-		if (vertexData.capacity() > 0) {
+		if (figure.figure.numPolyF > 0) {
 			GLES20.glUseProgram(colorProgram);
 			glUniformMatrix4fv(ucMatrixLocation, 1, false, mvpMatrix, 0);
 			GLUtils.checkGlError("glUniformMatrix4fv");
@@ -97,7 +97,7 @@ public class ObjectRenderer {
 
 			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getCenterGL(), 0);
 
-			int count = vertexData.capacity() / (COORDS_PER_VERTEX + COLORS_PER_VERTEX);
+			int count = figure.figure.numPolyF * 3;
 			// Draw the triangle
 			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
 			GLUtils.checkGlError("glDrawArrays");
