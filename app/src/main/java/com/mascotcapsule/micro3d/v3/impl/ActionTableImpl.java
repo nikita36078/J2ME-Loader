@@ -31,6 +31,8 @@ public class ActionTableImpl {
 			tra_unk3[i] = (short) bis.readUnsignedShort();
 		}
 		int tra_unk4 = bis.readInt();
+		System.out.printf("num_actions=%d num_segments=%d tra_unk3=%d tra_unk4=%d\n",
+				numActions, num_segments, tra_unk3[1], tra_unk4);
 
 		keyframesArr = new int[numActions];
 
@@ -43,7 +45,7 @@ public class ActionTableImpl {
 			}
 			int count = bis.readUnsignedShort();
 			for (int j = 0; j < count; j++) {
-				System.out.println("aux");
+				// aux
 				bis.readUnsignedShort();
 				bis.readUnsignedShort();
 				bis.readUnsignedShort();
@@ -62,7 +64,7 @@ public class ActionTableImpl {
 		int type = bis.readUnsignedByte();
 		switch (type) {
 			case 0:
-				System.out.println("full matrix");
+				//  full matrix
 				for (int j = 0; j < 3; j++) {
 					bis.readUnsignedShort();
 					bis.readUnsignedShort();
@@ -71,10 +73,11 @@ public class ActionTableImpl {
 				}
 				break;
 			case 1:
-				System.out.println("identity");
+				// identity
 				break;
 			case 2: {
-				System.out.println("animation");
+				// animation
+				// translation
 				int count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
@@ -82,6 +85,7 @@ public class ActionTableImpl {
 					bis.readUnsignedShort();
 					bis.readUnsignedShort();
 				}
+				// scale
 				count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
@@ -89,6 +93,7 @@ public class ActionTableImpl {
 					bis.readUnsignedShort();
 					bis.readUnsignedShort();
 				}
+				// rotation
 				count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
@@ -96,6 +101,7 @@ public class ActionTableImpl {
 					bis.readUnsignedShort();
 					bis.readUnsignedShort();
 				}
+				// roll
 				count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
@@ -104,7 +110,6 @@ public class ActionTableImpl {
 				break;
 			}
 			case 3: {
-				System.out.println("unknown3");
 				bis.readUnsignedShort();
 				bis.readUnsignedShort();
 				bis.readUnsignedShort();
@@ -119,7 +124,6 @@ public class ActionTableImpl {
 				break;
 			}
 			case 4: {
-				System.out.println("unknown4");
 				int count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
@@ -135,7 +139,6 @@ public class ActionTableImpl {
 				break;
 			}
 			case 5: {
-				System.out.println("unknown5");
 				int count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
@@ -146,7 +149,6 @@ public class ActionTableImpl {
 				break;
 			}
 			case 6: {
-				System.out.println("unknown6");
 				int count = bis.readUnsignedShort();
 				for (int j = 0; j < count; j++) {
 					bis.readUnsignedShort();
