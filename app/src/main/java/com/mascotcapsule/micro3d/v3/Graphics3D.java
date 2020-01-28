@@ -16,7 +16,7 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import com.mascotcapsule.micro3d.v3.impl.Renderer;
+import com.mascotcapsule.micro3d.v3.render.Renderer;
 
 import javax.microedition.lcdui.Graphics;
 

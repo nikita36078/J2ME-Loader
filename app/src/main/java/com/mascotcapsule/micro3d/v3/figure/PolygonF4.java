@@ -1,4 +1,4 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.figure;
 
 public class PolygonF4 extends Polygon4 {
 	public final Color color;

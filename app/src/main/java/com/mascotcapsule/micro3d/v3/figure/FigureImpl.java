@@ -1,7 +1,8 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.figure;
 
 import com.mascotcapsule.micro3d.v3.AffineTrans;
 import com.mascotcapsule.micro3d.v3.Vector3D;
+import com.mascotcapsule.micro3d.v3.util.BitInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

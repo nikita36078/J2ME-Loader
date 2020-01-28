@@ -1,4 +1,4 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.render;
 
 import android.opengl.GLES20;
 import android.util.Log;

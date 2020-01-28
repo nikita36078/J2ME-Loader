@@ -16,7 +16,7 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import com.mascotcapsule.micro3d.v3.impl.FigureImpl;
+import com.mascotcapsule.micro3d.v3.figure.FigureImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

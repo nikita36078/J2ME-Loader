@@ -17,7 +17,7 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import com.mascotcapsule.micro3d.v3.impl.ActionTableImpl;
+import com.mascotcapsule.micro3d.v3.action.ActionTableImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

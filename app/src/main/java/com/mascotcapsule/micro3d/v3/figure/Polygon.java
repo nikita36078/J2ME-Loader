@@ -1,4 +1,4 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.figure;
 
 public class Polygon {
 	public boolean specular;

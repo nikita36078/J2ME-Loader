@@ -1,4 +1,4 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.render;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,6 +8,7 @@ import android.opengl.GLUtils;
 import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
 import com.mascotcapsule.micro3d.v3.Texture;
+import com.mascotcapsule.micro3d.v3.figure.DirectFigure;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

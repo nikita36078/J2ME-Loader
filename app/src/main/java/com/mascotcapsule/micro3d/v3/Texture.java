@@ -56,7 +56,7 @@ public class Texture {
 		final int[] textureIds = new int[1];
 		glGenTextures(1, textureIds, 0);
 		if (textureIds[0] == 0) {
-			com.mascotcapsule.micro3d.v3.impl.GLUtils.checkGlError("glGenTextures");
+			com.mascotcapsule.micro3d.v3.render.GLUtils.checkGlError("glGenTextures");
 			return 0;
 		}
 

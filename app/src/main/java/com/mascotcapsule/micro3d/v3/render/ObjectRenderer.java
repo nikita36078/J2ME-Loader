@@ -1,9 +1,10 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.render;
 
 import android.opengl.GLES20;
 
 import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
+import com.mascotcapsule.micro3d.v3.figure.DirectFigure;
 
 import java.nio.FloatBuffer;
 

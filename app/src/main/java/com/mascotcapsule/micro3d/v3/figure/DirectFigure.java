@@ -1,4 +1,4 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.figure;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 import com.mascotcapsule.micro3d.v3.Texture;

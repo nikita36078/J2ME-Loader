@@ -1,4 +1,6 @@
-package com.mascotcapsule.micro3d.v3.impl;
+package com.mascotcapsule.micro3d.v3.action;
+
+import com.mascotcapsule.micro3d.v3.util.BitInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
