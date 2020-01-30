@@ -98,25 +98,25 @@ public class ContextHolder {
 	public static InputStream getResourceAsStream(Class resClass, String resName) {
 		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		if (resName == null || resName.equals("")) {
-			Log.d(TAG, "Can't load res on empty path");
+			Log.w(TAG, "Can't load res on empty path");
 			return null;
 		}
 		// Add support for Siemens file path
-		resName = resName.replace('\\', '/');
+		String normName = resName.replace('\\', '/');
 		// Remove double slashes
-		resName = resName.replace("//", "/");
-		if (resName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
+		normName = normName.replace("//", "/");
+		if (normName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
 			String className = resClass.getPackage().getName().replace('.', '/');
-			resName = className + "/" + resName;
+			normName = className + "/" + normName;
 		}
 		// Remove leading slash
-		if (resName.charAt(0) == '/') {
-			resName = resName.substring(1);
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
 		}
 		try {
-			return getResource(resName);
+			return getResource(normName);
 		} catch (IOException | NullPointerException e) {
-			Log.d(TAG, "Can't load res: " + resName);
+			Log.w(TAG, "Can't load res: " + resName);
 			return null;
 		}
 	}
