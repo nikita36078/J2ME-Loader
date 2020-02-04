@@ -87,6 +87,7 @@ public class Image {
 				throw new IOException("Can't read image: " + resname);
 			}
 			b = BitmapFactory.decodeStream(stream);
+			stream.close();
 			if (b == null) {
 				throw new IOException("Can't decode image: " + resname);
 			}

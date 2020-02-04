@@ -116,8 +116,9 @@ public class ContextHolder {
 		byte[] data;
 		File midletResFile = new File(Config.APP_DIR,
 				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
+		ZipFileCompat zipFile = null;
 		if (midletResFile.exists()) {
-			ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
+			zipFile = new ZipFileCompat(midletResFile);
 			ZipEntry entry = zipFile.getEntry(resName);
 			is = zipFile.getInputStream(entry);
 			data = new byte[(int) entry.getSize()];
@@ -129,6 +130,9 @@ public class ContextHolder {
 		DataInputStream dis = new DataInputStream(is);
 		dis.readFully(data);
 		dis.close();
+		if (zipFile != null) {
+			zipFile.close();
+		}
 		return new ByteArrayInputStream(data);
 	}
 
