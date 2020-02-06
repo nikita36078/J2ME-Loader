@@ -128,17 +128,11 @@ public class FileUtils {
 			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (out != null) {
+				out.close();
 			}
+			in.close();
 		}
 		return file.getPath();
 	}

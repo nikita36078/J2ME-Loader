@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
 	private String getAppPath() {
 		try {
 			return FileUtils.getAppPath(this, getIntent().getData());
-		} catch (IOException e) {
+		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 			return null;
