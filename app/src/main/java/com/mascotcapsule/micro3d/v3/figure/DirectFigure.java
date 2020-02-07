@@ -15,6 +15,8 @@ public class DirectFigure {
 	public int numPolyT;
 	public int numPolyF;
 	public Texture texture;
+	public int blendMode;
+	public boolean transparent;
 
 	public DirectFigure() {
 		vboPolyT = ByteBuffer.allocateDirect(255 * 30 * 4)
@@ -33,6 +35,8 @@ public class DirectFigure {
 		vboPolyT.position(0);
 		vboPolyF.position(0);
 		this.texture = texture;
+		this.blendMode = (command & Graphics3D.PATTR_BLEND_SUB) >> 5;
+		this.transparent = (command & Graphics3D.PATTR_COLORKEY) == Graphics3D.PATTR_COLORKEY;
 
 		if ((command & Graphics3D.PRIMITVE_POINT_SPRITES) == Graphics3D.PRIMITVE_POINT_SPRITES) {
 			if ((command & Graphics3D.PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) == Graphics3D.PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) {

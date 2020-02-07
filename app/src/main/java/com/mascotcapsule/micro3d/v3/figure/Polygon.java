@@ -7,10 +7,10 @@ public class Polygon {
 	public int blendMode;
 	public boolean transparent;
 
-	private static final int BLENDING_MODE_NORMAL = 0;
-	private static final int BLENDING_MODE_HALF = 1;
-	private static final int BLENDING_MODE_ADD = 2;
-	private static final int BLENDING_MODE_SUB = 3;
+	public static final int BLENDING_MODE_NORMAL = 0;
+	public static final int BLENDING_MODE_HALF = 1;
+	public static final int BLENDING_MODE_ADD = 2;
+	public static final int BLENDING_MODE_SUB = 3;
 
 	public Polygon(int attribute) {
 		specular = (attribute & 0x40) != 0;

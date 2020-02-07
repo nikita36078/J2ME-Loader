@@ -11,6 +11,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class FigureImpl {
 
@@ -31,11 +32,13 @@ public class FigureImpl {
 	private ArrayList<PolygonT3> triangleFacesT = new ArrayList<>();
 	private ArrayList<PolygonT4> quadFacesT = new ArrayList<>();
 	private ArrayList<Bone> bones = new ArrayList<>();
+	public ArrayList<Material> materials = new ArrayList<>();
 	public FloatBuffer vboPolyT;
 	public FloatBuffer vboPolyF;
 	public int[] texturedPolygons;
 	public int numPolyT;
 	public int numPolyF;
+	public int numTexture;
 	private ArrayList<PolygonF4> quadFacesF = new ArrayList<>();
 	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 	private int numPattern;
@@ -74,21 +77,22 @@ public class FigureImpl {
 
 		int num_polyf3 = bis.readUnsignedShort();
 		int num_polyf4 = bis.readUnsignedShort();
-		int num_texture = bis.readUnsignedShort();
+		numTexture = bis.readUnsignedShort();
 		numPattern = bis.readUnsignedShort();
 		int num_color = bis.readUnsignedShort();
 		System.out.printf("num_polyf3=%d num_polyf4=%d num_texture=%d num_pattern=%d num_color=%d\n",
-				num_polyf3, num_polyf4, num_texture, numPattern, num_color);
+				num_polyf3, num_polyf4, numTexture, numPattern, num_color);
 
-		texturedPolygons = new int[num_texture];
+		texturedPolygons = new int[numTexture * 2];
 		for (int i = 0; i < numPattern; i++) {
 			int num_unk_polyf3 = bis.readUnsignedShort();
 			int num_unk_polyf4 = bis.readUnsignedShort();
-			for (int j = 0; j < num_texture; j++) {
+			for (int j = 0; j < texturedPolygons.length; j += 2) {
 				int num_textured_polyt3 = bis.readUnsignedShort();
 				int num_textured_polyt4 = bis.readUnsignedShort();
 				// Don't support an external patterns for now
-				texturedPolygons[j] += num_textured_polyt3 + num_textured_polyt4 * 2;
+				texturedPolygons[j] += num_textured_polyt3;
+				texturedPolygons[j + 1] += num_textured_polyt4;
 			}
 		}
 
@@ -366,8 +370,8 @@ public class FigureImpl {
 		numPolyT = num_polyt3 + num_polyt4 * 2;
 		numPolyF = num_polyf3 + num_polyf4 * 2;
 		vboPolyT = ByteBuffer.allocateDirect(numPolyT * 15 * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
+				.order(ByteOrder.nativeOrder())
+				.asFloatBuffer();
 		vboPolyF = ByteBuffer.allocateDirect(numPolyF * 21 * 4)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
@@ -529,6 +533,62 @@ public class FigureImpl {
 		}
 		vboPolyT.position(0);
 		vboPolyF.position(0);
+		updatePolys();
+	}
+
+	private void updatePolys() {
+		for (int i = 0; i < quadFacesT.size(); i++) {
+			Polygon polygon = quadFacesT.get(i);
+			Material material = getMaterial(i, polygon);
+			material.count += 6;
+		}
+		for (int i = 0; i < triangleFacesT.size(); i++) {
+			Polygon polygon = triangleFacesT.get(i);
+			Material material = getMaterial(i, polygon);
+			material.count += 3;
+		}
+		Collections.sort(materials, (o1, o2) -> o1.blendMode - o2.blendMode);
+	}
+
+	private Material getMaterial(int polygonId, Polygon polygon) {
+		Material result = null;
+		int offset;
+		int polyStart;
+		if (polygon instanceof PolygonT3) {
+			offset = 0;
+			polyStart = (quadFacesT.size() * 2 + polygonId) * 3;
+		} else {
+			offset = 1;
+			polyStart = polygonId * 6;
+		}
+		int textureId = getTextureId(polygonId, offset);
+
+		for (Material material : materials) {
+			int matEnd = material.start + material.count;
+			if (material.blendMode == polygon.blendMode && material.textureId == textureId &&
+					matEnd == polyStart && material.transparent == polygon.transparent) {
+				result = material;
+				break;
+			}
+		}
+		if (result == null) {
+			result = new Material(polyStart, 0, polygon.blendMode, textureId, polygon.transparent);
+			materials.add(result);
+		}
+		return result;
+	}
+
+	private int getTextureId(int polygonId, int offset) {
+		int result = 0;
+		int num = 0;
+		for (int i = 0; i < texturedPolygons.length; i += 2) {
+			num += texturedPolygons[i + offset];
+			if (polygonId < num) {
+				result = i / 2;
+				break;
+			}
+		}
+		return result;
 	}
 
 	public int getNumPattern() {
