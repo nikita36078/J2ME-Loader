@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedHashMap;
+import java.util.zip.ZipException;
 
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
@@ -168,6 +169,9 @@ public class JarConverter {
 			File patchedJar;
 			try {
 				patchedJar = patchJar(inputJar, encoding);
+			} catch (ZipException e) {
+				deleteTemp();
+				throw new ConverterException("Invalid jar", e);
 			} catch (Exception e) {
 				deleteTemp();
 				throw new ConverterException("Can't patch", e);
