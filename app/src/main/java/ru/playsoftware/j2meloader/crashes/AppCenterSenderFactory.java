@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.hockeyapp;
+package ru.playsoftware.j2meloader.crashes;
 
 import android.content.Context;
 
@@ -24,11 +24,11 @@ import org.acra.sender.ReportSenderFactory;
 
 import androidx.annotation.NonNull;
 
-public class HockeySenderFactory implements ReportSenderFactory {
+public class AppCenterSenderFactory implements ReportSenderFactory {
 	@NonNull
 	@Override
 	public ReportSender create(@NonNull Context context, @NonNull CoreConfiguration config) {
-		return new HockeySender();
+		return new AppCenterSender();
 	}
 
 	@Override
