@@ -61,7 +61,7 @@ public class ObjectRenderer {
 					false, TEXTURE_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(atTextureLocation);
 
-			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getCenterGL(), 0);
+			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getGlCenter(), 0);
 			// Put the texture to the unit 0 target
 			GLES20.glActiveTexture(GL_TEXTURE0);
 			// Texture units
@@ -110,7 +110,7 @@ public class ObjectRenderer {
 					false, COLOR_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(acColorLocation);
 
-			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getCenterGL(), 0);
+			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getGlCenter(), 0);
 
 			GLES20.glDisable(GL_BLEND);
 			int count = figure.figure.numPolyF * 3;
@@ -152,7 +152,7 @@ public class ObjectRenderer {
 				GLES20.glDisable(GL_BLEND);
 			}
 
-			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getCenterGL(), 0);
+			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getGlCenter(), 0);
 			// Put the texture to the unit 0 target
 			GLES20.glActiveTexture(GL_TEXTURE0);
 			// Texture units
@@ -187,7 +187,7 @@ public class ObjectRenderer {
 					false, COLOR_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(acColorLocation);
 
-			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getCenterGL(), 0);
+			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getGlCenter(), 0);
 
 			GLES20.glDisable(GL_BLEND);
 			int count = figure.numPolyF * 3;

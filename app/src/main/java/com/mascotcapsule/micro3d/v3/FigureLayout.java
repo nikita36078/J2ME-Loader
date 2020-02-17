@@ -41,22 +41,17 @@ public class FigureLayout {
 	private float[] glMVPMatrix = new float[16];
 	private float[] glProjectionMatrix = new float[16];
 	private float[] mTempMatrix = new float[48];
-	private float[] centerGL = new float[2];
+	private float[] glCenter = new float[2];
 
 	public FigureLayout() {
-		prepareMatrices();
-		setAffineTrans((AffineTrans) null);
-		this.mScaleX = 512;
-		this.mScaleY = 512;
+		this(null, 512, 512, 0, 0);
 	}
 
 	public FigureLayout(AffineTrans trans, int sx, int sy, int cx, int cy) {
 		prepareMatrices();
 		setAffineTrans(trans);
-		this.mScaleX = sx;
-		this.mScaleY = sy;
-		this.mCenterX = cx;
-		this.mCenterY = cy;
+		setScale(sx, sy);
+		setCenter(cx, cy);
 	}
 
 	public final AffineTrans getAffineTrans() {
@@ -150,6 +145,7 @@ public class FigureLayout {
 	public final void setCenter(int cx, int cy) {
 		this.mCenterX = cx;
 		this.mCenterY = cy;
+		updateGlCenter();
 	}
 
 	public final void setPerspective(int zNear, int zFar, int angle) {
@@ -203,12 +199,16 @@ public class FigureLayout {
 	public void setOffset(int offsetX, int offsetY) {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
+		updateGlCenter();
 	}
 
-	public float[] getCenterGL() {
-		centerGL[0] = (mCenterX - 120 + offsetX) / 120f;
-		centerGL[1] = (mCenterY - 160 + offsetY) / 160f;
-		return centerGL;
+	public void updateGlCenter() {
+		glCenter[0] = (mCenterX - 120 + offsetX) / 120f;
+		glCenter[1] = (mCenterY - 160 + offsetY) / 160f;
+	}
+
+	public float[] getGlCenter() {
+		return glCenter;
 	}
 
 }
