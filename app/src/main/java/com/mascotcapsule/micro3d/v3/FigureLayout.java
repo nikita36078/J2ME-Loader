@@ -18,6 +18,8 @@ package com.mascotcapsule.micro3d.v3;
 
 import android.opengl.Matrix;
 
+import javax.microedition.lcdui.Canvas;
+
 @SuppressWarnings({"FieldCanBeLocal", "unused", "WeakerAccess"})
 public class FigureLayout {
 
@@ -37,6 +39,7 @@ public class FigureLayout {
 	private int mSettingIndex;
 	private int offsetX;
 	private int offsetY;
+	private int halfWidth, halfHeight;
 
 	private float[] glMVPMatrix = new float[16];
 	private float[] glProjectionMatrix = new float[16];
@@ -52,6 +55,8 @@ public class FigureLayout {
 		setAffineTrans(trans);
 		setScale(sx, sy);
 		setCenter(cx, cy);
+		halfWidth = Canvas.getVirtualWidth() / 2;
+		halfHeight = Canvas.getVirtualHeight() / 2;
 	}
 
 	public final AffineTrans getAffineTrans() {
@@ -125,8 +130,8 @@ public class FigureLayout {
 			throw new IllegalArgumentException();
 		}
 		if (w == 0 || h == 0) {
-			w = 240;
-			h = 320;
+			w = halfWidth * 2;
+			h = halfHeight * 2;
 		}
 		this.mParaWidth = w;
 		this.mParaHeight = h;
@@ -157,7 +162,7 @@ public class FigureLayout {
 		this.mPersFar = zFar;
 		this.mPersAngle = angle;
 		this.mSettingIndex = 2;
-		Matrix.perspectiveM(glProjectionMatrix, 0, angle * 480F / 4096F, 3F / 4F, zNear, zFar);
+		Matrix.perspectiveM(glProjectionMatrix, 0, angle * 480F / 4096F, (float) halfWidth / halfHeight, zNear, zFar);
 	}
 
 	public final void setPerspective(int zNear, int zFar, int width, int height) {
@@ -203,8 +208,8 @@ public class FigureLayout {
 	}
 
 	public void updateGlCenter() {
-		glCenter[0] = (mCenterX - 120 + offsetX) / 120f;
-		glCenter[1] = (mCenterY - 160 + offsetY) / 160f;
+		glCenter[0] = (mCenterX - halfWidth + offsetX) / (float) halfWidth;
+		glCenter[1] = (mCenterY - halfHeight + offsetY) / (float) halfHeight;
 	}
 
 	public float[] getGlCenter() {

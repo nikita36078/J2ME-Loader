@@ -452,6 +452,14 @@ public abstract class Canvas extends Displayable {
 		updateSize();
 	}
 
+	public static int getVirtualWidth() {
+		return virtualWidth;
+	}
+
+	public static int getVirtualHeight() {
+		return virtualHeight;
+	}
+
 	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
 		Canvas.virtualWidth = virtualWidth;
 		Canvas.virtualHeight = virtualHeight;
