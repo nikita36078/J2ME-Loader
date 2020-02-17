@@ -114,7 +114,7 @@ public class FigureLayout {
 		this.mScaleY = sy;
 		this.mSettingIndex = 0;
 		Matrix.setIdentityM(glProjectionMatrix, 0);
-		Matrix.scaleM(glProjectionMatrix, 0, sx, sy, 1.0F);
+		Matrix.scaleM(glProjectionMatrix, 0, sx / 512F, sy / 512F, 1.0F);
 	}
 
 	public final int getParallelWidth() {
