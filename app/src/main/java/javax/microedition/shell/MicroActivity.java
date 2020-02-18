@@ -76,6 +76,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean loaded;
 	private boolean started;
 	private boolean actionBarEnabled;
+	private boolean statusbarEnabled;
 	private boolean keyLongPressed;
 	private LinearLayout layout;
 	private Toolbar toolbar;
@@ -93,6 +94,7 @@ public class MicroActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
+		statusbarEnabled = sp.getBoolean("pref_statusbar_switch", false);
 		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
 		if (wakelockEnabled) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -270,13 +272,13 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void hideSystemUI() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			getWindow().getDecorView().setSystemUiVisibility(
-					View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-							| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-							| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-							| View.SYSTEM_UI_FLAG_FULLSCREEN
-							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-		} else {
+			int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+			if (!statusbarEnabled) {
+				flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN;
+			}
+			getWindow().getDecorView().setSystemUiVisibility(flags);
+		} else if (!statusbarEnabled) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
