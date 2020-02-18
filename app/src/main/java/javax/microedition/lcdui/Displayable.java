@@ -49,6 +49,8 @@ public abstract class Displayable {
 	private TextView marquee;
 
 	private static EventQueue queue;
+	protected static int virtualWidth;
+	protected static int virtualHeight;
 
 	private static final int TICKER_NO_ACTION = 0;
 	private static final int TICKER_SHOW = 1;
@@ -80,6 +82,11 @@ public abstract class Displayable {
 	public Displayable() {
 		commands = new ArrayList<>();
 		listener = null;
+	}
+
+	public static void setVirtualSize(int virtualWidth, int virtualHeight) {
+		Displayable.virtualWidth = virtualWidth;
+		Displayable.virtualHeight = virtualHeight;
 	}
 
 	public void setParentActivity(MicroActivity activity) {
@@ -182,11 +189,11 @@ public abstract class Displayable {
 	}
 
 	public int getWidth() {
-		return ContextHolder.getDisplayWidth();
+		return virtualWidth;
 	}
 
 	public int getHeight() {
-		return ContextHolder.getDisplayHeight();
+		return virtualHeight;
 	}
 
 	public void setTicker(Ticker newticker) {

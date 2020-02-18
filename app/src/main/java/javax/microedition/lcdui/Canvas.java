@@ -505,9 +505,6 @@ public abstract class Canvas extends Displayable {
 	private boolean visible;
 	private boolean sizeChangedCalled;
 
-	private static int virtualWidth;
-	private static int virtualHeight;
-
 	private static boolean scaleToFit;
 	private static boolean keepAspectRatio;
 	private static boolean filter;
@@ -545,10 +542,7 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	public static void setVirtualSize(int virtualWidth, int virtualHeight, boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
-		Canvas.virtualWidth = virtualWidth;
-		Canvas.virtualHeight = virtualHeight;
-
+	public static void setScale(boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
 		Canvas.scaleToFit = scaleToFit;
 		Canvas.keepAspectRatio = keepAspectRatio;
 		Canvas.scaleRatio = scaleRatio;

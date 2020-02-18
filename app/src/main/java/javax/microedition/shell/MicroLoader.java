@@ -39,6 +39,7 @@ import java.util.Map;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.FixedKeyboard;
@@ -198,8 +199,8 @@ public class MicroLoader {
 			}
 
 			SparseIntArray intArray = KeyMapper.getArrayPref(params);
-			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
-					screenKeepAspectRatio, screenScaleRatio);
+			Displayable.setVirtualSize(screenWidth, screenHeight);
+			Canvas.setScale(screenScaleToFit, screenKeepAspectRatio, screenScaleRatio);
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setHardwareAcceleration(hwAcceleration, parallel);
