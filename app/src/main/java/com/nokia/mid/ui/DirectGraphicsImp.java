@@ -119,7 +119,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 					for (int xj = 0; xj < width; xj++) {
 						int c = doAlpha(pix, alpha, (line + xj) / 8, b);
 						if (!isTransparent(c)) { //alpha
-							pixres[yj * width + xj] = c;
+							pixres[ypos + xj] = c;
 						}
 						b--;
 						if (b < 0) b = 7;
@@ -130,18 +130,17 @@ public class DirectGraphicsImp implements DirectGraphics {
 			case TYPE_BYTE_1_GRAY_VERTICAL: {
 				int ods = off / scanlen;
 				int oms = off % scanlen;
-				int b = 0;
+				int b;
 				for (int yj = 0; yj < height; yj++) {
+					b = ((ods + yj) % 8);
 					int ypos = yj * width;
 					int tmp = (ods + yj) / 8 * scanlen + oms;
 					for (int xj = 0; xj < width; xj++) {
 						int c = doAlpha(pix, alpha, tmp + xj, b);
 						if (!isTransparent(c)) { //alpha
-							pixres[yj * width + xj] = c;
+							pixres[ypos + xj] = c;
 						}
 					}
-					b++;
-					if (b > 7) b = 0;
 				}
 				break;
 			}
