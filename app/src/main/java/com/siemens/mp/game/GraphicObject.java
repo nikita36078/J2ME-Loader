@@ -29,6 +29,7 @@ public class GraphicObject extends com.siemens.mp.misc.NativeMem {
 
 	protected GraphicObject() {
 		super();
+		this.visible = true;
 	}
 
 	public boolean getVisible() {
