@@ -130,9 +130,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 			case TYPE_BYTE_1_GRAY_VERTICAL: {
 				int ods = off / scanlen;
 				int oms = off % scanlen;
-				int b;
+				int b = ods % 8;
 				for (int yj = 0; yj < height; yj++) {
-					b = ((ods + yj) % 8);
 					int ypos = yj * width;
 					int tmp = (ods + yj) / 8 * scanlen + oms;
 					for (int xj = 0; xj < width; xj++) {
@@ -141,6 +140,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 							pixres[ypos + xj] = c;
 						}
 					}
+					b++;
+					if (b > 7) b = 0;
 				}
 				break;
 			}
