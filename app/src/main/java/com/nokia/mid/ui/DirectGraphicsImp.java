@@ -117,10 +117,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 					int line = off + yj * scanlen;
 					int ypos = yj * width;
 					for (int xj = 0; xj < width; xj++) {
-						int c = doAlpha(pix, alpha, (line + xj) / 8, b);
-						if (!isTransparent(c)) { //alpha
-							pixres[ypos + xj] = c;
-						}
+						pixres[ypos + xj] = doAlpha(pix, alpha, (line + xj) / 8, b);
 						b--;
 						if (b < 0) b = 7;
 					}
@@ -135,10 +132,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 					int ypos = yj * width;
 					int tmp = (ods + yj) / 8 * scanlen + oms;
 					for (int xj = 0; xj < width; xj++) {
-						int c = doAlpha(pix, alpha, tmp + xj, b);
-						if (!isTransparent(c)) { //alpha
-							pixres[ypos + xj] = c;
-						}
+						pixres[ypos + xj] = doAlpha(pix, alpha, tmp + xj, b);
 					}
 					b++;
 					if (b > 7) b = 0;
@@ -341,10 +335,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 			}
 		}
 		return result;
-	}
-
-	private static boolean isTransparent(int s) {
-		return (s & 0xFF000000) == 0;
 	}
 
 	private static int getTransformation(int manipulation) {
