@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -49,6 +48,7 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
+import androidx.preference.PreferenceManager;
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
