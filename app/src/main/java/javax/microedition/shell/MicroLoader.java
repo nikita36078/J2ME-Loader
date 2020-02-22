@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -79,6 +80,11 @@ public class MicroLoader {
 				temp.delete();
 			}
 		}
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitNetwork()
+				.penaltyLog()
+				.build();
+		StrictMode.setThreadPolicy(policy);
 		params.load(false);
 	}
 
