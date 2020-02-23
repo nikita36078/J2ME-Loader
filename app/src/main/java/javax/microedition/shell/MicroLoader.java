@@ -145,12 +145,15 @@ public class MicroLoader {
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
 		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
+		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		System.setProperty("user.home", externalStoragePath);
 		System.setProperty("com.siemens.IMEI", "000000000000000");
 		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
 		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
 		System.setProperty("com.siemens.OSVersion", "11");
 		System.setProperty("device.imei", "000000000000000");
+		System.setProperty("fileconn.dir.cache", "file:///c:"
+				+ Config.DATA_DIR.replace(externalStoragePath, "") + appName);
 	}
 
 	public int getOrientation() {
