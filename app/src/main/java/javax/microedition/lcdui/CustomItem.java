@@ -112,6 +112,7 @@ public abstract class CustomItem extends Item {
 	}
 
 	protected final void repaint(int x, int y, int width, int height) {
+		if (view == null) return;
 		graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
 		graphics.reset();
 		graphics.setClip(x, y, width, height);
