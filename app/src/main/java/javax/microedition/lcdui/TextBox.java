@@ -39,6 +39,10 @@ public class TextBox extends Screen {
 		textField.insert(src, pos);
 	}
 
+	public void insert(char[] data, int offset, int length, int position) {
+		insert(new String(data, offset, length), position);
+	}
+
 	public String getString() {
 		return textField.getString();
 	}
@@ -67,7 +71,11 @@ public class TextBox extends Screen {
 	}
 
 	public void setChars(char[] data, int offset, int length) {
-		textField.setChars(data, offset, length);
+		setString(new String(data, offset, length));
+	}
+
+	public int getChars(char[] data) {
+		return textField.getChars(data);
 	}
 
 	public int getCaretPosition() {
