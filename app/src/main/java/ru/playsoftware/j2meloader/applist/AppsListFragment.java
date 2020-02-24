@@ -257,11 +257,11 @@ public class AppsListFragment extends ListFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
-				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					AppUtils.deleteApp(item);
 					appRepository.delete(item);
 				})
-				.setNegativeButton(android.R.string.no, null);
+				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}
 
