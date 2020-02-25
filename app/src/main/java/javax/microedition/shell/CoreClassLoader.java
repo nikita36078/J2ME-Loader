@@ -16,9 +16,9 @@
 
 package javax.microedition.shell;
 
-public class MyCoreClassLoader extends ClassLoader {
+public class CoreClassLoader extends ClassLoader {
 
-	public MyCoreClassLoader(ClassLoader parent) {
+	public CoreClassLoader(ClassLoader parent) {
 		super(parent);
 	}
 

@@ -43,7 +43,7 @@ import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotFoundException;
 import javax.microedition.rms.RecordStoreNotOpenException;
-import javax.microedition.shell.MyClassLoader;
+import javax.microedition.shell.AppClassLoader;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.config.Config;
@@ -68,7 +68,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	private synchronized void initializeIfNecessary() {
 		if (recordStores == null) {
 			recordStores = new ConcurrentHashMap<>();
-			String[] list = new File(Config.DATA_DIR, MyClassLoader.getName()).list();
+			String[] list = new File(Config.DATA_DIR, AppClassLoader.getName()).list();
 			if (list != null && list.length > 0) {
 				for (String aList : list) {
 					if (aList.endsWith(RECORD_STORE_HEADER_SUFFIX)) {

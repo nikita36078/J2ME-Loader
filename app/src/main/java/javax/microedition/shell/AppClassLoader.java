@@ -23,12 +23,12 @@ import java.io.File;
 
 import dalvik.system.DexClassLoader;
 
-public class MyClassLoader extends DexClassLoader {
+public class AppClassLoader extends DexClassLoader {
 
 	private static File resFolder;
 
-	public MyClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
-		super(paths, tmpDir, null, new MyCoreClassLoader(parent));
+	public AppClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
+		super(paths, tmpDir, null, new CoreClassLoader(parent));
 		resFolder = resDir;
 		ACRA.getErrorReporter().putCustomData("Running app", getName());
 	}

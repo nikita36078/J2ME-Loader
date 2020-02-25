@@ -39,7 +39,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.shell.MyClassLoader;
+import javax.microedition.shell.AppClassLoader;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -108,7 +108,7 @@ public class ContextHolder {
 
 	public static void prepareZipFile() {
 		File midletResFile = new File(Config.APP_DIR,
-				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
+				AppClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
 			zipFile = new ZipFile(midletResFile);
 		}
@@ -144,13 +144,13 @@ public class ContextHolder {
 		InputStream is;
 		byte[] data;
 		File midletResFile = new File(Config.APP_DIR,
-				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
+				AppClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
 			FileHeader header = zipFile.getFileHeader(resName);
 			is = zipFile.getInputStream(header);
 			data = new byte[(int) header.getUncompressedSize()];
 		} else {
-			File resFile = new File(MyClassLoader.getResFolder(), resName);
+			File resFile = new File(AppClassLoader.getResFolder(), resName);
 			is = new FileInputStream(resFile);
 			data = new byte[(int) resFile.length()];
 		}
@@ -173,7 +173,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.DATA_DIR + MyClassLoader.getName(), name);
+		return new File(Config.DATA_DIR + AppClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {
