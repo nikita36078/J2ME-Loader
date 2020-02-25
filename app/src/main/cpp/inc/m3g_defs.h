@@ -218,7 +218,7 @@ extern "C" {
  * ES implementation
  */
 #if !defined(M3G_MAX_VIEWPORT_WIDTH)
-#   define M3G_MAX_VIEWPORT_WIDTH       1024
+#   define M3G_MAX_VIEWPORT_WIDTH       4096
 #endif
 
 /*!
@@ -232,7 +232,7 @@ extern "C" {
  * ES implementation
  */
 #if !defined(M3G_MAX_VIEWPORT_HEIGHT)
-#   define M3G_MAX_VIEWPORT_HEIGHT      1024
+#   define M3G_MAX_VIEWPORT_HEIGHT      4096
 #endif
 
 /*!
