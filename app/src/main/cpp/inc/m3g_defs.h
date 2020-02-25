@@ -542,7 +542,7 @@ M3G_SPLINT(extern /*@noreturnwhenfalse@*/ void M3G_ASSERT(/*@sef@*//*@null@*//*@
  * \brief Compile-time assertion
  */
 /*@notfunction@*/
-#define M3G_CT_ASSERT(a)    struct __M3G_UNIQUE_NAME { unsigned bf : (a) ? 1 : 1; }
+#define M3G_CT_ASSERT(a)    struct __M3G_UNIQUE_NAME { unsigned bf : (a) ? 1 : -1; }
 /*@notfunction@*/
 #define __M3G_UNIQUE_NAME           __M3G_MAKE_UNIQUE_NAME(__LINE__, 0)
 /*@notfunction@*/
@@ -606,7 +606,7 @@ M3G_CT_ASSERT(sizeof(M3Gfloat)   == 4);
 
 /* Unsigned is used extensively as a wrapper for object pointers, so
  * check that we can fit a pointer in there */
-M3G_CT_ASSERT(sizeof(M3Guint) >= sizeof(void*));
+M3G_CT_ASSERT(sizeof(M3Gpointer) >= sizeof(void*));
 
 /*
  * Globally disable some redundant Lint messages
