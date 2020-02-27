@@ -112,7 +112,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 		switch (format) {
 			case TYPE_BYTE_1_GRAY: {
-				int b = 7;
+				int b = 7 - off % 8;
 				for (int yj = 0; yj < height; yj++) {
 					int line = off + yj * scanlen;
 					int ypos = yj * width;
@@ -121,6 +121,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 						b--;
 						if (b < 0) b = 7;
 					}
+					b = b - (scanlen - width) % 8;
+					if (b < 0) b = 8 + b;
 				}
 				break;
 			}
