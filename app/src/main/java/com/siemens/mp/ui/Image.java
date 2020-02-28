@@ -46,6 +46,7 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 			}
 		}
 		javax.microedition.lcdui.Image image = javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
+		image.setBlackWhiteAlpha(alpha != null);
 		return image;
 	}
 
@@ -68,6 +69,7 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 			}
 		}
 		javax.microedition.lcdui.Image image = javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
+		image.setBlackWhiteAlpha(true);
 		return image;
 	}
 

@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.LruCache;
 
 import java.io.IOException;
@@ -42,24 +43,17 @@ public class Image {
 
 	private Bitmap bitmap;
 	private Canvas canvas;
+	private Graphics graphics;
+	private int save;
+	private Rect bounds;
+	private boolean isBlackWhiteAlpha;
 
-	public Image(Bitmap bitmap) {
+	private Image(Bitmap bitmap) {
 		if (bitmap == null) {
 			throw new NullPointerException();
 		}
-
 		this.bitmap = bitmap;
-	}
-
-	public static Image createImage(int width, int height, Image reuse) {
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		if (reuse == null) {
-			return new Image(bitmap);
-		}
-		reuse.getCanvas().setBitmap(bitmap);
-		reuse.copyPixels(reuse);
-		reuse.bitmap = bitmap;
-		return new Image(bitmap);
+		bounds = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 	}
 
 	public static Image createTransparentImage(int width, int height) {
@@ -73,6 +67,7 @@ public class Image {
 	public Canvas getCanvas() {
 		if (canvas == null) {
 			canvas = new Canvas(bitmap);
+			save = canvas.save();
 		}
 
 		return canvas;
@@ -152,18 +147,59 @@ public class Image {
 	}
 
 	public int getWidth() {
-		return bitmap.getWidth();
+		return bounds.right;
 	}
 
 	public int getHeight() {
-		return bitmap.getHeight();
+		return bounds.bottom;
 	}
 
 	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
 		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
 	}
 
-	void copyPixels(Image dst) {
-		dst.getCanvas().drawBitmap(bitmap, 0, 0, null);
+	void copyTo(Image dst) {
+		dst.getCanvas().drawBitmap(bitmap, bounds, bounds, null);
+	}
+
+	void copyTo(Image dst, int x, int y) {
+		Rect r = new Rect(x, y, x + bounds.right, y + bounds.bottom);
+		dst.getCanvas().drawBitmap(bitmap, bounds, r, null);
+	}
+
+	Graphics getSingleGraphics() {
+		if (graphics == null) {
+			graphics = getGraphics();
+			graphics.setCanvas(getCanvas(), bitmap);
+		}
+		return graphics;
+	}
+
+	void resetCanvas() {
+		getCanvas();
+		try {
+			canvas.restoreToCount(save);
+		} catch (Exception e) {
+			canvas.restoreToCount(1);
+		}
+		save = canvas.save();
+	}
+
+	void setSize(int width, int height) {
+		bounds.right = width;
+		bounds.bottom = height;
+		getCanvas().clipRect(bounds);
+	}
+
+	Rect getBounds() {
+		return bounds;
+	}
+
+	public boolean isBlackWhiteAlpha() {
+		return isBlackWhiteAlpha;
+	}
+
+	public void setBlackWhiteAlpha(boolean blackWhiteAlpha) {
+		isBlackWhiteAlpha = blackWhiteAlpha;
 	}
 }

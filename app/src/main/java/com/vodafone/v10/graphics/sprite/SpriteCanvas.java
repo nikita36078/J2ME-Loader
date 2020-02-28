@@ -49,7 +49,7 @@ public abstract class SpriteCanvas extends Canvas {
 	}
 
 	public void drawFrameBuffer(int tx, int ty) {
-		flushBuffer(spriteImage);
+		flushBuffer(spriteImage, tx, ty);
 		graphics.clear(0);
 	}
 
