@@ -82,14 +82,14 @@ public class TemplatesAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	void renameItem(int position, Template item) {
-		list.set(position, item);
-		Collections.sort(list);
+	public void setDefault(int index) {
+		defaultIndex = index;
 		notifyDataSetChanged();
 	}
 
-	public void setDefault(int index) {
-		defaultIndex = index;
+	void addItem(Template template) {
+		list.add(template);
+		Collections.sort(list);
 		notifyDataSetChanged();
 	}
 

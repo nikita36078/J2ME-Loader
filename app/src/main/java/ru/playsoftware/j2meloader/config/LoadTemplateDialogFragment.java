@@ -23,7 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.Spinner;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,12 +41,11 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_load_template, null);
-		Spinner spTemplate = v.findViewById(R.id.spTemplate);
+		ListView lvTemplate = v.findViewById(R.id.lvTemplate);
 		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
 		ArrayAdapter<Template> adapter = new ArrayAdapter<>(requireActivity(),
-				android.R.layout.simple_spinner_item, templates);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spTemplate.setAdapter(adapter);
+				android.R.layout.simple_list_item_single_choice, templates);
+		lvTemplate.setAdapter(adapter);
 		CheckBox cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
 		CheckBox cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
@@ -54,8 +53,15 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 				.setView(v)
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 					try {
-						TemplatesManager.loadTemplate((Template) spTemplate.getSelectedItem(), configPath,
-								cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
+						final int pos = lvTemplate.getCheckedItemPosition();
+						final boolean configChecked = cbTemplateSettings.isChecked();
+						final boolean vkChecked = cbTemplateKeyboard.isChecked();
+						if (pos == -1 || !(configChecked || vkChecked)) {
+							Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+							return;
+						}
+						TemplatesManager.loadTemplate((Template) lvTemplate.getItemAtPosition(pos), configPath,
+								configChecked, vkChecked);
 						((ConfigActivity) requireActivity()).loadParams();
 					} catch (Exception e) {
 						e.printStackTrace();

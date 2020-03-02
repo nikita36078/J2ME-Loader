@@ -27,11 +27,10 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
 public class KeyMapper {
-	private static final String PREF_KEY = "KeyMappings";
+	public static final String PREF_KEY = "KeyMappings";
 
-	public static void saveArrayPref(SharedPreferencesContainer container, SparseIntArray intArray) {
-		JSONArray json = new JSONArray();
-		StringBuilder  data = new StringBuilder().append("[");
+	static void saveArrayPref(SharedPreferencesContainer container, SparseIntArray intArray) {
+		StringBuilder data = new StringBuilder().append("[");
 		for (int i = 0; i < intArray.size(); i++) {
 			data.append("{")
 					.append("\"key\": ")
@@ -39,15 +38,14 @@ public class KeyMapper {
 					.append("\"value\": ")
 					.append(intArray.valueAt(i))
 					.append("},");
-			json.put(data);
 		}
-		data.deleteCharAt(data.length() - 1);
+		data.setLength(data.length() - 1);
 		data.append("]");
 		container.putString(PREF_KEY, intArray.size() == 0 ? null : data.toString());
 		container.apply();
 	}
 
-	public static SparseIntArray getArray(String json) {
+	private static SparseIntArray getArray(String json) {
 		SparseIntArray intArray = new SparseIntArray();
 		if (json != null) {
 			try {
@@ -69,7 +67,7 @@ public class KeyMapper {
 		return getArray(container.getString(PREF_KEY, null));
 	}
 
-	public static void initArray(SparseIntArray intDict) {
+	static void initArray(SparseIntArray intDict) {
 		intDict.put(KeyEvent.KEYCODE_0, Canvas.KEY_NUM0);
 		intDict.put(KeyEvent.KEYCODE_1, Canvas.KEY_NUM1);
 		intDict.put(KeyEvent.KEYCODE_2, Canvas.KEY_NUM2);

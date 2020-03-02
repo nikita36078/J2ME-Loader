@@ -34,7 +34,6 @@ public class Config {
 	public static final String SCREENSHOTS_DIR =
 			Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/J2ME-Loader";
 	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
-	public static final String DEFAULT_CONFIG_DIR = EMULATOR_DIR + "/default/";
 	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
 	public static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
 	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
@@ -47,7 +46,7 @@ public class Config {
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
-	static final String DEFAULT_TEMPLATE_KEY = "default_template";
+	public static final String DEFAULT_TEMPLATE_KEY = "default_template";
 
 	public static void startApp(Context context, AppItem app, boolean showSettings) {
 		File file = new File(Config.CONFIGS_DIR, app.getPath());

@@ -134,6 +134,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private Display display;
 	private File configDir;
 	private final ArrayList<String> charsets = new ArrayList<>(Charset.availableCharsets().keySet());
+	private String defTemplate;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -148,12 +149,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			finish();
 			return;
 		}
-		setContentView(R.layout.activity_config);
-		//noinspection ConstantConditions
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		display = getWindowManager().getDefaultDisplay();
-		fragmentManager = getSupportFragmentManager();
 		if (isTemplate) {
+			setResult(RESULT_OK, new Intent().setData(intent.getData()));
 			configDir = new File(Config.TEMPLATES_DIR, dirName);
 			setTitle(dirName);
 		} else {
@@ -163,10 +160,26 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			configDir = new File(Config.CONFIGS_DIR, dirName);
 		}
 		configDir.mkdirs();
-		loadKeyLayout();
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load();
+
+		if (loaded && !showSettings) {
+			startMIDlet();
+			return;
+		}
+		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+				.getString(Config.DEFAULT_TEMPLATE_KEY, null);
+		if (defName != null) {
+			defTemplate = Config.TEMPLATES_DIR + '/' + defName;
+			FileUtils.copyFiles(defTemplate, configDir.getAbsolutePath(), null);
+		}
+		loadKeyLayout();
+		setContentView(R.layout.activity_config);
+		//noinspection ConstantConditions
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		display = getWindowManager().getDefaultDisplay();
+		fragmentManager = getSupportFragmentManager();
 
 		rootContainer = findViewById(R.id.configRoot);
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
@@ -297,10 +310,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKSelFore.addTextChangedListener(new ColorTextWatcher(tfVKSelFore));
 		tfVKSelBack.addTextChangedListener(new ColorTextWatcher(tfVKSelBack));
 		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
-
-		if (loaded && !showSettings) {
-			startMIDlet();
-		}
 	}
 
 	private void initEncoding() {
@@ -346,11 +355,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (isTemplate || file.exists()) {
 			return;
 		}
-		final String def = PreferenceManager.getDefaultSharedPreferences(this).getString(Config.DEFAULT_TEMPLATE_KEY, null);
-		if (def == null) {
+		if (defTemplate == null) {
 			return;
 		}
-		File defaultKeyLayoutFile = new File(Config.TEMPLATES_DIR, def + Config.MIDLET_KEYLAYOUT_FILE);
+		File defaultKeyLayoutFile = new File(defTemplate, Config.MIDLET_KEYLAYOUT_FILE);
 		if (!defaultKeyLayoutFile.exists()) {
 			return;
 		}
@@ -638,9 +646,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_clear_data)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-					FileUtils.deleteDirectory(dataDir);
-					//noinspection ResultOfMethodCallIgnored
-					dataDir.mkdirs();
+					FileUtils.clearDirectory(dataDir);
 				})
 				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
@@ -667,9 +673,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 						.setTitle(getString(R.string.SIZE_PRESETS))
 						.setItems(fontAdapter.toArray(new String[0]),
 								(dialog, which) -> {
-					tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
-					tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
-					tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
+									tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
+									tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
+									tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
 								})
 						.show();
 				break;

@@ -21,30 +21,26 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class TemplatesActivity extends BaseActivity {
+public class TemplatesActivity extends BaseActivity implements EditNameDialog.Callback {
 
+	static final int REQUEST_CODE_EDIT = 5;
 	private TemplatesAdapter adapter;
-	private ListView listView;
 	private SharedPreferences preferences;
 
 	@Override
@@ -59,7 +55,7 @@ public class TemplatesActivity extends BaseActivity {
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
-		listView = findViewById(R.id.list_view);
+		ListView listView = findViewById(R.id.list_view);
 		TextView emptyView = findViewById(R.id.empty_view);
 		listView.setEmptyView(emptyView);
 		registerForContextMenu(listView);
@@ -78,10 +74,21 @@ public class TemplatesActivity extends BaseActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.templates, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			finish();
-			return true;
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+			case R.id.add:
+				EditNameDialog.newInstance(getString(R.string.enter_name), -1)
+						.show(getSupportFragmentManager(), "alert_create_template");
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -103,63 +110,52 @@ public class TemplatesActivity extends BaseActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
+		final Template template = adapter.getItem(index);
 		switch (item.getItemId()) {
-			case R.id.action_context_default: {
-				final Template template = adapter.getItem(index);
+			case R.id.action_context_default:
 				preferences.edit().putString(Config.DEFAULT_TEMPLATE_KEY, template.getName()).apply();
 				adapter.setDefault(index);
 				return true;
-			}
 			case R.id.action_context_edit:
-				final Template template = adapter.getItem(index);
 				final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_TEMPLATE,
 						Uri.parse(template.getName()),
 						getApplicationContext(), ConfigActivity.class);
 				startActivity(intent);
 				return true;
 			case R.id.action_context_rename:
-				showRenameDialog(index);
+				EditNameDialog.newInstance(getString(R.string.enter_new_name), index)
+						.show(getSupportFragmentManager(), "alert_rename_template");
 				break;
 			case R.id.action_context_delete:
-				deleteTemplate(index);
+				template.delete();
+				adapter.removeItem(index);
 				break;
 		}
 		return super.onContextItemSelected(item);
 	}
 
-	private void deleteTemplate(final int id) {
-		Template template = (Template) adapter.getItem(id);
-		template.delete();
-		adapter.removeItem(id);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		if (requestCode != REQUEST_CODE_EDIT
+				|| resultCode != RESULT_OK
+				|| data == null)
+			return;
+		final String name = data.getDataString();
+		if (name == null)
+			return;
+		adapter.addItem(new Template(name));
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private void showRenameDialog(final int id) {
-		Template template = (Template) adapter.getItem(id);
-		EditText editText = new EditText(this);
-		editText.setText(template.getName());
-		float density = getResources().getDisplayMetrics().density;
-		LinearLayout linearLayout = new LinearLayout(this);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		int margin = (int) (density * 20);
-		params.setMargins(margin, 0, margin, 0);
-		linearLayout.addView(editText, params);
-		int paddingVertical = (int) (density * 16);
-		int paddingHorizontal = (int) (density * 8);
-		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
-				.setTitle(R.string.action_context_rename)
-				.setView(linearLayout)
-				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-					String newName = editText.getText().toString().trim();
-					if (newName.equals("")) {
-						Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-					} else {
-						template.renameTo(newName);
-						adapter.renameItem(id, template);
-					}
-				})
-				.setNegativeButton(android.R.string.cancel, null);
-		builder.show();
+	@Override
+	public void onNameChanged(int id, String newName) {
+		if (id == -1) {
+			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_TEMPLATE,
+					Uri.parse(newName), getApplicationContext(), ConfigActivity.class);
+			startActivityForResult(intent, TemplatesActivity.REQUEST_CODE_EDIT);
+			return;
+		}
+		adapter.getItem(id).renameTo(newName);
+		adapter.notifyDataSetChanged();
 	}
 }

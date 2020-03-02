@@ -49,7 +49,8 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 		CheckBox cbDefaultTemplate = v.findViewById(R.id.cbDefaultTemplate);
 		Button btNegative = v.findViewById(R.id.btNegative);
 		Button btPositive = v.findViewById(R.id.btPositive);
-		AlertDialog dialog = new AlertDialog.Builder(requireActivity()).setTitle(R.string.SAVE_TEMPLATE_CMD).setView(v).create();
+		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
+				.setTitle(R.string.SAVE_TEMPLATE_CMD).setView(v).create();
 		btNegative.setOnClickListener(v1 -> dismiss());
 		btPositive.setOnClickListener(v1 -> {
 			String templateName = etTemplateName.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");

@@ -198,11 +198,16 @@
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
+    <string name="action_context_default_template">Set as default config</string>
     <string name="default_template">"%s (default)"</string>
     <string name="saved">Saved</string>
     <string name="not_saved_exists">Not saved: already exists</string>
     <string name="error_name">Enter a name!</string>
     <string name="set_as_default">Set as default</string>
     <string name="edit">Edit</string>
-
+    <string name="add">Add</string>
+    <string name="add_template_description">Create new template</string>
+    <string name="enter_name">Enter name:</string>
+    <string name="enter_new_name">Enter new name:</string>
+    <string name="set_default_template_description">Select this template as a standard settings for all apps that will be installed later</string>
 </resources>

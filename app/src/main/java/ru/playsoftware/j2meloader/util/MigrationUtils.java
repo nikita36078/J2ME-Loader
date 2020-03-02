@@ -32,8 +32,9 @@ import ru.playsoftware.j2meloader.settings.KeyMapper;
 
 public class MigrationUtils {
 
-	private static int VERSION_1 = 1;
-	private static int VERSION_2 = 2;
+	private static final int VERSION_1 = 1;
+	private static final int VERSION_2 = 2;
+	private static final int VERSION = 3;
 
 	private static void moveConfigs(Context context) {
 		File srcConfDir = new File(context.getApplicationInfo().dataDir, "/shared_prefs");
@@ -73,13 +74,15 @@ public class MigrationUtils {
 	}
 
 	private static void moveKeyMappings(Context context) {
-		File defaultConfigDir = new File(Config.DEFAULT_CONFIG_DIR);
+		File defaultConfigDir = new File(Config.EMULATOR_DIR + "/default");
 		SharedPreferencesContainer container = new SharedPreferencesContainer(defaultConfigDir);
 		container.load();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString("pref_key_mapping", null);
 		prefs.edit().remove("pref_key_mapping").apply();
-		KeyMapper.saveArrayPref(container, KeyMapper.getArray(json));
+		if (json != null && json.length() > 20) {
+			container.edit().putString(KeyMapper.PREF_KEY, json).apply();
+		}
 	}
 
 	private static int readVersion(File file) throws IOException {
@@ -90,9 +93,9 @@ public class MigrationUtils {
 		return version;
 	}
 
-	private static void writeVersion(File file, int version) throws IOException {
+	private static void writeVersion(File file) throws IOException {
 		try (FileOutputStream stream = new FileOutputStream(file)) {
-			stream.write(version);
+			stream.write(VERSION);
 		}
 	}
 
@@ -104,21 +107,35 @@ public class MigrationUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (version < VERSION_1) {
-			try {
+		switch (version) {
+			case 0:
 				moveConfigs(context);
-				writeVersion(file, VERSION_1);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (version < VERSION_2) {
-			try {
+			case VERSION_1:
 				moveKeyMappings(context);
-				writeVersion(file, VERSION_2);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			case VERSION_2:
+				if (moveDefaultToTemplate()) {
+					PreferenceManager.getDefaultSharedPreferences(context)
+							.edit().putString(Config.DEFAULT_TEMPLATE_KEY, "default_migrated")
+							.apply();
+				}
 		}
+		try {
+			writeVersion(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static boolean moveDefaultToTemplate() {
+		File dir = new File(Config.EMULATOR_DIR + "/default");
+		final String[] files = dir.list();
+		if (files == null || files.length == 0) {
+			return false;
+		}
+		File newDir = new File(Config.TEMPLATES_DIR + "/default_migrated");
+		//noinspection ResultOfMethodCallIgnored
+		dir.renameTo(newDir);
+		final String[] list = newDir.list();
+		return list != null && list.length > 0;
 	}
 }

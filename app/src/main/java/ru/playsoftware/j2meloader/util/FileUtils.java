@@ -131,4 +131,18 @@ public class FileUtils {
 		}
 		return file.getPath();
 	}
+
+	public static void clearDirectory(File dir) {
+		if (!dir.isDirectory()) return;
+		final File[] files = dir.listFiles();
+		if (files == null) return;
+		for (File file : files) {
+			if (file.isDirectory()) {
+				deleteDirectory(dir);
+			} else {
+				//noinspection ResultOfMethodCallIgnored
+				file.delete();
+			}
+		}
+	}
 }
