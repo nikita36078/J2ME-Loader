@@ -36,7 +36,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
-public class SaveTemplateDialogFragment extends DialogFragment {
+public class SaveProfileAlert extends DialogFragment {
 
 	@NonNull
 	@Override
@@ -44,15 +44,15 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 		String configPath = requireArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
-		View v = inflater.inflate(R.layout.dialog_save_template, null);
-		EditText editText = v.findViewById(R.id.etTemplateName);
-		CheckBox cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
-		CheckBox cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
-		CheckBox cbDefaultTemplate = v.findViewById(R.id.cbDefaultTemplate);
+		View v = inflater.inflate(R.layout.dialog_save_profile, null);
+		EditText editText = v.findViewById(R.id.editText);
+		CheckBox cbConfig = v.findViewById(R.id.cbConfig);
+		CheckBox cbKeyboard = v.findViewById(R.id.cbKeyboard);
+		CheckBox cbDefault = v.findViewById(R.id.cbDefault);
 		Button btNegative = v.findViewById(R.id.btNegative);
 		Button btPositive = v.findViewById(R.id.btPositive);
 		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
-				.setTitle(R.string.SAVE_TEMPLATE_CMD).setView(v).create();
+				.setTitle(R.string.save_profile).setView(v).create();
 		btNegative.setOnClickListener(v1 -> dismiss());
 		btPositive.setOnClickListener(v1 -> {
 			String name = editText.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
@@ -61,7 +61,7 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 				return;
 			}
 
-			final File config = new File(Config.TEMPLATES_DIR, name + Config.MIDLET_CONFIG_FILE);
+			final File config = new File(Config.PROFILES_DIR, name + Config.MIDLET_CONFIG_FILE);
 			if (config.exists()) {
 				editText.setText(name);
 				editText.requestFocus();
@@ -74,12 +74,12 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 				return;
 			}
 			try {
-				Template template = new Template(name);
-				TemplatesManager.saveTemplate(template, configPath,
-						cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
-				if (cbDefaultTemplate.isChecked()) {
+				Profile profile = new Profile(name);
+				ProfilesManager.save(profile, configPath,
+						cbConfig.isChecked(), cbKeyboard.isChecked());
+				if (cbDefault.isChecked()) {
 					PreferenceManager.getDefaultSharedPreferences(requireContext())
-							.edit().putString(Config.DEFAULT_TEMPLATE_KEY, name).apply();
+							.edit().putString(Config.DEFAULT_PROFILE_KEY, name).apply();
 				}
 				dismiss();
 			} catch (IOException e) {

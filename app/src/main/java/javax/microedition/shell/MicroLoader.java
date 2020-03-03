@@ -62,15 +62,15 @@ public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
 
 	private String path;
-	private String appName;
+	private String appPath;
 	private Context context;
 	private SharedPreferencesContainer params;
 
-	public MicroLoader(Context context, String appName) {
+	public MicroLoader(Context context, String appPath) {
 		this.context = context;
-		this.appName = appName;
-		this.path = Config.APP_DIR + appName;
-		this.params = new SharedPreferencesContainer(appName);
+		this.appPath = appPath;
+		this.path = Config.APP_DIR + appPath;
+		this.params = new SharedPreferencesContainer(appPath);
 	}
 
 	public void init() {
@@ -163,9 +163,9 @@ public class MicroLoader {
 		System.setProperty("device.imei", "000000000000000");
 		System.setProperty("com.nokia.mid.imei", "000000000000000");
 		System.setProperty("fileconn.dir.cache", "file:///c:"
-				+ Config.DATA_DIR.replace(externalStoragePath, "") + appName);
+				+ Config.DATA_DIR.replace(externalStoragePath, "") + appPath);
 		System.setProperty("fileconn.dir.private", "file:///c:"
-				+ Config.DATA_DIR.replace(externalStoragePath, "") + appName);
+				+ Config.DATA_DIR.replace(externalStoragePath, "") + appPath);
 		System.setProperty("com.nokia.mid.impl.isa.visual_radio_operator_id", "0");
 		System.setProperty("com.nokia.mid.impl.isa.visual_radio_channel_freq", "0");
 	}
@@ -269,7 +269,7 @@ public class MicroLoader {
 		vk.setButtonShape(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 		vk.setForceOpacity(vkForceOpacity);
 
-		File keylayoutFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
+		File keylayoutFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_KEY_LAYOUT_FILE);
 		if (keylayoutFile.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(keylayoutFile);

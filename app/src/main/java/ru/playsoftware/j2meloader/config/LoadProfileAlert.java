@@ -37,17 +37,17 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
-public class LoadTemplateDialogFragment extends DialogFragment {
+public class LoadProfileAlert extends DialogFragment {
 
-	private ArrayList<Template> templates;
-	private CheckBox cbTemplateSettings;
-	private CheckBox cbTemplateKeyboard;
+	private ArrayList<Profile> profiles;
+	private CheckBox cbConfig;
+	private CheckBox cbKeyboard;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		templates = TemplatesManager.getTemplatesList();
-		Collections.sort(templates);
+		profiles = ProfilesManager.getProfiles();
+		Collections.sort(profiles);
 	}
 
 	@NonNull
@@ -56,27 +56,27 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 		String configPath = requireArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
-		View v = inflater.inflate(R.layout.dialog_load_template, null);
-		ListView lvTemplate = v.findViewById(R.id.lvTemplate);
-		ArrayAdapter<Template> adapter = new ArrayAdapter<>(requireActivity(),
-				android.R.layout.simple_list_item_single_choice, templates);
-		lvTemplate.setOnItemClickListener(this::onItemClick);
-		lvTemplate.setAdapter(adapter);
-		cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
-		cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
+		View v = inflater.inflate(R.layout.dialog_load_profile, null);
+		ListView listView = v.findViewById(android.R.id.list);
+		ArrayAdapter<Profile> adapter = new ArrayAdapter<>(requireActivity(),
+				android.R.layout.simple_list_item_single_choice, profiles);
+		listView.setOnItemClickListener(this::onItemClick);
+		listView.setAdapter(adapter);
+		cbConfig = v.findViewById(R.id.cbConfig);
+		cbKeyboard = v.findViewById(R.id.cbKeyboard);
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-		builder.setTitle(R.string.LOAD_TEMPLATE_CMD)
+		builder.setTitle(R.string.load_profile)
 				.setView(v)
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 					try {
-						final int pos = lvTemplate.getCheckedItemPosition();
-						final boolean configChecked = cbTemplateSettings.isChecked();
-						final boolean vkChecked = cbTemplateKeyboard.isChecked();
+						final int pos = listView.getCheckedItemPosition();
+						final boolean configChecked = cbConfig.isChecked();
+						final boolean vkChecked = cbKeyboard.isChecked();
 						if (pos == -1) {
 							Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 							return;
 						}
-						TemplatesManager.loadTemplate((Template) lvTemplate.getItemAtPosition(pos), configPath,
+						ProfilesManager.load((Profile) listView.getItemAtPosition(pos), configPath,
 								configChecked, vkChecked);
 						((ConfigActivity) requireActivity()).loadParams();
 					} catch (Exception e) {
@@ -86,14 +86,14 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 				})
 				.setNegativeButton(android.R.string.cancel, null);
 		final String def = PreferenceManager.getDefaultSharedPreferences(requireContext())
-				.getString(Config.DEFAULT_TEMPLATE_KEY, null);
+				.getString(Config.DEFAULT_PROFILE_KEY, null);
 
 		if (def != null) {
-			for (int i = 0, templatesSize = templates.size(); i < templatesSize; i++) {
-				Template template = templates.get(i);
-				if (template.getName().equals(def)) {
-					lvTemplate.setItemChecked(i, true);
-					onItemClick(lvTemplate, null, i, i);
+			for (int i = 0, size = profiles.size(); i < size; i++) {
+				Profile profile = profiles.get(i);
+				if (profile.getName().equals(def)) {
+					listView.setItemChecked(i, true);
+					onItemClick(listView, null, i, i);
 					break;
 				}
 			}
@@ -102,13 +102,13 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 	}
 
 	private void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-		final Template template = templates.get(pos);
-		final boolean hasConfig = template.hasConfig();
-		final boolean hasVk = template.hasKeyLayout();
-		cbTemplateSettings.setEnabled(hasConfig && hasVk);
-		cbTemplateSettings.setChecked(hasConfig);
-		cbTemplateKeyboard.setEnabled(hasVk && hasConfig);
-		cbTemplateKeyboard.setChecked(hasVk);
+		final Profile profile = profiles.get(pos);
+		final boolean hasConfig = profile.hasConfig();
+		final boolean hasVk = profile.hasKeyLayout();
+		cbConfig.setEnabled(hasConfig && hasVk);
+		cbConfig.setChecked(hasConfig);
+		cbKeyboard.setEnabled(hasVk && hasConfig);
+		cbKeyboard.setChecked(hasVk);
 	}
 
 }

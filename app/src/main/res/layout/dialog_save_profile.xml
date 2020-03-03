@@ -5,29 +5,29 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/etTemplateName"
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <CheckBox
-        android:id="@+id/cbTemplateSettings"
+        android:id="@+id/cbConfig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/action_settings" />
 
     <CheckBox
-        android:id="@+id/cbTemplateKeyboard"
+        android:id="@+id/cbKeyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/PREF_VIRTUAL_KEYBOARD_OPTIONS" />
 
     <CheckBox
-        android:id="@+id/cbDefaultTemplate"
+        android:id="@+id/cbDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/action_context_default_template" />
+        android:text="@string/set_as_default" />
 
     <LinearLayout
         android:layout_width="match_parent"

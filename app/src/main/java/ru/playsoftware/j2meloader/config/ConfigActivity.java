@@ -73,7 +73,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class ConfigActivity extends BaseActivity implements View.OnClickListener {
 
 	public static final String ACTION_EDIT = "config.edit";
-	public static final String ACTION_EDIT_TEMPLATE = "config.edit.template";
+	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 	public static final String CONFIG_PATH_KEY = "configPath";
 	public static final String MIDLET_NAME_KEY = "midletName";
 
@@ -130,11 +130,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File dataDir;
 	private SharedPreferencesContainer params;
 	private FragmentManager fragmentManager;
-	private boolean isTemplate;
+	private boolean isProfile;
 	private Display display;
 	private File configDir;
 	private final ArrayList<String> charsets = new ArrayList<>(Charset.availableCharsets().keySet());
-	private String defTemplate;
+	private String defProfile;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -142,16 +142,16 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 		String action = intent.getAction();
-		isTemplate = ACTION_EDIT_TEMPLATE.equals(action);
-		boolean showSettings = isTemplate || ACTION_EDIT.equals(action);
+		isProfile = ACTION_EDIT_PROFILE.equals(action);
+		boolean showSettings = isProfile || ACTION_EDIT.equals(action);
 		String dirName = intent.getDataString();
 		if (dirName == null) {
 			finish();
 			return;
 		}
-		if (isTemplate) {
+		if (isProfile) {
 			setResult(RESULT_OK, new Intent().setData(intent.getData()));
-			configDir = new File(Config.TEMPLATES_DIR, dirName);
+			configDir = new File(Config.PROFILES_DIR, dirName);
 			setTitle(dirName);
 		} else {
 			setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
@@ -169,10 +169,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			return;
 		}
 		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-				.getString(Config.DEFAULT_TEMPLATE_KEY, null);
+				.getString(Config.DEFAULT_PROFILE_KEY, null);
 		if (defName != null) {
-			defTemplate = Config.TEMPLATES_DIR + '/' + defName;
-			FileUtils.copyFiles(defTemplate, configDir.getAbsolutePath(), null);
+			defProfile = Config.PROFILES_DIR + '/' + defName;
+			FileUtils.copyFiles(defProfile, configDir.getAbsolutePath(), null);
 		}
 		loadKeyLayout();
 		setContentView(R.layout.activity_config);
@@ -350,15 +350,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void loadKeyLayout() {
-		File file = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
+		File file = new File(configDir, Config.MIDLET_KEY_LAYOUT_FILE);
 		keylayoutFile = file;
-		if (isTemplate || file.exists()) {
+		if (isProfile || file.exists()) {
 			return;
 		}
-		if (defTemplate == null) {
+		if (defProfile == null) {
 			return;
 		}
-		File defaultKeyLayoutFile = new File(defTemplate, Config.MIDLET_KEYLAYOUT_FILE);
+		File defaultKeyLayoutFile = new File(defProfile, Config.MIDLET_KEY_LAYOUT_FILE);
 		if (!defaultKeyLayoutFile.exists()) {
 			return;
 		}
@@ -589,7 +589,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.config, menu);
-		if (isTemplate) {
+		if (isProfile) {
 			menu.findItem(R.id.action_start).setVisible(false);
 			menu.findItem(R.id.action_clear_data).setVisible(false);
 		}
@@ -614,20 +614,20 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				keylayoutFile.delete();
 				loadKeyLayout();
 				break;
-			case R.id.action_load_template:
-				LoadTemplateDialogFragment loadTemplateFragment = new LoadTemplateDialogFragment();
+			case R.id.action_load_profile:
+				LoadProfileAlert loadProfileAlert = new LoadProfileAlert();
 				Bundle bundleLoad = new Bundle();
 				bundleLoad.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
-				loadTemplateFragment.setArguments(bundleLoad);
-				loadTemplateFragment.show(fragmentManager, "load_template");
+				loadProfileAlert.setArguments(bundleLoad);
+				loadProfileAlert.show(fragmentManager, "load_profile");
 				break;
-			case R.id.action_save_template:
+			case R.id.action_save_profile:
 				saveParams();
-				SaveTemplateDialogFragment saveTemplateFragment = new SaveTemplateDialogFragment();
+				SaveProfileAlert saveProfileAlert = new SaveProfileAlert();
 				Bundle bundleSave = new Bundle();
 				bundleSave.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
-				saveTemplateFragment.setArguments(bundleSave);
-				saveTemplateFragment.show(fragmentManager, "save_template");
+				saveProfileAlert.setArguments(bundleSave);
+				saveProfileAlert.show(fragmentManager, "save_profile");
 				break;
 			case R.id.action_map_keys:
 				Intent i = new Intent(getIntent());

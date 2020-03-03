@@ -21,5 +21,5 @@
         android:title="@string/add"
         android:icon="@drawable/ic_add_white"
         app:showAsAction="ifRoom"
-        app:tooltipText="@string/add_template_description" />
+        app:tooltipText="@string/add_profile_description" />
 </menu>

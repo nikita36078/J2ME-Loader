@@ -21,15 +21,14 @@ import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
-import ru.playsoftware.j2meloader.config.TemplatesActivity;
+import ru.playsoftware.j2meloader.config.ProfilesActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
 		findPreference("pref_default_settings").setOnPreferenceClickListener(preference -> {
-			Intent intent = new Intent(getActivity(), TemplatesActivity.class);
+			Intent intent = new Intent(getActivity(), ProfilesActivity.class);
 			startActivity(intent);
 			return true;
 		});

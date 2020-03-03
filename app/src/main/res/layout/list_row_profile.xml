@@ -9,4 +9,4 @@
     android:paddingEnd="?listPreferredItemPaddingEnd"
     android:paddingLeft="?listPreferredItemPaddingLeft"
     android:paddingRight="?listPreferredItemPaddingRight"
-    tools:text="Template (default)"/>
+    tools:text="Profile (default)"/>

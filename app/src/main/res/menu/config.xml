@@ -18,12 +18,12 @@
         android:title="@string/RESET_LAYOUT_CMD"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_load_template"
-        android:title="@string/LOAD_TEMPLATE_CMD"
+        android:id="@+id/action_load_profile"
+        android:title="@string/load_profile"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_save_template"
-        android:title="@string/SAVE_TEMPLATE_CMD"
+        android:id="@+id/action_save_profile"
+        android:title="@string/save_profile"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_map_keys"

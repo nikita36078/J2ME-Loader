@@ -62,9 +62,9 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			return;
 		}
 		File configDir;
-		boolean isTemplate = ConfigActivity.ACTION_EDIT_TEMPLATE.equals(intent.getAction());
-		if (isTemplate) {
-			configDir = new File(Config.TEMPLATES_DIR, dirName);
+		boolean isProfile = ConfigActivity.ACTION_EDIT_PROFILE.equals(intent.getAction());
+		if (isProfile) {
+			configDir = new File(Config.PROFILES_DIR, dirName);
 		} else {
 			configDir = new File(Config.CONFIGS_DIR, dirName);
 		}

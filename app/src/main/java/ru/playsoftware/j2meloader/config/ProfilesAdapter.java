@@ -28,12 +28,12 @@ import java.util.Collections;
 
 import ru.playsoftware.j2meloader.R;
 
-public class TemplatesAdapter extends BaseAdapter {
-	private ArrayList<Template> list;
+public class ProfilesAdapter extends BaseAdapter {
+	private ArrayList<Profile> list;
 	private final LayoutInflater layoutInflater;
 	private int defaultIndex = -1;
 
-	TemplatesAdapter(Context context, ArrayList<Template> list) {
+	ProfilesAdapter(Context context, ArrayList<Profile> list) {
 		if (list != null) {
 			this.list = list;
 			Collections.sort(list);
@@ -47,7 +47,7 @@ public class TemplatesAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Template getItem(int position) {
+	public Profile getItem(int position) {
 		return list.get(position);
 	}
 
@@ -58,19 +58,19 @@ public class TemplatesAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup viewGroup) {
-		TemplatesAdapter.ViewHolder holder;
+		ProfilesAdapter.ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_template, viewGroup, false);
-			holder = new TemplatesAdapter.ViewHolder();
+			view = layoutInflater.inflate(R.layout.list_row_profile, viewGroup, false);
+			holder = new ProfilesAdapter.ViewHolder();
 			holder.name = (TextView) view;
 			view.setTag(holder);
 		} else {
-			holder = (TemplatesAdapter.ViewHolder) view.getTag();
+			holder = (ProfilesAdapter.ViewHolder) view.getTag();
 		}
 
 		String name = list.get(position).getName();
 		if (position == defaultIndex) {
-			name = view.getResources().getString(R.string.default_template, name);
+			name = view.getResources().getString(R.string.default_label, name);
 		}
 		holder.name.setText(name);
 
@@ -87,8 +87,8 @@ public class TemplatesAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	void addItem(Template template) {
-		list.add(template);
+	void addItem(Profile profile) {
+		list.add(profile);
 		Collections.sort(list);
 		notifyDataSetChanged();
 	}

@@ -12,7 +12,7 @@
     <string name="more">More</string>
     <string name="search">Search</string>
     <string name="licenses">Licenses</string>
-    <string name="templates">Templates</string>
+    <string name="profiles">Profiles</string>
     <string name="save_log">Save log</string>
     <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.&lt;BR></string>
     <string name="help_message">&#8226; Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.&lt;BR>&#8226; Image flickering issues can be fixed by enabling the "Immediate processing mode" option.</string>
@@ -50,8 +50,8 @@
     <string name="CLEAR_DATA_CMD">Clear data</string>
     <string name="RESET_SETTINGS_CMD">Reset settings</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
-    <string name="LOAD_TEMPLATE_CMD">Load template</string>
-    <string name="SAVE_TEMPLATE_CMD">Save template</string>
+    <string name="load_profile">Load profile</string>
+    <string name="save_profile">Save profile</string>
     <string name="PREF_SCREEN_OPTIONS">Screen options</string>
     <string name="PREF_SCALE_RATIO">Scale(%)</string>
     <string name="PREF_SCALE_TO_FIT">Scale to fit</string>
@@ -198,17 +198,16 @@
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
-    <string name="action_context_default_template">Set as default</string>
-    <string name="default_template">"%s (default)"</string>
+    <string name="default_label">"%s (default)"</string>
     <string name="saved">Saved</string>
     <string name="not_saved_exists">Already exists</string>
     <string name="error_name">Enter a name!</string>
     <string name="set_as_default">Set as default</string>
     <string name="edit">Edit</string>
     <string name="add">Add</string>
-    <string name="add_template_description">Create new template</string>
+    <string name="add_profile_description">Create new profile</string>
     <string name="enter_name">Enter name</string>
     <string name="enter_new_name">Enter new name</string>
-    <string name="set_default_template_description">Select this template as a standard settings for all apps that will be installed later</string>
+    <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
     <string name="error_name_exists">Already exists, enter other name</string>
 </resources>

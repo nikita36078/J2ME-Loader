@@ -34,7 +34,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import ru.playsoftware.j2meloader.R;
 
-public class EditNameDialog extends DialogFragment {
+public class EditNameAlert extends DialogFragment {
 
 	private static final String TITLE = "title";
 	private static final String ID = "id";
@@ -42,8 +42,8 @@ public class EditNameDialog extends DialogFragment {
 	private String mTitle;
 	private int mId;
 
-	public static EditNameDialog newInstance(String title, int id) {
-		EditNameDialog fragment = new EditNameDialog();
+	static EditNameAlert newInstance(String title, int id) {
+		EditNameAlert fragment = new EditNameAlert();
 		Bundle args = new Bundle();
 		args.putString(TITLE, title);
 		args.putInt(ID, id);
@@ -70,37 +70,37 @@ public class EditNameDialog extends DialogFragment {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_change_name, null);
-		EditText etTemplateName = v.findViewById(R.id.etTemplateName);
+		EditText editText = v.findViewById(R.id.editText);
 		Button btNegative = v.findViewById(R.id.btNegative);
 		Button btPositive = v.findViewById(R.id.btPositive);
 		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
 				.setTitle(mTitle).setView(v).create();
 		btNegative.setOnClickListener(v1 -> dismiss());
-		btPositive.setOnClickListener(v1 -> onClickOk(etTemplateName));
+		btPositive.setOnClickListener(v1 -> onClickOk(editText));
 		return dialog;
 	}
 
-	private void onClickOk(EditText etTemplateName) {
-		String templateName = etTemplateName.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
-		if (templateName.isEmpty()) {
-			etTemplateName.setText(templateName);
-			etTemplateName.requestFocus();
-			etTemplateName.setSelection(templateName.length());
+	private void onClickOk(EditText editText) {
+		String name = editText.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
+		if (name.isEmpty()) {
+			editText.setText(name);
+			editText.requestFocus();
+			editText.setSelection(name.length());
 			Toast.makeText(getActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		final File config = new File(Config.TEMPLATES_DIR, templateName + Config.MIDLET_CONFIG_FILE);
+		final File config = new File(Config.PROFILES_DIR, name + Config.MIDLET_CONFIG_FILE);
 		if (config.exists()) {
-			etTemplateName.setText(templateName);
-			etTemplateName.requestFocus();
-			etTemplateName.setSelection(templateName.length());
+			editText.setText(name);
+			editText.requestFocus();
+			editText.setSelection(name.length());
 			final Toast toast = Toast.makeText(getActivity(), R.string.not_saved_exists, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 50);
 			toast.show();
 			return;
 		}
 		if (callback != null) {
-			callback.onNameChanged(mId, templateName);
+			callback.onNameChanged(mId, name);
 		}
 		dismiss();
 	}

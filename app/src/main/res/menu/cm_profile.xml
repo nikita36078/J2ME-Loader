@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_context_default"
         android:title="@string/set_as_default"
-        app:tooltipText="@string/set_default_template_description" />
+        app:tooltipText="@string/set_default_profile_description" />
     <item
         android:id="@+id/action_context_edit"
         android:title="@string/edit" />

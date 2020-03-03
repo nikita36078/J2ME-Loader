@@ -37,35 +37,35 @@ import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class TemplatesActivity extends BaseActivity implements EditNameDialog.Callback {
+public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback {
 
 	static final int REQUEST_CODE_EDIT = 5;
-	private TemplatesAdapter adapter;
+	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_templates);
+		setContentView(R.layout.activity_profiles);
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
-		setTitle(R.string.templates);
+		setTitle(R.string.profiles);
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
+		ArrayList<Profile> profiles = ProfilesManager.getProfiles();
 		ListView listView = findViewById(R.id.list_view);
 		TextView emptyView = findViewById(R.id.empty_view);
 		listView.setEmptyView(emptyView);
 		registerForContextMenu(listView);
-		adapter = new TemplatesAdapter(this, templates);
+		adapter = new ProfilesAdapter(this, profiles);
 		listView.setAdapter(adapter);
-		final String def = preferences.getString(Config.DEFAULT_TEMPLATE_KEY, null);
+		final String def = preferences.getString(Config.DEFAULT_PROFILE_KEY, null);
 		if (def != null) {
-			for (int i = 0, templatesSize = templates.size(); i < templatesSize; i++) {
-				Template template = templates.get(i);
-				if (template.getName().equals(def)) {
+			for (int i = 0, size = profiles.size(); i < size; i++) {
+				Profile profile = profiles.get(i);
+				if (profile.getName().equals(def)) {
 					adapter.setDefault(i);
 					break;
 				}
@@ -75,7 +75,7 @@ public class TemplatesActivity extends BaseActivity implements EditNameDialog.Ca
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.templates, menu);
+		getMenuInflater().inflate(R.menu.activity_profiles, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -86,8 +86,8 @@ public class TemplatesActivity extends BaseActivity implements EditNameDialog.Ca
 				finish();
 				return true;
 			case R.id.add:
-				EditNameDialog.newInstance(getString(R.string.enter_name), -1)
-						.show(getSupportFragmentManager(), "alert_create_template");
+				EditNameAlert.newInstance(getString(R.string.enter_name), -1)
+						.show(getSupportFragmentManager(), "alert_create_profile");
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -97,10 +97,10 @@ public class TemplatesActivity extends BaseActivity implements EditNameDialog.Ca
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.context_tempates, menu);
+		inflater.inflate(R.menu.cm_profile, menu);
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		final Template template = adapter.getItem(info.position);
-		if (!template.getConfig().exists()) {
+		final Profile profile = adapter.getItem(info.position);
+		if (!profile.getConfig().exists()) {
 			menu.findItem(R.id.action_context_default).setVisible(false);
 			menu.findItem(R.id.action_context_edit).setVisible(false);
 		}
@@ -110,24 +110,24 @@ public class TemplatesActivity extends BaseActivity implements EditNameDialog.Ca
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
-		final Template template = adapter.getItem(index);
+		final Profile profile = adapter.getItem(index);
 		switch (item.getItemId()) {
 			case R.id.action_context_default:
-				preferences.edit().putString(Config.DEFAULT_TEMPLATE_KEY, template.getName()).apply();
+				preferences.edit().putString(Config.DEFAULT_PROFILE_KEY, profile.getName()).apply();
 				adapter.setDefault(index);
 				return true;
 			case R.id.action_context_edit:
-				final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_TEMPLATE,
-						Uri.parse(template.getName()),
+				final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
+						Uri.parse(profile.getName()),
 						getApplicationContext(), ConfigActivity.class);
 				startActivity(intent);
 				return true;
 			case R.id.action_context_rename:
-				EditNameDialog.newInstance(getString(R.string.enter_new_name), index)
-						.show(getSupportFragmentManager(), "alert_rename_template");
+				EditNameAlert.newInstance(getString(R.string.enter_new_name), index)
+						.show(getSupportFragmentManager(), "alert_rename_profile");
 				break;
 			case R.id.action_context_delete:
-				template.delete();
+				profile.delete();
 				adapter.removeItem(index);
 				break;
 		}
@@ -143,16 +143,16 @@ public class TemplatesActivity extends BaseActivity implements EditNameDialog.Ca
 		final String name = data.getDataString();
 		if (name == null)
 			return;
-		adapter.addItem(new Template(name));
+		adapter.addItem(new Profile(name));
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	public void onNameChanged(int id, String newName) {
 		if (id == -1) {
-			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_TEMPLATE,
+			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
 					Uri.parse(newName), getApplicationContext(), ConfigActivity.class);
-			startActivityForResult(intent, TemplatesActivity.REQUEST_CODE_EDIT);
+			startActivityForResult(intent, ProfilesActivity.REQUEST_CODE_EDIT);
 			return;
 		}
 		adapter.getItem(id).renameTo(newName);

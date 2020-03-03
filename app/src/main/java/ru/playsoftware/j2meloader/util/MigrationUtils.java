@@ -34,7 +34,8 @@ public class MigrationUtils {
 
 	private static final int VERSION_1 = 1;
 	private static final int VERSION_2 = 2;
-	private static final int VERSION = 3;
+	private static final int VERSION_3 = 3;
+	private static final int VERSION = 4;
 
 	private static void moveConfigs(Context context) {
 		File srcConfDir = new File(context.getApplicationInfo().dataDir, "/shared_prefs");
@@ -57,12 +58,12 @@ public class MigrationUtils {
 			return;
 		}
 		for (File srcData : srcDataDir.listFiles()) {
-			File srcKeylayout = new File(srcData, Config.MIDLET_KEYLAYOUT_FILE);
+			File srcKeylayout = new File(srcData, Config.MIDLET_KEY_LAYOUT_FILE);
 			if (!srcKeylayout.exists()) {
 				continue;
 			}
 			File dstKeylayout = new File(Config.CONFIGS_DIR,
-					srcData.getName() + Config.MIDLET_KEYLAYOUT_FILE);
+					srcData.getName() + Config.MIDLET_KEY_LAYOUT_FILE);
 			dstKeylayout.getParentFile().mkdirs();
 			try {
 				FileUtils.copyFileUsingChannel(srcKeylayout, dstKeylayout);
@@ -113,10 +114,21 @@ public class MigrationUtils {
 			case VERSION_1:
 				moveKeyMappings(context);
 			case VERSION_2:
-				if (moveDefaultToTemplate()) {
+				if (moveDefaultToProfiles()) {
 					PreferenceManager.getDefaultSharedPreferences(context)
-							.edit().putString(Config.DEFAULT_TEMPLATE_KEY, "default_migrated")
+							.edit().putString("default_template", "default_migrated")
 							.apply();
+				}
+			case VERSION_3:
+				File templates = new File(Config.EMULATOR_DIR, "templates");
+				File profiles = new File(Config.PROFILES_DIR);
+				if (templates.renameTo(profiles)) {
+					SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+					String defProfile = pref.getString("default_template", null);
+					if (defProfile != null) {
+						defProfile = defProfile.replace("/templates/", "/profiles/");
+						pref.edit().putString(Config.DEFAULT_PROFILE_KEY, defProfile).apply();
+					}
 				}
 		}
 		try {
@@ -126,13 +138,13 @@ public class MigrationUtils {
 		}
 	}
 
-	private static boolean moveDefaultToTemplate() {
-		File dir = new File(Config.EMULATOR_DIR + "/default");
+	private static boolean moveDefaultToProfiles() {
+		File dir = new File(Config.EMULATOR_DIR, "default");
 		final String[] files = dir.list();
 		if (files == null || files.length == 0) {
 			return false;
 		}
-		File newDir = new File(Config.TEMPLATES_DIR + "/default_migrated");
+		File newDir = new File(Config.PROFILES_DIR, "default_migrated");
 		//noinspection ResultOfMethodCallIgnored
 		dir.renameTo(newDir);
 		final String[] list = newDir.list();

@@ -21,11 +21,11 @@ import java.io.File;
 import androidx.annotation.NonNull;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
-public class Template implements Comparable<Template> {
+public class Profile implements Comparable<Profile> {
 
 	private String name;
 
-	public Template(String name) {
+	public Profile(String name) {
 		this.name = name;
 	}
 
@@ -35,7 +35,7 @@ public class Template implements Comparable<Template> {
 
 	public boolean renameTo(String newName) {
 		File oldDir = getDir();
-		File newDir = new File(Config.TEMPLATES_DIR, newName);
+		File newDir = new File(Config.PROFILES_DIR, newName);
 		name = newName;
 		return oldDir.renameTo(newDir);
 	}
@@ -49,15 +49,15 @@ public class Template implements Comparable<Template> {
 	}
 
 	private File getDir() {
-		return new File(Config.TEMPLATES_DIR, name);
+		return new File(Config.PROFILES_DIR, name);
 	}
 
 	public File getConfig() {
-		return new File(Config.TEMPLATES_DIR, name + Config.MIDLET_CONFIG_FILE);
+		return new File(Config.PROFILES_DIR, name + Config.MIDLET_CONFIG_FILE);
 	}
 
 	public File getKeyLayout() {
-		return new File(Config.TEMPLATES_DIR, name + Config.MIDLET_KEYLAYOUT_FILE);
+		return new File(Config.PROFILES_DIR, name + Config.MIDLET_KEY_LAYOUT_FILE);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class Template implements Comparable<Template> {
 	}
 
 	@Override
-	public int compareTo(@NonNull Template o) {
+	public int compareTo(@NonNull Profile o) {
 		return name.compareTo(o.name);
 	}
 

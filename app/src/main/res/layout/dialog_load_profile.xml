@@ -8,7 +8,7 @@
     android:paddingEnd="20dp">
 
     <ListView xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/lvTemplate"
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -16,7 +16,7 @@
         tools:listitem="@android:layout/simple_list_item_single_choice" />
 
     <CheckBox
-        android:id="@+id/cbTemplateSettings"
+        android:id="@+id/cbConfig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -24,7 +24,7 @@
         android:text="@string/action_settings" />
 
     <CheckBox
-        android:id="@+id/cbTemplateKeyboard"
+        android:id="@+id/cbKeyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
