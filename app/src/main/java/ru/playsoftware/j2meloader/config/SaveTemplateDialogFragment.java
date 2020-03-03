@@ -19,6 +19,7 @@ package ru.playsoftware.j2meloader.config;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -43,7 +45,7 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_save_template, null);
-		EditText etTemplateName = v.findViewById(R.id.etTemplateName);
+		EditText editText = v.findViewById(R.id.etTemplateName);
 		CheckBox cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
 		CheckBox cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
 		CheckBox cbDefaultTemplate = v.findViewById(R.id.cbDefaultTemplate);
@@ -53,23 +55,36 @@ public class SaveTemplateDialogFragment extends DialogFragment {
 				.setTitle(R.string.SAVE_TEMPLATE_CMD).setView(v).create();
 		btNegative.setOnClickListener(v1 -> dismiss());
 		btPositive.setOnClickListener(v1 -> {
-			String templateName = etTemplateName.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
-			if (templateName.isEmpty()) {
+			String name = editText.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
+			if (name.isEmpty()) {
 				Toast.makeText(getActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
-			} else {
-				try {
-					Template template = new Template(templateName);
-					TemplatesManager.saveTemplate(template, configPath,
-							cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
-					if (cbDefaultTemplate.isChecked()) {
-						PreferenceManager.getDefaultSharedPreferences(requireContext())
-								.edit().putString(Config.DEFAULT_TEMPLATE_KEY, templateName).apply();
-					}
-					dismiss();
-				} catch (IOException e) {
-					e.printStackTrace();
-					Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			final File config = new File(Config.TEMPLATES_DIR, name + Config.MIDLET_CONFIG_FILE);
+			if (config.exists()) {
+				editText.setText(name);
+				editText.requestFocus();
+				editText.setSelection(name.length());
+				final Toast toast = Toast.makeText(getActivity(), R.string.error_name_exists, Toast.LENGTH_SHORT);
+				final int[] loc = new int[2];
+				editText.getLocationOnScreen(loc);
+				toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, loc[1]);
+				toast.show();
+				return;
+			}
+			try {
+				Template template = new Template(name);
+				TemplatesManager.saveTemplate(template, configPath,
+						cbTemplateSettings.isChecked(), cbTemplateKeyboard.isChecked());
+				if (cbDefaultTemplate.isChecked()) {
+					PreferenceManager.getDefaultSharedPreferences(requireContext())
+							.edit().putString(Config.DEFAULT_TEMPLATE_KEY, name).apply();
 				}
+				dismiss();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 			}
 		});
 		return dialog;

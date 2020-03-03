@@ -21,19 +21,35 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
 public class LoadTemplateDialogFragment extends DialogFragment {
+
+	private ArrayList<Template> templates;
+	private CheckBox cbTemplateSettings;
+	private CheckBox cbTemplateKeyboard;
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		templates = TemplatesManager.getTemplatesList();
+		Collections.sort(templates);
+	}
+
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -42,12 +58,12 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_load_template, null);
 		ListView lvTemplate = v.findViewById(R.id.lvTemplate);
-		ArrayList<Template> templates = TemplatesManager.getTemplatesList();
 		ArrayAdapter<Template> adapter = new ArrayAdapter<>(requireActivity(),
 				android.R.layout.simple_list_item_single_choice, templates);
+		lvTemplate.setOnItemClickListener(this::onItemClick);
 		lvTemplate.setAdapter(adapter);
-		CheckBox cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
-		CheckBox cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
+		cbTemplateSettings = v.findViewById(R.id.cbTemplateSettings);
+		cbTemplateKeyboard = v.findViewById(R.id.cbTemplateKeyboard);
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 		builder.setTitle(R.string.LOAD_TEMPLATE_CMD)
 				.setView(v)
@@ -56,7 +72,7 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 						final int pos = lvTemplate.getCheckedItemPosition();
 						final boolean configChecked = cbTemplateSettings.isChecked();
 						final boolean vkChecked = cbTemplateKeyboard.isChecked();
-						if (pos == -1 || !(configChecked || vkChecked)) {
+						if (pos == -1) {
 							Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 							return;
 						}
@@ -69,6 +85,30 @@ public class LoadTemplateDialogFragment extends DialogFragment {
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
+		final String def = PreferenceManager.getDefaultSharedPreferences(requireContext())
+				.getString(Config.DEFAULT_TEMPLATE_KEY, null);
+
+		if (def != null) {
+			for (int i = 0, templatesSize = templates.size(); i < templatesSize; i++) {
+				Template template = templates.get(i);
+				if (template.getName().equals(def)) {
+					lvTemplate.setItemChecked(i, true);
+					onItemClick(lvTemplate, null, i, i);
+					break;
+				}
+			}
+		}
 		return builder.create();
 	}
+
+	private void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+		final Template template = templates.get(pos);
+		final boolean hasConfig = template.hasConfig();
+		final boolean hasVk = template.hasKeyLayout();
+		cbTemplateSettings.setEnabled(hasConfig && hasVk);
+		cbTemplateSettings.setChecked(hasConfig);
+		cbTemplateKeyboard.setEnabled(hasVk && hasConfig);
+		cbTemplateKeyboard.setChecked(hasVk);
+	}
+
 }

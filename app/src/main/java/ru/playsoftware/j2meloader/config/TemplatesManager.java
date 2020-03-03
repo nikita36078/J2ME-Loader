@@ -48,25 +48,23 @@ class TemplatesManager {
 		File dstKeyLayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
 		try {
 			if (templateSettings) FileUtils.copyFileUsingChannel(template.getConfig(), dstConfig);
-			if (templateKeyboard)
-				FileUtils.copyFileUsingChannel(template.getKeylayout(), dstKeyLayout);
+			if (templateKeyboard) FileUtils.copyFileUsingChannel(template.getKeyLayout(), dstKeyLayout);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	static void saveTemplate(Template template, String path,
-							 boolean templateSettings, boolean templateKeyboard) throws IOException {
-		if (!templateSettings && !templateKeyboard) {
+	static void saveTemplate(Template template, String path, boolean config, boolean keyboard)
+			throws IOException {
+		if (!config && !keyboard) {
 			return;
 		}
 		template.create();
 		File srcConfig = new File(path, Config.MIDLET_CONFIG_FILE);
 		File srcKeyLayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
 		try {
-			if (templateSettings) FileUtils.copyFileUsingChannel(srcConfig, template.getConfig());
-			if (templateKeyboard)
-				FileUtils.copyFileUsingChannel(srcKeyLayout, template.getKeylayout());
+			if (config) FileUtils.copyFileUsingChannel(srcConfig, template.getConfig());
+			if (keyboard) FileUtils.copyFileUsingChannel(srcKeyLayout, template.getKeyLayout());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
