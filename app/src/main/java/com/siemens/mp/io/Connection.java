@@ -54,7 +54,7 @@ public class Connection extends com.siemens.mp.misc.NativeMem {
 	}
 
 	// renamed for fix versioning problem
-	public static void setListenerOld(ConnectionListener listener) {
+	public static void setListenerCompat(ConnectionListener listener) {
 		sListener = listener;
 	}
 }
