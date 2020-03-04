@@ -210,4 +210,6 @@
     <string name="enter_new_name">Enter new name</string>
     <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
     <string name="error_name_exists">Already exists, enter other name</string>
+    <string name="disabled">disabled</string>
+    <string name="unlimited">unlimited</string>
 </resources>

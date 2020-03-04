@@ -636,34 +636,36 @@ public abstract class Canvas extends Displayable {
 		} else {
 			scaledDisplayHeight = displayHeight;
 		}
-		if (virtualWidth < 0) {
-			if (virtualHeight < 0) {
+		if (virtualWidth > 0) {
+			if (virtualHeight > 0) {
 				/*
-				 * nothing is set - screen-sized canvas
+				 * the width and height of the canvas are strictly set
 				 */
-				width = displayWidth;
-				height = scaledDisplayHeight;
+				width = virtualWidth;
+				height = virtualHeight;
 			} else {
+				/*
+				 * only the canvas width is set
+				 * height is selected by the ratio of the real screen
+				 */
+				width = virtualWidth;
+				height = scaledDisplayHeight * virtualWidth / displayWidth;
+			}
+		} else {
+			if (virtualHeight > 0) {
 				/*
 				 * only the canvas height is set
 				 * width is selected by the ratio of the real screen
 				 */
 				width = displayWidth * virtualHeight / scaledDisplayHeight;
 				height = virtualHeight;
+			} else {
+				/*
+				 * nothing is set - screen-sized canvas
+				 */
+				width = displayWidth;
+				height = scaledDisplayHeight;
 			}
-		} else if (virtualHeight < 0) {
-			/*
-			 * only the canvas width is set
-			 * height is selected by the ratio of the real screen
-			 */
-			width = virtualWidth;
-			height = scaledDisplayHeight * virtualWidth / displayWidth;
-		} else {
-			/*
-			 * the width and height of the canvas are strictly set
-			 */
-			width = virtualWidth;
-			height = virtualHeight;
 		}
 
 		/*

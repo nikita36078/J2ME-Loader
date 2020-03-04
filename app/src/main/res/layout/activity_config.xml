@@ -270,7 +270,10 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:textDirection="ltr" />
+                    android:textDirection="ltr"
+                    android:layout_width="0dp"
+                    android:hint="@string/unlimited"
+                    android:importantForAutofill="no" />
             </LinearLayout>
         </LinearLayout>
 
@@ -565,9 +568,11 @@
                             android:layout_marginRight="4dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:hint="@string/_MINUS_ONE"
+                            android:hint="@string/disabled"
                             android:inputType="number|numberSigned"
-                            android:textDirection="ltr" />
+                            android:textDirection="ltr"
+                            android:importantForAutofill="no"
+                            tools:targetApi="jelly_bean_mr1" />
 
                         <TextView
                             android:layout_width="wrap_content"

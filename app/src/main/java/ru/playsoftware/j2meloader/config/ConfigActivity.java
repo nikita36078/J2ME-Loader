@@ -76,6 +76,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 	public static final String CONFIG_PATH_KEY = "configPath";
 	public static final String MIDLET_NAME_KEY = "midletName";
+	private static final int[] SCREEN_SIZES = {128, 176, 220, 320};
+	private static final int[] FONT_SIZES = {
+			9, 13, 15, // 128
+			13, 15, 20, // 176
+			15, 18, 22, // 220
+			18, 22, 26, // 320
+	};
 
 	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
@@ -553,9 +560,24 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("LimitFps", cxLimitFps.isChecked());
 			params.putInt("FpsLimit", parseInt(tfFpsLimit.getText().toString()));
 
-			params.putInt("FontSizeSmall", parseInt(tfFontSizeSmall.getText().toString()));
-			params.putInt("FontSizeMedium", parseInt(tfFontSizeMedium.getText().toString()));
-			params.putInt("FontSizeLarge", parseInt(tfFontSizeLarge.getText().toString()));
+			try {
+				int value = Integer.parseInt(tfFontSizeSmall.getText().toString());
+				params.putInt("FontSizeSmall", value);
+			} catch (NumberFormatException e) {
+				params.putInt("FontSizeSmall", getFontSizeForResolution(0, w, h));
+			}
+			try {
+				int value = Integer.parseInt(tfFontSizeMedium.getText().toString());
+				params.putInt("FontSizeMedium", value);
+			} catch (NumberFormatException e) {
+				params.putInt("FontSizeMedium", getFontSizeForResolution(1, w, h));
+			}
+			try {
+				int value = Integer.parseInt(tfFontSizeLarge.getText().toString());
+				params.putInt("FontSizeLarge", value);
+			} catch (NumberFormatException e) {
+				params.putInt("FontSizeLarge", getFontSizeForResolution(2, w, h));
+			}
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
 			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
@@ -583,6 +605,18 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+	}
+
+	private int getFontSizeForResolution(int sizeType, int width, int height) {
+		int size = Math.max(width, height);
+		if (size > 0) {
+			for (int i = 0; i < SCREEN_SIZES.length; i++) {
+				if (SCREEN_SIZES[i] >= size) {
+					return FONT_SIZES[i * 3 + sizeType];
+				}
+			}
+		}
+		return FONT_SIZES[FONT_SIZES.length - (3 - sizeType)];
 	}
 
 	@Override
@@ -645,9 +679,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_clear_data)
-				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-					FileUtils.clearDirectory(dataDir);
-				})
+				.setPositiveButton(android.R.string.ok, (d, w) -> FileUtils.clearDirectory(dataDir))
 				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}

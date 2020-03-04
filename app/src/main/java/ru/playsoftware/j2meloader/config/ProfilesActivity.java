@@ -63,10 +63,10 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		listView.setAdapter(adapter);
 		final String def = preferences.getString(Config.DEFAULT_PROFILE_KEY, null);
 		if (def != null) {
-			for (int i = 0, size = profiles.size(); i < size; i++) {
+			for (int i = profiles.size() - 1; i >= 0; i--) {
 				Profile profile = profiles.get(i);
 				if (profile.getName().equals(def)) {
-					adapter.setDefault(i);
+					adapter.setDefault(profile);
 					break;
 				}
 			}
@@ -114,7 +114,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		switch (item.getItemId()) {
 			case R.id.action_context_default:
 				preferences.edit().putString(Config.DEFAULT_PROFILE_KEY, profile.getName()).apply();
-				adapter.setDefault(index);
+				adapter.setDefault(profile);
 				return true;
 			case R.id.action_context_edit:
 				final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
@@ -155,7 +155,11 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 			startActivityForResult(intent, ProfilesActivity.REQUEST_CODE_EDIT);
 			return;
 		}
-		adapter.getItem(id).renameTo(newName);
+		Profile profile = adapter.getItem(id);
+		profile.renameTo(newName);
 		adapter.notifyDataSetChanged();
+		if (adapter.getDefault() == profile) {
+			preferences.edit().putString(Config.DEFAULT_PROFILE_KEY, newName).apply();
+		}
 	}
 }

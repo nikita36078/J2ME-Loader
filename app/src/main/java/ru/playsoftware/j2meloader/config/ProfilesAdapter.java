@@ -31,12 +31,11 @@ import ru.playsoftware.j2meloader.R;
 public class ProfilesAdapter extends BaseAdapter {
 	private ArrayList<Profile> list;
 	private final LayoutInflater layoutInflater;
-	private int defaultIndex = -1;
+	private Profile def;
 
 	ProfilesAdapter(Context context, ArrayList<Profile> list) {
 		if (list != null) {
 			this.list = list;
-			Collections.sort(list);
 		}
 		this.layoutInflater = LayoutInflater.from(context);
 	}
@@ -58,18 +57,19 @@ public class ProfilesAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View view, ViewGroup viewGroup) {
-		ProfilesAdapter.ViewHolder holder;
+		ViewHolder holder;
 		if (view == null) {
 			view = layoutInflater.inflate(R.layout.list_row_profile, viewGroup, false);
-			holder = new ProfilesAdapter.ViewHolder();
+			holder = new ViewHolder();
 			holder.name = (TextView) view;
 			view.setTag(holder);
 		} else {
-			holder = (ProfilesAdapter.ViewHolder) view.getTag();
+			holder = (ViewHolder) view.getTag();
 		}
 
-		String name = list.get(position).getName();
-		if (position == defaultIndex) {
+		Profile profile = list.get(position);
+		String name = profile.getName();
+		if (profile == def) {
 			name = view.getResources().getString(R.string.default_label, name);
 		}
 		holder.name.setText(name);
@@ -82,8 +82,8 @@ public class ProfilesAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void setDefault(int index) {
-		defaultIndex = index;
+	public void setDefault(Profile profile) {
+		def = profile;
 		notifyDataSetChanged();
 	}
 
@@ -91,6 +91,10 @@ public class ProfilesAdapter extends BaseAdapter {
 		list.add(profile);
 		Collections.sort(list);
 		notifyDataSetChanged();
+	}
+
+	public Profile getDefault() {
+		return def;
 	}
 
 	private static class ViewHolder {
