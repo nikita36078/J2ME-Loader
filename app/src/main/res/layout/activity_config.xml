@@ -58,7 +58,6 @@
                     android:hint="@string/PREF_WIDTH"
                     android:inputType="numberSigned"
                     android:maxLines="1"
-                    android:textDirection="ltr"
                     android:textSize="22sp"
                     android:importantForAutofill="no" />
 
@@ -82,7 +81,6 @@
                     android:inputType="numberSigned"
                     android:maxLines="1"
                     android:textSize="22sp"
-                    android:textDirection="ltr"
                     android:importantForAutofill="no" />
 
                 <ImageButton
@@ -91,6 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/add_resolution_preset"
+                    app:tooltipText="@string/add_resolution_preset"
                     android:src="@drawable/ic_add_preset" />
             </LinearLayout>
 
@@ -360,6 +360,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/PREF_FONT_SIZE_IN_SP" />
+
         </LinearLayout>
 
         <TextView
@@ -470,14 +471,14 @@
                 <!-- Key shape type -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_marginBottom="4dp"
                     android:minHeight="40dp">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
@@ -555,34 +556,28 @@
                         android:textColor="?attr/textColorSecondary"
                         android:textSize="15sp" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/tfVKHideDelay"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dip"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/disabled"
+                        android:inputType="number|numberSigned"
+                        android:textDirection="ltr"
+                        android:importantForAutofill="no"
+                        tools:targetApi="jelly_bean_mr1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/tfVKHideDelay"
-                            style="@style/EditTextStyle"
-                            android:layout_width="0dip"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginRight="4dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:hint="@string/disabled"
-                            android:inputType="number|numberSigned"
-                            android:textDirection="ltr"
-                            android:importantForAutofill="no"
-                            tools:targetApi="jelly_bean_mr1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginRight="5dp"
-                            android:text="@string/PREF_UNIT_MS"
-                            android:textColor="?attr/textColorSecondary"
-                            android:textSize="15sp" />
-                    </LinearLayout>
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/PREF_UNIT_MS"
+                        android:textColor="?attr/textColorSecondary"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <TableLayout
@@ -602,6 +597,7 @@
                             android:id="@+id/tfVKFore"
                             style="@style/EditTextStyle"
                             android:layout_width="0dp"
+                            android:layout_height="38dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginEnd="6dp"
@@ -609,7 +605,9 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:hint="@string/PREF_COLOR_HINT"
-                            android:textDirection="ltr" />
+                            android:textDirection="ltr"
+                            android:importantForAutofill="no"
+                            tools:targetApi="jelly_bean_mr1" />
                     </TableRow>
 
                     <TableRow android:gravity="center_vertical">
@@ -625,6 +623,7 @@
                             android:id="@+id/tfVKBack"
                             style="@style/EditTextStyle"
                             android:layout_width="0dp"
+                            android:layout_height="38dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginEnd="6dp"
@@ -707,6 +706,7 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- System Properties -->
         <TextView
             style="@style/ConfigTitleTextStyle"
             android:layout_margin="10dp"
@@ -726,33 +726,15 @@
             android:paddingBottom="10dp"
             tools:ignore="UnusedAttribute">
 
-            <!-- Encoding -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btEncoding"
+                android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:layout_marginBottom="4dp"
-                android:minHeight="40dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:text="@string/pref_encoding_title"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?attr/textColorSecondary"
-                    android:textSize="15sp" />
-
-                <Spinner
-                    android:id="@+id/spEncoding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="20"
-                    android:textColor="?attr/textColorSecondary"
-                    android:textSize="15sp" />
-            </LinearLayout><!-- Encoding -->
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/pref_encoding_title" />
 
             <EditText
                 android:id="@+id/tfSystemProperties"
@@ -760,10 +742,9 @@
                 android:layout_width="match_parent"
                 android:hint="@string/PREF_SYS_PROPS_HINT"
                 android:inputType="textMultiLine"
-                android:lines="2"
                 android:textDirection="ltr" />
 
-        </LinearLayout>
+        </LinearLayout><!-- System Properties -->
     </LinearLayout>
 
 </ScrollView>

@@ -37,11 +37,21 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
+import static ru.playsoftware.j2meloader.config.ConfigActivity.CONFIG_PATH_KEY;
+
 public class LoadProfileAlert extends DialogFragment {
 
 	private ArrayList<Profile> profiles;
 	private CheckBox cbConfig;
 	private CheckBox cbKeyboard;
+
+	static LoadProfileAlert newInstance(String parent) {
+		LoadProfileAlert fragment = new LoadProfileAlert();
+		Bundle args = new Bundle();
+		args.putString(CONFIG_PATH_KEY, parent);
+		fragment.setArguments(args);
+		return fragment;
+	}
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +63,7 @@ public class LoadProfileAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String configPath = requireArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
+		String configPath = requireArguments().getString(CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_load_profile, null);

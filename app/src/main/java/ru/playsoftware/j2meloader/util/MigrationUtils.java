@@ -114,20 +114,14 @@ public class MigrationUtils {
 			case VERSION_1:
 				moveKeyMappings(context);
 			case VERSION_2:
-				if (moveDefaultToProfiles()) {
-					PreferenceManager.getDefaultSharedPreferences(context)
-							.edit().putString("default_template", "default_migrated")
-							.apply();
-				}
 			case VERSION_3:
 				File templates = new File(Config.EMULATOR_DIR, "templates");
 				File profiles = new File(Config.PROFILES_DIR);
 				if (templates.renameTo(profiles)) {
-					SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-					String defProfile = pref.getString("default_template", null);
-					if (defProfile != null) {
-						defProfile = defProfile.replace("/templates/", "/profiles/");
-						pref.edit().putString(Config.DEFAULT_PROFILE_KEY, defProfile).apply();
+					if (moveDefaultToProfiles()) {
+						PreferenceManager.getDefaultSharedPreferences(context)
+								.edit().putString(Config.DEFAULT_PROFILE_KEY, "default_migrated")
+								.apply();
 					}
 				}
 		}

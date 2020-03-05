@@ -137,37 +137,13 @@ public class MicroLoader {
 	}
 
 	private void setProperties() {
-		System.setProperty("microedition.sensor.version", "1");
-		System.setProperty("microedition.platform", "Nokia 6233");
-		System.setProperty("microedition.configuration", "CDLC-1.1");
-		System.setProperty("microedition.profiles", "MIDP-2.0");
-		System.setProperty("microedition.m3g.version", "1.1");
-		System.setProperty("microedition.media.version", "1.0");
-		System.setProperty("supports.mixing", "true");
-		System.setProperty("supports.audio.capture", "true");
-		System.setProperty("supports.video.capture", "false");
-		System.setProperty("supports.recording", "false");
-		System.setProperty("microedition.pim.version", "1.0");
-		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
 		final Locale defaultLocale = Locale.getDefault();
 		final String country = defaultLocale.getCountry();
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
-		System.setProperty("microedition.encoding", "ISO-8859-1");
 		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
-		System.setProperty("user.home", externalStoragePath);
-		System.setProperty("com.siemens.IMEI", "000000000000000");
-		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
-		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
-		System.setProperty("com.siemens.OSVersion", "11");
-		System.setProperty("device.imei", "000000000000000");
-		System.setProperty("com.nokia.mid.imei", "000000000000000");
 		System.setProperty("fileconn.dir.cache", "file:///c:"
-				+ Config.DATA_DIR.replace(externalStoragePath, "") + appPath);
-		System.setProperty("fileconn.dir.private", "file:///c:"
-				+ Config.DATA_DIR.replace(externalStoragePath, "") + appPath);
-		System.setProperty("com.nokia.mid.impl.isa.visual_radio_operator_id", "0");
-		System.setProperty("com.nokia.mid.impl.isa.visual_radio_channel_freq", "0");
+				+ Config.DATA_DIR.substring(externalStoragePath.length()) + appPath);
 	}
 
 	public int getOrientation() {

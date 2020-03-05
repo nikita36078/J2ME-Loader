@@ -36,12 +36,23 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
+import static ru.playsoftware.j2meloader.config.ConfigActivity.CONFIG_PATH_KEY;
+
 public class SaveProfileAlert extends DialogFragment {
+
+	@NonNull
+	public static SaveProfileAlert getInstance(String parent) {
+		SaveProfileAlert saveProfileAlert = new SaveProfileAlert();
+		Bundle bundleSave = new Bundle();
+		bundleSave.putString(CONFIG_PATH_KEY, parent);
+		saveProfileAlert.setArguments(bundleSave);
+		return saveProfileAlert;
+	}
 
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String configPath = requireArguments().getString(ConfigActivity.CONFIG_PATH_KEY);
+		String configPath = requireArguments().getString(CONFIG_PATH_KEY);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_save_profile, null);

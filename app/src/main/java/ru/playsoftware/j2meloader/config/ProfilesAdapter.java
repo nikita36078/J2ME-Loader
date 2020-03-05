@@ -36,6 +36,7 @@ public class ProfilesAdapter extends BaseAdapter {
 	ProfilesAdapter(Context context, ArrayList<Profile> list) {
 		if (list != null) {
 			this.list = list;
+			Collections.sort(list);
 		}
 		this.layoutInflater = LayoutInflater.from(context);
 	}
