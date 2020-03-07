@@ -16,19 +16,16 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 
 import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
 import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
 
 import java.io.File;
 
-import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
-
-import static ru.playsoftware.j2meloader.util.Constants.PREF_THEME;
 
 public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File> {
 
@@ -44,13 +41,7 @@ public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File>
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String theme = preferences.getString(PREF_THEME, "light");
-		if ("dark".equals(theme)) {
-			setTheme(R.style.FilePickerTheme);
-		} else {
-			setTheme(R.style.FilePickerTheme_Light);
-		}
+		setTheme(R.style.FilePickerTheme);
 		super.onCreate(savedInstanceState);
 	}
 

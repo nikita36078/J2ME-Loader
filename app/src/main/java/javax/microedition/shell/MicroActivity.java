@@ -99,8 +99,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		setTheme(sp.getString(PREF_THEME, "light"));
+		setTheme(R.style.AppTheme_NoActionBar);
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
@@ -108,6 +107,7 @@ public class MicroActivity extends AppCompatActivity {
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
 		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
 		if (sp.getBoolean(PREF_KEEP_SCREEN, false)) {
@@ -195,14 +195,6 @@ public class MicroActivity extends AppCompatActivity {
 			default:
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 				break;
-		}
-	}
-
-	private void setTheme(String theme) {
-		if (theme.equals("dark")) {
-			setTheme(R.style.AppTheme_NoActionBar);
-		} else {
-			setTheme(R.style.AppTheme_Light_NoActionBar);
 		}
 	}
 
@@ -501,22 +493,22 @@ public class MicroActivity extends AppCompatActivity {
 	@SuppressLint("CheckResult")
 	private void takeScreenshot() {
 		microLoader.takeScreenshot((Canvas) current, new SingleObserver<String>() {
-					@Override
-					public void onSubscribe(@NonNull Disposable d) {
-					}
+			@Override
+			public void onSubscribe(@NonNull Disposable d) {
+			}
 
-					@Override
-					public void onSuccess(@NonNull String s) {
-						Toast.makeText(MicroActivity.this, getString(R.string.screenshot_saved)
-								+ " " + s, Toast.LENGTH_LONG).show();
-					}
+			@Override
+			public void onSuccess(@NonNull String s) {
+				Toast.makeText(MicroActivity.this, getString(R.string.screenshot_saved)
+						+ " " + s, Toast.LENGTH_LONG).show();
+			}
 
-					@Override
-					public void onError(@NonNull Throwable e) {
-						e.printStackTrace();
-						Toast.makeText(MicroActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-					}
-				});
+			@Override
+			public void onError(@NonNull Throwable e) {
+				e.printStackTrace();
+				Toast.makeText(MicroActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 	private void saveLog() {

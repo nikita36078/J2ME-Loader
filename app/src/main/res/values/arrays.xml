@@ -6,13 +6,15 @@
         <item>5 USD</item>
         <item>10 USD</item>
     </string-array>
-    <string-array name="pref_theme_entries">
+    <string-array name="pref_theme_entries" tools:ignore="InconsistentArrays">
         <item>@string/pref_theme_light</item>
         <item>@string/pref_theme_night</item>
+        <item>@string/pref_theme_auto_time</item>
     </string-array>
-    <string-array name="pref_theme_values" translatable="false">
+    <string-array name="pref_theme_values" translatable="false" tools:ignore="InconsistentArrays">
         <item>light</item>
         <item>dark</item>
+        <item>auto-time</item>
     </string-array>
     <string-array name="pref_app_sort_entries">
         <item>@string/pref_app_sort_name</item>

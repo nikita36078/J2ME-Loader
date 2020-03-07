@@ -48,13 +48,10 @@ public class AppUtils {
 				}
 				continue;
 			}
-			File compressed = new File(appFolder, Config.MIDLET_DEX_ARCH);
-			if (!compressed.isFile()) {
-				File dex = new File(appFolder, Config.MIDLET_DEX_FILE);
-				if (!dex.isFile()) {
-					FileUtils.deleteDirectory(appFolder);
-					continue;
-				}
+			File dex = new File(appFolder, Config.MIDLET_DEX_FILE);
+			if (!dex.isFile()) {
+				FileUtils.deleteDirectory(appFolder);
+				continue;
 			}
 			try {
 				AppItem item = getApp(appFolder);

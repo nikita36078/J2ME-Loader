@@ -23,13 +23,11 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,7 +44,6 @@ import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
-import ru.playsoftware.j2meloader.util.SettingsResultContract;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
@@ -61,9 +58,6 @@ public class MainActivity extends BaseActivity {
 	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
 			new PickDirResultContract(),
 			this::onPickDirResult);
-	private final ActivityResultLauncher<Boolean> settingsLauncher = registerForActivityResult(
-			new SettingsResultContract(),
-			this::onSettingsResult);
 
 	private SharedPreferences preferences;
 	private AppListModel appListModel;
@@ -118,15 +112,6 @@ public class MainActivity extends BaseActivity {
 				.show();
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-		if (item.getItemId() == R.id.action_settings) {
-			settingsLauncher.launch(false);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	private void onPermissionResult(Map<String, Boolean> status) {
 		if (!status.containsValue(false)) {
 			checkAndCreateDirs();
@@ -142,12 +127,6 @@ public class MainActivity extends BaseActivity {
 		} else {
 			Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 			finish();
-		}
-	}
-
-	private void onSettingsResult(Boolean needRecreate) {
-		if (needRecreate) {
-			ActivityCompat.recreate(this);
 		}
 	}
 

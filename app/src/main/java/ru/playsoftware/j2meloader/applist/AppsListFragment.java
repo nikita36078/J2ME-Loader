@@ -85,6 +85,7 @@ import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
+import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.LogUtils;
@@ -365,6 +366,9 @@ public class AppsListFragment extends ListFragment {
 		} else if (itemId == R.id.action_profiles) {
 			Intent intentProfiles = new Intent(activity, ProfilesActivity.class);
 			startActivity(intentProfiles);
+		} else if (item.getItemId() == R.id.action_settings) {
+			startActivity(new Intent(activity, SettingsActivity.class));
+			return true;
 		} else if (itemId == R.id.action_help) {
 			HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
 			helpDialogFragment.show(getChildFragmentManager(), "help");

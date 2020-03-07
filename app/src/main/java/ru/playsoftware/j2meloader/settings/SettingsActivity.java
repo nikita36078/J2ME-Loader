@@ -16,23 +16,16 @@
 
 package ru.playsoftware.j2meloader.settings;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.preference.PreferenceManager;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_THEME;
-import static ru.playsoftware.j2meloader.util.Constants.RESULT_NEED_RECREATE;
-
 public class SettingsActivity extends BaseActivity {
-	private SharedPreferences preferences;
-	private String theme;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,19 +36,6 @@ public class SettingsActivity extends BaseActivity {
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 		setTitle(R.string.action_settings);
-		setResult(RESULT_OK);
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		theme = preferences.getString(PREF_THEME, "light");
-	}
-
-	@Override
-	public void finish() {
-		if (theme.equals(preferences.getString(PREF_THEME, "light"))) {
-			setResult(RESULT_OK);
-		} else {
-			setResult(RESULT_NEED_RECREATE);
-		}
-		super.finish();
 	}
 
 	@Override

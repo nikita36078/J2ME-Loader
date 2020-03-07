@@ -1,100 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="@style/Theme.AppCompat">
-        <item name="colorPrimary">@color/dark_color_primary</item>
-        <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
-        <item name="colorAccent">@color/dark_color_accent</item>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
-        <item name="android:colorBackground">@color/dark_color_background</item>
-        <item name="android:windowBackground">@color/dark_color_background</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
-
-        <!--custom theme attrs-->
-        <item name="bg_config_card">@drawable/bg_config_card_dark</item>
-        <item name="textColorPrimary">@color/dark_color_text_primary</item>
-        <item name="textColorSecondary">@color/dark_color_text_secondary</item>
+        <item name="bg_config_card">@drawable/bg_config_card</item>
+        <item name="textColorPrimary">@color/text_primary</item>
+        <item name="textColorSecondary">@color/text_secondary</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
-    <style name="AppTheme.Light" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/light_color_primary</item>
-        <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
-        <item name="colorAccent">@color/light_color_accent</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-        <item name="android:colorBackground">@color/light_color_background</item>
-        <item name="android:windowBackground">@color/light_color_background</item>
-        <item name="buttonStyle">@style/ButtonStyle.Light</item>
-
-        <!--custom theme attrs-->
-        <item name="bg_config_card">@drawable/bg_config_card_light</item>
-        <item name="textColorPrimary">@color/light_color_text_primary</item>
-        <item name="textColorSecondary">@color/light_color_text_secondary</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="@style/Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/dark_color_primary</item>
-        <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
-        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.AppTheme.OverflowMenu</item>
         <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader</item>
         <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceSmall</item>
         <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceLarge</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.OverflowMenu" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:popupBackground">@color/dark_color_primary_dark</item>
+    <style name="Widget.AppTheme.OverflowMenu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/background</item>
         <item name="overlapAnchor">false</item>
     </style>
 
-    <style name="PopupMenuTextAppearanceHeader" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header">
-        <item name="android:textColor">@color/dark_color_text_primary</item>
+    <style name="PopupMenuTextAppearanceHeader" parent="TextAppearance.AppCompat.Widget.PopupMenu.Header">
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <style name="PopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Small">
-        <item name="android:textColor">@color/dark_color_text_primary</item>
+    <style name="PopupMenuTextAppearanceSmall" parent="TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <style name="PopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large">
-        <item name="android:textColor">@color/dark_color_text_primary</item>
+    <style name="PopupMenuTextAppearanceLarge" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <style name="AppTheme.Light.NoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/light_color_primary</item>
-        <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
-        <item name="actionOverflowMenuStyle">@style/AppTheme.Light.OverflowMenu</item>
-    </style>
-
-    <style name="AppTheme.Light.OverflowMenu" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
-        <item name="overlapAnchor">false</item>
-    </style>
-
-    <style name="FilePickerTheme" parent="NNF_BaseTheme">
-        <item name="colorPrimary">@color/dark_color_primary</item>
-        <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
+    <style name="FilePickerTheme" parent="Theme.AppCompat.DayNight.DialogWhenLarge">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/file_picker_accent</item>
-        <item name="android:colorBackground">@color/dark_color_background</item>
-        <item name="android:windowBackground">@color/dark_color_background</item>
-        <item name="colorBackgroundFloating">@color/dark_color_background</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
-        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
-    </style>
-
-    <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">@color/file_picker_accent</item>
-    </style>
-
-    <style name="FilePickerTheme.Light" parent="NNF_BaseTheme.Light">
-        <item name="colorPrimary">@color/light_color_primary</item>
-        <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
-        <item name="colorAccent">@color/file_picker_accent</item>
-        <item name="android:colorBackground">@color/light_color_background</item>
-        <item name="android:windowBackground">@color/light_color_background</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:windowBackground">@color/background</item>
         <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme.Light</item>
+        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
+        <item name="nnf_separator_color">@color/nnf_separator_color</item>
+        <item name="nnf_save_icon_color">?attr/colorAccent</item>
+        <item name="nnf_dir_icon_color">?attr/colorAccent</item>
+
+        <!-- These are important. Handled by toolbar. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
-    <style name="FilePickerAlertDialogTheme.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/file_picker_accent</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <style name="ConfigTitleTextStyle">
@@ -120,19 +87,12 @@
         <item name="android:textColor">?attr/textColorPrimary</item>
     </style>
 
-    <style name="ButtonStyle.Base" parent="Widget.AppCompat.Button.Colored">
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="android:minHeight">38dp</item>
         <item name="android:paddingLeft">6dp</item>
         <item name="android:paddingRight">6dp</item>
-        <item name="android:elevation" tools:ignore="NewApi">1dp</item>
-    </style>
-
-    <style name="ButtonStyle" parent="ButtonStyle.Base">
-        <item name="android:background">@drawable/bg_button_dark</item>
-    </style>
-
-    <style name="ButtonStyle.Light" parent="ButtonStyle.Base">
-        <item name="android:background">@drawable/bg_button_light</item>
+        <item name="android:elevation" tools:targetApi="lollipop">1dp</item>
+        <item name="android:background">@drawable/bg_button</item>
     </style>
 
     <style name="ImageButtonStyle" parent="Widget.AppCompat.ImageButton">

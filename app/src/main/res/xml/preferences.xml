@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <ListPreference
-        android:defaultValue="light"
+        android:defaultValue="@string/pref_theme_default"
         android:entries="@array/pref_theme_entries"
         android:entryValues="@array/pref_theme_values"
         android:icon="@drawable/ic_setting_theme"

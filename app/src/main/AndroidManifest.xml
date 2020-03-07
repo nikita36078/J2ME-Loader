@@ -101,9 +101,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize"
-            android:process=":midlet"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize|uiMode"
+            android:process=":midlet" />
         <activity android:name=".settings.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
