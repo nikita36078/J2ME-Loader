@@ -69,9 +69,14 @@ public class ZipFileCompat implements Closeable {
 		if (zipFile != null) {
 			return zipFile.getEntry(name);
 		} else {
-			ZipEntry zipEntry;
-			while ((zipEntry = zis.getNextEntry()) != null && !zipEntry.getName().equals(name));
-			return zipEntry;
+			ZipEntry zipEntry, foundZipEntry = null;
+			while ((zipEntry = zis.getNextEntry()) != null) {
+				if (zipEntry.getName().equals(name)) {
+					foundZipEntry = zipEntry;
+					break;
+				}
+			};
+			return foundZipEntry;
 		}
 	}
 
