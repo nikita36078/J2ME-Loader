@@ -66,7 +66,8 @@ public class AndroidProducer {
 			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
 			byte[] buffer = new byte[BUFFER_SIZE];
 			while ((zipEntry = zip.getNextEntry()) != null) {
-				if (!zipEntry.isDirectory()) {
+				// Some zip entries have zero length names
+				if (zipEntry.getName().length() > 0 && !zipEntry.isDirectory()) {
 					zis = zip.getInputStream(zipEntry);
 					String name = zipEntry.getName();
 					int size = 0;
