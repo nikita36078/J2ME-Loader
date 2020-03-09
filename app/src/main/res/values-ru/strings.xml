@@ -77,20 +77,16 @@
     <string name="SWAP_SIZES">Поменять местами</string>
     <string name="PREF_SYS_PROPS">Системные параметры</string>
     <string name="PREF_ORIENTATION">Ориентация экрана</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>По умолчанию</item>
-        <item>Автоматически</item>
-        <item>Портрет</item>
-        <item>Альбом</item>
-    </string-array>
+    <string name="pref_orientation_default">По умолчанию</string>
+    <string name="pref_orientation_auto">Автоматически</string>
+    <string name="pref_orientation_port">Портрет</string>
+    <string name="pref_orientation_land">Альбом</string>
     <string name="error">Ошибка</string>
     <string name="message_clear_data">Вы действительно хотите очистить данные приложения?</string>
     <string name="PREF_VK_TYPE">Тип клавиатуры</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Настраиваемая</item>
-        <item>Телефонная</item>
-        <item>Телефонная (стрелки)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Настраиваемая</string>
+    <string name="pref_vk_type_phone">Телефонная</string>
+    <string name="pref_vk_type_phone_arrows">Телефонная (стрелки)</string>
     <string name="PREF_LAYOUT">Раскладка</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Принудительное закрытие приложения может привести к потере данных или даже полной его неработоспособности!\nПродолжить?</string>
     <string name="CONFIRMATION_REQUIRED">Требуется подтверждение</string>
@@ -109,26 +105,20 @@
     <string name="log_saved">Лог сохранен</string>
     <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
     <string name="pref_theme_title">Тема</string>
-    <string-array name="pref_theme_entries">
-        <item>Светлая</item>
-        <item>Тёмная</item>
-    </string-array>
+    <string name="pref_theme_light">Светлая</string>
+    <string name="pref_theme_night">Тёмная</string>
     <string name="pref_requires_restart_summary">Требуется перезапуск</string>
     <string name="pref_enable_actionbar_title">Включить ActionBar</string>
     <string name="pref_enable_actionbar_summary">В полноэкранных приложениях</string>
     <string name="pref_enable_statusbar_title">Включить статусбар</string>
     <string name="pref_wakelock_title">Не отключать экран</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Овальные</item>
-        <item>Прямоугольные</item>
-        <item>Закруглённые</item>
-    </string-array>
+    <string name="pref_button_shape_oval">Овальные</string>
+    <string name="pref_button_shape_rect">Прямоугольные</string>
+    <string name="pref_button_shape_round">Закруглённые</string>
     <string name="pref_app_sort_title">Сортировка приложений</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Имя</item>
-        <item>Дата</item>
-    </string-array>
+    <string name="pref_app_sort_name">Имя</string>
+    <string name="pref_app_sort_date">Дата</string>
     <string name="pref_map_keys">Назначение кнопок</string>
     <string name="pref_encoding_title">Кодировка</string>
     <string name="pref_default_settings">Стандартные настройки</string>

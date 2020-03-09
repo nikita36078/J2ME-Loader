@@ -69,20 +69,16 @@
     <string name="SWAP_SIZES">مبادلة الأحجام</string>
     <string name="PREF_SYS_PROPS">خصائص النظام</string>
     <string name="PREF_ORIENTATION">اتجاه الشاشة</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>الافتراضي</item>
-        <item>تلقائي</item>
-        <item>عمودي</item>
-        <item>أفقي</item>
-    </string-array>
+    <string name="pref_orientation_default">الافتراضي</string>
+    <string name="pref_orientation_auto">تلقائي</string>
+    <string name="pref_orientation_port">عمودي</string>
+    <string name="pref_orientation_land">أفقي</string>
     <string name="error">خطأ</string>
     <string name="message_clear_data">هل تريد حقاً أن تحذف بيانات التطبيق؟</string>
     <string name="PREF_VK_TYPE">نوع لوحة المفاتيح</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>قابل للتعديل</item>
-        <item>الهاتف</item>
-        <item>مفاتيح الأسهم في الهاتف</item>
-    </string-array>
+    <string name="pref_vk_type_custom">قابل للتعديل</string>
+    <string name="pref_vk_type_phone">الهاتف</string>
+    <string name="pref_vk_type_phone_arrows">مفاتيح الأسهم في الهاتف</string>
     <string name="PREF_LAYOUT">التنسيق</string>
     <string name="FORCE_CLOSE_CONFIRMATION">فرض اغلاق التطبيق قد يؤدي لفقد بعض البيانات او تدميرها بالكامل!\nمتابعه؟</string>
     <string name="CONFIRMATION_REQUIRED">التأكيد مطلوب</string>
@@ -101,10 +97,8 @@
     <string name="log_saved">تم حفظ السجل</string>
     <string name="common_settings">[اعدادات عامه]</string>
     <string name="pref_theme_title">المظهر</string>
-    <string-array name="pref_theme_entries">
-        <item>فاتح (ابيض)</item>
-        <item>مظلم(اسود)</item>
-    </string-array>
+    <string name="pref_theme_light">فاتح (ابيض)</string>
+    <string name="pref_theme_night">مظلم(اسود)</string>
     <string name="pref_requires_restart_summary">يتطلب إعادة التشغيل</string>
     <string name="pref_enable_actionbar_title">تفعيل اكشن بار</string>
     <string name="pref_enable_actionbar_summary">في تطبيقات ملء الشاشة</string>
@@ -112,10 +106,8 @@
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="pref_button_shape_title">شكل الزر</string>
     <string name="pref_app_sort_title">الفرز بحسب</string>
-    <string-array name="pref_app_sort_entries">
-        <item>الإسم</item>
-        <item>التاريخ</item>
-    </string-array>
+    <string name="pref_app_sort_name">الإسم</string>
+    <string name="pref_app_sort_date">التاريخ</string>
     <string name="pref_map_keys">توجيهات المفتاح</string>
     <string name="pref_encoding_title">الترميز</string>
     <string name="pref_default_settings">الإعدادات الإفتراضية</string>

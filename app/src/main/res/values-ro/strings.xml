@@ -69,20 +69,16 @@
     <string name="SWAP_SIZES">Schimbă dimensiunea</string>
     <string name="PREF_SYS_PROPS">Proprietati sistem</string>
     <string name="PREF_ORIENTATION">Orientatie ecran</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Implicit</item>
-        <item>Automat</item>
-        <item>Portret</item>
-        <item>Peisaj</item>
-    </string-array>
+    <string name="pref_orientation_default">Implicit</string>
+    <string name="pref_orientation_auto">Automat</string>
+    <string name="pref_orientation_port">Portret</string>
+    <string name="pref_orientation_land">Peisaj</string>
     <string name="error">Eroare</string>
     <string name="message_clear_data">Ești sigur că vrei să ștergi datele aplicației?</string>
     <string name="PREF_VK_TYPE">Tip tastatură</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Personalizabile</item>
-        <item>Telefon (numeric)</item>
-        <item>Telefon (D-pad)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Personalizabile</string>
+    <string name="pref_vk_type_phone">Telefon (numeric)</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (D-pad)</string>
     <string name="PREF_LAYOUT">Dispunere</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Închiderea forțată a aplicației ar putea duce la pierderea datelor!\nVrei să continui?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmare necesară</string>
@@ -101,20 +97,16 @@
     <string name="log_saved">Jurnalul a fost salvat</string>
     <string name="common_settings">[SETĂRI COMUNE]</string>
     <string name="pref_theme_title">Tema</string>
-    <string-array name="pref_theme_entries">
-        <item>Luminata</item>
-        <item>Intunecata</item>
-    </string-array>
+    <string name="pref_theme_light">Luminata</string>
+    <string name="pref_theme_night">Intunecata</string>
     <string name="pref_requires_restart_summary">Este nevoie de restart</string>
     <string name="pref_enable_actionbar_title">Activează ActionBar</string>
     <string name="pref_enable_actionbar_summary">În aplicațiile pe tot ecranul</string>
     <string name="pref_wakelock_title">Tine ecranul aprins</string>
     <string name="pref_button_shape_title">Formă buton</string>
     <string name="pref_app_sort_title">Ordine sortare aplicații</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Nume</item>
-        <item>Data</item>
-    </string-array>
+    <string name="pref_app_sort_name">Nume</string>
+    <string name="pref_app_sort_date">Data</string>
     <string name="pref_map_keys">Mapari taste</string>
     <string name="pref_encoding_title">Codificare</string>
     <string name="pref_default_settings">Setări implicite</string>

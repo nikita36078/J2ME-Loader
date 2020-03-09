@@ -38,12 +38,6 @@
 
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
-    <string-array name="donation_google_catalog_values" translatable="false">
-        <item>1 USD</item>
-        <item>2 USD</item>
-        <item>5 USD</item>
-        <item>10 USD</item>
-    </string-array>
 
     <string name="START_CMD">Start</string>
     <string name="CANCEL_CMD">Cancel</string>
@@ -99,26 +93,17 @@
     <string name="PREF_SYS_PROPS">System properties</string>
     <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
     <string name="PREF_ORIENTATION">Screen orientation</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Default</item>
-        <item>Auto</item>
-        <item>Portrait</item>
-        <item>Landscape</item>
-    </string-array>
+    <string name="pref_orientation_default">Default</string>
+    <string name="pref_orientation_auto">Auto</string>
+    <string name="pref_orientation_port">Portrait</string>
+    <string name="pref_orientation_land">Landscape</string>
     <string name="error">Error</string>
     <string name="message_clear_data">Do you really want to clear app data?</string>
     <string name="PREF_VK_TYPE">Keyboard type</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Customizable</item>
-        <item>Phone</item>
-        <item>Phone (arrows)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Customizable</string>
+    <string name="pref_vk_type_phone">Phone</string>
+    <string name="pref_vk_type_phone_arrows">Phone (arrows)</string>
     <string name="PREF_LAYOUT">Layout</string>
-    <string-array name="PREF_LAYOUT_ENTRIES" translatable="false">
-        <item>Nokia/SE</item>
-        <item>Siemens</item>
-        <item>Motorola</item>
-    </string-array>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>
@@ -138,38 +123,20 @@
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_theme_title">Theme</string>
-    <string-array name="pref_theme_entries">
-        <item>Light</item>
-        <item>Dark</item>
-    </string-array>
-    <string-array name="pref_theme_values" translatable="false">
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_night">Dark</string>
     <string name="pref_requires_restart_summary">Requires restart</string>
     <string name="pref_enable_actionbar_title">Enable ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
     <string name="pref_enable_statusbar_title">Enable statusbar</string>
     <string name="pref_wakelock_title">Keep screen on</string>
     <string name="pref_button_shape_title">Button shape</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Oval</item>
-        <item>Rectangle</item>
-        <item>Rounded Rectangle</item>
-    </string-array>
-    <string-array name="pref_button_shape_values" translatable="false">
-        <item>round</item>
-        <item>square</item>
-    </string-array>
+    <string name="pref_button_shape_oval">Oval</string>
+    <string name="pref_button_shape_rect">Rectangle</string>
+    <string name="pref_button_shape_round">Rounded rectangle</string>
     <string name="pref_app_sort_title">App sort order</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Name</item>
-        <item>Date</item>
-    </string-array>
-    <string-array name="pref_app_sort_values" translatable="false">
-        <item>name</item>
-        <item>date</item>
-    </string-array>
+    <string name="pref_app_sort_name">Name</string>
+    <string name="pref_app_sort_date">Date</string>
     <string name="pref_map_keys">Key mappings</string>
     <string name="pref_encoding_title">Encoding</string>
     <string name="pref_default_settings">Default settings</string>

@@ -70,20 +70,16 @@
     <string name="SWAP_SIZES">Inverter dimensões</string>
     <string name="PREF_SYS_PROPS">Propriedades do sistema</string>
     <string name="PREF_ORIENTATION">Orientação da tela</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Padrão</item>
-        <item>Automático</item>
-        <item>Retrato</item>
-        <item>Paisagem</item>
-    </string-array>
+    <string name="pref_orientation_default">Padrão</string>
+    <string name="pref_orientation_auto">Automático</string>
+    <string name="pref_orientation_port">Retrato</string>
+    <string name="pref_orientation_land">Paisagem</string>
     <string name="error">Erro</string>
     <string name="message_clear_data">Deseja realmente limpar os dados do aplicativo?</string>
     <string name="PREF_VK_TYPE">Tipo de teclado</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Personalizável</item>
-        <item>Telefone</item>
-        <item>Telefone (setas)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Personalizável</string>
+    <string name="pref_vk_type_phone">Telefone</string>
+    <string name="pref_vk_type_phone_arrows">Telefone (setas)</string>
     <string name="PREF_LAYOUT">Layout</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Forçar o fechamento do aplicativo, pode resultar em perda de dados ou até mesmo quebra-lo completamente! \nContinuar?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
@@ -102,10 +98,8 @@
     <string name="log_saved">Registro salvo com sucesso</string>
     <string name="common_settings">[MENU]</string>
     <string name="pref_theme_title">Tema</string>
-    <string-array name="pref_theme_entries">
-        <item>Claro</item>
-        <item>Escuro</item>
-    </string-array>
+    <string name="pref_theme_light">Claro</string>
+    <string name="pref_theme_night">Escuro</string>
     <string name="pref_requires_restart_summary">Requer reinicialização</string>
     <string name="pref_enable_actionbar_title">Ativar Barra de Ação</string>
     <string name="pref_enable_actionbar_summary">Em aplicativos em tela cheia</string>
@@ -113,10 +107,8 @@
     <string name="pref_wakelock_title">Manter a tela ligada</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
     <string name="pref_app_sort_title">Ordem de classificação de apps</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Nome</item>
-        <item>Data</item>
-    </string-array>
+    <string name="pref_app_sort_name">Nome</string>
+    <string name="pref_app_sort_date">Data</string>
     <string name="pref_map_keys">Mapeamento do teclado</string>
     <string name="pref_encoding_title">Codificação</string>
     <string name="pref_default_settings">Configurações padrão</string>

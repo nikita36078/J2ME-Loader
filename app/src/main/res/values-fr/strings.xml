@@ -68,20 +68,16 @@
     <string name="SWAP_SIZES">La taille du Swap ou changer la taille du Swap</string>
     <string name="PREF_SYS_PROPS">Propriétés système</string>
     <string name="PREF_ORIENTATION">Orientation de l\'écran</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Par défaut</item>
-        <item>Automatique</item>
-        <item>Portrait</item>
-        <item>Paysage</item>
-    </string-array>
+    <string name="pref_orientation_default">Par défaut</string>
+    <string name="pref_orientation_auto">Automatique</string>
+    <string name="pref_orientation_port">Portrait</string>
+    <string name="pref_orientation_land">Paysage</string>
     <string name="error">Erreur</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données des applications ?</string>
     <string name="PREF_VK_TYPE">Type de clavier</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Personnalisable</item>
-        <item>Téléphone</item>
-        <item>Téléphone (flèches)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Personnalisable</string>
+    <string name="pref_vk_type_phone">Téléphone</string>
+    <string name="pref_vk_type_phone_arrows">Téléphone (flèches)</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Forcer la fermeture de l\'application peut entraîner une perte de données ou même la stopper complètement!\nProcédure?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation requise</string>
     <string name="select_dialog_title">Sélectionnez la taille moyenne</string>
@@ -99,20 +95,16 @@
     <string name="log_saved">Logs a été sauvegardé</string>
     <string name="common_settings">[PARAMÈTRES COMMUNS]</string>
     <string name="pref_theme_title">Thème</string>
-    <string-array name="pref_theme_entries">
-        <item>Mode claie</item>
-        <item>Mode Nuit</item>
-    </string-array>
+    <string name="pref_theme_light">Mode claie</string>
+    <string name="pref_theme_night">Mode Nuit</string>
     <string name="pref_requires_restart_summary">Redémarrage requis</string>
     <string name="pref_enable_actionbar_title">Activez la barre de contrôle</string>
     <string name="pref_enable_actionbar_summary">En mode plein écran des applications</string>
     <string name="pref_wakelock_title">Gardez l\'écran allumé</string>
     <string name="pref_button_shape_title">Forme des boutons ou apparence des boutons</string>
     <string name="pref_app_sort_title">Trier les applications par ordre alphabétique</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Nom</item>
-        <item>Date</item>
-    </string-array>
+    <string name="pref_app_sort_name">Nom</string>
+    <string name="pref_app_sort_date">Date</string>
     <string name="pref_map_keys">Mappage des touches</string>
     <string name="pref_encoding_title">Encodage</string>
     <string name="pref_default_settings">Réglages par défaut</string>

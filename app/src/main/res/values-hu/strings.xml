@@ -70,20 +70,16 @@
     <string name="SWAP_SIZES">Méretcsere</string>
     <string name="PREF_SYS_PROPS">Rendszertulajdonságok</string>
     <string name="PREF_ORIENTATION">Képernyőtájolás</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Alapértelmezett</item>
-        <item>Automatikus</item>
-        <item>Álló</item>
-        <item>Fekvő</item>
-    </string-array>
+    <string name="pref_orientation_default">Alapértelmezett</string>
+    <string name="pref_orientation_auto">Automatikus</string>
+    <string name="pref_orientation_port">Álló</string>
+    <string name="pref_orientation_land">Fekvő</string>
     <string name="error">Hiba</string>
     <string name="message_clear_data">Tényleg törölni szeretné az alkalmazás adatait?</string>
     <string name="PREF_VK_TYPE">Billentyűzettípus</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Testreszabható</item>
-        <item>Telefon</item>
-        <item>Telefon (nyilakkal)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Testreszabható</string>
+    <string name="pref_vk_type_phone">Telefon</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (nyilakkal)</string>
     <string name="PREF_LAYOUT">Elrendezés</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Az alkalmazás erőltetett bezárása adatvesztéshez, vagy akár teljesen működésképtelenné váláshoz vezethet!\nFolytatja?</string>
     <string name="CONFIRMATION_REQUIRED">Megerősítés szükséges</string>
@@ -102,10 +98,8 @@
     <string name="log_saved">A naplófájl mentésre került</string>
     <string name="common_settings">[ÁLTALÁNOS BEÁLLÍTÁSOK]</string>
     <string name="pref_theme_title">Téma</string>
-    <string-array name="pref_theme_entries">
-        <item>Világos</item>
-        <item>Sötét</item>
-    </string-array>
+    <string name="pref_theme_light">Világos</string>
+    <string name="pref_theme_night">Sötét</string>
     <string name="pref_requires_restart_summary">Újraindítást igényel</string>
     <string name="pref_enable_actionbar_title">Az ActionBar engedélyezése</string>
     <string name="pref_enable_actionbar_summary">A teljes képernyős alkalmazásokban</string>
@@ -113,10 +107,8 @@
     <string name="pref_wakelock_title">Képernyő bekapcsolva tartása</string>
     <string name="pref_button_shape_title">Gombforma</string>
     <string name="pref_app_sort_title">Alkalmazásrendezési sorrend</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Név</item>
-        <item>Dátum</item>
-    </string-array>
+    <string name="pref_app_sort_name">Név</string>
+    <string name="pref_app_sort_date">Dátum</string>
     <string name="pref_map_keys">Billentyűkiosztás</string>
     <string name="pref_encoding_title">Kódolás</string>
     <string name="pref_default_settings">Alapértelmezett beállítások</string>

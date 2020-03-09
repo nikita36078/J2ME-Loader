@@ -69,20 +69,16 @@
     <string name="SWAP_SIZES">মাপ অদলবদল</string>
     <string name="PREF_SYS_PROPS">সিস্টেম বৈশিষ্ট্যগুলো</string>
     <string name="PREF_ORIENTATION">স্ক্রিন ওরিয়েন্টেশন</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>ডিফল্ট</item>
-        <item>স্বয়ংক্রিয়</item>
-        <item>উলম্ব</item>
-        <item>অনুভূমিক</item>
-    </string-array>
+    <string name="pref_orientation_default">ডিফল্ট</string>
+    <string name="pref_orientation_auto">স্বয়ংক্রিয়</string>
+    <string name="pref_orientation_port">উলম্ব</string>
+    <string name="pref_orientation_land">অনুভূমিক</string>
     <string name="error">ত্রুটি</string>
     <string name="message_clear_data">আপনি কি সত্যিই ক্যাশে মুছে ফেলতে চান?</string>
     <string name="PREF_VK_TYPE">কিবোর্ডের ধরণ</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>স্বনির্ধারিত</item>
-        <item>ফোন</item>
-        <item>ফোন (তীর)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">স্বনির্ধারিত</string>
+    <string name="pref_vk_type_phone">ফোন</string>
+    <string name="pref_vk_type_phone_arrows">ফোন (তীর)</string>
     <string name="FORCE_CLOSE_CONFIRMATION">ফোর্স বন্ধ করার ফলে ডাটা ক্ষতিগ্রস্ত অথবা সম্পূর্ণভাবে ভেঙ্গে যতে পারে\nপ্রোসেস্ট?</string>
     <string name="CONFIRMATION_REQUIRED">অনুমোদন প্রয়োজন</string>
     <string name="select_dialog_title">MIDlet নির্বাচন করুন</string>
@@ -100,20 +96,16 @@
     <string name="log_saved">লগ সংরক্ষণ করা হয়েছে</string>
     <string name="common_settings">[সাধারণ সেটিংস]</string>
     <string name="pref_theme_title">থিম</string>
-    <string-array name="pref_theme_entries">
-        <item>উজ্জ্বল</item>
-        <item>গাঢ়</item>
-    </string-array>
+    <string name="pref_theme_light">উজ্জ্বল</string>
+    <string name="pref_theme_night">গাঢ়</string>
     <string name="pref_requires_restart_summary">পুনরায় শুরু করা প্রয়োজন</string>
     <string name="pref_enable_actionbar_title">ActionBar সক্রিয় করুন</string>
     <string name="pref_enable_actionbar_summary">পর্দা জুড়ে প্রদর্শন</string>
     <string name="pref_wakelock_title">স্ক্রিন চালু রাখুন</string>
     <string name="pref_button_shape_title">বাটনের আকৃতি</string>
     <string name="pref_app_sort_title">অ্যাপ সর্ট আর্ডার</string>
-    <string-array name="pref_app_sort_entries">
-        <item>নাম</item>
-        <item>তারিখ</item>
-    </string-array>
+    <string name="pref_app_sort_name">নাম</string>
+    <string name="pref_app_sort_date">তারিখ</string>
     <string name="pref_map_keys">কী মানচিত্রকরণ</string>
     <string name="pref_encoding_title">এনকোডিং</string>
     <string name="pref_default_settings">ডিফল্ট সেটিংস</string>

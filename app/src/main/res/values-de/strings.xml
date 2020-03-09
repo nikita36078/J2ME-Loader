@@ -69,20 +69,16 @@
     <string name="SWAP_SIZES">Grössen tauschen</string>
     <string name="PREF_SYS_PROPS">Systemeigenschaften</string>
     <string name="PREF_ORIENTATION">Bildschirmausrichtung</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Standard</item>
-        <item>Auto</item>
-        <item>Portrait</item>
-        <item>Landschaft</item>
-    </string-array>
+    <string name="pref_orientation_default">Standard</string>
+    <string name="pref_orientation_auto">Auto</string>
+    <string name="pref_orientation_port">Portrait</string>
+    <string name="pref_orientation_land">Landschaft</string>
     <string name="error">Fehler</string>
     <string name="message_clear_data">Möchten Sie wirklich die App-Daten löschen?</string>
     <string name="PREF_VK_TYPE">Tastaturtyp</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Anpassbar</item>
-        <item>Telefon</item>
-        <item>Telefon (Pfeile)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Anpassbar</string>
+    <string name="pref_vk_type_phone">Telefon</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (Pfeile)</string>
     <string name="PREF_LAYOUT">Layout</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
     <string name="CONFIRMATION_REQUIRED">Bestätigung erforderlich</string>
@@ -101,20 +97,16 @@
     <string name="log_saved">Protokoll wurde gespeichert</string>
     <string name="common_settings">[ALLGEMEINE EINSTELLUNGEN]</string>
     <string name="pref_theme_title">Design</string>
-    <string-array name="pref_theme_entries">
-        <item>Hell</item>
-        <item>Dunkel</item>
-    </string-array>
+    <string name="pref_theme_light">Hell</string>
+    <string name="pref_theme_night">Dunkel</string>
     <string name="pref_requires_restart_summary">Erfordert Neustart</string>
     <string name="pref_enable_actionbar_title">ActionBar aktivieren</string>
     <string name="pref_enable_actionbar_summary">In Vollbild-Anwendungen</string>
     <string name="pref_wakelock_title">Bildschirm anlassen</string>
     <string name="pref_button_shape_title">Tastenform</string>
     <string name="pref_app_sort_title">App-Sortierung</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Name</item>
-        <item>Datum</item>
-    </string-array>
+    <string name="pref_app_sort_name">Name</string>
+    <string name="pref_app_sort_date">Datum</string>
     <string name="pref_map_keys">Tastenzuordnung</string>
     <string name="pref_encoding_title">Zeichenkodierung</string>
     <string name="pref_default_settings">Standardeinstellungen</string>

@@ -70,20 +70,16 @@
     <string name="SWAP_SIZES">Поміняти розміри</string>
     <string name="PREF_SYS_PROPS">Властивості системи</string>
     <string name="PREF_ORIENTATION">Орієнтація екрану</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>За замовчуванням</item>
-        <item>Авто</item>
-        <item>Портретна</item>
-        <item>Альбомна</item>
-    </string-array>
+    <string name="pref_orientation_default">За замовчуванням</string>
+    <string name="pref_orientation_auto">Авто</string>
+    <string name="pref_orientation_port">Портретна</string>
+    <string name="pref_orientation_land">Альбомна</string>
     <string name="error">Помилка</string>
     <string name="message_clear_data">Ви дійсно хочете очистити програмні дані?</string>
     <string name="PREF_VK_TYPE">Тип клавіатури</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Настроюваний</item>
-        <item>Телефон</item>
-        <item>Телефонна (стрілки)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Настроюваний</string>
+    <string name="pref_vk_type_phone">Телефон</string>
+    <string name="pref_vk_type_phone_arrows">Телефонна (стрілки)</string>
     <string name="PREF_LAYOUT">Розкладка</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання додатку може призвести до втрати даних або навіть до повного виведення його з ладу! \nПродовжити?</string>
     <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
@@ -102,10 +98,8 @@
     <string name="log_saved">Журнал помилок збережено</string>
     <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
     <string name="pref_theme_title">Тема</string>
-    <string-array name="pref_theme_entries">
-        <item>Світла</item>
-        <item>Темна</item>
-    </string-array>
+    <string name="pref_theme_light">Світла</string>
+    <string name="pref_theme_night">Темна</string>
     <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
     <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
     <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
@@ -113,10 +107,8 @@
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string name="pref_app_sort_title">Порядок сортування додатків</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Назва</item>
-        <item>Дата</item>
-    </string-array>
+    <string name="pref_app_sort_name">Назва</string>
+    <string name="pref_app_sort_date">Дата</string>
     <string name="pref_map_keys">Зіставлення клавіш</string>
     <string name="pref_encoding_title">Кодування</string>
     <string name="pref_default_settings">Налаштування за замовчуванням</string>

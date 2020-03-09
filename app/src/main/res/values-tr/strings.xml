@@ -69,20 +69,16 @@
     <string name="SWAP_SIZES">Boyutları değiştir</string>
     <string name="PREF_SYS_PROPS">Sistem özellikleri</string>
     <string name="PREF_ORIENTATION">Ekran yönü</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Varsayılan</item>
-        <item>Otomatik</item>
-        <item>Dikey</item>
-        <item>Yatay</item>
-    </string-array>
+    <string name="pref_orientation_default">Varsayılan</string>
+    <string name="pref_orientation_auto">Otomatik</string>
+    <string name="pref_orientation_port">Dikey</string>
+    <string name="pref_orientation_land">Yatay</string>
     <string name="error">Hata</string>
     <string name="message_clear_data">Gerçekten uygulama önbelleğini temizlemek istiyor musunuz?</string>
     <string name="PREF_VK_TYPE">Klavye tipi</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Özelleştirilebilir</item>
-        <item>Telefon</item>
-        <item>Telefon (oklar)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Özelleştirilebilir</string>
+    <string name="pref_vk_type_phone">Telefon</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (oklar)</string>
     <string name="PREF_LAYOUT">Düzen</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Uygulamayı zorla kapatmak veri kaybına neden olabilir veya tamamen bozabilir!\nDevam edilsin mi?</string>
     <string name="CONFIRMATION_REQUIRED">Onaylama gerekli</string>
@@ -101,20 +97,16 @@
     <string name="log_saved">Günlük kaydedildi</string>
     <string name="common_settings">[GENEL AYARLAR]</string>
     <string name="pref_theme_title">Tema</string>
-    <string-array name="pref_theme_entries">
-        <item>Açık</item>
-        <item>Koyu</item>
-    </string-array>
+    <string name="pref_theme_light">Açık</string>
+    <string name="pref_theme_night">Koyu</string>
     <string name="pref_requires_restart_summary">Yeniden başlatma gerektirir</string>
     <string name="pref_enable_actionbar_title">Başlık çubuğunu etkinleştir</string>
     <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
     <string name="pref_wakelock_title">Ekranı açık tut</string>
     <string name="pref_button_shape_title">Tuş şekli</string>
     <string name="pref_app_sort_title">Uygulamaları sırala</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Ada göre</item>
-        <item>Tarihe göre</item>
-    </string-array>
+    <string name="pref_app_sort_name">Ada göre</string>
+    <string name="pref_app_sort_date">Tarihe göre</string>
     <string name="pref_map_keys">Tuş atamaları</string>
     <string name="pref_encoding_title">Kodlama</string>
     <string name="pref_default_settings">Varsayılan ayarlar</string>

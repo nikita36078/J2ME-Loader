@@ -70,20 +70,16 @@
     <string name="SWAP_SIZES">Hoán đổi K. thước</string>
     <string name="PREF_SYS_PROPS">Thuộc tính hệ thống</string>
     <string name="PREF_ORIENTATION">Định hướng màn hình</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Mặc định</item>
-        <item>Tự động</item>
-        <item>Chiều dọc</item>
-        <item>Chiều ngang</item>
-    </string-array>
+    <string name="pref_orientation_default">Mặc định</string>
+    <string name="pref_orientation_auto">Tự động</string>
+    <string name="pref_orientation_port">Chiều dọc</string>
+    <string name="pref_orientation_land">Chiều ngang</string>
     <string name="error">Lỗi</string>
     <string name="message_clear_data">Bạn thực sự muốn xoá dữ liệu ứng dụng?</string>
     <string name="PREF_VK_TYPE">Kiểu bàn phím</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Tùy chỉnh</item>
-        <item>Điện thoại</item>
-        <item>Điện thoại(mũi tên)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Tùy chỉnh</string>
+    <string name="pref_vk_type_phone">Điện thoại</string>
+    <string name="pref_vk_type_phone_arrows">Điện thoại(mũi tên)</string>
     <string name="PREF_LAYOUT">Bố cục</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Bắt buộc đóng ứng dụng có thể dẫn đến mất dữ liệu hoặc thậm chí hư hại hoàn toàn!\nTiến hành?</string>
     <string name="CONFIRMATION_REQUIRED">Yêu cầu xác nhận</string>
@@ -102,10 +98,8 @@
     <string name="log_saved">Log đã được lưu</string>
     <string name="common_settings">[THIẾT LẬP CHUNG]</string>
     <string name="pref_theme_title">Chủ đề</string>
-    <string-array name="pref_theme_entries">
-        <item>Sáng</item>
-        <item>Tối</item>
-    </string-array>
+    <string name="pref_theme_light">Sáng</string>
+    <string name="pref_theme_night">Tối</string>
     <string name="pref_requires_restart_summary">Yêu cầu khởi động lại</string>
     <string name="pref_enable_actionbar_title">Bật thanh hành động</string>
     <string name="pref_enable_actionbar_summary">Trong các ứng dụng toàn màn hình</string>
@@ -113,10 +107,8 @@
     <string name="pref_wakelock_title">Giữ màn hình mở</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
     <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Tên</item>
-        <item>Ngày</item>
-    </string-array>
+    <string name="pref_app_sort_name">Tên</string>
+    <string name="pref_app_sort_date">Ngày</string>
     <string name="pref_map_keys">Phím ánh xạ</string>
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>
