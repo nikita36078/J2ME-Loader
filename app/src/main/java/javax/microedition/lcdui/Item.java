@@ -191,6 +191,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		int vwrap = LayoutParams.WRAP_CONTENT;
 		int gravity = Gravity.LEFT;
 
+		if (this instanceof ImageItem) {
+			hwrap = LayoutParams.WRAP_CONTENT;
+		}
+
 		if ((layoutmode & LAYOUT_SHRINK) != 0) {
 			hwrap = LayoutParams.WRAP_CONTENT;
 		} else if ((layoutmode & LAYOUT_EXPAND) != 0) {
