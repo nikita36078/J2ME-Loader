@@ -70,10 +70,12 @@ public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 
 		for (int i = 0; i < v.size(); i++) {
 			GraphicObject go = v.elementAt(i);
-			if (go instanceof Sprite && go.getVisible()) {
-				((Sprite) go).paint(g);
-			} else if (go instanceof TiledBackground) {
-				((TiledBackground)go).paint(g);
+			if (go.getVisible()) {
+				if (go instanceof Sprite) {
+					((Sprite) go).paint(g);
+				} else if (go instanceof TiledBackground) {
+					((TiledBackground) go).paint(g);
+				}
 			}
 		}
 
