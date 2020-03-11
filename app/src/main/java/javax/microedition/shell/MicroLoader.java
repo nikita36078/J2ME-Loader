@@ -122,6 +122,7 @@ public class MicroLoader {
 		File resDir = new File(path, Config.MIDLET_RES_DIR);
 		ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
 				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
+		ContextHolder.createResourceMap();
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
 		Log.i(TAG, "MIDlet-Name: " + MyClassLoader.getName());
 		return (MIDlet) loader.loadClass(mainClass).newInstance();
