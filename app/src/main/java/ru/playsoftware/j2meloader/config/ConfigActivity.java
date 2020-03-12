@@ -222,7 +222,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
+				sbScaleRatio.setProgress(parseInt(s.toString()));
 			}
 
 			@Override
@@ -331,6 +331,20 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		fontAdapter.add(title);
 	}
 
+	private int parseInt(String s) {
+		return parseInt(s, 10);
+	}
+
+	private int parseInt(String s, int radix) {
+		int result;
+		try {
+			result = Integer.parseInt(s, radix);
+		} catch (NumberFormatException e) {
+			result = 0;
+		}
+		return result;
+	}
+
 	@SuppressLint("SetTextI18n")
 	public void loadParams() {
 		params.load(defaultConfig);
@@ -382,9 +396,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		try {
 			params.edit();
 
-			params.putInt("ScreenWidth", Integer.parseInt(tfScreenWidth.getText().toString()));
-			params.putInt("ScreenHeight", Integer.parseInt(tfScreenHeight.getText().toString()));
-			params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
+			params.putInt("ScreenWidth", parseInt(tfScreenWidth.getText().toString()));
+			params.putInt("ScreenHeight", parseInt(tfScreenHeight.getText().toString()));
+			params.putInt("ScreenBackgroundColor", parseInt(tfScreenBack.getText().toString(), 16));
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
@@ -396,14 +410,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("ForceFullscreen", cxForceFullscreen.isChecked());
 			params.putBoolean("ShowFps", cxShowFps.isChecked());
 			params.putBoolean("LimitFps", cxLimitFps.isChecked());
-			params.putInt("FpsLimit", Integer.parseInt(tfFpsLimit.getText().toString()));
+			params.putInt("FpsLimit", parseInt(tfFpsLimit.getText().toString()));
 
-			params.putInt("FontSizeSmall",
-					Integer.parseInt(tfFontSizeSmall.getText().toString()));
-			params.putInt("FontSizeMedium",
-					Integer.parseInt(tfFontSizeMedium.getText().toString()));
-			params.putInt("FontSizeLarge",
-					Integer.parseInt(tfFontSizeLarge.getText().toString()));
+			params.putInt("FontSizeSmall", parseInt(tfFontSizeSmall.getText().toString()));
+			params.putInt("FontSizeMedium", parseInt(tfFontSizeMedium.getText().toString()));
+			params.putInt("FontSizeLarge", parseInt(tfFontSizeLarge.getText().toString()));
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
 			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
@@ -413,18 +424,17 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
 			params.putInt("Layout", spLayout.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
-			params.putInt("VirtualKeyboardDelay",
-					Integer.parseInt(tfVKHideDelay.getText().toString()));
+			params.putInt("VirtualKeyboardDelay", parseInt(tfVKHideDelay.getText().toString()));
 			params.putInt("VirtualKeyboardColorBackground",
-					Integer.parseInt(tfVKBack.getText().toString(), 16));
+					parseInt(tfVKBack.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorForeground",
-					Integer.parseInt(tfVKFore.getText().toString(), 16));
+					parseInt(tfVKFore.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorBackgroundSelected",
-					Integer.parseInt(tfVKSelBack.getText().toString(), 16));
+					parseInt(tfVKSelBack.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorForegroundSelected",
-					Integer.parseInt(tfVKSelFore.getText().toString(), 16));
+					parseInt(tfVKSelFore.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorOutline",
-					Integer.parseInt(tfVKOutline.getText().toString(), 16));
+					parseInt(tfVKOutline.getText().toString(), 16));
 
 			params.apply();
 		} catch (Throwable t) {
@@ -540,7 +550,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				};
 				break;
 			case R.id.cmdScreenBack:
-				color = Integer.parseInt(tfScreenBack.getText().toString(), 16);
+				color = parseInt(tfScreenBack.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
@@ -554,7 +564,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				};
 				break;
 			case R.id.cmdVKBack:
-				color = Integer.parseInt(tfVKBack.getText().toString(), 16);
+				color = parseInt(tfVKBack.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
@@ -568,7 +578,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				};
 				break;
 			case R.id.cmdVKFore:
-				color = Integer.parseInt(tfVKFore.getText().toString(), 16);
+				color = parseInt(tfVKFore.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
@@ -582,7 +592,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				};
 				break;
 			case R.id.cmdVKSelFore:
-				color = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
+				color = parseInt(tfVKSelFore.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
@@ -596,7 +606,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				};
 				break;
 			case R.id.cmdVKSelBack:
-				color = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
+				color = parseInt(tfVKSelBack.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
@@ -610,7 +620,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				};
 				break;
 			case R.id.cmdVKOutline:
-				color = Integer.parseInt(tfVKOutline.getText().toString(), 16);
+				color = parseInt(tfVKOutline.getText().toString(), 16);
 
 				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
