@@ -34,6 +34,6 @@ System requirements: Android 4.0+
 <img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
 
 ## License
-> Copyright 2017-2019 Nikita Shakarun.
+> Copyright 2017-2020 Nikita Shakarun.
 > Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)
