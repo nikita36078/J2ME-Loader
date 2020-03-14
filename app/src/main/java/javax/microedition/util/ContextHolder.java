@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Process;
+import android.os.Vibrator;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -29,25 +30,29 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.shell.MicroActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {
+
 	private static Display display;
 	private static VirtualKeyboard vk;
-	private static AppCompatActivity currentActivity;
+	private static WeakReference<MicroActivity> currentActivity;
+	private static Vibrator vibrator;
+	private static Context appContext;
 	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 
-	public static Context getContext() {
-		return currentActivity.getApplicationContext();
+	public static Context getAppContext() {
+		return appContext;
 	}
 
 	public static VirtualKeyboard getVk() {
@@ -60,7 +65,7 @@ public class ContextHolder {
 
 	private static Display getDisplay() {
 		if (display == null) {
-			display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+			display = ((WindowManager) Objects.requireNonNull(getAppContext().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
 		}
 		return display;
 	}
@@ -73,12 +78,9 @@ public class ContextHolder {
 		return getDisplay().getHeight();
 	}
 
-	public static void setCurrentActivity(AppCompatActivity activity) {
-		currentActivity = activity;
-	}
-
-	public static AppCompatActivity getCurrentActivity() {
-		return currentActivity;
+	public static void setCurrentActivity(MicroActivity activity) {
+		appContext = activity.getApplicationContext();
+		currentActivity = new WeakReference<>(activity);
 	}
 
 	public static void addActivityResultListener(ActivityResultListener listener) {
@@ -118,12 +120,12 @@ public class ContextHolder {
 	}
 
 	public static File getCacheDir() {
-		return getContext().getExternalCacheDir();
+		return getAppContext().getExternalCacheDir();
 	}
 
 	public static boolean requestPermission(String permission) {
-		if (ContextCompat.checkSelfPermission(currentActivity, permission) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(currentActivity, new String[]{permission}, 0);
+		if (ContextCompat.checkSelfPermission(currentActivity.get(), permission) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(currentActivity.get(), new String[]{permission}, 0);
 			return false;
 		} else {
 			return true;
@@ -134,11 +136,31 @@ public class ContextHolder {
 	 * Kill midlet process.
 	 */
 	public static void notifyDestroyed() {
-		currentActivity.finish();
+		MicroActivity activity = currentActivity.get();
+		if (activity != null) {
+			activity.finish();
+		}
 		Process.killProcess(Process.myPid());
 	}
 
 	public static MicroActivity getActivity() {
-		return (MicroActivity) currentActivity;
+		return currentActivity.get();
+	}
+
+	public static boolean vibrate(int duration) {
+		if (vibrator == null) {
+			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		}
+		if (vibrator == null || !vibrator.hasVibrator()) {
+			return false;
+		}
+		if (duration > 0) {
+			vibrator.vibrate(duration);
+		} else if (duration < 0) {
+			throw new IllegalStateException();
+		} else {
+			vibrator.cancel();
+		}
+		return true;
 	}
 }

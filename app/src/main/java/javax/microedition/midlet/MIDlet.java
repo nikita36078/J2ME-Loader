@@ -24,11 +24,16 @@ import android.net.Uri;
 import java.util.Map;
 
 import javax.microedition.io.ConnectionNotFoundException;
+import javax.microedition.lcdui.Display;
 import javax.microedition.util.ContextHolder;
 
 public abstract class MIDlet {
 
 	private static Map<String, String> properties;
+
+	protected MIDlet() {
+		Display.getDisplay(this); // init display for this instance
+	}
 
 	public static void initProps(Map<String, String> p) {
 		properties = p;
@@ -77,7 +82,7 @@ public abstract class MIDlet {
 	public boolean platformRequest(String url)
 			throws ConnectionNotFoundException {
 		try {
-			ContextHolder.getCurrentActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+			ContextHolder.getAppContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		} catch (ActivityNotFoundException e) {
 			throw new ConnectionNotFoundException();
 		}

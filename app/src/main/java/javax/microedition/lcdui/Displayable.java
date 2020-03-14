@@ -22,19 +22,16 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import javax.microedition.lcdui.event.CommandActionEvent;
-import javax.microedition.lcdui.event.Event;
-import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class Displayable {
 	private MicroActivity parent;
@@ -48,7 +45,6 @@ public abstract class Displayable {
 	private LinearLayout layout;
 	private TextView marquee;
 
-	private static EventQueue queue;
 	protected static int virtualWidth;
 	protected static int virtualHeight;
 
@@ -74,11 +70,6 @@ public abstract class Displayable {
 		}
 	};
 
-	static {
-		queue = new EventQueue();
-		queue.startProcessing();
-	}
-
 	public Displayable() {
 		commands = new ArrayList<>();
 		listener = null;
@@ -101,9 +92,9 @@ public abstract class Displayable {
 		parent = activity;
 	}
 
-	public AppCompatActivity getParentActivity() {
+	public MicroActivity getParentActivity() {
 		if (parent == null) {
-			return ContextHolder.getCurrentActivity();
+			return ContextHolder.getActivity();
 		}
 		return parent;
 	}
@@ -134,7 +125,7 @@ public abstract class Displayable {
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
-			layout.setLayoutParams(new LinearLayout.LayoutParams(
+			layout.setLayoutParams(new FrameLayout.LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 			marquee = new TextView(context);
@@ -184,16 +175,8 @@ public abstract class Displayable {
 
 	public void fireCommandAction(Command c, Displayable d) {
 		if (listener != null) {
-			queue.postEvent(CommandActionEvent.getInstance(listener, c, d));
+			Display.postEvent(CommandActionEvent.getInstance(listener, c, d));
 		}
-	}
-
-	public EventQueue getEventQueue() {
-		return queue;
-	}
-
-	public static void postEvent(Event event) {
-		queue.postEvent(event);
 	}
 
 	public int getWidth() {
@@ -235,7 +218,7 @@ public abstract class Displayable {
 		Command[] array = commands.toArray(new Command[0]);
 		for (Command cmd : array) {
 			if (cmd.hashCode() == id) {
-				postEvent(CommandActionEvent.getInstance(listener, cmd, this));
+				Display.postEvent(CommandActionEvent.getInstance(listener, cmd, this));
 			}
 		}
 		return true;

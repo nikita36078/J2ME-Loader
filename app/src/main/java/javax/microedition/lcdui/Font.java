@@ -79,7 +79,8 @@ public class Font {
 
 	public Font(Typeface face, int style, float size, boolean underline) {
 		if (applyDimensions) {
-			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, ContextHolder.getContext().getResources().getDisplayMetrics());
+			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size,
+					ContextHolder.getAppContext().getResources().getDisplayMetrics());
 		}
 
 		paint = new Paint();
@@ -93,11 +94,12 @@ public class Font {
 
 	// Font for keyboard
 	public Font() {
-		AssetManager manager = ContextHolder.getContext().getAssets();
+		AssetManager manager = ContextHolder.getAppContext().getAssets();
 		Typeface typeface = Typeface.createFromAsset(manager, "Roboto-Regular.ttf");
 		paint = new Paint();
 		paint.setTypeface(typeface);
-		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getContext().getResources().getDisplayMetrics());
+		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD,
+				ContextHolder.getAppContext().getResources().getDisplayMetrics());
 		paint.setTextSize(size);
 	}
 

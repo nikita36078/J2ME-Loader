@@ -20,7 +20,6 @@ package javax.microedition.lcdui.pointer;
 import java.util.HashSet;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.pointer.VirtualKeyboard.VirtualKey;
 
 public class KeyRepeater implements Runnable {

@@ -16,15 +16,15 @@
 
 package com.samsung.util;
 
-import javax.microedition.lcdui.Display;
+import javax.microedition.util.ContextHolder;
 
 public class Vibration {
 	public static void start(int duration, int strength) {
-		Display.getDisplay(null).vibrate(duration * 1000);
+		ContextHolder.vibrate(duration * 1000);
 	}
 
 	public static void stop() {
-		Display.getDisplay(null).vibrate(0);
+		ContextHolder.vibrate(0);
 	}
 
 	public static boolean isSupported() {

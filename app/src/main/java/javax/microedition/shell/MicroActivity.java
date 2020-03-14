@@ -32,6 +32,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -75,7 +76,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
 	private boolean keyLongPressed;
-	private LinearLayout layout;
+	private FrameLayout layout;
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
 

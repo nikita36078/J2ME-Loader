@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -154,7 +153,7 @@ public class DiscoveryAgent {
 					}
 					listener.serviceSearchCompleted(transID, (records.isEmpty() && !supportsSPP) ? DiscoveryListener.SERVICE_SEARCH_NO_RECORDS :
 							stop ? DiscoveryListener.SERVICE_SEARCH_TERMINATED : DiscoveryListener.SERVICE_SEARCH_COMPLETED);
-					ContextHolder.getContext().unregisterReceiver(this);
+					ContextHolder.getAppContext().unregisterReceiver(this);
 					synchronized (transList) {
 						transList.remove(this);
 					}
@@ -219,7 +218,7 @@ public class DiscoveryAgent {
 			}
 		}).start();
 
-		ContextHolder.getContext().registerReceiver(new BroadcastReceiver() {
+		ContextHolder.getAppContext().registerReceiver(new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
 				if (BluetoothDevice.ACTION_FOUND.equals(action)) {
@@ -241,7 +240,7 @@ public class DiscoveryAgent {
 							}
 						}
 					}
-					ContextHolder.getContext().unregisterReceiver(this);
+					ContextHolder.getAppContext().unregisterReceiver(this);
 				}
 			}
 		}, filter);
@@ -289,7 +288,7 @@ public class DiscoveryAgent {
 
 		final Transaction curTrans = new Transaction(maxID, attrSet, uuidSet, btDev, listener);
 		transList.add(curTrans);
-		ContextHolder.getContext().registerReceiver(curTrans, new IntentFilter(BluetoothDevice.ACTION_UUID));
+		ContextHolder.getAppContext().registerReceiver(curTrans, new IntentFilter(BluetoothDevice.ACTION_UUID));
 
 		if (!adapter.isDiscovering()) {
 			synchronized (transList) {

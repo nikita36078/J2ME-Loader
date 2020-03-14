@@ -24,7 +24,7 @@
 
 package com.siemens.mp.game;
 
-import javax.microedition.lcdui.Display;
+import javax.microedition.util.ContextHolder;
 
 public class Vibrator {
 	public static void startVibrator() {
@@ -34,6 +34,6 @@ public class Vibrator {
 	}
 
 	public static void triggerVibrator(int duration) {
-		Display.getDisplay(null).vibrate(duration);
+		ContextHolder.vibrate(duration);
 	}
 }

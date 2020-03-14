@@ -17,15 +17,15 @@
 
 package javax.microedition.lcdui;
 
-import android.content.Context;
-import android.os.Vibrator;
-
+import javax.microedition.lcdui.event.Event;
+import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import androidx.appcompat.app.AlertDialog;
 
+@SuppressWarnings("unused")
 public class Display {
 	public static final int LIST_ELEMENT = 1;
 	public static final int CHOICE_GROUP_ELEMENT = 2;
@@ -49,10 +49,13 @@ public class Display {
 			};
 
 	private static Display instance;
+	static EventQueue queue = new EventQueue();
+
+	static {
+		queue.startProcessing();
+	}
 
 	private Displayable current;
-
-	private Vibrator vibrator;
 
 	public static Display getDisplay(MIDlet midlet) {
 		if (instance == null && midlet != null) {
@@ -66,6 +69,14 @@ public class Display {
 
 	public static void initDisplay() {
 		instance = null;
+	}
+
+	public static void postEvent(Event event) {
+		queue.postEvent(event);
+	}
+
+	static EventQueue getEventQueue() {
+		return queue;
 	}
 
 	public void setCurrent(Displayable disp) {
@@ -121,28 +132,18 @@ public class Display {
 	}
 
 	public void callSerially(Runnable r) {
-		Displayable.postEvent(RunnableEvent.getInstance(r));
+		postEvent(RunnableEvent.getInstance(r));
 	}
 
 	public boolean flashBacklight(int duration) {
 		return false;
 	}
 
+	/**
+	 * @since MIDP 2.0
+	 */
 	public boolean vibrate(int duration) {
-		if (vibrator == null) {
-			vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-		}
-		if (vibrator == null || !vibrator.hasVibrator()) {
-			return false;
-		}
-		if (duration > 0) {
-			vibrator.vibrate(duration);
-		} else if (duration < 0) {
-			throw new IllegalStateException();
-		} else {
-			vibrator.cancel();
-		}
-		return true;
+		return ContextHolder.vibrate(duration);
 	}
 
 	public void setCurrentItem(Item item) {

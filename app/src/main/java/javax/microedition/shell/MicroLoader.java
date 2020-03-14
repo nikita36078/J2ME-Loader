@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,8 +106,9 @@ public class MicroLoader {
 		return midlets;
 	}
 
-	public MIDlet loadMIDlet(String mainClass)
-			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	MIDlet loadMIDlet(String mainClass)
+			throws IOException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		File dexSource = new File(path, Config.MIDLET_DEX_FILE);
 		File dexTargetDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
 		if (dexTargetDir.exists()) {
@@ -124,7 +127,12 @@ public class MicroLoader {
 				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
 		Log.i(TAG, "MIDlet-Name: " + AppClassLoader.getName());
-		return (MIDlet) loader.loadClass(mainClass).newInstance();
+		//noinspection unchecked
+		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
+		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
+		init.setAccessible(true);
+		MIDlet midlet = init.newInstance();
+		return midlet;
 	}
 
 	private void setProperties() {

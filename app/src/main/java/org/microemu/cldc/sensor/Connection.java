@@ -71,7 +71,7 @@ public class Connection implements SensorConnection, ConnectionImplementation, S
 		}
 		timestamps = new long[dataLength];
 
-		sensorManager = (android.hardware.SensorManager) ContextHolder.getContext().getSystemService(Context.SENSOR_SERVICE);
+		sensorManager = (android.hardware.SensorManager) ContextHolder.getAppContext().getSystemService(Context.SENSOR_SERVICE);
 		int type = AndroidSensorManager.getSensorType(sensorInfo.getQuantity());
 		sensor = sensorManager.getDefaultSensor(type);
 		state = STATE_OPENED;
