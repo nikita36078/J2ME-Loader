@@ -19,6 +19,7 @@ package javax.microedition.shell;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.os.Process;
 import android.util.Log;
 
 import javax.microedition.midlet.MIDlet;
@@ -67,14 +68,6 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	}
 
 	static void destroyApp() {
-		new Thread(() -> {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			ContextHolder.notifyDestroyed();
-		}, "ForceDestroyTimer").start();
 		instance.handler.obtainMessage(DESTROY, 1).sendToTarget();
 	}
 
@@ -105,13 +98,19 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 				}
 				break;
 			case DESTROY:
-				if (!started) {
-					ContextHolder.notifyDestroyed();
-					return true;
-				}
-				started = false;
+				new Thread(() -> {
+					if (started) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Process.killProcess(Process.myPid());
+					}
+				}, "ForceDestroyTimer").start();
 				try {
 					midlet.destroyApp(true);
+					started = false;
 					ContextHolder.notifyDestroyed();
 				} catch (MIDletStateChangeException e) {
 					Log.w(TAG, "destroyApp:", e);

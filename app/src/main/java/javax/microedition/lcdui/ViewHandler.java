@@ -33,4 +33,8 @@ public class ViewHandler {
 	public static void postEvent(Runnable event) {
 		handler.post(event);
 	}
+
+	public static void postDelayed(Runnable event, long delayMillis) {
+		handler.postDelayed(event, delayMillis);
+	}
 }

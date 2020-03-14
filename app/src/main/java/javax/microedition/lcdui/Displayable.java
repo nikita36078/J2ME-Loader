@@ -192,7 +192,7 @@ public abstract class Displayable {
 		return queue;
 	}
 
-	public void postEvent(Event event) {
+	public static void postEvent(Event event) {
 		queue.postEvent(event);
 	}
 

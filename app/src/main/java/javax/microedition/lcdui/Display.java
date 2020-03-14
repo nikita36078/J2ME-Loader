@@ -22,12 +22,9 @@ import android.os.Vibrator;
 
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
-import javax.microedition.midlet.MIDletStateChangeException;
-import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class Display {
 	public static final int LIST_ELEMENT = 1;
@@ -53,22 +50,18 @@ public class Display {
 
 	private static Display instance;
 
-	private MIDlet context;
 	private Displayable current;
-	private AppCompatActivity activity;
 
-	private static Vibrator vibrator;
+	private Vibrator vibrator;
 
 	public static Display getDisplay(MIDlet midlet) {
 		if (instance == null && midlet != null) {
-			instance = new Display(midlet);
+			instance = new Display();
 		}
 		return instance;
 	}
 
-	private Display(MIDlet midlet) {
-		context = midlet;
-		activity = ContextHolder.getCurrentActivity();
+	private Display() {
 	}
 
 	public static void initDisplay() {
@@ -100,18 +93,11 @@ public class Display {
 	}
 
 	private void showAlert(Alert alert) {
-		activity.runOnUiThread(() -> {
+		ViewHandler.postEvent(() -> {
 			AlertDialog alertDialog = alert.prepareDialog();
 			alertDialog.show();
 			if (alert.finiteTimeout()) {
-				(new Thread(() -> {
-					try {
-						Thread.sleep(alert.getTimeout());
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					alertDialog.dismiss();
-				}, "MIDletAlertThread")).start();
+				ViewHandler.postDelayed(alertDialog::dismiss, alert.getTimeout());
 			}
 		});
 	}
@@ -127,25 +113,7 @@ public class Display {
 	}
 
 	private void showCurrent() {
-		((MicroActivity) activity).setCurrent(current);
-	}
-
-	public void activityResumed() {
-		try {
-			context.startApp();
-		} catch (MIDletStateChangeException e) {
-			e.printStackTrace();
-		} catch (IllegalThreadStateException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void activityStopped() {
-		try {
-			context.pauseApp();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+		ContextHolder.getActivity().setCurrent(current);
 	}
 
 	public Displayable getCurrent() {
@@ -153,11 +121,7 @@ public class Display {
 	}
 
 	public void callSerially(Runnable r) {
-		if (current != null) {
-			current.postEvent(RunnableEvent.getInstance(r));
-		} else {
-			(new Thread(r, "MIDletDisplayThread")).start();
-		}
+		Displayable.postEvent(RunnableEvent.getInstance(r));
 	}
 
 	public boolean flashBacklight(int duration) {
@@ -168,7 +132,7 @@ public class Display {
 		if (vibrator == null) {
 			vibrator = (Vibrator) ContextHolder.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 		}
-		if (!vibrator.hasVibrator()) {
+		if (vibrator == null || !vibrator.hasVibrator()) {
 			return false;
 		}
 		if (duration > 0) {
