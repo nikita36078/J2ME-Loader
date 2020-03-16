@@ -22,11 +22,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.LruCache;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.game.Sprite;
 import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class Image {
 
@@ -86,7 +89,7 @@ public class Image {
 			if (stream == null) {
 				throw new IOException("Can't read image: " + resname);
 			}
-			b = BitmapFactory.decodeStream(stream);
+			b = PNGUtils.getFixedBitmap(stream);
 			stream.close();
 			if (b == null) {
 				throw new IOException("Can't decode image: " + resname);
@@ -96,12 +99,21 @@ public class Image {
 		}
 	}
 
-	public static Image createImage(InputStream stream) {
-		return new Image(BitmapFactory.decodeStream(stream));
+	public static Image createImage(InputStream stream) throws IOException {
+		Bitmap b = PNGUtils.getFixedBitmap(stream);
+		if (b == null) {
+			throw new IOException("Can't decode image");
+		}
+		return new Image(b);
 	}
 
 	public static Image createImage(byte[] imageData, int imageOffset, int imageLength) {
-		return new Image(BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength));
+		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
+		Bitmap b = PNGUtils.getFixedBitmap(byteArrayInputStream);
+		if (b == null) {
+			throw new IllegalArgumentException("Can't decode image");
+		}
+		return new Image(b);
 	}
 
 	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
