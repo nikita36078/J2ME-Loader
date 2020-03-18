@@ -22,6 +22,10 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Log;
 
+import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.util.ContextHolder;
@@ -68,6 +72,23 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	}
 
 	static void destroyApp() {
+		new Thread(() -> {
+			if (instance.started) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				Process.killProcess(Process.myPid());
+			}
+		}, "ForceDestroyTimer").start();
+		Displayable current = ContextHolder.getActivity().getCurrent();
+		if (current instanceof Canvas) {
+			Canvas canvas = (Canvas) current;
+			int keyCode = Canvas.convertKeyCode(Canvas.KEY_END);
+			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, keyCode));
+			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_RELEASED, keyCode));
+		}
 		instance.handler.obtainMessage(DESTROY, 1).sendToTarget();
 	}
 
@@ -98,16 +119,6 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 				}
 				break;
 			case DESTROY:
-				new Thread(() -> {
-					if (started) {
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						Process.killProcess(Process.myPid());
-					}
-				}, "ForceDestroyTimer").start();
 				try {
 					midlet.destroyApp(true);
 					started = false;
