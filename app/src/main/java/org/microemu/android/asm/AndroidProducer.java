@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class AndroidProducer {
@@ -70,21 +71,7 @@ public class AndroidProducer {
 				if (zipEntry.getName().length() > 0 && !zipEntry.isDirectory()) {
 					zis = zip.getInputStream(zipEntry);
 					String name = zipEntry.getName();
-					int size = 0;
-					int read;
-					int length = buffer.length;
-					while ((read = zis.read(buffer, size, length)) > 0) {
-						size += read;
-
-						length = BUFFER_SIZE;
-						if (size + length > buffer.length) {
-							byte[] newInputBuffer = new byte[size + length];
-							System.arraycopy(buffer, 0, newInputBuffer, 0, buffer.length);
-							buffer = newInputBuffer;
-						}
-					}
-					byte[] inBuffer = new byte[size];
-					System.arraycopy(buffer, 0, inBuffer, 0, size);
+					byte[] inBuffer = IOUtils.toByteArray(zis);
 					resources.put(name, inBuffer);
 				}
 			}

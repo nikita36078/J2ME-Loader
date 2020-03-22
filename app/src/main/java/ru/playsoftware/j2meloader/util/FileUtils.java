@@ -39,7 +39,6 @@ import java.util.Map;
 public class FileUtils {
 
 	private static String TAG = FileUtils.class.getName();
-	private static final int BUFFER_SIZE = 1024;
 
 	public static void copyFiles(String src, String dest, FilenameFilter filter) {
 		File fsrc = new File(src);
@@ -122,12 +121,8 @@ public class FileUtils {
 		}
 		try {
 			out = new FileOutputStream(file);
-			byte[] buf = new byte[BUFFER_SIZE];
-			int len;
 			out.write(signature);
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
+			IOUtils.copy(in, out);
 		} finally {
 			if (out != null) {
 				out.close();

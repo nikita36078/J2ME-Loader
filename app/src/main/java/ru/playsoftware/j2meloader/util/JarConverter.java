@@ -78,11 +78,7 @@ public class JarConverter {
 		connection.setConnectTimeout(15000);
 		InputStream inputStream = connection.getInputStream();
 		OutputStream outputStream = new FileOutputStream(outputJar);
-		byte[] buffer = new byte[2048];
-		int length;
-		while ((length = inputStream.read(buffer)) > 0) {
-			outputStream.write(buffer, 0, length);
-		}
+		IOUtils.copy(inputStream, outputStream);
 		inputStream.close();
 		outputStream.close();
 		connection.disconnect();
