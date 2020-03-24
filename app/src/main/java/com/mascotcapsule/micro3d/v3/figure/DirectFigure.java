@@ -277,12 +277,13 @@ public class DirectFigure {
 	}
 
 	private void addFTriangles(int numPrimitives, int[] vertexCoords, int[] colors) {
-		int x, y, z, r, g, b, a;
+		int x, y, z;
+		float r, g, b, a;
 		int color = colors[0];
-		r = (color >> 16) & 0xFF;
-		g = (color >> 8) & 0xFF;
-		b = color & 0xFF;
-		a = 0xFF;
+		r = ((color >> 16) & 0xFF) / 255F;
+		g = ((color >> 8) & 0xFF) / 255F;
+		b = (color & 0xFF) / 255F;
+		a = 1.0F;
 		for (int i = 0; i < numPrimitives * 3; i++) {
 			x = vertexCoords[i * 3];
 			y = vertexCoords[i * 3 + 1];
@@ -299,12 +300,13 @@ public class DirectFigure {
 	}
 
 	private void addFQuads(int numPrimitives, int[] vertexCoords, int[] colors) {
-		int x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, r, g, b, a;
+		int x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
+		float r, g, b, a;
 		int color = colors[0];
-		r = (color >> 16) & 0xFF;
-		g = (color >> 8) & 0xFF;
-		b = color & 0xFF;
-		a = 0xFF;
+		r = ((color >> 16) & 0xFF) / 255F;
+		g = ((color >> 8) & 0xFF) / 255F;
+		b = (color & 0xFF) / 255F;
+		a = 1.0F;
 		for (int i = 0; i < numPrimitives; i++) {
 			x1 = vertexCoords[i * 12];
 			y1 = vertexCoords[i * 12 + 1];
