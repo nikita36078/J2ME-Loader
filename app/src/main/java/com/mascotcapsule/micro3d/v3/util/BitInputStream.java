@@ -244,4 +244,8 @@ public class BitInputStream implements Closeable {
 	public int readInt() throws IOException {
 		return readBits(32);
 	}
+
+	public long skipBytes(long n) throws IOException {
+		return in.skip(n);
+	}
 }
