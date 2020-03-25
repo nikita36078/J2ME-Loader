@@ -64,9 +64,11 @@ public class Texture {
 		this.image = Image.createImage(b, 0, b.length).getBitmap();
 		this.size = new float[]{image.getWidth(), image.getHeight()};
 		try {
-			this.transparentColor = BitmapUtils.getPaletteColor(new ByteArrayInputStream(b));
+			ByteArrayInputStream bais = new ByteArrayInputStream(b);
+			this.transparentColor = BitmapUtils.getPaletteColor(bais);
+			bais.close();
 			createTransparentBitmap();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
