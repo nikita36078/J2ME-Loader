@@ -248,17 +248,7 @@ public class EventQueue implements Runnable {
 				}
 
 				if (event != null) {
-					try {
-						event.process();
-					} catch (Throwable ex) {
-						ex.printStackTrace();
-					}
-
-					synchronized (queue) {
-
-						event.leaveQueue();
-						event.recycle();
-					}
+					event.run();
 
 					synchronized (this) {
 						synchronized (queue) {

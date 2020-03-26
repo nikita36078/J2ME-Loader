@@ -483,7 +483,7 @@ public abstract class Canvas extends Displayable {
 		 */
 		@Override
 		public boolean placeableAfter(Event event) {
-			return enqueued < 2;
+			return event != this;
 		}
 
 		@Override

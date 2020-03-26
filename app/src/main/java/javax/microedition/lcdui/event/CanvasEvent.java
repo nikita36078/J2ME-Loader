@@ -16,12 +16,15 @@
  */
 package javax.microedition.lcdui.event;
 
+import android.util.Log;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
 
-	private static ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
+	private static final String TAG = CanvasEvent.class.getName();
+	private static final ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
 
 	public static final int KEY_PRESSED = 0,
 			KEY_REPEATED = 1,
@@ -108,34 +111,58 @@ public class CanvasEvent extends Event {
 	public void process() {
 		switch (eventType) {
 			case KEY_PRESSED:
-				canvas.keyPressed(keyCode);
+				try {
+					canvas.keyPressed(keyCode);
+				} catch (Exception e) {
+					Log.e(TAG, "keyPressed: ", e);
+				}
 				break;
 
 			case KEY_REPEATED:
-				canvas.keyRepeated(keyCode);
+				try {
+					canvas.keyRepeated(keyCode);
+				} catch (Exception e) {
+					Log.e(TAG, "keyRepeated: ", e);
+				}
 				break;
 
 			case KEY_RELEASED:
-				canvas.keyReleased(keyCode);
+				try {
+					canvas.keyReleased(keyCode);
+				} catch (Exception e) {
+					Log.e(TAG, "keyReleased: ", e);
+				}
 				break;
 
 			case POINTER_PRESSED:
-				canvas.pointerPressed(pointer, x, y);
+				try {
+					canvas.pointerPressed(pointer, x, y);
+				} catch (Exception e) {
+					Log.e(TAG, "pointerPressed: ", e);
+				}
 				break;
 
 			case POINTER_DRAGGED:
-				canvas.pointerDragged(pointer, x, y);
+				try {
+					canvas.pointerDragged(pointer, x, y);
+				} catch (Exception e) {
+					Log.e(TAG, "pointerDragged: ", e);
+				}
 				break;
 
 			case POINTER_RELEASED:
-				canvas.pointerReleased(pointer, x, y);
+				try {
+					canvas.pointerReleased(pointer, x, y);
+				} catch (Exception e) {
+					Log.e(TAG, "pointerReleased: ", e);
+				}
 				break;
 
 			case SHOW_NOTIFY:
 				try {
 					canvas.showNotify();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e(TAG, "showNotify: ", e);
 				}
 				canvas.setVisible(true);
 				break;
@@ -145,12 +172,16 @@ public class CanvasEvent extends Event {
 				try {
 					canvas.hideNotify();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e(TAG, "hideNotify: ", e);
 				}
 				break;
 
 			case SIZE_CHANGED:
-				canvas.sizeChanged(width, height);
+				try {
+					canvas.sizeChanged(width, height);
+				} catch (Exception e) {
+					Log.e(TAG, "sizeChanged: ", e);
+				}
 				break;
 		}
 	}
