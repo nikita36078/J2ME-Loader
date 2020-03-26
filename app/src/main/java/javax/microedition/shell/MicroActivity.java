@@ -203,7 +203,6 @@ public class MicroActivity extends AppCompatActivity {
 	private SimpleEvent msgSetCurrent = new SimpleEvent() {
 		@Override
 		public void process() {
-			current.setParentActivity(MicroActivity.this);
 			current.clearDisplayableView();
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
