@@ -87,9 +87,12 @@ public class FigureImpl {
 		for (int i = 0; i < numPattern; i++) {
 			int num_unk_polyf3 = bis.readUnsignedShort();
 			int num_unk_polyf4 = bis.readUnsignedShort();
+			System.out.printf("pattern #%d\n", i);
 			for (int j = 0; j < texturedPolygons.length; j += 2) {
 				int num_textured_polyt3 = bis.readUnsignedShort();
 				int num_textured_polyt4 = bis.readUnsignedShort();
+				System.out.printf("num_textured_polyt3=%d, num_textured_polyt4=%d\n",
+						num_textured_polyt3, num_textured_polyt4);
 				// Don't support an external patterns for now
 				texturedPolygons[j] += num_textured_polyt3;
 				texturedPolygons[j + 1] += num_textured_polyt4;
