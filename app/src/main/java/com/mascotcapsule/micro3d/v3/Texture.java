@@ -62,7 +62,7 @@ public class Texture {
 		}
 		this.isModel = isForModel;
 		this.image = Image.createImage(b, 0, b.length).getBitmap();
-		this.size = new float[]{image.getWidth(), image.getHeight()};
+		this.size = new float[]{image.getWidth() - 1, image.getHeight() - 1};
 		try {
 			ByteArrayInputStream bais = new ByteArrayInputStream(b);
 			this.transparentColor = BitmapUtils.getPaletteColor(bais);
@@ -74,8 +74,8 @@ public class Texture {
 	}
 
 	private void createTransparentBitmap() {
-		int width = (int) size[0];
-		int height = (int) size[1];
+		int width = image.getWidth();
+		int height = image.getHeight();
 		transparentImage = image.copy(Bitmap.Config.ARGB_8888, true);
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
