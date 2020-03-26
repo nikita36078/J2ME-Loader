@@ -54,6 +54,12 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 				midlet.startApp();
 			} catch (Throwable t) {
 				t.printStackTrace();
+				Throwable e;
+				Throwable cause = t;
+				while ((e = cause.getCause()) != null) {
+					cause = e;
+				}
+				ContextHolder.getActivity().showErrorDialog(cause.toString());
 			}
 		};
 		handler.post(r);
@@ -68,19 +74,18 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	}
 
 	static void resumeApp() {
-		instance.handler.obtainMessage(START).sendToTarget();
+		if (instance != null)
+			instance.handler.obtainMessage(START).sendToTarget();
 	}
 
 	static void destroyApp() {
 		new Thread(() -> {
-			if (instance.started) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				Process.killProcess(Process.myPid());
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			Process.killProcess(Process.myPid());
 		}, "ForceDestroyTimer").start();
 		Displayable current = ContextHolder.getActivity().getCurrent();
 		if (current instanceof Canvas) {

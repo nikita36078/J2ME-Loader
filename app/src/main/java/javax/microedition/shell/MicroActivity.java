@@ -195,7 +195,8 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
-				.setMessage(message);
+				.setMessage(message)
+				.setNegativeButton(android.R.string.ok, null);
 		builder.setOnCancelListener(dialogInterface -> ContextHolder.notifyDestroyed());
 		builder.show();
 	}
