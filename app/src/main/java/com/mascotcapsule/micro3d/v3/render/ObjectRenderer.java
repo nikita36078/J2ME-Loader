@@ -4,9 +4,11 @@ import android.opengl.GLES20;
 
 import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
+import com.mascotcapsule.micro3d.v3.Texture;
 import com.mascotcapsule.micro3d.v3.figure.DirectFigure;
 import com.mascotcapsule.micro3d.v3.figure.Material;
 import com.mascotcapsule.micro3d.v3.figure.Polygon;
+import com.mascotcapsule.micro3d.v3.figure.Renderable;
 
 import java.nio.FloatBuffer;
 
@@ -42,10 +44,10 @@ public class ObjectRenderer {
 		getTextureLocations();
 	}
 
-	public void draw(Figure figure, FigureLayout layout) {
+	public void draw(Renderable renderable, FigureLayout layout) {
 		float[] mvpMatrix = layout.getMatrix();
-		FloatBuffer vertexData = figure.figure.vboPolyT;
-		if (figure.figure.numPolyT > 0) {
+		FloatBuffer vertexData = renderable.getVboPolyT();
+		if (renderable.getNumPolyT() > 0) {
 			GLES20.glUseProgram(textureProgram);
 			glUniformMatrix4fv(utMatrixLocation, 1, false, mvpMatrix, 0);
 			GLUtils.checkGlError("glUniformMatrix4fv");
@@ -67,8 +69,8 @@ public class ObjectRenderer {
 			// Texture units
 			GLES20.glUniform1i(utTextureUnitLocation, 0);
 
-			for (int i = 0; i < figure.figure.materials.size(); i++) {
-				Material material = figure.figure.materials.get(i);
+			for (int i = 0; i < renderable.getMaterials().size(); i++) {
+				Material material = renderable.getMaterials().get(i);
 				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -82,19 +84,20 @@ public class ObjectRenderer {
 					GLES20.glDisable(GL_BLEND);
 				}
 
+				Texture texture = renderable.getTextureById(material.textureId);
 				if (material.transparent) {
-					GLES20.glBindTexture(GL_TEXTURE_2D, figure.getTextureById(material.textureId).getTransparentId());
+					GLES20.glBindTexture(GL_TEXTURE_2D, texture.getTransparentId());
 				} else {
-					GLES20.glBindTexture(GL_TEXTURE_2D, figure.getTextureById(material.textureId).getId());
+					GLES20.glBindTexture(GL_TEXTURE_2D, texture.getId());
 				}
-				GLES20.glUniform2fv(utTextureSizeLocation, 1, figure.getTextureById(material.textureId).getSize(), 0);
+				GLES20.glUniform2fv(utTextureSizeLocation, 1, texture.getSize(), 0);
 				// Draw the triangle
 				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, material.start, material.count);
 				GLUtils.checkGlError("glDrawArrays");
 			}
 		}
-		vertexData = figure.figure.vboPolyF;
-		if (figure.figure.numPolyF > 0) {
+		vertexData = renderable.getVboPolyF();
+		if (renderable.getNumPolyF() > 0) {
 			GLES20.glUseProgram(colorProgram);
 			glUniformMatrix4fv(ucMatrixLocation, 1, false, mvpMatrix, 0);
 			GLUtils.checkGlError("glUniformMatrix4fv");
@@ -112,88 +115,21 @@ public class ObjectRenderer {
 
 			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getGlCenter(), 0);
 
-			GLES20.glDisable(GL_BLEND);
-			int count = figure.figure.numPolyF * 3;
-			// Draw the triangle
-			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
-			GLUtils.checkGlError("glDrawArrays");
-		}
-	}
-
-	public void draw(DirectFigure figure, FigureLayout layout) {
-		float[] mvpMatrix = layout.getMatrix();
-		FloatBuffer vertexData = figure.vboPolyT;
-		if (figure.numPolyT > 0) {
-			GLES20.glUseProgram(textureProgram);
-			glUniformMatrix4fv(utMatrixLocation, 1, false, mvpMatrix, 0);
-			GLUtils.checkGlError("glUniformMatrix4fv");
-			// Vertex coords
-			vertexData.position(0);
-			GLES20.glVertexAttribPointer(atPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
-					false, TEXTURE_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(atPositionLocation);
-
-			// Texture coords
-			vertexData.position(COORDS_PER_VERTEX);
-			GLES20.glVertexAttribPointer(atTextureLocation, TEX_COORDS_PER_VERTEX, GL_FLOAT,
-					false, TEXTURE_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(atTextureLocation);
-
-			if (figure.blendMode == Polygon.BLENDING_MODE_ADD) {
-				GLES20.glEnable(GL_BLEND);
-				GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			} else if (figure.blendMode == Polygon.BLENDING_MODE_SUB) {
-				GLES20.glEnable(GL_BLEND);
-				GLES20.glBlendFuncSeparate(GL_ONE_MINUS_SRC_COLOR, GL_ONE, GL_ONE, GL_ONE);
-			} else if (figure.transparent) {
-				GLES20.glEnable(GL_BLEND);
-				GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			} else {
-				GLES20.glDisable(GL_BLEND);
+			for (int i = 0; i < renderable.getMaterials().size(); i++) {
+				Material material = renderable.getMaterials().get(i);
+				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
+					GLES20.glEnable(GL_BLEND);
+					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				} else if (material.blendMode == Polygon.BLENDING_MODE_SUB) {
+					GLES20.glEnable(GL_BLEND);
+					GLES20.glBlendFuncSeparate(GL_ONE_MINUS_SRC_COLOR, GL_ONE, GL_ONE, GL_ONE);
+				} else {
+					GLES20.glDisable(GL_BLEND);
+				}
+				// Draw the triangle
+				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, material.start, material.count);
+				GLUtils.checkGlError("glDrawArrays");
 			}
-
-			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getGlCenter(), 0);
-			// Put the texture to the unit 0 target
-			GLES20.glActiveTexture(GL_TEXTURE0);
-			// Texture units
-			GLES20.glUniform1i(utTextureUnitLocation, 0);
-
-			int count = figure.numPolyT * 3;
-
-			if (figure.transparent) {
-				GLES20.glBindTexture(GL_TEXTURE_2D, figure.texture.getTransparentId());
-			} else {
-				GLES20.glBindTexture(GL_TEXTURE_2D, figure.texture.getId());
-			}
-			GLES20.glUniform2fv(utTextureSizeLocation, 1, figure.texture.getSize(), 0);
-			// Draw the triangle
-			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
-			GLUtils.checkGlError("glDrawArrays");
-		}
-		vertexData = figure.vboPolyF;
-		if (figure.numPolyF > 0) {
-			GLES20.glUseProgram(colorProgram);
-			glUniformMatrix4fv(ucMatrixLocation, 1, false, mvpMatrix, 0);
-			GLUtils.checkGlError("glUniformMatrix4fv");
-			// Vertex coords
-			vertexData.position(0);
-			GLES20.glVertexAttribPointer(acPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
-					false, COLOR_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(acPositionLocation);
-
-			// Color data
-			vertexData.position(COORDS_PER_VERTEX);
-			GLES20.glVertexAttribPointer(acColorLocation, COLORS_PER_VERTEX, GL_FLOAT,
-					false, COLOR_STRIDE, vertexData);
-			GLES20.glEnableVertexAttribArray(acColorLocation);
-
-			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getGlCenter(), 0);
-
-			GLES20.glDisable(GL_BLEND);
-			int count = figure.numPolyF * 3;
-			// Draw the triangle
-			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count);
-			GLUtils.checkGlError("glDrawArrays");
 		}
 	}
 

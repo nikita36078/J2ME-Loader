@@ -17,15 +17,19 @@
 package com.mascotcapsule.micro3d.v3;
 
 import com.mascotcapsule.micro3d.v3.figure.FigureImpl;
+import com.mascotcapsule.micro3d.v3.figure.Material;
+import com.mascotcapsule.micro3d.v3.figure.Renderable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import javax.microedition.util.ContextHolder;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Figure {
+public class Figure implements Renderable {
 	public FigureImpl figure;
 	private Texture[] myTextureArray;
 	private Texture myTextureNow;
@@ -129,6 +133,32 @@ public class Figure {
 	public final void setPattern(int idx) {
 	}
 
+	@Override
+	public ArrayList<Material> getMaterials() {
+		return figure.materials;
+	}
+
+	@Override
+	public FloatBuffer getVboPolyT() {
+		return figure.vboPolyT;
+	}
+
+	@Override
+	public FloatBuffer getVboPolyF() {
+		return figure.vboPolyF;
+	}
+
+	@Override
+	public int getNumPolyT() {
+		return figure.numPolyT;
+	}
+
+	@Override
+	public int getNumPolyF() {
+		return figure.numPolyF;
+	}
+
+	@Override
 	public Texture getTextureById(int idx) {
 		return myTextureArray[idx];
 	}

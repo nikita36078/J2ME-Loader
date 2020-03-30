@@ -7,8 +7,9 @@ import com.mascotcapsule.micro3d.v3.Util3D;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
-public class DirectFigure {
+public class DirectFigure implements Renderable {
 
 	public FloatBuffer vboPolyT;
 	public FloatBuffer vboPolyF;
@@ -17,6 +18,7 @@ public class DirectFigure {
 	public Texture texture;
 	public int blendMode;
 	public boolean transparent;
+	public ArrayList<Material> materials;
 
 	public DirectFigure() {
 		vboPolyT = ByteBuffer.allocateDirect(255 * 30 * 4)
@@ -25,6 +27,8 @@ public class DirectFigure {
 		vboPolyF = ByteBuffer.allocateDirect(255 * 42 * 4)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
+		materials = new ArrayList();
+		materials.add(new Material());
 	}
 
 	public void parse(Texture texture, int command,
@@ -35,8 +39,6 @@ public class DirectFigure {
 		vboPolyT.position(0);
 		vboPolyF.position(0);
 		this.texture = texture;
-		this.blendMode = (command & Graphics3D.PATTR_BLEND_SUB) >> 5;
-		this.transparent = (command & Graphics3D.PATTR_COLORKEY) == Graphics3D.PATTR_COLORKEY;
 
 		if ((command & Graphics3D.PRIMITVE_POINT_SPRITES) == Graphics3D.PRIMITVE_POINT_SPRITES) {
 			if ((command & Graphics3D.PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) == Graphics3D.PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) {
@@ -66,6 +68,10 @@ public class DirectFigure {
 				addTQuads(numPrimitives, vertexCoords, textureCoords);
 			}
 		}
+
+		int blendMode = (command & Graphics3D.PATTR_BLEND_SUB) >> 5;
+		boolean transparent = (command & Graphics3D.PATTR_COLORKEY) == Graphics3D.PATTR_COLORKEY;
+		materials.get(0).set(0, (numPolyT + numPolyF) * 3, blendMode, 0, transparent);
 	}
 
 	private void addSprites(int numPrimitives, int[] vertexCoords, int[] textureCoords) {
@@ -369,5 +375,35 @@ public class DirectFigure {
 			vboPolyF.put(b);
 			vboPolyF.put(a);
 		}
+	}
+
+	@Override
+	public ArrayList<Material> getMaterials() {
+		return materials;
+	}
+
+	@Override
+	public FloatBuffer getVboPolyT() {
+		return vboPolyT;
+	}
+
+	@Override
+	public FloatBuffer getVboPolyF() {
+		return vboPolyF;
+	}
+
+	@Override
+	public int getNumPolyT() {
+		return numPolyT;
+	}
+
+	@Override
+	public int getNumPolyF() {
+		return numPolyF;
+	}
+
+	@Override
+	public Texture getTextureById(int idx) {
+		return texture;
 	}
 }
