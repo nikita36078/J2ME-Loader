@@ -378,7 +378,12 @@ public class DirectFigure implements Renderable {
 	}
 
 	@Override
-	public ArrayList<Material> getMaterials() {
+	public ArrayList<Material> getMaterialsT() {
+		return materials;
+	}
+
+	@Override
+	public ArrayList<Material> getMaterialsF() {
 		return materials;
 	}
 

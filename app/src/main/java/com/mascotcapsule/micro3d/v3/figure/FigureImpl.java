@@ -30,17 +30,16 @@ public class FigureImpl {
 	private ArrayList<Vector3D> vertices = new ArrayList<>();
 	private ArrayList<Vector3D> normals = new ArrayList<>();
 	private ArrayList<PolygonT3> triangleFacesT = new ArrayList<>();
-	private ArrayList<PolygonT4> quadFacesT = new ArrayList<>();
+	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 	private ArrayList<Bone> bones = new ArrayList<>();
-	public ArrayList<Material> materials = new ArrayList<>();
+	public ArrayList<Material> materialsT = new ArrayList<>();
+	public ArrayList<Material> materialsF = new ArrayList<>();
 	public FloatBuffer vboPolyT;
 	public FloatBuffer vboPolyF;
 	public int[] texturedPolygons;
 	public int numPolyT;
 	public int numPolyF;
 	public int numTexture;
-	private ArrayList<PolygonF4> quadFacesF = new ArrayList<>();
-	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 	private int numPattern;
 
 	public FigureImpl(InputStream inputStream) throws IOException {
@@ -247,7 +246,8 @@ public class FigureImpl {
 			int d = bis.readBits(vertex_index_bits);
 
 			int color_id = bis.readBits(color_id_bits);
-			quadFacesF.add(new PolygonF4(a, b, c, d, colors[color_id], attribute));
+			triangleFacesF.add(new PolygonF3(a, b, c, colors[color_id], attribute));
+			triangleFacesF.add(new PolygonF3(c, b, d, colors[color_id], attribute));
 		}
 	}
 
@@ -269,7 +269,8 @@ public class FigureImpl {
 			int v2 = bis.readBits(uv_bits);
 			int u3 = bis.readBits(uv_bits);
 			int v3 = bis.readBits(uv_bits);
-			triangleFacesT.add(new PolygonT3(a, b, c, u1, v1, u2, v2, u3, v3, attribute));
+			int textureId = getTextureId(i, false);
+			triangleFacesT.add(new PolygonT3(a, b, c, u1, v1, u2, v2, u3, v3, textureId, attribute));
 		}
 
 		for (int i = 0; i < num_polyt4; i++) {
@@ -287,7 +288,9 @@ public class FigureImpl {
 			int v3 = bis.readBits(uv_bits);
 			int u4 = bis.readBits(uv_bits);
 			int v4 = bis.readBits(uv_bits);
-			quadFacesT.add(new PolygonT4(a, b, c, d, u1, v1, u2, v2, u3, v3, u4, v4, attribute));
+			int textureId = getTextureId(i, true);
+			triangleFacesT.add(new PolygonT3(a, b, c, u1, v1, u2, v2, u3, v3, textureId, attribute));
+			triangleFacesT.add(new PolygonT3(c, b, d, u3, v3, u2, v2, u4, v4, textureId, attribute));
 		}
 	}
 
@@ -378,51 +381,6 @@ public class FigureImpl {
 		vboPolyF = ByteBuffer.allocateDirect(numPolyF * 21 * 4)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		for (int i = 0; i < quadFacesT.size(); i++) {
-			PolygonT4 polygon4 = quadFacesT.get(i);
-			Vector3D a = vertices.get(polygon4.a);
-			Vector3D b = vertices.get(polygon4.b);
-			Vector3D c = vertices.get(polygon4.c);
-			Vector3D d = vertices.get(polygon4.d);
-
-			vboPolyT.put(a.x);
-			vboPolyT.put(a.y);
-			vboPolyT.put(a.z);
-			vboPolyT.put(polygon4.u1);
-			vboPolyT.put(polygon4.v1);
-
-			vboPolyT.put(b.x);
-			vboPolyT.put(b.y);
-			vboPolyT.put(b.z);
-			vboPolyT.put(polygon4.u2);
-			vboPolyT.put(polygon4.v2);
-
-			vboPolyT.put(c.x);
-			vboPolyT.put(c.y);
-			vboPolyT.put(c.z);
-			vboPolyT.put(polygon4.u3);
-			vboPolyT.put(polygon4.v3);
-
-			//Create second triangle
-
-			vboPolyT.put(c.x);
-			vboPolyT.put(c.y);
-			vboPolyT.put(c.z);
-			vboPolyT.put(polygon4.u3);
-			vboPolyT.put(polygon4.v3);
-
-			vboPolyT.put(b.x);
-			vboPolyT.put(b.y);
-			vboPolyT.put(b.z);
-			vboPolyT.put(polygon4.u2);
-			vboPolyT.put(polygon4.v2);
-
-			vboPolyT.put(d.x);
-			vboPolyT.put(d.y);
-			vboPolyT.put(d.z);
-			vboPolyT.put(polygon4.u4);
-			vboPolyT.put(polygon4.v4);
-		}
 		for (int i = 0; i < triangleFacesT.size(); i++) {
 			PolygonT3 polygon3 = triangleFacesT.get(i);
 			Vector3D a = vertices.get(polygon3.a);
@@ -446,63 +404,6 @@ public class FigureImpl {
 			vboPolyT.put(c.z);
 			vboPolyT.put(polygon3.u3);
 			vboPolyT.put(polygon3.v3);
-		}
-		for (int i = 0; i < quadFacesF.size(); i++) {
-			PolygonF4 polygon4 = quadFacesF.get(i);
-			Vector3D a = vertices.get(polygon4.a);
-			Vector3D b = vertices.get(polygon4.b);
-			Vector3D c = vertices.get(polygon4.c);
-			Vector3D d = vertices.get(polygon4.d);
-
-			vboPolyF.put(a.x);
-			vboPolyF.put(a.y);
-			vboPolyF.put(a.z);
-			vboPolyF.put(polygon4.color.r);
-			vboPolyF.put(polygon4.color.g);
-			vboPolyF.put(polygon4.color.b);
-			vboPolyF.put(polygon4.color.a);
-
-			vboPolyF.put(b.x);
-			vboPolyF.put(b.y);
-			vboPolyF.put(b.z);
-			vboPolyF.put(polygon4.color.r);
-			vboPolyF.put(polygon4.color.g);
-			vboPolyF.put(polygon4.color.b);
-			vboPolyF.put(polygon4.color.a);
-
-			vboPolyF.put(c.x);
-			vboPolyF.put(c.y);
-			vboPolyF.put(c.z);
-			vboPolyF.put(polygon4.color.r);
-			vboPolyF.put(polygon4.color.g);
-			vboPolyF.put(polygon4.color.b);
-			vboPolyF.put(polygon4.color.a);
-
-			//Create second triangle
-
-			vboPolyF.put(c.x);
-			vboPolyF.put(c.y);
-			vboPolyF.put(c.z);
-			vboPolyF.put(polygon4.color.r);
-			vboPolyF.put(polygon4.color.g);
-			vboPolyF.put(polygon4.color.b);
-			vboPolyF.put(polygon4.color.a);
-
-			vboPolyF.put(b.x);
-			vboPolyF.put(b.y);
-			vboPolyF.put(b.z);
-			vboPolyF.put(polygon4.color.r);
-			vboPolyF.put(polygon4.color.g);
-			vboPolyF.put(polygon4.color.b);
-			vboPolyF.put(polygon4.color.a);
-
-			vboPolyF.put(d.x);
-			vboPolyF.put(d.y);
-			vboPolyF.put(d.z);
-			vboPolyF.put(polygon4.color.r);
-			vboPolyF.put(polygon4.color.g);
-			vboPolyF.put(polygon4.color.b);
-			vboPolyF.put(polygon4.color.a);
 		}
 		for (int i = 0; i < triangleFacesF.size(); i++) {
 			PolygonF3 polygon3 = triangleFacesF.get(i);
@@ -540,50 +441,63 @@ public class FigureImpl {
 	}
 
 	private void updatePolys() {
-		for (int i = 0; i < quadFacesT.size(); i++) {
-			Polygon polygon = quadFacesT.get(i);
-			Material material = getMaterial(i, polygon);
-			material.count += 6;
-		}
 		for (int i = 0; i < triangleFacesT.size(); i++) {
-			Polygon polygon = triangleFacesT.get(i);
-			Material material = getMaterial(i, polygon);
+			Material material = getMaterialT(i);
 			material.count += 3;
 		}
-		Collections.sort(materials, (o1, o2) -> o1.blendMode - o2.blendMode);
+		for (int i = 0; i < triangleFacesF.size(); i++) {
+			Material material = getMaterialF(i);
+			material.count += 3;
+		}
+		Collections.sort(materialsT, (o1, o2) -> o1.blendMode - o2.blendMode);
+		Collections.sort(materialsF, (o1, o2) -> o1.blendMode - o2.blendMode);
 	}
 
-	private Material getMaterial(int polygonId, Polygon polygon) {
+	private Material getMaterialT(int polygonId) {
 		Material result = null;
-		int offset;
-		int polyStart;
-		if (polygon instanceof PolygonT3) {
-			offset = 0;
-			polyStart = (quadFacesT.size() * 2 + polygonId) * 3;
-		} else {
-			offset = 1;
-			polyStart = polygonId * 6;
-		}
-		int textureId = getTextureId(polygonId, offset);
+		PolygonT3 current = triangleFacesT.get(polygonId);
+		int textureId = current.textureId;
+		int polyStart = polygonId * 3;
 
-		for (Material material : materials) {
+		for (Material material : materialsT) {
 			int matEnd = material.start + material.count;
-			if (material.blendMode == polygon.blendMode && material.textureId == textureId &&
-					matEnd == polyStart && material.transparent == polygon.transparent) {
+			if (material.blendMode == current.blendMode && material.textureId == textureId &&
+					matEnd == polyStart && material.transparent == current.transparent) {
 				result = material;
 				break;
 			}
 		}
 		if (result == null) {
-			result = new Material(polyStart, 0, polygon.blendMode, textureId, polygon.transparent);
-			materials.add(result);
+			result = new Material(polyStart, 0, current.blendMode, textureId, current.transparent);
+			materialsT.add(result);
 		}
 		return result;
 	}
 
-	private int getTextureId(int polygonId, int offset) {
+	private Material getMaterialF(int polygonId) {
+		Material result = null;
+		PolygonF3 current = triangleFacesF.get(polygonId);
+		int polyStart = polygonId * 3;
+
+		for (Material material : materialsF) {
+			int matEnd = material.start + material.count;
+			if (material.blendMode == current.blendMode && matEnd == polyStart &&
+					material.transparent == current.transparent) {
+				result = material;
+				break;
+			}
+		}
+		if (result == null) {
+			result = new Material(polyStart, 0, current.blendMode, 0, current.transparent);
+			materialsF.add(result);
+		}
+		return result;
+	}
+
+	private int getTextureId(int polygonId, boolean quad) {
 		int result = 0;
 		int num = 0;
+		int offset = quad ? 1 : 0;
 		for (int i = 0; i < texturedPolygons.length; i += 2) {
 			num += texturedPolygons[i + offset];
 			if (polygonId < num) {

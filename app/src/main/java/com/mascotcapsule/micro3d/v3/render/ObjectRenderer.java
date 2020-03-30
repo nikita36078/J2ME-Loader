@@ -2,10 +2,8 @@ package com.mascotcapsule.micro3d.v3.render;
 
 import android.opengl.GLES20;
 
-import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
 import com.mascotcapsule.micro3d.v3.Texture;
-import com.mascotcapsule.micro3d.v3.figure.DirectFigure;
 import com.mascotcapsule.micro3d.v3.figure.Material;
 import com.mascotcapsule.micro3d.v3.figure.Polygon;
 import com.mascotcapsule.micro3d.v3.figure.Renderable;
@@ -69,8 +67,8 @@ public class ObjectRenderer {
 			// Texture units
 			GLES20.glUniform1i(utTextureUnitLocation, 0);
 
-			for (int i = 0; i < renderable.getMaterials().size(); i++) {
-				Material material = renderable.getMaterials().get(i);
+			for (int i = 0; i < renderable.getMaterialsT().size(); i++) {
+				Material material = renderable.getMaterialsT().get(i);
 				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -115,8 +113,8 @@ public class ObjectRenderer {
 
 			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getGlCenter(), 0);
 
-			for (int i = 0; i < renderable.getMaterials().size(); i++) {
-				Material material = renderable.getMaterials().get(i);
+			for (int i = 0; i < renderable.getMaterialsF().size(); i++) {
+				Material material = renderable.getMaterialsF().get(i);
 				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);

@@ -134,8 +134,13 @@ public class Figure implements Renderable {
 	}
 
 	@Override
-	public ArrayList<Material> getMaterials() {
-		return figure.materials;
+	public ArrayList<Material> getMaterialsT() {
+		return figure.materialsT;
+	}
+
+	@Override
+	public ArrayList<Material> getMaterialsF() {
+		return figure.materialsF;
 	}
 
 	@Override
