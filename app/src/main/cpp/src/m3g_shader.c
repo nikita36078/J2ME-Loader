@@ -5,10 +5,10 @@
 #include "m3g_shader.h"
 
 static const char *gVertexShader =
-"attribute vec4 vPosition;\n"
+"attribute vec4 aPosition;\n"
 "uniform mat4 uMVPMatrix;\n"
 "void main() {\n"
-"  gl_Position = vPosition;\n"
+"  gl_Position = uMVPMatrix * aPosition;\n"
 "}\n";
 
 static const char *gFragmentShader =
@@ -109,17 +109,21 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
 GLuint glProgram;
 GLuint glPositionHandle;
 GLuint glMVPHandle;
+M3Gbool inited = M3G_FALSE;
 
 void m3gInitShaders() {
-    glProgram = createProgram(gVertexShader, gFragmentShader);
-    if (!glProgram) {
-        M3G_LOG(M3G_LOG_USER_ERRORS, "Could not create program.");
-        return;
+    if (!inited) {
+        glProgram = createProgram(gVertexShader, gFragmentShader);
+        if (!glProgram) {
+            M3G_LOG(M3G_LOG_USER_ERRORS, "Could not create program.");
+            return;
+        }
+        glPositionHandle = (GLuint) glGetAttribLocation(glProgram, "aPosition");
+        checkGlError("glGetAttribLocation");
+        glMVPHandle = (GLuint) glGetUniformLocation(glProgram, "uMVPMatrix");
+        checkGlError("glGetUniformLocation");
+        inited = M3G_TRUE;
     }
-    glPositionHandle = (GLuint) glGetAttribLocation(glProgram, "vPosition");
-    checkGlError("glGetAttribLocation");
-    glMVPHandle = (GLuint) glGetUniformLocation(glProgram, "uMVPMatrix");
-    checkGlError("glGetUniformLocation");
 }
 
 void m3gLoadVertices(GLint size, GLenum type, GLsizei stride, const void *pointer) {
@@ -195,4 +199,47 @@ void m3gMultProjectionMatrix(M3Gfloat* matr) {
 
 void m3gMultModelMatrix(M3Gfloat* matr) {
     multiplyMatrix(modelMatrix, matr, modelMatrix);
+}
+
+void m3gOrtho(M3Gfloat left, M3Gfloat right, M3Gfloat bottom, M3Gfloat top,
+              M3Gfloat near, M3Gfloat far) {
+    M3Gfloat r_width  = 1.0f / (right - left);
+    M3Gfloat r_height = 1.0f / (top - bottom);
+    M3Gfloat r_depth  = 1.0f / (far - near);
+    M3Gfloat x =  2.0f * (r_width);
+    M3Gfloat y =  2.0f * (r_height);
+    M3Gfloat z = -2.0f * (r_depth);
+    M3Gfloat tx = -(right + left) * r_width;
+    M3Gfloat ty = -(top + bottom) * r_height;
+    M3Gfloat tz = -(far + near) * r_depth;
+    projMatrix[0] = x;
+    projMatrix[5] = y;
+    projMatrix[10] = z;
+    projMatrix[12] = tx;
+    projMatrix[13] = ty;
+    projMatrix[14] = tz;
+    projMatrix[15] = 1.0f;
+    projMatrix[1] = 0.0f;
+    projMatrix[2] = 0.0f;
+    projMatrix[3] = 0.0f;
+    projMatrix[4] = 0.0f;
+    projMatrix[6] = 0.0f;
+    projMatrix[7] = 0.0f;
+    projMatrix[8] = 0.0f;
+    projMatrix[9] = 0.0f;
+    projMatrix[11] = 0.0f;
+}
+
+void m3gScaleModel(M3Gfloat x, M3Gfloat y, M3Gfloat z) {
+    for (int i=0 ; i<4 ; i++) {
+        modelMatrix[i] *= x;
+        modelMatrix[4 + i] *= y;
+        modelMatrix[8 + i] *= z;
+    }
+}
+
+void m3gTranslateModel(M3Gfloat x, M3Gfloat y, M3Gfloat z) {
+    for (int i=0 ; i<4 ; i++) {
+        modelMatrix[12 + i] += modelMatrix[i] * x + modelMatrix[4 + i] * y + modelMatrix[8 + i] * z;
+    }
 }

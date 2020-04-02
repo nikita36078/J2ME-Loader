@@ -15,5 +15,9 @@ void m3gIdentityProjectionMatrix();
 void m3gIdentityModelMatrix();
 void m3gMultProjectionMatrix(M3Gfloat* matr);
 void m3gMultModelMatrix(M3Gfloat* matr);
+void m3gOrtho(M3Gfloat left, M3Gfloat right, M3Gfloat bottom, M3Gfloat top,
+        M3Gfloat near, M3Gfloat far);
+void m3gScaleModel(M3Gfloat x, M3Gfloat y, M3Gfloat z);
+void m3gTranslateModel(M3Gfloat x, M3Gfloat y, M3Gfloat z);
 
 #endif //__M3G_SHADER_H__

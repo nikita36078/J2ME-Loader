@@ -99,12 +99,12 @@ static void m3gApplyScaleAndBias(const VertexBuffer *buffer)
 
     //glMatrixMode(GL_MODELVIEW);
     if (buffer->vertices != NULL) {
-        /*glTranslatef(buffer->vertexBias[0],
+        m3gTranslateModel(buffer->vertexBias[0],
                      buffer->vertexBias[1],
                      buffer->vertexBias[2]);
-        glScalef(buffer->vertexScale,
+        m3gScaleModel(buffer->vertexScale,
                  buffer->vertexScale,
-                 buffer->vertexScale);*/
+                 buffer->vertexScale);
     }
 }
 
