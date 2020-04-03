@@ -17,12 +17,14 @@ public class SkinnedMesh extends Mesh {
 	public SkinnedMesh(VertexBuffer vertices, IndexBuffer[] submeshes, Appearance[] appearances, Group skeleton) {
 		super(vertices, submeshes, appearances);
 		checkSkeleton(skeleton);
+		skeleton.setParent(this);
 		this.skeleton = skeleton;
 	}
 
 	public SkinnedMesh(VertexBuffer vertices, IndexBuffer submeshes, Appearance appearances, Group skeleton) {
 		super(vertices, submeshes, appearances);
 		checkSkeleton(skeleton);
+		skeleton.setParent(this);
 		this.skeleton = skeleton;
 	}
 
@@ -103,7 +105,10 @@ public class SkinnedMesh extends Mesh {
 			addInfluence(i, boneIndex, weight);
 		}
 
-		bone.hasBones = true;
+		while (bone != this) {
+			bone.hasBones = true;
+			bone = bone.parent;
+		}
 	}
 
 	private void addInfluence(int vertexIndex, int boneIndex, int weight) {
@@ -188,13 +193,13 @@ public class SkinnedMesh extends Mesh {
 	private void ensureBonesPerVertex(int count) {
 		if (count > bonesPerVertex) {
 			for (int i = bonesPerVertex; i < count; ++i) {
-				int[] array = new int[count];
+				int[] array = new int[weightedVertexCount];
 				boneIndices[i] = array;
 
-				array = new int[count];
+				array = new int[weightedVertexCount];
 				boneWeights[i] = array;
 
-				array = new int[count];
+				array = new int[weightedVertexCount];
 				normalizedWeights[i] = array;
 			}
 
