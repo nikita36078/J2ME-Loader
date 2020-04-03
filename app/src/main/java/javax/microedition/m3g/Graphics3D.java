@@ -122,7 +122,6 @@ public final class Graphics3D {
 				EGL10.EGL_BLUE_SIZE, 8,
 				EGL10.EGL_ALPHA_SIZE, 8,
 				EGL10.EGL_DEPTH_SIZE, 8,
-				EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
 				EGL10.EGL_NONE};
 		EGLConfig[] eglConfigs = new EGLConfig[1];
 		EGL_ASSERT(egl.eglChooseConfig(eglDisplay, s_configAttribs, eglConfigs, 1, num_config));
