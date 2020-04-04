@@ -19,6 +19,7 @@ package ru.playsoftware.j2meloader.config;
 import java.io.File;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Profile implements Comparable<Profile> {
@@ -76,5 +77,14 @@ public class Profile implements Comparable<Profile> {
 
 	boolean hasKeyLayout() {
 		return getKeyLayout().exists();
+	}
+
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof Profile)) {
+			return false;
+		}
+		return name.equals(((Profile) obj).name);
 	}
 }

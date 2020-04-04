@@ -41,13 +41,18 @@ public class FileUtils {
 	private static String TAG = FileUtils.class.getName();
 
 	public static void copyFiles(String src, String dest, FilenameFilter filter) {
-		File fsrc = new File(src);
-		File fdest = new File(dest);
-		fdest.mkdirs();
-		String to;
-		File[] list = fsrc.listFiles(filter);
+		File srcFile = new File(src);
+		File dstFile = new File(dest);
+		if (!dstFile.exists() && !dstFile.mkdirs()) {
+			Log.e(TAG, "copyFiles failed create dir: " + dstFile);
+			return;
+		}
+		File[] list = srcFile.listFiles(filter);
+		if (list == null) {
+			return;
+		}
 		for (File entry : list) {
-			to = entry.getPath().replace(src, dest);
+			String to = entry.getPath().replace(src, dest);
 			if (entry.isDirectory()) {
 				copyFiles(entry.getPath(), to, filter);
 			} else {
@@ -106,6 +111,12 @@ public class FileUtils {
 	}
 
 	public static String getAppPath(Context context, Uri uri) throws IOException {
+		if ("file".equals(uri.getScheme())) {
+			String path = uri.getPath();
+			if (path != null && new File(path).exists()) {
+				return path;
+			}
+		}
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		OutputStream out = null;
 		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);

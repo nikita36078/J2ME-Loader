@@ -89,9 +89,11 @@ public class ProfilesAdapter extends BaseAdapter {
 	}
 
 	void addItem(Profile profile) {
-		list.add(profile);
-		Collections.sort(list);
-		notifyDataSetChanged();
+		if (!list.contains(profile)) {
+			list.add(profile);
+			Collections.sort(list);
+			notifyDataSetChanged();
+		}
 	}
 
 	public Profile getDefault() {

@@ -168,20 +168,20 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load();
+		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+				.getString(Config.DEFAULT_PROFILE_KEY, null);
+		if (!loaded && defName != null) {
+			defProfile = Config.PROFILES_DIR + defName;
+			FileUtils.copyFiles(defProfile, configDir.getAbsolutePath(), null);
+			loaded = params.load();
+		}
 		if (params.getInt("version", 0) < 1) {
 			updateProperties();
 			params.edit().putInt("version", 1).apply();
 		}
-
 		if (loaded && !showSettings) {
 			startMIDlet();
 			return;
-		}
-		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-				.getString(Config.DEFAULT_PROFILE_KEY, null);
-		if (defName != null) {
-			defProfile = Config.PROFILES_DIR + '/' + defName;
-			FileUtils.copyFiles(defProfile, configDir.getAbsolutePath(), null);
 		}
 		loadKeyLayout();
 		setContentView(R.layout.activity_config);

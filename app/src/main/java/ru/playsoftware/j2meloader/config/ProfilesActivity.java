@@ -152,7 +152,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		if (id == -1) {
 			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
 					Uri.parse(newName), getApplicationContext(), ConfigActivity.class);
-			startActivityForResult(intent, ProfilesActivity.REQUEST_CODE_EDIT);
+			startActivityForResult(intent, REQUEST_CODE_EDIT);
 			return;
 		}
 		Profile profile = adapter.getItem(id);
