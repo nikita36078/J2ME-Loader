@@ -183,7 +183,6 @@ public abstract class Transformable extends Object3D {
 	}
 
 	public void setTransform(Transform transform) {
-		this.transform = transform;
 		if (transform != null) {
 			if (!(this instanceof Texture2D) && !transform.mtx.isWUnity())
 				throw new IllegalArgumentException();
