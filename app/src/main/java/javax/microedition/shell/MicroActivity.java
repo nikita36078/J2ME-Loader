@@ -196,7 +196,7 @@ public class MicroActivity extends AppCompatActivity {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
 				.setMessage(message)
-				.setNegativeButton(android.R.string.ok, null);
+				.setPositiveButton(android.R.string.ok, (d, w) -> ContextHolder.notifyDestroyed());
 		builder.setOnCancelListener(dialogInterface -> ContextHolder.notifyDestroyed());
 		builder.show();
 	}
