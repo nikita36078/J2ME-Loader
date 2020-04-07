@@ -162,7 +162,6 @@ public class Appearance extends Object3D {
 			gl.glAlphaFunc(GL10.GL_GEQUAL, 0.0f);
 			gl.glDisable(GL10.GL_ALPHA_TEST);
 
-			//gl.glDisable(GL10.GL_BLEND);
 			gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL10.GL_BLEND);
 

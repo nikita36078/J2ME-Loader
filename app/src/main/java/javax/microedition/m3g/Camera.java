@@ -122,7 +122,6 @@ public class Camera extends Node {
 
 	public void setGeneric(Transform transform) {
 		this.projectionType = GENERIC;
-		//this.transform.set(transform);
 		this.transform.mtx.copyMatrix(transform.mtx);
 
 		validateProjectionMatrix();

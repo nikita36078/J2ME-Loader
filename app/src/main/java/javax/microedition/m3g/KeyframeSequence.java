@@ -82,10 +82,6 @@ public class KeyframeSequence extends Object3D {
 		copy.duration = duration;
 		copy.validRangeFirst = validRangeFirst;
 		copy.validRangeLast = validRangeLast;
-		//copy.interpolationType = interpolationType;
-		//copy.keyframeCount = keyframeCount;
-		//copy.componentCount = componentCount;
-		//copy.probablyNext = probablyNext;
 
 		copy.keyFrames = new float[keyFrames.length][keyFrames[0].length];
 		for (int i = 0; i < keyFrames.length; i++)
@@ -362,14 +358,10 @@ public class KeyframeSequence extends Object3D {
 				temp1 = new QVec4();
 				q0 = new QVec4();
 				q1 = new QVec4();
-				//A = new QVec4();
-				//B = new QVec4();
 				sampl = new QVec4();
 
 				q0.setQuat(keyframeAt(start));
 				q1.setQuat(keyframeAt(end));
-				//A.setQuat(a[start]);
-				//B.setQuat(b[end]);
 				sampl.setQuat(sample);
 				temp0.slerpQuat(s, q0, q1);
 				temp1.slerpQuat(s, a[start], b[end]);
@@ -389,16 +381,6 @@ public class KeyframeSequence extends Object3D {
 				temp[1] = q1.y;
 				temp[2] = q1.z;
 				temp[3] = q1.w;
-				/*temp = a[start];
-                temp[0] = A.x;
-				temp[1] = A.y;
-				temp[2] = A.z;
-				temp[3] = A.w;
-				temp = b[end];
-				temp[0] = B.x;
-				temp[1] = B.y;
-				temp[2] = B.z;
-				temp[3] = B.w;*/
 				break;
 			default:
 				throw new IllegalStateException();

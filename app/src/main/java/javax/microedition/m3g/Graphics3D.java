@@ -114,7 +114,6 @@ public final class Graphics3D {
 		EGL_ASSERT(egl.eglInitialize(eglDisplay, major_minor));
 
 		int[] num_config = new int[1];
-		//EGL_ASSERT(egl.eglGetConfigs(eglDisplay, null, 0, num_config));
 		int[] s_configAttribs = {
 				EGL10.EGL_SURFACE_TYPE, EGL10.EGL_PBUFFER_BIT,
 				EGL10.EGL_RED_SIZE, 8,
@@ -312,12 +311,13 @@ public final class Graphics3D {
 			EGL_ASSERT(egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT));
 			egl.eglDestroySurface(this.eglDisplay, this.eglWindowSurface);
 		}
+		renderTarget = null;
 	}
 
 	public void clear(Background background) {
-		/*if (!targetBound) {
+		if (renderTarget == null) {
 			throw new IllegalStateException("Graphics3D does not have a rendering target");
-		}*/
+		}
 
 		if (background != null)
 			background.setupGL(gl);
@@ -486,8 +486,8 @@ public final class Graphics3D {
 	}
 
 	public void render(Node node, Transform transform) {
-		/*if (!targetBound)
-			throw new IllegalStateException("Graphics3D does not have a rendering target");*/
+		if (renderTarget == null)
+			throw new IllegalStateException("Graphics3D does not have a rendering target");
 		if (camera == null)
 			throw new IllegalStateException("Graphics3D does not have a current camera");
 
@@ -516,7 +516,6 @@ public final class Graphics3D {
 
 			gl.glMatrixMode(GL10.GL_MODELVIEW);
 			t.set(cameraTransform);
-			//t.mtx.invertMatrix();
 			t.setGL(gl);
 
 			gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
@@ -554,8 +553,8 @@ public final class Graphics3D {
 			throw new NullPointerException("triangles == null");
 		if (appearance == null)
 			throw new NullPointerException("appearance == null");
-		/*if (!targetBound)
-			throw new IllegalStateException("Graphics3D does not have a rendering target");*/
+		if (renderTarget == null)
+			throw new IllegalStateException("Graphics3D does not have a rendering target");
 		if (camera == null)
 			throw new IllegalStateException("Graphics3D does not have a current camera");
 		// TODO Check if vertices or triangles violates the constraints defined in VertexBuffer or IndexBuffer
@@ -684,10 +683,9 @@ public final class Graphics3D {
 	}
 
 	public void render(World world) {
-
-		/*if (!targetBound) {
+		if (renderTarget == null) {
 			throw new IllegalStateException("Graphics3D does not have a rendering target");
-		}*/
+		}
 
 		clear(world.getBackground());
 
@@ -741,142 +739,6 @@ public final class Graphics3D {
 				child = child.right;
 			} while (child != group.firstChild);
 		}
-	}
-
-	private void drawMesh(VertexBuffer vb, IndexBuffer ib, Appearance app, Transform modelTransform) {
-		initRender();
-		if (modelTransform != null) {
-			float transform[] = new float[16];
-			modelTransform.mtx.getMatrixColumns(transform);
-			gl.glPushMatrix();
-			FloatBuffer tr = ByteBuffer.allocateDirect(transform.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-			tr.put(transform).position(0);
-			gl.glMultMatrixf(tr);
-		}
-		app.setupGL(gl);
-
-		VertexArray colors = vb.getColors();
-		if (colors != null) {
-			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			Buffer buffer = colors.getBuffer();
-			buffer.position(0);
-			// Force number of color components to 4 (i.e. don't use colors.getComponentCount())
-			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			gl.glColorPointer(4, GL10.GL_UNSIGNED_BYTE, 4, buffer);
-		} else {
-			gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-			// Use default color as we don't have color per vertex
-			Color color = new Color(vb.getDefaultColor());
-			float[] colorArray = color.toRGBAArray();
-			gl.glColor4f(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
-		}
-
-		VertexArray normals = vb.getNormals();
-		if (normals != null) {
-/*			gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-			FloatBuffer norm = normals.getFloatBuffer();
-			norm.position(0);
-			gl.glEnable(GL10.GL_NORMALIZE);
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, norm);*/
-
-			//FloatBuffer norm = normals.getFloatBuffer();
-			gl.glEnable(GL10.GL_NORMALIZE);
-			if (normals.getComponentType() == 1) {
-				ByteBuffer norm = (ByteBuffer) normals.getBuffer();
-				norm.position(0);
-				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-				gl.glNormalPointer(GL10.GL_BYTE, 4, norm);
-			} else {
-				ShortBuffer norm = (ShortBuffer) normals.getBuffer();
-				norm.position(0);
-				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-				gl.glNormalPointer(GL10.GL_SHORT, normals.stride, norm);
-			}
-			/*norm.position(0);
-			gl.glEnable(GL10.GL_NORMALIZE);
-			gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, norm);*/
-
-		} else {
-			//gl.glDisable(GL10.GL_NORMALIZE);
-			gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-		}
-
-		// Vertices
-		float[] scaleBias = new float[4];
-		VertexArray vertices = vb.getPositions(scaleBias);
-		if (vertices != null) {
-			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-			//FloatBuffer pos = vertices.getFloatBuffer();
-			if (vertices.getComponentType() == 1) {
-				ByteBuffer buffer = (ByteBuffer) vertices.getBuffer();
-				buffer.position(0);
-				gl.glVertexPointer(vertices.getComponentCount(), GL10.GL_BYTE, 4, buffer);
-			} else {
-				ShortBuffer buffer = (ShortBuffer) vertices.getBuffer();
-				buffer.position(0);
-				gl.glVertexPointer(vertices.getComponentCount(), GL10.GL_SHORT, vertices.stride, buffer);
-			}
-			//pos.position(0);
-			//gl.glVertexPointer(vertices.getComponentCount(), GL10.GL_FLOAT, 0, pos);
-		} else {
-			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		}
-
-		// Textures
-		for (int i = 0; i < maxTextureUnits; i++) {
-			float[] texScaleBias = new float[4];
-			VertexArray texcoords = vb.getTexCoords(i, texScaleBias);
-			gl.glClientActiveTexture(GL10.GL_TEXTURE0 + i);
-			gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
-			if ((texcoords != null) && (app.getTexture(i) != null)) {
-				// Enable the texture coordinate array
-				gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-				//FloatBuffer tex = texcoords.getFloatBuffer();
-				//tex.position(0);
-
-				// Activate the texture unit
-				//appearance.getTexture(i).setupGL(gl, texScaleBias);
-
-				// Set the texture coordinates
-				if (texcoords.getComponentType() == 1) {
-					ByteBuffer buffer = (ByteBuffer) texcoords.getBuffer();
-					buffer.position(0);
-					gl.glTexCoordPointer(texcoords.getComponentCount(), GL10.GL_BYTE, 4, buffer);
-				} else {
-					ShortBuffer buffer = (ShortBuffer) texcoords.getBuffer();
-					buffer.position(0);
-					gl.glTexCoordPointer(texcoords.getComponentCount(), GL10.GL_SHORT, texcoords.stride, buffer);
-				}
-			} else {
-				gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			}
-		}
-
-		gl.glMatrixMode(GL10.GL_TEXTURE);
-		for (int i = 0; i < maxTextureUnits; i++) {
-			float[] texScaleBias = new float[4];
-			VertexArray texcoords = vb.getTexCoords(i, texScaleBias);
-			if (texcoords != null && app.getTexture(i) != null) {
-				//appearance.getTexture(i).setupGL(gl, texScaleBias);
-				gl.glActiveTexture(GL10.GL_TEXTURE0 + i);
-				gl.glTranslatef(texScaleBias[1], texScaleBias[2], texScaleBias[3]);
-				gl.glScalef(texScaleBias[0], texScaleBias[0], texScaleBias[0]);
-			}
-		}
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		if (vertices != null) {
-			gl.glTranslatef(scaleBias[1], scaleBias[2], scaleBias[3]);
-			gl.glScalef(scaleBias[0], scaleBias[0], scaleBias[0]);
-		}
-
-		// Draw
-		IntBuffer indices = ib.getBuffer();
-		indices.position(0);
-		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, ib.getIndexCount(), GLES20.GL_UNSIGNED_INT, indices);
-
-		if (modelTransform != null)
-			gl.glPopMatrix();
 	}
 
 	private void renderNode(Node node, Transform transform) {
