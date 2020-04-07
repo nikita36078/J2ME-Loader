@@ -249,9 +249,6 @@ public class Loader {
 			int length = readInt();
 			readed = 0;
 
-			System.out.println("objectType: " + objectType);
-			System.out.println("length: " + length);
-
 			dis.mark(Integer.MAX_VALUE);
 
 			if (objectType == 0) { // Header
@@ -912,7 +909,6 @@ public class Loader {
 		}
 
 		String ret = result.toString();
-		System.out.println("String: " + ret);
 		return ret;
 	}
 
@@ -951,7 +947,6 @@ public class Loader {
 				hashtable.put(new Integer(parameterID), parameterBytes);
 			}
 			object.setUserObject(hashtable);
-			System.out.println("Loaded " + userParams + " user objects");
 		}
 	}
 
