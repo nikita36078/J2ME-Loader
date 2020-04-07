@@ -742,6 +742,9 @@ public final class Graphics3D {
 	}
 
 	private void renderNode(Node node, Transform transform) {
+		if (!node.isRenderingEnabled()) {
+			return;
+		}
 		if (node instanceof Mesh) {
 			Mesh mesh = (Mesh) node;
 			int subMeshes = mesh.getSubmeshCount();
