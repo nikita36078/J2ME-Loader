@@ -72,12 +72,15 @@ public class ObjectRenderer {
 				Material material = renderable.getMaterialsT().get(i);
 				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
+					GLES20.glBlendEquation(GL_FUNC_ADD);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				} else if (material.blendMode == Polygon.BLENDING_MODE_SUB) {
 					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendFuncSeparate(GL_ONE_MINUS_SRC_COLOR, GL_ONE, GL_ONE, GL_ONE);
+					GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
 				} else if (material.transparent) {
 					GLES20.glEnable(GL_BLEND);
+					GLES20.glBlendEquation(GL_FUNC_ADD);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				} else {
 					GLES20.glDisable(GL_BLEND);
@@ -118,10 +121,12 @@ public class ObjectRenderer {
 				Material material = renderable.getMaterialsF().get(i);
 				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
+					GLES20.glBlendEquation(GL_FUNC_ADD);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				} else if (material.blendMode == Polygon.BLENDING_MODE_SUB) {
 					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendFuncSeparate(GL_ONE_MINUS_SRC_COLOR, GL_ONE, GL_ONE, GL_ONE);
+					GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
 				} else {
 					GLES20.glDisable(GL_BLEND);
 				}
