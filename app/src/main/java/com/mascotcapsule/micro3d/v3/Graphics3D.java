@@ -169,6 +169,7 @@ public class Graphics3D {
 	}
 
 	public final void dispose() {
+		renderer.dispose();
 	}
 
 	private void checkTargetIsValid() throws IllegalStateException {

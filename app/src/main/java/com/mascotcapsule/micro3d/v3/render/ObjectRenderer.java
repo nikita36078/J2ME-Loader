@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 
 import com.mascotcapsule.micro3d.v3.FigureLayout;
 import com.mascotcapsule.micro3d.v3.Texture;
+import com.mascotcapsule.micro3d.v3.figure.CanvasFigure;
 import com.mascotcapsule.micro3d.v3.figure.Material;
 import com.mascotcapsule.micro3d.v3.figure.Polygon;
 import com.mascotcapsule.micro3d.v3.figure.Renderable;
@@ -129,6 +130,38 @@ public class ObjectRenderer {
 				GLUtils.checkGlError("glDrawArrays");
 			}
 		}
+	}
+
+	public void draw(CanvasFigure figure) {
+		float[] mvpMatrix = figure.getMatrix();
+		FloatBuffer vertexData = figure.getVboPoly();
+
+		GLES20.glUseProgram(textureProgram);
+		glUniformMatrix4fv(utMatrixLocation, 1, false, mvpMatrix, 0);
+		GLUtils.checkGlError("glUniformMatrix4fv");
+		// Vertex coords
+		vertexData.position(0);
+		GLES20.glVertexAttribPointer(atPositionLocation, COORDS_PER_VERTEX, GL_FLOAT,
+				false, TEXTURE_STRIDE, vertexData);
+		GLES20.glEnableVertexAttribArray(atPositionLocation);
+
+		// Texture coords
+		vertexData.position(COORDS_PER_VERTEX);
+		GLES20.glVertexAttribPointer(atTextureLocation, TEX_COORDS_PER_VERTEX, GL_FLOAT,
+				false, TEXTURE_STRIDE, vertexData);
+		GLES20.glEnableVertexAttribArray(atTextureLocation);
+		GLES20.glUniform2fv(ucOffsetLocation, 1, figure.getGlCenter(), 0);
+
+		// Put the texture to the unit 0 target
+		GLES20.glActiveTexture(GL_TEXTURE0);
+		// Texture units
+		GLES20.glUniform1i(utTextureUnitLocation, 0);
+
+		GLES20.glBindTexture(GL_TEXTURE_2D, figure.getId());
+		GLES20.glUniform2fv(utTextureSizeLocation, 1, figure.getSize(), 0);
+		// Draw the triangle
+		GLES20.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		GLUtils.checkGlError("glDrawArrays");
 	}
 
 	private void getTextureLocations() {

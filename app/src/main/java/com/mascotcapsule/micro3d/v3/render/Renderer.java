@@ -1,13 +1,12 @@
 package com.mascotcapsule.micro3d.v3.render;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 
 import com.mascotcapsule.micro3d.v3.Figure;
 import com.mascotcapsule.micro3d.v3.FigureLayout;
 import com.mascotcapsule.micro3d.v3.Texture;
+import com.mascotcapsule.micro3d.v3.figure.CanvasFigure;
 import com.mascotcapsule.micro3d.v3.figure.DirectFigure;
 
 import java.nio.ByteBuffer;
@@ -31,8 +30,8 @@ public class Renderer {
 
 	private ObjectRenderer objectRenderer;
 	private DirectFigure directFigure;
+	private CanvasFigure canvasFigure;
 	private ByteBuffer pixelBuf;
-	private Bitmap mBitmapBuffer;
 
 	private void init() {
 		this.egl = (EGL10) EGLContext.getEGL();
@@ -93,14 +92,19 @@ public class Renderer {
 				GLES20.glViewport(0, 0, width, height);
 				objectRenderer = new ObjectRenderer();
 				directFigure = new DirectFigure();
+				canvasFigure = new CanvasFigure();
 				pixelBuf = ByteBuffer.allocateDirect(width * height * 4);
 				pixelBuf.order(ByteOrder.LITTLE_ENDIAN);
-				mBitmapBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 			}
 		}
 		// Draw background color
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+		// Draw canvas
+		canvasFigure.loadTexture(graphics.getBitmap());
+		objectRenderer.draw(canvasFigure);
+		flush();
 	}
 
 	@Override
@@ -127,13 +131,16 @@ public class Renderer {
 
 	public void release(Graphics graphics) {
 		pixelBuf.position(0);
-		GLES20.glReadPixels(0, 0, width, height, GLUtils.getInternalFormat(mBitmapBuffer), GLES20.GL_UNSIGNED_BYTE, pixelBuf);
+		GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuf);
 		pixelBuf.position(0);
-		mBitmapBuffer.copyPixelsFromBuffer(pixelBuf);
-		graphics.getCanvas().drawBitmap(mBitmapBuffer, 0, 0, null);
+		graphics.getBitmap().copyPixelsFromBuffer(pixelBuf);
 	}
 
 	public void flush() {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+	}
+
+	public void dispose() {
+		canvasFigure.dispose();
 	}
 }
