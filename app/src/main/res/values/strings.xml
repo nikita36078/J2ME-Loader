@@ -201,6 +201,7 @@
     <string name="default_label">"%s (default)"</string>
     <string name="saved">Saved</string>
     <string name="not_saved_exists">Already exists</string>
+    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
     <string name="error_name">Enter a name!</string>
     <string name="set_as_default">Set as default</string>
     <string name="edit">Edit</string>
@@ -212,4 +213,5 @@
     <string name="error_name_exists">Already exists, enter other name</string>
     <string name="disabled">disabled</string>
     <string name="unlimited">unlimited</string>
+    <string name="pref_emulator_dir">Working directory</string>
 </resources>

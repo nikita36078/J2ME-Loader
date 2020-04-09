@@ -143,7 +143,8 @@ public class AppsListFragment extends ListFragment {
 	private void initDb() {
 		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
-				.subscribeOn(Schedulers.io()).publish();
+				.subscribeOn(Schedulers.io())
+				.publish();
 		listConnectableFlowable
 				.firstElement()
 				.subscribe(list -> AppUtils.updateDb(appRepository, list));
@@ -374,5 +375,4 @@ public class AppsListFragment extends ListFragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 }

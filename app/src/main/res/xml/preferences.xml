@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <ListPreference
         android:defaultValue="light"
         android:entries="@array/pref_theme_entries"
@@ -37,5 +39,11 @@
         android:key="pref_default_settings"
         android:icon="@drawable/ic_setting_default"
         android:title="@string/pref_default_settings">
+    </Preference>
+    <Preference
+        android:key="emulator_dir"
+        android:icon="@drawable/ic_setting_folder"
+        android:title="@string/pref_emulator_dir"
+        tools:summary="/sdcard/J2ME-Loader">
     </Preference>
 </androidx.preference.PreferenceScreen>

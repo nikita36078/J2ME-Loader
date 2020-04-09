@@ -22,6 +22,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import ru.playsoftware.j2meloader.applist.AppItem;
+import ru.playsoftware.j2meloader.config.Config;
 
 @Database(entities = {AppItem.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
@@ -34,7 +35,8 @@ public abstract class AppDatabase extends RoomDatabase {
 			synchronized (AppDatabase.class) {
 				if (instance == null) {
 					instance = Room.databaseBuilder(context.getApplicationContext(),
-							AppDatabase.class, "apps-database.db").build();
+							AppDatabase.class, Config.getEmulatorDir() + "/J2ME-apps.db")
+							.build();
 				}
 			}
 		}

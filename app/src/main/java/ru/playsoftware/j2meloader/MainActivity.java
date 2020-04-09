@@ -18,12 +18,14 @@
 package ru.playsoftware.j2meloader;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -38,6 +41,7 @@ import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.MigrationUtils;
 
@@ -45,9 +49,11 @@ public class MainActivity extends BaseActivity {
 
 	public static final String APP_SORT_KEY = "appSort";
 	public static final String APP_PATH_KEY = "appPath";
+	public static final String APP_URI_KEY = "appUri";
 
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
+	private String emulatorDir;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,7 @@ public class MainActivity extends BaseActivity {
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(this, R.string.external_storage_not_mounted, Toast.LENGTH_SHORT).show();
 			finish();
+			return;
 		}
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -73,14 +80,28 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void setupActivity(boolean intentUri) {
-		initFolders();
+		if (!initFolders()) {
+			String msg = getString(R.string.create_apps_dir_failed, emulatorDir);
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.error)
+					.setCancelable(false)
+					.setMessage(msg)
+					.setNegativeButton(R.string.close, (d, w) -> finish())
+					.setPositiveButton(R.string.action_settings, (d, w) -> startActivity(
+							new Intent(getApplicationContext(), SettingsActivity.class)))
+					.show();
+			return;
+		}
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check();
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
-		if (intentUri) bundleLoad.putString(APP_PATH_KEY, getAppPath());
+		if (intentUri) {
+			bundleLoad.putString(APP_PATH_KEY, getAppPath(getIntent().getData()));
+			bundleLoad.putParcelable(APP_URI_KEY, getIntent().getData());
+		}
 		AppsListFragment appsListFragment = new AppsListFragment();
 		appsListFragment.setArguments(bundleLoad);
 		FragmentManager fragmentManager = getSupportFragmentManager();
@@ -89,30 +110,41 @@ public class MainActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 										   @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					setupActivity(getIntent().getData() != null);
-				} else {
-					Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
-					finish();
-				}
-				break;
+		if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_STORAGE) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				setupActivity(getIntent().getData() != null);
+			} else {
+				Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
+				finish();
+			}
 		}
 	}
 
-	private void initFolders() {
-		File nomedia = new File(Config.getEmulatorDir(), ".nomedia");
-		if (!nomedia.exists()) {
-			try {
-				nomedia.getParentFile().mkdirs();
-				nomedia.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (!Config.getEmulatorDir().equals(emulatorDir)) {
+			new Handler().post(this::recreate);
 		}
+	}
+
+	private boolean initFolders() {
+		emulatorDir = Config.getEmulatorDir();
+		File appsDir = new File(emulatorDir);
+		if (appsDir.exists()) {
+			return true;
+		}
+		try {
+			File nomedia = new File(appsDir, ".nomedia");
+			if (appsDir.mkdirs() && nomedia.createNewFile()) {
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private void checkActionBar() {
@@ -125,9 +157,9 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private String getAppPath() {
+	private String getAppPath(Uri uri) {
 		try {
-			return FileUtils.getAppPath(this, getIntent().getData());
+			return FileUtils.getAppPath(this, uri);
 		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();

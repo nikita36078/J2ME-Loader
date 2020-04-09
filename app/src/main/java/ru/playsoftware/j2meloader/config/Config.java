@@ -43,7 +43,7 @@ public class Config {
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
-	public static final String PREF_EMULATOR_DIR = "emulatorDir";
+	public static final String PREF_EMULATOR_DIR = "emulator_dir";
 	static final String PREF_DEFAULT_PROFILE = "default_profile";
 
 	private static String emulatorDir;
