@@ -170,9 +170,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		boolean loaded = params.load();
 		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 				.getString(Config.DEFAULT_PROFILE_KEY, null);
+		defProfile = Config.PROFILES_DIR + defName;
 		if (!loaded && defName != null) {
-			defProfile = Config.PROFILES_DIR + defName;
-			FileUtils.copyFiles(defProfile, configDir.getAbsolutePath(), null);
+			FileUtils.copyFiles(new File(defProfile), configDir, null);
 			loaded = params.load();
 		}
 		if (params.getInt("version", 0) < 1) {

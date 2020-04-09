@@ -16,132 +16,60 @@
 
 package ru.playsoftware.j2meloader.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.microedition.util.param.SharedPreferencesContainer;
-
-import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.settings.KeyMapper;
 
 public class MigrationUtils {
 
-	private static final int VERSION_1 = 1;
-	private static final int VERSION_2 = 2;
-	private static final int VERSION_3 = 3;
-	private static final int VERSION = 4;
-
-	private static void moveConfigs(Context context) {
-		File srcConfDir = new File(context.getApplicationInfo().dataDir, "/shared_prefs");
-		for (File srcConf : srcConfDir.listFiles()) {
-			String fileName = srcConf.getName().replace(".xml", "");
-			if (fileName.equals("ru.playsoftware.j2meloader_preferences")) {
-				continue;
-			}
-			File dstConf = new File(Config.CONFIGS_DIR, fileName + Config.MIDLET_CONFIG_FILE);
-			dstConf.getParentFile().mkdirs();
-			try {
-				FileUtils.copyFileUsingChannel(srcConf, dstConf);
-				srcConf.delete();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	private static void moveKeyLayouts() {
 		File srcDataDir = new File(Config.DATA_DIR);
 		if (!srcDataDir.exists()) {
 			return;
 		}
-		for (File srcData : srcDataDir.listFiles()) {
-			File srcKeylayout = new File(srcData, Config.MIDLET_KEY_LAYOUT_FILE);
-			if (!srcKeylayout.exists()) {
+		File[] files = srcDataDir.listFiles();
+		if (files == null) {
+			return;
+		}
+		for (File srcData : files) {
+			File srcKeyLayout = new File(srcData, Config.MIDLET_KEY_LAYOUT_FILE);
+			if (!srcKeyLayout.exists()) {
 				continue;
 			}
-			File dstKeylayout = new File(Config.CONFIGS_DIR,
+			File dstKeyLayout = new File(Config.CONFIGS_DIR,
 					srcData.getName() + Config.MIDLET_KEY_LAYOUT_FILE);
-			dstKeylayout.getParentFile().mkdirs();
+			dstKeyLayout.getParentFile().mkdirs();
 			try {
-				FileUtils.copyFileUsingChannel(srcKeylayout, dstKeylayout);
-				srcKeylayout.delete();
+				FileUtils.copyFileUsingChannel(srcKeyLayout, dstKeyLayout);
+				srcKeyLayout.delete();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private static void moveKeyMappings(Context context) {
-		File defaultConfigDir = new File(Config.EMULATOR_DIR + "/default");
-		SharedPreferencesContainer container = new SharedPreferencesContainer(defaultConfigDir);
-		container.load();
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String json = prefs.getString("pref_key_mapping", null);
-		prefs.edit().remove("pref_key_mapping").apply();
-		if (json != null && json.length() > 20) {
-			container.edit().putString(KeyMapper.PREF_KEY, json).apply();
+	public static void check() {
+		moveKeyLayouts();
+		moveTemplatesToProfiles();
+		moveDefaultToProfiles();
+	}
+
+	private static void moveTemplatesToProfiles() {
+		File templates = new File(Config.EMULATOR_DIR, "templates");
+		if (templates.exists()) {
+			File profiles = new File(Config.PROFILES_DIR);
+			FileUtils.copyFiles(templates, profiles, null);
 		}
 	}
 
-	private static int readVersion(File file) throws IOException {
-		int version;
-		try (FileInputStream in = new FileInputStream(file)) {
-			version = in.read();
-		}
-		return version;
-	}
-
-	private static void writeVersion(File file) throws IOException {
-		try (FileOutputStream stream = new FileOutputStream(file)) {
-			stream.write(VERSION);
-		}
-	}
-
-	public static void check(Context context) {
-		File file = new File(Config.EMULATOR_DIR, "DATA_VERSION");
-		int version = 0;
-		try {
-			version = readVersion(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		switch (version) {
-			case 0:
-				moveConfigs(context);
-			case VERSION_1:
-				moveKeyMappings(context);
-			case VERSION_2:
-			case VERSION_3:
-				File templates = new File(Config.EMULATOR_DIR, "templates");
-				File profiles = new File(Config.PROFILES_DIR);
-				if (templates.renameTo(profiles)) {
-					if (moveDefaultToProfiles()) {
-						PreferenceManager.getDefaultSharedPreferences(context)
-								.edit().putString(Config.DEFAULT_PROFILE_KEY, "default_migrated")
-								.apply();
-					}
-				}
-		}
-		try {
-			writeVersion(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static boolean moveDefaultToProfiles() {
+	private static void moveDefaultToProfiles() {
 		File dir = new File(Config.EMULATOR_DIR, "default");
 		final String[] files = dir.list();
 		if (files == null || files.length == 0) {
-			return false;
+			return;
 		}
-		File newDir = new File(Config.PROFILES_DIR, "default_migrated");
-		//noinspection ResultOfMethodCallIgnored
-		dir.renameTo(newDir);
-		final String[] list = newDir.list();
-		return list != null && list.length > 0;
+		File newDir = new File(Config.PROFILES_DIR, "J2ME-Loader");
+		FileUtils.copyFiles(dir, newDir, null);
 	}
 }

@@ -40,24 +40,22 @@ public class FileUtils {
 
 	private static String TAG = FileUtils.class.getName();
 
-	public static void copyFiles(String src, String dest, FilenameFilter filter) {
-		File srcFile = new File(src);
-		File dstFile = new File(dest);
-		if (!dstFile.exists() && !dstFile.mkdirs()) {
-			Log.e(TAG, "copyFiles failed create dir: " + dstFile);
+	public static void copyFiles(File src, File dst, FilenameFilter filter) {
+		if (!dst.exists() && !dst.mkdirs()) {
+			Log.e(TAG, "copyFiles() failed create dir: " + dst);
 			return;
 		}
-		File[] list = srcFile.listFiles(filter);
+		File[] list = src.listFiles(filter);
 		if (list == null) {
 			return;
 		}
-		for (File entry : list) {
-			String to = entry.getPath().replace(src, dest);
-			if (entry.isDirectory()) {
-				copyFiles(entry.getPath(), to, filter);
+		for (File file : list) {
+			File to = new File(dst, file.getName());
+			if (file.isDirectory()) {
+				copyFiles(src, to, filter);
 			} else {
 				try {
-					copyFileUsingChannel(entry, new File(to));
+					copyFileUsingChannel(file, to);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -66,7 +64,8 @@ public class FileUtils {
 	}
 
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
-		try (FileChannel sourceChannel = new FileInputStream(source).getChannel(); FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
+		try (FileChannel sourceChannel = new FileInputStream(source).getChannel();
+			 FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
 			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
 		}
 	}
@@ -154,6 +153,35 @@ public class FileUtils {
 				//noinspection ResultOfMethodCallIgnored
 				file.delete();
 			}
+		}
+	}
+
+	static void moveFiles(File src, File dst) {
+		if (src.renameTo(dst)) return;
+		File[] files = src.listFiles();
+		if (files == null) {
+			return;
+		}
+		if (!dst.mkdirs()) {
+			Log.e(TAG, "moveFiles() can't create directory: " + dst);
+		}
+		for (File file : files) {
+			File to = new File(dst, file.getName());
+			if (file.isDirectory()) {
+				moveFiles(file, to);
+			} else if (!file.renameTo(to)) {
+				try {
+					copyFileUsingChannel(file, to);
+					if (!file.delete()) {
+						Log.e(TAG, "moveFiles() can't delete: " + file);
+					}
+				} catch (IOException e) {
+					Log.e(TAG, "moveFiles() can't move [" + file + "] to [" + to + "]", e);
+				}
+			}
+		}
+		if (!src.delete()) {
+			Log.e(TAG, "moveFiles() can't delete: " + src);
 		}
 	}
 }

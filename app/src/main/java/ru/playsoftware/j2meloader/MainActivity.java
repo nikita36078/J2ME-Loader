@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
 		initFolders();
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		MigrationUtils.check(this);
+		MigrationUtils.check();
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
