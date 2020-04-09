@@ -156,21 +156,21 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		if (isProfile) {
 			setResult(RESULT_OK, new Intent().setData(intent.getData()));
-			configDir = new File(Config.PROFILES_DIR, dirName);
+			configDir = new File(Config.getProfilesDir(), dirName);
 			setTitle(dirName);
 		} else {
 			setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
-			dataDir = new File(Config.DATA_DIR, dirName);
+			dataDir = new File(Config.getDataDir(), dirName);
 			dataDir.mkdirs();
-			configDir = new File(Config.CONFIGS_DIR, dirName);
+			configDir = new File(Config.getConfigsDir(), dirName);
 		}
 		configDir.mkdirs();
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load();
 		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-				.getString(Config.DEFAULT_PROFILE_KEY, null);
-		defProfile = Config.PROFILES_DIR + defName;
+				.getString(Config.PREF_DEFAULT_PROFILE, null);
+		defProfile = Config.getProfilesDir() + defName;
 		if (!loaded && defName != null) {
 			FileUtils.copyFiles(new File(defProfile), configDir, null);
 			loaded = params.load();

@@ -89,7 +89,7 @@ public class EditNameAlert extends DialogFragment {
 			Toast.makeText(getActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		final File config = new File(Config.PROFILES_DIR, name + Config.MIDLET_CONFIG_FILE);
+		final File config = new File(Config.getProfilesDir(), name + Config.MIDLET_CONFIG_FILE);
 		if (config.exists()) {
 			editText.setText(name);
 			editText.requestFocus();

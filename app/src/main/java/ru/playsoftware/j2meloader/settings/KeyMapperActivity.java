@@ -64,9 +64,9 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		File configDir;
 		boolean isProfile = ConfigActivity.ACTION_EDIT_PROFILE.equals(intent.getAction());
 		if (isProfile) {
-			configDir = new File(Config.PROFILES_DIR, dirName);
+			configDir = new File(Config.getProfilesDir(), dirName);
 		} else {
-			configDir = new File(Config.CONFIGS_DIR, dirName);
+			configDir = new File(Config.getConfigsDir(), dirName);
 		}
 		params = new SharedPreferencesContainer(configDir);
 		params.load();

@@ -17,6 +17,7 @@
 
 package javax.microedition.util;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -79,7 +80,6 @@ public class ContextHolder {
 	}
 
 	public static void setCurrentActivity(MicroActivity activity) {
-		appContext = activity.getApplicationContext();
 		currentActivity = new WeakReference<>(activity);
 	}
 
@@ -116,7 +116,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.DATA_DIR + AppClassLoader.getName(), name);
+		return new File(Config.getDataDir() + AppClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {
@@ -162,5 +162,9 @@ public class ContextHolder {
 			vibrator.cancel();
 		}
 		return true;
+	}
+
+	public static void setApplication(Application application) {
+		appContext = application;
 	}
 }

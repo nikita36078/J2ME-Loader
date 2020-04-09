@@ -24,7 +24,7 @@ import ru.playsoftware.j2meloader.config.Config;
 public class MigrationUtils {
 
 	private static void moveKeyLayouts() {
-		File srcDataDir = new File(Config.DATA_DIR);
+		File srcDataDir = new File(Config.getDataDir());
 		if (!srcDataDir.exists()) {
 			return;
 		}
@@ -37,7 +37,7 @@ public class MigrationUtils {
 			if (!srcKeyLayout.exists()) {
 				continue;
 			}
-			File dstKeyLayout = new File(Config.CONFIGS_DIR,
+			File dstKeyLayout = new File(Config.getConfigsDir(),
 					srcData.getName() + Config.MIDLET_KEY_LAYOUT_FILE);
 			dstKeyLayout.getParentFile().mkdirs();
 			try {
@@ -56,20 +56,20 @@ public class MigrationUtils {
 	}
 
 	private static void moveTemplatesToProfiles() {
-		File templates = new File(Config.EMULATOR_DIR, "templates");
+		File templates = new File(Config.getEmulatorDir(), "templates");
 		if (templates.exists()) {
-			File profiles = new File(Config.PROFILES_DIR);
+			File profiles = new File(Config.getProfilesDir());
 			FileUtils.copyFiles(templates, profiles, null);
 		}
 	}
 
 	private static void moveDefaultToProfiles() {
-		File dir = new File(Config.EMULATOR_DIR, "default");
+		File dir = new File(Config.getEmulatorDir(), "default");
 		final String[] files = dir.list();
 		if (files == null || files.length == 0) {
 			return;
 		}
-		File newDir = new File(Config.PROFILES_DIR, "J2ME-Loader");
+		File newDir = new File(Config.getProfilesDir(), "J2ME-Loader");
 		FileUtils.copyFiles(dir, newDir, null);
 	}
 }

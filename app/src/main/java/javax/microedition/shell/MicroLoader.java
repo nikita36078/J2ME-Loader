@@ -58,6 +58,9 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
 
@@ -69,7 +72,7 @@ public class MicroLoader {
 	public MicroLoader(Context context, String appPath) {
 		this.context = context;
 		this.appPath = appPath;
-		this.path = Config.APP_DIR + appPath;
+		this.path = Config.getAppDir() + appPath;
 		this.params = new SharedPreferencesContainer(appPath);
 	}
 
@@ -111,29 +114,23 @@ public class MicroLoader {
 			throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		File dexSource = new File(path, Config.MIDLET_DEX_FILE);
-		File dexTargetDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
-		if (dexTargetDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetDir);
+		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
+		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
+		if (dexOptDir.exists()) {
+			FileUtils.clearDirectory(dexOptDir);
+		} else if (!dexOptDir.mkdir()) {
+			throw new IOException("Cant't create directory: [" + dexOptDir + ']');
 		}
-		dexTargetDir.mkdir();
-		File dexTargetOptDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_OPT_DIR);
-		if (dexTargetOptDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetOptDir);
-		}
-		dexTargetOptDir.mkdir();
-		File dexTarget = new File(dexTargetDir, Config.MIDLET_DEX_FILE);
-		FileUtils.copyFileUsingChannel(dexSource, dexTarget);
 		File resDir = new File(path, Config.MIDLET_RES_DIR);
-		ClassLoader loader = new AppClassLoader(dexTarget.getAbsolutePath(),
-				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
-		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
+		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
+				dexOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
+		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
 		Log.i(TAG, "MIDlet-Name: " + AppClassLoader.getName());
 		//noinspection unchecked
 		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
 		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
 		init.setAccessible(true);
-		MIDlet midlet = init.newInstance();
-		return midlet;
+		return init.newInstance();
 	}
 
 	private void setProperties() {
@@ -143,7 +140,7 @@ public class MicroLoader {
 				+ (country.length() == 2 ? "-" + country : ""));
 		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
 		System.setProperty("fileconn.dir.cache", "file:///c:"
-				+ Config.DATA_DIR.substring(externalStoragePath.length()) + appPath);
+				+ Config.getDataDir().substring(externalStoragePath.length()) + appPath);
 	}
 
 	public int getOrientation() {
@@ -245,7 +242,7 @@ public class MicroLoader {
 		vk.setButtonShape(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 		vk.setForceOpacity(vkForceOpacity);
 
-		File keylayoutFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_KEY_LAYOUT_FILE);
+		File keylayoutFile = new File(Config.getConfigsDir(), appPath + Config.MIDLET_KEY_LAYOUT_FILE);
 		if (keylayoutFile.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(keylayoutFile);

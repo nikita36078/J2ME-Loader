@@ -61,7 +61,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		registerForContextMenu(listView);
 		adapter = new ProfilesAdapter(this, profiles);
 		listView.setAdapter(adapter);
-		final String def = preferences.getString(Config.DEFAULT_PROFILE_KEY, null);
+		final String def = preferences.getString(Config.PREF_DEFAULT_PROFILE, null);
 		if (def != null) {
 			for (int i = profiles.size() - 1; i >= 0; i--) {
 				Profile profile = profiles.get(i);
@@ -113,7 +113,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		final Profile profile = adapter.getItem(index);
 		switch (item.getItemId()) {
 			case R.id.action_context_default:
-				preferences.edit().putString(Config.DEFAULT_PROFILE_KEY, profile.getName()).apply();
+				preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, profile.getName()).apply();
 				adapter.setDefault(profile);
 				return true;
 			case R.id.action_context_edit:
@@ -159,7 +159,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		profile.renameTo(newName);
 		adapter.notifyDataSetChanged();
 		if (adapter.getDefault() == profile) {
-			preferences.edit().putString(Config.DEFAULT_PROFILE_KEY, newName).apply();
+			preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, newName).apply();
 		}
 	}
 }

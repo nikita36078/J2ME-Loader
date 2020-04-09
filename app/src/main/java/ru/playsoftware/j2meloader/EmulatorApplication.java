@@ -32,6 +32,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import javax.microedition.util.ContextHolder;
+
 import ru.playsoftware.j2meloader.crashes.AppCenterSenderFactory;
 
 @AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {AppCenterSenderFactory.class},
@@ -50,6 +52,7 @@ public class EmulatorApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		ContextHolder.setApplication(this);
 		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) ACRA.init(this);
 	}
 

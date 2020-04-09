@@ -28,12 +28,12 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 class ProfilesManager {
 
 	static ArrayList<Profile> getProfiles() {
-		File root = new File(Config.PROFILES_DIR);
+		File root = new File(Config.getProfilesDir());
 		return getList(root);
 	}
 
 	static ArrayList<Profile> getConfigs() {
-		File root = new File(Config.CONFIGS_DIR);
+		File root = new File(Config.getConfigsDir());
 		return getList(root);
 	}
 

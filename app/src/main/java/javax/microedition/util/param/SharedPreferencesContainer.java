@@ -33,7 +33,7 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 	private File configFile;
 
 	public SharedPreferencesContainer(String appName) {
-		configFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
+		configFile = new File(Config.getConfigsDir(), appName + Config.MIDLET_CONFIG_FILE);
 	}
 
 	public SharedPreferencesContainer(File configDir) {

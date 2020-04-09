@@ -72,7 +72,7 @@ public class SaveProfileAlert extends DialogFragment {
 				return;
 			}
 
-			final File config = new File(Config.PROFILES_DIR, name + Config.MIDLET_CONFIG_FILE);
+			final File config = new File(Config.getProfilesDir(), name + Config.MIDLET_CONFIG_FILE);
 			if (config.exists()) {
 				editText.setText(name);
 				editText.requestFocus();
@@ -90,7 +90,7 @@ public class SaveProfileAlert extends DialogFragment {
 						cbConfig.isChecked(), cbKeyboard.isChecked());
 				if (cbDefault.isChecked()) {
 					PreferenceManager.getDefaultSharedPreferences(requireContext())
-							.edit().putString(Config.DEFAULT_PROFILE_KEY, name).apply();
+							.edit().putString(Config.PREF_DEFAULT_PROFILE, name).apply();
 				}
 				dismiss();
 			} catch (IOException e) {

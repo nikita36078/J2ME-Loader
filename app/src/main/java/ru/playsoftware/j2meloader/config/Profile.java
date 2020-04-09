@@ -36,7 +36,7 @@ public class Profile implements Comparable<Profile> {
 
 	public boolean renameTo(String newName) {
 		File oldDir = getDir();
-		File newDir = new File(Config.PROFILES_DIR, newName);
+		File newDir = new File(Config.getProfilesDir(), newName);
 		name = newName;
 		return oldDir.renameTo(newDir);
 	}
@@ -50,15 +50,15 @@ public class Profile implements Comparable<Profile> {
 	}
 
 	private File getDir() {
-		return new File(Config.PROFILES_DIR, name);
+		return new File(Config.getProfilesDir(), name);
 	}
 
 	public File getConfig() {
-		return new File(Config.PROFILES_DIR, name + Config.MIDLET_CONFIG_FILE);
+		return new File(Config.getProfilesDir(), name + Config.MIDLET_CONFIG_FILE);
 	}
 
 	public File getKeyLayout() {
-		return new File(Config.PROFILES_DIR, name + Config.MIDLET_KEY_LAYOUT_FILE);
+		return new File(Config.getProfilesDir(), name + Config.MIDLET_KEY_LAYOUT_FILE);
 	}
 
 	@Override

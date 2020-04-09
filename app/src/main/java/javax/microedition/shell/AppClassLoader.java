@@ -82,7 +82,7 @@ public class AppClassLoader extends DexClassLoader {
 	}
 
 	private static void prepareZipFile() {
-		File midletResFile = new File(Config.APP_DIR,
+		File midletResFile = new File(Config.getAppDir(),
 				AppClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
 			zipFile = new ZipFile(midletResFile);
@@ -92,7 +92,7 @@ public class AppClassLoader extends DexClassLoader {
 	private static InputStream getResourceStream(String resName) throws IOException {
 		InputStream is;
 		byte[] data;
-		File midletResFile = new File(Config.APP_DIR,
+		File midletResFile = new File(Config.getAppDir(),
 				AppClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
 			FileHeader header = zipFile.getFileHeader(resName);

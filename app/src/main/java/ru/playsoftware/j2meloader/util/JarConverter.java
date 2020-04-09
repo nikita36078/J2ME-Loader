@@ -200,7 +200,7 @@ public class JarConverter {
 				deleteTemp();
 				throw new ConverterException("Invalid manifest");
 			}
-			appConverted = new File(Config.APP_DIR, appDirPath);
+			appConverted = new File(Config.getAppDir(), appDirPath);
 			// Create target directory
 			FileUtils.deleteDirectory(appConverted);
 			appConverted.mkdirs();

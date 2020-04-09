@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void initFolders() {
-		File nomedia = new File(Config.EMULATOR_DIR, ".nomedia");
+		File nomedia = new File(Config.getEmulatorDir(), ".nomedia");
 		if (!nomedia.exists()) {
 			try {
 				nomedia.getParentFile().mkdirs();

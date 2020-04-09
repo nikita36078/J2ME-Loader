@@ -18,27 +18,24 @@ package ru.playsoftware.j2meloader.config;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
 
 import javax.microedition.shell.MicroActivity;
+import javax.microedition.util.ContextHolder;
 
+import androidx.preference.PreferenceManager;
+import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 public class Config {
 
 	private static final String MIDLET_DIR = "/converted/";
-	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
-	public static final String SCREENSHOTS_DIR =
-			Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/J2ME-Loader";
-	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
-	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
-	public static final String PROFILES_DIR = EMULATOR_DIR + "/profiles/";
-	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
-	public static final String TEMP_DEX_DIR = "/tmp_dex";
-	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
+	public static final String SCREENSHOTS_DIR;
+	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
 	public static final String MIDLET_RES_DIR = "/res";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_RES_FILE = "/res.jar";
@@ -46,10 +43,44 @@ public class Config {
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
-	public static final String DEFAULT_PROFILE_KEY = "default_profile";
+	public static final String PREF_EMULATOR_DIR = "emulatorDir";
+	static final String PREF_DEFAULT_PROFILE = "default_profile";
+
+	private static String emulatorDir;
+	private static String dataDir;
+	private static String configsDir;
+	private static String profilesDir;
+	private static String appDir;
+
+	private static SharedPreferences.OnSharedPreferenceChangeListener sPrefListener = (sharedPreferences, key) -> {
+		if (key.equals(PREF_EMULATOR_DIR)) {
+			initDirs(sharedPreferences.getString(key, emulatorDir));
+		}
+	};
+
+
+	public static String getEmulatorDir() {
+		return emulatorDir;
+	}
+
+	public static String getDataDir() {
+		return dataDir;
+	}
+
+	public static String getConfigsDir() {
+		return configsDir;
+	}
+
+	public static String getProfilesDir() {
+		return profilesDir;
+	}
+
+	public static String getAppDir() {
+		return appDir;
+	}
 
 	public static void startApp(Context context, AppItem app, boolean showSettings) {
-		File file = new File(Config.CONFIGS_DIR, app.getPath());
+		File file = new File(Config.configsDir, app.getPath());
 		if (showSettings || !file.exists()) {
 			Intent intent = new Intent(ConfigActivity.ACTION_EDIT, Uri.parse(app.getPath()),
 					context, ConfigActivity.class);
@@ -63,4 +94,23 @@ public class Config {
 		}
 	}
 
+	private static void initDirs(String path) {
+		emulatorDir = path;
+		dataDir = emulatorDir + "/data/";
+		configsDir = emulatorDir + "/configs/";
+		profilesDir = emulatorDir + "/profiles/";
+		appDir = emulatorDir + MIDLET_DIR;
+	}
+
+	static {
+		String appName = ContextHolder.getAppContext().getString(R.string.app_name);
+		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+				+ "/" + appName;
+		Context context = ContextHolder.getAppContext();
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		String path = preferences.getString(PREF_EMULATOR_DIR, null);
+		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + appName;
+		initDirs(path);
+		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);
+	}
 }

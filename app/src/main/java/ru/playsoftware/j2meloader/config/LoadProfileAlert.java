@@ -96,7 +96,7 @@ public class LoadProfileAlert extends DialogFragment {
 				})
 				.setNegativeButton(android.R.string.cancel, null);
 		final String def = PreferenceManager.getDefaultSharedPreferences(requireContext())
-				.getString(Config.DEFAULT_PROFILE_KEY, null);
+				.getString(Config.PREF_DEFAULT_PROFILE, null);
 
 		if (def != null) {
 			for (int i = 0, size = profiles.size(); i < size; i++) {
