@@ -87,9 +87,9 @@ public class AppUtils {
 	public static void deleteApp(AppItem item) {
 		File appDir = new File(item.getPathExt());
 		FileUtils.deleteDirectory(appDir);
-		File appSaveDir = new File(Config.DATA_DIR, item.getTitle());
+		File appSaveDir = new File(Config.DATA_DIR, item.getPath());
 		FileUtils.deleteDirectory(appSaveDir);
-		File appConfigsDir = new File(Config.CONFIGS_DIR, item.getTitle());
+		File appConfigsDir = new File(Config.CONFIGS_DIR, item.getPath());
 		FileUtils.deleteDirectory(appConfigsDir);
 	}
 
