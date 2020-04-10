@@ -27,6 +27,9 @@
 
 package org.microemu.android.asm;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -40,11 +43,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import ru.playsoftware.j2meloader.util.IOUtils;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class AndroidProducer {
-
-	private static final int BUFFER_SIZE = 2048;
 
 	private static byte[] instrument(final byte[] classFile, String classFileName, String encoding)
 			throws IllegalArgumentException {
@@ -63,16 +63,16 @@ public class AndroidProducer {
 		HashMap<String, byte[]> resources = new HashMap<>();
 		ZipEntry zipEntry;
 		InputStream zis;
-		try (ZipFileCompat zip = new ZipFileCompat(jarInputFile);
-			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
-			byte[] buffer = new byte[BUFFER_SIZE];
-			while ((zipEntry = zip.getNextEntry()) != null) {
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
+			ZipFile zip = new ZipFile(jarInputFile);
+			for (FileHeader header : zip.getFileHeaders()) {
 				// Some zip entries have zero length names
-				if (zipEntry.getName().length() > 0 && !zipEntry.isDirectory()) {
-					zis = zip.getInputStream(zipEntry);
-					String name = zipEntry.getName();
+				if (header.getFileNameLength() > 0 && !header.isDirectory()) {
+					zis = zip.getInputStream(header);
+					String name = header.getFileName();
 					byte[] inBuffer = IOUtils.toByteArray(zis);
 					resources.put(name, inBuffer);
+					zis.close();
 				}
 			}
 

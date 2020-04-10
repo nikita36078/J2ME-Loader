@@ -24,6 +24,9 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -32,8 +35,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.zip.ZipEntry;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
@@ -42,7 +43,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -50,7 +50,7 @@ public class ContextHolder {
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static AppCompatActivity currentActivity;
-	private static HashMap<String, String> resources = new HashMap<>();
+	private static ZipFile zipFile;
 
 	public static Context getContext() {
 		return currentActivity.getApplicationContext();
@@ -87,21 +87,11 @@ public class ContextHolder {
 		return currentActivity;
 	}
 
-	public static void createResourceMap() {
+	public static void prepareZipFile() {
 		File midletResFile = new File(Config.APP_DIR,
 				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
-		try {
-			if (midletResFile.exists()) {
-				ZipEntry entry;
-				ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
-				resources.clear();
-				while ((entry = zipFile.getNextEntry()) != null) {
-					resources.put(entry.getName().toLowerCase(), entry.getName());
-				}
-				zipFile.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (midletResFile.exists()) {
+			zipFile = new ZipFile(midletResFile);
 		}
 	}
 
@@ -136,14 +126,10 @@ public class ContextHolder {
 		byte[] data;
 		File midletResFile = new File(Config.APP_DIR,
 				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
-		ZipFileCompat zipFile = null;
 		if (midletResFile.exists()) {
-			resName = resources.get(resName.toLowerCase());
-			if (resName == null) throw new IOException();
-			zipFile = new ZipFileCompat(midletResFile);
-			ZipEntry entry = zipFile.getEntry(resName);
-			is = zipFile.getInputStream(entry);
-			data = new byte[(int) entry.getSize()];
+			FileHeader header = zipFile.getFileHeader(resName);
+			is = zipFile.getInputStream(header);
+			data = new byte[(int) header.getUncompressedSize()];
 		} else {
 			File resFile = new File(MyClassLoader.getResFolder(), resName);
 			is = new FileInputStream(resFile);
@@ -152,9 +138,6 @@ public class ContextHolder {
 		DataInputStream dis = new DataInputStream(is);
 		dis.readFully(data);
 		dis.close();
-		if (zipFile != null) {
-			zipFile.close();
-		}
 		return new ByteArrayInputStream(data);
 	}
 
