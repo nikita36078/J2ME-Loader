@@ -11,11 +11,7 @@ public class Material {
 	}
 
 	public Material(int start, int count, int blendMode, int textureId, boolean transparent) {
-		this.start = start;
-		this.count = count;
-		this.blendMode = blendMode;
-		this.textureId = textureId;
-		this.transparent = transparent;
+		set(start, count, blendMode, textureId, transparent);
 	}
 
 	public void set(int start, int count, int blendMode, int textureId, boolean transparent) {
