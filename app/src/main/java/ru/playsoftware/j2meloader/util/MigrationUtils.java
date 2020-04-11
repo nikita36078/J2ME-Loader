@@ -16,9 +16,14 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import android.content.SharedPreferences;
+
 import java.io.File;
 import java.io.IOException;
 
+import javax.microedition.util.ContextHolder;
+
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class MigrationUtils {
@@ -51,16 +56,7 @@ public class MigrationUtils {
 
 	public static void check() {
 		moveKeyLayouts();
-		moveTemplatesToProfiles();
 		moveDefaultToProfiles();
-	}
-
-	private static void moveTemplatesToProfiles() {
-		File templates = new File(Config.getEmulatorDir(), "templates");
-		if (templates.exists()) {
-			File profiles = new File(Config.getProfilesDir());
-			FileUtils.copyFiles(templates, profiles, null);
-		}
 	}
 
 	private static void moveDefaultToProfiles() {
@@ -69,7 +65,11 @@ public class MigrationUtils {
 		if (files == null || files.length == 0) {
 			return;
 		}
-		File newDir = new File(Config.getProfilesDir(), "J2ME-Loader");
+		File newDir = new File(Config.getProfilesDir(), "default");
 		FileUtils.copyFiles(dir, newDir, null);
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(ContextHolder.getAppContext());
+		if (pref.getString(Config.PREF_DEFAULT_PROFILE, null) == null) {
+			pref.edit().putString(Config.PREF_DEFAULT_PROFILE, "default").apply();
+		}
 	}
 }
