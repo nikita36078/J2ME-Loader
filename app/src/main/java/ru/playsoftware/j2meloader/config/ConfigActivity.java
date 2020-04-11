@@ -45,8 +45,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -508,30 +511,22 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF)).toUpperCase());
 	}
 
-	public static String getDefaultProperties() {
+	public String getDefaultProperties() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("microedition.sensor.version").append(": ").append("1").append('\n');
-		sb.append("microedition.platform").append(": ").append("Nokia 6233").append('\n');
-		sb.append("microedition.configuration").append(": ").append("CDLC-1.1").append('\n');
-		sb.append("microedition.profiles").append(": ").append("MIDP-2.0").append('\n');
-		sb.append("microedition.m3g.version").append(": ").append("1.1").append('\n');
-		sb.append("microedition.media.version").append(": ").append("1.0").append('\n');
-		sb.append("supports.mixing").append(": ").append("true").append('\n');
-		sb.append("supports.audio.capture").append(": ").append("true").append('\n');
-		sb.append("supports.video.capture").append(": ").append("false").append('\n');
-		sb.append("supports.recording").append(": ").append("false").append('\n');
-		sb.append("microedition.pim.version").append(": ").append("1.0").append('\n');
-		sb.append("microedition.io.file.FileConnection.version").append(": ").append("1.0").append('\n');
-		sb.append("microedition.encoding").append(": ").append("ISO-8859-1").append('\n');
-		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
-		sb.append("user.home").append(": ").append(externalStoragePath).append('\n');
-		sb.append("com.siemens.IMEI").append(": ").append("000000000000000").append('\n');
-		sb.append("com.siemens.mp.systemfolder.ringingtone").append(": ").append("fs/MyStuff/Ringtones").append('\n');
-		sb.append("com.siemens.mp.systemfolder.pictures").append(": ").append("fs/MyStuff/Pictures").append('\n');
-		sb.append("com.siemens.OSVersion").append(": ").append("11").append('\n');
-		sb.append("device.imei").append(": ").append("000000000000000").append('\n');
-		sb.append("com.nokia.mid.impl.isa.visual_radio_operator_id").append(": ").append("0").append('\n');
-		sb.append("com.nokia.mid.impl.isa.visual_radio_channel_freq").append(": ").append("0").append('\n');
+		try (BufferedInputStream bis = new BufferedInputStream(
+				getAssets().open("defaults/system.props"))) {
+			int available = bis.available();
+			byte[] buf = new byte[available];
+			int read;
+			int off = 0;
+			while (available > 0 && (read = bis.read(buf, off, available)) != -1) {
+				off += read;
+				available -= read;
+			}
+			sb.append(new String(buf));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return sb.toString();
 	}
 
@@ -617,6 +612,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		boolean validCharset = false;
 		for (int i = lines.length - 1; i >= 0; i--) {
 			String line = lines[i];
+			if (line.trim().isEmpty()) continue;
 			if (line.startsWith("microedition.encoding:")) {
 				if (validCharset) continue;
 				try {

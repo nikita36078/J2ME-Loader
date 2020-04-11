@@ -141,6 +141,7 @@ public class MicroLoader {
 		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
 		System.setProperty("fileconn.dir.cache", "file:///c:"
 				+ Config.getDataDir().substring(externalStoragePath.length()) + appPath);
+		System.setProperty("user.home", externalStoragePath);
 	}
 
 	public int getOrientation() {
