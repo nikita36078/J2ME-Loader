@@ -2,7 +2,6 @@ package com.mascotcapsule.micro3d.v3.render;
 
 import android.opengl.GLES20;
 
-import com.mascotcapsule.micro3d.v3.FigureLayout;
 import com.mascotcapsule.micro3d.v3.Texture;
 import com.mascotcapsule.micro3d.v3.figure.CanvasFigure;
 import com.mascotcapsule.micro3d.v3.figure.Material;
@@ -43,8 +42,10 @@ public class ObjectRenderer {
 		getTextureLocations();
 	}
 
-	public void draw(Renderable renderable, FigureLayout layout) {
-		float[] mvpMatrix = layout.getMatrix();
+	public void draw(RenderElement element) {
+		Renderable renderable = element.getRenderable();
+		float[] mvpMatrix = element.getMatrix();
+		float[] glCenter = element.getGlCenter();
 		FloatBuffer vertexData = renderable.getVboPolyT();
 		if (renderable.getNumPolyT() > 0) {
 			GLES20.glUseProgram(textureProgram);
@@ -62,7 +63,7 @@ public class ObjectRenderer {
 					false, TEXTURE_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(atTextureLocation);
 
-			GLES20.glUniform2fv(utOffsetLocation, 1, layout.getGlCenter(), 0);
+			GLES20.glUniform2fv(utOffsetLocation, 1, glCenter, 0);
 			// Put the texture to the unit 0 target
 			GLES20.glActiveTexture(GL_TEXTURE0);
 			// Texture units
@@ -115,7 +116,7 @@ public class ObjectRenderer {
 					false, COLOR_STRIDE, vertexData);
 			GLES20.glEnableVertexAttribArray(acColorLocation);
 
-			GLES20.glUniform2fv(ucOffsetLocation, 1, layout.getGlCenter(), 0);
+			GLES20.glUniform2fv(ucOffsetLocation, 1, glCenter, 0);
 
 			for (int i = 0; i < renderable.getMaterialsF().size(); i++) {
 				Material material = renderable.getMaterialsF().get(i);

@@ -29,9 +29,10 @@ public class Renderer {
 	private int width, height;
 
 	private ObjectRenderer objectRenderer;
-	private DirectFigure directFigure;
+	private DirectFigurePool directFigurePool;
 	private CanvasFigure canvasFigure;
 	private ByteBuffer pixelBuf;
+	private RenderQueue renderQueue;
 
 	private void init() {
 		this.egl = (EGL10) EGLContext.getEGL();
@@ -62,6 +63,10 @@ public class Renderer {
 				EGL10.EGL_NONE
 		};
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
+
+		this.renderQueue = new RenderQueue();
+		this.directFigurePool = new DirectFigurePool();
+		this.canvasFigure = new CanvasFigure();
 	}
 
 	public void bind(Graphics graphics, boolean targetChanged) {
@@ -91,8 +96,6 @@ public class Renderer {
 				// this projection matrix is applied to object coordinates
 				GLES20.glViewport(0, 0, width, height);
 				objectRenderer = new ObjectRenderer();
-				directFigure = new DirectFigure();
-				canvasFigure = new CanvasFigure();
 				pixelBuf = ByteBuffer.allocateDirect(width * height * 4);
 				pixelBuf.order(ByteOrder.LITTLE_ENDIAN);
 			}
@@ -120,13 +123,13 @@ public class Renderer {
 	public void render(Texture texture, FigureLayout layout, int command,
 					   int numPrimitives, int[] vertexCoords,
 					   int[] textureCoords, int[] colors) {
+		DirectFigure directFigure = directFigurePool.get();
 		directFigure.parse(texture, command, numPrimitives, vertexCoords, textureCoords, colors);
-		objectRenderer.draw(directFigure, layout);
+		renderQueue.add(directFigure, layout);
 	}
 
 	public void render(Figure figure, FigureLayout layout) {
-		// Draw figure
-		objectRenderer.draw(figure, layout);
+		renderQueue.add(figure, layout);
 	}
 
 	public void release(Graphics graphics) {
@@ -137,6 +140,14 @@ public class Renderer {
 	}
 
 	public void flush() {
+		renderQueue.sort();
+		for (RenderElement element : renderQueue.getQueue()) {
+			objectRenderer.draw(element);
+			if (element.getRenderable() instanceof DirectFigure) {
+				directFigurePool.release((DirectFigure) element.getRenderable());
+			}
+		}
+		renderQueue.clear();
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
 	}
 
