@@ -18,11 +18,9 @@
 package javax.microedition.lcdui;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.LruCache;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -108,8 +106,7 @@ public class Image {
 	}
 
 	public static Image createImage(byte[] imageData, int imageOffset, int imageLength) {
-		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-		Bitmap b = PNGUtils.getFixedBitmap(byteArrayInputStream);
+		Bitmap b = PNGUtils.getFixedBitmap(imageData, imageOffset, imageLength);
 		if (b == null) {
 			throw new IllegalArgumentException("Can't decode image");
 		}

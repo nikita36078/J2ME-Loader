@@ -19,6 +19,7 @@ package ru.playsoftware.j2meloader.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -33,13 +34,27 @@ public class PNGUtils {
 	private static final byte[] END_TYPE = new byte[]{'I', 'E', 'N', 'D'};
 
 	public static Bitmap getFixedBitmap(InputStream stream) {
-		byte[] data = new byte[0];
+		Bitmap b = null;
 		try {
-			data = fixPNG(stream);
+			byte[] data = IOUtils.toByteArray(stream);
+			b = getFixedBitmap(data, 0, data.length);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return BitmapFactory.decodeByteArray(data, 0, data.length);
+		return b;
+	}
+
+	public static Bitmap getFixedBitmap(byte[] imageData, int imageOffset, int imageLength) {
+		Bitmap b = BitmapFactory.decodeByteArray(imageData, 0, imageLength);
+		if (b == null) {
+			try (ByteArrayInputStream stream = new ByteArrayInputStream(imageData, imageOffset, imageLength)) {
+				byte[] data = fixPNG(stream);
+				b = BitmapFactory.decodeByteArray(data, 0, data.length);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return b;
 	}
 
 	private static byte[] fixPNG(InputStream stream) throws IOException {
