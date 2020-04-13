@@ -290,6 +290,7 @@ public class Graphics {
 	}
 
 	public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+		if (width <= 0 || height <= 0) return;
 		floatRect.set(x, y, x + width, y + height);
 		canvas.drawArc(floatRect, -startAngle, -arcAngle, false, drawPaint);
 	}
@@ -299,6 +300,7 @@ public class Graphics {
 	}
 
 	public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+		if (width <= 0 || height <= 0) return;
 		floatRect.set(x, y, x + width, y + height);
 		canvas.drawArc(floatRect, -startAngle, -arcAngle, true, fillPaint);
 	}
@@ -308,14 +310,17 @@ public class Graphics {
 	}
 
 	public void drawRect(int x, int y, int width, int height) {
+		if (width <= 0 || height <= 0) return;
 		canvas.drawRect(x, y, x + width, y + height, drawPaint);
 	}
 
 	public void fillRect(int x, int y, int width, int height) {
+		if (width <= 0 || height <= 0) return;
 		canvas.drawRect(x, y, x + width, y + height, fillPaint);
 	}
 
 	public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
+		if (width <= 0 || height <= 0) return;
 		floatRect.set(x, y, x + width, y + height);
 		canvas.drawRoundRect(floatRect, arcWidth, arcHeight, drawPaint);
 	}
@@ -325,6 +330,7 @@ public class Graphics {
 	}
 
 	public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
+		if (width <= 0 || height <= 0) return;
 		floatRect.set(x, y, x + width, y + height);
 		canvas.drawRoundRect(floatRect, arcWidth, arcHeight, fillPaint);
 	}
