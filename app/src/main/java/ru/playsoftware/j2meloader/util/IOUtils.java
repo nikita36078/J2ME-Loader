@@ -23,7 +23,7 @@ import java.io.OutputStream;
 
 public class IOUtils {
 
-	private static final int BUFFER_SIZE = 2048;
+	private static final int BUFFER_SIZE = 16384;
 
 	public static byte[] toByteArray(InputStream stream) throws IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
