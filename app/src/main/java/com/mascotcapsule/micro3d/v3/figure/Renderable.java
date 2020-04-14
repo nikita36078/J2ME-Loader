@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public interface Renderable {
 
-	public ArrayList<Material> getMaterialsT();
+	public ArrayList<Mesh> getMeshesT();
 
-	public ArrayList<Material> getMaterialsF();
+	public ArrayList<Mesh> getMeshesF();
 
 	public FloatBuffer getVboPolyT();
 

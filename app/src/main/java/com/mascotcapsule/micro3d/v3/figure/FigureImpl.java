@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class FigureImpl {
 
@@ -32,8 +33,9 @@ public class FigureImpl {
 	private ArrayList<PolygonT3> triangleFacesT = new ArrayList<>();
 	private ArrayList<PolygonF3> triangleFacesF = new ArrayList<>();
 	private ArrayList<Bone> bones = new ArrayList<>();
-	public ArrayList<Material> materialsT = new ArrayList<>();
-	public ArrayList<Material> materialsF = new ArrayList<>();
+	public ArrayList<Mesh> meshesT = new ArrayList<>();
+	public ArrayList<Mesh> meshesF = new ArrayList<>();
+	private Material compMaterial = new Material();
 	public FloatBuffer vboPolyT;
 	public FloatBuffer vboPolyF;
 	public int[] texturedPolygons;
@@ -41,6 +43,13 @@ public class FigureImpl {
 	public int numPolyF;
 	public int numTexture;
 	private int numPattern;
+
+	private Comparator<Mesh> meshComparator = new Comparator<Mesh>() {
+		@Override
+		public int compare(Mesh o1, Mesh o2) {
+			return o1.getMaterial().getBlendMode() - o2.getMaterial().getBlendMode();
+		}
+	};
 
 	public FigureImpl(InputStream inputStream) throws IOException {
 		BitInputStream bis = new BitInputStream(inputStream, ByteOrder.LITTLE_ENDIAN);
@@ -442,56 +451,55 @@ public class FigureImpl {
 
 	private void updatePolys() {
 		for (int i = 0; i < triangleFacesT.size(); i++) {
-			Material material = getMaterialT(i);
-			material.count += 3;
+			updateMeshesT(i);
 		}
 		for (int i = 0; i < triangleFacesF.size(); i++) {
-			Material material = getMaterialF(i);
-			material.count += 3;
+			updateMeshesF(i);
 		}
-		Collections.sort(materialsT, (o1, o2) -> o1.blendMode - o2.blendMode);
-		Collections.sort(materialsF, (o1, o2) -> o1.blendMode - o2.blendMode);
+		Collections.sort(meshesT, meshComparator);
+		Collections.sort(meshesF, meshComparator);
 	}
 
-	private Material getMaterialT(int polygonId) {
-		Material result = null;
+	private void updateMeshesT(int polygonId) {
+		Mesh result = null;
 		PolygonT3 current = triangleFacesT.get(polygonId);
-		int textureId = current.textureId;
+		compMaterial.copy(current);
 		int polyStart = polygonId * 3;
 
-		for (Material material : materialsT) {
-			int matEnd = material.start + material.count;
-			if (material.blendMode == current.blendMode && material.textureId == textureId &&
-					matEnd == polyStart && material.transparent == current.transparent) {
-				result = material;
+		for (Mesh mesh : meshesT) {
+			int matEnd = mesh.getEnd();
+			if (mesh.getMaterial().equals(compMaterial) && mesh.getEnd() == polyStart) {
+				result = mesh;
 				break;
 			}
 		}
 		if (result == null) {
-			result = new Material(polyStart, 0, current.blendMode, textureId, current.transparent);
-			materialsT.add(result);
+			Material material = new Material(compMaterial);
+			result = new Mesh(polyStart, 0, material);
+			meshesT.add(result);
 		}
-		return result;
+		result.increment();
 	}
 
-	private Material getMaterialF(int polygonId) {
-		Material result = null;
+	private void updateMeshesF(int polygonId) {
+		Mesh result = null;
 		PolygonF3 current = triangleFacesF.get(polygonId);
+		compMaterial.copy(current);
 		int polyStart = polygonId * 3;
 
-		for (Material material : materialsF) {
-			int matEnd = material.start + material.count;
-			if (material.blendMode == current.blendMode && matEnd == polyStart &&
-					material.transparent == current.transparent) {
-				result = material;
+		for (Mesh mesh : meshesF) {
+			int matEnd = mesh.getEnd();
+			if (mesh.getMaterial().equals(compMaterial) && mesh.getEnd() == polyStart) {
+				result = mesh;
 				break;
 			}
 		}
 		if (result == null) {
-			result = new Material(polyStart, 0, current.blendMode, 0, current.transparent);
-			materialsF.add(result);
+			Material material = new Material(compMaterial);
+			result = new Mesh(polyStart, 0, material);
+			meshesF.add(result);
 		}
-		return result;
+		result.increment();
 	}
 
 	private int getTextureId(int polygonId, boolean quad) {

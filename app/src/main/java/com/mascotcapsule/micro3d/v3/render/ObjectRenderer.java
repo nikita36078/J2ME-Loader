@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import com.mascotcapsule.micro3d.v3.Texture;
 import com.mascotcapsule.micro3d.v3.figure.CanvasFigure;
 import com.mascotcapsule.micro3d.v3.figure.Material;
+import com.mascotcapsule.micro3d.v3.figure.Mesh;
 import com.mascotcapsule.micro3d.v3.figure.Polygon;
 import com.mascotcapsule.micro3d.v3.figure.Renderable;
 
@@ -69,17 +70,18 @@ public class ObjectRenderer {
 			// Texture units
 			GLES20.glUniform1i(utTextureUnitLocation, 0);
 
-			for (int i = 0; i < renderable.getMaterialsT().size(); i++) {
-				Material material = renderable.getMaterialsT().get(i);
-				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
+			for (int i = 0; i < renderable.getMeshesT().size(); i++) {
+				Mesh mesh = renderable.getMeshesT().get(i);
+				Material material = mesh.getMaterial();
+				if (material.getBlendMode() == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendEquation(GL_FUNC_ADD);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				} else if (material.blendMode == Polygon.BLENDING_MODE_SUB) {
+				} else if (material.getBlendMode() == Polygon.BLENDING_MODE_SUB) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
 					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
-				} else if (material.transparent) {
+				} else if (material.isTransparent()) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendEquation(GL_FUNC_ADD);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -87,15 +89,15 @@ public class ObjectRenderer {
 					GLES20.glDisable(GL_BLEND);
 				}
 
-				Texture texture = renderable.getTextureById(material.textureId);
-				if (material.transparent) {
+				Texture texture = renderable.getTextureById(material.getTextureId());
+				if (material.isTransparent()) {
 					GLES20.glBindTexture(GL_TEXTURE_2D, texture.getTransparentId());
 				} else {
 					GLES20.glBindTexture(GL_TEXTURE_2D, texture.getId());
 				}
 				GLES20.glUniform2fv(utTextureSizeLocation, 1, texture.getSize(), 0);
 				// Draw the triangle
-				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, material.start, material.count);
+				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, mesh.getStart(), mesh.getCount());
 				GLUtils.checkGlError("glDrawArrays");
 			}
 		}
@@ -118,13 +120,14 @@ public class ObjectRenderer {
 
 			GLES20.glUniform2fv(ucOffsetLocation, 1, glCenter, 0);
 
-			for (int i = 0; i < renderable.getMaterialsF().size(); i++) {
-				Material material = renderable.getMaterialsF().get(i);
-				if (material.blendMode == Polygon.BLENDING_MODE_ADD) {
+			for (int i = 0; i < renderable.getMeshesF().size(); i++) {
+				Mesh mesh = renderable.getMeshesF().get(i);
+				Material material = mesh.getMaterial();
+				if (material.getBlendMode() == Polygon.BLENDING_MODE_ADD) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendEquation(GL_FUNC_ADD);
 					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				} else if (material.blendMode == Polygon.BLENDING_MODE_SUB) {
+				} else if (material.getBlendMode() == Polygon.BLENDING_MODE_SUB) {
 					GLES20.glEnable(GL_BLEND);
 					GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
 					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
@@ -132,7 +135,7 @@ public class ObjectRenderer {
 					GLES20.glDisable(GL_BLEND);
 				}
 				// Draw the triangle
-				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, material.start, material.count);
+				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, mesh.getStart(), mesh.getCount());
 				GLUtils.checkGlError("glDrawArrays");
 			}
 		}

@@ -11,14 +11,15 @@ import java.util.ArrayList;
 
 public class DirectFigure implements Renderable {
 
-	public FloatBuffer vboPolyT;
-	public FloatBuffer vboPolyF;
-	public int numPolyT;
-	public int numPolyF;
-	public Texture texture;
-	public int blendMode;
-	public boolean transparent;
-	public ArrayList<Material> materials;
+	private FloatBuffer vboPolyT;
+	private FloatBuffer vboPolyF;
+	private int numPolyT;
+	private int numPolyF;
+	private Texture texture;
+	private int blendMode;
+	private boolean transparent;
+	private Material material;
+	private ArrayList<Mesh> meshes;
 
 	public DirectFigure() {
 		vboPolyT = ByteBuffer.allocateDirect(255 * 30 * 4)
@@ -27,8 +28,9 @@ public class DirectFigure implements Renderable {
 		vboPolyF = ByteBuffer.allocateDirect(255 * 42 * 4)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		materials = new ArrayList();
-		materials.add(new Material());
+		material = new Material();
+		meshes = new ArrayList();
+		meshes.add(new Mesh(0, 0, material));
 	}
 
 	public void parse(Texture texture, int command,
@@ -71,7 +73,8 @@ public class DirectFigure implements Renderable {
 
 		int blendMode = (command & Graphics3D.PATTR_BLEND_SUB) >> 5;
 		boolean transparent = (command & Graphics3D.PATTR_COLORKEY) == Graphics3D.PATTR_COLORKEY;
-		materials.get(0).set(0, (numPolyT + numPolyF) * 3, blendMode, 0, transparent);
+		meshes.get(0).set(0, (numPolyT + numPolyF) * 3, material);
+		material.set(blendMode, 0, transparent);
 	}
 
 	private void addSprites(int numPrimitives, int[] vertexCoords, int[] textureCoords) {
@@ -378,13 +381,13 @@ public class DirectFigure implements Renderable {
 	}
 
 	@Override
-	public ArrayList<Material> getMaterialsT() {
-		return materials;
+	public ArrayList<Mesh> getMeshesT() {
+		return meshes;
 	}
 
 	@Override
-	public ArrayList<Material> getMaterialsF() {
-		return materials;
+	public ArrayList<Mesh> getMeshesF() {
+		return meshes;
 	}
 
 	@Override

@@ -17,7 +17,7 @@
 package com.mascotcapsule.micro3d.v3;
 
 import com.mascotcapsule.micro3d.v3.figure.FigureImpl;
-import com.mascotcapsule.micro3d.v3.figure.Material;
+import com.mascotcapsule.micro3d.v3.figure.Mesh;
 import com.mascotcapsule.micro3d.v3.figure.Renderable;
 
 import java.io.ByteArrayInputStream;
@@ -134,13 +134,13 @@ public class Figure implements Renderable {
 	}
 
 	@Override
-	public ArrayList<Material> getMaterialsT() {
-		return figure.materialsT;
+	public ArrayList<Mesh> getMeshesT() {
+		return figure.meshesT;
 	}
 
 	@Override
-	public ArrayList<Material> getMaterialsF() {
-		return figure.materialsF;
+	public ArrayList<Mesh> getMeshesF() {
+		return figure.meshesF;
 	}
 
 	@Override
