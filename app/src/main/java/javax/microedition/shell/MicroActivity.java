@@ -431,8 +431,7 @@ public class MicroActivity extends AppCompatActivity {
 						Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.action_layout_switch:
-				int layout = vk.switchLayout();
-				Toast.makeText(this, String.valueOf(layout), Toast.LENGTH_SHORT).show();
+				showSetLayoutDialog();
 				break;
 			case R.id.action_hide_buttons:
 				showHideButtonDialog();
@@ -480,6 +479,16 @@ public class MicroActivity extends AppCompatActivity {
 				.setTitle(R.string.hide_buttons)
 				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(),
 						(dialogInterface, i, b) -> vk.setKeyVisibility(i, b))
+				.setPositiveButton(android.R.string.ok, null);
+		builder.show();
+	}
+
+	private void showSetLayoutDialog() {
+		final VirtualKeyboard vk = ContextHolder.getVk();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.layout_switch)
+				.setSingleChoiceItems(vk.getLayoutNames(), -1,
+						(dialogInterface, i) -> vk.setLayout(i))
 				.setPositiveButton(android.R.string.ok, null);
 		builder.show();
 	}

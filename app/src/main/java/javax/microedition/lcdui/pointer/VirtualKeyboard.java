@@ -177,6 +177,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int LAYOUT_OLD_VERSION = 1;
 	private static final int LAYOUT_VERSION = 2;
 
+	private static final int NUM_VARIANTS = 4;
+
 	public static final int LAYOUT_EOF = -1;
 	public static final int LAYOUT_KEYS = 0;
 	public static final int LAYOUT_SCALES = 1;
@@ -282,7 +284,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private int editedIndex;
 	private float offsetX, offsetY;
 	private float prevScale;
-	protected int layoutVariant;
 
 	protected RectF screen;
 	protected RectF virtualScreen;
@@ -299,7 +300,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public VirtualKeyboard(int variant) {
-		layoutVariant = variant;
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
 
@@ -336,7 +336,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapValid = new boolean[keypad.length];
 		snapStack = new int[keypad.length];
 
-		resetLayout(layoutVariant);
+		resetLayout(variant);
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
 		hider = new Thread(this, "MIDletVirtualKeyboard");
@@ -486,11 +486,20 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	public int switchLayout() {
-		layoutVariant++;
-		if (layoutVariant > 3) {
-			layoutVariant = 0;
+	protected int getLayoutNum() {
+		return NUM_VARIANTS;
+	}
+
+	public String[] getLayoutNames() {
+		int num = getLayoutNum();
+		String[] names = new String[num];
+		for (int i = 0; i < num; i++) {
+			names[i] = String.valueOf(i + 1);
 		}
+		return names;
+	}
+
+	public void setLayout(int layoutVariant) {
 		resetLayout(layoutVariant);
 		for (int group = 0; group < keyScaleGroups.length; group++) {
 			resizeKeyGroup(group);
@@ -498,7 +507,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapKeys();
 		repaint();
 		listener.layoutChanged(this);
-		return layoutVariant;
 	}
 
 	public void writeLayout(DataOutputStream dos) throws IOException {
