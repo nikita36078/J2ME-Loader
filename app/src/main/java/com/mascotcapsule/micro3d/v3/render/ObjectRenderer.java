@@ -88,6 +88,11 @@ public class ObjectRenderer {
 				} else {
 					GLES20.glDisable(GL_BLEND);
 				}
+				if (material.isDoubleFace()) {
+					GLES20.glDisable(GL_CULL_FACE);
+				} else {
+					GLES20.glEnable(GL_CULL_FACE);
+				}
 
 				Texture texture = renderable.getTextureById(material.getTextureId());
 				if (material.isTransparent()) {
@@ -133,6 +138,11 @@ public class ObjectRenderer {
 					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
 				} else {
 					GLES20.glDisable(GL_BLEND);
+				}
+				if (material.isDoubleFace()) {
+					GLES20.glDisable(GL_CULL_FACE);
+				} else {
+					GLES20.glEnable(GL_CULL_FACE);
 				}
 				// Draw the triangle
 				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, mesh.getStart(), mesh.getCount());

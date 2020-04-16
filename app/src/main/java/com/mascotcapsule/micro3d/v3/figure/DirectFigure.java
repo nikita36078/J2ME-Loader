@@ -74,7 +74,7 @@ public class DirectFigure implements Renderable {
 		int blendMode = (command & Graphics3D.PATTR_BLEND_SUB) >> 5;
 		boolean transparent = (command & Graphics3D.PATTR_COLORKEY) == Graphics3D.PATTR_COLORKEY;
 		meshes.get(0).set(0, (numPolyT + numPolyF) * 3, material);
-		material.set(blendMode, 0, transparent);
+		material.set(blendMode, 0, transparent, true);
 	}
 
 	private void addSprites(int numPrimitives, int[] vertexCoords, int[] textureCoords) {

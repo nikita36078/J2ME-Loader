@@ -7,20 +7,20 @@ public class Material {
 	private int blendMode;
 	private int textureId;
 	private boolean transparent;
+	private boolean doubleFace;
 
 	public Material() {
 	}
 
 	public Material(Material copy) {
-		this.blendMode = copy.blendMode;
-		this.textureId = copy.textureId;
-		this.transparent = copy.transparent;
+		set(copy.blendMode, copy.textureId, copy.transparent, copy.doubleFace);
 	}
 
-	public void set(int blendMode, int textureId, boolean transparent) {
+	public void set(int blendMode, int textureId, boolean transparent, boolean doubleFace) {
 		this.blendMode = blendMode;
 		this.textureId = textureId;
 		this.transparent = transparent;
+		this.doubleFace = doubleFace;
 	}
 
 	@Override
@@ -31,15 +31,11 @@ public class Material {
 	}
 
 	public void copy(PolygonT3 polygon) {
-		this.blendMode = polygon.blendMode;
-		this.textureId = polygon.textureId;
-		this.transparent = polygon.transparent;
+		set(polygon.blendMode, polygon.textureId, polygon.transparent, polygon.doubleFace);
 	}
 
 	public void copy(PolygonF3 polygon) {
-		this.blendMode = polygon.blendMode;
-		this.textureId = -1;
-		this.transparent = polygon.transparent;
+		set(polygon.blendMode, -1, polygon.transparent, polygon.doubleFace);
 	}
 
 	public int getBlendMode() {
@@ -52,5 +48,9 @@ public class Material {
 
 	public boolean isTransparent() {
 		return transparent;
+	}
+
+	public boolean isDoubleFace() {
+		return doubleFace;
 	}
 }
