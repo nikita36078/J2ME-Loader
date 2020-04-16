@@ -178,6 +178,9 @@ public class ObjectRenderer {
 
 		GLES20.glBindTexture(GL_TEXTURE_2D, figure.getId());
 		GLES20.glUniform2fv(utTextureSizeLocation, 1, figure.getSize(), 0);
+
+		GLES20.glDisable(GL_CULL_FACE);
+		GLES20.glDisable(GL_BLEND);
 		// Draw the triangle
 		GLES20.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		GLUtils.checkGlError("glDrawArrays");
