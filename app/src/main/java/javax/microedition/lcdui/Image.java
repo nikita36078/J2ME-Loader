@@ -122,13 +122,9 @@ public class Image {
 	}
 
 	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {
-		if (!processAlpha) {
-			final int length = width * height;
-			for (int i = 0; i < length; i++) {
-				rgb[i] |= 0xFF << 24;
-			}
-		}
-		return new Image(Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888));
+		Bitmap b = Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888);
+		b.setHasAlpha(processAlpha);
+		return new Image(b);
 	}
 
 	public Graphics getGraphics() {
