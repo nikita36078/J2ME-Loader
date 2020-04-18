@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.LruCache;
 
 import java.io.IOException;
@@ -74,7 +75,9 @@ public class Image {
 	}
 
 	public static Image createImage(int width, int height) {
-		return new Image(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+		Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		b.eraseColor(Color.WHITE);
+		return new Image(b);
 	}
 
 	public static Image createImage(String resname) throws IOException {
