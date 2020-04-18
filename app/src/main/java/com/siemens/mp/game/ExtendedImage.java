@@ -40,7 +40,7 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 		this.image = image;
 		this.width = Displayable.getVirtualWidth();
 		this.height = Displayable.getVirtualHeight();
-		this.buffer = Image.createImage(width, height);
+		this.buffer = Image.createTransparentImage(width, height);
 		this.bufferGraphics = buffer.getGraphics();
 	}
 

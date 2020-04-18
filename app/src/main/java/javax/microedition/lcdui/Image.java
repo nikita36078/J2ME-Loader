@@ -62,6 +62,10 @@ public class Image {
 		return new Image(bitmap);
 	}
 
+	public static Image createTransparentImage(int width, int height) {
+		return new Image(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+	}
+
 	public Bitmap getBitmap() {
 		return bitmap;
 	}

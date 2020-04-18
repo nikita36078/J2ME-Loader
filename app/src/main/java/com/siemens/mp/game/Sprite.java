@@ -51,7 +51,7 @@ public class Sprite extends GraphicObject {
 		this.pixels = new Image[numFrames];
 
 		for (int i = 0; i < numFrames; i++) {
-			Image img = Image.createImage(pixels.getWidth(), pixels.getHeight() / numFrames);
+			Image img = Image.createTransparentImage(pixels.getWidth(), pixels.getHeight() / numFrames);
 
 			img.getGraphics().drawImage(pixels, 0, -i * pixels.getHeight() / numFrames, 0);
 			this.pixels[i] = img;
@@ -60,7 +60,7 @@ public class Sprite extends GraphicObject {
 		if (mask != null) {
 			this.mask = new Image[numFrames];
 			for (int i = 0; i < numFrames; i++) {
-				Image img = Image.createImage(mask.getWidth(), mask.getHeight() / numFrames);
+				Image img = Image.createTransparentImage(mask.getWidth(), mask.getHeight() / numFrames);
 
 				img.getGraphics().drawImage(mask, 0, -i * mask.getHeight() / numFrames, 0);
 				this.mask[i] = img;

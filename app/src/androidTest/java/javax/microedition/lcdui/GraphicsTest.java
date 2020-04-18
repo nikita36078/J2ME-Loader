@@ -47,9 +47,6 @@ public class GraphicsTest {
 		Image image = Image.createImage(testWidth, testHeight);
 		Graphics graphics = image.getGraphics();
 
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
-
 		graphics.setColor(BLUE);
 		graphics.setStrokeStyle(Graphics.DOTTED);
 		graphics.drawLine(1, 5, 1, 16);
@@ -83,7 +80,6 @@ public class GraphicsTest {
 		drawGraphics.fillRect(0, 0, 5, 5);
 
 		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 		graphics.drawImage(drawImage, 0, 0, 0);
 		graphics.drawImage(drawImage, 2, 8, 0);
 
@@ -121,7 +117,6 @@ public class GraphicsTest {
 				r, r, r, r, r
 		};
 		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 		graphics.drawRGB(rgb, 0, 5, 0, 0, 5, 5, true);
 		graphics.drawRGB(rgb, 9, 4, 6, 6, 4, 4, false);
 
@@ -155,8 +150,6 @@ public class GraphicsTest {
 		Graphics drawGraphics = drawImage.getGraphics();
 		drawGraphics.fillRect(0, 0, 5, 5);
 
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 		graphics.drawRegion(drawImage, 0, 0, 2, 2, 0, 5, 5, 0);
 
 		final int[] spotsToValidate = {
@@ -177,9 +170,6 @@ public class GraphicsTest {
 	public void setClip() {
 		Image image = Image.createImage(testWidth, testHeight);
 		Graphics graphics = image.getGraphics();
-
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 
 		graphics.setClip(0, 0, 5, 5);
 		graphics.setColor(RED);
@@ -213,9 +203,6 @@ public class GraphicsTest {
 	public void clipRect() {
 		Image image = Image.createImage(testWidth, testHeight);
 		Graphics graphics = image.getGraphics();
-
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 
 		graphics.setClip(0, 0, 10, 10);
 		graphics.clipRect(0, 0, 5, 5);

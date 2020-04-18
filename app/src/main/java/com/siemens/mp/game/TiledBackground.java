@@ -55,13 +55,13 @@ public class TiledBackground extends GraphicObject {
 		this.widthInTiles = widthInTiles;
 
 		pixels = new Image[tilePixels.getHeight() / 8 + 3];
-		pixels[0] = Image.createImage(8, 8);
-		pixels[1] = Image.createImage(8, 8);
-		pixels[2] = Image.createImage(8, 8);
+		pixels[0] = Image.createTransparentImage(8, 8); // transparent
+		pixels[1] = Image.createImage(8, 8); // white
+		pixels[2] = Image.createImage(8, 8); // black
 		pixels[2].getGraphics().fillRect(0, 0, 8, 8);
 
 		for (int i = 0; i < this.pixels.length - 3; i++) {
-			Image img = Image.createImage(8, 8);
+			Image img = Image.createTransparentImage(8, 8);
 
 			img.getGraphics().drawImage(tilePixels, 0, -i * 8, 0);
 			pixels[i + 3] = img;

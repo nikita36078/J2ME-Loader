@@ -177,7 +177,7 @@ public abstract class CustomItem extends Item {
 			int height = getMinContentHeight();
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
-			offscreen = Image.createImage(width, height);
+			offscreen = Image.createTransparentImage(width, height);
 		}
 
 		return view;
