@@ -60,6 +60,10 @@ public class TiledBackground extends GraphicObject {
 		pixels[2] = Image.createImage(8, 8); // black
 		pixels[2].getGraphics().fillRect(0, 0, 8, 8);
 
+		if (tileMask != null) {
+			tilePixels = com.siemens.mp.ui.Image.createTransparentImageFromMask(tilePixels, tileMask);
+		}
+
 		for (int i = 0; i < this.pixels.length - 3; i++) {
 			Image img = Image.createTransparentImage(8, 8);
 
