@@ -64,11 +64,6 @@ public class MainActivity extends BaseActivity {
 			finish();
 			return;
 		}
-		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-			Toast.makeText(this, R.string.external_storage_not_mounted, Toast.LENGTH_SHORT).show();
-			finish();
-			return;
-		}
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 				!= PackageManager.PERMISSION_GRANTED) {
