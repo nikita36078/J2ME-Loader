@@ -45,7 +45,7 @@ public class PNGUtils {
 	}
 
 	public static Bitmap getFixedBitmap(byte[] imageData, int imageOffset, int imageLength) {
-		Bitmap b = BitmapFactory.decodeByteArray(imageData, 0, imageLength);
+		Bitmap b = BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength);
 		if (b == null) {
 			try (ByteArrayInputStream stream = new ByteArrayInputStream(imageData, imageOffset, imageLength)) {
 				byte[] data = fixPNG(stream);
