@@ -153,6 +153,7 @@ public class MicroLoader {
 		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
 		System.setProperty("com.siemens.OSVersion", "11");
 		System.setProperty("device.imei", "000000000000000");
+		System.setProperty("com.nokia.mid.imei", "000000000000000");
 		System.setProperty("fileconn.dir.cache", "file:///c:"
 				+ Config.DATA_DIR.replace(externalStoragePath, "") + appName);
 		System.setProperty("com.nokia.mid.impl.isa.visual_radio_operator_id", "0");
