@@ -129,9 +129,16 @@ public class Image {
 	}
 
 	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {
-		Bitmap b = Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888);
-		b.setHasAlpha(processAlpha);
-		return new Image(b);
+		if (!processAlpha) {
+			final int length = width * height;
+			int[] rgbCopy = new int[length];
+			System.arraycopy(rgb, 0, rgbCopy, 0, length);
+			for (int i = 0; i < length; i++) {
+				rgbCopy[i] |= 0xFF << 24;
+			}
+			rgb = rgbCopy;
+		}
+		return new Image(Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888));
 	}
 
 	public Graphics getGraphics() {
