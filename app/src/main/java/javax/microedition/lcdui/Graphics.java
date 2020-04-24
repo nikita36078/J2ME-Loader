@@ -465,6 +465,13 @@ public class Graphics {
 		if (rows < height) {
 			height = rows;
 		}
+		if (!processAlpha) {
+			for (int iy = 0; iy < height; iy++) {
+				for (int ix = 0; ix < width; ix++) {
+					rgbData[offset + ix + iy * scanlength] |= (0xFF << 24);
+				}
+			}
+		}
 		// Use deprecated method due to perfomance issues
 		canvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, null);
 	}
