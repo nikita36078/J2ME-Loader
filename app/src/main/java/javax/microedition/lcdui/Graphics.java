@@ -414,11 +414,36 @@ public class Graphics {
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
 		if (width == 0 || height == 0) return;
 
+		if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
+				Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1)) {
+			slowDraw(image, srcx, srcy, width, height, transform, dstx, dsty, anchor);
+		} else {
+			fastDraw(image, srcx, srcy, width, height, transform, dstx, dsty, anchor);
+		}
+	}
+
+	private void slowDraw(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
+		if (srcx == 0 && srcy == 0 && width == image.getWidth() && height == image.getHeight()) {
+			if (transform != 0) {
+				Matrix matrix = Sprite.transformMatrix(transform, width / 2f, height / 2f);
+				canvas.save();
+				canvas.concat(matrix);
+				drawImage(image, dstx, dsty, anchor);
+				canvas.restore();
+			} else {
+				drawImage(image, dstx, dsty, anchor);
+			}
+		} else {
+			drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
+		}
+	}
+
+	private void fastDraw(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
 		if (transform != 0) {
 			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
 			RectF dstR = new RectF(0, 0, width, height);
 			RectF deviceR = new RectF();
-			Matrix matrix = Sprite.transformMatrix(transform, width / 2, height / 2);
+			Matrix matrix = Sprite.transformMatrix(transform, width / 2f, height / 2f);
 			matrix.mapRect(deviceR, dstR);
 
 			if ((anchor & Graphics.RIGHT) != 0) {
