@@ -5,8 +5,6 @@
     <string name="help">ช่วยเหลือ</string>
     <string name="more">อื่น ๆ</string>
     <string name="licenses">ใบอนุญาต</string>
-    <string name="templates">Templates</string>
-    <string name="save_log">Save log</string>
     <string name="about_message">แอปพลิเคชั่นนี้ช่วยให้คุณสามารถใช้งานแอปพลิเคชั่นของ J2ME บน Android. รองรับทั้ง 2D และ 3D อาจมีข้อจำกัดบางประการ. &lt;BR&gt;</string>
     <string name="help_message">&#8226; การเปิดใช้งานการกรองข้อมูลอาจทำให้ลดประสิทธิภาพการทำงาน. ปิดใช้งานนี้ตัวเลือกถ้าเกมจะช้าเกินไป.&lt;BR&gt;&#8226; ภาพริบหรี่ปัญหาสามารถแก้ไขได้ โดยเปิดใช้ตัวเลือก \"โหมดการประมวลผลทันที\".</string>
     <string name="author">ผู้เขียน: </string>
