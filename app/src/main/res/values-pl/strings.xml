@@ -39,6 +39,7 @@
     <string name="PREF_FILTER">Filtrowanie</string>
     <string name="PREF_IMMEDIATE">Tryb natychmiastowego przetwarzania</string>
     <string name="PREF_SHOW_FPS">Pokaż FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Wymuś tryb pełnoekranowy</string>
     <string name="PREF_LIMIT_FPS">Limit FPS</string>
     <string name="PREF_FONT_OPTIONS">Opcje czcionek</string>
     <string name="PREF_WIDTH">Szerokość</string>
@@ -85,6 +86,7 @@
         <item>Telefon</item>
         <item>Telefon (strzałki)</item>
     </string-array>
+    <string name="PREF_LAYOUT">Układ</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Wymuszenie zamknięcia aplikacji może spowodować utratę danych lub nawet całkowicie ją zepsuć! \nKontynuować?</string>
     <string name="CONFIRMATION_REQUIRED">Wymagane potwierdzenie</string>
     <string name="select_dialog_title">Wybierz MIDlet</string>
@@ -109,6 +111,7 @@
     <string name="pref_requires_restart_summary">Wymaga restartu</string>
     <string name="pref_enable_actionbar_title">Włącz ActionBar</string>
     <string name="pref_enable_actionbar_summary">W aplikacjach pełnoekranowych</string>
+    <string name="pref_enable_statusbar_title">Włącz pasek stanu</string>
     <string name="pref_wakelock_title">Pozostaw ekran włączony</string>
     <string name="pref_button_shape_title">Kształt przycisków</string>
     <string-array name="pref_button_shape_entries">
