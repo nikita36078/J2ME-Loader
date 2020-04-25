@@ -111,6 +111,7 @@
     <string name="pref_requires_restart_summary">Perubahan diterapkan setelah memulai ulang J2ME Loader</string>
     <string name="pref_enable_actionbar_title">Hidupkan ActionBar</string>
     <string name="pref_enable_actionbar_summary">ActionBar menampilkan nama MIDlet dan menu. Matikan opsi ini jika ingin dalam keadaan layar penuh.</string>
+    <string name="pref_enable_statusbar_title">Aktifkan statusbar</string>
     <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
     <string name="pref_button_shape_title">Bentuk tombol</string>
     <string-array name="pref_button_shape_entries">
