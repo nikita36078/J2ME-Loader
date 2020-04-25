@@ -802,7 +802,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						if (aKeypad.getSecondKeyCode() != 0) {
 							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getSecondKeyCode()));
 						}
-						repeater.start(aKeypad.getKeyCode(), aKeypad.getSecondKeyCode());
+						repeater.add(aKeypad);
 						repaint();
 						break;
 					}
@@ -855,7 +855,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (associatedKeys[pointer] == null) {
 					pointerPressed(pointer, x, y);
 				} else if (!associatedKeys[pointer].contains(x, y)) {
-					repeater.stop();
+					repeater.remove(associatedKeys[pointer]);
 					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
 					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
@@ -931,7 +931,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				return checkPointerHandled(x, y);
 			}
 			if (associatedKeys[pointer] != null) {
-				repeater.stop();
+				repeater.remove(associatedKeys[pointer]);
 				target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));

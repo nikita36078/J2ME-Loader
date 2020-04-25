@@ -17,24 +17,25 @@
 
 package javax.microedition.lcdui.pointer;
 
+import java.util.HashSet;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.event.CanvasEvent;
+import javax.microedition.lcdui.pointer.VirtualKeyboard.VirtualKey;
 
 public class KeyRepeater implements Runnable {
-	private static final long INTERVAL = 200;
+	private static final long INTERVAL = 150;
 
 	protected Canvas target;
 
 	protected Thread thread;
 	private final Object waiter;
-	private boolean isrunning;
+	private final HashSet<VirtualKey> keys;
 
 	protected boolean enabled;
 
-	private int keyCode;
-	private int secondKeyCode;
-
 	public KeyRepeater() {
+		keys = new HashSet<>();
 		waiter = new Object();
 
 		thread = new Thread(this, "MIDletKeyRepeater");
@@ -43,34 +44,38 @@ public class KeyRepeater implements Runnable {
 
 	public void setTarget(Canvas canvas) {
 		if (canvas == null) {
-			stop();
+			enabled = false;
+		}
+		synchronized (keys) {
+			keys.clear();
 		}
 
 		target = canvas;
 	}
 
-	public void start(int keyCode, int secondKeyCode) {
+	public void add(VirtualKey key) {
 		if (target == null) {
 			return;
 		}
 
-		synchronized (waiter) {
-			if (isrunning) {
-				return;
-			}
-
-			this.keyCode = keyCode;
-			this.secondKeyCode = secondKeyCode;
-
+		synchronized (keys) {
+			keys.add(key);
 			enabled = true;
+		}
 
+		synchronized (waiter) {
 			waiter.notifyAll();
 		}
 	}
 
-	public void stop() {
-		enabled = false;
-		thread.interrupt();
+	public void remove(VirtualKey key) {
+		synchronized (keys) {
+			keys.remove(key);
+
+			if (keys.isEmpty()) {
+				enabled = false;
+			}
+		}
 	}
 
 	@Override
@@ -78,22 +83,24 @@ public class KeyRepeater implements Runnable {
 		while (true) {
 			try {
 				synchronized (waiter) {
-					isrunning = false;
 					waiter.wait();
-
-					isrunning = true;
 				}
 
 				while (enabled) {
 					Thread.sleep(INTERVAL);
 
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, keyCode));
-					if (secondKeyCode != 0) {
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, secondKeyCode));
+					synchronized (keys) {
+						for (VirtualKey key : keys) {
+							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getKeyCode()));
+							if (key.getSecondKeyCode() != 0) {
+								target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getSecondKeyCode()));
+							}
+						}
 					}
 				}
 			} catch (InterruptedException ie) {
 				// Don't need to print stacktrace here
+				System.out.println();
 			}
 		}
 	}
