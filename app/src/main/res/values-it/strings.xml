@@ -39,6 +39,7 @@
     <string name="PREF_FILTER">Filtro</string>
     <string name="PREF_IMMEDIATE">Modalità di elaborazione immediata</string>
     <string name="PREF_SHOW_FPS">Mostra FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Forza schermo intero</string>
     <string name="PREF_LIMIT_FPS">Limita FPS</string>
     <string name="PREF_FONT_OPTIONS">Opzioni carattere</string>
     <string name="PREF_WIDTH">Larghezza</string>
@@ -85,6 +86,7 @@
         <item>Telefono</item>
         <item>Telefono (frecce)</item>
     </string-array>
+    <string name="PREF_LAYOUT">Posizionamento</string>
     <string name="FORCE_CLOSE_CONFIRMATION">La chiusura forzata dell\'applicazione potrebbe causare una perdita di dati o la loro perdita completa!\nProcedere?</string>
     <string name="CONFIRMATION_REQUIRED">Conferma richiesta</string>
     <string name="select_dialog_title">Scegli MIDlet</string>
@@ -109,6 +111,7 @@
     <string name="pref_requires_restart_summary">Richiede il riavvio</string>
     <string name="pref_enable_actionbar_title">Abilita barra delle azioni</string>
     <string name="pref_enable_actionbar_summary">Nelle applicazioni a schermo intero</string>
+    <string name="pref_enable_statusbar_title">Abilita barra di stato</string>
     <string name="pref_wakelock_title">Mantieni schermo attivo</string>
     <string name="pref_button_shape_title">Forma del tasto</string>
     <string-array name="pref_button_shape_entries">
