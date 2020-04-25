@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ru.playsoftware.j2meloader.util.FileUtils;
 
@@ -36,7 +37,7 @@ public class TemplatesManager {
 		for (int i = 0; i < size; i++) {
 			templates.add(new Template(templatesList[i].getName()));
 		}
-		templates.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+		Collections.sort(templates, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
 		return templates;
 	}
 
