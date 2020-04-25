@@ -111,6 +111,7 @@
     <string name="pref_requires_restart_summary">Yêu cầu khởi động lại</string>
     <string name="pref_enable_actionbar_title">Bật thanh hành động</string>
     <string name="pref_enable_actionbar_summary">Trong các ứng dụng toàn màn hình</string>
+    <string name="pref_enable_statusbar_title">Bật thanh trạng thái</string>
     <string name="pref_wakelock_title">Giữ màn hình mở</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
     <string-array name="pref_button_shape_entries">
@@ -126,7 +127,7 @@
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>
     <string name="mapping_dialog_title">Bấm một phím</string>
-    <string name="mapping_dialog_message" formatted="false">Ánh xạ hiện tại: %1$s</string>
+    <string name="mapping_dialog_message" formatted="false">Ánh xạ dòng: %1$s</string>
     <string name="reset_mapping">Thiết lập lại</string>
     <string name="parallel_screen_redrawing">Kéo ngược màn hình song song</string>
 </resources>
