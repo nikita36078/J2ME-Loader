@@ -19,42 +19,13 @@ package ru.playsoftware.j2meloader.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
-
-	public static void zip(File sourceFolder, File zipFile) throws IOException {
-		FileOutputStream dest = new FileOutputStream(zipFile);
-		ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-		zipSubFolder(out, sourceFolder, sourceFolder.getPath().length() + 1);
-		out.close();
-	}
-
-	private static void zipSubFolder(ZipOutputStream out, File folder,
-									 int basePathLength) throws IOException {
-		File[] fileList = folder.listFiles();
-		BufferedInputStream origin;
-		for (File file : fileList) {
-			if (file.isDirectory()) {
-				zipSubFolder(out, file, basePathLength);
-			} else {
-				String unmodifiedFilePath = file.getPath();
-				String relativePath = unmodifiedFilePath.substring(basePathLength);
-				FileInputStream fi = new FileInputStream(unmodifiedFilePath);
-				origin = new BufferedInputStream(fi);
-				ZipEntry entry = new ZipEntry(relativePath);
-				out.putNextEntry(entry);
-				IOUtils.copy(origin, out);
-				origin.close();
-			}
-		}
-	}
 
 	public static void unzip(File zipFile, File extractFolder) throws IOException {
 		ZipFile zip = new ZipFile(zipFile);
