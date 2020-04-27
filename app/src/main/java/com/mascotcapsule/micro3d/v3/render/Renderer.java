@@ -28,6 +28,7 @@ public class Renderer {
 	private EGLConfig eglConfig;
 	private EGLContext eglContext;
 	private int width, height;
+	private int drawCount;
 
 	private ObjectRenderer objectRenderer;
 	private ArrayStack<DirectFigure> directFigurePool;
@@ -137,10 +138,13 @@ public class Renderer {
 	}
 
 	public void release(Graphics graphics) {
-		pixelBuf.position(0);
-		GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuf);
-		pixelBuf.position(0);
-		graphics.getBitmap().copyPixelsFromBuffer(pixelBuf);
+		if (drawCount > 1) {
+			pixelBuf.position(0);
+			GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuf);
+			pixelBuf.position(0);
+			graphics.getBitmap().copyPixelsFromBuffer(pixelBuf);
+		}
+		drawCount = 0;
 	}
 
 	public void flush() {
@@ -153,6 +157,7 @@ public class Renderer {
 		}
 		renderQueue.clear();
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+		drawCount++;
 	}
 
 	public void dispose() {
