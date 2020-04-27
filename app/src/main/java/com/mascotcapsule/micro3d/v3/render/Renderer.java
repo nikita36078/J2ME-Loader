@@ -18,6 +18,7 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.util.ArrayStack;
 
 public class Renderer {
 
@@ -29,7 +30,7 @@ public class Renderer {
 	private int width, height;
 
 	private ObjectRenderer objectRenderer;
-	private DirectFigurePool directFigurePool;
+	private ArrayStack<DirectFigure> directFigurePool;
 	private CanvasFigure canvasFigure;
 	private ByteBuffer pixelBuf;
 	private RenderQueue renderQueue;
@@ -65,7 +66,7 @@ public class Renderer {
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
 
 		this.renderQueue = new RenderQueue();
-		this.directFigurePool = new DirectFigurePool();
+		this.directFigurePool = new ArrayStack<>();
 		this.canvasFigure = new CanvasFigure();
 	}
 
@@ -123,7 +124,10 @@ public class Renderer {
 	public void render(Texture texture, FigureLayout layout, int command,
 					   int numPrimitives, int[] vertexCoords,
 					   int[] textureCoords, int[] colors) {
-		DirectFigure directFigure = directFigurePool.get();
+		DirectFigure directFigure = directFigurePool.pop();
+		if (directFigure == null) {
+			directFigure = new DirectFigure();
+		}
 		directFigure.parse(texture, command, numPrimitives, vertexCoords, textureCoords, colors);
 		renderQueue.add(directFigure, layout);
 	}
@@ -144,7 +148,7 @@ public class Renderer {
 		for (RenderElement element : renderQueue.getQueue()) {
 			objectRenderer.draw(element);
 			if (element.getRenderable() instanceof DirectFigure) {
-				directFigurePool.release((DirectFigure) element.getRenderable());
+				directFigurePool.push((DirectFigure) element.getRenderable());
 			}
 		}
 		renderQueue.clear();

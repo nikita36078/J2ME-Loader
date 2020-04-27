@@ -5,18 +5,23 @@ import com.mascotcapsule.micro3d.v3.figure.Renderable;
 
 import java.util.ArrayList;
 
+import javax.microedition.util.ArrayStack;
+
 public class RenderQueue {
 
 	private ArrayList<RenderElement> queue;
-	RenderElementPool renderElementPool;
+	ArrayStack<RenderElement> renderElementPool;
 
 	public RenderQueue() {
 		this.queue = new ArrayList<>();
-		this.renderElementPool = new RenderElementPool();
+		this.renderElementPool = new ArrayStack<>();
 	}
 
 	public void add(Renderable renderable, FigureLayout layout) {
-		RenderElement element = renderElementPool.get();
+		RenderElement element = renderElementPool.pop();
+		if (element == null) {
+			element = new RenderElement();
+		}
 		element.setLayout(layout);
 		element.setRenderable(renderable);
 		queue.add(element);
@@ -28,7 +33,7 @@ public class RenderQueue {
 
 	public void clear() {
 		for (RenderElement element : queue) {
-			renderElementPool.release(element);
+			renderElementPool.push(element);
 		}
 		queue.clear();
 	}
