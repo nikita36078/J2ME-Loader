@@ -45,7 +45,12 @@ public class Image2D extends Object3D {
 		int bpp = getBytesPerPixel();
 
 		pixels = ByteBuffer.allocateDirect(width * height * bpp).order(ByteOrder.nativeOrder());
-		pixels.clear();
+		for (int i = 0; i < width * height; ++i) {
+			for (int c = 0; c < bpp; ++c) {
+				pixels.put((byte) 0xFF);
+			}
+		}
+		pixels.flip();
 	}
 
 	public Image2D(int format, int width, int height, byte[] image) {
