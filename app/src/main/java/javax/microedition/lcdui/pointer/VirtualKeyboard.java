@@ -959,7 +959,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void hide() {
-		if (delay >= 0 && obscuresVirtualScreen) {
+		if (delay > 0 && obscuresVirtualScreen) {
 			synchronized (waiter) {
 				waiter.notifyAll();
 			}
