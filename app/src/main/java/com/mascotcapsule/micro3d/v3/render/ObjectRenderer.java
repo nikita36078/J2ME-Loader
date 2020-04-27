@@ -30,10 +30,12 @@ public class ObjectRenderer {
 	private int utMatrixLocation;
 	private int utOffsetLocation;
 	private int utTextureSizeLocation;
+	private int utAlphaLocation;
 
 	private int acPositionLocation;
 	private int ucMatrixLocation;
 	private int ucOffsetLocation;
+	private int ucAlphaLocation;
 	private int acColorLocation;
 
 	public ObjectRenderer() {
@@ -73,26 +75,7 @@ public class ObjectRenderer {
 			for (int i = 0; i < renderable.getMeshesT().size(); i++) {
 				Mesh mesh = renderable.getMeshesT().get(i);
 				Material material = mesh.getMaterial();
-				if (material.getBlendMode() == Polygon.BLENDING_MODE_ADD) {
-					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendEquation(GL_FUNC_ADD);
-					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				} else if (material.getBlendMode() == Polygon.BLENDING_MODE_SUB) {
-					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
-					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
-				} else if (material.isTransparent()) {
-					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendEquation(GL_FUNC_ADD);
-					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				} else {
-					GLES20.glDisable(GL_BLEND);
-				}
-				if (material.isDoubleFace()) {
-					GLES20.glDisable(GL_CULL_FACE);
-				} else {
-					GLES20.glEnable(GL_CULL_FACE);
-				}
+				applyMaterial(material);
 
 				Texture texture = renderable.getTextureById(material.getTextureId());
 				if (material.isTransparent()) {
@@ -128,26 +111,43 @@ public class ObjectRenderer {
 			for (int i = 0; i < renderable.getMeshesF().size(); i++) {
 				Mesh mesh = renderable.getMeshesF().get(i);
 				Material material = mesh.getMaterial();
-				if (material.getBlendMode() == Polygon.BLENDING_MODE_ADD) {
-					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendEquation(GL_FUNC_ADD);
-					GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				} else if (material.getBlendMode() == Polygon.BLENDING_MODE_SUB) {
-					GLES20.glEnable(GL_BLEND);
-					GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
-					GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
-				} else {
-					GLES20.glDisable(GL_BLEND);
-				}
-				if (material.isDoubleFace()) {
-					GLES20.glDisable(GL_CULL_FACE);
-				} else {
-					GLES20.glEnable(GL_CULL_FACE);
-				}
+				applyMaterial(material);
+
 				// Draw the triangle
 				GLES20.glDrawArrays(GLES20.GL_TRIANGLES, mesh.getStart(), mesh.getCount());
 				GLUtils.checkGlError("glDrawArrays");
 			}
+		}
+	}
+
+	private void applyMaterial(Material material) {
+		if (material.getBlendMode() == Polygon.BLENDING_MODE_ADD ||
+				material.getBlendMode() == Polygon.BLENDING_MODE_HALF) {
+			GLES20.glEnable(GL_BLEND);
+			GLES20.glBlendEquation(GL_FUNC_ADD);
+			GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		} else if (material.getBlendMode() == Polygon.BLENDING_MODE_SUB) {
+			GLES20.glEnable(GL_BLEND);
+			GLES20.glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+			GLES20.glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ONE);
+		} else if (material.isTransparent()) {
+			GLES20.glEnable(GL_BLEND);
+			GLES20.glBlendEquation(GL_FUNC_ADD);
+			GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		} else {
+			GLES20.glDisable(GL_BLEND);
+		}
+
+		if (material.getBlendMode() == Polygon.BLENDING_MODE_HALF) {
+			GLES20.glUniform1f(utAlphaLocation, 0.5f);
+		} else {
+			GLES20.glUniform1f(utAlphaLocation, 1f);
+		}
+
+		if (material.isDoubleFace()) {
+			GLES20.glDisable(GL_CULL_FACE);
+		} else {
+			GLES20.glEnable(GL_CULL_FACE);
 		}
 	}
 
@@ -181,6 +181,7 @@ public class ObjectRenderer {
 
 		GLES20.glDisable(GL_CULL_FACE);
 		GLES20.glDisable(GL_BLEND);
+		GLES20.glUniform1f(utAlphaLocation, 1f);
 		// Draw the triangle
 		GLES20.glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		GLUtils.checkGlError("glDrawArrays");
@@ -193,6 +194,7 @@ public class ObjectRenderer {
 		utMatrixLocation = GLES20.glGetUniformLocation(textureProgram, "uMVPMatrix");
 		utOffsetLocation = GLES20.glGetUniformLocation(textureProgram, "uTranslationOffset");
 		utTextureSizeLocation = GLES20.glGetUniformLocation(textureProgram, "uTextureSize");
+		utAlphaLocation = GLES20.glGetUniformLocation(textureProgram, "uAlpha");
 	}
 
 	private void getColorLocations() {
@@ -200,5 +202,6 @@ public class ObjectRenderer {
 		acColorLocation = GLES20.glGetAttribLocation(colorProgram, "aColor");
 		ucMatrixLocation = GLES20.glGetUniformLocation(colorProgram, "uMVPMatrix");
 		ucOffsetLocation = GLES20.glGetUniformLocation(colorProgram, "uTranslationOffset");
+		ucAlphaLocation = GLES20.glGetUniformLocation(colorProgram, "uAlpha");
 	}
 }
