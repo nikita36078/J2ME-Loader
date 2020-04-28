@@ -189,8 +189,8 @@ public class AppsListFragment extends ListFragment {
 					public void onSuccess(String s) {
 						AppItem app = AppUtils.getApp(s);
 						appRepository.insert(app);
-						dialog.dismiss();
 						if (!isAdded()) return;
+						dialog.dismiss();
 						showStartDialog(app);
 					}
 
