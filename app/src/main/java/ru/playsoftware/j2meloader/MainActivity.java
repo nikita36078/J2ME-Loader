@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
@@ -120,7 +119,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!Config.getEmulatorDir().equals(emulatorDir)) {
+		if (emulatorDir != null && !Config.getEmulatorDir().equals(emulatorDir)) {
 			new Handler().post(this::recreate);
 		}
 	}
@@ -128,16 +127,15 @@ public class MainActivity extends BaseActivity {
 	private boolean initFolders() {
 		emulatorDir = Config.getEmulatorDir();
 		File appsDir = new File(emulatorDir);
-		if (appsDir.exists()) {
-			return true;
-		}
-		try {
-			File nomedia = new File(appsDir, ".nomedia");
-			if (appsDir.mkdirs() && nomedia.createNewFile()) {
-				return true;
+		File nomedia = new File(appsDir, ".nomedia");
+		if (appsDir.isDirectory() || appsDir.mkdirs()) {
+			try {
+				//noinspection ResultOfMethodCallIgnored
+				nomedia.createNewFile();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			return true;
 		}
 		return false;
 	}

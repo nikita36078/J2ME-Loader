@@ -44,7 +44,7 @@ public class Config {
 	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
 	public static final String PREF_EMULATOR_DIR = "emulator_dir";
-	public static final String PREF_DEFAULT_PROFILE = "default_profile";
+	static final String PREF_DEFAULT_PROFILE = "default_profile";
 
 	private static String emulatorDir;
 	private static String dataDir;
@@ -103,10 +103,10 @@ public class Config {
 	}
 
 	static {
-		String appName = ContextHolder.getAppContext().getString(R.string.app_name);
-		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-				+ "/" + appName;
 		Context context = ContextHolder.getAppContext();
+		String appName = context.getString(R.string.app_name);
+		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+					+ "/" + appName;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String path = preferences.getString(PREF_EMULATOR_DIR, null);
 		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + appName;
