@@ -414,21 +414,11 @@ public class Graphics {
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
 		if (width == 0 || height == 0) return;
 
-		if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
-				Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1) &&
-				(width != image.getWidth() || height != image.getHeight())) {
-			drawImage(Image.createImage(image, srcx, srcy, width, height, transform), dstx, dsty, anchor);
-		} else {
-			fastDraw(image, srcx, srcy, width, height, transform, dstx, dsty, anchor);
-		}
-	}
-
-	private void fastDraw(Image image, int srcx, int srcy, int width, int height, int transform, int dstx, int dsty, int anchor) {
 		if (transform != 0) {
 			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
 			RectF dstR = new RectF(0, 0, width, height);
 			RectF deviceR = new RectF();
-			Matrix matrix = Sprite.transformMatrix(transform, width / 2f, height / 2f);
+			Matrix matrix = Sprite.transformMatrix(transform, width / 2, height / 2);
 			matrix.mapRect(deviceR, dstR);
 
 			if ((anchor & Graphics.RIGHT) != 0) {
