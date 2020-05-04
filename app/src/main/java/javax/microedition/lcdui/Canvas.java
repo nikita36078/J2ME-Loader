@@ -106,20 +106,14 @@ public abstract class Canvas extends Displayable {
 	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
 	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
 
-	private static SparseIntArray keyCodeToSiemensCode;
-	private static SparseIntArray keyCodeToMotorolaCode;
+	private static SparseIntArray keyCodeToSiemensCode = new SparseIntArray();
+	private static SparseIntArray keyCodeToMotorolaCode = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
-	private static SparseIntArray keyCodeToGameAction;
-	private static SparseIntArray gameActionToKeyCode;
-	private static SparseArrayCompat<String> keyCodeToKeyName;
+	private static SparseIntArray keyCodeToGameAction = new SparseIntArray();
+	private static SparseIntArray gameActionToKeyCode = new SparseIntArray();
+	private static SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
 
 	static {
-		keyCodeToSiemensCode = new SparseIntArray();
-		keyCodeToMotorolaCode = new SparseIntArray();
-		keyCodeToGameAction = new SparseIntArray();
-		gameActionToKeyCode = new SparseIntArray();
-		keyCodeToKeyName = new SparseArrayCompat<>();
-
 		mapKeyCode(KEY_NUM0, 0, "0");
 		mapKeyCode(KEY_NUM1, 0, "1");
 		mapKeyCode(KEY_NUM2, UP, "2");
@@ -251,6 +245,18 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
+	public void postKeyPressed(int keyCode) {
+		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
+	}
+
+	public void postKeyReleased(int keyCode) {
+		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
+	}
+
+	public void postKeyRepeated(int keyCode) {
+		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
+	}
+
 	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {
 
 		OverlayView overlayView;
@@ -288,11 +294,11 @@ public abstract class Canvas extends Displayable {
 			}
 			if (event.getRepeatCount() == 0) {
 				if (overlay == null || !overlay.keyPressed(keyCode)) {
-					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_PRESSED, keyCode));
+					postKeyPressed(keyCode);
 				}
 			} else {
 				if (overlay == null || !overlay.keyRepeated(keyCode)) {
-					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_REPEATED, keyCode));
+					postKeyRepeated(keyCode);
 				}
 			}
 			return true;
@@ -305,7 +311,7 @@ public abstract class Canvas extends Displayable {
 				return false;
 			}
 			if (overlay == null || !overlay.keyReleased(keyCode)) {
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_RELEASED, keyCode));
+				postKeyReleased(keyCode);
 			}
 			return true;
 		}

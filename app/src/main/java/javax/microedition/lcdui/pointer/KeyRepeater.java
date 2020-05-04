@@ -94,9 +94,9 @@ public class KeyRepeater implements Runnable {
 
 					synchronized (keys) {
 						for (VirtualKey key : keys) {
-							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getKeyCode()));
+							target.postKeyRepeated(key.getKeyCode());
 							if (key.getSecondKeyCode() != 0) {
-								target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getSecondKeyCode()));
+								target.postKeyRepeated(key.getSecondKeyCode());
 							}
 						}
 					}

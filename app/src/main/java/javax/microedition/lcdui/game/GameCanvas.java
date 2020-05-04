@@ -78,28 +78,31 @@ public class GameCanvas extends Canvas {
 		}
 	}
 
-	public void gameKeyPressed(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyPressed(keyCode);
+	@Override
+	public void postKeyPressed(int keyCode) {
+		key |= convertGameKeyCode(keyCode);
+		if (!(suppressCommands && isGameAction(keyCode))) {
+			super.postKeyPressed(keyCode);
 		}
-		key |= convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyReleased(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyReleased(keyCode);
+	@Override
+	public void postKeyReleased(int keyCode) {
+		repeatedKey &= ~convertGameKeyCode(keyCode);
+		if (!(suppressCommands && isGameAction(keyCode))) {
+			super.postKeyReleased(keyCode);
 		}
-		repeatedKey &= ~convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyRepeated(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyRepeated(keyCode);
+	@Override
+	public void postKeyRepeated(int keyCode) {
+		repeatedKey |= convertGameKeyCode(keyCode);
+		if (!(suppressCommands && isGameAction(keyCode))) {
+			super.postKeyRepeated(keyCode);
 		}
-		repeatedKey |= convertGameKeyCode(originalKeycode);
 	}
 
-	private boolean checkGameAction(int keyCode) {
+	private boolean isGameAction(int keyCode) {
 		try {
 			return getGameAction(keyCode) != 0;
 		} catch (IllegalArgumentException iae) {

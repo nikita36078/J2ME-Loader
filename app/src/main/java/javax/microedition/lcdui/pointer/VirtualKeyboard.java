@@ -798,9 +798,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						vibrate();
 						associatedKeys[pointer] = aKeypad;
 						aKeypad.setSelected(true);
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getKeyCode()));
+						target.postKeyPressed(aKeypad.getKeyCode());
 						if (aKeypad.getSecondKeyCode() != 0) {
-							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getSecondKeyCode()));
+							target.postKeyPressed(aKeypad.getSecondKeyCode());
 						}
 						repeater.add(aKeypad);
 						repaint();
@@ -856,9 +856,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					pointerPressed(pointer, x, y);
 				} else if (!associatedKeys[pointer].contains(x, y)) {
 					repeater.remove(associatedKeys[pointer]);
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
+					target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
+						target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
 					}
 					associatedKeys[pointer].setSelected(false);
 					associatedKeys[pointer] = null;
@@ -932,9 +932,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 			if (associatedKeys[pointer] != null) {
 				repeater.remove(associatedKeys[pointer]);
-				target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
+				target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
+					target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
 				}
 				associatedKeys[pointer].setSelected(false);
 				associatedKeys[pointer] = null;
