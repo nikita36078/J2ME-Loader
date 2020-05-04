@@ -412,7 +412,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfSystemProperties.setText(params.getString("SystemProperties", ""));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
-		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
