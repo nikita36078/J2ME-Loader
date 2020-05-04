@@ -462,7 +462,7 @@
                         android:textColor="?attr/textColorSecondary"
                         android:textSize="15sp" />
 
-                </LinearLayout><!-- KeyCodes layout --><!-- Key shape type -->
+                </LinearLayout><!-- KeyCodes layout -->
 
                 <!-- Keys vibration feedback -->
                 <CheckBox
@@ -558,7 +558,6 @@
                             android:id="@+id/tfVKFore"
                             style="@style/EditTextStyle"
                             android:layout_width="0dp"
-                            android:layout_height="38dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginEnd="6dp"
@@ -582,7 +581,6 @@
                             android:id="@+id/tfVKBack"
                             style="@style/EditTextStyle"
                             android:layout_width="0dp"
-                            android:layout_height="38dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginEnd="6dp"
