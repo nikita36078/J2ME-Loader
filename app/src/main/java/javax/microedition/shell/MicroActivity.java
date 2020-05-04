@@ -52,6 +52,7 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,7 +77,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean loaded;
 	private boolean started;
 	private boolean actionBarEnabled;
-	private boolean statusbarEnabled;
+	private boolean statusBarEnabled;
 	private boolean keyLongPressed;
 	private LinearLayout layout;
 	private Toolbar toolbar;
@@ -94,7 +95,7 @@ public class MicroActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
-		statusbarEnabled = sp.getBoolean("pref_statusbar_switch", false);
+		statusBarEnabled = sp.getBoolean("pref_statusbar_switch", false);
 		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
 		if (wakelockEnabled) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -158,6 +159,7 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
+	@SuppressLint("SourceLockedOrientationActivity")
 	private void setOrientation(int orientation) {
 		switch (orientation) {
 			case ORIENTATION_AUTO:
@@ -275,12 +277,12 @@ public class MicroActivity extends AppCompatActivity {
 	private void hideSystemUI() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-			if (!statusbarEnabled) {
+			if (!statusBarEnabled) {
 				flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN;
 			}
 			getWindow().getDecorView().setSystemUiVisibility(flags);
-		} else if (!statusbarEnabled) {
+		} else if (!statusBarEnabled) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
@@ -294,8 +296,8 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	public void setCurrent(Displayable disp) {
-		current = disp;
+	public void setCurrent(Displayable displayable) {
+		current = displayable;
 		ViewHandler.postEvent(msgSetCurrent);
 	}
 
@@ -392,7 +394,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		if (current != null) {
 			int id = item.getItemId();
 			if (item.getGroupId() == R.id.action_group_common_settings) {
@@ -446,7 +448,7 @@ public class MicroActivity extends AppCompatActivity {
 		microLoader.takeScreenshot((Canvas) current)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new SingleObserver<String>() {
+				.subscribe(new SingleObserver<String>() {
 					@Override
 					public void onSubscribe(Disposable d) {
 					}
@@ -496,7 +498,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(@NonNull MenuItem item) {
 		if (current instanceof Form) {
 			((Form) current).contextMenuItemSelected(item);
 		} else if (current instanceof List) {
