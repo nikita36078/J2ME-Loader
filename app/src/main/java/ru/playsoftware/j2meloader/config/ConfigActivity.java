@@ -680,7 +680,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 					editText.getResources().getDisplayMetrics());
 			ColorDrawable colorDrawable = new ColorDrawable();
 			colorDrawable.setBounds(0, 0, size, size);
-			editText.setCompoundDrawables(null, null, colorDrawable, null);
+			editText.setCompoundDrawablesRelative(null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
 			editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
