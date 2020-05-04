@@ -249,13 +249,15 @@ public class MicroActivity extends AppCompatActivity {
 				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
-					actionBar.setTitle(MyClassLoader.getName());
+					final String title = current.getTitle();
+					actionBar.setTitle(title == null ? MyClassLoader.getName() : title);
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
 				showSystemUI();
 				actionBar.show();
-				actionBar.setTitle(current.getTitle());
+				final String title = current.getTitle();
+				actionBar.setTitle(title == null ? MyClassLoader.getName() : title);
 				layoutParams.height = getToolBarHeight();
 			}
 			toolbar.setLayoutParams(layoutParams);
