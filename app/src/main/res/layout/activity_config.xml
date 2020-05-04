@@ -360,36 +360,6 @@
         </LinearLayout>
 
         <TextView
-            style="@style/ConfigTitleTextStyle"
-            android:layout_margin="10dp"
-            android:text="@string/PREF_SYS_PROPS" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="?attr/bg_config_card"
-            android:elevation="1dp"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            tools:ignore="UnusedAttribute">
-
-            <EditText
-                android:id="@+id/tfSystemProperties"
-                style="@style/EditTextStyle"
-                android:layout_width="match_parent"
-                android:hint="@string/PREF_SYS_PROPS_HINT"
-                android:inputType="textMultiLine"
-                android:lines="2"
-                android:textDirection="ltr" />
-
-        </LinearLayout>
-
-        <TextView
             android:id="@+id/tvKeyboardHeader"
             style="@style/ConfigTitleTextStyle"
             android:layout_margin="10dp"
@@ -693,6 +663,36 @@
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/ConfigTitleTextStyle"
+            android:layout_margin="10dp"
+            android:text="@string/PREF_SYS_PROPS" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="?attr/bg_config_card"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            tools:ignore="UnusedAttribute">
+
+            <EditText
+                android:id="@+id/tfSystemProperties"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:hint="@string/PREF_SYS_PROPS_HINT"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:textDirection="ltr" />
+
         </LinearLayout>
     </LinearLayout>
 
