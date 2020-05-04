@@ -85,6 +85,7 @@ public class PNGUtils {
 				}
 			}
 		}
+		reader.end();
 		return Bitmap.createBitmap(pix, width, height, Bitmap.Config.ARGB_8888);
 	}
 
