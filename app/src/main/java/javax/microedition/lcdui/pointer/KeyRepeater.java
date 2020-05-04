@@ -25,14 +25,15 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard.VirtualKey;
 
 public class KeyRepeater implements Runnable {
 	private static final long INTERVAL = 150;
+	private static final long INITIAL_INTERVAL = 250;
 
-	protected Canvas target;
+	private Canvas target;
 
-	protected Thread thread;
+	private Thread thread;
 	private final Object waiter;
 	private final HashSet<VirtualKey> keys;
 
-	protected boolean enabled;
+	private boolean enabled;
 
 	public KeyRepeater() {
 		keys = new HashSet<>();
@@ -85,6 +86,8 @@ public class KeyRepeater implements Runnable {
 				synchronized (waiter) {
 					waiter.wait();
 				}
+
+				Thread.sleep(INITIAL_INTERVAL);
 
 				while (enabled) {
 					Thread.sleep(INTERVAL);
