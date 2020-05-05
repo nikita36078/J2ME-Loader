@@ -17,14 +17,14 @@
 package ru.playsoftware.j2meloader.util;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
-import ar.com.hjg.pngj.IImageLine;
 import ar.com.hjg.pngj.ImageInfo;
-import ar.com.hjg.pngj.ImageLineHelper;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.ImageLineSetDefault;
 import ar.com.hjg.pngj.PngReaderInt;
@@ -33,10 +33,13 @@ import ar.com.hjg.pngj.chunks.PngChunkTRNS;
 
 public class PNGUtils {
 
+	private static final byte[] PNG_SIGNATURE = new byte[]{-119, 80, 78, 71, 13, 10, 26, 10};
+
 	public static Bitmap getFixedBitmap(InputStream stream) {
 		Bitmap b = null;
 		try {
-			b = fixPNG(stream);
+			byte[] data = IOUtils.toByteArray(stream);
+			b = getFixedBitmap(data, 0, data.length);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,10 +48,15 @@ public class PNGUtils {
 
 	public static Bitmap getFixedBitmap(byte[] imageData, int imageOffset, int imageLength) {
 		Bitmap b = null;
-		try (ByteArrayInputStream stream = new ByteArrayInputStream(imageData, imageOffset, imageLength)) {
-			b = fixPNG(stream);
-		} catch (Exception e) {
-			e.printStackTrace();
+		byte[] signature = Arrays.copyOfRange(imageData, imageOffset, imageOffset + 8);
+		if (Arrays.equals(signature, PNG_SIGNATURE)) {
+			try (ByteArrayInputStream stream = new ByteArrayInputStream(imageData, imageOffset, imageLength)) {
+				b = fixPNG(stream);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			b = BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength);
 		}
 		return b;
 	}
@@ -63,49 +71,47 @@ public class PNGUtils {
 		PngChunkPLTE plte = reader.getMetadata().getPLTE();
 		ImageLineSetDefault<ImageLineInt> lineSet = (ImageLineSetDefault) reader.readRows();
 		int[] pix = new int[width * height];
-		if (imageInfo.indexed) {
-			int[] buf = new int[width];
-			for (int i = 0; i < height; i++) {
-				ImageLineInt lineInt = lineSet.getImageLine(i);
-				int[] r = palette2rgb(lineInt, plte, trns, buf);
-				for (int j = 0; j < width; j++) {
-					pix[i * width + j] = r[j];
-				}
-			}
-		} else {
-			for (int i = 0; i < height; i++) {
-				ImageLineInt lineInt = lineSet.getImageLine(i);
-				for (int j = 0; j < width; j++) {
-					if (imageInfo.alpha) {
-						pix[i * width + j] = ImageLineHelper.getPixelARGB8(lineInt, j);
-					} else {
-						pix[i * width + j] = ImageLineHelper.getPixelRGB8(lineInt, j);
-						pix[i * width + j] |= 0xFF << 24;
-					}
-				}
+		int[] buf = new int[width];
+		for (int i = 0; i < height; i++) {
+			ImageLineInt lineInt = lineSet.getImageLine(i);
+			int[] r = lineToARGB32(lineInt, plte, trns, buf);
+			for (int j = 0; j < width; j++) {
+				pix[i * width + j] = r[j];
 			}
 		}
 		reader.end();
 		return Bitmap.createBitmap(pix, width, height, Bitmap.Config.ARGB_8888);
 	}
 
-	private static int[] palette2rgb(IImageLine line, PngChunkPLTE pal, PngChunkTRNS trns, int[] buf) {
-		boolean isalpha = trns != null;
-		int channels = isalpha ? 4 : 3;
-		ImageLineInt linei = (ImageLineInt) (line instanceof ImageLineInt ? line : null);
-		int cols = linei.imgInfo.cols;
-		int nsamples = cols;
-		if (buf == null || buf.length < nsamples)
-			buf = new int[nsamples];
-		int nindexesWithAlpha = isalpha ? trns.getPalletteAlpha().length : 0;
-		for (int c = 0; c < cols; c++) {
-			int index = linei.getScanline()[c];
-			buf[c] = pal.getEntry(index);
-			if (isalpha) {
-				int alpha = index < nindexesWithAlpha ? trns.getPalletteAlpha()[index] : 255;
-				buf[c] |= alpha << 24;
-			} else {
-				buf[c] |= 0xFF << 24;
+	private static int[] lineToARGB32(ImageLineInt line, PngChunkPLTE pal, PngChunkTRNS trns, int[] buf) {
+		boolean alphachannel = line.imgInfo.alpha;
+		int[] scanline = line.getScanline();
+		int cols = line.imgInfo.cols;
+		if (buf == null || buf.length < cols)
+			buf = new int[cols];
+		int index, rgb, alpha, ga, g;
+		if (line.imgInfo.indexed) { // palette
+			int nindexesWithAlpha = trns != null ? trns.getPalletteAlpha().length : 0;
+			for (int c = 0; c < cols; c++) {
+				index = scanline[c];
+				rgb = pal.getEntry(index);
+				alpha = index < nindexesWithAlpha ? trns.getPalletteAlpha()[index] : 255;
+				buf[c] = (alpha << 24) | rgb;
+			}
+		} else if (line.imgInfo.greyscale) { // gray
+			ga = trns != null ? trns.getGray() : -1;
+			for (int c = 0, c2 = 0; c < cols; c++) {
+				g = scanline[c2++];
+				alpha = alphachannel ? scanline[c2++] : (g != ga ? 255 : 0);
+				buf[c] = (alpha << 24) | g | (g << 8) | (g << 16);
+			}
+		} else { // true color
+			ga = trns != null ? trns.getRGB888() : -1;
+			for (int c = 0, c2 = 0; c < cols; c++) {
+				rgb = ((scanline[c2++]) << 16) | ((scanline[c2++]) << 8)
+						| (scanline[c2++]);
+				alpha = alphachannel ? scanline[c2++] : (rgb != ga ? 255 : 0);
+				buf[c] = (alpha << 24) | rgb;
 			}
 		}
 		return buf;
