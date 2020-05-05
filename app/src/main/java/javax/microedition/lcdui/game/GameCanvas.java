@@ -34,7 +34,6 @@ public class GameCanvas extends Canvas {
 
 	private Image image;
 	private int key;
-	private int repeatedKey;
 	private boolean suppressCommands;
 
 	public GameCanvas(boolean suppressCommands) {
@@ -80,41 +79,33 @@ public class GameCanvas extends Canvas {
 
 	@Override
 	public void postKeyPressed(int keyCode) {
-		key |= convertGameKeyCode(keyCode);
-		if (!(suppressCommands && isGameAction(keyCode))) {
+		int code = convertGameKeyCode(keyCode);
+		key |= code;
+		if (!(suppressCommands && code != 0)) {
 			super.postKeyPressed(keyCode);
 		}
 	}
 
 	@Override
 	public void postKeyReleased(int keyCode) {
-		repeatedKey &= ~convertGameKeyCode(keyCode);
-		if (!(suppressCommands && isGameAction(keyCode))) {
+		int code = convertGameKeyCode(keyCode);
+		key &= ~code;
+		if (!(suppressCommands && code != 0)) {
 			super.postKeyReleased(keyCode);
 		}
 	}
 
 	@Override
 	public void postKeyRepeated(int keyCode) {
-		repeatedKey |= convertGameKeyCode(keyCode);
-		if (!(suppressCommands && isGameAction(keyCode))) {
+		int code = convertGameKeyCode(keyCode);
+		key |= code;
+		if (!(suppressCommands && code != 0)) {
 			super.postKeyRepeated(keyCode);
 		}
 	}
 
-	private boolean isGameAction(int keyCode) {
-		try {
-			return getGameAction(keyCode) != 0;
-		} catch (IllegalArgumentException iae) {
-			return false;
-		}
-	}
-
 	public int getKeyStates() {
-		int temp = key;
-		temp |= repeatedKey;
-		key = repeatedKey;
-		return temp;
+		return key;
 	}
 
 	public Graphics getGraphics() {
