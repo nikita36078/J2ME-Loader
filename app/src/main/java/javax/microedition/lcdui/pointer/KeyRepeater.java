@@ -44,11 +44,9 @@ public class KeyRepeater implements Runnable {
 	}
 
 	public void setTarget(Canvas canvas) {
-		if (canvas == null) {
-			enabled = false;
-		}
 		synchronized (keys) {
 			keys.clear();
+			enabled = false;
 		}
 
 		target = canvas;
