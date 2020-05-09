@@ -69,4 +69,7 @@ public class AppRepository {
 				.subscribe();
 	}
 
+	public void close() {
+		AppDatabase.closeInstance();
+	}
 }

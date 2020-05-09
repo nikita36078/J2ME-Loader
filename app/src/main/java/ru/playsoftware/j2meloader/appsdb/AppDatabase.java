@@ -40,4 +40,11 @@ public abstract class AppDatabase extends RoomDatabase {
 		}
 		return instance;
 	}
+
+	static void closeInstance() {
+		if (instance != null) {
+			instance.close();
+			instance = null;
+		}
+	}
 }
