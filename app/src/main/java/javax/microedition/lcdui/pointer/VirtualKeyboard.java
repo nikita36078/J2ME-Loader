@@ -28,7 +28,6 @@ import java.io.IOException;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.overlay.Overlay;
 
 public class VirtualKeyboard implements Overlay, Runnable {
@@ -54,6 +53,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private String label;
 		private boolean selected;
 		private boolean visible;
+		private boolean intersectsScreen;
 
 		VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
@@ -102,7 +102,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		public void paint(Graphics g) {
 			if (label != null && visible) {
-				int alpha = obscuresVirtualScreen ? overlayAlpha : 0xFF000000;
+				int alpha = intersectsScreen ? overlayAlpha : 0xFF000000;
 				g.setColorAlpha(alpha | colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				if (shape == SQUARE_SHAPE) {
 					g.fillRoundRect(rect, 0, 0);
@@ -622,6 +622,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setKeyVisibility(int id, boolean hidden) {
 		keypad[id].setVisible(!hidden);
+		snapKeys();
 		repaint();
 		listener.layoutChanged(this);
 	}
@@ -686,8 +687,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		obscuresVirtualScreen = false;
 		for (int i = 0; i < keypad.length; i++) {
 			snapKey(i, 0);
-			if (keypad[i].isVisible() && RectF.intersects(keypad[i].getRect(), virtualScreen)) {
+			VirtualKey key = keypad[i];
+			if (key.isVisible() && RectF.intersects(key.getRect(), virtualScreen)) {
 				obscuresVirtualScreen = true;
+				key.intersectsScreen = true;
+			} else {
+				key.intersectsScreen = false;
 			}
 		}
 	}
