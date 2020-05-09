@@ -120,7 +120,7 @@ public class MicroActivity extends AppCompatActivity {
 			loadMIDlet();
 		} catch (Exception e) {
 			e.printStackTrace();
-			showErrorDialog(e.getMessage());
+			showErrorDialog(e.toString());
 		}
 	}
 
@@ -223,7 +223,7 @@ public class MicroActivity extends AppCompatActivity {
 			(new Thread(r, "MIDletLoader")).start();
 		} catch (Throwable t) {
 			t.printStackTrace();
-			showErrorDialog(t.getMessage());
+			showErrorDialog(t.toString());
 		}
 	}
 
