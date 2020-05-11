@@ -48,12 +48,13 @@ public class PNGUtils {
 
 	public static Bitmap getFixedBitmap(byte[] imageData, int imageOffset, int imageLength) {
 		Bitmap b = null;
-		byte[] signature = Arrays.copyOfRange(imageData, imageOffset, imageOffset + 8);
+		byte[] signature = Arrays.copyOfRange(imageData, imageOffset, imageOffset + PNG_SIGNATURE.length);
 		if (Arrays.equals(signature, PNG_SIGNATURE)) {
 			try (ByteArrayInputStream stream = new ByteArrayInputStream(imageData, imageOffset, imageLength)) {
 				b = fixPNG(stream);
 			} catch (Exception e) {
 				e.printStackTrace();
+				b = BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength);
 			}
 		} else {
 			b = BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength);
