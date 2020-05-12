@@ -45,11 +45,21 @@ public class KeyRepeater implements Runnable {
 
 	public void setTarget(Canvas canvas) {
 		synchronized (keys) {
+			releaseAllKeys();
 			keys.clear();
 			enabled = false;
 		}
 
 		target = canvas;
+	}
+
+	private void releaseAllKeys() {
+		for (VirtualKey key : keys) {
+			target.postKeyReleased(key.getKeyCode());
+			if (key.getSecondKeyCode() != 0) {
+				target.postKeyReleased(key.getSecondKeyCode());
+			}
+		}
 	}
 
 	public void add(VirtualKey key) {
