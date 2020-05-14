@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">Close</string>
+    <string name="close">إغلاق</string>
     <string name="exit">خروج</string>
     <string name="about">حول البرنامج</string>
     <string name="help">مساعدة</string>
@@ -39,6 +39,7 @@
     <string name="PREF_FILTER">فلترة</string>
     <string name="PREF_IMMEDIATE">وضع المعالجة الفورية</string>
     <string name="PREF_SHOW_FPS">إظهار عدد اللقطات في كل ثانية</string>
+    <string name="PREF_FORCE_FULLSCREEN">إجبار ملء الشاشة</string>
     <string name="PREF_LIMIT_FPS">أكبر حد من اللقطات في كل ثانية</string>
     <string name="PREF_FONT_OPTIONS">خيارات الخط</string>
     <string name="PREF_WIDTH">العرض</string>
@@ -85,6 +86,7 @@
         <item>الهاتف</item>
         <item>مفاتيح الأسهم في الهاتف</item>
     </string-array>
+    <string name="PREF_LAYOUT">التنسيق</string>
     <string name="FORCE_CLOSE_CONFIRMATION">فرض اغلاق التطبيق قد يؤدي لفقد بعض البيانات او تدميرها بالكامل!\nمتابعه؟</string>
     <string name="CONFIRMATION_REQUIRED">التأكيد مطلوب</string>
     <string name="select_dialog_title">حدد MIDlet</string>
@@ -109,6 +111,7 @@
     <string name="pref_requires_restart_summary">يتطلب إعادة التشغيل</string>
     <string name="pref_enable_actionbar_title">تفعيل اكشن بار</string>
     <string name="pref_enable_actionbar_summary">في تطبيقات ملء الشاشة</string>
+    <string name="pref_enable_statusbar_title">تمكين شريط الحالة</string>
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="pref_button_shape_title">شكل الزر</string>
     <string-array name="pref_button_shape_entries">
