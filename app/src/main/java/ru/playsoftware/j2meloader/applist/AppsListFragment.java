@@ -137,12 +137,8 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public void onDestroy() {
-		compositeDisposable.clear();
-		if (appRepository != null) {
-			appRepository.close();
-			appRepository = null;
-		}
 		super.onDestroy();
+		compositeDisposable.clear();
 	}
 
 	@SuppressLint("CheckResult")
