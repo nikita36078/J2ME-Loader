@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">Đónsh</string>
-    <string name="exit">Thoátd</string>
-    <string name="about">About</string>
+    <string name="close">Đóng</string>
+    <string name="exit">Thoát</string>
+    <string name="about">Giới thiệu</string>
     <string name="help">Trợ giúp</string>
     <string name="more">Thêm</string>
     <string name="search">Tìm kiếm</string>
@@ -59,7 +59,7 @@
     <string name="PREF_VK_OUTLINE">Đường nét</string>
     <string name="PREF_VK_ALPHA">Độ mờ: </string>
     <string name="PREF_VK_HIDE_DELAY">Ẩn trễ: </string>
-    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_UNIT_MS">mili giây</string>
     <string name="PREF_VK_SEL_FORE">Đường đánh dấu (P)</string>
     <string name="PREF_VK_SEL_BACK">Nút (P)</string>
     <string name="PREF_VK_KEY_SIZES">Kích thước phím</string>
