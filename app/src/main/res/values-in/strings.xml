@@ -10,7 +10,7 @@
     <string name="templates">Kelola template</string>
     <string name="save_log">Simpan log</string>
     <string name="about_message">Aplikasi ini berfungsi untuk menjalankan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga permainan 3D dengan beberapa keterbatasan.&lt;BR&gt;</string>
-    <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
+    <string name="help_message">&#8226; Menghidupkan opsi \"Saring\" dalam sebagian kasus dapat mengurangi kinerja yang sangat besar. Matikan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat diatasi dengan menghidupkan opsi \"Mode pengolahan dengan cepat\".</string>
     <string name="author">Vendor: </string>
     <string name="version">Versi: </string>
     <string name="no_data_for_display">Tidak ada data</string>
@@ -60,8 +60,8 @@
     <string name="PREF_VK_ALPHA">Keburaman: </string>
     <string name="PREF_VK_HIDE_DELAY">Sembunyikan penundaan: </string>
     <string name="PREF_UNIT_MS">ms</string>
-    <string name="PREF_VK_SEL_FORE">Label (P)</string>
-    <string name="PREF_VK_SEL_BACK">Tombol (P)</string>
+    <string name="PREF_VK_SEL_FORE">Label (ditekan)</string>
+    <string name="PREF_VK_SEL_BACK">Tombol (ditekan)</string>
     <string name="PREF_VK_KEY_SIZES">Ukuran tombol</string>
     <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
@@ -84,7 +84,7 @@
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Disesuaikan</item>
         <item>Ponsel (Numerik)</item>
-        <item>Ponsel (D-pad)</item>
+        <item>Ponsel (D-Pad)</item>
     </string-array>
     <string name="PREF_LAYOUT">Tata letak</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkan sepenuhnya! \nLanjutkan?</string>
@@ -110,8 +110,8 @@
     </string-array>
     <string name="pref_requires_restart_summary">Perubahan diterapkan setelah memulai ulang J2ME Loader</string>
     <string name="pref_enable_actionbar_title">Hidupkan ActionBar</string>
-    <string name="pref_enable_actionbar_summary">ActionBar menampilkan nama MIDlet dan menu. Matikan opsi ini jika ingin dalam keadaan layar penuh.</string>
-    <string name="pref_enable_statusbar_title">Aktifkan statusbar</string>
+    <string name="pref_enable_actionbar_summary">Matikan opsi ini jika ingin dalam keadaan layar penuh.</string>
+    <string name="pref_enable_statusbar_title">Hidupkan statusbar</string>
     <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
     <string name="pref_button_shape_title">Bentuk tombol</string>
     <string-array name="pref_button_shape_entries">
