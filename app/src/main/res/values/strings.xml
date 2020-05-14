@@ -72,6 +72,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_VK_FEEDBACK">Haptic feedback</string>
+    <string name="PREF_VK_FORCE_OPACITY">Force opacity for off-screen keys</string>
     <string name="PREF_TOUCH_INPUT">Touch input</string>
     <string name="PREF_HW_ACCELERATION">HW acceleration (unstable)</string>
     <string name="PREF_VK_BACK">Buttons</string>

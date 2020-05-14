@@ -94,6 +94,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	private View vkContainer;
 	protected CheckBox cxVKFeedback;
+	protected CheckBox cxVKForceOpacity;
 	protected CheckBox cxTouchInput;
 
 	protected Spinner spVKType;
@@ -183,6 +184,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
 		vkContainer = findViewById(R.id.configVkContainer);
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
+		cxVKForceOpacity = findViewById(R.id.cxVKForceOpacity);
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		spVKType = findViewById(R.id.spVKType);
@@ -412,6 +414,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfSystemProperties.setText(params.getString("SystemProperties", ""));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
+		cxVKForceOpacity.setChecked(params.getBoolean(("VirtualKeyboardForceOpacity"), false));
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
@@ -466,6 +469,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
 			params.putBoolean("VirtualKeyboardFeedback", cxVKFeedback.isChecked());
+			params.putBoolean("VirtualKeyboardForceOpacity", cxVKForceOpacity.isChecked());
 			params.putBoolean("TouchInput", cxTouchInput.isChecked());
 
 			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());

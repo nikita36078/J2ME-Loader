@@ -238,6 +238,7 @@ public class MicroLoader {
 		int vkColorForegroundSelected =  params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
 		int vkColorOutline = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
 		boolean vkFeedback = params.getBoolean(("VirtualKeyboardFeedback"), false);
+		boolean vkForceOpacity = params.getBoolean(("VirtualKeyboardForceOpacity"), false);
 
 		VirtualKeyboard vk;
 		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
@@ -250,6 +251,7 @@ public class MicroLoader {
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
 		vk.setHasHapticFeedback(vkFeedback);
+		vk.setForceOpacity(vkForceOpacity);
 
 		String shapeStr = PreferenceManager.getDefaultSharedPreferences(context)
 				.getString("pref_button_shape", "round");

@@ -102,7 +102,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		public void paint(Graphics g) {
 			if (label != null && visible) {
-				int alpha = intersectsScreen ? overlayAlpha : 0xFF000000;
+				boolean opaque = forceOpacity ? intersectsScreen : obscuresVirtualScreen;
+				int alpha = opaque ? overlayAlpha : 0xFF000000;
 				g.setColorAlpha(alpha | colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				if (shape == SQUARE_SHAPE) {
 					g.fillRoundRect(rect, 0, 0);
@@ -263,6 +264,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private View overlayView;
 	private boolean obscuresVirtualScreen;
 	private boolean feedback;
+	private boolean forceOpacity;
 	private static final int FEEDBACK_DURATION = 50;
 
 	private boolean visible, hiding, skip;
@@ -1048,6 +1050,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setButtonShape(int shape) {
 		this.shape = shape;
+	}
+
+	public void setForceOpacity(boolean forceOpacity) {
+		this.forceOpacity = forceOpacity;
 	}
 
 	public void setView(View view) {

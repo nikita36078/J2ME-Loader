@@ -474,6 +474,15 @@
                     android:text="@string/PREF_VK_FEEDBACK" />
 
                 <!-- Keys opacity -->
+                <CheckBox
+                    android:id="@+id/cxVKForceOpacity"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/PREF_VK_FORCE_OPACITY" />
+
+                <!-- Keys opacity -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
