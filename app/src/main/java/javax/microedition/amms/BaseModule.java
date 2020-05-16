@@ -25,6 +25,10 @@ import javax.microedition.media.Player;
 public class BaseModule implements Module {
 	private ArrayList<Player> players;
 
+	public BaseModule() {
+		players = new ArrayList<>();
+	}
+
 	@Override
 	public void addMIDIChannel(Player player, int channel) throws MediaException {
 	}
