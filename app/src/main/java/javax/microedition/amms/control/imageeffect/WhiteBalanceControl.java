@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control;
+package javax.microedition.amms.control.imageeffect;
 
-import javax.microedition.media.Control;
+import javax.microedition.amms.control.EffectControl;
 
-public interface EffectControl extends Control {
-	public String[] getPresetNames();
+public interface WhiteBalanceControl extends EffectControl {
+	public final static int AUTO = -1000;
+	public final static int NEXT = -1001;
+	public final static int PREVIOUS = -1002;
+	public final static int UNKNOWN = -1004;
 
-	public void setPreset(String preset);
+	public int setColorTemp(int temp);
 
-	public String getPreset();
+	public int getColorTemp();
 
-	public void setEnabled(boolean enable);
+	public int getMinColorTemp();
 
-	public boolean isEnabled();
+	public int getMaxColorTemp();
+
+	public int getNumberOfSteps();
 }

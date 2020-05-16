@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control;
+package javax.microedition.amms;
 
-import javax.microedition.media.Control;
+import javax.microedition.media.Controllable;
+import javax.microedition.media.MediaException;
+import javax.microedition.media.Player;
 
-public interface EffectControl extends Control {
-	public String[] getPresetNames();
+public interface Module extends Controllable {
+	public void addMIDIChannel(Player player, int channel) throws MediaException;
 
-	public void setPreset(String preset);
+	public void removeMIDIChannel(Player player, int channel);
 
-	public String getPreset();
+	public void addPlayer(Player player) throws MediaException;
 
-	public void setEnabled(boolean enable);
-
-	public boolean isEnabled();
+	public void removePlayer(Player player);
 }

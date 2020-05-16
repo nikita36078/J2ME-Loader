@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,30 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control.audioeffect;
+package javax.microedition.amms.control.imageeffect;
 
 import javax.microedition.amms.control.EffectControl;
 
-public interface EqualizerControl extends EffectControl {
-	public int getNumberOfBands();
+public interface ImageTonalityControl extends EffectControl {
+	public final static int AUTO = -1000;
+	public final static int NEXT = -1001;
+	public final static int PREVIOUS = -1002;
 
-	public int getBand(int frequency);
+	public int setBrightness(int level);
 
-	public int getCenterFreq(int band);
+	public int getBrightness();
 
-	public int getMinBandLevel();
+	public int getBrightnessLevels();
 
-	public int getMaxBandLevel();
+	public int setContrast(int level);
 
-	public void setBandLevel(int level, int band);
+	public int getContrast();
 
-	public int getBandLevel(int band);
+	public int getContrastLevels();
+
+	public int setGamma(int level);
+
+	public int getGamma();
+
+	public int getGammaLevels();
 }

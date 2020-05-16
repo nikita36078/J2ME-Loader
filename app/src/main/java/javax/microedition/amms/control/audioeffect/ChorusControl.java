@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,28 @@ package javax.microedition.amms.control.audioeffect;
 
 import javax.microedition.amms.control.EffectControl;
 
-public interface EqualizerControl extends EffectControl {
-	public int getNumberOfBands();
+public interface ChorusControl extends EffectControl {
+	public int setWetLevel(int level);
 
-	public int getBand(int frequency);
+	public int getWetLevel();
 
-	public int getCenterFreq(int band);
+	public void setModulationRate(int rate);
 
-	public int getMinBandLevel();
+	public int getModulationRate();
 
-	public int getMaxBandLevel();
+	public int getMinModulationRate();
 
-	public void setBandLevel(int level, int band);
+	public int getMaxModulationRate();
 
-	public int getBandLevel(int band);
+	public void setModulationDepth(int percentage);
+
+	public int getModulationDepth();
+
+	public int getMaxModulationDepth();
+
+	public void setAverageDelay(int delay);
+
+	public int getAverageDelay();
+
+	public int getMaxAverageDelay();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control;
+package javax.microedition.amms.control.camera;
 
 import javax.microedition.media.Control;
 
-public interface EffectControl extends Control {
-	public String[] getPresetNames();
+public interface FlashControl extends Control {
+	public final static int OFF = 1;
+	public final static int AUTO = 2;
+	public final static int AUTO_WITH_REDEYEREDUCE = 3;
+	public final static int FORCE = 4;
+	public final static int FORCE_WITH_REDEYEREDUCE = 5;
+	public final static int FILLIN = 6;
 
-	public void setPreset(String preset);
+	public int[] getSupportedModes();
 
-	public String getPreset();
+	public void setMode(int mode);
 
-	public void setEnabled(boolean enable);
+	public int getMode();
 
-	public boolean isEnabled();
+	public boolean isFlashReady();
 }

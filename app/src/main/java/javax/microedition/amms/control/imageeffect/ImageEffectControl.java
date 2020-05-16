@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control;
+package javax.microedition.amms.control.imageeffect;
 
-import javax.microedition.media.Control;
+import javax.microedition.amms.control.EffectControl;
 
-public interface EffectControl extends Control {
-	public String[] getPresetNames();
-
-	public void setPreset(String preset);
-
-	public String getPreset();
-
-	public void setEnabled(boolean enable);
-
-	public boolean isEnabled();
+public interface ImageEffectControl extends EffectControl {
 }

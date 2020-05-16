@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control;
+package javax.microedition.amms.control.audio3d;
 
-import javax.microedition.media.Control;
+public interface ObstructionControl extends javax.microedition.media.Control {
+	public void setLevel(int level);
 
-public interface EffectControl extends Control {
-	public String[] getPresetNames();
+	public int getLevel();
 
-	public void setPreset(String preset);
+	public void setHFLevel(int HFLevel);
 
-	public String getPreset();
-
-	public void setEnabled(boolean enable);
-
-	public boolean isEnabled();
+	public int getHFLevel();
 }

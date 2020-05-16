@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package javax.microedition.amms.control;
+package javax.microedition.amms.control.audioeffect;
 
 import javax.microedition.media.Control;
+import javax.microedition.media.MediaException;
 
-public interface EffectControl extends Control {
-	public String[] getPresetNames();
+public interface ReverbSourceControl extends Control {
+	public final int DISCONNECT = Integer.MAX_VALUE;
 
-	public void setPreset(String preset);
+	public void setRoomLevel(int level) throws MediaException;
 
-	public String getPreset();
-
-	public void setEnabled(boolean enable);
-
-	public boolean isEnabled();
+	public int getRoomLevel();
 }
