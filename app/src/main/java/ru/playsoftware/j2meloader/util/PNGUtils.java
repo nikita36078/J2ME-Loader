@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import ar.com.hjg.pngj.ImageInfo;
+import ar.com.hjg.pngj.ImageLineHelper;
 import ar.com.hjg.pngj.ImageLineInt;
 import ar.com.hjg.pngj.ImageLineSetDefault;
 import ar.com.hjg.pngj.PngReaderInt;
@@ -75,6 +76,7 @@ public class PNGUtils {
 		int[] buf = new int[width];
 		for (int i = 0; i < height; i++) {
 			ImageLineInt lineInt = lineSet.getImageLine(i);
+			ImageLineHelper.scaleUp(lineInt);
 			int[] r = lineToARGB32(lineInt, plte, trns, buf);
 			for (int j = 0; j < width; j++) {
 				pix[i * width + j] = r[j];
