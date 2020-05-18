@@ -26,8 +26,8 @@
 //#define M3G_NATIVE_LOADER
 
 /* Constants that work for MBX and Gerbera */
-#define M3G_MAX_VIEWPORT_DIMENSION  1024
-#define M3G_MAX_TEXTURE_DIMENSION   1024
+#define M3G_MAX_VIEWPORT_DIMENSION  4096
+#define M3G_MAX_TEXTURE_DIMENSION   4096
 
 /* Support antialiasing */
 #define M3G_SUPPORT_ANTIALIASING    M3G_TRUE

@@ -24,7 +24,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,10 +52,12 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -76,6 +77,7 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean loaded;
 	private boolean started;
 	private boolean actionBarEnabled;
+	private boolean statusBarEnabled;
 	private boolean keyLongPressed;
 	private LinearLayout layout;
 	private Toolbar toolbar;
@@ -93,6 +95,7 @@ public class MicroActivity extends AppCompatActivity {
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
+		statusBarEnabled = sp.getBoolean("pref_statusbar_switch", false);
 		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
 		if (wakelockEnabled) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -117,7 +120,7 @@ public class MicroActivity extends AppCompatActivity {
 			loadMIDlet();
 		} catch (Exception e) {
 			e.printStackTrace();
-			showErrorDialog(e.getMessage());
+			showErrorDialog(e.toString());
 		}
 	}
 
@@ -156,6 +159,7 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
+	@SuppressLint("SourceLockedOrientationActivity")
 	private void setOrientation(int orientation) {
 		switch (orientation) {
 			case ORIENTATION_AUTO:
@@ -219,7 +223,7 @@ public class MicroActivity extends AppCompatActivity {
 			(new Thread(r, "MIDletLoader")).start();
 		} catch (Throwable t) {
 			t.printStackTrace();
-			showErrorDialog(t.getMessage());
+			showErrorDialog(t.toString());
 		}
 	}
 
@@ -247,13 +251,15 @@ public class MicroActivity extends AppCompatActivity {
 				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
-					actionBar.setTitle(MyClassLoader.getName());
+					final String title = current.getTitle();
+					actionBar.setTitle(title == null ? MyClassLoader.getName() : title);
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
 				showSystemUI();
 				actionBar.show();
-				actionBar.setTitle(current.getTitle());
+				final String title = current.getTitle();
+				actionBar.setTitle(title == null ? MyClassLoader.getName() : title);
 				layoutParams.height = getToolBarHeight();
 			}
 			toolbar.setLayoutParams(layoutParams);
@@ -270,13 +276,13 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void hideSystemUI() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			getWindow().getDecorView().setSystemUiVisibility(
-					View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-							| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-							| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-							| View.SYSTEM_UI_FLAG_FULLSCREEN
-							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-		} else {
+			int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+			if (!statusBarEnabled) {
+				flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN;
+			}
+			getWindow().getDecorView().setSystemUiVisibility(flags);
+		} else if (!statusBarEnabled) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
@@ -290,8 +296,8 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	public void setCurrent(Displayable disp) {
-		current = disp;
+	public void setCurrent(Displayable displayable) {
+		current = displayable;
 		ViewHandler.postEvent(msgSetCurrent);
 	}
 
@@ -307,7 +313,7 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.yes, (p1, p2) -> {
+				.setPositiveButton(android.R.string.ok, (p1, p2) -> {
 					Runnable r = () -> {
 						try {
 							Display.getDisplay(null).activityDestroyed();
@@ -318,7 +324,7 @@ public class MicroActivity extends AppCompatActivity {
 					};
 					(new Thread(r, "MIDletDestroyThread")).start();
 				})
-				.setNegativeButton(android.R.string.no, null);
+				.setNegativeButton(android.R.string.cancel, null);
 		alertBuilder.create().show();
 	}
 
@@ -388,7 +394,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		if (current != null) {
 			int id = item.getItemId();
 			if (item.getGroupId() == R.id.action_group_common_settings) {
@@ -429,7 +435,7 @@ public class MicroActivity extends AppCompatActivity {
 						Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.action_layout_switch:
-				vk.switchLayout();
+				showSetLayoutDialog();
 				break;
 			case R.id.action_hide_buttons:
 				showHideButtonDialog();
@@ -442,7 +448,7 @@ public class MicroActivity extends AppCompatActivity {
 		microLoader.takeScreenshot((Canvas) current)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new SingleObserver<String>() {
+				.subscribe(new SingleObserver<String>() {
 					@Override
 					public void onSubscribe(Disposable d) {
 					}
@@ -481,8 +487,18 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
+	private void showSetLayoutDialog() {
+		final VirtualKeyboard vk = ContextHolder.getVk();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.layout_switch)
+				.setSingleChoiceItems(vk.getLayoutNames(), -1,
+						(dialogInterface, i) -> vk.setLayout(i))
+				.setPositiveButton(android.R.string.ok, null);
+		builder.show();
+	}
+
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(@NonNull MenuItem item) {
 		if (current instanceof Form) {
 			((Form) current).contextMenuItemSelected(item);
 		} else if (current instanceof List) {

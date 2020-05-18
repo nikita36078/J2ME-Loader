@@ -16,8 +16,10 @@
 
 package javax.microedition.lcdui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.view.View;
 
 public abstract class CustomItem extends Item {
@@ -56,6 +58,25 @@ public abstract class CustomItem extends Item {
 			graphics.setSurfaceCanvas(canvas);
 			graphics.drawImage(offscreen, 0, 0, onWidth, onHeight, false, 255);
 		}
+
+		@SuppressLint("ClickableViewAccessibility")
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+			switch (event.getActionMasked()) {
+				case MotionEvent.ACTION_DOWN:
+					pointerPressed(convertPointerX(event.getX()), convertPointerY(event.getY()));
+					break;
+				case MotionEvent.ACTION_MOVE:
+					pointerDragged(convertPointerX(event.getX()), convertPointerY(event.getY()));
+					break;
+				case MotionEvent.ACTION_UP:
+					pointerReleased(convertPointerX(event.getX()), convertPointerY(event.getY()));
+					break;
+				default:
+					return super.onTouchEvent(event);
+			}
+			return true;
+		}
 	}
 
 	protected CustomItem(String label) {
@@ -91,6 +112,7 @@ public abstract class CustomItem extends Item {
 	}
 
 	protected final void repaint(int x, int y, int width, int height) {
+		if (view == null) return;
 		graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
 		graphics.reset();
 		graphics.setClip(x, y, width, height);
@@ -133,6 +155,14 @@ public abstract class CustomItem extends Item {
 	protected void pointerReleased(int x, int y) {
 	}
 
+	private int convertPointerX(float x) {
+		return (int) x * getMinContentWidth() / onWidth;
+	}
+
+	private int convertPointerY(float y) {
+		return (int) y * getMinContentHeight() / onHeight;
+	}
+
 	private void updateSize() {
 		float mult = view.getWidth() / (float) getMinContentWidth();
 		onWidth = (int) (getMinContentWidth() * mult);
@@ -147,7 +177,7 @@ public abstract class CustomItem extends Item {
 			int height = getMinContentHeight();
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
-			offscreen = Image.createImage(width, height);
+			offscreen = Image.createTransparentImage(width, height);
 		}
 
 		return view;

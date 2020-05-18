@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.hockeyapp;
+package com.motorola.funlight;
 
-import android.content.Context;
-
-import org.acra.config.CoreConfiguration;
-import org.acra.sender.ReportSender;
-import org.acra.sender.ReportSenderFactory;
-
-import androidx.annotation.NonNull;
-
-public class HockeySenderFactory implements ReportSenderFactory {
-	@NonNull
-	@Override
-	public ReportSender create(@NonNull Context context, @NonNull CoreConfiguration config) {
-		return new HockeySender();
+public class FunLightException extends RuntimeException {
+	public FunLightException() {
+		super();
 	}
 
-	@Override
-	public boolean enabled(@NonNull CoreConfiguration config) {
-		return true;
+	public FunLightException(java.lang.String s) {
+		super(s);
 	}
 }

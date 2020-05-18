@@ -18,7 +18,6 @@ package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +26,7 @@ import java.io.IOException;
 
 import javax.microedition.util.param.SharedPreferencesContainer;
 
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
 

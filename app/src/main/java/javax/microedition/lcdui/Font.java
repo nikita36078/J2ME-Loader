@@ -17,6 +17,7 @@
 
 package javax.microedition.lcdui;
 
+import android.content.res.AssetManager;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.TypedValue;
@@ -94,7 +95,10 @@ public class Font {
 
 	// Font for keyboard
 	public Font() {
+		AssetManager manager = ContextHolder.getContext().getAssets();
+		Typeface typeface = Typeface.createFromAsset(manager, "Roboto-Regular.ttf");
 		paint = new Paint();
+		paint.setTypeface(typeface);
 		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getContext().getResources().getDisplayMetrics());
 		paint.setTextSize(size);
 	}

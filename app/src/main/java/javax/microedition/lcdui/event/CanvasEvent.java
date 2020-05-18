@@ -17,7 +17,6 @@
 package javax.microedition.lcdui.event;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.game.GameCanvas;
 import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
@@ -40,7 +39,6 @@ public class CanvasEvent extends Event {
 	private int eventType;
 
 	private int keyCode;
-	private int originalKeycode;
 
 	private int pointer;
 	private float x, y;
@@ -70,8 +68,7 @@ public class CanvasEvent extends Event {
 
 		instance.canvas = canvas;
 		instance.eventType = eventType;
-		instance.originalKeycode = keyCode;
-		instance.keyCode = Canvas.convertKeyCode(keyCode);
+		instance.keyCode = keyCode;
 
 		return instance;
 	}
@@ -111,27 +108,15 @@ public class CanvasEvent extends Event {
 	public void process() {
 		switch (eventType) {
 			case KEY_PRESSED:
-				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyPressed(keyCode, originalKeycode);
-				} else {
-					canvas.keyPressed(keyCode);
-				}
+				canvas.keyPressed(keyCode);
 				break;
 
 			case KEY_REPEATED:
-				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyRepeated(keyCode, originalKeycode);
-				} else {
-					canvas.keyRepeated(keyCode);
-				}
+				canvas.keyRepeated(keyCode);
 				break;
 
 			case KEY_RELEASED:
-				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyReleased(keyCode, originalKeycode);
-				} else {
-					canvas.keyReleased(keyCode);
-				}
+				canvas.keyReleased(keyCode);
 				break;
 
 			case POINTER_PRESSED:

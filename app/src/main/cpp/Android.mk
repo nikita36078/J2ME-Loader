@@ -19,4 +19,8 @@ ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
 endif
 
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+    LOCAL_ARM_NEON := false
+endif
+
 include $(BUILD_SHARED_LIBRARY)

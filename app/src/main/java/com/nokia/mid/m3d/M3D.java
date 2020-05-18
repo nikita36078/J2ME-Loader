@@ -44,14 +44,21 @@ public class M3D {
 
 	private boolean boundTexture = false;
 
-	private double[] verts = new double[600];
-	private double[] UVs = new double[600];
+	private double[] verts = new double[256];
+	private double[] UVs = new double[256];
+	private double[] faces = new double[384];
+	private double[] faceUVs = new double[384];
+	private int[] debugColors = new int[384];
+	private int debugColor = 0xFF0000;
 	private int vertCount;
+	private int faceCount;
 
 	private Image platformImage;
 	private Graphics gc;
 
 	private double[] zbuffer;
+	private double near;
+	private double far;
 
 	private int color = 0xFF000000;
 	private int clearcolor = 0xFFFFFFFF;
@@ -88,7 +95,7 @@ public class M3D {
 		identity(matrix);
 		identity(stack);
 		for (int i = 0; i < zbuffer.length; i++) {
-			zbuffer[i] = -500;
+			zbuffer[i] = -128;
 		}
 		boundTexture = false;
 	}
@@ -100,7 +107,7 @@ public class M3D {
 		identity(matrix);
 	}
 
-	public void frustumxi(int left, int right, int bottom, int top, int near, int far) //-3,3, -2,2, 3,1000
+	public void frustumxi(int left, int right, int top, int bottom, int nearclip, int farclip) //-3,3, -2,2, 3,1000
 	{
 		//System.out.println("frustrumxi("+a+", "+b+", "+c+", "+d+", "+near+", "+far+");");
 		// c.c: bu.frustumxi(-bp << 11, bp << 11, -bo << 11, bo << 11, 196608, 65536000);
@@ -109,9 +116,12 @@ public class M3D {
 		double t = top / 2048;
 		double b = bottom / 2048;
 
-		double n = near / 65536;
-		double f = far / 65536;
-		projection(projm, r - l, t - b, 90, n, f);
+		double n = nearclip / 655360;
+		double f = farclip / 655360;
+
+		near = -0.01;//25;//-n;
+		far = -f;
+		projection(projm, r - l, b - t, 90, near, far);
 	}
 
 	public void scalexi(int X, int Y, int Z) {
@@ -141,7 +151,7 @@ public class M3D {
 		clone(matrix, tempt);
 	}
 
-	public void rotatexi(int Y, int Z, int X, int W) // probably not a quaternion 
+	public void rotatexi(int Y, int Z, int X, int W) // probably not a quaternion
 	{
 		//System.out.println("rotatexi("+Y+", "+Z+", "+X+", "+W+");");
 		// 1 degree = 0.0174533 rad
@@ -187,13 +197,6 @@ public class M3D {
 		clone(matrix, stack);
 	}
 
-	public void vertexPointerub(int a, int b, byte[] vertices) {
-		for (int i = 0; i < vertices.length; i++) {
-			verts[i] = vertices[i];
-		}
-		vertCount = vertices.length;
-	}
-
 	public void color4ub(byte r, byte g, byte b, byte a) {
 		color = ((0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
 	}
@@ -202,69 +205,221 @@ public class M3D {
 		clearcolor = ((0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
 	}
 
-	public void drawElementsub(int a, int b, byte[] faces) {
-		gc.setColor(color);
+	public void vertexPointerub(int a, int b, byte[] vertices) {
+		for (int i = 0; i < vertices.length; i += 3) {
+			verts[i] = vertices[i];
+			verts[i + 1] = vertices[i + 1];
+			verts[i + 2] = vertices[i + 2];
+		}
+		vertCount = vertices.length;
+	}
 
-		double x, y, z, theta;
+	private void addFaces(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double u1, double v1, double u2, double v2, double u3, double v3) {
+		debugColor = color;
+		// add faces -- split triangles that intersect near plane
+		if (z1 <= near && z2 <= near && z3 <= near) {
+			addFace(x1, y1, z1, x2, y2, z2, x3, y3, z3, u1, v1, u2, v2, u3, v3);
+			return;
+		}
+		// one point behind near plane, split in to two triangles
+		if (z1 > near && z2 <= near && z3 <= near) {
+			// point 1 behind near plane
+			addFace2(x2, y2, z2, x3, y3, z3, x1, y1, z1, u2, v2, u3, v3, u1, v1);
+			return;
+		}
+		if (z1 <= near && z2 > near && z3 <= near) {
+			addFace2(x1, y1, z1, x3, y3, z3, x2, y2, z2, u1, v1, u3, v3, u2, v2);
+			return;
+		}
+		if (z1 <= near && z2 <= near && z3 > near) {
+			addFace2(x1, y1, z1, x2, y2, z2, x3, y3, z3, u1, v1, u2, v2, u3, v3);
+			return;
+		}
+		// two points behind near plane, clip triangle
+		if (z1 > near && z2 > near && z3 <= near) {
+			addFace1(x3, y3, z3, x1, y1, z1, x2, y2, z2, u3, v3, u1, v1, u2, v2);
+			return;
+		}
+		if (z1 > near && z2 <= near && z3 > near) {
+			addFace1(x2, y2, z2, x1, y1, z1, x3, y3, z3, u2, v2, u1, v1, u3, v3);
+			return;
+		}
+		if (z1 <= near && z2 > near && z3 > near) {
+			addFace1(x1, y1, z1, x2, y2, z2, x3, y3, z3, u1, v1, u2, v2, u3, v3);
+			return;
+		}
+	}
+
+	private void addFace2(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double u1, double v1, double u2, double v2, double u3, double v3) {
+		double dx, dy, dz, x4, y4, z4, x5, y5, z5;
+		// point3 is behind the near plane, create and add two new faces
+		dx = x3 - x1;
+		dy = y3 - y1;
+		dz = z1 - z3;
+		x4 = x1 + (dx / dz) * (z1 - near);
+		y4 = y1 + (dy / dz) * (z1 - near);
+		z4 = near;
+
+		dx = x3 - x2;
+		dy = y3 - y2;
+		dz = z2 - z3;
+		x5 = x2 + (dx / dz) * (z2 - near);
+		y5 = y2 + (dy / dz) * (z2 - near);
+		z5 = near;
+
+		//debugColor = 0x00FF00;
+		addFace(x1, y1, z1, x2, y2, z2, x5, y5, z5, u1, v1, u2, v2, u3, v3);
+		//debugColor = 0x0000FF;
+		addFace(x1, y1, z1, x5, y5, z5, x4, y4, z4, u1, v1, u2, v2, u3, v3);
+	}
+
+	private void addFace1(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double u1, double v1, double u2, double v2, double u3, double v3) {
+		double dx, dy, dz;
+		// points 2 and 3 are behind the near plane, clip and add the new face
+		dx = x2 - x1;
+		dy = y2 - y1;
+		dz = z1 - z2;
+		x2 = x1 + (dx / dz) * (z1 - near);
+		y2 = y1 + (dy / dz) * (z1 - near);
+		z2 = near;
+
+		dx = x3 - x1;
+		dy = y3 - y1;
+		dz = z1 - z3;
+		x3 = x1 + (dx / dz) * (z1 - near);
+		y3 = y1 + (dy / dz) * (z1 - near);
+		z3 = near;
+
+		addFace(x1, y1, z1, x2, y2, z2, x3, y3, z3, u1, v1, u2, v2, u3, v3);
+	}
+
+	private void addFace(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double u1, double v1, double u2, double v2, double u3, double v3) {
+		//debugColors[faceCount] = debugColor;
+		//debugColors[faceCount+1] = debugColor;
+		//debugColors[faceCount+2] = debugColor;
+		faces[faceCount * 3] = x1;
+		faces[faceCount * 3 + 1] = y1;
+		faces[faceCount * 3 + 2] = z1;
+		faceUVs[faceCount * 2] = u1;
+		faceUVs[faceCount * 2 + 1] = v1;
+		faceCount++;
+
+		faces[faceCount * 3] = x2;
+		faces[faceCount * 3 + 1] = y2;
+		faces[faceCount * 3 + 2] = z2;
+		faceUVs[faceCount * 2] = u2;
+		faceUVs[faceCount * 2 + 1] = v2;
+		faceCount++;
+
+		faces[faceCount * 3] = x3;
+		faces[faceCount * 3 + 1] = y3;
+		faces[faceCount * 3 + 2] = z3;
+		faceUVs[faceCount * 2] = u3;
+		faceUVs[faceCount * 2 + 1] = v3;
+		faceCount++;
+	}
+
+	public void drawElementsub(int A, int B, byte[] facelist) {
+		byte a, b;
+		double x1, y1, z1, x2, y2, z2, x3, y3, z3, w1;
+		double u1, v1, u2, v2, u3, v3;
+
+		double x, y, z, w;
+		double ox = width / 2;
+		double oy = height / 2;
+
+		u1 = v1 = u2 = v2 = u3 = v3 = 0;
+
+		gc.setColor(color);
 
 		applyMatrix(matrix);
 
-		for (int i = 0; i < vertCount; i += 3) // projection
-		{
-			x = verts[i];
-			y = verts[i + 1];
-			z = verts[i + 2] + 15;
-			z = -((z - 30) / 90);
-			if (z > 0) {
-				verts[i] = x / z;
-				verts[i + 1] = (-y) / z;
-				verts[i + 2] += 15;
+		// clip //
+		faceCount = 0;
+		for (int i = 0; i < facelist.length; i += 3) {
+			x1 = verts[(facelist[i] * 3)];
+			y1 = verts[(facelist[i] * 3) + 1];
+			z1 = verts[(facelist[i] * 3) + 2];
+
+			x2 = verts[(facelist[i + 1] * 3)];
+			y2 = verts[(facelist[i + 1] * 3) + 1];
+			z2 = verts[(facelist[i + 1] * 3) + 2];
+
+			x3 = verts[(facelist[i + 2] * 3)];
+			y3 = verts[(facelist[i + 2] * 3) + 1];
+			z3 = verts[(facelist[i + 2] * 3) + 2];
+
+			if (z1 > near && z2 > near && z3 > near) {
+				continue;
+			} // drop face
+
+			u1 = UVs[facelist[i] * 2];
+			v1 = UVs[facelist[i] * 2 + 1];
+
+			u2 = UVs[facelist[i + 1] * 2];
+			v2 = UVs[facelist[i + 1] * 2 + 1];
+
+			u3 = UVs[facelist[i + 2] * 2];
+			v3 = UVs[facelist[i + 2] * 2 + 1];
+
+			addFaces(x1, y1, z1, x2, y2, z2, x3, y3, z3, u1, v1, u2, v2, u3, v3);
+		}
+
+		// projection
+		for (int i = 0; i < faceCount; i++) {
+			x = faces[i * 3];
+			y = faces[i * 3 + 1];
+			z = faces[i * 3 + 2];
+			w = 1;
+
+			x1 = x * projm[0] + y * projm[4] + z * projm[8] + projm[12];
+			y1 = x * projm[1] + y * projm[5] + z * projm[9] + projm[13];
+			z1 = x * projm[2] + y * projm[6] + z * projm[10] + projm[14];
+			w1 = x * projm[3] + y * projm[7] + z * projm[11] + projm[15];
+
+			if (w1 != 1) {
+				faces[i * 3] = (x1 / w1);
+				faces[i * 3 + 1] = (y1 / w1);
+				//faces[i*3+2] = (z1/w1);
 			}
 		}
 
 		// draw elements
-		double x1, y1, z1, x2, y2, z2, x3, y3, z3;
-		double ox = width / 2;
-		double oy = height / 2;
+		for (int i = 0; i < faceCount; i += 3) {
+			x1 = faces[i * 3];
+			y1 = faces[i * 3 + 1];
+			z1 = faces[i * 3 + 2];
 
-		for (int i = 0; i < faces.length; i += 3) {
-			x1 = verts[(faces[i] * 3)];
-			y1 = verts[(faces[i] * 3) + 1];
-			z1 = verts[(faces[i] * 3) + 2];
+			x2 = faces[i * 3 + 3];
+			y2 = faces[i * 3 + 4];
+			z2 = faces[i * 3 + 5];
 
-			x2 = verts[(faces[i + 1] * 3)];
-			y2 = verts[(faces[i + 1] * 3) + 1];
-			z2 = verts[(faces[i + 1] * 3) + 2];
+			x3 = faces[i * 3 + 6];
+			y3 = faces[i * 3 + 7];
+			z3 = faces[i * 3 + 8];
 
-			x3 = verts[(faces[i + 2] * 3)];
-			y3 = verts[(faces[i + 2] * 3) + 1];
-			z3 = verts[(faces[i + 2] * 3) + 2];
+			u1 = faceUVs[i * 2];
+			v1 = faceUVs[i * 2 + 1];
 
-			// clip
-			if (z3 > 15 && z2 > 15 && z1 > 15) {
-				continue;
-			}
+			u2 = faceUVs[i * 2 + 2];
+			v2 = faceUVs[i * 2 + 3];
 
-			// center on screen
-			x1 = x1 + ox;
-			x2 = x2 + ox;
-			x3 = x3 + ox;
-			y1 = y1 + oy;
-			y2 = y2 + oy;
-			y3 = y3 + oy;
+			u3 = faceUVs[i * 2 + 4];
+			v3 = faceUVs[i * 2 + 5];
 
-			// backface culling (weird trick) //
-			/*
-			if( (x2-x1)!=0 && (x3-x1)!=0 )
-			{
-				boolean t1 = ((y2-y1)/(x2-x1) - (y3-y1)/(x3-x1)) < 0;
-				boolean t2 = (x1 <= x2) == (x1 > x3);
-				if (t1 ^ t2) { continue; }
-			}
-			*/
+			// scale and center on screen
+			x1 = (x1 * ox) + ox;
+			x2 = (x2 * ox) + ox;
+			x3 = (x3 * ox) + ox;
+			y1 = (y1 * oy) + oy;
+			y2 = (y2 * oy) + oy;
+			y3 = (y3 * oy) + oy;
+
+			//gc.setColor(debugColors[i]);
+
 			// draw
 			if (boundTexture) {
-				texture.setUVs((int) UVs[(faces[i] * 2)], (int) UVs[(faces[i] * 2) + 1], (int) UVs[(faces[i + 1] * 2)], (int) UVs[(faces[i + 1] * 2) + 1], (int) UVs[(faces[i + 2] * 2)], (int) UVs[(faces[i + 2] * 2) + 1]);
+				texture.setUVs((int) u1, (int) v1, (int) u2, (int) v2, (int) u3, (int) v3);
 				texture.mapto((int) x1, (int) y1, (int) x2, (int) y2, (int) x3, (int) y3);
 			}
 			fillTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);
@@ -318,18 +473,28 @@ public class M3D {
 
 	private void projection(double[] m, double w, double h, double fov, double near, double far) {
 		fov = fov * 0.0174533;
-		double aspect = h / w;
-		double sy = 1 / Math.tan(fov / 2);
-		double sx = sy / aspect;
-		double c = (far + near) / (near - far);
-		double d = -1;
-		double e = (2 * far * near) / (near - far);
-		double f = 0;
+		double sx = 1 / Math.tan(fov / 2);
+		double sy = -sx * (w / h);
+		double sz = (far / (far - near)); // 1 > z > -1
+		double d = -1.0;
+		double e = 1;
 
-		m[0]  = sx; m[1]  = 0;   m[2]  = 0; m[3]  = 0;
-		m[4]  = 0;  m[5]  =-sy;  m[6]  = 0; m[7]  = 0;
-		m[8]  = 0;  m[9]  = 0;   m[10] = c; m[11] = d;
-		m[12] = 0;  m[13] = 0;   m[14] = e; m[15] = f;
+		m[0] = sx;
+		m[1] = 0;
+		m[2] = 0;
+		m[3] = 0;
+		m[4] = 0;
+		m[5] = sy;
+		m[6] = 0;
+		m[7] = 0;
+		m[8] = 0;
+		m[9] = 0;
+		m[10] = sz;
+		m[11] = d;
+		m[12] = 0;
+		m[13] = 0;
+		m[14] = e;
+		m[15] = 0;
 	}
 
 	private void clone(double[] m1, double[] m2) {
@@ -400,20 +565,22 @@ public class M3D {
 	}
 
 	private void applyMatrix(double[] m) {
-		double x, y, z;
+		double x, y, z, w;
 		for (int i = 0; i < vertCount; i += 3) {
 			x = verts[i];
 			y = verts[i + 1];
 			z = verts[i + 2];
-			verts[i] = x * m[0] + y * m[4] + z * m[8] + m[12];
-			verts[i + 1] = x * m[1] + y * m[5] + z * m[9] + m[13];
-			verts[i + 2] = x * m[2] + y * m[6] + z * m[10] + m[14];
+			w = 1;
+			verts[i] = x * m[0] + y * m[4] + z * m[8] + w * m[12];
+			verts[i + 1] = x * m[1] + y * m[5] + z * m[9] + w * m[13];
+			verts[i + 2] = x * m[2] + y * m[6] + z * m[10] + w * m[14];
 		}
 	}
 
 	private void fillTriangle(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
-		double a, b, c, d;
-		double depth = 0;
+		double a, b, c;
+		double depth;
+		double px, py;
 
 		// find rect, clip to screen
 		int maxX = (int) Math.min(Math.max(x1, Math.max(x2, x3)), width - 1);
@@ -421,21 +588,24 @@ public class M3D {
 		int minX = (int) Math.max(Math.min(x1, Math.min(x2, x3)), 0);
 		int minY = (int) Math.max(Math.min(y1, Math.min(y2, y3)), 0);
 
-		if (minX > (width - 1) || minY > (height - 1) || maxX < 0 || maxY < 0) {
-			return;
-		}
-
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
+				px = (double) x;
+				py = (double) y;
+
 				// point in triangle
-				d = ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3));
-				a = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / d;
-				b = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / d;
-				c = 1 - a - b;
-				if ((a >= 0) && (a <= 1) && (b >= 0) && (b <= 1) && (c >= 0) && (c <= 1) && (x >= 0 && x < width && y >= 0 && y < height)) {
+				//cross product to find area*2 of triangles around point
+				a = (x3 - x2) * -(py - y2) - -(y3 - y2) * (px - x2); // p1
+				b = (x1 - x3) * -(py - y3) - -(y1 - y3) * (px - x3); // p2
+				c = (x2 - x1) * -(py - y1) - -(y2 - y1) * (px - x1); // p3
+
+				//if(!(a<0 || b<0 || c<0))
+				if (a >= 0 && b >= 0 && c >= 0) {
+					//fragment depth
+					depth = (a * z1 + b * z2 + c * z3) / (a + b + c);
+
 					// plot
-					depth = z1 * a + z2 * b + z3 * c; // fragment depth
-					if (zbuffer[x + (y * width)] <= depth && depth < 5) {
+					if (depth >= zbuffer[x + (y * width)]) {
 						zbuffer[x + (y * width)] = depth;
 						if (boundTexture) {
 							gc.setColorAlpha(texture.map(x, y));

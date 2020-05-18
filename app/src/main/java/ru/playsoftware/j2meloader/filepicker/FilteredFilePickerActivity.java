@@ -18,7 +18,6 @@ package ru.playsoftware.j2meloader.filepicker;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
 import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
@@ -26,6 +25,7 @@ import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
 import java.io.File;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
 public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File> {

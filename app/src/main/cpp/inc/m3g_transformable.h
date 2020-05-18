@@ -59,7 +59,7 @@ struct M3GTransformableImpl
 /* Sanity check; if this assert fires, check the compiler padding
  * settings */
 
-M3G_CT_ASSERT(sizeof(Transformable) == sizeof(Object) + 44);
+M3G_CT_ASSERT2(sizeof(Transformable) == sizeof(Object) + 44);
 
 
 /*----------------------------------------------------------------------

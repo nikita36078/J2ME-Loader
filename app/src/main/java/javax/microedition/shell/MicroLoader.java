@@ -20,7 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.preference.PreferenceManager;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -39,6 +39,7 @@ import java.util.Map;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.FixedKeyboard;
@@ -48,6 +49,7 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
+import androidx.preference.PreferenceManager;
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
@@ -77,6 +79,11 @@ public class MicroLoader {
 				temp.delete();
 			}
 		}
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitNetwork()
+				.penaltyLog()
+				.build();
+		StrictMode.setThreadPolicy(policy);
 		params.load(false);
 	}
 
@@ -114,6 +121,7 @@ public class MicroLoader {
 		File resDir = new File(path, Config.MIDLET_RES_DIR);
 		ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
 				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
+		ContextHolder.prepareZipFile();
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
 		Log.i(TAG, "MIDlet-Name: " + MyClassLoader.getName());
 		return (MIDlet) loader.loadClass(mainClass).newInstance();
@@ -137,12 +145,18 @@ public class MicroLoader {
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
 		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
+		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		System.setProperty("user.home", externalStoragePath);
 		System.setProperty("com.siemens.IMEI", "000000000000000");
 		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
 		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
 		System.setProperty("com.siemens.OSVersion", "11");
 		System.setProperty("device.imei", "000000000000000");
+		System.setProperty("com.nokia.mid.imei", "000000000000000");
+		System.setProperty("fileconn.dir.cache", "file:///c:"
+				+ Config.DATA_DIR.replace(externalStoragePath, "") + appName);
+		System.setProperty("com.nokia.mid.impl.isa.visual_radio_operator_id", "0");
+		System.setProperty("com.nokia.mid.impl.isa.visual_radio_channel_freq", "0");
 	}
 
 	public int getOrientation() {
@@ -197,8 +211,8 @@ public class MicroLoader {
 			}
 
 			SparseIntArray intArray = KeyMapper.getArrayPref(params);
-			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
-					screenKeepAspectRatio, screenScaleRatio);
+			Displayable.setVirtualSize(screenWidth, screenHeight);
+			Canvas.setScale(screenScaleToFit, screenKeepAspectRatio, screenScaleRatio);
 			Canvas.setFilterBitmap(screenFilter);
 			EventQueue.setImmediate(immediateMode);
 			Canvas.setHardwareAcceleration(hwAcceleration, parallel);
@@ -223,6 +237,7 @@ public class MicroLoader {
 		int vkColorForegroundSelected =  params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
 		int vkColorOutline = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
 		boolean vkFeedback = params.getBoolean(("VirtualKeyboardFeedback"), false);
+		boolean vkForceOpacity = params.getBoolean(("VirtualKeyboardForceOpacity"), false);
 
 		VirtualKeyboard vk;
 		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
@@ -235,6 +250,7 @@ public class MicroLoader {
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
 		vk.setHasHapticFeedback(vkFeedback);
+		vk.setForceOpacity(vkForceOpacity);
 
 		String shapeStr = PreferenceManager.getDefaultSharedPreferences(context)
 				.getString("pref_button_shape", "round");

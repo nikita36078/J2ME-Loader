@@ -8,8 +8,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 72
-        versionName "1.5.5"
+        versionCode 80
+        versionName "1.6.1-fixed2"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
@@ -23,6 +23,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix '.debug'
         }
     }
 
@@ -82,23 +85,28 @@ static def generateVersionCode() {
 }
 
 dependencies {
-    def roomVersion = '2.2.1'
+    def roomVersion = '2.2.5'
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'ar.com.hjg:pngj:2.1.0'
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'ch.acra:acra-dialog:5.4.0'
+    implementation 'ch.acra:acra-dialog:5.5.1'
     implementation 'com.github.billthefarmer:mididriver:v1.17'
     implementation 'com.github.nikita36078:donations:2.8'
     implementation 'com.github.nikita36078:filepicker:4.3.0'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    compileOnly "com.google.auto.service:auto-service-annotations:1.0-rc6"
+    annotationProcessor "com.google.auto.service:auto-service:1.0-rc6"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'org.ow2.asm:asm:7.0'
+    implementation 'net.lingala.zip4j:zip4j:2.5.1'
+    implementation 'org.ow2.asm:asm:8.0.1'
     implementation project(':dexlib')
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

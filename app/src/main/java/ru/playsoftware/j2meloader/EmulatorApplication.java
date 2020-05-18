@@ -32,9 +32,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
+import ru.playsoftware.j2meloader.crashes.AppCenterSenderFactory;
 
-@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {HockeySenderFactory.class})
+@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {AppCenterSenderFactory.class},
+		parallel = false)
 @AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
 		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = R.string.CANCEL_CMD,
 		resTheme = R.style.Theme_AppCompat_Dialog)

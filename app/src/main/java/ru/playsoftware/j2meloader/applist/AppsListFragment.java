@@ -27,7 +27,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,6 +57,7 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.ListFragment;
+import androidx.preference.PreferenceManager;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.SingleObserver;
@@ -189,8 +189,8 @@ public class AppsListFragment extends ListFragment {
 					public void onSuccess(String s) {
 						AppItem app = AppUtils.getApp(s);
 						appRepository.insert(app);
-						dialog.dismiss();
 						if (!isAdded()) return;
+						dialog.dismiss();
 						showStartDialog(app);
 					}
 
@@ -257,11 +257,11 @@ public class AppsListFragment extends ListFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
-				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					AppUtils.deleteApp(item);
 					appRepository.delete(item);
 				})
-				.setNegativeButton(android.R.string.no, null);
+				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}
 

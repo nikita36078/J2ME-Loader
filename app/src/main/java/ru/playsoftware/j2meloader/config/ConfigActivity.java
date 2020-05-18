@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,34 +18,47 @@
 package ru.playsoftware.j2meloader.config;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
@@ -53,6 +67,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends BaseActivity implements View.OnClickListener {
 
+	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
 	protected EditText tfScreenBack;
@@ -76,7 +91,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxFontSizeInSP;
 	protected EditText tfSystemProperties;
 	protected CheckBox cxShowKeyboard;
+
+	private View vkContainer;
 	protected CheckBox cxVKFeedback;
+	protected CheckBox cxVKForceOpacity;
 	protected CheckBox cxTouchInput;
 
 	protected Spinner spVKType;
@@ -89,9 +107,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfVKSelBack;
 	protected EditText tfVKOutline;
 
-	protected ArrayList<Integer> screenWidths;
-	protected ArrayList<Integer> screenHeights;
-	protected ArrayList<String> screenAdapter;
+	protected ArrayList<String> screenPresets = new ArrayList<>();
 
 	protected ArrayList<Integer> fontSmall;
 	protected ArrayList<Integer> fontMedium;
@@ -119,7 +135,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		setContentView(R.layout.activity_config);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Intent intent = getIntent();
-		display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		display = getWindowManager().getDefaultDisplay();
 		fragmentManager = getSupportFragmentManager();
 		defaultConfig = intent.getBooleanExtra(DEFAULT_CONFIG_KEY, false);
 		boolean showSettings;
@@ -140,6 +156,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load(defaultConfig);
 
+		rootContainer = findViewById(R.id.configRoot);
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
 		tfScreenBack = findViewById(R.id.tfScreenBack);
@@ -162,8 +179,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
+
+		cxTouchInput = findViewById(R.id.cxTouchInput);
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
+		vkContainer = findViewById(R.id.configVkContainer);
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
+		cxVKForceOpacity = findViewById(R.id.cxVKForceOpacity);
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		spVKType = findViewById(R.id.spVKType);
@@ -176,11 +197,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKSelBack = findViewById(R.id.tfVKSelBack);
 		tfVKOutline = findViewById(R.id.tfVKOutline);
 
-		screenWidths = new ArrayList<>();
-		screenHeights = new ArrayList<>();
-		screenAdapter = new ArrayList<>();
-
-		fillScreenSizePresets();
+		fillScreenSizePresets(display.getWidth(), display.getHeight());
 
 		fontSmall = new ArrayList<>();
 		fontMedium = new ArrayList<>();
@@ -192,8 +209,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		addFontSizePreset("176 x 220", 15, 18, 22);
 		addFontSizePreset("240 x 320", 18, 22, 26);
 
-		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this);
+		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this::showScreenPresets);
 		findViewById(R.id.cmdSwapSizes).setOnClickListener(this);
+		findViewById(R.id.cmdAddToPreset).setOnClickListener(v -> addResolutionToPresets());
 		findViewById(R.id.cmdFontSizePresets).setOnClickListener(this);
 		findViewById(R.id.cmdScreenBack).setOnClickListener(this);
 		findViewById(R.id.cmdVKBack).setOnClickListener(this);
@@ -222,7 +240,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
+				sbScaleRatio.setProgress(parseInt(s.toString()));
 			}
 
 			@Override
@@ -241,14 +259,28 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				}
 			});
 		}
-
-		cxShowKeyboard.setOnClickListener(v -> {
-			if (!((CheckBox) v).isChecked()) {
-				cxVKFeedback.setEnabled(false);
+		vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
+		cxShowKeyboard.setOnCheckedChangeListener((b, checked) -> {
+			if (checked) {
+				vkContainer.setVisibility(View.VISIBLE);
 			} else {
-				cxVKFeedback.setEnabled(true);
+				vkContainer.setVisibility(View.GONE);
 			}
+			View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
+				@Override
+				public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getBottom());
+					v.removeOnLayoutChangeListener(this);
+				}
+			};
+			rootContainer.addOnLayoutChangeListener(onLayoutChangeListener);
 		});
+		tfScreenBack.addTextChangedListener(new ColorTextWatcher(tfScreenBack));
+		tfVKFore.addTextChangedListener(new ColorTextWatcher(tfVKFore));
+		tfVKBack.addTextChangedListener(new ColorTextWatcher(tfVKBack));
+		tfVKSelFore.addTextChangedListener(new ColorTextWatcher(tfVKSelFore));
+		tfVKSelBack.addTextChangedListener(new ColorTextWatcher(tfVKSelBack));
+		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
 
 		if (loaded && !showSettings) {
 			startMIDlet();
@@ -283,43 +315,55 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		fillScreenSizePresets();
+		fillScreenSizePresets(display.getWidth(), display.getHeight());
 	}
 
-	private void fillScreenSizePresets() {
-		int w = display.getWidth();
-		int h = display.getHeight();
+	private void fillScreenSizePresets(int w, int h) {
+		ArrayList<String> screenPresets = this.screenPresets;
+		screenPresets.clear();
 
-		screenWidths.clear();
-		screenHeights.clear();
-		screenAdapter.clear();
-
-		addScreenSizePreset(128, 128);
-		addScreenSizePreset(128, 160);
-		addScreenSizePreset(132, 176);
-		addScreenSizePreset(176, 220);
-		addScreenSizePreset(240, 320);
-		addScreenSizePreset(352, 416);
-		addScreenSizePreset(640, 360);
-		addScreenSizePreset(800, 480);
+		screenPresets.add("128 x 128");
+		screenPresets.add("128 x 160");
+		screenPresets.add("132 x 176");
+		screenPresets.add("176 x 220");
+		screenPresets.add("240 x 320");
+		screenPresets.add("352 x 416");
+		screenPresets.add("640 x 360");
+		screenPresets.add("800 x 480");
 
 		if (w > h) {
-			addScreenSizePreset(h * 3 / 4, h);
-			addScreenSizePreset(h * 4 / 3, h);
+			screenPresets.add(h * 3 / 4 + " x " + h);
+			screenPresets.add(h * 4 / 3 + " x " + h);
 		} else {
-			addScreenSizePreset(w, w * 4 / 3);
-			addScreenSizePreset(w, w * 3 / 4);
+			screenPresets.add(w + " x " + w * 4 / 3);
+			screenPresets.add(w + " x " + w * 3 / 4);
 		}
 
-		addScreenSizePreset(w, h);
-	}
-
-	private void addScreenSizePreset(int width, int height) {
-		screenWidths.add(width);
-		screenHeights.add(height);
-		screenAdapter.add(width + " x " + height);
+		screenPresets.add(w + " x " + h);
+		Set<String> preset = PreferenceManager.getDefaultSharedPreferences(this)
+				.getStringSet("ResolutionsPreset", null);
+		if (preset != null) {
+			screenPresets.addAll(preset);
+		}
+		Collections.sort(screenPresets, (o1, o2) -> {
+			int sep1 = o1.indexOf(" x ");
+			int sep2 = o2.indexOf(" x ");
+			if (sep1 == -1) {
+				if (sep2 != -1) return -1;
+				else return 0;
+			} else if (sep2 == -1) return 1;
+			int r = Integer.decode(o1.substring(0, sep1)).compareTo(Integer.decode(o2.substring(0, sep2)));
+			if (r != 0) return r;
+			return Integer.decode(o1.substring(sep1 + 3)).compareTo(Integer.decode(o2.substring(sep2 + 3)));
+		});
+		String prev = null;
+		for (Iterator<String> iterator = screenPresets.iterator(); iterator.hasNext(); ) {
+			String next = iterator.next();
+			if (next.equals(prev)) iterator.remove();
+			else prev = next;
+		}
 	}
 
 	private void addFontSizePreset(String title, int small, int medium, int large) {
@@ -327,6 +371,20 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		fontMedium.add(medium);
 		fontLarge.add(large);
 		fontAdapter.add(title);
+	}
+
+	private int parseInt(String s) {
+		return parseInt(s, 10);
+	}
+
+	private int parseInt(String s, int radix) {
+		int result;
+		try {
+			result = Integer.parseInt(s, radix);
+		} catch (NumberFormatException e) {
+			result = 0;
+		}
+		return result;
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -356,7 +414,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfSystemProperties.setText(params.getString("SystemProperties", ""));
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
-		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
+		cxVKForceOpacity.setChecked(params.getBoolean(("VirtualKeyboardForceOpacity"), false));
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
 
@@ -380,9 +438,17 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		try {
 			params.edit();
 
-			params.putInt("ScreenWidth", Integer.parseInt(tfScreenWidth.getText().toString()));
-			params.putInt("ScreenHeight", Integer.parseInt(tfScreenHeight.getText().toString()));
-			params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
+			String width = tfScreenWidth.getText().toString();
+			String height = tfScreenHeight.getText().toString();
+			if (width.isEmpty() || width.equals("-")) width = "-1";
+			if (height.isEmpty() || height.equals("-")) height = "-1";
+			int w = parseInt(width);
+			int h = parseInt(height);
+			if (w == 0) w = -1;
+			if (h == 0) h = -1;
+			params.putInt("ScreenWidth", w);
+			params.putInt("ScreenHeight", h);
+			params.putInt("ScreenBackgroundColor", parseInt(tfScreenBack.getText().toString(), 16));
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
@@ -394,35 +460,32 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("ForceFullscreen", cxForceFullscreen.isChecked());
 			params.putBoolean("ShowFps", cxShowFps.isChecked());
 			params.putBoolean("LimitFps", cxLimitFps.isChecked());
-			params.putInt("FpsLimit", Integer.parseInt(tfFpsLimit.getText().toString()));
+			params.putInt("FpsLimit", parseInt(tfFpsLimit.getText().toString()));
 
-			params.putInt("FontSizeSmall",
-					Integer.parseInt(tfFontSizeSmall.getText().toString()));
-			params.putInt("FontSizeMedium",
-					Integer.parseInt(tfFontSizeMedium.getText().toString()));
-			params.putInt("FontSizeLarge",
-					Integer.parseInt(tfFontSizeLarge.getText().toString()));
+			params.putInt("FontSizeSmall", parseInt(tfFontSizeSmall.getText().toString()));
+			params.putInt("FontSizeMedium", parseInt(tfFontSizeMedium.getText().toString()));
+			params.putInt("FontSizeLarge", parseInt(tfFontSizeLarge.getText().toString()));
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
 			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
 			params.putBoolean("VirtualKeyboardFeedback", cxVKFeedback.isChecked());
+			params.putBoolean("VirtualKeyboardForceOpacity", cxVKForceOpacity.isChecked());
 			params.putBoolean("TouchInput", cxTouchInput.isChecked());
 
 			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
 			params.putInt("Layout", spLayout.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
-			params.putInt("VirtualKeyboardDelay",
-					Integer.parseInt(tfVKHideDelay.getText().toString()));
+			params.putInt("VirtualKeyboardDelay", parseInt(tfVKHideDelay.getText().toString()));
 			params.putInt("VirtualKeyboardColorBackground",
-					Integer.parseInt(tfVKBack.getText().toString(), 16));
+					parseInt(tfVKBack.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorForeground",
-					Integer.parseInt(tfVKFore.getText().toString(), 16));
+					parseInt(tfVKFore.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorBackgroundSelected",
-					Integer.parseInt(tfVKSelBack.getText().toString(), 16));
+					parseInt(tfVKSelBack.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorForegroundSelected",
-					Integer.parseInt(tfVKSelFore.getText().toString(), 16));
+					parseInt(tfVKSelFore.getText().toString(), 16));
 			params.putInt("VirtualKeyboardColorOutline",
-					Integer.parseInt(tfVKOutline.getText().toString(), 16));
+					parseInt(tfVKOutline.getText().toString(), 16));
 
 			params.apply();
 		} catch (Throwable t) {
@@ -455,6 +518,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				loadParams();
 				break;
 			case R.id.action_reset_layout:
+				//noinspection ResultOfMethodCallIgnored
 				keylayoutFile.delete();
 				loadKeylayout();
 				break;
@@ -490,11 +554,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_clear_data)
-				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					FileUtils.deleteDirectory(dataDir);
+					//noinspection ResultOfMethodCallIgnored
 					dataDir.mkdirs();
 				})
-				.setNegativeButton(android.R.string.no, null);
+				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}
 
@@ -508,134 +573,160 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	@SuppressLint("SetTextI18n")
 	@Override
 	public void onClick(View v) {
-		String[] presets = null;
-		DialogInterface.OnClickListener presetListener = null;
-
-		int color = 0;
-		AmbilWarnaDialog.OnAmbilWarnaListener colorListener = null;
-
 		switch (v.getId()) {
-			case R.id.cmdScreenSizePresets:
-				presets = screenAdapter.toArray(new String[0]);
-
-				presetListener = (dialog, which) -> {
-					tfScreenWidth.setText(Integer.toString(screenWidths.get(which)));
-					tfScreenHeight.setText(Integer.toString(screenHeights.get(which)));
-				};
-				break;
 			case R.id.cmdSwapSizes:
 				String tmp = tfScreenWidth.getText().toString();
 				tfScreenWidth.setText(tfScreenHeight.getText().toString());
 				tfScreenHeight.setText(tmp);
 				break;
 			case R.id.cmdFontSizePresets:
-				presets = fontAdapter.toArray(new String[0]);
-
-				presetListener = (dialog, which) -> {
+				new AlertDialog.Builder(this)
+						.setTitle(getString(R.string.SIZE_PRESETS))
+						.setItems(fontAdapter.toArray(new String[0]),
+								(dialog, which) -> {
 					tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
 					tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
 					tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
-				};
+								})
+						.show();
 				break;
 			case R.id.cmdScreenBack:
-				color = Integer.parseInt(tfScreenBack.getText().toString(), 16);
-
-				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-					@Override
-					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfScreenBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
-					}
-
-					@Override
-					public void onCancel(AmbilWarnaDialog dialog) {
-					}
-				};
+				showColorPicker(tfScreenBack);
 				break;
 			case R.id.cmdVKBack:
-				color = Integer.parseInt(tfVKBack.getText().toString(), 16);
-
-				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-					@Override
-					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
-					}
-
-					@Override
-					public void onCancel(AmbilWarnaDialog dialog) {
-					}
-				};
+				showColorPicker(tfVKBack);
 				break;
 			case R.id.cmdVKFore:
-				color = Integer.parseInt(tfVKFore.getText().toString(), 16);
-
-				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-					@Override
-					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKFore.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
-					}
-
-					@Override
-					public void onCancel(AmbilWarnaDialog dialog) {
-					}
-				};
+				showColorPicker(tfVKFore);
 				break;
 			case R.id.cmdVKSelFore:
-				color = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
-
-				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-					@Override
-					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKSelFore.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
-					}
-
-					@Override
-					public void onCancel(AmbilWarnaDialog dialog) {
-					}
-				};
+				showColorPicker(tfVKSelFore);
 				break;
 			case R.id.cmdVKSelBack:
-				color = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
-
-				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-					@Override
-					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKSelBack.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
-					}
-
-					@Override
-					public void onCancel(AmbilWarnaDialog dialog) {
-					}
-				};
+				showColorPicker(tfVKSelBack);
 				break;
 			case R.id.cmdVKOutline:
-				color = Integer.parseInt(tfVKOutline.getText().toString(), 16);
+				showColorPicker(tfVKOutline);
+				break;
+			default:
+		}
+	}
 
-				colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+	private void showScreenPresets(View v) {
+		PopupMenu popup = new PopupMenu(this, v);
+		Menu menu = popup.getMenu();
+		for (String preset : screenPresets) {
+			menu.add(preset);
+		}
+		popup.setOnMenuItemClickListener(item -> {
+			String string = item.getTitle().toString();
+			int separator = string.indexOf(" x ");
+			tfScreenWidth.setText(string.substring(0, separator));
+			tfScreenHeight.setText(string.substring(separator + 3));
+			return true;
+		});
+		popup.show();
+	}
+
+	private void showColorPicker(EditText et) {
+		AmbilWarnaDialog.OnAmbilWarnaListener colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						tfVKOutline.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
+						et.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
 					}
 
 					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
 					}
-				};
-				break;
-			default:
-				return;
+		};
+		int color = parseInt(et.getText().toString().trim(), 16);
+		new AmbilWarnaDialog(this, color | 0xFF000000, colorListener).show();
+	}
+
+	private void addResolutionToPresets() {
+		String width = tfScreenWidth.getText().toString();
+		String height = tfScreenHeight.getText().toString();
+		if (width.isEmpty()) width = "-1";
+		if (height.isEmpty()) height = "-1";
+		int w = parseInt(width);
+		int h = parseInt(height);
+		if (w <= 0 || h <= 0) {
+			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String preset = width + " x " + height;
+		if (screenPresets.contains(preset)) {
+			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
+			return;
 		}
 
-		if (presetListener != null) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(getString(R.string.SIZE_PRESETS));
-			builder.setItems(presets, presetListener);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		Set<String> set = preferences.getStringSet("ResolutionsPreset", null);
+		if (set == null) {
+			set = new HashSet<>(1);
+		}
+		if (set.add(preset)) {
+			preferences.edit().putStringSet("ResolutionsPreset", set).apply();
+			screenPresets.add(preset);
+			Toast.makeText(this, R.string.saved, Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
+		}
+	}
 
-			AlertDialog alert = builder.create();
-			alert.show();
-		} else if (colorListener != null) {
-			AmbilWarnaDialog dialog = new AmbilWarnaDialog(this,
-					color | 0xFF000000, colorListener);
-			dialog.show();
+	private static class ColorTextWatcher implements TextWatcher {
+		private final EditText editText;
+		private final ColorDrawable drawable;
+
+		ColorTextWatcher(EditText editText) {
+			this.editText = editText;
+			int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
+					editText.getResources().getDisplayMetrics());
+			ColorDrawable colorDrawable = new ColorDrawable();
+			colorDrawable.setBounds(0, 0, size, size);
+			editText.setCompoundDrawablesRelative(null, null, colorDrawable, null);
+			drawable = colorDrawable;
+			editText.setFilters(new InputFilter[]{this::filter});
+			editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		}
+
+		private CharSequence filter(CharSequence src, int ss, int se, Spanned dst, int ds, int de) {
+			StringBuilder sb = new StringBuilder(se - ss);
+			for (int i = ss; i < se; i++) {
+				char c = src.charAt(i);
+				if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
+					sb.append(c);
+				} else if (c  >= 'a' && c <= 'f') {
+					sb.append((char)(c - 32));
+				}
+			}
+			return sb;
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			if (s.length() > 6) {
+				if (start >= 6) editText.getText().delete(6, s.length());
+				else {
+					int st = start + count;
+					int end = st + (before == 0 ? count : before);
+					editText.getText().delete(st, Math.min(end, s.length()));
+				}
+			}
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			try {
+				int color = Integer.parseInt(s.toString(), 16);
+				drawable.setColor(color | Color.BLACK);
+			} catch (NumberFormatException e) {
+				drawable.setColor(Color.BLACK);
+			}
 		}
 	}
 }

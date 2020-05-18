@@ -34,7 +34,6 @@ public class GameCanvas extends Canvas {
 
 	private Image image;
 	private int key;
-	private int repeatedKey;
 	private boolean suppressCommands;
 
 	public GameCanvas(boolean suppressCommands) {
@@ -78,41 +77,35 @@ public class GameCanvas extends Canvas {
 		}
 	}
 
-	public void gameKeyPressed(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyPressed(keyCode);
+	@Override
+	public void postKeyPressed(int keyCode) {
+		int code = convertGameKeyCode(keyCode);
+		key |= code;
+		if (!(suppressCommands && code != 0)) {
+			super.postKeyPressed(keyCode);
 		}
-		key |= convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyReleased(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyReleased(keyCode);
+	@Override
+	public void postKeyReleased(int keyCode) {
+		int code = convertGameKeyCode(keyCode);
+		key &= ~code;
+		if (!(suppressCommands && code != 0)) {
+			super.postKeyReleased(keyCode);
 		}
-		repeatedKey &= ~convertGameKeyCode(originalKeycode);
 	}
 
-	public void gameKeyRepeated(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyRepeated(keyCode);
-		}
-		repeatedKey |= convertGameKeyCode(originalKeycode);
-	}
-
-	private boolean checkGameAction(int keyCode) {
-		try {
-			getGameAction(keyCode);
-			return true;
-		} catch (IllegalArgumentException iae) {
-			return false;
+	@Override
+	public void postKeyRepeated(int keyCode) {
+		int code = convertGameKeyCode(keyCode);
+		key |= code;
+		if (!(suppressCommands && code != 0)) {
+			super.postKeyRepeated(keyCode);
 		}
 	}
 
 	public int getKeyStates() {
-		int temp = key;
-		temp |= repeatedKey;
-		key = repeatedKey;
-		return temp;
+		return key;
 	}
 
 	public Graphics getGraphics() {

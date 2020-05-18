@@ -55,13 +55,17 @@ public class TiledBackground extends GraphicObject {
 		this.widthInTiles = widthInTiles;
 
 		pixels = new Image[tilePixels.getHeight() / 8 + 3];
-		pixels[0] = Image.createImage(8, 8);
-		pixels[1] = Image.createImage(8, 8);
-		pixels[2] = Image.createImage(8, 8);
+		pixels[0] = Image.createTransparentImage(8, 8); // transparent
+		pixels[1] = Image.createImage(8, 8); // white
+		pixels[2] = Image.createImage(8, 8); // black
 		pixels[2].getGraphics().fillRect(0, 0, 8, 8);
 
+		if (tileMask != null) {
+			tilePixels = com.siemens.mp.ui.Image.createTransparentImageFromMask(tilePixels, tileMask);
+		}
+
 		for (int i = 0; i < this.pixels.length - 3; i++) {
-			Image img = Image.createImage(8, 8);
+			Image img = Image.createTransparentImage(8, 8);
 
 			img.getGraphics().drawImage(tilePixels, 0, -i * 8, 0);
 			pixels[i + 3] = img;
@@ -76,8 +80,7 @@ public class TiledBackground extends GraphicObject {
 	protected void paint(Graphics g) {
 		for (int y = posy / 8; y < heightInTiles; y++) {
 			for (int x = posx / 8; x < widthInTiles; x++) {
-				if (map[y * widthInTiles + x] < 0) break;
-				g.drawImage(pixels[map[y * widthInTiles + x]], -posx + x * 8, -posy + y * 8, 0);
+				g.drawImage(pixels[map[y * widthInTiles + x] & 0xFF], -posx + x * 8, -posy + y * 8, 0);
 			}
 		}
 	}

@@ -43,7 +43,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 		private Label exceptionHandler;
 
 		public AndroidMethodVisitor(MethodVisitor mv) {
-			super(Opcodes.ASM7, mv);
+			super(Opcodes.ASM8, mv);
 		}
 
 		@Override
@@ -99,7 +99,7 @@ public class AndroidClassVisitor extends ClassVisitor {
 	}
 
 	public AndroidClassVisitor(ClassVisitor cv, String encoding) {
-		super(Opcodes.ASM7, cv);
+		super(Opcodes.ASM8, cv);
 		this.encoding = encoding;
 	}
 

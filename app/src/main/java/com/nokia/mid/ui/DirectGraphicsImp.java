@@ -112,33 +112,29 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 		switch (format) {
 			case TYPE_BYTE_1_GRAY: {
-				int b = 7;
+				int b = 7 - off % 8;
 				for (int yj = 0; yj < height; yj++) {
 					int line = off + yj * scanlen;
 					int ypos = yj * width;
 					for (int xj = 0; xj < width; xj++) {
-						int c = doAlpha(pix, alpha, (line + xj) / 8, b);
-						if (!isTransparent(c)) { //alpha
-							pixres[yj * width + xj] = c;
-						}
+						pixres[ypos + xj] = doAlpha(pix, alpha, (line + xj) / 8, b);
 						b--;
 						if (b < 0) b = 7;
 					}
+					b = b - (scanlen - width) % 8;
+					if (b < 0) b = 8 + b;
 				}
 				break;
 			}
 			case TYPE_BYTE_1_GRAY_VERTICAL: {
 				int ods = off / scanlen;
 				int oms = off % scanlen;
-				int b = 0;
+				int b = ods % 8;
 				for (int yj = 0; yj < height; yj++) {
 					int ypos = yj * width;
 					int tmp = (ods + yj) / 8 * scanlen + oms;
 					for (int xj = 0; xj < width; xj++) {
-						int c = doAlpha(pix, alpha, tmp + xj, b);
-						if (!isTransparent(c)) { //alpha
-							pixres[yj * width + xj] = c;
-						}
+						pixres[ypos + xj] = doAlpha(pix, alpha, tmp + xj, b);
 					}
 					b++;
 					if (b > 7) b = 0;
@@ -341,10 +337,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 			}
 		}
 		return result;
-	}
-
-	private static boolean isTransparent(int s) {
-		return (s & 0xFF000000) == 0;
 	}
 
 	private static int getTransformation(int manipulation) {

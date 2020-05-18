@@ -176,7 +176,7 @@ struct M3GNodeImpl
 
 /* Sanity check; check compiler padding settings if this assert fails */
 
-M3G_CT_ASSERT(sizeof(Node) == sizeof(Transformable) + 28);
+M3G_CT_ASSERT2(sizeof(Node) == sizeof(Transformable) + 28);
 
               
 /*----------------------------------------------------------------------

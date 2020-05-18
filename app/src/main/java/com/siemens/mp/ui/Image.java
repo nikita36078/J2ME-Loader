@@ -71,6 +71,25 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		return image;
 	}
 
+	public static javax.microedition.lcdui.Image createTransparentImageFromMask(javax.microedition.lcdui.Image image, javax.microedition.lcdui.Image mask) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+		int[] imagePixels = new int[width * height];
+		int[] maskPixels = new int[width * height];
+
+		image.getRGB(imagePixels, 0, width, 0, 0, width, height);
+		mask.getRGB(maskPixels, 0, width, 0, 0, width, height);
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (maskPixels[y * width + x] == 0xFFFFFFFF) {
+					imagePixels[y * width + x] = 0;
+				}
+			}
+		}
+		return javax.microedition.lcdui.Image.createRGBImage(imagePixels, width, height, true);
+	}
+
 	private static boolean isBitSet(byte b, int pos) {
 		return ((b & (byte) (1 << pos)) != 0);
 	}

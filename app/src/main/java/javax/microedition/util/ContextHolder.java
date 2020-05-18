@@ -24,6 +24,9 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -32,7 +35,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
@@ -41,7 +43,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -49,6 +50,7 @@ public class ContextHolder {
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static AppCompatActivity currentActivity;
+	private static ZipFile zipFile;
 
 	public static Context getContext() {
 		return currentActivity.getApplicationContext();
@@ -85,28 +87,36 @@ public class ContextHolder {
 		return currentActivity;
 	}
 
+	public static void prepareZipFile() {
+		File midletResFile = new File(Config.APP_DIR,
+				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
+		if (midletResFile.exists()) {
+			zipFile = new ZipFile(midletResFile);
+		}
+	}
+
 	public static InputStream getResourceAsStream(Class resClass, String resName) {
 		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		if (resName == null || resName.equals("")) {
-			Log.d(TAG, "Can't load res on empty path");
+			Log.w(TAG, "Can't load res on empty path");
 			return null;
 		}
-		if (resName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
-			String className = resClass.getPackage().getName().replace('.', '/');
-			resName = className + "/" + resName;
-		}
 		// Add support for Siemens file path
-		resName = resName.replace('\\', '/');
+		String normName = resName.replace('\\', '/');
 		// Remove double slashes
-		resName = resName.replace("//", "/");
+		normName = normName.replace("//", "/");
+		if (normName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
+			String className = resClass.getPackage().getName().replace('.', '/');
+			normName = className + "/" + normName;
+		}
 		// Remove leading slash
-		if (resName.charAt(0) == '/') {
-			resName = resName.substring(1);
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
 		}
 		try {
-			return getResource(resName);
+			return getResource(normName);
 		} catch (IOException | NullPointerException e) {
-			Log.d(TAG, "Can't load res: " + resName);
+			Log.w(TAG, "Can't load res: " + resName);
 			return null;
 		}
 	}
@@ -117,10 +127,9 @@ public class ContextHolder {
 		File midletResFile = new File(Config.APP_DIR,
 				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
-			ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
-			ZipEntry entry = zipFile.getEntry(resName);
-			is = zipFile.getInputStream(entry);
-			data = new byte[(int) entry.getSize()];
+			FileHeader header = zipFile.getFileHeader(resName);
+			is = zipFile.getInputStream(header);
+			data = new byte[(int) header.getUncompressedSize()];
 		} else {
 			File resFile = new File(MyClassLoader.getResFolder(), resName);
 			is = new FileInputStream(resFile);

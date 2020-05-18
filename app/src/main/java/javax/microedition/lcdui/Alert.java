@@ -78,6 +78,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		this.type = type;
 	}
 
+	public AlertType getType() {
+		return type;
+	}
+
 	public void setString(String str) {
 		text = str;
 
@@ -104,6 +108,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	public void setIndicator(Gauge indicator) {
 		this.indicator = indicator;
+	}
+
+	public Gauge getIndicator() {
+		return indicator;
 	}
 
 	public void setTimeout(int timeout) {

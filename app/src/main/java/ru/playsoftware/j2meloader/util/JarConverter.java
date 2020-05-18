@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedHashMap;
+import java.util.zip.ZipException;
 
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
@@ -77,11 +78,7 @@ public class JarConverter {
 		connection.setConnectTimeout(15000);
 		InputStream inputStream = connection.getInputStream();
 		OutputStream outputStream = new FileOutputStream(outputJar);
-		byte[] buffer = new byte[2048];
-		int length;
-		while ((length = inputStream.read(buffer)) > 0) {
-			outputStream.write(buffer, 0, length);
-		}
+		IOUtils.copy(inputStream, outputStream);
 		inputStream.close();
 		outputStream.close();
 		connection.disconnect();
@@ -168,6 +165,9 @@ public class JarConverter {
 			File patchedJar;
 			try {
 				patchedJar = patchJar(inputJar, encoding);
+			} catch (ZipException e) {
+				deleteTemp();
+				throw new ConverterException("Invalid jar", e);
 			} catch (Exception e) {
 				deleteTemp();
 				throw new ConverterException("Can't patch", e);
@@ -189,12 +189,12 @@ public class JarConverter {
 			}
 			LinkedHashMap<String, String> params = FileUtils.loadManifest(conf);
 			appDirPath = params.get("MIDlet-Name");
-			if (appDirPath == null) {
+			if (appDirPath == null || appDirPath.isEmpty()) {
 				deleteTemp();
 				throw new ConverterException("Invalid manifest");
 			}
 			// Remove invalid characters from app path
-			appDirPath = appDirPath.replace(":", "").replace("/", "");
+			appDirPath = appDirPath.replaceAll("[?:\"*|/\\\\<>]", "");
 			appConverted = new File(Config.APP_DIR, appDirPath);
 			// Create target directory
 			FileUtils.deleteDirectory(appConverted);
