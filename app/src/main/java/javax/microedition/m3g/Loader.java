@@ -200,6 +200,9 @@ public class Loader {
 		Image2D i2d;
 		try {
 			i2d = new Image2D(aColourFormat, Image.createImage(dis));
+		} catch (IOException e) {
+			i2d = null;
+			e.printStackTrace();
 		} finally {
 			try {
 				dis.close();
