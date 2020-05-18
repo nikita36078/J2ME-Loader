@@ -79,8 +79,10 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	@Override
 	public void goToDir(@NonNull File file) {
-		lastPath = file.getPath();
-		super.goToDir(file);
+		if (file.canRead()) {
+			lastPath = file.getPath();
+			super.goToDir(file);
+		}
 	}
 
 	public static String getLastPath() {
