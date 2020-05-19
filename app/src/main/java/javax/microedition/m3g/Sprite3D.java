@@ -299,7 +299,7 @@ public class Sprite3D extends Node {
 		}
 	}
 
-	void render(GL10 gl, Graphics3D ctx) {
+	public void render(GL10 gl, Graphics3D ctx) {
 		short[] texvert = new short[8];
 		int[] vert = new int[12];
 		QVec4 eyeSpace = new QVec4();

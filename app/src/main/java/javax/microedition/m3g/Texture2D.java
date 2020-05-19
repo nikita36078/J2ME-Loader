@@ -158,7 +158,7 @@ public class Texture2D extends Transformable {
 		return wrappingT;
 	}
 
-	void setupGL(GL10 gl, float[] scaleBias) {
+	public void setupGL(GL10 gl, float[] scaleBias) {
 		image.setupGL(gl);
 
 		// Set texture scale

@@ -187,7 +187,7 @@ public class Background extends Object3D {
 		return backgroundImage;
 	}
 
-	void setupGL(GL10 gl) {
+	public void setupGL(GL10 gl) {
 
 		// Clear the buffers
 		Color c = new Color(backgroundColor);

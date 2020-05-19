@@ -155,7 +155,7 @@ public class Transform {
 		gl.glLoadMatrixf(cols, 0);
 	}
 
-	void multGL(GL10 gl) {
+	public void multGL(GL10 gl) {
 		float[] cols = new float[16];
 		mtx.getMatrixColumns(cols);
 		gl.glMultMatrixf(cols, 0);

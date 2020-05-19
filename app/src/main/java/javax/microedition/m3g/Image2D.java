@@ -21,7 +21,7 @@ public class Image2D extends Object3D {
 	private ByteBuffer pixels;
 	private int[] id = new int[]{0};
 	private boolean dirty = true;
-	static Vector recycledTextures = new Vector();
+	public static Vector recycledTextures = new Vector();
 
 	@Override
 	public void finalize() {
@@ -29,7 +29,7 @@ public class Image2D extends Object3D {
 			recycledTextures.add(this);
 	}
 
-	void releaseTexture(GL10 gl) {
+	public void releaseTexture(GL10 gl) {
 		if (id[0] != 0) {
 			gl.glDeleteTextures(1, id, 0);
 			id[0] = 0;

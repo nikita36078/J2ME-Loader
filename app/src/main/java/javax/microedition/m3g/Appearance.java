@@ -150,7 +150,7 @@ public class Appearance extends Object3D {
 		return textures[index];
 	}
 
-	void setupGL(GL10 gl) {
+	public void setupGL(GL10 gl) {
 		if (compositingMode != null)
 			compositingMode.setupGL(gl);
 		else {

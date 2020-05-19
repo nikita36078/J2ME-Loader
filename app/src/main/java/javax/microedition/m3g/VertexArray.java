@@ -167,7 +167,7 @@ public class VertexArray extends Object3D {
 			return GL10.GL_SHORT;
 	}
 
-	Buffer getBuffer() {
+	public Buffer getBuffer() {
 		return buffer;
 	}
 }
