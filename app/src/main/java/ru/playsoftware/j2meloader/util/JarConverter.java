@@ -189,12 +189,16 @@ public class JarConverter {
 			}
 			LinkedHashMap<String, String> params = FileUtils.loadManifest(conf);
 			appDirPath = params.get("MIDlet-Name");
-			if (appDirPath == null || appDirPath.isEmpty()) {
+			if (appDirPath == null) {
 				deleteTemp();
 				throw new ConverterException("Invalid manifest");
 			}
 			// Remove invalid characters from app path
 			appDirPath = appDirPath.replaceAll("[?:\"*|/\\\\<>]", "");
+			if (appDirPath.isEmpty()) {
+				deleteTemp();
+				throw new ConverterException("Invalid manifest");
+			}
 			appConverted = new File(Config.APP_DIR, appDirPath);
 			// Create target directory
 			FileUtils.deleteDirectory(appConverted);
