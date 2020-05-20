@@ -109,19 +109,17 @@ public class M3D {
 
 	public void frustumxi(int left, int right, int top, int bottom, int nearclip, int farclip) //-3,3, -2,2, 3,1000
 	{
-		//System.out.println("frustrumxi("+a+", "+b+", "+c+", "+d+", "+near+", "+far+");");
-		// c.c: bu.frustumxi(-bp << 11, bp << 11, -bo << 11, bo << 11, 196608, 65536000);
-		double r = right / 2048;
-		double l = left / 2048;
-		double t = top / 2048;
-		double b = bottom / 2048;
+		double r = right / 65536.0;
+		double l = left / 65536.0;
+		double t = top / 65536.0;
+		double b = bottom / 65536.0;
 
-		double n = nearclip / 655360;
-		double f = farclip / 655360;
+		double n = nearclip / 65536.0;
+		double f = farclip / 65536.0;
 
-		near = -0.01;//25;//-n;
+		near = -n;
 		far = -f;
-		projection(projm, r - l, b - t, 90, near, far);
+		projection(projm, r - l, t - b, n, f);
 	}
 
 	public void scalexi(int X, int Y, int Z) {
@@ -151,38 +149,36 @@ public class M3D {
 		clone(matrix, tempt);
 	}
 
-	public void rotatexi(int Y, int Z, int X, int W) // probably not a quaternion
-	{
-		//System.out.println("rotatexi("+Y+", "+Z+", "+X+", "+W+");");
-		// 1 degree = 0.0174533 rad
-		// from d:1343 rotatexi(1310720, 65536, 0, 0);
-		// from d:1347 rotatexi(c0, 65536, 0, 0);
-		// from d:1354 rotatexi(cx * 90, 0, 65536, 0);
+	public void rotatexi(int Angle, int X, int Y, int Z) {
+		double a = (Angle / 65536.0) * 0.0174533;
 
-		double x = (X / 65536.0) * 0.0174533;
-		double y = ((Y / 65536.0) - 10) * 0.0174533;
-		double z = (Z / 65536.0) * 0.0174533;
-
-		// rotate on y
-		tempr[0]  =  Math.cos(y); tempr[1]  =  0; tempr[2]  = -Math.sin(y); tempr[3]  =  0;
-		tempr[4]  =  0;           tempr[5]  =  1; tempr[6]  =  0;           tempr[7]  =  0;
-		tempr[8]  =  Math.sin(y); tempr[9]  =  0; tempr[10] =  Math.cos(y); tempr[11] =  0;
-		tempr[12] =  0;           tempr[13] =  0; tempr[14] =  0;           tempr[15] =  1;
-		clone(rotm, tempr);
-
-		// rotate on x
-		tempr[0]  =  1; tempr[1]  =  0;            tempr[2]  =  0;           tempr[3]  =  0;
-		tempr[4]  =  0; tempr[5]  =  Math.cos(x);  tempr[6]  =  Math.sin(x); tempr[7]  =  0;
-		tempr[8]  =  0; tempr[9]  = -Math.sin(x);  tempr[10] =  Math.cos(x); tempr[11] =  0;
-		tempr[12] =  0; tempr[13] =  0;            tempr[14] =  0;           tempr[15] =  1;
-		matmul(rotm, tempr);
-
-		// rotate on z
-		tempr[0]  =  Math.cos(z); tempr[1]  =  Math.sin(z); tempr[2]  =  0; tempr[3]  =  0;
-		tempr[4]  = -Math.sin(z); tempr[5]  =  Math.cos(z); tempr[6]  =  0; tempr[7]  =  0;
-		tempr[8]  =  0;           tempr[9]  =  0;           tempr[10] =  1; tempr[11] =  0;
-		tempr[12] =  0;           tempr[13] =  0;           tempr[14] =  0; tempr[15] =  1;
-		matmul(rotm, tempr);
+		// (X, Y, Z) define an axis for rotation
+		// But game uses only X, Y or Z axis
+		// Following code is enough for game to run without issues
+		if (X != 0) {
+			// rotate on x
+			tempr[0]  =  1; tempr[1]  =  0;            tempr[2]  =  0;           tempr[3]  =  0;
+			tempr[4]  =  0; tempr[5]  =  Math.cos(a);  tempr[6]  =  Math.sin(a); tempr[7]  =  0;
+			tempr[8]  =  0; tempr[9]  = -Math.sin(a);  tempr[10] =  Math.cos(a); tempr[11] =  0;
+			tempr[12] =  0; tempr[13] =  0;            tempr[14] =  0;           tempr[15] =  1;
+			clone(rotm, tempr);
+		}
+		if (Y != 0) {
+			// rotate on y
+			tempr[0]  =  Math.cos(a); tempr[1]  =  0; tempr[2]  = -Math.sin(a); tempr[3]  =  0;
+			tempr[4]  =  0;           tempr[5]  =  1; tempr[6]  =  0;           tempr[7]  =  0;
+			tempr[8]  =  Math.sin(a); tempr[9]  =  0; tempr[10] =  Math.cos(a); tempr[11] =  0;
+			tempr[12] =  0;           tempr[13] =  0; tempr[14] =  0;           tempr[15] =  1;
+			clone(rotm, tempr);
+		}
+		if (Z != 0) {
+			// rotate on z
+			tempr[0]  =  Math.cos(a); tempr[1]  =  Math.sin(a); tempr[2]  =  0; tempr[3]  =  0;
+			tempr[4]  = -Math.sin(a); tempr[5]  =  Math.cos(a); tempr[6]  =  0; tempr[7]  =  0;
+			tempr[8]  =  0;           tempr[9]  =  0;           tempr[10] =  1; tempr[11] =  0;
+			tempr[12] =  0;           tempr[13] =  0;           tempr[14] =  0; tempr[15] =  1;
+			clone(rotm, tempr);
+		}
 
 		matmul(rotm, matrix);
 		clone(matrix, rotm);
@@ -267,9 +263,7 @@ public class M3D {
 		y5 = y2 + (dy / dz) * (z2 - near);
 		z5 = near;
 
-		//debugColor = 0x00FF00;
 		addFace(x1, y1, z1, x2, y2, z2, x5, y5, z5, u1, v1, u2, v2, u3, v3);
-		//debugColor = 0x0000FF;
 		addFace(x1, y1, z1, x5, y5, z5, x4, y4, z4, u1, v1, u2, v2, u3, v3);
 	}
 
@@ -294,9 +288,6 @@ public class M3D {
 	}
 
 	private void addFace(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double u1, double v1, double u2, double v2, double u3, double v3) {
-		//debugColors[faceCount] = debugColor;
-		//debugColors[faceCount+1] = debugColor;
-		//debugColors[faceCount+2] = debugColor;
 		faces[faceCount * 3] = x1;
 		faces[faceCount * 3 + 1] = y1;
 		faces[faceCount * 3 + 2] = z1;
@@ -380,7 +371,6 @@ public class M3D {
 			if (w1 != 1) {
 				faces[i * 3] = (x1 / w1);
 				faces[i * 3 + 1] = (y1 / w1);
-				//faces[i*3+2] = (z1/w1);
 			}
 		}
 
@@ -426,13 +416,27 @@ public class M3D {
 		}
 	}
 
+	// Call order:
+	// vertexPointerub(3, 0, [ -100, 20, -100, 0, -20, 0, 100, 20, -100, ]); // 3, 0, len 9
+	// drawArrays(4, 0, 3);
+	//
+	// Water is a huge triangle with one point under the player. Other 2 (far) points form the horizon.
+	// We'll cheat here. Instead of drawing 3D surface let's calculate Y coordinate (on screen) of far point.
+	// And then fill everything below it with a color.
 	public void drawArrays(int a, int b, int c)  // called after clear -- background?
 	{
-		// The expected result.  No idea how to get there from here:
-		//vertexPointerub(3, 0, [ -100, 20, -100, 0, -20, 0, 100, 20, -100, ]); // 3, 0, len 9
-		//drawArrays(4, 0, 3);
 		gc.setColor(color);
-		gc.fillRect(0, 20, width, height);
+		applyMatrix(matrix);
+
+		// projection
+		double y, z;
+		y = verts[1];
+		z = verts[2];
+		y = y * projm[5] / (-z);
+		double oy = height / 2;
+		y = (y * oy) + oy;
+
+		gc.fillRect(0, (int) y, width, height - (int) y);
 
 	}
 
@@ -471,30 +475,14 @@ public class M3D {
 		m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
 	}
 
-	private void projection(double[] m, double w, double h, double fov, double near, double far) {
-		fov = fov * 0.0174533;
-		double sx = 1 / Math.tan(fov / 2);
-		double sy = -sx * (w / h);
-		double sz = (far / (far - near)); // 1 > z > -1
-		double d = -1.0;
-		double e = 1;
+	private void projection(double[] m, double w, double h, double n, double f) {
+		double d = -(f + n) / (f - n);
+		double e = -(2 * f * n ) / (f - n);
 
-		m[0] = sx;
-		m[1] = 0;
-		m[2] = 0;
-		m[3] = 0;
-		m[4] = 0;
-		m[5] = sy;
-		m[6] = 0;
-		m[7] = 0;
-		m[8] = 0;
-		m[9] = 0;
-		m[10] = sz;
-		m[11] = d;
-		m[12] = 0;
-		m[13] = 0;
-		m[14] = e;
-		m[15] = 0;
+		m[0]  = 2 * n / w; m[1]  = 0;          m[2]  = 0;  m[3]  = 0;
+		m[4]  = 0;         m[5]  = 2 * n / h;  m[6]  = 0;  m[7]  = 0;
+		m[8]  = 0;         m[9]  = 0;          m[10] = d;  m[11] = -1;
+		m[12] = 0;         m[13] = 0;          m[14] = e;  m[15] = 0;
 	}
 
 	private void clone(double[] m1, double[] m2) {
@@ -590,8 +578,8 @@ public class M3D {
 
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
-				px = (double) x;
-				py = (double) y;
+				px = x;
+				py = y;
 
 				// point in triangle
 				//cross product to find area*2 of triangles around point
@@ -599,7 +587,6 @@ public class M3D {
 				b = (x1 - x3) * -(py - y3) - -(y1 - y3) * (px - x3); // p2
 				c = (x2 - x1) * -(py - y1) - -(y2 - y1) * (px - x1); // p3
 
-				//if(!(a<0 || b<0 || c<0))
 				if (a >= 0 && b >= 0 && c >= 0) {
 					//fragment depth
 					depth = (a * z1 + b * z2 + c * z3) / (a + b + c);
