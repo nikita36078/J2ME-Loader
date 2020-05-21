@@ -12,7 +12,7 @@ static const char *gVertexShader =
 "varying vec2 vTexture;\n"
 "void main() {\n"
 "  gl_Position = uMVPMatrix * aPosition;\n"
-"  vec4 texCoord = vec4(aTexture, 0.0, 0.0);\n"
+"  vec4 texCoord = vec4(aTexture, 0.0, 1.0);\n"
 "  vec4 res = uTexMatrix * texCoord;\n"
 "  vTexture = vec2(res.x, res.y);\n"
 "}\n";
