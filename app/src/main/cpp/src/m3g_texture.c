@@ -121,8 +121,7 @@ static void m3gBindTexture(Texture *texture)
         M3Gfloat matrixValues[16];
         m3gGetCompositeTransform((Transformable *) texture, &mtx);
         m3gGetMatrixColumns(&mtx, matrixValues);
-        //glMatrixMode(GL_TEXTURE);
-        //glLoadMatrixf(matrixValues);
+        m3gLoadTextureMatrix(matrixValues);
     }
     //glMatrixMode(GL_MODELVIEW);
 

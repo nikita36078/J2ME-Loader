@@ -80,24 +80,22 @@ static void m3gDestroyVertexBuffer(Object *obj)
 static void m3gApplyScaleAndBias(const VertexBuffer *buffer)
 {
     M3G_VALIDATE_OBJECT(buffer);
-    
-    //glMatrixMode(GL_TEXTURE);
+
     {
         M3Gint i;
         for (i = 0; i < M3G_NUM_TEXTURE_UNITS; ++i) {
             if (buffer->texCoords[i] != NULL) {
                 glActiveTexture((GLenum)(GL_TEXTURE0 + i));
-                /*glTranslatef(buffer->texCoordBias[i][0],
+                m3gTranslateTexture(buffer->texCoordBias[i][0],
                              buffer->texCoordBias[i][1],
                              buffer->texCoordBias[i][2]);
-                glScalef(buffer->texCoordScale[i],
+                m3gScaleTexture(buffer->texCoordScale[i],
                          buffer->texCoordScale[i],
-                         buffer->texCoordScale[i]);*/
+                         buffer->texCoordScale[i]);
             }
         }
     }
 
-    //glMatrixMode(GL_MODELVIEW);
     if (buffer->vertices != NULL) {
         m3gTranslateModel(buffer->vertexBias[0],
                      buffer->vertexBias[1],

@@ -7,14 +7,22 @@
 static const char *gVertexShader =
 "attribute vec4 aPosition;\n"
 "uniform mat4 uMVPMatrix;\n"
+"uniform mat4 uTexMatrix;\n"
+"attribute vec2 aTexture;\n"
+"varying vec2 vTexture;\n"
 "void main() {\n"
 "  gl_Position = uMVPMatrix * aPosition;\n"
+"  vec4 texCoord = vec4(aTexture, 0.0, 0.0);\n"
+"  vec4 res = uTexMatrix * texCoord;\n"
+"  vTexture = vec2(res.x, res.y);\n"
 "}\n";
 
 static const char *gFragmentShader =
 "precision mediump float;\n"
+"uniform sampler2D uTextureUnit;\n"
+"varying vec2 vTexture;\n"
 "void main() {\n"
-"  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+"  gl_FragColor = texture2D(uTextureUnit, vTexture);\n"
 "}\n";
 
 const GLfloat identityMatrix[16] =
@@ -25,9 +33,18 @@ const GLfloat identityMatrix[16] =
                 0.0f, 0.0f, 0.0f, 1.0f,
         };
 
+const GLfloat identityTextureMatrix[16] =
+        {
+                1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 0.0f,
+        };
+
 GLfloat projMatrix[16];
 GLfloat mvpMatrix[16];
 GLfloat modelMatrix[16];
+GLfloat textureMatrix[16];
 
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
@@ -108,7 +125,10 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
 
 GLuint glProgram;
 GLuint glPositionHandle;
+GLuint glTextureHandle;
+GLuint glTextureUnitHandle;
 GLuint glMVPHandle;
+GLuint glTexMHandle;
 M3Gbool inited = M3G_FALSE;
 
 void m3gInitShaders() {
@@ -120,19 +140,34 @@ void m3gInitShaders() {
         }
         glPositionHandle = (GLuint) glGetAttribLocation(glProgram, "aPosition");
         checkGlError("glGetAttribLocation");
+        glTextureHandle = (GLuint) glGetAttribLocation(glProgram, "aTexture");
+        checkGlError("glGetAttribLocation");
+        glTextureUnitHandle = (GLuint) glGetUniformLocation(glProgram, "uTextureUnit");
+        checkGlError("glGetUniformLocation");
         glMVPHandle = (GLuint) glGetUniformLocation(glProgram, "uMVPMatrix");
         checkGlError("glGetUniformLocation");
+        glTexMHandle = (GLuint) glGetUniformLocation(glProgram, "uTexMatrix");
+        checkGlError("glGetUniformLocation");
+        glUseProgram(glProgram);
+        checkGlError("glUseProgram");
         inited = M3G_TRUE;
     }
 }
 
 void m3gLoadVertices(GLint size, GLenum type, GLsizei stride, const void *pointer) {
-    glUseProgram(glProgram);
-    checkGlError("glUseProgram");
     glVertexAttribPointer(glPositionHandle, size, type, GL_FALSE, stride, pointer);
     checkGlError("glVertexAttribPointer");
     glEnableVertexAttribArray(glPositionHandle);
     checkGlError("glEnableVertexAttribArray");
+}
+
+void m3gLoadTexCoords(GLint size, GLenum type, GLsizei stride, const void *pointer) {
+    glVertexAttribPointer(glTextureHandle, size, type, GL_FALSE, stride, pointer);
+    checkGlError("glVertexAttribPointer");
+    glEnableVertexAttribArray(glTextureHandle);
+    checkGlError("glEnableVertexAttribArray");
+    glUniform1i(glTextureUnitHandle, 0);
+    checkGlError("glUniform1i");
 }
 
 M3Gfloat* multiplyMatrix(M3Gfloat *mat, M3Gfloat *mat2, M3Gfloat *dest) {
@@ -173,6 +208,8 @@ void m3gDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indice
     multiplyMatrix(projMatrix, modelMatrix, mvpMatrix);
     glUniformMatrix4fv(glMVPHandle, 1, GL_FALSE, mvpMatrix);
     checkGlError("glUniformMatrix4fv");
+    glUniformMatrix4fv(glTexMHandle, 1, GL_FALSE, textureMatrix);
+    checkGlError("glUniformMatrix4fv");
     glDrawElements(mode, count, type, indices);
     checkGlError("glDrawElements");
 }
@@ -185,12 +222,20 @@ void m3gLoadModelMatrix(M3Gfloat* matr) {
     m3gCopy(modelMatrix, matr, sizeof(modelMatrix));
 }
 
+void m3gLoadTextureMatrix(M3Gfloat* matr) {
+    m3gCopy(textureMatrix, matr, sizeof(textureMatrix));
+}
+
 void m3gIdentityProjectionMatrix() {
     m3gCopy(projMatrix, identityMatrix, sizeof(projMatrix));
 }
 
 void m3gIdentityModelMatrix() {
     m3gCopy(modelMatrix, identityMatrix, sizeof(modelMatrix));
+}
+
+void m3gIdentityTextureMatrix() {
+    m3gCopy(textureMatrix, identityTextureMatrix, sizeof(textureMatrix));
 }
 
 void m3gMultProjectionMatrix(M3Gfloat* matr) {
@@ -241,5 +286,19 @@ void m3gScaleModel(M3Gfloat x, M3Gfloat y, M3Gfloat z) {
 void m3gTranslateModel(M3Gfloat x, M3Gfloat y, M3Gfloat z) {
     for (int i=0 ; i<4 ; i++) {
         modelMatrix[12 + i] += modelMatrix[i] * x + modelMatrix[4 + i] * y + modelMatrix[8 + i] * z;
+    }
+}
+
+void m3gScaleTexture(M3Gfloat x, M3Gfloat y, M3Gfloat z) {
+    for (int i=0 ; i<4 ; i++) {
+        textureMatrix[i] *= x;
+        textureMatrix[4 + i] *= y;
+        textureMatrix[8 + i] *= z;
+    }
+}
+
+void m3gTranslateTexture(M3Gfloat x, M3Gfloat y, M3Gfloat z) {
+    for (int i=0 ; i<4 ; i++) {
+        textureMatrix[12 + i] += textureMatrix[i] * x + textureMatrix[4 + i] * y + textureMatrix[8 + i] * z;
     }
 }

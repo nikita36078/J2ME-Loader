@@ -204,10 +204,10 @@ static void m3gLockTexCoordArray(const VertexArray *array)
     M3G_VALIDATE_OBJECT(array);
     M3G_ASSERT(!array->mapCount);
 
-   /* glTexCoordPointer(array->elementSize,
+    m3gLoadTexCoords(array->elementSize,
                       array->elementType,
                       array->stride,
-                      m3gMapObject(M3G_INTERFACE(array), array->data));*/
+                      m3gMapObject(M3G_INTERFACE(array), array->data));
     M3G_ASSERT_GL;
     
     ++((VertexArray*)array)->numLocks;

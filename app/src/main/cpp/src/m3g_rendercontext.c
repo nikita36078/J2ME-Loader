@@ -910,7 +910,7 @@ static void m3gPushScreenSpace(RenderContext *ctx, M3Gbool realPixels)
     if (realPixels) {
         int w = ctx->viewport.width;
         int h = ctx->viewport.height;
-        //glOrthox(0, w << 16, 0, h << 16, -1 << 16, 1 << 16);
+        m3gOrtho(0, w, 0, h, -1, 1);
     }
     m3gIdentityModelMatrix();
 }
