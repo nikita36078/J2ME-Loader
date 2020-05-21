@@ -519,7 +519,7 @@ static void m3gSpriteDoRender(Node *self,
 
     /* Load indices -> draws the sprite */
     M3G_BEGIN_PROFILE(M3G_INTERFACE(ctx), M3G_PROFILE_NGL_DRAW);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     M3G_END_PROFILE(M3G_INTERFACE(ctx), M3G_PROFILE_NGL_DRAW);
 
     m3gReleaseTextureImage(imagePow2);

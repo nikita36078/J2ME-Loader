@@ -539,13 +539,11 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
     /* Set up texture and vertex coordinate arrays for the image tiles */
 
     //glClientActiveTexture(GL_TEXTURE0);
-    //glTexCoordPointer(2, GL_BYTE, 0, tc);
+    m3gLoadTexCoords(2, GL_BYTE, 0, tc);
     //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    //glVertexPointer(2, GL_SHORT, 0, pos);
+    m3gLoadVertices(2, GL_SHORT, 0, pos);
     //glEnableClientState(GL_VERTEX_ARRAY);
-    //glMatrixMode(GL_TEXTURE);
-    //glLoadIdentity();
-    //glMatrixMode(GL_MODELVIEW);
+    m3gIdentityTextureMatrix();
     M3G_ASSERT_GL;
 
     /* Load each image tile into a texture and draw */
@@ -609,7 +607,7 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
                 pos[5] = pos[1];
                 pos[6] = pos[4];
                 pos[7] = pos[3];
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+                //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
             }
         }
         M3G_ASSERT_GL;

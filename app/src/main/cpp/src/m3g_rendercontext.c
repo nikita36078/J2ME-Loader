@@ -828,14 +828,14 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
             /* Zero the masked channels */
             
             glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_COLOR);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
             /* Add the masked channels from the stored texture */
             
             //glEnable(GL_TEXTURE_2D);
             //glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             glBlendFunc(GL_ONE, GL_ONE);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         }
             
         /* Restore the mandatory state */
