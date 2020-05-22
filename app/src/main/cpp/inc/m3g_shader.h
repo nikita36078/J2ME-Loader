@@ -9,6 +9,7 @@ void m3gInitShaders();
 void m3gLoadVertices(GLint size, GLenum type, GLsizei stride, const void *pointer);
 void m3gLoadTexCoords(GLint size, GLenum type, GLsizei stride, const void *pointer);
 void m3gDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices);
+void m3gDrawArrays(GLenum mode, GLsizei count, GLenum type);
 void m3gLoadProjectionMatrix(M3Gfloat* matr);
 void m3gLoadModelMatrix(M3Gfloat* matr);
 void m3gLoadTextureMatrix(M3Gfloat* matr);
