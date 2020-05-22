@@ -539,11 +539,11 @@ static void m3gBlitFrameBufferPixels2(RenderContext *ctx,
     /* Set up texture and vertex coordinate arrays for the image tiles */
 
     //glClientActiveTexture(GL_TEXTURE0);
-    m3gLoadTexCoords(2, GL_BYTE, 0, tc);
+    //m3gLoadTexCoords(2, GL_BYTE, 0, tc);
     //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    m3gLoadVertices(2, GL_SHORT, 0, pos);
+    //m3gLoadVertices(2, GL_SHORT, 0, pos);
     //glEnableClientState(GL_VERTEX_ARRAY);
-    m3gIdentityTextureMatrix();
+    //m3gIdentityTextureMatrix();
     M3G_ASSERT_GL;
 
     /* Load each image tile into a texture and draw */
@@ -893,11 +893,11 @@ static void m3gBlitFrameBufferPixels(RenderContext *ctx,
 
     glScissor(xOffset, yOffset, width, height);
     glViewport(0, 0, ctx->target.width, ctx->target.height);
-    m3gIdentityProjectionMatrix();
-    m3gOrtho(0, ctx->target.width,
+    //m3gIdentityProjectionMatrix();
+    /*m3gOrtho(0, ctx->target.width,
              0, ctx->target.height,
-             -1, 1);
-    m3gIdentityModelMatrix();
+             -1, 1);*/
+    //m3gIdentityModelMatrix();
     
     /* Disable any stray state we don't want */
 

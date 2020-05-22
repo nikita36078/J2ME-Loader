@@ -508,12 +508,12 @@ static void m3gSpriteDoRender(Node *self,
         m3gMatrixInverse(&invProjMatrix, projMatrix);
 		m3gGetMatrixColumns(&invProjMatrix, transform);
 
-        m3gMultModelMatrix(transform);
+        //m3gMultModelMatrix(transform);
         scaleW[0] = scaleW[5] = scaleW[10] = scaleW[15] = eyeSpace.w;
-        m3gMultModelMatrix(scaleW);
+       // m3gMultModelMatrix(scaleW);
 
         m3gGetMatrixColumns(projMatrix, transform);
-        m3gLoadProjectionMatrix(transform);
+        //m3gLoadProjectionMatrix(transform);
     }
 #endif
 

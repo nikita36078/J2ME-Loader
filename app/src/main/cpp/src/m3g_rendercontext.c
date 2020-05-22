@@ -653,7 +653,7 @@ static M3G_INLINE void m3gApplyLights(RenderContext *ctx, M3Gint scope)
          * the viewing matrix to the lights only */
         
         if (ctx->renderMode == RENDER_NODES) {
-            m3gLoadModelMatrix(ctx->viewTransform);
+            //m3gLoadModelMatrix(ctx->viewTransform);
         }
         
         m3gSelectGLLights(&ctx->lightManager, 8, scope, 0, 0, 0);
@@ -906,13 +906,13 @@ static void m3gPushScreenSpace(RenderContext *ctx, M3Gbool realPixels)
 {
     M3G_VALIDATE_OBJECT(ctx);
     
-    m3gIdentityProjectionMatrix();
+    //m3gIdentityProjectionMatrix();
     if (realPixels) {
         int w = ctx->viewport.width;
         int h = ctx->viewport.height;
-        m3gOrtho(0, w, 0, h, -1, 1);
+        //m3gOrtho(0, w, 0, h, -1, 1);
     }
-    m3gIdentityModelMatrix();
+    //m3gIdentityModelMatrix();
 }
 
 /*!
@@ -1095,6 +1095,7 @@ static void m3gDrawMesh(RenderContext *ctx,
 
 RestoreModelview:
     if (modelTransform != NULL) {
+        m3gIdentityModelMatrix();
         //glPopMatrix();
     }
 }
