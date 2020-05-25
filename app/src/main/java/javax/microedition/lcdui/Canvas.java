@@ -592,6 +592,9 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void setOverlay(Overlay ov) {
+		if (overlay != null) {
+			overlay.setTarget(null);
+		}
 		if (ov != null) {
 			ov.setTarget(this);
 		}
