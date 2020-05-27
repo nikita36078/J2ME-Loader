@@ -275,6 +275,12 @@ typedef enum {
     M3G_IO_ERROR
 } M3GError;
 
+/* Shader modes */
+typedef enum {
+    M3G_SHADER_TEXTURE = 0x00,
+    M3G_SHADER_COLOR,
+} M3GShaderMode;
+
 /* Supported types of rendering primitives
  *
  * These match GL enums directly.

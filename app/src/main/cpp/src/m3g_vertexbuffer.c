@@ -119,6 +119,13 @@ static void m3gLockVertexBuffer(const VertexBuffer *buffer,
     M3G_VALIDATE_OBJECT(buffer);
     M3G_ASSERT(!buffer->locked);
 
+    if (buffer->texCoords[0] != NULL) {
+        m3gSetShaderMode(M3G_SHADER_TEXTURE);
+    }
+    else {
+        m3gSetShaderMode(M3G_SHADER_COLOR);
+    }
+
     if (buffer->colors != NULL) {
         //glEnableClientState(GL_COLOR_ARRAY);
         m3gLockColorArray(buffer->colors, alphaFactor);

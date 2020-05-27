@@ -4,26 +4,43 @@
 
 #include "m3g_shader.h"
 
-static const char *gVertexShader =
-"attribute vec4 aPosition;\n"
-"uniform mat4 uMVPMatrix;\n"
-"uniform mat4 uTexMatrix;\n"
-"attribute vec2 aTexture;\n"
-"varying vec2 vTexture;\n"
-"void main() {\n"
-"  gl_Position = uMVPMatrix * aPosition;\n"
-"  vec4 texCoord = vec4(aTexture, 0.0, 1.0);\n"
-"  vec4 res = uTexMatrix * texCoord;\n"
-"  vTexture = vec2(res.x, res.y);\n"
-"}\n";
+static const char *gTVertexShader =
+        "attribute vec4 aPosition;\n"
+        "uniform mat4 uMVPMatrix;\n"
+        "uniform mat4 uTexMatrix;\n"
+        "attribute vec2 aTexture;\n"
+        "varying vec2 vTexture;\n"
+        "void main() {\n"
+        "  gl_Position = uMVPMatrix * aPosition;\n"
+        "  vec4 texCoord = vec4(aTexture, 0.0, 1.0);\n"
+        "  vec4 res = uTexMatrix * texCoord;\n"
+        "  vTexture = vec2(res.x, res.y);\n"
+        "}\n";
 
-static const char *gFragmentShader =
-"precision mediump float;\n"
-"uniform sampler2D uTextureUnit;\n"
-"varying vec2 vTexture;\n"
-"void main() {\n"
-"  gl_FragColor = texture2D(uTextureUnit, vTexture);\n"
-"}\n";
+static const char *gTFragmentShader =
+        "precision mediump float;\n"
+        "uniform sampler2D uTextureUnit;\n"
+        "varying vec2 vTexture;\n"
+        "void main() {\n"
+        "  gl_FragColor = texture2D(uTextureUnit, vTexture);\n"
+        "}\n";
+
+static const char *gCVertexShader =
+        "attribute vec4 aPosition;\n"
+        "uniform mat4 uMVPMatrix;\n"
+        "attribute vec4 aColor;\n"
+        "varying vec4 vColor;\n"
+        "void main() {\n"
+        "  gl_Position = uMVPMatrix * aPosition;\n"
+        "  vColor = aColor;\n"
+        "}\n";
+
+static const char *gCFragmentShader =
+        "precision mediump float;\n"
+        "varying vec4 vColor;\n"
+        "void main() {\n"
+        "  gl_FragColor = vColor;\n"
+        "}\n";
 
 const GLfloat identityMatrix[16] =
         {
@@ -45,6 +62,21 @@ GLfloat projMatrix[16];
 GLfloat mvpMatrix[16];
 GLfloat modelMatrix[16];
 GLfloat textureMatrix[16];
+
+GLuint glTProgram;
+GLuint glTPositionHandle;
+GLuint glTTextureHandle;
+GLuint glTTextureUnitHandle;
+GLuint glTMVPHandle;
+GLuint glTTexMHandle;
+
+GLuint glCProgram;
+GLuint glCPositionHandle;
+GLuint glCColorHandle;
+GLuint glCMVPHandle;
+
+M3Gbool inited = M3G_FALSE;
+M3Genum shaderMode = M3G_SHADER_TEXTURE;
 
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
@@ -123,51 +155,82 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
     return program;
 }
 
-GLuint glProgram;
-GLuint glPositionHandle;
-GLuint glTextureHandle;
-GLuint glTextureUnitHandle;
-GLuint glMVPHandle;
-GLuint glTexMHandle;
-M3Gbool inited = M3G_FALSE;
-
 void m3gInitShaders() {
     if (!inited) {
-        glProgram = createProgram(gVertexShader, gFragmentShader);
-        if (!glProgram) {
+        glTProgram = createProgram(gTVertexShader, gTFragmentShader);
+        if (!glTProgram) {
             M3G_LOG(M3G_LOG_USER_ERRORS, "Could not create program.");
             return;
         }
-        glPositionHandle = (GLuint) glGetAttribLocation(glProgram, "aPosition");
+        glTPositionHandle = (GLuint) glGetAttribLocation(glTProgram, "aPosition");
         checkGlError("glGetAttribLocation");
-        glTextureHandle = (GLuint) glGetAttribLocation(glProgram, "aTexture");
+        glTTextureHandle = (GLuint) glGetAttribLocation(glTProgram, "aTexture");
         checkGlError("glGetAttribLocation");
-        glTextureUnitHandle = (GLuint) glGetUniformLocation(glProgram, "uTextureUnit");
+        glTTextureUnitHandle = (GLuint) glGetUniformLocation(glTProgram, "uTextureUnit");
         checkGlError("glGetUniformLocation");
-        glMVPHandle = (GLuint) glGetUniformLocation(glProgram, "uMVPMatrix");
+        glTMVPHandle = (GLuint) glGetUniformLocation(glTProgram, "uMVPMatrix");
         checkGlError("glGetUniformLocation");
-        glTexMHandle = (GLuint) glGetUniformLocation(glProgram, "uTexMatrix");
+        glTTexMHandle = (GLuint) glGetUniformLocation(glTProgram, "uTexMatrix");
         checkGlError("glGetUniformLocation");
-        glUseProgram(glProgram);
-        checkGlError("glUseProgram");
+
+        glCProgram = createProgram(gCVertexShader, gCFragmentShader);
+        if (!glCProgram) {
+            M3G_LOG(M3G_LOG_USER_ERRORS, "Could not create program.");
+            return;
+        }
+        glCPositionHandle = (GLuint) glGetAttribLocation(glCProgram, "aPosition");
+        checkGlError("glGetAttribLocation");
+        glCColorHandle = (GLuint) glGetAttribLocation(glCProgram, "aColor");
+        checkGlError("glGetAttribLocation");
+        glCMVPHandle = (GLuint) glGetUniformLocation(glCProgram, "uMVPMatrix");
+        checkGlError("glGetUniformLocation");
         inited = M3G_TRUE;
     }
 }
 
+void m3gSetShaderMode(M3Genum mode) {
+    shaderMode = mode;
+    if (shaderMode == M3G_SHADER_TEXTURE) {
+        glUseProgram(glTProgram);
+        checkGlError("glUseProgram");
+    } else {
+        glUseProgram(glCProgram);
+        checkGlError("glUseProgram");
+    }
+}
+
 void m3gLoadVertices(GLint size, GLenum type, GLsizei stride, const void *pointer) {
-    glVertexAttribPointer(glPositionHandle, size, type, GL_FALSE, stride, pointer);
-    checkGlError("glVertexAttribPointer");
-    glEnableVertexAttribArray(glPositionHandle);
-    checkGlError("glEnableVertexAttribArray");
+    if (shaderMode == M3G_SHADER_TEXTURE) {
+        glVertexAttribPointer(glTPositionHandle, size, type, GL_FALSE, stride, pointer);
+        checkGlError("glVertexAttribPointer");
+        glEnableVertexAttribArray(glTPositionHandle);
+        checkGlError("glEnableVertexAttribArray");
+    } else {
+        glVertexAttribPointer(glCPositionHandle, size, type, GL_FALSE, stride, pointer);
+        checkGlError("glVertexAttribPointer");
+        glEnableVertexAttribArray(glCPositionHandle);
+        checkGlError("glEnableVertexAttribArray");
+    }
 }
 
 void m3gLoadTexCoords(GLint size, GLenum type, GLsizei stride, const void *pointer) {
-    glVertexAttribPointer(glTextureHandle, size, type, GL_FALSE, stride, pointer);
-    checkGlError("glVertexAttribPointer");
-    glEnableVertexAttribArray(glTextureHandle);
-    checkGlError("glEnableVertexAttribArray");
-    glUniform1i(glTextureUnitHandle, 0);
-    checkGlError("glUniform1i");
+    if (shaderMode == M3G_SHADER_TEXTURE) {
+        glVertexAttribPointer(glTTextureHandle, size, type, GL_FALSE, stride, pointer);
+        checkGlError("glVertexAttribPointer");
+        glEnableVertexAttribArray(glTTextureHandle);
+        checkGlError("glEnableVertexAttribArray");
+        glUniform1i(glTTextureUnitHandle, 0);
+        checkGlError("glUniform1i");
+    }
+}
+
+void m3gLoadColors(GLint size, GLenum type, GLsizei stride, const void *pointer) {
+    if (shaderMode == M3G_SHADER_COLOR) {
+        glVertexAttribPointer(glCColorHandle, size, type, GL_FALSE, stride, pointer);
+        checkGlError("glVertexAttribPointer");
+        glEnableVertexAttribArray(glCColorHandle);
+        checkGlError("glEnableVertexAttribArray");
+    }
 }
 
 M3Gfloat* multiplyMatrix(M3Gfloat *mat, M3Gfloat *mat2, M3Gfloat *dest) {
@@ -206,21 +269,21 @@ M3Gfloat* multiplyMatrix(M3Gfloat *mat, M3Gfloat *mat2, M3Gfloat *dest) {
 
 void m3gDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices) {
     multiplyMatrix(projMatrix, modelMatrix, mvpMatrix);
-    glUniformMatrix4fv(glMVPHandle, 1, GL_FALSE, mvpMatrix);
-    checkGlError("glUniformMatrix4fv");
-    glUniformMatrix4fv(glTexMHandle, 1, GL_FALSE, textureMatrix);
-    checkGlError("glUniformMatrix4fv");
+    if (shaderMode == M3G_SHADER_TEXTURE) {
+        glUniformMatrix4fv(glTMVPHandle, 1, GL_FALSE, mvpMatrix);
+        checkGlError("glUniformMatrix4fv");
+        glUniformMatrix4fv(glTTexMHandle, 1, GL_FALSE, textureMatrix);
+        checkGlError("glUniformMatrix4fv");
+    } else {
+        glUniformMatrix4fv(glCMVPHandle, 1, GL_FALSE, mvpMatrix);
+        checkGlError("glUniformMatrix4fv");
+    }
     glDrawElements(mode, count, type, indices);
     checkGlError("glDrawElements");
 }
 
 void m3gDrawArrays(GLenum mode, GLsizei count, GLenum type) {
-    glUniformMatrix4fv(glMVPHandle, 1, GL_FALSE, identityMatrix);
-    checkGlError("glUniformMatrix4fv");
-    glUniformMatrix4fv(glTexMHandle, 1, GL_FALSE, identityTextureMatrix);
-    checkGlError("glUniformMatrix4fv");
-    glDrawArrays(mode, count, type);
-    checkGlError("glDrawElements");
+
 }
 
 void m3gLoadProjectionMatrix(M3Gfloat* matr) {

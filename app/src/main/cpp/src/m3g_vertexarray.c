@@ -96,10 +96,10 @@ static void m3gLockColorArray(const VertexArray *array, M3Gint alphaFactor)
         if (type >= GL_BYTE && type <= GL_UNSIGNED_SHORT) {
             type |= 0x01; /* force type to unsigned for GL */
         }
-        /*glColorPointer(type == GL_UNSIGNED_BYTE ? 4 : array->elementSize,
+        m3gLoadColors(type == GL_UNSIGNED_BYTE ? 4 : array->elementSize,
                        type,
                        array->stride,
-                       m3gMapObject(m3g, array->data));*/
+                       m3gMapObject(m3g, array->data));
     }
     else {
 
@@ -150,8 +150,8 @@ static void m3gLockColorArray(const VertexArray *array, M3Gint alphaFactor)
         
         /* We now have the scaled colors in the cache, so just set the
          * pointer there */
-        
-        //glColorPointer(4, GL_UNSIGNED_BYTE, 0, cache);
+
+        m3gLoadColors(4, array->elementType, 0, cache);
     }
     M3G_ASSERT_GL;
     

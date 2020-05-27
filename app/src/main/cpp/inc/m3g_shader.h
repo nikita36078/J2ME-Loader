@@ -6,8 +6,10 @@
 #define __M3G_SHADER_H__
 
 void m3gInitShaders();
+void m3gSetShaderMode(M3Genum mode);
 void m3gLoadVertices(GLint size, GLenum type, GLsizei stride, const void *pointer);
 void m3gLoadTexCoords(GLint size, GLenum type, GLsizei stride, const void *pointer);
+void m3gLoadColors(GLint size, GLenum type, GLsizei stride, const void *pointer);
 void m3gDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indices);
 void m3gDrawArrays(GLenum mode, GLsizei count, GLenum type);
 void m3gLoadProjectionMatrix(M3Gfloat* matr);
