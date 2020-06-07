@@ -47,7 +47,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	private InternalMetaData metadata;
 
 	public MicroPlayer(DataSource datasource) {
-		player = new MediaPlayer();
+		player = new AndroidPlayer();
 		player.setOnCompletionListener(this);
 
 		source = datasource;
@@ -115,6 +115,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 		if (loopCount == 1) {
 			state = PREFETCHED;
+			player.reset();
 		} else if (loopCount > 1) {
 			loopCount--;
 		}
@@ -151,21 +152,14 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 		if (state == REALIZED) {
 			try {
-				player.prepare();
-
 				MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 				retriever.setDataSource(source.getLocator());
 				metadata.updateMetaData(retriever);
 				retriever.release();
-
-				state = PREFETCHED;
-			} catch (IOException e) {
-				/*
-				 * Only 32 instances of MediaPlayer can be prepared at once, don't throw the MediaException here
-				 * if we can't prepare it now
-				 */
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			state = PREFETCHED;
 		}
 	}
 

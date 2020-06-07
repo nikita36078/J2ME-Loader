@@ -99,6 +99,7 @@ dependencies {
     implementation 'com.github.billthefarmer:mididriver:v1.17'
     implementation 'com.github.nikita36078:donations:2.8'
     implementation 'com.github.nikita36078:filepicker:4.3.0'
+    implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     compileOnly "com.google.auto.service:auto-service-annotations:1.0-rc6"
