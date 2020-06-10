@@ -120,7 +120,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 			loopCount--;
 		}
 
-		if (state == STARTED) {
+		if (state == STARTED && loopCount != -1) {
 			player.start();
 			postEvent(PlayerListener.STARTED, new Long(getMediaTime()));
 		}
