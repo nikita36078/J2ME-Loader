@@ -28,6 +28,7 @@ public class AndroidPlayer extends MediaPlayer {
 	private boolean looping;
 
 	public AndroidPlayer() {
+		super();
 		this.leftVolume = 1.0f;
 		this.rightVolume = 1.0f;
 	}
