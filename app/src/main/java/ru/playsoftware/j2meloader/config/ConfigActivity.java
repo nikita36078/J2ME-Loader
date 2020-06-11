@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -45,11 +44,8 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,9 +53,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
-import javax.microedition.util.param.SharedPreferencesContainer;
+import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -137,7 +132,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	private File keylayoutFile;
 	private File dataDir;
-	private SharedPreferencesContainer params;
+	private ProfileModel params;
 	private FragmentManager fragmentManager;
 	private boolean isProfile;
 	private Display display;
@@ -169,20 +164,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		configDir.mkdirs();
 
-		params = new SharedPreferencesContainer(configDir);
-		boolean loaded = params.load();
-		final String defName = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+		defProfile = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 				.getString(Config.PREF_DEFAULT_PROFILE, null);
-		defProfile = Config.getProfilesDir() + defName;
-		if (!loaded && defName != null) {
-			FileUtils.copyFiles(new File(defProfile), configDir, null);
-			loaded = params.load();
-		}
-		if (params.getInt("version", 0) < 1) {
-			updateProperties();
-			params.edit().putInt("version", 1).apply();
-		}
-		if (loaded && !showSettings) {
+		loadConfig();
+		if (!params.isNew && !showSettings) {
 			startMIDlet();
 			return;
 		}
@@ -322,22 +307,28 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
 	}
 
-	private void updateProperties() {
-		String[] defaults = getDefaultProperties().split("\\n");
-		String properties = params.getString("SystemProperties", "");
-		StringBuilder sb = new StringBuilder(properties);
-		for (String line : defaults) {
-			if (properties.contains(line.substring(0, line.indexOf(':')))) continue;
-			sb.append(line).append('\n');
+	void loadConfig() {
+		params = ProfilesManager.loadConfig(configDir);
+		if (params == null && defProfile != null) {
+			FileUtils.copyFiles(new File(Config.getProfilesDir(), defProfile), configDir, null);
+			params = ProfilesManager.loadConfig(configDir);
 		}
-		params.putString("SystemProperties", sb.toString()).apply();
+		if (params == null) {
+			params = new ProfileModel(configDir);
+			ProfilesManager.saveConfig(params);
+		}
+		if (params.version < 1) {
+			ProfilesManager.updateSystemProperties(params);
+			params.version = 1;
+			ProfilesManager.saveConfig(params);
+		}
 	}
 
 	private void showCharsetPicker(View v) {
 		String[] charsets = Charset.availableCharsets().keySet().toArray(new String[0]);
 		new AlertDialog.Builder(this).setItems(charsets, (d, w) -> {
 			String enc = "microedition.encoding: " + charsets[w];
-			String[] props = tfSystemProperties.getText().toString().split("\n");
+			String[] props = tfSystemProperties.getText().toString().split("[\\n\\r]+");
 			int propsLength = props.length;
 			if (propsLength == 0) {
 				tfSystemProperties.setText(enc);
@@ -368,7 +359,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (defProfile == null) {
 			return;
 		}
-		File defaultKeyLayoutFile = new File(defProfile, Config.MIDLET_KEY_LAYOUT_FILE);
+		File defaultKeyLayoutFile = new File(Config.getProfilesDir() + defProfile, Config.MIDLET_KEY_LAYOUT_FILE);
 		if (!defaultKeyLayoutFile.exists()) {
 			return;
 		}
@@ -388,7 +379,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	@Override
 	protected void onResume() {
 		super.onResume();
-		loadParams();
+		loadParams(true);
 	}
 
 	@Override
@@ -465,146 +456,135 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	@SuppressLint("SetTextI18n")
-	public void loadParams() {
-		params.load();
-		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
-		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
-		tfScreenBack.setText(Integer.toHexString(params.
-				getInt("ScreenBackgroundColor", 0xD0D0D0)).toUpperCase());
-		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
-		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
-		spOrientation.setSelection(params.getInt("Orientation", 0));
-		cxScaleToFit.setChecked(params.getBoolean("ScreenScaleToFit", true));
-		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio", true));
-		cxFilter.setChecked(params.getBoolean("ScreenFilter", false));
-		cxImmediate.setChecked(params.getBoolean("ImmediateMode", false));
-		cxParallel.setChecked(params.getBoolean("ParallelRedrawScreen", false));
-		cxForceFullscreen.setChecked(params.getBoolean("ForceFullscreen", false));
-		cxHwAcceleration.setChecked(params.getBoolean("HwAcceleration", false));
-		cxShowFps.setChecked(params.getBoolean("ShowFps", false));
-		cxLimitFps.setChecked(params.getBoolean("LimitFps", false));
+	public void loadParams(boolean reloadFromFile) {
+		if (reloadFromFile) {
+			loadConfig();
+		}
+		tfScreenWidth.setText(Integer.toString(params.screenWidth));
+		tfScreenHeight.setText(Integer.toString(params.screenHeight));
+		tfScreenBack.setText(String.format("%06X", params.screenBackgroundColor));
+		sbScaleRatio.setProgress(params.screenScaleRatio);
+		tfScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
+		spOrientation.setSelection(params.orientation);
+		cxScaleToFit.setChecked(params.screenScaleToFit);
+		cxKeepAspectRatio.setChecked(params.screenKeepAspectRatio);
+		cxFilter.setChecked(params.screenFilter);
+		cxImmediate.setChecked(params.immediateMode);
+		cxParallel.setChecked(params.parallelRedrawScreen);
+		cxForceFullscreen.setChecked(params.forceFullscreen);
+		cxHwAcceleration.setChecked(params.hwAcceleration);
+		cxShowFps.setChecked(params.showFps);
+		cxLimitFps.setChecked(params.limitFps);
 
-		tfFontSizeSmall.setText(Integer.toString(params.getInt("FontSizeSmall", 18)));
-		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
-		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
-		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
-		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
-		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
-		cxVKForceOpacity.setChecked(params.getBoolean(("VirtualKeyboardForceOpacity"), false));
-		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
-		int fpsLimit = params.getInt("FpsLimit", 0);
+		tfFontSizeSmall.setText(Integer.toString(params.fontSizeSmall));
+		tfFontSizeMedium.setText(Integer.toString(params.fontSizeMedium));
+		tfFontSizeLarge.setText(Integer.toString(params.fontSizeLarge));
+		cxFontSizeInSP.setChecked(params.fontApplyDimensions);
+		boolean showVk = params.showKeyboard;
+		cxShowKeyboard.setChecked(showVk);
+		vkContainer.setVisibility(showVk ? View.VISIBLE : View.GONE);
+		cxVKFeedback.setChecked(params.vkFeedback);
+		cxVKForceOpacity.setChecked(params.vkForceOpacity);
+		cxTouchInput.setChecked(params.touchInput);
+		int fpsLimit = params.fpsLimit;
 		if (fpsLimit > 0) {
 			tfFpsLimit.setText(Integer.toString(fpsLimit));
 		}
 
-		spVKType.setSelection(params.getInt("VirtualKeyboardType", 0));
-		spLayout.setSelection(params.getInt("Layout", 0));
-		spButtonsShape.setSelection(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
-		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
-		int vkHideDelay = params.getInt("VirtualKeyboardDelay", -1);
+		spVKType.setSelection(params.vkType);
+		spLayout.setSelection(params.keyCodesLayout);
+		spButtonsShape.setSelection(params.vkButtonShape);
+		sbVKAlpha.setProgress(params.vkAlpha);
+		int vkHideDelay = params.vkHideDelay;
 		if (vkHideDelay > 0) {
 			tfVKHideDelay.setText(Integer.toString(vkHideDelay));
 		}
-		tfVKBack.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0)).toUpperCase());
-		tfVKFore.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorForeground", 0x000080)).toUpperCase());
-		tfVKSelBack.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080)).toUpperCase());
-		tfVKSelFore.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF)).toUpperCase());
-		tfVKOutline.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF)).toUpperCase());
-	}
 
-	public String getDefaultProperties() {
-		StringBuilder sb = new StringBuilder();
-		try (BufferedInputStream bis = new BufferedInputStream(
-				getAssets().open("defaults/system.props"))) {
-			int available = bis.available();
-			byte[] buf = new byte[available];
-			int read;
-			int off = 0;
-			while (available > 0 && (read = bis.read(buf, off, available)) != -1) {
-				off += read;
-				available -= read;
-			}
-			sb.append(new String(buf));
-		} catch (IOException e) {
-			e.printStackTrace();
+		tfVKBack.setText(String.format("%06X", params.vkBgColor));
+		tfVKFore.setText(String.format("%06X", params.vkFgColor));
+		tfVKSelBack.setText(String.format("%06X", params.vkBgColorSelected));
+		tfVKSelFore.setText(String.format("%06X", params.vkFgColorSelected));
+		tfVKOutline.setText(String.format("%06X", params.vkOutlineColor));
+
+		String systemProperties = params.systemProperties;
+		if (systemProperties == null) {
+			systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
 		}
-		return sb.toString();
+		tfSystemProperties.setText(systemProperties);
 	}
 
 	private void saveParams() {
 		try {
-			params.edit();
-
-			String width = tfScreenWidth.getText().toString();
-			String height = tfScreenHeight.getText().toString();
-			if (width.isEmpty() || width.equals("-")) width = "-1";
-			if (height.isEmpty() || height.equals("-")) height = "-1";
-			int w = parseInt(width);
-			int h = parseInt(height);
-			if (w == 0) w = -1;
-			if (h == 0) h = -1;
-			params.putInt("ScreenWidth", w);
-			params.putInt("ScreenHeight", h);
-			params.putInt("ScreenBackgroundColor", parseInt(tfScreenBack.getText().toString(), 16));
-			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
-			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
-			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
-			params.putBoolean("ScreenKeepAspectRatio", cxKeepAspectRatio.isChecked());
-			params.putBoolean("ScreenFilter", cxFilter.isChecked());
-			params.putBoolean("ImmediateMode", cxImmediate.isChecked());
-			params.putBoolean("HwAcceleration", cxHwAcceleration.isChecked());
-			params.putBoolean("ParallelRedrawScreen", cxParallel.isChecked());
-			params.putBoolean("ForceFullscreen", cxForceFullscreen.isChecked());
-			params.putBoolean("ShowFps", cxShowFps.isChecked());
-			params.putBoolean("LimitFps", cxLimitFps.isChecked());
-			params.putInt("FpsLimit", parseInt(tfFpsLimit.getText().toString()));
+			int width = parseInt(tfScreenWidth.getText().toString());
+			params.screenWidth = width;
+			int height = parseInt(tfScreenHeight.getText().toString());
+			params.screenHeight = height;
+			try {
+				params.screenBackgroundColor = Integer.parseInt(tfScreenBack.getText().toString(), 16);
+			} catch (NumberFormatException ignored) {
+			}
+			params.screenScaleRatio = sbScaleRatio.getProgress();
+			params.orientation = spOrientation.getSelectedItemPosition();
+			params.screenScaleToFit = cxScaleToFit.isChecked();
+			params.screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
+			params.screenFilter = cxFilter.isChecked();
+			params.immediateMode = cxImmediate.isChecked();
+			params.hwAcceleration = cxHwAcceleration.isChecked();
+			params.parallelRedrawScreen = cxParallel.isChecked();
+			params.forceFullscreen = cxForceFullscreen.isChecked();
+			params.showFps = cxShowFps.isChecked();
+			params.limitFps = cxLimitFps.isChecked();
+			params.fpsLimit = parseInt(tfFpsLimit.getText().toString());
 
 			try {
-				int value = Integer.parseInt(tfFontSizeSmall.getText().toString());
-				params.putInt("FontSizeSmall", value);
+				params.fontSizeSmall = Integer.parseInt(tfFontSizeSmall.getText().toString());
 			} catch (NumberFormatException e) {
-				params.putInt("FontSizeSmall", getFontSizeForResolution(0, w, h));
+				params.fontSizeSmall = getFontSizeForResolution(0, width, height);
 			}
 			try {
-				int value = Integer.parseInt(tfFontSizeMedium.getText().toString());
-				params.putInt("FontSizeMedium", value);
+				params.fontSizeMedium = Integer.parseInt(tfFontSizeMedium.getText().toString());
 			} catch (NumberFormatException e) {
-				params.putInt("FontSizeMedium", getFontSizeForResolution(1, w, h));
+				params.fontSizeMedium = getFontSizeForResolution(1, width, height);
 			}
 			try {
-				int value = Integer.parseInt(tfFontSizeLarge.getText().toString());
-				params.putInt("FontSizeLarge", value);
+				params.fontSizeLarge = Integer.parseInt(tfFontSizeLarge.getText().toString());
 			} catch (NumberFormatException e) {
-				params.putInt("FontSizeLarge", getFontSizeForResolution(2, w, h));
+				params.fontSizeLarge = getFontSizeForResolution(2, width, height);
 			}
-			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
-			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
-			params.putBoolean("VirtualKeyboardFeedback", cxVKFeedback.isChecked());
-			params.putBoolean("VirtualKeyboardForceOpacity", cxVKForceOpacity.isChecked());
-			params.putBoolean("TouchInput", cxTouchInput.isChecked());
+			params.fontApplyDimensions = cxFontSizeInSP.isChecked();
+			params.showKeyboard = cxShowKeyboard.isChecked();
+			params.vkFeedback = cxVKFeedback.isChecked();
+			params.vkForceOpacity = cxVKForceOpacity.isChecked();
+			params.touchInput = cxTouchInput.isChecked();
 
-			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
-			params.putInt("Layout", spLayout.getSelectedItemPosition());
-			params.putInt("ButtonShape", spButtonsShape.getSelectedItemPosition());
-			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
-			params.putInt("VirtualKeyboardDelay", parseInt(tfVKHideDelay.getText().toString()));
-			params.putInt("VirtualKeyboardColorBackground",
-					parseInt(tfVKBack.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorForeground",
-					parseInt(tfVKFore.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorBackgroundSelected",
-					parseInt(tfVKSelBack.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorForegroundSelected",
-					parseInt(tfVKSelFore.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorOutline",
-					parseInt(tfVKOutline.getText().toString(), 16));
+			params.vkType = spVKType.getSelectedItemPosition();
+			params.keyCodesLayout = spLayout.getSelectedItemPosition();
+			params.vkButtonShape = spButtonsShape.getSelectedItemPosition();
+			params.vkAlpha = sbVKAlpha.getProgress();
+			params.vkHideDelay = parseInt(tfVKHideDelay.getText().toString());
+			try {
+				params.vkBgColor = Integer.parseInt(tfVKBack.getText().toString(), 16);
+			} catch (Exception ignored) {
+			}
+			try {
+				params.vkFgColor = Integer.parseInt(tfVKFore.getText().toString(), 16);
+			} catch (Exception ignored) {
+			}
+			try {
+				params.vkBgColorSelected = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
+			} catch (Exception ignored) {
+			}
+			try {
+				params.vkFgColorSelected = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
+			} catch (Exception ignored) {
+			}
+			try {
+				params.vkOutlineColor = Integer.parseInt(tfVKOutline.getText().toString(), 16);
+			} catch (Exception ignored) {
+			}
+			params.systemProperties = getSystemProperties();
 
-			params.apply();
+			ProfilesManager.saveConfig(params);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -666,8 +646,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				showClearDataDialog();
 				break;
 			case R.id.action_reset_settings:
-				params.edit().clear().apply();
-				loadParams();
+				params = new ProfileModel(configDir);
+				loadParams(false);
 				break;
 			case R.id.action_reset_layout:
 				//noinspection ResultOfMethodCallIgnored
@@ -771,14 +751,16 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	private void showColorPicker(EditText et) {
 		AmbilWarnaDialog.OnAmbilWarnaListener colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
-					@Override
-					public void onOk(AmbilWarnaDialog dialog, int color) {
-						et.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
-					}
+			@Override
+			public void onOk(AmbilWarnaDialog dialog, int color) {
+				et.setText(String.format("%06X", color & 0xFFFFFF));
+				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawables()[2];
+				drawable.setColor(color);
+			}
 
-					@Override
-					public void onCancel(AmbilWarnaDialog dialog) {
-					}
+			@Override
+			public void onCancel(AmbilWarnaDialog dialog) {
+			}
 		};
 		int color = parseInt(et.getText().toString().trim(), 16);
 		new AmbilWarnaDialog(this, color | 0xFF000000, colorListener).show();
@@ -837,8 +819,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				char c = src.charAt(i);
 				if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
 					sb.append(c);
-				} else if (c  >= 'a' && c <= 'f') {
-					sb.append((char)(c - 32));
+				} else if (c >= 'a' && c <= 'f') {
+					sb.append((char) (c - 32));
 				}
 			}
 			return sb;

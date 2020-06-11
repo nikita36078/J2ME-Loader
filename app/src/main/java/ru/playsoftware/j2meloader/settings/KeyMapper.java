@@ -24,12 +24,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.util.param.SharedPreferencesContainer;
+
+import ru.playsoftware.j2meloader.config.ProfileModel;
 
 public class KeyMapper {
-	public static final String PREF_KEY = "KeyMappings";
 
-	static void saveArrayPref(SharedPreferencesContainer container, SparseIntArray intArray) {
+	static void saveArrayPref(ProfileModel container, SparseIntArray intArray) {
 		StringBuilder data = new StringBuilder().append("[");
 		for (int i = 0; i < intArray.size(); i++) {
 			data.append("{")
@@ -41,8 +41,7 @@ public class KeyMapper {
 		}
 		data.setLength(data.length() - 1);
 		data.append("]");
-		container.putString(PREF_KEY, intArray.size() == 0 ? null : data.toString());
-		container.apply();
+		container.keyMappings = intArray.size() == 0 ? null : data.toString();
 	}
 
 	private static SparseIntArray getArray(String json) {
@@ -63,8 +62,8 @@ public class KeyMapper {
 		return intArray;
 	}
 
-	public static SparseIntArray getArrayPref(SharedPreferencesContainer container) {
-		return getArray(container.getString(PREF_KEY, null));
+	public static SparseIntArray getArrayPref(ProfileModel container) {
+		return getArray(container.keyMappings);
 	}
 
 	static void initArray(SparseIntArray intDict) {

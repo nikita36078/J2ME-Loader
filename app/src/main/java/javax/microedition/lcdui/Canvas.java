@@ -496,7 +496,7 @@ public abstract class Canvas extends Displayable {
 	private static final String TAG = Canvas.class.getName();
 	private final Object paintSync = new Object();
 
-	private PaintEvent paintEvent = new PaintEvent();
+	private final PaintEvent paintEvent = new PaintEvent();
 
 	private LinearLayout layout;
 	private InnerView innerView;

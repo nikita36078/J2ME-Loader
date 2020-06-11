@@ -88,7 +88,7 @@ public class LoadProfileAlert extends DialogFragment {
 						}
 						ProfilesManager.load((Profile) listView.getItemAtPosition(pos), configPath,
 								configChecked, vkChecked);
-						((ConfigActivity) requireActivity()).loadParams();
+						((ConfigActivity) requireActivity()).loadParams(true);
 					} catch (Exception e) {
 						e.printStackTrace();
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
@@ -113,7 +113,7 @@ public class LoadProfileAlert extends DialogFragment {
 
 	private void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
 		final Profile profile = profiles.get(pos);
-		final boolean hasConfig = profile.hasConfig();
+		final boolean hasConfig = profile.hasConfig() || profile.hasOldConfig();
 		final boolean hasVk = profile.hasKeyLayout();
 		cbConfig.setEnabled(hasConfig && hasVk);
 		cbConfig.setChecked(hasConfig);

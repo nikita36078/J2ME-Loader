@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
@@ -62,6 +63,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
@@ -79,6 +81,7 @@ public class MicroActivity extends AppCompatActivity {
 	private FrameLayout layout;
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
+	private String appName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,9 +101,13 @@ public class MicroActivity extends AppCompatActivity {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 		Intent intent = getIntent();
-		String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
-		microLoader = new MicroLoader(this, appName);
-		microLoader.init();
+		appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
+		microLoader = new MicroLoader(this, intent.getDataString());
+		if (!microLoader.init()) {
+			Config.startApp(this, appName, intent.getDataString(), true);
+			finish();
+			return;
+		}
 		microLoader.applyConfiguration();
 		VirtualKeyboard vk = ContextHolder.getVk();
 		if (vk != null) {
@@ -208,7 +215,7 @@ public class MicroActivity extends AppCompatActivity {
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
 			invalidateOptionsMenu();
-			ActionBar actionBar = getSupportActionBar();
+			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
 			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
 			if (current instanceof Canvas) {
 				hideSystemUI();
@@ -216,14 +223,14 @@ public class MicroActivity extends AppCompatActivity {
 					actionBar.hide();
 				} else {
 					final String title = current.getTitle();
-					actionBar.setTitle(title == null ? AppClassLoader.getName() : title);
+					actionBar.setTitle(title == null ? appName : title);
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
 				showSystemUI();
 				actionBar.show();
 				final String title = current.getTitle();
-				actionBar.setTitle(title == null ? AppClassLoader.getName() : title);
+				actionBar.setTitle(title == null ? appName : title);
 				layoutParams.height = getToolBarHeight();
 			}
 			toolbar.setLayoutParams(layoutParams);
@@ -277,8 +284,8 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.yes, (d, w) -> MidletThread.destroyApp())
-				.setNegativeButton(android.R.string.no, null);
+				.setPositiveButton(android.R.string.ok, (d, w) -> MidletThread.destroyApp())
+				.setNegativeButton(android.R.string.cancel, null);
 		alertBuilder.create().show();
 	}
 

@@ -29,7 +29,6 @@ import javax.microedition.util.ContextHolder;
 
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.applist.AppItem;
 
 public class Config {
 
@@ -42,7 +41,7 @@ public class Config {
 	public static final String MIDLET_ICON_FILE = "/icon.png";
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
-	public static final String MIDLET_CONFIG_FILE = "/config.xml";
+	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String PREF_EMULATOR_DIR = "emulator_dir";
 	static final String PREF_DEFAULT_PROFILE = "default_profile";
 
@@ -79,17 +78,17 @@ public class Config {
 		return appDir;
 	}
 
-	public static void startApp(Context context, AppItem app, boolean showSettings) {
-		File file = new File(Config.configsDir, app.getPath());
+	public static void startApp(Context context, String name, String path, boolean showSettings) {
+		File file = new File(Config.configsDir, path);
 		if (showSettings || !file.exists()) {
-			Intent intent = new Intent(ConfigActivity.ACTION_EDIT, Uri.parse(app.getPath()),
+			Intent intent = new Intent(ConfigActivity.ACTION_EDIT, Uri.parse(path),
 					context, ConfigActivity.class);
-			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, app.getTitle());
+			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, name);
 			context.startActivity(intent);
 		} else {
-			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPath()),
+			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(path),
 					context, MicroActivity.class);
-			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, app.getTitle());
+			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, name);
 			context.startActivity(intent);
 		}
 	}
@@ -106,7 +105,7 @@ public class Config {
 		Context context = ContextHolder.getAppContext();
 		String appName = context.getString(R.string.app_name);
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-					+ "/" + appName;
+				+ "/" + appName;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String path = preferences.getString(PREF_EMULATOR_DIR, null);
 		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + appName;

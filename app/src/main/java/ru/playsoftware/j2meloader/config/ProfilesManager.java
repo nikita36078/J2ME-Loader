@@ -16,16 +16,33 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
+import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.XmlUtils;
 
-class ProfilesManager {
+public class ProfilesManager {
+
+	private static final String TAG = ProfilesManager.class.getName();
+	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	static ArrayList<Profile> getProfiles() {
 		File root = new File(Config.getProfilesDir());
@@ -59,7 +76,19 @@ class ProfilesManager {
 		File dstConfig = new File(toPath, Config.MIDLET_CONFIG_FILE);
 		File dstKeyLayout = new File(toPath, Config.MIDLET_KEY_LAYOUT_FILE);
 		try {
-			if (config) FileUtils.copyFileUsingChannel(from.getConfig(), dstConfig);
+			if (config) {
+				File source = from.getConfig();
+				if (source.exists())
+					FileUtils.copyFileUsingChannel(source, dstConfig);
+				else {
+					ProfileModel params = loadConfig(from.getDir());
+					if (params != null) {
+						params.dir = dstConfig.getParentFile();
+						if (params.version < 1) updateSystemProperties(params);
+						saveConfig(params);
+					}
+				}
+			}
 			if (keyboard) FileUtils.copyFileUsingChannel(from.getKeyLayout(), dstKeyLayout);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -82,4 +111,55 @@ class ProfilesManager {
 		}
 	}
 
+	@Nullable
+	public static ProfileModel loadConfig(File dir) {
+		File file = new File(dir, Config.MIDLET_CONFIG_FILE);
+		if (file.exists()) {
+			try (FileReader reader = new FileReader(file)) {
+				ProfileModel params = gson.fromJson(reader, ProfileModel.class);
+				params.dir = dir;
+				return params;
+			} catch (Exception e) {
+				Log.e(TAG, "loadConfig: ", e);
+			}
+		}
+		File oldFile = new File(dir, "config.xml");
+		if (oldFile.exists()) {
+			try (FileInputStream in = new FileInputStream(oldFile)) {
+				HashMap<String, Object> map = XmlUtils.readMapXml(in);
+				JsonElement json = gson.toJsonTree(map);
+				ProfileModel params = gson.fromJson(json, ProfileModel.class);
+				params.dir = dir;
+				return params;
+			} catch (Exception e) {
+				Log.e(TAG, "loadConfig: ", e);
+			}
+		}
+		return null;
+	}
+
+	public static void saveConfig(ProfileModel p) {
+		try (FileWriter writer = new FileWriter(new File(p.dir, Config.MIDLET_CONFIG_FILE))) {
+			gson.toJson(p, writer);
+		} catch (Exception e) {
+			Log.e(TAG, "saveConfig: ", e);
+		}
+	}
+
+	public static void updateSystemProperties(ProfileModel params) {
+		String defaultProperties = ContextHolder.getAssetAsString("defaults/system.props");
+		String properties = params.systemProperties;
+		StringBuilder sb = new StringBuilder();
+		if (properties == null) {
+			params.systemProperties = defaultProperties;
+			return;
+		}
+		sb.append(properties);
+		String[] defaults = defaultProperties.split("[\\n\\r]+");
+		for (String line : defaults) {
+			if (properties.contains(line.substring(0, line.indexOf(':')))) continue;
+			sb.append(line).append('\n');
+		}
+		params.systemProperties = sb.toString();
+	}
 }

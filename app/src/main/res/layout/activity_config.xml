@@ -562,7 +562,7 @@
                         android:layout_marginRight="4dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:hint="@string/disabled"
+                        android:hint="@string/pref_vk_hide_hint"
                         android:inputType="number|numberSigned"
                         android:textDirection="ltr"
                         android:importantForAutofill="no"

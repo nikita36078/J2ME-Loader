@@ -213,7 +213,7 @@ public class AppsListFragment extends ListFragment {
 		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 		if (drawable != null) dialog.setIcon(drawable);
 		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Config.startApp(getActivity(), app, false);
+			Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
 		});
 		dialog.setNegativeButton(R.string.close, null);
 		dialog.show();
@@ -265,7 +265,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Config.startApp(getActivity(), item, false);
+		Config.startApp(getActivity(), item.getTitle(), item.getPath(), false);
 	}
 
 	@Override
@@ -300,7 +300,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Config.startApp(getActivity(), appItem, true);
+				Config.startApp(getActivity(), appItem.getTitle(), appItem.getPath(), true);
 				break;
 			case R.id.action_context_delete:
 				showDeleteDialog(index);

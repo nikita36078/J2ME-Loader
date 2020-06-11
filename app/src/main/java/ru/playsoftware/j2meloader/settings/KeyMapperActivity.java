@@ -30,7 +30,6 @@ import android.widget.Toast;
 import java.io.File;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.util.param.SharedPreferencesContainer;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -39,11 +38,13 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.ProfileModel;
+import ru.playsoftware.j2meloader.config.ProfilesManager;
 
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
 	private static SparseIntArray idToCanvasKey = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
-	private SharedPreferencesContainer params;
+	private ProfileModel params;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,15 +62,9 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			finish();
 			return;
 		}
-		File configDir;
 		boolean isProfile = ConfigActivity.ACTION_EDIT_PROFILE.equals(intent.getAction());
-		if (isProfile) {
-			configDir = new File(Config.getProfilesDir(), dirName);
-		} else {
-			configDir = new File(Config.getConfigsDir(), dirName);
-		}
-		params = new SharedPreferencesContainer(configDir);
-		params.load();
+		String parentDir = isProfile ? Config.getProfilesDir() : Config.getConfigsDir();
+		params = ProfilesManager.loadConfig(new File(parentDir, dirName));
 
 		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
 		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);
@@ -126,6 +121,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 						deleteDuplicates(canvasKey);
 						androidToMIDP.put(keyCode, canvasKey);
 						KeyMapper.saveArrayPref(params, androidToMIDP);
+						ProfilesManager.saveConfig(params);
 						dialog.dismiss();
 						return true;
 					}
@@ -158,6 +154,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 				androidToMIDP.clear();
 				KeyMapper.initArray(androidToMIDP);
 				KeyMapper.saveArrayPref(params, androidToMIDP);
+				ProfilesManager.saveConfig(params);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

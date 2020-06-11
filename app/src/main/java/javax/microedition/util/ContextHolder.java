@@ -26,12 +26,16 @@ import android.os.Vibrator;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -130,6 +134,21 @@ public class ContextHolder {
 		} else {
 			return true;
 		}
+	}
+
+	public static String getAssetAsString(String fileName) {
+		StringBuilder sb = new StringBuilder();
+
+		try (InputStream is = getAppContext().getAssets().open(fileName);
+			 BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")))) {
+			String str;
+			while ((str = br.readLine()) != null) {
+				sb.append(str).append('\n');
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb.toString();
 	}
 
 	/**
