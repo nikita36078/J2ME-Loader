@@ -68,7 +68,7 @@ public class Profile implements Comparable<Profile> {
 
 	@Override
 	public int compareTo(@NonNull Profile o) {
-		return name.compareTo(o.name);
+		return name.toLowerCase().compareTo(o.name.toLowerCase());
 	}
 
 	boolean hasConfig() {
