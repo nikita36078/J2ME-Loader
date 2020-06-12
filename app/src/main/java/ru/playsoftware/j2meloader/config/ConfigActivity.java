@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -264,40 +263,36 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sbScaleRatio.setProgress(parseInt(s.toString()));
+				try {
+					sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
+				} catch (NumberFormatException e) {
+					sbScaleRatio.setProgress(100);
+				}
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-			cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
-				if (isChecked) {
-					cxParallel.setChecked(false);
-				}
-			});
-			cxParallel.setOnCheckedChangeListener((buttonView, isChecked) -> {
-				if (isChecked) {
-					cxHwAcceleration.setChecked(false);
-				}
-			});
-		}
-		vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
-		cxShowKeyboard.setOnCheckedChangeListener((b, checked) -> {
-			if (checked) {
-				vkContainer.setVisibility(View.VISIBLE);
+		cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			if (isChecked) {
+				cxParallel.setVisibility(View.GONE);
 			} else {
-				vkContainer.setVisibility(View.GONE);
+				cxParallel.setVisibility(View.VISIBLE);
 			}
+		});
+		cxShowKeyboard.setOnClickListener((b) -> {
 			View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
 				@Override
 				public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getBottom());
+					View focus = rootContainer.findFocus();
+					if (focus != null) focus.clearFocus();
+					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getTop());
 					v.removeOnLayoutChangeListener(this);
 				}
 			};
 			rootContainer.addOnLayoutChangeListener(onLayoutChangeListener);
+			vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
 		});
 		tfScreenBack.addTextChangedListener(new ColorTextWatcher(tfScreenBack));
 		tfVKFore.addTextChangedListener(new ColorTextWatcher(tfVKFore));
