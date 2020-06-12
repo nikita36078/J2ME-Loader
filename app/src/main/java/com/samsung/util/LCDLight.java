@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@ package com.samsung.util;
 
 import javax.microedition.lcdui.Display;
 
-public class Vibration {
-	public static void start(int duration, int strength) {
-		Display.getDisplay(null).vibrate(duration * 1000);
+public class LCDLight {
+	public static void on(int duration) {
 	}
 
-	public static void stop() {
-		Display.getDisplay(null).vibrate(0);
+	public static void off() {
 	}
 
 	public static boolean isSupported() {
