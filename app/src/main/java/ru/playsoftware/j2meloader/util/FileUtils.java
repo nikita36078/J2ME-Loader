@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -183,5 +184,16 @@ public class FileUtils {
 		if (!src.delete()) {
 			Log.e(TAG, "moveFiles() can't delete: " + src);
 		}
+	}
+
+	public static String getText(String path) {
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(path))) {
+			byte[] buf = new byte[dis.available()];
+			dis.readFully(buf);
+			return new String(buf);
+		} catch (IOException e) {
+			Log.e(TAG, "getText: " + path, e);
+		}
+		return "";
 	}
 }

@@ -62,6 +62,8 @@ public class ProfileModel {
 	@SerializedName("HwAcceleration")
 	public boolean hwAcceleration;
 
+	public ShaderInfo shader;
+
 	@SerializedName("ParallelRedrawScreen")
 	public boolean parallelRedrawScreen;
 

@@ -30,14 +30,18 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -66,7 +70,8 @@ import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ConfigActivity extends BaseActivity implements View.OnClickListener {
+public class ConfigActivity extends BaseActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
+	private static final String TAG = ConfigActivity.class.getSimpleName();
 
 	public static final String ACTION_EDIT = "config.edit";
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
@@ -92,6 +97,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxFilter;
 	protected CheckBox cxImmediate;
 	protected CheckBox cxHwAcceleration;
+	protected Spinner spShader;
 	protected CheckBox cxParallel;
 	protected CheckBox cxForceFullscreen;
 	protected CheckBox cxShowFps;
@@ -137,6 +143,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private Display display;
 	private File configDir;
 	private String defProfile;
+	private ArrayAdapter<ShaderInfo> spShaderAdapter;
+	private View shaderContainer;
+	private ImageButton btShaderTune;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -189,6 +198,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
 		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
+		spShader = findViewById(R.id.spShader);
+		btShaderTune = findViewById(R.id.btShaderTune);
+		shaderContainer = findViewById(R.id.shaderContainer);
 		cxParallel = findViewById(R.id.cxParallel);
 		cxForceFullscreen = findViewById(R.id.cxForceFullscreen);
 		cxShowFps = findViewById(R.id.cxShowFps);
@@ -242,6 +254,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdVKSelFore).setOnClickListener(this);
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
 		findViewById(R.id.btEncoding).setOnClickListener(this::showCharsetPicker);
+		btShaderTune.setOnClickListener(this::showShaderSettings);
 		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -277,8 +290,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			if (isChecked) {
 				cxParallel.setVisibility(View.GONE);
+				initShaderSpinner();
 			} else {
 				cxParallel.setVisibility(View.VISIBLE);
+				shaderContainer.setVisibility(View.GONE);
 			}
 		});
 		cxShowKeyboard.setOnClickListener((b) -> {
@@ -317,6 +332,85 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.version = 1;
 			ProfilesManager.saveConfig(params);
 		}
+	}
+
+	private void showShaderSettings(View v) {
+		ShaderInfo shader = (ShaderInfo) spShader.getSelectedItem();
+		params.shader = shader;
+		ShaderTuneAlert.newInstance(shader).show(getSupportFragmentManager(), "ShaderTuning");
+	}
+
+	private void initShaderSpinner() {
+		if (spShaderAdapter != null) {
+			shaderContainer.setVisibility(View.VISIBLE);
+			return;
+		}
+		File dir = new File(Config.getShadersDir());
+		if (!dir.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			dir.mkdirs();
+		}
+		ArrayList<ShaderInfo> infos = new ArrayList<>();
+		spShaderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, infos);
+		spShaderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spShader.setAdapter(spShaderAdapter);
+		File[] files = dir.listFiles((f) -> f.isFile() && f.getName().toLowerCase().endsWith(".ini"));
+		if (files != null) {
+			for (File file : files) {
+				String text = FileUtils.getText(file.getAbsolutePath());
+				String[] split = text.split("[\\n\\r]+");
+				ShaderInfo info = null;
+				for (String line : split) {
+					if (line.startsWith("[")) {
+						if (info != null) {
+							infos.add(info);
+						}
+						info = new ShaderInfo();
+					} else if (info != null) {
+						try {
+							info.set(line);
+						} catch (Exception e) {
+							Log.e(TAG, "initShaderSpinner: ", e);
+						}
+					}
+				}
+				if (info != null) {
+					infos.add(info);
+				}
+			}
+			Collections.sort(infos);
+		}
+		infos.add(0, new ShaderInfo(getString(R.string.identity_filter), "woesss"));
+		spShaderAdapter.notifyDataSetChanged();
+		ShaderInfo selected = params.shader;
+		if (selected != null) {
+			int position = infos.indexOf(selected);
+			if (position > 0) {
+				infos.get(position).values = selected.values;
+				spShader.setSelection(position);
+			}
+		}
+		shaderContainer.setVisibility(View.VISIBLE);
+		spShader.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				ShaderInfo item = (ShaderInfo) parent.getItemAtPosition(position);
+				ShaderInfo.Setting[] settings = item.settings;
+				for (int i = 0; i < 4; i++) {
+					if (settings[i] != null) {
+						btShaderTune.setVisibility(View.VISIBLE);
+						return;
+					}
+				}
+				btShaderTune.setVisibility(View.GONE);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
+
 	}
 
 	private void showCharsetPicker(View v) {
@@ -524,7 +618,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			params.screenFilter = cxFilter.isChecked();
 			params.immediateMode = cxImmediate.isChecked();
-			params.hwAcceleration = cxHwAcceleration.isChecked();
+			boolean checked = cxHwAcceleration.isChecked();
+			params.hwAcceleration = checked;
+			if (checked) {
+				params.shader = (ShaderInfo) spShader.getSelectedItem();
+			}
 			params.parallelRedrawScreen = cxParallel.isChecked();
 			params.forceFullscreen = cxForceFullscreen.isChecked();
 			params.showFps = cxShowFps.isChecked();
@@ -790,6 +888,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		} else {
 			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	@Override
+	public void onTuneComplete(float[] values) {
+		params.shader.values = values;
 	}
 
 	private static class ColorTextWatcher implements TextWatcher {

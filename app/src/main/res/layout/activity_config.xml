@@ -223,6 +223,45 @@
                 android:checked="false"
                 android:text="@string/PREF_HW_ACCELERATION" />
 
+            <LinearLayout
+                android:id="@+id/shaderContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginBottom="4dp"
+                android:minHeight="40dp"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/PREF_SHADER_FILTER"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?attr/textColorSecondary"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/spShader"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="?attr/textColorSecondary"
+                    android:textSize="15sp" />
+
+                <ImageButton
+                    android:id="@+id/btShaderTune"
+                    style="@style/ImageButtonStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_baseline_tune_24"
+                    android:contentDescription="@string/shader_tuning"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
             <CheckBox
                 android:id="@+id/cxParallel"
                 style="@style/CheckBoxStyle"

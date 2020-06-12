@@ -18,10 +18,16 @@ package javax.microedition.lcdui.graphics;
 
 import android.opengl.GLU;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.nio.FloatBuffer;
 
+import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.config.ShaderInfo;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 import static android.opengl.GLES20.*;
 
@@ -33,8 +39,24 @@ public class ShaderProgram {
 	public int aTexCoord;
 	public int uTextureUnit;
 	public int aPosition;
+	public int uTexelDelta;
+	public int uSetting;
+	public int uPixelDelta;
 
-	public ShaderProgram() {
+	public ShaderProgram(ShaderInfo shader) {
+		String vertex = shader.vertex;
+		String fragment = shader.fragment;
+		if (vertex != null && fragment != null) {
+			String vertexCode = FileUtils.getText(Config.getShadersDir() + vertex);
+			String fragmentCode = FileUtils.getText(Config.getShadersDir() + fragment);
+			if (createProgram(vertexCode, fragmentCode) != -1) {
+				glReleaseShaderCompiler();
+				return;
+			}
+			ViewHandler.postEvent(() -> Toast.makeText(ContextHolder.getActivity(),
+					"Error loading shader - default shader is used!",
+					Toast.LENGTH_LONG).show());
+		}
 		String vertexCode = ContextHolder.getAssetAsString(VERTEX);
 		String fragmentCode = ContextHolder.getAssetAsString(FRAGMENT);
 		int program = createProgram(vertexCode, fragmentCode);
@@ -65,6 +87,9 @@ public class ShaderProgram {
 		aPosition = glGetAttribLocation(program, "a_position");
 		aTexCoord = glGetAttribLocation(program, "a_texcoord0");
 		uTextureUnit = glGetUniformLocation(program, "sampler0");
+		uTexelDelta = glGetUniformLocation(program, "u_texelDelta");
+		uPixelDelta = glGetUniformLocation(program, "u_pixelDelta");
+		uSetting = glGetUniformLocation(program, "u_setting");
 		glUseProgram(program);
 		int error1 = glGetError();
 		if (error1 != GL_NO_ERROR) {
@@ -96,7 +121,7 @@ public class ShaderProgram {
 		return shader;
 	}
 
-	public void loadVbo(FloatBuffer vbo) {
+	public void loadVbo(FloatBuffer vbo, float width, float height) {
 		vbo.rewind();
 		glVertexAttribPointer(aPosition, 2, GL_FLOAT, false, 4 * 4, vbo);
 		glEnableVertexAttribArray(aPosition);
@@ -105,5 +130,6 @@ public class ShaderProgram {
 		vbo.position(2);
 		glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, false, 4 * 4, vbo);
 		glEnableVertexAttribArray(aTexCoord);
+		glUniform2f(uTexelDelta, 1.0f / width, 1.0f / height);
 	}
 }

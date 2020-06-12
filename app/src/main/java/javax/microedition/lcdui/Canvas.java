@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -58,6 +59,7 @@ import javax.microedition.util.ContextHolder;
 import androidx.annotation.NonNull;
 import androidx.collection.SparseArrayCompat;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.ShaderInfo;
 
 import static android.opengl.GLES20.*;
 
@@ -158,6 +160,8 @@ public abstract class Canvas extends Displayable {
 		mapGameAction(GAME_D, KEY_POUND);
 	}
 
+	private static ShaderInfo shaderFilter;
+
 	private static void remapKeys() {
 		if (layoutType == SIEMENS_LAYOUT) {
 			keyCodeToSiemensCode.put(KEY_LEFT, SIEMENS_KEY_LEFT);
@@ -226,6 +230,10 @@ public abstract class Canvas extends Displayable {
 			result = keyCode;
 		}
 		return result;
+	}
+
+	public static void setShaderFilter(ShaderInfo shader) {
+		Canvas.shaderFilter = shader;
 	}
 
 	public int getKeyCode(int gameAction) {
@@ -440,8 +448,16 @@ public abstract class Canvas extends Displayable {
 			overlayView.setVisibility(false);
 		}
 
+		@Override
+		protected void onDraw(android.graphics.Canvas canvas) {
+			super.onDraw(canvas);
+		}
+
 		public void updateSize() {
-			queueEvent(() -> renderer.program.loadVbo(VERTEX_BG));
+			queueEvent(() -> {
+				Bitmap bitmap = offscreenCopy.getBitmap();
+				renderer.program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
+			});
 		}
 	}
 
@@ -451,20 +467,25 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			program = new ShaderProgram();
+			program = new ShaderProgram(shaderFilter);
 			int c = Canvas.backgroundColor;
 			glClearColor((c >> 16 & 0xff) / 255.0f, (c >> 8 & 0xff) / 255.0f, (c & 0xff) / 255.0f, 1.0f);
 			glDisable(GL_BLEND);
 			glDisable(GL_DEPTH_TEST);
 			glDepthMask(false);
 			initTex();
-			program.loadVbo(VERTEX_BG);
+			Bitmap bitmap = offscreenCopy.getBitmap();
+			program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
+			if (shaderFilter.values != null) {
+				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
+			}
 			renderStarted = true;
 		}
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			glViewport(0, 0, width, height);
+			glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);
 		}
 
 		@Override

@@ -78,6 +78,10 @@ public class Config {
 		return appDir;
 	}
 
+	public static String getShadersDir() {
+		return emulatorDir + "/shaders/";
+	}
+
 	public static void startApp(Context context, String name, String path, boolean showSettings) {
 		File file = new File(Config.configsDir, path);
 		if (showSettings || !file.exists()) {

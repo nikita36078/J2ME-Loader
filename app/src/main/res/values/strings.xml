@@ -214,4 +214,9 @@
     <string name="pref_vk_hide_hint">disabled</string>
     <string name="unlimited">unlimited</string>
     <string name="pref_emulator_dir">Working directory</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Fast (no filter)</string>
+    <string name="shader_tuning">Shader Tuning</string>
+    <string name="shader_setting">%s: %s</string>
+    <string name="reset">Reset</string>
 </resources>
