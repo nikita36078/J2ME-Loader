@@ -164,8 +164,6 @@ public class Connection implements ConnectionImplementation, L2CAPConnection, L2
 			socket = serverSocket.accept();
 			os = socket.getOutputStream();
 			is = socket.getInputStream();
-			serverSocket.close();
-			serverSocket = null;
 		}
 		return this;
 	}

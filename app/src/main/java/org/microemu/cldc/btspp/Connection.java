@@ -221,11 +221,7 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 	public StreamConnection acceptAndOpen() throws IOException {
 		if (serverSocket != null) {
 			socket = serverSocket.accept();
-			serverSocket.close();
-			serverSocket = null;
 		}
-		/*if (socket != null)
-			socket.connect();*/
 		return this;
 	}
 
