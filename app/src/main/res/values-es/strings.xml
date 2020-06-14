@@ -39,6 +39,7 @@
     <string name="PREF_FILTER">Filtro</string>
     <string name="PREF_IMMEDIATE">Modo de procesamiento de páginas</string>
     <string name="PREF_SHOW_FPS">Mostrar FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Activar/Desactivar pantalla completa</string>
     <string name="PREF_LIMIT_FPS">Limitar FPS</string>
     <string name="PREF_FONT_OPTIONS">Opciones de fuente</string>
     <string name="PREF_WIDTH">Ancho</string>
