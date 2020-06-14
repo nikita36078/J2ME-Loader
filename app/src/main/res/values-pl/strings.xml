@@ -52,6 +52,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Wirtualna klawiatura</string>
     <string name="PREF_VK_SHOW">Pokaż klawiaturę</string>
     <string name="PREF_VK_FEEDBACK">Wibracja przy naciśnięciu</string>
+    <string name="PREF_VK_FORCE_OPACITY">Wymuś przeźroczystość przycisków poza ekranem</string>
     <string name="PREF_TOUCH_INPUT">Wprowadzanie dotykowe</string>
     <string name="PREF_HW_ACCELERATION">Przyspieszenie sprzętowe (niestabilne)</string>
     <string name="PREF_VK_BACK">Guziki</string>
