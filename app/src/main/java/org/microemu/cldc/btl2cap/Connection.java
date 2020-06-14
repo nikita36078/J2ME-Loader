@@ -91,6 +91,9 @@ public class Connection implements ConnectionImplementation, L2CAPConnection, L2
 			if (args[i].startsWith("skipAfterWrite="))
 				skipAfterWrite = Boolean.parseBoolean(args[i].substring(args[i].indexOf("=") + 1));
 		}
+		if (argsStart == -1) {
+			argsStart = name.length() - 1;
+		}
 		secure = authenticate && encrypt;
 
 		String uuid = name.substring(portSepIndex + 1, argsStart);
