@@ -32,7 +32,7 @@ public class DeviceClass {
 	}
 
 	DeviceClass() {
-		this(BluetoothClass.Device.PHONE_CELLULAR);
+		this(BluetoothClass.Device.PHONE_CELLULAR | BluetoothClass.Service.TELEPHONY);
 	}
 
 	public int getServiceClasses() {
