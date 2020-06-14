@@ -9,6 +9,7 @@
     <string name="licenses">許可</string>
     <string name="templates">模闆</string>
     <string name="about_message">此應用程序可以在Android設備上運行J2ME應用程序和遊戲，它支持大多數2D和部分3D遊戲。&lt;BR&gt;</string>
+    <string name="help_message">&#8226; • 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; •通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
     <string name="author">作者: </string>
     <string name="version">版本： </string>
     <string name="no_data_for_display">暫無數據</string>
@@ -17,7 +18,7 @@
     <string name="convert_complete">完成</string>
     <string name="converting_message">安裝JAR遊戲中，請耐心等待1-3分鐘。</string>
     <string name="permission_request_failed">本應用需要穫取存儲讀寫權限</string>
-    <string name="external_storage_not_mounted">本應用需要外部存儲</string>
+    <string name="external_storage_not_mounted">該功能需要存儲權限，請去設置授予存儲權限，以便您繼續使用該功能。</string>
     <string name="action_context_shortcut">添加到桌麵</string>
     <string name="action_settings">設置</string>
     <string name="action_context_delete">刪除</string>
@@ -81,7 +82,7 @@
     <string name="CONFIRMATION_REQUIRED">需要確認</string>
     <string name="select_dialog_title">選擇程序結搆</string>
     <string name="crash_dialog_message">是否嚮開髮者髮送錯誤報告？</string>
-    <string name="crash_dialog_title">檢測到錯誤</string>
+    <string name="crash_dialog_title">髮生錯誤</string>
     <string name="report_crash">髮送</string>
     <string name="layout_edit_finished">編輯模式已完成</string>
     <string name="layout_edit_finish">按鍵佈挶編輯</string>
