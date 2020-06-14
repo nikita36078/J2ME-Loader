@@ -31,39 +31,12 @@ import javax.bluetooth.L2CAPConnection;
 import javax.bluetooth.L2CAPConnectionNotifier;
 import javax.bluetooth.UUID;
 
-public class Connection implements ConnectionImplementation, L2CAPConnection, L2CAPConnectionNotifier {
+public class Connection implements ConnectionImplementation, L2CAPConnectionNotifier {
 	private BluetoothServerSocket serverSocket = null;
 	private BluetoothServerSocket nameServerSocket = null;
 	public BluetoothSocket socket = null;
 	public javax.bluetooth.UUID connUuid = null;
 	private boolean skipAfterWrite = false;
-	private OutputStream os;
-	private InputStream is;
-
-	@Override
-	public int getTransmitMTU() throws IOException {
-		return L2CAPConnection.DEFAULT_MTU;
-	}
-
-	@Override
-	public int getReceiveMTU() throws IOException {
-		return L2CAPConnection.DEFAULT_MTU;
-	}
-
-	@Override
-	public void send(byte[] data) throws IOException {
-		os.write(data);
-	}
-
-	@Override
-	public int receive(byte[] inBuf) throws IOException {
-		return is.read(inBuf);
-	}
-
-	@Override
-	public boolean ready() throws IOException {
-		return is.available() > 0;
-	}
 
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 		if (name == null)
@@ -135,6 +108,7 @@ public class Connection implements ConnectionImplementation, L2CAPConnection, L2
 				serverSocket = adapter.listenUsingRfcommWithServiceRecord(finalSrvname, btUuid);
 			else
 				serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(finalSrvname, btUuid);
+			return this;
 		} else {
 			StringBuilder sb = new StringBuilder(host);
 			for (int i = 2; i < sb.length(); i += 3)
@@ -149,30 +123,24 @@ public class Connection implements ConnectionImplementation, L2CAPConnection, L2
 
 			try {
 				socket.connect();
-				os = socket.getOutputStream();
-				is = socket.getInputStream();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			return new L2CAPConnectionImpl(socket);
 		}
-		return this;
 	}
 
 	@Override
 	public L2CAPConnection acceptAndOpen() throws IOException {
 		if (serverSocket != null) {
 			socket = serverSocket.accept();
-			os = socket.getOutputStream();
-			is = socket.getInputStream();
 		}
-		return this;
+		return new L2CAPConnectionImpl(socket);
 	}
 
 	@Override
 	public void close() throws IOException {
 		if (serverSocket != null)
 			serverSocket.close();
-		if (socket != null)
-			socket.close();
 	}
 }

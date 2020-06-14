@@ -23,110 +23,19 @@ import android.bluetooth.BluetoothSocket;
 
 import org.microemu.microedition.io.ConnectionImplementation;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.bluetooth.UUID;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
-public class Connection implements ConnectionImplementation, StreamConnectionNotifier, StreamConnection {
+public class Connection implements ConnectionImplementation, StreamConnectionNotifier {
 	private BluetoothServerSocket serverSocket = null;
 	private BluetoothServerSocket nameServerSocket = null;
 	public BluetoothSocket socket = null;
 	public javax.bluetooth.UUID connUuid = null;
-
-	// Android closes socket when one of streams is closed, we need to workaround it
-	// Also if we're connecting with SPP profile the data we write is returned back to InputStream
-	// This is not an expected behavior
-	private static class BTInputStream extends InputStream {
-		private InputStream is;
-
-		public BTInputStream(InputStream is) {
-			this.is = is;
-		}
-
-		public int available() throws IOException {
-			return is.available();
-		}
-
-		public void close() throws IOException {
-			// application may call Connection.close(), which closes socket
-			// So do nothing
-		}
-
-		public void mark(int readlimit) {
-			is.mark(readlimit);
-		}
-
-		public boolean markSupported() {
-			return is.markSupported();
-		}
-
-		public int read() throws IOException {
-			return is.read();
-		}
-
-		public int read(byte[] b) throws IOException {
-			return is.read(b);
-		}
-
-		public int read(byte[] b, int off, int len) throws IOException {
-			return is.read(b, off, len);
-		}
-
-		public void reset() throws IOException {
-			is.reset();
-		}
-
-		public long skip(long n) throws IOException {
-			return is.skip(n);
-		}
-	}
-
-	private static class BTOutputStream extends OutputStream {
-		private OutputStream os;
-		public InputStream is;
-
-		public BTOutputStream(OutputStream os, InputStream is) {
-			this.os = os;
-			this.is = is;
-		}
-
-		public void close() throws IOException {
-			// same as above
-			os.flush();
-		}
-
-		public void flush() throws IOException {
-			os.flush();
-		}
-
-		public void write(byte[] b) throws IOException {
-			os.write(b);
-			if (is != null)
-				is.skip(b.length);
-		}
-
-		public void write(byte[] b, int off, int len) throws IOException {
-			os.write(b, off, len);
-			if (is != null)
-				is.skip(len);
-		}
-
-		public void write(int b) throws IOException {
-			os.write(b);
-			if (is != null)
-				is.skip(1);
-		}
-	}
-
-	private BTInputStream btin = null;
-	private BTOutputStream btout = null;
-	boolean skipAfterWrite = false;
+	private boolean skipAfterWrite = false;
 
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 		if (name == null)
@@ -198,6 +107,7 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 				serverSocket = adapter.listenUsingRfcommWithServiceRecord(finalSrvname, btUuid);
 			else
 				serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(finalSrvname, btUuid);
+			return this;
 		} else {
 			StringBuilder sb = new StringBuilder(host);
 			for (int i = 2; i < sb.length(); i += 3)
@@ -213,50 +123,21 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 			try {
 				socket.connect();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
+			return new SPPConnectionImpl(socket, false);
 		}
-		return this;
 	}
 
 	public StreamConnection acceptAndOpen() throws IOException {
 		if (serverSocket != null) {
 			socket = serverSocket.accept();
 		}
-		return this;
+		return new SPPConnectionImpl(socket, skipAfterWrite);
 	}
 
 	public void close() throws IOException {
 		if (serverSocket != null)
 			serverSocket.close();
-		if (socket != null)
-			socket.close();
-	}
-
-	public InputStream openInputStream() throws IOException {
-		if (btin != null)
-			return btin;
-		if (socket != null)
-			return btin = new BTInputStream(socket.getInputStream());
-		throw new IOException("socket is null");
-	}
-
-	public DataInputStream openDataInputStream() throws IOException {
-		if (socket != null)
-			return new DataInputStream(openInputStream());
-		throw new IOException("socket is null");
-	}
-
-	public OutputStream openOutputStream() throws IOException {
-		if (btout != null)
-			return btout;
-		if (socket != null)
-			return btout = new BTOutputStream(socket.getOutputStream(), skipAfterWrite ? socket.getInputStream() : null);
-		throw new IOException("socket is null");
-	}
-
-	public DataOutputStream openDataOutputStream() throws IOException {
-		if (socket != null)
-			return new DataOutputStream(openOutputStream());
-		throw new IOException("socket is null");
 	}
 }

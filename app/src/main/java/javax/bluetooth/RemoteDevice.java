@@ -65,16 +65,19 @@ public class RemoteDevice {
 	public static RemoteDevice getRemoteDevice(Connection conn) throws IOException {
 		if (conn == null)
 			throw new NullPointerException("conn is null");
-		if (!(conn instanceof org.microemu.cldc.btspp.Connection || conn instanceof org.microemu.cldc.btl2cap.Connection))
+		if (!(conn instanceof org.microemu.cldc.btspp.SPPConnectionImpl
+				|| conn instanceof org.microemu.cldc.btl2cap.L2CAPConnectionImpl))
 			throw new java.lang.IllegalArgumentException("not a RFCOMM connection");
 
-		if (conn instanceof org.microemu.cldc.btspp.Connection) {
-			org.microemu.cldc.btspp.Connection connection = (org.microemu.cldc.btspp.Connection) conn;
+		if (conn instanceof org.microemu.cldc.btspp.SPPConnectionImpl) {
+			org.microemu.cldc.btspp.SPPConnectionImpl connection =
+					(org.microemu.cldc.btspp.SPPConnectionImpl) conn;
 			if (connection.socket == null)
 				throw new IOException("socket is null");
 			return new RemoteDevice(connection.socket.getRemoteDevice());
 		} else {
-			org.microemu.cldc.btl2cap.Connection connection = (org.microemu.cldc.btl2cap.Connection) conn;
+			org.microemu.cldc.btl2cap.L2CAPConnectionImpl connection =
+					(org.microemu.cldc.btl2cap.L2CAPConnectionImpl) conn;
 			if (connection.socket == null)
 				throw new IOException("socket is null");
 			return new RemoteDevice(connection.socket.getRemoteDevice());
