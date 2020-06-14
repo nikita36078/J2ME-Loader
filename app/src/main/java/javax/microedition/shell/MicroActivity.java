@@ -508,4 +508,8 @@ public class MicroActivity extends AppCompatActivity {
 
 		return super.onContextItemSelected(item);
 	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		ContextHolder.notifyOnActivityResult(requestCode, resultCode, data);
+	}
 }

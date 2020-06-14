@@ -18,6 +18,7 @@
 package javax.microedition.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Process;
 import android.util.Log;
@@ -35,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
@@ -51,6 +53,7 @@ public class ContextHolder {
 	private static VirtualKeyboard vk;
 	private static AppCompatActivity currentActivity;
 	private static ZipFile zipFile;
+	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 
 	public static Context getContext() {
 		return currentActivity.getApplicationContext();
@@ -85,6 +88,22 @@ public class ContextHolder {
 
 	public static AppCompatActivity getCurrentActivity() {
 		return currentActivity;
+	}
+
+	public static void addActivityResultListener(ActivityResultListener listener) {
+		if (!resultListeners.contains(listener)) {
+			resultListeners.add(listener);
+		}
+	}
+
+	public static void removeActivityResultListener(ActivityResultListener listener) {
+		resultListeners.remove(listener);
+	}
+
+	public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
+		for (ActivityResultListener listener : resultListeners) {
+			listener.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	public static void prepareZipFile() {
