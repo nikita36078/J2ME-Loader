@@ -18,7 +18,10 @@
 -keep class javax.** { *; }
 -keep class com.siemens.mp.** { *; }
 -keep class com.samsung.util.** { *; }
+-keep class com.sonyericsson.accelerometer.** { *; }
+-keep class com.sprintpcs.media.** { *; }
 -keep class com.mascotcapsule.micro3d.v3.** { *; }
+-keep class com.motorola.funlight.** { *; }
 -keep class com.nokia.mid.** { *; }
 -keep class com.sun.midp.midlet.** { *; }
 -keep class com.vodafone.util.** { *; }
