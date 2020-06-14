@@ -230,7 +230,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 				if (transparencyMask != null && minBytesLen > transparencyMask.length - offset)
 					throw new IllegalArgumentException();
 				int[] colors = new int[width * height];
-				graphics.getBitmap().getPixels(colors, 0, width, x, y, width, height);
+				graphics.getPixels(colors, 0, width, x, y, width, height);
 				for (int i = offset, k = 0, w = 0, d = 0; d < dataLen; i++) {
 					for (int j = 7; j >= 0 && d < dataLen; j--, w++, d++) {
 						if (w == scanLength) w = 0;

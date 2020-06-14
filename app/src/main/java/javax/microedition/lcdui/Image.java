@@ -137,9 +137,7 @@ public class Image {
 	}
 
 	public Graphics getGraphics() {
-		Graphics graphics = new Graphics();
-		graphics.setCanvas(new Canvas(bitmap), bitmap);
-		return graphics;
+		return new Graphics(this);
 	}
 
 	public boolean isMutable() {
@@ -170,7 +168,6 @@ public class Image {
 	Graphics getSingleGraphics() {
 		if (graphics == null) {
 			graphics = getGraphics();
-			graphics.setCanvas(getCanvas(), bitmap);
 		}
 		return graphics;
 	}
@@ -191,7 +188,7 @@ public class Image {
 		getCanvas().clipRect(bounds);
 	}
 
-	Rect getBounds() {
+	public Rect getBounds() {
 		return bounds;
 	}
 

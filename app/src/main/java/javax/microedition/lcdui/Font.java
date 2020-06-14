@@ -17,9 +17,9 @@
 
 package javax.microedition.lcdui;
 
-import android.content.res.AssetManager;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 import java.util.Arrays;
@@ -41,7 +41,6 @@ public class Font {
 	public static final int STYLE_UNDERLINED = 4;
 
 	private static final int FONT_COUNT = 3 * 3 * (1 << 3);
-	private static final int SIZE_KEYBOARD = 22;
 	private static Font[] fonts = new Font[FONT_COUNT];
 
 	private static boolean applyDimensions = true;
@@ -79,8 +78,8 @@ public class Font {
 
 	public Font(Typeface face, int style, float size, boolean underline) {
 		if (applyDimensions) {
-			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size,
-					ContextHolder.getAppContext().getResources().getDisplayMetrics());
+			DisplayMetrics metrics = ContextHolder.getAppContext().getResources().getDisplayMetrics();
+			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
 		}
 
 		paint = new Paint();
@@ -90,21 +89,6 @@ public class Font {
 
 		paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
 		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
-	}
-
-	// Font for keyboard
-	public Font() {
-		AssetManager manager = ContextHolder.getAppContext().getAssets();
-		Typeface typeface = Typeface.createFromAsset(manager, "Roboto-Regular.ttf");
-		paint = new Paint();
-		paint.setTypeface(typeface);
-		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD,
-				ContextHolder.getAppContext().getResources().getDisplayMetrics());
-		paint.setTextSize(size);
-	}
-
-	public static Font getFont(int fontSpecifier) {
-		return getDefaultFont();
 	}
 
 	public static Font getFont(int face, int style, int size) {

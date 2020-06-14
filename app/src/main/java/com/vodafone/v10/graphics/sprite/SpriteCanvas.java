@@ -50,7 +50,7 @@ public abstract class SpriteCanvas extends Canvas {
 
 	public void drawFrameBuffer(int tx, int ty) {
 		flushBuffer(spriteImage, tx, ty);
-		graphics.clear(0);
+		graphics.getBitmap().eraseColor(0);
 	}
 
 	public void setPalette(int index, int palette) {

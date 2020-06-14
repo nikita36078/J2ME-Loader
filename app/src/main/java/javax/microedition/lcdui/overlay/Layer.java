@@ -15,10 +15,10 @@
  */
 package javax.microedition.lcdui.overlay;
 
-import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.graphics.CanvasWrapper;
 
 public interface Layer {
 
-	void paint(Graphics g);
+	void paint(CanvasWrapper g);
 
 }

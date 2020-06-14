@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -35,8 +36,8 @@ public abstract class CustomItem extends Item {
 
 	private InnerView view;
 	private Image offscreen;
-	private int onWidth, onHeight;
-	private Graphics graphics = new Graphics();
+	private final RectF bounds = new RectF();
+	private Graphics graphics;
 
 	private class InnerView extends View {
 		public InnerView(Context context) {
@@ -54,9 +55,8 @@ public abstract class CustomItem extends Item {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			view.setMinimumHeight(onHeight);
-			graphics.setSurfaceCanvas(canvas);
-			graphics.drawImage(offscreen, 0, 0, onWidth, onHeight, false, 255);
+			view.setMinimumHeight((int) bounds.bottom);
+			canvas.drawBitmap(offscreen.getBitmap(), null, bounds, null);
 		}
 
 		@SuppressLint("ClickableViewAccessibility")
@@ -113,7 +113,6 @@ public abstract class CustomItem extends Item {
 
 	protected final void repaint(int x, int y, int width, int height) {
 		if (view == null) return;
-		graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
 		graphics.reset();
 		graphics.setClip(x, y, width, height);
 		try {
@@ -156,17 +155,17 @@ public abstract class CustomItem extends Item {
 	}
 
 	private int convertPointerX(float x) {
-		return (int) x * getMinContentWidth() / onWidth;
+		return (int) (x * getMinContentWidth() / bounds.right);
 	}
 
 	private int convertPointerY(float y) {
-		return (int) y * getMinContentHeight() / onHeight;
+		return (int) (y * getMinContentHeight() / bounds.bottom);
 	}
 
 	private void updateSize() {
-		float mult = view.getWidth() / (float) getMinContentWidth();
-		onWidth = (int) (getMinContentWidth() * mult);
-		onHeight = (int) (getMinContentHeight() * mult);
+		float scale = view.getWidth() / (float) getMinContentWidth();
+		bounds.right = getMinContentWidth() * scale;
+		bounds.bottom = getMinContentHeight() * scale;
 	}
 
 	@Override
@@ -177,7 +176,8 @@ public abstract class CustomItem extends Item {
 			int height = getMinContentHeight();
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
-			offscreen = Image.createTransparentImage(width, height);
+			offscreen = Image.createImage(width, height);
+			graphics = offscreen.getSingleGraphics();
 		}
 
 		return view;

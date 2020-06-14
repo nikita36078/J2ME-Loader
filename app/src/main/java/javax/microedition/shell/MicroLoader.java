@@ -199,15 +199,6 @@ public class MicroLoader {
 
 	private void setVirtualKeyboard() {
 		int vkType = params.vkType;
-		int vkAlpha = params.vkAlpha;
-		int vkDelay = params.vkHideDelay;
-		int vkColorBackground = params.vkBgColor;
-		int vkColorForeground = params.vkFgColor;
-		int vkColorBackgroundSelected = params.vkBgColorSelected;
-		int vkColorForegroundSelected = params.vkFgColorSelected;
-		int vkColorOutline = params.vkOutlineColor;
-		boolean vkFeedback = params.vkFeedback;
-
 		VirtualKeyboard vk;
 		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
 			vk = new VirtualKeyboard();
@@ -216,9 +207,8 @@ public class MicroLoader {
 		} else {
 			vk = new FixedKeyboard(1);
 		}
-		vk.setOverlayAlpha(vkAlpha);
-		vk.setHideDelay(vkDelay);
-		vk.setHasHapticFeedback(vkFeedback);
+		vk.setHideDelay(params.vkHideDelay);
+		vk.setHasHapticFeedback(params.vkFeedback);
 		vk.setButtonShape(params.vkButtonShape);
 		vk.setForceOpacity(params.vkForceOpacity);
 
@@ -234,13 +224,12 @@ public class MicroLoader {
 			}
 		}
 
-		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);
-		vk.setColor(VirtualKeyboard.FOREGROUND, vkColorForeground);
-		vk.setColor(VirtualKeyboard.BACKGROUND_SELECTED,
-				vkColorBackgroundSelected);
-		vk.setColor(VirtualKeyboard.FOREGROUND_SELECTED,
-				vkColorForegroundSelected);
-		vk.setColor(VirtualKeyboard.OUTLINE, vkColorOutline);
+		int vkAlpha = params.vkAlpha << 24;
+		vk.setColor(VirtualKeyboard.BACKGROUND, vkAlpha | params.vkBgColor);
+		vk.setColor(VirtualKeyboard.FOREGROUND, vkAlpha | params.vkFgColor);
+		vk.setColor(VirtualKeyboard.BACKGROUND_SELECTED, vkAlpha | params.vkBgColorSelected);
+		vk.setColor(VirtualKeyboard.FOREGROUND_SELECTED, vkAlpha | params.vkFgColorSelected);
+		vk.setColor(VirtualKeyboard.OUTLINE, vkAlpha | params.vkOutlineColor);
 
 		VirtualKeyboard.LayoutListener listener = vk1 -> {
 			try {
@@ -259,7 +248,7 @@ public class MicroLoader {
 	@SuppressLint("SimpleDateFormat")
 	Single<String> takeScreenshot(Canvas canvas) {
 		return Single.create(emitter -> {
-			Bitmap bitmap = canvas.getOffscreenCopy().getBitmap();
+			Bitmap bitmap = canvas.getScreenShot();
 			Calendar calendar = Calendar.getInstance();
 			Date now = calendar.getTime();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");

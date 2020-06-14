@@ -20,8 +20,7 @@ import android.view.View;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.graphics.CanvasWrapper;
 
 public class FpsCounter extends TimerTask implements Layer {
 
@@ -46,13 +45,10 @@ public class FpsCounter extends TimerTask implements Layer {
 		totalFrameCount++;
 	}
 
-	public void paint(Graphics g) {
-		String fps = prevFrameCount;
-		Font font = g.getFont();
-		g.setColorAlpha(0x90000000);
-		g.fillRect(0, 0, font.stringWidth(fps), font.getHeight());
-		g.setColor(0, 255, 0);
-		g.drawString(fps, 0, 0, 0);
+	public void paint(CanvasWrapper g) {
+		g.setFillColor(0x90000000);
+		g.setTextColor(0xFF00FF00);
+		g.drawBackgroundedText(prevFrameCount);
 	}
 
 	public void stop() {

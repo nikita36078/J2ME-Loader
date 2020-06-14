@@ -49,6 +49,7 @@ import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.graphics.CanvasWrapper;
 import javax.microedition.lcdui.graphics.ShaderProgram;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
@@ -159,8 +160,6 @@ public abstract class Canvas extends Displayable {
 		mapGameAction(GAME_C, KEY_STAR);
 		mapGameAction(GAME_D, KEY_POUND);
 	}
-
-	private static ShaderInfo shaderFilter;
 
 	private static void remapKeys() {
 		if (layoutType == SIEMENS_LAYOUT) {
@@ -448,11 +447,6 @@ public abstract class Canvas extends Displayable {
 			overlayView.setVisibility(false);
 		}
 
-		@Override
-		protected void onDraw(android.graphics.Canvas canvas) {
-			super.onDraw(canvas);
-		}
-
 		public void updateSize() {
 			queueEvent(() -> {
 				Bitmap bitmap = offscreenCopy.getBitmap();
@@ -513,16 +507,13 @@ public abstract class Canvas extends Displayable {
 
 	private class PaintEvent extends Event implements EventFilter {
 
-		private Graphics mGraphics = new Graphics();
-
 		@Override
 		public void process() {
 			synchronized (paintSync) {
 				if (surface == null || !surface.isValid() || !isShown()) {
 					return;
 				}
-				Graphics g = this.mGraphics;
-				g.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
+				Graphics g = offscreen.getSingleGraphics();
 				g.reset();
 				try {
 					paint(g);
@@ -584,14 +575,14 @@ public abstract class Canvas extends Displayable {
 	private LinearLayout layout;
 	private InnerView innerView;
 	private Surface surface;
-	private Graphics graphics = new Graphics();
+	private CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
 
 	protected int width, height;
 	protected int maxHeight;
 
 	private int displayWidth;
 	private int displayHeight;
-	private boolean fullscreen;
+	private boolean fullscreen = forceFullscreen;
 	private boolean visible;
 	private boolean sizeChangedCalled;
 
@@ -600,6 +591,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean filter;
 	private static boolean touchInput;
 	private static boolean hwaEnabled;
+	private static ShaderInfo shaderFilter;
 	private static boolean parallelRedraw;
 	private static boolean forceFullscreen;
 	private static boolean showFps;
@@ -611,6 +603,7 @@ public abstract class Canvas extends Displayable {
 	private Image offscreen;
 	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
+	private RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
 	private long lastFrameTime = System.currentTimeMillis();
 
 	private Handler uiHandler;
@@ -626,12 +619,7 @@ public abstract class Canvas extends Displayable {
 		}
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
-		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
-		if (forceFullscreen) {
-			setFullScreenMode(true);
-		} else {
-			updateSize();
-		}
+		updateSize();
 	}
 
 	public static void setScale(boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
@@ -685,11 +673,11 @@ public abstract class Canvas extends Displayable {
 		overlay = ov;
 	}
 
-	public Image getOffscreenCopy() {
-		Image image = Image.createImage(onWidth, onHeight);
-		Graphics g = image.getGraphics();
-		g.drawImage(offscreenCopy, 0, 0, onWidth, onHeight, filter, 255);
-		return image;
+	public Bitmap getScreenShot() {
+		Bitmap bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
+		canvasWrapper.bind(new android.graphics.Canvas(bitmap));
+		canvasWrapper.drawImage(offscreenCopy, virtualScreen);
+		return bitmap;
 	}
 
 	private boolean checkSizeChanged() {
@@ -818,7 +806,7 @@ public abstract class Canvas extends Displayable {
 		}
 
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
-		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
+		virtualScreen.set(onX, onY, onX + onWidth, onY + onHeight);
 
 		if (offscreen == null) {
 			int w = width + (width & 1);
@@ -988,7 +976,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private void limitFps() {
-		if (fpsLimit == 0) return;
+		if (fpsLimit <= 0) return;
 		try {
 			long millis = (1000 / fpsLimit) - (System.currentTimeMillis() - lastFrameTime);
 			if (millis > 0) Thread.sleep(millis);
@@ -1012,11 +1000,10 @@ public abstract class Canvas extends Displayable {
 			if (canvas == null) {
 				return true;
 			}
-			Graphics g = this.graphics;
-			g.setSurfaceCanvas(canvas);
+			CanvasWrapper g = this.canvasWrapper;
+			g.bind(canvas);
 			g.clear(backgroundColor);
-			offscreenCopy.getBitmap().prepareToDraw();
-			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
+			g.drawImage(offscreenCopy, virtualScreen);
 			surface.unlockCanvasAndPost(canvas);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
