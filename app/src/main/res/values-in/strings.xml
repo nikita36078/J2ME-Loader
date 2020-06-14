@@ -52,6 +52,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual tombol keypad</string>
     <string name="PREF_VK_SHOW">Tampilkan tombol keypad</string>
     <string name="PREF_VK_FEEDBACK">Respon keypad (getar)</string>
+    <string name="PREF_VK_FORCE_OPACITY">Paksakan keburaman untuk tombol di luar layar</string>
     <string name="PREF_TOUCH_INPUT">Pakai layar sentuh</string>
     <string name="PREF_HW_ACCELERATION">Akselerasi HW (tidak stabil)</string>
     <string name="PREF_VK_BACK">Tombol</string>
@@ -130,4 +131,6 @@
     <string name="mapping_dialog_message" formatted="false">Pemetaan saat ini: %1$s</string>
     <string name="reset_mapping">Setel ulang</string>
     <string name="parallel_screen_redrawing">Gambar ulang layar paralel</string>
+    <string name="saved">Tersimpan</string>
+    <string name="not_saved_exists">Tidak tersimpan: sudah ada</string>
 </resources>
