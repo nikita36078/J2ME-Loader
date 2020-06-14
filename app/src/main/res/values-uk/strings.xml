@@ -52,6 +52,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
     <string name="PREF_VK_SHOW">Показати клавіатуру</string>
     <string name="PREF_VK_FEEDBACK">Вібрація при натисканні</string>
+    <string name="PREF_VK_FORCE_OPACITY">Примусова прозорість для вимк. екрану</string>
     <string name="PREF_TOUCH_INPUT">Сенсорний ввід</string>
     <string name="PREF_HW_ACCELERATION">Апаратне прискорення (нестабільне)</string>
     <string name="PREF_VK_BACK">Клавіші</string>
@@ -111,6 +112,7 @@
     <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
     <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
     <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
+    <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string-array name="pref_button_shape_entries">
@@ -129,4 +131,6 @@
     <string name="mapping_dialog_message" formatted="false">Поточне зіставлення: %1$s</string>
     <string name="reset_mapping">Скинути</string>
     <string name="parallel_screen_redrawing">Паралельне перемальовування екрану</string>
+    <string name="saved">Збережено</string>
+    <string name="not_saved_exists">Не збережено: вже існує</string>
 </resources>
