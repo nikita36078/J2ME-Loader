@@ -103,7 +103,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		public void paint(Graphics g) {
 			if (label != null && visible) {
 				boolean opaque = forceOpacity ? intersectsScreen : obscuresVirtualScreen;
-				int alpha = opaque ? overlayAlpha : 0xFF000000;
+				int alpha = (opaque && layoutEditMode == LAYOUT_EOF) ? overlayAlpha : 0xFF000000;
 				g.setColorAlpha(alpha | colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
 				if (shape == SQUARE_SHAPE) {
 					g.fillRoundRect(rect, 0, 0);
