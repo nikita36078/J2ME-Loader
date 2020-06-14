@@ -164,7 +164,7 @@ class TextFieldImpl {
 		if (textview != null) {
 			return textview.getSelectionEnd();
 		} else {
-			return -1;
+			return 0;
 		}
 	}
 
