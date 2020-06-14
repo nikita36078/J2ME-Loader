@@ -52,6 +52,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
     <string name="PREF_VK_SHOW">Exibir o teclado</string>
     <string name="PREF_VK_FEEDBACK">Feedback tátil</string>
+    <string name="PREF_VK_FORCE_OPACITY">Forçar opacidade das teclas na tela</string>
     <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
     <string name="PREF_HW_ACCELERATION">Aceleração de Hardware (instável)</string>
     <string name="PREF_VK_BACK">Botões</string>
@@ -130,4 +131,6 @@
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
     <string name="parallel_screen_redrawing">Redesenho de tela paralela</string>
+    <string name="saved">Salvo</string>
+    <string name="not_saved_exists">Não salvo: já existe</string>
 </resources>
