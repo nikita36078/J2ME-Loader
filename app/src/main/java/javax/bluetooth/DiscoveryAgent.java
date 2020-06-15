@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Set;
@@ -161,6 +162,7 @@ public class DiscoveryAgent {
 	}
 
 	private LinkedList<Transaction> transList = new LinkedList<Transaction>();
+	private ArrayList<BluetoothDevice> discoveredList = new ArrayList<>();
 
 	DiscoveryAgent() throws BluetoothStateException {
 		adapter = BluetoothAdapter.getDefaultAdapter();
@@ -212,10 +214,14 @@ public class DiscoveryAgent {
 				String action = intent.getAction();
 				if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 					BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-					RemoteDevice dev = new RemoteDevice(device);
-					DeviceClass cod = new DeviceClass();
-					listener.deviceDiscovered(dev, cod);
+					if (!discoveredList.contains(device)) {
+						discoveredList.add(device);
+						RemoteDevice dev = new RemoteDevice(device);
+						DeviceClass cod = new DeviceClass();
+						listener.deviceDiscovered(dev, cod);
+					}
 				} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+					discoveredList.clear();
 					listener.inquiryCompleted(DiscoveryListener.INQUIRY_COMPLETED);
 					synchronized (transList) {
 						if (!transList.isEmpty()) {
