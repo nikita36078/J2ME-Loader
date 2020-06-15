@@ -142,10 +142,12 @@ public class DiscoveryAgent {
 						}
 					}
 
-					if (records.isEmpty() && supportsSPP)
-						listener.servicesDiscovered(transID, new J2MEServiceRecord[]
-								{new J2MEServiceRecord(dev, new UUID(0x1101), true, false)});
-					else {
+					if (records.isEmpty()) {
+						if (supportsSPP) {
+							listener.servicesDiscovered(transID, new J2MEServiceRecord[]
+									{new J2MEServiceRecord(dev, new UUID(0x1101), true, false)});
+						}
+					} else {
 						J2MEServiceRecord[] casted = records.toArray(new J2MEServiceRecord[0]);
 						listener.servicesDiscovered(transID, casted);
 					}
