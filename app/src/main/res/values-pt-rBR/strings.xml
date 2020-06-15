@@ -11,7 +11,7 @@
     <string name="save_log">Salvar registros</string>
     <string name="about_message">Este aplicativo permite abrir aplicativos e jogos J2ME no Android. Ele suporta a maioria dos jogos 2D além dos 3D, mas com algumas limitações.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Ativando a filtragem em alguns casos pode reduzir muito a performance. Desative esta opção se o jogo estiver muito lento.&lt;BR&gt;&#8226; Problemas de exibição de imagens podem ser corrigidos ao ativar a opção \"Modo de processamento imediato\".</string>
-    <string name="author">Criado por: </string>
+    <string name="author">Autor: </string>
     <string name="version">Versão: </string>
     <string name="no_data_for_display">Sem dados</string>
     <string name="message_delete">Deseja realmente excluir este aplicativo?</string>
@@ -52,11 +52,12 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
     <string name="PREF_VK_SHOW">Exibir o teclado</string>
     <string name="PREF_VK_FEEDBACK">Feedback tátil</string>
+    <string name="PREF_VK_FORCE_OPACITY">Forçar opacidade das teclas na tela</string>
     <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
     <string name="PREF_HW_ACCELERATION">Aceleração de Hardware (instável)</string>
     <string name="PREF_VK_BACK">Botões</string>
     <string name="PREF_VK_FORE">Etiquetas</string>
-    <string name="PREF_VK_OUTLINE">Esboço</string>
+    <string name="PREF_VK_OUTLINE">Contorno</string>
     <string name="PREF_VK_ALPHA">Opacidade: </string>
     <string name="PREF_VK_HIDE_DELAY">Esconder atraso: </string>
     <string name="PREF_UNIT_MS">ms</string>
@@ -96,13 +97,13 @@
     <string name="layout_edit_finished">Modo de edição concluído</string>
     <string name="layout_edit_finish">Encerrar o modo de edição</string>
     <string name="layout_edit_mode">Modo de edição do teclado</string>
-    <string name="layout_scale_mode">Modo de redimensionamento do teclado</string>
+    <string name="layout_scale_mode">Editar tamanho dos botões</string>
     <string name="layout_switch">Alternar layout do teclado</string>
     <string name="hide_buttons">Ocultar botões</string>
     <string name="take_screenshot">Capturar tela</string>
     <string name="screenshot_saved">A Captura de tela foi salva em</string>
     <string name="log_saved">Registro salvo com sucesso</string>
-    <string name="common_settings">[CONFIGURAÇÕES PADRÃO]</string>
+    <string name="common_settings">[MENU]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
         <item>Claro</item>
@@ -111,7 +112,7 @@
     <string name="pref_requires_restart_summary">Requer reinicialização</string>
     <string name="pref_enable_actionbar_title">Ativar Barra de Ação</string>
     <string name="pref_enable_actionbar_summary">Em aplicativos em tela cheia</string>
-    <string name="pref_enable_statusbar_title">Ativar barra de status</string>
+    <string name="pref_enable_statusbar_title">Ativar Barra de Status</string>
     <string name="pref_wakelock_title">Manter a tela ligada</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
     <string-array name="pref_button_shape_entries">
@@ -130,4 +131,6 @@
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
     <string name="parallel_screen_redrawing">Redesenho de tela paralela</string>
+    <string name="saved">Salvo</string>
+    <string name="not_saved_exists">Não salvo: já existe</string>
 </resources>

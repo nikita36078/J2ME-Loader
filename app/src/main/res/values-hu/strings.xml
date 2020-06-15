@@ -39,6 +39,7 @@
     <string name="PREF_FILTER">Szűrő</string>
     <string name="PREF_IMMEDIATE">Azonnali feldolgozás mód</string>
     <string name="PREF_SHOW_FPS">FPS kijelzése</string>
+    <string name="PREF_FORCE_FULLSCREEN">Teljesképernyős mód kényszerítése</string>
     <string name="PREF_LIMIT_FPS">FPS-korlát</string>
     <string name="PREF_FONT_OPTIONS">Betűtípus beállítások</string>
     <string name="PREF_WIDTH">Szélesség</string>
@@ -51,6 +52,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuális billentyűzet</string>
     <string name="PREF_VK_SHOW">Billentyűzet megjelenítése</string>
     <string name="PREF_VK_FEEDBACK">Rezgő visszajelzés</string>
+    <string name="PREF_VK_FORCE_OPACITY">A képernyőn kívüli gombok áttetszőségének kényszerítése</string>
     <string name="PREF_TOUCH_INPUT">Érintéses bevitel</string>
     <string name="PREF_HW_ACCELERATION">HW gyorsítás (nem stabil)</string>
     <string name="PREF_VK_BACK">Gombok</string>
@@ -85,6 +87,7 @@
         <item>Telefon</item>
         <item>Telefon (nyilakkal)</item>
     </string-array>
+    <string name="PREF_LAYOUT">Elrendezés</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Az alkalmazás erőltetett bezárása adatvesztéshez, vagy akár teljesen működésképtelenné váláshoz vezethet!\nFolytatja?</string>
     <string name="CONFIRMATION_REQUIRED">Megerősítés szükséges</string>
     <string name="select_dialog_title">Válassza ki a MIDlet</string>
@@ -109,6 +112,7 @@
     <string name="pref_requires_restart_summary">Újraindítást igényel</string>
     <string name="pref_enable_actionbar_title">Az ActionBar engedélyezése</string>
     <string name="pref_enable_actionbar_summary">A teljes képernyős alkalmazásokban</string>
+    <string name="pref_enable_statusbar_title">Állapotsor engedélyezése</string>
     <string name="pref_wakelock_title">Képernyő bekapcsolva tartása</string>
     <string name="pref_button_shape_title">Gombforma</string>
     <string-array name="pref_button_shape_entries">
@@ -127,4 +131,6 @@
     <string name="mapping_dialog_message" formatted="false">Jelenlegi hozzárendelés: %1$s</string>
     <string name="reset_mapping">Alaphelyzetbe állítás</string>
     <string name="parallel_screen_redrawing">Párhuzamos képernyő-újrarajzolás</string>
+    <string name="saved">Mentve</string>
+    <string name="not_saved_exists">Nincs mentve: már létezik</string>
 </resources>

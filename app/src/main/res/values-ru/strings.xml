@@ -52,12 +52,13 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуальная клавиатура</string>
     <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
     <string name="PREF_VK_FEEDBACK">Тактильный отклик</string>
+    <string name="PREF_VK_FORCE_OPACITY">Принудительная непрозрачность кнопок вне экрана</string>
     <string name="PREF_TOUCH_INPUT">Сенсорный ввод</string>
     <string name="PREF_HW_ACCELERATION">Аппаратное ускорение (нестабильно)</string>
     <string name="PREF_VK_BACK">Кнопки</string>
     <string name="PREF_VK_FORE">Надписи</string>
     <string name="PREF_VK_OUTLINE">Обводка</string>
-    <string name="PREF_VK_ALPHA">Прозрачность: </string>
+    <string name="PREF_VK_ALPHA">Непрозрачность: </string>
     <string name="PREF_VK_HIDE_DELAY">Скрывать через: </string>
     <string name="PREF_UNIT_MS">мс</string>
     <string name="PREF_VK_SEL_FORE">Надписи (Н)</string>
@@ -130,4 +131,6 @@
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
     <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
+    <string name="saved">Сохранено</string>
+    <string name="not_saved_exists">Уже существует</string>
 </resources>
