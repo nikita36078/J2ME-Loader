@@ -25,11 +25,22 @@ class J2MEServiceRecord implements ServiceRecord {
 	private boolean btl2cap;
 	private HashMap<Integer, DataElement> dataElements = new HashMap<>();
 
+	private static final int PROTOCOL_DESCRIPTOR_LIST = 0x0004;
+	private static final int SERVICE_CLASS_ID_LIST = 0x0001;
+	private static final UUID RFCOMM_PROTOCOL_UUID = new UUID(0x0003);
+	private static final UUID L2CAP_PROTOCOL_UUID = new UUID(0x0100);
+	private static final UUID SERIAL_PORT_UUID = new UUID(0x1101);
+
 	public J2MEServiceRecord(RemoteDevice dev, UUID uuid, boolean skipAfterWrite, boolean btl2cap) {
 		this.dev = dev;
 		this.uuid = uuid;
 		this.skipAfterWrite = skipAfterWrite;
 		this.btl2cap = btl2cap;
+		if (btl2cap) {
+			populateL2capRecords();
+		} else {
+			populateSppRecords();
+		}
 	}
 
 	public RemoteDevice getHostDevice() {
@@ -104,5 +115,36 @@ class J2MEServiceRecord implements ServiceRecord {
 			if (dataElements.containsKey(val)) return true;
 		}
 		return false;
+	}
+
+	private void populateSppRecords() {
+		DataElement serviceClassIDList = new DataElement(DataElement.DATSEQ);
+		serviceClassIDList.addElement(new DataElement(DataElement.UUID, uuid));
+		serviceClassIDList.addElement(new DataElement(DataElement.UUID, SERIAL_PORT_UUID));
+		setAttributeValue(SERVICE_CLASS_ID_LIST, serviceClassIDList);
+
+		DataElement protocolDescriptorList = new DataElement(DataElement.DATSEQ);
+		DataElement L2CAPDescriptor = new DataElement(DataElement.DATSEQ);
+		L2CAPDescriptor.addElement(new DataElement(DataElement.UUID, L2CAP_PROTOCOL_UUID));
+		protocolDescriptorList.addElement(L2CAPDescriptor);
+
+		DataElement RFCOMMDescriptor = new DataElement(DataElement.DATSEQ);
+		RFCOMMDescriptor.addElement(new DataElement(DataElement.UUID, RFCOMM_PROTOCOL_UUID));
+		RFCOMMDescriptor.addElement(new DataElement(DataElement.U_INT_1, 0));
+		protocolDescriptorList.addElement(RFCOMMDescriptor);
+		setAttributeValue(PROTOCOL_DESCRIPTOR_LIST, protocolDescriptorList);
+	}
+
+	private void populateL2capRecords() {
+		DataElement serviceClassIDList = new DataElement(DataElement.DATSEQ);
+		serviceClassIDList.addElement(new DataElement(DataElement.UUID, uuid));
+		setAttributeValue(SERVICE_CLASS_ID_LIST, serviceClassIDList);
+
+		DataElement protocolDescriptorList = new DataElement(DataElement.DATSEQ);
+		DataElement L2CAPDescriptor = new DataElement(DataElement.DATSEQ);
+		L2CAPDescriptor.addElement(new DataElement(DataElement.UUID, L2CAP_PROTOCOL_UUID));
+		L2CAPDescriptor.addElement(new DataElement(DataElement.U_INT_2, 0));
+		protocolDescriptorList.addElement(L2CAPDescriptor);
+		setAttributeValue(PROTOCOL_DESCRIPTOR_LIST, protocolDescriptorList);
 	}
 }
