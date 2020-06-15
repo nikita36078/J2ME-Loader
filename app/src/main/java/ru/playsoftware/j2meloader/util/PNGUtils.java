@@ -108,6 +108,14 @@ public class PNGUtils {
 				alpha = alphachannel ? scanline[c2++] : (g != ga ? 255 : 0);
 				buf[c] = (alpha << 24) | g | (g << 8) | (g << 16);
 			}
+		} else if (line.imgInfo.bitDepth == 16) { // true color
+			ga = trns != null ? trns.getRGB888() : -1;
+			for (int c = 0, c2 = 0; c < cols; c++) {
+				rgb = ((scanline[c2++] & 0xFF00) << 8) | (scanline[c2++] & 0xFF00)
+						| ((scanline[c2++] & 0xFF00) >> 8);
+				alpha = alphachannel ? ((scanline[c2++] & 0xFF00) >> 8) : (rgb != ga ? 255 : 0);
+				buf[c] = (alpha << 24) | rgb;
+			}
 		} else { // true color
 			ga = trns != null ? trns.getRGB888() : -1;
 			for (int c = 0, c2 = 0; c < cols; c++) {
