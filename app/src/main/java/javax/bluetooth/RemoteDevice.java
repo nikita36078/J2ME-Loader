@@ -45,7 +45,11 @@ public class RemoteDevice {
 	}
 
 	public String getFriendlyName(boolean alwaysAsk) throws IOException {
-		return dev.getName();
+		String name = dev.getName();
+		if (name == null) {
+			name =  "";
+		}
+		return name;
 	}
 
 	public final String getBluetoothAddress() {
