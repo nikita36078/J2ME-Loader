@@ -659,8 +659,8 @@ public abstract class Canvas extends Displayable {
 		Canvas.showFps = showFps;
 	}
 
-	public static void setLimitFps(boolean limitFps, int fpsLimit) {
-		Canvas.fpsLimit = limitFps ? fpsLimit : 0;
+	public static void setLimitFps(int fpsLimit) {
+		Canvas.fpsLimit = fpsLimit;
 	}
 
 	public void setOverlay(Overlay ov) {

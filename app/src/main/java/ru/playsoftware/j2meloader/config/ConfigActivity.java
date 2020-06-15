@@ -39,7 +39,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
@@ -92,33 +93,33 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected SeekBar sbScaleRatio;
 	protected EditText tfScaleRatioValue;
 	protected Spinner spOrientation;
-	protected CheckBox cxScaleToFit;
-	protected CheckBox cxKeepAspectRatio;
-	protected CheckBox cxFilter;
-	protected CheckBox cxImmediate;
-	protected CheckBox cxHwAcceleration;
+	protected Checkable cxScaleToFit;
+	protected Checkable cxKeepAspectRatio;
+	protected Checkable cxFilter;
+	protected Checkable cxImmediate;
+	protected CompoundButton cxHwAcceleration;
 	protected Spinner spShader;
-	protected CheckBox cxParallel;
-	protected CheckBox cxForceFullscreen;
-	protected CheckBox cxShowFps;
-	protected CheckBox cxLimitFps;
+	protected CompoundButton cxParallel;
+	protected Checkable cxForceFullscreen;
+	protected Checkable cxShowFps;
 	protected EditText tfFpsLimit;
 
 	protected EditText tfFontSizeSmall;
 	protected EditText tfFontSizeMedium;
 	protected EditText tfFontSizeLarge;
-	protected CheckBox cxFontSizeInSP;
-	protected CheckBox cxShowKeyboard;
+	protected Checkable cxFontSizeInSP;
+	protected CompoundButton cxShowKeyboard;
 
-	private View vkContainer;
-	protected CheckBox cxVKFeedback;
-	protected CheckBox cxVKForceOpacity;
-	protected CheckBox cxTouchInput;
+	private View rootInputConfig;
+	private View groupVkConfig;
+	protected Checkable cxVKFeedback;
+	protected Checkable cxTouchInput;
 
 	protected Spinner spVKType;
 	protected Spinner spLayout;
 	private Spinner spButtonsShape;
 	protected SeekBar sbVKAlpha;
+	protected Checkable cxVKForceOpacity;
 	protected EditText tfVKHideDelay;
 	protected EditText tfVKFore;
 	protected EditText tfVKBack;
@@ -204,7 +205,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxParallel = findViewById(R.id.cxParallel);
 		cxForceFullscreen = findViewById(R.id.cxForceFullscreen);
 		cxShowFps = findViewById(R.id.cxShowFps);
-		cxLimitFps = findViewById(R.id.cxLimitFps);
 		tfFpsLimit = findViewById(R.id.tfFpsLimit);
 
 		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
@@ -213,12 +213,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
 
+		rootInputConfig = findViewById(R.id.rootInputConfig);
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
-		vkContainer = findViewById(R.id.configVkContainer);
+		groupVkConfig = findViewById(R.id.groupVkConfig);
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
 		cxVKForceOpacity = findViewById(R.id.cxVKForceOpacity);
-		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		spVKType = findViewById(R.id.spVKType);
 		spLayout = findViewById(R.id.spLayout);
@@ -248,6 +248,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdAddToPreset).setOnClickListener(v -> addResolutionToPresets());
 		findViewById(R.id.cmdFontSizePresets).setOnClickListener(this);
 		findViewById(R.id.cmdScreenBack).setOnClickListener(this);
+		findViewById(R.id.cmdKeyMappings).setOnClickListener(this);
 		findViewById(R.id.cmdVKBack).setOnClickListener(this);
 		findViewById(R.id.cmdVKFore).setOnClickListener(this);
 		findViewById(R.id.cmdVKSelBack).setOnClickListener(this);
@@ -276,15 +277,31 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				try {
-					sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
-				} catch (NumberFormatException e) {
-					sbScaleRatio.setProgress(100);
+				int length = s.length();
+				if (length > 3) {
+					if (start >= 3) {
+						tfScaleRatioValue.getText().delete(3, length);
+					} else {
+						int st = start + count;
+						int end = st + (before == 0 ? count : before);
+						tfScaleRatioValue.getText().delete(st, Math.min(end, length));
+					}
 				}
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
+				if (s.length() == 0) return;
+				try {
+					int progress = Integer.parseInt(s.toString());
+					if (progress <= 100) {
+						sbScaleRatio.setProgress(progress);
+					} else {
+						s.replace(0, s.length(), "100");
+					}
+				} catch (NumberFormatException e) {
+					s.clear();
+				}
 			}
 		});
 		cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -302,12 +319,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 					View focus = rootContainer.findFocus();
 					if (focus != null) focus.clearFocus();
-					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getTop());
+					v.scrollTo(0, rootInputConfig.getTop());
 					v.removeOnLayoutChangeListener(this);
 				}
 			};
 			rootContainer.addOnLayoutChangeListener(onLayoutChangeListener);
-			vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
+			groupVkConfig.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
 		});
 		tfScreenBack.addTextChangedListener(new ColorTextWatcher(tfScreenBack));
 		tfVKFore.addTextChangedListener(new ColorTextWatcher(tfVKFore));
@@ -563,7 +580,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxForceFullscreen.setChecked(params.forceFullscreen);
 		cxHwAcceleration.setChecked(params.hwAcceleration);
 		cxShowFps.setChecked(params.showFps);
-		cxLimitFps.setChecked(params.limitFps);
 
 		tfFontSizeSmall.setText(Integer.toString(params.fontSizeSmall));
 		tfFontSizeMedium.setText(Integer.toString(params.fontSizeMedium));
@@ -571,7 +587,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxFontSizeInSP.setChecked(params.fontApplyDimensions);
 		boolean showVk = params.showKeyboard;
 		cxShowKeyboard.setChecked(showVk);
-		vkContainer.setVisibility(showVk ? View.VISIBLE : View.GONE);
+		groupVkConfig.setVisibility(showVk ? View.VISIBLE : View.GONE);
 		cxVKFeedback.setChecked(params.vkFeedback);
 		cxVKForceOpacity.setChecked(params.vkForceOpacity);
 		cxTouchInput.setChecked(params.touchInput);
@@ -626,7 +642,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.parallelRedrawScreen = cxParallel.isChecked();
 			params.forceFullscreen = cxForceFullscreen.isChecked();
 			params.showFps = cxShowFps.isChecked();
-			params.limitFps = cxLimitFps.isChecked();
 			params.fpsLimit = parseInt(tfFpsLimit.getText().toString());
 
 			try {
@@ -756,11 +771,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				SaveProfileAlert.getInstance(keylayoutFile.getParent())
 						.show(fragmentManager, "save_profile");
 				break;
-			case R.id.action_map_keys:
-				Intent i = new Intent(getIntent());
-				i.setClass(getApplicationContext(), KeyMapperActivity.class);
-				startActivity(i);
-				break;
 			case android.R.id.home:
 				finish();
 				break;
@@ -821,6 +831,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				break;
 			case R.id.cmdVKOutline:
 				showColorPicker(tfVKOutline);
+				break;
+			case R.id.cmdKeyMappings:
+				Intent i = new Intent(getIntent());
+				i.setClass(getApplicationContext(), KeyMapperActivity.class);
+				startActivity(i);
 				break;
 			default:
 		}
@@ -942,11 +957,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		@Override
 		public void afterTextChanged(Editable s) {
+			if (s.length() == 0) return;
 			try {
 				int color = Integer.parseInt(s.toString(), 16);
 				drawable.setColor(color | Color.BLACK);
 			} catch (NumberFormatException e) {
 				drawable.setColor(Color.BLACK);
+				s.clear();
 			}
 		}
 	}

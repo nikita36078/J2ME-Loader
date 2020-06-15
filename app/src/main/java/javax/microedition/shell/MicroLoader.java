@@ -188,7 +188,7 @@ public class MicroLoader {
 			Canvas.setHasTouchInput(params.touchInput);
 			Canvas.setForceFullscreen(params.forceFullscreen);
 			Canvas.setShowFps(params.showFps);
-			Canvas.setLimitFps(params.limitFps, params.fpsLimit);
+			Canvas.setLimitFps(params.fpsLimit);
 			ShaderInfo shader = params.shader;
 			if (shader == null) shader = new ShaderInfo();
 			Canvas.setShaderFilter(shader);

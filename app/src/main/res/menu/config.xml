@@ -25,9 +25,5 @@
         android:id="@+id/action_save_profile"
         android:title="@string/save_profile"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_map_keys"
-        android:title="@string/pref_map_keys"
-        app:showAsAction="never" />
 
 </menu>

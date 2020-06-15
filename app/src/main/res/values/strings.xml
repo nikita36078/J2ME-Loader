@@ -219,4 +219,5 @@
     <string name="shader_tuning">Shader Tuning</string>
     <string name="shader_setting">%s: %s</string>
     <string name="reset">Reset</string>
+    <string name="pref_input_devices_title">Input devices</string>
 </resources>

@@ -70,9 +70,6 @@ public class ProfileModel {
 	@SerializedName("ShowFps")
 	public boolean showFps;
 
-	@SerializedName("LimitFps")
-	public boolean limitFps;
-
 	@SerializedName("FpsLimit")
 	public int fpsLimit;
 
