@@ -27,6 +27,7 @@ class J2MEServiceRecord implements ServiceRecord {
 
 	private static final int PROTOCOL_DESCRIPTOR_LIST = 0x0004;
 	private static final int SERVICE_CLASS_ID_LIST = 0x0001;
+	private static final int ATTRIBUTE_ID_SERVICE_NAME = 0x100;
 	private static final UUID RFCOMM_PROTOCOL_UUID = new UUID(0x0003);
 	private static final UUID L2CAP_PROTOCOL_UUID = new UUID(0x0100);
 	private static final UUID SERIAL_PORT_UUID = new UUID(0x1101);
@@ -115,6 +116,10 @@ class J2MEServiceRecord implements ServiceRecord {
 			if (dataElements.containsKey(val)) return true;
 		}
 		return false;
+	}
+
+	public void setServiceName(String name) {
+		setAttributeValue(ATTRIBUTE_ID_SERVICE_NAME, new DataElement(DataElement.STRING, name));
 	}
 
 	private void populateSppRecords() {

@@ -138,7 +138,7 @@ public class DiscoveryAgent {
 					}
 					if (serviceName != null) {
 						for (J2MEServiceRecord record : records) {
-							record.setAttributeValue(attrs[0], new DataElement(DataElement.STRING, serviceName));
+							record.setServiceName(serviceName);
 						}
 					}
 
