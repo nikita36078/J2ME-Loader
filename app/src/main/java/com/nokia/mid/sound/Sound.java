@@ -61,7 +61,7 @@ public class Sound {
 	public void init(int freq, long duration) {
 		try {
 			player = Manager.createPlayer(Manager.TONE_DEVICE_LOCATOR);
-			postEvent(SOUND_UNINITIALIZED);
+			state = SOUND_STOPPED;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -70,7 +70,7 @@ public class Sound {
 	public void init(byte[] data, int type) {
 		try {
 			player = Manager.createPlayer(new ByteArrayInputStream(data), "audio/midi");
-			postEvent(SOUND_UNINITIALIZED);
+			state = SOUND_STOPPED;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
