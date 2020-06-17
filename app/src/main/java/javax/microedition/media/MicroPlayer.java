@@ -111,6 +111,9 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 	@Override
 	public synchronized void onCompletion(MediaPlayer mp) {
+		if (state == CLOSED) {
+			return;
+		}
 		postEvent(PlayerListener.END_OF_MEDIA, new Long(getMediaTime()));
 
 		if (loopCount == 1) {
