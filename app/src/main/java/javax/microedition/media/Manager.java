@@ -90,7 +90,7 @@ public class Manager {
 	public static String[] getSupportedContentTypes(String str) {
 		return new String[]{"audio/wav", "audio/x-wav", "audio/midi", "audio/x-midi",
 				"audio/mpeg", "audio/aac", "audio/amr", "audio/amr-wb", "audio/mp3",
-				"audio/mp4"};
+				"audio/mp4", "audio/mmf"};
 	}
 
 	public static String[] getSupportedProtocols(String str) {
