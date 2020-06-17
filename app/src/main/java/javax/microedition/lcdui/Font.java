@@ -22,6 +22,8 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 
+import java.util.Arrays;
+
 import javax.microedition.util.ContextHolder;
 
 public class Font {
@@ -48,9 +50,7 @@ public class Font {
 	public static void setApplyDimensions(boolean flag) {
 		applyDimensions = flag;
 
-		for (int i = 0; i < fonts.length; i++) {
-			fonts[i] = null;
-		}
+		Arrays.fill(fonts, null);
 	}
 
 	public static void setSize(int size, float value) {
@@ -71,9 +71,7 @@ public class Font {
 				return;
 		}
 
-		for (int i = 0; i < fonts.length; i++) {
-			fonts[i] = null;
-		}
+		Arrays.fill(fonts, null);
 	}
 
 	private Paint paint;
@@ -101,6 +99,10 @@ public class Font {
 		paint.setTypeface(typeface);
 		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getContext().getResources().getDisplayMetrics());
 		paint.setTextSize(size);
+	}
+
+	public static Font getFont(int fontSpecifier) {
+		return getDefaultFont();
 	}
 
 	public static Font getFont(int face, int style, int size) {
