@@ -97,7 +97,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected Checkable cxKeepAspectRatio;
 	protected Checkable cxFilter;
 	protected Checkable cxImmediate;
-	protected CompoundButton cxHwAcceleration;
+	protected Spinner spGraphicsMode;
 	protected Spinner spShader;
 	protected CompoundButton cxParallel;
 	protected Checkable cxForceFullscreen;
@@ -198,7 +198,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
-		cxHwAcceleration = findViewById(R.id.cxHwAcceleration);
+		spGraphicsMode = findViewById(R.id.spGraphicsMode);
 		spShader = findViewById(R.id.spShader);
 		btShaderTune = findViewById(R.id.btShaderTune);
 		shaderContainer = findViewById(R.id.shaderContainer);
@@ -304,13 +304,27 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				}
 			}
 		});
-		cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			if (isChecked) {
-				cxParallel.setVisibility(View.GONE);
-				initShaderSpinner();
-			} else {
-				cxParallel.setVisibility(View.VISIBLE);
-				shaderContainer.setVisibility(View.GONE);
+		spGraphicsMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				switch (position) {
+					case 0:
+					case 3:
+						cxParallel.setVisibility(View.VISIBLE);
+						shaderContainer.setVisibility(View.GONE);
+						break;
+					case 1:
+						cxParallel.setVisibility(View.GONE);
+						initShaderSpinner();
+						break;
+					case 2:
+						cxParallel.setVisibility(View.GONE);
+						shaderContainer.setVisibility(View.GONE);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
 		cxShowKeyboard.setOnClickListener((b) -> {
@@ -578,7 +592,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxImmediate.setChecked(params.immediateMode);
 		cxParallel.setChecked(params.parallelRedrawScreen);
 		cxForceFullscreen.setChecked(params.forceFullscreen);
-		cxHwAcceleration.setChecked(params.hwAcceleration);
+		spGraphicsMode.setSelection(params.getGraphicsMode());
 		cxShowFps.setChecked(params.showFps);
 
 		tfFontSizeSmall.setText(Integer.toString(params.fontSizeSmall));
@@ -634,9 +648,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
 			params.screenFilter = cxFilter.isChecked();
 			params.immediateMode = cxImmediate.isChecked();
-			boolean checked = cxHwAcceleration.isChecked();
-			params.hwAcceleration = checked;
-			if (checked) {
+			int mode = spGraphicsMode.getSelectedItemPosition();
+			params.graphicsMode = mode;
+			if (mode == 1) {
 				params.shader = (ShaderInfo) spShader.getSelectedItem();
 			}
 			params.parallelRedrawScreen = cxParallel.isChecked();
@@ -923,7 +937,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			editText.setCompoundDrawablesRelative(null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
-			editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 		}
 
 		private CharSequence filter(CharSequence src, int ss, int se, Spanned dst, int ds, int de) {

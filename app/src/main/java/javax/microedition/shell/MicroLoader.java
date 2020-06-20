@@ -182,7 +182,7 @@ public class MicroLoader {
 			Canvas.setScale(params.screenScaleToFit, params.screenKeepAspectRatio, params.screenScaleRatio);
 			Canvas.setFilterBitmap(params.screenFilter);
 			EventQueue.setImmediate(params.immediateMode);
-			Canvas.setHardwareAcceleration(params.hwAcceleration, params.parallelRedrawScreen);
+			Canvas.setGraphicsMode(params.getGraphicsMode(), params.parallelRedrawScreen);
 			Canvas.setBackgroundColor(params.screenBackgroundColor);
 			Canvas.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params));
 			Canvas.setHasTouchInput(params.touchInput);

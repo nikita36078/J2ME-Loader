@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="pref_graphics_mode_entries" tools:ignore="InconsistentArrays">
+        <item>@string/pref_graphics_software</item>
+        <item>@string/pref_graphics_hw_gles</item>
+        <item>@string/pref_graphics_hw_view</item>
+        <item>@string/pref_graphics_hw_surface</item>
+    </string-array>
+</resources>

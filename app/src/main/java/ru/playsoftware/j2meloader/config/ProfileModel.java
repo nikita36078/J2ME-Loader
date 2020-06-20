@@ -17,6 +17,8 @@
 package ru.playsoftware.j2meloader.config;
 
 
+import android.os.Build;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
@@ -61,6 +63,9 @@ public class ProfileModel {
 
 	@SerializedName("HwAcceleration")
 	public boolean hwAcceleration;
+
+	@SerializedName("GraphicsMode")
+	public int graphicsMode = -1;
 
 	public ShaderInfo shader;
 
@@ -168,5 +173,15 @@ public class ProfileModel {
 		vkFgColorSelected = 0xFFFFFF;
 		vkOutlineColor = 0xFFFFFF;
 		systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
+	}
+
+	public int getGraphicsMode() {
+		int mode = this.graphicsMode;
+		if (mode == -1) {
+			if (hwAcceleration) {
+				mode = Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? 2 : 3;
+			} else mode = 0;
+		}
+		return mode;
 	}
 }
