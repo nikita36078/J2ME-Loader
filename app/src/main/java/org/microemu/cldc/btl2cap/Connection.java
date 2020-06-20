@@ -24,7 +24,6 @@ import android.bluetooth.BluetoothSocket;
 import org.microemu.microedition.io.ConnectionImplementation;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.bluetooth.L2CAPConnection;
@@ -132,9 +131,10 @@ public class Connection implements ConnectionImplementation, L2CAPConnectionNoti
 
 	@Override
 	public L2CAPConnection acceptAndOpen() throws IOException {
-		if (serverSocket != null) {
-			socket = serverSocket.accept();
+		if (serverSocket == null) {
+			throw new IOException();
 		}
+		socket = serverSocket.accept();
 		return new L2CAPConnectionImpl(socket);
 	}
 
@@ -142,5 +142,7 @@ public class Connection implements ConnectionImplementation, L2CAPConnectionNoti
 	public void close() throws IOException {
 		if (serverSocket != null)
 			serverSocket.close();
+		if (nameServerSocket != null)
+			nameServerSocket.close();
 	}
 }

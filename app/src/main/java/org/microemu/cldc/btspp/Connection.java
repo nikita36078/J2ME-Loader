@@ -130,14 +130,17 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 	}
 
 	public StreamConnection acceptAndOpen() throws IOException {
-		if (serverSocket != null) {
-			socket = serverSocket.accept();
+		if (serverSocket == null) {
+			throw new IOException();
 		}
+		socket = serverSocket.accept();
 		return new SPPConnectionImpl(socket, skipAfterWrite);
 	}
 
 	public void close() throws IOException {
 		if (serverSocket != null)
 			serverSocket.close();
+		if (nameServerSocket != null)
+			nameServerSocket.close();
 	}
 }
