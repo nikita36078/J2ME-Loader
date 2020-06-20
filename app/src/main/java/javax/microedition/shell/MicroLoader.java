@@ -140,10 +140,11 @@ public class MicroLoader {
 		final String country = defaultLocale.getCountry();
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
-		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
-		System.setProperty("fileconn.dir.cache", "file:///c:"
-				+ Config.getDataDir().substring(externalStoragePath.length()) + appPath);
-		System.setProperty("user.home", externalStoragePath);
+		final String primaryStoragePath = Environment.getExternalStorageDirectory().getPath();
+		String uri = "file:///c:" + Config.getDataDir().substring(primaryStoragePath.length()) + appPath;
+		System.setProperty("fileconn.dir.cache", uri + "/cache");
+		System.setProperty("fileconn.dir.private", uri + "/private");
+		System.setProperty("user.home", primaryStoragePath);
 	}
 
 	public int getOrientation() {
