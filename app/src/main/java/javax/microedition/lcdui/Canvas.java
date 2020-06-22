@@ -415,6 +415,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
+			onResume();
 			if (graphicsMode == 1) {
 				super.surfaceCreated(holder);
 			}
@@ -431,6 +432,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
+			onPause();
 			renderStarted = false;
 			if (graphicsMode == 1) {
 				super.surfaceDestroyed(holder);
@@ -535,7 +537,7 @@ public abstract class Canvas extends Displayable {
 				}
 				offscreen.copyTo(offscreenCopy);
 				if (graphicsMode == 1) {
-					if (renderStarted) {
+					if (innerView != null) {
 						innerView.requestRender();
 					}
 				} else if (graphicsMode == 2) {
@@ -960,7 +962,7 @@ public abstract class Canvas extends Displayable {
 		synchronized (paintSync) {
 			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
 			if (graphicsMode == 1) {
-				if (renderStarted) {
+				if (innerView != null) {
 					innerView.requestRender();
 				}
 				return;
@@ -984,7 +986,7 @@ public abstract class Canvas extends Displayable {
 		synchronized (paintSync) {
 			image.copyTo(offscreenCopy, x, y);
 			if (graphicsMode == 1) {
-				if (renderStarted) {
+				if (innerView != null) {
 					innerView.requestRender();
 				}
 				return;
