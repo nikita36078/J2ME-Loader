@@ -77,7 +77,13 @@ public class InternalDataSource extends DataSource {
 		} finally {
 			stream.close();
 		}
-		convert();
+
+		try {
+			convert();
+		} catch (UnsatisfiedLinkError e) {
+			// Thrown on fake Oppo devices
+			e.printStackTrace();
+		}
 	}
 
 	private void convert() {
