@@ -148,10 +148,6 @@ public class Display {
 		}
 	}
 
-	public void activityDestroyed() {
-		context.callDestroyApp(true);
-	}
-
 	public Displayable getCurrent() {
 		return current;
 	}

@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.AppClassLoader;
+import javax.microedition.shell.MicroActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -195,5 +196,9 @@ public class ContextHolder {
 	public static void notifyDestroyed() {
 		currentActivity.finish();
 		Process.killProcess(Process.myPid());
+	}
+
+	public static MicroActivity getActivity() {
+		return (MicroActivity) currentActivity;
 	}
 }

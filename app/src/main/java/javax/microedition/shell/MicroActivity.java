@@ -40,7 +40,6 @@ import java.util.LinkedHashMap;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
@@ -49,7 +48,6 @@ import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.lcdui.pointer.FixedKeyboard;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
@@ -74,8 +72,6 @@ public class MicroActivity extends AppCompatActivity {
 
 	private Displayable current;
 	private boolean visible;
-	private boolean loaded;
-	private boolean started;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
 	private boolean keyLongPressed;
@@ -128,27 +124,14 @@ public class MicroActivity extends AppCompatActivity {
 	public void onResume() {
 		super.onResume();
 		visible = true;
-		if (loaded) {
-			if (started) {
-				Display.getDisplay(null).activityResumed();
-			} else {
-				started = true;
-			}
-		}
+		MidletThread.resumeApp();
 	}
 
 	@Override
 	public void onPause() {
-		super.onPause();
 		visible = false;
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		if (loaded) {
-			Display.getDisplay(null).activityStopped();
-		}
+		MidletThread.pauseApp();
+		super.onPause();
 	}
 
 	@Override
@@ -193,7 +176,7 @@ public class MicroActivity extends AppCompatActivity {
 		if (size == 0) {
 			throw new Exception("No MIDlets found");
 		} else if (size == 1) {
-			startMidlet(midletsClassArray[0]);
+			MidletThread.create(microLoader, midletsClassArray[0]);
 		} else {
 			showMidletDialog(midletsNameArray, midletsClassArray);
 		}
@@ -202,32 +185,12 @@ public class MicroActivity extends AppCompatActivity {
 	private void showMidletDialog(String[] midletsNameArray, final String[] midletsClassArray) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
-				.setItems(midletsNameArray, (d, n) -> startMidlet(midletsClassArray[n]))
+				.setItems(midletsNameArray, (d, n) -> MidletThread.create(microLoader, midletsClassArray[n]))
 				.setOnCancelListener(dialogInterface -> finish());
 		builder.show();
 	}
 
-	private void startMidlet(String mainClass) {
-		try {
-			MIDlet midlet = microLoader.loadMIDlet(mainClass);
-			// Start midlet in Thread
-			Runnable r = () -> {
-				try {
-					midlet.startApp();
-					loaded = true;
-				} catch (Throwable t) {
-					t.printStackTrace();
-					ContextHolder.notifyDestroyed();
-				}
-			};
-			(new Thread(r, "MIDletLoader")).start();
-		} catch (Throwable t) {
-			t.printStackTrace();
-			showErrorDialog(t.toString());
-		}
-	}
-
-	private void showErrorDialog(String message) {
+	void showErrorDialog(String message) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
@@ -313,18 +276,8 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.ok, (p1, p2) -> {
-					Runnable r = () -> {
-						try {
-							Display.getDisplay(null).activityDestroyed();
-						} catch (Throwable ex) {
-							ex.printStackTrace();
-						}
-						ContextHolder.notifyDestroyed();
-					};
-					(new Thread(r, "MIDletDestroyThread")).start();
-				})
-				.setNegativeButton(android.R.string.cancel, null);
+				.setPositiveButton(android.R.string.yes, (d, w) -> MidletThread.destroyApp())
+				.setNegativeButton(android.R.string.no, null);
 		alertBuilder.create().show();
 	}
 
