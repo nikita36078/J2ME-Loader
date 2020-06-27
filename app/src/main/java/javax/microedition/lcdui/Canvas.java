@@ -282,13 +282,18 @@ public abstract class Canvas extends Displayable {
 
 		public InnerView(Context context) {
 			super(context);
-			setWillNotDraw(graphicsMode == 1);
-			getHolder().setFormat(PixelFormat.RGBA_8888);
 			if (graphicsMode == 1) {
 				setEGLContextClientVersion(2);
+				setEGLConfigChooser(false);
 				renderer = new GLRenderer();
 				setRenderer(renderer);
 				setRenderMode(RENDERMODE_WHEN_DIRTY);
+				setWillNotDraw(true);
+			} else {
+				if (graphicsMode == 2) {
+					setWillNotDraw(false);
+				}
+				getHolder().setFormat(PixelFormat.RGBA_8888);
 			}
 			rootView = ((Activity) context).findViewById(R.id.midletFrame);
 			overlayView = rootView.findViewById(R.id.vOverlay);
@@ -415,9 +420,9 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			onResume();
 			if (graphicsMode == 1) {
 				super.surfaceCreated(holder);
+				onResume();
 			}
 			synchronized (paintSync) {
 				surface = holder.getSurface();
@@ -432,9 +437,9 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			onPause();
 			renderStarted = false;
 			if (graphicsMode == 1) {
+				onPause();
 				super.surfaceDestroyed(holder);
 			}
 			synchronized (paintSync) {
