@@ -102,7 +102,11 @@ public class PNGUtils {
 				buf[c] = (alpha << 24) | rgb;
 			}
 		} else if (line.imgInfo.greyscale) { // gray
-			ga = trns != null ? trns.getGray() : -1;
+			if (trns != null) {
+				ga = ImageLineHelper.scaleUp(line.imgInfo.bitDepth, (byte) trns.getGray()) & 0xFF;
+			} else {
+				ga = -1;
+			}
 			for (int c = 0, c2 = 0; c < cols; c++) {
 				g = scanline[c2++];
 				alpha = alphachannel ? scanline[c2++] : (g != ga ? 255 : 0);
