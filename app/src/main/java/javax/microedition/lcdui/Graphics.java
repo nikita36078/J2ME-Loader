@@ -46,6 +46,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	private Canvas canvas;
 	private Bitmap canvasBitmap;
+	private final Image image;
 	private int canvasInitSave;
 
 	private Paint drawPaint = new Paint();
@@ -54,9 +55,8 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	private int translateX;
 	private int translateY;
 
+	private final Rect clip = new Rect();
 	private Rect rect = new Rect();
-	private Rect clipRect = new Rect();
-	private Rect canvasRect = new Rect();
 	private RectF rectF = new RectF();
 	private Path path = new Path();
 
@@ -68,9 +68,11 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	Graphics(Image image) {
 		canvasBitmap = image.getBitmap();
+		this.image = image;
 		canvas = new Canvas(canvasBitmap);
-		canvas.clipRect(image.getBounds());
 		canvasInitSave = canvas.save();
+		canvas.clipRect(image.getBounds());
+		canvas.getClipBounds(clip);
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
 		drawPaint.setAntiAlias(false);
@@ -83,9 +85,8 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		setStrokeStyle(SOLID);
 		canvas.restoreToCount(canvasInitSave);
 		canvasInitSave = canvas.save();
-		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
-		canvas.getClipBounds(canvasRect);
-		clipRect.set(canvasRect);
+		canvas.clipRect(image.getBounds());
+		canvas.getClipBounds(clip);
 		translateX = 0;
 		translateY = 0;
 	}
@@ -187,46 +188,38 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	public void setClip(int x, int y, int width, int height) {
-		clipRect.set(x, y, x + width, y + height);
+		clip.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			canvas.restore();
 			canvas.save();
 			canvas.translate(translateX, translateY);
-			canvas.clipRect(clipRect);
+			canvas.clipRect(clip);
 		} else {
-			canvas.clipRect(clipRect, Region.Op.REPLACE);
+			canvas.clipRect(clip, Region.Op.REPLACE);
 		}
-		// Calculate the clip
-		clipRect.offset(translateX, translateY);
-		clipRect.sort();
-		if (!clipRect.intersect(canvasRect)) {
-			clipRect.set(translateX, translateY, translateX, translateY);
-		}
+		canvas.getClipBounds(clip);
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
-		canvas.clipRect(x, y, x + width, y + height);
-		// Calculate the clip
-		clipRect.offset(-translateX, -translateY);
-		clipRect.sort();
-		clipRect.intersect(x, y, x + width, y + height);
-		clipRect.offset(translateX, translateY);
+		clip.set(x, y, x + width, y + height);
+		canvas.clipRect(clip);
+		canvas.getClipBounds(clip);
 	}
 
 	public int getClipX() {
-		return clipRect.left - translateX;
+		return clip.left;
 	}
 
 	public int getClipY() {
-		return clipRect.top - translateY;
+		return clip.top;
 	}
 
 	public int getClipWidth() {
-		return clipRect.width();
+		return clip.width();
 	}
 
 	public int getClipHeight() {
-		return clipRect.height();
+		return clip.height();
 	}
 
 	public void translate(int dx, int dy) {
@@ -234,6 +227,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		translateY += dy;
 
 		canvas.translate(dx, dy);
+		canvas.getClipBounds(clip);
 	}
 
 	public int getTranslateX() {
@@ -328,7 +322,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		fillPaint.setAntiAlias(false);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawString(String text, int x, int y, int anchor) {
 		if (anchor == 0) {
 			anchor = LEFT | TOP;

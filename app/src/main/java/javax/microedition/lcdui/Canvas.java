@@ -841,19 +841,15 @@ public abstract class Canvas extends Displayable {
 		virtualScreen.set(onX, onY, onX + onWidth, onY + onHeight);
 
 		if (offscreen == null) {
-			int w = width + (width & 1);
-			int h = maxHeight + (maxHeight & 1);
-			offscreen = Image.createImage(w, h);
-			offscreenCopy = Image.createImage(w, h);
-			offscreen.setSize(width, maxHeight);
-			offscreenCopy.setSize(width, maxHeight);
+			offscreen = Image.createImage(width, maxHeight);
+			offscreenCopy = Image.createImage(width, maxHeight);
 		}
 		if (offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen.resetCanvas();
-			offscreenCopy.resetCanvas();
 			offscreen.setSize(width, height);
 			offscreenCopy.setSize(width, height);
 		}
+		offscreen.getSingleGraphics().reset();
+		offscreenCopy.getSingleGraphics().reset();
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
 		}

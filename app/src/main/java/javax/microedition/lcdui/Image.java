@@ -165,21 +165,11 @@ public class Image {
 		dst.getCanvas().drawBitmap(bitmap, bounds, r, null);
 	}
 
-	Graphics getSingleGraphics() {
+	public Graphics getSingleGraphics() {
 		if (graphics == null) {
 			graphics = getGraphics();
 		}
 		return graphics;
-	}
-
-	void resetCanvas() {
-		getCanvas();
-		try {
-			canvas.restoreToCount(save);
-		} catch (Exception e) {
-			canvas.restoreToCount(1);
-		}
-		save = canvas.save();
 	}
 
 	void setSize(int width, int height) {
