@@ -25,6 +25,7 @@
 -keep class com.nokia.mid.** { *; }
 -keep class com.sun.midp.midlet.** { *; }
 -keep class com.vodafone.util.** { *; }
+-keep class mmpp.media.** { *; }
 -keep class org.microemu.** { *; }
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
