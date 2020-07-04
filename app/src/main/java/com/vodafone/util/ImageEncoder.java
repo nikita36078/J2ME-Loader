@@ -24,18 +24,33 @@ import java.io.IOException;
 import javax.microedition.lcdui.Image;
 
 public class ImageEncoder {
+	public static int FORMAT_PNG = 0;
+	public static int FORMAT_JPEG = 1;
+	private int format;
 
-	public static ImageEncoder createEncoder(int flags) {
-		return new ImageEncoder();
+	public ImageEncoder(int format) {
+		this.format = format;
 	}
 
-	public byte[] encodeOffscreen(Image image, int x, int y, int width, int height) throws IOException {
-		Image resultImage = Image.createImage(image, x, y, width, height, 0);
+	public static ImageEncoder createEncoder(int format) {
+		if (format != FORMAT_PNG && format != FORMAT_JPEG) {
+			throw new IllegalArgumentException();
+		}
+		return new ImageEncoder(format);
+	}
+
+	public byte[] encodeOffscreen(Image src, int x, int y, int width, int height) throws IOException {
+		Image resultImage = Image.createImage(src, x, y, width, height, 0);
 		Bitmap bmp = resultImage.getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		Bitmap.CompressFormat compressFormat =
+				(format == FORMAT_PNG) ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
+		bmp.compress(compressFormat, 100, stream);
 		byte[] byteArray = stream.toByteArray();
 		stream.close();
 		return byteArray;
+	}
+
+	public void setJpegOption(int size) {
 	}
 }
