@@ -283,7 +283,15 @@ void m3gDrawElements(GLenum mode, GLsizei count, GLenum type, const void *indice
 }
 
 void m3gDrawArrays(GLenum mode, GLsizei count, GLenum type) {
+    multiplyMatrix(projMatrix, modelMatrix, mvpMatrix);
 
+    glUniformMatrix4fv(glTMVPHandle, 1, GL_FALSE, mvpMatrix);
+    checkGlError("glUniformMatrix4fv");
+    glUniformMatrix4fv(glTTexMHandle, 1, GL_FALSE, textureMatrix);
+    checkGlError("glUniformMatrix4fv");
+
+    glDrawArrays(mode, count, type);
+    checkGlError("glDrawElements");
 }
 
 void m3gLoadProjectionMatrix(M3Gfloat* matr) {
