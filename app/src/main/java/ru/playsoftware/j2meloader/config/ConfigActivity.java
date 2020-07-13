@@ -427,13 +427,21 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				ShaderInfo item = (ShaderInfo) parent.getItemAtPosition(position);
 				ShaderInfo.Setting[] settings = item.settings;
+				float[] values = null;
 				for (int i = 0; i < 4; i++) {
 					if (settings[i] != null) {
-						btShaderTune.setVisibility(View.VISIBLE);
-						return;
+						if (values == null) {
+							values = new float[4];
+						}
+						values[i] = settings[i].def;
 					}
 				}
-				btShaderTune.setVisibility(View.GONE);
+				if (values == null) {
+					btShaderTune.setVisibility(View.GONE);
+				} else {
+					item.values = values;
+					btShaderTune.setVisibility(View.VISIBLE);
+				}
 			}
 
 			@Override

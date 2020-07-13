@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
@@ -59,6 +60,11 @@ public class ShaderTuneAlert extends DialogFragment {
 		}
 		Bundle bundle = requireArguments();
 		shader = bundle.getParcelable(SHADER_KEY);
+		if (shader == null) {
+			Toast.makeText(context, R.string.error, Toast.LENGTH_SHORT).show();
+			dismiss();
+			return;
+		}
 		values = shader.values;
 	}
 
