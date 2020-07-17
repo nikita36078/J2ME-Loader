@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import android.graphics.Rect;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -197,6 +199,32 @@ public class GraphicsTest {
 				9, 10, WHITE
 		};
 		assertTrue(validate(image, spotsToValidate));
+
+		graphics.setClip(0, 0, 100, 100);
+		Rect canvasClip = graphics.getCanvas().getClipBounds();
+		Rect clip = new Rect(graphics.getClipX(), graphics.getClipY(),
+				graphics.getClipX() + graphics.getClipWidth(),
+				graphics.getClipY() + graphics.getClipHeight());
+		assertTrue(canvasClip.equals(clip));
+
+		graphics.translate(10, 10);
+		graphics.setClip(0, 0, 5, 5);
+		graphics.getCanvas().getClipBounds(canvasClip);
+		clip.set(graphics.getClipX(), graphics.getClipY(),
+				graphics.getClipX() + graphics.getClipWidth(),
+				graphics.getClipY() + graphics.getClipHeight());
+		graphics.translate(-10, -10);
+		assertTrue(canvasClip.equals(clip));
+
+		graphics.translate(20, 10);
+		graphics.setClip(0, 0, 30, 30);
+		graphics.clipRect(30, 30, 40, 40);
+		graphics.getCanvas().getClipBounds(canvasClip);
+		clip.set(graphics.getClipX(), graphics.getClipY(),
+				graphics.getClipX() + graphics.getClipWidth(),
+				graphics.getClipY() + graphics.getClipHeight());
+		graphics.translate(-20, -10);
+		assertTrue(canvasClip.equals(clip));
 	}
 
 	@Test

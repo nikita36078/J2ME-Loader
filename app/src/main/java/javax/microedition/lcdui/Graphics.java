@@ -53,8 +53,9 @@ public class Graphics {
 	private int translateX;
 	private int translateY;
 
-	private Rect intRect = new Rect();
-	private RectF floatRect = new RectF();
+	private Rect clipRect = new Rect();
+	private Rect canvasRect = new Rect();
+	private RectF rectF = new RectF();
 	private Path path = new Path();
 
 	private DashPathEffect dpeffect = new DashPathEffect(new float[]{5, 5}, 0);
@@ -98,11 +99,15 @@ public class Graphics {
 			canvas.save();
 		}
 		canvas.save();
+		canvas.getClipBounds(canvasRect);
+		clipRect.set(canvasRect);
 		this.canvas = canvas;
 		this.canvasBitmap = canvasBitmap;
 	}
 
 	public void setSurfaceCanvas(Canvas canvas) {
+		canvas.getClipBounds(canvasRect);
+		clipRect.set(canvasRect);
 		this.canvas = canvas;
 	}
 
@@ -218,40 +223,46 @@ public class Graphics {
 	}
 
 	public void setClip(int x, int y, int width, int height) {
-		intRect.set(x, y, x + width, y + height);
+		clipRect.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			canvas.restore();
 			canvas.save();
 			canvas.translate(translateX, translateY);
-			canvas.clipRect(intRect);
+			canvas.clipRect(clipRect);
 		} else {
-			canvas.clipRect(intRect, Region.Op.REPLACE);
+			canvas.clipRect(clipRect, Region.Op.REPLACE);
+		}
+		// Calculate the clip
+		clipRect.offset(translateX, translateY);
+		clipRect.sort();
+		if (!clipRect.intersect(canvasRect)) {
+			clipRect.set(translateX, translateY, translateX, translateY);
 		}
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
-		intRect.set(x, y, x + width, y + height);
-		canvas.clipRect(intRect);
+		canvas.clipRect(x, y, x + width, y + height);
+		// Calculate the clip
+		clipRect.offset(-translateX, -translateY);
+		clipRect.sort();
+		clipRect.intersect(x, y, x + width, y + height);
+		clipRect.offset(translateX, translateY);
 	}
 
 	public int getClipX() {
-		canvas.getClipBounds(intRect);
-		return intRect.left;
+		return clipRect.left - translateX;
 	}
 
 	public int getClipY() {
-		canvas.getClipBounds(intRect);
-		return intRect.top;
+		return clipRect.top - translateY;
 	}
 
 	public int getClipWidth() {
-		canvas.getClipBounds(intRect);
-		return intRect.width();
+		return clipRect.width();
 	}
 
 	public int getClipHeight() {
-		canvas.getClipBounds(intRect);
-		return intRect.height();
+		return clipRect.height();
 	}
 
 	public void translate(int dx, int dy) {
@@ -291,8 +302,8 @@ public class Graphics {
 
 	public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
 		if (width <= 0 || height <= 0) return;
-		floatRect.set(x, y, x + width, y + height);
-		canvas.drawArc(floatRect, -startAngle, -arcAngle, false, drawPaint);
+		rectF.set(x, y, x + width, y + height);
+		canvas.drawArc(rectF, -startAngle, -arcAngle, false, drawPaint);
 	}
 
 	public void drawArc(RectF oval, int startAngle, int arcAngle) {
@@ -301,8 +312,8 @@ public class Graphics {
 
 	public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
 		if (width <= 0 || height <= 0) return;
-		floatRect.set(x, y, x + width, y + height);
-		canvas.drawArc(floatRect, -startAngle, -arcAngle, true, fillPaint);
+		rectF.set(x, y, x + width, y + height);
+		canvas.drawArc(rectF, -startAngle, -arcAngle, true, fillPaint);
 	}
 
 	public void fillArc(RectF oval, int startAngle, int arcAngle) {
@@ -321,8 +332,8 @@ public class Graphics {
 
 	public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
 		if (width <= 0 || height <= 0) return;
-		floatRect.set(x, y, x + width, y + height);
-		canvas.drawRoundRect(floatRect, arcWidth, arcHeight, drawPaint);
+		rectF.set(x, y, x + width, y + height);
+		canvas.drawRoundRect(rectF, arcWidth, arcHeight, drawPaint);
 	}
 
 	public void drawRoundRect(RectF rect, int arcWidth, int arcHeight) {
@@ -331,8 +342,8 @@ public class Graphics {
 
 	public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
 		if (width <= 0 || height <= 0) return;
-		floatRect.set(x, y, x + width, y + height);
-		canvas.drawRoundRect(floatRect, arcWidth, arcHeight, fillPaint);
+		rectF.set(x, y, x + width, y + height);
+		canvas.drawRoundRect(rectF, arcWidth, arcHeight, fillPaint);
 	}
 
 	public void fillRoundRect(RectF rect, int arcWidth, int arcHeight) {
@@ -400,8 +411,8 @@ public class Graphics {
 		imagePaint.setAlpha(alpha);
 
 		if (width > 0 && height > 0) {
-			intRect.set(x, y, x + width, y + height);
-			canvas.drawBitmap(image.getBitmap(), null, intRect, imagePaint);
+			rectF.set(x, y, x + width, y + height);
+			canvas.drawBitmap(image.getBitmap(), null, rectF, imagePaint);
 		} else {
 			canvas.drawBitmap(image.getBitmap(), x, y, imagePaint);
 		}
