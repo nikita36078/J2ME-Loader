@@ -24,7 +24,7 @@
 -keep class com.motorola.** { *; }
 -keep class com.nokia.mid.** { *; }
 -keep class com.sun.midp.midlet.** { *; }
--keep class com.vodafone.util.** { *; }
+-keep class com.vodafone.** { *; }
 -keep class mmpp.media.** { *; }
 -keep class org.microemu.** { *; }
 # Keep the BuildConfig
