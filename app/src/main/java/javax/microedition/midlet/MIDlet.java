@@ -82,7 +82,7 @@ public abstract class MIDlet {
 	public boolean platformRequest(String url)
 			throws ConnectionNotFoundException {
 		try {
-			ContextHolder.getAppContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+			ContextHolder.getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		} catch (ActivityNotFoundException e) {
 			throw new ConnectionNotFoundException();
 		}
