@@ -75,8 +75,10 @@ public class ShaderProgram {
 		glAttachShader(program, fragmentId); // add the fragment shader to program
 
 		glLinkProgram(program);              // create OpenGL program executables
-		String s = glGetProgramInfoLog(program);
-		if (s.length() > 0) {
+		int[] status = new int[1];
+		glGetProgramiv(program, GL_LINK_STATUS, status, 0);
+		if (status[0] == 0) {
+			String s = glGetProgramInfoLog(program);
 			Log.e(TAG, "createProgram: " + s);
 		}
 		int error = glGetError();
@@ -112,8 +114,10 @@ public class ShaderProgram {
 		// add the source code to the shader and compile it
 		glShaderSource(shader, shaderCode);
 		glCompileShader(shader);
-		String s = glGetShaderInfoLog(shader);
-		if (s.length() > 0) {
+		int[] status = new int[1];
+		glGetShaderiv(shader, GL_COMPILE_STATUS, status, 0);
+		if (status[0] == 0) {
+			String s = glGetShaderInfoLog(shader);
 			Log.e(TAG, "loadShader: " + s);
 			glDeleteShader(shader);
 			return -1;
