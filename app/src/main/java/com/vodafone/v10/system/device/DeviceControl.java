@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +20,35 @@ package com.vodafone.v10.system.device;
 import javax.microedition.util.ContextHolder;
 
 public class DeviceControl {
-	public static final int BACK_LIGHT = 5;
 	public static final int BATTERY = 1;
-	public static final int EIGHT_DIRECTIONS = 6;
 	public static final int FIELD_INTENSITY = 2;
 	public static final int KEY_STATE = 3;
 	public static final int VIBRATION = 4;
+	public static final int BACK_LIGHT = 5;
+	public static final int EIGHT_DIRECTIONS = 6;
+
 	private static DeviceControl instance;
 
-	public static final DeviceControl getDefaultDeviceControl() {
+	public static synchronized DeviceControl getDefaultDeviceControl() {
 		if (instance == null) {
 			instance = new DeviceControl();
 		}
 		return instance;
+	}
+
+	public static void setMailListener(MailListener listener) {
+	}
+
+	public static void setRingStateListener(RingStateListener listener) {
+	}
+
+	public static void setScheduledAlarmListener(ScheduledAlarmListener listener) {
+	}
+
+	public static void setTelephonyListener(TelephonyListener listener) {
+	}
+
+	public void blink(int lighting, int extinction, int repeat) {
 	}
 
 	public int getDeviceState(int deviceNo) {
@@ -50,6 +67,14 @@ public class DeviceControl {
 		return 0;
 	}
 
+	public boolean getKeyRepeatState(int key) {
+		return false;
+	}
+
+	public boolean isDeviceActive(int deviceNo) {
+		return false;
+	}
+
 	public boolean setDeviceActive(int deviceNo, boolean active) {
 		switch (deviceNo) {
 			case BACK_LIGHT:
@@ -63,5 +88,9 @@ public class DeviceControl {
 				throw new IllegalStateException();
 		}
 		return true;
+	}
+
+	public boolean setKeyRepeatState(int key, boolean state) {
+		return false;
 	}
 }

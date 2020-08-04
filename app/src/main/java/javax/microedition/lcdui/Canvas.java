@@ -274,6 +274,14 @@ public abstract class Canvas extends Displayable {
 		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
 	}
 
+	public void callShowNotify() {
+		showNotify();
+	}
+
+	public void callHideNotify() {
+		hideNotify();
+	}
+
 	private class InnerView extends GLSurfaceView {
 
 		private GLRenderer renderer;
@@ -945,7 +953,7 @@ public abstract class Canvas extends Displayable {
 		return height;
 	}
 
-	public abstract void paint(Graphics g);
+	protected abstract void paint(Graphics g);
 
 	public final void repaint() {
 		repaint(0, 0, width, height);
@@ -1103,10 +1111,10 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	public void showNotify() {
+	protected void showNotify() {
 	}
 
-	public void hideNotify() {
+	protected void hideNotify() {
 	}
 
 	public void keyPressed(int keyCode) {

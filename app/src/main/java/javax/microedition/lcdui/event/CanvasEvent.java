@@ -160,7 +160,7 @@ public class CanvasEvent extends Event {
 
 			case SHOW_NOTIFY:
 				try {
-					canvas.showNotify();
+					canvas.callShowNotify();
 				} catch (Exception e) {
 					Log.e(TAG, "showNotify: ", e);
 				}
@@ -170,7 +170,7 @@ public class CanvasEvent extends Event {
 			case HIDE_NOTIFY:
 				canvas.setVisible(false);
 				try {
-					canvas.hideNotify();
+					canvas.callHideNotify();
 				} catch (Exception e) {
 					Log.e(TAG, "hideNotify: ", e);
 				}
