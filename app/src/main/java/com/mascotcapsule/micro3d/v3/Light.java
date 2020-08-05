@@ -68,7 +68,7 @@ public class Light {
 		this.myAmbIntensity = p;
 	}
 
-	public final Vector3D getDirection() {
+	public Vector3D getDirection() {
 		return getParallelLightDirection();
 	}
 

@@ -28,9 +28,11 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 
+import com.mascotcapsule.micro3d.v3.Graphics3D;
+
 import javax.microedition.lcdui.game.Sprite;
 
-public class Graphics {
+public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D {
 	public static final int HCENTER = 1;
 	public static final int VCENTER = 2;
 	public static final int LEFT = 4;
@@ -62,6 +64,7 @@ public class Graphics {
 	private int stroke = SOLID;
 
 	private Font font = Font.getDefaultFont();
+	private com.mascotcapsule.micro3d.v3.Graphics3D g3d;
 
 	Graphics(Image image) {
 		canvasBitmap = image.getBitmap();
@@ -493,5 +496,16 @@ public class Graphics {
 	void flush(Image image, int x, int y, int width, int height) {
 		rect.set(x, y, x + width, y + height);
 		canvas.drawBitmap(image.getBitmap(), rect, rect, null);
+	}
+
+	@Override
+	public synchronized void drawFigure(com.vodafone.v10.graphics.j3d.Figure figure,
+										int x, int y,
+										com.vodafone.v10.graphics.j3d.FigureLayout layout,
+										com.vodafone.v10.graphics.j3d.Effect3D effect) {
+		if (g3d == null) g3d = new Graphics3D();
+		g3d.bind(this);
+		g3d.drawFigure(figure, x, y, layout, effect);
+		g3d.release(this);
 	}
 }
