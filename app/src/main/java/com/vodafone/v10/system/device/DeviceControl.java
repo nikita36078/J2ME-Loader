@@ -17,6 +17,7 @@
 
 package com.vodafone.v10.system.device;
 
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
 public class DeviceControl {
@@ -57,14 +58,12 @@ public class DeviceControl {
 			case FIELD_INTENSITY:
 				return 100;
 			case KEY_STATE:
-				return getKeyState();
+				VirtualKeyboard vk = ContextHolder.getVk();
+				if (vk == null) return 0;
+				return vk.getKeyStatesVodafone();
 			default:
 				throw new IllegalStateException();
 		}
-	}
-
-	private int getKeyState() {
-		return 0;
 	}
 
 	public boolean getKeyRepeatState(int key) {

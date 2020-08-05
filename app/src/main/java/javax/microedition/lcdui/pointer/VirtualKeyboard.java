@@ -1087,4 +1087,46 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public void setView(View view) {
 		overlayView = view;
 	}
+
+	public int getKeyStatesVodafone() {
+		int keyStates = 0;
+		for (int i = 0; i < keypad.length; i++) {
+			VirtualKey key = keypad[i];
+			if (key.selected) {
+				keyStates |= getKeyBit(i);
+			}
+		}
+		return keyStates;
+	}
+
+	private int getKeyBit(int vKey) {
+		switch (vKey) {
+			case KEY_NUM0      : return 1;       // 0 0 key         KEY_NUM0       = 9;
+			case KEY_NUM1      : return 1 <<  1; // 1 1 key         KEY_NUM1       = 0;
+			case KEY_NUM2      : return 1 <<  2; // 2 2 key         KEY_NUM2       = 1;
+			case KEY_NUM3      : return 1 <<  3; // 3 3 key         KEY_NUM3       = 2;
+			case KEY_NUM4      : return 1 <<  4; // 4 4 key         KEY_NUM4       = 3;
+			case KEY_NUM5      : return 1 <<  5; // 5 5 key         KEY_NUM5       = 4;
+			case KEY_NUM6      : return 1 <<  6; // 6 6 key         KEY_NUM6       = 5;
+			case KEY_NUM7      : return 1 <<  7; // 7 7key          KEY_NUM7       = 6;
+			case KEY_NUM8      : return 1 <<  8; // 8 8 key         KEY_NUM8       = 7;
+			case KEY_NUM9      : return 1 <<  9; // 9 9 key         KEY_NUM9       = 8;
+			case KEY_STAR      : return 1 << 10; // 10 * key        KEY_STAR       = 10;
+			case KEY_POUND     : return 1 << 11; // 11 # key        KEY_POUND      = 11;
+			case KEY_UP        : return 1 << 12; // 12 Up key       KEY_UP         = 17;
+			case KEY_LEFT      : return 1 << 13; // 13 Left key     KEY_LEFT       = 19;
+			case KEY_RIGHT     : return 1 << 14; // 14 Right key    KEY_RIGHT      = 20;
+			case KEY_DOWN      : return 1 << 15; // 15 Down key     KEY_DOWN       = 22;
+			case KEY_FIRE      : return 1 << 16; // 16 Select key   KEY_FIRE       = 24;
+			case KEY_SOFT_LEFT : return 1 << 17; // 17 Softkey 1    KEY_SOFT_LEFT  = 12;
+			case KEY_SOFT_RIGHT: return 1 << 18; // 18 Softkey 2    KEY_SOFT_RIGHT = 13;
+			// TODO: 05.08.2020 Softkey3 mapped to KEY_CANCEL
+			case KEY_CANCEL    : return 1 << 19; // 19 Softkey 3    KEY_CANCEL     = 15;
+			case KEY_UP_RIGHT  : return 1 << 20; // 20 Upper Right  KEY_UP_RIGHT   = 18;
+			case KEY_UP_LEFT   : return 1 << 21; // 21 Upper Left   KEY_UP_LEFT    = 16;
+			case KEY_DOWN_RIGHT: return 1 << 22; // 22 Lower Right  KEY_DOWN_RIGHT = 23;
+			case KEY_DOWN_LEFT : return 1 << 23; // 23 Lower Left   KEY_DOWN_LEFT  = 21;
+		}
+		return 0;
+	}
 }
