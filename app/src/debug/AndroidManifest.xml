@@ -6,9 +6,6 @@
         <activity
             android:name="javax.microedition.shell.MicroActivity"
             tools:remove="android:process"/>
-        <activity
-            android:name="ru.playsoftware.j2meloader.config.ConfigActivity"
-            tools:remove="android:process"/>
     </application>
 
 </manifest>

@@ -76,7 +76,6 @@
         <activity
             android:name=".config.ConfigActivity"
             android:exported="true"
-            android:process=":midlet"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
