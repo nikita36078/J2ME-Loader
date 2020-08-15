@@ -22,7 +22,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             applicationIdSuffix '.debug'
@@ -93,7 +93,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.preference:preference:1.1.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'ar.com.hjg:pngj:2.1.0'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'ch.acra:acra-dialog:5.5.1'
