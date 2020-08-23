@@ -26,13 +26,6 @@
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />
     <ListPreference
-        android:defaultValue="round"
-        android:entries="@array/pref_button_shape_entries"
-        android:entryValues="@array/pref_button_shape_values"
-        android:icon="@drawable/ic_setting_button_shape"
-        android:key="pref_button_shape"
-        android:title="@string/pref_button_shape_title" />
-    <ListPreference
         android:defaultValue="name"
         android:entries="@array/pref_app_sort_entries"
         android:entryValues="@array/pref_app_sort_values"

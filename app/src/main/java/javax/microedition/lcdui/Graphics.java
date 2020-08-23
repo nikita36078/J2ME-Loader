@@ -501,4 +501,12 @@ public class Graphics {
 	public Bitmap getBitmap() {
 		return canvasBitmap;
 	}
+
+	public void fillRect(RectF rect) {
+		canvas.drawRect(rect, fillPaint);
+	}
+
+	public void drawRect(RectF rect) {
+		canvas.drawRect(rect, drawPaint);
+	}
 }

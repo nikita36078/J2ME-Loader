@@ -149,8 +149,9 @@
     <string name="pref_wakelock_title">Keep screen on</string>
     <string name="pref_button_shape_title">Button shape</string>
     <string-array name="pref_button_shape_entries">
-        <item>Round</item>
-        <item>Square</item>
+        <item>Oval</item>
+        <item>Rectangle</item>
+        <item>Rounded Rectangle</item>
     </string-array>
     <string-array name="pref_button_shape_values" translatable="false">
         <item>round</item>

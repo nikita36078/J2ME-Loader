@@ -464,6 +464,36 @@
 
                 </LinearLayout><!-- KeyCodes layout -->
 
+                <!-- Key shape type -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:minHeight="40dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/pref_button_shape_title"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="?attr/textColorSecondary"
+                        android:textSize="15sp" />
+
+                    <Spinner
+                        android:id="@+id/spButtonsShape"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="20"
+                        android:entries="@array/pref_button_shape_entries"
+                        android:textColor="?attr/textColorSecondary"
+                        android:textSize="15sp" />
+
+                </LinearLayout><!-- Key shape type -->
+
                 <!-- Keys vibration feedback -->
                 <CheckBox
                     android:id="@+id/cxVKFeedback"

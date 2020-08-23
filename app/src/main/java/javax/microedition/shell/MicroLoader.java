@@ -266,17 +266,8 @@ public class MicroLoader {
 		vk.setOverlayAlpha(vkAlpha);
 		vk.setHideDelay(vkDelay);
 		vk.setHasHapticFeedback(vkFeedback);
+		vk.setButtonShape(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 		vk.setForceOpacity(vkForceOpacity);
-
-		String shapeStr = PreferenceManager.getDefaultSharedPreferences(context)
-				.getString("pref_button_shape", "round");
-		int shape;
-		if (shapeStr.equals("square")) {
-			shape = VirtualKeyboard.SQUARE_SHAPE;
-		} else {
-			shape = VirtualKeyboard.ROUND_SHAPE;
-		}
-		vk.setButtonShape(shape);
 
 		File keylayoutFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
 		if (keylayoutFile.exists()) {

@@ -55,6 +55,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
@@ -104,6 +105,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	protected Spinner spVKType;
 	protected Spinner spLayout;
+	private Spinner spButtonsShape;
 	protected SeekBar sbVKAlpha;
 	protected EditText tfVKHideDelay;
 	protected EditText tfVKFore;
@@ -197,6 +199,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		spVKType = findViewById(R.id.spVKType);
 		spLayout = findViewById(R.id.spLayout);
+		spButtonsShape = findViewById(R.id.spButtonsShape);
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
 		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
 		tfVKFore = findViewById(R.id.tfVKFore);
@@ -357,8 +360,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@Override
 	protected void onResume() {
-		loadParams();
 		super.onResume();
+		loadParams();
 	}
 
 	@Override
@@ -490,6 +493,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		spVKType.setSelection(params.getInt("VirtualKeyboardType", 0));
 		spLayout.setSelection(params.getInt("Layout", 0));
+		spButtonsShape.setSelection(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
 		tfVKBack.setText(Integer.toHexString(
@@ -544,6 +548,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
 			params.putInt("Layout", spLayout.getSelectedItemPosition());
+			params.putInt("ButtonShape", spButtonsShape.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
 			params.putInt("VirtualKeyboardDelay", parseInt(tfVKHideDelay.getText().toString()));
 			params.putInt("VirtualKeyboardColorBackground",
