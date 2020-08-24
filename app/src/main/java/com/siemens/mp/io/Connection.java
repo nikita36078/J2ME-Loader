@@ -24,21 +24,37 @@
 
 package com.siemens.mp.io;
 
+import com.siemens.mp.NotAllowedException;
+
 public class Connection extends com.siemens.mp.misc.NativeMem {
 
-	private ConnectionListener listener;
+	private final String connectTo;
+	private static ConnectionListener sListener;
+	private ConnectionListener mListener;
 
 	public Connection(String connectTo) {
+		this.connectTo = connectTo;
 	}
 
 	public ConnectionListener getListener() {
-		return listener;
+		return mListener;
 	}
 
-	public void send(byte[] data) {
+	public void send(byte[] data) throws NotAllowedException {
+		if (sListener != null) {
+			sListener.receiveData(data);
+		}
+		if (mListener != null) {
+			mListener.receiveData(data);
+		}
 	}
 
 	public void setListener(ConnectionListener listener) {
-		this.listener = listener;
+		mListener = listener;
+	}
+
+	// renamed for fix versioning problem
+	public static void setListenerOld(ConnectionListener listener) {
+		sListener = listener;
 	}
 }
