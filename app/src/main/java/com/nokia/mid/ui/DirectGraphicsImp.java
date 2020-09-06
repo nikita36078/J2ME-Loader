@@ -150,7 +150,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPixels(short[] pix, boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+	public void drawPixels(short[] pix, boolean trans, int off, int scanlen,
+						   int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -170,9 +171,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = toARGB32(pix[off + ix + iy * scanlen], format);
-				if (format == TYPE_USHORT_444_RGB) {
-					c |= (0xFF << 24);
-				}
 				pixres[iy * width + ix] = c;
 			}
 		}
@@ -336,45 +334,50 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	private static int toARGB32(short s, int type) {
-		int result = 0;
 		switch (type) {
 			case TYPE_USHORT_4444_ARGB: {
-				int a = ((s) & 0xF000) >>> 12;
-				int r = ((s) & 0x0F00) >>> 8;
-				int g = ((s) & 0x00F0) >>> 4;
-				int b = ((s) & 0x000F);
+				int a = (s & 0xF000) << 12;
+				int r = (s & 0x0F00) << 8;
+				int g = (s & 0x00F0) << 4;
+				int b = (s & 0x000F);
+				a |= a << 4;
+				r |= r << 4;
+				g |= g << 4;
+				b |= b << 4;
 
-				result = (a << 28) | (r << 20) | (g << 12) | (b << 4);
-				break;
+				return a | r | g | b;
 			}
 			case TYPE_USHORT_444_RGB: {
-				int r = ((s) & 0x0F00) >>> 8;
-				int g = ((s) & 0x00F0) >>> 4;
-				int b = ((s) & 0x000F);
+				int a = 0xFF << 24;
+				int r = (s & 0x0F00) << 8;
+				int g = (s & 0x00F0) << 4;
+				int b = (s & 0x000F);
+				r |= r << 4;
+				g |= g << 4;
+				b |= b << 4;
 
-				result = (r << 20) | (g << 12) | (b << 4);
-				break;
+				return a | r | g | b;
 			}
 		}
-		return result;
+		return 0;
 	}
 
 	private static short toARGB16(int s, int type) {
 		short result = 0;
 		switch (type) {
 			case TYPE_USHORT_4444_ARGB: {
-				int a = ((s) & 0xFF000000) >>> 28;
-				int r = ((s) & 0x00FF0000) >>> 20;
-				int g = ((s) & 0x0000FF00) >>> 12;
-				int b = ((s) & 0x000000FF) >>> 4;
+				int a = (s & 0xFF000000) >>> 28;
+				int r = (s & 0x00FF0000) >>> 20;
+				int g = (s & 0x0000FF00) >>> 12;
+				int b = (s & 0x000000FF) >>> 4;
 
 				result = (short) ((a << 12) | (r << 8) | (g << 4) | b);
 				break;
 			}
 			case TYPE_USHORT_444_RGB: {
-				int r = ((s) & 0x00FF0000) >>> 20;
-				int g = ((s) & 0x0000FF00) >>> 12;
-				int b = ((s) & 0x000000FF) >>> 4;
+				int r = (s & 0x00FF0000) >>> 20;
+				int g = (s & 0x0000FF00) >>> 12;
+				int b = (s & 0x000000FF) >>> 4;
 
 				result = (short) ((r << 8) | (g << 4) | b);
 				break;
