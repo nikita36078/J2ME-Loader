@@ -105,8 +105,6 @@
 
     <style name="SwitchStyle">
         <item name="android:textSize">15sp</item>
-        <item name="android:paddingLeft">4dp</item>
-        <item name="android:paddingStart">4dp</item>
         <item name="android:textColor">?textColorSecondary</item>
         <item name="android:minHeight">40dp</item>
     </style>

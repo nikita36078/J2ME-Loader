@@ -714,7 +714,7 @@
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:text="@string/PREF_VK_HIDE_DELAY"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
@@ -936,7 +936,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="?attr/bg_config_card"
-            android:padding="10dp"
+            android:padding="5dp"
             app:elevation="2dp">
 
             <TextView
