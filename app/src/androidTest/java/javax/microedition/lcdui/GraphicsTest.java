@@ -201,7 +201,7 @@ public class GraphicsTest {
 		assertTrue(validate(image, spotsToValidate));
 
 		graphics.setClip(0, 0, 100, 100);
-		Rect canvasClip = new Rect(0, 0, testWidth, testHeight);
+		Rect canvasClip = graphics.getCanvas().getClipBounds();
 		Rect clip = new Rect(graphics.getClipX(), graphics.getClipY(),
 				graphics.getClipX() + graphics.getClipWidth(),
 				graphics.getClipY() + graphics.getClipHeight());
@@ -209,7 +209,7 @@ public class GraphicsTest {
 
 		graphics.translate(10, 10);
 		graphics.setClip(0, 0, 5, 5);
-		canvasClip.set(0, 0, 5, 5);
+		graphics.getCanvas().getClipBounds(canvasClip);
 		clip.set(graphics.getClipX(), graphics.getClipY(),
 				graphics.getClipX() + graphics.getClipWidth(),
 				graphics.getClipY() + graphics.getClipHeight());
@@ -241,7 +241,7 @@ public class GraphicsTest {
 		graphics.translate(20, 10);
 		graphics.setClip(0, 0, 10, 10);
 		graphics.clipRect(10, 10, 20, 20);
-		Rect canvasClip = new Rect(0, 0, 0, 0);
+		Rect canvasClip = graphics.getCanvas().getClipBounds();
 		Rect clip = new Rect(graphics.getClipX(), graphics.getClipY(),
 				graphics.getClipX() + graphics.getClipWidth(),
 				graphics.getClipY() + graphics.getClipHeight());
