@@ -129,6 +129,8 @@ public class MainActivity extends BaseActivity {
 		File appsDir = new File(emulatorDir);
 		File nomedia = new File(appsDir, ".nomedia");
 		if (appsDir.isDirectory() || appsDir.mkdirs()) {
+			//noinspection ResultOfMethodCallIgnored
+			new File(Config.getShadersDir()).mkdir();
 			try {
 				//noinspection ResultOfMethodCallIgnored
 				nomedia.createNewFile();
