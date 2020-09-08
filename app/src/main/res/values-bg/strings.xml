@@ -7,7 +7,6 @@
     <string name="more">Още</string>
     <string name="search">Търсене</string>
     <string name="licenses">Лицензи</string>
-    <string name="templates">Шаблони</string>
     <string name="save_log">Запиши регистрационния файл</string>
     <string name="about_message">Това приложение ви позволява да стартирате приложения с J2ME и игри на Android. Поддържа повечето двуизмерни и триизмерни игри с някои ограничения.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Включването на филтри може значително да подобри производителността.Изключете тази опция ако играта е прекалено бавна.&lt;BR&gt;&#8226; Премигвания на екрана могат да бъдат поправени като изключите опцията за незабавна обработка.</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Изчистване на данните</string>
     <string name="RESET_SETTINGS_CMD">Нулиране на настройките</string>
     <string name="RESET_LAYOUT_CMD">Нулиране на подредбата за клавиатурата</string>
-    <string name="LOAD_TEMPLATE_CMD">Зареждане на шаблон</string>
-    <string name="SAVE_TEMPLATE_CMD">Запис на шаблон</string>
     <string name="PREF_SCREEN_OPTIONS">Опции на екрана</string>
     <string name="PREF_SCALE_RATIO">Мащаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Мащабиране до натаманяване</string>
@@ -114,10 +111,6 @@
     <string name="pref_enable_statusbar_title">Включване на лентата на състояние</string>
     <string name="pref_wakelock_title">Поддържане на включен екран</string>
     <string name="pref_button_shape_title">Форма на бутона</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Закръглен</item>
-        <item>Квадрат</item>
-    </string-array>
     <string name="pref_app_sort_title">Ред за сортиране на приложения</string>
     <string-array name="pref_app_sort_entries">
         <item>Име</item>
