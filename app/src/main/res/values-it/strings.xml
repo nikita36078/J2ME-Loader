@@ -7,7 +7,6 @@
     <string name="more">Altro</string>
     <string name="search">Cerca</string>
     <string name="licenses">Licenze</string>
-    <string name="templates">Modelli</string>
     <string name="save_log">Salva log</string>
     <string name="about_message">Questa applicazione consente di avviare applicazioni e giochi J2ME su Android. Supporta la maggior parte dei giochi 2D e anche 3D, con alcune limitazioni.&lt;BR&gt;</string>
     <string name="help_message">&#8226; L\'abilitazione del filtro in alcuni casi può ridurre notevolmente le prestazioni. Disabilitare questa opzione se il gioco è troppo lento.&lt;BR&gt;&#8226; Problemi di tremolio dell\'immagine possono essere risolti abilitando l\'opzione \"modalità di elaborazione immediata\".</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Cancella i dati</string>
     <string name="RESET_SETTINGS_CMD">Resetta impostazioni</string>
     <string name="RESET_LAYOUT_CMD">Resetta la disposizione dei tasti</string>
-    <string name="LOAD_TEMPLATE_CMD">Carica modello</string>
-    <string name="SAVE_TEMPLATE_CMD">Salva modello</string>
     <string name="PREF_SCREEN_OPTIONS">Opzioni schermo</string>
     <string name="PREF_SCALE_RATIO">Scala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Allarga fino a riempire</string>
@@ -114,10 +111,6 @@
     <string name="pref_enable_statusbar_title">Abilita barra di stato</string>
     <string name="pref_wakelock_title">Mantieni schermo attivo</string>
     <string name="pref_button_shape_title">Forma del tasto</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Rotonda</item>
-        <item>Quadrata</item>
-    </string-array>
     <string name="pref_app_sort_title">Ordine applicazioni</string>
     <string-array name="pref_app_sort_entries">
         <item>Nome</item>
