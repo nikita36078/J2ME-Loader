@@ -7,7 +7,6 @@
     <string name="more">Más detalles</string>
     <string name="search">Buscar</string>
     <string name="licenses">Licencias</string>
-    <string name="templates">Plantillas</string>
     <string name="save_log">Guardar registro</string>
     <string name="about_message">Esta aplicación te permite ejecutar aplicaciones y juegos J2ME en Android. Es compatible con la mayoría de juegos 2D y también 3D con algunas limitaciones.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Habilitar el filtrado en algunos casos puede reducir enormemente el rendimiento. Desactive esta opción si el juego es demasiado lento.&lt;BR&gt;&#8226; Los problemas de parpadeo de la imagen se pueden solucionar activando la opción \"Modo de procesamiento inmediato\".</string>
@@ -15,7 +14,7 @@
     <string name="version">Versión: </string>
     <string name="no_data_for_display">Sin datos</string>
     <string name="message_delete">¿Realmente desea eliminar esta aplicación?</string>
-    <string name="converting_wait">Convirtiendo...</string>
+    <string name="converting_wait">Convirtiendo JAR...</string>
     <string name="convert_complete">Completo</string>
     <string name="converting_message">Cargando...</string>
     <string name="permission_request_failed">Esta aplicación requiere permisos de escritura de almacenamiento</string>
@@ -24,22 +23,20 @@
     <string name="action_settings">Configuración</string>
     <string name="action_context_delete">Eliminar</string>
     <string name="action_context_rename">Renombrar</string>
-    <string name="donate">Realice una donación</string>
-    <string name="START_CMD">Comenzar</string>
+    <string name="donate">Donar</string>
+    <string name="START_CMD">Iniciar</string>
     <string name="CANCEL_CMD">Cancelar</string>
     <string name="CLEAR_DATA_CMD">Borrar datos</string>
     <string name="RESET_SETTINGS_CMD">Restablecer la configuración</string>
     <string name="RESET_LAYOUT_CMD">Reiniciar disposición del teclado</string>
-    <string name="LOAD_TEMPLATE_CMD">Cargar plantilla</string>
-    <string name="SAVE_TEMPLATE_CMD">Guardar plantilla</string>
     <string name="PREF_SCREEN_OPTIONS">Opciones de pantalla</string>
     <string name="PREF_SCALE_RATIO">Escala(%)</string>
-    <string name="PREF_SCALE_TO_FIT">Escala de ajuste</string>
-    <string name="PREF_KEEP_ASPECT_RATIO">Mantener la relación de aspecto</string>
+    <string name="PREF_SCALE_TO_FIT">Escalar para adaptarse</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">Mantener relación de aspecto</string>
     <string name="PREF_FILTER">Filtro</string>
-    <string name="PREF_IMMEDIATE">Modo de procesamiento de páginas</string>
+    <string name="PREF_IMMEDIATE">Modo de procesamiento inmediato</string>
     <string name="PREF_SHOW_FPS">Mostrar FPS</string>
-    <string name="PREF_FORCE_FULLSCREEN">Activar/Desactivar pantalla completa</string>
+    <string name="PREF_FORCE_FULLSCREEN">Forzar pantalla completa</string>
     <string name="PREF_LIMIT_FPS">Limitar FPS</string>
     <string name="PREF_FONT_OPTIONS">Opciones de fuente</string>
     <string name="PREF_WIDTH">Ancho</string>
@@ -47,18 +44,19 @@
     <string name="PREF_FONT_SMALL">Pequeño</string>
     <string name="PREF_FONT_MEDIUM">Mediano</string>
     <string name="PREF_FONT_LARGE">Grande</string>
-    <string name="PREF_FONT_SIZE_IN_SP">Los valores están en Píxeles escalados</string>
+    <string name="PREF_FONT_SIZE_IN_SP">Los valores son en píxeles escalados</string>
     <string name="PREF_BACKGROUND">Fondo</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
     <string name="PREF_VK_SHOW">Mostrar teclado</string>
-    <string name="PREF_VK_FEEDBACK">Respuesta háptica</string>
+    <string name="PREF_VK_FEEDBACK">Retroalimentación háptica</string>
+    <string name="PREF_VK_FORCE_OPACITY">Forzar la opacidad de las teclas afuera de la pantalla</string>
     <string name="PREF_TOUCH_INPUT">Entrada táctil</string>
     <string name="PREF_HW_ACCELERATION">Aceleración por Hardware (Inestable)</string>
     <string name="PREF_VK_BACK">Botones</string>
-    <string name="PREF_VK_FORE">Etiquetas personales</string>
-    <string name="PREF_VK_OUTLINE">Trazado</string>
+    <string name="PREF_VK_FORE">Etiquetas</string>
+    <string name="PREF_VK_OUTLINE">Contorno</string>
     <string name="PREF_VK_ALPHA">Opacidad: </string>
-    <string name="PREF_VK_HIDE_DELAY">Ocultar retraso: </string>
+    <string name="PREF_VK_HIDE_DELAY">Ocultar el retraso: </string>
     <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etiquetas (P)</string>
     <string name="PREF_VK_SEL_BACK">Botones (P)</string>
@@ -66,56 +64,54 @@
     <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Teclas programables: </string>
     <string name="PREF_VK_NUM_KEYS">Dígitos: </string>
-    <string name="PREF_VK_FIRE_KEY">Repetible: </string>
+    <string name="PREF_VK_FIRE_KEY">Fuego: </string>
     <string name="PREF_VK_SIZE_HINT">Tamaño</string>
-    <string name="SIZE_PRESETS">Plantillas</string>
+    <string name="SIZE_PRESETS">Preajustes</string>
     <string name="SWAP_SIZES">Intercambiar tamaños</string>
     <string name="PREF_SYS_PROPS">Propiedades del sistema</string>
     <string name="PREF_ORIENTATION">Orientacion de la pantalla</string>
     <string-array name="PREF_ORIENTATION_ENTRIES">
         <item>Por defecto</item>
-        <item>Auto</item>
+        <item>Automático</item>
         <item>Vertical</item>
         <item>Horizontal</item>
     </string-array>
     <string name="error">Error</string>
-    <string name="message_clear_data">¿Quieres borrar los datos de la aplicación?</string>
+    <string name="message_clear_data">¿Realmente quieres borrar los datos de la aplicación?</string>
     <string name="PREF_VK_TYPE">Tipo de teclado</string>
     <string-array name="PREF_VK_TYPE_ENTRIES">
         <item>Personalizable</item>
         <item>Teléfono</item>
         <item>Teléfono (flechas)</item>
     </string-array>
-    <string name="FORCE_CLOSE_CONFIRMATION">¿Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla por completo.\nContinuar?</string>
+    <string name="PREF_LAYOUT">Diseño</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">¡Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla completamente!\n¿Desea proceder?</string>
     <string name="CONFIRMATION_REQUIRED">Se requiere confirmación</string>
     <string name="select_dialog_title">Seleccionar MIDlet</string>
     <string name="crash_dialog_message">¿Desea enviar un informe de errores el desarrollador?</string>
     <string name="crash_dialog_title">Error detectado</string>
     <string name="report_crash">Enviar</string>
-    <string name="layout_edit_finished">Modo de edición terminado</string>
-    <string name="layout_edit_finish">Terminar modo de edición</string>
+    <string name="layout_edit_finished">Modo de edición finalizado</string>
+    <string name="layout_edit_finish">Finalizar modo de edición</string>
     <string name="layout_edit_mode">Modo de edición de disposición del teclado</string>
     <string name="layout_scale_mode">Modo de cambio de tamaño del teclado</string>
     <string name="layout_switch">Cambiar disposición del teclado</string>
     <string name="hide_buttons">Ocultar botones</string>
-    <string name="take_screenshot">Tomar Captura De Pantalla</string>
-    <string name="screenshot_saved">La captura de pantalla se ha guarado</string>
-    <string name="log_saved">Registro guardado</string>
+    <string name="take_screenshot">Tomar captura de pantalla</string>
+    <string name="screenshot_saved">La captura de pantalla se ha guardado en</string>
+    <string name="log_saved">El registro ha sido guardado</string>
     <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
     <string name="pref_theme_title">Tema</string>
     <string-array name="pref_theme_entries">
-        <item>Brillante</item>
+        <item>Claro</item>
         <item>Oscuro</item>
     </string-array>
     <string name="pref_requires_restart_summary">Requiere reinicio</string>
-    <string name="pref_enable_actionbar_title">Permitir barra de acción</string>
+    <string name="pref_enable_actionbar_title">Mostrar la barra de acción</string>
     <string name="pref_enable_actionbar_summary">En aplicaciones de pantalla completa</string>
+    <string name="pref_enable_statusbar_title">Mostrar la barra de estado</string>
     <string name="pref_wakelock_title">Mantener pantalla encendida</string>
     <string name="pref_button_shape_title">Forma del botón</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Circular</item>
-        <item>Cuadrado</item>
-    </string-array>
     <string name="pref_app_sort_title">Orden de las aplicaciones</string>
     <string-array name="pref_app_sort_entries">
         <item>Nombre</item>
@@ -127,5 +123,6 @@
     <string name="mapping_dialog_title">Presiona una tecla</string>
     <string name="mapping_dialog_message" formatted="false">Mapeo actual: %1$s</string>
     <string name="reset_mapping">Reiniciar</string>
-    <string name="parallel_screen_redrawing">Dibujado de pantalla paralelo</string>
+    <string name="parallel_screen_redrawing">Redibujo de la pantalla en paralelo</string>
+    <string name="saved">Guardado</string>
 </resources>

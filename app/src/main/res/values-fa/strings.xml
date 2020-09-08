@@ -7,7 +7,6 @@
     <string name="more">بیشتر</string>
     <string name="search">جستجو</string>
     <string name="licenses">مجوزها</string>
-    <string name="templates">قالب ها</string>
     <string name="save_log">ذخیره گزارش</string>
     <string name="about_message">این برنامه به شما اجازه می دهد تا برنامه ها و بازی های ۲ بُعدی و ۳ بُعدی جاوا را با برخی محدودیت ها در گوشی اندروید اجرا کنید</string>
     <string name="help_message">• فعال کردن فیلتر در بعضی موارد می تواند عملکرد را به شدت کاهش دهد اگر بازی خیلی کند است این گزینه را غیرفعال کنید
@@ -31,8 +30,6 @@
     <string name="CLEAR_DATA_CMD">پاک کردن اطلاعات</string>
     <string name="RESET_SETTINGS_CMD">بازنشانی تنظیمات</string>
     <string name="RESET_LAYOUT_CMD">بازنشانی طرح کلید ها</string>
-    <string name="LOAD_TEMPLATE_CMD">وارد کردن قالب </string>
-    <string name="SAVE_TEMPLATE_CMD">ذخیره قالب</string>
     <string name="PREF_SCREEN_OPTIONS">گزینه های صفحه نمایش</string>
     <string name="PREF_SCALE_RATIO">اندازه</string>
     <string name="PREF_SCALE_TO_FIT">اندازه مناسب است</string>
@@ -114,10 +111,6 @@
     <string name="pref_enable_actionbar_summary">در برنامه های تمام صفحه</string>
     <string name="pref_wakelock_title">صفحه نمایش روشن بماند</string>
     <string name="pref_button_shape_title">شکل دکمه</string>
-    <string-array name="pref_button_shape_entries">
-        <item>گرد</item>
-        <item>مربعی</item>
-    </string-array>
     <string name="pref_app_sort_title">مرتب سازی برنامه بر اساس</string>
     <string-array name="pref_app_sort_entries">
         <item>نام</item>

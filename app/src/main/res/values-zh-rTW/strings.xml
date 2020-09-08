@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="close">關閉</string>
-    <string name="exit">退齣</string>
-    <string name="about">關于</string>
+    <string name="exit">退出</string>
+    <string name="about">關於</string>
     <string name="help">幫助</string>
     <string name="more">更多</string>
-    <string name="search">搜索</string>
-    <string name="licenses">許可</string>
-    <string name="templates">模闆</string>
+    <string name="search">搜尋</string>
+    <string name="licenses">授權</string>
     <string name="about_message">此應用程序可以在Android設備上運行J2ME應用程序和遊戲，它支持大多數2D和部分3D遊戲。&lt;BR&gt;</string>
     <string name="help_message">&#8226; • 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; •通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
     <string name="author">作者: </string>
@@ -19,7 +18,7 @@
     <string name="converting_message">安裝JAR遊戲中，請耐心等待1-3分鐘。</string>
     <string name="permission_request_failed">本應用需要穫取存儲讀寫權限</string>
     <string name="external_storage_not_mounted">該功能需要存儲權限，請去設置授予存儲權限，以便您繼續使用該功能。</string>
-    <string name="action_context_shortcut">添加到桌麵</string>
+    <string name="action_context_shortcut">添加到桌面</string>
     <string name="action_settings">設置</string>
     <string name="action_context_delete">刪除</string>
     <string name="action_context_rename">重命名</string>
@@ -29,8 +28,6 @@
     <string name="CLEAR_DATA_CMD">清除數據</string>
     <string name="RESET_SETTINGS_CMD">恢復默認設置</string>
     <string name="RESET_LAYOUT_CMD">重置按鍵佈挶</string>
-    <string name="LOAD_TEMPLATE_CMD">保存模闆</string>
-    <string name="SAVE_TEMPLATE_CMD">保存模闆</string>
     <string name="PREF_SCREEN_OPTIONS">屏幕選項</string>
     <string name="PREF_SCALE_RATIO">比例(%)</string>
     <string name="PREF_SCALE_TO_FIT">縮放以適應屏幕(建議開啟，會根據屏幕大小自動放大遊戲圖像)</string>
@@ -46,9 +43,9 @@
     <string name="PREF_FONT_MEDIUM">中</string>
     <string name="PREF_FONT_LARGE">大</string>
     <string name="PREF_FONT_SIZE_IN_SP">以屏幕分辨率為單位縮放</string>
-    <string name="PREF_BACKGROUND">揹景顏色</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虛擬鍵槃</string>
-    <string name="PREF_VK_SHOW">顯示鍵槃</string>
+    <string name="PREF_BACKGROUND">背景</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虛擬鍵盤</string>
+    <string name="PREF_VK_SHOW">顯示鍵盤</string>
     <string name="PREF_VK_FEEDBACK">觸覺反饋</string>
     <string name="PREF_TOUCH_INPUT">屏幕觸摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不穩定)</string>
@@ -64,26 +61,33 @@
     <string name="PREF_VK_NAV_KEYS">搖桿: </string>
     <string name="PREF_VK_SOFT_KEYS">軟按鍵 </string>
     <string name="PREF_VK_NUM_KEYS">數字： </string>
-    <string name="PREF_VK_FIRE_KEY">髮射: </string>
-    <string name="PREF_VK_SIZE_HINT">呎吋</string>
+    <string name="PREF_VK_FIRE_KEY">火: </string>
+    <string name="PREF_VK_SIZE_HINT">大小</string>
     <string name="SIZE_PRESETS">預設</string>
     <string name="SWAP_SIZES">交換呎吋</string>
-    <string name="PREF_SYS_PROPS">係統屬性</string>
-    <string name="PREF_ORIENTATION">屏幕方嚮​​​​​​​​​​​​​​</string>
+    <string name="PREF_SYS_PROPS">系統屬性</string>
+    <string name="PREF_ORIENTATION">螢幕方向</string>
     <string-array name="PREF_ORIENTATION_ENTRIES">
         <item>預設</item>
         <item>自動</item>
         <item>縱向顯示</item>
-        <item>Landscape</item>
+        <item>橫向顯示</item>
     </string-array>
     <string name="error">錯誤</string>
+    <string name="message_clear_data">你確定要刪除所有的資料嗎？</string>
+    <string name="PREF_VK_TYPE">鍵盤類型</string>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>喜好設定</item>
+        <item>手機</item>
+        <item>手機(arrows)</item>
+    </string-array>
     <string name="PREF_LAYOUT">佈挶</string>
     <string name="FORCE_CLOSE_CONFIRMATION">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
     <string name="CONFIRMATION_REQUIRED">需要確認</string>
     <string name="select_dialog_title">選擇程序結搆</string>
-    <string name="crash_dialog_message">是否嚮開髮者髮送錯誤報告？</string>
-    <string name="crash_dialog_title">髮生錯誤</string>
-    <string name="report_crash">髮送</string>
+    <string name="crash_dialog_message">是否需要向開發者發送錯誤報告？</string>
+    <string name="crash_dialog_title">檢測到錯誤</string>
+    <string name="report_crash">發送</string>
     <string name="layout_edit_finished">編輯模式已完成</string>
     <string name="layout_edit_finish">按鍵佈挶編輯</string>
     <string name="layout_edit_mode">按鍵佈挶編輯</string>
@@ -93,12 +97,12 @@
     <string name="take_screenshot">屏幕截圖</string>
     <string name="screenshot_saved">屏幕截圖已保存到</string>
     <string name="common_settings">[常用設置]</string>
-    <string name="pref_theme_title">界麵主題</string>
+    <string name="pref_theme_title">主題</string>
     <string-array name="pref_theme_entries">
         <item>白色主題</item>
         <item>深色主題</item>
     </string-array>
-    <string name="pref_requires_restart_summary">需要重啟本程序</string>
+    <string name="pref_requires_restart_summary">需要重新啟動</string>
     <string name="pref_enable_actionbar_title">啟用操作欄</string>
     <string name="pref_enable_actionbar_summary">在應用中全屏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
@@ -109,8 +113,11 @@
         <item>日期</item>
     </string-array>
     <string name="pref_map_keys">按鍵映射</string>
-    <string name="mapping_dialog_title">按下一個按鍵</string>
+    <string name="pref_encoding_title">字元編碼</string>
+    <string name="pref_default_settings">預設</string>
+    <string name="mapping_dialog_title">按任意按鍵</string>
     <string name="mapping_dialog_message" formatted="false">當前映射: %1$s</string>
     <string name="reset_mapping">重設</string>
-    <string name="parallel_screen_redrawing">同步畫麵繪製</string>
+    <string name="parallel_screen_redrawing">同步畫面繪製</string>
+    <string name="saved">已儲存</string>
 </resources>

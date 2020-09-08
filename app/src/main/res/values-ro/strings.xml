@@ -7,7 +7,6 @@
     <string name="more">Mai multe</string>
     <string name="search">Căutare</string>
     <string name="licenses">Licențe</string>
-    <string name="templates">Șabloane</string>
     <string name="save_log">Salvează jurnal</string>
     <string name="about_message">Această aplicație iți permite să lansezi aplicații J2ME și jocuri pe Android. Suportă majoritatea jocurilor 2D și 3D cu unele limitări. &lt;BR&gt;</string>
     <string name="help_message">&#8226; Permitand filtrarea poate reduce cu mult performanta in unele cazuri. Dezactiveaza aceasta optiune daca jocul ruleaza incet.&lt;BR&gt;&#8226; Problemele legate de imagine pot fi reparate cu ajutorul optiunii \"Mod de procesare imediata\".</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Curata date</string>
     <string name="RESET_SETTINGS_CMD">Resetează setările</string>
     <string name="RESET_LAYOUT_CMD">Resetează formatul tastaturii</string>
-    <string name="LOAD_TEMPLATE_CMD">Încarcă șablonul</string>
-    <string name="SAVE_TEMPLATE_CMD">Salvează șablonul</string>
     <string name="PREF_SCREEN_OPTIONS">Opțiunile ecranului</string>
     <string name="PREF_SCALE_RATIO">Redimensionare(%)</string>
     <string name="PREF_SCALE_TO_FIT">Redimensionare pentru potrivire</string>
@@ -113,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">În aplicațiile pe tot ecranul</string>
     <string name="pref_wakelock_title">Tine ecranul aprins</string>
     <string name="pref_button_shape_title">Formă buton</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Rotund</item>
-        <item>Pătrat</item>
-    </string-array>
     <string name="pref_app_sort_title">Ordine sortare aplicații</string>
     <string-array name="pref_app_sort_entries">
         <item>Nume</item>

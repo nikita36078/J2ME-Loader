@@ -7,7 +7,6 @@
     <string name="more">Daha Fazla</string>
     <string name="search">Ara</string>
     <string name="licenses">Lisanslar</string>
-    <string name="templates">Şablonlar</string>
     <string name="save_log">Günlüğü kaydet</string>
     <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Verileri temizle</string>
     <string name="RESET_SETTINGS_CMD">Ayarları sıfırla</string>
     <string name="RESET_LAYOUT_CMD">Tuş düzenini sıfırla</string>
-    <string name="LOAD_TEMPLATE_CMD">Şablon yükle</string>
-    <string name="SAVE_TEMPLATE_CMD">Şablonu kaydet</string>
     <string name="PREF_SCREEN_OPTIONS">Ekran seçenekleri</string>
     <string name="PREF_SCALE_RATIO">Ölçekleme(%)</string>
     <string name="PREF_SCALE_TO_FIT">Ekrana sığdır</string>
@@ -113,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
     <string name="pref_wakelock_title">Ekranı açık tut</string>
     <string name="pref_button_shape_title">Tuş şekli</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Yuvarlak</item>
-        <item>Kare</item>
-    </string-array>
     <string name="pref_app_sort_title">Uygulamaları sırala</string>
     <string-array name="pref_app_sort_entries">
         <item>Ada göre</item>

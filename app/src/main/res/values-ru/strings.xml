@@ -7,7 +7,7 @@
     <string name="more">Подробнее</string>
     <string name="search">Поиск</string>
     <string name="licenses">Лицензии</string>
-    <string name="templates">Шаблоны</string>
+    <string name="profiles">Профили</string>
     <string name="save_log">Сохранить лог</string>
     <string name="about_message">Данный эмулятор позволяет запускать J2ME приложения на Android. Для работы программы не нужен интернет, конвертация приложений происходит прямо на устройстве.&lt;BR&gt;На данный момент поддерживается большинство 2д игр, поддержка 3д присутствует, но с некоторыми ограничениями.&lt;BR&gt;Есть виртуальная клавиатура, индивидуальные настройки для каждого приложения, присутствует поддержка масштабирования.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Включение фильтрации в некоторых случаях может значительно снизить производительность. Отключите эту опцию, если игра работает слишком медленно. &lt;BR&gt;&#8226; Проблемы с мерцанием изображения могут быть решены с помощью опции \"Режим неотложной обработки\".</string>
@@ -30,8 +30,8 @@
     <string name="CLEAR_DATA_CMD">Очистить данные</string>
     <string name="RESET_SETTINGS_CMD">Сброс настроек</string>
     <string name="RESET_LAYOUT_CMD">Сброс раскладки</string>
-    <string name="LOAD_TEMPLATE_CMD">Загрузить шаблон</string>
-    <string name="SAVE_TEMPLATE_CMD">Сохранить шаблон</string>
+    <string name="load_profile">Загрузить профиль</string>
+    <string name="save_profile">Сохранить профиль</string>
     <string name="PREF_SCREEN_OPTIONS">Параметры экрана</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Масштабировать</string>
@@ -55,6 +55,10 @@
     <string name="PREF_VK_FORCE_OPACITY">Принудительная непрозрачность кнопок вне экрана</string>
     <string name="PREF_TOUCH_INPUT">Сенсорный ввод</string>
     <string name="PREF_HW_ACCELERATION">Аппаратное ускорение (нестабильно)</string>
+    <string name="pref_graphics_software">Программный</string>
+    <string name="pref_graphics_hw_gles">Аппаратный (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Аппаратный (window)</string>
+    <string name="pref_graphics_hw_surface">Аппаратный (surface)</string>
     <string name="PREF_VK_BACK">Кнопки</string>
     <string name="PREF_VK_FORE">Надписи</string>
     <string name="PREF_VK_OUTLINE">Обводка</string>
@@ -116,8 +120,9 @@
     <string name="pref_wakelock_title">Не отключать экран</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string-array name="pref_button_shape_entries">
-        <item>Круглые</item>
-        <item>Квадратные</item>
+        <item>Овальные</item>
+        <item>Прямоугольные</item>
+        <item>Закруглённые</item>
     </string-array>
     <string name="pref_app_sort_title">Сортировка приложений</string>
     <string-array name="pref_app_sort_entries">
@@ -131,6 +136,26 @@
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
     <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
+    <string name="default_label">"%s (стандартный)"</string>
     <string name="saved">Сохранено</string>
     <string name="not_saved_exists">Уже существует</string>
+    <string name="create_apps_dir_failed">Не удалось создать папку по указанному пути:\n\'%s\'\nвыберите другую.</string>
+    <string name="error_name">Введите название шаблона!</string>
+    <string name="set_as_default">Сделать стандартным</string>
+    <string name="edit">Настроить</string>
+    <string name="add">Создать</string>
+    <string name="add_profile_description">Создать новый профиль</string>
+    <string name="enter_name">Введите название</string>
+    <string name="enter_new_name">Введите новое название</string>
+    <string name="set_default_profile_description">Выбрать этот шаблон как стандартную настройку для всех приложений, которые будут устанавливаться позже</string>
+    <string name="error_name_exists">Уже есть, введите другое название</string>
+    <string name="pref_vk_hide_hint">не скрывать</string>
+    <string name="unlimited">без ограничений</string>
+    <string name="pref_emulator_dir">Рабочая папка</string>
+    <string name="PREF_SHADER_FILTER">Шейдер:</string>
+    <string name="identity_filter">Быстрый (без фильтра)</string>
+    <string name="shader_tuning">Настройка шейдера</string>
+    <string name="reset">Сброс</string>
+    <string name="pref_input_devices_title">Устройства ввода</string>
+    <string name="pref_graphics_mode_title">Режим графики:</string>
 </resources>

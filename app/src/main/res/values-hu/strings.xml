@@ -7,7 +7,6 @@
     <string name="more">Továbbiak</string>
     <string name="search">Keresés</string>
     <string name="licenses">Licencek</string>
-    <string name="templates">Sablonok</string>
     <string name="save_log">Napló mentése</string>
     <string name="about_message">Ez az app lehetővé teszi a J2ME alkalmazások és játékok indítását Androidon. Támogatja a legtöbb 2D-s játékot, illetve a 3D-seket némi korlátozással.&lt;BR&gt;</string>
     <string name="help_message">&#8226; A szűrés engedélyezése esetenként jelentősen csökkentheti a teljesítményt. Tiltsa le, ha a játék túl lassú.&lt;BR&gt;&#8226; A kép villódzása javítható az \"Azonnali feldolgozás\" lehetőséggel.</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Adatok törlése</string>
     <string name="RESET_SETTINGS_CMD">Beállítások visszaállítása</string>
     <string name="RESET_LAYOUT_CMD">Gombelrendezés visszaállítása</string>
-    <string name="LOAD_TEMPLATE_CMD">Sablon betöltése</string>
-    <string name="SAVE_TEMPLATE_CMD">Sablon mentése</string>
     <string name="PREF_SCREEN_OPTIONS">Képernyőbeállítások</string>
     <string name="PREF_SCALE_RATIO">Méretezés (%)</string>
     <string name="PREF_SCALE_TO_FIT">Mérethez igazítás</string>
@@ -115,10 +112,6 @@
     <string name="pref_enable_statusbar_title">Állapotsor engedélyezése</string>
     <string name="pref_wakelock_title">Képernyő bekapcsolva tartása</string>
     <string name="pref_button_shape_title">Gombforma</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Kerek</item>
-        <item>Négyszögletes</item>
-    </string-array>
     <string name="pref_app_sort_title">Alkalmazásrendezési sorrend</string>
     <string-array name="pref_app_sort_entries">
         <item>Név</item>
@@ -132,5 +125,4 @@
     <string name="reset_mapping">Alaphelyzetbe állítás</string>
     <string name="parallel_screen_redrawing">Párhuzamos képernyő-újrarajzolás</string>
     <string name="saved">Mentve</string>
-    <string name="not_saved_exists">Nincs mentve: már létezik</string>
 </resources>

@@ -7,7 +7,6 @@
     <string name="more">更多</string>
     <string name="search">搜索</string>
     <string name="licenses">许可</string>
-    <string name="templates">模板</string>
     <string name="save_log">存储日志</string>
     <string name="about_message">此应用程序可以在Android设备上运行J2ME应用程序和游戏，它支持大多数2D和部分3D游戏。&lt;BR&gt;</string>
     <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt;BR&gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">清除数据</string>
     <string name="RESET_SETTINGS_CMD">恢复默认设置</string>
     <string name="RESET_LAYOUT_CMD">重置按键布局</string>
-    <string name="LOAD_TEMPLATE_CMD">加载模板</string>
-    <string name="SAVE_TEMPLATE_CMD">保存模板</string>
     <string name="PREF_SCREEN_OPTIONS">屏幕选项</string>
     <string name="PREF_SCALE_RATIO">比例(%)</string>
     <string name="PREF_SCALE_TO_FIT">自适应屏幕</string>
@@ -52,6 +49,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
     <string name="PREF_VK_SHOW">显示键盘</string>
     <string name="PREF_VK_FEEDBACK">触觉反馈</string>
+    <string name="PREF_VK_FORCE_OPACITY">屏幕外按键强制不透明</string>
     <string name="PREF_TOUCH_INPUT">屏幕触摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
     <string name="PREF_VK_BACK">按键</string>
@@ -114,10 +112,6 @@
     <string name="pref_enable_statusbar_title">启用状态栏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
     <string name="pref_button_shape_title">按钮形状</string>
-    <string-array name="pref_button_shape_entries">
-        <item>圆形</item>
-        <item>矩形</item>
-    </string-array>
     <string name="pref_app_sort_title">应用排序</string>
     <string-array name="pref_app_sort_entries">
         <item>名称</item>
@@ -130,4 +124,5 @@
     <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
     <string name="reset_mapping">重置</string>
     <string name="parallel_screen_redrawing">同步画面绘制</string>
+    <string name="saved">已保存</string>
 </resources>
