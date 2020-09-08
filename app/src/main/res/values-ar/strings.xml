@@ -7,7 +7,6 @@
     <string name="more">المزيد</string>
     <string name="search">ابـحثblogまタラタラ</string>
     <string name="licenses">التراخيص</string>
-    <string name="templates">النماذج</string>
     <string name="save_log">سجلات الحفظ</string>
     <string name="about_message">هذا التطبيق يسمح لك بتشغيل تطبيقات والعاب J2ME على جهازك اندرويد. وهو يدعم معظم الألعاب 2D و 3D أيضا ولكن مع بعض القيود.&lt;BR&gt;</string>
     <string name="help_message">&#8226; تمكين التصفية في بعض الحالات يمكن أن يقلل كثيرا من الأداء.قم بتعطيل هذا الخيار إذا كانت اللعبة بطيئة جداً.&lt;BR&gt;&#8226; خفقان الصورة يمكن اصلاحه عن طريق تمكين الخيار \"وضع المعالجة الفورية\".</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">مسح البيانات</string>
     <string name="RESET_SETTINGS_CMD">إعادة تعيين الإعدادات</string>
     <string name="RESET_LAYOUT_CMD">إعادة تعيين ترتيب لوحة المفاتيح</string>
-    <string name="LOAD_TEMPLATE_CMD">تحميل نموذج</string>
-    <string name="SAVE_TEMPLATE_CMD">حفظ النموذج</string>
     <string name="PREF_SCREEN_OPTIONS">إعدادات الشاشة</string>
     <string name="PREF_SCALE_RATIO">المقاس(٪)</string>
     <string name="PREF_SCALE_TO_FIT">مقاس ملء الشاشه</string>
@@ -114,10 +111,6 @@
     <string name="pref_enable_statusbar_title">تمكين شريط الحالة</string>
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="pref_button_shape_title">شكل الزر</string>
-    <string-array name="pref_button_shape_entries">
-        <item>دائري</item>
-        <item>مربع</item>
-    </string-array>
     <string name="pref_app_sort_title">الفرز بحسب</string>
     <string-array name="pref_app_sort_entries">
         <item>الإسم</item>
