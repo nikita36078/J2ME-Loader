@@ -7,7 +7,6 @@
     <string name="more">Mehr</string>
     <string name="search">Suche</string>
     <string name="licenses">Lizenzen</string>
-    <string name="templates">Vorlagen</string>
     <string name="save_log">Log speichern</string>
     <string name="about_message">Diese App ermöglicht es Ihnen, J2Me Anwendungen und Spiele auf Android zu starten. Die meisten 2D-Spiele und, mit einigen Einschränkungen, auch 3D.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Das Aktivieren der Filterung kann in einigen Fällen die Leistung erheblich beeinträchtigen. Deaktivieren Sie diese Option, wenn das Spiel zu langsam ist.&lt;BR&gt;&#8226; Bildflimmerprobleme können behoben werden, indem die Option \"Sofortiger Verarbeitungsmodus\" aktiviert wird.</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Daten löschen</string>
     <string name="RESET_SETTINGS_CMD">Einstellungen zurücksetzen</string>
     <string name="RESET_LAYOUT_CMD">Tastaturlayout zurücksetzen</string>
-    <string name="LOAD_TEMPLATE_CMD">Vorlage laden</string>
-    <string name="SAVE_TEMPLATE_CMD">Vorlage speichern</string>
     <string name="PREF_SCREEN_OPTIONS">Bildschirmoptionen</string>
     <string name="PREF_SCALE_RATIO">Skalierung (%)</string>
     <string name="PREF_SCALE_TO_FIT">Passend skalieren</string>
@@ -113,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">In Vollbild-Anwendungen</string>
     <string name="pref_wakelock_title">Bildschirm anlassen</string>
     <string name="pref_button_shape_title">Tastenform</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Rund</item>
-        <item>Quadratisch</item>
-    </string-array>
     <string name="pref_app_sort_title">App-Sortierung</string>
     <string-array name="pref_app_sort_entries">
         <item>Name</item>
