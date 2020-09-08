@@ -70,16 +70,9 @@
     <string name="SWAP_SIZES">Intercambiar tamaños</string>
     <string name="PREF_SYS_PROPS">Propiedades del sistema</string>
     <string name="PREF_ORIENTATION">Orientacion de la pantalla</string>
-    <string name="pref_orientation_default">Por defecto</string>
-    <string name="pref_orientation_auto">Automático</string>
-    <string name="pref_orientation_port">Vertical</string>
-    <string name="pref_orientation_land">Horizontal</string>
     <string name="error">Error</string>
     <string name="message_clear_data">¿Realmente quieres borrar los datos de la aplicación?</string>
     <string name="PREF_VK_TYPE">Tipo de teclado</string>
-    <string name="pref_vk_type_custom">Personalizable</string>
-    <string name="pref_vk_type_phone">Teléfono</string>
-    <string name="pref_vk_type_phone_arrows">Teléfono (flechas)</string>
     <string name="PREF_LAYOUT">Diseño</string>
     <string name="FORCE_CLOSE_CONFIRMATION">¡Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla completamente!\n¿Desea proceder?</string>
     <string name="CONFIRMATION_REQUIRED">Se requiere confirmación</string>
@@ -98,8 +91,6 @@
     <string name="log_saved">El registro ha sido guardado</string>
     <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
     <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_light">Claro</string>
-    <string name="pref_theme_night">Oscuro</string>
     <string name="pref_requires_restart_summary">Requiere reinicio</string>
     <string name="pref_enable_actionbar_title">Mostrar la barra de acción</string>
     <string name="pref_enable_actionbar_summary">En aplicaciones de pantalla completa</string>
@@ -107,8 +98,6 @@
     <string name="pref_wakelock_title">Mantener pantalla encendida</string>
     <string name="pref_button_shape_title">Forma del botón</string>
     <string name="pref_app_sort_title">Orden de las aplicaciones</string>
-    <string name="pref_app_sort_name">Nombre</string>
-    <string name="pref_app_sort_date">Fecha</string>
     <string name="pref_map_keys">Mapear teclas</string>
     <string name="pref_encoding_title">Codificación</string>
     <string name="pref_default_settings">Configuración predeterminada</string>
