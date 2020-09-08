@@ -6,7 +6,6 @@
     <string name="more">さらに表示</string>
     <string name="search">検索</string>
     <string name="licenses">ライセンス</string>
-    <string name="templates">テンプレート</string>
     <string name="about_message">このアプリではAndroidでJ2MEのアプリやゲームを起動できます。 これはほとんどの2Dゲームといくつかの制限付き3Dをサポートしています。&lt;BR&gt;</string>
     <string name="author">作者: </string>
     <string name="version">バージョン: </string>
@@ -27,8 +26,6 @@
     <string name="CLEAR_DATA_CMD">データをクリア</string>
     <string name="RESET_SETTINGS_CMD">設定をリセット</string>
     <string name="RESET_LAYOUT_CMD">キーロックアウトをリセットする</string>
-    <string name="LOAD_TEMPLATE_CMD">テンプレートを読み込む</string>
-    <string name="SAVE_TEMPLATE_CMD">テンプレートを保存</string>
     <string name="PREF_SCREEN_OPTIONS">画面オプション</string>
     <string name="PREF_SCALE_RATIO">規模（％）</string>
     <string name="PREF_SCALE_TO_FIT">フィットするようにスケールする</string>
