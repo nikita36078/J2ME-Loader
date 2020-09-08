@@ -7,7 +7,6 @@
     <string name="more">Lainnya</string>
     <string name="search">Cari</string>
     <string name="licenses">Lisensi</string>
-    <string name="templates">Kelola template</string>
     <string name="save_log">Simpan log</string>
     <string name="about_message">Aplikasi ini berfungsi untuk menjalankan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga permainan 3D dengan beberapa keterbatasan.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Menghidupkan opsi \"Saring\" dalam sebagian kasus dapat mengurangi kinerja yang sangat besar. Matikan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat diatasi dengan menghidupkan opsi \"Mode pengolahan dengan cepat\".</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Hapus data</string>
     <string name="RESET_SETTINGS_CMD">Setel ulang pengaturan</string>
     <string name="RESET_LAYOUT_CMD">Setel ulang letak tombol</string>
-    <string name="LOAD_TEMPLATE_CMD">Pilih template</string>
-    <string name="SAVE_TEMPLATE_CMD">Simpan template</string>
     <string name="PREF_SCREEN_OPTIONS">Opsi layar</string>
     <string name="PREF_SCALE_RATIO">Skala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
@@ -111,14 +108,10 @@
     </string-array>
     <string name="pref_requires_restart_summary">Perubahan diterapkan setelah memulai ulang J2ME Loader</string>
     <string name="pref_enable_actionbar_title">Hidupkan ActionBar</string>
-    <string name="pref_enable_actionbar_summary">Matikan opsi ini jika ingin dalam keadaan layar penuh.</string>
+    <string name="pref_enable_actionbar_summary">Matikan opsi ini jika ingin dalam keadaan layar penuh</string>
     <string name="pref_enable_statusbar_title">Hidupkan statusbar</string>
     <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
     <string name="pref_button_shape_title">Bentuk tombol</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Bulat</item>
-        <item>Kotak</item>
-    </string-array>
     <string name="pref_app_sort_title">Urutkan aplikasi berdasarkan</string>
     <string-array name="pref_app_sort_entries">
         <item>Nama</item>
@@ -132,5 +125,4 @@
     <string name="reset_mapping">Setel ulang</string>
     <string name="parallel_screen_redrawing">Gambar ulang layar paralel</string>
     <string name="saved">Tersimpan</string>
-    <string name="not_saved_exists">Tidak tersimpan: sudah ada</string>
 </resources>
