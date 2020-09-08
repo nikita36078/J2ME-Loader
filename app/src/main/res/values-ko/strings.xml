@@ -7,7 +7,6 @@
     <string name="more">더보기</string>
     <string name="search">검색하다</string>
     <string name="licenses">허가</string>
-    <string name="templates">템플릿</string>
     <string name="save_log">Log 저장</string>
     <string name="about_message">이 앱은 Android 기기에서 다수의 2D와 일부 3D 게임을 지원하는 J2ME 앱과 게임을 실행할 수 있습니다.&lt;BR&gt;</string>
     <string name="help_message">&#8226;어떤 경우에 필터를 기용하면 성능이 크게 저하될 수 있습니다.게임이 너무 느리면 이 옵션을 사용하지 마십시오.&lt;BR&gt;&#8226;의 \"즉각 처리 모드\" 옵션을 사용하여 이미지 깜박임 문제를 복원할 수 있습니다.&lt;BR&gt;&#8226; 도움말 1. 시뮬레이터 가상 버튼 상용 기능 소개
@@ -44,8 +43,6 @@
     <string name="CLEAR_DATA_CMD">데이터 제거</string>
     <string name="RESET_SETTINGS_CMD">묵시적 설정 복원</string>
     <string name="RESET_LAYOUT_CMD">리셋 버튼 배치</string>
-    <string name="LOAD_TEMPLATE_CMD">추가 템플릿</string>
-    <string name="SAVE_TEMPLATE_CMD">템플릿 저장</string>
     <string name="PREF_SCREEN_OPTIONS">화면 옵션</string>
     <string name="PREF_SCALE_RATIO">비율(%)</string>
     <string name="PREF_SCALE_TO_FIT">스크린에 적응하도록 축방하다(권장 켜짐, 스크린 크기에 따라 자동으로 게임 이미지 확대)</string>
@@ -127,10 +124,6 @@
     <string name="pref_enable_actionbar_summary">애플리케이션에서 풀스크린</string>
     <string name="pref_wakelock_title">스크린을 항상 밝게 유지</string>
     <string name="pref_button_shape_title">버튼 모양</string>
-    <string-array name="pref_button_shape_entries">
-        <item>둥근</item>
-        <item>광장</item>
-    </string-array>
     <string name="pref_app_sort_title">애플리케이션 정렬</string>
     <string-array name="pref_app_sort_entries">
         <item>이름</item>
