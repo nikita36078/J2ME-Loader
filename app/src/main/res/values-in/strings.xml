@@ -70,9 +70,16 @@
     <string name="SWAP_SIZES">Tukar ukuran</string>
     <string name="PREF_SYS_PROPS">Properti sistem</string>
     <string name="PREF_ORIENTATION">Orientasi layar</string>
+    <string name="pref_orientation_default">Sistem Bawaan</string>
+    <string name="pref_orientation_auto">Otomatis</string>
+    <string name="pref_orientation_port">Potret</string>
+    <string name="pref_orientation_land">Lanskap</string>
     <string name="error">Kesalahan</string>
     <string name="message_clear_data">Apakah Anda yakin ingin menghapus data aplikasi?</string>
     <string name="PREF_VK_TYPE">Jenis keypad</string>
+    <string name="pref_vk_type_custom">Disesuaikan</string>
+    <string name="pref_vk_type_phone">Ponsel (Numerik)</string>
+    <string name="pref_vk_type_phone_arrows">Ponsel (D-Pad)</string>
     <string name="PREF_LAYOUT">Tata letak</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Menutup paksa aplikasi akan mengakibatkan hilangnya data atau bahkan menghancurkan sepenuhnya! \nLanjutkan?</string>
     <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>
@@ -91,6 +98,8 @@
     <string name="log_saved">Log telah disimpan</string>
     <string name="common_settings">[PENGATURAN UMUM]</string>
     <string name="pref_theme_title">Tema</string>
+    <string name="pref_theme_light">Terang</string>
+    <string name="pref_theme_night">Gelap</string>
     <string name="pref_requires_restart_summary">Perubahan diterapkan setelah memulai ulang J2ME Loader</string>
     <string name="pref_enable_actionbar_title">Hidupkan ActionBar</string>
     <string name="pref_enable_actionbar_summary">Matikan opsi ini jika ingin dalam keadaan layar penuh</string>
@@ -98,6 +107,8 @@
     <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
     <string name="pref_button_shape_title">Bentuk tombol</string>
     <string name="pref_app_sort_title">Urutkan aplikasi berdasarkan</string>
+    <string name="pref_app_sort_name">Nama</string>
+    <string name="pref_app_sort_date">Tanggal</string>
     <string name="pref_map_keys">Pemetaan tombol</string>
     <string name="pref_encoding_title">Pengkodean</string>
     <string name="pref_default_settings">Pengaturan bawaan</string>

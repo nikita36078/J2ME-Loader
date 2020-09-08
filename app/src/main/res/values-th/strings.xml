@@ -63,6 +63,10 @@
     <string name="SWAP_SIZES">ขนาด Swap</string>
     <string name="PREF_SYS_PROPS">คุณสมบัติของระบบ</string>
     <string name="PREF_ORIENTATION">การหมุนหน้าจอ</string>
+    <string name="pref_orientation_default">ค่าเริ่มต้น</string>
+    <string name="pref_orientation_auto">อัตโนมัติ</string>
+    <string name="pref_orientation_port">แนวตั้ง</string>
+    <string name="pref_orientation_land">แนวนอน</string>
     <string name="error">ผิดพลาด</string>
     <string name="FORCE_CLOSE_CONFIRMATION">บังคับปิดแอพลิเคชันอาจทำให้สูญเสียข้อมูล หรือแม้แต่ทำลายอย่างสมบูรณ์! \nทำต่อ?</string>
     <string name="CONFIRMATION_REQUIRED">ต้องการยืนยัน</string>
@@ -78,11 +82,15 @@
     <string name="hide_buttons">ซ่อนปุ่ม</string>
     <string name="common_settings">ตั้งค่าทั่วไป</string>
     <string name="pref_theme_title">ธีม</string>
+    <string name="pref_theme_light">สว่าง</string>
+    <string name="pref_theme_night">มืด</string>
     <string name="pref_requires_restart_summary">ต้องเริ่มแอปฯใหม่</string>
     <string name="pref_enable_actionbar_title">เปิดใช้ ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
     <string name="pref_button_shape_title">รูปร่างปุ่ม</string>
     <string name="pref_app_sort_title">ลำดับการจัดเรียง app</string>
+    <string name="pref_app_sort_name">ชื่อ</string>
+    <string name="pref_app_sort_date">วันที่</string>
     <string name="pref_map_keys">Key mappings</string>
     <string name="mapping_dialog_title">กดปุ่ม</string>
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>

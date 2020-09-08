@@ -69,9 +69,16 @@
     <string name="SWAP_SIZES">Размяна на размерите</string>
     <string name="PREF_SYS_PROPS">Свойства на системата</string>
     <string name="PREF_ORIENTATION">Ориентация на екрана</string>
+    <string name="pref_orientation_default">По подразбиране</string>
+    <string name="pref_orientation_auto">Автоматично</string>
+    <string name="pref_orientation_port">Портрет</string>
+    <string name="pref_orientation_land">Пейзаж</string>
     <string name="error">Грешка</string>
     <string name="message_clear_data">Наистина ли искате да изтриете всички данни на приложението?</string>
     <string name="PREF_VK_TYPE">Вид клавиатура</string>
+    <string name="pref_vk_type_custom">Персонализиране</string>
+    <string name="pref_vk_type_phone">Телефон</string>
+    <string name="pref_vk_type_phone_arrows">Телефон (стрелки)</string>
     <string name="PREF_LAYOUT">Оформление</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Принудителното затваряне може да предизвика загуба на данни или проблем в приложението!\nПродължавате ли?</string>
     <string name="CONFIRMATION_REQUIRED">Изисква се потвърждение</string>
@@ -90,6 +97,8 @@
     <string name="log_saved">Регистрационния файл е записан</string>
     <string name="common_settings">[ОБЩИ НАСТРОЙКИ]</string>
     <string name="pref_theme_title">Тема</string>
+    <string name="pref_theme_light">Светла</string>
+    <string name="pref_theme_night">Тъмна</string>
     <string name="pref_requires_restart_summary">Изисква се рестартиране</string>
     <string name="pref_enable_actionbar_title">Включване на ActionBar</string>
     <string name="pref_enable_actionbar_summary">Приложения на цял екран</string>
@@ -97,6 +106,8 @@
     <string name="pref_wakelock_title">Поддържане на включен екран</string>
     <string name="pref_button_shape_title">Форма на бутона</string>
     <string name="pref_app_sort_title">Ред за сортиране на приложения</string>
+    <string name="pref_app_sort_name">Име</string>
+    <string name="pref_app_sort_date">Дата</string>
     <string name="pref_map_keys">Клавишни настройки</string>
     <string name="pref_encoding_title">Кодиране</string>
     <string name="pref_default_settings">Стандартни настройки</string>
