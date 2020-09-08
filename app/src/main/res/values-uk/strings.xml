@@ -7,7 +7,6 @@
     <string name="more">Більше</string>
     <string name="search">Пошук</string>
     <string name="licenses">Ліцензії</string>
-    <string name="templates">Шаблони</string>
     <string name="save_log">Зберегти у журнал</string>
     <string name="about_message">Данний додаток дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
@@ -30,8 +29,6 @@
     <string name="CLEAR_DATA_CMD">Очистити дані</string>
     <string name="RESET_SETTINGS_CMD">Скидання налаштувань</string>
     <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
-    <string name="LOAD_TEMPLATE_CMD">Завантажити шаблон</string>
-    <string name="SAVE_TEMPLATE_CMD">Зберегти шаблон</string>
     <string name="PREF_SCREEN_OPTIONS">Налаштування екрану</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
@@ -115,10 +112,6 @@
     <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Кругла</item>
-        <item>Квадратна</item>
-    </string-array>
     <string name="pref_app_sort_title">Порядок сортування додатків</string>
     <string-array name="pref_app_sort_entries">
         <item>Назва</item>
@@ -132,5 +125,4 @@
     <string name="reset_mapping">Скинути</string>
     <string name="parallel_screen_redrawing">Паралельне перемальовування екрану</string>
     <string name="saved">Збережено</string>
-    <string name="not_saved_exists">Не збережено: вже існує</string>
 </resources>
