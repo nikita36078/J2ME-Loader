@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="donation_google_catalog_values" translatable="false">
         <item>1 USD</item>
         <item>2 USD</item>
@@ -42,5 +42,10 @@
         <item>Nokia/SE</item>
         <item>Siemens</item>
         <item>Motorola</item>
+    </string-array>
+    <string-array name="pref_graphics_mode_entries" tools:ignore="InconsistentArrays">
+        <item>@string/pref_graphics_software</item>
+        <item>@string/pref_graphics_hw_gles</item>
+        <item>@string/pref_graphics_hw_view</item>
     </string-array>
 </resources>
