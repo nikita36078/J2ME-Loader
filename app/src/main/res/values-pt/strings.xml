@@ -63,6 +63,10 @@
     <string name="SWAP_SIZES">Tamanhos de swap</string>
     <string name="PREF_SYS_PROPS">Propriedades do sistema</string>
     <string name="PREF_ORIENTATION">Orientação do ecrã</string>
+    <string name="pref_orientation_default">Predefinição</string>
+    <string name="pref_orientation_auto">Automático</string>
+    <string name="pref_orientation_port">Retrato</string>
+    <string name="pref_orientation_land">Paisagem</string>
     <string name="error">Erro</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Força-fechamento do aplicativo pode resultar em perda de dados ou até mesmo danificar completamente! \nProceder?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação Necessária</string>
@@ -80,6 +84,8 @@
     <string name="pref_enable_actionbar_title">Habilitar ActionBar</string>
     <string name="pref_enable_actionbar_summary">Tela completa no app</string>
     <string name="pref_app_sort_title">Ordem de Apps</string>
+    <string name="pref_app_sort_name">Nome</string>
+    <string name="pref_app_sort_date">Data</string>
     <string name="pref_map_keys">Mapeamentos de teclas</string>
     <string name="mapping_dialog_title">Pressione uma tecla</string>
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
