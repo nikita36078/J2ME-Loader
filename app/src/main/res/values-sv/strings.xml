@@ -14,6 +14,9 @@
     <string name="CANCEL_CMD">Avbryt</string>
     <string name="PREF_SHOW_FPS">Visa FPS</string>
     <string name="PREF_BACKGROUND">Bakgrund</string>
+    <string name="pref_orientation_default">Standard</string>
     <string name="report_crash">Skicka</string>
     <string name="pref_theme_title">Tema</string>
+    <string name="pref_app_sort_name">Namn</string>
+    <string name="pref_app_sort_date">Datum</string>
 </resources>
