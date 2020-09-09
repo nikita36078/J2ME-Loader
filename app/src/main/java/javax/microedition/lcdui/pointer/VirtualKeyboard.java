@@ -793,8 +793,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void paint(CanvasWrapper g) {
 		if (visible) {
-			for (VirtualKey aKeypad : keypad) {
-				aKeypad.paint(g);
+			for (VirtualKey key : keypad) {
+				if (key.visible) {
+					key.paint(g);
+				}
 			}
 		}
 	}
