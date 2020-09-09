@@ -70,9 +70,16 @@
     <string name="SWAP_SIZES">Zamień rozmiary</string>
     <string name="PREF_SYS_PROPS">Właściwości systemu</string>
     <string name="PREF_ORIENTATION">Orientacja ekranu</string>
+    <string name="pref_orientation_default">Domyślna</string>
+    <string name="pref_orientation_auto">Automatyczna</string>
+    <string name="pref_orientation_port">Pionowa</string>
+    <string name="pref_orientation_land">Pozioma</string>
     <string name="error">Błąd</string>
     <string name="message_clear_data">Czy na pewno chcesz wyczyścić dane aplikacji?</string>
     <string name="PREF_VK_TYPE">Typ klawiatury</string>
+    <string name="pref_vk_type_custom">Konfigurowalna</string>
+    <string name="pref_vk_type_phone">Telefon</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (strzałki)</string>
     <string name="PREF_LAYOUT">Układ</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Wymuszenie zamknięcia aplikacji może spowodować utratę danych lub nawet całkowicie ją zepsuć! \nKontynuować?</string>
     <string name="CONFIRMATION_REQUIRED">Wymagane potwierdzenie</string>
@@ -91,6 +98,8 @@
     <string name="log_saved">Log został zapisany</string>
     <string name="common_settings">[WSPÓLNE USTAWIENIA]</string>
     <string name="pref_theme_title">Motyw</string>
+    <string name="pref_theme_light">Jasny</string>
+    <string name="pref_theme_night">Ciemny</string>
     <string name="pref_requires_restart_summary">Wymaga restartu</string>
     <string name="pref_enable_actionbar_title">Włącz ActionBar</string>
     <string name="pref_enable_actionbar_summary">W aplikacjach pełnoekranowych</string>
@@ -98,6 +107,8 @@
     <string name="pref_wakelock_title">Pozostaw ekran włączony</string>
     <string name="pref_button_shape_title">Kształt przycisków</string>
     <string name="pref_app_sort_title">Kolejność sortowania aplikacji</string>
+    <string name="pref_app_sort_name">Nazwa</string>
+    <string name="pref_app_sort_date">Data</string>
     <string name="pref_map_keys">Mapowanie klawiszy</string>
     <string name="pref_encoding_title">Kodowanie</string>
     <string name="pref_default_settings">Ustawienia domyślne</string>
