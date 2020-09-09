@@ -70,7 +70,6 @@
     <string name="PREF_ORIENTATION">Orientation de l\'écran</string>
     <string name="pref_orientation_default">Par défaut</string>
     <string name="pref_orientation_auto">Automatique</string>
-    <string name="pref_orientation_port">Portrait</string>
     <string name="pref_orientation_land">Paysage</string>
     <string name="error">Erreur</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données des applications ?</string>
@@ -104,7 +103,6 @@
     <string name="pref_button_shape_title">Forme des boutons ou apparence des boutons</string>
     <string name="pref_app_sort_title">Trier les applications par ordre alphabétique</string>
     <string name="pref_app_sort_name">Nom</string>
-    <string name="pref_app_sort_date">Date</string>
     <string name="pref_map_keys">Mappage des touches</string>
     <string name="pref_encoding_title">Encodage</string>
     <string name="pref_default_settings">Réglages par défaut</string>
