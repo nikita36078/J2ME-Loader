@@ -7,6 +7,7 @@
     <string name="more">Mais</string>
     <string name="search">Pesquisar</string>
     <string name="licenses">Licenças</string>
+    <string name="profiles">Perfís</string>
     <string name="save_log">Salvar registros</string>
     <string name="about_message">Este aplicativo permite abrir aplicativos e jogos J2ME no Android. Ele suporta a maioria dos jogos 2D além dos 3D, mas com algumas limitações.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Ativando a filtragem em alguns casos pode reduzir muito a performance. Desative esta opção se o jogo estiver muito lento.&lt;BR&gt;&#8226; Problemas de exibição de imagens podem ser corrigidos ao ativar a opção \"Modo de processamento imediato\".</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Limpar dados</string>
     <string name="RESET_SETTINGS_CMD">Redefinir configurações</string>
     <string name="RESET_LAYOUT_CMD">Redefinir layout das teclas</string>
+    <string name="load_profile">Carregar perfil</string>
+    <string name="save_profile">Salvar perfil</string>
     <string name="PREF_SCREEN_OPTIONS">Opções de tela</string>
     <string name="PREF_SCALE_RATIO">Escala (%)</string>
     <string name="PREF_SCALE_TO_FIT">Escalar para caber</string>
@@ -52,6 +55,10 @@
     <string name="PREF_VK_FORCE_OPACITY">Forçar opacidade das teclas na tela</string>
     <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
     <string name="PREF_HW_ACCELERATION">Aceleração de Hardware (instável)</string>
+    <string name="pref_graphics_software">Software</string>
+    <string name="pref_graphics_hw_gles">Aceleração por HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Aceleração por HW (janela)</string>
+    <string name="pref_graphics_hw_surface">Aceleração por HW (instável)</string>
     <string name="PREF_VK_BACK">Botões</string>
     <string name="PREF_VK_FORE">Etiquetas</string>
     <string name="PREF_VK_OUTLINE">Contorno</string>
@@ -106,6 +113,9 @@
     <string name="pref_enable_statusbar_title">Ativar Barra de Status</string>
     <string name="pref_wakelock_title">Manter a tela ligada</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
+    <string name="pref_button_shape_oval">Oval</string>
+    <string name="pref_button_shape_rect">Retângulo</string>
+    <string name="pref_button_shape_round">Retângulo arredondado</string>
     <string name="pref_app_sort_title">Ordem de classificação de apps</string>
     <string name="pref_app_sort_name">Nome</string>
     <string name="pref_app_sort_date">Data</string>
@@ -116,5 +126,26 @@
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
     <string name="parallel_screen_redrawing">Redesenho de tela paralela</string>
+    <string name="default_label">"%s (padrão)"</string>
     <string name="saved">Salvo</string>
+    <string name="not_saved_exists">Já existe</string>
+    <string name="create_apps_dir_failed">Falha ao criar uma pasta no caminho:\n\'%s\'\nselecione outra.</string>
+    <string name="error_name">Insira o nome!</string>
+    <string name="set_as_default">Definir como padrão</string>
+    <string name="edit">Editar</string>
+    <string name="add">Adicionar</string>
+    <string name="add_profile_description">Criar novo perfil</string>
+    <string name="enter_name">Inserir nome</string>
+    <string name="enter_new_name">Inserir o novo nome</string>
+    <string name="set_default_profile_description">Selecione este perfil como uma configuração padrão para todos os apps que serão instalados mais tarde</string>
+    <string name="error_name_exists">Já existe, insira outro nome</string>
+    <string name="pref_vk_hide_hint">desativado</string>
+    <string name="unlimited">ilimitado</string>
+    <string name="pref_emulator_dir">Diretório de trabalho</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Rápido (sem filtro)</string>
+    <string name="shader_tuning">Ajuste de Shader</string>
+    <string name="reset">Redefinir</string>
+    <string name="pref_input_devices_title">Dispositivos de entrada</string>
+    <string name="pref_graphics_mode_title">Modo gráfico:</string>
 </resources>
