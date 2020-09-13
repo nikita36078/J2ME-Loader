@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
@@ -101,7 +100,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		inflater.inflate(R.menu.profile, menu);
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		final Profile profile = adapter.getItem(info.position);
-		if (!profile.hasConfig() && !new File(profile.getDir(), "config.xml").exists()) {
+		if (!profile.hasConfig() && !profile.hasOldConfig()) {
 			menu.findItem(R.id.action_context_default).setVisible(false);
 			menu.findItem(R.id.action_context_edit).setVisible(false);
 		}
