@@ -107,7 +107,7 @@ public class Config {
 
 	static {
 		Context context = ContextHolder.getAppContext();
-		String appName = context.getString(R.string.app_name);
+		String appName = "J2ME-Loader";
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 				+ "/" + appName;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
