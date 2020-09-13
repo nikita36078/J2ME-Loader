@@ -54,6 +54,7 @@ public class EmulatorApplication extends Application {
 		super.attachBaseContext(base);
 		ContextHolder.setApplication(this);
 		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) ACRA.init(this);
+		ACRA.getErrorReporter().putCustomData("Flavor", BuildConfig.FLAVOR);
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")
