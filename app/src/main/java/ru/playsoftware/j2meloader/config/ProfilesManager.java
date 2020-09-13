@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
@@ -130,6 +131,11 @@ public class ProfilesManager {
 				JsonElement json = gson.toJsonTree(map);
 				ProfileModel params = gson.fromJson(json, ProfileModel.class);
 				params.dir = dir;
+				// Fix keyboard shape for old configs
+				if (params.vkType == VirtualKeyboard.PHONE_DIGITS_TYPE ||
+						params.vkType == VirtualKeyboard.PHONE_ARROWS_TYPE) {
+					params.vkButtonShape = VirtualKeyboard.RECT_SHAPE;
+				}
 				return params;
 			} catch (Exception e) {
 				Log.e(TAG, "loadConfig: ", e);
