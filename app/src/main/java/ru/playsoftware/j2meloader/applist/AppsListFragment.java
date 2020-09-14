@@ -285,6 +285,7 @@ public class AppsListFragment extends ListFragment {
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
 						Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
+				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 								.setIntent(launchIntent)
