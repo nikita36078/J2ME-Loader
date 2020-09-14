@@ -66,6 +66,8 @@ import static android.opengl.GLES20.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Canvas extends Displayable {
+	private static final String TAG = Canvas.class.getName();
+
 	public static final int KEY_POUND = 35;
 	public static final int KEY_STAR = 42;
 	public static final int KEY_NUM0 = 48;
@@ -118,6 +120,7 @@ public abstract class Canvas extends Displayable {
 	private static final int MOTOROLA_KEY_FIRE = -20;
 	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
 	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
+	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
 
 	private static SparseIntArray keyCodeToSiemensCode = new SparseIntArray();
 	private static SparseIntArray keyCodeToMotorolaCode = new SparseIntArray();
@@ -125,6 +128,19 @@ public abstract class Canvas extends Displayable {
 	private static SparseIntArray keyCodeToGameAction = new SparseIntArray();
 	private static SparseIntArray gameActionToKeyCode = new SparseIntArray();
 	private static SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
+	private static boolean scaleToFit;
+	private static boolean keepAspectRatio;
+	private static boolean filter;
+	private static boolean touchInput;
+	private static int graphicsMode;
+	private static ShaderInfo shaderFilter;
+	private static boolean parallelRedraw;
+	private static boolean forceFullscreen;
+	private static boolean showFps;
+	private static int backgroundColor;
+	private static int scaleRatio;
+	private static int fpsLimit;
+	private static int layoutType;
 
 	static {
 		mapKeyCode(KEY_NUM0, 0, "0");
@@ -159,6 +175,40 @@ public abstract class Canvas extends Displayable {
 		mapGameAction(GAME_B, KEY_NUM9);
 		mapGameAction(GAME_C, KEY_STAR);
 		mapGameAction(GAME_D, KEY_POUND);
+	}
+
+	private final Object paintSync = new Object();
+	private final PaintEvent paintEvent = new PaintEvent();
+	private final FloatBuffer VERTEX_BG = ByteBuffer.allocateDirect(8 * 2 * 4)
+			.order(ByteOrder.nativeOrder()).asFloatBuffer();
+	protected int width, height;
+	protected int maxHeight;
+	private LinearLayout layout;
+	private InnerView innerView;
+	private Surface surface;
+	private CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
+	private int displayWidth;
+	private int displayHeight;
+	private boolean fullscreen = forceFullscreen;
+	private boolean visible;
+	private boolean sizeChangedCalled;
+	private Image offscreen;
+	private Image offscreenCopy;
+	private int onX, onY, onWidth, onHeight;
+	private RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
+	private long lastFrameTime = System.currentTimeMillis();
+	private Handler uiHandler;
+	private Overlay overlay;
+	private FpsCounter fpsCounter;
+	private boolean renderStarted;
+
+	public Canvas() {
+		if (parallelRedraw) {
+			uiHandler = new Handler(Looper.getMainLooper(), msg -> repaintScreen());
+		}
+		displayWidth = ContextHolder.getDisplayWidth();
+		displayHeight = ContextHolder.getDisplayHeight();
+		updateSize();
 	}
 
 	private static void remapKeys() {
@@ -235,6 +285,47 @@ public abstract class Canvas extends Displayable {
 		Canvas.shaderFilter = shader;
 	}
 
+	public static void setScale(boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
+		Canvas.scaleToFit = scaleToFit;
+		Canvas.keepAspectRatio = keepAspectRatio;
+		Canvas.scaleRatio = scaleRatio;
+	}
+
+	public static void setBackgroundColor(int color) {
+		backgroundColor = color | 0xFF000000;
+	}
+
+	public static void setFilterBitmap(boolean filter) {
+		Canvas.filter = filter;
+	}
+
+	public static void setKeyMapping(int layoutType, SparseIntArray intArray) {
+		Canvas.layoutType = layoutType;
+		Canvas.androidToMIDP = intArray;
+		remapKeys();
+	}
+
+	public static void setHasTouchInput(boolean touchInput) {
+		Canvas.touchInput = touchInput;
+	}
+
+	public static void setGraphicsMode(int mode, boolean parallel) {
+		Canvas.graphicsMode = mode;
+		Canvas.parallelRedraw = (mode == 0 || mode == 3) && parallel;
+	}
+
+	public static void setForceFullscreen(boolean forceFullscreen) {
+		Canvas.forceFullscreen = forceFullscreen;
+	}
+
+	public static void setShowFps(boolean showFps) {
+		Canvas.showFps = showFps;
+	}
+
+	public static void setLimitFps(int fpsLimit) {
+		Canvas.fpsLimit = fpsLimit;
+	}
+
 	public int getKeyCode(int gameAction) {
 		int res = gameActionToKeyCode.get(gameAction, Integer.MAX_VALUE);
 		if (res != Integer.MAX_VALUE) {
@@ -280,419 +371,6 @@ public abstract class Canvas extends Displayable {
 
 	public void callHideNotify() {
 		hideNotify();
-	}
-
-	private class InnerView extends GLSurfaceView {
-
-		private GLRenderer renderer;
-		OverlayView overlayView;
-		private FrameLayout rootView;
-
-		public InnerView(Context context) {
-			super(context);
-			if (graphicsMode == 1) {
-				setEGLContextClientVersion(2);
-				setEGLConfigChooser(false);
-				renderer = new GLRenderer();
-				setRenderer(renderer);
-				setRenderMode(RENDERMODE_WHEN_DIRTY);
-				setWillNotDraw(true);
-			} else {
-				if (graphicsMode == 2) {
-					setWillNotDraw(false);
-				}
-				getHolder().setFormat(PixelFormat.RGBA_8888);
-			}
-			rootView = ((Activity) context).findViewById(R.id.midletFrame);
-			overlayView = rootView.findViewById(R.id.vOverlay);
-			setFocusableInTouchMode(true);
-		}
-
-		@Override
-		protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
-			super.onVisibilityChanged(changedView, visibility);
-			// Fix keyboard issue on Blackberry
-			if (visibility == VISIBLE) {
-				requestFocus();
-			}
-		}
-
-		@Override
-		public boolean onKeyDown(int keyCode, KeyEvent event) {
-			keyCode = convertAndroidKeyCode(keyCode);
-			if (keyCode == Integer.MAX_VALUE) {
-				return false;
-			}
-			if (event.getRepeatCount() == 0) {
-				if (overlay == null || !overlay.keyPressed(keyCode)) {
-					postKeyPressed(keyCode);
-				}
-			} else {
-				if (overlay == null || !overlay.keyRepeated(keyCode)) {
-					postKeyRepeated(keyCode);
-				}
-			}
-			return true;
-		}
-
-		@Override
-		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			keyCode = convertAndroidKeyCode(keyCode);
-			if (keyCode == Integer.MAX_VALUE) {
-				return false;
-			}
-			if (overlay == null || !overlay.keyReleased(keyCode)) {
-				postKeyReleased(keyCode);
-			}
-			return true;
-		}
-
-		@Override
-		@SuppressLint("ClickableViewAccessibility")
-		public boolean onTouchEvent(MotionEvent event) {
-			switch (event.getActionMasked()) {
-				case MotionEvent.ACTION_DOWN:
-					if (overlay != null) {
-						overlay.show();
-					}
-				case MotionEvent.ACTION_POINTER_DOWN:
-					int index = event.getActionIndex();
-					int id = event.getPointerId(index);
-					if ((overlay == null || !overlay.pointerPressed(id, event.getX(index), event.getY(index)))
-							&& touchInput && id == 0) {
-						Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, id,
-								convertPointerX(event.getX()), convertPointerY(event.getY())));
-					}
-					break;
-				case MotionEvent.ACTION_MOVE:
-					int pointerCount = event.getPointerCount();
-					int historySize = event.getHistorySize();
-					for (int h = 0; h < historySize; h++) {
-						for (int p = 0; p < pointerCount; p++) {
-							id = event.getPointerId(p);
-							if ((overlay == null || !overlay.pointerDragged(id, event.getHistoricalX(p, h), event.getHistoricalY(p, h)))
-									&& touchInput && id == 0) {
-								Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
-										convertPointerX(event.getHistoricalX(p, h)), convertPointerY(event.getHistoricalY(p, h))));
-							}
-						}
-					}
-					for (int p = 0; p < pointerCount; p++) {
-						id = event.getPointerId(p);
-						if ((overlay == null || !overlay.pointerDragged(id, event.getX(p), event.getY(p)))
-								&& touchInput && id == 0) {
-							Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
-									convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
-						}
-					}
-					break;
-				case MotionEvent.ACTION_UP:
-					if (overlay != null) {
-						overlay.hide();
-					}
-				case MotionEvent.ACTION_POINTER_UP:
-					index = event.getActionIndex();
-					id = event.getPointerId(index);
-					if ((overlay == null || !overlay.pointerReleased(id, event.getX(index), event.getY(index)))
-							&& touchInput && id == 0) {
-						Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, id,
-								convertPointerX(event.getX()), convertPointerY(event.getY())));
-					}
-					break;
-				default:
-					return super.onTouchEvent(event);
-			}
-			return true;
-		}
-
-		@Override
-		public void surfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight) {
-			if (graphicsMode == 1) {
-				super.surfaceChanged(holder, format, newWidth, newHeight);
-			}
-			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
-			// calculates the relative coordinates to the parent
-			rootView.offsetDescendantRectToMyCoords(this, offsetViewBounds);
-			synchronized (paintSync) {
-				overlayView.setTargetBounds(offsetViewBounds);
-				displayWidth = newWidth;
-				displayHeight = newHeight;
-				if (checkSizeChanged() || !sizeChangedCalled) {
-					Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
-							width, height));
-					sizeChangedCalled = true;
-				}
-			}
-			Display.postEvent(paintEvent);
-		}
-
-		@Override
-		public void surfaceCreated(SurfaceHolder holder) {
-			if (graphicsMode == 1) {
-				super.surfaceCreated(holder);
-				onResume();
-			}
-			synchronized (paintSync) {
-				surface = holder.getSurface();
-				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
-			}
-			if (showFps) {
-				fpsCounter = new FpsCounter(overlayView);
-				overlayView.addLayer(fpsCounter);
-			}
-			overlayView.setVisibility(true);
-		}
-
-		@Override
-		public void surfaceDestroyed(SurfaceHolder holder) {
-			renderStarted = false;
-			if (graphicsMode == 1) {
-				onPause();
-				super.surfaceDestroyed(holder);
-			}
-			synchronized (paintSync) {
-				surface = null;
-				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
-				if (fpsCounter != null) {
-					fpsCounter.stop();
-					overlayView.removeLayer(fpsCounter);
-					fpsCounter = null;
-				}
-			}
-			overlayView.setVisibility(false);
-		}
-
-		public void updateSize() {
-			queueEvent(() -> {
-				Bitmap bitmap = offscreenCopy.getBitmap();
-				renderer.program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
-			});
-		}
-
-		@Override
-		protected void onDraw(android.graphics.Canvas canvas) {
-			if (graphicsMode != 2) return; // Fix for Android Pie
-			CanvasWrapper g = canvasWrapper;
-			g.bind(canvas);
-			g.clear(backgroundColor);
-			offscreenCopy.getBitmap().prepareToDraw();
-			g.drawImage(offscreenCopy, virtualScreen);
-			if (fpsCounter != null) {
-				fpsCounter.increment();
-			}
-		}
-	}
-
-	private class GLRenderer implements GLSurfaceView.Renderer {
-		private int[] bgTextureId = new int[1];
-		private ShaderProgram program;
-
-		@Override
-		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			program = new ShaderProgram(shaderFilter);
-			int c = Canvas.backgroundColor;
-			glClearColor((c >> 16 & 0xff) / 255.0f, (c >> 8 & 0xff) / 255.0f, (c & 0xff) / 255.0f, 1.0f);
-			glDisable(GL_BLEND);
-			glDisable(GL_DEPTH_TEST);
-			glDepthMask(false);
-			initTex();
-			Bitmap bitmap = offscreenCopy.getBitmap();
-			program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
-			if (shaderFilter.values != null) {
-				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
-			}
-			renderStarted = true;
-		}
-
-		@Override
-		public void onSurfaceChanged(GL10 gl, int width, int height) {
-			glViewport(0, 0, width, height);
-			glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);
-		}
-
-		@Override
-		public void onDrawFrame(GL10 gl) {
-			glClear(GL_COLOR_BUFFER_BIT);
-			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, offscreenCopy.getBitmap(), 0);
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-			if (fpsCounter != null) {
-				fpsCounter.increment();
-			}
-		}
-
-		private void initTex() {
-			glGenTextures(1, bgTextureId, 0);
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter ? GL_LINEAR : GL_NEAREST);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter ? GL_LINEAR : GL_NEAREST);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glUniform1i(program.uTextureUnit, 0);
-		}
-
-	}
-
-	private class PaintEvent extends Event implements EventFilter {
-
-		@Override
-		public void process() {
-			synchronized (paintSync) {
-				if (surface == null || !surface.isValid() || !isShown()) {
-					return;
-				}
-				Graphics g = offscreen.getSingleGraphics();
-				g.reset();
-				try {
-					paint(g);
-				} catch (Throwable t) {
-					t.printStackTrace();
-				}
-				offscreen.copyTo(offscreenCopy);
-				if (graphicsMode == 1) {
-					if (innerView != null) {
-						innerView.requestRender();
-					}
-				} else if (graphicsMode == 2) {
-					if (innerView != null) {
-						innerView.postInvalidate();
-					}
-				} else if (!parallelRedraw) {
-					repaintScreen();
-				} else if (!uiHandler.hasMessages(0)) {
-					uiHandler.sendEmptyMessage(0);
-				}
-			}
-		}
-
-		@Override
-		public void recycle() {
-		}
-
-		private int enqueued = 0;
-
-		@Override
-		public void enterQueue() {
-			enqueued++;
-		}
-
-		@Override
-		public void leaveQueue() {
-			enqueued--;
-		}
-
-		/**
-		 * The queue should contain no more than two repaint events
-		 * <p>
-		 * One won't be smooth enough, and if you add more than two,
-		 * then how to determine exactly how many of them need to be added?
-		 */
-		@Override
-		public boolean placeableAfter(Event event) {
-			return event != this;
-		}
-
-		@Override
-		public boolean accept(Event event) {
-			return event == this;
-		}
-	}
-
-	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
-	private static final String TAG = Canvas.class.getName();
-	private final Object paintSync = new Object();
-
-	private final PaintEvent paintEvent = new PaintEvent();
-
-	private LinearLayout layout;
-	private InnerView innerView;
-	private Surface surface;
-	private CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
-
-	protected int width, height;
-	protected int maxHeight;
-
-	private int displayWidth;
-	private int displayHeight;
-	private boolean fullscreen = forceFullscreen;
-	private boolean visible;
-	private boolean sizeChangedCalled;
-
-	private static boolean scaleToFit;
-	private static boolean keepAspectRatio;
-	private static boolean filter;
-	private static boolean touchInput;
-	private static int graphicsMode;
-	private static ShaderInfo shaderFilter;
-	private static boolean parallelRedraw;
-	private static boolean forceFullscreen;
-	private static boolean showFps;
-	private static int backgroundColor;
-	private static int scaleRatio;
-	private static int fpsLimit;
-	private static int layoutType;
-
-	private Image offscreen;
-	private Image offscreenCopy;
-	private int onX, onY, onWidth, onHeight;
-	private RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
-	private long lastFrameTime = System.currentTimeMillis();
-
-	private Handler uiHandler;
-	private Overlay overlay;
-	private FpsCounter fpsCounter;
-	private final FloatBuffer VERTEX_BG = ByteBuffer.allocateDirect(8 * 2 * 4)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer();
-	private boolean renderStarted;
-
-	public Canvas() {
-		if (parallelRedraw) {
-			uiHandler = new Handler(Looper.getMainLooper(), msg -> repaintScreen());
-		}
-		displayWidth = ContextHolder.getDisplayWidth();
-		displayHeight = ContextHolder.getDisplayHeight();
-		updateSize();
-	}
-
-	public static void setScale(boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
-		Canvas.scaleToFit = scaleToFit;
-		Canvas.keepAspectRatio = keepAspectRatio;
-		Canvas.scaleRatio = scaleRatio;
-	}
-
-	public static void setBackgroundColor(int color) {
-		backgroundColor = color | 0xFF000000;
-	}
-
-	public static void setFilterBitmap(boolean filter) {
-		Canvas.filter = filter;
-	}
-
-	public static void setKeyMapping(int layoutType, SparseIntArray intArray) {
-		Canvas.layoutType = layoutType;
-		Canvas.androidToMIDP = intArray;
-		remapKeys();
-	}
-
-	public static void setHasTouchInput(boolean touchInput) {
-		Canvas.touchInput = touchInput;
-	}
-
-	public static void setGraphicsMode(int mode, boolean parallel) {
-		Canvas.graphicsMode = mode;
-		Canvas.parallelRedraw = (mode == 0 || mode == 3) && parallel;
-	}
-
-	public static void setForceFullscreen(boolean forceFullscreen) {
-		Canvas.forceFullscreen = forceFullscreen;
-	}
-
-	public static void setShowFps(boolean showFps) {
-		Canvas.showFps = showFps;
-	}
-
-	public static void setLimitFps(int fpsLimit) {
-		Canvas.fpsLimit = fpsLimit;
 	}
 
 	public void setOverlay(Overlay ov) {
@@ -1147,5 +825,323 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void pointerReleased(int x, int y) {
+	}
+
+	private class GLRenderer implements GLSurfaceView.Renderer {
+		private int[] bgTextureId = new int[1];
+		private ShaderProgram program;
+
+		@Override
+		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+			program = new ShaderProgram(shaderFilter);
+			int c = Canvas.backgroundColor;
+			glClearColor((c >> 16 & 0xff) / 255.0f, (c >> 8 & 0xff) / 255.0f, (c & 0xff) / 255.0f, 1.0f);
+			glDisable(GL_BLEND);
+			glDisable(GL_DEPTH_TEST);
+			glDepthMask(false);
+			initTex();
+			Bitmap bitmap = offscreenCopy.getBitmap();
+			program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
+			if (shaderFilter.values != null) {
+				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
+			}
+			renderStarted = true;
+		}
+
+		@Override
+		public void onSurfaceChanged(GL10 gl, int width, int height) {
+			glViewport(0, 0, width, height);
+			glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);
+		}
+
+		@Override
+		public void onDrawFrame(GL10 gl) {
+			glClear(GL_COLOR_BUFFER_BIT);
+			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, offscreenCopy.getBitmap(), 0);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+			if (fpsCounter != null) {
+				fpsCounter.increment();
+			}
+		}
+
+		private void initTex() {
+			glGenTextures(1, bgTextureId, 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
+			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+			// юнит текстуры
+			glUniform1i(program.uTextureUnit, 0);
+		}
+
+	}
+
+	private class PaintEvent extends Event implements EventFilter {
+
+		private int enqueued = 0;
+
+		@Override
+		public void process() {
+			synchronized (paintSync) {
+				if (surface == null || !surface.isValid() || !isShown()) {
+					return;
+				}
+				Graphics g = offscreen.getSingleGraphics();
+				g.reset();
+				try {
+					paint(g);
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+				offscreen.copyTo(offscreenCopy);
+				if (graphicsMode == 1) {
+					if (innerView != null) {
+						innerView.requestRender();
+					}
+				} else if (graphicsMode == 2) {
+					if (innerView != null) {
+						innerView.postInvalidate();
+					}
+				} else if (!parallelRedraw) {
+					repaintScreen();
+				} else if (!uiHandler.hasMessages(0)) {
+					uiHandler.sendEmptyMessage(0);
+				}
+			}
+		}
+
+		@Override
+		public void recycle() {
+		}
+
+		@Override
+		public void enterQueue() {
+			enqueued++;
+		}
+
+		@Override
+		public void leaveQueue() {
+			enqueued--;
+		}
+
+		/**
+		 * The queue should contain no more than two repaint events
+		 * <p>
+		 * One won't be smooth enough, and if you add more than two,
+		 * then how to determine exactly how many of them need to be added?
+		 */
+		@Override
+		public boolean placeableAfter(Event event) {
+			return event != this;
+		}
+
+		@Override
+		public boolean accept(Event event) {
+			return event == this;
+		}
+	}
+
+	private class InnerView extends GLSurfaceView {
+
+		OverlayView overlayView;
+		private GLRenderer renderer;
+		private FrameLayout rootView;
+
+		public InnerView(Context context) {
+			super(context);
+			if (graphicsMode == 1) {
+				setEGLContextClientVersion(2);
+				setEGLConfigChooser(false);
+				renderer = new GLRenderer();
+				setRenderer(renderer);
+				setRenderMode(RENDERMODE_WHEN_DIRTY);
+				setWillNotDraw(true);
+			} else {
+				if (graphicsMode == 2) {
+					setWillNotDraw(false);
+				}
+				getHolder().setFormat(PixelFormat.RGBA_8888);
+			}
+			rootView = ((Activity) context).findViewById(R.id.midletFrame);
+			overlayView = rootView.findViewById(R.id.vOverlay);
+			setFocusableInTouchMode(true);
+		}
+
+		@Override
+		protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+			super.onVisibilityChanged(changedView, visibility);
+			// Fix keyboard issue on Blackberry
+			if (visibility == VISIBLE) {
+				requestFocus();
+			}
+		}
+
+		@Override
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			keyCode = convertAndroidKeyCode(keyCode);
+			if (keyCode == Integer.MAX_VALUE) {
+				return false;
+			}
+			if (event.getRepeatCount() == 0) {
+				if (overlay == null || !overlay.keyPressed(keyCode)) {
+					postKeyPressed(keyCode);
+				}
+			} else {
+				if (overlay == null || !overlay.keyRepeated(keyCode)) {
+					postKeyRepeated(keyCode);
+				}
+			}
+			return true;
+		}
+
+		@Override
+		public boolean onKeyUp(int keyCode, KeyEvent event) {
+			keyCode = convertAndroidKeyCode(keyCode);
+			if (keyCode == Integer.MAX_VALUE) {
+				return false;
+			}
+			if (overlay == null || !overlay.keyReleased(keyCode)) {
+				postKeyReleased(keyCode);
+			}
+			return true;
+		}
+
+		@Override
+		@SuppressLint("ClickableViewAccessibility")
+		public boolean onTouchEvent(MotionEvent event) {
+			switch (event.getActionMasked()) {
+				case MotionEvent.ACTION_DOWN:
+					if (overlay != null) {
+						overlay.show();
+					}
+				case MotionEvent.ACTION_POINTER_DOWN:
+					int index = event.getActionIndex();
+					int id = event.getPointerId(index);
+					if ((overlay == null || !overlay.pointerPressed(id, event.getX(index), event.getY(index)))
+							&& touchInput && id == 0) {
+						Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, id,
+								convertPointerX(event.getX()), convertPointerY(event.getY())));
+					}
+					break;
+				case MotionEvent.ACTION_MOVE:
+					int pointerCount = event.getPointerCount();
+					int historySize = event.getHistorySize();
+					for (int h = 0; h < historySize; h++) {
+						for (int p = 0; p < pointerCount; p++) {
+							id = event.getPointerId(p);
+							if ((overlay == null || !overlay.pointerDragged(id, event.getHistoricalX(p, h), event.getHistoricalY(p, h)))
+									&& touchInput && id == 0) {
+								Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
+										convertPointerX(event.getHistoricalX(p, h)), convertPointerY(event.getHistoricalY(p, h))));
+							}
+						}
+					}
+					for (int p = 0; p < pointerCount; p++) {
+						id = event.getPointerId(p);
+						if ((overlay == null || !overlay.pointerDragged(id, event.getX(p), event.getY(p)))
+								&& touchInput && id == 0) {
+							Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
+									convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
+						}
+					}
+					break;
+				case MotionEvent.ACTION_UP:
+					if (overlay != null) {
+						overlay.hide();
+					}
+				case MotionEvent.ACTION_POINTER_UP:
+					index = event.getActionIndex();
+					id = event.getPointerId(index);
+					if ((overlay == null || !overlay.pointerReleased(id, event.getX(index), event.getY(index)))
+							&& touchInput && id == 0) {
+						Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, id,
+								convertPointerX(event.getX()), convertPointerY(event.getY())));
+					}
+					break;
+				default:
+					return super.onTouchEvent(event);
+			}
+			return true;
+		}
+
+		@Override
+		public void surfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight) {
+			if (graphicsMode == 1) {
+				super.surfaceChanged(holder, format, newWidth, newHeight);
+			}
+			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
+			// calculates the relative coordinates to the parent
+			rootView.offsetDescendantRectToMyCoords(this, offsetViewBounds);
+			synchronized (paintSync) {
+				overlayView.setTargetBounds(offsetViewBounds);
+				displayWidth = newWidth;
+				displayHeight = newHeight;
+				if (checkSizeChanged() || !sizeChangedCalled) {
+					Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+							width, height));
+					sizeChangedCalled = true;
+				}
+			}
+			Display.postEvent(paintEvent);
+		}
+
+		@Override
+		public void surfaceCreated(SurfaceHolder holder) {
+			if (graphicsMode == 1) {
+				super.surfaceCreated(holder);
+				onResume();
+			}
+			synchronized (paintSync) {
+				surface = holder.getSurface();
+				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
+			}
+			if (showFps) {
+				fpsCounter = new FpsCounter(overlayView);
+				overlayView.addLayer(fpsCounter);
+			}
+			overlayView.setVisibility(true);
+		}
+
+		@Override
+		public void surfaceDestroyed(SurfaceHolder holder) {
+			renderStarted = false;
+			if (graphicsMode == 1) {
+				onPause();
+				super.surfaceDestroyed(holder);
+			}
+			synchronized (paintSync) {
+				surface = null;
+				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
+				if (fpsCounter != null) {
+					fpsCounter.stop();
+					overlayView.removeLayer(fpsCounter);
+					fpsCounter = null;
+				}
+			}
+			overlayView.setVisibility(false);
+		}
+
+		public void updateSize() {
+			queueEvent(() -> {
+				Bitmap bitmap = offscreenCopy.getBitmap();
+				renderer.program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
+			});
+		}
+
+		@Override
+		protected void onDraw(android.graphics.Canvas canvas) {
+			if (graphicsMode != 2) return; // Fix for Android Pie
+			CanvasWrapper g = canvasWrapper;
+			g.bind(canvas);
+			g.clear(backgroundColor);
+			offscreenCopy.getBitmap().prepareToDraw();
+			g.drawImage(offscreenCopy, virtualScreen);
+			if (fpsCounter != null) {
+				fpsCounter.increment();
+			}
+		}
 	}
 }
