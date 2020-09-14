@@ -19,7 +19,6 @@ package javax.microedition.lcdui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -35,6 +34,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -49,12 +49,15 @@ import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.graphics.CanvasView;
 import javax.microedition.lcdui.graphics.CanvasWrapper;
+import javax.microedition.lcdui.graphics.GlesView;
 import javax.microedition.lcdui.graphics.ShaderProgram;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.lcdui.pointer.FixedKeyboard;
+import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
@@ -63,6 +66,7 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 
 import static android.opengl.GLES20.*;
+import static android.opengl.GLSurfaceView.RENDERMODE_WHEN_DIRTY;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Canvas extends Displayable {
@@ -179,14 +183,13 @@ public abstract class Canvas extends Displayable {
 
 	private final Object paintSync = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
-	private final FloatBuffer VERTEX_BG = ByteBuffer.allocateDirect(8 * 2 * 4)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer();
 	protected int width, height;
 	protected int maxHeight;
 	private LinearLayout layout;
-	private InnerView innerView;
+	private SurfaceView innerView;
 	private Surface surface;
 	private CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
+	private GLRenderer renderer;
 	private int displayWidth;
 	private int displayHeight;
 	private boolean fullscreen = forceFullscreen;
@@ -200,9 +203,11 @@ public abstract class Canvas extends Displayable {
 	private Handler uiHandler;
 	private Overlay overlay;
 	private FpsCounter fpsCounter;
-	private boolean renderStarted;
 
 	public Canvas() {
+		if (graphicsMode == 1) {
+			renderer = new GLRenderer();
+		}
 		if (parallelRedraw) {
 			uiHandler = new Handler(Looper.getMainLooper(), msg -> repaintScreen());
 		}
@@ -373,6 +378,18 @@ public abstract class Canvas extends Displayable {
 		hideNotify();
 	}
 
+	public void onDraw(android.graphics.Canvas canvas) {
+		if (graphicsMode != 2) return; // Fix for Android Pie
+		CanvasWrapper g = canvasWrapper;
+		g.bind(canvas);
+		g.clear(backgroundColor);
+		offscreenCopy.getBitmap().prepareToDraw();
+		g.drawImage(offscreenCopy, virtualScreen);
+		if (fpsCounter != null) {
+			fpsCounter.increment();
+		}
+	}
+
 	public void setOverlay(Overlay ov) {
 		if (overlay != null) {
 			overlay.setTarget(null);
@@ -539,15 +556,7 @@ public abstract class Canvas extends Displayable {
 			float gb = 1.0f - 2.0f * virtualScreen.bottom / displayHeight;
 			float th = (float) height / offscreen.getBitmap().getHeight();
 			float tw = (float) width / offscreen.getBitmap().getWidth();
-			FloatBuffer vertex_bg = VERTEX_BG;
-			vertex_bg.rewind();
-			vertex_bg.put(gl).put(gt).put(0.0f).put(0.0f);// lt
-			vertex_bg.put(gl).put(gb).put(0.0f).put(  th);// lb
-			vertex_bg.put(gr).put(gt).put(  tw).put(0.0f);// rt
-			vertex_bg.put(gr).put(gb).put(  tw).put(  th);// rb
-			if (renderStarted) {
-				innerView.updateSize();
-			}
+			renderer.updateSize(gl, gt, gr, gb, th, tw);
 		}
 	}
 
@@ -571,11 +580,31 @@ public abstract class Canvas extends Displayable {
 		return (y - onY) * height / onHeight;
 	}
 
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public View getDisplayableView() {
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
-			innerView = new InnerView(getParentActivity());
+			MicroActivity activity = getParentActivity();
+			if (graphicsMode == 1) {
+				GlesView glesView = new GlesView(activity);
+				glesView.setRenderer(renderer);
+				glesView.setRenderMode(RENDERMODE_WHEN_DIRTY);
+				renderer.setView(glesView);
+				innerView = glesView;
+			} else {
+				CanvasView canvasView = new CanvasView(this, activity);
+				if (graphicsMode == 2) {
+					canvasView.setWillNotDraw(false);
+				}
+				canvasView.getHolder().setFormat(PixelFormat.RGBA_8888);
+				innerView = canvasView;
+			}
+			ViewCallbacks callback = new ViewCallbacks(innerView);
+			innerView.getHolder().addCallback(callback);
+			innerView.setOnTouchListener(callback);
+			innerView.setOnKeyListener(callback);
+			innerView.setFocusableInTouchMode(true);
 			layout.addView(innerView);
 		}
 		return layout;
@@ -650,7 +679,7 @@ public abstract class Canvas extends Displayable {
 			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
 			if (graphicsMode == 1) {
 				if (innerView != null) {
-					innerView.requestRender();
+					renderer.requestRender();
 				}
 				return;
 			} else if (graphicsMode == 2) {
@@ -674,7 +703,7 @@ public abstract class Canvas extends Displayable {
 			image.copyTo(offscreenCopy, x, y);
 			if (graphicsMode == 1) {
 				if (innerView != null) {
-					innerView.requestRender();
+					renderer.requestRender();
 				}
 				return;
 			} else if (graphicsMode == 2) {
@@ -828,8 +857,12 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private class GLRenderer implements GLSurfaceView.Renderer {
+		private final FloatBuffer vbo = ByteBuffer.allocateDirect(8 * 2 * 4)
+				.order(ByteOrder.nativeOrder()).asFloatBuffer();
+		private GLSurfaceView mView;
 		private int[] bgTextureId = new int[1];
 		private ShaderProgram program;
+		private boolean isStarted;
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -841,11 +874,11 @@ public abstract class Canvas extends Displayable {
 			glDepthMask(false);
 			initTex();
 			Bitmap bitmap = offscreenCopy.getBitmap();
-			program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
+			program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
 			if (shaderFilter.values != null) {
 				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
 			}
-			renderStarted = true;
+			isStarted = true;
 		}
 
 		@Override
@@ -877,6 +910,37 @@ public abstract class Canvas extends Displayable {
 			glUniform1i(program.uTextureUnit, 0);
 		}
 
+		public void updateSize(float gl, float gt, float gr, float gb, float th, float tw) {
+			FloatBuffer vertex_bg = vbo;
+			vertex_bg.rewind();
+			vertex_bg.put(gl).put(gt).put(0.0f).put(0.0f);// lt
+			vertex_bg.put(gl).put(gb).put(0.0f).put(  th);// lb
+			vertex_bg.put(gr).put(gt).put(  tw).put(0.0f);// rt
+			vertex_bg.put(gr).put(gb).put(  tw).put(  th);// rb
+			if (isStarted) {
+				mView.queueEvent(() -> {
+					Bitmap bitmap = offscreenCopy.getBitmap();
+					program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
+				});
+			}
+		}
+
+		public void requestRender() {
+			mView.requestRender();
+		}
+
+		public void setView(GLSurfaceView mView) {
+			this.mView = mView;
+		}
+
+		public void stop() {
+			isStarted = false;
+			mView.onPause();
+		}
+
+		public void start() {
+			mView.onResume();
+		}
 	}
 
 	private class PaintEvent extends Event implements EventFilter {
@@ -899,7 +963,7 @@ public abstract class Canvas extends Displayable {
 				offscreen.copyTo(offscreenCopy);
 				if (graphicsMode == 1) {
 					if (innerView != null) {
-						innerView.requestRender();
+						renderer.requestRender();
 					}
 				} else if (graphicsMode == 2) {
 					if (innerView != null) {
@@ -944,42 +1008,29 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	private class InnerView extends GLSurfaceView {
+	private class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback, View.OnKeyListener {
 
+		private final View mView;
 		OverlayView overlayView;
-		private GLRenderer renderer;
 		private FrameLayout rootView;
 
-		public InnerView(Context context) {
-			super(context);
-			if (graphicsMode == 1) {
-				setEGLContextClientVersion(2);
-				setEGLConfigChooser(false);
-				renderer = new GLRenderer();
-				setRenderer(renderer);
-				setRenderMode(RENDERMODE_WHEN_DIRTY);
-				setWillNotDraw(true);
-			} else {
-				if (graphicsMode == 2) {
-					setWillNotDraw(false);
-				}
-				getHolder().setFormat(PixelFormat.RGBA_8888);
-			}
-			rootView = ((Activity) context).findViewById(R.id.midletFrame);
+		public ViewCallbacks(View view) {
+			mView = view;
+			rootView = ((Activity) view.getContext()).findViewById(R.id.midletFrame);
 			overlayView = rootView.findViewById(R.id.vOverlay);
-			setFocusableInTouchMode(true);
 		}
 
 		@Override
-		protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
-			super.onVisibilityChanged(changedView, visibility);
-			// Fix keyboard issue on Blackberry
-			if (visibility == VISIBLE) {
-				requestFocus();
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			switch (event.getAction()) {
+				case KeyEvent.ACTION_DOWN:
+					return onKeyDown(keyCode, event);
+				case KeyEvent.ACTION_UP:
+					return onKeyUp(keyCode, event);
 			}
+			return false;
 		}
 
-		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
 			if (keyCode == Integer.MAX_VALUE) {
@@ -997,7 +1048,6 @@ public abstract class Canvas extends Displayable {
 			return true;
 		}
 
-		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
 			keyCode = convertAndroidKeyCode(keyCode);
 			if (keyCode == Integer.MAX_VALUE) {
@@ -1011,7 +1061,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		@SuppressLint("ClickableViewAccessibility")
-		public boolean onTouchEvent(MotionEvent event) {
+		public boolean onTouch(View v, MotionEvent event) {
 			switch (event.getActionMasked()) {
 				case MotionEvent.ACTION_DOWN:
 					if (overlay != null) {
@@ -1062,19 +1112,16 @@ public abstract class Canvas extends Displayable {
 					}
 					break;
 				default:
-					return super.onTouchEvent(event);
+					return false;
 			}
 			return true;
 		}
 
 		@Override
-		public void surfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight) {
-			if (graphicsMode == 1) {
-				super.surfaceChanged(holder, format, newWidth, newHeight);
-			}
+		public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int newWidth, int newHeight) {
 			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
 			// calculates the relative coordinates to the parent
-			rootView.offsetDescendantRectToMyCoords(this, offsetViewBounds);
+			rootView.offsetDescendantRectToMyCoords(mView, offsetViewBounds);
 			synchronized (paintSync) {
 				overlayView.setTargetBounds(offsetViewBounds);
 				displayWidth = newWidth;
@@ -1089,10 +1136,9 @@ public abstract class Canvas extends Displayable {
 		}
 
 		@Override
-		public void surfaceCreated(SurfaceHolder holder) {
-			if (graphicsMode == 1) {
-				super.surfaceCreated(holder);
-				onResume();
+		public void surfaceCreated(@NonNull SurfaceHolder holder) {
+			if (renderer != null) {
+				renderer.start();
 			}
 			synchronized (paintSync) {
 				surface = holder.getSurface();
@@ -1106,11 +1152,9 @@ public abstract class Canvas extends Displayable {
 		}
 
 		@Override
-		public void surfaceDestroyed(SurfaceHolder holder) {
-			renderStarted = false;
-			if (graphicsMode == 1) {
-				onPause();
-				super.surfaceDestroyed(holder);
+		public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
+			if (renderer != null) {
+				renderer.stop();
 			}
 			synchronized (paintSync) {
 				surface = null;
@@ -1124,24 +1168,5 @@ public abstract class Canvas extends Displayable {
 			overlayView.setVisibility(false);
 		}
 
-		public void updateSize() {
-			queueEvent(() -> {
-				Bitmap bitmap = offscreenCopy.getBitmap();
-				renderer.program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
-			});
-		}
-
-		@Override
-		protected void onDraw(android.graphics.Canvas canvas) {
-			if (graphicsMode != 2) return; // Fix for Android Pie
-			CanvasWrapper g = canvasWrapper;
-			g.bind(canvas);
-			g.clear(backgroundColor);
-			offscreenCopy.getBitmap().prepareToDraw();
-			g.drawImage(offscreenCopy, virtualScreen);
-			if (fpsCounter != null) {
-				fpsCounter.increment();
-			}
-		}
 	}
 }
