@@ -26,7 +26,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -393,10 +392,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				ShaderInfo info = null;
 				for (String line : split) {
 					if (line.startsWith("[")) {
-						if (info != null) {
+						if (info != null && info.fragment != null && info.vertex != null) {
 							infos.add(info);
 						}
-						info = new ShaderInfo();
+						info = new ShaderInfo(line.replaceAll("[\\[\\]]", ""), "unknown");
 					} else if (info != null) {
 						try {
 							info.set(line);
@@ -405,7 +404,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 						}
 					}
 				}
-				if (info != null) {
+				if (info != null && info.fragment != null && info.vertex != null) {
 					infos.add(info);
 				}
 			}
