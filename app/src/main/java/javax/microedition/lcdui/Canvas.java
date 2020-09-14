@@ -680,7 +680,7 @@ public abstract class Canvas extends Displayable {
 
 	public static void setGraphicsMode(int mode, boolean parallel) {
 		Canvas.graphicsMode = mode;
-		Canvas.parallelRedraw =  (mode == 0 || mode == 3) && parallel;
+		Canvas.parallelRedraw = (mode == 0 || mode == 3) && parallel;
 	}
 
 	public static void setForceFullscreen(boolean forceFullscreen) {

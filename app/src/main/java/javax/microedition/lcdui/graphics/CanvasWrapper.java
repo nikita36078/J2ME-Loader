@@ -20,11 +20,12 @@ public class CanvasWrapper {
 	private final Paint drawPaint = new Paint();
 	private final Paint fillPaint = new Paint();
 	private final Paint textPaint = new Paint();
+	private final Paint imgPaint = new Paint();
 	private Canvas canvas;
 	private float textHeight;
 
 	public CanvasWrapper(boolean filterBitmap) {
-		drawPaint.setFilterBitmap(filterBitmap);
+		imgPaint.setFilterBitmap(filterBitmap);
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
 
@@ -72,7 +73,7 @@ public class CanvasWrapper {
 	public void drawImage(Image image, RectF dst) {
 		Bitmap bitmap = image.getBitmap();
 		bitmap.prepareToDraw();
-		canvas.drawBitmap(bitmap, image.getBounds(), dst, drawPaint);
+		canvas.drawBitmap(bitmap, image.getBounds(), dst, imgPaint);
 	}
 
 	public void fillRect(RectF rect) {
