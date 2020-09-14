@@ -175,7 +175,6 @@ public class Image {
 	void setSize(int width, int height) {
 		bounds.right = width;
 		bounds.bottom = height;
-		getCanvas().clipRect(bounds);
 	}
 
 	public Rect getBounds() {
