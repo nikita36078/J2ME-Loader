@@ -7,6 +7,7 @@
     <string name="more">Більше</string>
     <string name="search">Пошук</string>
     <string name="licenses">Ліцензії</string>
+    <string name="profiles">Профілі</string>
     <string name="save_log">Зберегти у журнал</string>
     <string name="about_message">Данний додаток дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Очистити дані</string>
     <string name="RESET_SETTINGS_CMD">Скидання налаштувань</string>
     <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
+    <string name="load_profile">Завантажити профіль</string>
+    <string name="save_profile">Зберегти профіль</string>
     <string name="PREF_SCREEN_OPTIONS">Налаштування екрану</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
@@ -52,6 +55,10 @@
     <string name="PREF_VK_FORCE_OPACITY">Примусова прозорість для вимк. екрану</string>
     <string name="PREF_TOUCH_INPUT">Сенсорний ввід</string>
     <string name="PREF_HW_ACCELERATION">Апаратне прискорення (нестабільне)</string>
+    <string name="pref_graphics_software">Програмне</string>
+    <string name="pref_graphics_hw_gles">Апаратне прискорення (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Апаратне прискорення (window)</string>
+    <string name="pref_graphics_hw_surface">Апаратне прискорення (surface)</string>
     <string name="PREF_VK_BACK">Клавіші</string>
     <string name="PREF_VK_FORE">Позначки</string>
     <string name="PREF_VK_OUTLINE">Контур</string>
@@ -106,6 +113,9 @@
     <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
+    <string name="pref_button_shape_oval">Овал</string>
+    <string name="pref_button_shape_rect">Прямокутник</string>
+    <string name="pref_button_shape_round">Заокруглений прямокутник</string>
     <string name="pref_app_sort_title">Порядок сортування додатків</string>
     <string name="pref_app_sort_name">Назва</string>
     <string name="pref_app_sort_date">Дата</string>
@@ -116,5 +126,26 @@
     <string name="mapping_dialog_message" formatted="false">Поточне зіставлення: %1$s</string>
     <string name="reset_mapping">Скинути</string>
     <string name="parallel_screen_redrawing">Паралельне перемальовування екрану</string>
+    <string name="default_label">"%s (за замовчуванням)"</string>
     <string name="saved">Збережено</string>
+    <string name="not_saved_exists">Вже існує</string>
+    <string name="create_apps_dir_failed">Не вдалося створити папку за вказаним шляхом:\n\'%s\nвиберіть іншу.</string>
+    <string name="error_name">Введіть ім\'я!</string>
+    <string name="set_as_default">Встановити за замовчуванням</string>
+    <string name="edit">Редагувати</string>
+    <string name="add">Додати</string>
+    <string name="add_profile_description">Створити новий профіль</string>
+    <string name="enter_name">Введіть ім\'я</string>
+    <string name="enter_new_name">Введіть нове ім\'я</string>
+    <string name="set_default_profile_description">Виберіть цей профіль як стандартні налаштування для всіх програм, які будуть встановлені пізніше</string>
+    <string name="error_name_exists">Уже існує, введіть інше ім\'я</string>
+    <string name="pref_vk_hide_hint">вимкнено</string>
+    <string name="unlimited">необмежено</string>
+    <string name="pref_emulator_dir">Робоча директорія</string>
+    <string name="PREF_SHADER_FILTER">Шейдер:</string>
+    <string name="identity_filter">Швидко (без фільтрів)</string>
+    <string name="shader_tuning">Шейдер-Тюнінг</string>
+    <string name="reset">Скинути</string>
+    <string name="pref_input_devices_title">Пристрої введення</string>
+    <string name="pref_graphics_mode_title">Режим графіки:</string>
 </resources>
