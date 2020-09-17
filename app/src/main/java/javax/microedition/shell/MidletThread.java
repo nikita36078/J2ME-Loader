@@ -70,7 +70,8 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	}
 
 	static void pauseApp() {
-		instance.handler.obtainMessage(PAUSE).sendToTarget();
+		if (instance != null)
+			instance.handler.obtainMessage(PAUSE).sendToTarget();
 	}
 
 	static void resumeApp() {
