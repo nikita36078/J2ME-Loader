@@ -103,6 +103,22 @@ public class MigrationUtils {
 		return list != null && list.length > 0;
 	}
 
+	private static void moveDatabase(Context context) {
+		File srcDb = new File(context.getApplicationInfo().dataDir, "databases/apps-database.db");
+		File dstDb = new File(Config.getEmulatorDir(), "J2ME-apps.db");
+		if (srcDb.exists()) {
+			try {
+				File dstDbShm = new File(dstDb + "-shm");
+				File dstDbWal = new File(dstDb + "-wal");
+				FileUtils.copyFileUsingChannel(srcDb, dstDb);
+				FileUtils.copyFileUsingChannel(new File(srcDb + "-shm"), dstDbShm);
+				FileUtils.copyFileUsingChannel(new File(srcDb + "-wal"), dstDbWal);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private static int readVersion(File file) throws IOException {
 		int version;
 		try (FileInputStream in = new FileInputStream(file)) {
@@ -142,6 +158,7 @@ public class MigrationUtils {
 							.edit().putString(Config.PREF_DEFAULT_PROFILE, "default")
 							.apply();
 				}
+				moveDatabase(context);
 		}
 		try {
 			writeVersion(file);
