@@ -136,6 +136,8 @@ public class ProfilesManager {
 						params.vkType == VirtualKeyboard.PHONE_ARROWS_TYPE) {
 					params.vkButtonShape = VirtualKeyboard.RECT_SHAPE;
 				}
+				// Import old properties
+				updateSystemProperties(params);
 				return params;
 			} catch (Exception e) {
 				Log.e(TAG, "loadConfig: ", e);
