@@ -81,6 +81,9 @@ public class AppUtils {
 		} else if ((tmp = params.get("MIDlet-1")) != null) {
 			imagePath = tmp.split(",")[1];
 		}
+		if (imagePath.length() > 0 && imagePath.charAt(0) != '/') {
+			imagePath = "/" + imagePath;
+		}
 		return imagePath.replace(" ", "");
 	}
 
