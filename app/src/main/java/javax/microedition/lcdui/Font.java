@@ -91,6 +91,10 @@ public class Font {
 		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
 	}
 
+	public static Font getFont(int fontSpecifier) {
+		return getDefaultFont();
+	}
+
 	public static Font getFont(int face, int style, int size) {
 		int index = getFontIndex(face, style, size);
 
@@ -160,14 +164,6 @@ public class Font {
 		target.setTextSize(paint.getTextSize());
 	}
 
-	public Typeface getTypeface() {
-		return paint.getTypeface();
-	}
-
-	public float getTextSize() {
-		return paint.getTextSize();
-	}
-
 	public int getFace() {
 		return face;
 	}
@@ -208,7 +204,7 @@ public class Font {
 		return (int) paint.measureText(str, i, i + i2);
 	}
 
-	public static int getFontIndex(int face, int style, int size) {
+	private static int getFontIndex(int face, int style, int size) {
 		switch (face) {
 			case FACE_MONOSPACE:
 				face = 0;
@@ -238,42 +234,6 @@ public class Font {
 		}
 
 		return ((face * 3 + size) << 3) + style;
-	}
-
-	public static int getFontFace(int index) {
-		index = (index >>> 3) / 3;
-
-		switch (index) {
-			case 0:
-				return FACE_MONOSPACE;
-
-			case 1:
-				return FACE_PROPORTIONAL;
-
-			case 2:
-			default:
-				return FACE_SYSTEM;
-		}
-	}
-
-	public static int getFontSize(int index) {
-		index = (index >>> 3) % 3;
-
-		switch (index) {
-			case 0:
-				return SIZE_SMALL;
-
-			case 1:
-			default:
-				return SIZE_MEDIUM;
-
-			case 2:
-				return SIZE_LARGE;
-		}
-	}
-
-	public static int getFontStyle(int index) {
-		return index & 7;
 	}
 
 	public boolean isBold() {
