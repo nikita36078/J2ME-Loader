@@ -7,6 +7,7 @@
     <string name="more">المزيد</string>
     <string name="search">ابـحثblogまタラタラ</string>
     <string name="licenses">التراخيص</string>
+    <string name="profiles">حقوق المستخدم</string>
     <string name="save_log">سجلات الحفظ</string>
     <string name="about_message">هذا التطبيق يسمح لك بتشغيل تطبيقات والعاب J2ME على جهازك اندرويد. وهو يدعم معظم الألعاب 2D و 3D أيضا ولكن مع بعض القيود.&lt;BR&gt;</string>
     <string name="help_message">&#8226; تمكين التصفية في بعض الحالات يمكن أن يقلل كثيرا من الأداء.قم بتعطيل هذا الخيار إذا كانت اللعبة بطيئة جداً.&lt;BR&gt;&#8226; خفقان الصورة يمكن اصلاحه عن طريق تمكين الخيار \"وضع المعالجة الفورية\".</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">مسح البيانات</string>
     <string name="RESET_SETTINGS_CMD">إعادة تعيين الإعدادات</string>
     <string name="RESET_LAYOUT_CMD">إعادة تعيين ترتيب لوحة المفاتيح</string>
+    <string name="load_profile">تحميل الملف الشخصي</string>
+    <string name="save_profile">حفظ الوضع</string>
     <string name="PREF_SCREEN_OPTIONS">إعدادات الشاشة</string>
     <string name="PREF_SCALE_RATIO">المقاس(٪)</string>
     <string name="PREF_SCALE_TO_FIT">مقاس ملء الشاشه</string>
@@ -49,8 +52,13 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">لوحة المفاتيح الإفتراضية</string>
     <string name="PREF_VK_SHOW">أظهر لوحة المفاتيح</string>
     <string name="PREF_VK_FEEDBACK">اهتزاز عند النقر</string>
+    <string name="PREF_VK_FORCE_OPACITY">فرض التعتيم للمفاتيح المقفلة</string>
     <string name="PREF_TOUCH_INPUT">الإدخال باللمس</string>
     <string name="PREF_HW_ACCELERATION">تسريع المعدات(غير مستقر)</string>
+    <string name="pref_graphics_software">البرمجيات</string>
+    <string name="pref_graphics_hw_gles">تسارع HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">تسارع HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_surface">تسارع HW (السطح)</string>
     <string name="PREF_VK_BACK">الأزرار</string>
     <string name="PREF_VK_FORE">العناوين</string>
     <string name="PREF_VK_OUTLINE">التخطيط</string>
@@ -105,6 +113,9 @@
     <string name="pref_enable_statusbar_title">تمكين شريط الحالة</string>
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="pref_button_shape_title">شكل الزر</string>
+    <string name="pref_button_shape_oval">شكل بيضاوي</string>
+    <string name="pref_button_shape_rect">مستطيل</string>
+    <string name="pref_button_shape_round">مستطيل دائري</string>
     <string name="pref_app_sort_title">الفرز بحسب</string>
     <string name="pref_app_sort_name">الإسم</string>
     <string name="pref_app_sort_date">التاريخ</string>
@@ -115,4 +126,5 @@
     <string name="mapping_dialog_message" formatted="false">التوجيه الحالي: %1$s</string>
     <string name="reset_mapping">إعادة تعيين</string>
     <string name="parallel_screen_redrawing">إعادة رسم الشاشة بشكل موازي</string>
+    <string name="default_label">"3 ث (افتراضي)"</string>
 </resources>
