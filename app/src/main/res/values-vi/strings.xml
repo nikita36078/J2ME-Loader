@@ -7,6 +7,7 @@
     <string name="more">Thêm</string>
     <string name="search">Tìm kiếm</string>
     <string name="licenses">Giấy phép</string>
+    <string name="profiles">Cài đặt ưa dùng</string>
     <string name="save_log">Lưu log</string>
     <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và các trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D với 3D một số hạn chế.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bật tính năng bộ lọc trong một số trường hợp có thể giảm đáng kể hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\" tuỳ chỉnh.</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Xóa dữ liệu</string>
     <string name="RESET_SETTINGS_CMD">Thiết lập lại</string>
     <string name="RESET_LAYOUT_CMD">Đặt lại cấu trúc phím mặc định</string>
+    <string name="load_profile">Tải hồ sơ</string>
+    <string name="save_profile">Lưu hồ sơ</string>
     <string name="PREF_SCREEN_OPTIONS">Tùy chọn màn hình</string>
     <string name="PREF_SCALE_RATIO">Tỉ lệ(%)</string>
     <string name="PREF_SCALE_TO_FIT">Tỉ lệ phù hợp</string>
