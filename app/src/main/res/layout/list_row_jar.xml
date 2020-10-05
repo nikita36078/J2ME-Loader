@@ -17,10 +17,11 @@
         android:scaleType="centerCrop"
         tools:src="@mipmap/ic_launcher" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <!-- Title Of App-->
         <TextView
@@ -60,6 +61,6 @@
                 android:textSize="12sp"
                 tools:text="Version: 1.0" />
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>
