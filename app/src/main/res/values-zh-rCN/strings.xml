@@ -7,6 +7,7 @@
     <string name="more">更多</string>
     <string name="search">搜索</string>
     <string name="licenses">许可</string>
+    <string name="profiles">配置文件</string>
     <string name="save_log">存储日志</string>
     <string name="about_message">此应用程序可以在Android设备上运行J2ME应用程序和游戏，它支持大多数2D和部分3D游戏。&lt;BR&gt;</string>
     <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt;BR&gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">清除数据</string>
     <string name="RESET_SETTINGS_CMD">恢复默认设置</string>
     <string name="RESET_LAYOUT_CMD">重置按键布局</string>
+    <string name="load_profile">加载配置文件</string>
+    <string name="save_profile">保存配置文件</string>
     <string name="PREF_SCREEN_OPTIONS">屏幕选项</string>
     <string name="PREF_SCALE_RATIO">比例(%)</string>
     <string name="PREF_SCALE_TO_FIT">自适应屏幕</string>
@@ -52,6 +55,10 @@
     <string name="PREF_VK_FORCE_OPACITY">屏幕外按键强制不透明</string>
     <string name="PREF_TOUCH_INPUT">屏幕触摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
+    <string name="pref_graphics_software">软件</string>
+    <string name="pref_graphics_hw_gles">硬件加速 (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">硬件加速 (窗口)</string>
+    <string name="pref_graphics_hw_surface">硬件加速 (表面)</string>
     <string name="PREF_VK_BACK">按键</string>
     <string name="PREF_VK_FORE">标签</string>
     <string name="PREF_VK_OUTLINE">边框</string>
@@ -79,6 +86,7 @@
     <string name="PREF_VK_TYPE">键盘类型</string>
     <string name="pref_vk_type_custom">可自定义</string>
     <string name="pref_vk_type_phone">数量</string>
+    <string name="pref_vk_type_phone_arrows">手机（带箭头按键）</string>
     <string name="PREF_LAYOUT">布局</string>
     <string name="FORCE_CLOSE_CONFIRMATION">强制关闭应用可能导致数据丢失或损坏！\n要继续吗？</string>
     <string name="CONFIRMATION_REQUIRED">需要确认</string>
@@ -105,6 +113,9 @@
     <string name="pref_enable_statusbar_title">启用状态栏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
     <string name="pref_button_shape_title">按钮形状</string>
+    <string name="pref_button_shape_oval">椭圆形</string>
+    <string name="pref_button_shape_rect">矩形</string>
+    <string name="pref_button_shape_round">圆角矩形</string>
     <string name="pref_app_sort_title">应用排序</string>
     <string name="pref_app_sort_name">名称</string>
     <string name="pref_app_sort_date">日期</string>
@@ -115,5 +126,26 @@
     <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
     <string name="reset_mapping">重置</string>
     <string name="parallel_screen_redrawing">同步画面绘制</string>
+    <string name="default_label">"%s (默认)"</string>
     <string name="saved">已保存</string>
+    <string name="not_saved_exists">已存在</string>
+    <string name="create_apps_dir_failed">在路径:\n%s\n中创建文件夹失败，选择另一个。</string>
+    <string name="error_name">输入名称！</string>
+    <string name="set_as_default">设为默认</string>
+    <string name="edit">编辑</string>
+    <string name="add">添加</string>
+    <string name="add_profile_description">创建新配置文件</string>
+    <string name="enter_name">输入名称</string>
+    <string name="enter_new_name">输入新文件名</string>
+    <string name="set_default_profile_description">选择此配置文件作为以后将安装的所有应用程序的标准设置</string>
+    <string name="error_name_exists">已存在，输入其他名称</string>
+    <string name="pref_vk_hide_hint">已禁用</string>
+    <string name="unlimited">无限制</string>
+    <string name="pref_emulator_dir">工作目录</string>
+    <string name="PREF_SHADER_FILTER">着色器:</string>
+    <string name="identity_filter">快速(无过滤)</string>
+    <string name="shader_tuning">着色器调节</string>
+    <string name="reset">重置</string>
+    <string name="pref_input_devices_title">输入设备</string>
+    <string name="pref_graphics_mode_title">图形模式:</string>
 </resources>
