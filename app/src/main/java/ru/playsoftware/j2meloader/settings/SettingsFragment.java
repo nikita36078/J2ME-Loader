@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
@@ -59,21 +60,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK && data != null) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			File file = Utils.getFileForUri(files.get(0));
-//			if (file.exists()) {
-//				String[] list = file.list();
-//				if (list != null && list.length > 0) {
-//					List<String> names = Arrays.asList(list);
-//					if (!names.contains("converted")
-//							&& (list.length > 1 || !list[0].equals(".nomedia"))) {
-//						file = new File(file, getString(R.string.app_name));
-//					}
-//				}
-//			}
 			applyChangeFolder(file);
 		}
 	}
 
 	private void applyChangeFolder(File file) {
+		if (!file.canWrite()) {
+			Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+			return;
+		}
 		String path = file.getAbsolutePath();
 		getPreferenceManager().getSharedPreferences().edit()
 				.putString(Config.PREF_EMULATOR_DIR, path)

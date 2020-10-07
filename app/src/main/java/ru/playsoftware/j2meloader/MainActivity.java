@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -49,16 +50,20 @@ public class MainActivity extends BaseActivity {
 	public static final String APP_SORT_KEY = "appSort";
 	public static final String APP_PATH_KEY = "appPath";
 	public static final String APP_URI_KEY = "appUri";
+	private static final int REQUEST_WORK_DIR = 1;
+	private static final int RESULT_NEED_RECREATE = 1;
 
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 	private String emulatorDir;
+	private boolean needRecreate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Uri uri = getIntent().getData();
+		Intent intent = getIntent();
+		Uri uri = intent.getData();
 		if (!isTaskRoot() && uri == null) {
 			finish();
 			return;
@@ -69,7 +74,10 @@ public class MainActivity extends BaseActivity {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
 					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 		} else {
-			setupActivity(savedInstanceState == null && uri != null);
+			if (checkDirExists()) {
+				setupActivity((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0
+						&& savedInstanceState == null && uri != null);
+			}
 		}
 	}
 
@@ -81,8 +89,8 @@ public class MainActivity extends BaseActivity {
 					.setCancelable(false)
 					.setMessage(msg)
 					.setNegativeButton(R.string.close, (d, w) -> finish())
-					.setPositiveButton(R.string.action_settings, (d, w) -> startActivity(
-							new Intent(getApplicationContext(), SettingsActivity.class)))
+					.setPositiveButton(R.string.action_settings, (d, w) -> startActivityForResult(
+							new Intent(getApplicationContext(), SettingsActivity.class), REQUEST_WORK_DIR))
 					.show();
 			return;
 		}
@@ -103,24 +111,37 @@ public class MainActivity extends BaseActivity {
 				.replace(R.id.container, appsListFragment).commitNowAllowingStateLoss();
 	}
 
+	private boolean checkDirExists() {
+		String emulatorDir = Config.getEmulatorDir();
+		if (!new File(emulatorDir).exists()) {
+			String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir);
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.error)
+					.setCancelable(false)
+					.setMessage(msg)
+					.setNegativeButton(R.string.action_settings, (d, w) -> {
+						Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+						startActivityForResult(intent, REQUEST_WORK_DIR);
+					})
+					.setPositiveButton(R.string.create, (d, w) -> setupActivity(getIntent().getData() != null))
+					.show();
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 										   @NonNull int[] grantResults) {
 		if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_STORAGE) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				setupActivity(getIntent().getData() != null);
+				if (checkDirExists()) {
+					setupActivity(getIntent().getData() != null);
+				}
 			} else {
 				Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 				finish();
 			}
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (emulatorDir != null && !Config.getEmulatorDir().equals(emulatorDir)) {
-			new Handler().post(this::recreate);
 		}
 	}
 
@@ -134,10 +155,10 @@ public class MainActivity extends BaseActivity {
 			try {
 				//noinspection ResultOfMethodCallIgnored
 				nomedia.createNewFile();
+				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return true;
 		}
 		return false;
 	}
@@ -160,5 +181,20 @@ public class MainActivity extends BaseActivity {
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 			return null;
 		}
+	}
+
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+		if (needRecreate) new Handler().post(this::recreate);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		if (resultCode == RESULT_NEED_RECREATE || requestCode == REQUEST_WORK_DIR) {
+			needRecreate = true;
+			return;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

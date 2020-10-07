@@ -193,4 +193,6 @@
     <string name="reset">Reset</string>
     <string name="pref_input_devices_title">Input devices</string>
     <string name="pref_graphics_mode_title">Graphics mode:</string>
+    <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n\'%s\'.\nDo you want to create it or choose another one?</string>
+    <string name="create">Create</string>
 </resources>

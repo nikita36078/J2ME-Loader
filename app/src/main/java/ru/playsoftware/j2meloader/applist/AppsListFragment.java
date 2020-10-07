@@ -347,7 +347,7 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_settings:
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-				startActivity(settingsIntent);
+				startActivityForResult(settingsIntent, 0);
 				break;
 			case R.id.action_profiles:
 				Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
