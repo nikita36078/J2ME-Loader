@@ -55,6 +55,7 @@ public class ContextHolder {
 	private static Vibrator vibrator;
 	private static Context appContext;
 	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
+	private static boolean vibrationEnabled;
 
 	public static Context getAppContext() {
 		return appContext;
@@ -167,6 +168,9 @@ public class ContextHolder {
 	}
 
 	public static boolean vibrate(int duration) {
+		if (!vibrationEnabled) {
+			return false;
+		}
 		if (vibrator == null) {
 			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
 		}
@@ -185,5 +189,9 @@ public class ContextHolder {
 
 	public static void setApplication(Application application) {
 		appContext = application;
+	}
+
+	public static void setVibration(boolean vibrationEnabled) {
+		ContextHolder.vibrationEnabled = vibrationEnabled;
 	}
 }
