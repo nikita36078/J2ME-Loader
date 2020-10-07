@@ -196,7 +196,10 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
 				.setItems(midletsNameArray, (d, n) -> MidletThread.create(microLoader, midletsClassArray[n]))
-				.setOnCancelListener(dialogInterface -> finish());
+				.setOnCancelListener(d -> {
+					d.dismiss();
+					ContextHolder.notifyDestroyed();
+				});
 		builder.show();
 	}
 

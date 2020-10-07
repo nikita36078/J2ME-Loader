@@ -95,7 +95,8 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, keyCode));
 			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_RELEASED, keyCode));
 		}
-		instance.handler.obtainMessage(DESTROY, 1).sendToTarget();
+		if (instance != null)
+			instance.handler.obtainMessage(DESTROY, 1).sendToTarget();
 	}
 
 	@Override
