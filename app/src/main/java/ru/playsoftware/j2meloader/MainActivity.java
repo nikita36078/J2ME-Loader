@@ -74,10 +74,8 @@ public class MainActivity extends BaseActivity {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
 					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 		} else {
-			if (checkDirExists()) {
-				setupActivity((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0
-						&& savedInstanceState == null && uri != null);
-			}
+			setupActivity((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0
+					&& savedInstanceState == null && uri != null);
 		}
 	}
 
@@ -111,33 +109,12 @@ public class MainActivity extends BaseActivity {
 				.replace(R.id.container, appsListFragment).commitNowAllowingStateLoss();
 	}
 
-	private boolean checkDirExists() {
-		String emulatorDir = Config.getEmulatorDir();
-		if (!new File(emulatorDir).exists()) {
-			String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir);
-			new AlertDialog.Builder(this)
-					.setTitle(R.string.error)
-					.setCancelable(false)
-					.setMessage(msg)
-					.setNegativeButton(R.string.action_settings, (d, w) -> {
-						Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-						startActivityForResult(intent, REQUEST_WORK_DIR);
-					})
-					.setPositiveButton(R.string.create, (d, w) -> setupActivity(getIntent().getData() != null))
-					.show();
-			return false;
-		}
-		return true;
-	}
-
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 										   @NonNull int[] grantResults) {
 		if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_STORAGE) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				if (checkDirExists()) {
-					setupActivity(getIntent().getData() != null);
-				}
+				setupActivity(getIntent().getData() != null);
 			} else {
 				Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 				finish();
