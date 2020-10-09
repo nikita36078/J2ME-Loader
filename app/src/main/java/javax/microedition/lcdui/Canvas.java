@@ -403,7 +403,8 @@ public abstract class Canvas extends Displayable {
 	public Bitmap getScreenShot() {
 		Bitmap bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
 		canvasWrapper.bind(new android.graphics.Canvas(bitmap));
-		canvasWrapper.drawImage(offscreenCopy, virtualScreen);
+		RectF screen = new RectF(0, 0, onWidth, onHeight);
+		canvasWrapper.drawImage(offscreenCopy, screen);
 		return bitmap;
 	}
 
