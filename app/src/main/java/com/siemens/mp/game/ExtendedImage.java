@@ -24,8 +24,6 @@
 
 package com.siemens.mp.game;
 
-import android.graphics.Color;
-
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
@@ -33,7 +31,6 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
-	private final boolean hasAlpha;
 	private Image image;
 
 	public ExtendedImage(Image image) {
@@ -41,7 +38,6 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 			throw new IllegalArgumentException("ExtendedImage: width is not divisible by 8");
 		}
 		this.image = image;
-		hasAlpha = image.isBlackWhiteAlpha();
 	}
 
 	public void blitToScreen(int x, int y) {
@@ -63,82 +59,17 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public int getPixel(int x, int y) {
-		final int pixel = image.getBitmap().getPixel(x, y);
-		if (hasAlpha) {
-			if ((pixel & 0xFF000000) != 0xFF000000) return 0;
-			return ((pixel & 0xFFFFFF) == 0xFFFFFF) ? 1 : 2;
-		}
-		return ((pixel & 0xFFFFFF) == 0xFFFFFF) ? 0 : 1;
+		return 0;
 	}
 
 	public void getPixelBytes(byte[] pixels, int x, int y, int width, int height) {
-		int[] colors = new int[width * height];
-		image.getBitmap().getPixels(colors, 0, width, x, y, width, height);
-		if (hasAlpha) {
-			final int dataLen = colors.length / 4;
-			for (int i = 0, k = 0; i < dataLen; i++) {
-				int data = 0;
-				for (int j = 0; j < 4; j++) {
-					data <<= 2;
-					int color = colors[k++];
-					if ((color & 0xFF000000) != 0xFF000000) continue;
-					if ((color & 0xFFFFFF) == 0xFFFFFF) data |= 1;
-					else data |= 2;
-				}
-				pixels[i] = (byte) data;
-			}
-		} else {
-			final int dataLen = colors.length / 8;
-			for (int i = 0, k = 0; i < dataLen; i++) {
-				int data = 0;
-				for (int j = 0; j < 8; j++) {
-					data <<= 1;
-					if ((colors[k++] & 0xFFFFFF) != 0xFFFFFF) {
-						data |= 1;
-					}
-				}
-				pixels[i] = (byte) data;
-			}
-		}
 	}
 
 	public void setPixel(int x, int y, byte color) {
-		if (!hasAlpha) {
-			image.getBitmap().setPixel(x, y, color == 1 ? Color.BLACK : Color.WHITE);
-			return;
-		}
-		if (color == 0) {
-			image.getBitmap().setPixel(x, y, 0);
-		} else {
-			image.getBitmap().setPixel(x, y, color == 1 ? Color.WHITE : Color.BLACK);
-		}
 	}
 
 	public void setPixels(byte[] pixels, int x, int y, int width, int height) {
-		int[] colors = new int[width * height];
-		if (hasAlpha) {
-			final int dataLen = colors.length / 4;
-			for (int i = 0, k = 0; i < dataLen; i++) {
-				final int data = pixels[i];
-				for (int j = 3; j >= 0; j--) {
-					int color = (data >> j) & 0b11;
-					if (color == 0) {
-						colors[k++] = 0;
-					} else {
-						colors[k++] = color == 1 ? Color.WHITE : Color.BLACK;
-					}
-				}
-			}
-		} else {
-			final int dataLen = colors.length / 8;
-			for (int i = 0, k = 0; i < dataLen; i++) {
-				final int data = pixels[i];
-				for (int j = 7; j >= 0; j--) {
-					final int color = (data >> j) & 1;
-					colors[k++] = color == 1 ? Color.BLACK : Color.WHITE;
-				}
-			}
-		}
-		image.getBitmap().setPixels(colors, 0, width, x, y, width, height);
+		Image img = com.siemens.mp.ui.Image.createImageFromBitmap(pixels, width, height);
+		image.getGraphics().drawImage(img, x, y, 0);
 	}
 }
