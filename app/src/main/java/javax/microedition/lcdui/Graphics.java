@@ -343,9 +343,13 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 			y -= (fillPaint.descent() + fillPaint.ascent()) / 2;
 		}
 
-		fillPaint.setAntiAlias(true);
-		canvas.drawText(text, x, y, fillPaint);
-		fillPaint.setAntiAlias(false);
+		if (font.isSmall()) {
+			canvas.drawText(text, x, y, fillPaint);
+		} else {
+			fillPaint.setAntiAlias(true);
+			canvas.drawText(text, x, y, fillPaint);
+			fillPaint.setAntiAlias(false);
+		}
 	}
 
 	public void drawImage(Image image, int x, int y, int anchor) {
@@ -385,9 +389,13 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 			y -= (fillPaint.descent() + fillPaint.ascent()) / 2;
 		}
 
-		fillPaint.setAntiAlias(true);
-		canvas.drawText(str, offset, offset + len, x, y, fillPaint);
-		fillPaint.setAntiAlias(false);
+		if (font.isSmall()) {
+			canvas.drawText(str, offset, offset + len, x, y, fillPaint);
+		} else {
+			fillPaint.setAntiAlias(true);
+			canvas.drawText(str, offset, offset + len, x, y, fillPaint);
+			fillPaint.setAntiAlias(false);
+		}
 	}
 
 	public void drawRegion(Image image, int srcx, int srcy, int width, int height,

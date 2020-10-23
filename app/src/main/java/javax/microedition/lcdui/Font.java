@@ -40,6 +40,7 @@ public class Font {
 	public static final int STYLE_PLAIN = 0;
 	public static final int STYLE_UNDERLINED = 4;
 
+	private static final int FONT_SMALL_SIZE = 14;
 	private static final int FONT_COUNT = 3 * 3 * (1 << 3);
 	private static Font[] fonts = new Font[FONT_COUNT];
 
@@ -76,7 +77,7 @@ public class Font {
 	private Paint paint;
 	private int face, style, size;
 
-	public Font(Typeface face, int style, float size, boolean underline) {
+	private Font(Typeface face, int style, float size, boolean underline) {
 		if (applyDimensions) {
 			DisplayMetrics metrics = ContextHolder.getAppContext().getResources().getDisplayMetrics();
 			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
@@ -87,8 +88,12 @@ public class Font {
 		paint.setTypeface(Typeface.create(face, style));
 		paint.setUnderlineText(underline);
 
-		paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
-		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
+		if (size < FONT_SMALL_SIZE) {
+			paint.setTextSize(size);
+		} else {
+			paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
+			paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
+		}
 	}
 
 	public static Font getFont(int fontSpecifier) {
@@ -156,6 +161,10 @@ public class Font {
 
 	public static Font getDefaultFont() {
 		return getFont(FACE_SYSTEM, STYLE_PLAIN, SIZE_MEDIUM);
+	}
+
+	public boolean isSmall() {
+		return paint.getTextSize() < FONT_SMALL_SIZE;
 	}
 
 	public void copyInto(Paint target) {
