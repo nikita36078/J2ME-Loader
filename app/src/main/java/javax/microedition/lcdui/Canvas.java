@@ -537,8 +537,8 @@ public abstract class Canvas extends Displayable {
 		virtualScreen.set(onX, onY, onX + onWidth, onY + onHeight);
 
 		if (offscreen == null) {
-			offscreen = Image.createImage(width, maxHeight);
-			offscreenCopy = Image.createImage(width, maxHeight);
+			offscreen = Image.createTransparentImage(width, maxHeight);
+			offscreenCopy = Image.createTransparentImage(width, maxHeight);
 		}
 		if (offscreen.getWidth() != width || offscreen.getHeight() != height) {
 			offscreen.setSize(width, height);
