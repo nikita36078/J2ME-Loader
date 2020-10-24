@@ -7,7 +7,7 @@
     <string name="more">Thêm</string>
     <string name="search">Tìm kiếm</string>
     <string name="licenses">Giấy phép</string>
-    <string name="profiles">Cài đặt ưa dùng</string>
+    <string name="profiles">Biên dạng</string>
     <string name="save_log">Lưu log</string>
     <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và các trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D với 3D một số hạn chế.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bật tính năng bộ lọc trong một số trường hợp có thể giảm đáng kể hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\" tuỳ chỉnh.</string>
@@ -30,8 +30,8 @@
     <string name="CLEAR_DATA_CMD">Xóa dữ liệu</string>
     <string name="RESET_SETTINGS_CMD">Thiết lập lại</string>
     <string name="RESET_LAYOUT_CMD">Đặt lại cấu trúc phím mặc định</string>
-    <string name="load_profile">Tải hồ sơ</string>
-    <string name="save_profile">Lưu hồ sơ</string>
+    <string name="load_profile">Tải biên dạng</string>
+    <string name="save_profile">Lưu biên dạng</string>
     <string name="PREF_SCREEN_OPTIONS">Tùy chọn màn hình</string>
     <string name="PREF_SCALE_RATIO">Tỉ lệ(%)</string>
     <string name="PREF_SCALE_TO_FIT">Tỉ lệ phù hợp</string>
@@ -54,7 +54,11 @@
     <string name="PREF_VK_FEEDBACK">Phản hồi Haptic</string>
     <string name="PREF_VK_FORCE_OPACITY">Bắt buộc độ mờ cho các phím ngoài màn hình</string>
     <string name="PREF_TOUCH_INPUT">Cảm ứng đầu vào</string>
-    <string name="PREF_HW_ACCELERATION">Tăng tốc HW (không ổn định)</string>
+    <string name="PREF_HW_ACCELERATION">Gia tốc HW (không ổn định)</string>
+    <string name="pref_graphics_software">Chương trình</string>
+    <string name="pref_graphics_hw_gles">Gia tốc HW(OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Gia tốc HW(window)</string>
+    <string name="pref_graphics_hw_surface">Gia tốc HW(surface)</string>
     <string name="PREF_VK_BACK">Nút</string>
     <string name="PREF_VK_FORE">Đường đánh dấu</string>
     <string name="PREF_VK_OUTLINE">Đường nét</string>
@@ -109,6 +113,9 @@
     <string name="pref_enable_statusbar_title">Bật thanh trạng thái</string>
     <string name="pref_wakelock_title">Giữ màn hình mở</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
+    <string name="pref_button_shape_oval">Ôvan</string>
+    <string name="pref_button_shape_rect">Hình chữ nhật</string>
+    <string name="pref_button_shape_round">Hình chữ nhật thành tròn</string>
     <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
     <string name="pref_app_sort_name">Tên</string>
     <string name="pref_app_sort_date">Ngày</string>
@@ -119,5 +126,26 @@
     <string name="mapping_dialog_message" formatted="false">Ánh xạ dòng: %1$s</string>
     <string name="reset_mapping">Thiết lập lại</string>
     <string name="parallel_screen_redrawing">Kéo ngược màn hình song song</string>
+    <string name="default_label">"%s (mặc định)"</string>
     <string name="saved">Đã lưu</string>
+    <string name="not_saved_exists">Đã tồn tại</string>
+    <string name="create_apps_dir_failed">Không thể tạo thư mục trong đường dẫn:\n\'%s\'\nchọn khác.</string>
+    <string name="error_name">Nhập tên!</string>
+    <string name="set_as_default">Đặt như mặc định</string>
+    <string name="edit">Thoát</string>
+    <string name="add">Thêm</string>
+    <string name="add_profile_description">Tạo biên dạng mới</string>
+    <string name="enter_name">Nhập tên</string>
+    <string name="enter_new_name">Nhập tên mới</string>
+    <string name="set_default_profile_description">Chọn biên dạng này dưới dạng cài đặt chuẩn cho tất cả ứng dụng sẽ được cài đặt sau</string>
+    <string name="error_name_exists">Đã tồn tại, nhập tên khác</string>
+    <string name="pref_vk_hide_hint">vô hiệu</string>
+    <string name="unlimited">không giới hạn</string>
+    <string name="pref_emulator_dir">Thư mục làm việc</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Nhanh (không bộ lọc)</string>
+    <string name="shader_tuning">Điều Chỉnh Shader</string>
+    <string name="reset">Thiết lập lại</string>
+    <string name="pref_input_devices_title">Thiết bị đầu vào</string>
+    <string name="pref_graphics_mode_title">Chế độ đồ họa:</string>
 </resources>
