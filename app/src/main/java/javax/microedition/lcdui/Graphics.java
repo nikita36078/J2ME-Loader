@@ -317,9 +317,13 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 			y -= (fillPaint.descent() + fillPaint.ascent()) / 2;
 		}
 
-		fillPaint.setAntiAlias(true);
-		canvas.drawText(data, offset, length, x, y, fillPaint);
-		fillPaint.setAntiAlias(false);
+		if (font.isSmall()) {
+			canvas.drawText(data, offset, length, x, y, fillPaint);
+		} else {
+			fillPaint.setAntiAlias(true);
+			canvas.drawText(data, offset, length, x, y, fillPaint);
+			fillPaint.setAntiAlias(false);
+		}
 	}
 
 	public void drawString(String text, int x, int y, int anchor) {
