@@ -7,6 +7,7 @@
     <string name="more">Daha Fazla</string>
     <string name="search">Ara</string>
     <string name="licenses">Lisanslar</string>
+    <string name="profiles">Profiller</string>
     <string name="save_log">Günlüğü kaydet</string>
     <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D oyunu ve bazı sınırlamalara sahip 3D oyunu destekler.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Verileri temizle</string>
     <string name="RESET_SETTINGS_CMD">Ayarları sıfırla</string>
     <string name="RESET_LAYOUT_CMD">Tuş düzenini sıfırla</string>
+    <string name="load_profile">Profil yükle</string>
+    <string name="save_profile">Profili kaydet</string>
     <string name="PREF_SCREEN_OPTIONS">Ekran seçenekleri</string>
     <string name="PREF_SCALE_RATIO">Ölçekleme(%)</string>
     <string name="PREF_SCALE_TO_FIT">Ekrana sığdır</string>
@@ -49,8 +52,13 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Sanal klavye</string>
     <string name="PREF_VK_SHOW">Klavyeyi göster</string>
     <string name="PREF_VK_FEEDBACK">Haptik geri bildirim</string>
+    <string name="PREF_VK_FORCE_OPACITY">Ekran dışındaki tuşlar için opaklığı zorla</string>
     <string name="PREF_TOUCH_INPUT">Dokunma girişi</string>
     <string name="PREF_HW_ACCELERATION">Donanımsal hızlandırma (kararsız)</string>
+    <string name="pref_graphics_software">Yazılım</string>
+    <string name="pref_graphics_hw_gles">Donanım hızlandırma (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Donanım hızlandırma (pencere)</string>
+    <string name="pref_graphics_hw_surface">Donanım hızlandırma (yüzey)</string>
     <string name="PREF_VK_BACK">Tuşlar</string>
     <string name="PREF_VK_FORE">Metinler</string>
     <string name="PREF_VK_OUTLINE">Dış hatlar</string>
@@ -102,10 +110,14 @@
     <string name="pref_requires_restart_summary">Yeniden başlatma gerektirir</string>
     <string name="pref_enable_actionbar_title">Başlık çubuğunu etkinleştir</string>
     <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
+    <string name="pref_enable_statusbar_title">Durum çubuğunu etkinleştir</string>
     <string name="pref_wakelock_title">Ekranı açık tut</string>
     <string name="pref_button_shape_title">Tuş şekli</string>
+    <string name="pref_button_shape_oval">Oval</string>
+    <string name="pref_button_shape_rect">Dikdörtgen</string>
+    <string name="pref_button_shape_round">Yuvarlatılmış dikdörtgen</string>
     <string name="pref_app_sort_title">Uygulamaları sırala</string>
-    <string name="pref_app_sort_name">Ada göre</string>
+    <string name="pref_app_sort_name">İsme göre</string>
     <string name="pref_app_sort_date">Tarihe göre</string>
     <string name="pref_map_keys">Tuş atamaları</string>
     <string name="pref_encoding_title">Kodlama</string>
@@ -113,4 +125,27 @@
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
     <string name="mapping_dialog_message" formatted="false">Mevcut atama: %1$s</string>
     <string name="reset_mapping">Sıfırla</string>
+    <string name="parallel_screen_redrawing">Paralel ekran yeniden çizme</string>
+    <string name="default_label">"%s (varsayılan)"</string>
+    <string name="saved">Kaydedildi</string>
+    <string name="not_saved_exists">Zaten mevcut</string>
+    <string name="create_apps_dir_failed">Bu yolda klasör oluşturulamadı:\n\'%s\'\nbaşka yol seçin.</string>
+    <string name="error_name">İsim girin!</string>
+    <string name="set_as_default">Varsayılan olarak ayarla</string>
+    <string name="edit">Düzenle</string>
+    <string name="add">Ekle</string>
+    <string name="add_profile_description">Yeni profil oluştur</string>
+    <string name="enter_name">İsim girin</string>
+    <string name="enter_new_name">Yeni isim girin</string>
+    <string name="set_default_profile_description">Bu profili, daha sonra yüklenecek tüm uygulamalar için standart ayarlar olarak seçin</string>
+    <string name="error_name_exists">Zaten mevcut, başka isim girin</string>
+    <string name="pref_vk_hide_hint">devredışı</string>
+    <string name="unlimited">sınırsız</string>
+    <string name="pref_emulator_dir">Çalışma dizini</string>
+    <string name="PREF_SHADER_FILTER">Gölgelendiriciler:</string>
+    <string name="identity_filter">Hızlı (filtre yok)</string>
+    <string name="shader_tuning">Gölgelendirici Ayarı</string>
+    <string name="reset">Sıfırla</string>
+    <string name="pref_input_devices_title">Giriş cihazları</string>
+    <string name="pref_graphics_mode_title">Grafik modu:</string>
 </resources>
