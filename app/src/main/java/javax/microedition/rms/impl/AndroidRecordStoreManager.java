@@ -1,4 +1,4 @@
-/**
+/*
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2017-2018 Nikita Shakarun
@@ -24,7 +24,6 @@
  *
  * @version $Id$
  */
-
 package javax.microedition.rms.impl;
 
 import android.util.Log;
@@ -42,7 +41,6 @@ import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotFoundException;
-import javax.microedition.rms.RecordStoreNotOpenException;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.util.ContextHolder;
 
@@ -56,7 +54,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private final static Object NULL_STORE = new Object();
 
-	private static String TAG = RecordStore.class.getName();
+	private static final String TAG = RecordStore.class.getName();
 
 	private Map<String, Object> recordStores = null;
 
@@ -81,8 +79,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	}
 
 	@Override
-	public void deleteRecordStore(final String recordStoreName)
-			throws RecordStoreNotFoundException, RecordStoreException {
+	public void deleteRecordStore(final String recordStoreName) throws RecordStoreException {
 		initializeIfNecessary();
 
 		Object value = recordStores.get(recordStoreName);
@@ -161,13 +158,13 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	@Override
 	public void deleteRecord(RecordStoreImpl recordStoreImpl, int recordId)
-			throws RecordStoreNotOpenException, RecordStoreException {
+			throws RecordStoreException {
 		deleteFromDisk(recordStoreImpl, recordId);
 	}
 
 	@Override
 	public void loadRecord(RecordStoreImpl recordStoreImpl, int recordId)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+			throws RecordStoreException {
 		try {
 			DataInputStream dis = new DataInputStream(
 					ContextHolder.openFileInput(getRecordFileName(recordStoreImpl.getName(), recordId)));
@@ -182,7 +179,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	@Override
 	public void saveRecord(RecordStoreImpl recordStoreImpl, int recordId)
-			throws RecordStoreNotOpenException, RecordStoreException {
+			throws RecordStoreException {
 		saveToDisk(recordStoreImpl, recordId);
 	}
 
@@ -242,5 +239,4 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	private String getRecordFileName(String recordStoreName, int recordId) {
 		return recordStoreName + "." + recordId + RECORD_STORE_RECORD_SUFFIX;
 	}
-
 }

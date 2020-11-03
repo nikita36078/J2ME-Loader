@@ -21,20 +21,15 @@
  *  See the LGPL or the AL for the specific language governing permissions and
  *  limitations.
  */
-
 package javax.microedition.rms;
 
-
 public class RecordStoreException extends Exception {
-
-	public RecordStoreException(String message) {
-		super(message);
-	}
-
 
 	public RecordStoreException() {
 		super();
 	}
 
+	public RecordStoreException(String message) {
+		super(message);
+	}
 }
-

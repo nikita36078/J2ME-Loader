@@ -22,7 +22,6 @@
  *  See the LGPL or the AL for the specific language governing permissions and
  *  limitations.
  */
-
 package javax.microedition.rms.impl;
 
 import android.util.Log;
@@ -45,33 +44,24 @@ import javax.microedition.rms.RecordStoreFullException;
 import javax.microedition.rms.RecordStoreNotOpenException;
 
 public class RecordStoreImpl extends RecordStore {
-	private static String TAG = RecordStoreImpl.class.getName();
+	private static final String TAG = RecordStoreImpl.class.getName();
 
-	private static final byte[] fileIdentifier = {0x4d, 0x49, 0x44, 0x52, 0x4d, 0x53};
-
+	private static final byte[] fileIdentifier = "MIDRMS".getBytes();
 	private static final byte versionMajor = 0x03;
-
 	private static final byte versionMinor = 0x00;
 
+	private final RecordStoreManager recordStoreManager;
+	private final Vector<RecordListener> recordListeners = new Vector<>();
+	private final Hashtable<Integer, byte[]> records = new Hashtable<>();
+
 	private int lastRecordId = 0;
-
 	private int size = 0;
-
-	private Hashtable<Integer, byte[]> records = new Hashtable<>();
-
 	private String recordStoreName;
-
 	private int version = 0;
-
 	private long lastModified = 0;
+	private boolean open;
 
-	private transient boolean open;
-
-	private transient RecordStoreManager recordStoreManager;
-
-	private transient Vector<RecordListener> recordListeners = new Vector<>();
-
-	public RecordStoreImpl(RecordStoreManager recordStoreManager, String recordStoreName) {
+	RecordStoreImpl(RecordStoreManager recordStoreManager, String recordStoreName) {
 		this.recordStoreManager = recordStoreManager;
 		if (recordStoreName.length() <= 32) {
 			this.recordStoreName = recordStoreName;
@@ -81,21 +71,19 @@ public class RecordStoreImpl extends RecordStore {
 		this.open = false;
 	}
 
-	public RecordStoreImpl(RecordStoreManager recordStoreManager)
-			throws IOException {
+	RecordStoreImpl(RecordStoreManager recordStoreManager) {
 		this.recordStoreManager = recordStoreManager;
 	}
 
-	public int readHeader(DataInputStream dis)
-			throws IOException {
+	void readHeader(DataInputStream dis) throws IOException {
 		for (byte aFileIdentifier : fileIdentifier) {
 			if (dis.read() != aFileIdentifier) {
 				throw new IOException();
 			}
 		}
-		dis.read(); // Major version number
-		dis.read(); // Minor version number
-		dis.read(); // Encrypted flag
+		dis.readByte(); // Major version number
+		dis.readByte(); // Minor version number
+		dis.readByte(); // Encrypted flag
 
 		recordStoreName = dis.readUTF();
 		lastModified = dis.readLong();
@@ -104,23 +92,21 @@ public class RecordStoreImpl extends RecordStore {
 		dis.readByte(); // TODO Writable
 		size = dis.readInt();
 
-		return size;
 	}
 
-	public void readRecord(DataInputStream dis)
-			throws IOException {
+	void readRecord(DataInputStream dis) throws IOException {
 		int recordId = dis.readInt();
 		if (recordId > lastRecordId) {
 			lastRecordId = recordId;
 		}
 		dis.readInt(); // TODO Tag
-		byte[] data = new byte[dis.readInt()];
-		dis.read(data, 0, data.length);
-		this.records.put(new Integer(recordId), data);
+		int len = dis.readInt();
+		byte[] data = new byte[len];
+		dis.readFully(data, 0, len);
+		this.records.put(recordId, data);
 	}
 
-	public void writeHeader(DataOutputStream dos)
-			throws IOException {
+	void writeHeader(DataOutputStream dos) throws IOException {
 		dos.write(fileIdentifier);
 		dos.write(versionMajor);
 		dos.write(versionMinor);
@@ -134,8 +120,7 @@ public class RecordStoreImpl extends RecordStore {
 		dos.writeInt(size);
 	}
 
-	public void writeRecord(DataOutputStream dos, int recordId)
-			throws IOException {
+	void writeRecord(DataOutputStream dos, int recordId) throws IOException {
 		dos.writeInt(recordId);
 		dos.writeInt(0); // TODO Tag
 		try {
@@ -151,17 +136,16 @@ public class RecordStoreImpl extends RecordStore {
 		}
 	}
 
-	public boolean isOpen() {
+	boolean isOpen() {
 		return open;
 	}
 
-	public void setOpen(boolean open) {
+	void setOpen(boolean open) {
 		this.open = open;
 	}
 
 	@Override
-	public void closeRecordStore()
-			throws RecordStoreNotOpenException, RecordStoreException {
+	public void closeRecordStore() throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -177,8 +161,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public String getName()
-			throws RecordStoreNotOpenException {
+	public String getName() throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -187,8 +170,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getVersion()
-			throws RecordStoreNotOpenException {
+	public int getVersion() throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -199,8 +181,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getNumRecords()
-			throws RecordStoreNotOpenException {
+	public int getNumRecords() throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -209,8 +190,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getSize()
-			throws RecordStoreNotOpenException {
+	public int getSize() throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -221,7 +201,7 @@ public class RecordStoreImpl extends RecordStore {
 		enumerateRecords(null, null, false);
 
 		int result = 0;
-		Enumeration keys = records.keys();
+		Enumeration<Integer> keys = records.keys();
 		while (keys.hasMoreElements()) {
 			int key = (Integer) keys.nextElement();
 			try {
@@ -237,8 +217,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getSizeAvailable()
-			throws RecordStoreNotOpenException {
+	public int getSizeAvailable() throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -247,8 +226,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public long getLastModified()
-			throws RecordStoreNotOpenException {
+	public long getLastModified() throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -271,8 +249,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getNextRecordID()
-			throws RecordStoreNotOpenException, RecordStoreException {
+	public int getNextRecordID() throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -286,8 +263,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int addRecord(byte[] data, int offset, int numBytes)
-			throws RecordStoreNotOpenException, RecordStoreException, RecordStoreFullException {
+	public int addRecord(byte[] data, int offset, int numBytes) throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -308,7 +284,7 @@ public class RecordStoreImpl extends RecordStore {
 
 		int nextRecordID = getNextRecordID();
 		synchronized (this) {
-			records.put(new Integer(nextRecordID), recordData);
+			records.put(nextRecordID, recordData);
 			version++;
 			lastModified = System.currentTimeMillis();
 			lastRecordId++;
@@ -324,8 +300,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public void deleteRecord(int recordId)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+	public void deleteRecord(int recordId) throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -333,7 +308,7 @@ public class RecordStoreImpl extends RecordStore {
 		synchronized (this) {
 			// throws InvalidRecordIDException when no record found
 			getRecord(recordId);
-			records.remove(new Integer(recordId));
+			records.remove(recordId);
 			version++;
 			lastModified = System.currentTimeMillis();
 			size--;
@@ -346,17 +321,16 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getRecordSize(int recordId)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+	public int getRecordSize(int recordId) throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
 
 		synchronized (this) {
-			byte[] data = records.get(new Integer(recordId));
+			byte[] data = records.get(recordId);
 			if (data == null) {
 				recordStoreManager.loadRecord(this, recordId);
-				data = records.get(new Integer(recordId));
+				data = records.get(recordId);
 				if (data == null) {
 					throw new InvalidRecordIDException();
 				}
@@ -367,12 +341,11 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public int getRecord(int recordId, byte[] buffer, int offset)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+	public int getRecord(int recordId, byte[] buffer, int offset) throws RecordStoreException {
 		int recordSize;
 		synchronized (this) {
 			recordSize = getRecordSize(recordId);
-			System.arraycopy(records.get(new Integer(recordId)), 0, buffer, offset, recordSize);
+			System.arraycopy(records.get(recordId), 0, buffer, offset, recordSize);
 		}
 
 		fireRecordListener(ExtendedRecordListener.RECORD_READ, recordId);
@@ -381,8 +354,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public byte[] getRecord(int recordId)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+	public byte[] getRecord(int recordId) throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -399,7 +371,7 @@ public class RecordStoreImpl extends RecordStore {
 
 	@Override
 	public void setRecord(int recordId, byte[] newData, int offset, int numBytes)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException, RecordStoreFullException {
+			throws RecordStoreException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
 		}
@@ -415,7 +387,7 @@ public class RecordStoreImpl extends RecordStore {
 		synchronized (this) {
 			// throws InvalidRecordIDException when no record found
 			getRecord(recordId);
-			records.put(new Integer(recordId), recordData);
+			records.put(recordId, recordData);
 			version++;
 			lastModified = System.currentTimeMillis();
 		}
@@ -427,7 +399,9 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	@Override
-	public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated)
+	public RecordEnumeration enumerateRecords(RecordFilter filter,
+											  RecordComparator comparator,
+											  boolean keepUpdated)
 			throws RecordStoreNotOpenException {
 		if (!open) {
 			throw new RecordStoreNotOpenException();
@@ -441,8 +415,8 @@ public class RecordStoreImpl extends RecordStore {
 		long timestamp = System.currentTimeMillis();
 
 		if (recordListeners != null) {
-			for (Enumeration e = recordListeners.elements(); e.hasMoreElements(); ) {
-				RecordListener l = (RecordListener) e.nextElement();
+			for (Enumeration<RecordListener> e = recordListeners.elements(); e.hasMoreElements(); ) {
+				RecordListener l = e.nextElement();
 				if (l instanceof ExtendedRecordListener) {
 					((ExtendedRecordListener) l).recordEvent(type, timestamp, this, recordId);
 				} else {
@@ -460,5 +434,4 @@ public class RecordStoreImpl extends RecordStore {
 			}
 		}
 	}
-
 }

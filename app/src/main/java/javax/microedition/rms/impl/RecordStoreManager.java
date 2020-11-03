@@ -1,4 +1,4 @@
-/**
+/*
  * MicroEmulator
  * Copyright (C) 2001-2007 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2018 Nikita Shakarun
@@ -24,33 +24,25 @@
  */
 package javax.microedition.rms.impl;
 
-import javax.microedition.rms.InvalidRecordIDException;
 import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
-import javax.microedition.rms.RecordStoreNotFoundException;
-import javax.microedition.rms.RecordStoreNotOpenException;
 
 public interface RecordStoreManager {
 
+	void deleteRecord(RecordStoreImpl recordStoreImpl, int recordId) throws RecordStoreException;
+
+	void deleteRecordStore(String recordStoreName) throws RecordStoreException;
+
 	String getName();
 
-	void deleteRecordStore(String recordStoreName)
-			throws RecordStoreNotFoundException, RecordStoreException;
+	int getSizeAvailable(RecordStoreImpl recordStoreImpl);
+
+	String[] listRecordStores();
+
+	void loadRecord(RecordStoreImpl recordStoreImpl, int recordId) throws RecordStoreException;
 
 	RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
 			throws RecordStoreException;
 
-	String[] listRecordStores();
-
-	void loadRecord(RecordStoreImpl recordStoreImpl, int recordId)
-			throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException;
-
-	void deleteRecord(RecordStoreImpl recordStoreImpl, int recordId)
-			throws RecordStoreNotOpenException, RecordStoreException;
-
-	void saveRecord(RecordStoreImpl recordStoreImpl, int recordId)
-			throws RecordStoreNotOpenException, RecordStoreException;
-
-	int getSizeAvailable(RecordStoreImpl recordStoreImpl);
-
+	void saveRecord(RecordStoreImpl recordStoreImpl, int recordId) throws RecordStoreException;
 }
