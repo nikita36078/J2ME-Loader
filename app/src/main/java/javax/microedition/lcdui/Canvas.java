@@ -126,12 +126,12 @@ public abstract class Canvas extends Displayable {
 	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
 	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
 
-	private static SparseIntArray keyCodeToSiemensCode = new SparseIntArray();
-	private static SparseIntArray keyCodeToMotorolaCode = new SparseIntArray();
+	private static final SparseIntArray keyCodeToSiemensCode = new SparseIntArray();
+	private static final SparseIntArray keyCodeToMotorolaCode = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
-	private static SparseIntArray keyCodeToGameAction = new SparseIntArray();
-	private static SparseIntArray gameActionToKeyCode = new SparseIntArray();
-	private static SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
+	private static final SparseIntArray keyCodeToGameAction = new SparseIntArray();
+	private static final SparseIntArray gameActionToKeyCode = new SparseIntArray();
+	private static final SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
 	private static boolean scaleToFit;
 	private static boolean keepAspectRatio;
 	private static boolean filter;
@@ -188,7 +188,7 @@ public abstract class Canvas extends Displayable {
 	private LinearLayout layout;
 	private SurfaceView innerView;
 	private Surface surface;
-	private CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
+	private final CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
 	private GLRenderer renderer;
 	private int displayWidth;
 	private int displayHeight;
@@ -198,7 +198,7 @@ public abstract class Canvas extends Displayable {
 	private Image offscreen;
 	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
-	private RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
+	private final RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
 	private long lastFrameTime = System.currentTimeMillis();
 	private Handler uiHandler;
 	private Overlay overlay;
@@ -861,7 +861,7 @@ public abstract class Canvas extends Displayable {
 		private final FloatBuffer vbo = ByteBuffer.allocateDirect(8 * 2 * 4)
 				.order(ByteOrder.nativeOrder()).asFloatBuffer();
 		private GLSurfaceView mView;
-		private int[] bgTextureId = new int[1];
+		private final int[] bgTextureId = new int[1];
 		private ShaderProgram program;
 		private boolean isStarted;
 
@@ -1013,7 +1013,7 @@ public abstract class Canvas extends Displayable {
 
 		private final View mView;
 		OverlayView overlayView;
-		private FrameLayout rootView;
+		private final FrameLayout rootView;
 
 		public ViewCallbacks(View view) {
 			mView = view;

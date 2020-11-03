@@ -295,45 +295,44 @@ public class AppsListFragment extends ListFragment {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
 		AppItem appItem = adapter.getItem(index);
-		switch (item.getItemId()) {
-			case R.id.action_context_shortcut:
-				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
-				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
-						Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
-				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
-						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
-								.setIntent(launchIntent)
-								.setShortLabel(appItem.getTitle());
-				if (bitmap != null) {
-					int width = bitmap.getWidth();
-					int height = bitmap.getHeight();
-					ActivityManager am = (ActivityManager) requireContext()
-							.getSystemService(Context.ACTIVITY_SERVICE);
-					int iconSize = am.getLauncherLargeIconSize();
-					if (width > height) {
-						//noinspection SuspiciousNameCombination
-						bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
-					} else if (width < height) {
-						//noinspection SuspiciousNameCombination
-						bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
-					}
-					bitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
-					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
-				} else {
-					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.mipmap.ic_launcher));
+		int itemId = item.getItemId();
+		if (itemId == R.id.action_context_shortcut) {
+			Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
+			Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
+					Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
+			launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
+			ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
+					new ShortcutInfoCompat.Builder(requireActivity(), appItem.getTitle())
+							.setIntent(launchIntent)
+							.setShortLabel(appItem.getTitle());
+			if (bitmap != null) {
+				int width = bitmap.getWidth();
+				int height = bitmap.getHeight();
+				ActivityManager am = (ActivityManager) requireContext()
+						.getSystemService(Context.ACTIVITY_SERVICE);
+				int iconSize = am.getLauncherLargeIconSize();
+				if (width > height) {
+					//noinspection SuspiciousNameCombination
+					bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
+				} else if (width < height) {
+					//noinspection SuspiciousNameCombination
+					bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
 				}
-				ShortcutManagerCompat.requestPinShortcut(getActivity(), shortcutInfoCompatBuilder.build(), null);
-				break;
-			case R.id.action_context_rename:
-				showRenameDialog(index);
-				break;
-			case R.id.action_context_settings:
-				Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
-				break;
-			case R.id.action_context_delete:
-				showDeleteDialog(index);
-				break;
+				bitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
+				shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
+			} else {
+				IconCompat icon = IconCompat.createWithResource(requireActivity(),
+						R.mipmap.ic_launcher);
+				shortcutInfoCompatBuilder.setIcon(icon);
+			}
+			ShortcutManagerCompat.requestPinShortcut(requireActivity(),
+					shortcutInfoCompatBuilder.build(), null);
+		} else if (itemId == R.id.action_context_rename) {
+			showRenameDialog(index);
+		} else if (itemId == R.id.action_context_settings) {
+			Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
+		} else if (itemId == R.id.action_context_delete) {
+			showDeleteDialog(index);
 		}
 		return super.onContextItemSelected(item);
 	}
@@ -368,39 +367,32 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.action_about:
-				AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-				aboutDialogFragment.show(getChildFragmentManager(), "about");
-				break;
-			case R.id.action_settings:
-				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-				startActivityForResult(settingsIntent, SETTINGS_CODE);
-				break;
-			case R.id.action_profiles:
-				Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
-				startActivity(intentProfiles);
-				break;
-			case R.id.action_help:
-				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
-				helpDialogFragment.show(getChildFragmentManager(), "help");
-				break;
-			case R.id.action_donate:
-				Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);
-				startActivity(donationsIntent);
-				break;
-			case R.id.action_save_log:
-				try {
-					LogUtils.writeLog();
-					Toast.makeText(getActivity(), R.string.log_saved, Toast.LENGTH_SHORT).show();
-				} catch (IOException e) {
-					e.printStackTrace();
-					Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
-				}
-				break;
-			case R.id.action_exit_app:
-				getActivity().finish();
-				break;
+		int itemId = item.getItemId();
+		if (itemId == R.id.action_about) {
+			AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+			aboutDialogFragment.show(getChildFragmentManager(), "about");
+		} else if (itemId == R.id.action_settings) {
+			Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+			requireActivity().startActivityForResult(settingsIntent, 0);
+		} else if (itemId == R.id.action_profiles) {
+			Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
+			startActivity(intentProfiles);
+		} else if (itemId == R.id.action_help) {
+			HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
+			helpDialogFragment.show(getChildFragmentManager(), "help");
+		} else if (itemId == R.id.action_donate) {
+			Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);
+			startActivity(donationsIntent);
+		} else if (itemId == R.id.action_save_log) {
+			try {
+				LogUtils.writeLog();
+				Toast.makeText(getActivity(), R.string.log_saved, Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+			}
+		} else if (itemId == R.id.action_exit_app) {
+			requireActivity().finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}

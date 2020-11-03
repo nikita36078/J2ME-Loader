@@ -210,7 +210,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		loadKeyLayout();
 		setContentView(R.layout.activity_config);
-		//noinspection ConstantConditions
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		display = getWindowManager().getDefaultDisplay();
 		fragmentManager = getSupportFragmentManager();
@@ -795,34 +794,26 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.action_start:
-				startMIDlet();
-				break;
-			case R.id.action_clear_data:
-				showClearDataDialog();
-				break;
-			case R.id.action_reset_settings:
-				params = new ProfileModel(configDir);
-				loadParams(false);
-				break;
-			case R.id.action_reset_layout:
-				//noinspection ResultOfMethodCallIgnored
-				keylayoutFile.delete();
-				loadKeyLayout();
-				break;
-			case R.id.action_load_profile:
-				LoadProfileAlert.newInstance(keylayoutFile.getParent())
-						.show(fragmentManager, "load_profile");
-				break;
-			case R.id.action_save_profile:
-				saveParams();
-				SaveProfileAlert.getInstance(keylayoutFile.getParent())
-						.show(fragmentManager, "save_profile");
-				break;
-			case android.R.id.home:
-				finish();
-				break;
+		int itemId = item.getItemId();
+		if (itemId == R.id.action_start) {
+			startMIDlet();
+		} else if (itemId == R.id.action_clear_data) {
+			showClearDataDialog();
+		} else if (itemId == R.id.action_reset_settings) {
+			params = new ProfileModel(configDir);
+			loadParams(false);
+		} else if (itemId == R.id.action_reset_layout) {//noinspection ResultOfMethodCallIgnored
+			keylayoutFile.delete();
+			loadKeyLayout();
+		} else if (itemId == R.id.action_load_profile) {
+			LoadProfileAlert.newInstance(keylayoutFile.getParent())
+					.show(fragmentManager, "load_profile");
+		} else if (itemId == R.id.action_save_profile) {
+			saveParams();
+			SaveProfileAlert.getInstance(keylayoutFile.getParent())
+					.show(fragmentManager, "save_profile");
+		} else if (itemId == android.R.id.home) {
+			finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -846,47 +837,37 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	@SuppressLint("SetTextI18n")
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.cmdSwapSizes:
-				String tmp = tfScreenWidth.getText().toString();
-				tfScreenWidth.setText(tfScreenHeight.getText().toString());
-				tfScreenHeight.setText(tmp);
-				break;
-			case R.id.cmdFontSizePresets:
-				new AlertDialog.Builder(this)
-						.setTitle(getString(R.string.SIZE_PRESETS))
-						.setItems(fontAdapter.toArray(new String[0]),
-								(dialog, which) -> {
-									tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
-									tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
-									tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
-								})
-						.show();
-				break;
-			case R.id.cmdScreenBack:
-				showColorPicker(tfScreenBack);
-				break;
-			case R.id.cmdVKBack:
-				showColorPicker(tfVKBack);
-				break;
-			case R.id.cmdVKFore:
-				showColorPicker(tfVKFore);
-				break;
-			case R.id.cmdVKSelFore:
-				showColorPicker(tfVKSelFore);
-				break;
-			case R.id.cmdVKSelBack:
-				showColorPicker(tfVKSelBack);
-				break;
-			case R.id.cmdVKOutline:
-				showColorPicker(tfVKOutline);
-				break;
-			case R.id.cmdKeyMappings:
-				Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
-						this, KeyMapperActivity.class);
-				startActivity(i);
-				break;
-			default:
+		int id = v.getId();
+		if (id == R.id.cmdSwapSizes) {
+			String tmp = tfScreenWidth.getText().toString();
+			tfScreenWidth.setText(tfScreenHeight.getText().toString());
+			tfScreenHeight.setText(tmp);
+		} else if (id == R.id.cmdFontSizePresets) {
+			new AlertDialog.Builder(this)
+					.setTitle(getString(R.string.SIZE_PRESETS))
+					.setItems(fontAdapter.toArray(new String[0]),
+							(dialog, which) -> {
+								tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
+								tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
+								tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
+							})
+					.show();
+		} else if (id == R.id.cmdScreenBack) {
+			showColorPicker(tfScreenBack);
+		} else if (id == R.id.cmdVKBack) {
+			showColorPicker(tfVKBack);
+		} else if (id == R.id.cmdVKFore) {
+			showColorPicker(tfVKFore);
+		} else if (id == R.id.cmdVKSelFore) {
+			showColorPicker(tfVKSelFore);
+		} else if (id == R.id.cmdVKSelBack) {
+			showColorPicker(tfVKSelBack);
+		} else if (id == R.id.cmdVKOutline) {
+			showColorPicker(tfVKOutline);
+		} else if (id == R.id.cmdKeyMappings) {
+			Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
+					this, KeyMapperActivity.class);
+			startActivity(i);
 		}
 	}
 

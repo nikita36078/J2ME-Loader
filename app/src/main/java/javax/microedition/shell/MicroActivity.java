@@ -213,7 +213,7 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private SimpleEvent msgSetCurrent = new SimpleEvent() {
+	private final SimpleEvent msgSetCurrent = new SimpleEvent() {
 		@Override
 		public void process() {
 			current.clearDisplayableView();
@@ -384,28 +384,22 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void handleVkOptions(int id) {
 		VirtualKeyboard vk = ContextHolder.getVk();
-		switch (id) {
-			case R.id.action_layout_edit_mode:
-				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
-				Toast.makeText(this, R.string.layout_edit_mode,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case R.id.action_layout_scale_mode:
-				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
-				Toast.makeText(this, R.string.layout_scale_mode,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case R.id.action_layout_edit_finish:
-				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-				Toast.makeText(this, R.string.layout_edit_finished,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case R.id.action_layout_switch:
-				showSetLayoutDialog();
-				break;
-			case R.id.action_hide_buttons:
-				showHideButtonDialog();
-				break;
+		if (id == R.id.action_layout_edit_mode) {
+			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
+			Toast.makeText(this, R.string.layout_edit_mode,
+					Toast.LENGTH_SHORT).show();
+		} else if (id == R.id.action_layout_scale_mode) {
+			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
+			Toast.makeText(this, R.string.layout_scale_mode,
+					Toast.LENGTH_SHORT).show();
+		} else if (id == R.id.action_layout_edit_finish) {
+			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+			Toast.makeText(this, R.string.layout_edit_finished,
+					Toast.LENGTH_SHORT).show();
+		} else if (id == R.id.action_layout_switch) {
+			showSetLayoutDialog();
+		} else if (id == R.id.action_hide_buttons) {
+			showHideButtonDialog();
 		}
 	}
 
@@ -416,17 +410,17 @@ public class MicroActivity extends AppCompatActivity {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new SingleObserver<String>() {
 					@Override
-					public void onSubscribe(Disposable d) {
+					public void onSubscribe(@NonNull Disposable d) {
 					}
 
 					@Override
-					public void onSuccess(String s) {
+					public void onSuccess(@NonNull String s) {
 						Toast.makeText(MicroActivity.this, getString(R.string.screenshot_saved)
 								+ " " + s, Toast.LENGTH_LONG).show();
 					}
 
 					@Override
-					public void onError(Throwable e) {
+					public void onError(@NonNull Throwable e) {
 						e.printStackTrace();
 						Toast.makeText(MicroActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
 					}
