@@ -54,7 +54,7 @@ public class ContextHolder {
 	private static WeakReference<MicroActivity> currentActivity;
 	private static Vibrator vibrator;
 	private static Context appContext;
-	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
+	private static final ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 	private static boolean vibrationEnabled;
 
 	public static Context getAppContext() {
@@ -109,7 +109,12 @@ public class ContextHolder {
 	}
 
 	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {
-		return new FileOutputStream(getFileByName(name));
+		File dir = new File(AppClassLoader.getDataDir());
+		File file = new File(dir, name);
+		if (!dir.isDirectory() && !dir.mkdirs()) {
+			throw new FileNotFoundException("Can't create directory: " + dir);
+		}
+		return new FileOutputStream(file);
 	}
 
 	public static FileInputStream openFileInput(String name) throws FileNotFoundException {
@@ -121,7 +126,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.getDataDir() + AppClassLoader.getName(), name);
+		return new File(AppClassLoader.getDataDir(), name);
 	}
 
 	public static File getCacheDir() {

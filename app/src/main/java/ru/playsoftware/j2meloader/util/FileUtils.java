@@ -74,13 +74,15 @@ public class FileUtils {
 	public static void deleteDirectory(File dir) {
 		if (dir.isDirectory()) {
 			File[] listFiles = dir.listFiles();
-			if (listFiles.length != 0) {
+			if (listFiles != null && listFiles.length != 0) {
 				for (File file : listFiles) {
 					deleteDirectory(file);
 				}
 			}
 		}
-		dir.delete();
+		if (!dir.delete() && dir.exists()) {
+			Log.w(TAG, "Can't delete file: " + dir);
+		}
 	}
 
 	public static LinkedHashMap<String, String> loadManifest(File mf) {

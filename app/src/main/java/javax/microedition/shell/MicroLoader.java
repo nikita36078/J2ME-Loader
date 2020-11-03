@@ -23,6 +23,9 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 
+import org.acra.ACRA;
+import org.acra.ErrorReporter;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -64,19 +67,22 @@ import static android.os.Build.VERSION_CODES.LOLLIPOP;
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
 
-	private String path;
-	private Context context;
+	private final File appDir;
+	private final Context context;
+	private final String workDir;
+	private final String appDirName;
 	private ProfileModel params;
-	private String appPath;
 
 	MicroLoader(Context context, String appPath) {
 		this.context = context;
-		this.appPath = appPath;
-		this.path = Config.getAppDir() + appPath;
+		this.appDir = new File(appPath);
+		workDir = appDir.getParentFile().getParent();
+		appDirName = appDir.getName();
 	}
 
 	public boolean init() {
-		this.params = ProfilesManager.loadConfig(new File(Config.getConfigsDir(), appPath));
+		File config = new File(workDir + Config.MIDLET_CONFIGS_DIR + appDirName);
+		this.params = ProfilesManager.loadConfig(config);
 		if (params == null) {
 			return false;
 		}
@@ -85,9 +91,7 @@ public class MicroLoader {
 		File cacheDir = ContextHolder.getCacheDir();
 		// Some phones return null here
 		if (cacheDir != null && cacheDir.exists()) {
-			for (File temp : cacheDir.listFiles()) {
-				temp.delete();
-			}
+			FileUtils.clearDirectory(cacheDir);
 		}
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitNetwork()
@@ -100,7 +104,7 @@ public class MicroLoader {
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
 		LinkedHashMap<String, String> params =
-				FileUtils.loadManifest(new File(path, Config.MIDLET_MANIFEST_FILE));
+				FileUtils.loadManifest(new File(appDir, Config.MIDLET_MANIFEST_FILE));
 		MIDlet.initProps(params);
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {
@@ -115,7 +119,7 @@ public class MicroLoader {
 
 	MIDlet loadMIDlet(String mainClass) throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
-		File dexSource = new File(path, Config.MIDLET_DEX_FILE);
+		File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
 		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
 		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
 		if (dexOptDir.exists()) {
@@ -123,11 +127,11 @@ public class MicroLoader {
 		} else if (!dexOptDir.mkdir()) {
 			throw new IOException("Cant't create directory: [" + dexOptDir + ']');
 		}
-		File resDir = new File(path, Config.MIDLET_RES_DIR);
 		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
-				dexOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
+				dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
-		Log.i(TAG, "MIDlet-Name: " + AppClassLoader.getName());
+		Log.i(TAG, "MIDlet-Name: " + appDirName);
+		ACRA.getErrorReporter().putCustomData("Running app", appDirName);
 		//noinspection unchecked
 		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
 		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
@@ -140,8 +144,9 @@ public class MicroLoader {
 		final String country = defaultLocale.getCountry();
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
+		// FIXME: 21.10.2020 Config.getDataDir() may be in different storage
 		final String primaryStoragePath = Environment.getExternalStorageDirectory().getPath();
-		String uri = "file:///c:" + Config.getDataDir().substring(primaryStoragePath.length()) + appPath;
+		String uri = "file:///c:" + Config.getDataDir().substring(primaryStoragePath.length()) + appDirName;
 		System.setProperty("fileconn.dir.cache", uri + "/cache");
 		System.setProperty("fileconn.dir.private", uri + "/private");
 		System.setProperty("user.home", primaryStoragePath);
@@ -161,11 +166,6 @@ public class MicroLoader {
 			}
 			setProperties();
 
-			Font.setSize(Font.SIZE_SMALL, params.fontSizeSmall);
-			Font.setSize(Font.SIZE_MEDIUM, params.fontSizeMedium);
-			Font.setSize(Font.SIZE_LARGE, params.fontSizeLarge);
-			Font.setApplyDimensions(params.fontApplyDimensions);
-
 			final String[] propLines = params.systemProperties.split("\n");
 			for (String line : propLines) {
 				String[] prop = line.split(":[ ]*", 2);
@@ -179,20 +179,30 @@ public class MicroLoader {
 				System.setProperty("microedition.encoding", "ISO-8859-1");
 			}
 
-			Displayable.setVirtualSize(params.screenWidth, params.screenHeight);
+			int screenWidth = params.screenWidth;
+			int screenHeight = params.screenHeight;
+			Displayable.setVirtualSize(screenWidth, screenHeight);
+			Canvas.setBackgroundColor(params.screenBackgroundColor);
 			Canvas.setScale(params.screenScaleToFit, params.screenKeepAspectRatio, params.screenScaleRatio);
 			Canvas.setFilterBitmap(params.screenFilter);
 			EventQueue.setImmediate(params.immediateMode);
 			Canvas.setGraphicsMode(params.getGraphicsMode(), params.parallelRedrawScreen);
-			Canvas.setBackgroundColor(params.screenBackgroundColor);
-			Canvas.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params));
-			Canvas.setHasTouchInput(params.touchInput);
+			ShaderInfo shader = params.shader;
+			if (shader != null) {
+				shader.dir = workDir + Config.SHADERS_DIR;
+			}
+			Canvas.setShaderFilter(shader);
 			Canvas.setForceFullscreen(params.forceFullscreen);
 			Canvas.setShowFps(params.showFps);
 			Canvas.setLimitFps(params.fpsLimit);
-			ShaderInfo shader = params.shader;
-			if (shader == null) shader = new ShaderInfo();
-			Canvas.setShaderFilter(shader);
+
+			Font.setSize(Font.SIZE_SMALL, params.fontSizeSmall);
+			Font.setSize(Font.SIZE_MEDIUM, params.fontSizeMedium);
+			Font.setSize(Font.SIZE_LARGE, params.fontSizeLarge);
+			Font.setApplyDimensions(params.fontApplyDimensions);
+
+			Canvas.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params));
+			Canvas.setHasTouchInput(params.touchInput);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -213,10 +223,11 @@ public class MicroLoader {
 		vk.setButtonShape(params.vkButtonShape);
 		vk.setForceOpacity(params.vkForceOpacity);
 
-		File keylayoutFile = new File(Config.getConfigsDir(), appPath + Config.MIDLET_KEY_LAYOUT_FILE);
-		if (keylayoutFile.exists()) {
+		File keyLayoutFile = new File(workDir + Config.MIDLET_CONFIGS_DIR
+				+ appDirName + Config.MIDLET_KEY_LAYOUT_FILE);
+		if (keyLayoutFile.exists()) {
 			try {
-				FileInputStream fis = new FileInputStream(keylayoutFile);
+				FileInputStream fis = new FileInputStream(keyLayoutFile);
 				DataInputStream dis = new DataInputStream(fis);
 				vk.readLayout(dis);
 				fis.close();
@@ -234,7 +245,7 @@ public class MicroLoader {
 
 		VirtualKeyboard.LayoutListener listener = vk1 -> {
 			try {
-				FileOutputStream fos = new FileOutputStream(keylayoutFile);
+				FileOutputStream fos = new FileOutputStream(keyLayoutFile);
 				DataOutputStream dos = new DataOutputStream(fos);
 				vk1.writeLayout(dos);
 				fos.close();
@@ -256,8 +267,8 @@ public class MicroLoader {
 			String fileName = "Screenshot_" + simpleDateFormat.format(now) + ".png";
 			File screenshotDir = new File(Config.SCREENSHOTS_DIR);
 			File screenshotFile = new File(screenshotDir, fileName);
-			if (!screenshotDir.exists()) {
-				screenshotDir.mkdirs();
+			if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
+				throw new IOException("Can't create directory: " + screenshotDir);
 			}
 			FileOutputStream out = new FileOutputStream(screenshotFile);
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);

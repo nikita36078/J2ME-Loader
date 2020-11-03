@@ -876,7 +876,7 @@ public abstract class Canvas extends Displayable {
 			initTex();
 			Bitmap bitmap = offscreenCopy.getBitmap();
 			program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
-			if (shaderFilter.values != null) {
+			if (shaderFilter != null && shaderFilter.values != null) {
 				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
 			}
 			isStarted = true;

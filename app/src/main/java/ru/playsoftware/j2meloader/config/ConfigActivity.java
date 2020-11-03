@@ -23,7 +23,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -146,6 +149,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private ArrayAdapter<ShaderInfo> spShaderAdapter;
 	private View shaderContainer;
 	private ImageButton btShaderTune;
+	private String workDir;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -155,20 +159,45 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		String action = intent.getAction();
 		isProfile = ACTION_EDIT_PROFILE.equals(action);
 		boolean showSettings = isProfile || ACTION_EDIT.equals(action);
-		String dirName = intent.getDataString();
-		if (dirName == null) {
+		String path = intent.getDataString();
+		if (path == null) {
 			finish();
 			return;
 		}
 		if (isProfile) {
 			setResult(RESULT_OK, new Intent().setData(intent.getData()));
-			configDir = new File(Config.getProfilesDir(), dirName);
-			setTitle(dirName);
+			configDir = new File(Config.getProfilesDir(), path);
+			setTitle(path);
 		} else {
 			setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
-			dataDir = new File(Config.getDataDir(), dirName);
+			File appDir = new File(path);
+			File convertedDir = appDir.getParentFile();
+			if (!appDir.isDirectory() || convertedDir == null
+					|| (workDir = convertedDir.getParent()) == null) {
+				String storageName = "";
+				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+					StorageManager sm = (StorageManager) getSystemService(STORAGE_SERVICE);
+					if (sm != null) {
+						StorageVolume storageVolume = sm.getStorageVolume(appDir);
+						if (storageVolume != null) {
+							String desc = storageVolume.getDescription(this);
+							if (desc != null) {
+								storageName = "\"" + desc + "\" ";
+							}
+						}
+					}
+				}
+				new AlertDialog.Builder(this)
+						.setTitle(R.string.error)
+						.setMessage(getString(R.string.err_missing_app, storageName))
+						.setPositiveButton(R.string.exit, (d, w) -> finish())
+						.setCancelable(false)
+						.show();
+				return;
+			}
+			dataDir = new File(workDir + Config.MIDLET_DATA_DIR + appDir.getName());
 			dataDir.mkdirs();
-			configDir = new File(Config.getConfigsDir(), dirName);
+			configDir = new File(workDir + Config.MIDLET_CONFIGS_DIR + appDir.getName());
 		}
 		configDir.mkdirs();
 
@@ -355,12 +384,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		if (params == null) {
 			params = new ProfileModel(configDir);
-			ProfilesManager.saveConfig(params);
-		}
-		if (params.version < 1) {
-			ProfilesManager.updateSystemProperties(params);
-			params.version = 1;
-			ProfilesManager.saveConfig(params);
 		}
 	}
 
@@ -375,7 +398,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			shaderContainer.setVisibility(View.VISIBLE);
 			return;
 		}
-		File dir = new File(Config.getShadersDir());
+		File dir = new File(workDir + Config.SHADERS_DIR);
 		if (!dir.exists()) {
 			//noinspection ResultOfMethodCallIgnored
 			dir.mkdirs();
@@ -499,7 +522,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@Override
 	public void onPause() {
-		saveParams();
+		if (configDir != null) {
+			saveParams();
+		}
 		super.onPause();
 	}
 
@@ -658,7 +683,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			int mode = spGraphicsMode.getSelectedItemPosition();
 			params.graphicsMode = mode;
 			if (mode == 1) {
-				params.shader = (ShaderInfo) spShader.getSelectedItem();
+				if (spShader.getSelectedItemPosition() == 0)
+					params.shader = null;
+				else
+					params.shader = (ShaderInfo) spShader.getSelectedItem();
 			}
 			params.parallelRedrawScreen = cxParallel.isChecked();
 			params.forceFullscreen = cxForceFullscreen.isChecked();
@@ -809,8 +837,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void startMIDlet() {
-		Intent i = new Intent(getIntent());
-		i.setClass(getApplicationContext(), MicroActivity.class);
+		Intent i = new Intent(this, MicroActivity.class);
+		i.setData(getIntent().getData());
 		startActivity(i);
 		finish();
 	}
@@ -854,8 +882,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				showColorPicker(tfVKOutline);
 				break;
 			case R.id.cmdKeyMappings:
-				Intent i = new Intent(getIntent());
-				i.setClass(getApplicationContext(), KeyMapperActivity.class);
+				Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
+						this, KeyMapperActivity.class);
 				startActivity(i);
 				break;
 			default:

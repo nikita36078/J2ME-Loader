@@ -20,9 +20,8 @@ package javax.microedition.shell;
 import android.util.Log;
 
 import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
-
-import org.acra.ACRA;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -31,31 +30,30 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.microedition.util.ContextHolder;
-
-import androidx.annotation.Nullable;
 import dalvik.system.DexClassLoader;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.IOUtils;
 
 public class AppClassLoader extends DexClassLoader {
-	private static final String TAG = ContextHolder.class.getName();
+	private static final String TAG = AppClassLoader.class.getName();
 
-	private static File resFolder;
+	private static AppClassLoader instance;
 	private static ZipFile zipFile;
+	private static String dataDir;
+	private static File oldResDir;
 
-	public AppClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
+	AppClassLoader(String paths, String tmpDir, ClassLoader parent, File appDir) {
 		super(paths, tmpDir, null, new CoreClassLoader(parent));
-		resFolder = resDir;
-		prepareZipFile();
-		ACRA.getErrorReporter().putCustomData("Running app", getName());
+		if (appDir == null)
+			throw new NullPointerException("App path is null");
+		oldResDir = new File(appDir, Config.MIDLET_RES_DIR);
+		instance = this;
+		dataDir = appDir.getParentFile().getParent() + Config.MIDLET_DATA_DIR + appDir.getName();
+		File jar = new File(appDir, Config.MIDLET_RES_FILE);
+		zipFile = jar.exists() ? new ZipFile(jar) : null;
 	}
 
-	public static String getName() {
-		return resFolder.getParentFile().getName();
-	}
-
-	@Nullable
-	public static InputStream getResourceAsStream(Class resClass, String resName) {
+	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
 		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		if (resName == null || resName.equals("")) {
 			Log.w(TAG, "Can't load res on empty path");
@@ -64,7 +62,7 @@ public class AppClassLoader extends DexClassLoader {
 		// Add support for Siemens file path
 		String normName = resName.replace('\\', '/');
 		// Remove double slashes
-		normName = normName.replace("//", "/");
+		normName = normName.replaceAll("//+", "/");
 		if (normName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
 			String className = resClass.getPackage().getName().replace('.', '/');
 			normName = className + "/" + normName;
@@ -73,39 +71,79 @@ public class AppClassLoader extends DexClassLoader {
 		if (normName.charAt(0) == '/') {
 			normName = normName.substring(1);
 		}
-		try {
-			return getResourceStream(normName);
-		} catch (IOException | NullPointerException e) {
+		byte[] data = getResourceBytes(normName);
+		if (data == null) {
 			Log.w(TAG, "Can't load res: " + resName);
 			return null;
 		}
-	}
-
-	private static void prepareZipFile() {
-		File midletResFile = new File(Config.getAppDir(),
-				AppClassLoader.getName() + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) {
-			zipFile = new ZipFile(midletResFile);
-		}
-	}
-
-	private static InputStream getResourceStream(String resName) throws IOException {
-		InputStream is;
-		byte[] data;
-		File midletResFile = new File(Config.getAppDir(),
-				AppClassLoader.getName() + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) {
-			FileHeader header = zipFile.getFileHeader(resName);
-			is = zipFile.getInputStream(header);
-			data = new byte[(int) header.getUncompressedSize()];
-		} else {
-			File resFile = new File(resFolder, resName);
-			is = new FileInputStream(resFile);
-			data = new byte[(int) resFile.length()];
-		}
-		DataInputStream dis = new DataInputStream(is);
-		dis.readFully(data);
-		dis.close();
 		return new ByteArrayInputStream(data);
+	}
+
+	public static String getDataDir() {
+		return dataDir;
+	}
+
+	public static byte[] getResourceAsBytes(String resName) {
+		if (resName == null || resName.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
+		// Add support for Siemens file path
+		String normName = resName.replace('\\', '/');
+		// Remove double slashes
+		normName = normName.replaceAll("//+", "/");
+		// Remove leading slash
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
+		}
+		byte[] data = getResourceBytes(normName);
+		if (data == null) {
+			Log.w(TAG, "Can't load res: " + resName);
+			return null;
+		}
+		return data;
+	}
+
+	private static byte[] getResourceBytes(String name) {
+		if (zipFile == null) {
+			final File file = new File(oldResDir, name);
+			try {
+				FileInputStream fis = new FileInputStream(file);
+				byte[] data = IOUtils.toByteArray(fis);
+				fis.close();
+				return data;
+			} catch (Exception e) {
+				Log.w(TAG, "getResourceBytes: from file=" + file, e);
+				return null;
+			}
+		}
+		DataInputStream dis = null;
+		try {
+			FileHeader header = zipFile.getFileHeader(name);
+			if (header == null) {
+				return null;
+			}
+			dis = new DataInputStream(zipFile.getInputStream(header));
+			byte[] data = new byte[(int) header.getUncompressedSize()];
+			dis.readFully(data);
+			return data;
+		} catch (ZipException e) {
+			Log.e(TAG, "getResourceBytes: ", e);
+		} catch (IOException e) {
+			Log.e(TAG, "getResourceBytes: ", e);
+		} finally {
+			if (dis != null) {
+				try {
+					dis.close();
+				} catch (IOException e) {
+					Log.e(TAG, "getResourceBytes: ", e);
+				}
+			}
+		}
+		return null;
+	}
+
+	public static AppClassLoader getInstance() {
+		return instance;
 	}
 }

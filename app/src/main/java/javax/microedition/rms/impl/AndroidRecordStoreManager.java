@@ -44,8 +44,6 @@ import javax.microedition.rms.RecordStoreNotFoundException;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.util.ContextHolder;
 
-import ru.playsoftware.j2meloader.config.Config;
-
 public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private final static String RECORD_STORE_HEADER_SUFFIX = ".rsh";
@@ -66,7 +64,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	private synchronized void initializeIfNecessary() {
 		if (recordStores == null) {
 			recordStores = new ConcurrentHashMap<>();
-			String[] list = new File(Config.getDataDir(), AppClassLoader.getName()).list();
+			String[] list = new File(AppClassLoader.getDataDir()).list();
 			if (list != null && list.length > 0) {
 				for (String aList : list) {
 					if (aList.endsWith(RECORD_STORE_HEADER_SUFFIX)) {
@@ -90,7 +88,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			throw new RecordStoreException();
 		}
 
-		File dataDir = new File(Config.getDataDir(), AppClassLoader.getName());
+		File dataDir = new File(AppClassLoader.getDataDir());
 		String prefix = recordStoreName + ".";
 		String[] files = dataDir.list();
 		if (files != null) {
@@ -131,7 +129,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 		recordStores.put(recordStoreName, recordStoreImpl);
 		synchronized (recordStoreImpl.records) {
-			File dataDir = new File(Config.getDataDir(), AppClassLoader.getName());
+			File dataDir = new File(AppClassLoader.getDataDir());
 			String prefix = recordStoreName + ".";
 			String[] files = dataDir.list();
 			if (files != null) {

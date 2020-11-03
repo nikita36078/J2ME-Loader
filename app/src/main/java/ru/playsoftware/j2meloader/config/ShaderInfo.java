@@ -22,15 +22,18 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class ShaderInfo implements Comparable<ShaderInfo>, Parcelable {
-	String name;
-	String author;
+	public transient String dir;
 	public String fragment;
 	public String vertex;
+	String name;
+	String author;
 	transient boolean outputResolution;
 	transient boolean upscaling;
 	transient Setting[] settings = new Setting[4];
 	public float[] values;
 
+
+	@SuppressWarnings("unused")    // used by Gson deserialization
 	public ShaderInfo() {
 	}
 
@@ -39,7 +42,7 @@ public class ShaderInfo implements Comparable<ShaderInfo>, Parcelable {
 		this.author = author;
 	}
 
-	protected ShaderInfo(Parcel in) {
+	public ShaderInfo(Parcel in) {
 		name = in.readString();
 		author = in.readString();
 		fragment = in.readString();
@@ -60,8 +63,7 @@ public class ShaderInfo implements Comparable<ShaderInfo>, Parcelable {
 				equalsNullable(vertex, that.vertex);
 	}
 
-	@SuppressWarnings("EqualsReplaceableByObjectsCall")
-		// ObjectsCall require API19
+	@SuppressWarnings("EqualsReplaceableByObjectsCall")// ObjectsCall require API19
 	boolean equalsNullable(String a, String b) {
 		//noinspection StringEquality
 		return (a == b) || (a != null && a.equals(b));
@@ -215,7 +217,6 @@ public class ShaderInfo implements Comparable<ShaderInfo>, Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-
 		dest.writeString(name);
 		dest.writeString(author);
 		dest.writeString(fragment);

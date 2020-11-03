@@ -36,13 +36,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
-	private static SparseIntArray idToCanvasKey = new SparseIntArray();
+	private static final SparseIntArray idToCanvasKey = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
 	private ProfileModel params;
 
@@ -56,15 +54,13 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			actionBar.setTitle(R.string.pref_map_keys);
 		}
 		Intent intent = getIntent();
-		String dirName = intent.getDataString();
-		if (dirName == null) {
+		String path = intent.getDataString();
+		if (path == null) {
 			Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 			finish();
 			return;
 		}
-		boolean isProfile = ConfigActivity.ACTION_EDIT_PROFILE.equals(intent.getAction());
-		String parentDir = isProfile ? Config.getProfilesDir() : Config.getConfigsDir();
-		params = ProfilesManager.loadConfig(new File(parentDir, dirName));
+		params = ProfilesManager.loadConfig(new File(path));
 
 		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
 		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);
@@ -146,16 +142,14 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
-			case R.id.action_reset_mapping:
-				androidToMIDP.clear();
-				KeyMapper.initArray(androidToMIDP);
-				KeyMapper.saveArrayPref(params, androidToMIDP);
-				ProfilesManager.saveConfig(params);
-				break;
+		int itemId = item.getItemId();
+		if (itemId == android.R.id.home) {
+			finish();
+		} else if (itemId == R.id.action_reset_mapping) {
+			androidToMIDP.clear();
+			KeyMapper.initArray(androidToMIDP);
+			KeyMapper.saveArrayPref(params, androidToMIDP);
+			ProfilesManager.saveConfig(params);
 		}
 		return super.onOptionsItemSelected(item);
 	}

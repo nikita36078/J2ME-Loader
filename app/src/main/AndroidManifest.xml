@@ -17,6 +17,7 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
+
     <application
         android:name=".EmulatorApplication"
         android:allowBackup="false"
@@ -89,11 +90,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
         </activity>
-        <activity
-            android:name=".donations.DonationsActivity" />
-        <activity
-            android:name=".settings.KeyMapperActivity"
-            android:process=":midlet" />
+        <activity android:name=".donations.DonationsActivity" />
+        <activity android:name=".settings.KeyMapperActivity" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />

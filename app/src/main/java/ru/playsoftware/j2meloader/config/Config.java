@@ -32,19 +32,22 @@ import ru.playsoftware.j2meloader.R;
 
 public class Config {
 
-	private static final String MIDLET_DIR = "/converted/";
 	public static final String APP_NAME = "J2ME-Loader";
-	public static final String SCREENSHOTS_DIR;
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
-	public static final String MIDLET_RES_DIR = "/res";
-	public static final String MIDLET_DEX_FILE = "/converted.dex";
-	public static final String MIDLET_RES_FILE = "/res.jar";
-	public static final String MIDLET_ICON_FILE = "/icon.png";
-	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
-	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.json";
+	public static final String MIDLET_CONFIGS_DIR = "/configs/";
+	public static final String MIDLET_DATA_DIR = "/data/";
+	public static final String MIDLET_DEX_FILE = "/converted.dex";
+	public static final String MIDLET_ICON_FILE = "/icon.png";
+	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
+	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
+	public static final String MIDLET_RES_DIR = "/res";
+	public static final String MIDLET_RES_FILE = "/res.jar";
 	public static final String PREF_EMULATOR_DIR = "emulator_dir";
+	public static final String SCREENSHOTS_DIR;
+	public static final String SHADERS_DIR = "/shaders/";
 	public static final String PREF_DEFAULT_PROFILE = "default_profile";
+	private static final String MIDLET_DIR = "/converted/";
 
 	private static String emulatorDir;
 	private static String dataDir;
@@ -52,12 +55,23 @@ public class Config {
 	private static String profilesDir;
 	private static String appDir;
 
-	private static SharedPreferences.OnSharedPreferenceChangeListener sPrefListener = (sharedPreferences, key) -> {
-		if (key.equals(PREF_EMULATOR_DIR)) {
-			initDirs(sharedPreferences.getString(key, emulatorDir));
-		}
-	};
+	private static final SharedPreferences.OnSharedPreferenceChangeListener sPrefListener =
+			(sharedPreferences, key) -> {
+				if (key.equals(PREF_EMULATOR_DIR)) {
+					initDirs(sharedPreferences.getString(key, emulatorDir));
+				}
+			};
 
+	static {
+		Context context = ContextHolder.getAppContext();
+		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+				+ "/" + APP_NAME;
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		String path = preferences.getString(PREF_EMULATOR_DIR, null);
+		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + APP_NAME;
+		initDirs(path);
+		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);
+	}
 
 	public static String getEmulatorDir() {
 		return emulatorDir;
@@ -80,11 +94,13 @@ public class Config {
 	}
 
 	public static String getShadersDir() {
-		return emulatorDir + "/shaders/";
+		return emulatorDir + SHADERS_DIR;
 	}
 
 	public static void startApp(Context context, String name, String path, boolean showSettings) {
-		File file = new File(Config.configsDir, path);
+		File appDir = new File(path);
+		String workDir = appDir.getParentFile().getParent();
+		File file = new File(workDir + Config.MIDLET_CONFIGS_DIR + appDir.getName());
 		if (showSettings || !file.exists()) {
 			Intent intent = new Intent(ConfigActivity.ACTION_EDIT, Uri.parse(path),
 					context, ConfigActivity.class);
@@ -100,20 +116,9 @@ public class Config {
 
 	private static void initDirs(String path) {
 		emulatorDir = path;
-		dataDir = emulatorDir + "/data/";
-		configsDir = emulatorDir + "/configs/";
+		dataDir = emulatorDir + MIDLET_DATA_DIR;
+		configsDir = emulatorDir + MIDLET_CONFIGS_DIR;
 		profilesDir = emulatorDir + "/templates/";
 		appDir = emulatorDir + MIDLET_DIR;
-	}
-
-	static {
-		Context context = ContextHolder.getAppContext();
-		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-				+ "/" + APP_NAME;
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		String path = preferences.getString(PREF_EMULATOR_DIR, null);
-		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + APP_NAME;
-		initDirs(path);
-		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);
 	}
 }

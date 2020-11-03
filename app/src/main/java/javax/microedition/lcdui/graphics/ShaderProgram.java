@@ -25,7 +25,6 @@ import java.nio.FloatBuffer;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.util.ContextHolder;
 
-import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
@@ -44,18 +43,20 @@ public class ShaderProgram {
 	public int uPixelDelta;
 
 	public ShaderProgram(ShaderInfo shader) {
-		String vertex = shader.vertex;
-		String fragment = shader.fragment;
-		if (vertex != null && fragment != null) {
-			String vertexCode = FileUtils.getText(Config.getShadersDir() + vertex);
-			String fragmentCode = FileUtils.getText(Config.getShadersDir() + fragment);
-			if (createProgram(vertexCode, fragmentCode) != -1) {
-				glReleaseShaderCompiler();
-				return;
+		if (shader != null) {
+			String vertex = shader.vertex;
+			String fragment = shader.fragment;
+			if (vertex != null && fragment != null) {
+				String vertexCode = FileUtils.getText(shader.dir + vertex);
+				String fragmentCode = FileUtils.getText(shader.dir + fragment);
+				if (createProgram(vertexCode, fragmentCode) != -1) {
+					glReleaseShaderCompiler();
+					return;
+				}
+				ViewHandler.postEvent(() -> Toast.makeText(ContextHolder.getActivity(),
+						"Error loading shader - default shader is used!",
+						Toast.LENGTH_LONG).show());
 			}
-			ViewHandler.postEvent(() -> Toast.makeText(ContextHolder.getActivity(),
-					"Error loading shader - default shader is used!",
-					Toast.LENGTH_LONG).show());
 		}
 		String vertexCode = ContextHolder.getAssetAsString(VERTEX);
 		String fragmentCode = ContextHolder.getAssetAsString(FRAGMENT);
