@@ -19,7 +19,9 @@ package ru.playsoftware.j2meloader.applist;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.Bitmap;
@@ -304,6 +306,19 @@ public class AppsListFragment extends ListFragment {
 								.setIntent(launchIntent)
 								.setShortLabel(appItem.getTitle());
 				if (bitmap != null) {
+					int width = bitmap.getWidth();
+					int height = bitmap.getHeight();
+					ActivityManager am = (ActivityManager) requireContext()
+							.getSystemService(Context.ACTIVITY_SERVICE);
+					int iconSize = am.getLauncherLargeIconSize();
+					if (width > height) {
+						//noinspection SuspiciousNameCombination
+						bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
+					} else if (width < height) {
+						//noinspection SuspiciousNameCombination
+						bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
+					}
+					bitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
 					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
 				} else {
 					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.mipmap.ic_launcher));
