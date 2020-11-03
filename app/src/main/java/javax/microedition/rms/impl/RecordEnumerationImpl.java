@@ -25,6 +25,8 @@
 package javax.microedition.rms.impl;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.microedition.rms.InvalidRecordIDException;
@@ -93,7 +95,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 			throw new InvalidRecordIDException();
 		}
 
-		byte[] result = enumerationRecords.elementAt(currentRecord).value;
+		byte[] result = enumerationRecords.elementAt(currentRecord).value.clone();
 		currentRecord++;
 
 		return result;
@@ -122,7 +124,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 		currentRecord--;
 
-		return enumerationRecords.elementAt(currentRecord).value;
+		return enumerationRecords.elementAt(currentRecord).value.clone();
 	}
 
 	@Override
@@ -157,26 +159,14 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		//
 		// filter
 		//
-		synchronized (recordStoreImpl) {
-			try {
-				int recordId = 1;
-				int i = 0;
-				while (i < recordStoreImpl.getNumRecords()) {
-					try {
-						byte[] data = recordStoreImpl.getRecord(recordId);
-						i++;
-						if (filter != null && !filter.matches(data)) {
-							recordId++;
-							continue;
-						}
-						enumerationRecords.add(new EnumerationRecord(recordId, data));
-					} catch (InvalidRecordIDException e) {
-						e.printStackTrace();
-					}
-					recordId++;
+		synchronized (recordStoreImpl.records) {
+			HashMap<Integer, byte[]> records = recordStoreImpl.records;
+			for (Map.Entry<Integer, byte[]> e : records.entrySet()) {
+				byte[] data = e.getValue();
+				if (filter != null && !filter.matches(data)) {
+					continue;
 				}
-			} catch (RecordStoreException e) {
-				e.printStackTrace();
+				enumerationRecords.add(new EnumerationRecord(e.getKey(), data));
 			}
 		}
 
@@ -184,15 +174,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 		// sort
 		//
 		if (comparator != null) {
-			Collections.sort(enumerationRecords, (lhs, rhs) -> {
-				int compare = comparator.compare(lhs.value, rhs.value);
-				if (compare == RecordComparator.EQUIVALENT)
-					return 0;
-				else if (compare == RecordComparator.FOLLOWS)
-					return 1;
-				else
-					return -1;
-			});
+			Collections.sort(enumerationRecords, (lhs, rhs) -> comparator.compare(lhs.value, rhs.value));
 		}
 	}
 

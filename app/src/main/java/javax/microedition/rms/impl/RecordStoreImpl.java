@@ -30,7 +30,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.microedition.rms.InvalidRecordIDException;
@@ -50,9 +50,10 @@ public class RecordStoreImpl extends RecordStore {
 	private static final byte versionMajor = 0x03;
 	private static final byte versionMinor = 0x00;
 
+	final HashMap<Integer, byte[]> records = new HashMap<>();
+
 	private final RecordStoreManager recordStoreManager;
 	private final Vector<RecordListener> recordListeners = new Vector<>();
-	private final Hashtable<Integer, byte[]> records = new Hashtable<>();
 
 	private int lastRecordId = 0;
 	private int size = 0;
@@ -91,7 +92,8 @@ public class RecordStoreImpl extends RecordStore {
 		dis.readInt(); // TODO AuthMode
 		dis.readByte(); // TODO Writable
 		size = dis.readInt();
-
+		if (dis.available() >= 4)
+			lastRecordId = dis.readInt();
 	}
 
 	void readRecord(DataInputStream dis) throws IOException {
@@ -100,9 +102,8 @@ public class RecordStoreImpl extends RecordStore {
 			lastRecordId = recordId;
 		}
 		dis.readInt(); // TODO Tag
-		int len = dis.readInt();
-		byte[] data = new byte[len];
-		dis.readFully(data, 0, len);
+		byte[] data = new byte[dis.readInt()];
+		dis.readFully(data, 0, data.length);
 		this.records.put(recordId, data);
 	}
 
@@ -118,6 +119,7 @@ public class RecordStoreImpl extends RecordStore {
 		dos.writeInt(0); // TODO AuthMode
 		dos.writeByte(0); // TODO Writable
 		dos.writeInt(size);
+		dos.writeInt(lastRecordId);
 	}
 
 	void writeRecord(DataOutputStream dos, int recordId) throws IOException {
@@ -140,23 +142,25 @@ public class RecordStoreImpl extends RecordStore {
 		return open;
 	}
 
-	void setOpen(boolean open) {
-		this.open = open;
+	void setOpen() {
+		this.open = true;
 	}
 
 	@Override
 	public void closeRecordStore() throws RecordStoreException {
-		if (!open) {
-			throw new RecordStoreNotOpenException();
+		synchronized (records) {
+			if (!open) {
+				throw new RecordStoreNotOpenException();
+			}
+
+			if (recordListeners != null) {
+				recordListeners.removeAllElements();
+			}
+
+			records.clear();
+
+			open = false;
 		}
-
-		if (recordListeners != null) {
-			recordListeners.removeAllElements();
-		}
-
-		records.clear();
-
-		open = false;
 		Log.d(TAG, "RecordStore " + recordStoreName + " closed");
 	}
 
@@ -175,7 +179,7 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		synchronized (this) {
+		synchronized (records) {
 			return version;
 		}
 	}
@@ -197,20 +201,12 @@ public class RecordStoreImpl extends RecordStore {
 
 		// TODO include size overhead such as the data structures used to hold the state of the record store
 
-		// Preload all records
-		enumerateRecords(null, null, false);
-
 		int result = 0;
-		Enumeration<Integer> keys = records.keys();
-		while (keys.hasMoreElements()) {
-			int key = (Integer) keys.nextElement();
-			try {
-				byte[] data = getRecord(key);
+		synchronized (records) {
+			for (byte[] data : records.values()) {
 				if (data != null) {
 					result += data.length;
 				}
-			} catch (RecordStoreException e) {
-				e.printStackTrace();
 			}
 		}
 		return result;
@@ -231,7 +227,7 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		synchronized (this) {
+		synchronized (records) {
 			return lastModified;
 		}
 	}
@@ -254,11 +250,10 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		// lastRecordId needs to hold correct number, all records have to be preloaded
-		enumerateRecords(null, null, false);
-
-		synchronized (this) {
-			return lastRecordId + 1;
+		synchronized (records) {
+			int next = lastRecordId + 1;
+			if (next < 0 ) next = 0;
+			return next;
 		}
 	}
 
@@ -274,20 +269,17 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreFullException();
 		}
 
-		// lastRecordId needs to hold correct number, all records have to be preloaded
-		enumerateRecords(null, null, false);
-
 		byte[] recordData = new byte[numBytes];
 		if (data != null) {
 			System.arraycopy(data, offset, recordData, 0, numBytes);
 		}
 
 		int nextRecordID = getNextRecordID();
-		synchronized (this) {
+		synchronized (records) {
 			records.put(nextRecordID, recordData);
 			version++;
 			lastModified = System.currentTimeMillis();
-			lastRecordId++;
+			lastRecordId = nextRecordID;
 			size++;
 		}
 
@@ -305,10 +297,10 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		synchronized (this) {
-			// throws InvalidRecordIDException when no record found
-			getRecord(recordId);
-			records.remove(recordId);
+		synchronized (records) {
+			if (records.remove(recordId) == null) {
+				throw new InvalidRecordIDException();
+			}
 			version++;
 			lastModified = System.currentTimeMillis();
 			size--;
@@ -326,14 +318,10 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		synchronized (this) {
+		synchronized (records) {
 			byte[] data = records.get(recordId);
 			if (data == null) {
-				recordStoreManager.loadRecord(this, recordId);
-				data = records.get(recordId);
-				if (data == null) {
-					throw new InvalidRecordIDException();
-				}
+				throw new InvalidRecordIDException();
 			}
 
 			return data.length;
@@ -342,13 +330,18 @@ public class RecordStoreImpl extends RecordStore {
 
 	@Override
 	public int getRecord(int recordId, byte[] buffer, int offset) throws RecordStoreException {
-		int recordSize;
-		synchronized (this) {
-			recordSize = getRecordSize(recordId);
-			System.arraycopy(records.get(recordId), 0, buffer, offset, recordSize);
+		if (!open) {
+			throw new RecordStoreNotOpenException();
 		}
-
-		fireRecordListener(ExtendedRecordListener.RECORD_READ, recordId);
+		int recordSize;
+		synchronized (records) {
+			byte[] data = records.get(recordId);
+			if (data == null) {
+				throw new InvalidRecordIDException();
+			}
+			recordSize = data.length;
+			System.arraycopy(data, 0, buffer, offset, recordSize);
+		}
 
 		return recordSize;
 	}
@@ -359,14 +352,13 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		byte[] data;
-
-		synchronized (this) {
-			data = new byte[getRecordSize(recordId)];
-			getRecord(recordId, data, 0);
+		synchronized (records) {
+			byte[] data = records.get(recordId);
+			if (data == null) {
+				throw new InvalidRecordIDException();
+			}
+			return data.length < 1 ? null : data.clone();
 		}
-
-		return data.length < 1 ? null : data;
 	}
 
 	@Override
@@ -384,9 +376,10 @@ public class RecordStoreImpl extends RecordStore {
 		byte[] recordData = new byte[numBytes];
 		System.arraycopy(newData, offset, recordData, 0, numBytes);
 
-		synchronized (this) {
-			// throws InvalidRecordIDException when no record found
-			getRecord(recordId);
+		synchronized (records) {
+			if (!records.containsKey(recordId)) {
+				throw new InvalidRecordIDException();
+			}
 			records.put(recordId, recordData);
 			version++;
 			lastModified = System.currentTimeMillis();
