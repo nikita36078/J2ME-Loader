@@ -82,14 +82,14 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				return true;
-			case R.id.add:
-				EditNameAlert.newInstance(getString(R.string.enter_name), -1)
-						.show(getSupportFragmentManager(), "alert_create_profile");
-				return true;
+		int itemId = item.getItemId();
+		if (itemId == android.R.id.home) {
+			finish();
+			return true;
+		} else if (itemId == R.id.add) {
+			EditNameAlert.newInstance(getString(R.string.enter_name), -1)
+					.show(getSupportFragmentManager(), "alert_create_profile");
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -111,25 +111,23 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int index = info.position;
 		final Profile profile = adapter.getItem(index);
-		switch (item.getItemId()) {
-			case R.id.action_context_default:
-				preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, profile.getName()).apply();
-				adapter.setDefault(profile);
-				return true;
-			case R.id.action_context_edit:
-				final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
-						Uri.parse(profile.getName()),
-						getApplicationContext(), ConfigActivity.class);
-				startActivity(intent);
-				return true;
-			case R.id.action_context_rename:
-				EditNameAlert.newInstance(getString(R.string.enter_new_name), index)
-						.show(getSupportFragmentManager(), "alert_rename_profile");
-				break;
-			case R.id.action_context_delete:
-				profile.delete();
-				adapter.removeItem(index);
-				break;
+		int itemId = item.getItemId();
+		if (itemId == R.id.action_context_default) {
+			preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, profile.getName()).apply();
+			adapter.setDefault(profile);
+			return true;
+		} else if (itemId == R.id.action_context_edit) {
+			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
+					Uri.parse(profile.getName()),
+					getApplicationContext(), ConfigActivity.class);
+			startActivity(intent);
+			return true;
+		} else if (itemId == R.id.action_context_rename) {
+			EditNameAlert.newInstance(getString(R.string.enter_new_name), index)
+					.show(getSupportFragmentManager(), "alert_rename_profile");
+		} else if (itemId == R.id.action_context_delete) {
+			profile.delete();
+			adapter.removeItem(index);
 		}
 		return super.onContextItemSelected(item);
 	}

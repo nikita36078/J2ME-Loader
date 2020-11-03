@@ -80,13 +80,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 	public static final String CONFIG_PATH_KEY = "configPath";
 	public static final String MIDLET_NAME_KEY = "midletName";
-	private static final int[] SCREEN_SIZES = {128, 176, 220, 320};
-	private static final int[] FONT_SIZES = {
-			9, 13, 15, // 128
-			13, 15, 20, // 176
-			15, 18, 22, // 220
-			18, 22, 26, // 320
-	};
 
 	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
@@ -110,6 +103,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfFontSizeMedium;
 	protected EditText tfFontSizeLarge;
 	protected Checkable cxFontSizeInSP;
+	protected Checkable cxFontAA;
 	protected CompoundButton cxShowKeyboard;
 
 	private View rootInputConfig;
@@ -133,10 +127,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	protected ArrayList<String> screenPresets = new ArrayList<>();
 
-	protected ArrayList<Integer> fontSmall;
-	protected ArrayList<Integer> fontMedium;
-	protected ArrayList<Integer> fontLarge;
-	protected ArrayList<String> fontAdapter;
+	protected ArrayList<int[]> fontPresetValues = new ArrayList<>();
+	protected ArrayList<String> fontPresetTitles = new ArrayList<>();
 
 	private File keylayoutFile;
 	private File dataDir;
@@ -238,6 +230,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
 		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
+		cxFontAA = findViewById(R.id.cxFontAA);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
 
 		rootInputConfig = findViewById(R.id.rootInputConfig);
@@ -259,11 +252,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKOutline = findViewById(R.id.tfVKOutline);
 
 		fillScreenSizePresets(display.getWidth(), display.getHeight());
-
-		fontSmall = new ArrayList<>();
-		fontMedium = new ArrayList<>();
-		fontLarge = new ArrayList<>();
-		fontAdapter = new ArrayList<>();
 
 		addFontSizePreset("128 x 128", 9, 13, 15);
 		addFontSizePreset("128 x 160", 13, 15, 20);
@@ -586,10 +574,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void addFontSizePreset(String title, int small, int medium, int large) {
-		fontSmall.add(small);
-		fontMedium.add(medium);
-		fontLarge.add(large);
-		fontAdapter.add(title);
+		fontPresetValues.add(new int[]{small, medium, large});
+		fontPresetTitles.add(title);
 	}
 
 	private int parseInt(String s) {
@@ -630,6 +616,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium.setText(Integer.toString(params.fontSizeMedium));
 		tfFontSizeLarge.setText(Integer.toString(params.fontSizeLarge));
 		cxFontSizeInSP.setChecked(params.fontApplyDimensions);
+		cxFontAA.setChecked(params.fontAA);
 		boolean showVk = params.showKeyboard;
 		cxShowKeyboard.setChecked(showVk);
 		groupVkConfig.setVisibility(showVk ? View.VISIBLE : View.GONE);
@@ -695,19 +682,20 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			try {
 				params.fontSizeSmall = Integer.parseInt(tfFontSizeSmall.getText().toString());
 			} catch (NumberFormatException e) {
-				params.fontSizeSmall = getFontSizeForResolution(0, width, height);
+				params.fontSizeSmall = 0;
 			}
 			try {
 				params.fontSizeMedium = Integer.parseInt(tfFontSizeMedium.getText().toString());
 			} catch (NumberFormatException e) {
-				params.fontSizeMedium = getFontSizeForResolution(1, width, height);
+				params.fontSizeMedium = 0;
 			}
 			try {
 				params.fontSizeLarge = Integer.parseInt(tfFontSizeLarge.getText().toString());
 			} catch (NumberFormatException e) {
-				params.fontSizeLarge = getFontSizeForResolution(2, width, height);
+				params.fontSizeLarge = 0;
 			}
 			params.fontApplyDimensions = cxFontSizeInSP.isChecked();
+			params.fontAA = cxFontAA.isChecked();
 			params.showKeyboard = cxShowKeyboard.isChecked();
 			params.vkFeedback = cxVKFeedback.isChecked();
 			params.vkForceOpacity = cxVKForceOpacity.isChecked();
@@ -767,18 +755,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			sb.append(line).append('\n');
 		}
 		return sb.toString();
-	}
-
-	private int getFontSizeForResolution(int sizeType, int width, int height) {
-		int size = Math.max(width, height);
-		if (size > 0) {
-			for (int i = 0; i < SCREEN_SIZES.length; i++) {
-				if (SCREEN_SIZES[i] >= size) {
-					return FONT_SIZES[i * 3 + sizeType];
-				}
-			}
-		}
-		return FONT_SIZES[FONT_SIZES.length - (3 - sizeType)];
 	}
 
 	@Override
@@ -845,11 +821,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		} else if (id == R.id.cmdFontSizePresets) {
 			new AlertDialog.Builder(this)
 					.setTitle(getString(R.string.SIZE_PRESETS))
-					.setItems(fontAdapter.toArray(new String[0]),
+					.setItems(fontPresetTitles.toArray(new String[0]),
 							(dialog, which) -> {
-								tfFontSizeSmall.setText(Integer.toString(fontSmall.get(which)));
-								tfFontSizeMedium.setText(Integer.toString(fontMedium.get(which)));
-								tfFontSizeLarge.setText(Integer.toString(fontLarge.get(which)));
+								int[] values = fontPresetValues.get(which);
+								tfFontSizeSmall.setText(Integer.toString(values[0]));
+								tfFontSizeMedium.setText(Integer.toString(values[1]));
+								tfFontSizeLarge.setText(Integer.toString(values[2]));
 							})
 					.show();
 		} else if (id == R.id.cmdScreenBack) {

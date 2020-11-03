@@ -196,10 +196,23 @@ public class MicroLoader {
 			Canvas.setShowFps(params.showFps);
 			Canvas.setLimitFps(params.fpsLimit);
 
-			Font.setSize(Font.SIZE_SMALL, params.fontSizeSmall);
-			Font.setSize(Font.SIZE_MEDIUM, params.fontSizeMedium);
-			Font.setSize(Font.SIZE_LARGE, params.fontSizeLarge);
+			int fontSizeSmall = params.fontSizeSmall;
+			if (fontSizeSmall <= 0) {
+				fontSizeSmall = Font.getFontSizeForResolution(0, screenWidth, screenHeight);
+			}
+			int fontSizeMedium = params.fontSizeMedium;
+			if (fontSizeMedium <= 0) {
+				fontSizeMedium = Font.getFontSizeForResolution(1, screenWidth, screenHeight);
+			}
+			int fontSizeLarge = params.fontSizeLarge;
+			if (fontSizeLarge <= 0) {
+				fontSizeLarge = Font.getFontSizeForResolution(2, screenWidth, screenHeight);
+			}
+			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
+			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
+			Font.setSize(Font.SIZE_LARGE, fontSizeLarge);
 			Font.setApplyDimensions(params.fontApplyDimensions);
+			Font.setAntiAlias(params.fontAA);
 
 			Canvas.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params));
 			Canvas.setHasTouchInput(params.touchInput);

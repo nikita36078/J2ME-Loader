@@ -93,6 +93,9 @@ public class ProfileModel {
 	@SerializedName("FontApplyDimensions")
 	public boolean fontApplyDimensions;
 
+	@SerializedName("FontAntiAlias")
+	public boolean fontAA;
+
 	@SerializedName("TouchInput")
 	public boolean touchInput;
 
@@ -160,6 +163,7 @@ public class ProfileModel {
 		fontSizeSmall = 18;
 		fontSizeMedium = 22;
 		fontSizeLarge = 26;
+		fontAA = true;
 
 		showKeyboard = true;
 		touchInput = true;

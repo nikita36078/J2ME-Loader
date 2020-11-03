@@ -137,9 +137,23 @@ public class ProfilesManager {
 			}
 		}
 		if (params != null) {
-			if (params.version < 1) {
-				ProfilesManager.updateSystemProperties(params);
-				params.version = 1;
+			if (params.version < 2) {
+				if (params.version < 1) {
+					ProfilesManager.updateSystemProperties(params);
+				}
+				int w = params.screenWidth;
+				int h = params.screenHeight;
+				if (w > 0) {
+					if (h > 0) {
+						params.fontAA = Math.min(w, h) >= 240;
+					} else {
+						params.fontAA = w >= 240;
+					}
+				} else {
+					params.fontAA = (h <= 0) || (h >= 240);
+				}
+
+				params.version = 2;
 				ProfilesManager.saveConfig(params);
 			}
 		}

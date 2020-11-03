@@ -482,6 +482,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cmdFontSizePresets" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/cxFontAA"
+                style="@style/SwitchStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_config_row"
+                android:text="@string/PREF_FONT_ANTI_ALIASING"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cxFontSizeInSP" />
+
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Font -->
 
         <!-- Input -->
