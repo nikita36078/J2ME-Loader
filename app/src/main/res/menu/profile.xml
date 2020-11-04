@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_context_default"
+        android:title="@string/set_as_default"
+        app:tooltipText="@string/set_default_profile_description" />
+    <item
+        android:id="@+id/action_context_edit"
+        android:title="@string/edit" />
+    <item
+        android:id="@+id/action_context_rename"
+        android:title="@string/action_context_rename" />
+    <item
+        android:id="@+id/action_context_delete"
+        android:title="@string/action_context_delete" />
+</menu>

@@ -17,6 +17,8 @@
 
 package javax.microedition.lcdui.event;
 
+import android.util.Log;
+
 /**
  * The base class for all events.
  */
@@ -40,8 +42,14 @@ public abstract class Event implements Runnable {
 	 */
 	@Override
 	public void run() {
-		process();
-		recycle();
+		try {
+			process();
+		} catch (Exception e) {
+			Log.e(getClass().getName(), "process: ", e);
+		} finally {
+			leaveQueue();
+			recycle();
+		}
 	}
 
 	/**

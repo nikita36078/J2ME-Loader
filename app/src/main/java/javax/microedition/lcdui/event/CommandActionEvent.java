@@ -25,7 +25,7 @@ import javax.microedition.lcdui.ItemCommandListener;
 import javax.microedition.util.ArrayStack;
 
 public class CommandActionEvent extends Event {
-	private static ArrayStack<CommandActionEvent> recycled = new ArrayStack<>();
+	private static final ArrayStack<CommandActionEvent> recycled = new ArrayStack<>();
 
 	private CommandListener listener;
 	private ItemCommandListener itemlistener;

@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import android.graphics.Rect;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,9 +48,6 @@ public class GraphicsTest {
 	public void drawLine() {
 		Image image = Image.createImage(testWidth, testHeight);
 		Graphics graphics = image.getGraphics();
-
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 
 		graphics.setColor(BLUE);
 		graphics.setStrokeStyle(Graphics.DOTTED);
@@ -83,7 +82,6 @@ public class GraphicsTest {
 		drawGraphics.fillRect(0, 0, 5, 5);
 
 		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 		graphics.drawImage(drawImage, 0, 0, 0);
 		graphics.drawImage(drawImage, 2, 8, 0);
 
@@ -121,7 +119,6 @@ public class GraphicsTest {
 				r, r, r, r, r
 		};
 		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 		graphics.drawRGB(rgb, 0, 5, 0, 0, 5, 5, true);
 		graphics.drawRGB(rgb, 9, 4, 6, 6, 4, 4, false);
 
@@ -155,8 +152,6 @@ public class GraphicsTest {
 		Graphics drawGraphics = drawImage.getGraphics();
 		drawGraphics.fillRect(0, 0, 5, 5);
 
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 		graphics.drawRegion(drawImage, 0, 0, 2, 2, 0, 5, 5, 0);
 
 		final int[] spotsToValidate = {
@@ -177,9 +172,6 @@ public class GraphicsTest {
 	public void setClip() {
 		Image image = Image.createImage(testWidth, testHeight);
 		Graphics graphics = image.getGraphics();
-
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 
 		graphics.setClip(0, 0, 5, 5);
 		graphics.setColor(RED);
@@ -207,15 +199,28 @@ public class GraphicsTest {
 				9, 10, WHITE
 		};
 		assertTrue(validate(image, spotsToValidate));
+
+		graphics.setClip(0, 0, 100, 100);
+		Rect canvasClip = graphics.getCanvas().getClipBounds();
+		Rect clip = new Rect(graphics.getClipX(), graphics.getClipY(),
+				graphics.getClipX() + graphics.getClipWidth(),
+				graphics.getClipY() + graphics.getClipHeight());
+		assertTrue(canvasClip.equals(clip));
+
+		graphics.translate(10, 10);
+		graphics.setClip(0, 0, 5, 5);
+		graphics.getCanvas().getClipBounds(canvasClip);
+		clip.set(graphics.getClipX(), graphics.getClipY(),
+				graphics.getClipX() + graphics.getClipWidth(),
+				graphics.getClipY() + graphics.getClipHeight());
+		graphics.translate(-10, -10);
+		assertTrue(canvasClip.equals(clip));
 	}
 
 	@Test
 	public void clipRect() {
 		Image image = Image.createImage(testWidth, testHeight);
 		Graphics graphics = image.getGraphics();
-
-		graphics.setColor(WHITE);
-		graphics.fillRect(0, 0, testWidth, testHeight);
 
 		graphics.setClip(0, 0, 10, 10);
 		graphics.clipRect(0, 0, 5, 5);
@@ -232,6 +237,16 @@ public class GraphicsTest {
 				4, 5, WHITE,
 		};
 		assertTrue(validate(image, spotsToValidate));
+
+		graphics.translate(20, 10);
+		graphics.setClip(0, 0, 10, 10);
+		graphics.clipRect(10, 10, 20, 20);
+		Rect canvasClip = graphics.getCanvas().getClipBounds();
+		Rect clip = new Rect(graphics.getClipX(), graphics.getClipY(),
+				graphics.getClipX() + graphics.getClipWidth(),
+				graphics.getClipY() + graphics.getClipHeight());
+		graphics.translate(-20, -10);
+		assertTrue(canvasClip.equals(clip));
 	}
 
 	private boolean validate(Image image, final int[] spotsToValidate) {

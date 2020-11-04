@@ -46,7 +46,7 @@ public class FigureLayout {
 		this.myCenterY = cy;
 	}
 
-	public final AffineTrans getAffineTrans() {
+	public AffineTrans getAffineTrans() {
 		return this.myAffineNow;
 	}
 

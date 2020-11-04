@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="donation_google_catalog_values" translatable="false">
+        <item>1 USD</item>
+        <item>2 USD</item>
+        <item>5 USD</item>
+        <item>10 USD</item>
+    </string-array>
+    <string-array name="pref_theme_entries">
+        <item>@string/pref_theme_light</item>
+        <item>@string/pref_theme_night</item>
+    </string-array>
+    <string-array name="pref_theme_values" translatable="false">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+    <string-array name="pref_app_sort_entries">
+        <item>@string/pref_app_sort_name</item>
+        <item>@string/pref_app_sort_date</item>
+    </string-array>
+    <string-array name="pref_app_sort_values" translatable="false">
+        <item>name</item>
+        <item>date</item>
+    </string-array>
+    <string-array name="PREF_ORIENTATION_ENTRIES">
+        <item>@string/pref_orientation_default</item>
+        <item>@string/pref_orientation_auto</item>
+        <item>@string/pref_orientation_port</item>
+        <item>@string/pref_orientation_land</item>
+    </string-array>
+    <string-array name="PREF_VK_TYPE_ENTRIES">
+        <item>@string/pref_vk_type_custom</item>
+        <item>@string/pref_vk_type_phone</item>
+        <item>@string/pref_vk_type_phone_arrows</item>
+    </string-array>
+    <string-array name="pref_button_shape_entries">
+        <item>@string/pref_button_shape_oval</item>
+        <item>@string/pref_button_shape_rect</item>
+        <item>@string/pref_button_shape_round</item>
+    </string-array>
+    <string-array name="PREF_LAYOUT_ENTRIES" translatable="false">
+        <item>Nokia/SE</item>
+        <item>Siemens</item>
+        <item>Motorola</item>
+    </string-array>
+    <string-array name="pref_graphics_mode_entries" tools:ignore="InconsistentArrays">
+        <item>@string/pref_graphics_software</item>
+        <item>@string/pref_graphics_hw_gles</item>
+        <item>@string/pref_graphics_hw_view</item>
+    </string-array>
+</resources>

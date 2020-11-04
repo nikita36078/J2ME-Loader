@@ -88,6 +88,9 @@ public class FileSystemFileConnection implements FileConnection {
 		if (fullPath.length() == 0) {
 			throw new IOException("Invalid path " + name);
 		}
+		// Replace Siemens root
+		fullPath = fullPath.replaceAll("^" + ROOT_INTERNAL_DIR_SIEMENS_2, ROOT_INTERNAL_DIR);
+
 		int rootEnd = fullPath.indexOf(DIR_SEP);
 		isRoot = ((rootEnd == -1) || (rootEnd == fullPath.length() - 1));
 		fsRoot = getRoot(fullPath);
@@ -95,14 +98,13 @@ public class FileSystemFileConnection implements FileConnection {
 		isDirectory = file.isDirectory();
 	}
 
-
 	private static File getRoot(String path) {
 		File fsRoot = new File(System.getProperty("user.home"));
 		return fsRoot;
 	}
 
 	static Enumeration listRoots() {
-		Vector list = new Vector();
+		Vector<String> list = new Vector<>();
 		list.add(ROOT_INTERNAL_DIR);
 		return list.elements();
 	}

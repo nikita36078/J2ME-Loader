@@ -81,7 +81,7 @@ public class AppItem {
 	}
 
 	public String getPathExt() {
-		return Config.APP_DIR + path;
+		return Config.getAppDir() + path;
 	}
 
 	public void setImagePathExt(String imagePath) {
@@ -92,7 +92,7 @@ public class AppItem {
 	}
 
 	public String getImagePathExt() {
-		return Config.APP_DIR + imagePath;
+		return Config.getAppDir() + imagePath;
 	}
 
 	public String getAuthorExt(Context context) {

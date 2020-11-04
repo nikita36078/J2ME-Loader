@@ -28,13 +28,14 @@ import javax.microedition.io.Connector;
 import javax.microedition.media.control.RecordControl;
 import javax.microedition.util.ContextHolder;
 
+import ru.playsoftware.j2meloader.util.IOUtils;
+
 public class RecordPlayer extends BasePlayer implements RecordControl {
 
 	private static final int RECORD_CLOSED = 0;
 	private static final int RECORD_PREPARED = 1;
 	private static final int RECORD_STARTED = 2;
 	private static final int RECORD_STOPPED = 3;
-	private static final int BUFFER_SIZE = 2048;
 
 	private HashMap<String, Control> controls;
 	private MediaRecorder recorder;
@@ -122,12 +123,8 @@ public class RecordPlayer extends BasePlayer implements RecordControl {
 		stopRecord();
 
 		if (state != RECORD_CLOSED) {
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int currentByte;
 			FileInputStream fis = new FileInputStream(outputFile);
-			while ((currentByte = fis.read(buffer, 0, BUFFER_SIZE)) != -1) {
-				stream.write(buffer, 0, currentByte);
-			}
+			IOUtils.copy(fis, stream);
 			fis.close();
 			stream.close();
 			outputFile.delete();

@@ -32,11 +32,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
+import javax.microedition.util.ContextHolder;
 
-@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {HockeySenderFactory.class})
+import ru.playsoftware.j2meloader.crashes.AppCenterSenderFactory;
+
+@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {AppCenterSenderFactory.class},
+		parallel = false)
 @AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
-		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = R.string.CANCEL_CMD,
+		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = android.R.string.cancel,
 		resTheme = R.style.Theme_AppCompat_Dialog)
 public class EmulatorApplication extends Application {
 	private static final String[] VALID_SIGNATURES = {
@@ -49,7 +52,9 @@ public class EmulatorApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		ContextHolder.setApplication(this);
 		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) ACRA.init(this);
+		ACRA.getErrorReporter().putCustomData("Flavor", BuildConfig.FLAVOR);
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")

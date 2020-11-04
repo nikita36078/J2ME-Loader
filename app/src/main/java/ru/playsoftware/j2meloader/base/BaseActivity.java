@@ -19,10 +19,10 @@ package ru.playsoftware.j2meloader.base;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
 @SuppressLint("Registered")

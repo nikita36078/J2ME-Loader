@@ -56,7 +56,7 @@ public class DirectUtils {
 	 */
 	public static Image createImage(byte imageData[], int imageOffset, int imageLength) {
 		Image source = Image.createImage(imageData, imageOffset, imageLength);
-		Image target = Image.createImage(source.getWidth(), source.getHeight());
+		Image target = Image.createTransparentImage(source.getWidth(), source.getHeight());
 		target.getGraphics().drawImage(source, 0, 0, 0);
 		return target;
 	}
@@ -70,7 +70,7 @@ public class DirectUtils {
 	 * @return the created image
 	 */
 	public static Image createImage(int width, int height, int argb) {
-		Image img = Image.createImage(width, height);
+		Image img = Image.createTransparentImage(width, height);
 		Graphics g = img.getGraphics();
 		g.setColorAlpha(argb);
 		g.fillRect(0, 0, width, height);

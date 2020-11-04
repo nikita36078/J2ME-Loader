@@ -26,11 +26,11 @@ class Defs {
 	static boolean supportLocalCameraLighting = false;
 
 	static int MAX_LIGHTS = 8;
-	static int MAX_TEXTURE_DIMENSION = 1024;
+	static int MAX_TEXTURE_DIMENSION = 4096;
 	static int MAX_TRANSFORMS_PER_VERTEX = 4;
-	static int MAX_VIEWPORT_WIDTH = 1024;
-	static int MAX_VIEWPORT_HEIGHT = 1024;
-	static int MAX_VIEWPORT_DIMENSION = 1024;
+	static int MAX_VIEWPORT_WIDTH = 4096;
+	static int MAX_VIEWPORT_HEIGHT = 4096;
+	static int MAX_VIEWPORT_DIMENSION = 4096;
 	static int NUM_TEXTURE_UNITS = 2;
 
 	/* Constants used in various setters/getters */

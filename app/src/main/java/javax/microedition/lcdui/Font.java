@@ -19,7 +19,10 @@ package javax.microedition.lcdui;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+
+import java.util.Arrays;
 
 import javax.microedition.util.ContextHolder;
 
@@ -37,8 +40,8 @@ public class Font {
 	public static final int STYLE_PLAIN = 0;
 	public static final int STYLE_UNDERLINED = 4;
 
+	private static final int FONT_SMALL_SIZE = 14;
 	private static final int FONT_COUNT = 3 * 3 * (1 << 3);
-	private static final int SIZE_KEYBOARD = 22;
 	private static Font[] fonts = new Font[FONT_COUNT];
 
 	private static boolean applyDimensions = true;
@@ -47,9 +50,7 @@ public class Font {
 	public static void setApplyDimensions(boolean flag) {
 		applyDimensions = flag;
 
-		for (int i = 0; i < fonts.length; i++) {
-			fonts[i] = null;
-		}
+		Arrays.fill(fonts, null);
 	}
 
 	public static void setSize(int size, float value) {
@@ -70,17 +71,16 @@ public class Font {
 				return;
 		}
 
-		for (int i = 0; i < fonts.length; i++) {
-			fonts[i] = null;
-		}
+		Arrays.fill(fonts, null);
 	}
 
 	private Paint paint;
 	private int face, style, size;
 
-	public Font(Typeface face, int style, float size, boolean underline) {
+	private Font(Typeface face, int style, float size, boolean underline) {
 		if (applyDimensions) {
-			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, ContextHolder.getContext().getResources().getDisplayMetrics());
+			DisplayMetrics metrics = ContextHolder.getAppContext().getResources().getDisplayMetrics();
+			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
 		}
 
 		paint = new Paint();
@@ -88,15 +88,16 @@ public class Font {
 		paint.setTypeface(Typeface.create(face, style));
 		paint.setUnderlineText(underline);
 
-		paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
-		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
+		if (size < FONT_SMALL_SIZE) {
+			paint.setTextSize(size);
+		} else {
+			paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
+			paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
+		}
 	}
 
-	// Font for keyboard
-	public Font() {
-		paint = new Paint();
-		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getContext().getResources().getDisplayMetrics());
-		paint.setTextSize(size);
+	public static Font getFont(int fontSpecifier) {
+		return getDefaultFont();
 	}
 
 	public static Font getFont(int face, int style, int size) {
@@ -162,18 +163,14 @@ public class Font {
 		return getFont(FACE_SYSTEM, STYLE_PLAIN, SIZE_MEDIUM);
 	}
 
+	public boolean isSmall() {
+		return paint.getTextSize() < FONT_SMALL_SIZE;
+	}
+
 	public void copyInto(Paint target) {
 		target.setTypeface(paint.getTypeface());
 		target.setUnderlineText(paint.isUnderlineText());
 		target.setTextSize(paint.getTextSize());
-	}
-
-	public Typeface getTypeface() {
-		return paint.getTypeface();
-	}
-
-	public float getTextSize() {
-		return paint.getTextSize();
 	}
 
 	public int getFace() {
@@ -216,7 +213,7 @@ public class Font {
 		return (int) paint.measureText(str, i, i + i2);
 	}
 
-	public static int getFontIndex(int face, int style, int size) {
+	private static int getFontIndex(int face, int style, int size) {
 		switch (face) {
 			case FACE_MONOSPACE:
 				face = 0;
@@ -246,42 +243,6 @@ public class Font {
 		}
 
 		return ((face * 3 + size) << 3) + style;
-	}
-
-	public static int getFontFace(int index) {
-		index = (index >>> 3) / 3;
-
-		switch (index) {
-			case 0:
-				return FACE_MONOSPACE;
-
-			case 1:
-				return FACE_PROPORTIONAL;
-
-			case 2:
-			default:
-				return FACE_SYSTEM;
-		}
-	}
-
-	public static int getFontSize(int index) {
-		index = (index >>> 3) % 3;
-
-		switch (index) {
-			case 0:
-				return SIZE_SMALL;
-
-			case 1:
-			default:
-				return SIZE_MEDIUM;
-
-			case 2:
-				return SIZE_LARGE;
-		}
-	}
-
-	public static int getFontStyle(int index) {
-		return index & 7;
 	}
 
 	public boolean isBold() {

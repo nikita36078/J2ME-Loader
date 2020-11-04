@@ -27,6 +27,9 @@
 
 package org.microemu.android.asm;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -39,17 +42,15 @@ import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
+import ru.playsoftware.j2meloader.util.IOUtils;
 
 public class AndroidProducer {
 
-	private static final int BUFFER_SIZE = 2048;
-
-	private static byte[] instrument(final byte[] classFile, String classFileName, String encoding)
+	private static byte[] instrument(final byte[] classFile, String classFileName)
 			throws IllegalArgumentException {
 		ClassReader cr = new ClassReader(classFile);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassVisitor cv = new AndroidClassVisitor(cw, encoding);
+		ClassVisitor cv = new AndroidClassVisitor(cw);
 		if (!cr.getClassName().equals(classFileName)) {
 			throw new IllegalArgumentException("Class name does not match path");
 		}
@@ -58,33 +59,20 @@ public class AndroidProducer {
 		return cw.toByteArray();
 	}
 
-	public static void processJar(File jarInputFile, File jarOutputFile, String encoding) throws IOException {
+	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
 		HashMap<String, byte[]> resources = new HashMap<>();
 		ZipEntry zipEntry;
 		InputStream zis;
-		try (ZipFileCompat zip = new ZipFileCompat(jarInputFile);
-			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
-			byte[] buffer = new byte[BUFFER_SIZE];
-			while ((zipEntry = zip.getNextEntry()) != null) {
-				if (!zipEntry.isDirectory()) {
-					zis = zip.getInputStream(zipEntry);
-					String name = zipEntry.getName();
-					int size = 0;
-					int read;
-					int length = buffer.length;
-					while ((read = zis.read(buffer, size, length)) > 0) {
-						size += read;
-
-						length = BUFFER_SIZE;
-						if (size + length > buffer.length) {
-							byte[] newInputBuffer = new byte[size + length];
-							System.arraycopy(buffer, 0, newInputBuffer, 0, buffer.length);
-							buffer = newInputBuffer;
-						}
-					}
-					byte[] inBuffer = new byte[size];
-					System.arraycopy(buffer, 0, inBuffer, 0, size);
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
+			ZipFile zip = new ZipFile(jarInputFile);
+			for (FileHeader header : zip.getFileHeaders()) {
+				// Some zip entries have zero length names
+				if (header.getFileNameLength() > 0 && !header.isDirectory()) {
+					zis = zip.getInputStream(header);
+					String name = header.getFileName();
+					byte[] inBuffer = IOUtils.toByteArray(zis);
 					resources.put(name, inBuffer);
+					zis.close();
 				}
 			}
 
@@ -93,8 +81,7 @@ public class AndroidProducer {
 				byte[] outBuffer = inBuffer;
 				try {
 					if (name.endsWith(".class")) {
-						outBuffer = instrument(inBuffer,
-								name.replace(".class", ""), encoding);
+						outBuffer = instrument(inBuffer, name.replace(".class", ""));
 					}
 					zos.putNextEntry(new ZipEntry(name));
 					zos.write(outBuffer);

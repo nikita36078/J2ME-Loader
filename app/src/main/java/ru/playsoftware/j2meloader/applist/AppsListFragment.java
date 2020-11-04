@@ -21,13 +21,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -71,7 +69,7 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
-import ru.playsoftware.j2meloader.config.TemplatesActivity;
+import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
@@ -145,7 +143,8 @@ public class AppsListFragment extends ListFragment {
 	private void initDb() {
 		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
-				.subscribeOn(Schedulers.io()).publish();
+				.subscribeOn(Schedulers.io())
+				.publish();
 		listConnectableFlowable
 				.firstElement()
 				.subscribe(list -> AppUtils.updateDb(appRepository, list));
@@ -168,15 +167,13 @@ public class AppsListFragment extends ListFragment {
 
 	@SuppressLint("CheckResult")
 	private void convertJar(String path) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-		String encoding = sp.getString("pref_encoding", "ISO-8859-1");
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		dialog.setCancelable(false);
 		dialog.setMessage(getText(R.string.converting_message));
 		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path, encoding)
+		converter.convert(path)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SingleObserver<String>() {
@@ -189,8 +186,8 @@ public class AppsListFragment extends ListFragment {
 					public void onSuccess(String s) {
 						AppItem app = AppUtils.getApp(s);
 						appRepository.insert(app);
-						dialog.dismiss();
 						if (!isAdded()) return;
+						dialog.dismiss();
 						showStartDialog(app);
 					}
 
@@ -216,7 +213,7 @@ public class AppsListFragment extends ListFragment {
 		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 		if (drawable != null) dialog.setIcon(drawable);
 		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Config.startApp(getActivity(), app.getPath(), false);
+			Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
 		});
 		dialog.setNegativeButton(R.string.close, null);
 		dialog.show();
@@ -257,18 +254,18 @@ public class AppsListFragment extends ListFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
-				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					AppUtils.deleteApp(item);
 					appRepository.delete(item);
 				})
-				.setNegativeButton(android.R.string.no, null);
+				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Config.startApp(getActivity(), item.getPath(), false);
+		Config.startApp(getActivity(), item.getTitle(), item.getPath(), false);
 	}
 
 	@Override
@@ -288,6 +285,7 @@ public class AppsListFragment extends ListFragment {
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
 						Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
+				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
 								.setIntent(launchIntent)
@@ -303,7 +301,7 @@ public class AppsListFragment extends ListFragment {
 				showRenameDialog(index);
 				break;
 			case R.id.action_context_settings:
-				Config.startApp(getActivity(), appItem.getPath(), true);
+				Config.startApp(getActivity(), appItem.getTitle(), appItem.getPath(), true);
 				break;
 			case R.id.action_context_delete:
 				showDeleteDialog(index);
@@ -349,11 +347,11 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_settings:
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-				startActivity(settingsIntent);
+				startActivityForResult(settingsIntent, 0);
 				break;
-			case R.id.action_templates:
-				Intent templatesIntent = new Intent(getActivity(), TemplatesActivity.class);
-				startActivity(templatesIntent);
+			case R.id.action_profiles:
+				Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
+				startActivity(intentProfiles);
 				break;
 			case R.id.action_help:
 				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
@@ -378,5 +376,4 @@ public class AppsListFragment extends ListFragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 }

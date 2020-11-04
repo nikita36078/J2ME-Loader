@@ -21,6 +21,8 @@ import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
 
+import net.lingala.zip4j.exception.ZipException;
+
 import org.acra.ACRA;
 import org.microemu.android.asm.AndroidProducer;
 
@@ -55,9 +57,9 @@ public class JarConverter {
 		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
 	}
 
-	private File patchJar(File inputJar, String encoding) throws IOException {
+	private File patchJar(File inputJar) throws IOException {
 		File patchedJar = new File(tmpDir, inputJar.getName() + ".jar");
-		AndroidProducer.processJar(inputJar, patchedJar, encoding);
+		AndroidProducer.processJar(inputJar, patchedJar);
 		return patchedJar;
 	}
 
@@ -77,11 +79,7 @@ public class JarConverter {
 		connection.setConnectTimeout(15000);
 		InputStream inputStream = connection.getInputStream();
 		OutputStream outputStream = new FileOutputStream(outputJar);
-		byte[] buffer = new byte[2048];
-		int length;
-		while ((length = inputStream.read(buffer)) > 0) {
-			outputStream.write(buffer, 0, length);
-		}
+		IOUtils.copy(inputStream, outputStream);
 		inputStream.close();
 		outputStream.close();
 		connection.disconnect();
@@ -127,7 +125,7 @@ public class JarConverter {
 		return null;
 	}
 
-	public Single<String> convert(final String path, final String encoding) {
+	public Single<String> convert(final String path) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
 			String pathToJad = null;
@@ -167,7 +165,10 @@ public class JarConverter {
 			// Patch and unzip
 			File patchedJar;
 			try {
-				patchedJar = patchJar(inputJar, encoding);
+				patchedJar = patchJar(inputJar);
+			} catch (ZipException e) {
+				deleteTemp();
+				throw new ConverterException("Invalid jar", e);
 			} catch (Exception e) {
 				deleteTemp();
 				throw new ConverterException("Can't patch", e);
@@ -194,8 +195,12 @@ public class JarConverter {
 				throw new ConverterException("Invalid manifest");
 			}
 			// Remove invalid characters from app path
-			appDirPath = appDirPath.replace(":", "").replace("/", "");
-			appConverted = new File(Config.APP_DIR, appDirPath);
+			appDirPath = appDirPath.replaceAll("[?:\"*|/\\\\<>]", "");
+			if (appDirPath.isEmpty()) {
+				deleteTemp();
+				throw new ConverterException("Invalid manifest");
+			}
+			appConverted = new File(Config.getAppDir(), appDirPath);
 			// Create target directory
 			FileUtils.deleteDirectory(appConverted);
 			appConverted.mkdirs();

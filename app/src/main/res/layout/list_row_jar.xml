@@ -7,13 +7,15 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <!--  ListRow Left sied Thumbnail image -->
+    <!--  ListRow Left sided Thumbnail image -->
     <ImageView
         android:id="@+id/list_image"
         android:layout_width="36dip"
         android:layout_height="36dip"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -26,40 +28,39 @@
             android:id="@+id/list_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textAppearance="?android:textAppearance"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="MIDlet Name" />
 
         <!-- Author and version app -->
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha=".7"
-            android:layout_marginTop="2dp">
+            android:layout_gravity="bottom"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/list_author"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_toStartOf="@id/list_version"
-                android:layout_toLeftOf="@id/list_version"
+                android:layout_weight="1"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textAppearance="?android:textAppearance"
+                android:textColor="?textColorSecondary"
                 android:textSize="12sp"
-                tools:ignore="SmallSp" />
+                tools:text="Vendor: MIDlet Vendor ltd." />
 
             <TextView
                 android:id="@+id/list_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textAppearance="?android:textAppearance"
+                android:textColor="?textColorSecondary"
                 android:textSize="12sp"
-                tools:ignore="SmallSp" />
-        </RelativeLayout>
+                tools:text="Version: 1.0" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

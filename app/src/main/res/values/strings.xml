@@ -12,7 +12,7 @@
     <string name="more">More</string>
     <string name="search">Search</string>
     <string name="licenses">Licenses</string>
-    <string name="templates">Templates</string>
+    <string name="profiles">Profiles</string>
     <string name="save_log">Save log</string>
     <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.&lt;BR></string>
     <string name="help_message">&#8226; Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.&lt;BR>&#8226; Image flickering issues can be fixed by enabling the "Immediate processing mode" option.</string>
@@ -21,7 +21,7 @@
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2019 Nikita Shakarun</string>
+    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2020 Nikita Shakarun</string>
     <string name="author">Author: </string>
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
@@ -38,20 +38,14 @@
 
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
-    <string-array name="donation_google_catalog_values" translatable="false">
-        <item>1 USD</item>
-        <item>2 USD</item>
-        <item>5 USD</item>
-        <item>10 USD</item>
-    </string-array>
 
     <string name="START_CMD">Start</string>
     <string name="CANCEL_CMD">Cancel</string>
     <string name="CLEAR_DATA_CMD">Clear data</string>
     <string name="RESET_SETTINGS_CMD">Reset settings</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
-    <string name="LOAD_TEMPLATE_CMD">Load template</string>
-    <string name="SAVE_TEMPLATE_CMD">Save template</string>
+    <string name="load_profile">Load profile</string>
+    <string name="save_profile">Save profile</string>
     <string name="PREF_SCREEN_OPTIONS">Screen options</string>
     <string name="PREF_SCALE_RATIO">Scale(%)</string>
     <string name="PREF_SCALE_TO_FIT">Scale to fit</string>
@@ -72,8 +66,13 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_VK_FEEDBACK">Haptic feedback</string>
+    <string name="PREF_VK_FORCE_OPACITY">Force opacity for off-screen keys</string>
     <string name="PREF_TOUCH_INPUT">Touch input</string>
     <string name="PREF_HW_ACCELERATION">HW acceleration (unstable)</string>
+    <string name="pref_graphics_software">Software</string>
+    <string name="pref_graphics_hw_gles">HW acceleration (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">HW acceleration (window)</string>
+    <string name="pref_graphics_hw_surface">HW acceleration (surface)</string>
     <string name="PREF_VK_BACK">Buttons</string>
     <string name="PREF_VK_FORE">Labels</string>
     <string name="PREF_VK_OUTLINE">Outline</string>
@@ -94,26 +93,17 @@
     <string name="PREF_SYS_PROPS">System properties</string>
     <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
     <string name="PREF_ORIENTATION">Screen orientation</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>Default</item>
-        <item>Auto</item>
-        <item>Portrait</item>
-        <item>Landscape</item>
-    </string-array>
+    <string name="pref_orientation_default">Default</string>
+    <string name="pref_orientation_auto">Auto</string>
+    <string name="pref_orientation_port">Portrait</string>
+    <string name="pref_orientation_land">Landscape</string>
     <string name="error">Error</string>
     <string name="message_clear_data">Do you really want to clear app data?</string>
     <string name="PREF_VK_TYPE">Keyboard type</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>Customizable</item>
-        <item>Phone</item>
-        <item>Phone (arrows)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">Customizable</string>
+    <string name="pref_vk_type_phone">Phone</string>
+    <string name="pref_vk_type_phone_arrows">Phone (arrows)</string>
     <string name="PREF_LAYOUT">Layout</string>
-    <string-array name="PREF_LAYOUT_ENTRIES" translatable="false">
-        <item>Nokia/SE</item>
-        <item>Siemens</item>
-        <item>Motorola</item>
-    </string-array>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>
@@ -133,46 +123,23 @@
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_theme_title">Theme</string>
-    <string-array name="pref_theme_entries">
-        <item>Light</item>
-        <item>Dark</item>
-    </string-array>
-    <string-array name="pref_theme_values" translatable="false">
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_night">Dark</string>
     <string name="pref_requires_restart_summary">Requires restart</string>
     <string name="pref_enable_actionbar_title">Enable ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
+    <string name="pref_enable_statusbar_title">Enable statusbar</string>
     <string name="pref_wakelock_title">Keep screen on</string>
+    <string name="pref_vibration_title">Enable vibration</string>
     <string name="pref_button_shape_title">Button shape</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Round</item>
-        <item>Square</item>
-    </string-array>
-    <string-array name="pref_button_shape_values" translatable="false">
-        <item>round</item>
-        <item>square</item>
-    </string-array>
+    <string name="pref_button_shape_oval">Oval</string>
+    <string name="pref_button_shape_rect">Rectangle</string>
+    <string name="pref_button_shape_round">Rounded rectangle</string>
     <string name="pref_app_sort_title">App sort order</string>
-    <string-array name="pref_app_sort_entries">
-        <item>Name</item>
-        <item>Date</item>
-    </string-array>
-    <string-array name="pref_app_sort_values" translatable="false">
-        <item>name</item>
-        <item>date</item>
-    </string-array>
+    <string name="pref_app_sort_name">Name</string>
+    <string name="pref_app_sort_date">Date</string>
     <string name="pref_map_keys">Key mappings</string>
     <string name="pref_encoding_title">Encoding</string>
-    <string-array name="pref_encoding_entries" translatable="false">
-        <item>UTF-8</item>
-        <item>ISO-8859-1</item>
-    </string-array>
-    <string-array name="pref_encoding_values" translatable="false">
-        <item>UTF-8</item>
-        <item>ISO-8859-1</item>
-    </string-array>
     <string name="pref_default_settings">Default settings</string>
 
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
@@ -203,6 +170,27 @@
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
-
-
+    <string name="default_label">"%s (default)"</string>
+    <string name="saved">Saved</string>
+    <string name="not_saved_exists">Already exists</string>
+    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
+    <string name="error_name">Enter name!</string>
+    <string name="set_as_default">Set as default</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="add_profile_description">Create new profile</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
+    <string name="error_name_exists">Already exists, enter other name</string>
+    <string name="pref_vk_hide_hint">disabled</string>
+    <string name="unlimited">unlimited</string>
+    <string name="pref_emulator_dir">Working directory</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Fast (no filter)</string>
+    <string name="shader_tuning">Shader Tuning</string>
+    <string name="shader_setting" translatable="false">%s: %s</string>
+    <string name="reset">Reset</string>
+    <string name="pref_input_devices_title">Input devices</string>
+    <string name="pref_graphics_mode_title">Graphics mode:</string>
 </resources>

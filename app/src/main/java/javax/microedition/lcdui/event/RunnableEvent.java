@@ -20,7 +20,7 @@ package javax.microedition.lcdui.event;
 import javax.microedition.util.ArrayStack;
 
 public class RunnableEvent extends Event {
-	private static ArrayStack<RunnableEvent> recycled = new ArrayStack<>();
+	private static final ArrayStack<RunnableEvent> recycled = new ArrayStack<>();
 
 	private Runnable runnable;
 

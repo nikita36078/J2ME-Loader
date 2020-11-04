@@ -74,7 +74,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
+	public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
@@ -85,7 +85,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void fillPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
+	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.fillPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
@@ -112,33 +112,29 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 		switch (format) {
 			case TYPE_BYTE_1_GRAY: {
-				int b = 7;
+				int b = 7 - off % 8;
 				for (int yj = 0; yj < height; yj++) {
 					int line = off + yj * scanlen;
 					int ypos = yj * width;
 					for (int xj = 0; xj < width; xj++) {
-						int c = doAlpha(pix, alpha, (line + xj) / 8, b);
-						if (!isTransparent(c)) { //alpha
-							pixres[yj * width + xj] = c;
-						}
+						pixres[ypos + xj] = doAlpha(pix, alpha, (line + xj) / 8, b);
 						b--;
 						if (b < 0) b = 7;
 					}
+					b = b - (scanlen - width) % 8;
+					if (b < 0) b = 8 + b;
 				}
 				break;
 			}
 			case TYPE_BYTE_1_GRAY_VERTICAL: {
 				int ods = off / scanlen;
 				int oms = off % scanlen;
-				int b = 0;
+				int b = ods % 8;
 				for (int yj = 0; yj < height; yj++) {
 					int ypos = yj * width;
 					int tmp = (ods + yj) / 8 * scanlen + oms;
 					for (int xj = 0; xj < width; xj++) {
-						int c = doAlpha(pix, alpha, tmp + xj, b);
-						if (!isTransparent(c)) { //alpha
-							pixres[yj * width + xj] = c;
-						}
+						pixres[ypos + xj] = doAlpha(pix, alpha, tmp + xj, b);
 					}
 					b++;
 					if (b > 7) b = 0;
@@ -154,7 +150,8 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+	public void drawPixels(short[] pix, boolean trans, int off, int scanlen,
+						   int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -174,9 +171,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
 				int c = toARGB32(pix[off + ix + iy * scanlen], format);
-				if (format == TYPE_USHORT_444_RGB) {
-					c |= (0xFF << 24);
-				}
 				pixres[iy * width + ix] = c;
 			}
 		}
@@ -185,7 +179,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+	public void drawPixels(int[] pix, boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -216,13 +210,57 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height,
-						  int format) {
-		Log.e(TAG, "public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
+	public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanLength,
+						  int x, int y, int width, int height, int format) {
+		if (pixels == null) {
+			throw new NullPointerException();
+		}
+		if (x < 0 || y < 0 || width < 0 || height < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (width == 0 || height == 0) return;
+		switch (format) {
+			case TYPE_BYTE_1_GRAY:
+				final int dataLen = height * scanLength - (scanLength - width);
+				int minBytesLen = (dataLen + 7) / 8;
+				if (minBytesLen > pixels.length - offset)
+					throw new ArrayIndexOutOfBoundsException();
+				if (transparencyMask != null && minBytesLen > transparencyMask.length - offset)
+					throw new IllegalArgumentException();
+				int[] colors = new int[width * height];
+				graphics.getPixels(colors, 0, width, x, y, width, height);
+				for (int i = offset, k = 0, w = 0, d = 0; d < dataLen; i++) {
+					for (int j = 7; j >= 0 && d < dataLen; j--, w++, d++) {
+						if (w == scanLength) w = 0;
+						if (w >= width) {
+							continue;
+						}
+						int color = colors[k++];
+						int alpha = color >>> 31;
+						int gray = (((color & 0x80) >> 7) + ((color & 0x8000) >> 15) + ((color & 0x800000) >> 23)) >> 1;
+						if (gray == 0 && alpha == 1) pixels[i] |= 1 << j;
+						else pixels[i] &= ~(1 << j);
+						if (transparencyMask != null) {
+							if (alpha == 1) transparencyMask[i] |= 1 << j;
+							else transparencyMask[i] &= ~(1 << j);
+						}
+					}
+				}
+				break;
+			case TYPE_BYTE_1_GRAY_VERTICAL:
+			case TYPE_BYTE_2_GRAY:
+			case TYPE_BYTE_4_GRAY:
+			case TYPE_BYTE_8_GRAY:
+			case TYPE_BYTE_332_RGB:
+				Log.e(TAG, "getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanLength, int x, int y, int width, int height, int format)");
+			default:
+				throw new IllegalArgumentException();
+		}
+
 	}
 
 	@Override
-	public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+	public void getPixels(short[] pix, int offset, int scanlen, int x, int y, int width, int height, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -250,7 +288,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+	public void getPixels(int[] pix, int offset, int scanlen, int x, int y, int width, int height, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -296,55 +334,56 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	private static int toARGB32(short s, int type) {
-		int result = 0;
 		switch (type) {
 			case TYPE_USHORT_4444_ARGB: {
-				int a = ((s) & 0xF000) >>> 12;
-				int r = ((s) & 0x0F00) >>> 8;
-				int g = ((s) & 0x00F0) >>> 4;
-				int b = ((s) & 0x000F);
+				int a = (s & 0xF000) << 12;
+				int r = (s & 0x0F00) << 8;
+				int g = (s & 0x00F0) << 4;
+				int b = (s & 0x000F);
+				a |= a << 4;
+				r |= r << 4;
+				g |= g << 4;
+				b |= b << 4;
 
-				result = (a << 28) | (r << 20) | (g << 12) | (b << 4);
-				break;
+				return a | r | g | b;
 			}
 			case TYPE_USHORT_444_RGB: {
-				int r = ((s) & 0x0F00) >>> 8;
-				int g = ((s) & 0x00F0) >>> 4;
-				int b = ((s) & 0x000F);
+				int a = 0xFF << 24;
+				int r = (s & 0x0F00) << 8;
+				int g = (s & 0x00F0) << 4;
+				int b = (s & 0x000F);
+				r |= r << 4;
+				g |= g << 4;
+				b |= b << 4;
 
-				result = (r << 20) | (g << 12) | (b << 4);
-				break;
+				return a | r | g | b;
 			}
 		}
-		return result;
+		return 0;
 	}
 
 	private static short toARGB16(int s, int type) {
 		short result = 0;
 		switch (type) {
 			case TYPE_USHORT_4444_ARGB: {
-				int a = ((s) & 0xFF000000) >>> 28;
-				int r = ((s) & 0x00FF0000) >>> 20;
-				int g = ((s) & 0x0000FF00) >>> 12;
-				int b = ((s) & 0x000000FF) >>> 4;
+				int a = (s & 0xFF000000) >>> 28;
+				int r = (s & 0x00FF0000) >>> 20;
+				int g = (s & 0x0000FF00) >>> 12;
+				int b = (s & 0x000000FF) >>> 4;
 
 				result = (short) ((a << 12) | (r << 8) | (g << 4) | b);
 				break;
 			}
 			case TYPE_USHORT_444_RGB: {
-				int r = ((s) & 0x00FF0000) >>> 20;
-				int g = ((s) & 0x0000FF00) >>> 12;
-				int b = ((s) & 0x000000FF) >>> 4;
+				int r = (s & 0x00FF0000) >>> 20;
+				int g = (s & 0x0000FF00) >>> 12;
+				int b = (s & 0x000000FF) >>> 4;
 
 				result = (short) ((r << 8) | (g << 4) | b);
 				break;
 			}
 		}
 		return result;
-	}
-
-	private static boolean isTransparent(int s) {
-		return (s & 0xFF000000) == 0;
 	}
 
 	private static int getTransformation(int manipulation) {

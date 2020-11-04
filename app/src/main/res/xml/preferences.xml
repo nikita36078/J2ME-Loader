@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <ListPreference
         android:defaultValue="light"
         android:entries="@array/pref_theme_entries"
@@ -16,16 +18,20 @@
         android:title="@string/pref_enable_actionbar_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_enable_statusbar"
+        android:key="pref_statusbar_switch"
+        android:summary="@string/pref_enable_actionbar_summary"
+        android:title="@string/pref_enable_statusbar_title" />
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
         android:icon="@drawable/ic_setting_keep_screen_on"
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />
-    <ListPreference
-        android:defaultValue="round"
-        android:entries="@array/pref_button_shape_entries"
-        android:entryValues="@array/pref_button_shape_values"
-        android:icon="@drawable/ic_setting_button_shape"
-        android:key="pref_button_shape"
-        android:title="@string/pref_button_shape_title" />
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:icon="@drawable/ic_setting_enable_vibration"
+        android:key="pref_vibration_switch"
+        android:title="@string/pref_vibration_title" />
     <ListPreference
         android:defaultValue="name"
         android:entries="@array/pref_app_sort_entries"
@@ -34,16 +40,15 @@
         android:key="pref_app_sort"
         android:summary="@string/pref_requires_restart_summary"
         android:title="@string/pref_app_sort_title" />
-    <ListPreference
-        android:defaultValue="ISO-8859-1"
-        android:entries="@array/pref_encoding_entries"
-        android:entryValues="@array/pref_encoding_values"
-        android:icon="@drawable/ic_setting_encoding"
-        android:key="pref_encoding"
-        android:title="@string/pref_encoding_title" />
     <Preference
         android:key="pref_default_settings"
         android:icon="@drawable/ic_setting_default"
         android:title="@string/pref_default_settings">
+    </Preference>
+    <Preference
+        android:key="emulator_dir"
+        android:icon="@drawable/ic_setting_folder"
+        android:title="@string/pref_emulator_dir"
+        tools:summary="/sdcard/J2ME-Loader">
     </Preference>
 </androidx.preference.PreferenceScreen>

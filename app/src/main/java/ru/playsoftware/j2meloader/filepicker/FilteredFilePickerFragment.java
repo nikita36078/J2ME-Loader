@@ -27,15 +27,16 @@ import com.nononsenseapps.filepicker.LogicHandler;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import ru.playsoftware.j2meloader.R;
 
 public class FilteredFilePickerFragment extends FilePickerFragment {
-
-	private static String lastPath = Environment.getExternalStorageDirectory().getPath();
 	private static final List<String> extList = Arrays.asList(".jad", ".jar");
+	private static final Stack<File> history = new Stack<>();
+	private static File currentDir = Environment.getExternalStorageDirectory();
 
 	@NonNull
 	@Override
@@ -79,20 +80,32 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	@Override
 	public void goToDir(@NonNull File file) {
-		lastPath = file.getPath();
+		history.add(currentDir);
+		currentDir = file;
 		super.goToDir(file);
 	}
 
 	public static String getLastPath() {
-		return lastPath;
-	}
-
-	public File getBackTop() {
-		return getPath(getArguments().getString(KEY_START_PATH, "/"));
+		return currentDir.getPath();
 	}
 
 	public boolean isBackTop() {
-		return 0 == compareFiles(mCurrentPath, getBackTop()) ||
-				0 == compareFiles(mCurrentPath, new File("/"));
+		return history.empty();
+	}
+
+	public void goBack() {
+		File last = history.pop();
+		currentDir = last;
+		super.goToDir(last);
+	}
+
+	@Override
+	public void onBindHeaderViewHolder(@NonNull HeaderViewHolder viewHolder) {
+		if (compareFiles(currentDir, getRoot()) != 0) {
+			viewHolder.itemView.setEnabled(true);
+			super.onBindHeaderViewHolder(viewHolder);
+		} else {
+			viewHolder.itemView.setEnabled(false);
+		}
 	}
 }

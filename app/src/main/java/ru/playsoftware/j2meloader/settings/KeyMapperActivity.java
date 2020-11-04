@@ -25,11 +25,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.util.param.SharedPreferencesContainer;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -38,30 +38,33 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
+import ru.playsoftware.j2meloader.config.ProfileModel;
+import ru.playsoftware.j2meloader.config.ProfilesManager;
 
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
 	private static SparseIntArray idToCanvasKey = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
-	private SharedPreferencesContainer params;
+	private ProfileModel params;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_keymapper);
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle(R.string.pref_map_keys);
-		Intent intent = getIntent();
-		File configDir;
-		boolean defaultConfig = intent.getBooleanExtra(ConfigActivity.DEFAULT_CONFIG_KEY, false);
-		if (defaultConfig) {
-			configDir = new File(Config.DEFAULT_CONFIG_DIR);
-		} else {
-			String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
-			configDir = new File(Config.CONFIGS_DIR, appName);
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setTitle(R.string.pref_map_keys);
 		}
-		params = new SharedPreferencesContainer(configDir);
-		params.load(defaultConfig);
+		Intent intent = getIntent();
+		String dirName = intent.getDataString();
+		if (dirName == null) {
+			Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
+		boolean isProfile = ConfigActivity.ACTION_EDIT_PROFILE.equals(intent.getAction());
+		String parentDir = isProfile ? Config.getProfilesDir() : Config.getConfigsDir();
+		params = ProfilesManager.loadConfig(new File(parentDir, dirName));
 
 		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
 		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);
@@ -118,6 +121,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 						deleteDuplicates(canvasKey);
 						androidToMIDP.put(keyCode, canvasKey);
 						KeyMapper.saveArrayPref(params, androidToMIDP);
+						ProfilesManager.saveConfig(params);
 						dialog.dismiss();
 						return true;
 					}
@@ -150,6 +154,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 				androidToMIDP.clear();
 				KeyMapper.initArray(androidToMIDP);
 				KeyMapper.saveArrayPref(params, androidToMIDP);
+				ProfilesManager.saveConfig(params);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

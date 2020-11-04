@@ -155,15 +155,16 @@ class TextFieldImpl {
 		return constraints;
 	}
 
-	void setChars(char[] data, int offset, int length) {
-		setString(new String(data, offset, length));
+	int getChars(char[] data) {
+		text.getChars(0, text.length(), data, 0);
+		return text.length();
 	}
 
 	int getCaretPosition() {
 		if (textview != null) {
 			return textview.getSelectionEnd();
 		} else {
-			return -1;
+			return 0;
 		}
 	}
 

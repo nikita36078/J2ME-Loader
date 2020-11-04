@@ -24,7 +24,7 @@ import ru.playsoftware.j2meloader.config.Config;
 public class LogUtils {
 
 	public static void writeLog() throws IOException {
-		File logFile = new File(Config.EMULATOR_DIR, "log.txt");
+		File logFile = new File(Config.getEmulatorDir(), "log.txt");
 		if (logFile.exists()) {
 			logFile.delete();
 		}

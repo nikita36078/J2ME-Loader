@@ -23,12 +23,11 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.graphics.CanvasWrapper;
 
 public class OverlayView extends View {
 
-	private final Graphics graphics;
+	private final CanvasWrapper graphics;
 	private final Rect surfaceRect = new Rect();
 	private ArrayList<Layer> layers = new ArrayList<>();
 	private boolean visible;
@@ -38,8 +37,7 @@ public class OverlayView extends View {
 		if (isInEditMode()) { // fix for IDE preview
 			graphics = null;
 		} else {
-			graphics = new Graphics();
-			graphics.setFont(new Font());
+			graphics = new CanvasWrapper(false);
 		}
 	}
 
@@ -48,7 +46,7 @@ public class OverlayView extends View {
 		if (!visible) return;
 		int save = canvas.save();
 		canvas.translate(surfaceRect.left, surfaceRect.top);
-		graphics.setSurfaceCanvas(canvas);
+		graphics.bind(canvas);
 		for (Layer layer : layers) {
 			layer.paint(graphics);
 		}

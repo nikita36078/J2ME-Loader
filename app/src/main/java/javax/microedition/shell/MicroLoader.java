@@ -20,9 +20,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.preference.PreferenceManager;
+import android.os.StrictMode;
 import android.util.Log;
-import android.util.SparseIntArray;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -30,6 +29,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +41,7 @@ import java.util.Map;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.pointer.FixedKeyboard;
@@ -46,29 +49,37 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
-import javax.microedition.util.param.SharedPreferencesContainer;
 
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.config.ProfileModel;
+import ru.playsoftware.j2meloader.config.ProfilesManager;
+import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
+
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
 
 	private String path;
-	private String appName;
 	private Context context;
-	private SharedPreferencesContainer params;
+	private ProfileModel params;
+	private String appPath;
 
-	public MicroLoader(Context context, String appName) {
+	MicroLoader(Context context, String appPath) {
 		this.context = context;
-		this.appName = appName;
-		this.path = Config.APP_DIR + appName;
-		this.params = new SharedPreferencesContainer(appName);
+		this.appPath = appPath;
+		this.path = Config.getAppDir() + appPath;
 	}
 
-	public void init() {
+	public boolean init() {
+		this.params = ProfilesManager.loadConfig(new File(Config.getConfigsDir(), appPath));
+		if (params == null) {
+			return false;
+		}
 		Display.initDisplay();
 		Graphics3D.initGraphics3D();
 		File cacheDir = ContextHolder.getCacheDir();
@@ -78,10 +89,15 @@ public class MicroLoader {
 				temp.delete();
 			}
 		}
-		params.load(false);
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitNetwork()
+				.penaltyLog()
+				.build();
+		StrictMode.setThreadPolicy(policy);
+		return true;
 	}
 
-	public LinkedHashMap<String, String> loadMIDletList() {
+	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
 		LinkedHashMap<String, String> params =
 				FileUtils.loadManifest(new File(path, Config.MIDLET_MANIFEST_FILE));
@@ -89,142 +105,101 @@ public class MicroLoader {
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {
 				String tmp = entry.getValue();
-				String key = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
-				String value = tmp.substring(0, tmp.indexOf(',')).trim();
-				midlets.put(key, value);
+				String clazz = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
+				String title = tmp.substring(0, tmp.indexOf(',')).trim();
+				midlets.put(clazz, title);
 			}
 		}
 		return midlets;
 	}
 
-	public MIDlet loadMIDlet(String mainClass)
-			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	MIDlet loadMIDlet(String mainClass) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
 		File dexSource = new File(path, Config.MIDLET_DEX_FILE);
-		File dexTargetDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
-		if (dexTargetDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetDir);
+		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
+		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
+		if (dexOptDir.exists()) {
+			FileUtils.clearDirectory(dexOptDir);
+		} else if (!dexOptDir.mkdir()) {
+			throw new IOException("Cant't create directory: [" + dexOptDir + ']');
 		}
-		dexTargetDir.mkdir();
-		File dexTargetOptDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_OPT_DIR);
-		if (dexTargetOptDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetOptDir);
-		}
-		dexTargetOptDir.mkdir();
-		File dexTarget = new File(dexTargetDir, Config.MIDLET_DEX_FILE);
-		FileUtils.copyFileUsingChannel(dexSource, dexTarget);
 		File resDir = new File(path, Config.MIDLET_RES_DIR);
-		ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
-				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
-		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
-		Log.i(TAG, "MIDlet-Name: " + MyClassLoader.getName());
-		return (MIDlet) loader.loadClass(mainClass).newInstance();
+		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
+				dexOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
+		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
+		Log.i(TAG, "MIDlet-Name: " + AppClassLoader.getName());
+		//noinspection unchecked
+		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
+		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
+		init.setAccessible(true);
+		return init.newInstance();
 	}
 
 	private void setProperties() {
-		System.setProperty("microedition.sensor.version", "1");
-		System.setProperty("microedition.platform", "Nokia 6233");
-		System.setProperty("microedition.configuration", "CDLC-1.1");
-		System.setProperty("microedition.profiles", "MIDP-2.0");
-		System.setProperty("microedition.m3g.version", "1.1");
-		System.setProperty("microedition.media.version", "1.0");
-		System.setProperty("supports.mixing", "true");
-		System.setProperty("supports.audio.capture", "true");
-		System.setProperty("supports.video.capture", "false");
-		System.setProperty("supports.recording", "false");
-		System.setProperty("microedition.pim.version", "1.0");
-		System.setProperty("microedition.io.file.FileConnection.version", "1.0");
 		final Locale defaultLocale = Locale.getDefault();
 		final String country = defaultLocale.getCountry();
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
-		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
-		System.setProperty("com.siemens.IMEI", "000000000000000");
-		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
-		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
-		System.setProperty("com.siemens.OSVersion", "11");
-		System.setProperty("device.imei", "000000000000000");
+		final String primaryStoragePath = Environment.getExternalStorageDirectory().getPath();
+		String uri = "file:///c:" + Config.getDataDir().substring(primaryStoragePath.length()) + appPath;
+		System.setProperty("fileconn.dir.cache", uri + "/cache");
+		System.setProperty("fileconn.dir.private", uri + "/private");
+		System.setProperty("user.home", primaryStoragePath);
 	}
 
 	public int getOrientation() {
-		return params.getInt("Orientation", 0);
+		return params.orientation;
 	}
 
-	public void applyConfiguration() {
+	void applyConfiguration() {
 		try {
-			boolean cxShowKeyboard = params.getBoolean(("ShowKeyboard"), true);
-
 			// Apply configuration to the launching MIDlet
-			if (cxShowKeyboard) {
+			if (params.showKeyboard) {
 				setVirtualKeyboard();
 			} else {
 				ContextHolder.setVk(null);
 			}
 			setProperties();
 
-			int fontSizeSmall = params.getInt("FontSizeSmall", 18);
-			int fontSizeMedium = params.getInt("FontSizeSmall", 18);
-			int fontSizeLarge = params.getInt("FontSizeLarge", 26);
-			boolean fontApplyDimensions = params.getBoolean("FontApplyDimensions", false);
+			Font.setSize(Font.SIZE_SMALL, params.fontSizeSmall);
+			Font.setSize(Font.SIZE_MEDIUM, params.fontSizeSmall);
+			Font.setSize(Font.SIZE_LARGE, params.fontSizeLarge);
+			Font.setApplyDimensions(params.fontApplyDimensions);
 
-			int screenWidth = params.getInt("ScreenWidth", 240);
-			int screenHeight = params.getInt("ScreenHeight", 320);
-			int screenBackgroundColor = params.getInt("ScreenBackgroundColor", 0xD0D0D0);
-			int screenScaleRatio = params.getInt("ScreenScaleRatio", 100);
-			boolean screenScaleToFit = params.getBoolean("ScreenScaleToFit", true);
-			boolean screenKeepAspectRatio = params.getBoolean("ScreenKeepAspectRatio", true);
-			boolean screenFilter = params.getBoolean("ScreenFilter", false);
-			boolean immediateMode = params.getBoolean("ImmediateMode", false);
-			boolean touchInput = params.getBoolean(("TouchInput"), true);
-			boolean hwAcceleration = params.getBoolean("HwAcceleration", false);
-			boolean parallel = params.getBoolean("ParallelRedrawScreen", false);
-			boolean forceFullScreen = params.getBoolean("ForceFullscreen", false);
-			boolean showFps = params.getBoolean("ShowFps", false);
-			boolean limitFps = params.getBoolean("LimitFps", false);
-			int fpsLimit = params.getInt("FpsLimit", 0);
-			int layout = params.getInt("Layout", 0);
-
-			Font.setSize(Font.SIZE_SMALL, fontSizeSmall);
-			Font.setSize(Font.SIZE_MEDIUM, fontSizeMedium);
-			Font.setSize(Font.SIZE_LARGE, fontSizeLarge);
-			Font.setApplyDimensions(fontApplyDimensions);
-
-			final String[] propLines = params.getString("SystemProperties", "").split("\n");
+			final String[] propLines = params.systemProperties.split("\n");
 			for (String line : propLines) {
 				String[] prop = line.split(":[ ]*", 2);
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
 				}
 			}
+			try {
+				Charset.forName(System.getProperty("microedition.encoding"));
+			} catch (Exception e) {
+				System.setProperty("microedition.encoding", "ISO-8859-1");
+			}
 
-			SparseIntArray intArray = KeyMapper.getArrayPref(params);
-			Canvas.setVirtualSize(screenWidth, screenHeight, screenScaleToFit,
-					screenKeepAspectRatio, screenScaleRatio);
-			Canvas.setFilterBitmap(screenFilter);
-			EventQueue.setImmediate(immediateMode);
-			Canvas.setHardwareAcceleration(hwAcceleration, parallel);
-			Canvas.setBackgroundColor(screenBackgroundColor);
-			Canvas.setKeyMapping(layout, intArray);
-			Canvas.setHasTouchInput(touchInput);
-			Canvas.setForceFullscreen(forceFullScreen);
-			Canvas.setShowFps(showFps);
-			Canvas.setLimitFps(limitFps, fpsLimit);
+			Displayable.setVirtualSize(params.screenWidth, params.screenHeight);
+			Canvas.setScale(params.screenScaleToFit, params.screenKeepAspectRatio, params.screenScaleRatio);
+			Canvas.setFilterBitmap(params.screenFilter);
+			EventQueue.setImmediate(params.immediateMode);
+			Canvas.setGraphicsMode(params.getGraphicsMode(), params.parallelRedrawScreen);
+			Canvas.setBackgroundColor(params.screenBackgroundColor);
+			Canvas.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params));
+			Canvas.setHasTouchInput(params.touchInput);
+			Canvas.setForceFullscreen(params.forceFullscreen);
+			Canvas.setShowFps(params.showFps);
+			Canvas.setLimitFps(params.fpsLimit);
+			ShaderInfo shader = params.shader;
+			if (shader == null) shader = new ShaderInfo();
+			Canvas.setShaderFilter(shader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void setVirtualKeyboard() {
-		int vkType = params.getInt("VirtualKeyboardType", 0);
-		int vkAlpha = params.getInt("VirtualKeyboardAlpha", 64);
-		int vkDelay = params.getInt("VirtualKeyboardDelay", -1);
-		int vkColorBackground = params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0);
-		int vkColorForeground = params.getInt("VirtualKeyboardColorForeground", 0x000080);
-		int vkColorBackgroundSelected = params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080);
-		int vkColorForegroundSelected =  params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
-		int vkColorOutline = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
-		boolean vkFeedback = params.getBoolean(("VirtualKeyboardFeedback"), false);
-
+		int vkType = params.vkType;
 		VirtualKeyboard vk;
 		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
 			vk = new VirtualKeyboard();
@@ -233,21 +208,12 @@ public class MicroLoader {
 		} else {
 			vk = new FixedKeyboard(1);
 		}
-		vk.setOverlayAlpha(vkAlpha);
-		vk.setHideDelay(vkDelay);
-		vk.setHasHapticFeedback(vkFeedback);
+		vk.setHideDelay(params.vkHideDelay);
+		vk.setHasHapticFeedback(params.vkFeedback);
+		vk.setButtonShape(params.vkButtonShape);
+		vk.setForceOpacity(params.vkForceOpacity);
 
-		String shapeStr = PreferenceManager.getDefaultSharedPreferences(context)
-				.getString("pref_button_shape", "round");
-		int shape;
-		if (shapeStr.equals("square")) {
-			shape = VirtualKeyboard.SQUARE_SHAPE;
-		} else {
-			shape = VirtualKeyboard.ROUND_SHAPE;
-		}
-		vk.setButtonShape(shape);
-
-		File keylayoutFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
+		File keylayoutFile = new File(Config.getConfigsDir(), appPath + Config.MIDLET_KEY_LAYOUT_FILE);
 		if (keylayoutFile.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(keylayoutFile);
@@ -259,13 +225,12 @@ public class MicroLoader {
 			}
 		}
 
-		vk.setColor(VirtualKeyboard.BACKGROUND, vkColorBackground);
-		vk.setColor(VirtualKeyboard.FOREGROUND, vkColorForeground);
-		vk.setColor(VirtualKeyboard.BACKGROUND_SELECTED,
-				vkColorBackgroundSelected);
-		vk.setColor(VirtualKeyboard.FOREGROUND_SELECTED,
-				vkColorForegroundSelected);
-		vk.setColor(VirtualKeyboard.OUTLINE, vkColorOutline);
+		int vkAlpha = params.vkAlpha << 24;
+		vk.setColor(VirtualKeyboard.BACKGROUND, vkAlpha | params.vkBgColor);
+		vk.setColor(VirtualKeyboard.FOREGROUND, vkAlpha | params.vkFgColor);
+		vk.setColor(VirtualKeyboard.BACKGROUND_SELECTED, vkAlpha | params.vkBgColorSelected);
+		vk.setColor(VirtualKeyboard.FOREGROUND_SELECTED, vkAlpha | params.vkFgColorSelected);
+		vk.setColor(VirtualKeyboard.OUTLINE, vkAlpha | params.vkOutlineColor);
 
 		VirtualKeyboard.LayoutListener listener = vk1 -> {
 			try {
@@ -282,9 +247,9 @@ public class MicroLoader {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public Single<String> takeScreenshot(Canvas canvas) {
+	Single<String> takeScreenshot(Canvas canvas) {
 		return Single.create(emitter -> {
-			Bitmap bitmap = canvas.getOffscreenCopy().getBitmap();
+			Bitmap bitmap = canvas.getScreenShot();
 			Calendar calendar = Calendar.getInstance();
 			Date now = calendar.getTime();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");

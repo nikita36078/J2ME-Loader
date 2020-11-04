@@ -917,7 +917,7 @@ static void m3gBlitFrameBufferPixels(RenderContext *ctx,
     /* Split the large blit operation into smaller chunks that are
      * efficiently taken care of using power-of-two textures */
     {
-        const int MAX_BLIT_SIZE = 256; /* should be power of two */
+        const int MAX_BLIT_SIZE = 4096; /* should be power of two */
     
         int xBlits = (width / MAX_BLIT_SIZE) + 1;
         int yBlits = (height / MAX_BLIT_SIZE) + 1;

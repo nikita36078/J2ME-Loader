@@ -63,7 +63,7 @@ struct M3GVertexArrayImpl
 };
 
 /* If this assert fails, check the compiler padding settings */
-M3G_CT_ASSERT(sizeof(VertexArray) == sizeof(Object) + 44);
+M3G_CT_ASSERT2(sizeof(VertexArray) == sizeof(Object) + 44);
 
 /*----------------------------------------------------------------------
  * Internal functions

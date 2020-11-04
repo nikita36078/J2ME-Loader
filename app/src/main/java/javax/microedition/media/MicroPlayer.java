@@ -47,7 +47,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	private InternalMetaData metadata;
 
 	public MicroPlayer(DataSource datasource) {
-		player = new MediaPlayer();
+		player = new AndroidPlayer();
 		player.setOnCompletionListener(this);
 
 		source = datasource;
@@ -101,27 +101,31 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		listeners.remove(playerListener);
 	}
 
-	public synchronized void postEvent(String event) {
+	public synchronized void postEvent(String event, Object eventData) {
 		for (PlayerListener listener : listeners) {
 			// Callbacks should be async
-			Runnable r = () -> listener.playerUpdate(this, event, source.getLocator());
+			Runnable r = () -> listener.playerUpdate(this, event, eventData);
 			(new Thread(r, "MIDletPlayerCallback")).start();
 		}
 	}
 
 	@Override
 	public synchronized void onCompletion(MediaPlayer mp) {
-		postEvent(PlayerListener.END_OF_MEDIA);
+		if (state == CLOSED) {
+			return;
+		}
+		postEvent(PlayerListener.END_OF_MEDIA, new Long(getMediaTime()));
 
 		if (loopCount == 1) {
 			state = PREFETCHED;
+			player.reset();
 		} else if (loopCount > 1) {
 			loopCount--;
 		}
 
-		if (state == STARTED) {
+		if (state == STARTED && loopCount != -1) {
 			player.start();
-			postEvent(PlayerListener.STARTED);
+			postEvent(PlayerListener.STARTED, new Long(getMediaTime()));
 		}
 	}
 
@@ -151,21 +155,14 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 		if (state == REALIZED) {
 			try {
-				player.prepare();
-
 				MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 				retriever.setDataSource(source.getLocator());
 				metadata.updateMetaData(retriever);
 				retriever.release();
-
-				state = PREFETCHED;
-			} catch (IOException e) {
-				/*
-				 * Only 32 instances of MediaPlayer can be prepared at once, don't throw the MediaException here
-				 * if we can't prepare it now
-				 */
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			state = PREFETCHED;
 		}
 	}
 
@@ -177,7 +174,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 			player.start();
 
 			state = STARTED;
-			postEvent(PlayerListener.STARTED);
+			postEvent(PlayerListener.STARTED, new Long(getMediaTime()));
 		}
 	}
 
@@ -188,7 +185,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 			player.pause();
 
 			state = PREFETCHED;
-			postEvent(PlayerListener.STOPPED);
+			postEvent(PlayerListener.STOPPED, new Long(getMediaTime()));
 		}
 	}
 
@@ -217,7 +214,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		source.disconnect();
 
 		state = CLOSED;
-		postEvent(PlayerListener.CLOSED);
+		postEvent(PlayerListener.CLOSED, null);
 	}
 
 	protected void checkClosed() {
@@ -322,7 +319,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		}
 
 		player.setVolume(left, right);
-		postEvent(PlayerListener.VOLUME_CHANGED);
+		postEvent(PlayerListener.VOLUME_CHANGED, this);
 	}
 
 	@Override

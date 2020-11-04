@@ -17,41 +17,48 @@
 
 package javax.microedition.util;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Process;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
+import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.shell.MyClassLoader;
+import javax.microedition.shell.AppClassLoader;
+import javax.microedition.shell.MicroActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class ContextHolder {
-	private static final String TAG = ContextHolder.class.getName();
 
 	private static Display display;
 	private static VirtualKeyboard vk;
-	private static AppCompatActivity currentActivity;
+	private static WeakReference<MicroActivity> currentActivity;
+	private static Vibrator vibrator;
+	private static Context appContext;
+	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
+	private static boolean vibrationEnabled;
 
-	public static Context getContext() {
-		return currentActivity.getApplicationContext();
+	public static Context getAppContext() {
+		return appContext;
 	}
 
 	public static VirtualKeyboard getVk() {
@@ -64,7 +71,7 @@ public class ContextHolder {
 
 	private static Display getDisplay() {
 		if (display == null) {
-			display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+			display = ((WindowManager) Objects.requireNonNull(getAppContext().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
 		}
 		return display;
 	}
@@ -77,59 +84,28 @@ public class ContextHolder {
 		return getDisplay().getHeight();
 	}
 
-	public static void setCurrentActivity(AppCompatActivity activity) {
-		currentActivity = activity;
+	public static void setCurrentActivity(MicroActivity activity) {
+		currentActivity = new WeakReference<>(activity);
 	}
 
-	public static AppCompatActivity getCurrentActivity() {
-		return currentActivity;
+	public static void addActivityResultListener(ActivityResultListener listener) {
+		if (!resultListeners.contains(listener)) {
+			resultListeners.add(listener);
+		}
+	}
+
+	public static void removeActivityResultListener(ActivityResultListener listener) {
+		resultListeners.remove(listener);
+	}
+
+	public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
+		for (ActivityResultListener listener : resultListeners) {
+			listener.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	public static InputStream getResourceAsStream(Class resClass, String resName) {
-		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
-		if (resName == null || resName.equals("")) {
-			Log.d(TAG, "Can't load res on empty path");
-			return null;
-		}
-		if (resName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
-			String className = resClass.getPackage().getName().replace('.', '/');
-			resName = className + "/" + resName;
-		}
-		// Add support for Siemens file path
-		resName = resName.replace('\\', '/');
-		// Remove double slashes
-		resName = resName.replace("//", "/");
-		// Remove leading slash
-		if (resName.charAt(0) == '/') {
-			resName = resName.substring(1);
-		}
-		try {
-			return getResource(resName);
-		} catch (IOException | NullPointerException e) {
-			Log.d(TAG, "Can't load res: " + resName);
-			return null;
-		}
-	}
-
-	private static InputStream getResource(String resName) throws IOException {
-		InputStream is;
-		byte[] data;
-		File midletResFile = new File(Config.APP_DIR,
-				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) {
-			ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
-			ZipEntry entry = zipFile.getEntry(resName);
-			is = zipFile.getInputStream(entry);
-			data = new byte[(int) entry.getSize()];
-		} else {
-			File resFile = new File(MyClassLoader.getResFolder(), resName);
-			is = new FileInputStream(resFile);
-			data = new byte[(int) resFile.length()];
-		}
-		DataInputStream dis = new DataInputStream(is);
-		dis.readFully(data);
-		dis.close();
-		return new ByteArrayInputStream(data);
+		return AppClassLoader.getResourceAsStream(resClass, resName);
 	}
 
 	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {
@@ -145,27 +121,77 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.DATA_DIR + MyClassLoader.getName(), name);
+		return new File(Config.getDataDir() + AppClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {
-		return getContext().getExternalCacheDir();
+		return getAppContext().getExternalCacheDir();
 	}
 
 	public static boolean requestPermission(String permission) {
-		if (ContextCompat.checkSelfPermission(currentActivity, permission) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(currentActivity, new String[]{permission}, 0);
+		if (ContextCompat.checkSelfPermission(currentActivity.get(), permission) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(currentActivity.get(), new String[]{permission}, 0);
 			return false;
 		} else {
 			return true;
 		}
 	}
 
+	public static String getAssetAsString(String fileName) {
+		StringBuilder sb = new StringBuilder();
+
+		try (InputStream is = getAppContext().getAssets().open(fileName);
+			 BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")))) {
+			String str;
+			while ((str = br.readLine()) != null) {
+				sb.append(str).append('\n');
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return sb.toString();
+	}
+
 	/**
 	 * Kill midlet process.
 	 */
 	public static void notifyDestroyed() {
-		currentActivity.finish();
+		MicroActivity activity = currentActivity.get();
+		if (activity != null) {
+			activity.finish();
+		}
 		Process.killProcess(Process.myPid());
+	}
+
+	public static MicroActivity getActivity() {
+		return currentActivity.get();
+	}
+
+	public static boolean vibrate(int duration) {
+		if (!vibrationEnabled) {
+			return false;
+		}
+		if (vibrator == null) {
+			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		}
+		if (vibrator == null || !vibrator.hasVibrator()) {
+			return false;
+		}
+		if (duration > 0) {
+			vibrator.vibrate(duration);
+		} else if (duration < 0) {
+			throw new IllegalStateException();
+		} else {
+			vibrator.cancel();
+		}
+		return true;
+	}
+
+	public static void setApplication(Application application) {
+		appContext = application;
+	}
+
+	public static void setVibration(boolean vibrationEnabled) {
+		ContextHolder.vibrationEnabled = vibrationEnabled;
 	}
 }

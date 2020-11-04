@@ -26,6 +26,7 @@ package com.siemens.mp.game;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -33,11 +34,17 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	private Image image;
 
 	public ExtendedImage(Image image) {
+		if (image == null || image.getWidth() % 8 != 0) {
+			throw new IllegalArgumentException("ExtendedImage: width is not divisible by 8");
+		}
 		this.image = image;
 	}
 
 	public void blitToScreen(int x, int y) {
-		((Canvas) Display.getDisplay(null).getCurrent()).flushBuffer(image);
+		Displayable current = Display.getDisplay(null).getCurrent();
+		if (current instanceof Canvas) {
+			((Canvas) current).flushBuffer(image, x, y);
+		}
 	}
 
 	public void clear(byte color) {

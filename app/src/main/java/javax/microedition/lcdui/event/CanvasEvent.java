@@ -16,13 +16,15 @@
  */
 package javax.microedition.lcdui.event;
 
+import android.util.Log;
+
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.game.GameCanvas;
 import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
 
-	private static ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
+	private static final String TAG = CanvasEvent.class.getName();
+	private static final ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
 
 	public static final int KEY_PRESSED = 0,
 			KEY_REPEATED = 1,
@@ -40,7 +42,6 @@ public class CanvasEvent extends Event {
 	private int eventType;
 
 	private int keyCode;
-	private int originalKeycode;
 
 	private int pointer;
 	private float x, y;
@@ -70,8 +71,7 @@ public class CanvasEvent extends Event {
 
 		instance.canvas = canvas;
 		instance.eventType = eventType;
-		instance.originalKeycode = keyCode;
-		instance.keyCode = Canvas.convertKeyCode(keyCode);
+		instance.keyCode = keyCode;
 
 		return instance;
 	}
@@ -111,46 +111,58 @@ public class CanvasEvent extends Event {
 	public void process() {
 		switch (eventType) {
 			case KEY_PRESSED:
-				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyPressed(keyCode, originalKeycode);
-				} else {
+				try {
 					canvas.keyPressed(keyCode);
+				} catch (Exception e) {
+					Log.e(TAG, "keyPressed: ", e);
 				}
 				break;
 
 			case KEY_REPEATED:
-				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyRepeated(keyCode, originalKeycode);
-				} else {
+				try {
 					canvas.keyRepeated(keyCode);
+				} catch (Exception e) {
+					Log.e(TAG, "keyRepeated: ", e);
 				}
 				break;
 
 			case KEY_RELEASED:
-				if (canvas instanceof GameCanvas) {
-					((GameCanvas) canvas).gameKeyReleased(keyCode, originalKeycode);
-				} else {
+				try {
 					canvas.keyReleased(keyCode);
+				} catch (Exception e) {
+					Log.e(TAG, "keyReleased: ", e);
 				}
 				break;
 
 			case POINTER_PRESSED:
-				canvas.pointerPressed(pointer, x, y);
+				try {
+					canvas.pointerPressed(pointer, x, y);
+				} catch (Exception e) {
+					Log.e(TAG, "pointerPressed: ", e);
+				}
 				break;
 
 			case POINTER_DRAGGED:
-				canvas.pointerDragged(pointer, x, y);
+				try {
+					canvas.pointerDragged(pointer, x, y);
+				} catch (Exception e) {
+					Log.e(TAG, "pointerDragged: ", e);
+				}
 				break;
 
 			case POINTER_RELEASED:
-				canvas.pointerReleased(pointer, x, y);
+				try {
+					canvas.pointerReleased(pointer, x, y);
+				} catch (Exception e) {
+					Log.e(TAG, "pointerReleased: ", e);
+				}
 				break;
 
 			case SHOW_NOTIFY:
 				try {
-					canvas.showNotify();
+					canvas.callShowNotify();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e(TAG, "showNotify: ", e);
 				}
 				canvas.setVisible(true);
 				break;
@@ -158,14 +170,18 @@ public class CanvasEvent extends Event {
 			case HIDE_NOTIFY:
 				canvas.setVisible(false);
 				try {
-					canvas.hideNotify();
+					canvas.callHideNotify();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e(TAG, "hideNotify: ", e);
 				}
 				break;
 
 			case SIZE_CHANGED:
-				canvas.sizeChanged(width, height);
+				try {
+					canvas.sizeChanged(width, height);
+				} catch (Exception e) {
+					Log.e(TAG, "sizeChanged: ", e);
+				}
 				break;
 		}
 	}

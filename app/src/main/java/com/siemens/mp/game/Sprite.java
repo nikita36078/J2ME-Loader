@@ -29,7 +29,6 @@ import javax.microedition.lcdui.Image;
 
 public class Sprite extends GraphicObject {
 	private Image[] pixels;
-	private Image[] mask;
 	private int x;
 	private int y;
 	private int frame;
@@ -50,21 +49,15 @@ public class Sprite extends GraphicObject {
 	public Sprite(Image pixels, Image mask, int numFrames) {
 		this.pixels = new Image[numFrames];
 
+		if (mask != null) {
+			pixels = com.siemens.mp.lcdui.Image.createTransparentImageFromMask(pixels, mask);
+		}
+
 		for (int i = 0; i < numFrames; i++) {
-			Image img = Image.createImage(pixels.getWidth(), pixels.getHeight() / numFrames);
+			Image img = Image.createTransparentImage(pixels.getWidth(), pixels.getHeight() / numFrames);
 
 			img.getGraphics().drawImage(pixels, 0, -i * pixels.getHeight() / numFrames, 0);
 			this.pixels[i] = img;
-		}
-
-		if (mask != null) {
-			this.mask = new Image[numFrames];
-			for (int i = 0; i < numFrames; i++) {
-				Image img = Image.createImage(mask.getWidth(), mask.getHeight() / numFrames);
-
-				img.getGraphics().drawImage(mask, 0, -i * mask.getHeight() / numFrames, 0);
-				this.mask[i] = img;
-			}
 		}
 		collx = 0;
 		colly = 0;

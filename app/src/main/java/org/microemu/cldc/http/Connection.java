@@ -41,6 +41,7 @@ import javax.microedition.io.HttpConnection;
 public class Connection implements HttpConnection, ConnectionImplementation {
 
 	protected URLConnection cn;
+	protected URLConnection cnOut;
 
 	protected boolean connected = false;
 
@@ -78,7 +79,12 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 			((HttpURLConnection) cn).disconnect();
 		}
 
+		if (cnOut instanceof HttpURLConnection) {
+			((HttpURLConnection) cnOut).disconnect();
+		}
+
 		cn = null;
+		cnOut = null;
 	}
 
 	@Override
@@ -360,7 +366,17 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 
 		connected = true;
 
-		return cn.getOutputStream();
+		if (cn instanceof HttpURLConnection &&
+				((HttpURLConnection) cn).getRequestMethod().equals(HttpConnection.GET)) {
+			if (cnOut == null) {
+				cnOut = cn.getURL().openConnection();
+				cnOut.setDoOutput(true);
+				((HttpURLConnection) cnOut).setRequestMethod(HttpConnection.POST);
+			}
+			return cnOut.getOutputStream();
+		} else {
+			return cn.getOutputStream();
+		}
 	}
 
 	@Override

@@ -19,6 +19,8 @@ package javax.microedition.lcdui;
 import android.view.View;
 import android.widget.ImageView;
 
+import javax.microedition.util.ContextHolder;
+
 public class ImageItem extends Item {
 	private Image image;
 	private ImageView imgview;
@@ -41,7 +43,7 @@ public class ImageItem extends Item {
 		image = img;
 
 		if (imgview != null) {
-			imgview.setImageBitmap(image != null ? image.getBitmap() : null);
+			updateImageView();
 		}
 	}
 
@@ -61,12 +63,28 @@ public class ImageItem extends Item {
 		return appearanceMode;
 	}
 
+	private void updateImageView() {
+		if (image != null) {
+			int virtualWidth = Displayable.getVirtualWidth();
+			int displayWidth = ContextHolder.getDisplayWidth();
+			float mult = (float) displayWidth / virtualWidth;
+			int width = (int) (image.getWidth() * mult);
+			int height = (int) (image.getHeight() * mult);
+			imgview.setMinimumWidth(width);
+			imgview.setMinimumHeight(height);
+			imgview.setImageBitmap(image.getBitmap());
+		} else {
+			imgview.setImageBitmap(null);
+		}
+	}
+
 	@Override
 	public View getItemContentView() {
 		if (imgview == null) {
 			imgview = new ImageView(getOwnerForm().getParentActivity());
-			imgview.setImageBitmap(image != null ? image.getBitmap() : null);
+			imgview.setScaleType(ImageView.ScaleType.FIT_XY);
 			imgview.setOnClickListener(v -> fireDefaultCommandAction());
+			updateImageView();
 		}
 
 		return imgview;
