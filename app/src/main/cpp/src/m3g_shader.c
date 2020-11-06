@@ -32,7 +32,7 @@ static const char *gCVertexShader =
         "varying vec4 vColor;\n"
         "void main() {\n"
         "  gl_Position = uMVPMatrix * aPosition;\n"
-        "  vColor = aColor;\n"
+        "  vColor = aColor / 255.0;\n"
         "}\n";
 
 static const char *gCFragmentShader =
@@ -226,10 +226,18 @@ void m3gLoadTexCoords(GLint size, GLenum type, GLsizei stride, const void *point
 
 void m3gLoadColors(GLint size, GLenum type, GLsizei stride, const void *pointer) {
     if (shaderMode == M3G_SHADER_COLOR) {
-        glVertexAttribPointer(glCColorHandle, size, type, GL_FALSE, stride, pointer);
+        M3Gubyte* ptr = pointer;
+        glVertexAttribPointer(glCColorHandle, size, type, GL_FALSE, stride, ptr);
         checkGlError("glVertexAttribPointer");
         glEnableVertexAttribArray(glCColorHandle);
         checkGlError("glEnableVertexAttribArray");
+    }
+}
+
+void m3gLoadColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
+    if (shaderMode == M3G_SHADER_COLOR) {
+        glVertexAttrib4f(glCColorHandle, r, g, b, a);
+        checkGlError("glVertexAttrib");
     }
 }
 
