@@ -35,8 +35,8 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.Sprite;
 
 public class DirectGraphicsImp implements DirectGraphics {
-	private static String TAG = DirectGraphicsImp.class.getName();
-	private Graphics graphics;
+	private static final String TAG = DirectGraphicsImp.class.getName();
+	private final Graphics graphics;
 	private int alphaComponent;
 
 	public DirectGraphicsImp(Graphics g) {
@@ -168,10 +168,42 @@ public class DirectGraphicsImp implements DirectGraphics {
 		int transform = getTransformation(manipulation);
 		int[] pixres = new int[height * width];
 
-		for (int iy = 0; iy < height; iy++) {
-			for (int ix = 0; ix < width; ix++) {
-				int c = toARGB32(pix[off + ix + iy * scanlen], format);
-				pixres[iy * width + ix] = c;
+		switch (format) {
+			case TYPE_USHORT_4444_ARGB: {
+				for (int iy = 0; iy < height; iy++) {
+					for (int ix = 0; ix < width; ix++) {
+						short s = pix[off + ix + iy * scanlen];
+						int a = (s & 0xF000) << 12;
+						int r = (s & 0x0F00) << 8;
+						int g = (s & 0x00F0) << 4;
+						int b = (s & 0x000F);
+						int argb = a | r | g | b;
+						pixres[iy * width + ix] = argb | argb << 4;
+					}
+				}
+				break;
+			}
+			case TYPE_USHORT_444_RGB: {
+				for (int iy = 0; iy < height; iy++) {
+					for (int ix = 0; ix < width; ix++) {
+						short s = pix[off + ix + iy * scanlen];
+						int rgb = (s & 0x0F00) << 8 | (s & 0x00F0) << 4 | (s & 0x000F);
+						pixres[iy * width + ix] = 0xFF000000 | rgb | rgb << 4;
+					}
+				}
+				break;
+			}
+			case TYPE_USHORT_565_RGB: {
+				for (int iy = 0; iy < height; iy++) {
+					for (int ix = 0; ix < width; ix++) {
+						short s = pix[off + ix + iy * scanlen];
+						int r = (s & 0xF800) << 8 | (s & 0xE000) << 3;
+						int g = (s & 0x07E0) << 5 | (s & 0x0600) >> 1;
+						int b = (s & 0x001F) << 3 | (s & 0x001C) >> 2;
+						pixres[iy * width + ix] = 0xFF000000 | r | g | b;
+					}
+				}
+				break;
 			}
 		}
 		Image image = Image.createRGBImage(pixres, width, height, true);
@@ -264,7 +296,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
-		if (format != TYPE_USHORT_444_RGB && format != TYPE_USHORT_4444_ARGB) {
+		if (format != TYPE_USHORT_444_RGB && format != TYPE_USHORT_4444_ARGB && format != TYPE_USHORT_565_RGB) {
 			throw new IllegalArgumentException("Illegal format: " + format);
 		}
 		if (width < 0 || height < 0) {
@@ -274,15 +306,43 @@ public class DirectGraphicsImp implements DirectGraphics {
 			return;
 		}
 
-		int[] pixres = new int[offset + scanlen * height];
-		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
-		for (int iy = 0; iy < height; iy++) {
-			for (int ix = 0; ix < width; ix++) {
-				short c = toARGB16(pixres[offset + ix + iy * scanlen], format);
-				if (format == TYPE_USHORT_444_RGB) {
-					c |= (0xF << 12);
+		int[] pixels = new int[width * height];
+		graphics.getPixels(pixels, 0, width, x, y, width, height);
+		switch (format) {
+			case TYPE_USHORT_4444_ARGB: {
+				for (int iy = 0; iy < height; iy++) {
+					for (int ix = 0; ix < width; ix++) {
+						int a = pixels[ix + iy * width] >> 16 & 0xF000;
+						int r = pixels[ix + iy * width] >> 12 & 0x0F00;
+						int g = pixels[ix + iy * width] >> 8 & 0x00F0;
+						int b = pixels[ix + iy * width] >> 4 & 0x000F;
+
+						pix[offset + iy * scanlen + ix] = (short) (a | r | g | b);
+					}
 				}
-				pix[offset + iy * scanlen + ix] = c;
+				break;
+			}
+			case TYPE_USHORT_444_RGB: {
+				for (int iy = 0; iy < height; iy++) {
+					for (int ix = 0; ix < width; ix++) {
+						int r = pixels[ix + iy * width] >> 12 & 0x0F00;
+						int g = pixels[ix + iy * width] >> 8 & 0x00F0;
+						int b = pixels[ix + iy * width] >> 4 & 0x000F;
+
+						pix[offset + iy * scanlen + ix] = (short) (0xf000 | r | g | b);
+					}
+				}
+				break;
+			}
+			case TYPE_USHORT_565_RGB: {
+				for (int iy = 0; iy < height; iy++) {
+					for (int ix = 0; ix < width; ix++) {
+						int r = pixels[ix + iy * width] >> 8 & 0xF800;
+						int g = pixels[ix + iy * width] >> 5 & 0x07E0;
+						int b = pixels[ix + iy * width] >> 3 & 0x001F;
+						pix[offset + iy * scanlen + ix] = (short) (r | g | b);
+					}
+				}
 			}
 		}
 	}
@@ -302,15 +362,12 @@ public class DirectGraphicsImp implements DirectGraphics {
 			return;
 		}
 
-		int[] pixres = new int[offset + scanlen * height];
-		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
-		for (int iy = 0; iy < height; iy++) {
-			for (int ix = 0; ix < width; ix++) {
-				int c = pixres[offset + ix + iy * scanlen];
-				if (format == TYPE_INT_888_RGB) {
-					c |= (0xFF << 24);
+		graphics.getPixels(pix, offset, scanlen, x, y, width, height);
+		if (format == TYPE_INT_888_RGB) {
+			for (int iy = 0; iy < height; iy++) {
+				for (int ix = 0; ix < width; ix++) {
+					pix[offset + iy * scanlen + ix] |= 0xFF000000;
 				}
-				pix[offset + iy * scanlen + ix] = c;
 			}
 		}
 	}
@@ -331,59 +388,6 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 	private static boolean isBitSet(byte b, int pos) {
 		return ((b & (byte) (1 << pos)) != 0);
-	}
-
-	private static int toARGB32(short s, int type) {
-		switch (type) {
-			case TYPE_USHORT_4444_ARGB: {
-				int a = (s & 0xF000) << 12;
-				int r = (s & 0x0F00) << 8;
-				int g = (s & 0x00F0) << 4;
-				int b = (s & 0x000F);
-				a |= a << 4;
-				r |= r << 4;
-				g |= g << 4;
-				b |= b << 4;
-
-				return a | r | g | b;
-			}
-			case TYPE_USHORT_444_RGB: {
-				int a = 0xFF << 24;
-				int r = (s & 0x0F00) << 8;
-				int g = (s & 0x00F0) << 4;
-				int b = (s & 0x000F);
-				r |= r << 4;
-				g |= g << 4;
-				b |= b << 4;
-
-				return a | r | g | b;
-			}
-		}
-		return 0;
-	}
-
-	private static short toARGB16(int s, int type) {
-		short result = 0;
-		switch (type) {
-			case TYPE_USHORT_4444_ARGB: {
-				int a = (s & 0xFF000000) >>> 28;
-				int r = (s & 0x00FF0000) >>> 20;
-				int g = (s & 0x0000FF00) >>> 12;
-				int b = (s & 0x000000FF) >>> 4;
-
-				result = (short) ((a << 12) | (r << 8) | (g << 4) | b);
-				break;
-			}
-			case TYPE_USHORT_444_RGB: {
-				int r = (s & 0x00FF0000) >>> 20;
-				int g = (s & 0x0000FF00) >>> 12;
-				int b = (s & 0x000000FF) >>> 4;
-
-				result = (short) ((r << 8) | (g << 4) | b);
-				break;
-			}
-		}
-		return result;
 	}
 
 	private static int getTransformation(int manipulation) {
