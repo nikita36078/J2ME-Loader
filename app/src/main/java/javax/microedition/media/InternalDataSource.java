@@ -26,8 +26,6 @@ import com.arthenica.mobileffmpeg.FFprobe;
 import com.arthenica.mobileffmpeg.MediaInformation;
 import com.arthenica.mobileffmpeg.StreamInformation;
 
-import org.acra.ACRA;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,7 +82,6 @@ public class InternalDataSource extends DataSource {
 			convert();
 		} catch (Exception e) {
 			// Thrown on fake Oppo devices
-			ACRA.getErrorReporter().handleSilentException(e);
 			e.printStackTrace();
 		}
 	}
