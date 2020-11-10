@@ -144,6 +144,7 @@
     <string name="pref_app_sort_title">App sort order</string>
     <string name="pref_app_sort_name">Name</string>
     <string name="pref_app_sort_date">Date</string>
+    <string name="pref_app_sort_vendor">Vendor</string>
     <string name="pref_map_keys">Key mappings</string>
     <string name="pref_encoding_title">Encoding</string>
     <string name="pref_default_settings">Default settings</string>

@@ -8,7 +8,7 @@
         android:entryValues="@array/pref_theme_values"
         android:icon="@drawable/ic_setting_theme"
         android:key="pref_theme"
-        android:summary="@string/pref_requires_restart_summary"
+        app:useSimpleSummaryProvider="true"
         android:title="@string/pref_theme_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
@@ -32,23 +32,13 @@
         android:icon="@drawable/ic_setting_enable_vibration"
         android:key="pref_vibration_switch"
         android:title="@string/pref_vibration_title" />
-    <ListPreference
-        android:defaultValue="name"
-        android:entries="@array/pref_app_sort_entries"
-        android:entryValues="@array/pref_app_sort_values"
-        android:icon="@drawable/ic_setting_sort"
-        android:key="pref_app_sort"
-        android:summary="@string/pref_requires_restart_summary"
-        android:title="@string/pref_app_sort_title" />
     <Preference
         android:key="pref_default_settings"
         android:icon="@drawable/ic_setting_default"
-        android:title="@string/pref_default_settings">
-    </Preference>
+        android:title="@string/profiles" />
     <Preference
         android:key="emulator_dir"
         android:icon="@drawable/ic_setting_folder"
         android:title="@string/pref_emulator_dir"
-        tools:summary="/sdcard/J2ME-Loader">
-    </Preference>
+        tools:summary="/sdcard/J2ME-Loader" />
 </androidx.preference.PreferenceScreen>

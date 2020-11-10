@@ -17,10 +17,12 @@
     <string-array name="pref_app_sort_entries">
         <item>@string/pref_app_sort_name</item>
         <item>@string/pref_app_sort_date</item>
+        <item>@string/pref_app_sort_vendor</item>
     </string-array>
     <string-array name="pref_app_sort_values" translatable="false">
-        <item>name</item>
-        <item>date</item>
+        <item>title COLLATE LOCALIZED %1$s, author COLLATE LOCALIZED ASC</item>
+        <item>id %1$s</item>
+        <item>author COLLATE LOCALIZED %1$s, title COLLATE LOCALIZED ASC</item>
     </string-array>
     <string-array name="PREF_ORIENTATION_ENTRIES">
         <item>@string/pref_orientation_default</item>

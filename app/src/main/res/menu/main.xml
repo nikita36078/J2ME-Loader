@@ -9,6 +9,13 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_sort"
+        android:title="@string/pref_app_sort_title"
+        android:icon="@drawable/ic_setting_sort"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="0">
+    </item>
+    <item
         android:id="@+id/action_about"
         android:title="@string/about"
         app:showAsAction="never" />

@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2021 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +17,40 @@
 
 package ru.playsoftware.j2meloader.appsdb;
 
-import android.app.Application;
+import android.annotation.SuppressLint;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.sqlite.db.SupportSQLiteProgram;
+import androidx.sqlite.db.SupportSQLiteQuery;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
+import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 public class AppRepository {
+	private final AppItemDao appItemDao;
+	private final String[] orderTerms;
+	private boolean isClose;
+	private int sortVariant;
+	private final AppDatabase db;
 
-	private AppItemDao appItemDao;
-	private boolean appDateSort;
-
-	public AppRepository(Application application, boolean dateSort) {
-		AppDatabase db = AppDatabase.getDatabase(application);
-		appDateSort = dateSort;
+	public AppRepository(Context context) {
+		db = AppDatabase.getDatabase(context);
 		appItemDao = db.appItemDao();
+		orderTerms = context.getResources().getStringArray(R.array.pref_app_sort_values);
+	}
+
+	public AppRepository(Context context, int sort) {
+		this(context);
+		sortVariant = sort;
 	}
 
 	public Flowable<List<AppItem>> getAll() {
-		if (appDateSort) {
-			return appItemDao.getAllByDate();
-		} else {
-			return appItemDao.getAllByName();
-		}
+		return appItemDao.getAll(new MutableSortSQLiteQuery());
 	}
 
 	public void insert(AppItem item) {
@@ -57,6 +65,12 @@ public class AppRepository {
 				.subscribe();
 	}
 
+	public void update(AppItem item) {
+		Completable.fromAction(() -> appItemDao.update(item))
+				.subscribeOn(Schedulers.io())
+				.subscribe();
+	}
+
 	public void delete(AppItem item) {
 		Completable.fromAction(() -> appItemDao.delete(item))
 				.subscribeOn(Schedulers.io())
@@ -64,9 +78,56 @@ public class AppRepository {
 	}
 
 	public void deleteAll() {
-		Completable.fromAction(() -> appItemDao.deleteAll())
+		Completable.fromAction(appItemDao::deleteAll)
 				.subscribeOn(Schedulers.io())
 				.subscribe();
 	}
 
+	public AppItem get(String name, String vendor) {
+		return appItemDao.get(name, vendor);
+	}
+
+	@Override
+	protected void finalize() {
+		if (!isClose)
+			AppDatabase.closeInstance();
+	}
+
+	public void close() {
+		AppDatabase.closeInstance();
+		isClose = true;
+	}
+
+	public int getSort() {
+		return sortVariant;
+	}
+
+	@SuppressLint({"RestrictedApi", "VisibleForTests"})
+	public int setSort(int variant) {
+		if (this.sortVariant == variant) {
+			variant |= 0x80000000;
+		}
+		this.sortVariant = variant;
+		db.getInvalidationTracker().notifyObserversByTableNames("apps");
+		return variant;
+	}
+
+	private class MutableSortSQLiteQuery implements SupportSQLiteQuery {
+		private static final String SELECT = "SELECT * FROM apps ORDER BY ";
+
+		@Override
+		public String getSql() {
+			String order = sortVariant >= 0 ? " ASC" : " DESC";
+			return SELECT + String.format(orderTerms[sortVariant & 0x7FFFFFFF], order);
+		}
+
+		@Override
+		public void bindTo(SupportSQLiteProgram statement) {
+		}
+
+		@Override
+		public int getArgCount() {
+			return 0;
+		}
+	}
 }

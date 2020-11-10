@@ -18,6 +18,7 @@
 package ru.playsoftware.j2meloader.applist;
 
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	private List<AppItem> list = new ArrayList<>();
 	private List<AppItem> filteredList = new ArrayList<>();
 	private final AppFilter appFilter = new AppFilter();
+	private CharSequence filterConstraint;
 
 	@Override
 	public int getCount() {
@@ -86,8 +88,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 	public void setItems(List<AppItem> items) {
 		list = items;
-		filteredList = items;
-		notifyDataSetChanged();
+		appFilter.filter(filterConstraint);
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
 			FilterResults results = new FilterResults();
-			if (constraint.equals("")) {
+			if (TextUtils.isEmpty(constraint)) {
 				results.count = list.size();
 				results.values = list;
 			} else {
@@ -126,7 +127,9 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
+			filterConstraint = constraint;
 			if (results.values != null) {
+				//noinspection unchecked
 				filteredList = (List<AppItem>) results.values;
 				notifyDataSetChanged();
 			} else {

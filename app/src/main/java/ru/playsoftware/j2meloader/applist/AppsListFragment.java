@@ -34,6 +34,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,9 +43,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -52,10 +55,12 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
 import androidx.preference.PreferenceManager;
@@ -91,16 +96,20 @@ import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.JarConverter;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_APP_URI;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 
 public class AppsListFragment extends ListFragment {
-	private AppRepository appRepository;
-	private CompositeDisposable compositeDisposable;
+	private static final String TAG = AppsListFragment.class.getSimpleName();
+	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 	private final AppsListAdapter adapter = new AppsListAdapter();
 	private JarConverter converter;
-	private String appSort;
-	private Uri appPath;
+	private Uri appUri;
 	private SharedPreferences preferences;
+	private AppRepository appRepository;
+
 	private final ActivityResultLauncher<Void> openFileLauncher = registerForActivityResult(
 			new ActivityResultContract<Void, Uri>() {
 				@NonNull
@@ -137,13 +146,13 @@ public class AppsListFragment extends ListFragment {
 				preferences.edit()
 						.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
 						.apply();
-				convertJar(uri);
+				installApp(uri);
 			});
 
 	public static AppsListFragment newInstance(Uri data) {
 		AppsListFragment fragment = new AppsListFragment();
 		Bundle args = new Bundle();
-		args.putParcelable(KEY_APP_PATH, data);
+		args.putParcelable(KEY_APP_URI, data);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -151,11 +160,17 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		compositeDisposable = new CompositeDisposable();
+		appUri = requireArguments().getParcelable(KEY_APP_URI);
 		converter = new JarConverter(requireActivity().getApplicationInfo().dataDir);
 		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
-		appSort = preferences.getString(PREF_APP_SORT, "name");
-		appPath = requireArguments().getParcelable(KEY_APP_PATH);
+		int sort;
+		try {
+			sort = preferences.getInt(PREF_APP_SORT, 0);
+		} catch (Exception e) {
+			sort = preferences.getString(PREF_APP_SORT, "name").equals("name") ? 0 : 1;
+			preferences.edit().putInt(PREF_APP_SORT, sort).apply();
+		}
+		appRepository = new AppRepository(requireContext(), sort);
 	}
 
 	@Override
@@ -177,25 +192,27 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (appPath != null) {
-			convertJar(appPath);
-			appPath = null;
+		if (appUri != null) {
+			installApp(appUri);
+			appUri = null;
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
+		if (appRepository != null) {
+			appRepository.close();
+			appRepository = null;
+		}
 		compositeDisposable.clear();
+		super.onDestroy();
 	}
 
 	@SuppressLint("CheckResult")
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void initDb() {
-		appRepository = new AppRepository(requireActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
 				.subscribeOn(Schedulers.io())
-				.doOnError(this::alertDbError)
 				.publish();
 		listConnectableFlowable
 				.firstElement()
@@ -207,18 +224,25 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private void alertDbError(Throwable throwable) {
+		Activity activity = getActivity();
+		if (activity == null) {
+			Log.e(TAG, "Db error detected", throwable);
+			return;
+		}
 		if (throwable instanceof SQLiteDiskIOException) {
-			requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(),
-					R.string.error_disk_io, Toast.LENGTH_SHORT).show());
+			activity.runOnUiThread(() ->
+					Toast.makeText(activity, R.string.error_disk_io, Toast.LENGTH_SHORT).show());
 		} else {
-			requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(),
-					getString(R.string.error) + ": " + throwable.getMessage(), Toast.LENGTH_SHORT).show());
+			activity.runOnUiThread(() -> {
+				String msg = activity.getString(R.string.error) + ": " + throwable.getMessage();
+				Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+			});
 		}
 	}
 
 	@SuppressLint("CheckResult")
 	@SuppressWarnings("ResultOfMethodCallIgnored")
-	private void convertJar(Uri path) {
+	private void installApp(Uri path) {
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -294,7 +318,7 @@ public class AppsListFragment extends ListFragment {
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
 						item.setTitle(title);
-						appRepository.insert(item);
+						appRepository.update(item);
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
@@ -351,7 +375,7 @@ public class AppsListFragment extends ListFragment {
 			Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 		} else if (itemId == R.id.action_context_reinstall) {
 			Uri uri = Uri.fromFile(new File(appItem.getPathExt() + Config.MIDLET_RES_FILE));
-			convertJar(uri);
+			installApp(uri);
 		} else if (itemId == R.id.action_context_delete) {
 			showDeleteDialog(index);
 		} else {
@@ -399,26 +423,24 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		inflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter -> {
-			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-				@Override
-				public boolean onQueryTextSubmit(String query) {
-					emitter.onNext(query);
-					return true;
-				}
+		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
+				searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+					@Override
+					public boolean onQueryTextSubmit(String query) {
+						emitter.onNext(query);
+						return true;
+					}
 
-				@Override
-				public boolean onQueryTextChange(String newText) {
-					emitter.onNext(newText);
-					return true;
-				}
-			});
-		}).debounce(300, TimeUnit.MILLISECONDS)
+					@Override
+					public boolean onQueryTextChange(String newText) {
+						emitter.onNext(newText);
+						return true;
+					}
+				})).debounce(300, TimeUnit.MILLISECONDS)
 				.map(String::toLowerCase)
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())
@@ -428,30 +450,87 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		FragmentActivity activity = requireActivity();
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_about) {
 			AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
 			aboutDialogFragment.show(getChildFragmentManager(), "about");
 		} else if (itemId == R.id.action_profiles) {
-			Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
+			Intent intentProfiles = new Intent(activity, ProfilesActivity.class);
 			startActivity(intentProfiles);
 		} else if (itemId == R.id.action_help) {
 			HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
 			helpDialogFragment.show(getChildFragmentManager(), "help");
 		} else if (itemId == R.id.action_donate) {
-			Intent donationsIntent = new Intent(getActivity(), DonationsActivity.class);
+			Intent donationsIntent = new Intent(activity, DonationsActivity.class);
 			startActivity(donationsIntent);
 		} else if (itemId == R.id.action_save_log) {
 			try {
 				LogUtils.writeLog();
-				Toast.makeText(getActivity(), R.string.log_saved, Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, R.string.log_saved, Toast.LENGTH_SHORT).show();
 			} catch (IOException e) {
 				e.printStackTrace();
-				Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, R.string.error, Toast.LENGTH_SHORT).show();
 			}
 		} else if (itemId == R.id.action_exit_app) {
-			requireActivity().finish();
+			activity.finish();
+		} else if (itemId == R.id.action_sort) {
+			showSortDialog();
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
+	}
+
+	private void showSortDialog() {
+		int variant = appRepository.getSort();
+		SortAdapter adapter = new SortAdapter(requireActivity(), variant);
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
+				.setTitle(R.string.pref_app_sort_title)
+				.setAdapter(adapter, (d, v) -> {
+					adapter.setVariant(v);
+					setSort(v);
+					d.dismiss();
+				});
+		builder.show();
+	}
+
+	private void setSort(int sortVariant) {
+		int sortWithOrder = appRepository.setSort(sortVariant);
+		preferences.edit().putInt(PREF_APP_SORT, sortWithOrder).apply();
+	}
+
+	private static class SortAdapter extends ArrayAdapter<String> {
+		private int variant;
+		private final Drawable drawableArrowDown;
+		private final Drawable drawableArrowUp;
+
+		public SortAdapter(FragmentActivity activity, int variant) {
+			super(activity,
+					android.R.layout.simple_list_item_1,
+					activity.getResources().getStringArray(R.array.pref_app_sort_entries));
+			this.variant = variant;
+			drawableArrowDown = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_down);
+			drawableArrowUp = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_up);
+		}
+
+		@NonNull
+		@Override
+		public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+			TextView tv = (TextView) super.getView(position, convertView, parent);
+			if ((variant & 0x7FFFFFFF) == position) {
+				TextViewCompat.setCompoundDrawablesRelativeWithIntrinsicBounds(tv, null, null,
+						variant >= 0 ? drawableArrowDown : drawableArrowUp, null);
+			} else {
+				tv.setCompoundDrawables(null, null, null, null);
+			}
+			return tv;
+		}
+
+		public void setVariant(int variant) {
+			if (variant == this.variant) {
+				variant |= 0x80000000;
+			}
+			this.variant = variant;
+			notifyDataSetChanged();
+		}
 	}
 }
