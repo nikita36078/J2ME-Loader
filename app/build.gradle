@@ -11,6 +11,7 @@ android {
         versionCode 86
         versionName "1.6.7"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
+        ndkVersion '21.3.6528147'
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
         }
