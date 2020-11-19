@@ -162,7 +162,7 @@ public class MicroLoader {
 			setProperties();
 
 			Font.setSize(Font.SIZE_SMALL, params.fontSizeSmall);
-			Font.setSize(Font.SIZE_MEDIUM, params.fontSizeSmall);
+			Font.setSize(Font.SIZE_MEDIUM, params.fontSizeMedium);
 			Font.setSize(Font.SIZE_LARGE, params.fontSizeLarge);
 			Font.setApplyDimensions(params.fontApplyDimensions);
 
