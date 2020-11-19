@@ -42,6 +42,8 @@ public class Manager {
 		}
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
 			return new MidiPlayer();
+		} else if (locator.equals(TONE_DEVICE_LOCATOR)) {
+			return new TonePlayer();
 		} else if (locator.startsWith(FILE_LOCATOR)) {
 			InputStream stream = Connector.openInputStream(locator);
 			String extension = locator.substring(locator.lastIndexOf('.') + 1);
