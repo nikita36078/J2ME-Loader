@@ -107,4 +107,14 @@ public class MidiPlayer extends BasePlayer implements MIDIControl {
 		byte[] event = new byte[]{(byte) type, (byte) data1, (byte) data2};
 		midiDriver.write(event);
 	}
+
+	@Override
+	public void deallocate() {
+		midiDriver.stop();
+	}
+
+	@Override
+	public void close() {
+		deallocate();
+	}
 }

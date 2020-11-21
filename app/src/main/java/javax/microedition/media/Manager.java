@@ -27,6 +27,7 @@ import java.util.Arrays;
 import javax.microedition.io.Connector;
 import javax.microedition.media.protocol.DataSource;
 import javax.microedition.media.protocol.SourceStream;
+import javax.microedition.media.tone.ToneManager;
 import javax.microedition.util.ContextHolder;
 
 public class Manager {
@@ -92,15 +93,15 @@ public class Manager {
 	public static String[] getSupportedContentTypes(String str) {
 		return new String[]{"audio/wav", "audio/x-wav", "audio/midi", "audio/x-midi",
 				"audio/mpeg", "audio/aac", "audio/amr", "audio/amr-wb", "audio/mp3",
-				"audio/mp4", "audio/mmf"};
+				"audio/mp4", "audio/mmf", "audio/x-tone-seq"};
 	}
 
 	public static String[] getSupportedProtocols(String str) {
 		return new String[]{"device", "file", "http"};
 	}
 
-	public synchronized static void playTone(int frequency, int time, int volume)
+	public synchronized static void playTone(int note, int duration, int volume)
 			throws MediaException {
-		//TODO method stub
+		ToneManager.play(note, duration, volume);
 	}
 }

@@ -16,18 +16,32 @@
 
 package javax.microedition.media;
 
+import org.billthefarmer.mididriver.MidiDriver;
+
 import java.util.HashMap;
 
 import javax.microedition.media.control.ToneControl;
+import javax.microedition.media.tone.ToneSequence;
 
-public class TonePlayer extends BasePlayer {
+public class TonePlayer extends BasePlayer implements ToneControl {
 
+	private static final byte[] EMPTY_MIDI_SEQUENCE = {
+			0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x10,
+			0x4D, 0x54, 0x72, 0x6B, 0x00, 0x00, 0x00, 0x12, 0x00, (byte) 0xFF, 0x51, 0x03,
+			0x07, (byte) 0xA1, 0x20, 0x00, (byte) 0xC0, 0x01, 0x00, (byte) 0x80, 0x40,
+			0x7F, 0x00, (byte) 0xFF, 0x2F, 0x00
+	};
 	private HashMap<String, Control> controls;
+	private MidiDriver midiDriver;
+	private byte[] midiSequence;
+	private long duration;
 
 	public TonePlayer() {
-		InternalToneControl toneControl = new InternalToneControl();
+		midiDriver = new MidiDriver();
+		midiDriver.start();
+		midiSequence = EMPTY_MIDI_SEQUENCE;
 		controls = new HashMap<>();
-		controls.put(ToneControl.class.getName(), toneControl);
+		controls.put(ToneControl.class.getName(), this);
 	}
 
 	@Override
@@ -41,5 +55,37 @@ public class TonePlayer extends BasePlayer {
 	@Override
 	public Control[] getControls() {
 		return controls.values().toArray(new Control[0]);
+	}
+
+	@Override
+	public void setSequence(byte[] sequence) {
+		try {
+			ToneSequence tone = new ToneSequence(sequence);
+			tone.process();
+			midiSequence = tone.getByteArray();
+			duration = tone.getDuration();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public long getDuration() {
+		return duration;
+	}
+
+	@Override
+	public void start() throws MediaException {
+		midiDriver.queueEvent(midiSequence);
+	}
+
+	@Override
+	public void deallocate() {
+		midiDriver.stop();
+	}
+
+	@Override
+	public void close() {
+		deallocate();
 	}
 }
