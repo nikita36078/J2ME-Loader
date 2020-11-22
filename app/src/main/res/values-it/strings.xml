@@ -7,6 +7,7 @@
     <string name="more">Altro</string>
     <string name="search">Cerca</string>
     <string name="licenses">Licenze</string>
+    <string name="profiles">Profili</string>
     <string name="save_log">Salva log</string>
     <string name="about_message">Questa applicazione consente di avviare applicazioni e giochi J2ME su Android. Supporta la maggior parte dei giochi 2D e anche 3D, con alcune limitazioni.&lt;BR&gt;</string>
     <string name="help_message">&#8226; L\'abilitazione del filtro in alcuni casi può ridurre notevolmente le prestazioni. Disabilitare questa opzione se il gioco è troppo lento.&lt;BR&gt;&#8226; Problemi di tremolio dell\'immagine possono essere risolti abilitando l\'opzione \"modalità di elaborazione immediata\".</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Cancella i dati</string>
     <string name="RESET_SETTINGS_CMD">Resetta impostazioni</string>
     <string name="RESET_LAYOUT_CMD">Resetta la disposizione dei tasti</string>
+    <string name="load_profile">Carica Profilo</string>
+    <string name="save_profile">Salva Profilo</string>
     <string name="PREF_SCREEN_OPTIONS">Opzioni schermo</string>
     <string name="PREF_SCALE_RATIO">Scala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Allarga fino a riempire</string>
@@ -49,8 +52,13 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Tastiera virtuale</string>
     <string name="PREF_VK_SHOW">Mostra la tastiera</string>
     <string name="PREF_VK_FEEDBACK">Feedback tattile</string>
+    <string name="PREF_VK_FORCE_OPACITY">Forza l\'opacità per i tasti fuori schermo</string>
     <string name="PREF_TOUCH_INPUT">Input tocco</string>
     <string name="PREF_HW_ACCELERATION">Accelerazione hardware (instabile)</string>
+    <string name="pref_graphics_software">Software</string>
+    <string name="pref_graphics_hw_gles">Accelerazione HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Accelerazione HW (Finestra)</string>
+    <string name="pref_graphics_hw_surface">Accelerazione HW (Superficie)</string>
     <string name="PREF_VK_BACK">Tasti</string>
     <string name="PREF_VK_FORE">Etichette</string>
     <string name="PREF_VK_OUTLINE">Contorno</string>
@@ -104,7 +112,11 @@
     <string name="pref_enable_actionbar_summary">Nelle applicazioni a schermo intero</string>
     <string name="pref_enable_statusbar_title">Abilita barra di stato</string>
     <string name="pref_wakelock_title">Mantieni schermo attivo</string>
+    <string name="pref_vibration_title">Abilita vibrazione</string>
     <string name="pref_button_shape_title">Forma del tasto</string>
+    <string name="pref_button_shape_oval">Ovale</string>
+    <string name="pref_button_shape_rect">Rettangolare</string>
+    <string name="pref_button_shape_round">Rattengolo arrotondato</string>
     <string name="pref_app_sort_title">Ordine applicazioni</string>
     <string name="pref_app_sort_name">Nome</string>
     <string name="pref_app_sort_date">Data</string>
@@ -115,4 +127,26 @@
     <string name="mapping_dialog_message" formatted="false">Mappatura corrente: %1$s</string>
     <string name="reset_mapping">Reimposta</string>
     <string name="parallel_screen_redrawing">Ridisegno parallelo della schermata</string>
+    <string name="default_label">"%s (Predefinito)"</string>
+    <string name="saved">Salvato</string>
+    <string name="not_saved_exists">Esiste già</string>
+    <string name="create_apps_dir_failed">Impossibile creare una cartella nel percorso:\n\'%s\'\n selezionarne un\'altra.</string>
+    <string name="error_name">Inserire nome!</string>
+    <string name="set_as_default">Imposta come predefinita</string>
+    <string name="edit">Modifica</string>
+    <string name="add">Aggiungi</string>
+    <string name="add_profile_description">Crea un nuovo profilo</string>
+    <string name="enter_name">Inserisci il nome</string>
+    <string name="enter_new_name">Inserisci un nuovo nome</string>
+    <string name="set_default_profile_description">Seleziona questo profilo come impostazioni standard per tutte le applicazioni che saranno installate in seguito</string>
+    <string name="error_name_exists">Esiste già, inserisci un altro nome</string>
+    <string name="pref_vk_hide_hint">disabilitato</string>
+    <string name="unlimited">illimitato</string>
+    <string name="pref_emulator_dir">Cartella di lavoro</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Veloce (nessun filtro)</string>
+    <string name="shader_tuning">Tuning Shader</string>
+    <string name="reset">Reimposta</string>
+    <string name="pref_input_devices_title">Dispositivo di input</string>
+    <string name="pref_graphics_mode_title">Modalità grafica:</string>
 </resources>
