@@ -7,6 +7,7 @@
     <string name="more">Още</string>
     <string name="search">Търсене</string>
     <string name="licenses">Лицензи</string>
+    <string name="profiles">Профили</string>
     <string name="save_log">Запиши регистрационния файл</string>
     <string name="about_message">Това приложение ви позволява да стартирате приложения с J2ME и игри на Android. Поддържа повечето двуизмерни и триизмерни игри с някои ограничения.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Включването на филтри може значително да подобри производителността.Изключете тази опция ако играта е прекалено бавна.&lt;BR&gt;&#8226; Премигвания на екрана могат да бъдат поправени като изключите опцията за незабавна обработка.</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Изчистване на данните</string>
     <string name="RESET_SETTINGS_CMD">Нулиране на настройките</string>
     <string name="RESET_LAYOUT_CMD">Нулиране на подредбата за клавиатурата</string>
+    <string name="load_profile">Зареждане на профил</string>
+    <string name="save_profile">Запази профила</string>
     <string name="PREF_SCREEN_OPTIONS">Опции на екрана</string>
     <string name="PREF_SCALE_RATIO">Мащаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Мащабиране до натаманяване</string>
@@ -51,6 +54,10 @@
     <string name="PREF_VK_FEEDBACK">Вибрация при докосване</string>
     <string name="PREF_TOUCH_INPUT">Въвеждане с докосване</string>
     <string name="PREF_HW_ACCELERATION">Хардуерно ускорение (нестабилно)</string>
+    <string name="pref_graphics_software">Софтуерен</string>
+    <string name="pref_graphics_hw_gles">Хардуерно Ускорение (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Хардуерно Ускорение (window)</string>
+    <string name="pref_graphics_hw_surface">Хардуерно Ускорение (surface)</string>
     <string name="PREF_VK_BACK">Бутони</string>
     <string name="PREF_VK_FORE">Етикети</string>
     <string name="PREF_VK_OUTLINE">Контур</string>
@@ -104,7 +111,11 @@
     <string name="pref_enable_actionbar_summary">Приложения на цял екран</string>
     <string name="pref_enable_statusbar_title">Включване на лентата на състояние</string>
     <string name="pref_wakelock_title">Поддържане на включен екран</string>
+    <string name="pref_vibration_title">Включи вибрация</string>
     <string name="pref_button_shape_title">Форма на бутона</string>
+    <string name="pref_button_shape_oval">Овал</string>
+    <string name="pref_button_shape_rect">Правоъгълник</string>
+    <string name="pref_button_shape_round">Заоблен правоъгълник</string>
     <string name="pref_app_sort_title">Ред за сортиране на приложения</string>
     <string name="pref_app_sort_name">Име</string>
     <string name="pref_app_sort_date">Дата</string>
@@ -115,4 +126,5 @@
     <string name="mapping_dialog_message" formatted="false">Текущи настройки: %1$s</string>
     <string name="reset_mapping">Нулиране</string>
     <string name="parallel_screen_redrawing">Паралелно обновяване на екрана</string>
+    <string name="default_label">"%s (по подразбиране)"</string>
 </resources>
