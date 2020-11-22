@@ -112,6 +112,7 @@
     <string name="pref_enable_actionbar_summary">Matikan opsi ini jika ingin dalam keadaan layar penuh</string>
     <string name="pref_enable_statusbar_title">Hidupkan statusbar</string>
     <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
+    <string name="pref_vibration_title">Hidupkan getar</string>
     <string name="pref_button_shape_title">Bentuk tombol</string>
     <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Kotak</string>
