@@ -79,8 +79,8 @@
     <string name="PREF_ORIENTATION">Định hướng màn hình</string>
     <string name="pref_orientation_default">Mặc định</string>
     <string name="pref_orientation_auto">Tự động</string>
-    <string name="pref_orientation_port">Chiều dọc</string>
-    <string name="pref_orientation_land">Chiều ngang</string>
+    <string name="pref_orientation_port">Chân dung</string>
+    <string name="pref_orientation_land">Cảnh quan</string>
     <string name="error">Lỗi</string>
     <string name="message_clear_data">Bạn thực sự muốn xoá dữ liệu ứng dụng?</string>
     <string name="PREF_VK_TYPE">Kiểu bàn phím</string>
@@ -112,13 +112,14 @@
     <string name="pref_enable_actionbar_summary">Trong các ứng dụng toàn màn hình</string>
     <string name="pref_enable_statusbar_title">Bật thanh trạng thái</string>
     <string name="pref_wakelock_title">Giữ màn hình mở</string>
+    <string name="pref_vibration_title">Bật rung động</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
     <string name="pref_button_shape_oval">Ôvan</string>
     <string name="pref_button_shape_rect">Hình chữ nhật</string>
     <string name="pref_button_shape_round">Hình chữ nhật thành tròn</string>
     <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
     <string name="pref_app_sort_name">Tên</string>
-    <string name="pref_app_sort_date">Ngày</string>
+    <string name="pref_app_sort_date">Ngày tháng</string>
     <string name="pref_map_keys">Phím ánh xạ</string>
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>
@@ -132,7 +133,7 @@
     <string name="create_apps_dir_failed">Không thể tạo thư mục trong đường dẫn:\n\'%s\'\nchọn khác.</string>
     <string name="error_name">Nhập tên!</string>
     <string name="set_as_default">Đặt như mặc định</string>
-    <string name="edit">Thoát</string>
+    <string name="edit">Chỉnh sửa</string>
     <string name="add">Thêm</string>
     <string name="add_profile_description">Tạo biên dạng mới</string>
     <string name="enter_name">Nhập tên</string>
