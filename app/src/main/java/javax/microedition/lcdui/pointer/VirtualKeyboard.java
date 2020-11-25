@@ -649,7 +649,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void setTarget(Canvas canvas) {
-		target = canvas;
+		if (canvas != null) {
+			target = canvas;
+		}
 		repeater.setTarget(canvas);
 		highlightGroup(-1);
 	}
