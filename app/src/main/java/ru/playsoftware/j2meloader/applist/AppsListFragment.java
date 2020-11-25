@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -144,14 +145,25 @@ public class AppsListFragment extends ListFragment {
 		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
 				.subscribeOn(Schedulers.io())
+				.doOnError(this::alertDbError)
 				.publish();
 		listConnectableFlowable
 				.firstElement()
-				.subscribe(list -> AppUtils.updateDb(appRepository, list));
+				.subscribe(list -> AppUtils.updateDb(appRepository, list), this::alertDbError);
 		listConnectableFlowable
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(list -> adapter.setItems(list));
+				.subscribe(list -> adapter.setItems(list), this::alertDbError);
 		compositeDisposable.add(listConnectableFlowable.connect());
+	}
+
+	private void alertDbError(Throwable throwable) {
+		if (throwable instanceof SQLiteDiskIOException) {
+			requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(),
+					R.string.error_disk_io, Toast.LENGTH_SHORT).show());
+		} else {
+			requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(),
+					getString(R.string.error) + ": " + throwable.getMessage(), Toast.LENGTH_SHORT).show());
+		}
 	}
 
 	@Override

@@ -186,6 +186,7 @@
     <string name="pref_vk_hide_hint">disabled</string>
     <string name="unlimited">unlimited</string>
     <string name="pref_emulator_dir">Working directory</string>
+    <string name="error_disk_io">Storage error: check disk space</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Fast (no filter)</string>
     <string name="shader_tuning">Shader Tuning</string>
