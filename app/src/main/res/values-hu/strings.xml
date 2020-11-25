@@ -7,6 +7,7 @@
     <string name="more">Továbbiak</string>
     <string name="search">Keresés</string>
     <string name="licenses">Licencek</string>
+    <string name="profiles">Profilok</string>
     <string name="save_log">Napló mentése</string>
     <string name="about_message">Ez az app lehetővé teszi a J2ME alkalmazások és játékok indítását Androidon. Támogatja a legtöbb 2D-s játékot, illetve a 3D-seket némi korlátozással.&lt;BR&gt;</string>
     <string name="help_message">&#8226; A szűrés engedélyezése esetenként jelentősen csökkentheti a teljesítményt. Tiltsa le, ha a játék túl lassú.&lt;BR&gt;&#8226; A kép villódzása javítható az \"Azonnali feldolgozás\" lehetőséggel.</string>
@@ -29,6 +30,8 @@
     <string name="CLEAR_DATA_CMD">Adatok törlése</string>
     <string name="RESET_SETTINGS_CMD">Beállítások visszaállítása</string>
     <string name="RESET_LAYOUT_CMD">Gombelrendezés visszaállítása</string>
+    <string name="load_profile">Profil betöltése</string>
+    <string name="save_profile">Profil mentése</string>
     <string name="PREF_SCREEN_OPTIONS">Képernyőbeállítások</string>
     <string name="PREF_SCALE_RATIO">Méretezés (%)</string>
     <string name="PREF_SCALE_TO_FIT">Mérethez igazítás</string>
@@ -52,6 +55,10 @@
     <string name="PREF_VK_FORCE_OPACITY">A képernyőn kívüli gombok áttetszőségének kényszerítése</string>
     <string name="PREF_TOUCH_INPUT">Érintéses bevitel</string>
     <string name="PREF_HW_ACCELERATION">HW gyorsítás (nem stabil)</string>
+    <string name="pref_graphics_software">Szoftveres</string>
+    <string name="pref_graphics_hw_gles">Hardveres gyorsítás (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Hardveres gyorsítás (ablak)</string>
+    <string name="pref_graphics_hw_surface">Hardveres gyorsítás (felület)</string>
     <string name="PREF_VK_BACK">Gombok</string>
     <string name="PREF_VK_FORE">Címkék</string>
     <string name="PREF_VK_OUTLINE">Körvonal</string>
@@ -106,6 +113,9 @@
     <string name="pref_enable_statusbar_title">Állapotsor engedélyezése</string>
     <string name="pref_wakelock_title">Képernyő bekapcsolva tartása</string>
     <string name="pref_button_shape_title">Gombforma</string>
+    <string name="pref_button_shape_oval">Ovális</string>
+    <string name="pref_button_shape_rect">Téglalap</string>
+    <string name="pref_button_shape_round">Lekerekített téglalap</string>
     <string name="pref_app_sort_title">Alkalmazásrendezési sorrend</string>
     <string name="pref_app_sort_name">Név</string>
     <string name="pref_app_sort_date">Dátum</string>
@@ -116,5 +126,26 @@
     <string name="mapping_dialog_message" formatted="false">Jelenlegi hozzárendelés: %1$s</string>
     <string name="reset_mapping">Alaphelyzetbe állítás</string>
     <string name="parallel_screen_redrawing">Párhuzamos képernyő-újrarajzolás</string>
+    <string name="default_label">"%s (alapértelmezett)"</string>
     <string name="saved">Mentve</string>
+    <string name="not_saved_exists">Már létezik</string>
+    <string name="create_apps_dir_failed">Könyvtár létrehozása sikertelen a következő útvonalon:\n\'%s\'\nVálasszon másikat.</string>
+    <string name="error_name">Adja meg a nevet!</string>
+    <string name="set_as_default">Beállítás alapértelmezettként</string>
+    <string name="edit">Szerkesztés</string>
+    <string name="add">Hozzáadás</string>
+    <string name="add_profile_description">Új profil létrehozása</string>
+    <string name="enter_name">Név megadása</string>
+    <string name="enter_new_name">Adja meg az új nevet</string>
+    <string name="set_default_profile_description">Állítsa be ezt a profilt alapértelmezettként a jövőben telepítendő új alkalmazások számára</string>
+    <string name="error_name_exists">Már létezik, adjon meg egy másik nevet</string>
+    <string name="pref_vk_hide_hint">letiltva</string>
+    <string name="unlimited">korlátlan</string>
+    <string name="pref_emulator_dir">Munkakönyvtár</string>
+    <string name="PREF_SHADER_FILTER">Árnyékolás:</string>
+    <string name="identity_filter">Gyors (nincs szűrő)</string>
+    <string name="shader_tuning">Szűrő finomhangolása</string>
+    <string name="reset">Visszaállítás</string>
+    <string name="pref_input_devices_title">Beviteli eszközök</string>
+    <string name="pref_graphics_mode_title">Grafikamód:</string>
 </resources>

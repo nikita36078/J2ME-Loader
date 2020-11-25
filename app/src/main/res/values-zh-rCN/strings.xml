@@ -112,6 +112,7 @@
     <string name="pref_enable_actionbar_summary">在应用中全屏</string>
     <string name="pref_enable_statusbar_title">启用状态栏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
+    <string name="pref_vibration_title">开启振动</string>
     <string name="pref_button_shape_title">按钮形状</string>
     <string name="pref_button_shape_oval">椭圆形</string>
     <string name="pref_button_shape_rect">矩形</string>

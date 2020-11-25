@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">닫다</string>
+    <string name="close">가까운</string>
     <string name="exit">탈퇴하다</string>
     <string name="about">대해서</string>
     <string name="help">도움</string>
     <string name="more">더보기</string>
     <string name="search">검색하다</string>
     <string name="licenses">허가</string>
+    <string name="profiles">프로필</string>
     <string name="save_log">Log 저장</string>
     <string name="about_message">이 앱은 Android 기기에서 다수의 2D와 일부 3D 게임을 지원하는 J2ME 앱과 게임을 실행할 수 있습니다.&lt;BR&gt;</string>
     <string name="help_message">&#8226;어떤 경우에 필터를 기용하면 성능이 크게 저하될 수 있습니다.게임이 너무 느리면 이 옵션을 사용하지 마십시오.&lt;BR&gt;&#8226;의 \"즉각 처리 모드\" 옵션을 사용하여 이미지 깜박임 문제를 복원할 수 있습니다.&lt;BR&gt;&#8226; 도움말 1. 시뮬레이터 가상 버튼 상용 기능 소개
@@ -43,6 +44,8 @@
     <string name="CLEAR_DATA_CMD">데이터 제거</string>
     <string name="RESET_SETTINGS_CMD">묵시적 설정 복원</string>
     <string name="RESET_LAYOUT_CMD">리셋 버튼 배치</string>
+    <string name="load_profile">프로필 로드</string>
+    <string name="save_profile">프로필 저장</string>
     <string name="PREF_SCREEN_OPTIONS">화면 옵션</string>
     <string name="PREF_SCALE_RATIO">비율(%)</string>
     <string name="PREF_SCALE_TO_FIT">스크린에 적응하도록 축방하다(권장 켜짐, 스크린 크기에 따라 자동으로 게임 이미지 확대)</string>
@@ -63,8 +66,13 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">가상 키보드</string>
     <string name="PREF_VK_SHOW">키보드 표시</string>
     <string name="PREF_VK_FEEDBACK">촉각 피드백</string>
+    <string name="PREF_VK_FORCE_OPACITY">화면 밖 키에 대해 불투명 강제 적용</string>
     <string name="PREF_TOUCH_INPUT">스크린 터치</string>
     <string name="PREF_HW_ACCELERATION">하드웨어 가속(불안정하다)</string>
+    <string name="pref_graphics_software">소프트웨어</string>
+    <string name="pref_graphics_hw_gles">HW 가속 (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">HW 가속 (window)</string>
+    <string name="pref_graphics_hw_surface">HW 가속 (surface)</string>
     <string name="PREF_VK_BACK">버튼을 누르다</string>
     <string name="PREF_VK_FORE">라벨</string>
     <string name="PREF_VK_OUTLINE">테두리</string>
@@ -116,8 +124,13 @@
     <string name="pref_requires_restart_summary">본 절차의 재개가 필요하다</string>
     <string name="pref_enable_actionbar_title">오퍼레이션</string>
     <string name="pref_enable_actionbar_summary">애플리케이션에서 풀스크린</string>
+    <string name="pref_enable_statusbar_title">상태 표시줄 사용</string>
     <string name="pref_wakelock_title">스크린을 항상 밝게 유지</string>
+    <string name="pref_vibration_title">진동 활성화</string>
     <string name="pref_button_shape_title">버튼 모양</string>
+    <string name="pref_button_shape_oval">타원형</string>
+    <string name="pref_button_shape_rect">직사각형</string>
+    <string name="pref_button_shape_round">원형 직사각형</string>
     <string name="pref_app_sort_title">애플리케이션 정렬</string>
     <string name="pref_app_sort_name">이름</string>
     <string name="pref_app_sort_date">날짜</string>
@@ -128,4 +141,26 @@
     <string name="mapping_dialog_message" formatted="false">현재 맵핑: %1$s</string>
     <string name="reset_mapping">리셋</string>
     <string name="parallel_screen_redrawing">동기화 화면 그리기</string>
+    <string name="default_label">"%s (체납)"</string>
+    <string name="saved">저장됨</string>
+    <string name="not_saved_exists">이미 있음</string>
+    <string name="create_apps_dir_failed">경로에 폴더를 만들지 못함:\n\'%s\'\n다른 사람을 고르다.</string>
+    <string name="error_name">이름 입력!</string>
+    <string name="set_as_default">기본값으로 설정</string>
+    <string name="edit">편집</string>
+    <string name="add">추가하다</string>
+    <string name="add_profile_description">새 프로파일 만들기</string>
+    <string name="enter_name">이름 입력</string>
+    <string name="enter_new_name">새 이름 입력</string>
+    <string name="set_default_profile_description">나중에 설치할 모든 앱에 대한 표준 설정으로 이 프로파일 선택</string>
+    <string name="error_name_exists">이미 있음, 다른 이름을 입력하십시오</string>
+    <string name="pref_vk_hide_hint">불구가 된</string>
+    <string name="unlimited">무제한의</string>
+    <string name="pref_emulator_dir">작업 디렉터리</string>
+    <string name="PREF_SHADER_FILTER">셰이더:</string>
+    <string name="identity_filter">빠른(필터 없음)</string>
+    <string name="shader_tuning">셰이더 튜닝</string>
+    <string name="reset">리셋</string>
+    <string name="pref_input_devices_title">입력 장치</string>
+    <string name="pref_graphics_mode_title">그래픽 모드:</string>
 </resources>
