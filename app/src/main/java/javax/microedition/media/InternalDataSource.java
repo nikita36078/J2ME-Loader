@@ -80,7 +80,7 @@ public class InternalDataSource extends DataSource {
 
 		try {
 			convert();
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			// Thrown on fake Oppo devices
 			e.printStackTrace();
 		}
