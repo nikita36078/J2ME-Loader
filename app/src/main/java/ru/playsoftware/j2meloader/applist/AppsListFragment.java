@@ -90,6 +90,7 @@ public class AppsListFragment extends ListFragment {
 	private String appSort;
 	private String appPath;
 	private static final int FILE_CODE = 0;
+	private static final int SETTINGS_CODE = 1;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -359,7 +360,7 @@ public class AppsListFragment extends ListFragment {
 				break;
 			case R.id.action_settings:
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-				startActivityForResult(settingsIntent, 0);
+				startActivityForResult(settingsIntent, SETTINGS_CODE);
 				break;
 			case R.id.action_profiles:
 				Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
