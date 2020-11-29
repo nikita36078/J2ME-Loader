@@ -33,6 +33,7 @@ import ru.playsoftware.j2meloader.R;
 public class Config {
 
 	private static final String MIDLET_DIR = "/converted/";
+	public static final String APP_NAME = "J2ME-Loader";
 	public static final String SCREENSHOTS_DIR;
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
 	public static final String MIDLET_RES_DIR = "/res";
@@ -107,12 +108,11 @@ public class Config {
 
 	static {
 		Context context = ContextHolder.getAppContext();
-		String appName = "J2ME-Loader";
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-				+ "/" + appName;
+				+ "/" + APP_NAME;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String path = preferences.getString(PREF_EMULATOR_DIR, null);
-		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + appName;
+		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + APP_NAME;
 		initDirs(path);
 		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);
 	}

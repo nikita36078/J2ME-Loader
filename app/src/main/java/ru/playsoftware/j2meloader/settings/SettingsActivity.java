@@ -48,7 +48,7 @@ public class SettingsActivity extends BaseActivity {
 
 	@Override
 	public void finish() {
-		String defPath = Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name);
+		String defPath = Environment.getExternalStorageDirectory() + "/" + Config.APP_NAME;
 		//noinspection ConstantConditions
 		if (preferences.getString("pref_theme", "light").equals(oldParams.get("pref_theme"))
 		&& preferences.getString("pref_app_sort", "name").equals(oldParams.get("pref_app_sort"))
