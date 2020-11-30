@@ -883,7 +883,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void onOk(AmbilWarnaDialog dialog, int color) {
 				et.setText(String.format("%06X", color & 0xFFFFFF));
-				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawables()[2];
+				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawablesRelative()[2];
 				drawable.setColor(color);
 			}
 
