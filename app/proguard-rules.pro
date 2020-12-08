@@ -30,7 +30,7 @@
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
 
--keep class android.support.v7.widget.SearchView { *; }
+-keep class androidx.appcompat.widget.SearchView { *; }
 -keep class com.arthenica.mobileffmpeg.** { *; }
 -keep class ru.playsoftware.j2meloader.crashes.AppCenterAPI** { *; }
 
