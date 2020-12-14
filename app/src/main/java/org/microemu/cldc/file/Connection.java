@@ -1,4 +1,4 @@
-/**
+/*
  * MicroEmulator
  * Copyright (C) 2006-2007 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2006-2007 Vlad Skarzhevskyy
@@ -49,12 +49,10 @@ public class Connection implements ConnectionImplementation {
 		if (!name.startsWith(PROTOCOL)) {
 			throw new IOException("Invalid Protocol " + name);
 		}
-		switch (connectionType) {
-			case CONNECTIONTYPE_SYSTEM_FS:
-				return new FileSystemFileConnection(name.substring(PROTOCOL.length()));
-			default:
-				throw new IOException("Invalid connectionType configuration");
+		if (connectionType == CONNECTIONTYPE_SYSTEM_FS) {
+			return new FileSystemFileConnection(name);
 		}
+		throw new IOException("Invalid connectionType configuration");
 	}
 
 	static int getConnectionType() {

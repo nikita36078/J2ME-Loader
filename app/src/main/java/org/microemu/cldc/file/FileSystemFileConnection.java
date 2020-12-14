@@ -1,4 +1,4 @@
-/**
+/*
  * MicroEmulator
  * Copyright (C) 2006-2007 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2006-2007 Vlad Skarzhevskyy
@@ -26,6 +26,9 @@
  */
 package org.microemu.cldc.file;
 
+import android.net.Uri;
+import android.util.Log;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -36,6 +39,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -45,86 +50,95 @@ import javax.microedition.io.file.ConnectionClosedException;
 import javax.microedition.io.file.FileConnection;
 
 public class FileSystemFileConnection implements FileConnection {
+	private static final String TAG = FileSystemFileConnection.class.getSimpleName();
 
-	private File fsRoot;
+	private static final char DIR_SEP = '/';
+	private static final String DIR_SEP_STR = "/";
+	private static final String[] FC_ROOTS = {
+			"c:/",
+			"e:/",
+			"0:/",
+			"1:/",
+			"fs/MyStuff/",
+	};
+	private static final String[] FS_ROOTS = {System.getProperty("user.home")};
 
-	private String host;
-
-	private String fullPath;
-
+	private final String host;
+	private final String root;
+	private String name;
+	private String path;
 	private File file;
 
-	private boolean isRoot;
-
-	private boolean isDirectory;
-
 	private Throwable locationClosedFrom = null;
+	private InputStream openedInputStream;
+	private OutputStream openedOutputStream;
 
-	private InputStream opendInputStream;
-
-	private OutputStream opendOutputStream;
-
-	private final static String ROOT_INTERNAL_DIR = "c:/";
-
-	private final static String ROOT_INTERNAL_DIR_SIEMENS = "0:/";
-
-	private final static String ROOT_INTERNAL_DIR_SIEMENS_2 = "fs/MyStuff/";
-
-	private final static char DIR_SEP = '/';
-
-	private final static String DIR_SEP_STR = "/";
-
-	private static String TAG = FileSystemFileConnection.class.getName();
-
-	FileSystemFileConnection(String name) throws IOException {
+	FileSystemFileConnection(String url) throws IOException {
 		// <host>/<path>
-		int hostEnd = name.indexOf(DIR_SEP);
-		if (hostEnd == -1) {
-			throw new IOException("Invalid path " + name);
+		Uri uri = Uri.parse(url);
+		host = uri.getHost();
+		if (host == null) {
+			throw new IOException("Invalid connection specifier: " + url);
 		}
-
-		host = name.substring(0, hostEnd);
-		fullPath = name.substring(hostEnd + 1);
-		if (fullPath.length() == 0) {
-			throw new IOException("Invalid path " + name);
+		String path = uri.getPath();
+		if (path == null || path.trim().length() == 0 || path.charAt(0) != DIR_SEP) {
+			throw new IOException("Invalid connection specifier: " + url);
 		}
-		// Replace Siemens root
-		fullPath = fullPath.replaceAll("^" + ROOT_INTERNAL_DIR_SIEMENS_2, ROOT_INTERNAL_DIR);
-
-		int rootEnd = fullPath.indexOf(DIR_SEP);
-		isRoot = ((rootEnd == -1) || (rootEnd == fullPath.length() - 1));
-		fsRoot = getRoot(fullPath);
-		file = new File(fsRoot, fullPath.substring(rootEnd));
-		isDirectory = file.isDirectory();
+		path = path.substring(1);
+		root = getRoot(path);
+		if (root == null) throw new IllegalArgumentException("Root is not specified: " + url);
+		path = path.substring(root.length());
+		String fsRootPath = getFsRoot();
+		if (path.length() == 0) {
+			file = new File(fsRootPath);
+			this.path = "";
+			name = "";
+			return;
+		}
+		file = new File(fsRootPath, path);
+		int nameSeparator = path.lastIndexOf(DIR_SEP, path.length() - 2);
+		if (nameSeparator == -1) {
+			name = path;
+			this.path = "";
+		} else {
+			name = path.substring(nameSeparator + 1);
+			this.path = path.substring(0, path.length() - name.length());
+		}
+		if (!name.endsWith(DIR_SEP_STR) && file.isDirectory()) {
+			name += DIR_SEP;
+		}
 	}
 
-	private static File getRoot(String path) {
-		File fsRoot = new File(System.getProperty("user.home"));
-		return fsRoot;
+	private String getFsRoot() {
+		return FS_ROOTS[0] + DIR_SEP_STR;
 	}
 
-	static Enumeration listRoots() {
+	private static String getRoot(String path) {
+		for (String root : FC_ROOTS) {
+			if (path.startsWith(root))
+				return root;
+		}
+		int separator = path.indexOf(DIR_SEP);
+		if (separator == -1) return null;
+		Log.w(TAG, "getRoot: unknown root in path: " + path);
+		return path.substring(0, separator + 1);
+	}
+
+	static Enumeration<String> listRoots() {
 		Vector<String> list = new Vector<>();
-		list.add(ROOT_INTERNAL_DIR);
+		list.add(FC_ROOTS[0]);
 		return list.elements();
 	}
 
 	@Override
 	public long availableSize() {
 		throwClosed();
-		if (fsRoot == null) {
-			return -1;
-		}
-
 		return file.getFreeSpace();
 	}
 
 	@Override
 	public long totalSize() {
 		throwClosed();
-		if (fsRoot == null) {
-			return -1;
-		}
 		return file.getTotalSpace();
 	}
 
@@ -143,14 +157,28 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public void create() throws IOException {
 		throwClosed();
-		if (!file.createNewFile()) {
+		if (name.endsWith(DIR_SEP_STR)) {
+			throw new IOException("This method can't create directories");
+		}
+		if (file.exists()) {
 			throw new IOException("File already exists  " + file.getAbsolutePath());
+		}
+		if (!file.createNewFile()) {
+			throw new IOException("Can't create file: " + file.getAbsolutePath());
 		}
 	}
 
 	@Override
 	public void delete() throws IOException {
 		throwClosed();
+		if (openedInputStream != null) {
+			openedInputStream.close();
+			openedInputStream = null;
+		}
+		if (openedOutputStream != null) {
+			openedOutputStream.close();
+			openedOutputStream = null;
+		}
 		if (!file.delete()) {
 			throw new IOException("Unable to delete " + file.getAbsolutePath());
 		}
@@ -162,10 +190,10 @@ public class FileSystemFileConnection implements FileConnection {
 		if (!file.isDirectory()) {
 			throw new IOException("Not a directory " + file.getAbsolutePath());
 		}
-		return new Long(directorySize(file, includeSubDirs));
+		return directorySize(file, includeSubDirs);
 	}
 
-	private static long directorySize(File dir, boolean includeSubDirs) throws IOException {
+	private static long directorySize(File dir, boolean includeSubDirs) {
 		long size = 0;
 
 		File[] files = dir.listFiles();
@@ -192,60 +220,40 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public long fileSize() throws IOException {
 		throwClosed();
+		if (!file.isFile()) throw new IOException();
 		return file.length();
 	}
 
 	@Override
 	public String getName() {
-		// TODO test on real device. Not declared
-		throwClosed();
-
-		if (isRoot) {
-			return "";
-		}
-
-		if (this.isDirectory) {
-			return this.file.getName() + DIR_SEP;
-		} else {
-			return this.file.getName();
-		}
+		return name;
 	}
 
 	@Override
 	public String getPath() {
-		// TODO test on real device. Not declared
-		throwClosed();
-
 		// returns Parent directory
 		// /<root>/<directory>/
-		if (isRoot) {
-			return DIR_SEP + fullPath;
-		}
-
-		int pathEnd;
-		if (isDirectory) pathEnd = fullPath.lastIndexOf(DIR_SEP, fullPath.length() - 2);
-		else pathEnd = fullPath.lastIndexOf(DIR_SEP);
-		if (pathEnd == -1) {
-			return DIR_SEP_STR;
-		}
-		return DIR_SEP + fullPath.substring(0, pathEnd + 1);
+		return DIR_SEP + root + path;
 	}
 
 	@Override
 	public String getURL() {
-		// TODO test on real device. Not declared
-		throwClosed();
-
 		// file://<host>/<root>/<directory>/<filename.extension>
 		// or
 		// file://<host>/<root>/<directory>/<directoryname>/
-		return Connection.PROTOCOL + this.host + DIR_SEP + fullPath + ((this.isDirectory) ? DIR_SEP_STR : "");
+		try {
+			URI uri = new URI("file", host, getPath() + getName(), null);
+			return uri.toASCIIString();
+		} catch (URISyntaxException e) {
+			Log.e(TAG, "getURL: ", e);
+			return Connection.PROTOCOL + this.host + DIR_SEP + getPath() + name;
+		}
 	}
 
 	@Override
 	public boolean isDirectory() {
 		throwClosed();
-		return this.isDirectory;
+		return file.isDirectory();
 	}
 
 	@Override
@@ -263,35 +271,39 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public void mkdir() throws IOException {
 		throwClosed();
+		if (file.exists()) {
+			throw new IOException("File exists");
+		}
 		if (!file.mkdir()) {
 			throw new IOException("Can't create directory " + file.getAbsolutePath());
+		}
+		if (!name.endsWith(DIR_SEP_STR)) {
+			name += DIR_SEP;
 		}
 	}
 
 	@Override
-	public Enumeration list() throws IOException {
+	public Enumeration<String> list() throws IOException {
 		return this.list(null, false);
 	}
 
 	@Override
-	public Enumeration list(final String filter, final boolean includeHidden) throws IOException {
+	public Enumeration<String> list(final String filter, final boolean includeHidden) throws IOException {
 		throwClosed();
 		return listPrivileged(filter, includeHidden);
 	}
 
-	private Enumeration listPrivileged(final String filter, boolean includeHidden) throws IOException {
+	private Enumeration<String> listPrivileged(final String filter, boolean includeHidden) throws IOException {
 		if (!this.file.isDirectory()) {
 			throw new IOException("Not a directory " + this.file.getAbsolutePath());
 		}
-		FilenameFilter filenameFilter = null;
-		if (filter != null) {
+		FilenameFilter filenameFilter;
+		if (filter == null) {
+			filenameFilter = null;
+		} else {
 			filenameFilter = new FilenameFilter() {
-				private Pattern pattern;
-
-				{
-					/* convert simple search pattern to regexp */
-					pattern = Pattern.compile(filter.replaceAll("\\.", "\\\\.").replaceAll("\\*", ".*"));
-				}
+				/* convert simple search pattern to regexp */
+				private final Pattern pattern = Pattern.compile(filter.replaceAll("\\.", "\\\\.").replaceAll("\\*", ".*"));
 
 				@Override
 				public boolean accept(File dir, String name) {
@@ -301,20 +313,20 @@ public class FileSystemFileConnection implements FileConnection {
 		}
 
 		File[] files = this.file.listFiles(filenameFilter);
-		if (files == null) { // null if security restricted
-			return (new Vector()).elements();
+		Vector<String> list = new Vector<>();
+		if (files == null) {
+			return list.elements();
 		}
 		Arrays.sort(files);
-		Vector list = new Vector();
 		for (File child : files) {
-			if ((!includeHidden) && (child.isHidden())) {
+			if (!includeHidden && child.isHidden()) {
 				continue;
 			}
+			String name = child.getName();
 			if (child.isDirectory()) {
-				list.add(child.getName() + DIR_SEP);
-			} else {
-				list.add(child.getName());
+				name += DIR_SEP;
 			}
+			list.add(name);
 		}
 		return list.elements();
 	}
@@ -325,7 +337,7 @@ public class FileSystemFileConnection implements FileConnection {
 	}
 
 	private void throwOpenDirectory() throws IOException {
-		if (this.isDirectory) {
+		if (file.isDirectory()) {
 			throw new IOException("Unable to open Stream on directory");
 		}
 	}
@@ -335,21 +347,19 @@ public class FileSystemFileConnection implements FileConnection {
 		throwClosed();
 		throwOpenDirectory();
 
-		if (this.opendInputStream != null) {
+		if (this.openedInputStream != null) {
 			throw new IOException("InputStream already opened");
 		}
-		/**
-		 * Trying to open more than one InputStream or more than one
-		 * OutputStream from a StreamConnection causes an IOException.
-		 */
-		this.opendInputStream = new FileInputStream(file) {
+		// Trying to open more than one InputStream or more than one
+		// OutputStream from a StreamConnection causes an IOException.
+		this.openedInputStream = new FileInputStream(file) {
 			@Override
 			public void close() throws IOException {
-				FileSystemFileConnection.this.opendInputStream = null;
+				FileSystemFileConnection.this.openedInputStream = null;
 				super.close();
 			}
 		};
-		return this.opendInputStream;
+		return this.openedInputStream;
 	}
 
 	@Override
@@ -359,28 +369,24 @@ public class FileSystemFileConnection implements FileConnection {
 
 	@Override
 	public OutputStream openOutputStream() throws IOException {
-		return openOutputStream(false);
-	}
-
-	private OutputStream openOutputStream(final boolean append) throws IOException {
 		throwClosed();
 		throwOpenDirectory();
 
-		if (this.opendOutputStream != null) {
+		// Trying to open more than one InputStream or more than one
+		// OutputStream from a StreamConnection causes an IOException.
+		if (this.openedOutputStream != null) {
 			throw new IOException("OutputStream already opened");
 		}
-		/**
-		 * Trying to open more than one InputStream or more than one
-		 * OutputStream from a StreamConnection causes an IOException.
-		 */
-		this.opendOutputStream = new FileOutputStream(file, append) {
+
+		// TODO: 14.12.2020 unclear: should the existing file be truncated if the write hasn't reached the end
+		this.openedOutputStream = new FileOutputStream(file, false) {
 			@Override
 			public void close() throws IOException {
-				FileSystemFileConnection.this.opendOutputStream = null;
+				FileSystemFileConnection.this.openedOutputStream = null;
 				super.close();
 			}
 		};
-		return this.opendOutputStream;
+		return this.openedOutputStream;
 	}
 
 	@Override
@@ -392,32 +398,20 @@ public class FileSystemFileConnection implements FileConnection {
 	public OutputStream openOutputStream(long byteOffset) throws IOException {
 		throwClosed();
 		throwOpenDirectory();
-		if (this.opendOutputStream != null) {
+
+		// Trying to open more than one InputStream or more than one
+		// OutputStream from a StreamConnection causes an IOException.
+		if (this.openedOutputStream != null) {
 			throw new IOException("OutputStream already opened");
 		}
 		// we cannot truncate the file here since it could already have content
 		// which should be overridden instead of wiped.
-
-		return openOutputStream(true, byteOffset);
-	}
-
-	private OutputStream openOutputStream(boolean appendToFile, final long byteOffset) throws IOException {
-		throwClosed();
-		throwOpenDirectory();
-
-		if (this.opendOutputStream != null) {
-			throw new IOException("OutputStream already opened");
-		}
-		/**
-		 * Trying to open more than one InputStream or more than one
-		 * OutputStream from a StreamConnection causes an IOException.
-		 */
 		RandomAccessFile raf = new RandomAccessFile(file, "rw");
 		raf.seek(byteOffset);
 		return new FileOutputStream(raf.getFD()) {
 			@Override
 			public void close() throws IOException {
-				FileSystemFileConnection.this.opendOutputStream = null;
+				FileSystemFileConnection.this.openedOutputStream = null;
 				super.close();
 			}
 		};
@@ -435,13 +429,48 @@ public class FileSystemFileConnection implements FileConnection {
 					+ newFile.getAbsolutePath());
 		}
 		this.file = newFile;
-		this.fullPath = this.getPath() + newName;
+		this.name = newName;
 	}
 
 	@Override
-	public void setFileConnection(String s) throws IOException {
+	public void setFileConnection(String fileName) throws IOException {
 		throwClosed();
-		// TODO Auto-generated method stub
+		if (fileName == null) {
+			throw new NullPointerException();
+		}
+		if (!isDirectory()) {
+			throw new IOException("Current FileConnection is not a directory");
+		}
+		File newFile;
+		String newPath;
+		String newName;
+		if ("..".equals(fileName)) {
+			newFile = file.getParentFile();
+			if (newFile == null || (path.isEmpty() && name.isEmpty())) {
+				throw new IOException("Cannot set FileConnection to '..' from a file system root");
+			}
+			int index = path.lastIndexOf(DIR_SEP, path.length() - 2);
+			if (index == -1) {
+				newPath = "";
+				newName = path;
+			} else {
+				newPath = path.substring(0, index);
+				newName = path.substring(index + 1);
+			}
+		} else {
+			if (fileName.indexOf(DIR_SEP) != -1) {
+				throw new IllegalArgumentException();
+			}
+			newFile = new File(file, fileName);
+			newPath = path + name;
+			newName = fileName;
+		}
+		if (!newFile.exists()) {
+			throw new IllegalArgumentException();
+		}
+		file = newFile;
+		path = newPath;
+		name = newName;
 	}
 
 	@Override
@@ -458,10 +487,10 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public void setWritable(boolean writable) throws IOException {
 		throwClosed();
-		if (!writable) {
-			file.setReadOnly();
+		if (writable) {
+			file.setWritable(true);
 		} else {
-			file.setWritable(writable);
+			file.setReadOnly();
 		}
 	}
 
