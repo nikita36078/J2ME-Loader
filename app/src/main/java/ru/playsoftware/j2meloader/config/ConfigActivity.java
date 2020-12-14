@@ -73,13 +73,10 @@ import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class ConfigActivity extends BaseActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
-
-	public static final String ACTION_EDIT = "config.edit";
-	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
-	public static final String CONFIG_PATH_KEY = "configPath";
-	public static final String MIDLET_NAME_KEY = "midletName";
 
 	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
@@ -161,7 +158,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			configDir = new File(Config.getProfilesDir(), path);
 			setTitle(path);
 		} else {
-			setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
+			setTitle(intent.getStringExtra(KEY_MIDLET_NAME));
 			File appDir = new File(path);
 			File convertedDir = appDir.getParentFile();
 			if (!appDir.isDirectory() || convertedDir == null
@@ -194,7 +191,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		configDir.mkdirs();
 
 		defProfile = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-				.getString(Config.PREF_DEFAULT_PROFILE, null);
+				.getString(PREF_DEFAULT_PROFILE, null);
 		loadConfig();
 		if (!params.isNew && !showSettings) {
 			startMIDlet();

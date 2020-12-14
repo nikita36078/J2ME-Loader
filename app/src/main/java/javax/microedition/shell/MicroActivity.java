@@ -64,8 +64,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.LogUtils;
+
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_DEFAULT = 0;
@@ -86,7 +87,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		setTheme(sp.getString("pref_theme", "light"));
+		setTheme(sp.getString(PREF_THEME, "light"));
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
@@ -94,16 +95,16 @@ public class MicroActivity extends AppCompatActivity {
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
-		statusBarEnabled = sp.getBoolean("pref_statusbar_switch", false);
-		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
+		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
+		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
+		boolean wakelockEnabled = sp.getBoolean(PREF_KEEP_SCREEN, false);
 		if (wakelockEnabled) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
-		boolean vibrationEnabled = sp.getBoolean("pref_vibration_switch", false);
+		boolean vibrationEnabled = sp.getBoolean(PREF_VIBRATION, false);
 		ContextHolder.setVibration(vibrationEnabled);
 		Intent intent = getIntent();
-		appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
+		appName = intent.getStringExtra(KEY_MIDLET_NAME);
 		microLoader = new MicroLoader(this, intent.getDataString());
 		if (!microLoader.init()) {
 			Config.startApp(this, appName, intent.getDataString(), true);

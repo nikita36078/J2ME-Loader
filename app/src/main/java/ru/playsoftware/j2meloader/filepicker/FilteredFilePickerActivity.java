@@ -28,6 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_THEME;
+
 public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File> {
 
 	private FilteredFilePickerFragment currentFragment;
@@ -43,7 +45,7 @@ public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File>
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String theme = preferences.getString("pref_theme", "light");
+		String theme = preferences.getString(PREF_THEME, "light");
 		if ("dark".equals(theme)) {
 			setTheme(R.style.FilePickerTheme);
 		} else {

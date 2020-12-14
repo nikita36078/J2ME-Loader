@@ -29,6 +29,8 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 public class MigrationUtils {
 
 	private static final int VERSION_1 = 1;
@@ -150,12 +152,12 @@ public class MigrationUtils {
 				File profiles = new File(Config.getProfilesDir());
 				if (moveDefaultToProfiles()) {
 					PreferenceManager.getDefaultSharedPreferences(context)
-							.edit().putString(Config.PREF_DEFAULT_PROFILE, "default")
+							.edit().putString(PREF_DEFAULT_PROFILE, "default")
 							.apply();
 				}
 				if (moveKeyMappings(context)) {
 					PreferenceManager.getDefaultSharedPreferences(context)
-							.edit().putString(Config.PREF_DEFAULT_PROFILE, "default")
+							.edit().putString(PREF_DEFAULT_PROFILE, "default")
 							.apply();
 				}
 				moveDatabase(context);

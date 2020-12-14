@@ -36,7 +36,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
-import static ru.playsoftware.j2meloader.config.ConfigActivity.CONFIG_PATH_KEY;
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class SaveProfileAlert extends DialogFragment {
 
@@ -44,7 +44,7 @@ public class SaveProfileAlert extends DialogFragment {
 	public static SaveProfileAlert getInstance(String parent) {
 		SaveProfileAlert saveProfileAlert = new SaveProfileAlert();
 		Bundle bundleSave = new Bundle();
-		bundleSave.putString(CONFIG_PATH_KEY, parent);
+		bundleSave.putString(KEY_CONFIG_PATH, parent);
 		saveProfileAlert.setArguments(bundleSave);
 		return saveProfileAlert;
 	}
@@ -52,7 +52,7 @@ public class SaveProfileAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String configPath = requireArguments().getString(CONFIG_PATH_KEY);
+		String configPath = requireArguments().getString(KEY_CONFIG_PATH);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_save_profile, null);
@@ -90,7 +90,7 @@ public class SaveProfileAlert extends DialogFragment {
 						cbConfig.isChecked(), cbKeyboard.isChecked());
 				if (cbDefault.isChecked()) {
 					PreferenceManager.getDefaultSharedPreferences(requireContext())
-							.edit().putString(Config.PREF_DEFAULT_PROFILE, name).apply();
+							.edit().putString(PREF_DEFAULT_PROFILE, name).apply();
 				}
 				dismiss();
 			} catch (IOException e) {

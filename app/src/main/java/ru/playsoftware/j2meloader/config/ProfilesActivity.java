@@ -37,9 +37,9 @@ import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
-	static final int REQUEST_CODE_EDIT = 5;
+public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
 	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
 
@@ -61,7 +61,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		registerForContextMenu(listView);
 		adapter = new ProfilesAdapter(this, profiles);
 		listView.setAdapter(adapter);
-		final String def = preferences.getString(Config.PREF_DEFAULT_PROFILE, null);
+		final String def = preferences.getString(PREF_DEFAULT_PROFILE, null);
 		if (def != null) {
 			for (int i = profiles.size() - 1; i >= 0; i--) {
 				Profile profile = profiles.get(i);
@@ -113,11 +113,11 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		final Profile profile = adapter.getItem(index);
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_context_default) {
-			preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, profile.getName()).apply();
+			preferences.edit().putString(PREF_DEFAULT_PROFILE, profile.getName()).apply();
 			adapter.setDefault(profile);
 			return true;
 		} else if (itemId == R.id.action_context_edit) {
-			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
+			final Intent intent = new Intent(ACTION_EDIT_PROFILE,
 					Uri.parse(profile.getName()),
 					getApplicationContext(), ConfigActivity.class);
 			startActivity(intent);
@@ -134,7 +134,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		if (requestCode != REQUEST_CODE_EDIT
+		if (requestCode != REQUEST_EDIT
 				|| resultCode != RESULT_OK
 				|| data == null)
 			return;
@@ -148,16 +148,16 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 	@Override
 	public void onNameChanged(int id, String newName) {
 		if (id == -1) {
-			final Intent intent = new Intent(ConfigActivity.ACTION_EDIT_PROFILE,
+			final Intent intent = new Intent(ACTION_EDIT_PROFILE,
 					Uri.parse(newName), getApplicationContext(), ConfigActivity.class);
-			startActivityForResult(intent, REQUEST_CODE_EDIT);
+			startActivityForResult(intent, REQUEST_EDIT);
 			return;
 		}
 		Profile profile = adapter.getItem(id);
 		profile.renameTo(newName);
 		adapter.notifyDataSetChanged();
 		if (adapter.getDefault() == profile) {
-			preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, newName).apply();
+			preferences.edit().putString(PREF_DEFAULT_PROFILE, newName).apply();
 		}
 	}
 

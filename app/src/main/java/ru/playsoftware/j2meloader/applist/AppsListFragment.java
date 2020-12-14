@@ -67,7 +67,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
-import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
@@ -83,6 +82,8 @@ import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.JarConverter;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class AppsListFragment extends ListFragment {
 
 	private AppRepository appRepository;
@@ -91,17 +92,19 @@ public class AppsListFragment extends ListFragment {
 	private JarConverter converter;
 	private String appSort;
 	private String appPath;
-	private static final int FILE_CODE = 0;
-	private static final int SETTINGS_CODE = 1;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		compositeDisposable = new CompositeDisposable();
 		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
-		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
-		appPath = getArguments().getString(MainActivity.APP_PATH_KEY);
 		adapter = new AppsListAdapter(getActivity());
+		Bundle args = getArguments();
+		if (args == null) {
+			return;
+		}
+		appSort = args.getString(KEY_APP_SORT);
+		appPath = args.getString(KEY_APP_PATH);
 	}
 
 	@Override
@@ -124,7 +127,7 @@ public class AppsListFragment extends ListFragment {
 			i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
 			i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
 			i.putExtra(FilePickerActivity.EXTRA_START_PATH, FilteredFilePickerFragment.getLastPath());
-			startActivityForResult(i, FILE_CODE);
+			startActivityForResult(i, REQUEST_FILE);
 		});
 	}
 
@@ -171,7 +174,7 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
+		if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			for (Uri uri : files) {
 				File file = Utils.getFileForUri(uri);
@@ -278,13 +281,14 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
 		Config.startApp(getActivity(), item.getTitle(), item.getPathExt(), false);
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
+									ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getActivity().getMenuInflater();
 		inflater.inflate(R.menu.context_main, menu);
@@ -300,7 +304,7 @@ public class AppsListFragment extends ListFragment {
 			Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 			Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
 					Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-			launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
+			launchIntent.putExtra(KEY_MIDLET_NAME, appItem.getTitle());
 			ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 					new ShortcutInfoCompat.Builder(requireActivity(), appItem.getTitle())
 							.setIntent(launchIntent)
@@ -373,7 +377,7 @@ public class AppsListFragment extends ListFragment {
 			aboutDialogFragment.show(getChildFragmentManager(), "about");
 		} else if (itemId == R.id.action_settings) {
 			Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-			requireActivity().startActivityForResult(settingsIntent, 0);
+			requireActivity().startActivityForResult(settingsIntent, REQUEST_SETTINGS);
 		} else if (itemId == R.id.action_profiles) {
 			Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
 			startActivity(intentProfiles);

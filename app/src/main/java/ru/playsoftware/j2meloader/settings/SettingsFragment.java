@@ -36,28 +36,27 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class SettingsFragment extends PreferenceFragmentCompat {
-	private static final int FILE_CODE = 2315;
 	private Preference prefFolder;
 
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
-		//noinspection ConstantConditions
 		findPreference("pref_default_settings").setOnPreferenceClickListener(preference -> {
 			Intent intent = new Intent(getActivity(), ProfilesActivity.class);
 			startActivity(intent);
 			return true;
 		});
-		prefFolder = findPreference(Config.PREF_EMULATOR_DIR);
-		//noinspection ConstantConditions
+		prefFolder = findPreference(PREF_EMULATOR_DIR);
 		prefFolder.setSummary(Config.getEmulatorDir());
 		prefFolder.setOnPreferenceClickListener(this::pickFolder);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK && data != null) {
+		if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK && data != null) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			File file = Utils.getFileForUri(files.get(0));
 			applyChangeFolder(file);
@@ -71,7 +70,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		}
 		String path = file.getAbsolutePath();
 		getPreferenceManager().getSharedPreferences().edit()
-				.putString(Config.PREF_EMULATOR_DIR, path)
+				.putString(PREF_EMULATOR_DIR, path)
 				.apply();
 		prefFolder.setSummary(path);
 	}
@@ -83,7 +82,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
 		i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
 		i.putExtra(FilePickerActivity.EXTRA_START_PATH, Config.getEmulatorDir());
-		startActivityForResult(i, FILE_CODE);
+		startActivityForResult(i, REQUEST_FILE);
 		return true;
 	}
 }

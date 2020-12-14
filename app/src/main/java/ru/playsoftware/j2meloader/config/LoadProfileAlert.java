@@ -37,10 +37,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
-import static ru.playsoftware.j2meloader.config.ConfigActivity.CONFIG_PATH_KEY;
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class LoadProfileAlert extends DialogFragment {
-
 	private ArrayList<Profile> profiles;
 	private CheckBox cbConfig;
 	private CheckBox cbKeyboard;
@@ -48,7 +47,7 @@ public class LoadProfileAlert extends DialogFragment {
 	static LoadProfileAlert newInstance(String parent) {
 		LoadProfileAlert fragment = new LoadProfileAlert();
 		Bundle args = new Bundle();
-		args.putString(CONFIG_PATH_KEY, parent);
+		args.putString(KEY_CONFIG_PATH, parent);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -63,7 +62,7 @@ public class LoadProfileAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String configPath = requireArguments().getString(CONFIG_PATH_KEY);
+		String configPath = requireArguments().getString(KEY_CONFIG_PATH);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_load_profile, null);
@@ -96,7 +95,7 @@ public class LoadProfileAlert extends DialogFragment {
 				})
 				.setNegativeButton(android.R.string.cancel, null);
 		final String def = PreferenceManager.getDefaultSharedPreferences(requireContext())
-				.getString(Config.PREF_DEFAULT_PROFILE, null);
+				.getString(PREF_DEFAULT_PROFILE, null);
 
 		if (def != null) {
 			for (int i = 0, size = profiles.size(); i < size; i++) {
