@@ -22,6 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.microedition.lcdui.game.Sprite;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.assertTrue;
@@ -146,24 +148,23 @@ public class GraphicsTest {
 	@Test
 	public void drawRegion() {
 		Image image = Image.createImage(testWidth, testHeight);
-		Graphics graphics = image.getGraphics();
 
-		Image drawImage = Image.createImage(5, 5);
-		Graphics drawGraphics = drawImage.getGraphics();
-		drawGraphics.fillRect(0, 0, 5, 5);
+		Image drawImage = Image.createImage(10, 20);
 
-		graphics.drawRegion(drawImage, 0, 0, 2, 2, 0, 5, 5, 0);
+		drawImage.getGraphics().fillRect(0, 0, 10, 20);
+		image.getGraphics().drawRegion(drawImage, 1, 3, 5, 7, Sprite.TRANS_MIRROR_ROT270, 9, 11,
+				Graphics.LEFT | Graphics.VCENTER);
 
 		final int[] spotsToValidate = {
-				5, 5, BLACK,
-				6, 5, BLACK,
-				5, 6, BLACK,
-				6, 6, BLACK,
+				12,  9, BLACK,
+				12, 13, BLACK,
+				 9, 10, BLACK,
+				15, 10, BLACK,
 
-				4, 5, WHITE,
-				7, 5, WHITE,
-				7, 6, WHITE,
-				4, 6, WHITE
+				12,  8, WHITE,
+				12, 14, WHITE,
+				 8, 10, WHITE,
+				16, 10, WHITE
 		};
 		assertTrue(validate(image, spotsToValidate));
 	}

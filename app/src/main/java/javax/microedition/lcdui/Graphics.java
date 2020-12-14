@@ -30,7 +30,7 @@ import android.os.Build;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 
-import javax.microedition.lcdui.game.Sprite;
+import static javax.microedition.lcdui.game.Sprite.*;
 
 public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.motorola.graphics.j3d.Graphics3D {
 	public static final int HCENTER = 1;
@@ -389,48 +389,96 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		canvas.drawText(str, offset, offset + len, x, y, paint);
 	}
 
-	public void drawRegion(Image image, int srcx, int srcy, int width, int height,
-						   int transform, int dstx, int dsty, int anchor) {
+	public void drawRegion(Image image, int x_src, int y_src, int width, int height,
+						   int transform, int x_dst, int y_dst, int anchor) {
 		if (width <= 0 || height <= 0) return;
+		if (transform < TRANS_NONE || transform > TRANS_MIRROR_ROT90) {
+			throw new IllegalArgumentException("Illegal transform=" + transform);
+		}
 
-		if (transform != 0) {
-			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
-			RectF dstR = new RectF(0, 0, width, height);
-			RectF deviceR = new RectF();
-			Matrix matrix = Sprite.transformMatrix(transform, width / 2.0f, height / 2.0f);
-			matrix.mapRect(deviceR, dstR);
+		Rect srcR = rect;
+		RectF dstR = rectF;
+		float dx;
+		float dy;
+		srcR.set(x_src, y_src, x_src + width, y_src + height);
 
-			if ((anchor & Graphics.RIGHT) != 0) {
-				dstx -= deviceR.width();
-			} else if ((anchor & Graphics.HCENTER) != 0) {
-				dstx -= deviceR.width() / 2;
+		Matrix matrix = new Matrix();
+		switch (transform) {
+			case TRANS_NONE: {
+				if ((anchor & Graphics.RIGHT) != 0) {
+					dx = x_dst - width;
+				} else if ((anchor & Graphics.HCENTER) != 0) {
+					dx = x_dst - width / 2.0f;
+				} else {
+					dx = x_dst;
+				}
+				if ((anchor & Graphics.BOTTOM) != 0) {
+					dy = y_dst - height;
+				} else if ((anchor & Graphics.VCENTER) != 0) {
+					dy = y_dst - height / 2.0f;
+				} else {
+					dy = y_dst;
+				}
+
+				dstR.set(dx, dy, dx + width, dy + height);
+				canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+				return;
 			}
-			if ((anchor & Graphics.BOTTOM) != 0) {
-				dsty -= deviceR.height();
-			} else if ((anchor & Graphics.VCENTER) != 0) {
-				dsty -= deviceR.height() / 2;
-			}
+			case TRANS_ROT90:
+				matrix.preRotate(90);
+				break;
+			case TRANS_ROT180:
+				matrix.preRotate(180);
+				break;
+			case TRANS_ROT270:
+				matrix.preRotate(270);
+				break;
+			case TRANS_MIRROR:
+				matrix.preScale(-1, 1);
+				break;
+			case TRANS_MIRROR_ROT90:
+				matrix.preRotate(90);
+				matrix.preScale(-1, 1);
+				break;
+			case TRANS_MIRROR_ROT180:
+				matrix.preRotate(180);
+				matrix.preScale(-1, 1);
+				break;
+			case TRANS_MIRROR_ROT270:
+				matrix.preRotate(270);
+				matrix.preScale(-1, 1);
+				break;
+			default:
+				throw new IllegalArgumentException("Illegal transform=" + transform);
+		}
 
-			canvas.save();
-			canvas.translate(-deviceR.left + dstx, -deviceR.top + dsty);
-			canvas.concat(matrix);
-			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
-			canvas.restore();
+		dstR.set(0, 0, width, height);
+		matrix.mapRect(dstR);
+
+		if ((anchor & Graphics.RIGHT) != 0) {
+			dx = x_dst - dstR.width();
+		} else if ((anchor & Graphics.HCENTER) != 0) {
+			dx = x_dst - dstR.width() / 2.0f;
 		} else {
-			if ((anchor & Graphics.RIGHT) != 0) {
-				dstx -= width;
-			} else if ((anchor & Graphics.HCENTER) != 0) {
-				dstx -= width / 2;
-			}
-			if ((anchor & Graphics.BOTTOM) != 0) {
-				dsty -= height;
-			} else if ((anchor & Graphics.VCENTER) != 0) {
-				dsty -= height / 2;
-			}
+			dx = x_dst;
+		}
+		if ((anchor & Graphics.BOTTOM) != 0) {
+			dy = y_dst - dstR.height();
+		} else if ((anchor & Graphics.VCENTER) != 0) {
+			dy = y_dst - dstR.height() / 2.0f;
+		} else {
+			dy = y_dst;
+		}
 
-			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
-			RectF dstR = new RectF(dstx, dsty, dstx + width, dsty + height);
+		matrix.postTranslate(Math.round(dx - dstR.left), Math.round(dy - dstR.top));
+		dstR.set(0, 0, width, height);
+
+		canvas.save();
+		canvas.concat(matrix);
+		try {
 			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+		} finally {
+			canvas.restore();
 		}
 	}
 
