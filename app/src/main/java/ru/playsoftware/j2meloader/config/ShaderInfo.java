@@ -202,12 +202,16 @@ public class ShaderInfo implements Comparable<ShaderInfo>, Parcelable {
 	@NonNull
 	@Override
 	public String toString() {
-		return name;
+		return name == null ? "unnamed" : name;
 	}
 
 	@Override
 	public int compareTo(ShaderInfo o) {
-		return name.toLowerCase().compareTo(o.name.toLowerCase());
+		String oName = o.name;
+		if (this.name == null) {
+			return oName == null ? 0 : 1;
+		} else if (oName == null) return -1;
+		return name.toLowerCase().compareTo(oName.toLowerCase());
 	}
 
 	@Override
