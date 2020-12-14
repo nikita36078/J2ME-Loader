@@ -219,10 +219,12 @@ public class FileSystemFileConnection implements FileConnection {
 		// returns Parent directory
 		// /<root>/<directory>/
 		if (isRoot) {
-			return DIR_SEP + fullPath + DIR_SEP;
+			return DIR_SEP + fullPath;
 		}
 
-		int pathEnd = fullPath.lastIndexOf(DIR_SEP);
+		int pathEnd;
+		if (isDirectory) pathEnd = fullPath.lastIndexOf(DIR_SEP, fullPath.length() - 2);
+		else pathEnd = fullPath.lastIndexOf(DIR_SEP);
 		if (pathEnd == -1) {
 			return DIR_SEP_STR;
 		}
