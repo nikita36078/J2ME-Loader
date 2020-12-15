@@ -317,16 +317,18 @@ public class FileSystemFileConnection implements FileConnection {
 		if (files == null) {
 			return list.elements();
 		}
-		Arrays.sort(files);
+		Arrays.sort(files, (f1, f2) -> f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase()));
+		int dirsLen = 0;
 		for (File child : files) {
 			if (!includeHidden && child.isHidden()) {
 				continue;
 			}
 			String name = child.getName();
 			if (child.isDirectory()) {
-				name += DIR_SEP;
+				list.add(dirsLen++, name + DIR_SEP);
+			} else {
+				list.add(name);
 			}
-			list.add(name);
 		}
 		return list.elements();
 	}
