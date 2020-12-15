@@ -333,10 +333,10 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.midlet_displayable, menu);
 		if (current != null) {
-			menu.clear();
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.midlet_displayable, menu);
 			if (current instanceof Canvas) {
 				SubMenu group = menu.getItem(0).getSubMenu();
 				if (actionBarEnabled) {
@@ -361,21 +361,21 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-		if (current != null) {
-			int id = item.getItemId();
-			if (item.getGroupId() == R.id.action_group_common_settings) {
-				if (id == R.id.action_exit_midlet) {
-					showExitConfirmation();
-				} else if (id == R.id.action_take_screenshot) {
-					takeScreenshot();
-				} else if (id == R.id.action_save_log) {
-					saveLog();
-				} else if (ContextHolder.getVk() != null) {
-					// Handled only when virtual keyboard is enabled
-					handleVkOptions(id);
-				}
-				return true;
+		int id = item.getItemId();
+		if (item.getGroupId() == R.id.action_group_common_settings) {
+			if (id == R.id.action_exit_midlet) {
+				showExitConfirmation();
+			} else if (id == R.id.action_take_screenshot) {
+				takeScreenshot();
+			} else if (id == R.id.action_save_log) {
+				saveLog();
+			} else if (ContextHolder.getVk() != null) {
+				// Handled only when virtual keyboard is enabled
+				handleVkOptions(id);
 			}
+			return true;
+		}
+		if (current != null) {
 			return current.menuItemSelected(id);
 		}
 
