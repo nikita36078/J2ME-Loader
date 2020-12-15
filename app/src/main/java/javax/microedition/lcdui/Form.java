@@ -32,11 +32,11 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Form extends Screen {
 	private static final float BORDER_PADDING = 7;
 
+	private final ArrayList<Item> items = new ArrayList<>();
+	private ItemStateListener listener;
+
 	private ScrollView scrollview;
 	private LinearLayout layout;
-
-	private ArrayList<Item> items = new ArrayList<>();
-	private ItemStateListener listener;
 
 	public Form(String title) {
 		setTitle(title);
@@ -44,8 +44,22 @@ public class Form extends Screen {
 
 	public Form(String title, Item[] elements) {
 		setTitle(title);
+		// null array is correct: create empty Form
+		if (elements == null) {
+			return;
+		}
+		for (int i = 0, elementsLength = elements.length; i < elementsLength; i++) {
+			Item item = elements[i];
+			if (item == null) {
+				throw new NullPointerException("Item at index " + i + " is null");
+			}
+			if (item.hasOwnerForm()) {
+				throw new IllegalStateException("Item at index " + i + " is already owned by another container");
+			}
+		}
 		for (Item item : elements) {
-			append(item);
+			items.add(item);
+			item.setOwnerForm(this);
 		}
 	}
 

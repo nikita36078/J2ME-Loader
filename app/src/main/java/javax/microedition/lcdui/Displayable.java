@@ -34,30 +34,30 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 public abstract class Displayable {
-	private String title;
-
-	private ArrayList<Command> commands;
-	protected CommandListener listener;
-
-	private int tickermode;
-	private Ticker ticker;
-	private LinearLayout layout;
-	private TextView marquee;
-
-	protected static int virtualWidth;
-	protected static int virtualHeight;
-
 	private static final int TICKER_NO_ACTION = 0;
 	private static final int TICKER_SHOW = 1;
 	private static final int TICKER_HIDE = 2;
 
-	private SimpleEvent msgSetTicker = new SimpleEvent() {
+	protected static int virtualWidth;
+	protected static int virtualHeight;
+
+	protected CommandListener listener;
+
+	private final ArrayList<Command> commands = new ArrayList<>();
+
+	private String title;
+	private int tickerMode;
+	private Ticker ticker;
+	private LinearLayout layout;
+	private TextView marquee;
+
+	private final SimpleEvent msgSetTicker = new SimpleEvent() {
 		@Override
 		public void process() {
 			if (ticker != null) {
 				marquee.setText(ticker.getString());
 			}
-			switch (tickermode) {
+			switch (tickerMode) {
 				case TICKER_SHOW:
 					layout.addView(marquee, 0);
 					break;
@@ -65,14 +65,11 @@ public abstract class Displayable {
 					layout.removeView(marquee);
 					break;
 			}
-			tickermode = TICKER_NO_ACTION;
+			tickerMode = TICKER_NO_ACTION;
 		}
 	};
 
-	public Displayable() {
-		commands = new ArrayList<>();
-		listener = null;
-	}
+	public Displayable() {}
 
 	public static void setVirtualSize(int virtualWidth, int virtualHeight) {
 		Displayable.virtualWidth = virtualWidth;
@@ -183,9 +180,9 @@ public abstract class Displayable {
 	public void setTicker(Ticker newticker) {
 		if (layout != null) {
 			if (ticker == null && newticker != null) {
-				tickermode = TICKER_SHOW;
+				tickerMode = TICKER_SHOW;
 			} else if (ticker != null && newticker == null) {
-				tickermode = TICKER_HIDE;
+				tickerMode = TICKER_HIDE;
 			}
 
 			ticker = newticker;
