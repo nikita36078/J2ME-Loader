@@ -18,9 +18,15 @@
 package javax.microedition.lcdui.list;
 
 import android.database.DataSetObserver;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.DynamicDrawableSpan;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,14 +128,18 @@ public abstract class CompoundAdapter implements Adapter, Handler.Callback {
 		}
 
 		CompoundItem item = items.get(position);
-		textview.setText(item.getString());
 
-		if (useImagePart) {
-			textview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-				textview.setCompoundDrawablesWithIntrinsicBounds(item.getDrawable(textview.getHeight()),
-						null, null, null);
-				textview.setCompoundDrawablePadding(textview.getPaddingLeft());
-			});
+		if (useImagePart && item.getImage() != null) {
+			Paint.FontMetrics fm = textview.getPaint().getFontMetrics();
+			float lineHeight = fm.leading + fm.bottom - fm.top;
+			Drawable drawable = item.getDrawable(lineHeight);
+			SpannableStringBuilder ssb = new SpannableStringBuilder(" ");
+			ImageSpan imageSpan = new ImageSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM);
+			ssb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			ssb.append(item.getString());
+			textview.setText(ssb);
+		} else {
+			textview.setText(item.getString());
 		}
 
 		return textview;

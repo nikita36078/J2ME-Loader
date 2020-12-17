@@ -48,12 +48,12 @@ public class CompoundItem {
 		return icon;
 	}
 
-	public Drawable getDrawable(int height) {
+	public Drawable getDrawable(float height) {
 		if (imageDrawable == null && icon != null) {
 			Bitmap bitmap = icon.getBitmap();
-			int width = height / bitmap.getHeight() * bitmap.getWidth();
-			Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-			imageDrawable = new BitmapDrawable(scaledBitmap);
+			int width = Math.round(bitmap.getWidth() * height / bitmap.getHeight());
+			imageDrawable = new BitmapDrawable(bitmap);
+			imageDrawable.setBounds(0, 0, width, Math.round(height));
 		}
 		return imageDrawable;
 	}
