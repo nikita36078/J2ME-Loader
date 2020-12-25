@@ -26,6 +26,9 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +61,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -304,44 +308,55 @@ public class AppsListFragment extends ListFragment {
 		AppItem appItem = adapter.getItem(index);
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_context_shortcut) {
-			Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
-			Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
-					Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-			launchIntent.putExtra(KEY_MIDLET_NAME, appItem.getTitle());
-			ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
-					new ShortcutInfoCompat.Builder(requireActivity(), appItem.getTitle())
-							.setIntent(launchIntent)
-							.setShortLabel(appItem.getTitle());
-			if (bitmap != null) {
-				int width = bitmap.getWidth();
-				int height = bitmap.getHeight();
-				ActivityManager am = (ActivityManager) requireContext()
-						.getSystemService(Context.ACTIVITY_SERVICE);
-				int iconSize = am.getLauncherLargeIconSize();
-				if (width > height) {
-					//noinspection SuspiciousNameCombination
-					bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
-				} else if (width < height) {
-					//noinspection SuspiciousNameCombination
-					bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
-				}
-				bitmap = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, true);
-				shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
-			} else {
-				IconCompat icon = IconCompat.createWithResource(requireActivity(),
-						R.mipmap.ic_launcher);
-				shortcutInfoCompatBuilder.setIcon(icon);
-			}
-			ShortcutManagerCompat.requestPinShortcut(requireActivity(),
-					shortcutInfoCompatBuilder.build(), null);
+			requestAddShortcut(appItem);
 		} else if (itemId == R.id.action_context_rename) {
 			showRenameDialog(index);
 		} else if (itemId == R.id.action_context_settings) {
 			Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 		} else if (itemId == R.id.action_context_delete) {
 			showDeleteDialog(index);
+		} else {
+			return super.onContextItemSelected(item);
 		}
-		return super.onContextItemSelected(item);
+		return true;
+	}
+
+	private void requestAddShortcut(AppItem appItem) {
+		FragmentActivity activity = requireActivity();
+		Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
+		IconCompat icon;
+		if (bitmap == null) {
+			icon = IconCompat.createWithResource(activity, R.mipmap.ic_launcher);
+		} else {
+			int width = bitmap.getWidth();
+			int height = bitmap.getHeight();
+			ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+			int iconSize = am.getLauncherLargeIconSize();
+			Rect src;
+			if (width > height) {
+				int left = (width - height) / 2;
+				src = new Rect(left, 0, left + height, height);
+			} else if (width < height) {
+				int top = (height - width) / 2;
+				src = new Rect(0, top, width, top + width);
+			} else {
+				src = null;
+			}
+			Bitmap scaled = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(scaled);
+			canvas.drawBitmap(bitmap, src, new RectF(0, 0, iconSize, iconSize), null);
+			icon = IconCompat.createWithBitmap(scaled);
+		}
+		String title = appItem.getTitle();
+		Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()),
+				activity, ConfigActivity.class);
+		launchIntent.putExtra(KEY_MIDLET_NAME, title);
+		ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(activity, title)
+				.setIntent(launchIntent)
+				.setShortLabel(title)
+				.setIcon(icon)
+				.build();
+		ShortcutManagerCompat.requestPinShortcut(activity, shortcut, null);
 	}
 
 	@Override
