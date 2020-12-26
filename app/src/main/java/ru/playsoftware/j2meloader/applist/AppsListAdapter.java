@@ -18,8 +18,7 @@
 package ru.playsoftware.j2meloader.applist;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +39,8 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	private List<AppItem> list;
 	private List<AppItem> filteredList;
 	private final LayoutInflater layoutInflater;
-	private Context context;
-	private AppFilter appFilter;
+	private final Context context;
+	private final AppFilter appFilter;
 
 	public AppsListAdapter(Context context) {
 		this.list = new ArrayList<>();
@@ -84,8 +83,9 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 		File iconFile = new File(item.getImagePathExt());
 		if (iconFile.isFile()) {
-			Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
-			holder.icon.setImageBitmap(iconBitmap);
+			Drawable icon = Drawable.createFromPath(iconFile.getAbsolutePath());
+			icon.setFilterBitmap(false);
+			holder.icon.setImageDrawable(icon);
 		} else {
 			holder.icon.setImageResource(R.mipmap.ic_launcher);
 		}
