@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -97,17 +98,21 @@ public class MicroActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
 		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
-		boolean wakelockEnabled = sp.getBoolean(PREF_KEEP_SCREEN, false);
-		if (wakelockEnabled) {
+		if (sp.getBoolean(PREF_KEEP_SCREEN, false)) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
-		boolean vibrationEnabled = sp.getBoolean(PREF_VIBRATION, false);
-		ContextHolder.setVibration(vibrationEnabled);
+		ContextHolder.setVibration(sp.getBoolean(PREF_VIBRATION, false));
 		Intent intent = getIntent();
 		appName = intent.getStringExtra(KEY_MIDLET_NAME);
-		microLoader = new MicroLoader(this, intent.getDataString());
+		Uri data = intent.getData();
+		if (data == null) {
+			showErrorDialog("Invalid intent: app path is null");
+			return;
+		}
+		String appPath = data.toString();
+		microLoader = new MicroLoader(this, appPath);
 		if (!microLoader.init()) {
-			Config.startApp(this, appName, intent.getDataString(), true);
+			Config.startApp(this, appName, appPath, true);
 			finish();
 			return;
 		}
