@@ -147,16 +147,18 @@ public class Graphics3D {
 
 		if (target instanceof Graphics) {
 			final Graphics finalG = (Graphics) target;
-			android.graphics.Canvas canvas = finalG.getCanvas();
-			Rect bounds = canvas.getClipBounds();
-			if (bounds.width() > Defs.MAX_VIEWPORT_WIDTH ||
-					bounds.height() > Defs.MAX_VIEWPORT_HEIGHT) {
+			final int clipX = finalG.getClipX() + finalG.getTranslateX();
+			final int clipY = finalG.getClipY() + finalG.getTranslateY();
+			final int clipW = finalG.getClipWidth();
+			final int clipH = finalG.getClipHeight();
+			if (clipW > Defs.MAX_VIEWPORT_WIDTH ||
+					clipH > Defs.MAX_VIEWPORT_HEIGHT) {
 				throw new IllegalArgumentException();
 			}
 
-			final int width = canvas.getWidth();
-			final int height = canvas.getHeight();
 			buffer = finalG.getBitmap();
+			final int width = buffer.getWidth();
+			final int height = buffer.getHeight();
 
 			// TODO: draw on background? Probably should fix alpha
 			/*
@@ -177,12 +179,9 @@ public class Graphics3D {
 						@Override
 						public void doRun() {
 							iIsImageTarget = _bindGraphics(
-									handle,
-									0, width, height,
-									bounds.left, bounds.top,
-									bounds.width(), bounds.height(),
-									finalDepth, finalFlags,
-									iIsProperRenderer,
+									handle, 0, width, height,
+									clipX, clipY, clipW, clipH,
+									finalDepth, finalFlags, iIsProperRenderer,
 									buffer);
 						}
 					});

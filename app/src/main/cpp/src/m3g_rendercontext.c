@@ -1369,7 +1369,7 @@ M3G_API void m3gReleaseTarget(M3GRenderContext context)
 
     /* Update the real target if we rendered into the back buffer */
     
-    if (ctx->target.buffered) {
+    if (ctx->target.buffered && ctx->backBuffer.contentsValid) {
         m3gUpdateTargetBuffer(ctx);
     }
 
