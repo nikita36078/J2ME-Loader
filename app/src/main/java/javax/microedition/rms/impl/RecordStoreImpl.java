@@ -56,7 +56,6 @@ public class RecordStoreImpl extends RecordStore {
 	private final Vector<RecordListener> recordListeners = new Vector<>();
 
 	private int lastRecordId = 0;
-	private int size = 0;
 	private String recordStoreName;
 	private int version = 0;
 	private long lastModified = 0;
@@ -91,7 +90,7 @@ public class RecordStoreImpl extends RecordStore {
 		version = dis.readInt();
 		dis.readInt(); // TODO AuthMode
 		dis.readByte(); // TODO Writable
-		size = dis.readInt();
+		dis.readInt();
 		if (dis.available() >= 4)
 			lastRecordId = dis.readInt();
 	}
@@ -118,7 +117,7 @@ public class RecordStoreImpl extends RecordStore {
 		dos.writeInt(version);
 		dos.writeInt(0); // TODO AuthMode
 		dos.writeByte(0); // TODO Writable
-		dos.writeInt(size);
+		dos.writeInt(records.size());
 		dos.writeInt(lastRecordId);
 	}
 
@@ -190,7 +189,7 @@ public class RecordStoreImpl extends RecordStore {
 			throw new RecordStoreNotOpenException();
 		}
 
-		return size;
+		return records.size();
 	}
 
 	@Override
@@ -280,7 +279,6 @@ public class RecordStoreImpl extends RecordStore {
 			version++;
 			lastModified = System.currentTimeMillis();
 			lastRecordId = nextRecordID;
-			size++;
 		}
 
 		recordStoreManager.saveRecord(this, nextRecordID);
@@ -303,7 +301,6 @@ public class RecordStoreImpl extends RecordStore {
 			}
 			version++;
 			lastModified = System.currentTimeMillis();
-			size--;
 		}
 
 		recordStoreManager.deleteRecord(this, recordId);

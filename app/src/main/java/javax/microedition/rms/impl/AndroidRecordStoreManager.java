@@ -45,6 +45,7 @@ import javax.microedition.shell.AppClassLoader;
 import javax.microedition.util.ContextHolder;
 
 public class AndroidRecordStoreManager implements RecordStoreManager {
+	private static final String TAG = "RecordStore";
 
 	private final static String RECORD_STORE_HEADER_SUFFIX = ".rsh";
 
@@ -52,7 +53,6 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 	private final static Object NULL_STORE = new Object();
 
-	private static final String TAG = RecordStore.class.getName();
 
 	private Map<String, Object> recordStores = null;
 
@@ -65,11 +65,11 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		if (recordStores == null) {
 			recordStores = new ConcurrentHashMap<>();
 			String[] list = new File(AppClassLoader.getDataDir()).list();
-			if (list != null && list.length > 0) {
-				for (String aList : list) {
-					if (aList.endsWith(RECORD_STORE_HEADER_SUFFIX)) {
-						recordStores.put(aList.substring(0,
-								aList.length() - RECORD_STORE_HEADER_SUFFIX.length()), NULL_STORE);
+			if (list != null) {
+				for (String fileName : list) {
+					if (fileName.endsWith(RECORD_STORE_HEADER_SUFFIX)) {
+						recordStores.put(fileName.substring(0,
+								fileName.length() - RECORD_STORE_HEADER_SUFFIX.length()), NULL_STORE);
 					}
 				}
 			}
@@ -112,7 +112,8 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 
 		RecordStoreImpl recordStoreImpl;
 		String headerName = getHeaderFileName(recordStoreName);
-		try (DataInputStream dis = new DataInputStream(ContextHolder.openFileInput(headerName))) {
+		File headerFile = new File(AppClassLoader.getDataDir(), headerName);
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(headerFile))) {
 			recordStoreImpl = new RecordStoreImpl(this);
 			recordStoreImpl.readHeader(dis);
 			recordStoreImpl.setOpen();
@@ -124,7 +125,10 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			recordStoreImpl.setOpen();
 			saveToDisk(recordStoreImpl, -1);
 		} catch (IOException e) {
-			throw new RecordStoreException();
+			Log.w(TAG, "openRecordStore: broken header " + headerFile, e);
+			recordStoreImpl = new RecordStoreImpl(this, recordStoreName);
+			recordStoreImpl.setOpen();
+			saveToDisk(recordStoreImpl, -1);
 		}
 
 		recordStores.put(recordStoreName, recordStoreImpl);
@@ -134,15 +138,23 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			String[] files = dataDir.list();
 			if (files != null) {
 				for (String name : files) {
-					int dot = name.indexOf('.', prefix.length() + 1);
-					if (dot == name.lastIndexOf('.') && name.startsWith(prefix)) {
+					if (name.startsWith(prefix) && name.endsWith(RECORD_STORE_RECORD_SUFFIX)) {
 						File file = new File(dataDir, name);
 						try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
 							recordStoreImpl.readRecord(dis);
-						} catch (FileNotFoundException e) {
-							throw new InvalidRecordIDException();
 						} catch (IOException e) {
-							Log.e(TAG, "RecordStore.loadFromDisk: ERROR reading " + file, e);
+							Log.w(TAG, "loadFromDisk: broken record " + file, e);
+							int pLen = prefix.length();
+							int sLen = RECORD_STORE_RECORD_SUFFIX.length();
+							int nLen = name.length();
+							if (pLen + sLen < nLen) {
+								try {
+									int recordId = Integer.parseInt(name.substring(pLen, nLen - sLen));
+									recordStoreImpl.records.put(recordId, new byte[0]);
+								} catch (NumberFormatException numberFormatException) {
+									Log.w(TAG, "loadFromDisk: ERROR stubbing broken record " + file);
+								}
+							}
 						}
 					}
 				}
