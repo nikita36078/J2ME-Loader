@@ -176,10 +176,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	public void setFont(Font font) {
-		if (font == null) {
-			font = Font.getDefaultFont();
-		}
-		this.font = font;
+		this.font = font == null ? Font.getDefaultFont() : font;
 	}
 
 	public Font getFont() {
@@ -296,97 +293,100 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) {
-		if (anchor == 0) {
-			anchor = LEFT | TOP;
-		}
-
 		Paint paint = font.paint;
-		if ((anchor & Graphics.LEFT) != 0) {
-			paint.setTextAlign(Paint.Align.LEFT);
-		} else if ((anchor & Graphics.RIGHT) != 0) {
+		if ((anchor & Graphics.RIGHT) != 0) {
 			paint.setTextAlign(Paint.Align.RIGHT);
 		} else if ((anchor & Graphics.HCENTER) != 0) {
 			paint.setTextAlign(Paint.Align.CENTER);
+		} else {
+			paint.setTextAlign(Paint.Align.LEFT);
 		}
 
-		if ((anchor & Graphics.TOP) != 0) {
-			y -= font.ascent;
-		} else if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= font.descent;
+		float ly;
+		if ((anchor & Graphics.BOTTOM) != 0) {
+			ly = y - font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= (font.descent + font.ascent) / 2;
+			ly = y - (font.descent + font.ascent) / 2.0f;
+		} else if ((anchor & Graphics.BASELINE) != 0) {
+			ly = y;
+		} else {
+			ly = y - font.ascent;
 		}
 
 		paint.setColor(fillPaint.getColor());
-		canvas.drawText(data, offset, length, x, y, paint);
+		canvas.drawText(data, offset, length, x, ly, paint);
 	}
 
 	public void drawString(String text, int x, int y, int anchor) {
-		if (anchor == 0) {
-			anchor = LEFT | TOP;
-		}
-
 		Paint paint = font.paint;
-		if ((anchor & Graphics.LEFT) != 0) {
-			paint.setTextAlign(Paint.Align.LEFT);
-		} else if ((anchor & Graphics.RIGHT) != 0) {
+		if ((anchor & Graphics.RIGHT) != 0) {
 			paint.setTextAlign(Paint.Align.RIGHT);
 		} else if ((anchor & Graphics.HCENTER) != 0) {
 			paint.setTextAlign(Paint.Align.CENTER);
+		} else {
+			paint.setTextAlign(Paint.Align.LEFT);
 		}
 
-		if ((anchor & Graphics.TOP) != 0) {
-			y -= font.ascent;
-		} else if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= font.descent;
+		float ly;
+		if ((anchor & Graphics.BOTTOM) != 0) {
+			ly = y - font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= (font.descent + font.ascent) / 2;
+			ly = y - (font.descent + font.ascent) / 2.0f;
+		} else if ((anchor & Graphics.BASELINE) != 0) {
+			ly = y;
+		} else {
+			ly = y - font.ascent;
 		}
 
 		paint.setColor(fillPaint.getColor());
-		canvas.drawText(text, x, y, paint);
+		canvas.drawText(text, x, ly, paint);
 	}
 
 	public void drawImage(Image image, int x, int y, int anchor) {
+		float lx;
 		if ((anchor & Graphics.RIGHT) != 0) {
-			x -= image.getWidth();
+			lx = x - image.getWidth();
 		} else if ((anchor & Graphics.HCENTER) != 0) {
-			x -= image.getWidth() / 2;
+			lx = x - image.getWidth() / 2.0f;
+		} else {
+			lx = x;
 		}
 
+		float ly;
 		if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= image.getHeight();
+			ly = y - image.getHeight();
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= image.getHeight() / 2;
+			ly = y - image.getHeight() / 2.0f;
+		} else {
+			ly = y;
 		}
 
-		canvas.drawBitmap(image.getBitmap(), x, y, null);
+		canvas.drawBitmap(image.getBitmap(), lx, ly, null);
 	}
 
 	public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
-		if (anchor == 0) {
-			anchor = LEFT | TOP;
-		}
-
 		Paint paint = font.paint;
-		if ((anchor & Graphics.LEFT) != 0) {
-			paint.setTextAlign(Paint.Align.LEFT);
-		} else if ((anchor & Graphics.RIGHT) != 0) {
+		if ((anchor & Graphics.RIGHT) != 0) {
 			paint.setTextAlign(Paint.Align.RIGHT);
 		} else if ((anchor & Graphics.HCENTER) != 0) {
 			paint.setTextAlign(Paint.Align.CENTER);
+		} else {
+			paint.setTextAlign(Paint.Align.LEFT);
 		}
 
-		if ((anchor & Graphics.TOP) != 0) {
-			y -= font.ascent;
-		} else if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= font.descent;
+		float ly;
+		if ((anchor & Graphics.BOTTOM) != 0) {
+			ly = y - font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= (font.descent + font.ascent) / 2;
+			ly = y - (font.descent + font.ascent) / 2.0f;
+		} else if ((anchor & Graphics.TOP) != 0) {
+			ly = y - font.ascent;
+		} else {
+			ly = y;
 		}
 
 		paint.setColor(fillPaint.getColor());
-		canvas.drawText(str, offset, offset + len, x, y, paint);
+		canvas.drawText(str, offset, offset + len, x, ly, paint);
 	}
 
 	public void drawRegion(Image image, int x_src, int y_src, int width, int height,
@@ -508,17 +508,23 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		if (width <= 0 || height <= 0) return;
 		final int[] pixels = new int[width * height];
 		canvasBitmap.getPixels(pixels, 0, width, x_src, y_src, width, height);
+		float dx;
 		if ((anchor & Graphics.RIGHT) != 0) {
-			x_dest -= width;
+			dx = x_dest - width;
 		} else if ((anchor & Graphics.HCENTER) != 0) {
-			x_dest -= width / 2;
+			dx = x_dest - width / 2.0f;
+		} else {
+			dx = x_dest;
 		}
+		float dy;
 		if ((anchor & Graphics.BOTTOM) != 0) {
-			y_dest -= height;
+			dy = y_dest - height;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y_dest -= height / 2;
+			dy = y_dest - height / 2.0f;
+		} else {
+			dy = y_dest;
 		}
-		canvas.drawBitmap(pixels, 0, width, x_dest, y_dest, width, height, false, null);
+		canvas.drawBitmap(pixels, 0, width, dx, dy, width, height, false, null);
 	}
 
 	public void getPixels(int[] pixels, int offset, int stride,
@@ -550,7 +556,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	@Override
-	public void drawFigure(com.motorola.graphics.j3d.Figure figure,
+	public synchronized void drawFigure(com.motorola.graphics.j3d.Figure figure,
 						   int x, int y,
 						   com.motorola.graphics.j3d.FigureLayout layout,
 						   com.motorola.graphics.j3d.Effect3D effect) {
