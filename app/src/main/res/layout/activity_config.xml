@@ -99,6 +99,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle" />
 
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cbLockAspect"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_config_row"
+                android:text="@string/PREF_KEEP_ASPECT_RATIO"
+                app:layout_constraintTop_toBottomOf="@+id/cmdSwapSizes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/cmdScreenBack"
@@ -122,7 +130,7 @@
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cmdScreenBack"
-                app:layout_constraintTop_toBottomOf="@+id/tfScreenHeight"
+                app:layout_constraintTop_toBottomOf="@+id/cbLockAspect"
                 tools:ignore="UnusedAttribute" />
 
 

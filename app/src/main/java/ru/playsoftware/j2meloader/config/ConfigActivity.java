@@ -64,6 +64,7 @@ import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
@@ -81,6 +82,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
+	protected AppCompatCheckBox cbLockAspect;
 	protected EditText tfScreenBack;
 	protected SeekBar sbScaleRatio;
 	protected EditText tfScaleRatioValue;
@@ -206,6 +208,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		rootContainer = findViewById(R.id.configRoot);
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
+		cbLockAspect = findViewById(R.id.cbLockAspect);
 		tfScreenBack = findViewById(R.id.tfScreenBack);
 		cxScaleToFit = findViewById(R.id.cxScaleToFit);
 		sbScaleRatio = findViewById(R.id.sbScaleRatio);
@@ -255,6 +258,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		addFontSizePreset("176 x 220", 15, 18, 22);
 		addFontSizePreset("240 x 320", 18, 22, 26);
 
+		cbLockAspect.setOnCheckedChangeListener(this::onLockAspectChanged);
 		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this::showScreenPresets);
 		findViewById(R.id.cmdSwapSizes).setOnClickListener(this);
 		findViewById(R.id.cmdAddToPreset).setOnClickListener(v -> addResolutionToPresets());
@@ -358,6 +362,47 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKSelFore.addTextChangedListener(new ColorTextWatcher(tfVKSelFore));
 		tfVKSelBack.addTextChangedListener(new ColorTextWatcher(tfVKSelBack));
 		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
+	}
+
+	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
+		if (isChecked) {
+			float w;
+			try {
+				w = Integer.parseInt(tfScreenWidth.getText().toString());
+			} catch (Exception ignored) {
+				w = 0;
+			}
+			if (w <= 0) {
+				cb.setChecked(false);
+				return;
+			}
+			float h;
+			try {
+				h = Integer.parseInt(tfScreenHeight.getText().toString());
+			} catch (Exception ignored) {
+				h = 0;
+			}
+			if (h <= 0) {
+				cb.setChecked(false);
+				return;
+			}
+			float finalW = w;
+			float finalH = h;
+			tfScreenWidth.setOnFocusChangeListener(new ResolutionAutoFill(tfScreenWidth, tfScreenHeight, finalH / finalW));
+			tfScreenHeight.setOnFocusChangeListener(new ResolutionAutoFill(tfScreenHeight, tfScreenWidth, finalW / finalH));
+
+		} else {
+			View.OnFocusChangeListener listener = tfScreenWidth.getOnFocusChangeListener();
+			if (listener != null) {
+				listener.onFocusChange(tfScreenWidth, false);
+				tfScreenWidth.setOnFocusChangeListener(null);
+			}
+			listener = tfScreenHeight.getOnFocusChangeListener();
+			if (listener != null) {
+				listener.onFocusChange(tfScreenHeight, false);
+				tfScreenHeight.setOnFocusChangeListener(null);
+			}
+		}
 	}
 
 	void loadConfig() {
@@ -975,6 +1020,48 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			} catch (NumberFormatException e) {
 				drawable.setColor(Color.BLACK);
 				s.clear();
+			}
+		}
+	}
+
+	private static class ResolutionAutoFill implements TextWatcher, View.OnFocusChangeListener {
+		private final EditText src;
+		private final EditText dst;
+		private final float aspect;
+
+		public ResolutionAutoFill(EditText src, EditText dst, float aspect) {
+			this.src = src;
+			this.dst = dst;
+			this.aspect = aspect;
+			if (src.hasFocus())
+				src.addTextChangedListener(this);
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			try {
+				int size = Integer.parseInt(src.getText().toString());
+				if (size <= 0) return;
+				int value = Math.round(size * aspect);
+				dst.setText(Integer.toString(value));
+			} catch (NumberFormatException ignored) { }
+		}
+
+		public void onFocusChange(View v, boolean hasFocus) {
+			if (hasFocus) {
+				src.addTextChangedListener(this);
+			} else {
+				src.removeTextChangedListener(this);
 			}
 		}
 	}
