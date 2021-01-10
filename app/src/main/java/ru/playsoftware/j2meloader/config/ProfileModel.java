@@ -55,6 +55,10 @@ public class ProfileModel {
 	@SerializedName("ScreenKeepAspectRatio")
 	public boolean screenKeepAspectRatio;
 
+	public int screenScaleType;
+
+	public int screenGravity;
+
 	@SerializedName("ScreenFilter")
 	public boolean screenFilter;
 
@@ -156,6 +160,8 @@ public class ProfileModel {
 		screenWidth = 240;
 		screenHeight = 320;
 		screenBackgroundColor = 0xD0D0D0;
+		screenScaleType = 1;
+		screenGravity = 1;
 		screenScaleRatio = 100;
 		screenScaleToFit = true;
 		screenKeepAspectRatio = true;

@@ -137,24 +137,37 @@ public class ProfilesManager {
 			}
 		}
 		if (params != null) {
-			if (params.version < 2) {
-				if (params.version < 1) {
-					ProfilesManager.updateSystemProperties(params);
-				}
-				int w = params.screenWidth;
-				int h = params.screenHeight;
-				if (w > 0) {
-					if (h > 0) {
-						params.fontAA = Math.min(w, h) >= 240;
+			switch (params.version) {
+				case 0:
+					updateSystemProperties(params);
+				case 1:
+					int w = params.screenWidth;
+					int h = params.screenHeight;
+					if (w > 0) {
+						if (h > 0) {
+							params.fontAA = Math.min(w, h) >= 240;
+						} else {
+							params.fontAA = w >= 240;
+						}
 					} else {
-						params.fontAA = w >= 240;
+						params.fontAA = (h <= 0) || (h >= 240);
 					}
-				} else {
-					params.fontAA = (h <= 0) || (h >= 240);
-				}
 
-				params.version = 2;
-				ProfilesManager.saveConfig(params);
+				case 2:
+					if (params.screenScaleToFit) {
+						if (params.screenKeepAspectRatio) {
+							params.screenScaleType = 1;
+						} else {
+							params.screenScaleType = 2;
+						}
+					} else {
+						params.screenScaleType = 0;
+					}
+					params.screenGravity = 1;
+
+					params.version = 3;
+					ProfilesManager.saveConfig(params);
+					break;
 			}
 		}
 		return params;

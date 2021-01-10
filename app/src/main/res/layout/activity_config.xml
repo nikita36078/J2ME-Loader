@@ -110,13 +110,15 @@
 
             <Button
                 android:id="@+id/cmdScreenBack"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_margin="4dp"
                 android:text="@string/PREF_BACKGROUND"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
                 app:layout_constraintBottom_toBottomOf="@+id/tfScreenBack"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tfScreenBack" />
+                app:layout_constraintTop_toTopOf="@+id/tfScreenBack"
+                app:layout_constraintWidth_min="wrap" />
 
             <EditText
                 android:id="@+id/tfScreenBack"
@@ -129,7 +131,7 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cmdScreenBack"
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cbLockAspect"
                 tools:ignore="UnusedAttribute" />
 
@@ -173,15 +175,17 @@
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:gravity="center_vertical"
                 android:text="@string/PREF_ORIENTATION"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintWidth_min="wrap" />
 
             <Spinner
                 android:id="@+id/spOrientation"
@@ -191,31 +195,60 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toBottomOf="@+id/tfScaleRatioValue" />
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
+                app:layout_constraintTop_toTopOf="@+id/textView4" />
 
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxScaleToFit"
-                style="@style/SwitchStyle"
+            <TextView
+                android:id="@+id/tvScreenGravity"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
-                android:checked="true"
-                android:text="@string/PREF_SCALE_TO_FIT"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:checked="false"
+                android:gravity="center_vertical"
+                android:text="@string/pref_screen_gravity"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintWidth_min="wrap" />
+
+            <Spinner
+                android:id="@+id/spScreenGravity"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_config_row"
+                android:entries="@array/pref_screen_gravity_entries"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxKeepAspectRatio"
-                style="@style/SwitchStyle"
+            <TextView
+                android:id="@+id/tvScaleType"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
-                android:checked="true"
-                android:text="@string/PREF_KEEP_ASPECT_RATIO"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:checked="false"
+                android:gravity="center_vertical"
+                android:text="@string/pref_screen_scale_type"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxScaleToFit" />
+                app:layout_constraintTop_toBottomOf="@+id/tvScreenGravity"
+                app:layout_constraintWidth_min="wrap" />
+
+            <Spinner
+                android:id="@+id/spScaleType"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_config_row"
+                android:entries="@array/pref_scale_type_entries"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
+                app:layout_constraintTop_toBottomOf="@+id/tvScreenGravity" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/cxFilter"
@@ -226,7 +259,7 @@
                 android:text="@string/PREF_FILTER"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxKeepAspectRatio" />
+                app:layout_constraintTop_toBottomOf="@+id/tvScaleType" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/cxImmediate"
@@ -241,7 +274,7 @@
 
             <TextView
                 android:id="@+id/tvGraphicsMode"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:checked="false"
                 android:gravity="center_vertical"
@@ -249,8 +282,10 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxImmediate" />
+                app:layout_constraintTop_toBottomOf="@+id/cxImmediate"
+                app:layout_constraintWidth_min="wrap" />
 
             <Spinner
                 android:id="@+id/spGraphicsMode"
@@ -261,7 +296,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvGraphicsMode"
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxImmediate" />
 
             <LinearLayout
@@ -341,8 +376,8 @@
 
 
             <TextView
-                android:id="@+id/cxLimitFps"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvLimitFps"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginBottom="9dp"
                 android:gravity="center_vertical"
@@ -350,11 +385,13 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxShowFps" />
+                app:layout_constraintTop_toBottomOf="@+id/cxShowFps"
+                app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfFpsLimit"
+                android:id="@+id/etFpsLimit"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -366,9 +403,19 @@
                 android:inputType="number|numberSigned"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cxLimitFps"
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxShowFps"
                 tools:ignore="UnusedAttribute" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierScreenConfig"
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="cmdScreenBack,textView4,tvScaleType,tvGraphicsMode,tvLimitFps,tvScreenGravity"
+                tools:layout_editor_absoluteX="114dp"
+                tools:layout_editor_absoluteY="5dp" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Screen -->
 
@@ -547,7 +594,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cxTouchInput"
                 app:layout_constraintWidth_min="wrap" />
@@ -563,7 +610,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxTouchInput" />
             <!-- KeyCodes layout -->
 
@@ -619,7 +666,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard"
                 app:layout_constraintWidth_min="wrap" />
@@ -634,7 +681,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard" />
             <!-- Keyboard type -->
 
@@ -651,7 +698,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvVkType"
                 app:layout_constraintWidth_min="wrap" />
@@ -668,7 +715,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/tvVkType" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -695,7 +742,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cxVKFeedback"
                 app:layout_constraintWidth_min="wrap" />
@@ -709,7 +756,7 @@
                 android:max="255"
                 app:layout_constraintBottom_toBottomOf="@id/tvOpacity"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxVKFeedback" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -737,7 +784,7 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cxVKForceOpacity"
                 app:layout_constraintWidth_min="wrap" />
@@ -753,7 +800,7 @@
                 android:inputType="number"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toStartOf="@+id/textView13"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxVKForceOpacity"
                 tools:ignore="UnusedAttribute" />
 
@@ -783,7 +830,7 @@
                 android:text="@string/PREF_VK_FORE"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="@+id/tfVKFore"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tfVKFore"
                 app:layout_constraintWidth_min="wrap" />
@@ -801,7 +848,7 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"
                 tools:ignore="UnusedAttribute" />
 
@@ -815,7 +862,7 @@
                 android:text="@string/PREF_VK_BACK"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@+id/cmdVKSelFore"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cmdVKFore"
                 app:layout_constraintWidth_min="wrap" />
@@ -833,7 +880,7 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/tfVKFore"
                 tools:ignore="UnusedAttribute" />
 
@@ -847,7 +894,7 @@
                 android:text="@string/PREF_VK_SEL_FORE"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@+id/tfVKSelBack"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tfVKBack"
                 app:layout_constraintWidth_min="wrap" />
@@ -865,7 +912,7 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/tfVKBack"
                 tools:ignore="UnusedAttribute" />
 
@@ -881,7 +928,7 @@
                 android:text="@string/PREF_VK_SEL_BACK"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@+id/tfVKOutline"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tfVKSelBack"
                 app:layout_constraintWidth_min="wrap" />
@@ -899,7 +946,7 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/tfVKSelFore"
                 tools:ignore="UnusedAttribute" />
 
@@ -914,7 +961,7 @@
                 android:text="@string/PREF_VK_OUTLINE"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="@+id/tfVKOutline"
-                app:layout_constraintEnd_toStartOf="@+id/barrierConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tfVKSelBack"
                 app:layout_constraintWidth_min="wrap" />
@@ -932,12 +979,12 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierConfig"
+                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/tfVKSelBack"
                 tools:ignore="UnusedAttribute" />
 
             <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrierConfig"
+                android:id="@+id/barrierInputConfig"
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"

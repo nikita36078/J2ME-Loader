@@ -196,4 +196,14 @@
     <string name="pref_graphics_mode_title">Graphics mode:</string>
     <string name="err_missing_app">Application not found.\nPlease check storage device %savailability or re-create shortcut.</string>
     <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
+    <string name="pref_screen_gravity">Screen gravity</string>
+    <string name="pref_screen_gravity_bottom">Bottom</string>
+    <string name="pref_screen_gravity_center">Center</string>
+    <string name="pref_screen_gravity_left">Left</string>
+    <string name="pref_screen_gravity_right">Right</string>
+    <string name="pref_screen_gravity_top">Top</string>
+    <string name="pref_screen_scale_type">Scale type</string>
+    <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
+    <string name="pref_screen_scale_type_fit">Fit to window</string>
+    <string name="pref_screen_scale_type_none">As is</string>
 </resources>

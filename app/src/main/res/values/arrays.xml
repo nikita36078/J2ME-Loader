@@ -48,4 +48,16 @@
         <item>@string/pref_graphics_hw_gles</item>
         <item>@string/pref_graphics_hw_view</item>
     </string-array>
+    <string-array name="pref_scale_type_entries" >
+        <item>@string/pref_screen_scale_type_none</item>
+        <item>@string/pref_screen_scale_type_fit</item>
+        <item>@string/pref_screen_scale_type_fill</item>
+    </string-array>
+    <string-array name="pref_screen_gravity_entries" >
+        <item>@string/pref_screen_gravity_left</item>
+        <item>@string/pref_screen_gravity_top</item>
+        <item>@string/pref_screen_gravity_center</item>
+        <item>@string/pref_screen_gravity_right</item>
+        <item>@string/pref_screen_gravity_bottom</item>
+    </string-array>
 </resources>

@@ -132,8 +132,6 @@ public abstract class Canvas extends Displayable {
 	private static final SparseIntArray keyCodeToGameAction = new SparseIntArray();
 	private static final SparseIntArray gameActionToKeyCode = new SparseIntArray();
 	private static final SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
-	private static boolean scaleToFit;
-	private static boolean keepAspectRatio;
 	private static boolean filter;
 	private static boolean touchInput;
 	private static int graphicsMode;
@@ -203,6 +201,8 @@ public abstract class Canvas extends Displayable {
 	private Handler uiHandler;
 	private Overlay overlay;
 	private FpsCounter fpsCounter;
+	private static int scaleType;
+	private static int screenGravity;
 
 	public Canvas() {
 		if (graphicsMode == 1) {
@@ -290,9 +290,9 @@ public abstract class Canvas extends Displayable {
 		Canvas.shaderFilter = shader;
 	}
 
-	public static void setScale(boolean scaleToFit, boolean keepAspectRatio, int scaleRatio) {
-		Canvas.scaleToFit = scaleToFit;
-		Canvas.keepAspectRatio = keepAspectRatio;
+	public static void setScale(int screenGravity, int scaleType, int scaleRatio) {
+		Canvas.screenGravity = screenGravity;
+		Canvas.scaleType = scaleType;
 		Canvas.scaleRatio = scaleRatio;
 	}
 
@@ -483,54 +483,54 @@ public abstract class Canvas extends Displayable {
 		 * We turn the size of the canvas into the size of the image
 		 * that will be displayed on the screen of the device.
 		 */
-		if (scaleToFit) {
-			if (keepAspectRatio) {
-				/*
-				 * try to fit in width
-				 */
+		switch (scaleType) {
+			case 0:
+				// without scaling
+				onWidth = width;
+				onHeight = height;
+				break;
+			case 1:
+				// try to fit in width
 				onWidth = displayWidth;
 				onHeight = height * displayWidth / width;
 				if (onHeight > scaledDisplayHeight) {
-					/*
-					 * if height is too big,
-					 * then fit in height
-					 */
+					// if height is too big, then fit in height
 					onHeight = scaledDisplayHeight;
 					onWidth = width * scaledDisplayHeight / height;
 				}
-			} else {
-				/*
-				 * scaling without preserving the aspect ratio:
-				 * just stretch the picture to full screen
-				 */
+				break;
+			case 2:
+				// scaling without preserving the aspect ratio:
+				// just stretch the picture to full screen
 				onWidth = displayWidth;
 				onHeight = scaledDisplayHeight;
-			}
-		} else {
-			/*
-			 * without scaling
-			 */
-			onWidth = width;
-			onHeight = height;
+				break;
 		}
 
 		onWidth = onWidth * scaleRatio / 100;
 		onHeight = onHeight * scaleRatio / 100;
 
-		if (displayWidth >= displayHeight) {
-			/*
-			 * If we hold the screen horizontally, then most likely we hold it by the left and right edges.
-			 * Place the midlet screen in the center.
-			 */
-			onX = (displayWidth - onWidth) / 2;
-			onY = (displayHeight - onHeight) / 2;
-		} else {
-			/*
-			 * If we hold the screen vertically, then most likely we hold it by the bottom edge.
-			 * Shift the midlet screen to the top.
-			 */
-			onX = (displayWidth - onWidth) / 2;
-			onY = 0;
+		switch (screenGravity) {
+			case 0: // left
+				onX = 0;
+				onY = (displayHeight - onHeight) / 2;
+			break;
+			case 1: // top
+				onX = (displayWidth - onWidth) / 2;
+				onY = 0;
+				break;
+			case 2: // center
+				onX = (displayWidth - onWidth) / 2;
+				onY = (displayHeight - onHeight) / 2;
+				break;
+			case 3: // right
+				onX = displayWidth - onWidth;
+				onY = (displayHeight - onHeight) / 2;
+				break;
+			case 4: // bottom
+				onX = (displayWidth - onWidth) / 2;
+				onY = displayHeight - onHeight;
+				break;
 		}
 
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);

@@ -87,8 +87,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected SeekBar sbScaleRatio;
 	protected EditText tfScaleRatioValue;
 	protected Spinner spOrientation;
-	protected Checkable cxScaleToFit;
-	protected Checkable cxKeepAspectRatio;
+	protected Spinner spScreenGravity;
+	protected Spinner spScaleType;
 	protected Checkable cxFilter;
 	protected Checkable cxImmediate;
 	protected Spinner spGraphicsMode;
@@ -210,11 +210,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
 		cbLockAspect = findViewById(R.id.cbLockAspect);
 		tfScreenBack = findViewById(R.id.tfScreenBack);
-		cxScaleToFit = findViewById(R.id.cxScaleToFit);
+		spScreenGravity = findViewById(R.id.spScreenGravity);
+		spScaleType = findViewById(R.id.spScaleType);
 		sbScaleRatio = findViewById(R.id.sbScaleRatio);
 		tfScaleRatioValue = findViewById(R.id.tfScaleRatioValue);
 		spOrientation = findViewById(R.id.spOrientation);
-		cxKeepAspectRatio = findViewById(R.id.cxKeepAspectRatio);
 		cxFilter = findViewById(R.id.cxFilter);
 		cxImmediate = findViewById(R.id.cxImmediate);
 		spGraphicsMode = findViewById(R.id.spGraphicsMode);
@@ -224,7 +224,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxParallel = findViewById(R.id.cxParallel);
 		cxForceFullscreen = findViewById(R.id.cxForceFullscreen);
 		cxShowFps = findViewById(R.id.cxShowFps);
-		tfFpsLimit = findViewById(R.id.tfFpsLimit);
+		tfFpsLimit = findViewById(R.id.etFpsLimit);
 
 		tfFontSizeSmall = findViewById(R.id.tfFontSizeSmall);
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
@@ -653,8 +653,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		sbScaleRatio.setProgress(params.screenScaleRatio);
 		tfScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
 		spOrientation.setSelection(params.orientation);
-		cxScaleToFit.setChecked(params.screenScaleToFit);
-		cxKeepAspectRatio.setChecked(params.screenKeepAspectRatio);
+		spScaleType.setSelection(params.screenScaleType);
+		spScreenGravity.setSelection(params.screenGravity);
 		cxFilter.setChecked(params.screenFilter);
 		cxImmediate.setChecked(params.immediateMode);
 		cxParallel.setChecked(params.parallelRedrawScreen);
@@ -712,8 +712,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 			params.screenScaleRatio = sbScaleRatio.getProgress();
 			params.orientation = spOrientation.getSelectedItemPosition();
-			params.screenScaleToFit = cxScaleToFit.isChecked();
-			params.screenKeepAspectRatio = cxKeepAspectRatio.isChecked();
+			params.screenGravity = spScreenGravity.getSelectedItemPosition();
+			params.screenScaleType = spScaleType.getSelectedItemPosition();
 			params.screenFilter = cxFilter.isChecked();
 			params.immediateMode = cxImmediate.isChecked();
 			int mode = spGraphicsMode.getSelectedItemPosition();
