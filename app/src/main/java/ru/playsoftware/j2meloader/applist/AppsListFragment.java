@@ -231,7 +231,7 @@ public class AppsListFragment extends ListFragment {
 		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 		if (drawable != null) dialog.setIcon(drawable);
 		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
+			Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
 		});
 		dialog.setNegativeButton(R.string.close, null);
 		dialog.show();
