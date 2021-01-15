@@ -17,8 +17,11 @@
 package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.KeyMapper;
+import javax.microedition.lcdui.event.CanvasEvent;
 
 public class GameCanvas extends Canvas {
 
@@ -33,7 +36,7 @@ public class GameCanvas extends Canvas {
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
 	private Image image;
-	private int key;
+	private int keyState;
 	private boolean suppressCommands;
 
 	public GameCanvas(boolean suppressCommands) {
@@ -80,43 +83,53 @@ public class GameCanvas extends Canvas {
 	@Override
 	public void postKeyPressed(int keyCode) {
 		int code = convertGameKeyCode(keyCode);
-		key |= code;
-		if (!(suppressCommands && code != 0)) {
-			super.postKeyPressed(keyCode);
+		keyState |= code;
+		if (suppressCommands && code != 0) {
+			return;
 		}
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	@Override
 	public void postKeyReleased(int keyCode) {
 		int code = convertGameKeyCode(keyCode);
-		key &= ~code;
-		if (!(suppressCommands && code != 0)) {
-			super.postKeyReleased(keyCode);
+		keyState &= ~code;
+		if (suppressCommands && code != 0) {
+			return;
 		}
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	@Override
 	public void postKeyRepeated(int keyCode) {
-		int code = convertGameKeyCode(keyCode);
-		key |= code;
-		if (!(suppressCommands && code != 0)) {
-			super.postKeyRepeated(keyCode);
+		if (suppressCommands && convertGameKeyCode(keyCode) != 0) {
+			return;
 		}
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
+	@SuppressWarnings("unused")
 	public int getKeyStates() {
-		return key;
+		return keyState;
 	}
 
 	public Graphics getGraphics() {
 		return image.getGraphics();
 	}
 
+	@SuppressWarnings("unused")
 	public void flushGraphics() {
 		flushGraphics(0, 0, width, height);
 	}
 
+	@SuppressWarnings("WeakerAccess")
 	public void flushGraphics(int x, int y, int width, int height) {
 		flushBuffer(image, x, y, width, height);
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		keyState = 0;
 	}
 }

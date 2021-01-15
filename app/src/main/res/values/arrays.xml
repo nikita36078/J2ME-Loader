@@ -42,6 +42,7 @@
         <item>Nokia/SE</item>
         <item>Siemens</item>
         <item>Motorola</item>
+        <item>Custom</item>
     </string-array>
     <string-array name="pref_graphics_mode_entries" tools:ignore="InconsistentArrays">
         <item>@string/pref_graphics_software</item>

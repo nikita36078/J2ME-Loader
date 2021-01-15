@@ -29,7 +29,6 @@ import android.opengl.GLUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -61,7 +60,6 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
-import androidx.collection.SparseArrayCompat;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 
@@ -106,32 +104,8 @@ public abstract class Canvas extends Displayable {
 	public static final int GAME_C = 11;
 	public static final int GAME_D = 12;
 
-	private static final int DEFAULT_LAYOUT = 0;
-	private static final int SIEMENS_LAYOUT = 1;
-	private static final int MOTOROLA_LAYOUT = 2;
-
-	private static final int SIEMENS_KEY_UP = -59;
-	private static final int SIEMENS_KEY_DOWN = -60;
-	private static final int SIEMENS_KEY_LEFT = -61;
-	private static final int SIEMENS_KEY_RIGHT = -62;
-	private static final int SIEMENS_KEY_SOFT_LEFT = -1;
-	private static final int SIEMENS_KEY_SOFT_RIGHT = -4;
-
-	private static final int MOTOROLA_KEY_UP = -1;
-	private static final int MOTOROLA_KEY_DOWN = -6;
-	private static final int MOTOROLA_KEY_LEFT = -2;
-	private static final int MOTOROLA_KEY_RIGHT = -5;
-	private static final int MOTOROLA_KEY_FIRE = -20;
-	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
-	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
 	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
 
-	private static final SparseIntArray keyCodeToSiemensCode = new SparseIntArray();
-	private static final SparseIntArray keyCodeToMotorolaCode = new SparseIntArray();
-	private static SparseIntArray androidToMIDP;
-	private static final SparseIntArray keyCodeToGameAction = new SparseIntArray();
-	private static final SparseIntArray gameActionToKeyCode = new SparseIntArray();
-	private static final SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
 	private static boolean filter;
 	private static boolean touchInput;
 	private static int graphicsMode;
@@ -142,42 +116,6 @@ public abstract class Canvas extends Displayable {
 	private static int backgroundColor;
 	private static int scaleRatio;
 	private static int fpsLimit;
-	private static int layoutType;
-
-	static {
-		mapKeyCode(KEY_NUM0, 0, "0");
-		mapKeyCode(KEY_NUM1, 0, "1");
-		mapKeyCode(KEY_NUM2, UP, "2");
-		mapKeyCode(KEY_NUM3, 0, "3");
-		mapKeyCode(KEY_NUM4, LEFT, "4");
-		mapKeyCode(KEY_NUM5, FIRE, "5");
-		mapKeyCode(KEY_NUM6, RIGHT, "6");
-		mapKeyCode(KEY_NUM7, GAME_A, "7");
-		mapKeyCode(KEY_NUM8, DOWN, "8");
-		mapKeyCode(KEY_NUM9, GAME_B, "9");
-		mapKeyCode(KEY_STAR, GAME_C, "ASTERISK");
-		mapKeyCode(KEY_POUND, GAME_D, "POUND");
-		mapKeyCode(KEY_UP, UP, "UP");
-		mapKeyCode(KEY_DOWN, DOWN, "DOWN");
-		mapKeyCode(KEY_LEFT, LEFT, "LEFT");
-		mapKeyCode(KEY_RIGHT, RIGHT, "RIGHT");
-		mapKeyCode(KEY_FIRE, FIRE, "SELECT");
-		mapKeyCode(KEY_SOFT_LEFT, 0, "SOFT1");
-		mapKeyCode(KEY_SOFT_RIGHT, 0, "SOFT2");
-		mapKeyCode(KEY_CLEAR, 0, "CLEAR");
-		mapKeyCode(KEY_SEND, 0, "SEND");
-		mapKeyCode(KEY_END, 0, "END");
-
-		mapGameAction(UP, KEY_UP);
-		mapGameAction(LEFT, KEY_LEFT);
-		mapGameAction(RIGHT, KEY_RIGHT);
-		mapGameAction(DOWN, KEY_DOWN);
-		mapGameAction(FIRE, KEY_FIRE);
-		mapGameAction(GAME_A, KEY_NUM7);
-		mapGameAction(GAME_B, KEY_NUM9);
-		mapGameAction(GAME_C, KEY_STAR);
-		mapGameAction(GAME_D, KEY_POUND);
-	}
 
 	private final Object paintSync = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
@@ -216,76 +154,6 @@ public abstract class Canvas extends Displayable {
 		updateSize();
 	}
 
-	private static void remapKeys() {
-		if (layoutType == SIEMENS_LAYOUT) {
-			keyCodeToSiemensCode.put(KEY_LEFT, SIEMENS_KEY_LEFT);
-			keyCodeToSiemensCode.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
-			keyCodeToSiemensCode.put(KEY_UP, SIEMENS_KEY_UP);
-			keyCodeToSiemensCode.put(KEY_DOWN, SIEMENS_KEY_DOWN);
-			keyCodeToSiemensCode.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
-			keyCodeToSiemensCode.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
-
-			mapGameAction(LEFT, SIEMENS_KEY_LEFT);
-			mapGameAction(RIGHT, SIEMENS_KEY_RIGHT);
-			mapGameAction(UP, SIEMENS_KEY_UP);
-			mapGameAction(DOWN, SIEMENS_KEY_DOWN);
-
-			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
-			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
-			mapKeyCode(SIEMENS_KEY_LEFT, LEFT, "LEFT");
-			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
-			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
-			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
-		} else if (layoutType == MOTOROLA_LAYOUT) {
-			keyCodeToMotorolaCode.put(KEY_UP, MOTOROLA_KEY_UP);
-			keyCodeToMotorolaCode.put(KEY_DOWN, MOTOROLA_KEY_DOWN);
-			keyCodeToMotorolaCode.put(KEY_LEFT, MOTOROLA_KEY_LEFT);
-			keyCodeToMotorolaCode.put(KEY_RIGHT, MOTOROLA_KEY_RIGHT);
-			keyCodeToMotorolaCode.put(KEY_FIRE, MOTOROLA_KEY_FIRE);
-			keyCodeToMotorolaCode.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
-			keyCodeToMotorolaCode.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
-
-			mapGameAction(LEFT, MOTOROLA_KEY_LEFT);
-			mapGameAction(RIGHT, MOTOROLA_KEY_RIGHT);
-			mapGameAction(UP, MOTOROLA_KEY_UP);
-			mapGameAction(DOWN, MOTOROLA_KEY_DOWN);
-			mapGameAction(FIRE, MOTOROLA_KEY_FIRE);
-
-			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
-			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
-			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
-			mapKeyCode(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
-			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
-			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
-			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
-		}
-	}
-
-	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
-		keyCodeToGameAction.put(midpKeyCode, gameAction);
-		keyCodeToKeyName.put(midpKeyCode, keyName);
-	}
-
-	private static void mapGameAction(int gameAction, int keyCode) {
-		gameActionToKeyCode.put(gameAction, keyCode);
-	}
-
-	private static int convertAndroidKeyCode(int keyCode) {
-		return androidToMIDP.get(keyCode, Integer.MAX_VALUE);
-	}
-
-	public static int convertKeyCode(int keyCode) {
-		int result;
-		if (layoutType == SIEMENS_LAYOUT) {
-			result = keyCodeToSiemensCode.get(keyCode, keyCode);
-		} else if (layoutType == MOTOROLA_LAYOUT) {
-			result = keyCodeToMotorolaCode.get(keyCode, keyCode);
-		} else {
-			result = keyCode;
-		}
-		return result;
-	}
-
 	public static void setShaderFilter(ShaderInfo shader) {
 		Canvas.shaderFilter = shader;
 	}
@@ -302,12 +170,6 @@ public abstract class Canvas extends Displayable {
 
 	public static void setFilterBitmap(boolean filter) {
 		Canvas.filter = filter;
-	}
-
-	public static void setKeyMapping(int layoutType, SparseIntArray intArray) {
-		Canvas.layoutType = layoutType;
-		Canvas.androidToMIDP = intArray;
-		remapKeys();
 	}
 
 	public static void setHasTouchInput(boolean touchInput) {
@@ -332,7 +194,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getKeyCode(int gameAction) {
-		int res = gameActionToKeyCode.get(gameAction, Integer.MAX_VALUE);
+		int res = KeyMapper.getKeyCode(gameAction);
 		if (res != Integer.MAX_VALUE) {
 			return res;
 		} else {
@@ -341,7 +203,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getGameAction(int keyCode) {
-		int res = keyCodeToGameAction.get(keyCode, Integer.MAX_VALUE);
+		int res = KeyMapper.getGameAction(keyCode);
 		if (res != Integer.MAX_VALUE) {
 			return res;
 		} else {
@@ -350,7 +212,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public String getKeyName(int keyCode) {
-		String res = keyCodeToKeyName.get(keyCode);
+		String res = KeyMapper.getKeyName(keyCode);
 		if (res != null) {
 			return res;
 		} else {
@@ -359,15 +221,15 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void postKeyPressed(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void postKeyReleased(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void postKeyRepeated(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void callShowNotify() {
@@ -1033,7 +895,7 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
-			keyCode = convertAndroidKeyCode(keyCode);
+			keyCode = KeyMapper.convertAndroidKeyCode(keyCode);
 			if (keyCode == Integer.MAX_VALUE) {
 				return false;
 			}
@@ -1050,7 +912,7 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			keyCode = convertAndroidKeyCode(keyCode);
+			keyCode = KeyMapper.convertAndroidKeyCode(keyCode);
 			if (keyCode == Integer.MAX_VALUE) {
 				return false;
 			}

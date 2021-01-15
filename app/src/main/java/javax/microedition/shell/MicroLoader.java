@@ -214,7 +214,7 @@ public class MicroLoader {
 			Font.setApplyDimensions(params.fontApplyDimensions);
 			Font.setAntiAlias(params.fontAA);
 
-			Canvas.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params));
+			javax.microedition.lcdui.KeyMapper.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params), params.customKeys);
 			Canvas.setHasTouchInput(params.touchInput);
 		} catch (Exception e) {
 			e.printStackTrace();

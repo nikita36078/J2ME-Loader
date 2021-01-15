@@ -18,13 +18,17 @@ package ru.playsoftware.j2meloader.config;
 
 
 import android.os.Build;
+import android.util.SparseIntArray;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.util.SparseIntArrayAdapter;
 
 public class ProfileModel {
 	/** True if this is a new profile (not yet saved to file) */
@@ -141,6 +145,9 @@ public class ProfileModel {
 
 	@SerializedName("Layout")
 	public int keyCodesLayout;
+
+	@JsonAdapter(SparseIntArrayAdapter.class)
+	public SparseIntArray customKeys;
 
 	@SerializedName("KeyMappings")
 	public String keyMappings;
