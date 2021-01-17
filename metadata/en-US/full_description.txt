@@ -1,0 +1,4 @@
+J2ME Loader is a J2ME emulator for Android. It supports most 2D games and also 3D with some limitations (Mascot Capsule 3D games don't work). 
+Emulator has a virtual keyboard, individual settings for each application, scaling support. This project is a fork of J2meLoader.
+
+Translations page: https://crowdin.com/project/j2me-loader
