@@ -88,6 +88,7 @@ extern "C" {
 #elif defined(M3G_TARGET_ISA)
 #elif defined(M3G_TARGET_SYMBIAN)
 #elif defined(M3G_TARGET_WIN32)
+#elif defined(M3G_TARGET_ANDROID)
 #elif defined(S_SPLINT_S) /* auto-recognize Splint as a special case */
 #   define M3G_TARGET_GENERIC
 #else

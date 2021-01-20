@@ -1288,12 +1288,17 @@ static void m3gConfigureGL(Interface *m3g)
 
 	info = glGetString(GL_RENDERER);
 
+    // on Android this string does not contain "HW", but renderer always(???) hardware
+#ifdef M3G_TARGET_ANDROID
+    m3g->supportAntialiasing = M3G_TRUE;
+#else
     if (strstr((const char *)info, "HW")) {
         m3g->supportAntialiasing = M3G_TRUE;
     }
     else {
         m3g->supportAntialiasing = M3G_FALSE;
     }
+#endif // M3G_TARGET_ANDROID
 
     if (strstr((const char *)info, "MBX")) {
         m3g->colorMaskWorkaround = M3G_TRUE;
