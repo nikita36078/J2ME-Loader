@@ -596,8 +596,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (reloadFromFile) {
 			loadConfig();
 		}
-		tfScreenWidth.setText(Integer.toString(params.screenWidth));
-		tfScreenHeight.setText(Integer.toString(params.screenHeight));
+		int screenWidth = params.screenWidth;
+		if (screenWidth != 0) {
+			tfScreenWidth.setText(Integer.toString(screenWidth));
+		}
+		int screenHeight = params.screenHeight;
+		if (screenHeight != 0) {
+			tfScreenHeight.setText(Integer.toString(screenHeight));
+		}
 		tfScreenBack.setText(String.format("%06X", params.screenBackgroundColor));
 		sbScaleRatio.setProgress(params.screenScaleRatio);
 		tfScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
