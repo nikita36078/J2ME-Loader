@@ -433,13 +433,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				ShaderInfo item = (ShaderInfo) parent.getItemAtPosition(position);
 				ShaderInfo.Setting[] settings = item.settings;
-				float[] values = null;
-				for (int i = 0; i < 4; i++) {
-					if (settings[i] != null) {
-						if (values == null) {
-							values = new float[4];
+				float[] values = item.values;
+				if (values == null) {
+					for (int i = 0; i < 4; i++) {
+						if (settings[i] != null) {
+							if (values == null) {
+								values = new float[4];
+							}
+							values[i] = settings[i].def;
 						}
-						values[i] = settings[i].def;
 					}
 				}
 				if (values == null) {
