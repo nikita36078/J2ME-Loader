@@ -17,6 +17,10 @@
 
 package javax.microedition.m3g;
 
+import android.util.Log;
+
+import javax.microedition.lcdui.Image;
+
 public class Image2D extends Object3D {
 	//------------------------------------------------------------------
 	// Static data
@@ -113,50 +117,82 @@ public class Image2D extends Object3D {
 		if (image == null) {
 			throw new NullPointerException();
 		}
-		if (!(image instanceof javax.microedition.lcdui.Image)) {
+		if (!(image instanceof Image)) {
 			throw new IllegalArgumentException();
 		}
+		Image cgfxImage = (Image) image;
 
 		final int finalFormat = format;
 		tempHandle = 0;
 
-		// TODO
-		if (image instanceof javax.microedition.lcdui.Image) {
-			final javax.microedition.lcdui.Image cgfxImage = (javax.microedition.lcdui.Image) image;
+		final int width = cgfxImage.getWidth();
+		final int height = cgfxImage.getHeight();
+		int[] argbArr = new int[width * height];
+		final byte[] byteArr = new byte[width * height * getBytesPerPixel(finalFormat)];
 
-			int bpp = getBytesPerPixel(finalFormat);
-			int[] argbArr = new int[cgfxImage.getWidth() * cgfxImage.getHeight()];
-			final byte[] byteArr = new byte[cgfxImage.getWidth() * cgfxImage.getHeight() * bpp];
-			int index = 0;
+		cgfxImage.getRGB(argbArr, 0, width, 0, 0, width, height);
 
-			cgfxImage.getRGB(argbArr, 0, cgfxImage.getWidth(), 0, 0, cgfxImage.getWidth(), cgfxImage.getHeight());
-
-			for (int row = 0; row < cgfxImage.getHeight(); ++row) {
-				for (int col = 0; col < cgfxImage.getWidth(); ++col) {
-					int packedPixel = argbArr[row * cgfxImage.getWidth() + col];
-					if (bpp == 1)
+		int index = 0;
+		switch (format) {
+			case ALPHA:
+				if (cgfxImage.isMutable()){
+					for (int packedPixel : argbArr) {
+						int r = packedPixel >> 16 & 0xFF;
+						int g = packedPixel >> 8 & 0xFF;
+						int b = packedPixel & 0xFF;
+						byteArr[index++] = (byte) ((r + g + b) / 3);
+					}
+				} else {
+					for (int packedPixel : argbArr) {
 						byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
-					else if (bpp == 2) {
-						// TODO
-					} else if (bpp >= 3) {
-						byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
-						byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
-						byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
-						if (bpp >= 4)
-							byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
 					}
 				}
-			}
-
-			// excute in UI thread
-			Platform.executeInUIThread(
-					new M3gRunnable() {
-						@Override
-						void doRun() {
-							tempHandle = createHandle(finalFormat, cgfxImage.getWidth(), cgfxImage.getHeight(), byteArr);
-						}
-					});
+				break;
+			case LUMINANCE:
+				for (int packedPixel : argbArr) {
+					int r = packedPixel >> 16 & 0xFF;
+					int g = packedPixel >> 8 & 0xFF;
+					int b = packedPixel & 0xFF;
+					byteArr[index++] = (byte) ((r + g + b) / 3);
+				}
+				break;
+			case LUMINANCE_ALPHA:
+				for (int packedPixel : argbArr) {
+					int r = packedPixel >> 16 & 0xFF;
+					int g = packedPixel >> 8 & 0xFF;
+					int b = packedPixel & 0xFF;
+					byteArr[index++] = (byte) ((r + g + b) / 3);
+					byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
+				}
+				break;
+			case RGB:
+				for (int packedPixel : argbArr) {
+					byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
+				}
+				break;
+			case RGBA:
+				if (cgfxImage.isMutable()){
+					Log.w(Image2D.class.getName(), "checkAndCreate: mutable to RGBA");
+				}
+				for (int packedPixel : argbArr) {
+					byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
+					byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
+				}
+				break;
 		}
+
+		// excute in UI thread
+		Platform.executeInUIThread(
+				new M3gRunnable() {
+					@Override
+					void doRun() {
+						tempHandle = createHandle(finalFormat, width, height, byteArr);
+					}
+				});
 		return tempHandle;
 	}
 
