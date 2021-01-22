@@ -81,9 +81,8 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		}
 		AppItem item = filteredList.get(position);
 
-		File iconFile = new File(item.getImagePathExt());
-		if (iconFile.isFile()) {
-			Drawable icon = Drawable.createFromPath(iconFile.getAbsolutePath());
+		Drawable icon = Drawable.createFromPath(item.getImagePathExt());
+		if (icon != null) {
 			icon.setFilterBitmap(false);
 			holder.icon.setImageDrawable(icon);
 		} else {
