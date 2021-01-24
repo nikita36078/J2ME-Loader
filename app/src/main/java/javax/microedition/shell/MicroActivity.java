@@ -101,7 +101,7 @@ public class MicroActivity extends AppCompatActivity {
 		if (sp.getBoolean(PREF_KEEP_SCREEN, false)) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
-		ContextHolder.setVibration(sp.getBoolean(PREF_VIBRATION, false));
+		ContextHolder.setVibration(sp.getBoolean(PREF_VIBRATION, true));
 		Intent intent = getIntent();
 		appName = intent.getStringExtra(KEY_MIDLET_NAME);
 		Uri data = intent.getData();
