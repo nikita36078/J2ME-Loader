@@ -17,6 +17,7 @@ files:
         el: el
         fa: fa
         he: iw
+        hi: hi
         hu: hu
         id: in
         it: it
@@ -27,6 +28,8 @@ files:
         pt-PT: pt
         ro: ro
         ru: ru
+        sat: sat
+        si-LK: si
         sr: sr
         es-ES: es
         sv-SE: sv
