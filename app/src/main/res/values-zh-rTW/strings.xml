@@ -7,6 +7,8 @@
     <string name="more">更多</string>
     <string name="search">搜尋</string>
     <string name="licenses">授權</string>
+    <string name="profiles">設定檔</string>
+    <string name="save_log">儲存紀錄</string>
     <string name="about_message">此應用程序可以在Android設備上運行J2ME應用程序和遊戲，它支持大多數2D和部分3D遊戲。&lt;BR&gt;</string>
     <string name="help_message">&#8226; • 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; •通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
     <string name="author">作者: </string>
