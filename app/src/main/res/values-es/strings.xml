@@ -112,6 +112,7 @@
     <string name="pref_enable_actionbar_summary">En aplicaciones de pantalla completa</string>
     <string name="pref_enable_statusbar_title">Mostrar la barra de estado</string>
     <string name="pref_wakelock_title">Mantener pantalla encendida</string>
+    <string name="pref_vibration_title">Enable vibration</string>
     <string name="pref_button_shape_title">Forma del botón</string>
     <string name="pref_button_shape_oval">Ovalado</string>
     <string name="pref_button_shape_rect">Rectangular</string>
@@ -126,9 +127,12 @@
     <string name="mapping_dialog_message" formatted="false">Mapeo actual: %1$s</string>
     <string name="reset_mapping">Reiniciar</string>
     <string name="parallel_screen_redrawing">Redibujo de la pantalla en paralelo</string>
+    <string name="default_label">"%s (default)"</string>
     <string name="saved">Guardado</string>
     <string name="not_saved_exists">Ya existe</string>
+    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
     <string name="error_name">¡Escribir nombre!</string>
+    <string name="set_as_default">Set as default</string>
     <string name="edit">Editar</string>
     <string name="add">Agregar</string>
     <string name="add_profile_description">Crear perfil</string>
@@ -137,4 +141,12 @@
     <string name="set_default_profile_description">Seleccionar este perfil como configuración predeterminada para todas las aplicaciones</string>
     <string name="error_name_exists">Nombre existente, elegir otro</string>
     <string name="pref_vk_hide_hint">desactivado</string>
+    <string name="unlimited">unlimited</string>
+    <string name="pref_emulator_dir">Working directory</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Fast (no filter)</string>
+    <string name="shader_tuning">Shader Tuning</string>
+    <string name="reset">Reset</string>
+    <string name="pref_input_devices_title">Input devices</string>
+    <string name="pref_graphics_mode_title">Graphics mode:</string>
 </resources>
