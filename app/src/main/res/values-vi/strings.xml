@@ -79,8 +79,8 @@
     <string name="PREF_ORIENTATION">Định hướng màn hình</string>
     <string name="pref_orientation_default">Mặc định</string>
     <string name="pref_orientation_auto">Tự động</string>
-    <string name="pref_orientation_port">Chân dung</string>
-    <string name="pref_orientation_land">Cảnh quan</string>
+    <string name="pref_orientation_port">Hướng dọc</string>
+    <string name="pref_orientation_land">Xoay ngang</string>
     <string name="error">Lỗi</string>
     <string name="message_clear_data">Bạn thực sự muốn xoá dữ liệu ứng dụng?</string>
     <string name="PREF_VK_TYPE">Kiểu bàn phím</string>
