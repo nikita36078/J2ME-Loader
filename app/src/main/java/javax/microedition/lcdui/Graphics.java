@@ -138,7 +138,11 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	public int getGrayScale() {
-		return (getRedComponent() + getGreenComponent() + getBlueComponent()) / 3;
+		int argb = drawPaint.getColor();
+		int r = argb >> 16 & 0xFF;
+		int g = argb >> 8 & 0xFF;
+		int b = argb & 0xFF;
+		return 0x4CB2 * r + 0x9691 * g + 0x1D3E * b >> 16;
 	}
 
 	public int getRedComponent() {

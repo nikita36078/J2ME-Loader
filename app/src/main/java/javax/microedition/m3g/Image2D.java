@@ -17,8 +17,6 @@
 
 package javax.microedition.m3g;
 
-import android.util.Log;
-
 import javax.microedition.lcdui.Image;
 
 public class Image2D extends Object3D {
@@ -136,51 +134,48 @@ public class Image2D extends Object3D {
 		switch (format) {
 			case ALPHA:
 				if (cgfxImage.isMutable()){
-					for (int packedPixel : argbArr) {
-						int r = packedPixel >> 16 & 0xFF;
-						int g = packedPixel >> 8 & 0xFF;
-						int b = packedPixel & 0xFF;
-						byteArr[index++] = (byte) ((r + g + b) / 3);
+					for (int argb : argbArr) {
+						int r = argb >> 16 & 0xFF;
+						int g = argb >> 8 & 0xFF;
+						int b = argb & 0xFF;
+						byteArr[index++] = (byte) (0x4CB2 * r + 0x9691 * g + 0x1D3E * b >> 16);
 					}
 				} else {
-					for (int packedPixel : argbArr) {
-						byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
+					for (int argb : argbArr) {
+						byteArr[index++] = ((byte) ((argb >> 24) & 0xFF));
 					}
 				}
 				break;
 			case LUMINANCE:
-				for (int packedPixel : argbArr) {
-					int r = packedPixel >> 16 & 0xFF;
-					int g = packedPixel >> 8 & 0xFF;
-					int b = packedPixel & 0xFF;
-					byteArr[index++] = (byte) ((r + g + b) / 3);
+				for (int argb : argbArr) {
+					int r = argb >> 16 & 0xFF;
+					int g = argb >> 8 & 0xFF;
+					int b = argb & 0xFF;
+					byteArr[index++] = (byte) (0x4CB2 * r + 0x9691 * g + 0x1D3E * b >> 16);
 				}
 				break;
 			case LUMINANCE_ALPHA:
-				for (int packedPixel : argbArr) {
-					int r = packedPixel >> 16 & 0xFF;
-					int g = packedPixel >> 8 & 0xFF;
-					int b = packedPixel & 0xFF;
-					byteArr[index++] = (byte) ((r + g + b) / 3);
-					byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
+				for (int argb : argbArr) {
+					int r = argb >> 16 & 0xFF;
+					int g = argb >> 8 & 0xFF;
+					int b = argb & 0xFF;
+					byteArr[index++] = (byte) (0x4CB2 * r + 0x9691 * g + 0x1D3E * b >> 16);
+					byteArr[index++] = ((byte) ((argb >> 24) & 0xFF));
 				}
 				break;
 			case RGB:
-				for (int packedPixel : argbArr) {
-					byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
-					byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
-					byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
+				for (int argb : argbArr) {
+					byteArr[index++] = ((byte) ((argb >> 16) & 0xFF));
+					byteArr[index++] = ((byte) ((argb >> 8) & 0xFF));
+					byteArr[index++] = ((byte) ((argb) & 0xFF));
 				}
 				break;
 			case RGBA:
-				if (cgfxImage.isMutable()){
-					Log.w(Image2D.class.getName(), "checkAndCreate: mutable to RGBA");
-				}
-				for (int packedPixel : argbArr) {
-					byteArr[index++] = ((byte) ((packedPixel >> 16) & 0xFF));
-					byteArr[index++] = ((byte) ((packedPixel >> 8) & 0xFF));
-					byteArr[index++] = ((byte) ((packedPixel) & 0xFF));
-					byteArr[index++] = ((byte) ((packedPixel >> 24) & 0xFF));
+				for (int argb : argbArr) {
+					byteArr[index++] = ((byte) ((argb >> 16) & 0xFF));
+					byteArr[index++] = ((byte) ((argb >> 8) & 0xFF));
+					byteArr[index++] = ((byte) ((argb) & 0xFF));
+					byteArr[index++] = ((byte) ((argb >> 24) & 0xFF));
 				}
 				break;
 		}
@@ -239,10 +234,10 @@ public class Image2D extends Object3D {
 	}
 
 	// Native methods
-	private native static long _ctorImage(/*int eventSourceHandle,*/
+/*	private native static long _ctorImage(*//*int eventSourceHandle,*//*
 			long hInterface,
 			int format,
-			long imageHandle);
+			long imageHandle);*/
 
 	private native static long _ctorSizePixels(long hInterface,
 											  int format,
