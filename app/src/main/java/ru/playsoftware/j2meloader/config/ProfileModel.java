@@ -36,6 +36,7 @@ public class ProfileModel {
 
 	public transient File dir;
 
+	@SerializedName("Version")
 	public int version;
 
 	@SerializedName("ScreenWidth")
@@ -59,8 +60,10 @@ public class ProfileModel {
 	@SerializedName("ScreenKeepAspectRatio")
 	public boolean screenKeepAspectRatio;
 
+	@SerializedName("ScreenScaleType")
 	public int screenScaleType;
 
+	@SerializedName("ScreenGravity")
 	public int screenGravity;
 
 	@SerializedName("ScreenFilter")
