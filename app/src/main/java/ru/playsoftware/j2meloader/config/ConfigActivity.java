@@ -141,6 +141,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private View shaderContainer;
 	private ImageButton btShaderTune;
 	private String workDir;
+	private boolean needShow;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -149,9 +150,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		isProfile = ACTION_EDIT_PROFILE.equals(action);
-		boolean showSettings = isProfile || ACTION_EDIT.equals(action);
+		needShow = isProfile || ACTION_EDIT.equals(action);
 		String path = intent.getDataString();
 		if (path == null) {
+			needShow = false;
 			finish();
 			return;
 		}
@@ -165,6 +167,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			File convertedDir = appDir.getParentFile();
 			if (!appDir.isDirectory() || convertedDir == null
 					|| (workDir = convertedDir.getParent()) == null) {
+				needShow = false;
 				String storageName = "";
 				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 					StorageManager sm = (StorageManager) getSystemService(STORAGE_SERVICE);
@@ -195,7 +198,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		defProfile = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 				.getString(PREF_DEFAULT_PROFILE, null);
 		loadConfig();
-		if (!params.isNew && !showSettings) {
+		if (!params.isNew && !needShow) {
+			needShow = false;
 			startMIDlet();
 			return;
 		}
@@ -553,7 +557,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@Override
 	public void onPause() {
-		if (configDir != null) {
+		if (needShow && configDir != null) {
 			saveParams();
 		}
 		super.onPause();
@@ -562,7 +566,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	@Override
 	protected void onResume() {
 		super.onResume();
-		loadParams(true);
+		if (needShow) {
+			loadParams(true);
+		}
 	}
 
 	@Override
