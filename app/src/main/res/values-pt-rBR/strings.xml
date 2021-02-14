@@ -143,10 +143,23 @@
     <string name="pref_vk_hide_hint">desativado</string>
     <string name="unlimited">ilimitado</string>
     <string name="pref_emulator_dir">Pasta padrão</string>
+    <string name="error_disk_io">Erro de armazenamento: verifique o espaço no disco</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Rápido (sem filtro)</string>
     <string name="shader_tuning">Ajustar Shader</string>
     <string name="reset">Redefinir</string>
     <string name="pref_input_devices_title">Dispositivos de entrada</string>
     <string name="pref_graphics_mode_title">Modos de gráfico:</string>
+    <string name="err_missing_app">Aplicativo não encontrado.\nPor favor, verifique se o armazenamento %sesta disponível ou recrie o atalho.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Anti-Serrilhado</string>
+    <string name="pref_screen_gravity">Gravidade da tela</string>
+    <string name="pref_screen_gravity_bottom">Inferior</string>
+    <string name="pref_screen_gravity_center">Centro</string>
+    <string name="pref_screen_gravity_left">Esquerdo</string>
+    <string name="pref_screen_gravity_right">Direita</string>
+    <string name="pref_screen_gravity_top">Superior</string>
+    <string name="pref_screen_scale_type">Tipo de Escala</string>
+    <string name="pref_screen_scale_type_fill">Preencher janela (ignorar proporção de aspecto)</string>
+    <string name="pref_screen_scale_type_fit">Ajuste para caber na janela</string>
+    <string name="pref_screen_scale_type_none">Estilo padrão</string>
 </resources>
