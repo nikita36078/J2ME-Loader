@@ -143,10 +143,23 @@
     <string name="pref_vk_hide_hint">не скрывать</string>
     <string name="unlimited">без ограничений</string>
     <string name="pref_emulator_dir">Рабочая папка</string>
+    <string name="error_disk_io">Ошибка хранилища: проверьте свободное место на диске</string>
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="identity_filter">Быстрый (без фильтра)</string>
     <string name="shader_tuning">Настройка шейдера</string>
     <string name="reset">Сброс</string>
     <string name="pref_input_devices_title">Устройства ввода</string>
     <string name="pref_graphics_mode_title">Режим графики:</string>
+    <string name="err_missing_app">Приложение не найдено.\nПроверьте доступность запоминающего устройства %sили создайте ярлык заново.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Сглаживание</string>
+    <string name="pref_screen_gravity">Расположение</string>
+    <string name="pref_screen_gravity_bottom">Снизу</string>
+    <string name="pref_screen_gravity_center">По центру</string>
+    <string name="pref_screen_gravity_left">Слева</string>
+    <string name="pref_screen_gravity_right">Справа</string>
+    <string name="pref_screen_gravity_top">Сверху</string>
+    <string name="pref_screen_scale_type">Масштабирование</string>
+    <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
+    <string name="pref_screen_scale_type_fit">Вписать</string>
+    <string name="pref_screen_scale_type_none">Как есть</string>
 </resources>
