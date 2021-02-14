@@ -112,6 +112,7 @@
     <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
     <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
+    <string name="pref_vibration_title">Увімкнути вібрацію</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string name="pref_button_shape_oval">Овал</string>
     <string name="pref_button_shape_rect">Прямокутник</string>
@@ -142,10 +143,23 @@
     <string name="pref_vk_hide_hint">вимкнено</string>
     <string name="unlimited">необмежено</string>
     <string name="pref_emulator_dir">Робоча директорія</string>
+    <string name="error_disk_io">Помилка сховища: перевірте вільне місце на диску</string>
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="identity_filter">Швидко (без фільтрів)</string>
     <string name="shader_tuning">Шейдер-Тюнінг</string>
     <string name="reset">Скинути</string>
     <string name="pref_input_devices_title">Пристрої введення</string>
     <string name="pref_graphics_mode_title">Режим графіки:</string>
+    <string name="err_missing_app">Додаток не знайдено.\nПеревірте файли на пристрої %s або заново створіть ярлик.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Згладжування</string>
+    <string name="pref_screen_gravity">Розміщення</string>
+    <string name="pref_screen_gravity_bottom">Знизу</string>
+    <string name="pref_screen_gravity_center">По центру</string>
+    <string name="pref_screen_gravity_left">Ліворуч</string>
+    <string name="pref_screen_gravity_right">Праворуч</string>
+    <string name="pref_screen_gravity_top">Вгорі</string>
+    <string name="pref_screen_scale_type">Масштабування</string>
+    <string name="pref_screen_scale_type_fill">Заповнити вікно (ігнорувати пропорції)</string>
+    <string name="pref_screen_scale_type_fit">За розмірами вікна</string>
+    <string name="pref_screen_scale_type_none">Як є</string>
 </resources>
