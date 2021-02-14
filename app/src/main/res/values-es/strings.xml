@@ -143,10 +143,20 @@
     <string name="pref_vk_hide_hint">desactivado</string>
     <string name="unlimited">unlimited</string>
     <string name="pref_emulator_dir">Working directory</string>
+    <string name="error_disk_io">Error de almacenamiento: compruebe espacio en memoria</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Fast (no filter)</string>
     <string name="shader_tuning">Shader Tuning</string>
     <string name="reset">Reset</string>
     <string name="pref_input_devices_title">Input devices</string>
     <string name="pref_graphics_mode_title">Graphics mode:</string>
+    <string name="err_missing_app">No se encontró la aplicación.\nCompruebe ficheros en el dispositivo %so vuelva a crear un acceso directo.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Antialiasing</string>
+    <string name="pref_screen_gravity_bottom">Parte inferior</string>
+    <string name="pref_screen_gravity_center">Centro</string>
+    <string name="pref_screen_gravity_left">Izquierda</string>
+    <string name="pref_screen_gravity_right">Derecha</string>
+    <string name="pref_screen_gravity_top">Parte superior</string>
+    <string name="pref_screen_scale_type_fill">Ajustar ventana (ignorar relación de aspecto)</string>
+    <string name="pref_screen_scale_type_fit">Ajustar a ventana</string>
 </resources>
