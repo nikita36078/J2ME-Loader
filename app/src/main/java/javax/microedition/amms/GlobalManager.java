@@ -16,19 +16,29 @@
 
 package javax.microedition.amms;
 
+import java.util.HashMap;
+
+import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.Control;
+import javax.microedition.media.InternalEqualizer;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 
 public class GlobalManager {
 	private static Spectator spectator = new Spectator();
+	private static HashMap<String, Control> controls = new HashMap<>();
 
-	public static Control[] getControls() {
-		return null;
+	static {
+		InternalEqualizer equalizer = new InternalEqualizer();
+		controls.put(EqualizerControl.class.getName(), equalizer);
 	}
 
-	public static Control getControl(String aControlType) {
-		return null;
+	public static Control[] getControls() {
+		return controls.values().toArray(new Control[0]);
+	}
+
+	public static Control getControl(String controlType) {
+		return controls.get(controlType);
 	}
 
 	public static EffectModule createEffectModule() throws MediaException {
@@ -47,7 +57,7 @@ public class GlobalManager {
 		return spectator;
 	}
 
-	public static MediaProcessor createMediaProcessor(String aContentType) throws MediaException {
+	public static MediaProcessor createMediaProcessor(String contentType) throws MediaException {
 		return null;
 	}
 

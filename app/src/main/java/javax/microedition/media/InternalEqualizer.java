@@ -22,6 +22,15 @@ import javax.microedition.amms.control.audioeffect.EqualizerControl;
 public class InternalEqualizer implements EqualizerControl {
 
 	@Override
+	public void setScope(int scope) throws MediaException {
+	}
+
+	@Override
+	public int getScope() {
+		return 0;
+	}
+
+	@Override
 	public String[] getPresetNames() {
 		return new String[0];
 	}
@@ -41,6 +50,15 @@ public class InternalEqualizer implements EqualizerControl {
 
 	@Override
 	public boolean isEnabled() {
+		return false;
+	}
+
+	@Override
+	public void setEnforced(boolean enforced) {
+	}
+
+	@Override
+	public boolean isEnforced() {
 		return false;
 	}
 

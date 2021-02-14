@@ -19,7 +19,7 @@ package javax.microedition.amms.control;
 import javax.microedition.media.Control;
 
 public interface MIDIChannelControl extends javax.microedition.media.Control {
-	public Control getChannelControl(java.lang.String controlType, int channel);
+	public Control getChannelControl(String controlType, int channel);
 
 	public Control[] getChannelControls(int channel);
 }

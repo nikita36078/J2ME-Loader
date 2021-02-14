@@ -20,7 +20,7 @@ import javax.microedition.media.Control;
 import javax.microedition.media.Controllable;
 
 public class Spectator implements Controllable {
-	public Control getControl(java.lang.String aControlType) {
+	public Control getControl(String controlType) {
 		return null;
 	}
 
