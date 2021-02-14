@@ -143,10 +143,23 @@
     <string name="pref_vk_hide_hint">निर्योग्य</string>
     <string name="unlimited">अनलिमिटेड</string>
     <string name="pref_emulator_dir">कार्यकारी डाइरेक्टरी</string>
+    <string name="error_disk_io">संग्रहण त्रुटि: डिस्क स्थान की जाँच करें</string>
     <string name="PREF_SHADER_FILTER">शेडर:</string>
     <string name="identity_filter">तेज़ (कोई फ़िल्टर नहीं)</string>
     <string name="shader_tuning">शेडर ट्यूनिंग</string>
     <string name="reset">रीसेट</string>
     <string name="pref_input_devices_title">इनपुट डिवाइस</string>
     <string name="pref_graphics_mode_title">ग्राफिक्स मोड:</string>
+    <string name="err_missing_app">आवेदन नहीं मिला।\nकृपया संग्रहण डिवाइस %s उपलब्धता या फिर से शॉर्टकट बनाने की जाँच करें।</string>
+    <string name="PREF_FONT_ANTI_ALIASING">उपघटन प्रतिरोधी</string>
+    <string name="pref_screen_gravity">स्क्रीन गुरुत्वाकर्षण</string>
+    <string name="pref_screen_gravity_bottom">नीचे</string>
+    <string name="pref_screen_gravity_center">मध्य</string>
+    <string name="pref_screen_gravity_left">बाएँ</string>
+    <string name="pref_screen_gravity_right">दाएँ</string>
+    <string name="pref_screen_gravity_top">शीर्ष</string>
+    <string name="pref_screen_scale_type">स्केल प्रकार</string>
+    <string name="pref_screen_scale_type_fill">खिड़की भरें (पहलू अनुपात पर ध्यान न दें)</string>
+    <string name="pref_screen_scale_type_fit">खिड़की के लिए फिट</string>
+    <string name="pref_screen_scale_type_none">जैसा है</string>
 </resources>
