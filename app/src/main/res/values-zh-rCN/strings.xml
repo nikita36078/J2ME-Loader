@@ -143,10 +143,23 @@
     <string name="pref_vk_hide_hint">已禁用</string>
     <string name="unlimited">无限制</string>
     <string name="pref_emulator_dir">工作目录</string>
+    <string name="error_disk_io">存储错误：检查磁盘空间</string>
     <string name="PREF_SHADER_FILTER">着色器:</string>
     <string name="identity_filter">快速(无过滤)</string>
     <string name="shader_tuning">着色器调节</string>
     <string name="reset">重置</string>
     <string name="pref_input_devices_title">输入设备</string>
     <string name="pref_graphics_mode_title">图形模式:</string>
+    <string name="err_missing_app">应用程序未找到。\n请检查存储设备 %s可用性或重新创建快捷方式。</string>
+    <string name="PREF_FONT_ANTI_ALIASING">抗锯齿</string>
+    <string name="pref_screen_gravity">屏幕重力</string>
+    <string name="pref_screen_gravity_bottom">底部</string>
+    <string name="pref_screen_gravity_center">中心</string>
+    <string name="pref_screen_gravity_left">左</string>
+    <string name="pref_screen_gravity_right">右</string>
+    <string name="pref_screen_gravity_top">顶部</string>
+    <string name="pref_screen_scale_type">缩放类型</string>
+    <string name="pref_screen_scale_type_fill">填充窗口 (忽略宽高比)</string>
+    <string name="pref_screen_scale_type_fit">适应窗口</string>
+    <string name="pref_screen_scale_type_none">保持当前样式</string>
 </resources>
