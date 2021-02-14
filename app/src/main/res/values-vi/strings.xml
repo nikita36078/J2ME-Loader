@@ -143,10 +143,23 @@
     <string name="pref_vk_hide_hint">vô hiệu</string>
     <string name="unlimited">không giới hạn</string>
     <string name="pref_emulator_dir">Thư mục làm việc</string>
+    <string name="error_disk_io">Lỗi lưu trữ: kiểm tra không gian đĩa</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Nhanh (không bộ lọc)</string>
     <string name="shader_tuning">Điều Chỉnh Shader</string>
     <string name="reset">Thiết lập lại</string>
     <string name="pref_input_devices_title">Thiết bị đầu vào</string>
     <string name="pref_graphics_mode_title">Chế độ đồ họa:</string>
+    <string name="err_missing_app">Không tìm thấy ứng dụng.\nVui lòng kiểm tra thiết bị lưu trữ %ssẵn sàng hoặc tái tạo phím tắt.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Làm trơn</string>
+    <string name="pref_screen_gravity">Trọng lực màn hình</string>
+    <string name="pref_screen_gravity_bottom">Đáy</string>
+    <string name="pref_screen_gravity_center">Trung tâm</string>
+    <string name="pref_screen_gravity_left">Trái</string>
+    <string name="pref_screen_gravity_right">Phải</string>
+    <string name="pref_screen_gravity_top">Đầu</string>
+    <string name="pref_screen_scale_type">Kiểu tỷ lệ</string>
+    <string name="pref_screen_scale_type_fill">Fill window (bỏ qua tỷ lệ khung hình)</string>
+    <string name="pref_screen_scale_type_fit">Phù hợp với window</string>
+    <string name="pref_screen_scale_type_none">Như là</string>
 </resources>
