@@ -143,10 +143,23 @@
     <string name="pref_vk_hide_hint">ᱵᱚᱸᱫ ᱮᱱᱟ</string>
     <string name="unlimited">ᱟᱹᱱᱞᱤᱢᱤᱴᱮᱰ</string>
     <string name="pref_emulator_dir">ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱰᱟᱭᱨᱮᱠᱴᱚᱨᱭ</string>
+    <string name="error_disk_io">ᱫᱚᱦᱚ ᱵᱷᱩᱞ: ᱰᱤᱥᱠ ᱡᱟᱭᱜᱟ ᱧᱮᱞ ᱢᱮ</string>
     <string name="PREF_SHADER_FILTER">ᱥᱮᱰᱟᱹᱨ:</string>
     <string name="identity_filter">ᱞᱚᱜᱚᱱ (ᱯᱷᱤᱞᱴᱚᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ)</string>
     <string name="shader_tuning">ᱥᱮᱰᱟᱹᱨ ᱴᱭᱩᱱᱤᱝ</string>
     <string name="reset">ᱨᱤᱥᱮᱴ</string>
     <string name="pref_input_devices_title">ᱟᱫᱮᱨ ᱥᱟᱫᱷᱟᱱ ᱠᱚ</string>
     <string name="pref_graphics_mode_title">ᱜᱽᱨᱟᱯᱷᱤᱠᱥ ᱢᱳᱰ:</string>
+    <string name="err_missing_app">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱵᱟᱭ ᱧᱟᱢ ᱞᱟᱱᱟ ᱾\n ᱫᱚᱭᱟᱠᱟᱛᱮ ᱫᱟᱦᱟ ᱡᱟᱭᱜᱟ %s ᱧᱮᱞᱢᱮ ᱟᱨ ᱵᱟᱝ ᱥᱚᱴᱠᱚᱴ ᱫᱩᱦᱲᱟᱹ ᱛᱮᱭᱟᱨ ᱢᱮ ᱾</string>
+    <string name="PREF_FONT_ANTI_ALIASING">ᱟᱹᱱᱴᱤᱼᱟᱹᱞᱟᱭᱥᱤᱝ</string>
+    <string name="pref_screen_gravity">ᱥᱠᱨᱤᱱ ᱜᱽᱨᱟᱣᱤᱴᱭ</string>
+    <string name="pref_screen_gravity_bottom">ᱞᱟᱛᱟᱨ</string>
+    <string name="pref_screen_gravity_center">ᱛᱟᱞᱟ</string>
+    <string name="pref_screen_gravity_left">ᱞᱮᱸᱜᱟ</string>
+    <string name="pref_screen_gravity_right">ᱡᱚᱡᱚᱢ</string>
+    <string name="pref_screen_gravity_top">ᱪᱮᱛᱟᱱ</string>
+    <string name="pref_screen_scale_type">ᱥᱠᱮᱥ ᱯᱨᱟᱠᱟᱨ</string>
+    <string name="pref_screen_scale_type_fill">ᱡᱷᱟᱨᱠᱟ ᱯᱩᱨᱟᱹᱣ ᱢᱮ (ᱮᱥᱯᱮᱠᱼᱴ ᱨᱮᱥᱤᱭᱚ ᱤᱜᱽᱱᱟᱨ ᱢᱮ)</string>
+    <string name="pref_screen_scale_type_fit">ᱡᱷᱚᱨᱠᱟ ᱛᱮ ᱯᱷᱤᱴᱚᱜ ᱢᱮ</string>
+    <string name="pref_screen_scale_type_none">ᱚᱝᱠᱟ ᱛᱮ ᱜᱮ</string>
 </resources>
