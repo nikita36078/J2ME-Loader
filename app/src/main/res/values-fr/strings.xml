@@ -15,7 +15,7 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">Pas de données</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
-    <string name="converting_wait">Conversion en JAR...</string>
+    <string name="converting_wait">Conversion JAR...</string>
     <string name="convert_complete">Complétez</string>
     <string name="converting_message">Traitement des données en cours...</string>
     <string name="permission_request_failed">Cette application exige l’autorisation de sauvegarde de données et caché sur la carte Sd</string>
@@ -57,8 +57,6 @@
     <string name="PREF_HW_ACCELERATION">Accélération Matérielle (instable)</string>
     <string name="pref_graphics_software">Software</string>
     <string name="pref_graphics_hw_gles">Accélération HW (OpenGL ES)</string>
-    <string name="pref_graphics_hw_view">Accélération HW (OpenGL ES)</string>
-    <string name="pref_graphics_hw_surface">Accélération HW (OpenGL ES)</string>
     <string name="PREF_VK_BACK">Boutons</string>
     <string name="PREF_VK_FORE">Étiquettes</string>
     <string name="PREF_VK_OUTLINE">Contour</string>
@@ -143,10 +141,23 @@
     <string name="pref_vk_hide_hint">désactivée</string>
     <string name="unlimited">Illimité</string>
     <string name="pref_emulator_dir">Répertoire de travail</string>
+    <string name="error_disk_io">Erreur de stockage : vérifiez l\'espace disque</string>
     <string name="PREF_SHADER_FILTER">Shader</string>
     <string name="identity_filter">Rapide (sans filtre)</string>
     <string name="shader_tuning">Réglage du Shader</string>
     <string name="reset">Réinitialiser</string>
     <string name="pref_input_devices_title">\"Périphérique d\'entrée\"</string>
     <string name="pref_graphics_mode_title">Mode graphique</string>
+    <string name="err_missing_app">Application introuvable.\nVeuillez vérifier la disponibilité de l\'appareil de stockage %sou recréer le raccourci.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Anticrénelage</string>
+    <string name="pref_screen_gravity">Gravité de l\'écran</string>
+    <string name="pref_screen_gravity_bottom">Bas</string>
+    <string name="pref_screen_gravity_center">Centrer</string>
+    <string name="pref_screen_gravity_left">Gauche</string>
+    <string name="pref_screen_gravity_right">Droite</string>
+    <string name="pref_screen_gravity_top">Tout en haut</string>
+    <string name="pref_screen_scale_type">Type d\'échelle</string>
+    <string name="pref_screen_scale_type_fill">Remplir la fenêtre (Ignorer le rapport de l\'aspect)</string>
+    <string name="pref_screen_scale_type_fit">Adapter à la fenêtre</string>
+    <string name="pref_screen_scale_type_none">Comme c\'est</string>
 </resources>
