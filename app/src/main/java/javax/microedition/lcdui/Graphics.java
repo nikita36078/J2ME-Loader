@@ -279,13 +279,13 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
 		if (width < 0 || height < 0) return;
 		rectF.set(x, y, x + width, y + height);
-		canvas.drawRoundRect(rectF, arcWidth, arcHeight, drawPaint);
+		canvas.drawRoundRect(rectF, arcWidth * 0.5f, arcHeight * 0.5f, drawPaint);
 	}
 
 	public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
 		if (width < 0 || height < 0) return;
 		rectF.set(x, y, x + width, y + height);
-		canvas.drawRoundRect(rectF, arcWidth, arcHeight, fillPaint);
+		canvas.drawRoundRect(rectF, arcWidth * 0.5f, arcHeight * 0.5f, fillPaint);
 	}
 
 	public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
