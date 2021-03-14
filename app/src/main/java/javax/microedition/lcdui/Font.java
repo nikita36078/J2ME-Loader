@@ -106,8 +106,6 @@ public class Font {
 		paint.setTextSize(size);
 		// and now we set the size equal to the given one (in pixels)
 		paint.setTextSize(size * size / paint.getFontSpacing());
-		if (size >= 13)
-			paint.setTextScaleX(0.8f);
 		Paint.FontMetrics fm = paint.getFontMetrics();
 		height = (int) Math.ceil(fm.leading + fm.bottom - fm.top);
 		ascent = fm.ascent;

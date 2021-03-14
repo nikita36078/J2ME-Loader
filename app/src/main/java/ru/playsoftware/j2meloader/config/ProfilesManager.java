@@ -140,18 +140,6 @@ public class ProfilesManager {
 			switch (params.version) {
 				case 0:
 					updateSystemProperties(params);
-				case 1:
-					int w = params.screenWidth;
-					int h = params.screenHeight;
-					if (w > 0) {
-						if (h > 0) {
-							params.fontAA = Math.min(w, h) >= 240;
-						} else {
-							params.fontAA = w >= 240;
-						}
-					} else {
-						params.fontAA = (h <= 0) || (h >= 240);
-					}
 
 				case 2:
 					if (params.screenScaleToFit) {
