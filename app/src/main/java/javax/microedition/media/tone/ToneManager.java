@@ -42,14 +42,7 @@ public class ToneManager {
 		} catch (MediaException me) {
 			throw me;
 		}
-		new Thread(() -> {
-			try {
-				Thread.sleep(duration * 2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			p.deallocate();
-		}).start();
+		p.deallocate();
 	}
 
 	public static Player createPlayer(int note, int duration, int volume) throws MediaException {
