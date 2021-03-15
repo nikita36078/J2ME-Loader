@@ -40,6 +40,7 @@ import java.util.Map;
 public class FileUtils {
 
 	private static String TAG = FileUtils.class.getName();
+	public static final String ILLEGAL_FILENAME_CHARS = "[/\\\\:*?\"<>|]";
 
 	public static void copyFiles(File src, File dst, FilenameFilter filter) {
 		if (!dst.exists() && !dst.mkdirs()) {

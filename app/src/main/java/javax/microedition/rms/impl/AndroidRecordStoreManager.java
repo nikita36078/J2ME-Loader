@@ -44,6 +44,8 @@ import javax.microedition.rms.RecordStoreNotFoundException;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.util.ContextHolder;
 
+import ru.playsoftware.j2meloader.util.FileUtils;
+
 public class AndroidRecordStoreManager implements RecordStoreManager {
 	private static final String TAG = "RecordStore";
 
@@ -77,9 +79,10 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	}
 
 	@Override
-	public void deleteRecordStore(final String recordStoreName) throws RecordStoreException {
+	public void deleteRecordStore(String recordStoreName) throws RecordStoreException {
 		initializeIfNecessary();
 
+		recordStoreName = recordStoreName.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "");
 		Object value = recordStores.get(recordStoreName);
 		if (value == null) {
 			throw new RecordStoreNotFoundException(recordStoreName);
@@ -109,6 +112,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 	public RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary)
 			throws RecordStoreException {
 		initializeIfNecessary();
+		recordStoreName = recordStoreName.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "");
 
 		RecordStoreImpl recordStoreImpl;
 		String headerName = getHeaderFileName(recordStoreName);
