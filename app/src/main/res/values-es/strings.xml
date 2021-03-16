@@ -152,11 +152,14 @@
     <string name="pref_graphics_mode_title">Graphics mode:</string>
     <string name="err_missing_app">No se encontró la aplicación.\nCompruebe ficheros en el dispositivo %so vuelva a crear un acceso directo.</string>
     <string name="PREF_FONT_ANTI_ALIASING">Antialiasing</string>
+    <string name="pref_screen_gravity">Gravedad de la pantalla</string>
     <string name="pref_screen_gravity_bottom">Parte inferior</string>
     <string name="pref_screen_gravity_center">Centro</string>
     <string name="pref_screen_gravity_left">Izquierda</string>
     <string name="pref_screen_gravity_right">Derecha</string>
     <string name="pref_screen_gravity_top">Parte superior</string>
+    <string name="pref_screen_scale_type">Tipo de escala</string>
     <string name="pref_screen_scale_type_fill">Ajustar ventana (ignorar relación de aspecto)</string>
     <string name="pref_screen_scale_type_fit">Ajustar a ventana</string>
+    <string name="pref_screen_scale_type_none">Como es</string>
 </resources>
