@@ -112,6 +112,7 @@
     <string name="pref_enable_actionbar_summary">Tela completa no app</string>
     <string name="pref_enable_statusbar_title">Ativar barra de estado</string>
     <string name="pref_wakelock_title">Manter o ecrã ligado</string>
+    <string name="pref_vibration_title">Activar a vibração</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
     <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Retângulo</string>
@@ -142,10 +143,23 @@
     <string name="pref_vk_hide_hint">desativado</string>
     <string name="unlimited">ilimitado</string>
     <string name="pref_emulator_dir">Diretório de trabalho</string>
+    <string name="error_disk_io">Erro de armazenamento: verifique o espaço em disco</string>
     <string name="PREF_SHADER_FILTER">Sombras:</string>
     <string name="identity_filter">Rápido (sem filtro)</string>
     <string name="shader_tuning">Ajuste de Sombra</string>
     <string name="reset">Reset</string>
     <string name="pref_input_devices_title">Dispositivos de entrada</string>
     <string name="pref_graphics_mode_title">Modo gráfico:</string>
+    <string name="err_missing_app">Aplicativo não encontrado. \nVerifique a% de disponibilidade do dispositivo de armazenamento ou recrie o atalho.</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
+    <string name="pref_screen_gravity">Gravidade da tela</string>
+    <string name="pref_screen_gravity_bottom">Botão</string>
+    <string name="pref_screen_gravity_center">Centro</string>
+    <string name="pref_screen_gravity_left">Esquerda</string>
+    <string name="pref_screen_gravity_right">Direita</string>
+    <string name="pref_screen_gravity_top">Topo</string>
+    <string name="pref_screen_scale_type">Tipo de escala</string>
+    <string name="pref_screen_scale_type_fill">Preencher a janela (ignorar a proporção)</string>
+    <string name="pref_screen_scale_type_fit">Ajustar à janela</string>
+    <string name="pref_screen_scale_type_none">Como é</string>
 </resources>
