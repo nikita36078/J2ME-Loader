@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="close">වසන්න</string>
+    <string name="help">උපකාර</string>
+    <string name="search">සොයන්න</string>
+    <string name="licenses">බලපත්‍ර</string>
+    <string name="version">අනුවාදය: </string>
+    <string name="action_settings">සැකසුම්</string>
+    <string name="CANCEL_CMD">අවලංගු කරන්න</string>
+</resources>
