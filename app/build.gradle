@@ -8,8 +8,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 88
-        versionName "1.6.9"
+        versionCode 89
+        versionName "1.7.0"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndkVersion '21.3.6528147'
         ndk {
