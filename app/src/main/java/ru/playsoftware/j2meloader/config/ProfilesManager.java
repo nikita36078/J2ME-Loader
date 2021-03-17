@@ -141,6 +141,9 @@ public class ProfilesManager {
 				case 0:
 					updateSystemProperties(params);
 
+				case 1:
+					params.fontAA = true;
+
 				case 2:
 					if (params.screenScaleToFit) {
 						if (params.screenKeepAspectRatio) {
