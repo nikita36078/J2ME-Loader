@@ -39,7 +39,7 @@ public class AndroidMethodVisitor extends MethodVisitor {
 	private Label exceptionHandler;
 
 	AndroidMethodVisitor(MethodVisitor mv) {
-		super(Opcodes.ASM8, mv);
+		super(Opcodes.ASM9, mv);
 	}
 
 	@Override
