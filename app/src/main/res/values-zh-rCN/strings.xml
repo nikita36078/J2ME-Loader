@@ -51,7 +51,7 @@
     <string name="PREF_BACKGROUND">背景颜色</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
     <string name="PREF_VK_SHOW">显示键盘</string>
-    <string name="PREF_VK_FEEDBACK">触觉反馈</string>
+    <string name="PREF_VK_FEEDBACK">按键震动</string>
     <string name="PREF_VK_FORCE_OPACITY">屏幕外按键强制不透明</string>
     <string name="PREF_TOUCH_INPUT">屏幕触摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
@@ -85,7 +85,7 @@
     <string name="message_clear_data">您真的想要清除应用数据吗？</string>
     <string name="PREF_VK_TYPE">键盘类型</string>
     <string name="pref_vk_type_custom">可自定义</string>
-    <string name="pref_vk_type_phone">数量</string>
+    <string name="pref_vk_type_phone">数字键盘</string>
     <string name="pref_vk_type_phone_arrows">手机（带箭头按键）</string>
     <string name="PREF_LAYOUT">布局</string>
     <string name="FORCE_CLOSE_CONFIRMATION">强制关闭应用可能导致数据丢失或损坏！\n要继续吗？</string>
@@ -112,7 +112,7 @@
     <string name="pref_enable_actionbar_summary">在应用中全屏</string>
     <string name="pref_enable_statusbar_title">启用状态栏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
-    <string name="pref_vibration_title">开启振动</string>
+    <string name="pref_vibration_title">开启震动</string>
     <string name="pref_button_shape_title">按钮形状</string>
     <string name="pref_button_shape_oval">椭圆形</string>
     <string name="pref_button_shape_rect">矩形</string>
@@ -152,9 +152,9 @@
     <string name="pref_graphics_mode_title">图形模式:</string>
     <string name="err_missing_app">应用程序未找到。\n请检查存储设备 %s可用性或重新创建快捷方式。</string>
     <string name="PREF_FONT_ANTI_ALIASING">抗锯齿</string>
-    <string name="pref_screen_gravity">屏幕重力</string>
+    <string name="pref_screen_gravity">对齐方式</string>
     <string name="pref_screen_gravity_bottom">底部</string>
-    <string name="pref_screen_gravity_center">中心</string>
+    <string name="pref_screen_gravity_center">中间</string>
     <string name="pref_screen_gravity_left">左</string>
     <string name="pref_screen_gravity_right">右</string>
     <string name="pref_screen_gravity_top">顶部</string>
