@@ -383,10 +383,10 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 			ly = y - font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
 			ly = y - (font.descent + font.ascent) / 2.0f;
-		} else if ((anchor & Graphics.TOP) != 0) {
-			ly = y - font.ascent;
-		} else {
+		} else if ((anchor & Graphics.BASELINE) != 0) {
 			ly = y;
+		} else {
+			ly = y - font.ascent;
 		}
 
 		paint.setColor(fillPaint.getColor());
