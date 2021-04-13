@@ -18,39 +18,43 @@
 package javax.microedition.media;
 
 public interface Player extends Controllable {
-	public static final int CLOSED = 0;
-	public static final int UNREALIZED = 100;
-	public static final int REALIZED = 200;
-	public static final int PREFETCHED = 300;
-	public static final int STARTED = 400;
+	int CLOSED = 0;
+	int UNREALIZED = 100;
+	int REALIZED = 200;
+	int PREFETCHED = 300;
+	int STARTED = 400;
 
-	public static final long TIME_UNKNOWN = -1;
+	long TIME_UNKNOWN = -1;
 
-	public void realize() throws MediaException;
+	void realize() throws MediaException;
 
-	public void prefetch() throws MediaException;
+	void prefetch() throws MediaException;
 
-	public void start() throws MediaException;
+	void start() throws MediaException;
 
-	public void stop() throws MediaException;
+	void stop() throws MediaException;
 
-	public void deallocate();
+	void deallocate();
 
-	public void close();
+	void close();
 
-	public long setMediaTime(long now) throws MediaException;
+	long setMediaTime(long now) throws MediaException;
 
-	public long getMediaTime();
+	long getMediaTime();
 
-	public long getDuration();
+	TimeBase getTimeBase();
 
-	public void setLoopCount(int count);
+	void setTimeBase(TimeBase master) throws MediaException;
 
-	public int getState();
+	long getDuration();
 
-	public void addPlayerListener(PlayerListener playerListener);
+	void setLoopCount(int count);
 
-	public void removePlayerListener(PlayerListener playerListener);
+	int getState();
 
-	public String getContentType();
+	void addPlayerListener(PlayerListener playerListener);
+
+	void removePlayerListener(PlayerListener playerListener);
+
+	String getContentType();
 }

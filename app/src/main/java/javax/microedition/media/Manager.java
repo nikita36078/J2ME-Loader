@@ -36,6 +36,7 @@ public class Manager {
 
 	private static final String FILE_LOCATOR = "file://";
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
+	private static final TimeBase DEFAULT_TIMEBASE = () -> System.nanoTime() / 1000L;
 
 	public static Player createPlayer(String locator) throws IOException {
 		if (locator == null) {
@@ -98,6 +99,10 @@ public class Manager {
 
 	public static String[] getSupportedProtocols(String str) {
 		return new String[]{"device", "file", "http"};
+	}
+
+	public static TimeBase getSystemTimeBase() {
+		return DEFAULT_TIMEBASE;
 	}
 
 	public synchronized static void playTone(int note, int duration, int volume)

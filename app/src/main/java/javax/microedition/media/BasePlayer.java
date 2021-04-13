@@ -17,6 +17,8 @@
 package javax.microedition.media;
 
 public class BasePlayer implements Player {
+	private TimeBase timeBase;
+
 	@Override
 	public void realize() throws MediaException {
 	}
@@ -49,6 +51,19 @@ public class BasePlayer implements Player {
 	@Override
 	public long getMediaTime() {
 		return 0;
+	}
+
+	@Override
+	public TimeBase getTimeBase() {
+		if (timeBase == null) {
+			return Manager.getSystemTimeBase();
+		}
+		return timeBase;
+	}
+
+	@Override
+	public void setTimeBase(TimeBase master) throws MediaException {
+		timeBase = master;
 	}
 
 	@Override
