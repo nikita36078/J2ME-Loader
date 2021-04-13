@@ -48,9 +48,9 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.keyboard.FixedKeyboard;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.overlay.OverlayView;
-import javax.microedition.lcdui.pointer.FixedKeyboard;
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;

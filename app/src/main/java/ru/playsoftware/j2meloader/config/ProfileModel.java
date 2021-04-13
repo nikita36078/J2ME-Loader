@@ -25,7 +25,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.util.SparseIntArrayAdapter;

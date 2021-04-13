@@ -20,7 +20,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.KeyMapper;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.event.CanvasEvent;
 
 public class GameCanvas extends Canvas {
@@ -35,9 +35,9 @@ public class GameCanvas extends Canvas {
 	public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-	private Image image;
+	private final Image image;
 	private int keyState;
-	private boolean suppressCommands;
+	private final boolean suppressCommands;
 
 	public GameCanvas(boolean suppressCommands) {
 		super();

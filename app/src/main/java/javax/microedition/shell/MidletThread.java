@@ -25,7 +25,7 @@ import android.util.Log;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.KeyMapper;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;

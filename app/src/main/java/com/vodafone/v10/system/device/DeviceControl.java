@@ -17,7 +17,7 @@
 
 package com.vodafone.v10.system.device;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
 public class DeviceControl {

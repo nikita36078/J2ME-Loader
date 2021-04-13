@@ -52,10 +52,11 @@ import javax.microedition.lcdui.graphics.CanvasView;
 import javax.microedition.lcdui.graphics.CanvasWrapper;
 import javax.microedition.lcdui.graphics.GlesView;
 import javax.microedition.lcdui.graphics.ShaderProgram;
+import javax.microedition.lcdui.keyboard.FixedKeyboard;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
-import javax.microedition.lcdui.pointer.FixedKeyboard;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
@@ -376,7 +377,7 @@ public abstract class Canvas extends Displayable {
 			case 0: // left
 				onX = 0;
 				onY = (displayHeight - onHeight) / 2;
-			break;
+				break;
 			case 1: // top
 				onX = (displayWidth - onWidth) / 2;
 				onY = 0;

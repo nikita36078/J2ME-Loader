@@ -39,7 +39,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.shell.MicroActivity;
 

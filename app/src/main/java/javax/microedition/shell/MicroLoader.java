@@ -47,8 +47,8 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
-import javax.microedition.lcdui.pointer.FixedKeyboard;
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.lcdui.keyboard.FixedKeyboard;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -214,7 +214,8 @@ public class MicroLoader {
 			Font.setApplyDimensions(params.fontApplyDimensions);
 			Font.setAntiAlias(params.fontAA);
 
-			javax.microedition.lcdui.KeyMapper.setKeyMapping(params.keyCodesLayout, KeyMapper.getArrayPref(params), params.customKeys);
+			javax.microedition.lcdui.keyboard.KeyMapper.setKeyMapping(params.keyCodesLayout,
+					KeyMapper.getArrayPref(params), params.customKeys);
 			Canvas.setHasTouchInput(params.touchInput);
 		} catch (Exception e) {
 			e.printStackTrace();

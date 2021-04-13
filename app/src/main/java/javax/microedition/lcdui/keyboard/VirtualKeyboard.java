@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.microedition.lcdui.pointer;
+package javax.microedition.lcdui.keyboard;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
