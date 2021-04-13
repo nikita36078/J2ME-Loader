@@ -30,25 +30,25 @@ package org.microemu.android.asm;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+
+import java.util.ArrayList;
+
+import static org.objectweb.asm.Opcodes.*;
 
 public class AndroidMethodVisitor extends MethodVisitor {
+	static boolean USE_PANIC_LOGGING = false;
+	private final ArrayList<Label> exceptionHandlers = new ArrayList<>();
 
-	private boolean enhanceCatchBlock = false;
-
-	private Label exceptionHandler;
-
-	AndroidMethodVisitor(MethodVisitor mv) {
-		super(Opcodes.ASM9, mv);
+	public AndroidMethodVisitor(MethodVisitor methodVisitor) {
+		super(ASM9, methodVisitor);
 	}
 
 	@Override
 	public void visitLabel(Label label) {
 		mv.visitLabel(label);
-		if (enhanceCatchBlock && label == exceptionHandler) {
-			mv.visitInsn(Opcodes.DUP);
-			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/Throwable", "printStackTrace", "()V", false);
-			exceptionHandler = null;
+		if (USE_PANIC_LOGGING && exceptionHandlers.contains(label)) {
+			mv.visitInsn(DUP);
+			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Throwable", "printStackTrace", "()V", false);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class AndroidMethodVisitor extends MethodVisitor {
 		switch (owner) {
 			case "java/lang/Class":
 				if (name.equals("getResourceAsStream")) {
-					mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder",
+					mv.visitMethodInsn(INVOKESTATIC, "javax/microedition/util/ContextHolder",
 							name, "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
 					return;
 				}
@@ -101,14 +101,14 @@ public class AndroidMethodVisitor extends MethodVisitor {
 				break;
 			case "java/io/PrintStream":
 				if (name.equals("<init>") && desc.equals("(Ljava/io/OutputStream;)V")) {
-					mv.visitInsn(Opcodes.ICONST_0);
+					mv.visitInsn(ICONST_0);
 					injectGetPropertyEncoding();
 					mv.visitMethodInsn(opcode, owner, name, "(Ljava/io/OutputStream;ZLjava/lang/String;)V", itf);
 					return;
 				}
 				break;
 			case "com/siemens/mp/io/Connection":
-				if (opcode == Opcodes.INVOKESTATIC && name.equals("setListener")) {
+				if (opcode == INVOKESTATIC && name.equals("setListener")) {
 					name = "setListenerCompat";
 				}
 				break;
@@ -118,16 +118,15 @@ public class AndroidMethodVisitor extends MethodVisitor {
 
 	private void injectGetPropertyEncoding() {
 		mv.visitLdcInsn("microedition.encoding");
-		mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "getProperty",
+		mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "getProperty",
 				"(Ljava/lang/String;)Ljava/lang/String;", false);
 	}
 
 	@Override
 	public void visitTryCatchBlock(final Label start, final Label end, final Label handler, final String type) {
-		if (enhanceCatchBlock && type != null) {
-			exceptionHandler = handler;
+		if (USE_PANIC_LOGGING && type != null) {
+			exceptionHandlers.add(handler);
 		}
 		mv.visitTryCatchBlock(start, end, handler, type);
 	}
-
 }
