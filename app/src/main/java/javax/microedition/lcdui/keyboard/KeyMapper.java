@@ -18,10 +18,11 @@
 package javax.microedition.lcdui.keyboard;
 
 import android.util.SparseIntArray;
-
-import javax.microedition.lcdui.Canvas;
+import android.view.KeyEvent;
 
 import androidx.collection.SparseArrayCompat;
+
+import ru.playsoftware.j2meloader.config.ProfileModel;
 
 import static javax.microedition.lcdui.Canvas.*;
 
@@ -89,44 +90,44 @@ public class KeyMapper {
 
 	private static void remapKeys() {
 		if (layoutType == SIEMENS_LAYOUT) {
-			keyCodeToCustom.put(Canvas.KEY_LEFT, SIEMENS_KEY_LEFT);
-			keyCodeToCustom.put(Canvas.KEY_RIGHT, SIEMENS_KEY_RIGHT);
-			keyCodeToCustom.put(Canvas.KEY_UP, SIEMENS_KEY_UP);
-			keyCodeToCustom.put(Canvas.KEY_DOWN, SIEMENS_KEY_DOWN);
-			keyCodeToCustom.put(Canvas.KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
-			keyCodeToCustom.put(Canvas.KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
+			keyCodeToCustom.put(KEY_LEFT, SIEMENS_KEY_LEFT);
+			keyCodeToCustom.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
+			keyCodeToCustom.put(KEY_UP, SIEMENS_KEY_UP);
+			keyCodeToCustom.put(KEY_DOWN, SIEMENS_KEY_DOWN);
+			keyCodeToCustom.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
+			keyCodeToCustom.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
 
-			mapGameAction(Canvas.LEFT, SIEMENS_KEY_LEFT);
-			mapGameAction(Canvas.RIGHT, SIEMENS_KEY_RIGHT);
-			mapGameAction(Canvas.UP, SIEMENS_KEY_UP);
-			mapGameAction(Canvas.DOWN, SIEMENS_KEY_DOWN);
+			mapGameAction(LEFT, SIEMENS_KEY_LEFT);
+			mapGameAction(RIGHT, SIEMENS_KEY_RIGHT);
+			mapGameAction(UP, SIEMENS_KEY_UP);
+			mapGameAction(DOWN, SIEMENS_KEY_DOWN);
 
-			mapKeyCode(SIEMENS_KEY_UP, Canvas.UP, "UP");
-			mapKeyCode(SIEMENS_KEY_DOWN, Canvas.DOWN, "DOWN");
-			mapKeyCode(SIEMENS_KEY_LEFT, Canvas.LEFT, "LEFT");
-			mapKeyCode(SIEMENS_KEY_RIGHT, Canvas.RIGHT, "RIGHT");
+			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
+			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
+			mapKeyCode(SIEMENS_KEY_LEFT, LEFT, "LEFT");
+			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
 			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
 			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
 		} else if (layoutType == MOTOROLA_LAYOUT) {
-			keyCodeToCustom.put(Canvas.KEY_UP, MOTOROLA_KEY_UP);
-			keyCodeToCustom.put(Canvas.KEY_DOWN, MOTOROLA_KEY_DOWN);
-			keyCodeToCustom.put(Canvas.KEY_LEFT, MOTOROLA_KEY_LEFT);
-			keyCodeToCustom.put(Canvas.KEY_RIGHT, MOTOROLA_KEY_RIGHT);
-			keyCodeToCustom.put(Canvas.KEY_FIRE, MOTOROLA_KEY_FIRE);
-			keyCodeToCustom.put(Canvas.KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
-			keyCodeToCustom.put(Canvas.KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
+			keyCodeToCustom.put(KEY_UP, MOTOROLA_KEY_UP);
+			keyCodeToCustom.put(KEY_DOWN, MOTOROLA_KEY_DOWN);
+			keyCodeToCustom.put(KEY_LEFT, MOTOROLA_KEY_LEFT);
+			keyCodeToCustom.put(KEY_RIGHT, MOTOROLA_KEY_RIGHT);
+			keyCodeToCustom.put(KEY_FIRE, MOTOROLA_KEY_FIRE);
+			keyCodeToCustom.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
+			keyCodeToCustom.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
 
-			mapGameAction(Canvas.LEFT, MOTOROLA_KEY_LEFT);
-			mapGameAction(Canvas.RIGHT, MOTOROLA_KEY_RIGHT);
-			mapGameAction(Canvas.UP, MOTOROLA_KEY_UP);
-			mapGameAction(Canvas.DOWN, MOTOROLA_KEY_DOWN);
-			mapGameAction(Canvas.FIRE, MOTOROLA_KEY_FIRE);
+			mapGameAction(LEFT, MOTOROLA_KEY_LEFT);
+			mapGameAction(RIGHT, MOTOROLA_KEY_RIGHT);
+			mapGameAction(UP, MOTOROLA_KEY_UP);
+			mapGameAction(DOWN, MOTOROLA_KEY_DOWN);
+			mapGameAction(FIRE, MOTOROLA_KEY_FIRE);
 
-			mapKeyCode(MOTOROLA_KEY_UP, Canvas.UP, "UP");
-			mapKeyCode(MOTOROLA_KEY_DOWN, Canvas.DOWN, "DOWN");
-			mapKeyCode(MOTOROLA_KEY_LEFT, Canvas.LEFT, "LEFT");
-			mapKeyCode(MOTOROLA_KEY_RIGHT, Canvas.RIGHT, "RIGHT");
-			mapKeyCode(MOTOROLA_KEY_FIRE, Canvas.FIRE, "SELECT");
+			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
+			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
+			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
+			mapKeyCode(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
 			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
 			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
 		}
@@ -152,9 +153,12 @@ public class KeyMapper {
 		return keyCodeToCustom.get(keyCode, keyCode);
 	}
 
-	public static void setKeyMapping(int layoutType, SparseIntArray android, SparseIntArray custom) {
-		KeyMapper.layoutType = layoutType;
-		androidToMIDP = android;
+	public static void setKeyMapping(ProfileModel params) {
+		layoutType = params.keyCodesLayout;
+		androidToMIDP = params.keyMappings;
+		if (androidToMIDP == null) {
+			androidToMIDP = getDefaultKeyMap();
+		}
 		remapKeys();
 	}
 
@@ -168,5 +172,31 @@ public class KeyMapper {
 
 	public static String getKeyName(int keyCode) {
 		return keyCodeToKeyName.get(keyCode);
+	}
+
+	public static SparseIntArray getDefaultKeyMap() {
+		SparseIntArray map = new SparseIntArray();
+		map.put(KeyEvent.KEYCODE_0, KEY_NUM0);
+		map.put(KeyEvent.KEYCODE_1, KEY_NUM1);
+		map.put(KeyEvent.KEYCODE_2, KEY_NUM2);
+		map.put(KeyEvent.KEYCODE_3, KEY_NUM3);
+		map.put(KeyEvent.KEYCODE_4, KEY_NUM4);
+		map.put(KeyEvent.KEYCODE_5, KEY_NUM5);
+		map.put(KeyEvent.KEYCODE_6, KEY_NUM6);
+		map.put(KeyEvent.KEYCODE_7, KEY_NUM7);
+		map.put(KeyEvent.KEYCODE_8, KEY_NUM8);
+		map.put(KeyEvent.KEYCODE_9, KEY_NUM9);
+		map.put(KeyEvent.KEYCODE_STAR, KEY_STAR);
+		map.put(KeyEvent.KEYCODE_POUND, KEY_POUND);
+		map.put(KeyEvent.KEYCODE_DPAD_UP, KEY_UP);
+		map.put(KeyEvent.KEYCODE_DPAD_DOWN, KEY_DOWN);
+		map.put(KeyEvent.KEYCODE_DPAD_LEFT, KEY_LEFT);
+		map.put(KeyEvent.KEYCODE_DPAD_RIGHT, KEY_RIGHT);
+		map.put(KeyEvent.KEYCODE_ENTER, KEY_FIRE);
+		map.put(KeyEvent.KEYCODE_SOFT_LEFT, KEY_SOFT_LEFT);
+		map.put(KeyEvent.KEYCODE_SOFT_RIGHT, KEY_SOFT_RIGHT);
+		map.put(KeyEvent.KEYCODE_CALL, KEY_SEND);
+		map.put(KeyEvent.KEYCODE_ENDCALL, KEY_END);
+		return map;
 	}
 }

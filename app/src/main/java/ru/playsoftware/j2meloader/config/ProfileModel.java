@@ -150,10 +150,12 @@ public class ProfileModel {
 	public int keyCodesLayout;
 
 	@JsonAdapter(SparseIntArrayAdapter.class)
-	public SparseIntArray customKeys;
+	@SerializedName("KeyCodeMap")
+	public SparseIntArray keyCodeMap;
 
+	@JsonAdapter(SparseIntArrayAdapter.class)
 	@SerializedName("KeyMappings")
-	public String keyMappings;
+	public SparseIntArray keyMappings;
 
 	@SerializedName("SystemProperties")
 	public String systemProperties;

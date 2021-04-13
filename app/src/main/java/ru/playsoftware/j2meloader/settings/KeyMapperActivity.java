@@ -30,6 +30,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -40,8 +41,9 @@ import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
-	private static final SparseIntArray idToCanvasKey = new SparseIntArray();
-	private static SparseIntArray androidToMIDP;
+	private final SparseIntArray defaultKeyMap = KeyMapper.getDefaultKeyMap();
+	private final SparseIntArray idToCanvasKey = new SparseIntArray();
+	private SparseIntArray androidToMIDP;
 	private ProfileModel params;
 
 	@Override
@@ -83,7 +85,8 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		setupButton(R.id.virtual_key_0, Canvas.KEY_NUM0);
 		setupButton(R.id.virtual_key_star, Canvas.KEY_STAR);
 		setupButton(R.id.virtual_key_pound, Canvas.KEY_POUND);
-		androidToMIDP = KeyMapper.getArrayPref(params);
+		SparseIntArray keyMap = params.keyMappings;
+		androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
 	}
 
 	private void setupButton(int resId, int index) {
@@ -101,33 +104,39 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	}
 
 	private void showMappingDialog(int canvasKey) {
-		int id = androidToMIDP.indexOfValue(canvasKey);
+		SparseIntArray androidToMIDP = this.androidToMIDP;
+		int idx = androidToMIDP.indexOfValue(canvasKey);
 		String keyName = "";
-		if (id >= 0) {
-			keyName = KeyEvent.keyCodeToString(androidToMIDP.keyAt(id));
+		if (idx >= 0) {
+			keyName = KeyEvent.keyCodeToString(androidToMIDP.keyAt(idx));
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.mapping_dialog_title)
 				.setMessage(getString(R.string.mapping_dialog_message, keyName))
 				.setOnKeyListener((dialog, keyCode, event) -> {
-					if (keyCode == KeyEvent.KEYCODE_BACK) {
-						dialog.dismiss();
-						return false;
-					} else {
-						deleteDuplicates(canvasKey);
-						androidToMIDP.put(keyCode, canvasKey);
-						KeyMapper.saveArrayPref(params, androidToMIDP);
-						ProfilesManager.saveConfig(params);
-						dialog.dismiss();
-						return true;
+					switch (keyCode) {
+						case KeyEvent.KEYCODE_BACK:
+							dialog.dismiss();
+							return true;
+						case KeyEvent.KEYCODE_HOME:
+						case KeyEvent.KEYCODE_MENU:
+						case KeyEvent.KEYCODE_VOLUME_UP:
+						case KeyEvent.KEYCODE_VOLUME_DOWN:
+							return false;
+						default:
+							deleteDuplicates(canvasKey);
+							androidToMIDP.put(keyCode, canvasKey);
+							dialog.dismiss();
+							return true;
 					}
 				});
 		builder.show();
 	}
 
 	private void deleteDuplicates(int value) {
-		for (int i = 0; i < androidToMIDP.size(); i++) {
-			if (androidToMIDP.indexOfValue(value) == i) {
+		SparseIntArray androidToMIDP = this.androidToMIDP;
+		for (int i = androidToMIDP.size() - 1; i >= 0; i--) {
+			if (androidToMIDP.valueAt(i) == value) {
 				androidToMIDP.removeAt(i);
 			}
 		}
@@ -144,13 +153,40 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == android.R.id.home) {
-			finish();
+			onBackPressed();
 		} else if (itemId == R.id.action_reset_mapping) {
-			androidToMIDP.clear();
-			KeyMapper.initArray(androidToMIDP);
-			KeyMapper.saveArrayPref(params, androidToMIDP);
-			ProfilesManager.saveConfig(params);
+			androidToMIDP = defaultKeyMap.clone();
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onBackPressed() {
+		SparseIntArray oldMap = params.keyMappings;
+		SparseIntArray newMap = androidToMIDP;
+		if (equalMaps(newMap, defaultKeyMap)) {
+			newMap = null;
+		}
+		if (!equalMaps(oldMap, newMap)) {
+			params.keyMappings = newMap;
+			ProfilesManager.saveConfig(params);
+		}
+		super.onBackPressed();
+	}
+
+	private boolean equalMaps(SparseIntArray map1, SparseIntArray map2) {
+		if (map1 == map2) {
+			return true;
+		}
+		if (map1 == null || map2 == null || map1.size() != map2.size()) {
+			return false;
+		}
+		for (int i = 0, size = map1.size(); i < size; i++) {
+			if (map2.keyAt(i) != map1.keyAt(i) ||
+					map2.valueAt(i) != map1.valueAt(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

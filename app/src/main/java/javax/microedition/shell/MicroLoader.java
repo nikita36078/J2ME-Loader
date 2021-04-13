@@ -48,6 +48,7 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.keyboard.FixedKeyboard;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
@@ -58,7 +59,6 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
-import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -214,8 +214,7 @@ public class MicroLoader {
 			Font.setApplyDimensions(params.fontApplyDimensions);
 			Font.setAntiAlias(params.fontAA);
 
-			javax.microedition.lcdui.keyboard.KeyMapper.setKeyMapping(params.keyCodesLayout,
-					KeyMapper.getArrayPref(params), params.customKeys);
+			KeyMapper.setKeyMapping(params);
 			Canvas.setHasTouchInput(params.touchInput);
 		} catch (Exception e) {
 			e.printStackTrace();

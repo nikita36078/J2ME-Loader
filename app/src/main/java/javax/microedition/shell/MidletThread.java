@@ -92,9 +92,8 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 		Displayable current = ContextHolder.getActivity().getCurrent();
 		if (current instanceof Canvas) {
 			Canvas canvas = (Canvas) current;
-			int keyCode = KeyMapper.convertKeyCode(Canvas.KEY_END);
-			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_PRESSED, keyCode));
-			Display.postEvent(CanvasEvent.getInstance(canvas, CanvasEvent.KEY_RELEASED, keyCode));
+			canvas.postKeyPressed(Canvas.KEY_END);
+			canvas.postKeyReleased(Canvas.KEY_END);
 		}
 		if (instance != null)
 			instance.handler.obtainMessage(DESTROY, 1).sendToTarget();
