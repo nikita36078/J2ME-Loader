@@ -24,6 +24,12 @@
 
 package com.nokia.mid.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -54,11 +60,12 @@ public class DirectUtils {
 	 * @param imageLength the length of the data in the array
 	 * @return the created mutable image
 	 */
-	public static Image createImage(byte imageData[], int imageOffset, int imageLength) {
-		Image source = Image.createImage(imageData, imageOffset, imageLength);
-		Image target = Image.createTransparentImage(source.getWidth(), source.getHeight());
-		target.getGraphics().drawImage(source, 0, 0, 0);
-		return target;
+	public static Image createImage(byte[] imageData, int imageOffset, int imageLength) {
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inMutable = true;
+		Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, imageOffset, imageLength, opts);
+		if (!bitmap.isMutable()) Log.w(DirectUtils.class.getName(), "createImage: bitmap not is mutable");
+		return new Image(bitmap);
 	}
 
 	/**
@@ -70,11 +77,25 @@ public class DirectUtils {
 	 * @return the created image
 	 */
 	public static Image createImage(int width, int height, int argb) {
-		Image img = Image.createTransparentImage(width, height);
-		Graphics g = img.getGraphics();
-		g.setColorAlpha(argb);
-		g.fillRect(0, 0, width, height);
-		return img;
+		return Image.createImage(width, height, argb);
 	}
 
+	public static Font getFont(int identifier) {
+		// TODO: 12.04.2021  unknown how to interpret 'identifier'
+		return Font.getFont(identifier);
+	}
+
+	public static javax.microedition.lcdui.Font getFont(int face, int style, int height) {
+		return new Font(face, style, -1, height);
+	}
+
+	public static boolean setHeader(Displayable displayable,
+									String headerText,
+									Image headerImage,
+									int headerTextColor,
+									int headerBgColor,
+									int headerDividerColor) {
+		// TODO: 12.04.2021 stub
+		return false;
+	}
 }
