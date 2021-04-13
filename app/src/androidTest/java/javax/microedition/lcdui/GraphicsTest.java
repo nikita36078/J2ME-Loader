@@ -18,7 +18,6 @@ package javax.microedition.lcdui;
 
 import android.graphics.Color;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -41,11 +40,6 @@ public class GraphicsTest {
 
 	private static final int testWidth = 20;
 	private static final int testHeight = 20;
-
-	@Before
-	public void setUp() throws Exception {
-		Font.setApplyDimensions(false);
-	}
 
 	@Test
 	public void drawLine() {

@@ -17,6 +17,7 @@
 
 package javax.microedition.lcdui;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -26,6 +27,8 @@ import android.util.TypedValue;
 import java.util.Arrays;
 
 import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.config.ProfileModel;
 
 public class Font {
 	public static final int FACE_MONOSPACE = 32;
@@ -41,6 +44,9 @@ public class Font {
 	public static final int STYLE_PLAIN = 0;
 	public static final int STYLE_UNDERLINED = 4;
 
+	public static final int FONT_STATIC_TEXT = 0;
+	public static final int FONT_INPUT_TEXT = 1;
+
 	private static final int[] SCREEN_SIZES = {128, 176, 220, 320};
 	private static final int[] FONT_SIZES = {
 			9, 13, 15, // 128
@@ -49,67 +55,53 @@ public class Font {
 			18, 22, 26, // 320
 	};
 
-	private static final int FONT_COUNT = 3 * 3 * (1 << 3);
+	private static final int FONT_COUNT = 3 * 3 * 2 * 2 * 2;
 	private static final Font[] fonts = new Font[FONT_COUNT];
-	private static final float[] sizes = new float[]{18, 22, 26};
+	private static final float[] sizes = {22, 18, 26};
 
-	private static boolean applyDimensions = true;
 	private static boolean antiAlias;
 
-	final Paint paint;
+	final Paint paint = new Paint();
 	final float ascent;
 	final float descent;
 	private final int height;
-	private int face, style, size;
+	private final int face;
+	private final int style;
+	private final int size;
 
-	public static void setApplyDimensions(boolean flag) {
-		applyDimensions = flag;
-		Arrays.fill(fonts, null);
-	}
+	@SuppressLint("WrongConstant")
+	public Font(int face, int style, int size, float height) {
+		this.face = face;
+		this.style = style;
+		this.size = size;
 
-	public static void setSize(int size, float value) {
-		switch (size) {
-			case SIZE_SMALL:
-				sizes[0] = value;
+		Typeface family;
+		switch (face) {
+			case FACE_MONOSPACE:
+				family = Typeface.MONOSPACE;
 				break;
-
-			case SIZE_MEDIUM:
-				sizes[1] = value;
+			case FACE_PROPORTIONAL:
+				family = Typeface.SANS_SERIF;
 				break;
-
-			case SIZE_LARGE:
-				sizes[2] = value;
-				break;
-
 			default:
-				return;
+				family = Typeface.DEFAULT;
 		}
 
-		Arrays.fill(fonts, null);
-	}
-
-	public Font(Typeface face, int style, float size, boolean underline) {
-		if (applyDimensions) {
-			DisplayMetrics metrics = ContextHolder.getAppContext().getResources().getDisplayMetrics();
-			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
-		}
-
-		paint = new Paint();
-		paint.setAntiAlias(antiAlias);
 		paint.setColor(Color.BLACK);
+		paint.setTypeface(Typeface.create(family, style & Typeface.BOLD_ITALIC));
+		paint.setAntiAlias(antiAlias);
 		paint.setStyle(Paint.Style.FILL);
-
-		paint.setTypeface(Typeface.create(face, style));
-		paint.setUnderlineText(underline);
+		paint.setUnderlineText((style & STYLE_UNDERLINED) != 0);
 
 		// at first, just set the size (no matter what is put here)
-		paint.setTextSize(size);
+		paint.setTextSize(height);
 		// and now we set the size equal to the given one (in pixels)
-		paint.setTextSize(size * size / paint.getFontSpacing());
-		Paint.FontMetrics fm = paint.getFontMetrics();
-		height = (int) Math.ceil(fm.leading + fm.bottom - fm.top);
-		ascent = fm.ascent;
-		descent = fm.descent;
+		paint.setTextSize(height * height / paint.getFontSpacing());
+
+		Paint.FontMetrics fm = new Paint.FontMetrics();
+		this.height = (int) Math.ceil(paint.getFontMetrics(fm));
+		this.ascent = fm.ascent;
+		this.descent = fm.descent;
 	}
 
 	public static Font getFont(int fontSpecifier) {
@@ -117,84 +109,20 @@ public class Font {
 	}
 
 	public static Font getFont(int face, int style, int size) {
-		int index = getFontIndex(face, style, size);
+		int index = ((face >> 5) * 3 + (size >> 3) << 3) + style;
+		Font font = fonts[index];
 
-		if (fonts[index] == null) {
-			Typeface typeface;
-			int tfstyle = Typeface.NORMAL;
-			boolean underline;
-			float fsize;
-
-			switch (face) {
-				case FACE_MONOSPACE:
-					typeface = Typeface.MONOSPACE;
-					break;
-
-				case FACE_PROPORTIONAL:
-					typeface = Typeface.SANS_SERIF;
-					break;
-
-				default:
-				case FACE_SYSTEM:
-					typeface = Typeface.DEFAULT;
-					break;
-			}
-
-			if ((style & STYLE_BOLD) != 0) {
-				tfstyle |= Typeface.BOLD;
-			}
-
-			if ((style & STYLE_ITALIC) != 0) {
-				tfstyle |= Typeface.ITALIC;
-			}
-
-			underline = (style & STYLE_UNDERLINED) != 0;
-
-			switch (size) {
-				case SIZE_SMALL:
-					fsize = sizes[0];
-					break;
-
-				default:
-				case SIZE_MEDIUM:
-					fsize = sizes[1];
-					break;
-
-				case SIZE_LARGE:
-					fsize = sizes[2];
-					break;
-			}
-
-			fonts[index] = new Font(typeface, tfstyle, fsize, underline);
-
-			fonts[index].face = face;
-			fonts[index].style = style;
-			fonts[index].size = size;
+		if (font == null) {
+			float height = sizes[size / 8];
+			font = new Font(face, style, size, height);
+			fonts[index] = font;
 		}
 
-		return fonts[index];
+		return font;
 	}
 
 	public static Font getDefaultFont() {
 		return getFont(FACE_SYSTEM, STYLE_PLAIN, SIZE_MEDIUM);
-	}
-
-	public static void setAntiAlias(boolean enable) {
-		antiAlias = enable;
-		Arrays.fill(fonts, null);
-	}
-
-	// non api
-	public static int getFontSizeForResolution(int sizeType, int width, int height) {
-		int size = Math.max(width, height);
-		if (size > 0) {
-			for (int i = 0; i < SCREEN_SIZES.length; i++) {
-				if (SCREEN_SIZES[i] >= size) {
-					return FONT_SIZES[i * 3 + sizeType];
-				}
-			}
-		}
-		return FONT_SIZES[FONT_SIZES.length - 3 + sizeType];
 	}
 
 	public int getFace() {
@@ -233,40 +161,8 @@ public class Font {
 		return (int) Math.ceil(paint.measureText(text));
 	}
 
-	public int substringWidth(String str, int i, int i2) {
-		return (int) paint.measureText(str, i, i + i2);
-	}
-
-	private static int getFontIndex(int face, int style, int size) {
-		switch (face) {
-			case FACE_MONOSPACE:
-				face = 0;
-				break;
-
-			case FACE_PROPORTIONAL:
-				face = 1;
-				break;
-
-			case FACE_SYSTEM:
-				face = 2;
-				break;
-		}
-
-		switch (size) {
-			case SIZE_SMALL:
-				size = 0;
-				break;
-
-			case SIZE_MEDIUM:
-				size = 1;
-				break;
-
-			case SIZE_LARGE:
-				size = 2;
-				break;
-		}
-
-		return ((face * 3 + size) << 3) + style;
+	public int substringWidth(String str, int offset, int len) {
+		return (int) paint.measureText(str, offset, offset + len);
 	}
 
 	public boolean isBold() {
@@ -279,5 +175,41 @@ public class Font {
 
 	public boolean isItalic() {
 		return style == STYLE_ITALIC;
+	}
+
+	public static void applySettings(ProfileModel params) {
+		antiAlias = params.fontAA;
+
+		float small = params.fontSizeSmall;
+		float medium = params.fontSizeMedium;
+		float large = params.fontSizeLarge;
+
+		int screen = Math.max(params.screenWidth, params.screenHeight);
+		if (medium <= 0) medium = Font.getFontSizeForResolution(1, screen);
+		if (small <= 0) small = Font.getFontSizeForResolution(0, screen);
+		if (large <= 0) large = Font.getFontSizeForResolution(2, screen);
+
+		if (params.fontApplyDimensions) {
+			DisplayMetrics metrics = ContextHolder.getAppContext().getResources().getDisplayMetrics();
+			medium = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, medium, metrics);
+			small = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, small, metrics);
+			large = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, large, metrics);
+		}
+		sizes[0] = medium;
+		sizes[1] = small;
+		sizes[2] = large;
+
+		Arrays.fill(fonts, null);
+	}
+
+	private static int getFontSizeForResolution(int type, int size) {
+		if (size > 0) {
+			for (int i = 0; i < SCREEN_SIZES.length; i++) {
+				if (SCREEN_SIZES[i] >= size) {
+					return FONT_SIZES[i * 3 + type];
+				}
+			}
+		}
+		return FONT_SIZES[FONT_SIZES.length - 3 + type];
 	}
 }
