@@ -128,8 +128,8 @@ public class GameCanvas extends Canvas {
 	}
 
 	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
+	public void callShowNotify() {
 		keyState = 0;
+		super.callShowNotify();
 	}
 }

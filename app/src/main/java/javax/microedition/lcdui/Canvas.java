@@ -234,11 +234,13 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void callShowNotify() {
+		visible = true;
 		showNotify();
 	}
 
 	public void callHideNotify() {
 		hideNotify();
+		visible = false;
 	}
 
 	public void onDraw(android.graphics.Canvas canvas) {
@@ -531,11 +533,6 @@ public abstract class Canvas extends Displayable {
 		Display.postEvent(paintEvent);
 	}
 
-	@Override
-	public boolean isShown() {
-		return super.isShown() && visible;
-	}
-
 	// GameCanvas
 	public void flushBuffer(Image image, int x, int y, int width, int height) {
 		limitFps();
@@ -593,10 +590,6 @@ public abstract class Canvas extends Displayable {
 			e.printStackTrace();
 		}
 		lastFrameTime = System.currentTimeMillis();
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
 	}
 
 	@SuppressLint("NewApi")
@@ -814,7 +807,7 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void process() {
 			synchronized (paintSync) {
-				if (surface == null || !surface.isValid() || !isShown()) {
+				if (surface == null || !surface.isValid() || !visible) {
 					return;
 				}
 				Graphics g = offscreen.getSingleGraphics();

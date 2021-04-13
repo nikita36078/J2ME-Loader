@@ -164,11 +164,9 @@ public class CanvasEvent extends Event {
 				} catch (Exception e) {
 					Log.e(TAG, "showNotify: ", e);
 				}
-				canvas.setVisible(true);
 				break;
 
 			case HIDE_NOTIFY:
-				canvas.setVisible(false);
 				try {
 					canvas.callHideNotify();
 				} catch (Exception e) {
