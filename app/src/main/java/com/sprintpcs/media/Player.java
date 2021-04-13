@@ -46,6 +46,10 @@ public class Player {
 		}
 	}
 
+	public static void playBackground(Clip clip, int repeat) throws IllegalArgumentException {
+		// TODO: 13.03.2021 stub
+	}
+
 	public static void stop() {
 		if (player != null) {
 			player.close();
