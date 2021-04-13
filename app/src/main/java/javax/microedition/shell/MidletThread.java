@@ -23,10 +23,7 @@ import android.os.Process;
 import android.util.Log;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.keyboard.KeyMapper;
-import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.util.ContextHolder;
@@ -36,38 +33,45 @@ import androidx.annotation.NonNull;
 public class MidletThread extends HandlerThread implements Handler.Callback {
 	private static final String TAG = MidletThread.class.getName();
 
-	private static final int PAUSE = 2;
+	private static final int INIT = 0;
 	private static final int START = 1;
+	private static final int PAUSE = 2;
 	private static final int DESTROY = 3;
+	private static final int UNINITIALIZED = 0;
+	private static final int STARTED = 1;
+	private static final int PAUSED = 2;
+	private static final int DESTROYED = 3;
 	private static MidletThread instance;
+	private final MicroLoader microLoader;
+	private final String mainClass;
 	private MIDlet midlet;
 	private final Handler handler;
-	private boolean started;
+	private int state;
 
 	private MidletThread(MicroLoader microLoader, String mainClass) {
 		super("MidletMain");
+		this.microLoader = microLoader;
+		this.mainClass = mainClass;
 		start();
 		handler = new Handler(getLooper(), this);
-		Runnable r = () -> {
-			try {
-				midlet = microLoader.loadMIDlet(mainClass);
-				started = true;
-				midlet.startApp();
-			} catch (Throwable t) {
-				t.printStackTrace();
-				Throwable e;
-				Throwable cause = t;
-				while ((e = cause.getCause()) != null) {
-					cause = e;
-				}
-				ContextHolder.getActivity().showErrorDialog(cause.toString());
-			}
-		};
-		handler.post(r);
+		handler.obtainMessage(INIT).sendToTarget();
 	}
 
-	public static void create(MicroLoader microLoader, String mainClass) {
+	static void create(MicroLoader microLoader, String mainClass) {
 		instance = new MidletThread(microLoader, mainClass);
+	}
+
+	public static void notifyDestroyed() {
+		instance.state = DESTROYED;
+		MicroActivity activity = ContextHolder.getActivity();
+		if (activity != null) {
+			activity.finish();
+		}
+		Process.killProcess(Process.myPid());
+	}
+
+	public static void notifyPaused() {
+		instance.state = PAUSED;
 	}
 
 	static void pauseApp() {
@@ -75,8 +79,9 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 			instance.handler.obtainMessage(PAUSE).sendToTarget();
 	}
 
-	static void resumeApp() {
-		if (instance != null)
+	public static void resumeApp() {
+		MicroActivity activity = ContextHolder.getActivity();
+		if (instance != null && activity != null && activity.isVisible())
 			instance.handler.obtainMessage(START).sendToTarget();
 	}
 
@@ -89,54 +94,78 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 			}
 			Process.killProcess(Process.myPid());
 		}, "ForceDestroyTimer").start();
-		Displayable current = ContextHolder.getActivity().getCurrent();
-		if (current instanceof Canvas) {
-			Canvas canvas = (Canvas) current;
-			canvas.postKeyPressed(Canvas.KEY_END);
-			canvas.postKeyReleased(Canvas.KEY_END);
+		MicroActivity activity = ContextHolder.getActivity();
+		if (activity != null) {
+			Displayable current = activity.getCurrent();
+			if (current instanceof Canvas) {
+				Canvas canvas = (Canvas) current;
+				canvas.postKeyPressed(Canvas.KEY_END);
+				canvas.postKeyReleased(Canvas.KEY_END);
+			}
 		}
-		if (instance != null)
-			instance.handler.obtainMessage(DESTROY, 1).sendToTarget();
+		if (instance != null) {
+			instance.handler.obtainMessage(DESTROY).sendToTarget();
+		}
 	}
 
 	@Override
 	public boolean handleMessage(@NonNull Message msg) {
-		if (midlet == null) return true;
 		switch (msg.what) {
-			case START:
-				if (started) return true;
-				started = true;
+			case INIT:
+				if (state != UNINITIALIZED) {
+					break;
+				}
 				try {
+					midlet = microLoader.loadMIDlet(this.mainClass);
+					state = PAUSED;
+				} catch (Throwable t) {
+					throw new RuntimeException("Init midlet failed", t);
+				}
+				break;
+			case START:
+				if (state != PAUSED) {
+					break;
+				}
+				try {
+					state = STARTED;
 					midlet.startApp();
 				} catch (MIDletStateChangeException e) {
-					Log.w(TAG, "startApp:", e);
+					state = PAUSED;
+					Log.w(TAG, "Midlet doesn't want to start!", e);
 				} catch (Throwable t) {
-					Log.e(TAG, "startApp:", t);
-					ContextHolder.getActivity().showErrorDialog(t.getMessage());
+					state = DESTROYED;
+					throw new RuntimeException("Failed startApp", t);
 				}
 				break;
 			case PAUSE:
-				if (!started) return true;
-				started = false;
+				if (state != STARTED) {
+					break;
+				}
 				try {
 					midlet.pauseApp();
+					state = PAUSED;
 				} catch (Throwable t) {
-					Log.e(TAG, "pauseApp: ", t);
-					ContextHolder.getActivity().showErrorDialog(t.getMessage());
+					state = DESTROYED;
+					try {
+						midlet.destroyApp(true);
+					} catch (MIDletStateChangeException ignored) {}
+					throw new RuntimeException("Filed pauseApp", t);
 				}
 				break;
 			case DESTROY:
+				if (state == DESTROYED) {
+					notifyDestroyed();
+					break;
+				}
+				state = DESTROYED;
 				try {
 					midlet.destroyApp(true);
-					started = false;
-					ContextHolder.notifyDestroyed();
 				} catch (MIDletStateChangeException e) {
-					Log.w(TAG, "destroyApp:", e);
-					return true;
+					Log.w(TAG, "Midlet didn't want to die!", e);
 				} catch (Throwable t) {
-					Log.e(TAG, "destroyApp:", t);
-					ContextHolder.getActivity().showErrorDialog(t.getMessage());
+					Log.e(TAG, "Filed destroyApp:", t);
 				}
+				notifyDestroyed();
 				break;
 		}
 		return true;

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Display;
+import javax.microedition.shell.MidletThread;
 import javax.microedition.util.ContextHolder;
 
 public abstract class MIDlet {
@@ -47,6 +48,7 @@ public abstract class MIDlet {
 	 * Report the shell that the MIDlet is ready to go into a pause.
 	 */
 	public final void notifyPaused() {
+		MidletThread.notifyPaused();
 	}
 
 	/**
@@ -56,7 +58,7 @@ public abstract class MIDlet {
 	 * Calls to this method from destroyApp() are ignored.
 	 */
 	public final void notifyDestroyed() {
-		ContextHolder.notifyDestroyed();
+		MidletThread.notifyDestroyed();
 	}
 
 	/**
@@ -79,8 +81,7 @@ public abstract class MIDlet {
 	 */
 	public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
 
-	public boolean platformRequest(String url)
-			throws ConnectionNotFoundException {
+	public boolean platformRequest(String url) throws ConnectionNotFoundException {
 		try {
 			ContextHolder.getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		} catch (ActivityNotFoundException e) {
@@ -95,5 +96,6 @@ public abstract class MIDlet {
 	}
 
 	public final void resumeRequest() {
+		MidletThread.resumeApp();
 	}
 }

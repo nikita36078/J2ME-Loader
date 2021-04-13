@@ -198,13 +198,13 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	private void showMidletDialog(String[] midletsNameArray, final String[] midletsClassArray) {
+	private void showMidletDialog(String[] names, final String[] classes) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
-				.setItems(midletsNameArray, (d, n) -> MidletThread.create(microLoader, midletsClassArray[n]))
+				.setItems(names, (d, n) -> MidletThread.create(microLoader, classes[n]))
 				.setOnCancelListener(d -> {
 					d.dismiss();
-					ContextHolder.notifyDestroyed();
+					MidletThread.notifyDestroyed();
 				});
 		builder.show();
 	}
@@ -214,8 +214,8 @@ public class MicroActivity extends AppCompatActivity {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
 				.setMessage(message)
-				.setPositiveButton(android.R.string.ok, (d, w) -> ContextHolder.notifyDestroyed());
-		builder.setOnCancelListener(dialogInterface -> ContextHolder.notifyDestroyed());
+				.setPositiveButton(android.R.string.ok, (d, w) -> MidletThread.notifyDestroyed());
+		builder.setOnCancelListener(dialogInterface -> MidletThread.notifyDestroyed());
 		builder.show();
 	}
 
@@ -482,6 +482,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		ContextHolder.notifyOnActivityResult(requestCode, resultCode, data);
 	}
 }
