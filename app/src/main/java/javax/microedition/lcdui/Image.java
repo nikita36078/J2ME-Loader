@@ -18,37 +18,25 @@
 package javax.microedition.lcdui;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.LruCache;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.game.Sprite;
-import javax.microedition.util.ContextHolder;
+import javax.microedition.shell.AppClassLoader;
 
 import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class Image {
-
-	private static final int CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() >> 2); // 1/4 heap max
-	private static final LruCache<String, Bitmap> CACHE = new LruCache<String, Bitmap>(CACHE_SIZE) {
-		@Override
-		protected int sizeOf(String key, Bitmap value) {
-			return value.getByteCount();
-		}
-	};
-
-	private Bitmap bitmap;
-	private Canvas canvas;
+	private final Bitmap bitmap;
 	private Graphics graphics;
-	private int save;
-	private Rect bounds;
+	private final Rect bounds;
 	private boolean isBlackWhiteAlpha;
 
-	private Image(Bitmap bitmap) {
+	public Image(Bitmap bitmap) {
 		if (bitmap == null) {
 			throw new NullPointerException();
 		}
@@ -64,39 +52,28 @@ public class Image {
 		return bitmap;
 	}
 
-	public Canvas getCanvas() {
-		if (canvas == null) {
-			canvas = new Canvas(bitmap);
-			save = canvas.save();
-		}
-
-		return canvas;
+	public static Image createImage(int width, int height) {
+		return createImage(width, height, Color.WHITE);
 	}
 
-	public static Image createImage(int width, int height) {
-		Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		b.eraseColor(Color.WHITE);
-		return new Image(b);
+	public static Image createImage(int width, int height, int argb) {
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		if (argb != 0) bitmap.eraseColor(argb);
+		return new Image(bitmap);
 	}
 
 	public static Image createImage(String resname) throws IOException {
-		synchronized (CACHE) {
-			Bitmap b = CACHE.get(resname);
-			if (b != null) {
-				return new Image(b);
-			}
-			InputStream stream = ContextHolder.getResourceAsStream(null, resname);
+		Bitmap b;
+		try (InputStream stream = AppClassLoader.getResourceAsStream(null, resname)) {
 			if (stream == null) {
 				throw new IOException("Can't read image: " + resname);
 			}
 			b = PNGUtils.getFixedBitmap(stream);
-			stream.close();
-			if (b == null) {
-				throw new IOException("Can't decode image: " + resname);
-			}
-			CACHE.put(resname, b);
-			return new Image(b);
 		}
+		if (b == null) {
+			throw new IOException("Can't decode image: " + resname);
+		}
+		return new Image(b);
 	}
 
 	public static Image createImage(InputStream stream) throws IOException {
@@ -116,22 +93,24 @@ public class Image {
 	}
 
 	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
-		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, Sprite.transformMatrix(transform, width / 2f, height / 2f), false));
+		Matrix m = transform == 0 ? null : Sprite.transformMatrix(transform, width / 2.0f, height / 2.0f);
+		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, m, false));
 	}
 
-	public static Image createImage(Image image) {
-		return new Image(Bitmap.createBitmap(image.bitmap));
+	public static Image createImage(Image source) {
+		if (source.isMutable())
+			return new Image(Bitmap.createBitmap(source.bitmap));
+		return source;
 	}
 
 	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {
 		if (!processAlpha) {
 			final int length = width * height;
-			int[] rgbCopy = new int[length];
-			System.arraycopy(rgb, 0, rgbCopy, 0, length);
+			int[] tmp = new int[length];
 			for (int i = 0; i < length; i++) {
-				rgbCopy[i] |= 0xFF << 24;
+				tmp[i] = rgb[i] | 0xFF000000;
 			}
-			rgb = rgbCopy;
+			rgb = tmp;
 		}
 		return new Image(Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888));
 	}
@@ -157,12 +136,12 @@ public class Image {
 	}
 
 	void copyTo(Image dst) {
-		dst.getCanvas().drawBitmap(bitmap, bounds, bounds, null);
+		dst.getSingleGraphics().getCanvas().drawBitmap(bitmap, bounds, bounds, null);
 	}
 
 	void copyTo(Image dst, int x, int y) {
 		Rect r = new Rect(x, y, x + bounds.right, y + bounds.bottom);
-		dst.getCanvas().drawBitmap(bitmap, bounds, r, null);
+		dst.getSingleGraphics().getCanvas().drawBitmap(bitmap, bounds, r, null);
 	}
 
 	public Graphics getSingleGraphics() {
