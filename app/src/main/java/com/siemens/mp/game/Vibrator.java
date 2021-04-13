@@ -34,6 +34,6 @@ public class Vibrator {
 	}
 
 	public static void triggerVibrator(int duration) {
-		ContextHolder.vibrate(duration);
+		ContextHolder.vibrate(Math.max(duration, 0));
 	}
 }

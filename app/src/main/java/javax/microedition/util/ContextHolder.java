@@ -192,6 +192,16 @@ public class ContextHolder {
 		return true;
 	}
 
+	public static void vibrateKey(int duration) {
+		if (vibrator == null) {
+			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		}
+		if (vibrator == null || !vibrator.hasVibrator()) {
+			return;
+		}
+		vibrator.vibrate(duration);
+	}
+
 	public static void setApplication(Application application) {
 		appContext = application;
 	}

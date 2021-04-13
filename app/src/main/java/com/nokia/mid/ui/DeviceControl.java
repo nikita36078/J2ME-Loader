@@ -33,9 +33,7 @@ public class DeviceControl {
 		if (frequency < 0 || frequency > 100) {
 			throw new IllegalArgumentException();
 		}
-		if (!ContextHolder.vibrate((int) duration)) {
-			throw new IllegalStateException();
-		}
+		ContextHolder.vibrate(duration < 0 ? 0 : (int) duration);
 	}
 
 	public static void stopVibra() {

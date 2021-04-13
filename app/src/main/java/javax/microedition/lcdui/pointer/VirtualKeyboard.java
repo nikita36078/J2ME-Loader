@@ -1064,7 +1064,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private void vibrate() {
 		if (feedback) {
-			ContextHolder.vibrate(FEEDBACK_DURATION);
+			ContextHolder.vibrateKey(FEEDBACK_DURATION);
 		}
 	}
 
