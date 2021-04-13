@@ -114,6 +114,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		return indicator;
 	}
 
+	public int getDefaultTimeout() {
+		return FOREVER;
+	}
+
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
