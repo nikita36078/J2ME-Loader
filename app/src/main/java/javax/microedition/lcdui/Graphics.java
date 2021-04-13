@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -27,6 +28,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
+import android.util.Log;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 
@@ -396,9 +398,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	public void drawRegion(Image image, int x_src, int y_src, int width, int height,
 						   int transform, int x_dst, int y_dst, int anchor) {
 		if (width <= 0 || height <= 0) return;
-		if (transform < TRANS_NONE || transform > TRANS_MIRROR_ROT90) {
-			throw new IllegalArgumentException("Illegal transform=" + transform);
-		}
 
 		Rect srcR = rect;
 		RectF dstR = rectF;
@@ -487,24 +486,43 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
-		if (width == 0 || height == 0) return;
-		// MIDP allows almost any value of scanlength, drawBitmap is more strict with the stride
-		if (scanlength < width) {
-			scanlength = width;
+		if (rgbData == null) {
+			throw new NullPointerException();
 		}
-		int rows = rgbData.length / scanlength;
-		if (rows < height) {
-			height = rows;
+		if (width == 0 || height == 0) {
+			return;
 		}
-		if (!processAlpha) {
-			for (int iy = 0; iy < height; iy++) {
-				for (int ix = 0; ix < width; ix++) {
-					rgbData[offset + ix + iy * scanlength] |= (0xFF << 24);
-				}
+		if (offset < 0 || offset > rgbData.length) {
+			throw new ArrayIndexOutOfBoundsException();
+		}
+		if (width < 0 || height < 0) {
+			// TODO: 21.03.2021 This situation has not been verified and the correctness of such arguments is unknown.
+			Log.w(getClass().getSimpleName(), "drawRGB: width=" + width + ", height=" + height);
+		}
+		if (scanlength > 0) {
+			if (offset + scanlength * (height - 1) + width > rgbData.length) {
+				throw new ArrayIndexOutOfBoundsException();
+			}
+		} else {
+			if (offset + width > rgbData.length || offset + scanlength * (height - 1) < 0) {
+				throw new ArrayIndexOutOfBoundsException();
 			}
 		}
-		// Use deprecated method due to perfomance issues
-		canvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, null);
+
+		// copy pixels to a new array and apply processAlpha flag here,
+		// to avoid Android restrictions
+		int[] pixels = new int[height * width];
+		int alphaCorrection = processAlpha ? Color.TRANSPARENT : Color.BLACK;
+		for (int i = 0; i < height; i++) {
+			int s = offset + i * scanlength;
+			int d = i * width;
+			for (int j = 0; j < width; j++) {
+				int pixel = rgbData[s++];
+				pixels[d + j] = alphaCorrection | pixel;
+			}
+		}
+		// Use deprecated method due to performance issues
+		canvas.drawBitmap(pixels, 0, width, x, y, width, height, true, null);
 	}
 
 	public void copyArea(int x_src, int y_src, int width, int height,
