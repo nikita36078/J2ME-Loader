@@ -72,6 +72,9 @@ public class Sound {
 
 	public void init(int freq, long duration) {
 		try {
+			if (player != null) {
+				player.close();
+			}
 			int note = convertFreqToNote(freq);
 			player = ToneManager.createPlayer(note, (int) duration, MidiToneConstants.TONE_MAX_VOLUME);
 			state = SOUND_STOPPED;
@@ -82,7 +85,22 @@ public class Sound {
 
 	public void init(byte[] data, int type) {
 		try {
-			player = Manager.createPlayer(new ByteArrayInputStream(data), "audio/midi");
+			String mime;
+			switch (type) {
+				case FORMAT_TONE:
+					ToneVerifier.fix(data);
+					mime = "audio/midi";
+					break;
+				case FORMAT_WAV:
+					mime = "audio/wav";
+					break;
+				default:
+					throw new IllegalArgumentException();
+			}
+			if (player != null) {
+				player.close();
+			}
+			player = Manager.createPlayer(new ByteArrayInputStream(data), mime);
 			state = SOUND_STOPPED;
 		} catch (IOException e) {
 			e.printStackTrace();
