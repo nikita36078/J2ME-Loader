@@ -78,6 +78,7 @@ public class ProfileModel {
 	@SerializedName("GraphicsMode")
 	public int graphicsMode = -1;
 
+	@SerializedName("Shader")
 	public ShaderInfo shader;
 
 	@SerializedName("ParallelRedrawScreen")

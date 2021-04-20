@@ -21,15 +21,22 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ShaderInfo implements Comparable<ShaderInfo>, Parcelable {
 	public transient String dir;
+	@SerializedName("fragment")
 	public String fragment;
+	@SerializedName("vertex")
 	public String vertex;
+	@SerializedName("name")
 	String name;
+	@SerializedName("author")
 	String author;
 	transient boolean outputResolution;
 	transient boolean upscaling;
 	transient Setting[] settings = new Setting[4];
+	@SerializedName("Settings")
 	public float[] values;
 
 
