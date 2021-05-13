@@ -31,7 +31,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -39,6 +38,13 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -55,12 +61,6 @@ import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceManager;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -349,29 +349,41 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.midlet_displayable, menu);
-		if (current != null) {
-			if (current instanceof Canvas) {
-				SubMenu group = menu.getItem(0).getSubMenu();
-				if (actionBarEnabled) {
-					inflater.inflate(R.menu.midlet_canvas, menu);
-				} else {
-					inflater.inflate(R.menu.midlet_canvas_no_bar, group);
-				}
-				VirtualKeyboard vk = ContextHolder.getVk();
-				if (vk != null) {
-					inflater.inflate(R.menu.midlet_vk, group);
-					if (vk.getLayoutEditMode() == VirtualKeyboard.LAYOUT_EOF) {
-						menu.findItem(R.id.action_layout_edit_finish).setVisible(false);
-					}
-				}
+		if (current == null) {
+			inflater.inflate(R.menu.midlet_displayable, menu);
+			return true;
+		}
+		boolean hasCommands = current.countCommands() > 0;
+		Menu group;
+		if (hasCommands) {
+			inflater.inflate(R.menu.midlet_common, menu);
+			group = menu.getItem(0).getSubMenu();
+		} else {
+			group = menu;
+		}
+		inflater.inflate(R.menu.midlet_displayable, group);
+		if (current instanceof Canvas) {
+			if (actionBarEnabled) {
+				inflater.inflate(R.menu.midlet_canvas, menu);
+			} else {
+				inflater.inflate(R.menu.midlet_canvas_no_bar, group);
 			}
-			for (Command cmd : current.getCommands()) {
-				menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getAndroidLabel());
+			VirtualKeyboard vk = ContextHolder.getVk();
+			if (vk != null) {
+				inflater.inflate(R.menu.midlet_vk, group);
+				if (vk.getLayoutEditMode() == VirtualKeyboard.LAYOUT_EOF) {
+					menu.findItem(R.id.action_layout_edit_finish).setVisible(false);
+				}
 			}
 		}
+		if (!hasCommands) {
+			return true;
+		}
+		for (Command cmd : current.getCommands()) {
+			menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getAndroidLabel());
+		}
 
-		return super.onPrepareOptionsMenu(menu);
+		return true;
 	}
 
 	@Override

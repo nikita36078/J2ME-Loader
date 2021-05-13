@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_common_settings"
+        android:title="@string/common_settings">
+        <menu>
+            <group android:id="@+id/action_group_common_settings" />
+        </menu>
+    </item>
+</menu>
