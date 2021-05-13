@@ -351,13 +351,13 @@ public class MicroActivity extends AppCompatActivity {
 			if (current instanceof Canvas) {
 				SubMenu group = menu.getItem(0).getSubMenu();
 				if (actionBarEnabled) {
-					inflater.inflate(R.menu.midlet_canvas_no_keys2, menu);
+					inflater.inflate(R.menu.midlet_canvas, menu);
 				} else {
-					inflater.inflate(R.menu.midlet_canvas_no_keys, group);
+					inflater.inflate(R.menu.midlet_canvas_no_bar, group);
 				}
 				VirtualKeyboard vk = ContextHolder.getVk();
 				if (vk != null) {
-					inflater.inflate(R.menu.midlet_canvas, group);
+					inflater.inflate(R.menu.midlet_vk, group);
 				}
 			}
 			for (Command cmd : current.getCommands()) {
