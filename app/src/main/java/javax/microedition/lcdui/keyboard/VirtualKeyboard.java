@@ -196,7 +196,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private RectF screen;
 	private RectF virtualScreen;
 	private float keySize =
-			Math.max(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight()) / 12.0f;
+			Math.min(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight()) / 6.0f;
 	private float snapRadius;
 
 	public VirtualKeyboard(ProfileModel settings) {
@@ -824,24 +824,28 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public void resize(RectF screen, RectF virtualScreen) {
 		this.screen = screen;
 		this.virtualScreen = virtualScreen;
-		float width = screen.width();
-		float height = screen.height();
-		boolean landscape = width > height;
-		float maxSize = Math.max(screen.width(), screen.height());
-		float minSize = Math.min(screen.width(), screen.height());
-		boolean nonWide = maxSize / minSize < 2;
 		snapRadius = keyScales[0];
 		for (int i = 1; i < keyScales.length; i++) {
 			if (keyScales[i] < snapRadius) {
 				snapRadius = keyScales[i];
 			}
 		}
-		if (nonWide || landscape) {
-			keySize = maxSize / 12F;
+		int width = overlayView.getWidth();
+		int height = overlayView.getHeight();
+		float min;
+		float max;
+		if (width < height) {
+			min = width;
+			max = height;
 		} else {
-			keySize = minSize / 6.5F;
+			min = height;
+			max = width;
 		}
+
+		float keySize = min / 6.0f;
+		keySize = isPhone() ? keySize : Math.min(keySize, max / 12.0f);
 		snapRadius = keySize * snapRadius / 4;
+		this.keySize = keySize;
 		for (int group = 0; group < keyScaleGroups.length; group++) {
 			resizeKeyGroup(group);
 		}
