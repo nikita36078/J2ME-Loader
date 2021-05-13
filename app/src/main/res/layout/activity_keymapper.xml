@@ -1,222 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:targetApi="jelly_bean_mr1">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <Button
+                android:id="@+id/virtual_key_a"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_a"
+                tools:ignore="ButtonStyle" />
 
-                <Button
-                    android:id="@+id/virtual_key_left_soft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_left_soft" />
-
-                <Button
-                    android:id="@+id/virtual_key_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_up" />
-
-                <Button
-                    android:id="@+id/virtual_key_right_soft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_right_soft" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="2dp"
+                android:visibility="invisible"
+                tools:ignore="ButtonStyle" />
 
-                <Button
-                    android:id="@+id/virtual_key_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_left" />
-
-                <Button
-                    android:id="@+id/virtual_key_f"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_f" />
-
-                <Button
-                    android:id="@+id/virtual_key_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_right" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/virtual_key_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_b"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/virtual_key_d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_d" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-                <Button
-                    android:id="@+id/virtual_key_down"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_down" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/virtual_key_c"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_c" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/virtual_key_left_soft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal">
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_left_soft"
+                tools:ignore="ButtonStyle" />
 
-                <Button
-                    android:id="@+id/virtual_key_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_1" />
-
-                <Button
-                    android:id="@+id/virtual_key_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_2" />
-
-                <Button
-                    android:id="@+id/virtual_key_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_3" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/virtual_key_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_up"
+                tools:ignore="ButtonStyle" />
 
-                <Button
-                    android:id="@+id/virtual_key_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_4" />
-
-                <Button
-                    android:id="@+id/virtual_key_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_5" />
-
-                <Button
-                    android:id="@+id/virtual_key_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_6" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/virtual_key_right_soft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/virtual_key_7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_7" />
-
-                <Button
-                    android:id="@+id/virtual_key_8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_8" />
-
-                <Button
-                    android:id="@+id/virtual_key_9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_9" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/virtual_key_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_star" />
-
-                <Button
-                    android:id="@+id/virtual_key_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_0" />
-
-                <Button
-                    android:id="@+id/virtual_key_pound"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="@string/virtual_key_pound" />
-
-            </LinearLayout>
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_right_soft"
+                tools:ignore="ButtonStyle" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/virtual_key_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_left"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_f"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_right"
+                tools:ignore="ButtonStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/virtual_key_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_d"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_down"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_c"
+                tools:ignore="ButtonStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/virtual_key_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_1"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_2"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_3"
+                tools:ignore="ButtonStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/virtual_key_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_4"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_5"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_6"
+                tools:ignore="ButtonStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/virtual_key_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_7"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_8"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_9"
+                tools:ignore="ButtonStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/virtual_key_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_star"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_0"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/virtual_key_pound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="@string/virtual_key_pound"
+                tools:ignore="ButtonStyle" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </ScrollView>

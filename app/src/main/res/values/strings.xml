@@ -158,6 +158,8 @@
     <string name="virtual_key_up" translatable="false">↑</string>
     <string name="virtual_key_down" translatable="false">↓</string>
     <string name="virtual_key_f" translatable="false">F</string>
+    <string name="virtual_key_a" translatable="false" >A</string>
+    <string name="virtual_key_b" translatable="false">B</string>
     <string name="virtual_key_1" translatable="false">1</string>
     <string name="virtual_key_2" translatable="false">2</string>
     <string name="virtual_key_3" translatable="false">3</string>

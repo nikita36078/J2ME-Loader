@@ -44,6 +44,9 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 
+import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_A;
+import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
+
 public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String TAG = VirtualKeyboard.class.getName();
 
@@ -79,7 +82,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final float PHONE_KEY_SCALE_X = 2.0f;
 	private static final float PHONE_KEY_SCALE_Y = 0.75f;
 	private static final long[] REPEAT_INTERVALS = {200, 400, 128, 128, 128, 128, 128};
-	private static final int KEYBOARD_SIZE = 25;
+	private static final int KEYBOARD_SIZE = 27;
 
 	private static final int SCREEN = -1;
 	private static final int KEY_NUM1 = 0;
@@ -96,8 +99,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int KEY_POUND = 11;
 	private static final int KEY_SOFT_LEFT = 12;
 	private static final int KEY_SOFT_RIGHT = 13;
-	private static final int KEY_DIAL = 14;
-	private static final int KEY_CANCEL = 15;
+	private static final int KEY_D = 14;
+	private static final int KEY_C = 15;
 	private static final int KEY_UP_LEFT = 16;
 	private static final int KEY_UP = 17;
 	private static final int KEY_UP_RIGHT = 18;
@@ -107,6 +110,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int KEY_DOWN = 22;
 	private static final int KEY_DOWN_RIGHT = 23;
 	private static final int KEY_FIRE = 24;
+	private static final int KEY_A = 25;
+	private static final int KEY_B = 26;
 
 	private static final int SCALE_JOYSTICK = 0;
 	private static final int SCALE_SOFT_KEYS = 2;
@@ -144,8 +149,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			KEY_SOFT_LEFT,
 			KEY_SOFT_RIGHT
 	}, {
-			KEY_DIAL,
-			KEY_CANCEL,
+			KEY_A,
+			KEY_B,
+			KEY_C,
+			KEY_D,
 	}, {
 			KEY_NUM1,
 			KEY_NUM2,
@@ -220,8 +227,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		keypad[KEY_SOFT_LEFT] = new VirtualKey(Canvas.KEY_SOFT_LEFT, "L");
 		keypad[KEY_SOFT_RIGHT] = new VirtualKey(Canvas.KEY_SOFT_RIGHT, "R");
 
-		keypad[KEY_DIAL] = new VirtualKey(Canvas.KEY_SEND, "D");
-		keypad[KEY_CANCEL] = new VirtualKey(Canvas.KEY_END, "C");
+		keypad[KEY_A] = new VirtualKey(SE_KEY_SPECIAL_GAMING_A, "A");
+		keypad[KEY_B] = new VirtualKey(SE_KEY_SPECIAL_GAMING_B, "B");
+		keypad[KEY_C] = new VirtualKey(Canvas.KEY_END, "C");
+		keypad[KEY_D] = new VirtualKey(Canvas.KEY_SEND, "D");
 
 		keypad[KEY_UP_LEFT] = new VirtualKey(Canvas.KEY_UP, Canvas.KEY_LEFT, ARROW_UP_LEFT);
 		keypad[KEY_UP] = new VirtualKey(Canvas.KEY_UP, ARROW_UP);
@@ -285,6 +294,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keyScales[SCALE_FIRE_KEY] = PHONE_KEY_SCALE_X;
 				keyScales[SCALE_FIRE_KEY + 1] = PHONE_KEY_SCALE_Y;
 
+				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST);
+				setSnap(KEY_B, SCREEN, RectSnap.INT_NORTHEAST);
+
 				setSnap(KEY_NUM0, SCREEN, RectSnap.INT_SOUTH);
 				setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
 				setSnap(KEY_POUND, KEY_NUM0, RectSnap.EXT_EAST);
@@ -302,13 +314,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_FIRE, KEY_NUM2, RectSnap.EXT_NORTH);
 				setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_NORTH);
 
-				for (int i = KEY_NUM1; i < KEY_DIAL; i++) {
+				for (int i = KEY_NUM1; i < KEY_D; i++) {
 					keypad[i].setVisible(true);
 				}
-				for (int i = KEY_DIAL; i < KEY_FIRE; i++) {
+				for (int i = KEY_D; i < KEY_FIRE; i++) {
 					keypad[i].setVisible(false);
 				}
 				keypad[KEY_FIRE].setVisible(true);
+				keypad[KEY_A].setVisible(false);
+				keypad[KEY_B].setVisible(false);
 				break;
 			case 2: // phone (arrows)
 				keyScales[SCALE_JOYSTICK] = PHONE_KEY_SCALE_X;
@@ -321,6 +335,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keyScales[SCALE_DIGITS + 1] = PHONE_KEY_SCALE_Y;
 				keyScales[SCALE_FIRE_KEY] = PHONE_KEY_SCALE_X;
 				keyScales[SCALE_FIRE_KEY + 1] = PHONE_KEY_SCALE_Y;
+
+				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST);
+				setSnap(KEY_B, SCREEN, RectSnap.INT_NORTHEAST);
 
 				setSnap(KEY_NUM0, SCREEN, RectSnap.INT_SOUTH);
 				setSnap(KEY_STAR, KEY_NUM0, RectSnap.EXT_WEST);
@@ -349,8 +366,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keypad[KEY_POUND].setVisible(true);
 				keypad[KEY_SOFT_LEFT].setVisible(true);
 				keypad[KEY_SOFT_RIGHT].setVisible(true);
-				keypad[KEY_DIAL].setVisible(false);
-				keypad[KEY_CANCEL].setVisible(false);
+				keypad[KEY_D].setVisible(false);
+				keypad[KEY_C].setVisible(false);
 				keypad[KEY_UP_LEFT].setVisible(false);
 				keypad[KEY_UP].setVisible(true);
 				keypad[KEY_UP_RIGHT].setVisible(false);
@@ -360,10 +377,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				keypad[KEY_DOWN].setVisible(true);
 				keypad[KEY_DOWN_RIGHT].setVisible(false);
 				keypad[KEY_FIRE].setVisible(true);
+				keypad[KEY_A].setVisible(false);
+				keypad[KEY_B].setVisible(false);
 				break;
 			case 3: // numbers + arrays
 			default:
 				Arrays.fill(keyScales, 1);
+
+				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST);
+				setSnap(KEY_B, SCREEN, RectSnap.INT_NORTHEAST);
 
 				setSnap(KEY_DOWN_RIGHT, SCREEN, RectSnap.INT_SOUTHEAST);
 				setSnap(KEY_DOWN, KEY_DOWN_RIGHT, RectSnap.EXT_WEST);
@@ -389,17 +411,22 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_NUM1, KEY_NUM4, RectSnap.EXT_NORTH);
 				setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST);
 				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
-				setSnap(KEY_DIAL, KEY_NUM1, RectSnap.EXT_NORTH);
-				setSnap(KEY_CANCEL, KEY_NUM3, RectSnap.EXT_NORTH);
+				setSnap(KEY_D, KEY_NUM1, RectSnap.EXT_NORTH);
+				setSnap(KEY_C, KEY_NUM3, RectSnap.EXT_NORTH);
 
-				for (int i = KEY_NUM1; i < KEYBOARD_SIZE; i++) {
+				for (int i = KEY_NUM1; i < KEY_A; i++) {
 					keypad[i].setVisible(true);
 				}
-				keypad[KEY_DIAL].setVisible(false);
-				keypad[KEY_CANCEL].setVisible(false);
+				keypad[KEY_A].setVisible(false);
+				keypad[KEY_B].setVisible(false);
+				keypad[KEY_C].setVisible(false);
+				keypad[KEY_D].setVisible(false);
 				break;
 			case 4: // arrays + numbers
 				Arrays.fill(keyScales, 1);
+
+				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST);
+				setSnap(KEY_B, SCREEN, RectSnap.INT_NORTHEAST);
 
 				setSnap(KEY_DOWN_LEFT, SCREEN, RectSnap.INT_SOUTHWEST);
 				setSnap(KEY_DOWN, KEY_DOWN_LEFT, RectSnap.EXT_EAST);
@@ -425,17 +452,22 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_NUM1, KEY_NUM4, RectSnap.EXT_NORTH);
 				setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST);
 				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
-				setSnap(KEY_DIAL, KEY_NUM1, RectSnap.EXT_NORTH);
-				setSnap(KEY_CANCEL, KEY_NUM3, RectSnap.EXT_NORTH);
+				setSnap(KEY_D, KEY_NUM1, RectSnap.EXT_NORTH);
+				setSnap(KEY_C, KEY_NUM3, RectSnap.EXT_NORTH);
 
-				for (int i = KEY_NUM1; i < KEYBOARD_SIZE; i++) {
+				for (int i = KEY_NUM1; i < KEY_A; i++) {
 					keypad[i].setVisible(true);
 				}
-				keypad[KEY_DIAL].setVisible(false);
-				keypad[KEY_CANCEL].setVisible(false);
+				keypad[KEY_A].setVisible(false);
+				keypad[KEY_B].setVisible(false);
+				keypad[KEY_D].setVisible(false);
+				keypad[KEY_C].setVisible(false);
 				break;
 			case 5: // numbers
 				Arrays.fill(keyScales, 1);
+
+				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST);
+				setSnap(KEY_B, SCREEN, RectSnap.INT_NORTHEAST);
 
 				setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_WEST);
 				setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_EAST);
@@ -453,15 +485,18 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST);
 				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST);
 
-				for (int i = KEY_NUM1; i < KEY_DIAL; i++) {
+				for (int i = KEY_NUM1; i < KEY_D; i++) {
 					keypad[i].setVisible(true);
 				}
-				for (int i = KEY_DIAL; i < KEYBOARD_SIZE; i++) {
+				for (int i = KEY_D; i < KEYBOARD_SIZE; i++) {
 					keypad[i].setVisible(false);
 				}
 				break;
 			case 6: // arrays
 				Arrays.fill(keyScales, 1);
+
+				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST);
+				setSnap(KEY_B, SCREEN, RectSnap.INT_NORTHEAST);
 
 				setSnap(KEY_DOWN, SCREEN, RectSnap.INT_SOUTH);
 				setSnap(KEY_DOWN_RIGHT, KEY_DOWN, RectSnap.EXT_EAST);
@@ -478,11 +513,13 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				for (int i = KEY_NUM1; i < KEY_SOFT_LEFT; i++) {
 					keypad[i].setVisible(false);
 				}
-				for (int i = KEY_SOFT_LEFT; i < KEYBOARD_SIZE; i++) {
+				for (int i = KEY_SOFT_LEFT; i < KEY_A; i++) {
 					keypad[i].setVisible(true);
 				}
-				keypad[KEY_DIAL].setVisible(false);
-				keypad[KEY_CANCEL].setVisible(false);
+				keypad[KEY_A].setVisible(false);
+				keypad[KEY_B].setVisible(false);
+				keypad[KEY_D].setVisible(false);
+				keypad[KEY_C].setVisible(false);
 				break;
 		}
 	}
@@ -1116,7 +1153,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			case KEY_NUM4      : return 1 <<  4; // 4 4 key         KEY_NUM4       = 3;
 			case KEY_NUM5      : return 1 <<  5; // 5 5 key         KEY_NUM5       = 4;
 			case KEY_NUM6      : return 1 <<  6; // 6 6 key         KEY_NUM6       = 5;
-			case KEY_NUM7      : return 1 <<  7; // 7 7key          KEY_NUM7       = 6;
+			case KEY_NUM7      : return 1 <<  7; // 7 7 key         KEY_NUM7       = 6;
 			case KEY_NUM8      : return 1 <<  8; // 8 8 key         KEY_NUM8       = 7;
 			case KEY_NUM9      : return 1 <<  9; // 9 9 key         KEY_NUM9       = 8;
 			case KEY_STAR      : return 1 << 10; // 10 * key        KEY_STAR       = 10;
@@ -1128,8 +1165,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			case KEY_FIRE      : return 1 << 16; // 16 Select key   KEY_FIRE       = 24;
 			case KEY_SOFT_LEFT : return 1 << 17; // 17 Softkey 1    KEY_SOFT_LEFT  = 12;
 			case KEY_SOFT_RIGHT: return 1 << 18; // 18 Softkey 2    KEY_SOFT_RIGHT = 13;
-			// TODO: 05.08.2020 Softkey3 mapped to KEY_CANCEL
-			case KEY_CANCEL    : return 1 << 19; // 19 Softkey 3    KEY_CANCEL     = 15;
+			// TODO: 05.08.2020 Softkey3 mapped to KEY_C
+			case KEY_C         : return 1 << 19; // 19 Softkey 3    KEY_C          = 15;
 			case KEY_UP_RIGHT  : return 1 << 20; // 20 Upper Right  KEY_UP_RIGHT   = 18;
 			case KEY_UP_LEFT   : return 1 << 21; // 21 Upper Left   KEY_UP_LEFT    = 16;
 			case KEY_DOWN_RIGHT: return 1 << 22; // 22 Lower Right  KEY_DOWN_RIGHT = 23;

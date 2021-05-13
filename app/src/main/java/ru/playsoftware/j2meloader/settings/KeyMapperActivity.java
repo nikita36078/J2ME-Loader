@@ -85,6 +85,8 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		setupButton(R.id.virtual_key_0, Canvas.KEY_NUM0);
 		setupButton(R.id.virtual_key_star, Canvas.KEY_STAR);
 		setupButton(R.id.virtual_key_pound, Canvas.KEY_POUND);
+		setupButton(R.id.virtual_key_a, KeyMapper.SE_KEY_SPECIAL_GAMING_A);
+		setupButton(R.id.virtual_key_b, KeyMapper.SE_KEY_SPECIAL_GAMING_B);
 		SparseIntArray keyMap = params.keyMappings;
 		androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
 	}
