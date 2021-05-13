@@ -32,6 +32,10 @@
         <item>@string/pref_vk_type_custom</item>
         <item>@string/pref_vk_type_phone</item>
         <item>@string/pref_vk_type_phone_arrows</item>
+        <item>@string/pref_vk_type_numbers_arrows</item>
+        <item>@string/pref_vk_type_arrows_numbers</item>
+        <item>@string/pref_vk_type_numbers</item>
+        <item>@string/pref_vk_type_arrows</item>
     </string-array>
     <string-array name="pref_button_shape_entries">
         <item>@string/pref_button_shape_oval</item>

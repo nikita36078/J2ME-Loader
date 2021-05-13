@@ -52,8 +52,8 @@ import javax.microedition.lcdui.graphics.CanvasView;
 import javax.microedition.lcdui.graphics.CanvasWrapper;
 import javax.microedition.lcdui.graphics.GlesView;
 import javax.microedition.lcdui.graphics.ShaderProgram;
-import javax.microedition.lcdui.keyboard.FixedKeyboard;
 import javax.microedition.lcdui.keyboard.KeyMapper;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
@@ -283,7 +283,7 @@ public abstract class Canvas extends Displayable {
 	/**
 	 * Update the size and position of the virtual screen relative to the real one.
 	 */
-	private void updateSize() {
+	public void updateSize() {
 		/*
 		 * We turn the sizes of the virtual screen into the sizes of the visible canvas.
 		 *
@@ -292,12 +292,12 @@ public abstract class Canvas extends Displayable {
 		 * has the same aspect ratio as the actual screen of the device.
 		 */
 		int scaledDisplayHeight;
-		/*
-		 * If FixedKeyboard is active, then scale down the virtual screen
-		 */
-		if (ContextHolder.getVk() instanceof FixedKeyboard) {
-			scaledDisplayHeight = (int) (displayHeight - FixedKeyboard.KEY_ROW_COUNT * (displayWidth /
-					(FixedKeyboard.KEY_WIDTH_RATIO * FixedKeyboard.KEY_HEIGHT_RATIO)) - 1);
+		VirtualKeyboard vk = ContextHolder.getVk();
+		boolean isPhoneSkin = vk != null && vk.isPhone();
+
+		// if phone keyboard layout is active, then scale down the virtual screen
+		if (isPhoneSkin) {
+			scaledDisplayHeight = (int) (displayHeight - vk.getPhoneKeyboardHeight() - 1);
 		} else {
 			scaledDisplayHeight = displayHeight;
 		}
@@ -375,6 +375,7 @@ public abstract class Canvas extends Displayable {
 		onWidth = onWidth * scaleRatio / 100;
 		onHeight = onHeight * scaleRatio / 100;
 
+		int screenGravity = isPhoneSkin ? 1 : Canvas.screenGravity;
 		switch (screenGravity) {
 			case 0: // left
 				onX = 0;

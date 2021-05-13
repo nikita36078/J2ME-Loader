@@ -48,7 +48,6 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
-import javax.microedition.lcdui.keyboard.FixedKeyboard;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
@@ -118,16 +117,15 @@ public class MicroActivity extends AppCompatActivity {
 		}
 		microLoader.applyConfiguration();
 		VirtualKeyboard vk = ContextHolder.getVk();
+		int orientation = microLoader.getOrientation();
 		if (vk != null) {
 			vk.setView(overlayView);
 			overlayView.addLayer(vk);
+			if (vk.isPhone()) {
+				orientation = ORIENTATION_PORTRAIT;
+			}
 		}
-		if (vk instanceof FixedKeyboard) {
-			setOrientation(ORIENTATION_PORTRAIT);
-		} else {
-			int orientation = microLoader.getOrientation();
-			setOrientation(orientation);
-		}
+		setOrientation(orientation);
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
@@ -172,6 +170,7 @@ public class MicroActivity extends AppCompatActivity {
 				break;
 			case ORIENTATION_DEFAULT:
 			default:
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 				break;
 		}
 	}
@@ -357,9 +356,7 @@ public class MicroActivity extends AppCompatActivity {
 					inflater.inflate(R.menu.midlet_canvas_no_keys, group);
 				}
 				VirtualKeyboard vk = ContextHolder.getVk();
-				if (vk instanceof FixedKeyboard) {
-					inflater.inflate(R.menu.midlet_canvas_fixed, group);
-				} else if (vk != null) {
+				if (vk != null) {
 					inflater.inflate(R.menu.midlet_canvas, group);
 				}
 			}
@@ -463,8 +460,15 @@ public class MicroActivity extends AppCompatActivity {
 		final VirtualKeyboard vk = ContextHolder.getVk();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.layout_switch)
-				.setSingleChoiceItems(vk.getLayoutNames(), -1,
-						(dialogInterface, i) -> vk.setLayout(i))
+				.setSingleChoiceItems(R.array.PREF_VK_TYPE_ENTRIES, vk.getLayout(),
+						(dialogInterface, i) -> {
+							vk.setLayout(i);
+							if (vk.isPhone()) {
+								setOrientation(ORIENTATION_PORTRAIT);
+							} else {
+								setOrientation(microLoader.getOrientation());
+							}
+						})
 				.setPositiveButton(android.R.string.ok, null);
 		builder.show();
 	}

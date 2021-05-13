@@ -47,7 +47,6 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
-import javax.microedition.lcdui.keyboard.FixedKeyboard;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
@@ -207,14 +206,7 @@ public class MicroLoader {
 
 	private void setVirtualKeyboard() {
 		int vkType = params.vkType;
-		VirtualKeyboard vk;
-		if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
-			vk = new VirtualKeyboard();
-		} else if (vkType == VirtualKeyboard.PHONE_DIGITS_TYPE) {
-			vk = new FixedKeyboard(0);
-		} else {
-			vk = new FixedKeyboard(1);
-		}
+		VirtualKeyboard vk = new VirtualKeyboard(vkType);
 		vk.setHideDelay(params.vkHideDelay);
 		vk.setHasHapticFeedback(params.vkFeedback);
 		vk.setButtonShape(params.vkButtonShape);
@@ -222,14 +214,12 @@ public class MicroLoader {
 
 		File keyLayoutFile = new File(workDir + Config.MIDLET_CONFIGS_DIR
 				+ appDirName + Config.MIDLET_KEY_LAYOUT_FILE);
-		if (keyLayoutFile.exists()) {
-			try {
-				FileInputStream fis = new FileInputStream(keyLayoutFile);
-				DataInputStream dis = new DataInputStream(fis);
+		if (vkType == 0 && keyLayoutFile.exists()) {
+			try (DataInputStream dis = new DataInputStream(new FileInputStream(keyLayoutFile))) {
 				vk.readLayout(dis);
-				fis.close();
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
+				vk.setLayout(3);
 			}
 		}
 
@@ -241,11 +231,16 @@ public class MicroLoader {
 		vk.setColor(VirtualKeyboard.OUTLINE, vkAlpha | params.vkOutlineColor);
 
 		VirtualKeyboard.LayoutListener listener = vk1 -> {
-			try {
-				FileOutputStream fos = new FileOutputStream(keyLayoutFile);
-				DataOutputStream dos = new DataOutputStream(fos);
+			int vkLayout = vk1.getLayout();
+			if (params.vkType != vkLayout) {
+				params.vkType = vkLayout;
+				ProfilesManager.saveConfig(params);
+			}
+			if (vkLayout > 0) {
+				return;
+			}
+			try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(keyLayoutFile))) {
 				vk1.writeLayout(dos);
-				fos.close();
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}

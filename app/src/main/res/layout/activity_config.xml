@@ -612,7 +612,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
                 app:layout_constraintTop_toBottomOf="@+id/cxTouchInput" />
-            <!-- KeyCodes layout -->
+            <!-- End keyCodes layout -->
 
             <Button
                 android:id="@+id/cmdKeyMappings"
@@ -633,7 +633,7 @@
                 android:layout_marginTop="6dp"
                 android:background="?bg_config_card"
                 android:visibility="gone"
-                app:constraint_referenced_ids="cxVKForceOpacity,tvVkType,cxVKFeedback,tfVKBack,spVKType,tfVKSelFore,textView7,cmdVKSelFore,cmdVKFore,tfVKOutline,cmdVKBack,sbVKAlpha,cmdVKSelBack,tfVKHideDelay,textView13,spButtonsShape,tvOpacity,cmdVKOutline,textView12,tfVKFore,tfVKSelBack"
+                app:constraint_referenced_ids="cxVKForceOpacity,cxVKFeedback,tfVKBack,tfVKSelFore,textView7,cmdVKSelFore,cmdVKFore,tfVKOutline,cmdVKBack,sbVKAlpha,cmdVKSelBack,tfVKHideDelay,textView13,spButtonsShape,tvOpacity,cmdVKOutline,textView12,tfVKFore,tfVKSelBack"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -653,38 +653,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cmdKeyMappings" />
 
-            <!-- Keyboard type -->
-            <TextView
-                android:id="@+id/tvVkType"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/height_config_row"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:gravity="center_vertical"
-                android:text="@string/PREF_VK_TYPE"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?attr/textColorSecondary"
-                android:textSize="15sp"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard"
-                app:layout_constraintWidth_min="wrap" />
-
-            <Spinner
-                android:id="@+id/spVKType"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/height_config_row"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:entries="@array/PREF_VK_TYPE_ENTRIES"
-                android:textColor="?attr/textColorSecondary"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard" />
-            <!-- Keyboard type -->
-
             <!-- Key shape type -->
             <TextView
                 android:id="@+id/textView7"
@@ -700,11 +668,9 @@
                 app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvVkType"
+                app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard"
                 app:layout_constraintWidth_min="wrap" />
-            <!-- Key shape type -->
 
-            <!-- Keys vibration feedback -->
             <Spinner
                 android:id="@+id/spButtonsShape"
                 android:layout_width="0dp"
@@ -716,8 +682,10 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tvVkType" />
+                app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard" />
+            <!-- End key shape type -->
 
+            <!-- Keys vibration feedback -->
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/cxVKFeedback"
                 style="@style/SwitchStyle"
@@ -988,7 +956,7 @@
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="textView6,tvOpacity,tvVkType,textView7,textView12,cmdVKFore,cmdVKBack,cmdVKSelFore,cmdVKOutline" />
+                app:constraint_referenced_ids="textView6,tvOpacity,textView7,textView12,cmdVKFore,cmdVKBack,cmdVKSelFore,cmdVKOutline" />
 
             <!-- Key colors -->
             <!-- Keyboard settings -->

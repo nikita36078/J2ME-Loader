@@ -110,7 +110,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected Checkable cxVKFeedback;
 	protected Checkable cxTouchInput;
 
-	protected Spinner spVKType;
 	protected Spinner spLayout;
 	private Spinner spButtonsShape;
 	protected SeekBar sbVKAlpha;
@@ -244,7 +243,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
 		cxVKForceOpacity = findViewById(R.id.cxVKForceOpacity);
 
-		spVKType = findViewById(R.id.spVKType);
 		spLayout = findViewById(R.id.spLayout);
 		spButtonsShape = findViewById(R.id.spButtonsShape);
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
@@ -684,7 +682,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			tfFpsLimit.setText(Integer.toString(fpsLimit));
 		}
 
-		spVKType.setSelection(params.vkType);
 		spLayout.setSelection(params.keyCodesLayout);
 		spButtonsShape.setSelection(params.vkButtonShape);
 		sbVKAlpha.setProgress(params.vkAlpha);
@@ -757,7 +754,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.vkForceOpacity = cxVKForceOpacity.isChecked();
 			params.touchInput = cxTouchInput.isChecked();
 
-			params.vkType = spVKType.getSelectedItemPosition();
 			params.keyCodesLayout = spLayout.getSelectedItemPosition();
 			params.vkButtonShape = spButtonsShape.getSelectedItemPosition();
 			params.vkAlpha = sbVKAlpha.getProgress();

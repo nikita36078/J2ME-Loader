@@ -128,8 +128,7 @@ public class ProfilesManager {
 					params = gson.fromJson(json, ProfileModel.class);
 					params.dir = dir;
 					// Fix keyboard shape for old configs
-					if (params.vkType == VirtualKeyboard.PHONE_DIGITS_TYPE ||
-							params.vkType == VirtualKeyboard.PHONE_ARROWS_TYPE) {
+					if (params.vkType == 1 || params.vkType == 2) {
 						params.vkButtonShape = VirtualKeyboard.RECT_SHAPE;
 					}
 					if (saveConfig(params) && oldFile.delete()) {
