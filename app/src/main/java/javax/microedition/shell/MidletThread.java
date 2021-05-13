@@ -32,6 +32,8 @@ import androidx.annotation.NonNull;
 
 public class MidletThread extends HandlerThread implements Handler.Callback {
 	private static final String TAG = MidletThread.class.getName();
+	private static final UncaughtExceptionHandler uncaughtExceptionHandler = (t, e) ->
+			Log.e(TAG, "Error in thread: \"" + t + "\" after destroy app called", e);
 
 	private static final int INIT = 0;
 	private static final int START = 1;
@@ -62,6 +64,7 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	}
 
 	public static void notifyDestroyed() {
+		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 		instance.state = DESTROYED;
 		MicroActivity activity = ContextHolder.getActivity();
 		if (activity != null) {
@@ -86,6 +89,7 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	}
 
 	static void destroyApp() {
+		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 		new Thread(() -> {
 			try {
 				Thread.sleep(1000);
