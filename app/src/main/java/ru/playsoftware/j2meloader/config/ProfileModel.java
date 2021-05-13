@@ -31,6 +31,7 @@ import javax.microedition.util.ContextHolder;
 import ru.playsoftware.j2meloader.util.SparseIntArrayAdapter;
 
 public class ProfileModel {
+	public static final int VERSION = 3;
 	/** True if this is a new profile (not yet saved to file) */
 	public final transient boolean isNew;
 
@@ -76,7 +77,7 @@ public class ProfileModel {
 	public boolean hwAcceleration;
 
 	@SerializedName("GraphicsMode")
-	public int graphicsMode = -1;
+	public int graphicsMode;
 
 	@SerializedName("Shader")
 	public ShaderInfo shader;
@@ -168,8 +169,8 @@ public class ProfileModel {
 
 	public ProfileModel(File dir) {
 		this.dir = dir;
-		this.isNew = true;
-		version = 1;
+		isNew = true;
+		version = VERSION;
 		screenWidth = 240;
 		screenHeight = 320;
 		screenBackgroundColor = 0xD0D0D0;
@@ -178,6 +179,7 @@ public class ProfileModel {
 		screenScaleRatio = 100;
 		screenScaleToFit = true;
 		screenKeepAspectRatio = true;
+		graphicsMode = 1;
 
 		fontSizeSmall = 18;
 		fontSizeMedium = 22;
@@ -196,15 +198,5 @@ public class ProfileModel {
 		vkFgColorSelected = 0xFFFFFF;
 		vkOutlineColor = 0xFFFFFF;
 		systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
-	}
-
-	public int getGraphicsMode() {
-		int mode = this.graphicsMode;
-		if (mode == -1) {
-			if (hwAcceleration) {
-				mode = Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? 2 : 3;
-			} else mode = 0;
-		}
-		return mode;
 	}
 }

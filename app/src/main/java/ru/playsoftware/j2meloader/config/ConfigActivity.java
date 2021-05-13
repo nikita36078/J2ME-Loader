@@ -665,7 +665,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxImmediate.setChecked(params.immediateMode);
 		cxParallel.setChecked(params.parallelRedrawScreen);
 		cxForceFullscreen.setChecked(params.forceFullscreen);
-		spGraphicsMode.setSelection(params.getGraphicsMode());
+		spGraphicsMode.setSelection(params.graphicsMode);
 		cxShowFps.setChecked(params.showFps);
 
 		tfFontSizeSmall.setText(Integer.toString(params.fontSizeSmall));

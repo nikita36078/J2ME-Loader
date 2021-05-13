@@ -186,7 +186,7 @@ public class MicroLoader {
 			Canvas.setScale(params.screenGravity, params.screenScaleType, params.screenScaleRatio);
 			Canvas.setFilterBitmap(params.screenFilter);
 			EventQueue.setImmediate(params.immediateMode);
-			Canvas.setGraphicsMode(params.getGraphicsMode(), params.parallelRedrawScreen);
+			Canvas.setGraphicsMode(params.graphicsMode, params.parallelRedrawScreen);
 			ShaderInfo shader = params.shader;
 			if (shader != null) {
 				shader.dir = workDir + Config.SHADERS_DIR;

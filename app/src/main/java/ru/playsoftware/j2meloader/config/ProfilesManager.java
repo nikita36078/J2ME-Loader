@@ -16,6 +16,7 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import javax.microedition.lcdui.pointer.VirtualKeyboard;
+import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
@@ -136,30 +137,33 @@ public class ProfilesManager {
 				}
 			}
 		}
-		if (params != null) {
-			switch (params.version) {
-				case 0:
-					updateSystemProperties(params);
+		if (params == null) {
+			return null;
+		}
+		switch (params.version) {
+			case 0:
+				if (params.hwAcceleration) {
+					params.graphicsMode = Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? 2 : 3;
+				}
+				updateSystemProperties(params);
+			case 1:
+				params.fontAA = true;
 
-				case 1:
-					params.fontAA = true;
-
-				case 2:
-					if (params.screenScaleToFit) {
-						if (params.screenKeepAspectRatio) {
-							params.screenScaleType = 1;
-						} else {
-							params.screenScaleType = 2;
-						}
+			case 2:
+				if (params.screenScaleToFit) {
+					if (params.screenKeepAspectRatio) {
+						params.screenScaleType = 1;
 					} else {
-						params.screenScaleType = 0;
+						params.screenScaleType = 2;
 					}
-					params.screenGravity = 1;
+				} else {
+					params.screenScaleType = 0;
+				}
+				params.screenGravity = 1;
 
-					params.version = 3;
-					ProfilesManager.saveConfig(params);
-					break;
-			}
+				params.version = ProfileModel.VERSION;
+				ProfilesManager.saveConfig(params);
+				break;
 		}
 		return params;
 	}
