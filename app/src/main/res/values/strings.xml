@@ -210,4 +210,5 @@
     <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
     <string name="pref_screen_scale_type_fit">Fit to window</string>
     <string name="pref_screen_scale_type_none">As is</string>
+    <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
 </resources>

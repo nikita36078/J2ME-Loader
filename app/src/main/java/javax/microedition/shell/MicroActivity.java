@@ -18,6 +18,7 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -25,6 +26,7 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +37,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -358,6 +361,9 @@ public class MicroActivity extends AppCompatActivity {
 				VirtualKeyboard vk = ContextHolder.getVk();
 				if (vk != null) {
 					inflater.inflate(R.menu.midlet_vk, group);
+					if (vk.getLayoutEditMode() == VirtualKeyboard.LAYOUT_EOF) {
+						menu.findItem(R.id.action_layout_edit_finish).setVisible(false);
+					}
 				}
 			}
 			for (Command cmd : current.getCommands()) {
@@ -402,9 +408,11 @@ public class MicroActivity extends AppCompatActivity {
 			Toast.makeText(this, R.string.layout_scale_mode,
 					Toast.LENGTH_SHORT).show();
 		} else if (id == R.id.action_layout_edit_finish) {
-			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-			Toast.makeText(this, R.string.layout_edit_finished,
-					Toast.LENGTH_SHORT).show();
+			showSaveVkAlert((d, w) -> {
+				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+				Toast.makeText(this, R.string.layout_edit_finished,
+						Toast.LENGTH_SHORT).show();
+			});
 		} else if (id == R.id.action_layout_switch) {
 			showSetLayoutDialog();
 		} else if (id == R.id.action_hide_buttons) {
@@ -448,11 +456,29 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void showHideButtonDialog() {
 		final VirtualKeyboard vk = ContextHolder.getVk();
+		boolean[] states = vk.getKeysVisibility();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.hide_buttons)
-				.setMultiChoiceItems(vk.getKeyNames(), vk.getKeyVisibility(),
-						(dialogInterface, i, b) -> vk.setKeyVisibility(i, b))
-				.setPositiveButton(android.R.string.ok, null);
+				.setMultiChoiceItems(vk.getKeyNames(), states, null)
+				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+					ListView lv = ((AlertDialog) dialog).getListView();
+					SparseBooleanArray current = lv.getCheckedItemPositions();
+					for (int i = 0; i < current.size(); i++) {
+						if (states[current.keyAt(i)] != current.valueAt(i)) {
+							showSaveVkAlert((d, w) -> vk.setKeysVisibility(current));
+							return;
+						}
+					}
+				});
+		builder.show();
+	}
+
+	private void showSaveVkAlert(DialogInterface.OnClickListener listener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.CONFIRMATION_REQUIRED)
+				.setMessage(R.string.pref_vk_save_alert)
+				.setNegativeButton(android.R.string.cancel, null)
+				.setPositiveButton(android.R.string.ok, listener);
 		builder.show();
 	}
 
@@ -460,16 +486,15 @@ public class MicroActivity extends AppCompatActivity {
 		final VirtualKeyboard vk = ContextHolder.getVk();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.layout_switch)
-				.setSingleChoiceItems(R.array.PREF_VK_TYPE_ENTRIES, vk.getLayout(),
-						(dialogInterface, i) -> {
-							vk.setLayout(i);
-							if (vk.isPhone()) {
-								setOrientation(ORIENTATION_PORTRAIT);
-							} else {
-								setOrientation(microLoader.getOrientation());
-							}
-						})
-				.setPositiveButton(android.R.string.ok, null);
+				.setSingleChoiceItems(R.array.PREF_VK_TYPE_ENTRIES, vk.getLayout(), null)
+				.setPositiveButton(android.R.string.ok, (d, w) -> {
+					vk.changeLayout(((AlertDialog) d).getListView().getCheckedItemPosition());
+					if (vk.isPhone()) {
+						setOrientation(ORIENTATION_PORTRAIT);
+					} else {
+						setOrientation(microLoader.getOrientation());
+					}
+				});
 		builder.show();
 	}
 

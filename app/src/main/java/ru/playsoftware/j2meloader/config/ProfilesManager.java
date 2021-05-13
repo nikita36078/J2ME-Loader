@@ -129,7 +129,7 @@ public class ProfilesManager {
 					params.dir = dir;
 					// Fix keyboard shape for old configs
 					if (params.vkType == 1 || params.vkType == 2) {
-						params.vkButtonShape = VirtualKeyboard.RECT_SHAPE;
+						params.vkButtonShape = VirtualKeyboard.ROUND_RECT_SHAPE;
 					}
 					if (saveConfig(params) && oldFile.delete()) {
 						Log.d(TAG, "loadConfig: old config file deleted");

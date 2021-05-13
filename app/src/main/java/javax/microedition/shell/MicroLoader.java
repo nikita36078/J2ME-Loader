@@ -26,10 +26,7 @@ import android.util.Log;
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -159,7 +156,7 @@ public class MicroLoader {
 		try {
 			// Apply configuration to the launching MIDlet
 			if (params.showKeyboard) {
-				setVirtualKeyboard();
+				ContextHolder.setVk(new VirtualKeyboard(params));
 			} else {
 				ContextHolder.setVk(null);
 			}
@@ -202,51 +199,6 @@ public class MicroLoader {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void setVirtualKeyboard() {
-		int vkType = params.vkType;
-		VirtualKeyboard vk = new VirtualKeyboard(vkType);
-		vk.setHideDelay(params.vkHideDelay);
-		vk.setHasHapticFeedback(params.vkFeedback);
-		vk.setButtonShape(params.vkButtonShape);
-		vk.setForceOpacity(params.vkForceOpacity);
-
-		File keyLayoutFile = new File(workDir + Config.MIDLET_CONFIGS_DIR
-				+ appDirName + Config.MIDLET_KEY_LAYOUT_FILE);
-		if (vkType == 0 && keyLayoutFile.exists()) {
-			try (DataInputStream dis = new DataInputStream(new FileInputStream(keyLayoutFile))) {
-				vk.readLayout(dis);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-				vk.setLayout(3);
-			}
-		}
-
-		int vkAlpha = params.vkAlpha << 24;
-		vk.setColor(VirtualKeyboard.BACKGROUND, vkAlpha | params.vkBgColor);
-		vk.setColor(VirtualKeyboard.FOREGROUND, vkAlpha | params.vkFgColor);
-		vk.setColor(VirtualKeyboard.BACKGROUND_SELECTED, vkAlpha | params.vkBgColorSelected);
-		vk.setColor(VirtualKeyboard.FOREGROUND_SELECTED, vkAlpha | params.vkFgColorSelected);
-		vk.setColor(VirtualKeyboard.OUTLINE, vkAlpha | params.vkOutlineColor);
-
-		VirtualKeyboard.LayoutListener listener = vk1 -> {
-			int vkLayout = vk1.getLayout();
-			if (params.vkType != vkLayout) {
-				params.vkType = vkLayout;
-				ProfilesManager.saveConfig(params);
-			}
-			if (vkLayout > 0) {
-				return;
-			}
-			try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(keyLayoutFile))) {
-				vk1.writeLayout(dos);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		};
-		vk.setLayoutListener(listener);
-		ContextHolder.setVk(vk);
 	}
 
 	@SuppressLint("SimpleDateFormat")
