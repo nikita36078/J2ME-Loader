@@ -420,11 +420,10 @@ public class MicroActivity extends AppCompatActivity {
 			Toast.makeText(this, R.string.layout_scale_mode,
 					Toast.LENGTH_SHORT).show();
 		} else if (id == R.id.action_layout_edit_finish) {
-			showSaveVkAlert((d, w) -> {
-				vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-				Toast.makeText(this, R.string.layout_edit_finished,
-						Toast.LENGTH_SHORT).show();
-			});
+			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
+			Toast.makeText(this, R.string.layout_edit_finished,
+					Toast.LENGTH_SHORT).show();
+			showSaveVkAlert();
 		} else if (id == R.id.action_layout_switch) {
 			showSetLayoutDialog();
 		} else if (id == R.id.action_hide_buttons) {
@@ -477,7 +476,8 @@ public class MicroActivity extends AppCompatActivity {
 					SparseBooleanArray current = lv.getCheckedItemPositions();
 					for (int i = 0; i < current.size(); i++) {
 						if (states[current.keyAt(i)] != current.valueAt(i)) {
-							showSaveVkAlert((d, w) -> vk.setKeysVisibility(current));
+							vk.setKeysVisibility(current);
+							showSaveVkAlert();
 							return;
 						}
 					}
@@ -485,12 +485,13 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private void showSaveVkAlert(DialogInterface.OnClickListener listener) {
+	private void showSaveVkAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.pref_vk_save_alert)
-				.setNegativeButton(android.R.string.cancel, null)
-				.setPositiveButton(android.R.string.ok, listener);
+				.setNegativeButton(android.R.string.no, null)
+				.setPositiveButton(android.R.string.yes,
+						(d, w) -> ContextHolder.getVk().onLayoutChanged(VirtualKeyboard.TYPE_CUSTOM));
 		builder.show();
 	}
 
@@ -500,7 +501,7 @@ public class MicroActivity extends AppCompatActivity {
 				.setTitle(R.string.layout_switch)
 				.setSingleChoiceItems(R.array.PREF_VK_TYPE_ENTRIES, vk.getLayout(), null)
 				.setPositiveButton(android.R.string.ok, (d, w) -> {
-					vk.changeLayout(((AlertDialog) d).getListView().getCheckedItemPosition());
+					vk.setLayout(((AlertDialog) d).getListView().getCheckedItemPosition());
 					if (vk.isPhone()) {
 						setOrientation(ORIENTATION_PORTRAIT);
 					} else {

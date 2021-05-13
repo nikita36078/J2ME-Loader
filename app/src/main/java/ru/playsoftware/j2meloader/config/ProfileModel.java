@@ -16,8 +16,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-
-import android.os.Build;
 import android.util.SparseIntArray;
 
 import com.google.gson.annotations.JsonAdapter;
@@ -189,7 +187,6 @@ public class ProfileModel {
 		showKeyboard = true;
 		touchInput = true;
 
-		vkType = 3;
 		vkButtonShape = VirtualKeyboard.ROUND_RECT_SHAPE;
 		vkAlpha = 64;
 
