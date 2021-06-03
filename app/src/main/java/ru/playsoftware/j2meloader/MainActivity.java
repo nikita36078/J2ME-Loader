@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity {
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(KEY_APP_SORT, appSort);
 		if (intentUri) {
-			bundleLoad.putString(KEY_APP_PATH, getAppPath(getIntent().getData()));
+			bundleLoad.putParcelable(KEY_APP_PATH, getIntent().getData());
 		}
 		AppsListFragment appsListFragment = new AppsListFragment();
 		appsListFragment.setArguments(bundleLoad);
@@ -143,15 +143,6 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private String getAppPath(Uri uri) {
-		try {
-			return FileUtils.getAppPath(this, uri);
-		} catch (IOException | SecurityException e) {
-			e.printStackTrace();
-			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-			return null;
-		}
-	}
 
 	@Override
 	protected void onPostResume() {
