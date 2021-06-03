@@ -17,6 +17,7 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
@@ -34,6 +35,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedHashMap;
+
+import javax.microedition.util.ContextHolder;
 
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
@@ -125,11 +128,22 @@ public class JarConverter {
 		return null;
 	}
 
-	public Single<String> convert(final String path) {
+	public Single<String> convert(final Uri path) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
 			String pathToJad = null;
-			String pathToJar = path;
+			String pathToJar = null;
+			Exception error = null;
+			try {
+				pathToJar = FileUtils.getAppPath(ContextHolder.getAppContext(), path);
+			} catch (Exception e) {
+				error = e;
+			}
+
+			if (pathToJar == null){
+				throw new ConverterException("decode input uri path error: " + path.toString(), error);
+			}
+
 			tmpDir.mkdir();
 
 			// Add jar name to ACRA

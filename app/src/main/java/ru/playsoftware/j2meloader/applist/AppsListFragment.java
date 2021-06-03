@@ -95,7 +95,7 @@ public class AppsListFragment extends ListFragment {
 	private AppsListAdapter adapter;
 	private JarConverter converter;
 	private String appSort;
-	private String appPath;
+	private Uri appPath;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class AppsListFragment extends ListFragment {
 			return;
 		}
 		appSort = args.getString(KEY_APP_SORT);
-		appPath = args.getString(KEY_APP_PATH);
+		appPath = args.getParcelable(KEY_APP_PATH);
 	}
 
 	@Override
@@ -182,20 +182,20 @@ public class AppsListFragment extends ListFragment {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			for (Uri uri : files) {
 				File file = Utils.getFileForUri(uri);
-				convertJar(file.getAbsolutePath());
+				convertJar(Uri.fromFile(file));
 			}
 		}
 	}
 
 	@SuppressLint("CheckResult")
-	private void convertJar(String path) {
+	private void convertJar(Uri path) {
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setIndeterminate(true);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		dialog.setCancelable(false);
 		dialog.setMessage(getText(R.string.converting_message));
 		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path)
+		converter.convert(path.buildUpon().build())
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SingleObserver<String>() {
