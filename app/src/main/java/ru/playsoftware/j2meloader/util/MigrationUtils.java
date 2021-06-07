@@ -19,10 +19,13 @@ package ru.playsoftware.j2meloader.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.stream.JsonReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
 
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.config.Config;
@@ -85,8 +88,14 @@ public class MigrationUtils {
 			if (params == null) {
 				params = new ProfileModel(newDir);
 			}
-			params.keyMappings = json;
-			ProfilesManager.saveConfig(params);
+			SparseIntArrayAdapter arrayAdapter = new SparseIntArrayAdapter();
+			JsonReader jsonReader = new JsonReader(new StringReader(json));
+			try {
+				params.keyMappings = arrayAdapter.read(jsonReader);
+				ProfilesManager.saveConfig(params);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		return false;

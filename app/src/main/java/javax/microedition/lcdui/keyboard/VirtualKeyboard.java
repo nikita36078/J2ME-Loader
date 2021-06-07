@@ -18,6 +18,8 @@ package javax.microedition.lcdui.keyboard;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.view.View;
 
@@ -43,12 +45,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_UP_RIGHT = "\u2197";
 	private static final String ARROW_DOWN_LEFT = "\u2199";
 	private static final String ARROW_DOWN_RIGHT = "\u2198";
+	private static long[] REPEAT_INTERVALS = {200, 400, 128, 128, 128, 128, 128};
+	private final Handler handler;
 
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
 	}
 
-	protected class VirtualKey {
+	protected class VirtualKey implements Runnable {
 
 		private RectF rect;
 		private int keyCode, secondKeyCode;
@@ -57,6 +61,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private boolean visible;
 		private boolean opaque = true;
 		private int corners = 0;
+		private int repeatCount;
 
 		VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
@@ -114,7 +119,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				fgColor = colors[FOREGROUND];
 			}
 			int olColor = colors[OUTLINE];
-			if (opaque) {
+			if (opaque || layoutEditMode != LAYOUT_EOF) {
 				bgColor |= 0xFF000000;
 				fgColor |= 0xFF000000;
 				olColor |= 0xFF000000;
@@ -156,6 +161,24 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			result = prime * result + secondKeyCode;
 			return result;
 		}
+
+		@Override
+		public void run() {
+			if (target == null) {
+				selected = false;
+				repeatCount = 0;
+				return;
+			}
+			if (selected) {
+				target.postKeyRepeated(getKeyCode());
+				if (getSecondKeyCode() != 0) {
+					target.postKeyRepeated(getSecondKeyCode());
+				}
+				handler.postDelayed(this, repeatCount > 6 ? 80 : REPEAT_INTERVALS[repeatCount++]);
+			} else {
+				repeatCount = 0;
+			}
+		}
 	}
 
 	private static final int KEYBOARD_SIZE = 25;
@@ -188,8 +211,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	static final int KEY_FIRE = 24;
 
 	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
-	private static final int LAYOUT_OLD_VERSION = 1;
-	private static final int LAYOUT_VERSION = 2;
+	private static final int LAYOUT_VERSION_1 = 1;
+	private static final int LAYOUT_VERSION_2 = 2;
+	private static final int LAYOUT_VERSION_3 = 3;
+	private static final int LAYOUT_VERSION = LAYOUT_VERSION_3;
 
 	private static final int NUM_VARIANTS = 4;
 
@@ -224,19 +249,19 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	};
 
 	private static final int SCALE_JOYSTICK = 0;
-	private static final int SCALE_SOFT_KEYS = 1;
-	private static final int SCALE_DIAL_KEYS = 2;
-	private static final int SCALE_DIGITS = 3;
-	private static final int SCALE_FIRE_KEY = 4;
+	private static final int SCALE_SOFT_KEYS = 2;
+	private static final int SCALE_DIAL_KEYS = 4;
+	private static final int SCALE_DIGITS = 6;
+	private static final int SCALE_FIRE_KEY = 8;
 
 	private static final float SCALE_SNAP_RADIUS = 0.05f;
 
 	private float[] keyScales = {
-			1,
-			1,
-			1,
-			0.75f,
-			1.5f
+			1, 1,
+			1, 1,
+			1, 1,
+			1, 1,
+			1, 1
 	};
 
 	private int[][] keyScaleGroups = {
@@ -249,32 +274,28 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					KEY_DOWN_LEFT,
 					KEY_DOWN,
 					KEY_DOWN_RIGHT
-			},
-			{
-					KEY_SOFT_LEFT,
-					KEY_SOFT_RIGHT
-			},
-			{
-					KEY_DIAL,
-					KEY_CANCEL,
-			},
-			{
-					KEY_NUM1,
-					KEY_NUM2,
-					KEY_NUM3,
-					KEY_NUM4,
-					KEY_NUM5,
-					KEY_NUM6,
-					KEY_NUM7,
-					KEY_NUM8,
-					KEY_NUM9,
-					KEY_NUM0,
-					KEY_STAR,
-					KEY_POUND
-			},
-			{
-					KEY_FIRE
-			}
+			}, {
+			KEY_SOFT_LEFT,
+			KEY_SOFT_RIGHT
+	}, {
+			KEY_DIAL,
+			KEY_CANCEL,
+	}, {
+			KEY_NUM1,
+			KEY_NUM2,
+			KEY_NUM3,
+			KEY_NUM4,
+			KEY_NUM5,
+			KEY_NUM6,
+			KEY_NUM7,
+			KEY_NUM8,
+			KEY_NUM9,
+			KEY_NUM0,
+			KEY_STAR,
+			KEY_POUND
+	}, {
+			KEY_FIRE
+	}
 	};
 
 	protected Canvas target;
@@ -285,9 +306,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private boolean forceOpacity;
 	private static final int FEEDBACK_DURATION = 50;
 
-	private boolean visible, hiding, skip;
-	private final Object waiter = new Object();
-	private Thread hider;
+	private boolean visible;
 
 	private int[] snapOrigins;
 	private int[] snapModes;
@@ -298,7 +317,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private int layoutEditMode;
 	private int editedIndex;
 	private float offsetX, offsetY;
-	private float prevScale;
+	private float prevScaleX;
+	private float prevScaleY;
+	protected int layoutVariant;
 
 	protected RectF screen;
 	protected RectF virtualScreen;
@@ -308,7 +329,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected VirtualKey[] keypad;
 	private VirtualKey[] associatedKeys;
 
-	private KeyRepeater repeater;
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
@@ -316,6 +336,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public VirtualKeyboard(int variant) {
+		HandlerThread thread = new HandlerThread("MIDletVirtualKeyboard");
+		thread.start();
+		handler = new Handler(thread.getLooper());
+		layoutVariant = variant;
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
 
@@ -352,22 +376,24 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapValid = new boolean[keypad.length];
 		snapStack = new int[keypad.length];
 
-		resetLayout(variant);
+		resetLayout(layoutVariant);
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
-		hider = new Thread(this, "MIDletVirtualKeyboard");
-		hider.start();
-		repeater = new KeyRepeater();
 	}
 
 	protected void resetLayout(int variant) {
 		switch (variant) {
 			case 0:
 				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_JOYSTICK + 1] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_SOFT_KEYS + 1] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS + 1] = 1;
 				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_DIGITS + 1] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
+				keyScales[SCALE_FIRE_KEY + 1] = 1;
 
 				setSnap(KEY_DOWN_RIGHT, SCREEN, RectSnap.INT_SOUTHEAST);
 				setSnap(KEY_DOWN, KEY_DOWN_RIGHT, RectSnap.EXT_WEST);
@@ -404,10 +430,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				break;
 			case 1:
 				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_JOYSTICK + 1] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_SOFT_KEYS + 1] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS + 1] = 1;
 				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_DIGITS + 1] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
+				keyScales[SCALE_FIRE_KEY + 1] = 1;
 
 				setSnap(KEY_DOWN_LEFT, SCREEN, RectSnap.INT_SOUTHWEST);
 				setSnap(KEY_DOWN, KEY_DOWN_LEFT, RectSnap.EXT_EAST);
@@ -472,10 +503,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				break;
 			case 3:
 				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_JOYSTICK + 1] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_SOFT_KEYS + 1] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS + 1] = 1;
 				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_DIGITS + 1] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
+				keyScales[SCALE_FIRE_KEY + 1] = 1;
 
 				setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_WEST);
 				setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_EAST);
@@ -561,7 +597,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			throw new IOException("file signature not found");
 		}
 		int version = dis.readInt();
-		if (version != LAYOUT_VERSION && version != LAYOUT_OLD_VERSION) {
+		if (version < LAYOUT_VERSION_1 || version > LAYOUT_VERSION) {
 			throw new IOException("incompatible file version");
 		}
 		while (true) {
@@ -581,7 +617,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						found = false;
 						for (int key = 0; key < keypad.length; key++) {
 							if (keypad[key].hashCode() == hash) {
-								if (version == LAYOUT_VERSION) {
+								if (version >= LAYOUT_VERSION_2) {
 									keypad[key].setVisible(dis.readBoolean());
 								}
 								snapOrigins[key] = dis.readInt();
@@ -599,9 +635,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					break;
 				case LAYOUT_SCALES:
 					count = dis.readInt();
-					if (count == keyScales.length) {
+					if (version >= LAYOUT_VERSION_3) {
 						for (int i = 0; i < count; i++) {
 							keyScales[i] = dis.readFloat();
+						}
+					} else if (count * 2 == keyScales.length) {
+						for (int i = 0; i < keyScales.length; i++) {
+							float v = dis.readFloat();
+							keyScales[i++] = v;
+							keyScales[i] = v;
 						}
 					} else {
 						dis.skip(count * 4);
@@ -649,10 +691,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void setTarget(Canvas canvas) {
-		if (canvas != null) {
-			target = canvas;
-		}
-		repeater.setTarget(canvas);
+		target = canvas;
 		highlightGroup(-1);
 	}
 
@@ -672,7 +711,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		if (snapModes[target] != RectSnap.NO_SNAP) {
 			snapOrigins[target] = origin;
 			snapOffsets[target].set(0, 0);
-			for (VirtualKey aKeypad : keypad) {
+			for (VirtualKey ignored : keypad) {
 				origin = snapOrigins[origin];
 				if (origin == SCREEN) {
 					return true;
@@ -751,15 +790,16 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		show();
 	}
 
-	private void resizeKey(int key, float size) {
-		keypad[key].resize(size, size);
+	private void resizeKey(int key, float w, float h) {
+		keypad[key].resize(w, h);
 		snapValid[key] = false;
 	}
 
 	private void resizeKeyGroup(int group) {
-		float size = keySize * keyScales[group];
+		float sizeX = keySize * keyScales[group * 2];
+		float sizeY = keySize * keyScales[group * 2 + 1];
 		for (int key = 0; key < keyScaleGroups[group].length; key++) {
-			resizeKey(keyScaleGroups[group][key], size);
+			resizeKey(keyScaleGroups[group][key], sizeX, sizeY);
 		}
 	}
 
@@ -790,6 +830,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 		snapKeys();
 		repaint();
+		if (delay > 0 && obscuresVirtualScreen) {
+			for (VirtualKey key : associatedKeys) {
+				if (key != null) {
+					return;
+				}
+			}
+			handler.postDelayed(this, delay);
+		}
 	}
 
 	@Override
@@ -825,10 +873,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public boolean pointerPressed(int pointer, float x, float y) {
-		if (skip) {
-			return checkPointerHandled(x, y);
-		}
-
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
@@ -843,7 +887,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						if (aKeypad.getSecondKeyCode() != 0) {
 							target.postKeyPressed(aKeypad.getSecondKeyCode());
 						}
-						repeater.add(aKeypad);
+						handler.postDelayed(aKeypad, 400);
 						repaint();
 						break;
 					}
@@ -877,7 +921,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 				offsetX = x;
 				offsetY = y;
-				prevScale = keyScales[editedIndex];
+				prevScaleX = keyScales[editedIndex * 2];
+				prevScaleY = keyScales[editedIndex * 2 + 1];
 				break;
 		}
 		return checkPointerHandled(x, y);
@@ -885,9 +930,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public boolean pointerDragged(int pointer, float x, float y) {
-		if (skip) {
-			return checkPointerHandled(x, y);
-		}
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
@@ -896,7 +938,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (associatedKeys[pointer] == null) {
 					pointerPressed(pointer, x, y);
 				} else if (!associatedKeys[pointer].contains(x, y)) {
-					repeater.remove(associatedKeys[pointer]);
+					handler.removeCallbacks(associatedKeys[pointer]);
 					target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 						target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
@@ -928,32 +970,32 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						}
 					}
 					snapKey(editedIndex, 0);
-					snapKeys();
 					repaint();
 				}
 				break;
 			case LAYOUT_SCALES:
 				float dx = x - offsetX;
 				float dy = offsetY - y;
-				float delta;
+				float scale;
+				int index = this.editedIndex * 2;
 				if (Math.abs(dx) > Math.abs(dy)) {
-					delta = dx;
+					scale = prevScaleX + dx / Math.min(screen.centerX(), screen.centerY());
 				} else {
-					delta = dy;
+					scale = prevScaleY + dy / Math.min(screen.centerX(), screen.centerY());
+					index++;
 				}
-				float scale = prevScale + delta / Math.max(screen.width(), screen.height());
 				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
 					scale = 1;
 				} else {
-					for (int i = 0; i < keyScales.length; i++) {
-						if (i != editedIndex && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
+					for (int i = index % 2; i < keyScales.length; i += 2) {
+						if (i != index && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
 							scale = keyScales[i];
 							break;
 						}
 					}
 				}
-				keyScales[editedIndex] = scale;
-				resizeKeyGroup(editedIndex);
+				keyScales[index] = scale;
+				resizeKeyGroup(this.editedIndex);
 				snapKeys();
 				repaint();
 				break;
@@ -963,16 +1005,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public boolean pointerReleased(int pointer, float x, float y) {
-		if (skip) {
-			skip = false;
-			return checkPointerHandled(x, y);
-		}
 		if (layoutEditMode == LAYOUT_EOF) {
 			if (pointer > associatedKeys.length) {
 				return checkPointerHandled(x, y);
 			}
 			if (associatedKeys[pointer] != null) {
-				repeater.remove(associatedKeys[pointer]);
+				handler.removeCallbacks(associatedKeys[pointer]);
 				target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 					target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
@@ -982,6 +1020,29 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				repaint();
 			}
 		} else if (layoutEditMode == LAYOUT_KEYS) {
+			int length = snapOrigins.length;
+			for (int key = 0; key < length; key++) {
+				if (snapOrigins[key] == editedIndex) {
+					snapModes[key] = RectSnap.NO_SNAP;
+					for (int i = 0; i < length; i++) {
+						if (i != key && findSnap(key, i)) {
+							break;
+						}
+					}
+					if (snapModes[key] == RectSnap.NO_SNAP) {
+						snapModes[key] = RectSnap.getSnap(keypad[key].rect, screen, snapOffsets[key]);
+						snapOrigins[key] = SCREEN;
+						if (Math.abs(snapOffsets[key].x) <= snapRadius) {
+							snapOffsets[key].x = 0;
+						}
+						if (Math.abs(snapOffsets[key].y) <= snapRadius) {
+							snapOffsets[key].y = 0;
+						}
+					}
+					snapKey(key, 0);
+				}
+			}
+			snapKeys();
 			editedIndex = -1;
 		}
 		return checkPointerHandled(x, y);
@@ -989,48 +1050,32 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void show() {
-		synchronized (waiter) {
-			if (hiding) {
-				hider.interrupt();
-			}
+		handler.removeCallbacks(this);
+		if (!visible) {
+			visible = true;
+			repaint();
 		}
-		visible = true;
-		repaint();
 	}
 
 	@Override
 	public void hide() {
 		if (delay > 0 && obscuresVirtualScreen) {
-			synchronized (waiter) {
-				waiter.notifyAll();
-			}
+			handler.postDelayed(this, delay);
+		}
+	}
+
+	@Override
+	public void cancel() {
+		for (VirtualKey key : keypad) {
+			key.selected = false;
+			handler.removeCallbacks(key);
 		}
 	}
 
 	@Override
 	public void run() {
-		try {
-			while (true) {
-				synchronized (waiter) {
-					hiding = false;
-					waiter.notifyAll();
-					waiter.wait();
-					hiding = true;
-				}
-				try {
-					if (delay > 0) {
-						Thread.sleep(delay);
-					}
-					visible = false;
-					skip = true;
-					repaint();
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
-		}
+		visible = false;
+		repaint();
 	}
 
 	@Override
@@ -1063,9 +1108,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private void vibrate() {
-		if (feedback) {
-			ContextHolder.vibrateKey(FEEDBACK_DURATION);
-		}
+		if (feedback) ContextHolder.vibrateKey(FEEDBACK_DURATION);
 	}
 
 	public void setHideDelay(int delay) {
