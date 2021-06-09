@@ -94,12 +94,13 @@ public class JarConverter {
 		connection.setReadTimeout(30000);
 		connection.setConnectTimeout(15000);
 		int code = connection.getResponseCode();
+		if (code == HttpURLConnection.HTTP_OK) return connection;
 		if (code == HttpURLConnection.HTTP_MOVED_PERM || code == HttpURLConnection.HTTP_MOVED_TEMP) {
 			String location = connection.getHeaderField("Location");
 			connection.disconnect();
 			return openConnectionWithRedirect(location, ++count);
 		}
-		return connection;
+		throw new IOException("JAD Request Download Error (" + code + ")");
 	}
 
 	private File findManifest(File tmpDir) {
