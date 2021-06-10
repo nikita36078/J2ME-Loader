@@ -29,7 +29,7 @@ public class MidiPlayer extends BasePlayer implements MIDIControl {
 	private MidiDriver midiDriver;
 
 	public MidiPlayer() {
-		midiDriver = new MidiDriver();
+		midiDriver = MidiDriver.getInstance();
 		midiDriver.start();
 		controls = new HashMap<>();
 		controls.put(MIDIControl.class.getName(), this);

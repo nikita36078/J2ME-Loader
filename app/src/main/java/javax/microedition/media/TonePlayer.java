@@ -37,7 +37,7 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 	private long duration;
 
 	public TonePlayer() {
-		midiDriver = new MidiDriver();
+		midiDriver = MidiDriver.getInstance();
 		midiDriver.start();
 		midiSequence = EMPTY_MIDI_SEQUENCE;
 		controls = new HashMap<>();
