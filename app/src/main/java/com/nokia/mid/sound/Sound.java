@@ -71,6 +71,13 @@ public class Sound {
 	}
 
 	public void init(int freq, long duration) {
+		if (duration <= 0) {
+			throw new IllegalArgumentException("duration = " + duration);
+		}
+		if (freq < 0 || freq > FREQ_TABLE[FREQ_TABLE.length - 1]) {
+			throw new IllegalArgumentException("freq = " + freq);
+		}
+
 		try {
 			if (player != null) {
 				player.close();
@@ -160,33 +167,26 @@ public class Sound {
 		}
 	}
 
-	private int convertFreqToNote(int freq) {
-		int index = -1;
-		if (freq >= 0 && freq < FREQ_TABLE[127] && freq != 0) {
-			index = FREQ_TABLE.length / 2;
-			int high = FREQ_TABLE.length;
-			int low = 0;
-			while (true) {
-				if (freq >= FREQ_TABLE[index - 1]) {
-					if (freq < FREQ_TABLE[index]) {
-						break;
-					}
-					low = index;
-					int delta = (high - index) / 2;
-					if (delta == 0) {
-						delta = 1;
-					}
-					index += delta;
-				} else {
-					high = index;
-					int delta2 = (index - low) / 2;
-					if (delta2 == 0) {
-						delta2 = 1;
-					}
-					index -= delta2;
-				}
+	public static int convertFreqToNote(int freq) {
+		int low = 0;
+		int high = FREQ_TABLE.length - 1;
+
+		while (low <= high) {
+			int mid = (low + high) >>> 1;
+			int midVal = FREQ_TABLE[mid];
+
+			if (midVal < freq) {
+				low = mid + 1;
+			} else if (midVal > freq) {
+				high = mid - 1;
+			} else {
+				return mid;
 			}
 		}
-		return index;
+		if ((freq - FREQ_TABLE[low - 1]) < (FREQ_TABLE[low] - freq)) {
+			return low - 1;
+		} else {
+			return low;
+		}
 	}
 }
