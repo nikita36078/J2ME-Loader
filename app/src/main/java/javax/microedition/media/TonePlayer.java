@@ -31,16 +31,12 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 			0x07, (byte) 0xA1, 0x20, 0x00, (byte) 0xC0, 0x01, 0x00, (byte) 0x80, 0x40,
 			0x7F, 0x00, (byte) 0xFF, 0x2F, 0x00
 	};
-	private HashMap<String, Control> controls;
-	private MidiDriver midiDriver;
-	private byte[] midiSequence;
+	private final HashMap<String, Control> controls = new HashMap<>();
+	private final MidiDriver midiDriver = MidiInterface.getDriver();
+	private byte[] midiSequence = EMPTY_MIDI_SEQUENCE;
 	private long duration;
 
 	public TonePlayer() {
-		midiDriver = MidiDriver.getInstance();
-		midiDriver.start();
-		midiSequence = EMPTY_MIDI_SEQUENCE;
-		controls = new HashMap<>();
 		controls.put(ToneControl.class.getName(), this);
 	}
 
@@ -76,13 +72,11 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 
 	@Override
 	public void start() throws MediaException {
-		midiDriver.queueEvent(midiSequence);
+		midiDriver.write(midiSequence);
 	}
 
 	@Override
-	public void deallocate() {
-		midiDriver.stop();
-	}
+	public void deallocate() {}
 
 	@Override
 	public void close() {
