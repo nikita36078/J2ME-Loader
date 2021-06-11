@@ -15,14 +15,14 @@ import javax.microedition.util.ContextHolder;
 public class CanvasWrapper {
 	private static final float TEXT_SIZE_KEYBOARD = 22;
 
-	private final float textAscent;
-	private final float textCenterOffset;
 	private final Paint drawPaint = new Paint();
 	private final Paint fillPaint = new Paint();
 	private final Paint textPaint = new Paint();
 	private final Paint imgPaint = new Paint();
+	private final float textAscent;
+	private final float textCenterOffset;
+	private final float textHeight;
 	private Canvas canvas;
-	private float textHeight;
 
 	public CanvasWrapper(boolean filterBitmap) {
 		imgPaint.setFilterBitmap(filterBitmap);

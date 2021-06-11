@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -38,9 +39,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -60,7 +64,8 @@ import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-import androidx.annotation.NonNull;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 
@@ -265,12 +270,16 @@ public abstract class Canvas extends Displayable {
 		overlay = ov;
 	}
 
-	public Bitmap getScreenShot() {
-		Bitmap bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
-		canvasWrapper.bind(new android.graphics.Canvas(bitmap));
-		RectF screen = new RectF(0, 0, onWidth, onHeight);
-		canvasWrapper.drawImage(offscreenCopy, screen);
-		return bitmap;
+	public Single<Bitmap> getScreenShot() {
+		if (renderer != null) {
+			return renderer.takeScreenShot();
+		}
+		return Single.create(emitter -> {
+			Bitmap bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
+			canvasWrapper.bind(new android.graphics.Canvas(bitmap));
+			canvasWrapper.drawImage(offscreenCopy, new RectF(0, 0, onWidth, onHeight));
+			emitter.onSuccess(bitmap);
+		});
 	}
 
 	private boolean checkSizeChanged() {
@@ -721,6 +730,7 @@ public abstract class Canvas extends Displayable {
 		private final int[] bgTextureId = new int[1];
 		private ShaderProgram program;
 		private boolean isStarted;
+		private Runnable screenshotTask;
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -752,6 +762,10 @@ public abstract class Canvas extends Displayable {
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
+			}
+			if (screenshotTask != null) {
+				screenshotTask.run();
+				screenshotTask = null;
 			}
 		}
 
@@ -798,6 +812,30 @@ public abstract class Canvas extends Displayable {
 
 		public void start() {
 			mView.onResume();
+		}
+
+		private Single<Bitmap> takeScreenShot() {
+			return Single.<ByteBuffer>create(emitter -> {
+				ByteBuffer buf = ByteBuffer.allocateDirect(onWidth * onHeight * 4).order(ByteOrder.nativeOrder());
+				screenshotTask = () -> {
+					try {
+						glReadPixels(displayWidth - onWidth - onX, displayHeight - onHeight - onY, onWidth, onHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+						emitter.onSuccess(buf);
+					} catch (Throwable e) {
+						emitter.onError(e);
+					}
+				};
+			}).timeout(3, TimeUnit.SECONDS)
+					.subscribeOn(Schedulers.computation())
+					.observeOn(Schedulers.computation())
+					.map(bb -> {
+						Bitmap rawBitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
+						bb.rewind();
+						rawBitmap.copyPixelsFromBuffer(bb);
+						Matrix m = new Matrix();
+						m.setScale(1.0f, -1.0f);
+						return Bitmap.createBitmap(rawBitmap, 0, 0, onWidth, onHeight, m, false);
+					});
 		}
 	}
 

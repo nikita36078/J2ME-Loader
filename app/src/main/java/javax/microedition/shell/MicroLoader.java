@@ -16,7 +16,6 @@
 
 package javax.microedition.shell;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -50,7 +49,9 @@ import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
-import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
@@ -72,7 +73,10 @@ public class MicroLoader {
 	MicroLoader(Context context, String appPath) {
 		this.context = context;
 		this.appDir = new File(appPath);
-		workDir = appDir.getParentFile().getParent();
+		File converted = appDir.getParentFile();
+		if (converted == null)
+			throw new NullPointerException("Can't access to parent of " + appPath);
+		workDir = converted.getParent();
 		appDirName = appDir.getName();
 	}
 
@@ -121,7 +125,7 @@ public class MicroLoader {
 		if (dexOptDir.exists()) {
 			FileUtils.clearDirectory(dexOptDir);
 		} else if (!dexOptDir.mkdir()) {
-			throw new IOException("Cant't create directory: [" + dexOptDir + ']');
+			throw new IOException("Can't create directory: [" + dexOptDir + ']');
 		}
 		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
 				dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
@@ -206,22 +210,26 @@ public class MicroLoader {
 		}
 	}
 
-	@SuppressLint("SimpleDateFormat")
-	Single<String> takeScreenshot(Canvas canvas) {
-		return Single.create(emitter -> {
-			Bitmap bitmap = canvas.getScreenShot();
-			Calendar calendar = Calendar.getInstance();
-			Date now = calendar.getTime();
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
-			String fileName = "Screenshot_" + simpleDateFormat.format(now) + ".png";
-			File screenshotDir = new File(Config.SCREENSHOTS_DIR);
-			File screenshotFile = new File(screenshotDir, fileName);
-			if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
-				throw new IOException("Can't create directory: " + screenshotDir);
-			}
-			FileOutputStream out = new FileOutputStream(screenshotFile);
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-			emitter.onSuccess(screenshotFile.getAbsolutePath());
-		});
+	void takeScreenshot(Canvas canvas, SingleObserver<String> observer) {
+		canvas.getScreenShot()
+				.subscribeOn(Schedulers.computation())
+				.observeOn(Schedulers.io())
+				.map(bitmap -> {
+					Calendar calendar = Calendar.getInstance();
+					Date now = calendar.getTime();
+					//noinspection SpellCheckingInspection
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+					String fileName = "Screenshot_" + simpleDateFormat.format(now) + ".png";
+					File screenshotDir = new File(Config.SCREENSHOTS_DIR);
+					File screenshotFile = new File(screenshotDir, fileName);
+					if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
+						throw new IOException("Can't create directory: " + screenshotDir);
+					}
+					FileOutputStream out = new FileOutputStream(screenshotFile);
+					bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+					return screenshotFile.getAbsolutePath();
+				})
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(observer);
 	}
 }

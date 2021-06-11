@@ -18,7 +18,6 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -68,9 +67,7 @@ import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.LogUtils;
@@ -441,10 +438,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@SuppressLint("CheckResult")
 	private void takeScreenshot() {
-		microLoader.takeScreenshot((Canvas) current)
-				.subscribeOn(Schedulers.computation())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(new SingleObserver<String>() {
+		microLoader.takeScreenshot((Canvas) current, new SingleObserver<String>() {
 					@Override
 					public void onSubscribe(@NonNull Disposable d) {
 					}
