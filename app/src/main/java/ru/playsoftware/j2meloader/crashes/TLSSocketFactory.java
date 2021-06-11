@@ -19,22 +19,28 @@ package ru.playsoftware.j2meloader.crashes;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class TLSSocketFactory extends SSLSocketFactory {
 
-	private SSLSocketFactory internalSSLSocketFactory;
+	private final SSLSocketFactory internalSSLSocketFactory;
 
-	public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
-		SSLContext context = SSLContext.getInstance("TLS");
-		context.init(null, null, null);
-		internalSSLSocketFactory = context.getSocketFactory();
+	public TLSSocketFactory() {
+		SSLSocketFactory factory;
+		try {
+			SSLContext context = SSLContext.getInstance("TLS");
+			context.init(null, null, null);
+			factory = context.getSocketFactory();
+		} catch (NoSuchAlgorithmException | KeyManagementException e) {
+			factory = HttpsURLConnection.getDefaultSSLSocketFactory();
+		}
+		internalSSLSocketFactory = factory;
 	}
 
 	@Override
@@ -58,12 +64,12 @@ public class TLSSocketFactory extends SSLSocketFactory {
 	}
 
 	@Override
-	public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+	public Socket createSocket(String host, int port) throws IOException {
 		return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port));
 	}
 
 	@Override
-	public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+	public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
 		return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port, localHost, localPort));
 	}
 

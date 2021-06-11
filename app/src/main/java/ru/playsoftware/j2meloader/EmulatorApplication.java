@@ -27,8 +27,8 @@ import android.os.Build;
 import androidx.multidex.MultiDex;
 
 import org.acra.ACRA;
-import org.acra.annotation.AcraCore;
-import org.acra.annotation.AcraDialog;
+import org.acra.config.CoreConfigurationBuilder;
+import org.acra.config.DialogConfigurationBuilder;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -36,13 +36,6 @@ import java.util.Arrays;
 
 import javax.microedition.util.ContextHolder;
 
-import ru.playsoftware.j2meloader.crashes.AppCenterSenderFactory;
-
-@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {AppCenterSenderFactory.class},
-		parallel = false)
-@AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
-		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = android.R.string.cancel,
-		resTheme = R.style.Theme_AppCompat_Dialog)
 public class EmulatorApplication extends Application {
 	private static final String[] VALID_SIGNATURES = {
 			"78EF7758720A9902F731ED706F72C669C39B765C", // GPlay
@@ -58,13 +51,24 @@ public class EmulatorApplication extends Application {
 			MultiDex.install(this);
 		}
 		ContextHolder.setApplication(this);
-		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) ACRA.init(this);
-		ACRA.getErrorReporter().putCustomData("Flavor", BuildConfig.FLAVOR);
+		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) {
+			CoreConfigurationBuilder builder = new CoreConfigurationBuilder(this);
+			builder.withBuildConfigClass(BuildConfig.class)
+					.withParallel(false)
+					.withSendReportsInDevMode(false)
+					.withEnabled(true);
+			builder.getPluginConfigurationBuilder(DialogConfigurationBuilder.class)
+					.withResTitle(R.string.crash_dialog_title)
+					.withResText(R.string.crash_dialog_message)
+					.withResPositiveButtonText(R.string.report_crash)
+					.withResTheme(R.style.Theme_AppCompat_Dialog)
+					.withEnabled(true);
+			ACRA.init(this, builder);
+		}
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")
 	private boolean isSignatureValid() {
-		boolean result = true;
 		try {
 			Signature[] signatures;
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -76,22 +80,20 @@ public class EmulatorApplication extends Application {
 						.getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
 				signatures = info.signatures;
 			}
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			for (Signature signature : signatures) {
-				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(signature.toByteArray());
 				String sha1 = bytesToHex(md.digest());
-				if (!Arrays.asList(VALID_SIGNATURES).contains(sha1)) {
-					result = false;
+				if (Arrays.asList(VALID_SIGNATURES).contains(sha1)) {
+					return true;
 				}
 			}
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
-			result = false;
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			result = false;
 		}
-		return result;
+		return false;
 	}
 
 	private String bytesToHex(byte[] bytes) {

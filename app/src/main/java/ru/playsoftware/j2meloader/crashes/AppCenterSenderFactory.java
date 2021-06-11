@@ -18,12 +18,15 @@ package ru.playsoftware.j2meloader.crashes;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
+import com.google.auto.service.AutoService;
+
 import org.acra.config.CoreConfiguration;
 import org.acra.sender.ReportSender;
 import org.acra.sender.ReportSenderFactory;
 
-import androidx.annotation.NonNull;
-
+@AutoService(ReportSenderFactory.class)
 public class AppCenterSenderFactory implements ReportSenderFactory {
 	@NonNull
 	@Override

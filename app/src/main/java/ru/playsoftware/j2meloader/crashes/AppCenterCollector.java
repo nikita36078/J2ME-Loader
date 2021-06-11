@@ -19,6 +19,8 @@ package ru.playsoftware.j2meloader.crashes;
 import android.content.Context;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
+
 import com.google.auto.service.AutoService;
 import com.google.gson.Gson;
 
@@ -33,15 +35,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-
 @AutoService(Collector.class)
 public class AppCenterCollector implements Collector {
 	public static final String APPCENTER_LOG = "APPCENTER_LOG";
 
 	@Override
-	public void collect(@NonNull Context context, @NonNull CoreConfiguration config,
-						@NonNull ReportBuilder reportBuilder, @NonNull CrashReportData crashReportData) {
+	public void collect(@NonNull Context context,
+						@NonNull CoreConfiguration config,
+						@NonNull ReportBuilder reportBuilder,
+						@NonNull CrashReportData crashReportData) {
 		String log = createCrashLog(crashReportData, reportBuilder.getException());
 		crashReportData.put(APPCENTER_LOG, log);
 	}
@@ -61,9 +63,11 @@ public class AppCenterCollector implements Collector {
 
 		AppCenterAPI.Device device = new AppCenterAPI.Device();
 		String versionName = report.getString(ReportField.APP_VERSION_NAME);
-		int id = versionName.indexOf('-');
-		if (id > 0) {
-			versionName = versionName.substring(0, id);
+		if (versionName != null) {
+			int id = versionName.indexOf('-');
+			if (id > 0) {
+				versionName = versionName.substring(0, id);
+			}
 		}
 		device.appBuild = report.getString(ReportField.APP_VERSION_CODE);
 		device.appNamespace = report.getString(ReportField.PACKAGE_NAME);
@@ -78,8 +82,11 @@ public class AppCenterCollector implements Collector {
 
 		AppCenterAPI.ErrorAttachmentLog errorAttachmentLog =
 				new AppCenterAPI.ErrorAttachmentLog();
-		byte[] attachment = report.getString(ReportField.CUSTOM_DATA).getBytes();
-		errorAttachmentLog.data = Base64.encodeToString(attachment, Base64.DEFAULT);
+		String customData = report.getString(ReportField.CUSTOM_DATA);
+		if (customData != null) {
+			byte[] attachment = customData.getBytes();
+			errorAttachmentLog.data = Base64.encodeToString(attachment, Base64.DEFAULT);
+		}
 		errorAttachmentLog.errorId = report.getString(ReportField.REPORT_ID);
 		errorAttachmentLog.device = device;
 		errorAttachmentLog.timestamp = report.getString(ReportField.USER_CRASH_DATE);
