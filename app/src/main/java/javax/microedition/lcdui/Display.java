@@ -83,6 +83,10 @@ public class Display {
 		if (disp == null || disp == current) {
 			return;
 		}
+		if (current instanceof Canvas) {
+			Canvas c = (Canvas) current;
+			c.setInvisible();
+		}
 		if (disp instanceof Alert) {
 			Alert alert = (Alert) disp;
 			alert.setNextDisplayable(current);

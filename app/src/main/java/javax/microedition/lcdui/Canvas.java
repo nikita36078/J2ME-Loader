@@ -723,6 +723,10 @@ public abstract class Canvas extends Displayable {
 	public void pointerReleased(int x, int y) {
 	}
 
+	void setInvisible() {
+		this.visible = false;
+	}
+
 	private class GLRenderer implements GLSurfaceView.Renderer {
 		private final FloatBuffer vbo = ByteBuffer.allocateDirect(8 * 2 * 4)
 				.order(ByteOrder.nativeOrder()).asFloatBuffer();
