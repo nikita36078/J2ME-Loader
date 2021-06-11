@@ -99,7 +99,7 @@ public class AppsListFragment extends ListFragment {
 	private final AppsListAdapter adapter = new AppsListAdapter();
 	private JarConverter converter;
 	private String appSort;
-	private Uri appPath;;
+	private Uri appPath;
 	private SharedPreferences preferences;
 	private final ActivityResultLauncher<Void> openFileLauncher = registerForActivityResult(
 			new ActivityResultContract<Void, Uri>() {
@@ -140,10 +140,9 @@ public class AppsListFragment extends ListFragment {
 				convertJar(uri);
 			});
 
-	public static AppsListFragment newInstance(String appSort, Uri data) {
+	public static AppsListFragment newInstance(Uri data) {
 		AppsListFragment fragment = new AppsListFragment();
 		Bundle args = new Bundle();
-		args.putString(KEY_APP_SORT, appSort);
 		args.putParcelable(KEY_APP_PATH, data);
 		fragment.setArguments(args);
 		return fragment;
@@ -155,9 +154,8 @@ public class AppsListFragment extends ListFragment {
 		compositeDisposable = new CompositeDisposable();
 		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
 		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
-		Bundle args = requireArguments();
-		appSort = args.getString(KEY_APP_SORT);
-		appPath = args.getParcelable(KEY_APP_PATH);
+		appSort = preferences.getString(PREF_APP_SORT, "name");
+		appPath = requireArguments().getParcelable(KEY_APP_PATH);
 	}
 
 	@Override
@@ -192,6 +190,7 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@SuppressLint("CheckResult")
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void initDb() {
 		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
@@ -218,6 +217,7 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@SuppressLint("CheckResult")
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void convertJar(Uri path) {
 		ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setIndeterminate(true);
@@ -254,7 +254,7 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private void showStartDialog(AppItem app) {
-		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
 		StringBuilder text = new StringBuilder()
 				.append(getString(R.string.author)).append(' ')
 				.append(app.getAuthor()).append('\n')
@@ -285,7 +285,7 @@ public class AppsListFragment extends ListFragment {
 		int paddingVertical = (int) (density * 16);
 		int paddingHorizontal = (int) (density * 8);
 		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(R.string.action_context_rename)
 				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
@@ -303,7 +303,7 @@ public class AppsListFragment extends ListFragment {
 
 	private void showDeleteDialog(final int id) {
 		AppItem item = adapter.getItem(id);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
@@ -324,7 +324,7 @@ public class AppsListFragment extends ListFragment {
 	public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
 									ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		MenuInflater inflater = getActivity().getMenuInflater();
+		MenuInflater inflater = requireActivity().getMenuInflater();
 		inflater.inflate(R.menu.context_main, menu);
 		if (!ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())) {
 			menu.findItem(R.id.action_context_shortcut).setVisible(false);

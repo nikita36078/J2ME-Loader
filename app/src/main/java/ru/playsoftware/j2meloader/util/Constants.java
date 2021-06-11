@@ -20,7 +20,6 @@ public class Constants {
 	public static final String ACTION_EDIT = "config.edit";
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 
-	public static final String KEY_APP_SORT = "appSort";
 	public static final String KEY_APP_PATH = "appPath";
 	public static final String KEY_CONFIG_PATH = "configPath";
 	public static final String KEY_MIDLET_NAME = "midletName";

@@ -46,9 +46,7 @@ import ru.playsoftware.j2meloader.util.MigrationUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.playsoftware.j2meloader.util.SettingsResultContract;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_FIRST_START;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 
 public class MainActivity extends BaseActivity {
@@ -98,8 +96,7 @@ public class MainActivity extends BaseActivity {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check(this);
 		Uri data = isIntentUri ? getIntent().getData() : null;
-		String appSort = sp.getString(PREF_APP_SORT, "name");
-		AppsListFragment fragment = AppsListFragment.newInstance(appSort, data);
+		AppsListFragment fragment = AppsListFragment.newInstance(data);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment).commitNowAllowingStateLoss();
 	}
@@ -123,12 +120,9 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void checkActionBar() {
-		boolean firstStart = sp.getBoolean(PREF_FIRST_START, true);
-		if (firstStart) {
-			if (!ViewConfiguration.get(this).hasPermanentMenuKey()) {
-				sp.edit().putBoolean(PREF_TOOLBAR, true).apply();
-			}
-			sp.edit().putBoolean(PREF_FIRST_START, false).apply();
+		if (sp.getAll().get(PREF_TOOLBAR) == null) {
+			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
+			sp.edit().putBoolean(PREF_TOOLBAR, enable).apply();
 		}
 	}
 
