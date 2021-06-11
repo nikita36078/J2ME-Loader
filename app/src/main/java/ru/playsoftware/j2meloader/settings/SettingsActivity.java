@@ -43,7 +43,7 @@ public class SettingsActivity extends BaseActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle(R.string.action_settings);
-		setResult(RESULT_OK);
+		setResult(getIntent().getBooleanExtra(PREF_EMULATOR_DIR, false) ? RESULT_NEED_RECREATE : RESULT_OK);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		oldParams = preferences.getAll();
 	}
@@ -51,7 +51,8 @@ public class SettingsActivity extends BaseActivity {
 	@Override
 	public void finish() {
 		String defPath = Environment.getExternalStorageDirectory() + "/" + Config.APP_NAME;
-		if (preferences.getString(PREF_THEME, "light").equals(oldParams.get(PREF_THEME))
+		if (!getIntent().getBooleanExtra(PREF_EMULATOR_DIR, false)
+				&& preferences.getString(PREF_THEME, "light").equals(oldParams.get(PREF_THEME))
 				&& preferences.getString(PREF_APP_SORT, "name").equals(oldParams.get(PREF_APP_SORT))
 				&& preferences.getString(PREF_EMULATOR_DIR, defPath).equals(oldParams.get(PREF_EMULATOR_DIR))) {
 			setResult(RESULT_OK);

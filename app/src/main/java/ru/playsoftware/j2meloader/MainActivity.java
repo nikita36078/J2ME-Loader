@@ -20,32 +20,52 @@ package ru.playsoftware.j2meloader;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
-import java.io.File;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
+import com.nononsenseapps.filepicker.Utils;
+
+import java.io.File;
+import java.util.Map;
+
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.MigrationUtils;
+import ru.playsoftware.j2meloader.util.PickDirResultContract;
+import ru.playsoftware.j2meloader.util.SettingsResultContract;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_FIRST_START;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 
 public class MainActivity extends BaseActivity {
+	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
 	private SharedPreferences sp;
 	private String emulatorDir;
+	private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
+			new ActivityResultContracts.RequestMultiplePermissions(),
+			this::onPermissionResult);
+	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
+			new PickDirResultContract(),
+			this::onPickDirResult);
+	private final ActivityResultLauncher<Boolean> settingsLauncher = registerForActivityResult(
+			new SettingsResultContract(),
+			this::onSettingsResult);
+	private boolean isIntentUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +77,12 @@ public class MainActivity extends BaseActivity {
 			finish();
 			return;
 		}
+		isIntentUri = (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0 && uri != null;
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-				!= PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-					REQUEST_PERMISSIONS);
-		} else {
-			setupActivity((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0
-					&& savedInstanceState == null && uri != null);
-		}
+		permissionsLauncher.launch(STORAGE_PERMISSIONS);
 	}
 
-	private void setupActivity(boolean intentUri) {
+	private void setupActivity() {
 		if (!initFolders()) {
 			String msg = getString(R.string.create_apps_dir_failed, emulatorDir);
 			new AlertDialog.Builder(this)
@@ -76,33 +90,18 @@ public class MainActivity extends BaseActivity {
 					.setCancelable(false)
 					.setMessage(msg)
 					.setNegativeButton(R.string.close, (d, w) -> finish())
-					.setPositiveButton(R.string.action_settings, (d, w) -> startActivityForResult(
-							new Intent(getApplicationContext(), SettingsActivity.class), REQUEST_WORK_DIR))
+					.setPositiveButton(R.string.action_settings, (d, w) -> openDirLauncher.launch(null))
 					.show();
 			return;
 		}
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check(this);
-		Uri data = intentUri ? getIntent().getData() : null;
+		Uri data = isIntentUri ? getIntent().getData() : null;
 		String appSort = sp.getString(PREF_APP_SORT, "name");
 		AppsListFragment fragment = AppsListFragment.newInstance(appSort, data);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, fragment).commitNowAllowingStateLoss();
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-										   @NonNull int[] grantResults) {
-		if (requestCode == REQUEST_PERMISSIONS) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				setupActivity(getIntent().getData() != null);
-			} else {
-				Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
-				finish();
-			}
-		}
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
 	private boolean initFolders() {
@@ -134,11 +133,57 @@ public class MainActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		if (resultCode == RESULT_NEED_RECREATE || requestCode == REQUEST_WORK_DIR) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		if (item.getItemId() == R.id.action_settings) {
+			settingsLauncher.launch(false);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void onPermissionResult(Map<String, Boolean> status) {
+		if (!status.containsValue(false)) {
+			setupActivity();
+		} else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+			showRequestPermissionRationale();
+		} else {
+			Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
+			finish();
+		}
+	}
+
+	private void showRequestPermissionRationale() {
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.error)
+				.setCancelable(false)
+				.setMessage(R.string.permission_request_failed)
+				.setNegativeButton(R.string.retry, (d, w) ->
+						permissionsLauncher.launch(STORAGE_PERMISSIONS))
+				.setPositiveButton(R.string.exit, (d, w) -> finish())
+				.show();
+	}
+
+	private void onSettingsResult(Boolean needRecreate) {
+		if (needRecreate) {
 			ActivityCompat.recreate(this);
+		}
+	}
+
+	private void applyChangeFolder(File file) {
+		String path = file.getAbsolutePath();
+		if (path.equals(sp.getString(PREF_EMULATOR_DIR, null))) {
 			return;
 		}
-		super.onActivityResult(requestCode, resultCode, data);
+		sp.edit().putString(PREF_EMULATOR_DIR, path).apply();
+		ActivityCompat.recreate(this);
 	}
+
+	private void onPickDirResult(Uri uri) {
+		if (uri == null) {
+			return;
+		}
+		File file = Utils.getFileForUri(uri);
+		applyChangeFolder(file);
+	}
+
 }

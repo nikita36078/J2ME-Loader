@@ -16,6 +16,8 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -31,9 +33,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
@@ -42,6 +48,28 @@ import static ru.playsoftware.j2meloader.util.Constants.*;
 public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
 	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
+	private final ActivityResultLauncher<String> editProfileLauncher = registerForActivityResult(
+			new ActivityResultContract<String, String>() {
+				@NonNull
+				@Override
+				public Intent createIntent(@NonNull Context context, String input) {
+					return new Intent(ACTION_EDIT_PROFILE, Uri.parse(input),
+							getApplicationContext(), ConfigActivity.class);
+				}
+
+				@Override
+				public String parseResult(int resultCode, @Nullable Intent intent) {
+					if (resultCode == Activity.RESULT_OK && intent != null) {
+						return intent.getDataString();
+					}
+					return null;
+				}
+			},
+			name -> {
+				if (name != null) {
+					adapter.addItem(new Profile(name));
+				}
+			});
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,24 +161,9 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		if (requestCode != REQUEST_EDIT
-				|| resultCode != RESULT_OK
-				|| data == null)
-			return;
-		final String name = data.getDataString();
-		if (name == null)
-			return;
-		adapter.addItem(new Profile(name));
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	@Override
 	public void onNameChanged(int id, String newName) {
 		if (id == -1) {
-			final Intent intent = new Intent(ACTION_EDIT_PROFILE,
-					Uri.parse(newName), getApplicationContext(), ConfigActivity.class);
-			startActivityForResult(intent, REQUEST_EDIT);
+			editProfileLauncher.launch(newName);
 			return;
 		}
 		Profile profile = adapter.getItem(id);

@@ -23,6 +23,7 @@ import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,15 +47,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.nononsenseapps.filepicker.FilePickerActivity;
-import com.nononsenseapps.filepicker.Utils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -63,6 +58,16 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.nononsenseapps.filepicker.FilePickerActivity;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.SingleObserver;
@@ -81,8 +86,8 @@ import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
-import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
+import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.JarConverter;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
@@ -94,7 +99,46 @@ public class AppsListFragment extends ListFragment {
 	private final AppsListAdapter adapter = new AppsListAdapter();
 	private JarConverter converter;
 	private String appSort;
-	private Uri appPath;
+	private Uri appPath;;
+	private SharedPreferences preferences;
+	private final ActivityResultLauncher<Void> openFileLauncher = registerForActivityResult(
+			new ActivityResultContract<Void, Uri>() {
+				@NonNull
+				@Override
+				public Intent createIntent(@NonNull Context context, Void input) {
+					Intent i = new Intent(context, FilteredFilePickerActivity.class);
+					i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+					i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, true);
+					i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+					i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+					String path = preferences.getString(PREF_LAST_PATH, null);
+					if (path == null) {
+						File dir = Environment.getExternalStorageDirectory();
+						if (dir.canRead()) {
+							path = dir.getAbsolutePath();
+						}
+					}
+					i.putExtra(FilePickerActivity.EXTRA_START_PATH, path);
+					return i;
+				}
+
+				@Override
+				public Uri parseResult(int resultCode, @Nullable Intent intent) {
+					if (resultCode == Activity.RESULT_OK && intent != null) {
+						return intent.getData();
+					}
+					return null;
+				}
+			},
+			uri -> {
+				if (uri == null) {
+					return;
+				}
+				preferences.edit()
+						.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
+						.apply();
+				convertJar(uri);
+			});
 
 	public static AppsListFragment newInstance(String appSort, Uri data) {
 		AppsListFragment fragment = new AppsListFragment();
@@ -110,10 +154,8 @@ public class AppsListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		compositeDisposable = new CompositeDisposable();
 		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
-		Bundle args = getArguments();
-		if (args == null) {
-			return;
-		}
+		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
+		Bundle args = requireArguments();
 		appSort = args.getString(KEY_APP_SORT);
 		appPath = args.getParcelable(KEY_APP_PATH);
 	}
@@ -130,16 +172,8 @@ public class AppsListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
 		initDb();
-		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-		fab.setOnClickListener(v -> {
-			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
-			i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-			i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, true);
-			i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-			i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
-			i.putExtra(FilePickerActivity.EXTRA_START_PATH, FilteredFilePickerFragment.getLastPath());
-			startActivityForResult(i, REQUEST_FILE);
-		});
+		FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
+		fab.setOnClickListener(v -> openFileLauncher.launch(null));
 	}
 
 	@Override
@@ -180,17 +214,6 @@ public class AppsListFragment extends ListFragment {
 		} else {
 			requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(),
 					getString(R.string.error) + ": " + throwable.getMessage(), Toast.LENGTH_SHORT).show());
-		}
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK) {
-			List<Uri> files = Utils.getSelectedFilesFromResult(data);
-			for (Uri uri : files) {
-				File file = Utils.getFileForUri(uri);
-				convertJar(Uri.fromFile(file));
-			}
 		}
 	}
 
@@ -400,9 +423,6 @@ public class AppsListFragment extends ListFragment {
 		if (itemId == R.id.action_about) {
 			AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
 			aboutDialogFragment.show(getChildFragmentManager(), "about");
-		} else if (itemId == R.id.action_settings) {
-			Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-			requireActivity().startActivityForResult(settingsIntent, REQUEST_SETTINGS);
 		} else if (itemId == R.id.action_profiles) {
 			Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
 			startActivity(intentProfiles);
