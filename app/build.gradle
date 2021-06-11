@@ -1,4 +1,6 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,7 +13,6 @@ android {
         versionCode 89
         versionName "1.7.0"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
-        ndkVersion '21.3.6528147'
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
         }
@@ -81,6 +82,7 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
+    ndkVersion '22.1.7171670'
 }
 
 static def generateVersionCode() {
@@ -106,11 +108,11 @@ dependencies {
     implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
     implementation 'com.github.nikita36078:pngj:2.2.2'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
     compileOnly 'com.google.auto.service:auto-service-annotations:1.0'
     annotationProcessor 'com.google.auto.service:auto-service:1.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+    implementation 'net.lingala.zip4j:zip4j:2.8.0'
     implementation 'org.ow2.asm:asm:9.1'
     implementation project(':dexlib')
     androidTestImplementation 'androidx.test:runner:1.3.0'
