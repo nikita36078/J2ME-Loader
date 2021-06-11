@@ -17,7 +17,6 @@
 
 package ru.playsoftware.j2meloader.applist;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,6 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,19 +34,9 @@ import ru.playsoftware.j2meloader.R;
 
 public class AppsListAdapter extends BaseAdapter implements Filterable {
 
-	private List<AppItem> list;
-	private List<AppItem> filteredList;
-	private final LayoutInflater layoutInflater;
-	private final Context context;
-	private final AppFilter appFilter;
-
-	public AppsListAdapter(Context context) {
-		this.list = new ArrayList<>();
-		this.filteredList = new ArrayList<>();
-		this.layoutInflater = LayoutInflater.from(context);
-		this.context = context;
-		this.appFilter = new AppFilter();
-	}
+	private List<AppItem> list = new ArrayList<>();
+	private List<AppItem> filteredList = new ArrayList<>();
+	private final AppFilter appFilter = new AppFilter();
 
 	@Override
 	public int getCount() {
@@ -69,6 +57,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
+			LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
 			view = layoutInflater.inflate(R.layout.list_row_jar, viewGroup, false);
 			holder = new ViewHolder();
 			holder.icon = view.findViewById(R.id.list_image);
@@ -79,8 +68,8 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-		AppItem item = filteredList.get(position);
 
+		AppItem item = filteredList.get(position);
 		Drawable icon = Drawable.createFromPath(item.getImagePathExt());
 		if (icon != null) {
 			icon.setFilterBitmap(false);
@@ -89,8 +78,8 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 			holder.icon.setImageResource(R.mipmap.ic_launcher);
 		}
 		holder.name.setText(item.getTitle());
-		holder.author.setText(item.getAuthorExt(context));
-		holder.version.setText(item.getVersionExt(context));
+		holder.author.setText(item.getAuthor());
+		holder.version.setText(item.getVersion());
 
 		return view;
 	}
