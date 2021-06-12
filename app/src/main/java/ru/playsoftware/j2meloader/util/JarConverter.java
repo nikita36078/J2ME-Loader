@@ -75,32 +75,32 @@ public class JarConverter {
 
 	private void download(String urlStr, File outputJar) throws IOException {
 		// Download jar if it is referenced in jad file
-		URL url = new URL(getRedirect(urlStr));
-		Log.d(TAG, "Downloading " + outputJar.getPath());
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setReadTimeout(30000);
-		connection.setConnectTimeout(15000);
-		InputStream inputStream = connection.getInputStream();
-		OutputStream outputStream = new FileOutputStream(outputJar);
-		IOUtils.copy(inputStream, outputStream);
-		inputStream.close();
-		outputStream.close();
-		connection.disconnect();
-		Log.d(TAG, "Download complete");
+		HttpURLConnection connection = null;
+		try {
+			connection = openConnectionWithRedirect(urlStr, 0);
+			try(InputStream in = connection.getInputStream();
+				OutputStream out = new FileOutputStream(outputJar)){
+				IOUtils.copy(in, out);
+			}
+		} finally {
+			if (connection != null) connection.disconnect();
+		}
 	}
 
 	// Add support for HTTP redirects
-	private String getRedirect(String urlStr) throws IOException {
-		URL url = new URL(urlStr);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	private HttpURLConnection openConnectionWithRedirect(String urlStr, int count) throws IOException {
+		if (count > 9) throw new IOException("Too Many Redirects");
+		HttpURLConnection connection = (HttpURLConnection) new URL(urlStr).openConnection();
 		connection.setReadTimeout(30000);
 		connection.setConnectTimeout(15000);
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM ||
-				connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
-			urlStr = connection.getHeaderField("Location");
+		int code = connection.getResponseCode();
+		if (code == HttpURLConnection.HTTP_OK) return connection;
+		if (code == HttpURLConnection.HTTP_MOVED_PERM || code == HttpURLConnection.HTTP_MOVED_TEMP) {
+			String location = connection.getHeaderField("Location");
+			connection.disconnect();
+			return openConnectionWithRedirect(location, ++count);
 		}
-		connection.disconnect();
-		return urlStr;
+		throw new IOException("JAD Request Download Error (" + code + ")");
 	}
 
 	private File findManifest(File tmpDir) {

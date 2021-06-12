@@ -29,7 +29,7 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Dao
 public interface AppItemDao {
-	@Query("SELECT * FROM apps ORDER BY title COLLATE NOCASE ASC")
+	@Query("SELECT * FROM apps ORDER BY title COLLATE LOCALIZED ASC")
 	Flowable<List<AppItem>> getAllByName();
 
 	@Query("SELECT * FROM apps ORDER BY id ASC")
