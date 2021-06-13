@@ -101,16 +101,6 @@ public class LocalDevice implements ActivityResultListener {
 		Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 		lock = true;
 		ContextHolder.getActivity().startActivityForResult(discoverableIntent, 1);
-		while (lock) {
-			synchronized (monitor) {
-				try {
-					monitor.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					lock = false;
-				}
-			}
-		}
 		return true;
 	}
 
