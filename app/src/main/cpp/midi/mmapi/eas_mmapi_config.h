@@ -32,7 +32,7 @@
 /* #define MMAPI_NATIVE_RENDERING_THREAD */
 
 /* define this symbol if audio device playback is wanted */
-//define MMAPI_DEBUG_HAS_AUDIO_DEV
+#define MMAPI_DEBUG_HAS_AUDIO_DEV
 
 
 /* for debugging: write all output to a file */

@@ -37,17 +37,17 @@ LOCAL_CFLAGS    := -D_NO_DEBUG_PREPROCESSOR -DMMAPI_SUPPORT -DJET_INTERFACE -DEA
     -DDLS_SYNTHESIZER \
     -D_REVERB_ENABLED
 LOCAL_CXXFLAGS  := $(LOCAL_CFLAGS) -Wconstant-conversion
-LOCAL_LDLIBS    := -llog
+LOCAL_LDLIBS    := -llog -lOpenSLES
 LOCAL_MODULE    := mmapi
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/midi/mmapi/ \
     $(LOCAL_PATH)/midi/host/ \
     $(LOCAL_PATH)/midi/lib/
 LOCAL_SRC_FILES := \
-	midi/mmapi/eas_mmapi_kvm.c \
+	midi/mmapi/eas_mmapi_jvm.cpp \
 	midi/mmapi/eas_mmapi.c \
 	midi/mmapi/eas_mmapi_host.c \
 	midi/mmapi/eas_mmapi_wave.c \
-	midi/mmapi/eas_mmapi_windows.c \
+	midi/mmapi/eas_mmapi_android.c \
 	midi/host/eas_config.c \
 	midi/lib/eas_dlssynth.c \
 	midi/lib/eas_flog.c \

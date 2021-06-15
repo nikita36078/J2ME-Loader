@@ -172,6 +172,10 @@ class EAS {
 	 */
 	private static int easHandle; // = 0
 
+	static {
+		System.loadLibrary("mmapi");
+	}
+
 	/**
 	 * Init the EAS synth, if necessary, and increase the ref count.
 	 * 

@@ -30,12 +30,12 @@
 
 /* .WAV file format chunk */
 typedef struct {
-	EAS_U16 wFormatTag;
-	EAS_U16 nChannels;
-	EAS_U32 nSamplesPerSec;
-	EAS_U32 nAvgBytesPerSec;
-	EAS_U16 nBlockAlign;
-	EAS_U16 wBitsPerSample;
+    EAS_U16 wFormatTag;
+    EAS_U16 nChannels;
+    EAS_U32 nSamplesPerSec;
+    EAS_U32 nAvgBytesPerSec;
+    EAS_U16 nBlockAlign;
+    EAS_U16 wBitsPerSample;
 } WAVE_FMT_CHUNK;
 
 /* the Windows WAVE tag for PCM encoding */
@@ -57,7 +57,7 @@ typedef struct {
  *----------------------------------------------------------------------------
 */
 EAS_RESULT WAVE_WriteHeader(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-							WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize);
+                            WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize);
 
 
 /*----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ EAS_RESULT WAVE_WriteHeader(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
  *----------------------------------------------------------------------------
 */
 EAS_RESULT WAVE_WriteHeaderToBuffer(MMAPI_MediaBuffer* mb,
-						    WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize);
+                                    WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize);
 
 /*----------------------------------------------------------------------------
  * WAVE_FillFormat()
@@ -87,8 +87,8 @@ EAS_RESULT WAVE_WriteHeaderToBuffer(MMAPI_MediaBuffer* mb,
  *
  *----------------------------------------------------------------------------
 */
-EAS_RESULT WAVE_FillFormat(WAVE_FMT_CHUNK* fmt, 
-						 MMAPI_CAPTURE_ENCODING encoding, EAS_I32 rate, EAS_I32 bits, 
-						 EAS_I32 channels, EAS_BOOL isBigEndian, EAS_BOOL isSigned);
+EAS_RESULT WAVE_FillFormat(WAVE_FMT_CHUNK* fmt,
+                           MMAPI_CAPTURE_ENCODING encoding, EAS_I32 rate, EAS_I32 bits,
+                           EAS_I32 channels, EAS_BOOL isBigEndian, EAS_BOOL isSigned);
 
 #endif /* end #ifndef _EAS_MMAPI_WAVE_INCLUDED */

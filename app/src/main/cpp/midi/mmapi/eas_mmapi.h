@@ -36,24 +36,24 @@ extern "C" {
 
 /* recording data */
 typedef struct mmapi_recordingdata_tag {
-	/* the host handle returned by EAS_HWOpen().
-	 * This is where the data is written to. */
-	EAS_FILE_HANDLE handle;
-	/* recording state, one of the MMAPI_RS_* constants */
-	EAS_I32 state;
-	/* a possibly set limit to the recorded file size.
-	 * Checked/enforced in MMAPI_ReadRecordedBuffer(). */
-	EAS_I32 sizeLimit;
-	/* the WAVE format of the original file being read. It is used for the file being written */
-	WAVE_FMT_CHUNK waveFmt;
-	/* size of complete WAVE header of the original file being read, not the one being written */
-	EAS_I32 waveHeaderSize;
-	/* size of WAVE data following the header in original file, or -1 if not known */
-	EAS_I32 waveDataSize;
-	/* size of complete WAVE header of the file being written */
-	EAS_I32 writtenHeaderSize;
-	/* the circular buffer for recording to OutputStream */
-	MMAPI_MediaBuffer* mb;
+    /* the host handle returned by EAS_HWOpen().
+     * This is where the data is written to. */
+    EAS_FILE_HANDLE handle;
+    /* recording state, one of the MMAPI_RS_* constants */
+    EAS_I32 state;
+    /* a possibly set limit to the recorded file size.
+     * Checked/enforced in MMAPI_ReadRecordedBuffer(). */
+    EAS_I32 sizeLimit;
+    /* the WAVE format of the original file being read. It is used for the file being written */
+    WAVE_FMT_CHUNK waveFmt;
+    /* size of complete WAVE header of the original file being read, not the one being written */
+    EAS_I32 waveHeaderSize;
+    /* size of WAVE data following the header in original file, or -1 if not known */
+    EAS_I32 waveDataSize;
+    /* size of complete WAVE header of the file being written */
+    EAS_I32 writtenHeaderSize;
+    /* the circular buffer for recording to OutputStream */
+    MMAPI_MediaBuffer* mb;
 } MMAPI_RecordingData;
 
 /*
@@ -63,32 +63,32 @@ typedef struct mmapi_recordingdata_tag {
  * in the EAS_OpenFile call.
  */
 typedef struct mmapi_file_struct_tag {
-	/* the EAS_HANDLE for the opened file */
-	EAS_HANDLE handle;
-	/* the mode for opening this file */
-	MMAPI_OPEN_MODE mode;
-	/* the duration of the file in milliseconds, or one of the MMAPI_DURATION_ constants */
-	EAS_I32 duration;
-	/* linked list of dynamically allocated meta data entries */
-	MMAPI_MetaData* metaData;
-	/* the host instance handle. Filled in by EAS_HWOpenFile so that
-	 * eas_mmapi.c can access host functions */
-	EAS_HW_DATA_HANDLE hwInstData;
-	/* the host file handle. Filled in by EAS_HWOpenFile so that
-	 * eas_mmapi.c can access host functions */
-	EAS_FILE_HANDLE hwFileHandle;
-	/* structure used for recording */
-	MMAPI_RecordingData record;
-	union {
-		/* the locator for OPEN_MODE_NATIVE. Only valid during OpenFile call! */
-		EAS_CHAR* locator;
-		/* locator for OPEN_MODE_MEMORY and OPEN_MODE_STREAM */
-		MMAPI_MediaBuffer* mb;
-	};
-	/* the meta data buffer */
-	EAS_CHAR metaDataBuffer[MMAPI_METADATA_BUFFER_SIZE+1];
-	/* if capturing, handle to the capture device */
-	EAS_VOID_PTR captureDevice;
+    /* the EAS_HANDLE for the opened file */
+    EAS_HANDLE handle;
+    /* the mode for opening this file */
+    MMAPI_OPEN_MODE mode;
+    /* the duration of the file in milliseconds, or one of the MMAPI_DURATION_ constants */
+    EAS_I32 duration;
+    /* linked list of dynamically allocated meta data entries */
+    MMAPI_MetaData* metaData;
+    /* the host instance handle. Filled in by EAS_HWOpenFile so that
+     * eas_mmapi.c can access host functions */
+    EAS_HW_DATA_HANDLE hwInstData;
+    /* the host file handle. Filled in by EAS_HWOpenFile so that
+     * eas_mmapi.c can access host functions */
+    EAS_FILE_HANDLE hwFileHandle;
+    /* structure used for recording */
+    MMAPI_RecordingData record;
+    union {
+        /* the locator for OPEN_MODE_NATIVE. Only valid during OpenFile call! */
+        EAS_CHAR* locator;
+        /* locator for OPEN_MODE_MEMORY and OPEN_MODE_STREAM */
+        MMAPI_MediaBuffer* mb;
+    };
+    /* the meta data buffer */
+    EAS_CHAR metaDataBuffer[MMAPI_METADATA_BUFFER_SIZE+1];
+    /* if capturing, handle to the capture device */
+    EAS_VOID_PTR captureDevice;
 } MMAPI_FILE_STRUCT;
 
 
@@ -148,8 +148,8 @@ void MMAPI_CloseFile(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle);
  *----------------------------------------------------------------------------
 */
 EAS_I32 MMAPI_WriteBuffer(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle,
-						  EAS_U8* buffer, EAS_I32 offset, EAS_I32 count,
-						  EAS_I32 totalLength, EAS_I32 flags);
+                          EAS_U8* buffer, EAS_I32 offset, EAS_I32 count,
+                          EAS_I32 totalLength, EAS_I32 flags);
 
 
 /*----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ EAS_I32 MMAPI_WriteBuffer(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle,
  *----------------------------------------------------------------------------
 */
 EAS_I32 MMAPI_GeneralCommand(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle,
-							 MMAPI_COMMAND_CODE commandCode, EAS_I32 param);
+                             MMAPI_COMMAND_CODE commandCode, EAS_I32 param);
 
 /*----------------------------------------------------------------------------
  * Bridge from Java nPrepare() to EAS_Prepare().
@@ -395,7 +395,7 @@ EAS_BOOL MMAPI_OpenRecording(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandl
  *----------------------------------------------------------------------------
 */
 EAS_I32 MMAPI_ReadRecordedBuffer(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle,
-								 EAS_U8* buffer, EAS_I32 offset, EAS_I32 count);
+                                 EAS_U8* buffer, EAS_I32 offset, EAS_I32 count);
 
 
 /*----------------------------------------------------------------------------
@@ -415,8 +415,8 @@ EAS_I32 MMAPI_ReadRecordedBuffer(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fH
  *----------------------------------------------------------------------------
 */
 EAS_BOOL MMAPI_OpenCapture(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle,
-						   MMAPI_CAPTURE_ENCODING encoding, EAS_I32 rate, EAS_I32 bits,
-						   EAS_I32 channels, EAS_BOOL isBigEndian, EAS_BOOL isSigned);
+                           MMAPI_CAPTURE_ENCODING encoding, EAS_I32 rate, EAS_I32 bits,
+                           EAS_I32 channels, EAS_BOOL isBigEndian, EAS_BOOL isSigned);
 
 
 /* ---------------------------------------------------------------------------- */
@@ -463,9 +463,9 @@ EAS_RESULT MMAPI_HWSwitchToMemoryMode(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HAND
  *----------------------------------------------------------------------------
 */
 EAS_RESULT MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE mode,
-								 MMAPI_MediaBuffer* mb,
-								 EAS_U8* buffer, EAS_I32 count,
-								 EAS_I32 *pBytesWritten);
+                                 MMAPI_MediaBuffer* mb,
+                                 EAS_U8* buffer, EAS_I32 count,
+                                 EAS_I32 *pBytesWritten);
 
 
 /*----------------------------------------------------------------------------
@@ -479,7 +479,7 @@ EAS_RESULT MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE mode,
  *----------------------------------------------------------------------------
 */
 EAS_RESULT MMAPI_HWWriteFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-						     void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten);
+                             void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten);
 
 /*----------------------------------------------------------------------------
  *
@@ -494,7 +494,7 @@ EAS_RESULT MMAPI_HWWriteFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file
  *----------------------------------------------------------------------------
 */
 EAS_RESULT MMAPI_GetWaveInfo(EAS_DATA_HANDLE pEASData, EAS_HANDLE handle,
-						   WAVE_FMT_CHUNK* fmt, EAS_I32* headerSize, EAS_I32* dataSize);
+                             WAVE_FMT_CHUNK* fmt, EAS_I32* headerSize, EAS_I32* dataSize);
 
 
 

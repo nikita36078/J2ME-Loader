@@ -47,14 +47,14 @@
  *----------------------------------------------------------------------------
 */
 int startVibrate(int samples) {
-	EAS_RESULT res;
+    EAS_RESULT res;
 
-	res = EAS_HWVibrate(0, EAS_TRUE);
+    res = EAS_HWVibrate(0, EAS_TRUE);
 
-	/* TODO: a way to stop the vibration after the specified amount of time */
+    /* TODO: a way to stop the vibration after the specified amount of time */
 
-	/* return 1 for success, 0 otherwise */
-	return (res == EAS_SUCCESS)?1:0;
+    /* return 1 for success, 0 otherwise */
+    return (res == EAS_SUCCESS)?1:0;
 }
 
 /*----------------------------------------------------------------------------
@@ -66,6 +66,6 @@ int startVibrate(int samples) {
  *----------------------------------------------------------------------------
 */
 void stopVibrate() {
-	EAS_HWVibrate(0, EAS_FALSE);
+    EAS_HWVibrate(0, EAS_FALSE);
 }
 

@@ -113,12 +113,12 @@
  * stripped to eliminate double-buffering.
  */
 typedef struct eas_hw_file_native_tag {
-	FILE *pFile;
-	EAS_I32 bytesInBuffer;
-	EAS_I32 bytesRead;
-	EAS_I32 filePos;
-	EAS_BOOL dup;
-	EAS_U8 buffer[EAS_FILE_BUFFER_SIZE];
+    FILE *pFile;
+    EAS_I32 bytesInBuffer;
+    EAS_I32 bytesRead;
+    EAS_I32 filePos;
+    EAS_BOOL dup;
+    EAS_U8 buffer[EAS_FILE_BUFFER_SIZE];
 } EAS_HW_FILE_NATIVE, *EAS_FILE_NATIVE;
 
 /*
@@ -133,13 +133,13 @@ typedef struct eas_hw_file_native_tag {
  * the file size and read position.
  */
 typedef struct {
-	EAS_I32 fileSize;
-	EAS_I32 filePos;
-	EAS_BOOL dup;
-	EAS_U8 *buffer;
-	/* the media buffer used to set up this memory file.
-	 * Only required for MMAPI_HWWrite() */
-	MMAPI_MediaBuffer* mb;
+    EAS_I32 fileSize;
+    EAS_I32 filePos;
+    EAS_BOOL dup;
+    EAS_U8 *buffer;
+    /* the media buffer used to set up this memory file.
+     * Only required for MMAPI_HWWrite() */
+    MMAPI_MediaBuffer* mb;
 } EAS_HW_FILE_MEMORY, *EAS_FILE_MEMORY;
 
 /*
@@ -148,21 +148,21 @@ typedef struct {
 typedef MMAPI_MediaBuffer EAS_HW_FILE_STREAM, *EAS_FILE_STREAM;
 
 typedef struct eas_hw_file_tag {
-	int mode;
-	EAS_BOOL inUse;
-	union {
-		EAS_HW_FILE_NATIVE native;
-		EAS_HW_FILE_MEMORY memory;
-		/* STREAM mode uses the MMAPI_MediaBuffer directly */
-		EAS_FILE_STREAM stream;
-	};
-	/* the recording hook */
-	MMAPI_RecordingData* record;
+    int mode;
+    EAS_BOOL inUse;
+    union {
+        EAS_HW_FILE_NATIVE native;
+        EAS_HW_FILE_MEMORY memory;
+        /* STREAM mode uses the MMAPI_MediaBuffer directly */
+        EAS_FILE_STREAM stream;
+    };
+    /* the recording hook */
+    MMAPI_RecordingData* record;
 } EAS_HW_FILE_MIXED;
 
 typedef struct eas_hw_inst_data_tag
 {
-	EAS_HW_FILE_MIXED files[EAS_MAX_FILE_HANDLES];
+    EAS_HW_FILE_MIXED files[EAS_MAX_FILE_HANDLES];
 } EAS_HW_INST_DATA;
 
 
@@ -179,7 +179,7 @@ EAS_HW_INST_DATA fileData;
  *----------------------------------------------------------------------------
 */
 EAS_RESULT MMAPI_HWRecordBuffer(EAS_HW_DATA_HANDLE hwInstData, EAS_HW_FILE_MIXED* file,
-								EAS_U8* buffer, EAS_I32 count);
+                                EAS_U8* buffer, EAS_I32 count);
 
 
 /*----------------------------------------------------------------------------
@@ -192,16 +192,16 @@ EAS_RESULT MMAPI_HWRecordBuffer(EAS_HW_DATA_HANDLE hwInstData, EAS_HW_FILE_MIXED
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWInit (EAS_HW_DATA_HANDLE *pHWInstData)
 {
-	/* need to track file opens for duplicate handles */
+    /* need to track file opens for duplicate handles */
 #ifndef _STATIC_MEMORY
-	*pHWInstData = malloc(sizeof(EAS_HW_INST_DATA));
-	if (!(*pHWInstData))
-		return EAS_ERROR_MALLOC_FAILED;
+    *pHWInstData = malloc(sizeof(EAS_HW_INST_DATA));
+    if (!(*pHWInstData))
+        return EAS_ERROR_MALLOC_FAILED;
 #else
-	*pHWInstData = &fileData;
+    *pHWInstData = &fileData;
 #endif
-	EAS_HWMemSet(*pHWInstData, 0, sizeof(EAS_HW_INST_DATA));
-	return EAS_SUCCESS;
+    EAS_HWMemSet(*pHWInstData, 0, sizeof(EAS_HW_INST_DATA));
+    return EAS_SUCCESS;
 }
 
 
@@ -217,9 +217,9 @@ EAS_RESULT EAS_HWShutdown (EAS_HW_DATA_HANDLE hwInstData)
 {
 
 #ifndef _STATIC_MEMORY
-	free(hwInstData);
+    free(hwInstData);
 #endif
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -234,9 +234,9 @@ EAS_RESULT EAS_HWShutdown (EAS_HW_DATA_HANDLE hwInstData)
 void *EAS_HWMalloc(EAS_HW_DATA_HANDLE hwInstData, EAS_I32 size)
 {
 #ifdef _STATIC_MEMORY
-	return NULL;
+    return NULL;
 #else
-	return malloc((EAS_U32)size);
+    return malloc((EAS_U32)size);
 #endif
 }
 
@@ -252,7 +252,7 @@ void *EAS_HWMalloc(EAS_HW_DATA_HANDLE hwInstData, EAS_I32 size)
 void EAS_HWFree(EAS_HW_DATA_HANDLE hwInstData, void *p)
 {
 #ifndef _STATIC_MEMORY
-	free(p);
+    free(p);
 #endif
 }
 
@@ -266,7 +266,7 @@ void EAS_HWFree(EAS_HW_DATA_HANDLE hwInstData, void *p)
 */
 void *EAS_HWMemCpy(void *dest, const void *src, EAS_I32 amount)
 {
-	return memcpy(dest,src,(size_t) amount);
+    return memcpy(dest,src,(size_t) amount);
 }
 
 /*----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ void *EAS_HWMemCpy(void *dest, const void *src, EAS_I32 amount)
 */
 void *EAS_HWMemSet(void *dest, int val, EAS_I32 amount)
 {
-	return memset(dest,val,(size_t) amount);
+    return memset(dest,val,(size_t) amount);
 }
 
 /*----------------------------------------------------------------------------
@@ -292,7 +292,7 @@ void *EAS_HWMemSet(void *dest, int val, EAS_I32 amount)
 */
 EAS_I32 EAS_HWMemCmp(const void *s1, const void *s2, EAS_I32 amount)
 {
-	return (EAS_I32) memcmp(s1, s2, (size_t) amount);
+    return (EAS_I32) memcmp(s1, s2, (size_t) amount);
 }
 
 
@@ -322,56 +322,56 @@ EAS_I32 EAS_HWMemCmp(const void *s1, const void *s2, EAS_I32 amount)
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWOpenFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR locator,
-								EAS_FILE_NATIVE file, EAS_FILE_MODE mode) {
-	EAS_CHAR* c;
-	EAS_CHAR* openMode;
+                                EAS_FILE_NATIVE file, EAS_FILE_MODE mode) {
+    EAS_CHAR* c;
+    EAS_CHAR* openMode;
 
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "> EAS_HWOpenFileNative(instData=%p, locator=%s, file=%p, openMode=%d)\n",
+    EAS_Report(4, "> EAS_HWOpenFileNative(instData=%p, locator=%s, file=%p, openMode=%d)\n",
 		hwInstData, (char*) locator, file, mode);
 #endif
 
-	/* support read mode or write mode */
-	if (mode == EAS_FILE_READ) {
-		openMode = "rb";
-	} else if (mode == EAS_FILE_WRITE) {
-		openMode = "wb";
-	} else {
+    /* support read mode or write mode */
+    if (mode == EAS_FILE_READ) {
+        openMode = "rb";
+    } else if (mode == EAS_FILE_WRITE) {
+        openMode = "wb";
+    } else {
 #ifdef SONIVOX_DEBUG
-		EAS_Report(_EAS_SEVERITY_ERROR, "< EAS_HWOpenFileNative(): openMode ERROR\n");
+        EAS_Report(_EAS_SEVERITY_ERROR, "< EAS_HWOpenFileNative(): openMode ERROR\n");
 #endif
-		return EAS_ERROR_INVALID_FILE_MODE;
-	}
+        return EAS_ERROR_INVALID_FILE_MODE;
+    }
 
-	/* parse for protocol prefix */
-	if (locator != NULL) {
-		c = (EAS_CHAR*) locator;
-		/* simple implementation for now) */
-		if (c[0]=='f' && c[1]=='i' && c[2]=='l' && c[3]=='e'
-			&& c[4]==':' && c[5]=='/' && c[6]=='/') {
-			EAS_CHAR* tmp = (EAS_CHAR *) locator;
-			tmp += 7;
-			locator = (EAS_FILE_LOCATOR) tmp;
-		}
-	}
+    /* parse for protocol prefix */
+    if (locator != NULL) {
+        c = (EAS_CHAR*) locator;
+        /* simple implementation for now) */
+        if (c[0]=='f' && c[1]=='i' && c[2]=='l' && c[3]=='e'
+            && c[4]==':' && c[5]=='/' && c[6]=='/') {
+            EAS_CHAR* tmp = (EAS_CHAR *) locator;
+            tmp += 7;
+            locator = (EAS_FILE_LOCATOR) tmp;
+        }
+    }
 
 
-	/* open the file */
-	file->pFile = fopen((const char*) locator, openMode);
-	if (file->pFile == NULL) {
+    /* open the file */
+    file->pFile = fopen((const char*) locator, openMode);
+    if (file->pFile == NULL) {
 #ifdef SONIVOX_DEBUG
-		EAS_Report(_EAS_SEVERITY_ERROR, "< ERROR: EAS_HWOpenFileNative(locator=%s)\n", (char*) locator);
+        EAS_Report(_EAS_SEVERITY_ERROR, "< ERROR: EAS_HWOpenFileNative(locator=%s)\n", (char*) locator);
 #endif
-		return EAS_ERROR_FILE_OPEN_FAILED;
-	}
+        return EAS_ERROR_FILE_OPEN_FAILED;
+    }
 
-	/* initialize some values */
-	file->bytesInBuffer = 0;
-	file->bytesRead = 0;
-	file->filePos = 0;
-	file->dup = EAS_FALSE;
+    /* initialize some values */
+    file->bytesInBuffer = 0;
+    file->bytesRead = 0;
+    file->filePos = 0;
+    file->dup = EAS_FALSE;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -385,31 +385,31 @@ EAS_RESULT EAS_HWOpenFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR 
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWReadFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file, void *pBuffer, EAS_I32 n, EAS_I32 *pBytesRead)
 {
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* if duplicated handle,  need to reposition in case the file pointer moved */
-	if (file->dup)
-	{
+    /* if duplicated handle,  need to reposition in case the file pointer moved */
+    if (file->dup)
+    {
 
-		/* reposition the file pointer */
-		if (fseek(file->pFile,file->filePos,SEEK_SET) != 0)
-			return EAS_ERROR_FILE_SEEK;
+        /* reposition the file pointer */
+        if (fseek(file->pFile,file->filePos,SEEK_SET) != 0)
+            return EAS_ERROR_FILE_SEEK;
 
-		/* reset the buffer info so EAS_HWGetByte doesn't fail */
-		file->bytesInBuffer = 0;
-		file->bytesRead = 0;
-	}
+        /* reset the buffer info so EAS_HWGetByte doesn't fail */
+        file->bytesInBuffer = 0;
+        file->bytesRead = 0;
+    }
 
-	/* read data in the buffer */
-	*pBytesRead = (EAS_I32) fread(pBuffer, 1, (size_t) n, file->pFile);
-	file->filePos += *pBytesRead;
+    /* read data in the buffer */
+    *pBytesRead = (EAS_I32) fread(pBuffer, 1, (size_t) n, file->pFile);
+    file->filePos += *pBytesRead;
 
-	/* were n bytes read? */
-	if (*pBytesRead != n)
-		return EAS_EOF;
-	return EAS_SUCCESS;
+    /* were n bytes read? */
+    if (*pBytesRead != n)
+        return EAS_EOF;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -423,46 +423,46 @@ EAS_RESULT EAS_HWReadFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE f
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWGetByteNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file, void *p)
 {
-	int c;
+    int c;
 
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* if no duplicate handle, use fgetc */
-	if (!file->dup)
-	{
-		if ((c = fgetc(file->pFile)) == EOF)
-			return EAS_EOF;
-		*((EAS_U8*) p) = (EAS_U8) c;
-		file->filePos++;
-		return EAS_SUCCESS;
-	}
+    /* if no duplicate handle, use fgetc */
+    if (!file->dup)
+    {
+        if ((c = fgetc(file->pFile)) == EOF)
+            return EAS_EOF;
+        *((EAS_U8*) p) = (EAS_U8) c;
+        file->filePos++;
+        return EAS_SUCCESS;
+    }
 
-	/* use local buffer - do we have any data? */
-	if (file->bytesInBuffer <= file->bytesRead)
-	{
+    /* use local buffer - do we have any data? */
+    if (file->bytesInBuffer <= file->bytesRead)
+    {
 
-		/* reposition the file pointer */
-		if (fseek(file->pFile,file->filePos,SEEK_SET) != 0)
-			return EAS_ERROR_FILE_SEEK;
+        /* reposition the file pointer */
+        if (fseek(file->pFile,file->filePos,SEEK_SET) != 0)
+            return EAS_ERROR_FILE_SEEK;
 
-		/* read some data from the file */
-		file->bytesInBuffer = (EAS_I32) fread(file->buffer,1,EAS_FILE_BUFFER_SIZE,file->pFile);
+        /* read some data from the file */
+        file->bytesInBuffer = (EAS_I32) fread(file->buffer,1,EAS_FILE_BUFFER_SIZE,file->pFile);
 
-		/* if nothing to read, return EOF */
-		if (file->bytesInBuffer == 0)
-			return EAS_EOF;
+        /* if nothing to read, return EOF */
+        if (file->bytesInBuffer == 0)
+            return EAS_EOF;
 
-		/* reset buffer info */
-		file->bytesRead = 0;
-	}
+        /* reset buffer info */
+        file->bytesRead = 0;
+    }
 
-	/* get a character from the buffer */
-	*((EAS_U8*) p) = file->buffer[file->bytesRead++];
-	file->filePos++;
+    /* get a character from the buffer */
+    *((EAS_U8*) p) = file->buffer[file->bytesRead++];
+    file->filePos++;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -476,12 +476,12 @@ EAS_RESULT EAS_HWGetByteNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE fi
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFilePosNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file, EAS_I32 *pPosition)
 {
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	*pPosition = file->filePos;
-	return EAS_SUCCESS;
+    *pPosition = file->filePos;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -495,29 +495,29 @@ EAS_RESULT EAS_HWFilePosNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE fi
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeekNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file, EAS_I32 position)
 {
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	if (fseek(file->pFile,position,SEEK_SET) != 0) {
+    if (fseek(file->pFile,position,SEEK_SET) != 0) {
 #ifdef SONIVOX_DEBUG
-		EAS_Report(4, "  EAS_HWFileSeekNative(file=%p): ERROR: fseek failed. file->pFile=%p, position=%d\n",
+        EAS_Report(4, "  EAS_HWFileSeekNative(file=%p): ERROR: fseek failed. file->pFile=%p, position=%d\n",
 			(void*) file, (void*) file->pFile, (int)position);
 #endif
 
-		return EAS_ERROR_FILE_SEEK;
-	}
+        return EAS_ERROR_FILE_SEEK;
+    }
 
-	/* save new position and reset buffer info so EAS_HWGetByte doesn't fail */
-	file->filePos = position;
-	file->bytesInBuffer = 0;
-	file->bytesRead = 0;
+    /* save new position and reset buffer info so EAS_HWGetByte doesn't fail */
+    file->filePos = position;
+    file->bytesInBuffer = 0;
+    file->bytesRead = 0;
 
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "  EAS_HWFileSeekNative(file=%p): OK. position=%d\n",
+    EAS_Report(4, "  EAS_HWFileSeekNative(file=%p): OK. position=%d\n",
 		(void*) file, (int) file->filePos);
 #endif
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -531,19 +531,19 @@ EAS_RESULT EAS_HWFileSeekNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE f
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeekOfsNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file, EAS_I32 position)
 {
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	if (fseek(file->pFile,position,SEEK_CUR) != 0)
-		return EAS_ERROR_FILE_SEEK;
+    if (fseek(file->pFile,position,SEEK_CUR) != 0)
+        return EAS_ERROR_FILE_SEEK;
 
-	/* save new position and reset buffer info so EAS_HWGetByte doesn't fail */
-	file->filePos += position;
-	file->bytesInBuffer = 0;
-	file->bytesRead = 0;
+    /* save new position and reset buffer info so EAS_HWGetByte doesn't fail */
+    file->filePos += position;
+    file->bytesInBuffer = 0;
+    file->bytesRead = 0;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -557,21 +557,21 @@ EAS_RESULT EAS_HWFileSeekOfsNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIV
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileLengthNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file, EAS_I32 *pLength)
 {
-	long pos;
+    long pos;
 
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	if ((pos = ftell(file->pFile)) == -1L)
-		return EAS_ERROR_FILE_LENGTH;
-	if (fseek(file->pFile, 0L, SEEK_END) != 0)
-		return EAS_ERROR_FILE_LENGTH;
-	if ((*pLength = ftell(file->pFile)) == -1L)
-		return EAS_ERROR_FILE_LENGTH;
-	if (fseek(file->pFile, pos, SEEK_SET) != 0)
-		return EAS_ERROR_FILE_LENGTH;
-	return EAS_SUCCESS;
+    if ((pos = ftell(file->pFile)) == -1L)
+        return EAS_ERROR_FILE_LENGTH;
+    if (fseek(file->pFile, 0L, SEEK_END) != 0)
+        return EAS_ERROR_FILE_LENGTH;
+    if ((*pLength = ftell(file->pFile)) == -1L)
+        return EAS_ERROR_FILE_LENGTH;
+    if (fseek(file->pFile, pos, SEEK_SET) != 0)
+        return EAS_ERROR_FILE_LENGTH;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -586,23 +586,23 @@ EAS_RESULT EAS_HWFileLengthNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWDupHandleNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file,
-								 EAS_FILE_NATIVE newFile) {
-	/* check handle integrity */
-	if (file->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+                                 EAS_FILE_NATIVE newFile) {
+    /* check handle integrity */
+    if (file->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* copy info from the handle to be duplicated */
-	newFile->filePos = file->filePos;
-	newFile->pFile = file->pFile;
+    /* copy info from the handle to be duplicated */
+    newFile->filePos = file->filePos;
+    newFile->pFile = file->pFile;
 
-	/* set the duplicate handle flag */
-	newFile->dup = file->dup = EAS_TRUE;
+    /* set the duplicate handle flag */
+    newFile->dup = file->dup = EAS_TRUE;
 
-	/* initialize some values */
-	newFile->bytesInBuffer = 0;
-	newFile->bytesRead = 0;
+    /* initialize some values */
+    newFile->bytesInBuffer = 0;
+    newFile->bytesRead = 0;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -617,66 +617,66 @@ EAS_RESULT EAS_HWDupHandleNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE 
 */
 EAS_RESULT EAS_HWCloseFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file1)
 {
-	EAS_HW_FILE_NATIVE* dupFile;
-	EAS_HW_FILE_MIXED* file2;
-	int i;
+    EAS_HW_FILE_NATIVE* dupFile;
+    EAS_HW_FILE_MIXED* file2;
+    int i;
 
-	/* check handle integrity */
-	if (file1->pFile == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* check handle integrity */
+    if (file1->pFile == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* check for duplicate handle */
-	if (file1->dup)
-	{
-		dupFile = NULL;
-		file2 = hwInstData->files;
-		for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
-		{
-			/* check for duplicate */
-			if ((file1 != &(file2->native)) && (file2->native.pFile == file1->pFile))
-			{
-				/* is there more than one duplicate? */
-				if (dupFile != NULL)
-				{
-					/* clear this entry and return */
-					file1->pFile = NULL;
-					#ifdef SONIVOX_DEBUG
-					EAS_Report(4, "  Closed this duplicate. More file instances remaining.\n");
-					#endif
-					return EAS_SUCCESS;
-				}
+    /* check for duplicate handle */
+    if (file1->dup)
+    {
+        dupFile = NULL;
+        file2 = hwInstData->files;
+        for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
+        {
+            /* check for duplicate */
+            if ((file1 != &(file2->native)) && (file2->native.pFile == file1->pFile))
+            {
+                /* is there more than one duplicate? */
+                if (dupFile != NULL)
+                {
+                    /* clear this entry and return */
+                    file1->pFile = NULL;
+#ifdef SONIVOX_DEBUG
+                    EAS_Report(4, "  Closed this duplicate. More file instances remaining.\n");
+#endif
+                    return EAS_SUCCESS;
+                }
 
-				/* this is the first duplicate found */
-				dupFile = &(file2->native);
-			}
-			file2++;
-		}
+                /* this is the first duplicate found */
+                dupFile = &(file2->native);
+            }
+            file2++;
+        }
 
-		/* there is only one duplicate, clear the dup flag */
-		if (dupFile)
-			dupFile->dup = EAS_FALSE;
-		else
-			/* if we get here, there's a serious problem */
-			return EAS_ERROR_HANDLE_INTEGRITY;
+        /* there is only one duplicate, clear the dup flag */
+        if (dupFile)
+            dupFile->dup = EAS_FALSE;
+        else
+            /* if we get here, there's a serious problem */
+            return EAS_ERROR_HANDLE_INTEGRITY;
 
-		/* clear this entry and return */
-		file1->pFile = NULL;
-		#ifdef SONIVOX_DEBUG
-		EAS_Report(4, "  Closed this duplicate. One more file instance remaining.\n");
-		#endif
-		return EAS_SUCCESS;
-	}
+        /* clear this entry and return */
+        file1->pFile = NULL;
+#ifdef SONIVOX_DEBUG
+        EAS_Report(4, "  Closed this duplicate. One more file instance remaining.\n");
+#endif
+        return EAS_SUCCESS;
+    }
 
-	/* no duplicates - close the file */
-	if (fclose(file1->pFile) != 0)
-		return EAS_ERROR_CLOSE_FAILED;
+    /* no duplicates - close the file */
+    if (fclose(file1->pFile) != 0)
+        return EAS_ERROR_CLOSE_FAILED;
 
-	/* clear this entry and return */
-	file1->pFile = NULL;
-	#ifdef SONIVOX_DEBUG
-	EAS_Report(4, "  Closed last instance of this file.\n");
-	#endif
-	return EAS_SUCCESS;
+    /* clear this entry and return */
+    file1->pFile = NULL;
+#ifdef SONIVOX_DEBUG
+    EAS_Report(4, "  Closed last instance of this file.\n");
+#endif
+    return EAS_SUCCESS;
 }
 
 
@@ -710,29 +710,29 @@ EAS_RESULT EAS_HWCloseFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE 
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWOpenFileMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR locator,
-								EAS_FILE_MEMORY file, EAS_FILE_MODE mode)
+                                EAS_FILE_MEMORY file, EAS_FILE_MODE mode)
 {
-	MMAPI_MediaBuffer* mb = (MMAPI_MediaBuffer*) locator;
+    MMAPI_MediaBuffer* mb = (MMAPI_MediaBuffer*) locator;
 
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "> EAS_HWOpenFileMemory(instData=%p, mediaBuffer=%p, file=%p, openMode=%s%s)\n",
+    EAS_Report(4, "> EAS_HWOpenFileMemory(instData=%p, mediaBuffer=%p, file=%p, openMode=%s%s)\n",
 		hwInstData, locator, file, (mode & EAS_FILE_READ)?"R":"", (mode & EAS_FILE_WRITE)?"W":"");
 	EAS_Report(4, " mediaBuffer: totalSize=%d, buffer=%p\n", mb->totalSize, mb->buffer);
 #endif
 
-	/* initialize the structure */
-	file->fileSize = mb->totalSize;
-	file->buffer = mb->buffer;
-	file->filePos = 0;
-	file->dup = EAS_FALSE;
+    /* initialize the structure */
+    file->fileSize = mb->totalSize;
+    file->buffer = mb->buffer;
+    file->filePos = 0;
+    file->dup = EAS_FALSE;
 
-	/* required for write mode */
-	file->mb = mb;
+    /* required for write mode */
+    file->mb = mb;
 
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "< EAS_HWOpenFileMemory\n");
+    EAS_Report(4, "< EAS_HWOpenFileMemory\n");
 #endif
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -746,39 +746,39 @@ EAS_RESULT EAS_HWOpenFileMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR 
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWReadFileMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, void *pBuffer, EAS_I32 n, EAS_I32 *pBytesRead)
 {
-	EAS_I32 count;
-	#ifdef SONIVOX_DEBUG_IO
-	int a,b;
-	#endif
+    EAS_I32 count;
+#ifdef SONIVOX_DEBUG_IO
+    int a,b;
+#endif
 
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* calculate the bytes to read */
-	count = file->fileSize - file->filePos;
-	if (n < count)
-		count = n;
+    /* calculate the bytes to read */
+    count = file->fileSize - file->filePos;
+    if (n < count)
+        count = n;
 
-	/* copy the data to the requested location, and advance the pointer */
-	if (count) {
-		EAS_HWMemCpy(pBuffer, &file->buffer[file->filePos], count);
-		#ifdef SONIVOX_DEBUG_IO
-		a = ((EAS_U8*)pBuffer)[0];
+    /* copy the data to the requested location, and advance the pointer */
+    if (count) {
+        EAS_HWMemCpy(pBuffer, &file->buffer[file->filePos], count);
+#ifdef SONIVOX_DEBUG_IO
+        a = ((EAS_U8*)pBuffer)[0];
 		b = ((EAS_U8*)pBuffer)[1];
-		#endif
-	}
-	#ifdef SONIVOX_DEBUG_IO
-	EAS_Report(5, "EAS_HWReadFileMemory: read %d bytes at offset %d: %2x, %2x, ...\n",
+#endif
+    }
+#ifdef SONIVOX_DEBUG_IO
+    EAS_Report(5, "EAS_HWReadFileMemory: read %d bytes at offset %d: %2x, %2x, ...\n",
 		(int) count, (int) file->filePos, a, b);
-	#endif
-	file->filePos += count;
-	*pBytesRead = count;
+#endif
+    file->filePos += count;
+    *pBytesRead = count;
 
-	/* were n bytes read? */
-	if (count!= n)
-		return EAS_EOF;
-	return EAS_SUCCESS;
+    /* were n bytes read? */
+    if (count!= n)
+        return EAS_EOF;
+    return EAS_SUCCESS;
 }
 
 
@@ -793,21 +793,21 @@ EAS_RESULT EAS_HWReadFileMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY f
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWGetByteMemory (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, void *p)
 {
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* check for end of file */
-	if (file->filePos >= file->fileSize)
-	{
-		*((EAS_U8*) p) = 0;
-		return EAS_EOF;
-	}
+    /* check for end of file */
+    if (file->filePos >= file->fileSize)
+    {
+        *((EAS_U8*) p) = 0;
+        return EAS_EOF;
+    }
 
-	/* get a character from the buffer */
-	*((EAS_U8*) p) = file->buffer[file->filePos++];
+    /* get a character from the buffer */
+    *((EAS_U8*) p) = file->buffer[file->filePos++];
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -821,12 +821,12 @@ EAS_RESULT EAS_HWGetByteMemory (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY f
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWFilePosMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, EAS_I32 *pPosition)
 {
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	*pPosition = file->filePos;
-	return EAS_SUCCESS;
+    *pPosition = file->filePos;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -840,17 +840,17 @@ EAS_RESULT EAS_HWFilePosMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY fi
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWFileSeekMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, EAS_I32 position)
 {
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* validate new position */
-	if ((position < 0) || (position > file->fileSize))
-		return EAS_ERROR_FILE_SEEK;
+    /* validate new position */
+    if ((position < 0) || (position > file->fileSize))
+        return EAS_ERROR_FILE_SEEK;
 
-	/* save new position */
-	file->filePos = position;
-	return EAS_SUCCESS;
+    /* save new position */
+    file->filePos = position;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -864,18 +864,18 @@ EAS_RESULT EAS_HWFileSeekMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY f
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeekOfsMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, EAS_I32 position)
 {
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* determine the file position */
-	position += file->filePos;
-	if ((position < 0) || (position > file->fileSize))
-		return EAS_ERROR_FILE_SEEK;
+    /* determine the file position */
+    position += file->filePos;
+    if ((position < 0) || (position > file->fileSize))
+        return EAS_ERROR_FILE_SEEK;
 
-	/* save new position */
-	file->filePos = position;
-	return EAS_SUCCESS;
+    /* save new position */
+    file->filePos = position;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -889,12 +889,12 @@ EAS_RESULT EAS_HWFileSeekOfsMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMOR
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWFileLengthMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, EAS_I32 *pLength)
 {
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	*pLength = file->fileSize;
-	return EAS_SUCCESS;
+    *pLength = file->fileSize;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -907,20 +907,20 @@ EAS_RESULT EAS_HWFileLengthMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY
 */
 EAS_RESULT EAS_HWDupHandleMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, EAS_FILE_MEMORY dupFile)
 {
-	/* make sure we have a valid handle */
-	if (file->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* copy info from the handle to be duplicated */
-	dupFile->filePos = file->filePos;
-	dupFile->fileSize = file->fileSize;
-	dupFile->buffer = file->buffer;
-	dupFile->mb = file->mb;
+    /* copy info from the handle to be duplicated */
+    dupFile->filePos = file->filePos;
+    dupFile->fileSize = file->fileSize;
+    dupFile->buffer = file->buffer;
+    dupFile->mb = file->mb;
 
-	/* set the duplicate handle flag */
-	dupFile->dup = file->dup = EAS_TRUE;
+    /* set the duplicate handle flag */
+    dupFile->dup = file->dup = EAS_TRUE;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -935,56 +935,56 @@ EAS_RESULT EAS_HWDupHandleMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY 
 */
 EAS_RESULT EAS_HWCloseFileMemory (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file1)
 {
-	EAS_HW_FILE_MEMORY *dupFile;
-	EAS_HW_FILE_MIXED* file2;
-	int i;
+    EAS_HW_FILE_MEMORY *dupFile;
+    EAS_HW_FILE_MIXED* file2;
+    int i;
 
-	/* make sure we have a valid handle */
-	if (file1->buffer == NULL)
-		return EAS_ERROR_INVALID_HANDLE;
+    /* make sure we have a valid handle */
+    if (file1->buffer == NULL)
+        return EAS_ERROR_INVALID_HANDLE;
 
-	/* check for duplicate handle */
-	if (file1->dup)
-	{
-		dupFile = NULL;
-		file2 = hwInstData->files;
-		for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
-		{
-			/* check for duplicate */
-			if ((file1 != &(file2->memory)) && (file2->memory.buffer == file1->buffer))
-			{
-				/* is there more than one duplicate? */
-				if (dupFile != NULL)
-				{
-					/* clear this entry and return */
-					file1->buffer = NULL;
-					return EAS_SUCCESS;
-				}
+    /* check for duplicate handle */
+    if (file1->dup)
+    {
+        dupFile = NULL;
+        file2 = hwInstData->files;
+        for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
+        {
+            /* check for duplicate */
+            if ((file1 != &(file2->memory)) && (file2->memory.buffer == file1->buffer))
+            {
+                /* is there more than one duplicate? */
+                if (dupFile != NULL)
+                {
+                    /* clear this entry and return */
+                    file1->buffer = NULL;
+                    return EAS_SUCCESS;
+                }
 
-				/* this is the first duplicate found */
-				else
-					dupFile = &(file2->memory);
-			}
-			file2++;
-		}
+                    /* this is the first duplicate found */
+                else
+                    dupFile = &(file2->memory);
+            }
+            file2++;
+        }
 
-		/* there is only one duplicate, clear the dup flag */
-		if (dupFile)
-			dupFile->dup = EAS_FALSE;
-		else
-			/* if we get here, there's a serious problem */
-			return EAS_ERROR_HANDLE_INTEGRITY;
+        /* there is only one duplicate, clear the dup flag */
+        if (dupFile)
+            dupFile->dup = EAS_FALSE;
+        else
+            /* if we get here, there's a serious problem */
+            return EAS_ERROR_HANDLE_INTEGRITY;
 
-		/* clear this entry and return */
-		file1->buffer = NULL;
-		return EAS_SUCCESS;
-	}
+        /* clear this entry and return */
+        file1->buffer = NULL;
+        return EAS_SUCCESS;
+    }
 
-	/* DO NOT FREE the buffer here. The buffer is owned by eas_mmapi.c */
+    /* DO NOT FREE the buffer here. The buffer is owned by eas_mmapi.c */
 
-	/* clear this entry and return */
-	file1->buffer = NULL;
-	return EAS_SUCCESS;
+    /* clear this entry and return */
+    file1->buffer = NULL;
+    return EAS_SUCCESS;
 }
 
 
@@ -1014,15 +1014,15 @@ EAS_RESULT EAS_HWCloseFileMemory (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWOpenFileStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR locator,
-								EAS_FILE_STREAM mb, EAS_FILE_MODE mode) {
-	/* a quick sanity check */
-	if (mb == NULL) {
-		#ifdef SONIVOX_DEBUG
-		EAS_Report(2, "EAS_HWOpenFileStream(): error, mb is NULL!\n");
-		#endif
-		return EAS_ERROR_FILE_OPEN_FAILED;
-	}
-	return EAS_SUCCESS;
+                                EAS_FILE_STREAM mb, EAS_FILE_MODE mode) {
+    /* a quick sanity check */
+    if (mb == NULL) {
+#ifdef SONIVOX_DEBUG
+        EAS_Report(2, "EAS_HWOpenFileStream(): error, mb is NULL!\n");
+#endif
+        return EAS_ERROR_FILE_OPEN_FAILED;
+    }
+    return EAS_SUCCESS;
 }
 
 /*
@@ -1030,18 +1030,18 @@ EAS_RESULT EAS_HWOpenFileStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR 
  * @return true if EOF is reached.
  */
 EAS_BOOL EAS_HWIsEOF_Stream(MMAPI_MediaBuffer* mb) {
-	/* check for end of file */
-	#ifdef SONIVOX_DEBUG_ISEOF
-	EAS_Report(5, "EAS_HWIsEOF_Stream: mb->readPos(%d) + mb->readPosOffset(%d) = %d, mb->totalSize=%d \n",
+    /* check for end of file */
+#ifdef SONIVOX_DEBUG_ISEOF
+    EAS_Report(5, "EAS_HWIsEOF_Stream: mb->readPos(%d) + mb->readPosOffset(%d) = %d, mb->totalSize=%d \n",
 		mb->readPos, mb->readPosOffset, mb->readPos + mb->readPosOffset, mb->totalSize);
-	#endif
-	if (mb->totalSize >= 0 && mb->readPos + mb->readPosOffset >= mb->totalSize) {
-		#ifdef SONIVOX_DEBUG
-		EAS_Report(4, "EAS_HWIsEOF_Stream: found EOF. mb->totalSize=%d\n", mb->totalSize);
-		#endif
-		return EAS_TRUE;
-	}
-	return EAS_FALSE;
+#endif
+    if (mb->totalSize >= 0 && mb->readPos + mb->readPosOffset >= mb->totalSize) {
+#ifdef SONIVOX_DEBUG
+        EAS_Report(4, "EAS_HWIsEOF_Stream: found EOF. mb->totalSize=%d\n", mb->totalSize);
+#endif
+        return EAS_TRUE;
+    }
+    return EAS_FALSE;
 }
 
 /*
@@ -1049,11 +1049,11 @@ EAS_BOOL EAS_HWIsEOF_Stream(MMAPI_MediaBuffer* mb) {
  * buffer in STREAM mode.
  */
 void EAS_HWHandleWrapStream(MMAPI_MediaBuffer* mb) {
-	/* check for wrap around */
-	if (mb->readPos >= mb->bufferSize) {
-		mb->readPos -= mb->bufferSize;
-		mb->readPosOffset += mb->bufferSize;
-	}
+    /* check for wrap around */
+    if (mb->readPos >= mb->bufferSize) {
+        mb->readPos -= mb->bufferSize;
+        mb->readPosOffset += mb->bufferSize;
+    }
 }
 
 #ifdef MMAPI_PROVIDE_SILENCE_ON_UNDERRUN
@@ -1069,19 +1069,19 @@ void EAS_HWHandleWrapStream(MMAPI_MediaBuffer* mb) {
  * the read operation will not fail.
  */
 void EAS_CheckUnderrunFillSilence(MMAPI_MediaBuffer* mb, EAS_I32 minSize) {
-	if (minSize > 0 && minSize > mb->bufferFilled) {
-		if (minSize > mb->bufferSize) {
-			minSize = mb->bufferSize;
-		}
-		minSize = minSize - mb->bufferFilled;
-		if (minSize < MMAPI_MIN_SILENCE_WRITE) {
-			minSize = MMAPI_MIN_SILENCE_WRITE;
-		}
-		#ifdef SONIVOX_DEBUG
-		EAS_Report(2, "EAS_HWReadFileStream: buffer underrun, inserting %d bytes silence\n", minSize);
-		#endif
-		MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_STREAM, mb, NULL, minSize, &minSize);
-	}
+    if (minSize > 0 && minSize > mb->bufferFilled) {
+        if (minSize > mb->bufferSize) {
+            minSize = mb->bufferSize;
+        }
+        minSize = minSize - mb->bufferFilled;
+        if (minSize < MMAPI_MIN_SILENCE_WRITE) {
+            minSize = MMAPI_MIN_SILENCE_WRITE;
+        }
+#ifdef SONIVOX_DEBUG
+        EAS_Report(2, "EAS_HWReadFileStream: buffer underrun, inserting %d bytes silence\n", minSize);
+#endif
+        MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_STREAM, mb, NULL, minSize, &minSize);
+    }
 }
 #endif
 
@@ -1098,66 +1098,66 @@ void EAS_CheckUnderrunFillSilence(MMAPI_MediaBuffer* mb, EAS_I32 minSize) {
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWReadFileStream(EAS_HW_DATA_HANDLE hwInstData,
-								EAS_FILE_STREAM mb,
-								void *pBuffer,
-								EAS_I32 n,
-								EAS_I32 *pBytesRead) {
-	EAS_I32 i, thisCount;
-	EAS_U8* from;
-	EAS_U8* to = pBuffer;
-	#ifdef SONIVOX_DEBUG_IO
-	int a,b;
-	#endif
-
-	(*pBytesRead) = 0;
-
-	/* check for end of file */
-	if (EAS_HWIsEOF_Stream(mb)) {
-		return EAS_EOF;
-	}
-	/* return silence if necessary */
-#ifdef MMAPI_PROVIDE_SILENCE_ON_UNDERRUN
-	if (!mb->noSilenceOnUnderrun) {
-		EAS_CheckUnderrunFillSilence(mb, n);
-	}
+                                EAS_FILE_STREAM mb,
+                                void *pBuffer,
+                                EAS_I32 n,
+                                EAS_I32 *pBytesRead) {
+    EAS_I32 i, thisCount;
+    EAS_U8* from;
+    EAS_U8* to = pBuffer;
+#ifdef SONIVOX_DEBUG_IO
+    int a,b;
 #endif
 
-	/* copy at most twice */
-	for (i = 0; i < 2; i++) {
-		from = mb->buffer;
-		from += mb->readPos;
-		thisCount = n;
-		/* need to account for wrap-around at buffer boundary */
-		if (thisCount + mb->readPos > mb->bufferSize) {
-			thisCount = mb->bufferSize - mb->readPos;
-		}
-		/* cannot read more than the number of bytes written to the buffer */
-		if (thisCount > mb->bufferFilled) {
-			thisCount = mb->bufferFilled;
-		}
+    (*pBytesRead) = 0;
 
-		if (thisCount > 0) {
-			EAS_HWMemCpy(to, from, thisCount);
-			#ifdef SONIVOX_DEBUG_IO
-			if (i == 0) {
+    /* check for end of file */
+    if (EAS_HWIsEOF_Stream(mb)) {
+        return EAS_EOF;
+    }
+    /* return silence if necessary */
+#ifdef MMAPI_PROVIDE_SILENCE_ON_UNDERRUN
+    if (!mb->noSilenceOnUnderrun) {
+        EAS_CheckUnderrunFillSilence(mb, n);
+    }
+#endif
+
+    /* copy at most twice */
+    for (i = 0; i < 2; i++) {
+        from = mb->buffer;
+        from += mb->readPos;
+        thisCount = n;
+        /* need to account for wrap-around at buffer boundary */
+        if (thisCount + mb->readPos > mb->bufferSize) {
+            thisCount = mb->bufferSize - mb->readPos;
+        }
+        /* cannot read more than the number of bytes written to the buffer */
+        if (thisCount > mb->bufferFilled) {
+            thisCount = mb->bufferFilled;
+        }
+
+        if (thisCount > 0) {
+            EAS_HWMemCpy(to, from, thisCount);
+#ifdef SONIVOX_DEBUG_IO
+            if (i == 0) {
 				a = to[0];
 				b = to[1];
 			}
-			#endif
-			mb->bufferFilled -= thisCount;
-			mb->readPos += thisCount;
-			EAS_HWHandleWrapStream(mb);
-			to += thisCount;
-			n -= thisCount;
-			(*pBytesRead) += thisCount;
-		}
-	}
-	#ifdef SONIVOX_DEBUG_IO
-	EAS_Report(5, "EAS_HWReadFileStream: read %d bytes: %2x, %2x, ...\n",
+#endif
+            mb->bufferFilled -= thisCount;
+            mb->readPos += thisCount;
+            EAS_HWHandleWrapStream(mb);
+            to += thisCount;
+            n -= thisCount;
+            (*pBytesRead) += thisCount;
+        }
+    }
+#ifdef SONIVOX_DEBUG_IO
+    EAS_Report(5, "EAS_HWReadFileStream: read %d bytes: %2x, %2x, ...\n",
 		(int) *(pBytesRead), a,b);
-	#endif
+#endif
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 
@@ -1173,28 +1173,28 @@ EAS_RESULT EAS_HWReadFileStream(EAS_HW_DATA_HANDLE hwInstData,
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWGetByteStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb, void *p) {
 
-	/* check for end of file */
-	if (EAS_HWIsEOF_Stream(mb)) {
-		*((EAS_U8*) p) = 0;
-		return EAS_EOF;
-	}
+    /* check for end of file */
+    if (EAS_HWIsEOF_Stream(mb)) {
+        *((EAS_U8*) p) = 0;
+        return EAS_EOF;
+    }
 #ifdef MMAPI_PROVIDE_SILENCE_ON_UNDERRUN
-	if (!mb->noSilenceOnUnderrun) {
-		EAS_CheckUnderrunFillSilence(mb, 1);
-	}
+    if (!mb->noSilenceOnUnderrun) {
+        EAS_CheckUnderrunFillSilence(mb, 1);
+    }
 #endif
-	if (mb->bufferFilled >= 1) {
-		*((EAS_U8*) p) = mb->buffer[mb->readPos++];
-		mb->bufferFilled -= 1;
-		EAS_HWHandleWrapStream(mb);
-		return EAS_SUCCESS;
-	}
-	#ifdef SONIVOX_DEBUG
-	EAS_Report(2, "EAS_HWGetByteStream: cannot read a byte, need more buffer!\n");
-	#endif
-	/* should really return "buffering" */
-	return EAS_ERROR_FILE_READ_FAILED;
-	/* return EAS_STREAM_BUFFERING; */
+    if (mb->bufferFilled >= 1) {
+        *((EAS_U8*) p) = mb->buffer[mb->readPos++];
+        mb->bufferFilled -= 1;
+        EAS_HWHandleWrapStream(mb);
+        return EAS_SUCCESS;
+    }
+#ifdef SONIVOX_DEBUG
+    EAS_Report(2, "EAS_HWGetByteStream: cannot read a byte, need more buffer!\n");
+#endif
+    /* should really return "buffering" */
+    return EAS_ERROR_FILE_READ_FAILED;
+    /* return EAS_STREAM_BUFFERING; */
 }
 
 
@@ -1209,8 +1209,8 @@ EAS_RESULT EAS_HWGetByteStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFilePosStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb, EAS_I32 *pPosition) {
-	(*pPosition) = mb->readPos + mb->readPosOffset;
-	return EAS_SUCCESS;
+    (*pPosition) = mb->readPos + mb->readPosOffset;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1228,42 +1228,42 @@ EAS_RESULT EAS_HWFilePosStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeekOfsStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb,
-								   EAS_I32 position) {
+                                   EAS_I32 position) {
 
-	if ((position < mb->bufferFilled - mb->bufferSize)
-		|| (position > mb->bufferFilled)) {
-		#ifdef SONIVOX_DEBUG
-		EAS_Report(2, "EAS_HWFileSeekStream: cannot seek to %d, need more buffer! currPos=%d, bufferFilled=%d\n",
+    if ((position < mb->bufferFilled - mb->bufferSize)
+        || (position > mb->bufferFilled)) {
+#ifdef SONIVOX_DEBUG
+        EAS_Report(2, "EAS_HWFileSeekStream: cannot seek to %d, need more buffer! currPos=%d, bufferFilled=%d\n",
 			mb->readPosOffset + mb->readPos + position, mb->readPosOffset + mb->readPos, mb->bufferFilled);
-		#endif
-		return EAS_ERROR_FILE_SEEK;
-		/* return EAS_STREAM_BUFFERING; */
-	}
-	/*
-	#ifdef SONIVOX_DEBUG
-	EAS_Report(2, "EAS_HWFileSeekStream: seek to %d. before: currPos=%d, readPos=%d  bufferFilled=%d  \n",
-		mb->readPosOffset + mb->readPos + position, mb->readPosOffset + mb->readPos, mb->readPos, mb->bufferFilled);
-	#endif
-	*/
+#endif
+        return EAS_ERROR_FILE_SEEK;
+        /* return EAS_STREAM_BUFFERING; */
+    }
+    /*
+    #ifdef SONIVOX_DEBUG
+    EAS_Report(2, "EAS_HWFileSeekStream: seek to %d. before: currPos=%d, readPos=%d  bufferFilled=%d  \n",
+        mb->readPosOffset + mb->readPos + position, mb->readPosOffset + mb->readPos, mb->readPos, mb->bufferFilled);
+    #endif
+    */
 
-	mb->readPos += position;
-	mb->bufferFilled -= position;
-	/* check wraps */
-	if (mb->readPos < 0) {
-		mb->readPos += mb->bufferSize;
-		mb->readPosOffset -= mb->bufferSize;
-	} else {
-		EAS_HWHandleWrapStream(mb);
-	}
+    mb->readPos += position;
+    mb->bufferFilled -= position;
+    /* check wraps */
+    if (mb->readPos < 0) {
+        mb->readPos += mb->bufferSize;
+        mb->readPosOffset -= mb->bufferSize;
+    } else {
+        EAS_HWHandleWrapStream(mb);
+    }
 
-	/*
-	#ifdef SONIVOX_DEBUG
-	EAS_Report(2, "EAS_HWFileSeekStream:       after: currPos=%d, readPos=%d  bufferFilled=%d  \n",
-		mb->readPosOffset + mb->readPos, mb->readPos, mb->bufferFilled);
-	#endif
-	*/
+    /*
+    #ifdef SONIVOX_DEBUG
+    EAS_Report(2, "EAS_HWFileSeekStream:       after: currPos=%d, readPos=%d  bufferFilled=%d  \n",
+        mb->readPosOffset + mb->readPos, mb->readPos, mb->bufferFilled);
+    #endif
+    */
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1280,9 +1280,9 @@ EAS_RESULT EAS_HWFileSeekOfsStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREA
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeekStream (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb,
-								 EAS_I32 position) {
-	EAS_I32 currPos = mb->readPos + mb->readPosOffset;
-	return EAS_HWFileSeekOfsStream(hwInstData, mb, position - currPos);
+                                 EAS_I32 position) {
+    EAS_I32 currPos = mb->readPos + mb->readPosOffset;
+    return EAS_HWFileSeekOfsStream(hwInstData, mb, position - currPos);
 }
 
 /*----------------------------------------------------------------------------
@@ -1296,17 +1296,17 @@ EAS_RESULT EAS_HWFileSeekStream (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM 
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileLengthStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb,
-								  EAS_I32 *pLength) {
+                                  EAS_I32 *pLength) {
 
-	if (mb->totalSize >= 0) {
-		(*pLength) = mb->totalSize;
-	} else {
-		(*pLength) = MMAPI_FILE_SIZE_UNKNOWN;
-	}
-	#ifdef SONIVOX_DEBUG
-	EAS_Report(5, "EAS_HWFileLengthStream: returning %d = 0x%x\n", (*pLength), (*pLength));
-	#endif
-	return EAS_SUCCESS;
+    if (mb->totalSize >= 0) {
+        (*pLength) = mb->totalSize;
+    } else {
+        (*pLength) = MMAPI_FILE_SIZE_UNKNOWN;
+    }
+#ifdef SONIVOX_DEBUG
+    EAS_Report(5, "EAS_HWFileLengthStream: returning %d = 0x%x\n", (*pLength), (*pLength));
+#endif
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1321,12 +1321,12 @@ EAS_RESULT EAS_HWFileLengthStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWDupHandleStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb,
-								 EAS_FILE_STREAM newMB) {
-	#ifdef SONIVOX_DEBUG
-	EAS_Report(2, "EAS_HWDupHandleStream: cannot duplicate stream\n");
-	#endif
+                                 EAS_FILE_STREAM newMB) {
+#ifdef SONIVOX_DEBUG
+    EAS_Report(2, "EAS_HWDupHandleStream: cannot duplicate stream\n");
+#endif
 
-	return EAS_ERROR_FEATURE_NOT_AVAILABLE;
+    return EAS_ERROR_FEATURE_NOT_AVAILABLE;
 }
 
 /*----------------------------------------------------------------------------
@@ -1340,7 +1340,7 @@ EAS_RESULT EAS_HWDupHandleStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM 
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWCloseFileStream(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_STREAM mb) {
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 #ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
@@ -1377,67 +1377,67 @@ FILE* STREAM_DUMP_HANDLE = NULL;
 */
 EAS_RESULT EAS_HWOpenFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR locator, EAS_FILE_HANDLE *pHandle, EAS_FILE_MODE mode)
 {
-	EAS_HW_FILE_MIXED *file;
-	int i;
-	EAS_RESULT ret;
-	MMAPI_FILE_STRUCT* fHandle = (MMAPI_FILE_STRUCT*) locator;
+    EAS_HW_FILE_MIXED *file;
+    int i;
+    EAS_RESULT ret;
+    MMAPI_FILE_STRUCT* fHandle = (MMAPI_FILE_STRUCT*) locator;
 
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "> EAS_HWOpenFile(instData=%p, locator=%p, EAS_FileOpenMode=%d)\n",
+    EAS_Report(4, "> EAS_HWOpenFile(instData=%p, locator=%p, EAS_FileOpenMode=%d)\n",
 		hwInstData, locator, mode);
 #endif
-	/* set return value to NULL */
-	*pHandle = NULL;
+    /* set return value to NULL */
+    *pHandle = NULL;
 
-	/* find an empty entry in the file table */
-	file = hwInstData->files;
-	for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
-	{
-		/* is this slot being used? */
-		if (!file->inUse)
-		{
-			ret = EAS_ERROR_HANDLE_INTEGRITY;
-			/* actually open the file */
-			switch (fHandle->mode) {
-				case MMAPI_OPEN_MODE_NATIVE:
-					ret = EAS_HWOpenFileNative(NULL, fHandle->locator, &(file->native), mode);
-					break;
-				case MMAPI_OPEN_MODE_MEMORY:
-					ret = EAS_HWOpenFileMemory(NULL, fHandle->mb, &(file->memory), mode);
-					break;
-				case MMAPI_OPEN_MODE_STREAM:
-					file->stream = fHandle->mb;
-					ret = EAS_HWOpenFileStream(NULL, NULL, file->stream, mode);
-					break;
-			}
-			if (ret == EAS_SUCCESS) {
-				/* set the mode and inUse flags */
-				file->mode = fHandle->mode;
-				file->inUse = EAS_TRUE;
-				if (fHandle->record.state != MMAPI_RS_NATIVE_ERROR) {
-					file->record = &(fHandle->record);
-				}
-				/* set the returned handle */
-				(*pHandle) = (EAS_FILE_HANDLE) file;
-				/* set the host handles in the MMAPI_FILE_STRUCT so that eas_mmapi.c
-				 * can call host functions directly */
-				fHandle->hwInstData = hwInstData;
-				fHandle->hwFileHandle = (*pHandle);
+    /* find an empty entry in the file table */
+    file = hwInstData->files;
+    for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
+    {
+        /* is this slot being used? */
+        if (!file->inUse)
+        {
+            ret = EAS_ERROR_HANDLE_INTEGRITY;
+            /* actually open the file */
+            switch (fHandle->mode) {
+                case MMAPI_OPEN_MODE_NATIVE:
+                    ret = EAS_HWOpenFileNative(NULL, fHandle->locator, &(file->native), mode);
+                    break;
+                case MMAPI_OPEN_MODE_MEMORY:
+                    ret = EAS_HWOpenFileMemory(NULL, fHandle->mb, &(file->memory), mode);
+                    break;
+                case MMAPI_OPEN_MODE_STREAM:
+                    file->stream = fHandle->mb;
+                    ret = EAS_HWOpenFileStream(NULL, NULL, file->stream, mode);
+                    break;
+            }
+            if (ret == EAS_SUCCESS) {
+                /* set the mode and inUse flags */
+                file->mode = fHandle->mode;
+                file->inUse = EAS_TRUE;
+                if (fHandle->record.state != MMAPI_RS_NATIVE_ERROR) {
+                    file->record = &(fHandle->record);
+                }
+                /* set the returned handle */
+                (*pHandle) = (EAS_FILE_HANDLE) file;
+                /* set the host handles in the MMAPI_FILE_STRUCT so that eas_mmapi.c
+                 * can call host functions directly */
+                fHandle->hwInstData = hwInstData;
+                fHandle->hwFileHandle = (*pHandle);
 #ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
-				STREAM_DUMP_HANDLE = fopen("C:\\streamdump.pcm", "wb");
+                STREAM_DUMP_HANDLE = fopen("C:\\streamdump.pcm", "wb");
 #endif
 #ifdef SONIVOX_DEBUG
-				EAS_Report(4, "< EAS_HWOpenFile: pHandle=%p MMAPI_mode=%d\n", (void*) (*pHandle), file->mode);
+                EAS_Report(4, "< EAS_HWOpenFile: pHandle=%p MMAPI_mode=%d\n", (void*) (*pHandle), file->mode);
 #endif
-			}
-			return ret;
-		}
-		file++;
-	}
+            }
+            return ret;
+        }
+        file++;
+    }
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "< EAS_HWOpenFile: ERROR too many files open.\n");
+    EAS_Report(4, "< EAS_HWOpenFile: ERROR too many files open.\n");
 #endif
-	return EAS_ERROR_MAX_FILES_OPEN;
+    return EAS_ERROR_MAX_FILES_OPEN;
 }
 
 
@@ -1445,39 +1445,39 @@ EAS_RESULT EAS_HWOpenFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_LOCATOR locato
  * see eas_mmapi.h for details
  */
 EAS_RESULT MMAPI_HWSwitchToMemoryMode(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle) {
-	EAS_HW_FILE_MIXED* file = (EAS_HW_FILE_MIXED*) fHandle;
-	EAS_I32 pos;
-	EAS_RESULT res;
-	void* buffer;
+    EAS_HW_FILE_MIXED* file = (EAS_HW_FILE_MIXED*) fHandle;
+    EAS_I32 pos;
+    EAS_RESULT res;
+    void* buffer;
 
-	/* some sanity checks */
-	if (file->mode == MMAPI_OPEN_MODE_MEMORY) {
-		/* nothing to do */
-		return EAS_SUCCESS;
-	}
-	if (!file->inUse || file->mode != MMAPI_OPEN_MODE_STREAM) {
-		return EAS_ERROR_INVALID_PARAMETER;
-	}
-	/* remember the file position and buffer */
-	res = EAS_HWFilePosStream(mHandle, fHandle, &pos);
-	buffer = file->stream;
-	if (res == EAS_SUCCESS) {
-		res = EAS_HWCloseFileStream(mHandle, file->stream);
-	}
-	if (res == EAS_SUCCESS) {
-		EAS_HWMemSet(&(file->memory), 0, sizeof(EAS_HW_FILE_MEMORY));
-		file->mode = MMAPI_OPEN_MODE_MEMORY;
-		res = EAS_HWOpenFileMemory(NULL, buffer, &(file->memory), EAS_FILE_READ);
-	}
-	if (res == EAS_SUCCESS) {
-		res = EAS_HWFileSeekMemory(NULL, &(file->memory), pos);
-	}
-	if (res != EAS_SUCCESS) {
-		EAS_HWCloseFile(mHandle, fHandle);
-		/* make sure that this handle is freed */
-		file->inUse = EAS_FALSE;
-	}
-	return res;
+    /* some sanity checks */
+    if (file->mode == MMAPI_OPEN_MODE_MEMORY) {
+        /* nothing to do */
+        return EAS_SUCCESS;
+    }
+    if (!file->inUse || file->mode != MMAPI_OPEN_MODE_STREAM) {
+        return EAS_ERROR_INVALID_PARAMETER;
+    }
+    /* remember the file position and buffer */
+    res = EAS_HWFilePosStream(mHandle, fHandle, &pos);
+    buffer = file->stream;
+    if (res == EAS_SUCCESS) {
+        res = EAS_HWCloseFileStream(mHandle, file->stream);
+    }
+    if (res == EAS_SUCCESS) {
+        EAS_HWMemSet(&(file->memory), 0, sizeof(EAS_HW_FILE_MEMORY));
+        file->mode = MMAPI_OPEN_MODE_MEMORY;
+        res = EAS_HWOpenFileMemory(NULL, buffer, &(file->memory), EAS_FILE_READ);
+    }
+    if (res == EAS_SUCCESS) {
+        res = EAS_HWFileSeekMemory(NULL, &(file->memory), pos);
+    }
+    if (res != EAS_SUCCESS) {
+        EAS_HWCloseFile(mHandle, fHandle);
+        /* make sure that this handle is freed */
+        file->inUse = EAS_FALSE;
+    }
+    return res;
 }
 
 
@@ -1493,37 +1493,37 @@ EAS_RESULT MMAPI_HWSwitchToMemoryMode(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HAND
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWReadFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-						  void *pBuffer, EAS_I32 n, EAS_I32 *pBytesRead) {
-	EAS_RESULT res = EAS_ERROR_HANDLE_INTEGRITY;
+                          void *pBuffer, EAS_I32 n, EAS_I32 *pBytesRead) {
+    EAS_RESULT res = EAS_ERROR_HANDLE_INTEGRITY;
 #ifdef SONIVOX_DEBUG_IO
-	EAS_Report(5, "EAS_HWReadFile(instData=%p, file=%p, count=%d)\n",
+    EAS_Report(5, "EAS_HWReadFile(instData=%p, file=%p, count=%d)\n",
 		hwInstData, file, n);
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		res = EAS_HWReadFileNative(NULL, &(file->native), pBuffer, n, pBytesRead);
-		break;
-	case MMAPI_OPEN_MODE_MEMORY:
-		res = EAS_HWReadFileMemory(NULL, &(file->memory), pBuffer, n, pBytesRead);
-		break;
-	case MMAPI_OPEN_MODE_STREAM:
-		res = EAS_HWReadFileStream(NULL, file->stream, pBuffer, n, pBytesRead);
-		break;
-	}
-	/* the recording hook: if recording enabled, write the buffer to the record file */
-	if (res == EAS_SUCCESS
-			&& file->record != NULL
-			&& file->record->handle != NULL
-			&& file->record->state == MMAPI_RS_RECORDING) {
-		#ifdef SONIVOX_DEBUG_IO
-				EAS_Report(5, "EAS_HWReadFile: recording hook, writing %d bytes\n", (*pBytesRead));
-		#endif
-		MMAPI_HWRecordBuffer(hwInstData, file, pBuffer, (*pBytesRead));
-	}
-#ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
-	fwrite(pBuffer, (*pBytesRead), 1, STREAM_DUMP_HANDLE);
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            res = EAS_HWReadFileNative(NULL, &(file->native), pBuffer, n, pBytesRead);
+            break;
+        case MMAPI_OPEN_MODE_MEMORY:
+            res = EAS_HWReadFileMemory(NULL, &(file->memory), pBuffer, n, pBytesRead);
+            break;
+        case MMAPI_OPEN_MODE_STREAM:
+            res = EAS_HWReadFileStream(NULL, file->stream, pBuffer, n, pBytesRead);
+            break;
+    }
+    /* the recording hook: if recording enabled, write the buffer to the record file */
+    if (res == EAS_SUCCESS
+        && file->record != NULL
+        && file->record->handle != NULL
+        && file->record->state == MMAPI_RS_RECORDING) {
+#ifdef SONIVOX_DEBUG_IO
+        EAS_Report(5, "EAS_HWReadFile: recording hook, writing %d bytes\n", (*pBytesRead));
 #endif
-	return res;
+        MMAPI_HWRecordBuffer(hwInstData, file, pBuffer, (*pBytesRead));
+    }
+#ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
+    fwrite(pBuffer, (*pBytesRead), 1, STREAM_DUMP_HANDLE);
+#endif
+    return res;
 
 }
 
@@ -1539,33 +1539,33 @@ EAS_RESULT EAS_HWReadFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWGetByte(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, void *p) {
-	EAS_RESULT res = EAS_ERROR_HANDLE_INTEGRITY;
+    EAS_RESULT res = EAS_ERROR_HANDLE_INTEGRITY;
 
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		res = EAS_HWGetByteNative(NULL, &(file->native), p);
-		break;
-	case MMAPI_OPEN_MODE_MEMORY:
-		res = EAS_HWGetByteMemory(NULL, &(file->memory), p);
-		break;
-	case MMAPI_OPEN_MODE_STREAM:
-		res = EAS_HWGetByteStream(NULL, file->stream, p);
-		break;
-	}
-	/* the recording hook: if recording enabled, write the buffer to the record file */
-	if (res == EAS_SUCCESS
-			&& file->record != NULL
-			&& file->record->handle != NULL
-			&& file->record->state == MMAPI_RS_RECORDING) {
-				#ifdef SONIVOX_DEBUG_IO
-				EAS_Report(5, "EAS_HWGetByte: recording hook, writing 1 byte\n", (*pBytesRead));
-				#endif
-				MMAPI_HWRecordBuffer(hwInstData, file, (EAS_U8*) p, 1);
-	}
-#ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
-	fwrite(p, 1, 1, STREAM_DUMP_HANDLE);
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            res = EAS_HWGetByteNative(NULL, &(file->native), p);
+            break;
+        case MMAPI_OPEN_MODE_MEMORY:
+            res = EAS_HWGetByteMemory(NULL, &(file->memory), p);
+            break;
+        case MMAPI_OPEN_MODE_STREAM:
+            res = EAS_HWGetByteStream(NULL, file->stream, p);
+            break;
+    }
+    /* the recording hook: if recording enabled, write the buffer to the record file */
+    if (res == EAS_SUCCESS
+        && file->record != NULL
+        && file->record->handle != NULL
+        && file->record->state == MMAPI_RS_RECORDING) {
+#ifdef SONIVOX_DEBUG_IO
+        EAS_Report(5, "EAS_HWGetByte: recording hook, writing 1 byte\n", (*pBytesRead));
 #endif
-return res;
+        MMAPI_HWRecordBuffer(hwInstData, file, (EAS_U8*) p, 1);
+    }
+#ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
+    fwrite(p, 1, 1, STREAM_DUMP_HANDLE);
+#endif
+    return res;
 }
 
 /*----------------------------------------------------------------------------
@@ -1583,22 +1583,22 @@ return res;
 */
 EAS_RESULT EAS_HWGetWord (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, void *p, EAS_BOOL msbFirst)
 {
-	EAS_RESULT result;
-	EAS_U8 c1, c2;
+    EAS_RESULT result;
+    EAS_U8 c1, c2;
 
-	/* read 2 bytes from the file */
-	if ((result = EAS_HWGetByte(hwInstData, file,&c1)) != EAS_SUCCESS)
-		return result;
-	if ((result = EAS_HWGetByte(hwInstData, file,&c2)) != EAS_SUCCESS)
-		return result;
+    /* read 2 bytes from the file */
+    if ((result = EAS_HWGetByte(hwInstData, file,&c1)) != EAS_SUCCESS)
+        return result;
+    if ((result = EAS_HWGetByte(hwInstData, file,&c2)) != EAS_SUCCESS)
+        return result;
 
-	/* order them as requested */
-	if (msbFirst)
-		*((EAS_U16*) p) = ((EAS_U16) c1 << 8) | c2;
-	else
-		*((EAS_U16*) p) = ((EAS_U16) c2 << 8) | c1;
+    /* order them as requested */
+    if (msbFirst)
+        *((EAS_U16*) p) = ((EAS_U16) c1 << 8) | c2;
+    else
+        *((EAS_U16*) p) = ((EAS_U16) c2 << 8) | c1;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1616,26 +1616,26 @@ EAS_RESULT EAS_HWGetWord (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, v
 */
 EAS_RESULT EAS_HWGetDWord (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, void *p, EAS_BOOL msbFirst)
 {
-	EAS_RESULT result;
-	EAS_U8 c1, c2,c3,c4;
+    EAS_RESULT result;
+    EAS_U8 c1, c2,c3,c4;
 
-	/* read 4 bytes from the file */
-	if ((result = EAS_HWGetByte(hwInstData, file, &c1)) != EAS_SUCCESS)
-		return result;
-	if ((result = EAS_HWGetByte(hwInstData, file, &c2)) != EAS_SUCCESS)
-		return result;
-	if ((result = EAS_HWGetByte(hwInstData, file, &c3)) != EAS_SUCCESS)
-		return result;
-	if ((result = EAS_HWGetByte(hwInstData, file, &c4)) != EAS_SUCCESS)
-		return result;
+    /* read 4 bytes from the file */
+    if ((result = EAS_HWGetByte(hwInstData, file, &c1)) != EAS_SUCCESS)
+        return result;
+    if ((result = EAS_HWGetByte(hwInstData, file, &c2)) != EAS_SUCCESS)
+        return result;
+    if ((result = EAS_HWGetByte(hwInstData, file, &c3)) != EAS_SUCCESS)
+        return result;
+    if ((result = EAS_HWGetByte(hwInstData, file, &c4)) != EAS_SUCCESS)
+        return result;
 
-	/* order them as requested */
-	if (msbFirst)
-		*((EAS_U32*) p) = ((EAS_U32) c1 << 24) | ((EAS_U32) c2 << 16) | ((EAS_U32) c3 << 8) | c4;
-	else
-		*((EAS_U32*) p) = ((EAS_U32) c4 << 24) | ((EAS_U32) c3 << 16) | ((EAS_U32) c2 << 8) | c1;
+    /* order them as requested */
+    if (msbFirst)
+        *((EAS_U32*) p) = ((EAS_U32) c1 << 24) | ((EAS_U32) c2 << 16) | ((EAS_U32) c3 << 8) | c4;
+    else
+        *((EAS_U32*) p) = ((EAS_U32) c4 << 24) | ((EAS_U32) c3 << 16) | ((EAS_U32) c2 << 8) | c1;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1650,20 +1650,20 @@ EAS_RESULT EAS_HWGetDWord (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, 
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFilePos (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-						  EAS_I32 *pPosition) {
+                          EAS_I32 *pPosition) {
 #ifdef SONIVOX_DEBUG_IO
-	EAS_Report(5, "EAS_HWFilePos(instData=%p, file=%p)\n",
+    EAS_Report(5, "EAS_HWFilePos(instData=%p, file=%p)\n",
 		hwInstData, file);
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		return EAS_HWFilePosNative(NULL, &(file->native), pPosition);
-	case MMAPI_OPEN_MODE_MEMORY:
-		return EAS_HWFilePosMemory(NULL, &(file->memory), pPosition);
-	case MMAPI_OPEN_MODE_STREAM:
-		return EAS_HWFilePosStream(NULL, file->stream, pPosition);
-	}
-	return EAS_ERROR_HANDLE_INTEGRITY;
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            return EAS_HWFilePosNative(NULL, &(file->native), pPosition);
+        case MMAPI_OPEN_MODE_MEMORY:
+            return EAS_HWFilePosMemory(NULL, &(file->memory), pPosition);
+        case MMAPI_OPEN_MODE_STREAM:
+            return EAS_HWFilePosStream(NULL, file->stream, pPosition);
+    }
+    return EAS_ERROR_HANDLE_INTEGRITY;
 }
 
 /*----------------------------------------------------------------------------
@@ -1678,23 +1678,23 @@ EAS_RESULT EAS_HWFilePos (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeek (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-						   EAS_I32 position) {
+                           EAS_I32 position) {
 #ifdef SONIVOX_DEBUG_SEEK
-	EAS_Report(4, "EAS_HWFileSeek(instData=%p, file=%p, pos=%d)\n",
+    EAS_Report(4, "EAS_HWFileSeek(instData=%p, file=%p, pos=%d)\n",
 		hwInstData, file, position);
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		return EAS_HWFileSeekNative(NULL, &(file->native), position);
-	case MMAPI_OPEN_MODE_MEMORY:
-		return EAS_HWFileSeekMemory(NULL, &(file->memory), position);
-	case MMAPI_OPEN_MODE_STREAM:
-		return EAS_HWFileSeekStream(NULL, file->stream, position);
-	}
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            return EAS_HWFileSeekNative(NULL, &(file->native), position);
+        case MMAPI_OPEN_MODE_MEMORY:
+            return EAS_HWFileSeekMemory(NULL, &(file->memory), position);
+        case MMAPI_OPEN_MODE_STREAM:
+            return EAS_HWFileSeekStream(NULL, file->stream, position);
+    }
 #ifdef SONIVOX_DEBUG
-	EAS_Report(2, "  EAS_HWFileSeek: error: file->mode=%d\n", file->mode);
+    EAS_Report(2, "  EAS_HWFileSeek: error: file->mode=%d\n", file->mode);
 #endif
-	return EAS_ERROR_HANDLE_INTEGRITY;
+    return EAS_ERROR_HANDLE_INTEGRITY;
 }
 
 /*----------------------------------------------------------------------------
@@ -1709,20 +1709,20 @@ EAS_RESULT EAS_HWFileSeek (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileSeekOfs (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-							  EAS_I32 position) {
+                              EAS_I32 position) {
 #ifdef SONIVOX_DEBUG_SEEK
-	EAS_Report(4, "EAS_HWFileSeekOfs(instData=%p, file=%p, pos=%d)\n",
+    EAS_Report(4, "EAS_HWFileSeekOfs(instData=%p, file=%p, pos=%d)\n",
 		hwInstData, file, position);
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		return EAS_HWFileSeekOfsNative(NULL, &(file->native), position);
-	case MMAPI_OPEN_MODE_MEMORY:
-		return EAS_HWFileSeekOfsMemory(NULL, &(file->memory), position);
-	case MMAPI_OPEN_MODE_STREAM:
-		return EAS_HWFileSeekOfsStream(NULL, file->stream, position);
-	}
-	return EAS_ERROR_HANDLE_INTEGRITY;
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            return EAS_HWFileSeekOfsNative(NULL, &(file->native), position);
+        case MMAPI_OPEN_MODE_MEMORY:
+            return EAS_HWFileSeekOfsMemory(NULL, &(file->memory), position);
+        case MMAPI_OPEN_MODE_STREAM:
+            return EAS_HWFileSeekOfsStream(NULL, file->stream, position);
+    }
+    return EAS_ERROR_HANDLE_INTEGRITY;
 }
 
 /*----------------------------------------------------------------------------
@@ -1737,20 +1737,20 @@ EAS_RESULT EAS_HWFileSeekOfs (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE fil
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWFileLength (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-							 EAS_I32 *pLength) {
+                             EAS_I32 *pLength) {
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "EAS_HWFileLength(instData=%p, file=%p)\n",
+    EAS_Report(4, "EAS_HWFileLength(instData=%p, file=%p)\n",
 		hwInstData, file);
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		return EAS_HWFileLengthNative(NULL, &(file->native), pLength);
-	case MMAPI_OPEN_MODE_MEMORY:
-		return EAS_HWFileLengthMemory(NULL, &(file->memory), pLength);
-	case MMAPI_OPEN_MODE_STREAM:
-		return EAS_HWFileLengthStream(NULL, file->stream, pLength);
-	}
-	return EAS_ERROR_HANDLE_INTEGRITY;
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            return EAS_HWFileLengthNative(NULL, &(file->native), pLength);
+        case MMAPI_OPEN_MODE_MEMORY:
+            return EAS_HWFileLengthMemory(NULL, &(file->memory), pLength);
+        case MMAPI_OPEN_MODE_STREAM:
+            return EAS_HWFileLengthStream(NULL, file->stream, pLength);
+    }
+    return EAS_ERROR_HANDLE_INTEGRITY;
 }
 
 /*----------------------------------------------------------------------------
@@ -1765,58 +1765,58 @@ EAS_RESULT EAS_HWFileLength (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWDupHandle (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-							EAS_FILE_HANDLE *pDupFile) {
-	EAS_HW_FILE_MIXED* newFile;
-	EAS_RESULT ret;
-	int i;
+                            EAS_FILE_HANDLE *pDupFile) {
+    EAS_HW_FILE_MIXED* newFile;
+    EAS_RESULT ret;
+    int i;
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "> EAS_HWDupHandle(instData=%p, file=%p)\n",
+    EAS_Report(4, "> EAS_HWDupHandle(instData=%p, file=%p)\n",
 		hwInstData, file);
 #endif
 
-	/* initialize the return handle with NULL */
-	(*pDupFile) = NULL;
+    /* initialize the return handle with NULL */
+    (*pDupFile) = NULL;
 
-	/* find an empty entry in the file table */
-	newFile = (EAS_HW_FILE_MIXED*) hwInstData;
-	for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
-	{
-		/* is this slot being used? */
-		if (!newFile->inUse)
-		{
+    /* find an empty entry in the file table */
+    newFile = (EAS_HW_FILE_MIXED*) hwInstData;
+    for (i = 0; i < EAS_MAX_FILE_HANDLES; i++)
+    {
+        /* is this slot being used? */
+        if (!newFile->inUse)
+        {
 #ifdef SONIVOX_DEBUG
-			EAS_Report(4, "  EAS_HWDupHandle: newFile=%p mode=%d\n",
+            EAS_Report(4, "  EAS_HWDupHandle: newFile=%p mode=%d\n",
 				(void*) newFile, (int) file->mode);
 #endif
-			ret = EAS_ERROR_HANDLE_INTEGRITY;
-			switch (file->mode) {
-			case MMAPI_OPEN_MODE_NATIVE:
-				ret = EAS_HWDupHandleNative(NULL, &(file->native), &(newFile->native));
-				break;
-			case MMAPI_OPEN_MODE_MEMORY:
-				ret = EAS_HWDupHandleMemory(NULL, &(file->memory), &(newFile->memory));
-				break;
-			case MMAPI_OPEN_MODE_STREAM:
-				ret = EAS_HWDupHandleStream(NULL, file->stream, newFile->stream);
-				break;
-			}
-			if (ret == EAS_SUCCESS) {
-				newFile->mode = file->mode;
-				newFile->inUse = EAS_TRUE;
-				(*pDupFile) = newFile;
-			}
+            ret = EAS_ERROR_HANDLE_INTEGRITY;
+            switch (file->mode) {
+                case MMAPI_OPEN_MODE_NATIVE:
+                    ret = EAS_HWDupHandleNative(NULL, &(file->native), &(newFile->native));
+                    break;
+                case MMAPI_OPEN_MODE_MEMORY:
+                    ret = EAS_HWDupHandleMemory(NULL, &(file->memory), &(newFile->memory));
+                    break;
+                case MMAPI_OPEN_MODE_STREAM:
+                    ret = EAS_HWDupHandleStream(NULL, file->stream, newFile->stream);
+                    break;
+            }
+            if (ret == EAS_SUCCESS) {
+                newFile->mode = file->mode;
+                newFile->inUse = EAS_TRUE;
+                (*pDupFile) = newFile;
+            }
 #ifdef SONIVOX_DEBUG
-			EAS_Report(4, "< EAS_HWDupHandle, pDupFile=%p, ret=%d\n",
+            EAS_Report(4, "< EAS_HWDupHandle, pDupFile=%p, ret=%d\n",
 				(void*) (*pDupFile), (int) ret);
 #endif
-			return ret;
-		}
-		newFile++;
-	}
+            return ret;
+        }
+        newFile++;
+    }
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "< EAS_HWDupHandle, ERROR: too many files open\n");
+    EAS_Report(4, "< EAS_HWDupHandle, ERROR: too many files open\n");
 #endif
-	return EAS_ERROR_MAX_FILES_OPEN;
+    return EAS_ERROR_MAX_FILES_OPEN;
 }
 
 /*----------------------------------------------------------------------------
@@ -1833,38 +1833,38 @@ EAS_RESULT EAS_HWDupHandle (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
  *----------------------------------------------------------------------------
 */
 EAS_RESULT EAS_HWCloseFile (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file) {
-	EAS_RESULT ret = EAS_ERROR_HANDLE_INTEGRITY;
+    EAS_RESULT ret = EAS_ERROR_HANDLE_INTEGRITY;
 
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "> EAS_HWCloseFile(instData=%p, file=%p)\n",
+    EAS_Report(4, "> EAS_HWCloseFile(instData=%p, file=%p)\n",
 		hwInstData, file);
 	/* work around a problem in EAS 3.3 */
 	if (file == NULL) {
 		return EAS_SUCCESS;
 	}
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		ret = EAS_HWCloseFileNative(hwInstData, &(file->native));
-		break;
-	case MMAPI_OPEN_MODE_MEMORY:
-		ret = EAS_HWCloseFileMemory(hwInstData, &(file->memory));
-		break;
-	case MMAPI_OPEN_MODE_STREAM:
-		ret = EAS_HWCloseFileStream(hwInstData, file->stream);
-		break;
-	}
-	if (ret == EAS_SUCCESS) {
-		/* unset the inUse flag, make it available for the OpenFile function */
-		file->inUse = EAS_FALSE;
-	}
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            ret = EAS_HWCloseFileNative(hwInstData, &(file->native));
+            break;
+        case MMAPI_OPEN_MODE_MEMORY:
+            ret = EAS_HWCloseFileMemory(hwInstData, &(file->memory));
+            break;
+        case MMAPI_OPEN_MODE_STREAM:
+            ret = EAS_HWCloseFileStream(hwInstData, file->stream);
+            break;
+    }
+    if (ret == EAS_SUCCESS) {
+        /* unset the inUse flag, make it available for the OpenFile function */
+        file->inUse = EAS_FALSE;
+    }
 #ifdef MMAPI_DEBUG_WRITE_STREAM_DUMP
-	 fclose(STREAM_DUMP_HANDLE);
+    fclose(STREAM_DUMP_HANDLE);
 #endif
 #ifdef SONIVOX_DEBUG
-	EAS_Report(4, "< EAS_HWCloseFile, ret=%d\n", ret);
+    EAS_Report(4, "< EAS_HWCloseFile, ret=%d\n", ret);
 #endif
-	return ret;
+    return ret;
 }
 
 
@@ -1888,9 +1888,9 @@ EAS_RESULT EAS_HWCloseFile (EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file)
 EAS_RESULT EAS_HWVibrate(EAS_HW_DATA_HANDLE hwInstData, EAS_BOOL state)
 {
 #ifdef SONIVOX_DEBUG
-	EAS_ReportX(_EAS_SEVERITY_NOFILTER, "Vibrate state: %d\n", state);
+    EAS_ReportX(_EAS_SEVERITY_NOFILTER, "Vibrate state: %d\n", state);
 #endif
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1905,9 +1905,9 @@ EAS_RESULT EAS_HWVibrate(EAS_HW_DATA_HANDLE hwInstData, EAS_BOOL state)
 EAS_RESULT EAS_HWLED(EAS_HW_DATA_HANDLE hwInstData, EAS_BOOL state)
 {
 #ifdef SONIVOX_DEBUG
-	EAS_ReportX(_EAS_SEVERITY_NOFILTER, "LED state: %d\n", state);
+    EAS_ReportX(_EAS_SEVERITY_NOFILTER, "LED state: %d\n", state);
 #endif
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1922,9 +1922,9 @@ EAS_RESULT EAS_HWLED(EAS_HW_DATA_HANDLE hwInstData, EAS_BOOL state)
 EAS_RESULT EAS_HWBackLight(EAS_HW_DATA_HANDLE hwInstData, EAS_BOOL state)
 {
 #ifdef SONIVOX_DEBUG
-	EAS_ReportX(_EAS_SEVERITY_NOFILTER, "Backlight state: %d\n", state);
+    EAS_ReportX(_EAS_SEVERITY_NOFILTER, "Backlight state: %d\n", state);
 #endif
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 /*----------------------------------------------------------------------------
@@ -1952,10 +1952,10 @@ EAS_RESULT EAS_HWBackLight(EAS_HW_DATA_HANDLE hwInstData, EAS_BOOL state)
 /*lint -e{715} hwInstData available for customer use */
 EAS_BOOL EAS_HWYield (EAS_HW_DATA_HANDLE hwInstData)
 {
-	/* we cannot jump back to Java to issue a Java yield(),
-	 * so we must return FALSE here to let EAS return from
-	 * the EAS_Render() method and let Java do a yield(). */
-	return EAS_FALSE;
+    /* we cannot jump back to Java to issue a Java yield(),
+     * so we must return FALSE here to let EAS return from
+     * the EAS_Render() method and let Java do a yield(). */
+    return EAS_FALSE;
 }
 
 
@@ -1973,13 +1973,13 @@ EAS_BOOL EAS_HWYield (EAS_HW_DATA_HANDLE hwInstData)
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT EAS_HWWriteFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE file,
-								 void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten)
+                                 void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten)
 {
-	/* write data from the buffer */
-	*pBytesWritten = (EAS_I32) fwrite(pBuffer, 1, (size_t) n, file->pFile);
-	file->filePos += *pBytesWritten;
+    /* write data from the buffer */
+    *pBytesWritten = (EAS_I32) fwrite(pBuffer, 1, (size_t) n, file->pFile);
+    file->filePos += *pBytesWritten;
 
-	return EAS_SUCCESS;
+    return EAS_SUCCESS;
 }
 
 
@@ -2002,124 +2002,124 @@ EAS_RESULT EAS_HWWriteFileNative(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_NATIVE 
  *----------------------------------------------------------------------------
 */
 EAS_RESULT MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE mode,
-								 MMAPI_MediaBuffer* mb,
-								 EAS_U8* buffer, EAS_I32 count,
-								 EAS_I32 *pBytesWritten) {
-	EAS_I32 effSize;
-	EAS_U8* newBuffer = NULL;
-	EAS_RESULT res = EAS_SUCCESS;
-	EAS_I32 i;
-	EAS_I32 thisCount;
+                                 MMAPI_MediaBuffer* mb,
+                                 EAS_U8* buffer, EAS_I32 count,
+                                 EAS_I32 *pBytesWritten) {
+    EAS_I32 effSize;
+    EAS_U8* newBuffer = NULL;
+    EAS_RESULT res = EAS_SUCCESS;
+    EAS_I32 i;
+    EAS_I32 thisCount;
 
-	#ifdef SONIVOX_DEBUG_IO
-	EAS_Report(5, "MMAPI_HWWriteFileImpl: mode=%d count=%d\n", (int) mode, (int) count);
-	#endif
+#ifdef SONIVOX_DEBUG_IO
+    EAS_Report(5, "MMAPI_HWWriteFileImpl: mode=%d count=%d\n", (int) mode, (int) count);
+#endif
 
-	*pBytesWritten = 0;
+    *pBytesWritten = 0;
 
-	if (mode != MMAPI_OPEN_MODE_STREAM && mode != MMAPI_OPEN_MODE_MEMORY) {
-		return EAS_ERROR_INVALID_PARAMETER;
-	}
+    if (mode != MMAPI_OPEN_MODE_STREAM && mode != MMAPI_OPEN_MODE_MEMORY) {
+        return EAS_ERROR_INVALID_PARAMETER;
+    }
 
-	/*
-	 * for MEMORY mode, need to (re-)allocate buffer.
-	 * for STREAM mode, only allocate the buffer if not already done.
-	 */
-	if (mode == MMAPI_OPEN_MODE_MEMORY
-		|| ((mode == MMAPI_OPEN_MODE_STREAM) && (!mb->buffer))) {
+    /*
+     * for MEMORY mode, need to (re-)allocate buffer.
+     * for STREAM mode, only allocate the buffer if not already done.
+     */
+    if (mode == MMAPI_OPEN_MODE_MEMORY
+        || ((mode == MMAPI_OPEN_MODE_STREAM) && (!mb->buffer))) {
 
-		/* allocate buffer, if not already done */
-		if (mb->totalSize < 0) {
-			if (mode == MMAPI_OPEN_MODE_STREAM) {
-				/* STREAM mode: if total size is not known, set circular buffer size */
-				effSize = mb->bufferSize;
-			} else {
-				/* MEMORY mode: may need to re-allocate to new size */
-				effSize = mb->writePos + count;
-			}
-		} else {
-			/* if the total size of the file is known in advance, then set the
-			 * buffer size to this size. */
-			effSize = mb->totalSize;
-			if ((mode == MMAPI_OPEN_MODE_STREAM)
-					&& (effSize > mb->bufferSize)) {
-				/* for STREAM mode, limit to circular buffer size */
-				effSize = mb->bufferSize;
-			}
-		}
-		if (mb->bufferSize < effSize || mb->buffer == NULL) {
-			/* need to allocate new buffer */
-			#ifdef SONIVOX_DEBUG_IO
-			EAS_Report(5, "MMAPI_HWWriteFileImpl: totalSize=%d, bufferSize=%d. Allocating buffer with %d bytes\n",
+        /* allocate buffer, if not already done */
+        if (mb->totalSize < 0) {
+            if (mode == MMAPI_OPEN_MODE_STREAM) {
+                /* STREAM mode: if total size is not known, set circular buffer size */
+                effSize = mb->bufferSize;
+            } else {
+                /* MEMORY mode: may need to re-allocate to new size */
+                effSize = mb->writePos + count;
+            }
+        } else {
+            /* if the total size of the file is known in advance, then set the
+             * buffer size to this size. */
+            effSize = mb->totalSize;
+            if ((mode == MMAPI_OPEN_MODE_STREAM)
+                && (effSize > mb->bufferSize)) {
+                /* for STREAM mode, limit to circular buffer size */
+                effSize = mb->bufferSize;
+            }
+        }
+        if (mb->bufferSize < effSize || mb->buffer == NULL) {
+            /* need to allocate new buffer */
+#ifdef SONIVOX_DEBUG_IO
+            EAS_Report(5, "MMAPI_HWWriteFileImpl: totalSize=%d, bufferSize=%d. Allocating buffer with %d bytes\n",
 				mb->totalSize, mb->bufferSize, effSize);
-			#endif
-			newBuffer = (EAS_U8*) EAS_HWMalloc(NULL, effSize);
-			if (newBuffer == NULL) {
-				#ifdef SONIVOX_DEBUG
-				EAS_Report(1, "MMAPI_HWWriteFileImpl: ERROR out of memory.\n");
-				#endif
-				return EAS_ERROR_MALLOC_FAILED;
-			}
-			/* if re-allocating, need to copy over previous data */
-			if (mb->buffer != NULL) {
-				/*
-				 * TODO: for systems where malloc() is expensive, better to use
-				 * some kind of linked list, rather than re-allocating
-				 * the memory block with every additional call to WriteBuffer
-				 */
-				EAS_HWMemCpy(newBuffer, mb->buffer, mb->bufferFilled);
-				/* free old buffer */
-				EAS_HWFree(NULL, mb->buffer);
-				mb->buffer = NULL;
-			}
-			/* from now on, use the new buffer */
-			mb->buffer = newBuffer;
-			mb->bufferSize = effSize;
-		}
-	}
+#endif
+            newBuffer = (EAS_U8*) EAS_HWMalloc(NULL, effSize);
+            if (newBuffer == NULL) {
+#ifdef SONIVOX_DEBUG
+                EAS_Report(1, "MMAPI_HWWriteFileImpl: ERROR out of memory.\n");
+#endif
+                return EAS_ERROR_MALLOC_FAILED;
+            }
+            /* if re-allocating, need to copy over previous data */
+            if (mb->buffer != NULL) {
+                /*
+                 * TODO: for systems where malloc() is expensive, better to use
+                 * some kind of linked list, rather than re-allocating
+                 * the memory block with every additional call to WriteBuffer
+                 */
+                EAS_HWMemCpy(newBuffer, mb->buffer, mb->bufferFilled);
+                /* free old buffer */
+                EAS_HWFree(NULL, mb->buffer);
+                mb->buffer = NULL;
+            }
+            /* from now on, use the new buffer */
+            mb->buffer = newBuffer;
+            mb->bufferSize = effSize;
+        }
+    }
 
-	/* now copy over new data */
-	/* at maximum, do it in 2 iterations to account for wrap-around */
-	for (i = 0; i < 2; i++) {
-		newBuffer = mb->buffer;
-		newBuffer += mb->writePos;
-		thisCount = count;
+    /* now copy over new data */
+    /* at maximum, do it in 2 iterations to account for wrap-around */
+    for (i = 0; i < 2; i++) {
+        newBuffer = mb->buffer;
+        newBuffer += mb->writePos;
+        thisCount = count;
 
-		/* need to account for wrap-around at buffer boundary */
-		if (thisCount + mb->writePos > mb->bufferSize) {
-			thisCount = mb->bufferSize - mb->writePos;
-		}
-		/* cannot fill more than the size of the buffer */
-		if (thisCount + mb->bufferFilled > mb->bufferSize) {
-			thisCount = mb->bufferSize - mb->bufferFilled;
-		}
+        /* need to account for wrap-around at buffer boundary */
+        if (thisCount + mb->writePos > mb->bufferSize) {
+            thisCount = mb->bufferSize - mb->writePos;
+        }
+        /* cannot fill more than the size of the buffer */
+        if (thisCount + mb->bufferFilled > mb->bufferSize) {
+            thisCount = mb->bufferSize - mb->bufferFilled;
+        }
 
-		#ifdef SONIVOX_DEBUG_IO
-		EAS_Report(5, "MMAPI_HWWriteFileImpl: Copy %d bytes at offset %d. Buffer filled=%d, size=%d\n",
+#ifdef SONIVOX_DEBUG_IO
+        EAS_Report(5, "MMAPI_HWWriteFileImpl: Copy %d bytes at offset %d. Buffer filled=%d, size=%d\n",
 			(int) thisCount, (int) mb->writePos, (int) mb->bufferFilled, (int) mb->bufferSize);
-		#endif
-		if (thisCount > 0) {
-			if (buffer != NULL) {
-				EAS_HWMemCpy(newBuffer, buffer, thisCount);
-				buffer += thisCount;
-			} else {
-				/* FIXME: for 8-bit unsigned data, 0x80 is silence! */
-				EAS_HWMemSet(newBuffer, 0, thisCount);
-			}
-			count -= thisCount;
-			(*pBytesWritten) += thisCount;
-			mb->bufferFilled += thisCount;
-			mb->writePos += thisCount;
-			/* wrap around ? */
-			if ((mode == MMAPI_OPEN_MODE_STREAM) && (mb->writePos >= mb->bufferSize)) {
-				mb->writePos -= mb->bufferSize;
-			} else {
-				/* no need for second iteration if no wrap around */
-				break;
-			}
-		}
-	}
-	return res;
+#endif
+        if (thisCount > 0) {
+            if (buffer != NULL) {
+                EAS_HWMemCpy(newBuffer, buffer, thisCount);
+                buffer += thisCount;
+            } else {
+                /* FIXME: for 8-bit unsigned data, 0x80 is silence! */
+                EAS_HWMemSet(newBuffer, 0, thisCount);
+            }
+            count -= thisCount;
+            (*pBytesWritten) += thisCount;
+            mb->bufferFilled += thisCount;
+            mb->writePos += thisCount;
+            /* wrap around ? */
+            if ((mode == MMAPI_OPEN_MODE_STREAM) && (mb->writePos >= mb->bufferSize)) {
+                mb->writePos -= mb->bufferSize;
+            } else {
+                /* no need for second iteration if no wrap around */
+                break;
+            }
+        }
+    }
+    return res;
 }
 
 /*----------------------------------------------------------------------------
@@ -2134,15 +2134,15 @@ EAS_RESULT MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE mode,
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWWriteFileMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY file, void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten)
 {
-	EAS_RESULT res;
+    EAS_RESULT res;
 
-	file->mb->writePos = file->filePos;
-	res = MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_MEMORY, file->mb, (EAS_U8*) pBuffer, n, pBytesWritten);
+    file->mb->writePos = file->filePos;
+    res = MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_MEMORY, file->mb, (EAS_U8*) pBuffer, n, pBytesWritten);
 
-	file->filePos = file->mb->writePos;
-	file->fileSize = file->mb->bufferFilled;
+    file->filePos = file->mb->writePos;
+    file->fileSize = file->mb->bufferFilled;
 
-	return res;
+    return res;
 }
 
 /*----------------------------------------------------------------------------
@@ -2159,11 +2159,11 @@ EAS_RESULT EAS_HWWriteFileMemory(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_MEMORY 
 */
 /*lint -e{715} some hosts may not use hwInstData */
 EAS_RESULT EAS_HWWriteFileStream(EAS_HW_DATA_HANDLE hwInstData,
-								 EAS_FILE_STREAM mb,
-								 void *pBuffer, EAS_I32 n,
-								 EAS_I32 *pBytesWritten) {
-	return MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_STREAM,
-		mb, (EAS_U8*) pBuffer, n, pBytesWritten);
+                                 EAS_FILE_STREAM mb,
+                                 void *pBuffer, EAS_I32 n,
+                                 EAS_I32 *pBytesWritten) {
+    return MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_STREAM,
+                                 mb, (EAS_U8*) pBuffer, n, pBytesWritten);
 
 }
 
@@ -2180,20 +2180,20 @@ EAS_RESULT EAS_HWWriteFileStream(EAS_HW_DATA_HANDLE hwInstData,
 */
 /*lint -e{715} hwInstData available for customer use */
 EAS_RESULT MMAPI_HWWriteFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
-						     void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten) {
+                             void *pBuffer, EAS_I32 n, EAS_I32 *pBytesWritten) {
 #ifdef SONIVOX_DEBUG_IO
-	EAS_Report(5, "EAS_HWWriteFile(instData=%p, file=%p, count=%d), MMAPI_open_mode=%d\n",
+    EAS_Report(5, "EAS_HWWriteFile(instData=%p, file=%p, count=%d), MMAPI_open_mode=%d\n",
 		hwInstData, file, n, file->mode);
 #endif
-	switch (file->mode) {
-	case MMAPI_OPEN_MODE_NATIVE:
-		return EAS_HWWriteFileNative(NULL, &(file->native), pBuffer, n, pBytesWritten);
-	case MMAPI_OPEN_MODE_MEMORY:
-		return EAS_HWWriteFileMemory(NULL, &(file->memory), pBuffer, n, pBytesWritten);
-	case MMAPI_OPEN_MODE_STREAM:
-		return EAS_HWWriteFileStream(NULL, file->stream, pBuffer, n, pBytesWritten);
-	}
-	return EAS_ERROR_HANDLE_INTEGRITY;
+    switch (file->mode) {
+        case MMAPI_OPEN_MODE_NATIVE:
+            return EAS_HWWriteFileNative(NULL, &(file->native), pBuffer, n, pBytesWritten);
+        case MMAPI_OPEN_MODE_MEMORY:
+            return EAS_HWWriteFileMemory(NULL, &(file->memory), pBuffer, n, pBytesWritten);
+        case MMAPI_OPEN_MODE_STREAM:
+            return EAS_HWWriteFileStream(NULL, file->stream, pBuffer, n, pBytesWritten);
+    }
+    return EAS_ERROR_HANDLE_INTEGRITY;
 
 }
 
@@ -2206,40 +2206,40 @@ EAS_RESULT MMAPI_HWWriteFile(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file
  *----------------------------------------------------------------------------
 */
 EAS_RESULT MMAPI_HWRecordBuffer(EAS_HW_DATA_HANDLE hwInstData, EAS_HW_FILE_MIXED* file,
-								EAS_U8* buffer, EAS_I32 count) {
-	MMAPI_RecordingData* rec = file->record;
-	EAS_I32 pos = 0;
-	EAS_I32 bytesInHeader;
-	EAS_RESULT res;
+                                EAS_U8* buffer, EAS_I32 count) {
+    MMAPI_RecordingData* rec = file->record;
+    EAS_I32 pos = 0;
+    EAS_I32 bytesInHeader;
+    EAS_RESULT res;
 
-	/* discard header data:
-	 * (pos - count) is the position where the recorded data starts.
-	 * if (pos - count) is in the header, decrease count */
-	res = EAS_HWFilePos(hwInstData, (EAS_FILE_HANDLE) file, &pos);
-	if (res == EAS_SUCCESS) {
-		bytesInHeader = rec->waveHeaderSize - (pos - count);
-		if (bytesInHeader > 0) {
-			buffer += bytesInHeader;
-			count -= bytesInHeader;
-		}
-		if (count > 0) {
-			pos = 0;
-			res = MMAPI_HWWriteFile(hwInstData, rec->handle, buffer, count, &pos);
-			#ifdef SONIVOX_DEBUG
-			if (res == EAS_SUCCESS && pos < count) {
+    /* discard header data:
+     * (pos - count) is the position where the recorded data starts.
+     * if (pos - count) is in the header, decrease count */
+    res = EAS_HWFilePos(hwInstData, (EAS_FILE_HANDLE) file, &pos);
+    if (res == EAS_SUCCESS) {
+        bytesInHeader = rec->waveHeaderSize - (pos - count);
+        if (bytesInHeader > 0) {
+            buffer += bytesInHeader;
+            count -= bytesInHeader;
+        }
+        if (count > 0) {
+            pos = 0;
+            res = MMAPI_HWWriteFile(hwInstData, rec->handle, buffer, count, &pos);
+#ifdef SONIVOX_DEBUG
+            if (res == EAS_SUCCESS && pos < count) {
 				EAS_Report(_EAS_SEVERITY_ERROR,
 					"MMAPI_HWRecordBuffer: ERROR: buffer overflow, could only write %d bytes instead of %d!\n",
 					(int) pos, (int) count);
 			}
-			#endif
-		}
-	}
-	#ifdef SONIVOX_DEBUG
-	if (res != EAS_SUCCESS) {
+#endif
+        }
+    }
+#ifdef SONIVOX_DEBUG
+    if (res != EAS_SUCCESS) {
 		EAS_Report(_EAS_SEVERITY_ERROR, "MMAPI_HWRecordBuffer: ERROR: error code=%d\n", (int) res);
 	}
-	#endif
-	return res;
+#endif
+    return res;
 }
 
 

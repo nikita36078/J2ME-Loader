@@ -35,16 +35,16 @@ const EAS_U32 WAVE_TAG_DATA = 0x61746164;
 
 /* .WAV file header */
 typedef struct {
-	EAS_U32 nRiffTag;
-	EAS_U32 nRiffSize;
-	EAS_U32 nWaveTag;
-	EAS_U32 nFmtTag;
-	EAS_U32 nFmtSize;
-	WAVE_FMT_CHUNK fc;
-	EAS_U16 wSizeOfOptionalData;
-	EAS_U16 wPadding;
-	EAS_U32 nDataTag;
-	EAS_U32 nDataSize;
+    EAS_U32 nRiffTag;
+    EAS_U32 nRiffSize;
+    EAS_U32 nWaveTag;
+    EAS_U32 nFmtTag;
+    EAS_U32 nFmtSize;
+    WAVE_FMT_CHUNK fc;
+    EAS_U16 wSizeOfOptionalData;
+    EAS_U16 wPadding;
+    EAS_U32 nDataTag;
+    EAS_U32 nDataSize;
 } WAVE_HEADER;
 
 #pragma pack ()
@@ -136,31 +136,31 @@ static void FlipWaveHeader (WAVE_HEADER *p)
  *
  *----------------------------------------------------------------------------
 */
-EAS_RESULT WAVE_FillFormat(WAVE_FMT_CHUNK* fmt, 
-						 MMAPI_CAPTURE_ENCODING encoding, EAS_I32 rate, EAS_I32 bits, 
-						 EAS_I32 channels, EAS_BOOL isBigEndian, EAS_BOOL isSigned) {
-	if (encoding == MMAPI_CAPTURE_ENCODING_PCM) {
-		/* sanity check */
-		if (rate < 1000 || rate > 96000 || bits < 8 || bits > 24 
-			|| channels < 1 || channels > 2 || isBigEndian 
-			|| (bits == 8 && isSigned)) {
-				return EAS_FAILURE;
-		}
-	}
-	switch (encoding) {
-	case MMAPI_CAPTURE_ENCODING_PCM:
-		fmt->wFormatTag = WAVE_FORMAT_TAG_PCM;
-		break;
-	default:
-		/* encoding not supported */
-		return EAS_FAILURE;
-	}
-	fmt->nChannels = (EAS_U16) channels;
-	fmt->nSamplesPerSec = rate;
-	fmt->wBitsPerSample = (EAS_U16) bits;
-	fmt->nBlockAlign = (fmt->wBitsPerSample + 7) / 8;
-	fmt->nAvgBytesPerSec = fmt->nBlockAlign * fmt->nSamplesPerSec;
-	return EAS_SUCCESS;
+EAS_RESULT WAVE_FillFormat(WAVE_FMT_CHUNK* fmt,
+                           MMAPI_CAPTURE_ENCODING encoding, EAS_I32 rate, EAS_I32 bits,
+                           EAS_I32 channels, EAS_BOOL isBigEndian, EAS_BOOL isSigned) {
+    if (encoding == MMAPI_CAPTURE_ENCODING_PCM) {
+        /* sanity check */
+        if (rate < 1000 || rate > 96000 || bits < 8 || bits > 24
+            || channels < 1 || channels > 2 || isBigEndian
+            || (bits == 8 && isSigned)) {
+            return EAS_FAILURE;
+        }
+    }
+    switch (encoding) {
+        case MMAPI_CAPTURE_ENCODING_PCM:
+            fmt->wFormatTag = WAVE_FORMAT_TAG_PCM;
+            break;
+        default:
+            /* encoding not supported */
+            return EAS_FAILURE;
+    }
+    fmt->nChannels = (EAS_U16) channels;
+    fmt->nSamplesPerSec = rate;
+    fmt->wBitsPerSample = (EAS_U16) bits;
+    fmt->nBlockAlign = (fmt->wBitsPerSample + 7) / 8;
+    fmt->nAvgBytesPerSec = fmt->nBlockAlign * fmt->nSamplesPerSec;
+    return EAS_SUCCESS;
 }
 
 
@@ -179,67 +179,67 @@ EAS_RESULT WAVE_FillFormat(WAVE_FMT_CHUNK* fmt,
  *
  *----------------------------------------------------------------------------
 */
-EAS_RESULT WAVE_WriteHeaderImpl(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, 
-								MMAPI_MediaBuffer* mb,
-							    WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize) {
-	WAVE_HEADER header;
-	EAS_RESULT res = EAS_FAILURE;
-	
-	/* initialize .WAV file header */
-	header.nRiffTag = WAVE_TAG_RIFF;
-	if (dataSize >= 0) {
-		header.nRiffSize = sizeof(WAVE_HEADER) - 8 + ((EAS_U32) dataSize);
-	} else {
-#ifdef MMAPI_CAPTURE_STREAMING_WORKAROUND
-		if (dataSize == -2) 
-			/* workaround value for EAS to mean unlimited size */
-			header.nRiffSize = MMAPI_WAVE_SIZE_UNKNOWN;
-		else
-#endif
-		/* if data size is not known, use 0xFFFFFFFF as data size 
-		 * (per specification of WAVE file format) */
-		header.nRiffSize = WAVE_SIZE_NOT_KNOWN;
-	}
-	header.nWaveTag = WAVE_TAG_WAVE;
-	header.nFmtTag = WAVE_TAG_FMT;
-	header.nFmtSize = sizeof(WAVE_FMT_CHUNK) + sizeof(header.wSizeOfOptionalData) + sizeof(header.wPadding);
+EAS_RESULT WAVE_WriteHeaderImpl(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
+                                MMAPI_MediaBuffer* mb,
+                                WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize) {
+    WAVE_HEADER header;
+    EAS_RESULT res = EAS_FAILURE;
 
-	/* copy 'fmt' chunk */
-	header.fc = (*fmt);
-	header.wSizeOfOptionalData = 0;
-	header.wPadding = 0;
-
-	/* initialize 'data' chunk */
-	header.nDataTag = WAVE_TAG_DATA;
-	if (dataSize >= 0) {
-		header.nDataSize = (EAS_U32) dataSize;
-	} else {
+    /* initialize .WAV file header */
+    header.nRiffTag = WAVE_TAG_RIFF;
+    if (dataSize >= 0) {
+        header.nRiffSize = sizeof(WAVE_HEADER) - 8 + ((EAS_U32) dataSize);
+    } else {
 #ifdef MMAPI_CAPTURE_STREAMING_WORKAROUND
-		if (dataSize == -2) 
-			/* workaround value for EAS to mean unlimited size */
-			header.nDataSize = MMAPI_WAVE_SIZE_UNKNOWN;
-		else
+        if (dataSize == -2)
+            /* workaround value for EAS to mean unlimited size */
+            header.nRiffSize = MMAPI_WAVE_SIZE_UNKNOWN;
+        else
 #endif
-		/* if total length is (not yet) known, set the data size to -1, 
-		 * per the WAVE file spec */
-		header.nDataSize = WAVE_SIZE_NOT_KNOWN;
-	}
+            /* if data size is not known, use 0xFFFFFFFF as data size
+             * (per specification of WAVE file format) */
+            header.nRiffSize = WAVE_SIZE_NOT_KNOWN;
+    }
+    header.nWaveTag = WAVE_TAG_WAVE;
+    header.nFmtTag = WAVE_TAG_FMT;
+    header.nFmtSize = sizeof(WAVE_FMT_CHUNK) + sizeof(header.wSizeOfOptionalData) + sizeof(header.wPadding);
+
+    /* copy 'fmt' chunk */
+    header.fc = (*fmt);
+    header.wSizeOfOptionalData = 0;
+    header.wPadding = 0;
+
+    /* initialize 'data' chunk */
+    header.nDataTag = WAVE_TAG_DATA;
+    if (dataSize >= 0) {
+        header.nDataSize = (EAS_U32) dataSize;
+    } else {
+#ifdef MMAPI_CAPTURE_STREAMING_WORKAROUND
+        if (dataSize == -2)
+            /* workaround value for EAS to mean unlimited size */
+            header.nDataSize = MMAPI_WAVE_SIZE_UNKNOWN;
+        else
+#endif
+            /* if total length is (not yet) known, set the data size to -1,
+             * per the WAVE file spec */
+            header.nDataSize = WAVE_SIZE_NOT_KNOWN;
+    }
 
 #ifdef _BIG_ENDIAN
-	FlipWaveHeader(&header);
+    FlipWaveHeader(&header);
 #endif
 
-	/* write the header */
-	if (hwInstData != NULL && file != NULL) {
-		res = MMAPI_HWWriteFile(hwInstData, file, &header, sizeof(WAVE_HEADER), headerSize);
-	} else
-	if (mb != NULL) {
-		res = MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_STREAM, mb, (EAS_U8*) &header, sizeof(WAVE_HEADER), headerSize);
-	}
-	if (res == EAS_SUCCESS && (*headerSize) != sizeof(WAVE_HEADER)) {
-		res = EAS_FAILURE;
-	}
-	return res;
+    /* write the header */
+    if (hwInstData != NULL && file != NULL) {
+        res = MMAPI_HWWriteFile(hwInstData, file, &header, sizeof(WAVE_HEADER), headerSize);
+    } else
+    if (mb != NULL) {
+        res = MMAPI_HWWriteFileImpl(MMAPI_OPEN_MODE_STREAM, mb, (EAS_U8*) &header, sizeof(WAVE_HEADER), headerSize);
+    }
+    if (res == EAS_SUCCESS && (*headerSize) != sizeof(WAVE_HEADER)) {
+        res = EAS_FAILURE;
+    }
+    return res;
 }
 
 
@@ -259,8 +259,8 @@ EAS_RESULT WAVE_WriteHeaderImpl(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE f
  *----------------------------------------------------------------------------
 */
 EAS_RESULT WAVE_WriteHeaderToBuffer(MMAPI_MediaBuffer* mb,
-						    WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize) {
-	return WAVE_WriteHeaderImpl(NULL, NULL, mb, fmt, dataSize, headerSize);
+                                    WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize) {
+    return WAVE_WriteHeaderImpl(NULL, NULL, mb, fmt, dataSize, headerSize);
 }
 
 /*----------------------------------------------------------------------------
@@ -279,9 +279,9 @@ EAS_RESULT WAVE_WriteHeaderToBuffer(MMAPI_MediaBuffer* mb,
  *
  *----------------------------------------------------------------------------
 */
-EAS_RESULT WAVE_WriteHeader(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file, 
-						    WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize) {
-	return WAVE_WriteHeaderImpl(hwInstData, file, NULL, fmt, dataSize, headerSize);
+EAS_RESULT WAVE_WriteHeader(EAS_HW_DATA_HANDLE hwInstData, EAS_FILE_HANDLE file,
+                            WAVE_FMT_CHUNK* fmt, EAS_I32 dataSize, EAS_I32* headerSize) {
+    return WAVE_WriteHeaderImpl(hwInstData, file, NULL, fmt, dataSize, headerSize);
 }
 
 
