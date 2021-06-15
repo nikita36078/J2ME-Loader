@@ -1,29 +1,41 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * %W% %E%
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
+
 package javax.microedition.media.protocol;
+
+/**
+ * A <CODE>ContentDescriptor</CODE> identifies media data containers.
+ *
+ * @see SourceStream
+ */
 
 public class ContentDescriptor {
 
-	private String contentType;
+    private String encoding;
 
-	public ContentDescriptor(String contentType) {
-		this.contentType = contentType;
-	}
+    /**
+     * Obtain a string that represents the content type
+     * for this descriptor.
+     * If the content type is not known, <code>null</code> is returned.
+     *
+     * @return The content type.
+     */
+    public String getContentType() {
+	return encoding;
+    }
 
-	public String getContentType() {
-		return contentType;
-	}
+    /**
+     * Create a content descriptor with the specified content type.
+     *
+     * @param contentType The content type of this descriptor.
+     * If <code>contentType</code> is <code>null</code>, the type
+     * of the content is unknown.
+     */
+    public ContentDescriptor(String contentType) {
+	encoding = contentType;
+    }
 }

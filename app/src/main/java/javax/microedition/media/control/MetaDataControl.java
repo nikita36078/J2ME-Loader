@@ -1,43 +1,86 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * %W% %E%
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package javax.microedition.media.control;
 
-import javax.microedition.media.Control;
+//import javax.microedition.media.MediaException;
 
-public interface MetaDataControl extends Control {
-	public static final String TRACK_NUMBER_KEY = "tracknum";
-	public static final String ALBUM_KEY = "album";
-	public static final String ARTIST_KEY = "artist";
-	public static final String AUTHOR_KEY = "author";
-	public static final String COMPOSER_KEY = "composer";
-	public static final String DATE_KEY = "date";
-	public static final String GENRE_KEY = "genre";
-	public static final String TITLE_KEY = "title";
-	public static final String YEAR_KEY = "year";
-	public static final String DURATION_KEY = "duration";
-	public static final String NUM_TRACKS_KEY = "numtracks";
-	public static final String WRITER_KEY = "writer";
-	public static final String MIME_TYPE_KEY = "mimetype";
-	public static final String ALBUM_ARTIST_KEY = "albumartist";
-	public static final String DISC_NUMBER_KEY = "discnum";
-	public static final String COMPILATION_KEY = "compilation";
-	public static final String COPYRIGHT_KEY = "copyright";
+/**
+ * <code>MetaDataControl</code> is used to retrieve metadata information
+ * included within the media streams.  A <code>MetaDataControl</code>
+ * object recognizes and stores metadata and provides XML-like accessor
+ * methods to retrieve this information.
+ * <br>
+ * Predefined keys are provided to refer to commonly used metadata fields
+ * (title, copyright, data, author).
+ */
+public interface MetaDataControl extends javax.microedition.media.Control {
 
-	public String[] getKeys();
+    /**
+     * Default key for AUTHOR information.
+     * <p>
+     * Value "author" is assigned to <code>AUTHOR_KEY</code>.
+     */
+    String AUTHOR_KEY = "author";
 
-	public String getKeyValue(String key);
+    /**
+     * Default key for COPYRIGHT information.
+     * <p>
+     * Value "copyright" is assigned to <code>COPYRIGHT_KEY</code>.
+     */
+    String COPYRIGHT_KEY = "copyright";
+
+    /**
+     * Default key for DATE information.
+     * <p>
+     * Value "date" is assigned to <code>DATE_KEY</code>.
+     */
+    String DATE_KEY = "date";
+
+    /**
+     * Default key for TITLE information.
+     * <p>
+     * Value "title" is assigned to <code>TITLE_KEY</code>.
+     */
+    String TITLE_KEY = "title";
+
+    /**
+     * Return the list of keys for the available metadata values.
+     * The returned array must be an array with at least one
+     * key.
+     *
+     * @return The list of keys for the available metadata values.
+     */
+    String[] getKeys();
+
+    /**
+     * Retrieve the value found in the metadata associated with the
+     * given key.  Only keys obtained from <code>getKeys</code>
+     * are valid and can be used to retrieve metadata values.
+     * If <code>null</code> or an invalid key is used, an
+     * <code>IllegalArgumentException</code> will be thrown.
+     * <p>
+     * Some keys are valid but the associated metadata may not
+     * be available before a certain portion of the media is
+     * played.  For example, some streaming media types may
+     * contain metadata that's stored at the end of the file.
+     * As a result, the metadata may not be available
+     * until the playback reaches the end of media.  When
+     * that happens, calling <code>getKeyValues</code> with
+     * those keys will return <code>null</code> before the
+     * data is available.  However, when the playback reaches
+     * the end of media, all metadata values must be
+     * made available.
+     *
+     * @param key a key to retrieve the value.
+     * @return the value of the key or null if the given key is valid but
+     * the value is not yet available.
+     * @exception IllegalArgumentException Thrown if the given key is
+     * <code>null</code> or invalid.
+     */
+    String getKeyValue(String key);
 }
