@@ -20,7 +20,6 @@ import java.util.HashMap;
 
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.Control;
-import javax.microedition.media.InternalEqualizer;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 
@@ -29,8 +28,6 @@ public class GlobalManager {
 	private static HashMap<String, Control> controls = new HashMap<>();
 
 	static {
-		InternalEqualizer equalizer = new InternalEqualizer();
-		controls.put(EqualizerControl.class.getName(), equalizer);
 	}
 
 	public static Control[] getControls() {

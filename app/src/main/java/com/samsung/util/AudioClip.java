@@ -36,7 +36,7 @@ public class AudioClip {
 		try {
 			InputStream stream = ContextHolder.getResourceAsStream(null, filename);
 			player = Manager.createPlayer(stream, "audio/midi");
-		} catch (IOException e) {
+		} catch (IOException | MediaException e) {
 			e.printStackTrace();
 		}
 	}
@@ -44,7 +44,7 @@ public class AudioClip {
 	public AudioClip(int type, byte[] audioData, int audioOffset, int audioLength) {
 		try {
 			player = Manager.createPlayer(new ByteArrayInputStream(audioData), "audio/mmf");
-		} catch (IOException e) {
+		} catch (IOException | MediaException e) {
 			e.printStackTrace();
 		}
 	}

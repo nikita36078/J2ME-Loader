@@ -26,7 +26,7 @@ import javax.microedition.media.Player;
 public class Sound {
 	private Player player;
 
-	public Sound(byte[] data) throws IOException {
+	public Sound(byte[] data) throws IOException, MediaException {
 		if (data == null) {
 			throw new NullPointerException("sound data is null!");
 		}
