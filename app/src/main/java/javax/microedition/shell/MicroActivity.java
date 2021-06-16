@@ -26,14 +26,20 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -396,6 +402,8 @@ public class MicroActivity extends AppCompatActivity {
 				takeScreenshot();
 			} else if (id == R.id.action_save_log) {
 				saveLog();
+			} else if (id == R.id.action_limit_fps){
+				showLimitFpsDialog();
 			} else if (ContextHolder.getVk() != null) {
 				// Handled only when virtual keyboard is enabled
 				handleVkOptions(id);
@@ -509,6 +517,40 @@ public class MicroActivity extends AppCompatActivity {
 					}
 				});
 		builder.show();
+	}
+
+	private void showLimitFpsDialog(){
+		EditText editText = new EditText(this);
+		editText.setHint(R.string.limit_fps_dialog_hint);
+		editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+		editText.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+		editText.setMaxLines(1);
+		editText.setSingleLine(true);
+		float density = getResources().getDisplayMetrics().density;
+		LinearLayout linearLayout = new LinearLayout(this);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT);
+		int margin = (int) (density * 20);
+		params.setMargins(margin, 0, margin, 0);
+		linearLayout.addView(editText, params);
+		int paddingVertical = (int) (density * 16);
+		int paddingHorizontal = (int) (density * 8);
+		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.PREF_LIMIT_FPS)
+				.setView(linearLayout)
+				.setPositiveButton(android.R.string.ok, (d, w) -> {
+					Editable text = editText.getText();
+					int fps = 0;
+					try {
+						fps = TextUtils.isEmpty(text) ? 0 : Integer.parseInt(text.toString().trim());
+					} catch (NumberFormatException ignored) {
+					}
+					microLoader.setLimitFps(fps);
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.setNeutralButton(R.string.reset, ((d, which) -> microLoader.setLimitFps(-1)))
+				.show();
 	}
 
 	@Override
