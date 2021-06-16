@@ -143,7 +143,7 @@ public abstract class Canvas extends Displayable {
 	private final RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
 	private long lastFrameTime = System.currentTimeMillis();
 	private Handler uiHandler;
-	private Overlay overlay;
+	private final Overlay overlay = ContextHolder.getVk();
 	private FpsCounter fpsCounter;
 	private static int scaleType;
 	private static int screenGravity;
@@ -258,16 +258,6 @@ public abstract class Canvas extends Displayable {
 		if (fpsCounter != null) {
 			fpsCounter.increment();
 		}
-	}
-
-	public void setOverlay(Overlay ov) {
-		if (overlay != null) {
-			overlay.setTarget(null);
-		}
-		if (ov != null) {
-			ov.setTarget(this);
-		}
-		overlay = ov;
 	}
 
 	public Single<Bitmap> getScreenShot() {
@@ -1054,6 +1044,9 @@ public abstract class Canvas extends Displayable {
 				overlayView.addLayer(fpsCounter);
 			}
 			overlayView.setVisibility(true);
+			if (overlay != null) {
+				overlay.setTarget(Canvas.this);
+			}
 		}
 
 		@Override
@@ -1071,6 +1064,10 @@ public abstract class Canvas extends Displayable {
 				}
 			}
 			overlayView.setVisibility(false);
+			if (overlay != null) {
+				overlay.setTarget(null);
+				overlay.cancel();
+			}
 		}
 
 	}

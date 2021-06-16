@@ -92,7 +92,7 @@ public class Display {
 			alert.setNextDisplayable(current);
 			showAlert(alert);
 		} else {
-			changeCurrent(disp);
+			current = disp;
 			showCurrent();
 		}
 	}
@@ -115,16 +115,6 @@ public class Display {
 				ViewHandler.postDelayed(alertDialog::dismiss, alert.getTimeout());
 			}
 		});
-	}
-
-	private void changeCurrent(Displayable disp) {
-		if (current instanceof Canvas) {
-			((Canvas) current).setOverlay(null);
-		}
-		if (disp instanceof Canvas) {
-			((Canvas) disp).setOverlay(ContextHolder.getVk());
-		}
-		current = disp;
 	}
 
 	private void showCurrent() {
