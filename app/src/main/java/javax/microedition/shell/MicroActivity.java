@@ -521,7 +521,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void showLimitFpsDialog(){
 		EditText editText = new EditText(this);
-		editText.setHint(R.string.limit_fps_dialog_hint);
+		editText.setHint(R.string.unlimited);
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER);
 		editText.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
 		editText.setMaxLines(1);
