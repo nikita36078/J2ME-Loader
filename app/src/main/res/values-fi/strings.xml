@@ -81,4 +81,5 @@
     <string name="pref_app_sort_title">Sovellusten lajittelujärjestys</string>
     <string name="pref_app_sort_name">Nimi</string>
     <string name="pref_app_sort_date">Päivämäärä</string>
+    <string name="show_qwerty">Näytä QWERTY-näppäimistö</string>
 </resources>

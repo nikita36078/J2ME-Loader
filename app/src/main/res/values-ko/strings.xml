@@ -115,6 +115,7 @@
     <string name="layout_switch">버튼 배치를 맞바꾸다</string>
     <string name="hide_buttons">숨김 버튼</string>
     <string name="take_screenshot">스크린 캡처</string>
+    <string name="show_qwerty">QWERTY 키보드 표시</string>
     <string name="screenshot_saved">스크린샷이 저장되었습니다</string>
     <string name="log_saved">Log 저장됨</string>
     <string name="common_settings">[상용 설정]</string>

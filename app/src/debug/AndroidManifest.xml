@@ -5,6 +5,7 @@
     <application tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name="javax.microedition.shell.MicroActivity"
+            android:windowSoftInputMode="adjustResize"
             tools:remove="android:process"/>
     </application>
 

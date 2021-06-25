@@ -101,6 +101,7 @@
     <string name="layout_switch">Cambiar disposición del teclado</string>
     <string name="hide_buttons">Ocultar botones</string>
     <string name="take_screenshot">Tomar captura de pantalla</string>
+    <string name="show_qwerty">Abrir teclado QWERTY</string>
     <string name="screenshot_saved">La captura de pantalla se ha guardado en</string>
     <string name="log_saved">El registro ha sido guardado</string>
     <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>

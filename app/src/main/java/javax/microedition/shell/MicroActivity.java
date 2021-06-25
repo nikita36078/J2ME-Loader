@@ -18,6 +18,7 @@
 package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -92,9 +94,11 @@ public class MicroActivity extends AppCompatActivity {
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
 	private String appName;
+	private InputMethodManager keyboard;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		keyboard = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		setTheme(sp.getString(PREF_THEME, "light"));
 		super.onCreate(savedInstanceState);
@@ -141,6 +145,7 @@ public class MicroActivity extends AppCompatActivity {
 			e.printStackTrace();
 			showErrorDialog(e.toString());
 		}
+
 	}
 
 	@Override
@@ -343,6 +348,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
+
 		if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU) && !keyLongPressed) {
 			openOptionsMenu();
 			return true;
@@ -400,6 +406,8 @@ public class MicroActivity extends AppCompatActivity {
 				showExitConfirmation();
 			} else if (id == R.id.action_take_screenshot) {
 				takeScreenshot();
+			}else if(id == R.id.action_show_QWERTY){
+				showQWERTYKeyboard();
 			} else if (id == R.id.action_save_log) {
 				saveLog();
 			} else if (id == R.id.action_limit_fps){
@@ -461,6 +469,27 @@ public class MicroActivity extends AppCompatActivity {
 						Toast.makeText(MicroActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
 					}
 				});
+	}
+
+	//@TODO Fix the bug that makes the keyboard don't work anymore after closing a MIDlet and openning another, until J2ME Loader is minimized and remaximized
+	private void showQWERTYKeyboard(){
+
+		if (current == null || !(current instanceof Canvas)) {
+			return;
+		}
+
+		Canvas canvas = (Canvas) current;
+		current.getDisplayableView(); //Makes sure there's a displayable view
+		View view = ContextHolder.getActivity().getCurrentFocus();//canvas.getInnerView();
+		view.requestFocus();
+
+		keyboard.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+		//keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+	}
+
+	private void hideQWERTYKeyboard(){
+		View view = ContextHolder.getActivity().getCurrentFocus();
+		keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
 	private void saveLog() {

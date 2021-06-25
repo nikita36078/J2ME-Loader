@@ -8,6 +8,12 @@
             app:showAsAction="always"/>
 
         <item
+            android:icon="@drawable/ic_baseline_keyboard_24"
+            android:id="@+id/action_show_QWERTY"
+            android:title="@string/show_qwerty"
+            app:showAsAction="always"/>
+
+        <item
             android:id="@+id/action_limit_fps"
             android:title="@string/PREF_LIMIT_FPS"
             />

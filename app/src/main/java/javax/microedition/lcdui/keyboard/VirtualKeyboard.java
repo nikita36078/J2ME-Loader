@@ -908,9 +908,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						vibrate();
 						associatedKeys[pointer] = aKeypad;
 						aKeypad.selected = true;
-						target.postKeyPressed(aKeypad.keyCode);
+						target.postKeyPressed(KeyMapper.convertKeyCode(aKeypad.keyCode));
 						if (aKeypad.secondKeyCode != 0) {
-							target.postKeyPressed(aKeypad.secondKeyCode);
+							target.postKeyPressed(KeyMapper.convertKeyCode(aKeypad.secondKeyCode));
 						}
 						handler.postDelayed(aKeypad, 400);
 						overlayView.postInvalidate();
@@ -966,10 +966,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				} else if (!aKey.contains(x, y)) {
 					associatedKeys[pointer] = null;
 					handler.removeCallbacks(aKey);
-					target.postKeyReleased(aKey.keyCode);
+					target.postKeyReleased(KeyMapper.convertKeyCode(aKey.keyCode));
 					int secondKeyCode = aKey.secondKeyCode;
 					if (secondKeyCode != 0) {
-						target.postKeyReleased(secondKeyCode);
+						target.postKeyReleased(KeyMapper.convertKeyCode(secondKeyCode));
 					}
 					aKey.selected = false;
 					overlayView.postInvalidate();
@@ -1041,10 +1041,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (key != null) {
 				associatedKeys[pointer] = null;
 				handler.removeCallbacks(key);
-				target.postKeyReleased(key.keyCode);
+				target.postKeyReleased(KeyMapper.convertKeyCode(key.keyCode));
 				int secondKeyCode = key.secondKeyCode;
 				if (secondKeyCode != 0) {
-					target.postKeyReleased(secondKeyCode);
+					target.postKeyReleased(KeyMapper.convertKeyCode(secondKeyCode));
 				}
 				key.selected = false;
 				overlayView.postInvalidate();
@@ -1276,9 +1276,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				return;
 			}
 			if (selected) {
-				target.postKeyRepeated(keyCode);
+				target.postKeyRepeated(KeyMapper.convertKeyCode(keyCode));
 				if (secondKeyCode != 0) {
-					target.postKeyRepeated(secondKeyCode);
+					target.postKeyRepeated(KeyMapper.convertKeyCode(secondKeyCode));
 				}
 				handler.postDelayed(this, repeatCount > 6 ? 80 : REPEAT_INTERVALS[repeatCount++]);
 			} else {

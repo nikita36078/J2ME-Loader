@@ -53,7 +53,8 @@ public class KeyMapper {
 	private static final SparseIntArray keyCodeToCustom = new SparseIntArray();
 	private static final SparseIntArray keyCodeToGameAction = new SparseIntArray();
 	private static final SparseIntArray gameActionToKeyCode = new SparseIntArray();
-	private static SparseIntArray androidToMIDP;
+	private static SparseIntArray androidToMIDP = new SparseIntArray();
+	private static SparseIntArray SymToMIDP = new SparseIntArray(), CommToMIDP = new SparseIntArray();
 	private static int layoutType;
 
 	static {
@@ -89,6 +90,40 @@ public class KeyMapper {
 		mapGameAction(GAME_B, KEY_NUM9);
 		mapGameAction(GAME_C, KEY_STAR);
 		mapGameAction(GAME_D, KEY_POUND);
+
+		SymToMIDP.put(KeyEvent.KEYCODE_SPACE, 32); //Space
+		SymToMIDP.put(8, 33); //!
+		SymToMIDP.put(75, 34); //"
+		SymToMIDP.put(KeyEvent.KEYCODE_POUND, 35); //#
+		SymToMIDP.put(11, 36); //$
+		SymToMIDP.put(12, 37); //%
+		SymToMIDP.put(14, 38); //&
+		SymToMIDP.put(KeyEvent.KEYCODE_APOSTROPHE, 39); //'
+		SymToMIDP.put(16, 40); //(
+		SymToMIDP.put(7, 41); //)
+		SymToMIDP.put(KeyEvent.KEYCODE_STAR, 42); //*
+		SymToMIDP.put(KeyEvent.KEYCODE_NUMPAD_ADD, 43); //+
+		SymToMIDP.put(KeyEvent.KEYCODE_COMMA, 44); //,
+		SymToMIDP.put(KeyEvent.KEYCODE_MINUS, 45); //-
+		SymToMIDP.put(KeyEvent.KEYCODE_PERIOD, 46); //.
+		SymToMIDP.put(KeyEvent.KEYCODE_SLASH, 47); // /
+		SymToMIDP.put(74, 58); //:
+		SymToMIDP.put(KeyEvent.KEYCODE_SEMICOLON, 59);//;
+		SymToMIDP.put(55, 60); //<
+		SymToMIDP.put(KeyEvent.KEYCODE_EQUALS, 61); //=
+		SymToMIDP.put(56, 62); //>
+		SymToMIDP.put(76, 63); //?
+		SymToMIDP.put(KeyEvent.KEYCODE_AT, 64); //@
+		//SymToMIDP.put(68, 126); //~ Disabled, same code as grave (`)
+		SymToMIDP.put(KeyEvent.KEYCODE_LEFT_BRACKET, 91); //[
+		SymToMIDP.put(KeyEvent.KEYCODE_BACKSLASH, 92); //\
+		SymToMIDP.put(KeyEvent.KEYCODE_RIGHT_BRACKET, 93); //]
+		SymToMIDP.put(13, 94);//^
+		SymToMIDP.put(69, 95);//_
+		SymToMIDP.put(KeyEvent.KEYCODE_GRAVE, 96); //`
+
+		CommToMIDP.put(KeyEvent.KEYCODE_DEL, -8/*127*//*8*/); //Backspace
+
 	}
 
 	private static void remapKeys() {
@@ -156,6 +191,14 @@ public class KeyMapper {
 		return keyCodeToCustom.get(keyCode, keyCode);
 	}
 
+	public static int SymToMIDP(int code){
+		return SymToMIDP.get(code, Integer.MAX_VALUE);
+	}
+
+	public static int CommToMIDP(int code){
+		return CommToMIDP.get(code, Integer.MAX_VALUE);
+	}
+
 	public static void setKeyMapping(ProfileModel params) {
 		layoutType = params.keyCodesLayout;
 		androidToMIDP = params.keyMappings;
@@ -174,7 +217,9 @@ public class KeyMapper {
 	}
 
 	public static String getKeyName(int keyCode) {
-		return keyCodeToKeyName.get(keyCode);
+		String value = keyCodeToKeyName.get(keyCode, null);;
+		if(value == null) return String.valueOf((char)keyCode);
+		return value;
 	}
 
 	public static SparseIntArray getDefaultKeyMap() {

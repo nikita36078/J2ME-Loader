@@ -101,6 +101,7 @@
     <string name="layout_switch">Elrendezés váltása</string>
     <string name="hide_buttons">Gombok elrejtése</string>
     <string name="take_screenshot">Képernyőmentés készítése</string>
+    <string name="show_qwerty">QWERTY billentyűzet megjelenítése</string>
     <string name="screenshot_saved">A kép mentési helye:</string>
     <string name="log_saved">A naplófájl mentésre került</string>
     <string name="common_settings">[ÁLTALÁNOS BEÁLLÍTÁSOK]</string>

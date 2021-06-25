@@ -142,6 +142,7 @@ public abstract class Canvas extends Displayable {
 	private FpsCounter fpsCounter;
 	private static int scaleType;
 	private static int screenGravity;
+	private boolean Symbol=false;
 
 	public Canvas() {
 		if (graphicsMode == 1) {
@@ -221,16 +222,16 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	public void postKeyPressed(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
+	public void postKeyPressed(int keyCode){
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, keyCode));
 	}
 
-	public void postKeyReleased(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
+	public void postKeyReleased(int keyCode){
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, keyCode));
 	}
 
-	public void postKeyRepeated(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
+	public void postKeyRepeated(int keyCode){
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, keyCode));
 	}
 
 	public void callShowNotify() {
@@ -474,7 +475,13 @@ public abstract class Canvas extends Displayable {
 			innerView.setFocusableInTouchMode(true);
 			layout.addView(innerView);
 		}
+
+		Log.d("ViewCallbacks", "layout returned");
 		return layout;
+	}
+
+	public SurfaceView getInnerView(){
+		return innerView;
 	}
 
 	@Override
@@ -890,10 +897,13 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
-			keyCode = KeyMapper.convertAndroidKeyCode(keyCode);
+
+			keyCode=convertKeyCode(keyCode, event);
+
 			if (keyCode == Integer.MAX_VALUE) {
 				return false;
 			}
+
 			if (event.getRepeatCount() == 0) {
 				if (overlay == null || !overlay.keyPressed(keyCode)) {
 					postKeyPressed(keyCode);
@@ -907,7 +917,9 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			keyCode = KeyMapper.convertAndroidKeyCode(keyCode);
+
+			keyCode = convertKeyCode(keyCode, event);
+
 			if (keyCode == Integer.MAX_VALUE) {
 				return false;
 			}
@@ -915,6 +927,45 @@ public abstract class Canvas extends Displayable {
 				postKeyReleased(keyCode);
 			}
 			return true;
+		}
+
+		private int convertKeyCode(int keyCode, KeyEvent event){
+
+			if(event.getKeyCode()==KeyEvent.KEYCODE_SHIFT_LEFT || event.getKeyCode()==KeyEvent.KEYCODE_SHIFT_RIGHT){
+				if(event.getAction()==KeyEvent.ACTION_DOWN)
+					Symbol=true;
+				else if(event.getAction()==KeyEvent.ACTION_UP)
+					Symbol=false;
+
+				return Integer.MAX_VALUE;
+			}
+
+			if(event.getKeyCode()==KeyEvent.KEYCODE_ALT_LEFT || event.getKeyCode()==KeyEvent.KEYCODE_ALT_RIGHT)
+				return Integer.MAX_VALUE;
+
+			int code= Integer.MAX_VALUE;
+			if(!Symbol) {
+				code = KeyMapper.convertAndroidKeyCode(keyCode); //Gamepad
+				if (code != Integer.MAX_VALUE) {
+					return KeyMapper.convertKeyCode(code);
+				}
+			}
+
+			//Keyboard is open or not a gamepad command
+			if(Symbol){
+				code = KeyMapper.SymToMIDP(keyCode);
+				if(code != Integer.MAX_VALUE) return code;
+			}
+			//Not a symbol, priviledge command
+			code = KeyMapper.CommToMIDP(keyCode);
+			if(code != Integer.MAX_VALUE){
+				return code;
+			}
+
+			//Not a code, priviledge ASCII
+			keyCode = event.getUnicodeChar();
+
+			return KeyMapper.convertKeyCode(keyCode);
 		}
 
 		@Override

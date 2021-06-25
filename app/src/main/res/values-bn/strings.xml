@@ -92,6 +92,7 @@
     <string name="layout_switch">সুইচ keylayout</string>
     <string name="hide_buttons">বাটন আড়াল করুন</string>
     <string name="take_screenshot">স্ক্রীনশট নিন</string>
+    <string name="show_qwerty">QWERTY কীবোর্ড দেখান </string>
     <string name="screenshot_saved">স্ক্রিনসর্ট সংরক্ষণ করা হয়েছে</string>
     <string name="log_saved">লগ সংরক্ষণ করা হয়েছে</string>
     <string name="common_settings">[সাধারণ সেটিংস]</string>

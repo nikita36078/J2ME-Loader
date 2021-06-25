@@ -101,6 +101,7 @@
     <string name="layout_switch">Сменить раскладку</string>
     <string name="hide_buttons">Скрыть кнопки</string>
     <string name="take_screenshot">Сделать скриншот</string>
+    <string name="show_qwerty">Показать QWERTY клавиатуру</string>
     <string name="screenshot_saved">Скриншот сохранён в</string>
     <string name="log_saved">Лог сохранен</string>
     <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>

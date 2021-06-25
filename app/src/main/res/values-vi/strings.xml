@@ -101,6 +101,7 @@
     <string name="layout_switch">Công tắc cấu trúc phím</string>
     <string name="hide_buttons">Ẩn nút</string>
     <string name="take_screenshot">Chụp ảnh màn hình</string>
+    <string name="show_qwerty">SHiển thị bàn phím QWERTY</string>
     <string name="screenshot_saved">Ảnh chụp màn hình đã được lưu đến</string>
     <string name="log_saved">Log đã được lưu</string>
     <string name="common_settings">[THIẾT LẬP CHUNG]</string>

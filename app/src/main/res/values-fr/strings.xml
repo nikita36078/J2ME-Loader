@@ -99,6 +99,7 @@
     <string name="layout_switch">Changement de l\'affichage du clavier</string>
     <string name="hide_buttons">Masquer les boutons</string>
     <string name="take_screenshot">Prendre une capture d\'écran</string>
+    <string name="show_qwerty">Afficher le clavier QWERTY</string>
     <string name="screenshot_saved">La capture d\'écran a été enregistrée dans</string>
     <string name="log_saved">Logs a été sauvegardé</string>
     <string name="common_settings">[PARAMÈTRES COMMUNS]</string>

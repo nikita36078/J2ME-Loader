@@ -80,6 +80,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar"
             android:process=":midlet"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize" />

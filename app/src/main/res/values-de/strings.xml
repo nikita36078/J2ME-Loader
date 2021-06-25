@@ -91,6 +91,7 @@
     <string name="layout_switch">Tastaturlayout wechseln</string>
     <string name="hide_buttons">Tasten ausblenden</string>
     <string name="take_screenshot">Screenshot aufnehmen</string>
+    <string name="show_qwerty">QWERTZ-Tastatur anzeigen</string>
     <string name="screenshot_saved">Screenshot wurde gespeichert in</string>
     <string name="log_saved">Protokoll wurde gespeichert</string>
     <string name="common_settings">[ALLGEMEINE EINSTELLUNGEN]</string>

@@ -101,6 +101,7 @@
     <string name="layout_switch">Alternar Layout</string>
     <string name="hide_buttons">Esconder botões</string>
     <string name="take_screenshot">Capturar ecrã</string>
+    <string name="show_qwerty">Mostrar teclado QWERTY</string>
     <string name="screenshot_saved">Captura de ecrã foi salva em</string>
     <string name="log_saved">O registro foi salvo</string>
     <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>

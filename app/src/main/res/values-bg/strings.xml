@@ -100,6 +100,7 @@
     <string name="layout_switch">Смяна на подредбата</string>
     <string name="hide_buttons">Скриване на бутони</string>
     <string name="take_screenshot">Снимане на екрана</string>
+    <string name="show_qwerty">Показване на QWERTY клавиатура</string>
     <string name="screenshot_saved">Снимката на екрана беше записана във</string>
     <string name="log_saved">Регистрационния файл е записан</string>
     <string name="common_settings">[ОБЩИ НАСТРОЙКИ]</string>

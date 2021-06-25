@@ -101,6 +101,7 @@
     <string name="layout_switch">Tukar letak tombol</string>
     <string name="hide_buttons">Tombol yang tersembunyi</string>
     <string name="take_screenshot">Ambil screenshot</string>
+    <string name="show_qwerty">Tampilkan papan ketik QWERTY</string>
     <string name="screenshot_saved">Screenshot telah tersimpan ke</string>
     <string name="log_saved">Log telah disimpan</string>
     <string name="common_settings">[PENGATURAN UMUM]</string>

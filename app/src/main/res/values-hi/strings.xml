@@ -101,6 +101,7 @@
     <string name="layout_switch">स्विच कीलेआउट</string>
     <string name="hide_buttons">बटन छिपाएं</string>
     <string name="take_screenshot">स्क्रीनशॉट लें</string>
+    <string name="show_qwerty">QWERTY कीबोर्ड दिखाएं</string>
     <string name="screenshot_saved">स्क्रीनशॉट को सहेज लिया गया है</string>
     <string name="log_saved">लॉग सहेजा गया है</string>
     <string name="common_settings">[सामान्य सेटिंग]</string>

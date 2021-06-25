@@ -101,6 +101,7 @@
     <string name="layout_switch">切换按键布局</string>
     <string name="hide_buttons">隐藏按键</string>
     <string name="take_screenshot">屏幕截图</string>
+    <string name="show_qwerty">显示 QWERTY 键盘</string>
     <string name="screenshot_saved">屏幕截图已保存到</string>
     <string name="log_saved">日志已保存</string>
     <string name="common_settings">常用设置</string>

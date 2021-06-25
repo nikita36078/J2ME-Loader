@@ -81,6 +81,7 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
+    ndkVersion '22.1.7171670'
 }
 
 static def generateVersionCode() {

@@ -101,6 +101,7 @@
     <string name="layout_switch">Tuş düzenini değiştir</string>
     <string name="hide_buttons">Tuşları gizle</string>
     <string name="take_screenshot">Ekran görüntüsü al</string>
+    <string name="show_qwerty">QWERTY klavyeyi göster</string>
     <string name="screenshot_saved">Ekran görüntüsü şuraya kaydedildi</string>
     <string name="log_saved">Günlük kaydedildi</string>
     <string name="common_settings">[GENEL AYARLAR]</string>

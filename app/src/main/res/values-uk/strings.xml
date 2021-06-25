@@ -101,6 +101,7 @@
     <string name="layout_switch">Переключення розкладки клавіатури</string>
     <string name="hide_buttons">Приховати клавіші</string>
     <string name="take_screenshot">Зробити скріншот</string>
+    <string name="show_qwerty">Показати клавіатуру QWERTY</string>
     <string name="screenshot_saved">Скріншот було збережено до</string>
     <string name="log_saved">Журнал помилок збережено</string>
     <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>

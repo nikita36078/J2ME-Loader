@@ -101,6 +101,7 @@
     <string name="layout_switch">Wissel keylayout</string>
     <string name="hide_buttons">Verberg knoppen</string>
     <string name="take_screenshot">Maak schermafbeelding</string>
+    <string name="show_qwerty">QWERTY-toetsenbord weergeven</string>
     <string name="screenshot_saved">Schermafbeelding is opgeslagen in</string>
     <string name="log_saved">Logboek is opgeslagen</string>
     <string name="common_settings">[ALGEMENE INSTELLINGEN]</string>

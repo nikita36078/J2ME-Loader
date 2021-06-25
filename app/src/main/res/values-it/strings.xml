@@ -101,6 +101,7 @@
     <string name="layout_switch">Cambia disposizione tasti</string>
     <string name="hide_buttons">Nascondi tasti</string>
     <string name="take_screenshot">Cattura schermata</string>
+    <string name="show_qwerty">Mostra tastiera QWERTY</string>
     <string name="screenshot_saved">La schermata è stata salvata in</string>
     <string name="log_saved">Il log è stato salvato</string>
     <string name="common_settings">[IMPOSTAZIONI COMUNI]</string>

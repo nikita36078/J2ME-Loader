@@ -5,6 +5,10 @@
             android:title="@string/take_screenshot" />
 
         <item
+            android:id="@+id/action_show_QWERTY"
+            android:title="@string/show_qwerty" />
+
+        <item
             android:id="@+id/action_limit_fps"
             android:title="@string/PREF_LIMIT_FPS"
             />

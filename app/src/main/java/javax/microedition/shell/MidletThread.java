@@ -24,6 +24,7 @@ import android.util.Log;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.util.ContextHolder;
@@ -103,8 +104,8 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 			Displayable current = activity.getCurrent();
 			if (current instanceof Canvas) {
 				Canvas canvas = (Canvas) current;
-				canvas.postKeyPressed(Canvas.KEY_END);
-				canvas.postKeyReleased(Canvas.KEY_END);
+				canvas.postKeyPressed(KeyMapper.convertKeyCode(Canvas.KEY_END));
+				canvas.postKeyReleased(KeyMapper.convertKeyCode(Canvas.KEY_END));
 			}
 		}
 		if (instance != null) {

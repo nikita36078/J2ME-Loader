@@ -94,6 +94,7 @@
     <string name="layout_switch">Zmień układ przycisków</string>
     <string name="hide_buttons">Ukryj przyciski</string>
     <string name="take_screenshot">Zrób zrzut ekranu</string>
+    <string name="show_qwerty">Pokaż klawiaturę QWERTY</string>
     <string name="screenshot_saved">Zrzut ekranu został zapisany w</string>
     <string name="log_saved">Log został zapisany</string>
     <string name="common_settings">[WSPÓLNE USTAWIENIA]</string>

@@ -93,6 +93,7 @@
     <string name="layout_switch">Přepnout rozložení kláves</string>
     <string name="hide_buttons">Skrýt tlačítka</string>
     <string name="take_screenshot">Pořídit snímek obrazovky</string>
+    <string name="show_qwerty">Zobrazit QWERTY klávesnici</string>
     <string name="screenshot_saved">Snímek obrazovky byl uložen do</string>
     <string name="log_saved">Soubor log byl uložen</string>
     <string name="common_settings">[SPOLEČNÁ NASTAVENÍ]</string>

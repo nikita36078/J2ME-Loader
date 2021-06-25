@@ -93,6 +93,7 @@
     <string name="layout_switch">Schimbă formatul tastaturii</string>
     <string name="hide_buttons">Ascunde butoanele</string>
     <string name="take_screenshot">Creează o captură de ecran</string>
+    <string name="show_qwerty">Afișați tastatura QWERTY</string>
     <string name="screenshot_saved">Captura de ecran a fost salvată în</string>
     <string name="log_saved">Jurnalul a fost salvat</string>
     <string name="common_settings">[SETĂRI COMUNE]</string>
