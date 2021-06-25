@@ -943,7 +943,7 @@ public abstract class Canvas extends Displayable {
 			if(event.getKeyCode()==KeyEvent.KEYCODE_ALT_LEFT || event.getKeyCode()==KeyEvent.KEYCODE_ALT_RIGHT)
 				return Integer.MAX_VALUE;
 
-			int code= Integer.MAX_VALUE;
+			int code;
 			if(!Symbol) {
 				code = KeyMapper.convertAndroidKeyCode(keyCode); //Gamepad
 				if (code != Integer.MAX_VALUE) {

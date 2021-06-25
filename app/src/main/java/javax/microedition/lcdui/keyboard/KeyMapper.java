@@ -93,12 +93,11 @@ public class KeyMapper {
 
 		SymToMIDP.put(KeyEvent.KEYCODE_SPACE, 32); //Space
 		SymToMIDP.put(8, 33); //!
-		SymToMIDP.put(75, 34); //"
+		SymToMIDP.put(KeyEvent.KEYCODE_APOSTROPHE, 34); //"
 		SymToMIDP.put(KeyEvent.KEYCODE_POUND, 35); //#
 		SymToMIDP.put(11, 36); //$
 		SymToMIDP.put(12, 37); //%
 		SymToMIDP.put(14, 38); //&
-		SymToMIDP.put(KeyEvent.KEYCODE_APOSTROPHE, 39); //'
 		SymToMIDP.put(16, 40); //(
 		SymToMIDP.put(7, 41); //)
 		SymToMIDP.put(KeyEvent.KEYCODE_STAR, 42); //*
@@ -107,20 +106,17 @@ public class KeyMapper {
 		SymToMIDP.put(KeyEvent.KEYCODE_MINUS, 45); //-
 		SymToMIDP.put(KeyEvent.KEYCODE_PERIOD, 46); //.
 		SymToMIDP.put(KeyEvent.KEYCODE_SLASH, 47); // /
-		SymToMIDP.put(74, 58); //:
-		SymToMIDP.put(KeyEvent.KEYCODE_SEMICOLON, 59);//;
+		SymToMIDP.put(KeyEvent.KEYCODE_SEMICOLON, 58); //:
 		SymToMIDP.put(55, 60); //<
-		SymToMIDP.put(KeyEvent.KEYCODE_EQUALS, 61); //=
 		SymToMIDP.put(56, 62); //>
 		SymToMIDP.put(76, 63); //?
 		SymToMIDP.put(KeyEvent.KEYCODE_AT, 64); //@
-		//SymToMIDP.put(68, 126); //~ Disabled, same code as grave (`)
-		SymToMIDP.put(KeyEvent.KEYCODE_LEFT_BRACKET, 91); //[
-		SymToMIDP.put(KeyEvent.KEYCODE_BACKSLASH, 92); //\
-		SymToMIDP.put(KeyEvent.KEYCODE_RIGHT_BRACKET, 93); //]
+		SymToMIDP.put(KeyEvent.KEYCODE_GRAVE, 126); //~
+		SymToMIDP.put(KeyEvent.KEYCODE_LEFT_BRACKET, 123); //{
+		SymToMIDP.put(KeyEvent.KEYCODE_BACKSLASH, 124); // |
+		SymToMIDP.put(KeyEvent.KEYCODE_RIGHT_BRACKET, 125); //}
 		SymToMIDP.put(13, 94);//^
 		SymToMIDP.put(69, 95);//_
-		SymToMIDP.put(KeyEvent.KEYCODE_GRAVE, 96); //`
 
 		CommToMIDP.put(KeyEvent.KEYCODE_DEL, -8/*127*//*8*/); //Backspace
 

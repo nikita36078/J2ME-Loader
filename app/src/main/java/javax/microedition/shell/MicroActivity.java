@@ -19,7 +19,6 @@ package javax.microedition.shell;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -31,6 +30,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -472,24 +472,42 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	//@TODO Fix the bug that makes the keyboard don't work anymore after closing a MIDlet and openning another, until J2ME Loader is minimized and remaximized
-	private void showQWERTYKeyboard(){
+	private boolean showQWERTYKeyboard(){
 
 		if (current == null || !(current instanceof Canvas)) {
-			return;
+			Log.e("QWERTY.Show", "Current is NULL or not a instance of Canvas");
+			return false;
 		}
 
 		Canvas canvas = (Canvas) current;
 		current.getDisplayableView(); //Makes sure there's a displayable view
-		View view = ContextHolder.getActivity().getCurrentFocus();//canvas.getInnerView();
+		View view = canvas.getInnerView();
+		if(view==null){
+			Log.e("QWERTY.Show", "InnerView is NULL");
+			return false;
+		}
 		view.requestFocus();
+
+		if(ContextHolder.getActivity().getCurrentFocus() != view){
+			Log.e("QWERTY.Show", "Couldn't focus InnerView");
+		}
 
 		keyboard.showSoftInput(view, InputMethodManager.SHOW_FORCED);
 		//keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+		return true;
+
 	}
 
-	private void hideQWERTYKeyboard(){
+	private boolean hideQWERTYKeyboard(){
 		View view = ContextHolder.getActivity().getCurrentFocus();
+		if(view==null){
+			Log.e("QWERTY.Hide", "View is NULL");
+			return false;
+		}
 		keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+		return true;
 	}
 
 	private void saveLog() {
