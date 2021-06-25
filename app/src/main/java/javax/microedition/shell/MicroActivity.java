@@ -490,6 +490,7 @@ public class MicroActivity extends AppCompatActivity {
 
 		if(ContextHolder.getActivity().getCurrentFocus() != view){
 			Log.e("QWERTY.Show", "Couldn't focus InnerView");
+			return false;
 		}
 
 		keyboard.showSoftInput(view, InputMethodManager.SHOW_FORCED);
