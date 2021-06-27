@@ -940,7 +940,7 @@ public abstract class Canvas extends Displayable {
 				return Integer.MAX_VALUE;
 			}
 
-			if(event.getKeyCode()==KeyEvent.KEYCODE_ALT_LEFT || event.getKeyCode()==KeyEvent.KEYCODE_ALT_RIGHT)
+			if(event.getKeyCode()==KeyEvent.KEYCODE_BACK || event.getKeyCode()==KeyEvent.KEYCODE_HOME || event.getKeyCode()==KeyEvent.KEYCODE_MENU || event.getKeyCode()==KeyEvent.KEYCODE_ALT_LEFT || event.getKeyCode()==KeyEvent.KEYCODE_ALT_RIGHT)
 				return Integer.MAX_VALUE;
 
 			int code;
