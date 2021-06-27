@@ -488,10 +488,10 @@ public class MicroActivity extends AppCompatActivity {
 		}
 		view.requestFocus();
 
-		if(ContextHolder.getActivity().getCurrentFocus() != view){
+		/*if(ContextHolder.getActivity().getCurrentFocus() != view){
 			Log.e("QWERTY.Show", "Couldn't focus InnerView");
 			return false;
-		}
+		}*/ //I'm not sure if disabling it will work (make keyboard open at the first time), i suppose the Android Activity takes some little time to focus the View in a different thread
 
 		keyboard.showSoftInput(view, InputMethodManager.SHOW_FORCED);
 		//keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
