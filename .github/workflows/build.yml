@@ -13,5 +13,7 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: Change permission
+        run: chmod +x ./gradlew
       - name: Build the app
         run: ./gradlew build
