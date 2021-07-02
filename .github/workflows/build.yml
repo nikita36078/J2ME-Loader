@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: Gradle version
+        run: ./gradlew --version 
       - name: Change permission
         run: chmod +x ./gradlew
       - name: Build the app
