@@ -19,12 +19,16 @@ package javax.microedition.lcdui.graphics;
 import android.content.Context;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.keyboard.DelKeyWorkaround;
 
 import androidx.annotation.NonNull;
 
 public class CanvasView extends SurfaceView {
+	private InputConnection mPublicInputConnection;
 
 	private final Canvas owner;
 
@@ -45,5 +49,13 @@ public class CanvasView extends SurfaceView {
 	@Override
 	protected void onDraw(android.graphics.Canvas canvas) {
 		owner.onDraw(canvas);
+	}
+
+	@Override
+	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+		if (mPublicInputConnection == null) {
+			mPublicInputConnection = new DelKeyWorkaround(this, false);
+		}
+		return mPublicInputConnection;
 	}
 }

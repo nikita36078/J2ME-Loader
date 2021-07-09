@@ -25,6 +25,7 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -37,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -89,6 +91,7 @@ public class MicroActivity extends AppCompatActivity {
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
 	private String appName;
+	private InputMethodManager inputMethodManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,7 @@ public class MicroActivity extends AppCompatActivity {
 			}
 		}
 		setOrientation(orientation);
+		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
@@ -150,8 +154,16 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onPause() {
 		visible = false;
+		hideSoftInput();
 		MidletThread.pauseApp();
 		super.onPause();
+	}
+
+	private void hideSoftInput() {
+		if (inputMethodManager != null) {
+			IBinder windowToken = layout.getWindowToken();
+			inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+		}
 	}
 
 	@Override
@@ -300,8 +312,12 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.ok, (d, w) -> MidletThread.destroyApp())
+				.setPositiveButton(android.R.string.ok, (d, w) -> {
+					hideSoftInput();
+					MidletThread.destroyApp();
+				})
 				.setNeutralButton(R.string.action_settings, (d, w) -> {
+					hideSoftInput();
 					Intent intent = getIntent();
 					Config.startApp(this, intent.getStringExtra(KEY_MIDLET_NAME),
 							intent.getDataString(), true);
@@ -371,6 +387,9 @@ public class MicroActivity extends AppCompatActivity {
 			} else {
 				inflater.inflate(R.menu.midlet_canvas_no_bar, group);
 			}
+			if (inputMethodManager == null) {
+				menu.findItem(R.id.action_ime_keyboard).setVisible(false);
+			}
 			VirtualKeyboard vk = ContextHolder.getVk();
 			if (vk != null) {
 				inflater.inflate(R.menu.midlet_vk, group);
@@ -393,7 +412,11 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
 		if (item.getGroupId() == R.id.action_group_common_settings) {
-			if (id == R.id.action_exit_midlet) {
+			if (id == R.id.action_ime_keyboard) {
+				inputMethodManager.toggleSoftInputFromWindow(
+						layout.getWindowToken(),
+						InputMethodManager.SHOW_FORCED, 0);
+			} else if (id == R.id.action_exit_midlet) {
 				showExitConfirmation();
 			} else if (id == R.id.action_take_screenshot) {
 				takeScreenshot();

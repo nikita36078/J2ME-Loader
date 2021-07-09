@@ -19,10 +19,15 @@ package javax.microedition.lcdui.graphics;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 import androidx.annotation.NonNull;
 
+import javax.microedition.lcdui.keyboard.DelKeyWorkaround;
+
 public class GlesView extends GLSurfaceView {
+	private InputConnection mPublicInputConnection;
 
 	public GlesView(Context context) {
 		super(context);
@@ -38,5 +43,13 @@ public class GlesView extends GLSurfaceView {
 		if (visibility == VISIBLE) {
 			requestFocus();
 		}
+	}
+
+	@Override
+	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+		if (mPublicInputConnection == null) {
+			mPublicInputConnection = new DelKeyWorkaround(this, false);
+		}
+		return mPublicInputConnection;
 	}
 }
