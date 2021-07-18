@@ -74,7 +74,6 @@
     <string name="error">Fehler</string>
     <string name="message_clear_data">Möchten Sie wirklich die App-Daten löschen?</string>
     <string name="PREF_VK_TYPE">Tastaturtyp</string>
-    <string name="pref_vk_type_custom">Anpassbar</string>
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (Pfeile)</string>
     <string name="PREF_LAYOUT">Layout</string>
