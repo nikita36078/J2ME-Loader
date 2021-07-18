@@ -84,7 +84,6 @@
     <string name="error">Lỗi</string>
     <string name="message_clear_data">Bạn thực sự muốn xoá dữ liệu ứng dụng?</string>
     <string name="PREF_VK_TYPE">Kiểu bàn phím</string>
-    <string name="pref_vk_type_custom">Tùy chỉnh</string>
     <string name="pref_vk_type_phone">Điện thoại</string>
     <string name="pref_vk_type_phone_arrows">Điện thoại(mũi tên)</string>
     <string name="PREF_LAYOUT">Bố cục</string>

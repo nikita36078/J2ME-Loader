@@ -84,7 +84,6 @@
     <string name="error">Hiba</string>
     <string name="message_clear_data">Tényleg törölni szeretné az alkalmazás adatait?</string>
     <string name="PREF_VK_TYPE">Billentyűzettípus</string>
-    <string name="pref_vk_type_custom">Testreszabható</string>
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (nyilakkal)</string>
     <string name="PREF_LAYOUT">Elrendezés</string>

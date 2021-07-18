@@ -57,6 +57,8 @@
     <string name="PREF_HW_ACCELERATION">Accélération Matérielle (instable)</string>
     <string name="pref_graphics_software">Software</string>
     <string name="pref_graphics_hw_gles">Accélération HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Accélération matérielle (fenêtre)</string>
+    <string name="pref_graphics_hw_surface">Accélération matérielle (surface)</string>
     <string name="PREF_VK_BACK">Boutons</string>
     <string name="PREF_VK_FORE">Étiquettes</string>
     <string name="PREF_VK_OUTLINE">Contour</string>
@@ -82,7 +84,6 @@
     <string name="error">Erreur</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données des applications ?</string>
     <string name="PREF_VK_TYPE">Type de clavier</string>
-    <string name="pref_vk_type_custom">Personnalisable</string>
     <string name="pref_vk_type_phone">Téléphone</string>
     <string name="pref_vk_type_phone_arrows">Téléphone (flèches)</string>
     <string name="PREF_LAYOUT">Layout</string>

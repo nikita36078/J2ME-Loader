@@ -76,7 +76,6 @@
     <string name="error">Eroare</string>
     <string name="message_clear_data">Ești sigur că vrei să ștergi datele aplicației?</string>
     <string name="PREF_VK_TYPE">Tip tastatură</string>
-    <string name="pref_vk_type_custom">Personalizabile</string>
     <string name="pref_vk_type_phone">Telefon (numeric)</string>
     <string name="pref_vk_type_phone_arrows">Telefon (D-pad)</string>
     <string name="PREF_LAYOUT">Dispunere</string>
