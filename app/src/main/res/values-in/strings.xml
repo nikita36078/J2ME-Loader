@@ -84,7 +84,6 @@
     <string name="error">Kesalahan</string>
     <string name="message_clear_data">Apakah Anda yakin ingin menghapus data aplikasi?</string>
     <string name="PREF_VK_TYPE">Jenis keypad</string>
-    <string name="pref_vk_type_custom">Disesuaikan</string>
     <string name="pref_vk_type_phone">Ponsel (Numerik)</string>
     <string name="pref_vk_type_phone_arrows">Ponsel (D-Pad)</string>
     <string name="PREF_LAYOUT">Tata letak</string>
@@ -150,6 +149,7 @@
     <string name="reset">Atur ulang</string>
     <string name="pref_input_devices_title">Perangkat masukan</string>
     <string name="pref_graphics_mode_title">Mode grafik:</string>
+    <string name="err_missing_app">Aplikasi tidak ditemukan. \nSilahkan periksa ketersediaan penyimpanan perangkat atau membuat-ulang pintasan.</string>
     <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing (saring)</string>
     <string name="pref_screen_gravity">Gravitasi layar</string>
     <string name="pref_screen_gravity_bottom">Bawah</string>
@@ -158,7 +158,7 @@
     <string name="pref_screen_gravity_right">Kanan</string>
     <string name="pref_screen_gravity_top">Atas</string>
     <string name="pref_screen_scale_type">Tipe skala</string>
-    <string name="pref_screen_scale_type_fill">Isi jendela (abaikan aspek rasio)</string>
-    <string name="pref_screen_scale_type_fit">Paskan ke jendela</string>
+    <string name="pref_screen_scale_type_fill">Layar penuh (abaikan aspek rasio)</string>
+    <string name="pref_screen_scale_type_fit">Sesuaikan ke layar</string>
     <string name="pref_screen_scale_type_none">Dengan adanya (ukuran asli)</string>
 </resources>
