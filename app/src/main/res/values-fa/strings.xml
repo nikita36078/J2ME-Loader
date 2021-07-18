@@ -77,7 +77,6 @@
     <string name="error">خطا</string>
     <string name="message_clear_data">آیا واقعا می خواهید اطلاعات برنامه را پاک کنید؟</string>
     <string name="PREF_VK_TYPE">نوع صفحه کلید</string>
-    <string name="pref_vk_type_custom">قابل تنظیم</string>
     <string name="pref_vk_type_phone">گوشی</string>
     <string name="pref_vk_type_phone_arrows">گوشی (جهت ها)</string>
     <string name="PREF_LAYOUT">طرح</string>
