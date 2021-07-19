@@ -778,12 +778,14 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public void updateSize(float gl, float gt, float gr, float gb, float th, float tw) {
-			FloatBuffer vertex_bg = vbo;
-			vertex_bg.rewind();
-			vertex_bg.put(gl).put(gt).put(0.0f).put(0.0f);// lt
-			vertex_bg.put(gl).put(gb).put(0.0f).put(  th);// lb
-			vertex_bg.put(gr).put(gt).put(  tw).put(0.0f);// rt
-			vertex_bg.put(gr).put(gb).put(  tw).put(  th);// rb
+			synchronized (vbo) {
+				FloatBuffer vertex_bg = vbo;
+				vertex_bg.rewind();
+				vertex_bg.put(gl).put(gt).put(0.0f).put(0.0f);// lt
+				vertex_bg.put(gl).put(gb).put(0.0f).put(  th);// lb
+				vertex_bg.put(gr).put(gt).put(  tw).put(0.0f);// rt
+				vertex_bg.put(gr).put(gb).put(  tw).put(  th);// rb
+			}
 			if (isStarted) {
 				mView.queueEvent(() -> {
 					Bitmap bitmap = offscreenCopy.getBitmap();
