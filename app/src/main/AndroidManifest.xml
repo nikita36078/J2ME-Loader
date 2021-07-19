@@ -29,7 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        tools:targetApi="o">
+        tools:targetApi="q"
+        tools:ignore="RtlEnabled">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"

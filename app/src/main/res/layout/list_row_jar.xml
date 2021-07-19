@@ -7,7 +7,6 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <!--  ListRow Left sided Thumbnail image -->
     <ImageView
         android:id="@+id/list_image"
         android:layout_width="36dip"
@@ -23,7 +22,6 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- Title Of App-->
         <TextView
             android:id="@+id/list_title"
             android:layout_width="wrap_content"
@@ -31,7 +29,7 @@
             android:textAppearance="?android:textAppearance"
             android:textSize="15sp"
             android:textStyle="bold"
-            tools:text="MIDlet Name" />
+            tools:text="Example MIDlet Name" />
 
         <!-- Author and version app -->
         <LinearLayout
@@ -43,6 +41,7 @@
 
             <TextView
                 android:id="@+id/list_author"
+                style="@style/TextViewVendor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -50,7 +49,7 @@
                 android:textAppearance="?android:textAppearance"
                 android:textColor="?textColorSecondary"
                 android:textSize="12sp"
-                tools:text="Vendor: MIDlet Vendor ltd." />
+                tools:text="Example MIDlet Vendor Ltd." />
 
             <TextView
                 android:id="@+id/list_version"
@@ -59,7 +58,7 @@
                 android:textAppearance="?android:textAppearance"
                 android:textColor="?textColorSecondary"
                 android:textSize="12sp"
-                tools:text="Version: 1.0" />
+                tools:text="1.0.254" />
         </LinearLayout>
     </LinearLayout>
 

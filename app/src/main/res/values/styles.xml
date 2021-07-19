@@ -139,4 +139,7 @@
         <item name="android:tint">?colorAccent</item>
     </style>
 
+    <style name="TextViewVendor" parent="Widget.AppCompat.TextView" >
+    </style>
+
 </resources>

@@ -1,0 +1,6 @@
+<resources>
+
+    <style name="TextViewVendor" parent="Widget.AppCompat.TextView">
+        <item name="android:gravity">right</item>
+    </style>
+</resources>
