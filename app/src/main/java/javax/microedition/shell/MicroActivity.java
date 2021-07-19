@@ -309,7 +309,7 @@ public class MicroActivity extends AppCompatActivity {
 		return visible;
 	}
 
-	private void showExitConfirmation() {
+	public void showExitConfirmation() {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
