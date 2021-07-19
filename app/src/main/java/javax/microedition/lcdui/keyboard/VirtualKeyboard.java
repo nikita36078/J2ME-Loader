@@ -875,28 +875,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	/**
-	 * Check if we have processed the pointer touch.
-	 * <p>
-	 * The pointer touch is not processed if it is on the virtual screen:
-	 * in this case, it will be handled by the midlet.
-	 * But clicking outside the virtual screen is not transmitted
-	 * to the midlet for optimization purposes.
-	 *
-	 * @param x the touch coordinates
-	 * @param y the touch coordinates
-	 * @return true, if the touch point is on the virtual screen
-	 */
-	private boolean checkPointerHandled(float x, float y) {
-		return !virtualScreen.contains(x, y);
-	}
-
 	@Override
 	public boolean pointerPressed(int pointer, float x, float y) {
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
-					return checkPointerHandled(x, y);
+					return false;
 				}
 				for (VirtualKey key : keypad) {
 					if (key.contains(x, y)) {
@@ -940,7 +924,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				prevScaleY = keyScales[editedIndex * 2 + 1];
 				break;
 		}
-		return checkPointerHandled(x, y);
+		return false;
 	}
 
 	@Override
@@ -948,7 +932,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
-					return checkPointerHandled(x, y);
+					return false;
 				}
 				VirtualKey aKey = associatedKeys[pointer];
 				if (aKey == null) {
@@ -1012,14 +996,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				overlayView.postInvalidate();
 				break;
 		}
-		return checkPointerHandled(x, y);
+		return false;
 	}
 
 	@Override
 	public boolean pointerReleased(int pointer, float x, float y) {
 		if (layoutEditMode == LAYOUT_EOF) {
 			if (pointer > associatedKeys.length) {
-				return checkPointerHandled(x, y);
+				return false;
 			}
 			VirtualKey key = associatedKeys[pointer];
 			if (key != null) {
@@ -1053,7 +1037,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			snapKeys();
 			editedIndex = -1;
 		}
-		return checkPointerHandled(x, y);
+		return false;
 	}
 
 	@Override
