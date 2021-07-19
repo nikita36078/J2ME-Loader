@@ -329,6 +329,12 @@ public class AppsListFragment extends ListFragment {
 		if (!ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())) {
 			menu.findItem(R.id.action_context_shortcut).setVisible(false);
 		}
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		int index = info.position;
+		AppItem appItem = adapter.getItem(index);
+		if (!new File(appItem.getPathExt() + Config.MIDLET_RES_FILE).exists()) {
+			menu.findItem(R.id.action_context_reinstall).setVisible(false);
+		}
 	}
 
 	@Override
@@ -343,6 +349,9 @@ public class AppsListFragment extends ListFragment {
 			showRenameDialog(index);
 		} else if (itemId == R.id.action_context_settings) {
 			Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
+		} else if (itemId == R.id.action_context_reinstall) {
+			Uri uri = Uri.fromFile(new File(appItem.getPathExt() + Config.MIDLET_RES_FILE));
+			convertJar(uri);
 		} else if (itemId == R.id.action_context_delete) {
 			showDeleteDialog(index);
 		} else {

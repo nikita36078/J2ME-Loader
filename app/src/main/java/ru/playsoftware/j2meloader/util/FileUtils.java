@@ -114,12 +114,6 @@ public class FileUtils {
 	}
 
 	public static String getAppPath(Context context, Uri uri) throws IOException {
-		if ("file".equals(uri.getScheme())) {
-			String path = uri.getPath();
-			if (path != null && new File(path).exists()) {
-				return path;
-			}
-		}
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		OutputStream out = null;
 		File folder = new File(context.getApplicationInfo().dataDir, JarConverter.TEMP_URI_FOLDER_NAME);

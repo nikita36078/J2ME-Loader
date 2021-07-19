@@ -33,6 +33,7 @@
     <string name="external_storage_not_mounted">This app requires external storage</string>
     <string name="action_context_shortcut">Add shortcut</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
+    <string name="action_reinstall">Reinstall</string>
     <string name="action_settings">Settings</string>
     <string name="action_context_delete">Delete</string>
     <string name="action_context_rename">Rename</string>

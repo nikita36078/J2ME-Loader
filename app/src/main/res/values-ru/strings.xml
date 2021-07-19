@@ -22,6 +22,7 @@
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
     <string name="action_keyboard_ime">Клавиатура (IME)</string>
+    <string name="action_reinstall">Переустановить</string>
     <string name="action_settings">Настройки</string>
     <string name="action_context_delete">Удалить</string>
     <string name="action_context_rename">Переименовать</string>
