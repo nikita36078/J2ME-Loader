@@ -152,6 +152,7 @@
     <string name="_MINUS_ONE" translatable="false">-1</string>
     <string name="virtual_key_left_soft" translatable="false">L</string>
     <string name="virtual_key_right_soft" translatable="false">R</string>
+    <string name="virtual_key_menu">menu</string>
     <string name="virtual_key_d" translatable="false">D</string>
     <string name="virtual_key_c" translatable="false">C</string>
     <string name="virtual_key_left" translatable="false">←</string>
@@ -186,6 +187,7 @@
     <string name="edit">Edit</string>
     <string name="add">Add</string>
     <string name="add_profile_description">Create new profile</string>
+    <string name="alert_map_menu">You MUST map \"menu\" key!</string>
     <string name="enter_name">Enter name</string>
     <string name="enter_new_name">Enter new name</string>
     <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>

@@ -86,12 +86,12 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean visible;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
-	private boolean keyLongPressed;
 	private FrameLayout layout;
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
 	private String appName;
 	private InputMethodManager inputMethodManager;
+	private int menuKey;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -135,6 +135,7 @@ public class MicroActivity extends AppCompatActivity {
 			}
 		}
 		setOrientation(orientation);
+		menuKey = microLoader.getMenuKeyCode();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		try {
 			loadMIDlet();
@@ -329,10 +330,20 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_UP) {
-			onKeyUp(event.getKeyCode(), event);
-			return true;
-		}
+		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU)
+			if (current instanceof Canvas
+					&& layout.dispatchKeyEvent(event)) {
+				return true;
+			} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
+				if (event.getRepeatCount() == 0) {
+					event.startTracking();
+					return true;
+				} else if (event.isLongPress()) {
+					return onKeyLongPress(event.getKeyCode(), event);
+				}
+			} else if (event.getAction() == KeyEvent.ACTION_UP) {
+				return onKeyUp(event.getKeyCode(), event);
+			}
 		return super.dispatchKeyEvent(event);
 	}
 
@@ -346,22 +357,34 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
+		if (keyCode == menuKey || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU) {
 			showExitConfirmation();
-			keyLongPressed = true;
 			return true;
 		}
 		return super.onKeyLongPress(keyCode, event);
 	}
 
 	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			return false;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU) && !keyLongPressed) {
+		if ((keyCode == menuKey || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)
+				&& (event.getFlags() & (KeyEvent.FLAG_LONG_PRESS | KeyEvent.FLAG_CANCELED)) == 0) {
 			openOptionsMenu();
 			return true;
 		}
-		keyLongPressed = false;
 		return super.onKeyUp(keyCode, event);
+	}
+
+	@Override
+	public void onBackPressed() {
+		// Intentionally overridden by empty due to support for back-key remapping.
 	}
 
 	@Override

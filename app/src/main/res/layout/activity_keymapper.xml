@@ -28,10 +28,11 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
+                android:id="@+id/virtual_key_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:visibility="invisible"
+                android:text="@string/virtual_key_menu"
                 tools:ignore="ButtonStyle" />
 
             <Button

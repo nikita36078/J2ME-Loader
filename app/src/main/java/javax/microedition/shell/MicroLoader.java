@@ -21,6 +21,8 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.KeyEvent;
 
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
@@ -231,5 +233,17 @@ public class MicroLoader {
 				})
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(observer);
+	}
+
+	public int getMenuKeyCode() {
+		SparseIntArray mappings = params.keyMappings;
+		if (mappings == null) {
+			return KeyEvent.KEYCODE_BACK;
+		}
+		int i = mappings.indexOfValue(KeyMapper.KEY_OPTIONS_MENU);
+		if (i < 0) {
+			return KeyEvent.KEYCODE_BACK;
+		}
+		return mappings.keyAt(i);
 	}
 }

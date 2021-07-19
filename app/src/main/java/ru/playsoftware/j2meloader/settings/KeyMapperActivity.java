@@ -87,6 +87,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		setupButton(R.id.virtual_key_pound, Canvas.KEY_POUND);
 		setupButton(R.id.virtual_key_a, KeyMapper.SE_KEY_SPECIAL_GAMING_A);
 		setupButton(R.id.virtual_key_b, KeyMapper.SE_KEY_SPECIAL_GAMING_B);
+		setupButton(R.id.virtual_key_menu, KeyMapper.KEY_OPTIONS_MENU);
 		SparseIntArray keyMap = params.keyMappings;
 		androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
 	}
@@ -100,9 +101,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	@Override
 	public void onClick(View v) {
 		int canvasKey = idToCanvasKey.get(v.getId());
-		if (canvasKey != 0) {
-			showMappingDialog(canvasKey);
-		}
+		showMappingDialog(canvasKey);
 	}
 
 	private void showMappingDialog(int canvasKey) {
@@ -117,11 +116,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 				.setMessage(getString(R.string.mapping_dialog_message, keyName))
 				.setOnKeyListener((dialog, keyCode, event) -> {
 					switch (keyCode) {
-						case KeyEvent.KEYCODE_BACK:
-							dialog.dismiss();
-							return true;
 						case KeyEvent.KEYCODE_HOME:
-						case KeyEvent.KEYCODE_MENU:
 						case KeyEvent.KEYCODE_VOLUME_UP:
 						case KeyEvent.KEYCODE_VOLUME_DOWN:
 							return false;
@@ -164,8 +159,12 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 
 	@Override
 	public void onBackPressed() {
-		SparseIntArray oldMap = params.keyMappings;
 		SparseIntArray newMap = androidToMIDP;
+		if (newMap.indexOfValue(KeyMapper.KEY_OPTIONS_MENU) < 0) {
+			Toast.makeText(this, R.string.alert_map_menu, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		SparseIntArray oldMap = params.keyMappings;
 		if (equalMaps(newMap, defaultKeyMap)) {
 			newMap = null;
 		}

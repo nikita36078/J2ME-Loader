@@ -28,6 +28,10 @@ import ru.playsoftware.j2meloader.config.ProfileModel;
 import static javax.microedition.lcdui.Canvas.*;
 
 public class KeyMapper {
+	public static final int KEY_OPTIONS_MENU = 0;
+	public static final int SE_KEY_SPECIAL_GAMING_A = -13;
+	public static final int SE_KEY_SPECIAL_GAMING_B = -14;
+
 	private static final int DEFAULT_LAYOUT = 0;
 	private static final int SIEMENS_LAYOUT = 1;
 	private static final int MOTOROLA_LAYOUT = 2;
@@ -46,9 +50,6 @@ public class KeyMapper {
 	private static final int MOTOROLA_KEY_FIRE = -20;
 	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
 	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
-
-	public static final int SE_KEY_SPECIAL_GAMING_A = -13;
-	public static final int SE_KEY_SPECIAL_GAMING_B = -14;
 
 	private static final SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
 	private static final SparseIntArray keyCodeToCustom = new SparseIntArray();
@@ -197,28 +198,29 @@ public class KeyMapper {
 
 	public static SparseIntArray getDefaultKeyMap() {
 		SparseIntArray map = new SparseIntArray();
-		map.put(KeyEvent.KEYCODE_0, KEY_NUM0);
-		map.put(KeyEvent.KEYCODE_1, KEY_NUM1);
-		map.put(KeyEvent.KEYCODE_2, KEY_NUM2);
-		map.put(KeyEvent.KEYCODE_3, KEY_NUM3);
-		map.put(KeyEvent.KEYCODE_4, KEY_NUM4);
-		map.put(KeyEvent.KEYCODE_5, KEY_NUM5);
-		map.put(KeyEvent.KEYCODE_6, KEY_NUM6);
-		map.put(KeyEvent.KEYCODE_7, KEY_NUM7);
-		map.put(KeyEvent.KEYCODE_8, KEY_NUM8);
-		map.put(KeyEvent.KEYCODE_9, KEY_NUM9);
-		map.put(KeyEvent.KEYCODE_STAR, KEY_STAR);
-		map.put(KeyEvent.KEYCODE_POUND, KEY_POUND);
-		map.put(KeyEvent.KEYCODE_DPAD_UP, KEY_UP);
-		map.put(KeyEvent.KEYCODE_DPAD_DOWN, KEY_DOWN);
-		map.put(KeyEvent.KEYCODE_DPAD_LEFT, KEY_LEFT);
-		map.put(KeyEvent.KEYCODE_DPAD_RIGHT, KEY_RIGHT);
-		map.put(KeyEvent.KEYCODE_ENTER, KEY_FIRE);
-		map.put(KeyEvent.KEYCODE_SOFT_LEFT, KEY_SOFT_LEFT);
-		map.put(KeyEvent.KEYCODE_SOFT_RIGHT, KEY_SOFT_RIGHT);
-		map.put(KeyEvent.KEYCODE_CALL, KEY_SEND);
-		map.put(KeyEvent.KEYCODE_ENDCALL, KEY_END);
-		map.put(KeyEvent.KEYCODE_DEL, KEY_CLEAR);
+		map.append(KeyEvent.KEYCODE_SOFT_LEFT, KEY_SOFT_LEFT);
+		map.append(KeyEvent.KEYCODE_SOFT_RIGHT, KEY_SOFT_RIGHT);
+		map.append(KeyEvent.KEYCODE_BACK, KEY_OPTIONS_MENU);
+		map.append(KeyEvent.KEYCODE_CALL, KEY_SEND);
+		map.append(KeyEvent.KEYCODE_ENDCALL, KEY_END);
+		map.append(KeyEvent.KEYCODE_0, KEY_NUM0);
+		map.append(KeyEvent.KEYCODE_1, KEY_NUM1);
+		map.append(KeyEvent.KEYCODE_2, KEY_NUM2);
+		map.append(KeyEvent.KEYCODE_3, KEY_NUM3);
+		map.append(KeyEvent.KEYCODE_4, KEY_NUM4);
+		map.append(KeyEvent.KEYCODE_5, KEY_NUM5);
+		map.append(KeyEvent.KEYCODE_6, KEY_NUM6);
+		map.append(KeyEvent.KEYCODE_7, KEY_NUM7);
+		map.append(KeyEvent.KEYCODE_8, KEY_NUM8);
+		map.append(KeyEvent.KEYCODE_9, KEY_NUM9);
+		map.append(KeyEvent.KEYCODE_STAR, KEY_STAR);
+		map.append(KeyEvent.KEYCODE_POUND, KEY_POUND);
+		map.append(KeyEvent.KEYCODE_DPAD_UP, KEY_UP);
+		map.append(KeyEvent.KEYCODE_DPAD_DOWN, KEY_DOWN);
+		map.append(KeyEvent.KEYCODE_DPAD_LEFT, KEY_LEFT);
+		map.append(KeyEvent.KEYCODE_DPAD_RIGHT, KEY_RIGHT);
+		map.append(KeyEvent.KEYCODE_ENTER, KEY_FIRE);
+		map.append(KeyEvent.KEYCODE_DEL, KEY_CLEAR);
 		return map;
 	}
 }
