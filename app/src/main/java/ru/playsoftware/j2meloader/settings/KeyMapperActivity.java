@@ -30,20 +30,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
+import ru.playsoftware.j2meloader.util.SparseIntArrayAdapter;
 
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
+	private static final String KEY_SAVE = "KEY_MAP_SAVE";
 	private final SparseIntArray defaultKeyMap = KeyMapper.getDefaultKeyMap();
 	private final SparseIntArray idToCanvasKey = new SparseIntArray();
 	private final Rect popupRect = new Rect();
@@ -57,18 +62,18 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_keymapper);
-		ActionBar actionBar = getSupportActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			actionBar.setTitle(R.string.pref_map_keys);
-		}
 		Intent intent = getIntent();
 		String path = intent.getDataString();
 		if (path == null) {
 			Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 			finish();
 			return;
+		}
+		setContentView(R.layout.activity_keymapper);
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setTitle(R.string.pref_map_keys);
 		}
 		params = ProfilesManager.loadConfig(new File(path));
 
@@ -100,8 +105,40 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		setupButton(R.id.virtual_key_a, KeyMapper.SE_KEY_SPECIAL_GAMING_A);
 		setupButton(R.id.virtual_key_b, KeyMapper.SE_KEY_SPECIAL_GAMING_B);
 		setupButton(R.id.virtual_key_menu, KeyMapper.KEY_OPTIONS_MENU);
-		SparseIntArray keyMap = params.keyMappings;
-		androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
+		if (savedInstanceState == null) {
+			SparseIntArray keyMap = params.keyMappings;
+			androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
+		} else {
+			String save = savedInstanceState.getString(KEY_SAVE);
+			if (save == null) {
+				androidToMIDP = defaultKeyMap.clone();
+			} else if (save.isEmpty()) {
+				SparseIntArray keyMap = params.keyMappings;
+				androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
+			} else {
+				androidToMIDP = new GsonBuilder()
+						.registerTypeAdapter(SparseIntArray.class, new SparseIntArrayAdapter())
+						.create()
+						.fromJson(save, SparseIntArray.class);
+			}
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
+		if (!equalMaps(androidToMIDP, defaultKeyMap)) {
+			if (!equalMaps(params.keyMappings, androidToMIDP)) {
+				String currMap = new GsonBuilder()
+						.registerTypeAdapter(SparseIntArray.class, new SparseIntArrayAdapter())
+						.create()
+						.toJson(androidToMIDP);
+				outState.putString(KEY_SAVE, currMap);
+			} else {
+				outState.putString(KEY_SAVE, "");
+			}
+		}
+
+		super.onSaveInstanceState(outState);
 	}
 
 	private void setupButton(int resId, int index) {
