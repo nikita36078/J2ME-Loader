@@ -17,14 +17,17 @@
 package ru.playsoftware.j2meloader.settings;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -34,7 +37,7 @@ import javax.microedition.lcdui.keyboard.KeyMapper;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.ProfileModel;
@@ -43,8 +46,13 @@ import ru.playsoftware.j2meloader.config.ProfilesManager;
 public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
 	private final SparseIntArray defaultKeyMap = KeyMapper.getDefaultKeyMap();
 	private final SparseIntArray idToCanvasKey = new SparseIntArray();
+	private final Rect popupRect = new Rect();
 	private SparseIntArray androidToMIDP;
 	private ProfileModel params;
+	private View popupLayout;
+	private TextView popupMsg;
+	private View keyMapperLayer;
+	private int canvasKey;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +71,10 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			return;
 		}
 		params = ProfilesManager.loadConfig(new File(path));
+
+		keyMapperLayer = findViewById(R.id.keyMapperLayer);
+		popupLayout = findViewById(R.id.keyMapperPopup);
+		popupMsg = findViewById(R.id.keyMapperPopupMsg);
 
 		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
 		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);
@@ -105,29 +117,17 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 	}
 
 	private void showMappingDialog(int canvasKey) {
+		this.canvasKey = canvasKey;
 		SparseIntArray androidToMIDP = this.androidToMIDP;
 		int idx = androidToMIDP.indexOfValue(canvasKey);
-		String keyName = "";
-		if (idx >= 0) {
+		String keyName;
+		if (idx < 0) {
+			keyName = getString(R.string.mapping_dialog_key_not_specified);
+		} else {
 			keyName = KeyEvent.keyCodeToString(androidToMIDP.keyAt(idx));
 		}
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
-				.setTitle(R.string.mapping_dialog_title)
-				.setMessage(getString(R.string.mapping_dialog_message, keyName))
-				.setOnKeyListener((dialog, keyCode, event) -> {
-					switch (keyCode) {
-						case KeyEvent.KEYCODE_HOME:
-						case KeyEvent.KEYCODE_VOLUME_UP:
-						case KeyEvent.KEYCODE_VOLUME_DOWN:
-							return false;
-						default:
-							deleteDuplicates(canvasKey);
-							androidToMIDP.put(keyCode, canvasKey);
-							dialog.dismiss();
-							return true;
-					}
-				});
-		builder.show();
+		popupMsg.setText(getString(R.string.mapping_dialog_message, keyName));
+		keyMapperLayer.setVisibility(View.VISIBLE);
 	}
 
 	private void deleteDuplicates(int value) {
@@ -189,5 +189,37 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		if (keyMapperLayer.getVisibility() == View.VISIBLE
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			int keyCode = event.getKeyCode();
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_HOME:
+				case KeyEvent.KEYCODE_VOLUME_UP:
+				case KeyEvent.KEYCODE_VOLUME_DOWN:
+					break;
+				default:
+					deleteDuplicates(canvasKey);
+					androidToMIDP.put(keyCode, canvasKey);
+					keyMapperLayer.setVisibility(View.GONE);
+					return true;
+			}
+		}
+		return super.dispatchKeyEvent(event);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		if (keyMapperLayer.getVisibility() == View.VISIBLE && event.getAction() == MotionEvent.ACTION_DOWN) {
+			popupLayout.getGlobalVisibleRect(popupRect);
+			if (!popupRect.contains(((int) event.getX()), ((int) event.getY()))) {
+				keyMapperLayer.setVisibility(View.GONE);
+			}
+			return true;
+		}
+		return super.dispatchTouchEvent(event);
 	}
 }

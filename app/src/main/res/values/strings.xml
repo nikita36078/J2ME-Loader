@@ -175,8 +175,9 @@
     <string name="virtual_key_0" translatable="false">0</string>
     <string name="virtual_key_star" translatable="false">*</string>
     <string name="virtual_key_pound" translatable="false">#</string>
+    <string name="mapping_dialog_message">Current mapping: %1$s</string>
+    <string name="mapping_dialog_key_not_specified">not specified</string>
     <string name="mapping_dialog_title">Press a key</string>
-    <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
     <string name="default_label">"%s (default)"</string>
