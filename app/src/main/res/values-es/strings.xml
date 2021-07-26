@@ -21,6 +21,7 @@
     <string name="permission_request_failed">Esta aplicación requiere permisos de escritura de almacenamiento</string>
     <string name="external_storage_not_mounted">Esta aplicación requiere almacenamiento externo</string>
     <string name="action_context_shortcut">Añadir acceso directo</string>
+    <string name="action_keyboard_ime">Método de entrada</string>
     <string name="action_settings">Configuración</string>
     <string name="action_context_delete">Eliminar</string>
     <string name="action_context_rename">Renombrar</string>
@@ -84,6 +85,11 @@
     <string name="error">Error</string>
     <string name="message_clear_data">¿Realmente quieres borrar los datos de la aplicación?</string>
     <string name="PREF_VK_TYPE">Tipo de teclado</string>
+    <string name="pref_vk_type_arrows">Flechas</string>
+    <string name="pref_vk_type_arrows_numbers">Flechas &amp; números</string>
+    <string name="pref_vk_type_custom">Personalizado</string>
+    <string name="pref_vk_type_numbers">Números</string>
+    <string name="pref_vk_type_numbers_arrows">Números &amp; flechas</string>
     <string name="pref_vk_type_phone">Teléfono</string>
     <string name="pref_vk_type_phone_arrows">Teléfono (flechas)</string>
     <string name="PREF_LAYOUT">Diseño</string>
@@ -161,4 +167,6 @@
     <string name="pref_screen_scale_type_fill">Ajustar ventana (ignorar relación de aspecto)</string>
     <string name="pref_screen_scale_type_fit">Ajustar a ventana</string>
     <string name="pref_screen_scale_type_none">Como es</string>
+    <string name="pref_vk_save_alert">El teclado personalizado será reeemplazado por el actual\n¿Guardar?</string>
+    <string name="retry">reintentar</string>
 </resources>
