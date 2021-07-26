@@ -21,6 +21,7 @@
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
+    <string name="action_keyboard_ime">Клавиатура (IME)</string>
     <string name="action_settings">Настройки</string>
     <string name="action_context_delete">Удалить</string>
     <string name="action_context_rename">Переименовать</string>
@@ -84,6 +85,11 @@
     <string name="error">Ошибка</string>
     <string name="message_clear_data">Вы действительно хотите очистить данные приложения?</string>
     <string name="PREF_VK_TYPE">Тип клавиатуры</string>
+    <string name="pref_vk_type_arrows">Стрелки</string>
+    <string name="pref_vk_type_arrows_numbers">Стрелки и цифры</string>
+    <string name="pref_vk_type_custom">Пользовательская</string>
+    <string name="pref_vk_type_numbers">Цифры</string>
+    <string name="pref_vk_type_numbers_arrows">Цифры и стрелки</string>
     <string name="pref_vk_type_phone">Телефонная</string>
     <string name="pref_vk_type_phone_arrows">Телефонная (стрелки)</string>
     <string name="PREF_LAYOUT">Раскладка</string>
@@ -161,4 +167,6 @@
     <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
     <string name="pref_screen_scale_type_fit">Вписать</string>
     <string name="pref_screen_scale_type_none">Как есть</string>
+    <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
+    <string name="retry">повторить</string>
 </resources>
