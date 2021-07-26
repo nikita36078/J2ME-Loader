@@ -18,7 +18,7 @@ package ru.playsoftware.j2meloader.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
+import android.text.TextUtils;
 import android.view.MenuItem;
 
 import java.util.Map;
@@ -28,7 +28,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.config.Config;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
@@ -50,11 +49,11 @@ public class SettingsActivity extends BaseActivity {
 
 	@Override
 	public void finish() {
-		String defPath = Environment.getExternalStorageDirectory() + "/" + Config.APP_NAME;
 		if (!getIntent().getBooleanExtra(PREF_EMULATOR_DIR, false)
 				&& preferences.getString(PREF_THEME, "light").equals(oldParams.get(PREF_THEME))
 				&& preferences.getString(PREF_APP_SORT, "name").equals(oldParams.get(PREF_APP_SORT))
-				&& preferences.getString(PREF_EMULATOR_DIR, defPath).equals(oldParams.get(PREF_EMULATOR_DIR))) {
+				&& TextUtils.equals(preferences.getString(PREF_EMULATOR_DIR, null),
+				(CharSequence) oldParams.get(PREF_EMULATOR_DIR))) {
 			setResult(RESULT_OK);
 		} else {
 			setResult(RESULT_NEED_RECREATE);
