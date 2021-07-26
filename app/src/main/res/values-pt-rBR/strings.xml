@@ -21,6 +21,7 @@
     <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento</string>
     <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
     <string name="action_context_shortcut">Adicionar atalho</string>
+    <string name="action_keyboard_ime">Teclado (IME)</string>
     <string name="action_settings">Configurações</string>
     <string name="action_context_delete">Apagar</string>
     <string name="action_context_rename">Renomear</string>
@@ -84,6 +85,11 @@
     <string name="error">Erro</string>
     <string name="message_clear_data">Deseja realmente apagar os dados do aplicativo?</string>
     <string name="PREF_VK_TYPE">Tipo de teclado</string>
+    <string name="pref_vk_type_arrows">Setas</string>
+    <string name="pref_vk_type_arrows_numbers">Setas &amp; números</string>
+    <string name="pref_vk_type_custom">Personalizar</string>
+    <string name="pref_vk_type_numbers">Números</string>
+    <string name="pref_vk_type_numbers_arrows">Números &amp; setas</string>
     <string name="pref_vk_type_phone">Telefone</string>
     <string name="pref_vk_type_phone_arrows">Telefone (setas)</string>
     <string name="PREF_LAYOUT">Layout</string>
@@ -161,4 +167,6 @@
     <string name="pref_screen_scale_type_fill">Preencher janela (ignorar proporção de aspecto)</string>
     <string name="pref_screen_scale_type_fit">Ajuste para caber na janela</string>
     <string name="pref_screen_scale_type_none">Estilo padrão</string>
+    <string name="pref_vk_save_alert">O Teclado Personalizado será substituído por\nSalvar?</string>
+    <string name="retry">tentar novamente</string>
 </resources>
