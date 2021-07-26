@@ -21,6 +21,7 @@
     <string name="permission_request_failed">本应用需要获取存储读写权限</string>
     <string name="external_storage_not_mounted">本应用需要外部存储</string>
     <string name="action_context_shortcut">添加到桌面</string>
+    <string name="action_keyboard_ime">键盘类型 (IME)</string>
     <string name="action_settings">设置</string>
     <string name="action_context_delete">删除</string>
     <string name="action_context_rename">重命名</string>
@@ -84,6 +85,11 @@
     <string name="error">错误</string>
     <string name="message_clear_data">您真的想要清除应用数据吗？</string>
     <string name="PREF_VK_TYPE">键盘类型</string>
+    <string name="pref_vk_type_arrows">箭头</string>
+    <string name="pref_vk_type_arrows_numbers">箭头 &amp; 数字</string>
+    <string name="pref_vk_type_custom">定制</string>
+    <string name="pref_vk_type_numbers">数字</string>
+    <string name="pref_vk_type_numbers_arrows">数字 &amp; 箭头</string>
     <string name="pref_vk_type_phone">数字键盘</string>
     <string name="pref_vk_type_phone_arrows">手机（带箭头按键）</string>
     <string name="PREF_LAYOUT">布局</string>
@@ -161,4 +167,6 @@
     <string name="pref_screen_scale_type_fill">填充窗口 (忽略宽高比)</string>
     <string name="pref_screen_scale_type_fit">适应窗口</string>
     <string name="pref_screen_scale_type_none">按照设置尺寸</string>
+    <string name="pref_vk_save_alert">自定义键盘将被当前的替换\n保存？</string>
+    <string name="retry">重试</string>
 </resources>
