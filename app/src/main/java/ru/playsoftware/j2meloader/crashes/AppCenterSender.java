@@ -32,8 +32,6 @@ import org.acra.ReportField;
 import org.acra.data.CrashReportData;
 import org.acra.sender.ReportSender;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +50,7 @@ public class AppCenterSender implements ReportSender {
 		boolean forceTls12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 				&& Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
 
-		HurlStack hurlStack = new HurlStack(null, forceTls12 ? new TLSSocketFactory() : null);
+		HurlStack hurlStack = new HurlStack(null, forceTls12 ? new TLSSocketFactory(context) : null);
 		RequestQueue queue = Volley.newRequestQueue(context, hurlStack);
 		StringRequest postRequest = new StringRequest(Request.Method.POST, BASE_URL,
 				response -> Log.d(TAG, "send success: " + response),
