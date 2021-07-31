@@ -26,6 +26,7 @@
  */
 package org.microemu.cldc.file;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -48,6 +49,9 @@ import java.util.regex.Pattern;
 
 import javax.microedition.io.file.ConnectionClosedException;
 import javax.microedition.io.file.FileConnection;
+import javax.microedition.util.ContextHolder;
+
+import androidx.core.content.FileProvider;
 
 public class FileSystemFileConnection implements FileConnection {
 	private static final String TAG = FileSystemFileConnection.class.getSimpleName();
@@ -248,6 +252,12 @@ public class FileSystemFileConnection implements FileConnection {
 			Log.e(TAG, "getURL: ", e);
 			return Connection.PROTOCOL + this.host + DIR_SEP + getPath() + name;
 		}
+	}
+
+	public Uri getURI() {
+		Context context = ContextHolder.getAppContext();
+		return FileProvider.getUriForFile(context,
+				context.getApplicationContext().getPackageName() + ".provider", file);
 	}
 
 	@Override
