@@ -84,7 +84,6 @@
     <string name="error">Fout</string>
     <string name="message_clear_data">Weet u zeker dat u de app data wilt wissen?</string>
     <string name="PREF_VK_TYPE">Toetsenbord type</string>
-    <string name="pref_vk_type_custom">Aanpasbaar</string>
     <string name="pref_vk_type_phone">Telefoon</string>
     <string name="pref_vk_type_phone_arrows">Telefoon (pijlen)</string>
     <string name="PREF_LAYOUT">Indeling</string>

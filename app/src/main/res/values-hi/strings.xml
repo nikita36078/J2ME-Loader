@@ -84,7 +84,6 @@
     <string name="error">गलती  </string>
     <string name="message_clear_data">क्या आप वास्तव में ऐप डेटा साफ़ करना चाहते हैं?</string>
     <string name="PREF_VK_TYPE">कीबोर्ड के प्रकार</string>
-    <string name="pref_vk_type_custom">अनुकूलन योग्य (Automatic Translation)</string>
     <string name="pref_vk_type_phone">फ़ोन</string>
     <string name="pref_vk_type_phone_arrows">फ़ोन (तीर)</string>
     <string name="PREF_LAYOUT">‎ख़ाका</string>

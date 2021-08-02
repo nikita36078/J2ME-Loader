@@ -86,7 +86,11 @@
     <string name="error">Ошибка</string>
     <string name="message_clear_data">Вы действительно хотите очистить данные приложения?</string>
     <string name="PREF_VK_TYPE">Тип клавиатуры</string>
-    <string name="pref_vk_type_custom">Настраиваемая</string>
+    <string name="pref_vk_type_arrows">Стрелки</string>
+    <string name="pref_vk_type_arrows_numbers">Стрелки и цифры</string>
+    <string name="pref_vk_type_custom">Пользовательская</string>
+    <string name="pref_vk_type_numbers">Цифры</string>
+    <string name="pref_vk_type_numbers_arrows">Цифры и стрелки</string>
     <string name="pref_vk_type_phone">Телефонная</string>
     <string name="pref_vk_type_phone_arrows">Телефонная (стрелки)</string>
     <string name="PREF_LAYOUT">Раскладка</string>
@@ -125,6 +129,7 @@
     <string name="pref_map_keys">Назначение кнопок</string>
     <string name="pref_encoding_title">Кодировка</string>
     <string name="pref_default_settings">Стандартные настройки</string>
+    <string name="virtual_key_menu">меню</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
@@ -138,6 +143,7 @@
     <string name="edit">Настроить</string>
     <string name="add">Создать</string>
     <string name="add_profile_description">Создать новый профиль</string>
+    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"</string>
     <string name="enter_name">Введите название</string>
     <string name="enter_new_name">Введите новое название</string>
     <string name="set_default_profile_description">Выбрать этот шаблон как стандартную настройку для всех приложений, которые будут устанавливаться позже</string>
@@ -164,4 +170,6 @@
     <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
     <string name="pref_screen_scale_type_fit">Вписать</string>
     <string name="pref_screen_scale_type_none">Как есть</string>
+    <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
+    <string name="retry">повторить</string>
 </resources>
