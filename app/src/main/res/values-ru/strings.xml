@@ -22,6 +22,7 @@
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
     <string name="action_keyboard_ime">Клавиатура (IME)</string>
+    <string name="action_reinstall">Переустановить</string>
     <string name="action_settings">Настройки</string>
     <string name="action_context_delete">Удалить</string>
     <string name="action_context_rename">Переименовать</string>
@@ -128,6 +129,7 @@
     <string name="pref_map_keys">Назначение кнопок</string>
     <string name="pref_encoding_title">Кодировка</string>
     <string name="pref_default_settings">Стандартные настройки</string>
+    <string name="virtual_key_menu">меню</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
     <string name="reset_mapping">Сброс</string>
@@ -141,6 +143,7 @@
     <string name="edit">Настроить</string>
     <string name="add">Создать</string>
     <string name="add_profile_description">Создать новый профиль</string>
+    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"</string>
     <string name="enter_name">Введите название</string>
     <string name="enter_new_name">Введите новое название</string>
     <string name="set_default_profile_description">Выбрать этот шаблон как стандартную настройку для всех приложений, которые будут устанавливаться позже</string>
