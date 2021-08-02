@@ -22,6 +22,7 @@
     <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
     <string name="action_context_shortcut">Adicionar atalho</string>
     <string name="action_keyboard_ime">Teclado (IME)</string>
+    <string name="action_reinstall">Reinstalar</string>
     <string name="action_settings">Configurações</string>
     <string name="action_context_delete">Apagar</string>
     <string name="action_context_rename">Renomear</string>
@@ -128,6 +129,7 @@
     <string name="pref_map_keys">Mapeamento do teclado</string>
     <string name="pref_encoding_title">Codificação</string>
     <string name="pref_default_settings">Configurações padrão</string>
+    <string name="virtual_key_menu">menu</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
@@ -141,6 +143,7 @@
     <string name="edit">Editar</string>
     <string name="add">Adicionar</string>
     <string name="add_profile_description">Criar novo perfil</string>
+    <string name="alert_map_menu">Você DEVE mapear a tecla \"menu\"!</string>
     <string name="enter_name">Inserir nome</string>
     <string name="enter_new_name">Inserir novo nome</string>
     <string name="set_default_profile_description">Selecione este perfil como uma configuração padrão para todos os aplicativos que serão instalados posteriormente</string>
