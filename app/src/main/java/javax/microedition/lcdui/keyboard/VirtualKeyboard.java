@@ -1077,7 +1077,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public boolean keyPressed(int keyCode) {
 		int hashCode = 31 * (31 + keyCode);
 		for (VirtualKey key : keypad) {
-			if (key.hashCode == hashCode) {
+			if (key.hashCode() == hashCode) {
 				key.selected = true;
 				overlayView.postInvalidate();
 				break;
@@ -1095,7 +1095,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public boolean keyReleased(int keyCode) {
 		int hashCode = 31 * (31 + keyCode);
 		for (VirtualKey key : keypad) {
-			if (key.hashCode == hashCode) {
+			if (key.hashCode() == hashCode) {
 				key.selected = false;
 				overlayView.postInvalidate();
 				break;
