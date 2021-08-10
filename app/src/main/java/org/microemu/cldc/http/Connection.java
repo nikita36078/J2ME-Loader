@@ -350,7 +350,16 @@ public class Connection implements HttpConnection, ConnectionImplementation {
 
 		connected = true;
 
-		return cn.getInputStream();
+		try {
+			return cn.getInputStream();
+		} catch (IOException ex) {
+			if (cn instanceof HttpURLConnection) {
+				InputStream errorStream = ((HttpURLConnection) cn).getErrorStream();
+				if (errorStream == null) throw ex;
+				return errorStream;
+			}
+			throw ex;
+		}
 	}
 
 	@Override
