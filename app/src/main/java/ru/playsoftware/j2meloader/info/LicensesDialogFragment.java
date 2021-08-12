@@ -31,7 +31,7 @@ public class LicensesDialogFragment extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		WebView view = new WebView(getActivity());
 		view.loadUrl("file:///android_asset/licenses.html");
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 		builder.setTitle(R.string.licenses)
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(view);

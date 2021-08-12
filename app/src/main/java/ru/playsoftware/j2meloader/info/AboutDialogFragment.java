@@ -48,17 +48,17 @@ public class AboutDialogFragment extends DialogFragment {
 		int paddingHorizontal = (int) (density * 20);
 		int paddingVertical = (int) (density * 14);
 		tv.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, 0);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 		builder.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(tv)
 				.setPositiveButton(R.string.licenses, (dialog, which) -> {
 					LicensesDialogFragment licensesDialogFragment = new LicensesDialogFragment();
-					licensesDialogFragment.show(getFragmentManager(), "licenses");
+					licensesDialogFragment.show(getParentFragmentManager(), "licenses");
 				})
 				.setNeutralButton(R.string.more, (dialog, which) -> {
 					InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
-					infoDialogFragment.show(getFragmentManager(), "more");
+					infoDialogFragment.show(getParentFragmentManager(), "more");
 				});
 		return builder.create();
 	}

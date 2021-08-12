@@ -152,7 +152,7 @@ public class AppsListFragment extends ListFragment {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		compositeDisposable = new CompositeDisposable();
-		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
+		converter = new JarConverter(requireActivity().getApplicationInfo().dataDir);
 		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
 		appSort = preferences.getString(PREF_APP_SORT, "name");
 		appPath = requireArguments().getParcelable(KEY_APP_PATH);
@@ -192,7 +192,7 @@ public class AppsListFragment extends ListFragment {
 	@SuppressLint("CheckResult")
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void initDb() {
-		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
+		appRepository = new AppRepository(requireActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
 				.subscribeOn(Schedulers.io())
 				.doOnError(this::alertDbError)
