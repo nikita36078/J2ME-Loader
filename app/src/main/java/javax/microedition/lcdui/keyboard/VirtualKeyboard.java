@@ -76,7 +76,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int TYPE_NUM_ARR = 3;
 	private static final int TYPE_ARR_NUM = 4;
 	private static final int TYPE_NUMBERS = 5;
-	private static final int TYPE_ARRAYS = 6;
+	private static final int TYPE_ARROWS = 6;
 
 	private static final float PHONE_KEY_ROWS = 5;
 	private static final float PHONE_KEY_SCALE_X = 2.0f;
@@ -443,7 +443,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_D, KEY_NUM9, RectSnap.EXT_EAST, false);
 				setSnap(KEY_MENU, SCREEN, RectSnap.INT_NORTHEAST, false);
 				break;
-			case TYPE_ARRAYS:
+			case TYPE_ARROWS:
 				Arrays.fill(keyScales, 1);
 
 				setSnap(KEY_DOWN, SCREEN, RectSnap.INT_SOUTH, true);
