@@ -290,7 +290,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_NUM2, KEY_NUM1, RectSnap.EXT_EAST, true);
 				setSnap(KEY_NUM3, KEY_NUM2, RectSnap.EXT_EAST, true);
 				setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_NORTH, true);
-				setSnap(KEY_MENU, KEY_NUM2, RectSnap.EXT_NORTH, true);
+				setSnap(KEY_FIRE, KEY_NUM2, RectSnap.EXT_NORTH, true);
 				setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_NORTH, true);
 
 				setSnap(KEY_A, SCREEN, RectSnap.INT_NORTHWEST, false);
@@ -301,10 +301,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_UP, KEY_C, RectSnap.EXT_SOUTHEAST, false);
 				setSnap(KEY_UP_RIGHT, KEY_D, RectSnap.EXT_SOUTH, false);
 				setSnap(KEY_LEFT, KEY_UP_LEFT, RectSnap.EXT_SOUTH, false);
-				setSnap(KEY_FIRE, KEY_UP, RectSnap.EXT_SOUTH, false);
+				setSnap(KEY_MENU, KEY_UP, RectSnap.EXT_SOUTH, false);
 				setSnap(KEY_RIGHT, KEY_UP_RIGHT, RectSnap.EXT_SOUTH, false);
 				setSnap(KEY_DOWN_LEFT, KEY_LEFT, RectSnap.EXT_SOUTH, false);
-				setSnap(KEY_DOWN, KEY_FIRE, RectSnap.EXT_SOUTH, false);
+				setSnap(KEY_DOWN, KEY_MENU, RectSnap.EXT_SOUTH, false);
 				setSnap(KEY_DOWN_RIGHT, KEY_RIGHT, RectSnap.EXT_SOUTH, false);
 				break;
 			case TYPE_PHONE_ARROWS:
