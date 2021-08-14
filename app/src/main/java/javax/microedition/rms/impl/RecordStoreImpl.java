@@ -59,6 +59,7 @@ public class RecordStoreImpl extends RecordStore {
 	private String recordStoreName;
 	private int version = 0;
 	private long lastModified = 0;
+	private int openCount = 0;
 	private boolean open;
 
 	RecordStoreImpl(RecordStoreManager recordStoreManager, String recordStoreName) {
@@ -142,6 +143,7 @@ public class RecordStoreImpl extends RecordStore {
 	}
 
 	void setOpen() {
+		openCount++;
 		this.open = true;
 	}
 
@@ -150,6 +152,10 @@ public class RecordStoreImpl extends RecordStore {
 		synchronized (records) {
 			if (!open) {
 				throw new RecordStoreNotOpenException();
+			}
+
+			if (--openCount > 0) {
+				return;
 			}
 
 			if (recordListeners != null) {

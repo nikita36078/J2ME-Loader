@@ -114,6 +114,12 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 		initializeIfNecessary();
 		recordStoreName = recordStoreName.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "");
 
+		Object value = recordStores.get(recordStoreName);
+		if (value instanceof RecordStoreImpl && ((RecordStoreImpl) value).isOpen()) {
+			((RecordStoreImpl) value).setOpen();
+			return (RecordStoreImpl) value;
+		}
+
 		RecordStoreImpl recordStoreImpl;
 		String headerName = getHeaderFileName(recordStoreName);
 		File headerFile = new File(AppClassLoader.getDataDir(), headerName);
