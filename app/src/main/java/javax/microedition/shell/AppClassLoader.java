@@ -71,6 +71,10 @@ public class AppClassLoader extends DexClassLoader {
 		if (normName.charAt(0) == '/') {
 			normName = normName.substring(1);
 		}
+		if (normName.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
 		byte[] data = getResourceBytes(normName);
 		if (data == null) {
 			Log.w(TAG, "Can't load res: " + resName);
@@ -81,27 +85,6 @@ public class AppClassLoader extends DexClassLoader {
 
 	public static String getDataDir() {
 		return dataDir;
-	}
-
-	public static byte[] getResourceAsBytes(String resName) {
-		if (resName == null || resName.equals("")) {
-			Log.w(TAG, "Can't load res on empty path");
-			return null;
-		}
-		// Add support for Siemens file path
-		String normName = resName.replace('\\', '/');
-		// Remove double slashes
-		normName = normName.replaceAll("//+", "/");
-		// Remove leading slash
-		if (normName.charAt(0) == '/') {
-			normName = normName.substring(1);
-		}
-		byte[] data = getResourceBytes(normName);
-		if (data == null) {
-			Log.w(TAG, "Can't load res: " + resName);
-			return null;
-		}
-		return data;
 	}
 
 	private static byte[] getResourceBytes(String name) {
