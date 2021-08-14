@@ -844,8 +844,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			min = tmp;
 		}
 
-		float keySize = min / 6.5f;
-		keySize = isPhone() ? keySize : Math.min(keySize, max / 12.0f);
+		float keySize = isPhone() ? min / 6.0f : Math.min(min / 6.5f, max / 12.0f);
 		snapRadius = keySize * snapRadius / 4;
 		this.keySize = keySize;
 		for (int group = 0; group < keyScaleGroups.length; group++) {
