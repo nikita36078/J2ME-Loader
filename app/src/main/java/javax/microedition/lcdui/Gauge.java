@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
+import androidx.appcompat.widget.AppCompatSeekBar;
+
 public class Gauge extends Item {
 	public static final int CONTINUOUS_IDLE = 0;
 	public static final int INCREMENTAL_IDLE = 1;
@@ -30,7 +32,7 @@ public class Gauge extends Item {
 
 	private ProgressBar pbar;
 
-	private boolean interactive;
+	private final boolean interactive;
 	private int value, maxValue;
 
 	private class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
@@ -51,7 +53,7 @@ public class Gauge extends Item {
 		}
 	}
 
-	private SeekBarListener listener = new SeekBarListener();
+	private final SeekBarListener listener = new SeekBarListener();
 
 	public Gauge(String label, boolean interactive, int maxValue, int initialValue) {
 		setLabel(label);
@@ -89,10 +91,11 @@ public class Gauge extends Item {
 	protected View getItemContentView() {
 		if (pbar == null) {
 			if (interactive) {
-				pbar = new SeekBar(getOwnerForm().getParentActivity());
+				pbar = new AppCompatSeekBar(getOwnerForm().getParentActivity());
 				((SeekBar) pbar).setOnSeekBarChangeListener(listener);
 			} else {
 				pbar = new ProgressBar(getOwnerForm().getParentActivity(), null, android.R.attr.progressBarStyleHorizontal);
+				pbar.setIndeterminate(maxValue == INDEFINITE);
 			}
 
 			pbar.setMax(maxValue);

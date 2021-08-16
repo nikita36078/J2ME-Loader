@@ -19,13 +19,15 @@ package javax.microedition.lcdui;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 import javax.microedition.util.ContextHolder;
 
 public class ImageItem extends Item {
 	private Image image;
-	private ImageView imgview;
+	private ImageView imageView;
 	private String altText;
-	private int appearanceMode;
+	private final int appearanceMode;
 
 	public ImageItem(String label, Image image, int layout, String altText) {
 		this(label, image, layout, altText, PLAIN);
@@ -42,7 +44,7 @@ public class ImageItem extends Item {
 	public void setImage(Image img) {
 		image = img;
 
-		if (imgview != null) {
+		if (imageView != null) {
 			updateImageView();
 		}
 	}
@@ -67,31 +69,31 @@ public class ImageItem extends Item {
 		if (image != null) {
 			int virtualWidth = Displayable.getVirtualWidth();
 			int displayWidth = ContextHolder.getDisplayWidth();
-			float mult = (float) displayWidth / virtualWidth;
-			int width = (int) (image.getWidth() * mult);
-			int height = (int) (image.getHeight() * mult);
-			imgview.setMinimumWidth(width);
-			imgview.setMinimumHeight(height);
-			imgview.setImageBitmap(image.getBitmap());
+			float mul = (float) displayWidth / virtualWidth;
+			int width = (int) (image.getWidth() * mul);
+			int height = (int) (image.getHeight() * mul);
+			imageView.setMinimumWidth(width);
+			imageView.setMinimumHeight(height);
+			imageView.setImageBitmap(image.getBitmap());
 		} else {
-			imgview.setImageBitmap(null);
+			imageView.setImageBitmap(null);
 		}
 	}
 
 	@Override
 	public View getItemContentView() {
-		if (imgview == null) {
-			imgview = new ImageView(getOwnerForm().getParentActivity());
-			imgview.setScaleType(ImageView.ScaleType.FIT_XY);
-			imgview.setOnClickListener(v -> fireDefaultCommandAction());
+		if (imageView == null) {
+			imageView = new AppCompatImageView(getOwnerForm().getParentActivity());
+			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+			imageView.setOnClickListener(v -> fireDefaultCommandAction());
 			updateImageView();
 		}
 
-		return imgview;
+		return imageView;
 	}
 
 	@Override
 	public void clearItemContentView() {
-		imgview = null;
+		imageView = null;
 	}
 }

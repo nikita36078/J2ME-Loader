@@ -22,17 +22,19 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.URLSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import javax.microedition.lcdui.event.SimpleEvent;
 
 public class StringItem extends Item {
 	private String text;
 	private TextView textview;
-	private int appearanceMode;
+	private final int appearanceMode;
 
-	private SimpleEvent msgSetText = new SimpleEvent() {
+	private final SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
 		public void process() {
 			if (appearanceMode == HYPERLINK && text != null) {
@@ -84,9 +86,9 @@ public class StringItem extends Item {
 			Context context = getOwnerForm().getParentActivity();
 
 			if (appearanceMode == BUTTON) {
-				textview = new Button(context);
+				textview = new AppCompatButton(context);
 			} else {
-				textview = new TextView(context);
+				textview = new AppCompatTextView(context);
 			}
 
 			textview.setTextAppearance(context, android.R.style.TextAppearance_Small);

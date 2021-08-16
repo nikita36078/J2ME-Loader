@@ -22,10 +22,13 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import javax.microedition.lcdui.event.SimpleEvent;
 
@@ -36,7 +39,7 @@ class TextFieldImpl {
 	private int maxSize;
 	private int constraints;
 
-	private SimpleEvent msgSetText = new SimpleEvent() {
+	private final SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
 		public void process() {
 			textview.setText(text);
@@ -94,59 +97,54 @@ class TextFieldImpl {
 		this.constraints = constraints;
 
 		if (textview != null) {
-			int inputtype;
+			int inputType;
 
 			switch (constraints & TextField.CONSTRAINT_MASK) {
 				default:
 				case TextField.ANY:
-					inputtype = InputType.TYPE_CLASS_TEXT;
+					inputType = InputType.TYPE_CLASS_TEXT;
 					break;
-
 				case TextField.EMAILADDR:
-					inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+					inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
 					break;
-
 				case TextField.NUMERIC:
-					inputtype = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED;
+					inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED;
 					break;
-
 				case TextField.PHONENUMBER:
-					inputtype = InputType.TYPE_CLASS_PHONE;
+					inputType = InputType.TYPE_CLASS_PHONE;
 					break;
-
 				case TextField.URL:
-					inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI;
+					inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI;
 					break;
-
 				case TextField.DECIMAL:
-					inputtype = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL;
+					inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED |
+							InputType.TYPE_NUMBER_FLAG_DECIMAL;
 					break;
 			}
 
-			if ((constraints & TextField.PASSWORD) != 0 ||
-					(constraints & TextField.SENSITIVE) != 0) {
-				inputtype = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
-			}
 
-			if ((constraints & TextField.UNEDITABLE) != 0) {
-				inputtype = InputType.TYPE_NULL;
-			}
-
-			if ((constraints & TextField.NON_PREDICTIVE) != 0) {
-				inputtype |= InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+			if ((constraints & TextField.NON_PREDICTIVE) != 0 ||
+					(constraints & TextField.SENSITIVE) != 0 ||
+					(constraints & TextField.PASSWORD) != 0) {
+				inputType |= InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
 			}
 
 			if ((constraints & TextField.INITIAL_CAPS_WORD) != 0) {
-				inputtype |= InputType.TYPE_TEXT_FLAG_CAP_WORDS;
+				inputType |= InputType.TYPE_TEXT_FLAG_CAP_WORDS;
 			}
 
 			if ((constraints & TextField.INITIAL_CAPS_SENTENCE) != 0) {
-				inputtype |= InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+				inputType |= InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
 			}
 
-			textview.setInputType(inputtype);
-			if ((constraints & TextField.CONSTRAINT_MASK) == TextField.ANY) {
-				textview.setSingleLine(false);
+			textview.setInputType(inputType);
+			textview.setSingleLine(true);
+			textview.setMaxLines(50);
+			textview.setHorizontallyScrolling(false);
+			textview.setEnabled((constraints & TextField.UNEDITABLE) == 0);
+
+			if ((constraints & TextField.PASSWORD) != 0) {
+				textview.setTransformationMethod(new PasswordTransformationMethod());
 			}
 		}
 	}
@@ -175,7 +173,7 @@ class TextFieldImpl {
 
 	EditText getView(Context context, Item item) {
 		if (textview == null) {
-			textview = new EditText(context);
+			textview = new AppCompatEditText(context);
 
 			setMaxSize(maxSize);
 			setConstraints(constraints);
@@ -202,7 +200,7 @@ class TextFieldImpl {
 				});
 			} else {
 				textview.setLayoutParams(new LinearLayout.LayoutParams(
-						LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 				textview.setGravity(Gravity.TOP);
 			}
 		}

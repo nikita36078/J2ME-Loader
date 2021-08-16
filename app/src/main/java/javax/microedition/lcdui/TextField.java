@@ -36,7 +36,7 @@ public class TextField extends Item {
 	public static final int INITIAL_CAPS_WORD = 1048576;
 	public static final int INITIAL_CAPS_SENTENCE = 2097152;
 
-	private TextFieldImpl textField;
+	private final TextFieldImpl textField;
 
 	public TextField(String label, String text, int maxSize, int constraints) {
 		textField = new TextFieldImpl();

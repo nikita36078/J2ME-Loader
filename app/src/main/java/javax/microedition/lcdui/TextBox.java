@@ -21,7 +21,7 @@ import android.content.Context;
 import android.view.View;
 
 public class TextBox extends Screen {
-	private TextFieldImpl textField;
+	private final TextFieldImpl textField;
 
 	public TextBox(String title, String text, int maxSize, int constraints) {
 		textField = new TextFieldImpl();

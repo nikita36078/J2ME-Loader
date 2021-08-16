@@ -25,6 +25,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import java.util.ArrayList;
 
 import javax.microedition.lcdui.event.CommandActionEvent;
@@ -68,11 +70,11 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 	private Form owner;
 
-	private ArrayList<Command> commands = new ArrayList<>();
+	private final ArrayList<Command> commands = new ArrayList<>();
 	private ItemCommandListener listener = null;
 	private Command defaultCommand;
 
-	private SimpleEvent msgSetContextMenuListener = new SimpleEvent() {
+	private final SimpleEvent msgSetContextMenuListener = new SimpleEvent() {
 		@Override
 		public void process() {
 			if (listener != null) {
@@ -83,7 +85,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		}
 	};
 
-	private SimpleEvent msgSetLabel = new SimpleEvent() {
+	private final SimpleEvent msgSetLabel = new SimpleEvent() {
 		@Override
 		public void process() {
 			labelview.setText(label);
@@ -169,7 +171,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
 
-			labelview = new TextView(context);
+			labelview = new AppCompatTextView(context);
 			labelview.setTextAppearance(context, android.R.style.TextAppearance_Medium);
 			labelview.setText(label);
 
