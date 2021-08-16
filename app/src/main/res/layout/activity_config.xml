@@ -37,7 +37,7 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/SIZE_PRESETS"
                 android:gravity="center"
-                android:src="@drawable/ic_list"
+                app:srcCompat="@drawable/ic_list"
                 app:layout_constraintBottom_toBottomOf="@+id/tfScreenWidth"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle"
@@ -65,7 +65,7 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/SWAP_SIZES"
                 android:gravity="center"
-                android:src="@drawable/ic_swap"
+                app:srcCompat="@drawable/ic_swap"
                 app:layout_constraintBottom_toBottomOf="@+id/tfScreenWidth"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -94,7 +94,7 @@
                 android:layout_width="@dimen/height_config_row"
                 android:layout_height="0dp"
                 android:gravity="center"
-                android:src="@drawable/ic_add_preset"
+                app:srcCompat="@drawable/ic_add_preset"
                 app:layout_constraintBottom_toBottomOf="@+id/tfScreenHeight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle" />
@@ -333,7 +333,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:contentDescription="@string/shader_tuning"
-                    android:src="@drawable/ic_baseline_tune_24"
+                    app:srcCompat="@drawable/ic_baseline_tune_24"
                     android:visibility="gone"
                     tools:visibility="visible" />
 

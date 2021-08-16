@@ -79,6 +79,7 @@ public class EmulatorApplication extends Application {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(themeListener);
 		setNightMode(sp.getString(Constants.PREF_THEME, "light"));
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")

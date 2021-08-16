@@ -15,6 +15,7 @@ android {
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
         }
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     flavorDimensions "default"
