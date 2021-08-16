@@ -58,6 +58,7 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
+import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
@@ -109,9 +110,15 @@ public class MicroLoader {
 		Descriptor descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
 		Map<String, String> attr = descriptor.getAttrs();
 		ErrorReporter errorReporter = ACRA.getErrorReporter();
-		errorReporter.putCustomData(Descriptor.MIDLET_NAME, descriptor.getName());
-		errorReporter.putCustomData(Descriptor.MIDLET_VENDOR, descriptor.getVendor());
-		errorReporter.putCustomData(Descriptor.MIDLET_VERSION, descriptor.getVersion());
+		String report = errorReporter.getCustomData(Constants.KEY_APPCENTER_ATTACHMENT);
+		StringBuilder sb = new StringBuilder();
+		if (report != null) {
+			sb.append(report).append("\n");
+		}
+		sb.append(Descriptor.MIDLET_NAME).append(": ").append(descriptor.getName()).append("\n");
+		sb.append(Descriptor.MIDLET_VENDOR).append(": ").append(descriptor.getVendor()).append("\n");
+		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion());
+		errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 		MIDlet.initProps(attr);
 		for (Map.Entry<String, String> entry : attr.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {

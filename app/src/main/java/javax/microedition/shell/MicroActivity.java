@@ -46,14 +46,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.acra.ACRA;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
+
+import org.acra.ACRA;
+import org.acra.ErrorReporter;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -74,6 +75,7 @@ import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
@@ -223,7 +225,14 @@ public class MicroActivity extends AppCompatActivity {
 				.setTitle(R.string.select_dialog_title)
 				.setItems(names, (d, n) -> {
 					String clazz = classes[n];
-					ACRA.getErrorReporter().putCustomData("Begin app", names[n] + ", " + clazz);
+					ErrorReporter errorReporter = ACRA.getErrorReporter();
+					String report = errorReporter.getCustomData(Constants.KEY_APPCENTER_ATTACHMENT);
+					StringBuilder sb = new StringBuilder();
+					if (report != null) {
+						sb.append(report).append("\n");
+					}
+					sb.append("Begin app: ").append(names[n]).append(", ").append(clazz);
+					errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 					MidletThread.create(microLoader, clazz);
 					MidletThread.resumeApp();
 				})

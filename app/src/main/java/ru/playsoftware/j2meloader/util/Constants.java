@@ -21,6 +21,7 @@ public class Constants {
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 
 	public static final String KEY_APP_URI = "appUri";
+	public static final String KEY_APPCENTER_ATTACHMENT = "key_appcenter_attachment";
 	public static final String KEY_CONFIG_PATH = "configPath";
 	public static final String KEY_MIDLET_NAME = "midletName";
 
