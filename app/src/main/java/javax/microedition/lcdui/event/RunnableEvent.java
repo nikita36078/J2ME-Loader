@@ -17,10 +17,15 @@
 
 package javax.microedition.lcdui.event;
 
+import android.widget.Toast;
+
+import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.util.ArrayStack;
+import javax.microedition.util.ContextHolder;
 
 public class RunnableEvent extends Event {
 	private static final ArrayStack<RunnableEvent> recycled = new ArrayStack<>();
+	private static int instances;
 
 	private Runnable runnable;
 
@@ -29,6 +34,13 @@ public class RunnableEvent extends Event {
 
 		if (instance == null) {
 			instance = new RunnableEvent();
+			if (++instances > 100 && EventQueue.isImmediate()) {
+				EventQueue.setImmediate(false);
+				ViewHandler.postEvent(() ->
+						Toast.makeText(ContextHolder.getAppContext(),
+								"Immediate mode disabled due to stack overflow",
+								Toast.LENGTH_SHORT).show());
+			}
 		}
 
 		instance.runnable = runnable;

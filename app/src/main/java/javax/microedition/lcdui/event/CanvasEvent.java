@@ -26,17 +26,17 @@ public class CanvasEvent extends Event {
 	private static final String TAG = CanvasEvent.class.getName();
 	private static final ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
 
-	public static final int KEY_PRESSED = 0,
-			KEY_REPEATED = 1,
-			KEY_RELEASED = 2,
-			POINTER_PRESSED = 3,
-			POINTER_DRAGGED = 4,
-			POINTER_RELEASED = 5,
-			SHOW_NOTIFY = 6,
-			HIDE_NOTIFY = 7,
-			SIZE_CHANGED = 8;
+	public static final int KEY_PRESSED = 0;
+	public static final int KEY_REPEATED = 1;
+	public static final int KEY_RELEASED = 2;
+	public static final int POINTER_PRESSED = 3;
+	public static final int POINTER_DRAGGED = 4;
+	public static final int POINTER_RELEASED = 5;
+	public static final int SHOW_NOTIFY = 6;
+	public static final int HIDE_NOTIFY = 7;
+	public static final int SIZE_CHANGED = 8;
 
-	private static int[] enqueued = new int[9];
+	private static final int[] enqueued = new int[9];
 
 	private Canvas canvas;
 	private int eventType;

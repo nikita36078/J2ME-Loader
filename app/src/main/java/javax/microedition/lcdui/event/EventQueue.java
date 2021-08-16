@@ -62,6 +62,10 @@ public class EventQueue implements Runnable {
 		immediate = value;
 	}
 
+	public static boolean isImmediate() {
+		return immediate;
+	}
+
 	/**
 	 * Add event to the queue.
 	 * <p>
@@ -76,8 +80,7 @@ public class EventQueue implements Runnable {
 	 */
 	public void postEvent(Event event) {
 
-		if (immediate)        // the immediate processing mode is enabled
-		{
+		if (immediate) { // the immediate processing mode is enabled
 			event.run();    // process event on the spot
 			return;            // and nothing to do here
 		}
