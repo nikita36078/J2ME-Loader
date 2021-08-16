@@ -32,6 +32,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.DigitsKeyListener;
 import android.util.SparseBooleanArray;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +53,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
@@ -495,7 +497,7 @@ public class MicroActivity extends AppCompatActivity {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
 			Toast.makeText(this, R.string.layout_edit_finished,
 					Toast.LENGTH_SHORT).show();
-			showSaveVkAlert();
+			showSaveVkAlert(false);
 		} else if (id == R.id.action_layout_switch) {
 			showSetLayoutDialog();
 		} else if (id == R.id.action_hide_buttons) {
@@ -546,7 +548,7 @@ public class MicroActivity extends AppCompatActivity {
 					for (int i = 0; i < current.size(); i++) {
 						if (states[current.keyAt(i)] != current.valueAt(i)) {
 							vk.setKeysVisibility(current);
-							showSaveVkAlert();
+							showSaveVkAlert(true);
 							return;
 						}
 					}
@@ -554,14 +556,36 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private void showSaveVkAlert() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
-				.setTitle(R.string.CONFIRMATION_REQUIRED)
-				.setMessage(R.string.pref_vk_save_alert)
-				.setNegativeButton(android.R.string.no, null)
-				.setPositiveButton(android.R.string.yes,
-						(d, w) -> ContextHolder.getVk().onLayoutChanged(VirtualKeyboard.TYPE_CUSTOM));
-		builder.show();
+	private void showSaveVkAlert(boolean keepScreenPreferred) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.CONFIRMATION_REQUIRED);
+		builder.setMessage(R.string.pref_vk_save_alert);
+		builder.setNegativeButton(android.R.string.no, null);
+		AlertDialog dialog = builder.create();
+
+		final VirtualKeyboard vk = ContextHolder.getVk();
+		if (vk.isPhone()) {
+			AppCompatCheckBox cb = new AppCompatCheckBox(this);
+			cb.setText(R.string.opt_save_screen_params);
+			cb.setChecked(keepScreenPreferred);
+
+			TypedValue out = new TypedValue();
+			getTheme().resolveAttribute(R.attr.dialogPreferredPadding, out, true);
+			int paddingH = getResources().getDimensionPixelOffset(out.resourceId);
+			int paddingT = getResources().getDimensionPixelOffset(R.dimen.abc_dialog_padding_top_material);
+			dialog.setView(cb, paddingH, paddingT, paddingH, 0);
+
+			dialog.setButton(dialog.BUTTON_POSITIVE, getText(android.R.string.yes), (d, w) -> {
+				if (cb.isChecked()) {
+					vk.saveScreenParams();
+				}
+				vk.onLayoutChanged(VirtualKeyboard.TYPE_CUSTOM);
+			});
+		} else {
+			dialog.setButton(dialog.BUTTON_POSITIVE, getText(android.R.string.yes), (d, w) ->
+					ContextHolder.getVk().onLayoutChanged(VirtualKeyboard.TYPE_CUSTOM));
+		}
+		dialog.show();
 	}
 
 	private void showSetLayoutDialog() {

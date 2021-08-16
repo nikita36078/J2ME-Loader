@@ -170,6 +170,7 @@
     <string name="log_saved">Log has been saved</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
     <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
+    <string name="opt_save_screen_params">save screen params</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
 
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>

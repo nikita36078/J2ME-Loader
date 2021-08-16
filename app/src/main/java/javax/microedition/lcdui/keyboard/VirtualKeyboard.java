@@ -42,6 +42,7 @@ import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
+import ru.playsoftware.j2meloader.config.ProfilesManager;
 
 import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_A;
 import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
@@ -1152,6 +1153,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			case KEY_DOWN_LEFT : return 1 << 23; // 23 Lower Left   KEY_DOWN_LEFT  = 21;
 		}
 		return 0;
+	}
+
+	public void saveScreenParams() {
+		float scale = virtualScreen.width() / screen.width();
+		settings.screenScaleRatio = Math.round(scale * 100);
+		settings.screenGravity = 1;
+		Canvas.setScale(settings.screenGravity, settings.screenScaleType, settings.screenScaleRatio);
+		ProfilesManager.saveConfig(settings);
 	}
 
 	private class VirtualKey implements Runnable {
