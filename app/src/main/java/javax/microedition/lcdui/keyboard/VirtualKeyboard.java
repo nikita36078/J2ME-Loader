@@ -819,8 +819,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private void resizeKeyGroup(int group) {
-		float sizeX = (float) Math.ceil(keySize * keyScales[group * 2]);
-		float sizeY = (float) Math.ceil(keySize * keyScales[group * 2 + 1]);
+		float sizeX = keySize * keyScales[group * 2];
+		float sizeY = keySize * keyScales[group * 2 + 1];
 		for (int key = 0; key < keyScaleGroups[group].length; key++) {
 			resizeKey(keyScaleGroups[group][key], sizeX, sizeY);
 		}
