@@ -21,37 +21,19 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
 import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.config.Config;
 
 @Database(entities = {AppItem.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
-	private static AppDatabase instance;
-	private static volatile int openCount;
 
 	public abstract AppItemDao appItemDao();
 
-	static synchronized AppDatabase getDatabase(Context context) {
-		openCount++;
-		if (instance == null) {
-			instance = Room.databaseBuilder(context.getApplicationContext(),
-					AppDatabase.class, Config.getEmulatorDir() + "/J2ME-apps.db")
-					.build();
-		}
-		return instance;
-	}
-
-	static synchronized void closeInstance() {
-		if (--openCount > 0) return;
-		instance.close();
-		instance = null;
-	}
-
-	public static synchronized void closeQuietly() {
-		openCount = 0;
-		if (instance != null) {
-			instance.close();
-			instance = null;
-		}
+	static synchronized AppDatabase open(Context context, String dir) {
+		return Room.databaseBuilder(
+				context.getApplicationContext(),
+				AppDatabase.class,
+				dir + "/J2ME-apps.db")
+				.build();
 	}
 }

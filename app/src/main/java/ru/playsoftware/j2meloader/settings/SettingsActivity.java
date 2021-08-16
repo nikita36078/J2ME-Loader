@@ -18,42 +18,39 @@ package ru.playsoftware.j2meloader.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
-
-import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_THEME;
+import static ru.playsoftware.j2meloader.util.Constants.RESULT_NEED_RECREATE;
 
 public class SettingsActivity extends BaseActivity {
-	private Map<String, ?> oldParams;
 	private SharedPreferences preferences;
+	private String theme;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle(R.string.action_settings);
-		setResult(getIntent().getBooleanExtra(PREF_EMULATOR_DIR, false) ? RESULT_NEED_RECREATE : RESULT_OK);
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		setTitle(R.string.action_settings);
+		setResult(RESULT_OK);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		oldParams = preferences.getAll();
+		theme = preferences.getString(PREF_THEME, "light");
 	}
 
 	@Override
 	public void finish() {
-		if (!getIntent().getBooleanExtra(PREF_EMULATOR_DIR, false)
-				&& preferences.getString(PREF_THEME, "light").equals(oldParams.get(PREF_THEME))
-				&& preferences.getString(PREF_APP_SORT, "name").equals(oldParams.get(PREF_APP_SORT))
-				&& TextUtils.equals(preferences.getString(PREF_EMULATOR_DIR, null),
-				(CharSequence) oldParams.get(PREF_EMULATOR_DIR))) {
+		if (theme.equals(preferences.getString(PREF_THEME, "light"))) {
 			setResult(RESULT_OK);
 		} else {
 			setResult(RESULT_NEED_RECREATE);

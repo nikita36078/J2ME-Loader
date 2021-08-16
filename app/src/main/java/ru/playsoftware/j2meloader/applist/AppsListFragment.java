@@ -63,6 +63,7 @@ import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -77,9 +78,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
@@ -103,12 +102,12 @@ import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 
 public class AppsListFragment extends ListFragment {
 	private static final String TAG = AppsListFragment.class.getSimpleName();
-	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 	private final AppsListAdapter adapter = new AppsListAdapter();
 	private JarConverter converter;
 	private Uri appUri;
 	private SharedPreferences preferences;
 	private AppRepository appRepository;
+	private Disposable searchViewDisposable;
 
 	private final ActivityResultLauncher<Void> openFileLauncher = registerForActivityResult(
 			new ActivityResultContract<Void, Uri>() {
@@ -160,17 +159,15 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		appUri = requireArguments().getParcelable(KEY_APP_URI);
+		Bundle args = requireArguments();
+		appUri = args.getParcelable(KEY_APP_URI);
+		args.remove(KEY_APP_URI);
 		converter = new JarConverter(requireActivity().getApplicationInfo().dataDir);
 		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
-		int sort;
-		try {
-			sort = preferences.getInt(PREF_APP_SORT, 0);
-		} catch (Exception e) {
-			sort = preferences.getString(PREF_APP_SORT, "name").equals("name") ? 0 : 1;
-			preferences.edit().putInt(PREF_APP_SORT, sort).apply();
-		}
-		appRepository = new AppRepository(requireContext(), sort);
+		AppListModel appListModel = new ViewModelProvider(requireActivity()).get(AppListModel.class);
+		appRepository = appListModel.getAppRepository();
+		appRepository.observeErrors(this, this::alertDbError);
+		appRepository.observeApps(this, this::onDbUpdated);
 	}
 
 	@Override
@@ -184,43 +181,16 @@ public class AppsListFragment extends ListFragment {
 		registerForContextMenu(getListView());
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
-		initDb();
 		FloatingActionButton fab = view.findViewById(R.id.fab);
 		fab.setOnClickListener(v -> openFileLauncher.launch(null));
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		if (appUri != null) {
-			installApp(appUri);
-			appUri = null;
-		}
-	}
-
-	@Override
 	public void onDestroy() {
-		if (appRepository != null) {
-			appRepository.close();
-			appRepository = null;
+		if (searchViewDisposable != null) {
+			searchViewDisposable.dispose();
 		}
-		compositeDisposable.clear();
 		super.onDestroy();
-	}
-
-	@SuppressLint("CheckResult")
-	@SuppressWarnings("ResultOfMethodCallIgnored")
-	private void initDb() {
-		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
-				.subscribeOn(Schedulers.io())
-				.publish();
-		listConnectableFlowable
-				.firstElement()
-				.subscribe(list -> AppUtils.updateDb(appRepository, list), this::alertDbError);
-		listConnectableFlowable
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(adapter::setItems, this::alertDbError);
-		compositeDisposable.add(listConnectableFlowable.connect());
 	}
 
 	private void alertDbError(Throwable throwable) {
@@ -230,13 +200,10 @@ public class AppsListFragment extends ListFragment {
 			return;
 		}
 		if (throwable instanceof SQLiteDiskIOException) {
-			activity.runOnUiThread(() ->
-					Toast.makeText(activity, R.string.error_disk_io, Toast.LENGTH_SHORT).show());
+			Toast.makeText(activity, R.string.error_disk_io, Toast.LENGTH_SHORT).show();
 		} else {
-			activity.runOnUiThread(() -> {
-				String msg = activity.getString(R.string.error) + ": " + throwable.getMessage();
-				Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-			});
+			String msg = activity.getString(R.string.error) + ": " + throwable.getMessage();
+			Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -427,7 +394,7 @@ public class AppsListFragment extends ListFragment {
 		inflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
+		searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
 				searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 					@Override
 					public boolean onQueryTextSubmit(String query) {
@@ -445,7 +412,6 @@ public class AppsListFragment extends ListFragment {
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
-		compositeDisposable.add(searchViewDisposable);
 	}
 
 	@Override
@@ -494,8 +460,18 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private void setSort(int sortVariant) {
-		int sortWithOrder = appRepository.setSort(sortVariant);
-		preferences.edit().putInt(PREF_APP_SORT, sortWithOrder).apply();
+		if (appRepository.getSort() == sortVariant) {
+			sortVariant |= 0x80000000;
+		}
+		preferences.edit().putInt(PREF_APP_SORT, sortVariant).apply();
+	}
+
+	private void onDbUpdated(List<AppItem> items) {
+		adapter.setItems(items);
+		if (appUri != null) {
+			installApp(appUri);
+			appUri = null;
+		}
 	}
 
 	private static class SortAdapter extends ArrayAdapter<String> {

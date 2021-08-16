@@ -32,6 +32,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.filepicker.Utils;
@@ -39,6 +40,7 @@ import com.nononsenseapps.filepicker.Utils;
 import java.io.File;
 import java.util.Map;
 
+import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
@@ -52,7 +54,7 @@ import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 public class MainActivity extends BaseActivity {
 	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-	private SharedPreferences sp;
+	private SharedPreferences preferences;
 	private String emulatorDir;
 	private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
 			new ActivityResultContracts.RequestMultiplePermissions(),
@@ -66,7 +68,7 @@ public class MainActivity extends BaseActivity {
 	private boolean isIntentUri;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
@@ -75,8 +77,12 @@ public class MainActivity extends BaseActivity {
 			finish();
 			return;
 		}
-		isIntentUri = (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0 && uri != null;
-		sp = PreferenceManager.getDefaultSharedPreferences(this);
+		if (savedInstanceState == null) {
+			AppsListFragment fragment = AppsListFragment.newInstance(uri);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.container, fragment).commit();
+		}
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		permissionsLauncher.launch(STORAGE_PERMISSIONS);
 	}
 
@@ -95,10 +101,7 @@ public class MainActivity extends BaseActivity {
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check(this);
-		Uri data = isIntentUri ? getIntent().getData() : null;
-		AppsListFragment fragment = AppsListFragment.newInstance(data);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment).commitNowAllowingStateLoss();
+		new ViewModelProvider(this).get(AppListModel.class);
 	}
 
 	private boolean initFolders() {
@@ -120,9 +123,9 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void checkActionBar() {
-		if (sp.getAll().get(PREF_TOOLBAR) == null) {
+		if (!preferences.contains(PREF_TOOLBAR)) {
 			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
-			sp.edit().putBoolean(PREF_TOOLBAR, enable).apply();
+			preferences.edit().putBoolean(PREF_TOOLBAR, enable).apply();
 		}
 	}
 
@@ -165,11 +168,11 @@ public class MainActivity extends BaseActivity {
 
 	private void applyChangeFolder(File file) {
 		String path = file.getAbsolutePath();
-		if (path.equals(sp.getString(PREF_EMULATOR_DIR, null))) {
+		if (path.equals(preferences.getString(PREF_EMULATOR_DIR, null))) {
 			return;
 		}
-		sp.edit().putString(PREF_EMULATOR_DIR, path).apply();
-		ActivityCompat.recreate(this);
+		preferences.edit().putString(PREF_EMULATOR_DIR, path).apply();
+		setupActivity();
 	}
 
 	private void onPickDirResult(Uri uri) {

@@ -97,6 +97,11 @@ public class AppUtils {
 	}
 
 	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
+		File tmp = new File(Config.getAppDir(), ".tmp");
+		if (tmp.exists()) {
+			// TODO: 30.07.2021 uncompleted installation - may be continue???
+			FileUtils.deleteDirectory(tmp);
+		}
 		String[] appFolders = new File(Config.getAppDir()).list();
 		int itemsNum = items.size();
 		if (appFolders == null || appFolders.length == 0) {
