@@ -31,6 +31,8 @@
     <string name="converting_message">Processing...</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
     <string name="external_storage_not_mounted">This app requires external storage</string>
+    <string name="create">create</string>
+    <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n\'%1$s\'.\nDo you want to create it or choose another one?</string>
     <string name="action_context_shortcut">Add shortcut</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
     <string name="action_reinstall">Reinstall</string>

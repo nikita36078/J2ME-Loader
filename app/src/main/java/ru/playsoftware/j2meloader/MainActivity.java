@@ -44,9 +44,9 @@ import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.MigrationUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.playsoftware.j2meloader.util.SettingsResultContract;
+import ru.woesss.j2me.installer.InstallerDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
@@ -65,43 +65,55 @@ public class MainActivity extends BaseActivity {
 	private final ActivityResultLauncher<Boolean> settingsLauncher = registerForActivityResult(
 			new SettingsResultContract(),
 			this::onSettingsResult);
-	private boolean isIntentUri;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Intent intent = getIntent();
-		Uri uri = intent.getData();
-		if (!isTaskRoot() && uri == null) {
-			finish();
-			return;
-		}
 		if (savedInstanceState == null) {
+			Intent intent = getIntent();
+			Uri uri = null;
+			if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+				uri = intent.getData();
+			}
 			AppsListFragment fragment = AppsListFragment.newInstance(uri);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.container, fragment).commit();
 		}
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		permissionsLauncher.launch(STORAGE_PERMISSIONS);
-	}
-
-	private void setupActivity() {
-		if (!initFolders()) {
-			String msg = getString(R.string.create_apps_dir_failed, emulatorDir);
-			new AlertDialog.Builder(this)
-					.setTitle(R.string.error)
-					.setCancelable(false)
-					.setMessage(msg)
-					.setNegativeButton(R.string.close, (d, w) -> finish())
-					.setPositiveButton(R.string.action_settings, (d, w) -> openDirLauncher.launch(null))
-					.show();
-			return;
-		}
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		MigrationUtils.check(this);
 		new ViewModelProvider(this).get(AppListModel.class);
+	}
+
+	private void setupWorkDir() {
+		if (initFolders()) {
+			return;
+		}
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.error)
+				.setCancelable(false)
+				.setMessage(getString(R.string.create_apps_dir_failed, emulatorDir))
+				.setNegativeButton(R.string.close, (d, w) -> finish())
+				.setPositiveButton(R.string.action_settings, (d, w) -> openDirLauncher.launch(null))
+				.show();
+	}
+
+	private boolean checkDirExists() {
+		String emulatorDir = Config.getEmulatorDir();
+		if (!new File(emulatorDir).exists()) {
+			String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir);
+			new AlertDialog.Builder(this)
+					.setTitle(android.R.string.dialog_alert_title)
+					.setCancelable(false)
+					.setMessage(msg)
+					.setNegativeButton(R.string.action_settings, (d, w) -> openDirLauncher.launch(emulatorDir))
+					.setPositiveButton(R.string.create, (d, w) -> setupWorkDir())
+					.show();
+			return false;
+		}
+		return true;
 	}
 
 	private boolean initFolders() {
@@ -140,7 +152,9 @@ public class MainActivity extends BaseActivity {
 
 	private void onPermissionResult(Map<String, Boolean> status) {
 		if (!status.containsValue(false)) {
-			setupActivity();
+			if (checkDirExists()) {
+				setupWorkDir();
+			}
 		} else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 			showRequestPermissionRationale();
 		} else {
@@ -151,7 +165,7 @@ public class MainActivity extends BaseActivity {
 
 	private void showRequestPermissionRationale() {
 		new AlertDialog.Builder(this)
-				.setTitle(R.string.error)
+				.setTitle(android.R.string.dialog_alert_title)
 				.setCancelable(false)
 				.setMessage(R.string.permission_request_failed)
 				.setNegativeButton(R.string.retry, (d, w) ->
@@ -172,7 +186,7 @@ public class MainActivity extends BaseActivity {
 			return;
 		}
 		preferences.edit().putString(PREF_EMULATOR_DIR, path).apply();
-		setupActivity();
+		setupWorkDir();
 	}
 
 	private void onPickDirResult(Uri uri) {
@@ -183,4 +197,13 @@ public class MainActivity extends BaseActivity {
 		applyChangeFolder(file);
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		Uri uri = intent.getData();
+		if (uri != null) {
+			InstallerDialog.newInstance(uri).show(getSupportFragmentManager(), "installer");
+			intent.setData(null);
+		}
+	}
 }

@@ -80,13 +80,11 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		preferences.registerOnSharedPreferenceChangeListener(this);
 		String emulatorDir = Config.getEmulatorDir();
 		File dir = new File(emulatorDir);
-		if (!dir.exists() && !dir.mkdirs()) {
-			errorsLiveData.postValue(new IOException("Directory [" + emulatorDir + "] can't be write"));
-			return;
+		if (dir.exists()) {
+			db = AppDatabase.open(context, emulatorDir);
+			appItemDao = db.appItemDao();
+			initPublisher();
 		}
-		db = AppDatabase.open(context, emulatorDir);
-		appItemDao = db.appItemDao();
-		initPublisher();
 	}
 
 	public void observeApps(LifecycleOwner owner, Observer<List<AppItem>> observer) {
@@ -132,10 +130,10 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 	}
 
 	public void close() {
-		synchronized (AppRepository.class) {
+		if (db != null) {
 			db.close();
-			composer.clear();
 		}
+		composer.clear();
 	}
 
 	public int getSort() {
