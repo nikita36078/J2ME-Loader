@@ -92,7 +92,7 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 				.publish();
 		composer.add(listConnectableFlowable
 				.firstElement()
-				.subscribe(list -> AppUtils.updateDb(this, list), errorsLiveData::postValue));
+				.subscribe(list -> AppUtils.updateDb(this, new ArrayList<>(list)), errorsLiveData::postValue));
 		composer.add(listConnectableFlowable.subscribe(listLiveData::postValue, errorsLiveData::postValue));
 		composer.add(listConnectableFlowable.connect());
 	}
@@ -111,8 +111,8 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 				.subscribe(errorObserver);
 	}
 
-	public void insertAll(ArrayList<AppItem> items) {
-		Completable.fromAction(() -> appItemDao.insertAll(items))
+	public void insert(List<AppItem> items) {
+		Completable.fromAction(() -> appItemDao.insert(items))
 				.subscribeOn(Schedulers.io())
 				.subscribe();
 	}
@@ -125,6 +125,12 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 
 	public void delete(AppItem item) {
 		Completable.fromAction(() -> appItemDao.delete(item))
+				.subscribeOn(Schedulers.io())
+				.subscribe(errorObserver);
+	}
+
+	public void delete(List<AppItem> items) {
+		Completable.fromAction(() -> appItemDao.delete(items))
 				.subscribeOn(Schedulers.io())
 				.subscribe(errorObserver);
 	}

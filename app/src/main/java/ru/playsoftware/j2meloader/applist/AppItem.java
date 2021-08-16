@@ -19,7 +19,6 @@ package ru.playsoftware.j2meloader.applist;
 
 import android.content.Context;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -32,10 +31,9 @@ public class AppItem {
 	private int id;
 	private String imagePath;
 	private String title;
-	private String author;
-	private String version;
-	@ColumnInfo(name = "path")
-	private String path;
+	private final String author;
+	private final String version;
+	private final String path;
 
 	public AppItem(String path, String title, String author, String version) {
 		this.path = path;
@@ -92,6 +90,9 @@ public class AppItem {
 	}
 
 	public String getImagePathExt() {
+		if (imagePath == null) {
+			return null;
+		}
 		return Config.getAppDir() + imagePath;
 	}
 

@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -295,7 +294,7 @@ public class AppsListFragment extends ListFragment {
 
 	private void requestAddShortcut(AppItem appItem) {
 		FragmentActivity activity = requireActivity();
-		Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
+		Bitmap bitmap = AppUtils.getIconBitmap(appItem);
 		IconCompat icon;
 		if (bitmap == null) {
 			icon = IconCompat.createWithResource(activity, R.mipmap.ic_launcher);

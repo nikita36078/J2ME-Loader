@@ -16,14 +16,18 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
@@ -33,38 +37,39 @@ import ru.woesss.j2me.jar.Descriptor;
 public class AppUtils {
 	private static final String TAG = AppUtils.class.getSimpleName();
 
-	private static ArrayList<AppItem> getAppsList() {
+	private static ArrayList<AppItem> getAppsList(@NonNull List<String> appFolders) {
 		ArrayList<AppItem> apps = new ArrayList<>();
-		String[] appFolders = new File(Config.getAppDir()).list();
-		if (appFolders != null) {
-			for (String appFolder : appFolders) {
-				File temp = new File(Config.getAppDir(), appFolder);
-				if (!temp.isDirectory()) {
-					//noinspection ResultOfMethodCallIgnored
-					temp.delete();
+		File appsDir = new File(Config.getAppDir());
+		for (String appFolderName : appFolders) {
+			File appFolder = new File(appsDir, appFolderName);
+			if (!appFolder.isDirectory()) {
+				if (!appFolder.delete()) {
+					Log.e(TAG, "getAppsList() failed delete file: " + appFolder);
+				}
+				continue;
+			}
+			File compressed = new File(appFolder, Config.MIDLET_DEX_ARCH);
+			if (!compressed.isFile()) {
+				File dex = new File(appFolder, Config.MIDLET_DEX_FILE);
+				if (!dex.isFile()) {
+					FileUtils.deleteDirectory(appFolder);
 					continue;
 				}
-				String[] list = temp.list();
-				if (list == null || list.length == 0) {
-					//noinspection ResultOfMethodCallIgnored
-					temp.delete();
-					continue;
-				}
-				try {
-					AppItem item = getApp(temp.getName());
-					apps.add(item);
-				} catch (Exception e) {
-					Log.w(TAG, "getAppsList: ", e);
-				}
+			}
+			try {
+				AppItem item = getApp(appFolder);
+				apps.add(item);
+			} catch (Exception e) {
+				Log.w(TAG, "getAppsList: ", e);
+				FileUtils.deleteDirectory(appFolder);
 			}
 		}
 		return apps;
 	}
 
-	private static AppItem getApp(String path) throws IOException {
-		File appDir = new File(Config.getAppDir(), path);
-		File file = new File(appDir, Config.MIDLET_MANIFEST_FILE);
-		Descriptor params = new Descriptor(file, false);
+	private static AppItem getApp(File appDir) throws IOException {
+		File mf = new File(appDir, Config.MIDLET_MANIFEST_FILE);
+		Descriptor params = new Descriptor(mf, false);
 		AppItem item = new AppItem(appDir.getName(), params.getName(),
 				params.getVendor(),
 				params.getVersion());
@@ -93,35 +98,39 @@ public class AppUtils {
 	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
 		File tmp = new File(Config.getAppDir(), ".tmp");
 		if (tmp.exists()) {
-			// TODO: 30.07.2021 uncompleted installation - may be continue???
+			// TODO: 30.07.2021 incomplete installation - maybe can continue?
 			FileUtils.deleteDirectory(tmp);
 		}
 		String[] appFolders = new File(Config.getAppDir()).list();
-		int itemsNum = items.size();
 		if (appFolders == null || appFolders.length == 0) {
 			// If db isn't empty
-			if (itemsNum != 0) {
+			if (items.size() != 0) {
 				appRepository.deleteAll();
 			}
 			return;
 		}
-		List<String> appFoldersList = Arrays.asList(appFolders);
-		boolean result = true;
+		List<String> appFoldersList = new ArrayList<>(Arrays.asList(appFolders));
 		// Delete invalid app items from db
-		Iterator<AppItem> iterator = items.iterator();
-		while (iterator.hasNext()) {
-			AppItem item = iterator.next();
-			if (!appFoldersList.contains(item.getPath())) {
-				result = false;
-				appRepository.delete(item);
+		ListIterator<AppItem> iterator = items.listIterator(items.size());
+		while (iterator.hasPrevious()) {
+			AppItem item = iterator.previous();
+			if (appFoldersList.remove(item.getPath())) {
 				iterator.remove();
 			}
 		}
-		if (appFolders.length != items.size()) {
-			result = false;
+		if (items.size() > 0) {
+			appRepository.delete(items);
 		}
-		if (!result) {
-			appRepository.insertAll(getAppsList());
+		if (appFoldersList.size() > 0) {
+			appRepository.insert(getAppsList(appFoldersList));
 		}
+	}
+
+	public static Bitmap getIconBitmap(AppItem appItem) {
+		String file = appItem.getImagePathExt();
+		if (file == null) {
+			return null;
+		}
+		return BitmapFactory.decodeFile(file);
 	}
 }
