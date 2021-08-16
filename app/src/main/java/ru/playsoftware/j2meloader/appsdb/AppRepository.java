@@ -31,7 +31,6 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,11 +79,22 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		preferences.registerOnSharedPreferenceChangeListener(this);
 		String emulatorDir = Config.getEmulatorDir();
 		File dir = new File(emulatorDir);
-		if (dir.exists()) {
-			db = AppDatabase.open(context, emulatorDir);
-			appItemDao = db.appItemDao();
-			initPublisher();
+		if (dir.isDirectory() && dir.canWrite()) {
+			initDb(emulatorDir);
 		}
+	}
+
+	public void initDb(String path) {
+		db = AppDatabase.open(context, path);
+		appItemDao = db.appItemDao();
+		ConnectableFlowable<List<AppItem>> listConnectableFlowable = getAll()
+				.subscribeOn(Schedulers.io())
+				.publish();
+		composer.add(listConnectableFlowable
+				.firstElement()
+				.subscribe(list -> AppUtils.updateDb(this, list), errorsLiveData::postValue));
+		composer.add(listConnectableFlowable.subscribe(listLiveData::postValue, errorsLiveData::postValue));
+		composer.add(listConnectableFlowable.connect());
 	}
 
 	public void observeApps(LifecycleOwner owner, Observer<List<AppItem>> observer) {
@@ -169,25 +179,18 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 				db.close();
 				composer.clear();
 			}
-			db = AppDatabase.open(context, newPath);
-			appItemDao = db.appItemDao();
-			initPublisher();
+			initDb(newPath);
 		}
-	}
-
-	public void initPublisher() {
-		ConnectableFlowable<List<AppItem>> listConnectableFlowable = getAll()
-				.subscribeOn(Schedulers.io())
-				.publish();
-		composer.add(listConnectableFlowable
-				.firstElement()
-				.subscribe(list -> AppUtils.updateDb(this, list), errorsLiveData::postValue));
-		composer.add(listConnectableFlowable.subscribe(listLiveData::postValue, errorsLiveData::postValue));
-		composer.add(listConnectableFlowable.connect());
 	}
 
 	public void observeErrors(LifecycleOwner owner, Observer<Throwable> observer) {
 		errorsLiveData.observe(owner, observer);
+	}
+
+	public void onWorkDirReady() {
+		if (db == null) {
+			initDb(Config.getEmulatorDir());
+		}
 	}
 
 	private static class ErrorObserver implements CompletableObserver {

@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
+import ru.playsoftware.j2meloader.config.Config;
+
 public class FileUtils {
 
 	private static final String TAG = FileUtils.class.getName();
@@ -190,5 +192,21 @@ public class FileUtils {
 			Log.e(TAG, "getText: " + path, e);
 		}
 		return "";
+	}
+
+	public static boolean initWorkDir(File dir) {
+		if ((dir.isDirectory() || dir.mkdirs()) && dir.canWrite()) {
+			//noinspection ResultOfMethodCallIgnored
+			new File(dir, Config.SHADERS_DIR).mkdir();
+			try {
+				File nomedia = new File(dir, ".nomedia");
+				//noinspection ResultOfMethodCallIgnored
+				nomedia.createNewFile();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		return false;
 	}
 }

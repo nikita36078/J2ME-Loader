@@ -44,6 +44,7 @@ import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.playsoftware.j2meloader.util.SettingsResultContract;
 import ru.woesss.j2me.installer.InstallerDialog;
@@ -54,8 +55,6 @@ import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 public class MainActivity extends BaseActivity {
 	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-	private SharedPreferences preferences;
-	private String emulatorDir;
 	private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
 			new ActivityResultContracts.RequestMultiplePermissions(),
 			this::onPermissionResult);
@@ -66,10 +65,15 @@ public class MainActivity extends BaseActivity {
 			new SettingsResultContract(),
 			this::onSettingsResult);
 
+	private SharedPreferences preferences;
+	private AppListModel appListModel;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		permissionsLauncher.launch(STORAGE_PERMISSIONS);
+		appListModel = new ViewModelProvider(this).get(AppListModel.class);
 		if (savedInstanceState == null) {
 			Intent intent = getIntent();
 			Uri uri = null;
@@ -81,64 +85,37 @@ public class MainActivity extends BaseActivity {
 					.replace(R.id.container, fragment).commit();
 		}
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		permissionsLauncher.launch(STORAGE_PERMISSIONS);
-		checkActionBar();
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		new ViewModelProvider(this).get(AppListModel.class);
-	}
-
-	private void setupWorkDir() {
-		if (initFolders()) {
-			return;
-		}
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.error)
-				.setCancelable(false)
-				.setMessage(getString(R.string.create_apps_dir_failed, emulatorDir))
-				.setNegativeButton(R.string.close, (d, w) -> finish())
-				.setPositiveButton(R.string.action_settings, (d, w) -> openDirLauncher.launch(null))
-				.show();
-	}
-
-	private boolean checkDirExists() {
-		String emulatorDir = Config.getEmulatorDir();
-		if (!new File(emulatorDir).exists()) {
-			String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir);
-			new AlertDialog.Builder(this)
-					.setTitle(android.R.string.dialog_alert_title)
-					.setCancelable(false)
-					.setMessage(msg)
-					.setNegativeButton(R.string.action_settings, (d, w) -> openDirLauncher.launch(emulatorDir))
-					.setPositiveButton(R.string.create, (d, w) -> setupWorkDir())
-					.show();
-			return false;
-		}
-		return true;
-	}
-
-	private boolean initFolders() {
-		emulatorDir = Config.getEmulatorDir();
-		File appsDir = new File(emulatorDir);
-		File nomedia = new File(appsDir, ".nomedia");
-		if (appsDir.isDirectory() || appsDir.mkdirs()) {
-			//noinspection ResultOfMethodCallIgnored
-			new File(Config.getShadersDir()).mkdir();
-			try {
-				//noinspection ResultOfMethodCallIgnored
-				nomedia.createNewFile();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return true;
-		}
-		return false;
-	}
-
-	private void checkActionBar() {
 		if (!preferences.contains(PREF_TOOLBAR)) {
 			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
 			preferences.edit().putBoolean(PREF_TOOLBAR, enable).apply();
 		}
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+	}
+
+	private void checkAndCreateDirs() {
+		String emulatorDir = Config.getEmulatorDir();
+		File dir = new File(emulatorDir);
+		if (dir.isDirectory() && dir.canWrite()) {
+			FileUtils.initWorkDir(dir);
+			appListModel.getAppRepository().onWorkDirReady();
+			return;
+		}
+		if (dir.exists() || dir.getParentFile() == null || !dir.getParentFile().isDirectory()
+				|| !dir.getParentFile().canWrite()) {
+			alertDirCannotCreate(emulatorDir);
+			return;
+		}
+		alertCreateDir();
+	}
+
+	private void alertDirCannotCreate(String emulatorDir) {
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.error)
+				.setCancelable(false)
+				.setMessage(getString(R.string.create_apps_dir_failed, emulatorDir))
+				.setNegativeButton(R.string.exit, (d, w) -> finish())
+				.setPositiveButton(R.string.choose, (d, w) -> openDirLauncher.launch(null))
+				.show();
 	}
 
 	@Override
@@ -152,26 +129,20 @@ public class MainActivity extends BaseActivity {
 
 	private void onPermissionResult(Map<String, Boolean> status) {
 		if (!status.containsValue(false)) {
-			if (checkDirExists()) {
-				setupWorkDir();
-			}
+			checkAndCreateDirs();
 		} else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-			showRequestPermissionRationale();
+			new AlertDialog.Builder(this)
+					.setTitle(android.R.string.dialog_alert_title)
+					.setCancelable(false)
+					.setMessage(R.string.permission_request_failed)
+					.setNegativeButton(R.string.retry, (d, w) ->
+							permissionsLauncher.launch(STORAGE_PERMISSIONS))
+					.setPositiveButton(R.string.exit, (d, w) -> finish())
+					.show();
 		} else {
 			Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 			finish();
 		}
-	}
-
-	private void showRequestPermissionRationale() {
-		new AlertDialog.Builder(this)
-				.setTitle(android.R.string.dialog_alert_title)
-				.setCancelable(false)
-				.setMessage(R.string.permission_request_failed)
-				.setNegativeButton(R.string.retry, (d, w) ->
-						permissionsLauncher.launch(STORAGE_PERMISSIONS))
-				.setPositiveButton(R.string.exit, (d, w) -> finish())
-				.show();
 	}
 
 	private void onSettingsResult(Boolean needRecreate) {
@@ -180,21 +151,36 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private void applyChangeFolder(File file) {
-		String path = file.getAbsolutePath();
-		if (path.equals(preferences.getString(PREF_EMULATOR_DIR, null))) {
-			return;
-		}
-		preferences.edit().putString(PREF_EMULATOR_DIR, path).apply();
-		setupWorkDir();
-	}
-
 	private void onPickDirResult(Uri uri) {
 		if (uri == null) {
+			checkAndCreateDirs();
 			return;
 		}
 		File file = Utils.getFileForUri(uri);
-		applyChangeFolder(file);
+		applyWorkDir(file);
+	}
+
+	private void alertCreateDir() {
+		String emulatorDir = Config.getEmulatorDir();
+		String lblChange = getString(R.string.change);
+		String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir, lblChange);
+		new AlertDialog.Builder(this)
+				.setTitle(android.R.string.dialog_alert_title)
+				.setCancelable(false)
+				.setMessage(msg)
+				.setPositiveButton(R.string.create, (d, w) -> applyWorkDir(new File(emulatorDir)))
+				.setNeutralButton(lblChange, (d, w) -> openDirLauncher.launch(emulatorDir))
+				.setNegativeButton(R.string.exit, (d, w) -> finish())
+				.show();
+	}
+
+	private void applyWorkDir(File file) {
+		String path = file.getAbsolutePath();
+		if (!FileUtils.initWorkDir(file)) {
+			alertDirCannotCreate(path);
+			return;
+		}
+		preferences.edit().putString(PREF_EMULATOR_DIR, path).apply();
 	}
 
 	@Override
@@ -203,7 +189,6 @@ public class MainActivity extends BaseActivity {
 		Uri uri = intent.getData();
 		if (uri != null) {
 			InstallerDialog.newInstance(uri).show(getSupportFragmentManager(), "installer");
-			intent.setData(null);
 		}
 	}
 }

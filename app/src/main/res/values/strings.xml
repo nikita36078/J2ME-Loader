@@ -39,6 +39,8 @@
     <string name="err_missing_app">Application not found.\nPlease check storage device %savailability or re-create shortcut.</string>
     <string name="error_disk_io">Storage error: check disk space</string>
     <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
+    <string name="change">Change</string>
+    <string name="choose">Choose</string>
 
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>

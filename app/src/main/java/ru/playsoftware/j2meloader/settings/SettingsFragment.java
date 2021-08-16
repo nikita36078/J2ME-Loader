@@ -19,18 +19,19 @@ package ru.playsoftware.j2meloader.settings;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
@@ -53,23 +54,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		});
 	}
 
-	private void applyChangeFolder(File file) {
-		if (!file.canWrite()) {
-			Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
-			return;
-		}
-		String path = file.getAbsolutePath();
-		getPreferenceManager().getSharedPreferences().edit()
-				.putString(PREF_EMULATOR_DIR, path)
-				.apply();
-		prefFolder.setSummary(path);
-	}
-
 	private void onPickDirResult(Uri uri) {
 		if (uri == null) {
 			return;
 		}
 		File file = Utils.getFileForUri(uri);
-		applyChangeFolder(file);
+		String path = file.getAbsolutePath();
+		if (!FileUtils.initWorkDir(file)) {
+			new AlertDialog.Builder(requireActivity())
+					.setTitle(R.string.error)
+					.setCancelable(false)
+					.setMessage(getString(R.string.create_apps_dir_failed, path))
+					.setNegativeButton(android.R.string.cancel, null)
+					.setPositiveButton(R.string.choose, (d, w) -> openDirLauncher.launch(null))
+					.show();
+			return;
+		}
+		getPreferenceManager().getSharedPreferences().edit()
+				.putString(PREF_EMULATOR_DIR, path)
+				.apply();
+		prefFolder.setSummary(path);
 	}
 }
