@@ -658,11 +658,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 								keyScales[i] = dis.readFloat();
 							}
 						} else if (count * 2 <= keyScales.length) {
-							for (int i = 0; i < keyScales.length; i++) {
+							for (int i = 0; i < count; i++) {
 								float v = dis.readFloat();
 								keyScales[i++] = v;
 								keyScales[i] = v;
 							}
+							dis.skipBytes((keyScales.length - count * 2) * 4);
 						} else {
 							dis.skipBytes(count * 4);
 						}
