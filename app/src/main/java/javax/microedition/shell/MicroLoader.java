@@ -25,6 +25,7 @@ import android.util.SparseIntArray;
 import android.view.KeyEvent;
 
 import org.acra.ACRA;
+import org.acra.ErrorReporter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,6 +59,7 @@ import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.woesss.j2me.jar.Descriptor;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
@@ -104,10 +106,14 @@ public class MicroLoader {
 
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
-		LinkedHashMap<String, String> params =
-				FileUtils.loadManifest(new File(appDir, Config.MIDLET_MANIFEST_FILE));
-		MIDlet.initProps(params);
-		for (Map.Entry<String, String> entry : params.entrySet()) {
+		Descriptor descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
+		Map<String, String> attr = descriptor.getAttrs();
+		ErrorReporter errorReporter = ACRA.getErrorReporter();
+		errorReporter.putCustomData(Descriptor.MIDLET_NAME, descriptor.getName());
+		errorReporter.putCustomData(Descriptor.MIDLET_VENDOR, descriptor.getVendor());
+		errorReporter.putCustomData(Descriptor.MIDLET_VERSION, descriptor.getVersion());
+		MIDlet.initProps(attr);
+		for (Map.Entry<String, String> entry : attr.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {
 				String tmp = entry.getValue();
 				String clazz = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
@@ -131,8 +137,6 @@ public class MicroLoader {
 		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
 				dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
-		Log.i(TAG, "MIDlet-Name: " + appDirName);
-		ACRA.getErrorReporter().putCustomData("Running app", appDirName);
 		//noinspection unchecked
 		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
 		Constructor<MIDlet> init = clazz.getDeclaredConstructor();

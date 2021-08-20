@@ -17,10 +17,8 @@
 
 package ru.playsoftware.j2meloader.applist;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -76,10 +74,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
@@ -92,8 +88,8 @@ import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.Constants;
-import ru.playsoftware.j2meloader.util.JarConverter;
 import ru.playsoftware.j2meloader.util.LogUtils;
+import ru.woesss.j2me.installer.InstallerDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.KEY_APP_URI;
 import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
@@ -103,7 +99,6 @@ import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 public class AppsListFragment extends ListFragment {
 	private static final String TAG = AppsListFragment.class.getSimpleName();
 	private final AppsListAdapter adapter = new AppsListAdapter();
-	private JarConverter converter;
 	private Uri appUri;
 	private SharedPreferences preferences;
 	private AppRepository appRepository;
@@ -162,7 +157,6 @@ public class AppsListFragment extends ListFragment {
 		Bundle args = requireArguments();
 		appUri = args.getParcelable(KEY_APP_URI);
 		args.remove(KEY_APP_URI);
-		converter = new JarConverter(requireActivity().getApplicationInfo().dataDir);
 		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
 		AppListModel appListModel = new ViewModelProvider(requireActivity()).get(AppListModel.class);
 		appRepository = appListModel.getAppRepository();
@@ -207,62 +201,11 @@ public class AppsListFragment extends ListFragment {
 		}
 	}
 
-	@SuppressLint("CheckResult")
-	@SuppressWarnings("ResultOfMethodCallIgnored")
-	private void installApp(Uri path) {
-		ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setIndeterminate(true);
-		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setCancelable(false);
-		dialog.setMessage(getText(R.string.converting_message));
-		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path.buildUpon().build())
-				.subscribeOn(Schedulers.computation())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new SingleObserver<String>() {
-					@Override
-					public void onSubscribe(Disposable d) {
-						dialog.show();
-					}
-
-					@Override
-					public void onSuccess(String s) {
-						AppItem app = AppUtils.getApp(s);
-						appRepository.insert(app);
-						if (!isAdded()) return;
-						dialog.dismiss();
-						showStartDialog(app);
-					}
-
-					@Override
-					public void onError(Throwable e) {
-						e.printStackTrace();
-						if (!isAdded()) return;
-						Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-						dialog.dismiss();
-					}
-				});
+	private void installApp(Uri uri) {
+		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 	}
 
-	private void showStartDialog(AppItem app) {
-		AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
-		StringBuilder text = new StringBuilder()
-				.append(getString(R.string.author)).append(' ')
-				.append(app.getAuthor()).append('\n')
-				.append(getString(R.string.version)).append(' ')
-				.append(app.getVersion()).append('\n');
-		dialog.setMessage(text);
-		dialog.setTitle(app.getTitle());
-		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
-		if (drawable != null) dialog.setIcon(drawable);
-		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
-		});
-		dialog.setNegativeButton(R.string.close, null);
-		dialog.show();
-	}
-
-	private void showRenameDialog(final int id) {
+	private void alertRename(final int id) {
 		AppItem item = adapter.getItem(id);
 		EditText editText = new EditText(getActivity());
 		editText.setText(item.getTitle());
@@ -292,8 +235,7 @@ public class AppsListFragment extends ListFragment {
 		builder.show();
 	}
 
-	private void showDeleteDialog(final int id) {
-		AppItem item = adapter.getItem(id);
+	private void alertDelete(AppItem item) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
@@ -337,14 +279,14 @@ public class AppsListFragment extends ListFragment {
 		if (itemId == R.id.action_context_shortcut) {
 			requestAddShortcut(appItem);
 		} else if (itemId == R.id.action_context_rename) {
-			showRenameDialog(index);
+			alertRename(index);
 		} else if (itemId == R.id.action_context_settings) {
 			Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 		} else if (itemId == R.id.action_context_reinstall) {
 			Uri uri = Uri.fromFile(new File(appItem.getPathExt() + Config.MIDLET_RES_FILE));
 			installApp(uri);
 		} else if (itemId == R.id.action_context_delete) {
-			showDeleteDialog(index);
+			alertDelete(appItem);
 		} else {
 			return super.onContextItemSelected(item);
 		}

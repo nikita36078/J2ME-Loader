@@ -16,18 +16,22 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import android.util.Log;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.woesss.j2me.jar.Descriptor;
 
 public class AppUtils {
+	private static final String TAG = AppUtils.class.getSimpleName();
 
 	private static ArrayList<AppItem> getAppsList() {
 		ArrayList<AppItem> apps = new ArrayList<>();
@@ -35,56 +39,46 @@ public class AppUtils {
 		if (appFolders != null) {
 			for (String appFolder : appFolders) {
 				File temp = new File(Config.getAppDir(), appFolder);
+				if (!temp.isDirectory()) {
+					//noinspection ResultOfMethodCallIgnored
+					temp.delete();
+					continue;
+				}
+				String[] list = temp.list();
+				if (list == null || list.length == 0) {
+					//noinspection ResultOfMethodCallIgnored
+					temp.delete();
+					continue;
+				}
 				try {
-					if (temp.isDirectory() && temp.list().length > 0) {
-						AppItem item = getApp(temp.getName());
-						apps.add(item);
-					} else {
-						temp.delete();
-					}
-				} catch (RuntimeException re) {
-					re.printStackTrace();
-					FileUtils.deleteDirectory(temp);
+					AppItem item = getApp(temp.getName());
+					apps.add(item);
+				} catch (Exception e) {
+					Log.w(TAG, "getAppsList: ", e);
 				}
 			}
 		}
 		return apps;
 	}
 
-	public static AppItem getApp(String path) {
+	private static AppItem getApp(String path) throws IOException {
 		File appDir = new File(Config.getAppDir(), path);
-		LinkedHashMap<String, String> params =
-				FileUtils.loadManifest(new File(appDir.getAbsolutePath(), Config.MIDLET_MANIFEST_FILE));
-		AppItem item = new AppItem(appDir.getName(), params.get("MIDlet-Name"),
-				params.get("MIDlet-Vendor"),
-				params.get("MIDlet-Version"));
-		item.setImagePathExt(getImagePath(appDir, params));
-		return item;
-	}
-
-	private static String getImagePath(File appDir, LinkedHashMap<String, String> params) {
-		File defaultImage = new File(appDir.getAbsolutePath(), Config.MIDLET_ICON_FILE);
-		String imagePath;
-		if (defaultImage.exists()) {
-			imagePath = defaultImage.getName();
+		File file = new File(appDir, Config.MIDLET_MANIFEST_FILE);
+		Descriptor params = new Descriptor(file, false);
+		AppItem item = new AppItem(appDir.getName(), params.getName(),
+				params.getVendor(),
+				params.getVersion());
+		File icon = new File(appDir, Config.MIDLET_ICON_FILE);
+		if (icon.exists()) {
+			item.setImagePathExt(Config.MIDLET_ICON_FILE);
 		} else {
-			imagePath = Config.MIDLET_RES_DIR + getImagePathFromManifest(params);
+			String iconPath = Config.MIDLET_RES_DIR + '/' + params.getIcon();
+			icon = new File(appDir, iconPath);
+			if (icon.exists()) {
+				item.setImagePathExt(iconPath);
+			}
 		}
-		return imagePath;
-	}
-
-	public static String getImagePathFromManifest(LinkedHashMap<String, String> params) {
-		String tmp;
-		String imagePath = "";
-		if ((tmp = params.get("MIDlet-Icon")) != null) {
-			imagePath = tmp;
-		} else if ((tmp = params.get("MIDlet-1")) != null) {
-			imagePath = tmp.split(",")[1];
-		}
-		if (imagePath.length() > 0 && imagePath.charAt(0) != '/') {
-			imagePath = "/" + imagePath;
-		}
-		return imagePath.replace(" ", "");
+		return item;
 	}
 
 	public static void deleteApp(AppItem item) {

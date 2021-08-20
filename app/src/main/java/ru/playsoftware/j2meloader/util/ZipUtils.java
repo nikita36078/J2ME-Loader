@@ -16,36 +16,31 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class ZipUtils {
 
-	public static void unzip(File zipFile, File extractFolder) throws IOException {
-		ZipFile zip = new ZipFile(zipFile);
-		extractFolder.mkdir();
-		Enumeration zipFileEntries = zip.entries();
-		while (zipFileEntries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
-			String currentEntry = entry.getName();
-			File destFile = new File(extractFolder, currentEntry);
-			File destinationParent = destFile.getParentFile();
-			destinationParent.mkdirs();
-			if (!entry.isDirectory() && !destFile.exists() && !entry.getName().endsWith(".class")) {
-				BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
-				// write the current file to disk
-				FileOutputStream fos = new FileOutputStream(destFile);
-				BufferedOutputStream dest = new BufferedOutputStream(fos);
-				IOUtils.copy(is, dest);
-				dest.flush();
-				dest.close();
-				is.close();
+	private static final int BUFFER_SIZE = 8096;
+
+	public static void unzipEntry(File srcZip, String name, File dst) throws IOException {
+		ZipFile zip = new ZipFile(srcZip);
+		FileHeader entry = zip.getFileHeader(name);
+		if (entry == null) {
+			throw new IOException("Entry '" + name + "' not found in zip: " + srcZip);
+		}
+		try (BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
+			 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE)) {
+			byte[] data = new byte[BUFFER_SIZE];
+			int read;
+			while ((read = bis.read(data)) != -1) {
+				bos.write(data, 0, read);
 			}
 		}
 	}

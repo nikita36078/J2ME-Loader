@@ -46,6 +46,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.acra.ACRA;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -219,7 +221,12 @@ public class MicroActivity extends AppCompatActivity {
 	private void showMidletDialog(String[] names, final String[] classes) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
-				.setItems(names, (d, n) -> MidletThread.create(microLoader, classes[n]))
+				.setItems(names, (d, n) -> {
+					String clazz = classes[n];
+					ACRA.getErrorReporter().putCustomData("Begin app", names[n] + ", " + clazz);
+					MidletThread.create(microLoader, clazz);
+					MidletThread.resumeApp();
+				})
 				.setOnCancelListener(d -> {
 					d.dismiss();
 					MidletThread.notifyDestroyed();
