@@ -11,9 +11,6 @@
     <string name="version">バージョン: </string>
     <string name="no_data_for_display">データがありません</string>
     <string name="message_delete">本当にこのアプリを削除しますか？</string>
-    <string name="converting_wait">JAR を変換しています...</string>
-    <string name="convert_complete">完了しました</string>
-    <string name="converting_message">処理中です...</string>
     <string name="permission_request_failed">このアプリはストレージの書き込み権限が必要です</string>
     <string name="external_storage_not_mounted">このアプリは外部ストレージを必要とします。</string>
     <string name="action_context_shortcut">ショートカットを追加する</string>
@@ -21,6 +18,7 @@
     <string name="action_context_delete">削除</string>
     <string name="action_context_rename">名前を変更</string>
     <string name="donate">寄付する</string>
+    <string name="converting_wait">JAR を変換しています...</string>
     <string name="START_CMD">開始</string>
     <string name="CANCEL_CMD">キャンセル</string>
     <string name="CLEAR_DATA_CMD">データをクリア</string>
@@ -79,9 +77,9 @@
     <string name="layout_switch">キー配列を切り替える</string>
     <string name="hide_buttons">ボタンを隠す</string>
     <string name="common_settings">[共通設定]</string>
-    <string name="pref_theme_title">テーマ</string>
     <string name="pref_theme_light">ライト</string>
     <string name="pref_theme_night">ダーク</string>
+    <string name="pref_theme_title">テーマ</string>
     <string name="pref_requires_restart_summary">再起動が必要です</string>
     <string name="pref_enable_actionbar_title">ActionBar を有効にする</string>
     <string name="pref_enable_actionbar_summary">全画面アプリケーション</string>
@@ -89,7 +87,7 @@
     <string name="pref_app_sort_name">名前</string>
     <string name="pref_app_sort_date">日付</string>
     <string name="pref_map_keys">キーマッピング</string>
+    <string name="mapping_dialog_message">現在のマッピング: %1$s</string>
     <string name="mapping_dialog_title">キーを押してください</string>
-    <string name="mapping_dialog_message" formatted="false">現在のマッピング: %1$s</string>
     <string name="reset_mapping">リセット</string>
 </resources>
