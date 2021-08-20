@@ -11,15 +11,13 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">Ingen data</string>
     <string name="message_delete">Vil du slette denne app?</string>
-    <string name="converting_wait">Konverterer JAR...</string>
-    <string name="convert_complete">Fuldført</string>
-    <string name="converting_message">Behandler...</string>
     <string name="permission_request_failed">Denne app kræver skrivetilladelse til lager</string>
     <string name="external_storage_not_mounted">Denne app kræver eksternt lager</string>
     <string name="action_context_shortcut">Tilføj genvej</string>
     <string name="action_settings">Indstillinger</string>
     <string name="action_context_delete">Slet</string>
     <string name="donate">Donér</string>
+    <string name="converting_wait">Konverterer JAR...</string>
     <string name="START_CMD">Start</string>
     <string name="CANCEL_CMD">Annullér</string>
     <string name="CLEAR_DATA_CMD">Ryd data</string>
@@ -80,7 +78,7 @@
     <string name="pref_app_sort_name">Navn</string>
     <string name="pref_app_sort_date">Dato</string>
     <string name="pref_map_keys">Konfigurer taster</string>
+    <string name="mapping_dialog_message">Nuværende tastekonfiguration: %1$s</string>
     <string name="mapping_dialog_title">Tryk på en tast</string>
-    <string name="mapping_dialog_message" formatted="false">Nuværende tastekonfiguration: %1$s</string>
     <string name="reset_mapping">Nulstil</string>
 </resources>
