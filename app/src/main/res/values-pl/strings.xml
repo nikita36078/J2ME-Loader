@@ -14,9 +14,6 @@
     <string name="version">Wersja: </string>
     <string name="no_data_for_display">Brak danych</string>
     <string name="message_delete">Czy na pewno chcesz usunąć tę aplikację?</string>
-    <string name="converting_wait">Konwertuję plik JAR...</string>
-    <string name="convert_complete">Zakończono</string>
-    <string name="converting_message">Przetwarzanie...</string>
     <string name="permission_request_failed">Ta aplikacja wymaga pozwolenia na zapisywanie danych do pamięci zewnętrznej</string>
     <string name="external_storage_not_mounted">Ta aplikacja wymaga dostępu do pamięci zewnętrznej</string>
     <string name="action_context_shortcut">Dodaj skrót</string>
@@ -24,6 +21,7 @@
     <string name="action_context_delete">Usuń</string>
     <string name="action_context_rename">Zmień nazwę</string>
     <string name="donate">Wesprzyj</string>
+    <string name="converting_wait">Konwertuję plik JAR...</string>
     <string name="START_CMD">Rozpocznij</string>
     <string name="CANCEL_CMD">Anuluj</string>
     <string name="CLEAR_DATA_CMD">Wyczyść dane</string>
@@ -80,6 +78,8 @@
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (strzałki)</string>
     <string name="PREF_LAYOUT">Układ</string>
+    <string name="parallel_screen_redrawing">Równoległe przerysowywanie obrazu</string>
+    <string name="saved">Zapisano</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Wymuszenie zamknięcia aplikacji może spowodować utratę danych lub nawet całkowicie ją zepsuć! \nKontynuować?</string>
     <string name="CONFIRMATION_REQUIRED">Wymagane potwierdzenie</string>
     <string name="select_dialog_title">Wybierz MIDlet</string>
@@ -96,9 +96,9 @@
     <string name="screenshot_saved">Zrzut ekranu został zapisany w</string>
     <string name="log_saved">Log został zapisany</string>
     <string name="common_settings">[WSPÓLNE USTAWIENIA]</string>
-    <string name="pref_theme_title">Motyw</string>
     <string name="pref_theme_light">Jasny</string>
     <string name="pref_theme_night">Ciemny</string>
+    <string name="pref_theme_title">Motyw</string>
     <string name="pref_requires_restart_summary">Wymaga restartu</string>
     <string name="pref_enable_actionbar_title">Włącz ActionBar</string>
     <string name="pref_enable_actionbar_summary">W aplikacjach pełnoekranowych</string>
@@ -111,9 +111,7 @@
     <string name="pref_map_keys">Mapowanie klawiszy</string>
     <string name="pref_encoding_title">Kodowanie</string>
     <string name="pref_default_settings">Ustawienia domyślne</string>
+    <string name="mapping_dialog_message">Bieżące mapowanie: %1$s</string>
     <string name="mapping_dialog_title">Naciśnij przycisk</string>
-    <string name="mapping_dialog_message" formatted="false">Bieżące mapowanie: %1$s</string>
     <string name="reset_mapping">Zresetuj</string>
-    <string name="parallel_screen_redrawing">Równoległe przerysowywanie obrazu</string>
-    <string name="saved">Zapisano</string>
 </resources>
