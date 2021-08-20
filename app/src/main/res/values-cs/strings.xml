@@ -14,9 +14,6 @@
     <string name="version">Verze: </string>
     <string name="no_data_for_display">Žádná data</string>
     <string name="message_delete">Opravdu chcete tuto aplikaci smazat?</string>
-    <string name="converting_wait">Převádím JAR...</string>
-    <string name="convert_complete">Dokončeno</string>
-    <string name="converting_message">Zpracovává se...</string>
     <string name="permission_request_failed">Tato aplikace vyžaduje oprávnění k zápisu do úložiště</string>
     <string name="external_storage_not_mounted">Tato aplikace vyžaduje externí úložiště</string>
     <string name="action_context_shortcut">Přidat zkratku</string>
@@ -24,6 +21,7 @@
     <string name="action_context_delete">Vymazat</string>
     <string name="action_context_rename">Přejmenovat</string>
     <string name="donate">Podpořit</string>
+    <string name="converting_wait">Převádím JAR...</string>
     <string name="START_CMD">Spustit</string>
     <string name="CANCEL_CMD">Zrušit</string>
     <string name="CLEAR_DATA_CMD">Vymazat data</string>
@@ -79,6 +77,7 @@
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (šipky)</string>
     <string name="PREF_LAYOUT">Rozložení</string>
+    <string name="parallel_screen_redrawing">Paralelní překreslování obrazovky</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Vynucené ukončení aplikace může vést ke ztrátě dat nebo ji dokonce úplně rozbít!\nPokračovat?</string>
     <string name="CONFIRMATION_REQUIRED">Vyžadováno potvrzení</string>
     <string name="select_dialog_title">Vyberte MIDlet</string>
@@ -95,9 +94,9 @@
     <string name="screenshot_saved">Snímek obrazovky byl uložen do</string>
     <string name="log_saved">Soubor log byl uložen</string>
     <string name="common_settings">[SPOLEČNÁ NASTAVENÍ]</string>
-    <string name="pref_theme_title">Motiv</string>
     <string name="pref_theme_light">Světlý</string>
     <string name="pref_theme_night">Tmavý</string>
+    <string name="pref_theme_title">Motiv</string>
     <string name="pref_requires_restart_summary">Vyžaduje restart</string>
     <string name="pref_enable_actionbar_title">Aktivovat ActionBar</string>
     <string name="pref_enable_actionbar_summary">V celoobrazovkových aplikacích</string>
@@ -109,8 +108,7 @@
     <string name="pref_map_keys">Mapování kláves</string>
     <string name="pref_encoding_title">Kódování</string>
     <string name="pref_default_settings">Výchozí nastavení</string>
+    <string name="mapping_dialog_message">Aktuální mapování: %1$s</string>
     <string name="mapping_dialog_title">Zmáčkni tlačítko</string>
-    <string name="mapping_dialog_message" formatted="false">Aktuální mapování: %1$s</string>
     <string name="reset_mapping">Obnovit</string>
-    <string name="parallel_screen_redrawing">Paralelní překreslování obrazovky</string>
 </resources>

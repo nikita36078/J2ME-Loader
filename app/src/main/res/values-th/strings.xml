@@ -11,9 +11,6 @@
     <string name="version">รุ่น: </string>
     <string name="no_data_for_display">ไม่​มี​ข้อมูล</string>
     <string name="message_delete">ท่านต้องการลบแอปฯนี้หรือไม่?</string>
-    <string name="converting_wait">กำลังแปลง JAR...</string>
-    <string name="convert_complete">เสร็จสมบูรณ์</string>
-    <string name="converting_message">กำลังประมวลผล...</string>
     <string name="permission_request_failed">แอปฯนี้ต้องใช้สิทธิ์ในการเขียนที่เก็บข้อมูล</string>
     <string name="external_storage_not_mounted">แอปฯนี้ต้องใช้สิทธิ์ที่เก็บข้อมูลภายนอก</string>
     <string name="action_context_shortcut">เพิ่มทางลัด</string>
@@ -21,6 +18,7 @@
     <string name="action_context_delete">ลบ</string>
     <string name="action_context_rename">เปลี่ยนชื่อ</string>
     <string name="donate">บริจาค</string>
+    <string name="converting_wait">กำลังแปลง JAR...</string>
     <string name="START_CMD">เริ่ม</string>
     <string name="CANCEL_CMD">ยกเลิก</string>
     <string name="CLEAR_DATA_CMD">ล้างข้อมูล</string>
@@ -81,9 +79,9 @@
     <string name="layout_switch">สลับ keylayout</string>
     <string name="hide_buttons">ซ่อนปุ่ม</string>
     <string name="common_settings">ตั้งค่าทั่วไป</string>
-    <string name="pref_theme_title">ธีม</string>
     <string name="pref_theme_light">สว่าง</string>
     <string name="pref_theme_night">มืด</string>
+    <string name="pref_theme_title">ธีม</string>
     <string name="pref_requires_restart_summary">ต้องเริ่มแอปฯใหม่</string>
     <string name="pref_enable_actionbar_title">เปิดใช้ ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
@@ -92,7 +90,7 @@
     <string name="pref_app_sort_name">ชื่อ</string>
     <string name="pref_app_sort_date">วันที่</string>
     <string name="pref_map_keys">Key mappings</string>
+    <string name="mapping_dialog_message">Current mapping: %1$s</string>
     <string name="mapping_dialog_title">กดปุ่ม</string>
-    <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">รีเซ็ต</string>
 </resources>

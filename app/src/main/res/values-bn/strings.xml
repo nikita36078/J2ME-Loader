@@ -15,9 +15,6 @@
     <string name="version">সংস্করণ: </string>
     <string name="no_data_for_display">কোন তথ্য-উপাত্ত নেই</string>
     <string name="message_delete">আপনি কি সত্যিই এই অ্যাপটি মুছে ফেলতে চান?</string>
-    <string name="converting_wait">JAR রূপান্তর...</string>
-    <string name="convert_complete">সম্পন্ন হয়েছে।</string>
-    <string name="converting_message">প্রক্রিয়াধীন...</string>
     <string name="permission_request_failed">এই অ্যাপ্লিকেশনটি স্টোরেজে লেখার অনুমতি প্রয়োজন ।</string>
     <string name="external_storage_not_mounted">অ্যাপটির এক্সটার্নাল স্টোরেজ প্রয়োজন ।</string>
     <string name="action_context_shortcut">শর্টকাট যুক্ত করুন</string>
@@ -25,6 +22,7 @@
     <string name="action_context_delete">মুছে ফেলুন</string>
     <string name="action_context_rename">নাম পরিবর্তন করুন</string>
     <string name="donate">দান করুন ।</string>
+    <string name="converting_wait">JAR রূপান্তর...</string>
     <string name="START_CMD">শুরু</string>
     <string name="CANCEL_CMD">বাতিল</string>
     <string name="CLEAR_DATA_CMD">উপাত্ত সাফ করুন</string>
@@ -78,6 +76,7 @@
     <string name="PREF_VK_TYPE">কিবোর্ডের ধরণ</string>
     <string name="pref_vk_type_phone">ফোন</string>
     <string name="pref_vk_type_phone_arrows">ফোন (তীর)</string>
+    <string name="parallel_screen_redrawing">সমান্তরাল পর্দা পুনরায় আঁকানো</string>
     <string name="FORCE_CLOSE_CONFIRMATION">ফোর্স বন্ধ করার ফলে ডাটা ক্ষতিগ্রস্ত অথবা সম্পূর্ণভাবে ভেঙ্গে যতে পারে\nপ্রোসেস্ট?</string>
     <string name="CONFIRMATION_REQUIRED">অনুমোদন প্রয়োজন</string>
     <string name="select_dialog_title">MIDlet নির্বাচন করুন</string>
@@ -94,9 +93,9 @@
     <string name="screenshot_saved">স্ক্রিনসর্ট সংরক্ষণ করা হয়েছে</string>
     <string name="log_saved">লগ সংরক্ষণ করা হয়েছে</string>
     <string name="common_settings">[সাধারণ সেটিংস]</string>
-    <string name="pref_theme_title">থিম</string>
     <string name="pref_theme_light">উজ্জ্বল</string>
     <string name="pref_theme_night">গাঢ়</string>
+    <string name="pref_theme_title">থিম</string>
     <string name="pref_requires_restart_summary">পুনরায় শুরু করা প্রয়োজন</string>
     <string name="pref_enable_actionbar_title">ActionBar সক্রিয় করুন</string>
     <string name="pref_enable_actionbar_summary">পর্দা জুড়ে প্রদর্শন</string>
@@ -108,8 +107,7 @@
     <string name="pref_map_keys">কী মানচিত্রকরণ</string>
     <string name="pref_encoding_title">এনকোডিং</string>
     <string name="pref_default_settings">ডিফল্ট সেটিংস</string>
+    <string name="mapping_dialog_message">বর্তমান মানচিত্র: %1$s</string>
     <string name="mapping_dialog_title">কী চাপুন</string>
-    <string name="mapping_dialog_message" formatted="false">বর্তমান মানচিত্র: %1$s</string>
     <string name="reset_mapping">রিসেট করুন</string>
-    <string name="parallel_screen_redrawing">সমান্তরাল পর্দা পুনরায় আঁকানো</string>
 </resources>
