@@ -15,9 +15,6 @@
     <string name="version">نسخه :</string>
     <string name="no_data_for_display">اطلاعات موجود نیست</string>
     <string name="message_delete">آیا واقعا می خواهید این برنامه یا بازی را حذف کنید؟</string>
-    <string name="converting_wait">در حال تبدیل فایل جاوا ...</string>
-    <string name="convert_complete">انجام شد</string>
-    <string name="converting_message">در حال پردازش...</string>
     <string name="permission_request_failed">این برنامه به مجوز نوشتن در حافظه نیاز دارد</string>
     <string name="external_storage_not_mounted">این برنامه به مجوز نوشتن و ذخیره سازی در حافظه خارجی نیاز دارد</string>
     <string name="action_context_shortcut">نماد این برنامه یا بازی به صفحه اصلی دستگاه اضافه شود</string>
@@ -25,6 +22,7 @@
     <string name="action_context_delete">حذف</string>
     <string name="action_context_rename">تغییر نام</string>
     <string name="donate">حمایت مالی</string>
+    <string name="converting_wait">در حال تبدیل فایل جاوا ...</string>
     <string name="START_CMD">شروع</string>
     <string name="CANCEL_CMD">لغو</string>
     <string name="CLEAR_DATA_CMD">پاک کردن اطلاعات</string>
@@ -80,6 +78,7 @@
     <string name="pref_vk_type_phone">گوشی</string>
     <string name="pref_vk_type_phone_arrows">گوشی (جهت ها)</string>
     <string name="PREF_LAYOUT">طرح</string>
+    <string name="parallel_screen_redrawing">بازخوانی صفحه موازی</string>
     <string name="FORCE_CLOSE_CONFIRMATION">توقف اجباری برنامه ممکن است باعث از بین رفتن اطلاعات شود و یا آن را به طور کامل متوقف کند آیا ادامه می دهید؟</string>
     <string name="CONFIRMATION_REQUIRED">به تایید نیاز دارد</string>
     <string name="select_dialog_title">انتخاب میدلت</string>
@@ -96,9 +95,9 @@
     <string name="screenshot_saved">عکس صفحه نمایش ذخیره شده است</string>
     <string name="log_saved">گزارش ذخیره شده است</string>
     <string name="common_settings">[تنظیمات مشترک]</string>
-    <string name="pref_theme_title">پس زمینه</string>
     <string name="pref_theme_light">سفید</string>
     <string name="pref_theme_night">سیاه</string>
+    <string name="pref_theme_title">پس زمینه</string>
     <string name="pref_requires_restart_summary">به راه اندازی دوباره نیاز دارد</string>
     <string name="pref_enable_actionbar_title">فعال کردن نوار ابزار</string>
     <string name="pref_enable_actionbar_summary">در برنامه های تمام صفحه</string>
@@ -110,8 +109,7 @@
     <string name="pref_map_keys">نقشه برداری کلید</string>
     <string name="pref_encoding_title">رمزگذاری</string>
     <string name="pref_default_settings">تنظیمات پیش‌فرض</string>
+    <string name="mapping_dialog_message">نقشه برداری فعلی : %1$s</string>
     <string name="mapping_dialog_title">یک کلید را انتخاب کنید</string>
-    <string name="mapping_dialog_message" formatted="false">نقشه برداری فعلی : %1$s</string>
     <string name="reset_mapping">بازنشانی</string>
-    <string name="parallel_screen_redrawing">بازخوانی صفحه موازی</string>
 </resources>
