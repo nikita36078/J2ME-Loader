@@ -14,9 +14,6 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">Keine Daten</string>
     <string name="message_delete">Möchten Sie diese App wirklich löschen?</string>
-    <string name="converting_wait">Konvertiere Jar...</string>
-    <string name="convert_complete">Abgeschlossen</string>
-    <string name="converting_message">Verarbeitung läuft...</string>
     <string name="permission_request_failed">Diese App benötigt Schreibrechte</string>
     <string name="external_storage_not_mounted">Diese App benötigt externen Speicher</string>
     <string name="action_context_shortcut">Verknüpfung hinzufügen</string>
@@ -24,6 +21,7 @@
     <string name="action_context_delete">Löschen</string>
     <string name="action_context_rename">Umbenennung</string>
     <string name="donate">Spenden</string>
+    <string name="converting_wait">Konvertiere Jar...</string>
     <string name="START_CMD">Starten</string>
     <string name="CANCEL_CMD">Abbrechen</string>
     <string name="CLEAR_DATA_CMD">Daten löschen</string>
@@ -77,6 +75,7 @@
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (Pfeile)</string>
     <string name="PREF_LAYOUT">Layout</string>
+    <string name="parallel_screen_redrawing">Parallele Bildschirmwiederholung</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
     <string name="CONFIRMATION_REQUIRED">Bestätigung erforderlich</string>
     <string name="select_dialog_title">MIDlet auswählen</string>
@@ -93,9 +92,9 @@
     <string name="screenshot_saved">Screenshot wurde gespeichert in</string>
     <string name="log_saved">Protokoll wurde gespeichert</string>
     <string name="common_settings">[ALLGEMEINE EINSTELLUNGEN]</string>
-    <string name="pref_theme_title">Design</string>
     <string name="pref_theme_light">Hell</string>
     <string name="pref_theme_night">Dunkel</string>
+    <string name="pref_theme_title">Design</string>
     <string name="pref_requires_restart_summary">Erfordert Neustart</string>
     <string name="pref_enable_actionbar_title">ActionBar aktivieren</string>
     <string name="pref_enable_actionbar_summary">In Vollbild-Anwendungen</string>
@@ -106,8 +105,7 @@
     <string name="pref_map_keys">Tastenzuordnung</string>
     <string name="pref_encoding_title">Zeichenkodierung</string>
     <string name="pref_default_settings">Standardeinstellungen</string>
+    <string name="mapping_dialog_message">Aktuelle Zuordnung: %1$s</string>
     <string name="mapping_dialog_title">Taste drücken</string>
-    <string name="mapping_dialog_message" formatted="false">Aktuelle Zuordnung: %1$s</string>
     <string name="reset_mapping">Zurücksetzen</string>
-    <string name="parallel_screen_redrawing">Parallele Bildschirmwiederholung</string>
 </resources>
