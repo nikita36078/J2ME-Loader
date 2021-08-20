@@ -15,9 +15,6 @@
     <string name="version">版本： </string>
     <string name="no_data_for_display">暫無數據</string>
     <string name="message_delete">確定要刪除此應用？</string>
-    <string name="converting_wait">正在安裝...</string>
-    <string name="convert_complete">完成</string>
-    <string name="converting_message">安裝JAR遊戲中，請耐心等待1-3分鐘。</string>
     <string name="permission_request_failed">本應用需要穫取存儲讀寫權限</string>
     <string name="external_storage_not_mounted">該功能需要存儲權限，請去設置授予存儲權限，以便您繼續使用該功能。</string>
     <string name="action_context_shortcut">添加到桌面</string>
@@ -25,6 +22,7 @@
     <string name="action_context_delete">刪除</string>
     <string name="action_context_rename">重命名</string>
     <string name="donate">捐贈</string>
+    <string name="converting_wait">正在安裝...</string>
     <string name="START_CMD">啟動</string>
     <string name="CANCEL_CMD">取消</string>
     <string name="CLEAR_DATA_CMD">清除數據</string>
@@ -79,6 +77,8 @@
     <string name="pref_vk_type_phone">手機</string>
     <string name="pref_vk_type_phone_arrows">手機(arrows)</string>
     <string name="PREF_LAYOUT">佈挶</string>
+    <string name="parallel_screen_redrawing">同步畫面繪製</string>
+    <string name="saved">已儲存</string>
     <string name="FORCE_CLOSE_CONFIRMATION">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
     <string name="CONFIRMATION_REQUIRED">需要確認</string>
     <string name="select_dialog_title">選擇程序結搆</string>
@@ -93,10 +93,11 @@
     <string name="hide_buttons">隱藏按鍵</string>
     <string name="take_screenshot">屏幕截圖</string>
     <string name="screenshot_saved">屏幕截圖已保存到</string>
+    <string name="action_keyboard_ime">鍵盤類型)</string>
     <string name="common_settings">[常用設置]</string>
-    <string name="pref_theme_title">主題</string>
     <string name="pref_theme_light">白色主題</string>
     <string name="pref_theme_night">深色主題</string>
+    <string name="pref_theme_title">主題</string>
     <string name="pref_requires_restart_summary">需要重新啟動</string>
     <string name="pref_enable_actionbar_title">啟用操作欄</string>
     <string name="pref_enable_actionbar_summary">在應用中全屏</string>
@@ -108,9 +109,7 @@
     <string name="pref_map_keys">按鍵映射</string>
     <string name="pref_encoding_title">字元編碼</string>
     <string name="pref_default_settings">預設</string>
+    <string name="mapping_dialog_message">當前映射: %1$s</string>
     <string name="mapping_dialog_title">按任意按鍵</string>
-    <string name="mapping_dialog_message" formatted="false">當前映射: %1$s</string>
     <string name="reset_mapping">重設</string>
-    <string name="parallel_screen_redrawing">同步畫面繪製</string>
-    <string name="saved">已儲存</string>
 </resources>
