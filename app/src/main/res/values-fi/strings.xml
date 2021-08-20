@@ -13,9 +13,6 @@
     <string name="version">Versio: </string>
     <string name="no_data_for_display">Ei tietoja</string>
     <string name="message_delete">Haluatko todella poistaa tämän sovelluksen?</string>
-    <string name="converting_wait">Muunnetaan JARia...</string>
-    <string name="convert_complete">Valmis</string>
-    <string name="converting_message">Käsitellään...</string>
     <string name="permission_request_failed">Tämä sovellus edellyttää tallennuslupaa</string>
     <string name="external_storage_not_mounted">Tämä sovellus vaatii ulkoisen tallennustilan</string>
     <string name="action_context_shortcut">Lisää pikakuvake</string>
@@ -23,6 +20,7 @@
     <string name="action_context_delete">Poista</string>
     <string name="action_context_rename">Nimeä uudelleen</string>
     <string name="donate">Lahjoita</string>
+    <string name="converting_wait">Muunnetaan JARia...</string>
     <string name="START_CMD">Käynnistä</string>
     <string name="CANCEL_CMD">Peruuta</string>
     <string name="CLEAR_DATA_CMD">Tyhjennä tiedot</string>
