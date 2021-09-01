@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,7 @@ public class AboutDialogFragment extends DialogFragment {
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(message.toString()));
 		tv.setTextSize(16);
+		tv.setMovementMethod(new ScrollingMovementMethod());
 		float density = getResources().getDisplayMetrics().density;
 		int paddingHorizontal = (int) (density * 20);
 		int paddingVertical = (int) (density * 14);
