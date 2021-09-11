@@ -159,6 +159,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (isProfile) {
 			setResult(RESULT_OK, new Intent().setData(intent.getData()));
 			configDir = new File(Config.getProfilesDir(), path);
+			workDir = Config.getEmulatorDir();
 			setTitle(path);
 		} else {
 			setTitle(intent.getStringExtra(KEY_MIDLET_NAME));
