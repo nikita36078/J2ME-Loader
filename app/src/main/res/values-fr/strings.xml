@@ -18,7 +18,7 @@
     <string name="permission_request_failed">Cette application nécessite une autorisation d\'écriture sur le stockage. </string>
     <string name="external_storage_not_mounted">Cette application exige d\'être stocké sur la carte Sd ou externe</string>
     <string name="create">Créer</string>
-    <string name="alert_msg_workdir_not_exists">Le répertoire de travail n\'existe pas au chemin : Voulez-vous le créer ou en choisir un autre ?</string>
+    <string name="alert_msg_workdir_not_exists">Le répertoire de travail n\'existe pas au chemin :\n\'%1$s\'.\nVoulez-vous le créer ou en choisir un autre ?</string>
     <string name="action_context_shortcut">Ajouter un raccourci</string>
     <string name="action_reinstall">R
 réinstaller</string>
@@ -26,9 +26,9 @@ réinstaller</string>
     <string name="action_context_delete">Supprimer</string>
     <string name="action_context_rename">Renommer</string>
     <string name="retry">réessayer</string>
-    <string name="err_missing_app">Application introuvable. Veuillez vérifier la disponibilité de l\'appareil de stockage ou recréer le raccourci.</string>
+    <string name="err_missing_app">Application introuvable.\nVeuillez vérifier la disponibilité de l\'appareil de stockage %sou recréer le raccourci.</string>
     <string name="error_disk_io">Erreur de stockage : Vérifiez l\'espace disque</string>
-    <string name="create_apps_dir_failed">Impossible de créer un dossier dans le chemin : sélectionnez un autre.</string>
+    <string name="create_apps_dir_failed">Impossible de créer un dossier dans le chemin :\n\'%s\'\nsélectionnez un autre.</string>
     <string name="change">Modifier</string>
     <string name="choose">Sélectionnez le type de d\'initiative</string>
     <string name="donate">Donner</string>
@@ -40,12 +40,12 @@ réinstaller</string>
     <string name="converting_wait">Conversion JAD...</string>
     <string name="install">Installer</string>
     <string name="install_done">Votre application est installé</string>
-    <string name="install_jar_non_matched_jad">Cette application diffère de celle décrite dans JAD. Ignorer JAD et installer quand même ?</string>
+    <string name="install_jar_non_matched_jad">Cette application diffère de celle décrite dans JAD.\nIgnorer JAD et installer quand même ?</string>
     <string name="invalid_resolution_not_saved">Résolutions invalides : Non sauvegardées !</string>
     <string name="warn_install_from_net">Fichier téléchargé à partir d\'Internet</string>
     <string name="reinstall">Application déjà installée.\n\nVoulez-vous la réinstaller?\nToutes les données seront enregistrées.</string>
-    <string name="reinstall_newest">Mettre à jour cette application vers la version. Actuellement installé : Toutes les données seront sauvegardées.</string>
-    <string name="reinstall_oldest">Remplacer cette application par la version. % Actuellement installé : % La version la plus ancienne peut ne pas fonctionner correctement avec les données enregistrées.</string>
+    <string name="reinstall_newest">Mettre à jour cette application vers la version %1$s?\n\nActuellement installé : %2$s\nToutes les données seront sauvegardées.</string>
+    <string name="reinstall_oldest">Remplacer cette application par la version %1$s?\n\nActuellement installé : %2$s\nLa version la plus ancienne peut ne pas fonctionner correctement avec les données enregistrées.</string>
     <string name="loading_info">chargement infos... </string>
     <string name="START_CMD">Commencer</string>
     <string name="CANCEL_CMD">Annuler</string>
