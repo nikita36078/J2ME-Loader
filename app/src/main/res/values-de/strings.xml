@@ -16,6 +16,7 @@
     <string name="message_delete">Möchten Sie diese App wirklich löschen?</string>
     <string name="permission_request_failed">Diese App benötigt Schreibrechte</string>
     <string name="external_storage_not_mounted">Diese App benötigt externen Speicher</string>
+    <string name="create">create</string>
     <string name="action_context_shortcut">Verknüpfung hinzufügen</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_context_delete">Löschen</string>
