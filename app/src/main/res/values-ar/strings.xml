@@ -192,6 +192,6 @@
     <string name="enter_new_name">أدخل الاسم الجديد</string>
     <string name="set_default_profile_description">تحديد هذا الملف الشخصي كإعدادات إفتراضية لجميع التطبيقات التي سيتم تثبيتها لاحقاً</string>
     <string name="error_name_exists">هذا الاسم مستخدم، أدخل اسم آخر</string>
-    <string name="default_label">"3 ث (افتراضي)"</string>
+    <string name="default_label">"%s (افتراضي)"</string>
     <string name="not_saved_exists">موجود بالفعل</string>
 </resources>
