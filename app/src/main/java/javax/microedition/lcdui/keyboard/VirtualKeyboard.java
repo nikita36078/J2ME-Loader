@@ -249,8 +249,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void onLayoutChanged(int variant) {
 		if (variant == TYPE_CUSTOM && isPhone()) {
-			float min = overlayView.getWidth();
-			float max = overlayView.getHeight();
+			float min = screen.width();
+			float max = screen.height();
 			if (min > max) {
 				float tmp = max;
 				max = min;
@@ -860,15 +860,24 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 		}
 
-		float min = overlayView.getWidth();
-		float max = overlayView.getHeight();
+		float min = screen.width();
+		float max = screen.height();
+		boolean landscape = min > max;
 		if (min > max) {
 			float tmp = max;
 			max = min;
 			min = tmp;
 		}
 
-		float keySize = isPhone() ? min / 6.0f : Math.min(min / 6.5f, max / 12.0f);
+		boolean nonWide = max / min < 2;
+		float keySize;
+		if (isPhone()) {
+			keySize = min / 6.0F;
+		} else if (nonWide || landscape) {
+			keySize = max / 12F;
+		} else {
+			keySize = min / 6.5F;
+		}
 		snapRadius = keySize * snapRadius / 4;
 		this.keySize = keySize;
 		for (int group = 0; group < keyScaleGroups.length; group++) {

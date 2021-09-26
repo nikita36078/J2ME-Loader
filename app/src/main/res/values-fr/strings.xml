@@ -20,8 +20,7 @@
     <string name="create">Créer</string>
     <string name="alert_msg_workdir_not_exists">Le répertoire de travail n\'existe pas au chemin : Voulez-vous le créer ou en choisir un autre ?</string>
     <string name="action_context_shortcut">Ajouter un raccourci</string>
-    <string name="action_reinstall">R
-réinstaller</string>
+    <string name="action_reinstall">Réinstaller</string>
     <string name="action_settings">Paramètres</string>
     <string name="action_context_delete">Supprimer</string>
     <string name="action_context_rename">Renommer</string>
