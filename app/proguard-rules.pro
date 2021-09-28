@@ -33,4 +33,5 @@
 
 -keep class androidx.appcompat.widget.SearchView { *; }
 -keep class com.arthenica.mobileffmpeg.** { *; }
+-keep class org.acra.attachment.DefaultAttachmentProvider { *; }
 -keep class ru.playsoftware.j2meloader.crashes.models.* { *; }
