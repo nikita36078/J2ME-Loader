@@ -107,7 +107,9 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public void setIndicator(Gauge indicator) {
+		if(indicator.isInteractive()) throw new IllegalArgumentException();
 		this.indicator = indicator;
+		indicator.setAlert(this);
 	}
 
 	public Gauge getIndicator() {
@@ -143,6 +145,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 		if (image != null) {
 			builder.setIcon(new BitmapDrawable(context.getResources(), image.getBitmap()));
+		}
+
+		if(indicator != null) {
+			builder.setView(indicator.getItemContentView());
 		}
 
 		commands = getCommands();
