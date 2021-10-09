@@ -78,8 +78,10 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		@Override
 		public void process() {
 			if (listener != null) {
+				labelview.setOnCreateContextMenuListener(Item.this);
 				contentview.setOnCreateContextMenuListener(Item.this);
 			} else {
+				labelview.setLongClickable(false);
 				contentview.setLongClickable(false);
 			}
 		}
