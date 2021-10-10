@@ -44,7 +44,6 @@
     <string name="warn_install_from_net">Fichier téléchargé à partir d\'Internet</string>
     <string name="reinstall">Application déjà installée.\n\nVoulez-vous la réinstaller?\nToutes les données seront enregistrées.</string>
     <string name="reinstall_newest">Mettre à jour cette application vers la version %1$s?\n\nActuellement installé : %2$s\nToutes les données seront sauvegardées.</string>
-    <string name="reinstall_oldest">Remplacer cette application par la version %1$s?\n\nActuellement installé : %2$s\nLa version la plus ancienne peut ne pas fonctionner correctement avec les données enregistrées.</string>
     <string name="loading_info">chargement infos…</string>
     <string name="START_CMD">Commencer</string>
     <string name="CANCEL_CMD">Annuler</string>
