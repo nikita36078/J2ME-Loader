@@ -75,6 +75,7 @@ public abstract class CustomItem extends Item {
 				default:
 					return super.onTouchEvent(event);
 			}
+			super.onTouchEvent(event);
 			return true;
 		}
 	}
@@ -178,6 +179,7 @@ public abstract class CustomItem extends Item {
 			view.setMinimumHeight(height);
 			offscreen = Image.createTransparentImage(width, height);
 			graphics = offscreen.getSingleGraphics();
+			view.setOnClickListener(v -> fireDefaultCommandAction());
 		}
 
 		return view;
