@@ -33,7 +33,7 @@
         android:textIsSelectable="true"
         android:minLines="10"
         android:gravity="center_vertical"
-        tools:text="@string/reinstall_oldest" />
+        tools:text="@string/reinstall_older" />
 
     <ProgressBar
         android:id="@+id/progress"

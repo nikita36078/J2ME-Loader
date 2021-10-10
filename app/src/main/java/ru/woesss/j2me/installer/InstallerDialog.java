@@ -194,7 +194,7 @@ public class InstallerDialog extends DialogFragment {
 					break;
 				case AppInstaller.STATUS_OLDEST:
 					message = new SpannableStringBuilder(getString(
-							R.string.reinstall_oldest,
+							R.string.reinstall_older,
 							nd.getVersion(),
 							installer.getCurrentVersion()));
 					break;
