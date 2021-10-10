@@ -36,7 +36,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	private static class AlertCommandListener implements CommandListener {
 		@Override
 		public void commandAction(Command c, Displayable d) {
-			((Alert)d).dismiss();
+			((Alert) d).dismiss();
 		}
 	}
 
@@ -53,14 +53,14 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	private Command[] commands;
 	private int positive, negative, neutral;
 
-	private SimpleEvent msgSetString = new SimpleEvent() {
+	private final SimpleEvent msgSetString = new SimpleEvent() {
 		@Override
 		public void process() {
 			alertDialog.setMessage(text);
 		}
 	};
 
-	private SimpleEvent msgSetImage = new SimpleEvent() {
+	private final SimpleEvent msgSetImage = new SimpleEvent() {
 		@Override
 		public void process() {
 			BitmapDrawable bitmapDrawable = new BitmapDrawable(image.getBitmap());
@@ -68,19 +68,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 	};
 
-	private SimpleEvent msgCommandsChanged = new SimpleEvent() {
+	private final SimpleEvent msgCommandsChanged = new SimpleEvent() {
 		@Override
 		public void process() {
-			if(listener == DEFAULT_LISTENER) {
+			if (listener == DEFAULT_LISTENER) {
 				alertDialog.setCancelable(true);
 				alertDialog.setCanceledOnTouchOutside(true);
 				return;
 			}
-			if(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND) {
-				alertDialog.setCanceledOnTouchOutside(true);
-			} else {
-				alertDialog.setCanceledOnTouchOutside(false);
-			}
+			alertDialog.setCanceledOnTouchOutside(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND);
 		}
 	};
 
@@ -133,7 +129,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public void setIndicator(Gauge indicator) {
-		if(indicator.isInteractive()) throw new IllegalArgumentException();
+		if (indicator.isInteractive()) throw new IllegalArgumentException();
 		this.indicator = indicator;
 		indicator.setAlert(this);
 	}
@@ -165,9 +161,8 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
 		builder.setOnDismissListener(dialog -> {
-			if(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND && listener != null) {
+			if (countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND && listener != null) {
 				fireCommandAction(DISMISS_COMMAND, this);
-				return;
 			}
 		});
 
@@ -175,7 +170,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 			builder.setIcon(new BitmapDrawable(context.getResources(), image.getBitmap()));
 		}
 
-		if(indicator != null) {
+		if (indicator != null) {
 			builder.setView(indicator.getItemContentView());
 		}
 
@@ -218,13 +213,11 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 
 		alertDialog = builder.create();
-		if(listener == DEFAULT_LISTENER) {
+		if (listener == DEFAULT_LISTENER) {
 			alertDialog.setCancelable(true);
 			alertDialog.setCanceledOnTouchOutside(true);
-		} else if (commands.length == 1 && commands[0] == DISMISS_COMMAND) {
-			alertDialog.setCanceledOnTouchOutside(true);
 		} else {
-			alertDialog.setCanceledOnTouchOutside(false);
+			alertDialog.setCanceledOnTouchOutside(commands.length == 1 && commands[0] == DISMISS_COMMAND);
 		}
 		return alertDialog;
 	}
@@ -255,7 +248,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	@Override
 	public void setCommandListener(CommandListener listener) {
-		if(listener == null) {
+		if (listener == null) {
 			listener = DEFAULT_LISTENER;
 		}
 		super.setCommandListener(listener);

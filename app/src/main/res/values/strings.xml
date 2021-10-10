@@ -58,7 +58,7 @@
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="reinstall">App already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
     <string name="reinstall_newest">Update this app to version %1$s?\n\nCurrently installed: %2$s\nAll data will be saved.</string>
-    <string name="reinstall_oldest">Replace this app with version %1$s?\n\nCurrently installed: %2$s\nOldest version may not working correctly with recorded data.</string>
+    <string name="reinstall_older">Replace this app with version %1$s?\n\nCurrently installed: %2$s\nOlder version may not working correctly with recorded data.</string>
     <string name="loading_info">loading info…</string>
 
     <string name="START_CMD">Start</string>

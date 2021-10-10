@@ -72,7 +72,7 @@ public class Gauge extends Item {
 
 	public void setValue(int value) {
 		this.value = value;
-		if(this.maxValue == INDEFINITE && !interactive) {
+		if (this.maxValue == INDEFINITE && !interactive) {
 			return;
 		}
 		if (pbar != null) {
@@ -86,7 +86,7 @@ public class Gauge extends Item {
 
 	public void setMaxValue(int maxValue) {
 		this.maxValue = maxValue;
-		if(maxValue == INDEFINITE && !interactive) {
+		if (maxValue == INDEFINITE && !interactive) {
 			if (pbar != null) {
 				pbar.setIndeterminate(true);
 			}
@@ -106,7 +106,7 @@ public class Gauge extends Item {
 	protected View getItemContentView() {
 		if (pbar == null) {
 			MicroActivity activity;
-			if(alert != null) {
+			if (alert != null) {
 				activity = alert.getParentActivity();
 			} else {
 				activity = getOwnerForm().getParentActivity();
@@ -122,7 +122,7 @@ public class Gauge extends Item {
 			pbar.setMax(maxValue);
 			pbar.setProgress(value);
 
-			if(alert != null) {
+			if (alert != null) {
 				pbar.setPadding(60, 0, 60, 0);
 			}
 		}
