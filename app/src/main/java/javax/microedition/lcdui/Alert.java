@@ -31,6 +31,14 @@ import androidx.appcompat.app.AlertDialog;
 public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public static final int FOREVER = -2;
 	public static final Command DISMISS_COMMAND = new Command("", Command.OK, 0);
+	private static final AlertCommandListener DEFAULT_LISTENER = new AlertCommandListener();
+
+	private static class AlertCommandListener implements CommandListener {
+		@Override
+		public void commandAction(Command c, Displayable d) {
+			((Alert)d).dismiss();
+		}
+	}
 
 	private String text;
 	private Image image;
@@ -60,6 +68,22 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 	};
 
+	private SimpleEvent msgCommandsChanged = new SimpleEvent() {
+		@Override
+		public void process() {
+			if(listener == DEFAULT_LISTENER) {
+				alertDialog.setCancelable(true);
+				alertDialog.setCanceledOnTouchOutside(true);
+				return;
+			}
+			if(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND) {
+				alertDialog.setCanceledOnTouchOutside(true);
+			} else {
+				alertDialog.setCanceledOnTouchOutside(false);
+			}
+		}
+	};
+
 	public Alert(String title) {
 		this(title, null, null, null);
 	}
@@ -72,6 +96,8 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		this.image = image;
 		this.type = type;
 		this.timeout = FOREVER;
+
+		setCommandListener(DEFAULT_LISTENER);
 	}
 
 	public void setType(AlertType type) {
@@ -139,8 +165,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
 		builder.setOnDismissListener(dialog -> {
-			if (nextDisplayable != null) Display.getDisplay(null).setCurrent(nextDisplayable);
-			alertDialog = null;
+			if(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND && listener != null) {
+				fireCommandAction(DISMISS_COMMAND, this);
+				return;
+			}
 		});
 
 		if (image != null) {
@@ -190,6 +218,14 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 
 		alertDialog = builder.create();
+		if(listener == DEFAULT_LISTENER) {
+			alertDialog.setCancelable(true);
+			alertDialog.setCanceledOnTouchOutside(true);
+		} else if (commands.length == 1 && commands[0] == DISMISS_COMMAND) {
+			alertDialog.setCanceledOnTouchOutside(true);
+		} else {
+			alertDialog.setCanceledOnTouchOutside(false);
+		}
 		return alertDialog;
 	}
 
@@ -198,6 +234,9 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		if (cmd != DISMISS_COMMAND) {
 			super.addCommand(cmd);
 			super.removeCommand(DISMISS_COMMAND);
+			if (alertDialog != null) {
+				ViewHandler.postEvent(msgCommandsChanged);
+			}
 		}
 	}
 
@@ -206,8 +245,22 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		if (cmd != DISMISS_COMMAND) {
 			super.removeCommand(cmd);
 			if (countCommands() == 0) {
+				if (alertDialog != null) {
+					ViewHandler.postEvent(msgCommandsChanged);
+				}
 				super.addCommand(DISMISS_COMMAND);
 			}
+		}
+	}
+
+	@Override
+	public void setCommandListener(CommandListener listener) {
+		if(listener == null) {
+			listener = DEFAULT_LISTENER;
+		}
+		super.setCommandListener(listener);
+		if (alertDialog != null) {
+			ViewHandler.postEvent(msgCommandsChanged);
 		}
 	}
 
@@ -250,5 +303,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	void setNextDisplayable(Displayable nextDisplayable) {
 		this.nextDisplayable = nextDisplayable;
+	}
+
+	private void dismiss() {
+		if (nextDisplayable != null) Display.getDisplay(null).setCurrent(nextDisplayable);
+		alertDialog = null;
 	}
 }
