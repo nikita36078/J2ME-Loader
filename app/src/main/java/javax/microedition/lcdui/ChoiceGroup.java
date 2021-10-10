@@ -168,8 +168,10 @@ public class ChoiceGroup extends Item implements Choice {
 			if (images.size() == 0) {
 				images.addAll(Collections.nCopies(size, null));
 			}
-			selectedIndex = 0;
-			selected.set(0, true);
+			if (choiceType != MULTIPLE) {
+				selectedIndex = 0;
+				selected.set(0, true);
+			}
 		}
 	}
 
