@@ -6,14 +6,14 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
-import javax.microedition.lcdui.Display;
+import javax.microedition.util.ContextHolder;
 
 public abstract class Clipboard {
 	private static ClipboardManager clipboardmgr;
 
 	public static void copyToClipboard(String text) {
 		if(clipboardmgr == null) {
-			clipboardmgr = (ClipboardManager) Display.getDisplay(null).getCurrent().getDisplayableView().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+			clipboardmgr = (ClipboardManager) ContextHolder.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 		}
 		ClipData clip = ClipData.newPlainText("", text);
 		clipboardmgr.setPrimaryClip(clip);
@@ -21,7 +21,7 @@ public abstract class Clipboard {
 
 	public static String copyFromClipboard() {
 		if(clipboardmgr == null) {
-			clipboardmgr = (ClipboardManager) Display.getDisplay(null).getCurrent().getDisplayableView().getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+			clipboardmgr = (ClipboardManager) ContextHolder.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 		}
 		String text = null;
 		if (!clipboardmgr.hasPrimaryClip()) {
