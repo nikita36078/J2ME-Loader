@@ -90,6 +90,7 @@ public class ChoiceGroup extends Item implements Choice {
 		public void onItemSelected(AdapterView parent, View view, int position, long id) {
 			// prevent onItemSelected call after initializing
 			if (!spinnerInitialized) {
+				spinner.setSelection(selectedIndex);
 				spinnerInitialized = true;
 				return;
 			}
