@@ -191,12 +191,14 @@ public class MicroLoader {
 				String[] prop = line.split(":[ ]*", 2);
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
+					MidletSystem.setProperty(prop[0], prop[1]);
 				}
 			}
 			try {
 				Charset.forName(System.getProperty("microedition.encoding"));
 			} catch (Exception e) {
 				System.setProperty("microedition.encoding", "ISO-8859-1");
+				MidletSystem.setProperty("microedition.encoding", "ISO-8859-1");
 			}
 
 			int screenWidth = params.screenWidth;
