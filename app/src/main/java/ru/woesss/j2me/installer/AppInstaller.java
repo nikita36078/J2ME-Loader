@@ -31,15 +31,19 @@ import net.lingala.zip4j.model.FileHeader;
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.jar.JarFile;
 
@@ -106,6 +110,7 @@ public class AppInstaller {
 		}
 
 		String name = srcFile.getName();
+
 		if (name.toLowerCase().endsWith(".jad")) {
 			newDesc = new Descriptor(srcFile, true);
 			String url = newDesc.getJarUrl();
@@ -121,12 +126,71 @@ public class AppInstaller {
 					return;
 				}
 			}
+		} else if (name.toLowerCase().endsWith(".kjx")) {
+			/** Load kjx file */
+			parseKjx();
+			newDesc = new Descriptor(srcFile, true);
 		} else {
 			srcJar = srcFile;
 			newDesc = loadManifest(srcFile);
 		}
 		int result = checkDescriptor();
 		emitter.onSuccess(result);
+	}
+
+	private void parseKjx() throws ConverterException {
+		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
+			throw new ConverterException("Can't create cache dir");
+		}
+		File kjxFile = srcFile;
+		File jadFile = null;
+		File jarFile = null;
+		try (InputStream inputStream = new FileInputStream(kjxFile);
+			 DataInputStream dis = new DataInputStream(inputStream);
+		) {
+			byte[] magic = new byte[3];
+			dis.read(magic, 0, 3);
+			if (!Arrays.equals(magic, "KJX".getBytes())) {
+				throw new ConverterException("Magic KJX does not match: " + new String(magic));
+			}
+
+			byte startJadPos = dis.readByte();
+			byte lenKjxFileName = dis.readByte();
+			dis.skipBytes(lenKjxFileName);
+			int lenJadFileContent = dis.readUnsignedShort();
+			byte lenJadFileName = dis.readByte();
+			byte[] jadFileName = new byte[lenJadFileName];
+			dis.read(jadFileName, 0, lenJadFileName);
+			String strJadFileName = new String(jadFileName);
+
+			int bufSize = 2048;
+			byte[] buf = new byte[bufSize];
+
+			jadFile = new File(cacheDir, strJadFileName);
+			try (FileOutputStream fos = new FileOutputStream(jadFile)) {
+				int restSize = lenJadFileContent;
+				while(restSize > 0) {
+					int readSize = dis.read(buf, 0, Math.min(restSize, bufSize));
+					fos.write(buf, 0, readSize);
+					restSize -= readSize;
+				}
+			}
+
+			jarFile = new File(cacheDir, strJadFileName.substring(0, strJadFileName.length() -4) + ".jar");
+			try (FileOutputStream fos = new FileOutputStream(jarFile)) {
+				int length = 0;
+				while((length = dis.read(buf)) > 0) {
+					fos.write(buf, 0, length);
+				}
+			}
+
+			srcFile = jadFile;
+			srcJar = jarFile;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void downloadJad() throws ConverterException {

@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ru.playsoftware.j2meloader.R;
 
 public class FilteredFilePickerFragment extends FilePickerFragment {
-	private static final List<String> extList = Arrays.asList(".jad", ".jar");
+	private static final List<String> extList = Arrays.asList(".jad", ".jar", ".kjx");
 	private static final Stack<File> history = new Stack<>();
 	private static File currentDir = Environment.getExternalStorageDirectory();
 
