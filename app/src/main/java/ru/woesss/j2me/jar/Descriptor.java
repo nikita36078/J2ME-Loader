@@ -17,7 +17,6 @@
 package ru.woesss.j2me.jar;
 
 import android.content.Context;
-import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
@@ -200,7 +199,7 @@ public class Descriptor {
 				if (line.charAt(0) == ' ') sb.append(line, 1, line.length());
 				else sb.append(line);
 			} else {
-				attrs.put(key, sb.toString());
+				attrs.put(key, sb.toString().trim());
 				sb.setLength(0);
 				key = line.substring(0, colon++).trim();
 				if (line.charAt(colon) == ' ')
@@ -208,15 +207,7 @@ public class Descriptor {
 				sb.append(line, colon, line.length());
 			}
 		}
-		attrs.put(key, sb.toString());
-	}
-
-	private String getFileLocation(String jarURL) {
-		Uri jarUri = Uri.parse(jarURL);
-		if ("http".equalsIgnoreCase(jarUri.getScheme()) || "https".equalsIgnoreCase(jarUri.getScheme())) {
-			return "Интернет";
-		}
-		return "Файл";
+		attrs.put(key, sb.toString().trim());
 	}
 
 	public String getName() {
