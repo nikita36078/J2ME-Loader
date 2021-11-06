@@ -85,8 +85,8 @@ import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.Constants;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
-import ru.playsoftware.j2meloader.util.PickFileResultContract;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.KEY_APP_URI;
@@ -103,7 +103,7 @@ public class AppsListFragment extends ListFragment {
 	private Disposable searchViewDisposable;
 
 	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
-			new PickFileResultContract(),
+			FileUtils.getFilePicker(),
 			this::onPickFileResult);
 
 	public static AppsListFragment newInstance(Uri data) {

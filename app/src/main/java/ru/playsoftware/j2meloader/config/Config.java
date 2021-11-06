@@ -31,6 +31,8 @@ import androidx.preference.PreferenceManager;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
+import ru.playsoftware.j2meloader.util.FileUtils;
+
 public class Config {
 
 	public static final String APP_NAME = "J2ME-Loader";
@@ -65,8 +67,12 @@ public class Config {
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 				+ "/" + APP_NAME;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		String path = preferences.getString(PREF_EMULATOR_DIR, null);
-		if (path == null) path = Environment.getExternalStorageDirectory() + "/" + APP_NAME;
+		String path = FileUtils.isExternalStorageLegacy() ?
+				preferences.getString(PREF_EMULATOR_DIR, null) :
+				context.getExternalFilesDir(null).getPath();
+		if (path == null) {
+			path = Environment.getExternalStorageDirectory() + "/" + APP_NAME;
+		}
 		initDirs(path);
 		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);
 	}
