@@ -48,10 +48,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		findPreference("pref_default_settings").setIntent(new Intent(getActivity(), ProfilesActivity.class));
 		prefFolder = findPreference(PREF_EMULATOR_DIR);
 		prefFolder.setSummary(Config.getEmulatorDir());
-		prefFolder.setOnPreferenceClickListener(preference -> {
-			openDirLauncher.launch(null);
-			return true;
-		});
+		if (FileUtils.isExternalStorageLegacy()) {
+			prefFolder.setOnPreferenceClickListener(preference -> {
+				openDirLauncher.launch(null);
+				return true;
+			});
+		}
 	}
 
 	private void onPickDirResult(Uri uri) {

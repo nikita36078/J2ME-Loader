@@ -48,7 +48,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -64,7 +63,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,13 +79,13 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
-import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.Constants;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
@@ -104,44 +102,9 @@ public class AppsListFragment extends ListFragment {
 	private AppRepository appRepository;
 	private Disposable searchViewDisposable;
 
-	private final ActivityResultLauncher<Void> openFileLauncher = registerForActivityResult(
-			new ActivityResultContract<Void, Uri>() {
-				@NonNull
-				@Override
-				public Intent createIntent(@NonNull Context context, Void input) {
-					Intent i = new Intent(context, FilteredFilePickerActivity.class);
-					i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-					i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, true);
-					i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-					i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
-					String path = preferences.getString(PREF_LAST_PATH, null);
-					if (path == null) {
-						File dir = Environment.getExternalStorageDirectory();
-						if (dir.canRead()) {
-							path = dir.getAbsolutePath();
-						}
-					}
-					i.putExtra(FilePickerActivity.EXTRA_START_PATH, path);
-					return i;
-				}
-
-				@Override
-				public Uri parseResult(int resultCode, @Nullable Intent intent) {
-					if (resultCode == Activity.RESULT_OK && intent != null) {
-						return intent.getData();
-					}
-					return null;
-				}
-			},
-			uri -> {
-				if (uri == null) {
-					return;
-				}
-				preferences.edit()
-						.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
-						.apply();
-				installApp(uri);
-			});
+	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
+			FileUtils.getFilePicker(),
+			this::onPickFileResult);
 
 	public static AppsListFragment newInstance(Uri data) {
 		AppsListFragment fragment = new AppsListFragment();
@@ -176,7 +139,16 @@ public class AppsListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
 		FloatingActionButton fab = view.findViewById(R.id.fab);
-		fab.setOnClickListener(v -> openFileLauncher.launch(null));
+		fab.setOnClickListener(v -> {
+			String path = preferences.getString(PREF_LAST_PATH, null);
+			if (path == null) {
+				File dir = Environment.getExternalStorageDirectory();
+				if (dir.canRead()) {
+					path = dir.getAbsolutePath();
+				}
+			}
+			openFileLauncher.launch(path);
+		});
 	}
 
 	@Override
@@ -199,6 +171,16 @@ public class AppsListFragment extends ListFragment {
 			String msg = activity.getString(R.string.error) + ": " + throwable.getMessage();
 			Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	private void onPickFileResult(Uri uri) {
+		if (uri == null) {
+			return;
+		}
+		preferences.edit()
+				.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
+				.apply();
+		installApp(uri);
 	}
 
 	private void installApp(Uri uri) {
