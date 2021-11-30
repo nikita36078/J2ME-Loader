@@ -405,6 +405,7 @@ public class MMFConverter {
             if (!Arrays.equals(magic, "MMMD".getBytes())) {
                 throw new Exception("Signature is not match MMMD: " + magic);
             }
+            dis.readInt();
             dis.read(magic, 0, 4);
             if (!Arrays.equals(magic, "CNTI".getBytes())) {
                 throw new Exception("Signature is not match CNTI: " + magic);
