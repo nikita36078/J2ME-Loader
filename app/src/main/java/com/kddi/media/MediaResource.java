@@ -39,6 +39,9 @@ public class MediaResource {
 	}
 
 	public MediaResource(String url) {
+		this.player = null;
+		this.type = "devm39z";
+
 		String path = url.replace("resource://", "");
 		try (InputStream stream = ContextHolder.getResourceAsStream(null, path)) {
 			byte[] resource = IOUtils.toByteArray(stream);
