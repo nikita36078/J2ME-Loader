@@ -18,11 +18,15 @@ package com.kddi.media;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.microedition.media.MMFConverter;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
+import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.util.IOUtils;
 
 public class MediaResource {
 
@@ -35,7 +39,22 @@ public class MediaResource {
 	}
 
 	public MediaResource(String url) {
-		this.player = null;
+		String path = url.replace("resource://", "");
+		try (InputStream stream = ContextHolder.getResourceAsStream(null, path)) {
+			byte[] resource = IOUtils.toByteArray(stream);
+			MMFConverter converter = new MMFConverter();
+			byte[] midiDat = converter.convertToMDI(resource);
+			try (ByteArrayInputStream bis = new ByteArrayInputStream(midiDat)) {
+				player = Manager.createPlayer(bis, "audio/midi");
+				player.realize();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (MediaException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public MediaResource(byte[] resource, String disposition) {
