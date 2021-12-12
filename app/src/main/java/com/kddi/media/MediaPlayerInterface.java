@@ -18,45 +18,45 @@ package com.kddi.media;
 
 public interface MediaPlayerInterface {
 
-    void addMediaEventListener(MediaEventListener l);
+	void addMediaEventListener(MediaEventListener l);
 
-    int getAttribute(int attr);
+	int getAttribute(int attr);
 
-    int getPitch();
+	int getPitch();
 
-    MediaResource getResource();
+	MediaResource getResource();
 
-    int getTempo();
+	int getTempo();
 
-    int getVolume();
+	int getVolume();
 
-    @Deprecated
-    void hide();
+	@Deprecated
+	void hide();
 
-    void pause();
+	void pause();
 
-    void play();
+	void play();
 
-    void play(int count);
+	void play(int count);
 
-    void removeMediaEventListener(MediaEventListener l);
+	void removeMediaEventListener(MediaEventListener l);
 
-    void resume();
+	void resume();
 
-    void setAttribute(int attr, int value);
+	void setAttribute(int attr, int value);
 
-    void setPitch(int pitch);
+	void setPitch(int pitch);
 
-    void setResource(MediaResource resource);
+	void setResource(MediaResource resource);
 
-    void setTemp(int tempo);
+	void setTemp(int tempo);
 
-    void setVolume(int volume);
+	void setVolume(int volume);
 
-    @Deprecated
-    void show();
+	@Deprecated
+	void show();
 
-    void stop();
+	void stop();
 
-    void unsetResource(MediaResource resource);
+	void unsetResource(MediaResource resource);
 }
