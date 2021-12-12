@@ -20,8 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +33,7 @@ public class MMFConverter {
 	static final byte FORMAT_TYPE_MOBILE_STANDARD_COMPRESS = 0x01;
 	static final byte FORMAT_TYPE_MOBILE_STANDARD_NO_COMPRESS = 0x02;
 
-	private abstract class TrackEvent {
+	private abstract static class TrackEvent {
 		int timestamp;
 
 		TrackEvent(int timestamp) {
@@ -49,7 +47,7 @@ public class MMFConverter {
 		abstract void output(DataOutputStream dos, int currentTime) throws IOException;
 	}
 
-	private class NOPMessage extends TrackEvent {
+	private static class NOPMessage extends TrackEvent {
 		public NOPMessage(int timestamp) {
 			super(timestamp);
 		}
@@ -102,7 +100,7 @@ public class MMFConverter {
 		}
 	}
 
-	private class ControlChange extends TrackEvent {
+	private static class ControlChange extends TrackEvent {
 		int channel;
 		int controlNumber;
 		int controlValue;
@@ -138,7 +136,7 @@ public class MMFConverter {
 		}
 	}
 
-	private class PitchBend extends TrackEvent {
+	private static class PitchBend extends TrackEvent {
 		int channel;
 		int pitchBendChangeLSB;
 		int pitchBendChangeMSB;
@@ -194,7 +192,8 @@ public class MMFConverter {
 		ArrayList<TrackEvent> result = new ArrayList<>();
 		Map<Integer, Integer> mapVel = new HashMap<>();
 
-		try (ByteArrayInputStream is = new ByteArrayInputStream(data); DataInputStream dis = new DataInputStream(is)) {
+		try (ByteArrayInputStream is = new ByteArrayInputStream(data);
+			 DataInputStream dis = new DataInputStream(is)) {
 			// parse Duration;
 			byte[] firstByte = new byte[1];
 			int globalTime = 0;
@@ -256,7 +255,8 @@ public class MMFConverter {
 						result.add(new ProgramChange(globalTime, channel, programNumber));
 						break;
 					}
-					case 0xD: { // Reserved
+					case 0xD: {
+						// Reserved
 						throw new Exception("Not Implemented");
 						// break;
 					}
@@ -330,7 +330,7 @@ public class MMFConverter {
 		}
 	}
 
-	void parseMTR(byte data[], DataOutputStream dos) throws Exception {
+	void parseMTR(byte[] data, DataOutputStream dos) throws Exception {
 		try (ByteArrayInputStream is = new ByteArrayInputStream(data);
 			 DataInputStream dis = new DataInputStream(is)) {
 			byte formatType = dis.readByte();
@@ -400,15 +400,16 @@ public class MMFConverter {
 
 	public byte[] convertToMDI(byte[] data) throws Exception {
 		byte[] magic = new byte[4];
-		try (ByteArrayInputStream is = new ByteArrayInputStream(data); DataInputStream dis = new DataInputStream(is)) {
+		try (ByteArrayInputStream is = new ByteArrayInputStream(data);
+			 DataInputStream dis = new DataInputStream(is)) {
 			dis.read(magic, 0, 4);
 			if (!Arrays.equals(magic, "MMMD".getBytes())) {
-				throw new Exception("Signature is not match MMMD: " + magic);
+				throw new Exception("Signature is not match MMMD: " + Arrays.toString(magic));
 			}
 			dis.readInt();
 			dis.read(magic, 0, 4);
 			if (!Arrays.equals(magic, "CNTI".getBytes())) {
-				throw new Exception("Signature is not match CNTI: " + magic);
+				throw new Exception("Signature is not match CNTI: " + Arrays.toString(magic));
 			}
 			int blockSize = dis.readInt();
 			byte[] cntiBlock = new byte[blockSize];
@@ -416,7 +417,7 @@ public class MMFConverter {
 
 			dis.read(magic, 0, 4);
 			if (!Arrays.equals(magic, "OPDA".getBytes())) {
-				throw new Exception("Signature is not match OPDA: " + magic);
+				throw new Exception("Signature is not match OPDA: " + Arrays.toString(magic));
 			}
 			blockSize = dis.readInt();
 			byte[] blockData = new byte[blockSize];

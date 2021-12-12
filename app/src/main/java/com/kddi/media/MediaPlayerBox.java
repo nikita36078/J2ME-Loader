@@ -33,14 +33,13 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 	public static final int FOREGROUND = 5;
 	public static final int BACKGROUND = 6;
 
-	int state = STOP;
-
-	private ArrayList<MediaEventListener> listeners;
-
-	MediaResource resource;
+	private int state = STOP;
+	private final ArrayList<MediaEventListener> listeners;
+	private MediaResource resource;
 
 	public MediaPlayerBox() {
 		super();
+		listeners = new ArrayList<>();
 	}
 
 	public MediaPlayerBox(int flag) {
@@ -54,7 +53,7 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 
 	@Override
 	public void addMediaEventListener(MediaEventListener l) {
-		if (!listeners.contains(l) && listeners != null) {
+		if (!listeners.contains(l)) {
 			listeners.add(l);
 		}
 	}
@@ -65,11 +64,8 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 	}
 
 	private void postEvent(int event) {
-		if (listeners != null) {
-			for (MediaEventListener l : listeners
-			) {
-				l.stateChanged(this, event, 0);
-			}
+		for (MediaEventListener l : listeners) {
+			l.stateChanged(this, event, 0);
 		}
 	}
 
@@ -100,7 +96,6 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 
 	@Override
 	public void hide() {
-
 	}
 
 	@Override
@@ -143,22 +138,18 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 
 	@Override
 	public void pause() {
-
 	}
 
 	@Override
 	public void resume() {
-
 	}
 
 	@Override
 	public void setAttribute(int attr, int value) {
-
 	}
 
 	@Override
 	public void setPitch(int pitch) {
-
 	}
 
 	@Override
@@ -171,17 +162,14 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 
 	@Override
 	public void setTemp(int tempo) {
-
 	}
 
 	@Override
 	public void setVolume(int volume) {
-
 	}
 
 	@Override
 	public void show() {
-
 	}
 
 	@Override
@@ -191,6 +179,5 @@ public class MediaPlayerBox extends Canvas implements MediaPlayerInterface {
 
 	@Override
 	protected void paint(Graphics g) {
-
 	}
 }

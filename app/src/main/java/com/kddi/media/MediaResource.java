@@ -16,11 +16,10 @@
 
 package com.kddi.media;
 
-import javax.microedition.media.MMFConverter;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.microedition.media.MMFConverter;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
@@ -29,7 +28,6 @@ public class MediaResource {
 
 	private Player player;
 	private String type;
-
 
 	public Player _getPlayer() {
 		// workaround
@@ -43,8 +41,8 @@ public class MediaResource {
 	public MediaResource(byte[] resource, String disposition) {
 		this.player = null;
 		this.type = disposition;
-		String mime = null;
-		switch(disposition) {
+		String mime;
+		switch (disposition) {
 			case "dev4anm":
 			case "devmfan":
 			case "devm39z":
@@ -66,8 +64,6 @@ public class MediaResource {
 					e.printStackTrace();
 				}
 				break;
-			default:
-				mime = null;
 		}
 	}
 
