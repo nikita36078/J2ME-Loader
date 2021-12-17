@@ -122,6 +122,7 @@ public abstract class Canvas extends Displayable {
 	private static int backgroundColor;
 	private static int scaleRatio;
 	private static int fpsLimit;
+	private static boolean screenshotRawMode;
 
 	private final Object paintSync = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
@@ -203,6 +204,10 @@ public abstract class Canvas extends Displayable {
 		Canvas.fpsLimit = fpsLimit;
 	}
 
+	public static void setScreenshotRawMode(boolean enable) {
+		screenshotRawMode = enable;
+	}
+
 	public int getKeyCode(int gameAction) {
 		int res = KeyMapper.getKeyCode(gameAction);
 		if (res != Integer.MAX_VALUE) {
@@ -265,13 +270,19 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public Single<Bitmap> getScreenShot() {
-		if (renderer != null) {
+		if (renderer != null && !screenshotRawMode) {
 			return renderer.takeScreenShot();
 		}
 		return Single.create(emitter -> {
-			Bitmap bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
-			canvasWrapper.bind(new android.graphics.Canvas(bitmap));
-			canvasWrapper.drawImage(offscreenCopy, new RectF(0, 0, onWidth, onHeight));
+			Bitmap bitmap;
+			if (screenshotRawMode) {
+				bitmap = Bitmap.createBitmap(offscreenCopy.getBitmap(), 0, 0,
+						offscreenCopy.getWidth(), offscreenCopy.getHeight());
+			} else {
+				bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
+				canvasWrapper.bind(new android.graphics.Canvas(bitmap));
+				canvasWrapper.drawImage(offscreenCopy, new RectF(0, 0, onWidth, onHeight));
+			}
 			emitter.onSuccess(bitmap);
 		});
 	}
