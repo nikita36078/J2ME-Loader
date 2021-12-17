@@ -249,4 +249,5 @@
     <string name="error_name_exists">Already exists, enter other name</string>
     <string name="default_label">"%s (default)"</string>
     <string name="not_saved_exists">Already exists</string>
+    <string name="alert_rewrite_profile">A profile named \"%1$s\" already exists.\nDo you want to overwrite it?</string>
 </resources>

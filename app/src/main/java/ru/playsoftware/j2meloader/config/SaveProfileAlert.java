@@ -19,7 +19,6 @@ package ru.playsoftware.j2meloader.config;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,18 +26,26 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
+
+import java.io.File;
+import java.io.IOException;
+
 import ru.playsoftware.j2meloader.R;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_CONFIG_PATH;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
 
 public class SaveProfileAlert extends DialogFragment {
+
+	private EditText editText;
+	private CheckBox cbConfig;
+	private CheckBox cbKeyboard;
+	private CheckBox cbDefault;
+	private String configPath;
 
 	@NonNull
 	public static SaveProfileAlert getInstance(String parent) {
@@ -52,14 +59,14 @@ public class SaveProfileAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		String configPath = requireArguments().getString(KEY_CONFIG_PATH);
+		configPath = requireArguments().getString(KEY_CONFIG_PATH);
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_save_profile, null);
-		EditText editText = v.findViewById(R.id.editText);
-		CheckBox cbConfig = v.findViewById(R.id.cbConfig);
-		CheckBox cbKeyboard = v.findViewById(R.id.cbKeyboard);
-		CheckBox cbDefault = v.findViewById(R.id.cbDefault);
+		editText = v.findViewById(R.id.editText);
+		cbConfig = v.findViewById(R.id.cbConfig);
+		cbKeyboard = v.findViewById(R.id.cbKeyboard);
+		cbDefault = v.findViewById(R.id.cbDefault);
 		Button btNegative = v.findViewById(R.id.btNegative);
 		Button btPositive = v.findViewById(R.id.btPositive);
 		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
@@ -68,36 +75,47 @@ public class SaveProfileAlert extends DialogFragment {
 		btPositive.setOnClickListener(v1 -> {
 			String name = editText.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
 			if (name.isEmpty()) {
+				editText.requestFocus();
 				Toast.makeText(getActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
 				return;
 			}
 
 			final File config = new File(Config.getProfilesDir(), name + Config.MIDLET_CONFIG_FILE);
 			if (config.exists()) {
-				editText.setText(name);
-				editText.requestFocus();
-				editText.setSelection(name.length());
-				final Toast toast = Toast.makeText(getActivity(), R.string.error_name_exists, Toast.LENGTH_SHORT);
-				final int[] loc = new int[2];
-				editText.getLocationOnScreen(loc);
-				toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, loc[1]);
-				toast.show();
+				alertRewriteExists(name);
 				return;
 			}
-			try {
-				Profile profile = new Profile(name);
-				ProfilesManager.save(profile, configPath,
-						cbConfig.isChecked(), cbKeyboard.isChecked());
-				if (cbDefault.isChecked()) {
-					PreferenceManager.getDefaultSharedPreferences(requireContext())
-							.edit().putString(PREF_DEFAULT_PROFILE, name).apply();
-				}
-				dismiss();
-			} catch (IOException e) {
-				e.printStackTrace();
-				Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
-			}
+			save(name);
 		});
 		return dialog;
+	}
+
+	private void alertRewriteExists(String name) {
+		new AlertDialog.Builder(requireContext())
+				.setMessage(getString(R.string.alert_rewrite_profile, name))
+				.setPositiveButton(android.R.string.ok, (dialog, which) -> save(name))
+				.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+					editText.setText(name);
+					editText.requestFocus();
+					editText.setSelection(0, editText.getText().length());
+				})
+				.show();
+	}
+
+	private void save(String name) {
+		try {
+			Profile profile = new Profile(name);
+			ProfilesManager.save(profile, this.configPath,
+					this.cbConfig.isChecked(), this.cbKeyboard.isChecked());
+			if (this.cbDefault.isChecked()) {
+				PreferenceManager.getDefaultSharedPreferences(requireContext())
+						.edit().putString(PREF_DEFAULT_PROFILE, name).apply();
+			}
+			Toast.makeText(requireContext(), getString(R.string.saved, name), Toast.LENGTH_SHORT).show();
+			dismiss();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+		}
 	}
 }
