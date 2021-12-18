@@ -66,7 +66,7 @@ public class MMFConverter {
 		@Override
 		void output(DataOutputStream dos, int currentTime) throws IOException {
 			writeVariableLengthValue(timestamp - currentTime, dos);
-			dos.write(new byte[] { (byte) 0xFF, 0x20, 0x00 });
+			dos.write(new byte[]{(byte) 0xFF, 0x2F, 0x00});
 			System.out.println(String.format("timestamp: %d, EOS", timestamp));
 		}
 	}
@@ -344,6 +344,9 @@ public class MMFConverter {
 				// read 16byte channel status
 				channelStatus = new byte[16];
 				dis.read(channelStatus, 0, 16);
+			} else {
+				channelStatus = new byte[2];
+				dis.read(channelStatus, 0, 2);
 			}
 
 			byte[] chunkId = new byte[4];
@@ -374,12 +377,7 @@ public class MMFConverter {
 						ddos.writeByte((tempo >>> 8) & (byte) 0xFF);
 						ddos.writeByte((tempo >>> 0) & (byte) 0xFF);
 
-						Collections.sort(trk, new Comparator<TrackEvent>() {
-							@Override
-							public int compare(TrackEvent o1, TrackEvent o2) {
-								return o1.getTimestamp() - o2.getTimestamp();
-							}
-						});
+						Collections.sort(trk, (o1, o2) -> o1.getTimestamp() - o2.getTimestamp());
 
 						int globalTime = 0;
 						for (TrackEvent trackEvent : trk) {
@@ -389,6 +387,16 @@ public class MMFConverter {
 						dos.writeInt(ddos.size());
 						dos.write(os.toByteArray());
 					}
+				} else if (Arrays.equals(chunkId, "MspI".getBytes())) {
+					int chunkSize = dis.readInt();
+					byte[] chunkDat = new byte[chunkSize];
+					if (dis.read(chunkDat, 0, chunkSize) != chunkSize)
+						throw new Exception("chunkSize is not match: " + chunkSize);
+				} else if (Arrays.equals(chunkId, "Mtsu".getBytes())) {
+					int chunkSize = dis.readInt();
+					byte[] chunkDat = new byte[chunkSize];
+					if (dis.read(chunkDat, 0, chunkSize) != chunkSize)
+						throw new Exception("chunkSize is not match: " + chunkSize);
 				}
 				// Mtsp (Stream PCM Data Chunk)
 			}
