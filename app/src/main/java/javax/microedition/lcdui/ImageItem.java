@@ -21,79 +21,87 @@ import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.util.ContextHolder;
 
 public class ImageItem extends Item {
-	private Image image;
-	private ImageView imageView;
-	private String altText;
-	private final int appearanceMode;
+    private Image image;
+    private ImageView imageView;
+    private String altText;
+    private final int appearanceMode;
 
-	public ImageItem(String label, Image image, int layout, String altText) {
-		this(label, image, layout, altText, PLAIN);
-	}
+    private final SimpleEvent msgUpdateImageView = new SimpleEvent() {
+        @Override
+        public void process() {
+            if (image != null) {
+                int virtualWidth = Displayable.getVirtualWidth();
+                int displayWidth = ContextHolder.getDisplayWidth();
+                float mul = (float) displayWidth / virtualWidth;
+                int width = (int) (image.getWidth() * mul);
+                int height = (int) (image.getHeight() * mul);
+                imageView.setMinimumWidth(width);
+                imageView.setMinimumHeight(height);
+                imageView.setImageBitmap(image.getBitmap());
+            } else {
+                imageView.setImageBitmap(null);
+            }
+        }
+    };
 
-	public ImageItem(String label, Image image, int layout, String altText, int appearanceMode) {
-		setLabel(label);
-		setImage(image);
-		setLayout(layout);
-		setAltText(altText);
-		this.appearanceMode = appearanceMode;
-	}
+    public ImageItem(String label, Image image, int layout, String altText) {
+        this(label, image, layout, altText, PLAIN);
+    }
 
-	public void setImage(Image img) {
-		image = img;
+    public ImageItem(String label, Image image, int layout, String altText, int appearanceMode) {
+        setLabel(label);
+        setImage(image);
+        setLayout(layout);
+        setAltText(altText);
+        this.appearanceMode = appearanceMode;
+    }
 
-		if (imageView != null) {
-			updateImageView();
-		}
-	}
+    public void setImage(Image img) {
+        image = img;
 
-	public Image getImage() {
-		return image;
-	}
+        if (imageView != null) {
+            updateImageView();
+        }
+    }
 
-	public String getAltText() {
-		return altText;
-	}
+    public Image getImage() {
+        return image;
+    }
 
-	public void setAltText(String text) {
-		altText = text;
-	}
+    public String getAltText() {
+        return altText;
+    }
 
-	public int getAppearanceMode() {
-		return appearanceMode;
-	}
+    public void setAltText(String text) {
+        altText = text;
+    }
 
-	private void updateImageView() {
-		if (image != null) {
-			int virtualWidth = Displayable.getVirtualWidth();
-			int displayWidth = ContextHolder.getDisplayWidth();
-			float mul = (float) displayWidth / virtualWidth;
-			int width = (int) (image.getWidth() * mul);
-			int height = (int) (image.getHeight() * mul);
-			imageView.setMinimumWidth(width);
-			imageView.setMinimumHeight(height);
-			imageView.setImageBitmap(image.getBitmap());
-		} else {
-			imageView.setImageBitmap(null);
-		}
-	}
+    public int getAppearanceMode() {
+        return appearanceMode;
+    }
 
-	@Override
-	public View getItemContentView() {
-		if (imageView == null) {
-			imageView = new AppCompatImageView(getOwnerForm().getParentActivity());
-			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-			imageView.setOnClickListener(v -> fireDefaultCommandAction());
-			updateImageView();
-		}
+    private void updateImageView() {
+        ViewHandler.postEvent(msgUpdateImageView);
+    }
 
-		return imageView;
-	}
+    @Override
+    public View getItemContentView() {
+        if (imageView == null) {
+            imageView = new AppCompatImageView(getOwnerForm().getParentActivity());
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setOnClickListener(v -> fireDefaultCommandAction());
+            updateImageView();
+        }
 
-	@Override
-	public void clearItemContentView() {
-		imageView = null;
-	}
+        return imageView;
+    }
+
+    @Override
+    public void clearItemContentView() {
+        imageView = null;
+    }
 }
