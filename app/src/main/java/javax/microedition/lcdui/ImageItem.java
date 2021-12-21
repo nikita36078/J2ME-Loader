@@ -33,18 +33,7 @@ public class ImageItem extends Item {
     private final SimpleEvent msgUpdateImageView = new SimpleEvent() {
         @Override
         public void process() {
-            if (image != null) {
-                int virtualWidth = Displayable.getVirtualWidth();
-                int displayWidth = ContextHolder.getDisplayWidth();
-                float mul = (float) displayWidth / virtualWidth;
-                int width = (int) (image.getWidth() * mul);
-                int height = (int) (image.getHeight() * mul);
-                imageView.setMinimumWidth(width);
-                imageView.setMinimumHeight(height);
-                imageView.setImageBitmap(image.getBitmap());
-            } else {
-                imageView.setImageBitmap(null);
-            }
+            updateImageView();
         }
     };
 
@@ -64,7 +53,7 @@ public class ImageItem extends Item {
 		image = img;
 
 		if (imageView != null) {
-			updateImageView();
+            ViewHandler.postEvent(msgUpdateImageView);
 		}
 	}
 
@@ -85,7 +74,18 @@ public class ImageItem extends Item {
 	}
 
 	private void updateImageView() {
-        ViewHandler.postEvent(msgUpdateImageView);
+        if (image != null) {
+            int virtualWidth = Displayable.getVirtualWidth();
+            int displayWidth = ContextHolder.getDisplayWidth();
+            float mul = (float) displayWidth / virtualWidth;
+            int width = (int) (image.getWidth() * mul);
+            int height = (int) (image.getHeight() * mul);
+            imageView.setMinimumWidth(width);
+            imageView.setMinimumHeight(height);
+            imageView.setImageBitmap(image.getBitmap());
+        } else {
+            imageView.setImageBitmap(null);
+        }
 	}
 
 	@Override
