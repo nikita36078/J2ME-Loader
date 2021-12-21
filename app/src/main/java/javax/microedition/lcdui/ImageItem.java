@@ -25,10 +25,10 @@ import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.util.ContextHolder;
 
 public class ImageItem extends Item {
-    private Image image;
-    private ImageView imageView;
-    private String altText;
-    private final int appearanceMode;
+	private Image image;
+	private ImageView imageView;
+	private String altText;
+	private final int appearanceMode;
 
     private final SimpleEvent msgUpdateImageView = new SimpleEvent() {
         @Override
@@ -48,60 +48,60 @@ public class ImageItem extends Item {
         }
     };
 
-    public ImageItem(String label, Image image, int layout, String altText) {
-        this(label, image, layout, altText, PLAIN);
-    }
+	public ImageItem(String label, Image image, int layout, String altText) {
+		this(label, image, layout, altText, PLAIN);
+	}
 
-    public ImageItem(String label, Image image, int layout, String altText, int appearanceMode) {
-        setLabel(label);
-        setImage(image);
-        setLayout(layout);
-        setAltText(altText);
-        this.appearanceMode = appearanceMode;
-    }
+	public ImageItem(String label, Image image, int layout, String altText, int appearanceMode) {
+		setLabel(label);
+		setImage(image);
+		setLayout(layout);
+		setAltText(altText);
+		this.appearanceMode = appearanceMode;
+	}
 
-    public void setImage(Image img) {
-        image = img;
+	public void setImage(Image img) {
+		image = img;
 
-        if (imageView != null) {
-            updateImageView();
-        }
-    }
+		if (imageView != null) {
+			updateImageView();
+		}
+	}
 
-    public Image getImage() {
-        return image;
-    }
+	public Image getImage() {
+		return image;
+	}
 
-    public String getAltText() {
-        return altText;
-    }
+	public String getAltText() {
+		return altText;
+	}
 
-    public void setAltText(String text) {
-        altText = text;
-    }
+	public void setAltText(String text) {
+		altText = text;
+	}
 
-    public int getAppearanceMode() {
-        return appearanceMode;
-    }
+	public int getAppearanceMode() {
+		return appearanceMode;
+	}
 
-    private void updateImageView() {
+	private void updateImageView() {
         ViewHandler.postEvent(msgUpdateImageView);
-    }
+	}
 
-    @Override
-    public View getItemContentView() {
-        if (imageView == null) {
-            imageView = new AppCompatImageView(getOwnerForm().getParentActivity());
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageView.setOnClickListener(v -> fireDefaultCommandAction());
-            updateImageView();
-        }
+	@Override
+	public View getItemContentView() {
+		if (imageView == null) {
+			imageView = new AppCompatImageView(getOwnerForm().getParentActivity());
+			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+			imageView.setOnClickListener(v -> fireDefaultCommandAction());
+			updateImageView();
+		}
 
-        return imageView;
-    }
+		return imageView;
+	}
 
-    @Override
-    public void clearItemContentView() {
-        imageView = null;
-    }
+	@Override
+	public void clearItemContentView() {
+		imageView = null;
+	}
 }
