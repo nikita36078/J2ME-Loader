@@ -77,7 +77,6 @@ public class SoftNotificationImpl extends SoftNotification {
 		try {
 			if(id == -1) id = ids++;
 			instanceMap.put(id, this);
-
 			String appName = activity.getAppName();
 			String channelId = appName.toLowerCase();
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -114,8 +113,10 @@ public class SoftNotificationImpl extends SoftNotification {
 			selectIntent.setAction("select");
 			selectIntent.putExtra("id", id);
 			selectIntent.putExtra("event", 1);
+
 			PendingIntent selectPendingIntent = PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), selectIntent, 0);
 			builder.setContentIntent(selectPendingIntent);
+
 			if(softAction1 != null) {
 				builder.addAction(new NotificationCompat.Action.Builder(null,
 						softAction1, selectPendingIntent)
@@ -132,7 +133,6 @@ public class SoftNotificationImpl extends SoftNotification {
 							softAction2 != null ? softAction2 : "Dismiss",
 							PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), dismissIntent, 0))
 							.build();
-
 			builder.addAction(dismissAction);
 			notification = builder.build();
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
