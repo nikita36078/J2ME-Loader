@@ -1,11 +1,10 @@
 package com.nokia.mid.ui;
 
-import static androidx.core.app.NotificationCompat.EXTRA_NOTIFICATION_ID;
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -33,8 +32,8 @@ public class SoftNotificationImpl extends SoftNotification {
 	private String softAction1;
 	private String softAction2;
 	private int id;
-	private static int ids = 0;
-	private static Hashtable<Integer, SoftNotificationImpl> notifications;
+	private static int ids = 1;
+	static Hashtable<Integer, SoftNotificationImpl> instanceMap;
 	private SoftNotificationImpl old;
 	private Bitmap bitmap;
 
@@ -51,12 +50,12 @@ public class SoftNotificationImpl extends SoftNotification {
 		lastInstance = this;
 		iListener = new SoftNotificationListener[1];
 		if(id != -1) {
-			old = notifications.get(id);
+			old = instanceMap.get(id);
 			notification = old.notification;
 		}
 	}
 
-	private void notificationCallback(int aEventArg) {
+	void notificationCallback(int aEventArg) {
 		synchronized (this.iListener) {
 			SoftNotificationListener listener = this.iListener[0];
 			if (listener != null) {
@@ -77,19 +76,13 @@ public class SoftNotificationImpl extends SoftNotification {
 	public void post() throws SoftNotificationException {
 		try {
 			if(id == -1) id = ids++;
-			notifications.put(id, this);
-			PendingIntent pendingIntent = null;
-			if(softAction1 != null || softAction2 != null) {
-				Intent intent = new Intent(context, this.getClass());
-				intent.putExtra(EXTRA_NOTIFICATION_ID, id);
-				pendingIntent = PendingIntent.getActivity(context, id, intent, 0);
-			}
-			String appName = context.getAppName();
+			instanceMap.put(id, this);
+
+			String appName = activity.getAppName();
 			String channelId = appName.toLowerCase();
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 				NotificationChannel channel = null;
-				for(NotificationChannel c: notificationManager.getNotificationChannels()) {
+				for(NotificationChannel c: notificationmgr.getNotificationChannels()) {
 					if(c.getId().equals(channelId)) {
 						channel = c;
 						break;
@@ -99,10 +92,10 @@ public class SoftNotificationImpl extends SoftNotification {
 					int importance = NotificationManager.IMPORTANCE_DEFAULT;
 					channel = new NotificationChannel(channelId, appName, importance);
 					channel.setDescription("MIDlet");
-					notificationManager.createNotificationChannel(channel);
+					notificationmgr.createNotificationChannel(channel);
 				}
 			}
-			NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+			NotificationCompat.Builder builder = new NotificationCompat.Builder(activity, channelId);
 			builder.setContentTitle(appName);
 			if(groupText != null) builder.setGroup(groupText);
 			if(text != null) builder.setContentText(text);
@@ -116,16 +109,33 @@ public class SoftNotificationImpl extends SoftNotification {
 				builder.setSmallIcon(R.mipmap.ic_launcher);
 			}
 			builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-			if(pendingIntent != null) builder.setContentIntent(pendingIntent);
+
+			Intent selectIntent = new Intent(activity, NotificationActivity.class);
+			selectIntent.setAction("select");
+			selectIntent.putExtra("id", id);
+			selectIntent.putExtra("event", 1);
+			PendingIntent selectPendingIntent = PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), selectIntent, 0);
+			builder.setContentIntent(selectPendingIntent);
 			if(softAction1 != null) {
-				NotificationCompat.Action action = new NotificationCompat.Action.Builder(null, softAction1, pendingIntent).build();
-				builder.addAction(action);
+				builder.addAction(new NotificationCompat.Action.Builder(null,
+						softAction1, selectPendingIntent)
+						.build());
 			}
-			if(softAction2 != null) {
-				NotificationCompat.Action action = new NotificationCompat.Action.Builder(null, softAction2, pendingIntent).build();
-				builder.addAction(action);
-			}
+
+			Intent dismissIntent = new Intent(activity, NotificationActivity.class);
+			dismissIntent.setAction("dismiss");
+			dismissIntent.putExtra("id", id);
+			dismissIntent.putExtra("event", 2);
+
+			NotificationCompat.Action dismissAction =
+					new NotificationCompat.Action.Builder(null,
+							softAction2 != null ? softAction2 : "Dismiss",
+							PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), dismissIntent, 0))
+							.build();
+
+			builder.addAction(dismissAction);
 			notification = builder.build();
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			notificationmgr.notify(id, notification);
 		} catch (Throwable e) {
 			throw new SoftNotificationException(e);
@@ -146,17 +156,11 @@ public class SoftNotificationImpl extends SoftNotification {
 	public void setText(String aText, String aGroupText) throws SoftNotificationException {
 		text = aText;
 		groupText = aGroupText;
-		if(notification != null) {
-			post();
-		}
 	}
 
 	public void setSoftkeyLabels(String aSoftkey1Label, String aSoftkey2Label) throws SoftNotificationException {
 		softAction1 = aSoftkey1Label;
 		softAction2 = aSoftkey2Label;
-		if(notification != null) {
-			post();
-		}
 	}
 
 	public void setImage(byte[] aImageData) throws SoftNotificationException {
@@ -165,27 +169,18 @@ public class SoftNotificationImpl extends SoftNotification {
 			throw new SoftNotificationException("Can't decode image");
 		}
 		bitmap = b;
-		if(notification != null) {
-			post();
-		}
 		hasImage = true;
 	}
 
 	private static NotificationManagerCompat notificationmgr;
-	private static MicroActivity context;
+	private static MicroActivity activity;
 
 	static {
 		try {
-			context = ContextHolder.getActivity();
-			notificationmgr = NotificationManagerCompat.from(context);
-			notifications = new Hashtable<Integer, SoftNotificationImpl>();
+			activity = ContextHolder.getActivity();
+			notificationmgr = NotificationManagerCompat.from(activity);
+			instanceMap = new Hashtable<Integer, SoftNotificationImpl>();
 		} catch (Exception ex) {
-		}
-	}
-
-	protected static void action(int i) {
-		if(lastInstance != null) {
-			lastInstance.notificationCallback(i);
 		}
 	}
 }
