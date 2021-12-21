@@ -28,7 +28,7 @@ public class SoftNotificationImpl extends SoftNotification {
 	private String groupText;
 	private String text;
 	private boolean hasImage;
-	private static SoftNotificationImpl lastInst;
+	private static SoftNotificationImpl lastInstance;
 	private Notification notification;
 	private String softAction1;
 	private String softAction2;
@@ -48,7 +48,7 @@ public class SoftNotificationImpl extends SoftNotification {
 
 	protected void initialize(int aNotificationId) {
 		id = aNotificationId;
-		lastInst = this;
+		lastInstance = this;
 		iListener = new SoftNotificationListener[1];
 		if(id != -1) {
 			old = notifications.get(id);
@@ -201,7 +201,8 @@ public class SoftNotificationImpl extends SoftNotification {
 	}
 
 	protected static void action(int i) {
-		if(lastInst != null)
-			lastInst.notificationCallback(i);
+		if(lastInstance != null) {
+			lastInstance.notificationCallback(i);
+		}
 	}
 }

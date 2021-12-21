@@ -10,7 +10,7 @@ public class SoftNotificationException extends Exception {
 		super(info);
 	}
 
-	public SoftNotificationException(Throwable cause) {
+	SoftNotificationException(Throwable cause) {
 		super(cause);
 	}
 
