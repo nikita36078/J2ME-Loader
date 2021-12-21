@@ -75,7 +75,6 @@ public class SoftNotificationImpl extends SoftNotification {
 	}
 
 	public void post() throws SoftNotificationException {
-		System.out.println("SoftNotificationImpl post");
 		try {
 			if(id == -1) id = ids++;
 			notifications.put(id, this);
@@ -128,10 +127,7 @@ public class SoftNotificationImpl extends SoftNotification {
 			}
 			notification = builder.build();
 			notificationmgr.notify(id, notification);
-			System.out.println("SoftNotificationImpl post success");
 		} catch (Throwable e) {
-			System.out.println("SoftNotificationImpl ERROR: " + e.toString());
-			e.printStackTrace();
 			throw new SoftNotificationException(e);
 		}
 	}
@@ -151,11 +147,7 @@ public class SoftNotificationImpl extends SoftNotification {
 		text = aText;
 		groupText = aGroupText;
 		if(notification != null) {
-			try {
-				post();
-			} catch (Exception e) {
-				throw new SoftNotificationException(e.toString());
-			}
+			post();
 		}
 	}
 
@@ -163,11 +155,7 @@ public class SoftNotificationImpl extends SoftNotification {
 		softAction1 = aSoftkey1Label;
 		softAction2 = aSoftkey2Label;
 		if(notification != null) {
-			try {
-				post();
-			} catch (Exception e) {
-				throw new SoftNotificationException(e.toString());
-			}
+			post();
 		}
 	}
 
@@ -178,11 +166,7 @@ public class SoftNotificationImpl extends SoftNotification {
 		}
 		bitmap = b;
 		if(notification != null) {
-			try {
-				post();
-			} catch (Exception e) {
-				throw new SoftNotificationException(e.toString());
-			}
+			post();
 		}
 		hasImage = true;
 	}
@@ -196,7 +180,6 @@ public class SoftNotificationImpl extends SoftNotification {
 			notificationmgr = NotificationManagerCompat.from(context);
 			notifications = new Hashtable<Integer, SoftNotificationImpl>();
 		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 
