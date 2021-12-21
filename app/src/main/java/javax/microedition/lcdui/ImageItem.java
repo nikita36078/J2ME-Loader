@@ -16,11 +16,15 @@
 
 package javax.microedition.lcdui;
 
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.util.ContextHolder;
 
 public class ImageItem extends Item {
@@ -28,6 +32,13 @@ public class ImageItem extends Item {
 	private ImageView imageView;
 	private String altText;
 	private final int appearanceMode;
+
+	private final SimpleEvent msgUpdateImageView = new SimpleEvent() {
+		@Override
+		public void process() {
+			updateImageView();
+		}
+	};
 
 	public ImageItem(String label, Image image, int layout, String altText) {
 		this(label, image, layout, altText, PLAIN);
@@ -45,7 +56,7 @@ public class ImageItem extends Item {
 		image = img;
 
 		if (imageView != null) {
-			updateImageView();
+			ViewHandler.postEvent(msgUpdateImageView);
 		}
 	}
 
