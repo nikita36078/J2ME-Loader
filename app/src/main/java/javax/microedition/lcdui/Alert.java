@@ -63,20 +63,14 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	private final SimpleEvent msgSetImage = new SimpleEvent() {
 		@Override
 		public void process() {
-			BitmapDrawable bitmapDrawable = new BitmapDrawable(image.getBitmap());
-			alertDialog.setIcon(bitmapDrawable);
+			alertDialog.setIcon(new BitmapDrawable(image.getBitmap()));
 		}
 	};
 
 	private final SimpleEvent msgCommandsChanged = new SimpleEvent() {
 		@Override
 		public void process() {
-			if (listener == DEFAULT_LISTENER) {
-				alertDialog.setCancelable(true);
-				alertDialog.setCanceledOnTouchOutside(true);
-				return;
-			}
-			alertDialog.setCanceledOnTouchOutside(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND);
+			setCommands();
 		}
 	};
 
@@ -174,6 +168,12 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 			builder.setView(indicator.getItemContentView());
 		}
 
+		alertDialog = builder.create();
+		setCommands();
+		return alertDialog;
+	}
+
+	private void setCommands() {
 		commands = getCommands();
 		Arrays.sort(commands);
 
@@ -201,25 +201,23 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 
 		if (positive >= 0) {
-			builder.setPositiveButton(commands[positive].getAndroidLabel(), this);
+			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, commands[positive].getAndroidLabel(), this);
 		}
 
 		if (negative >= 0) {
-			builder.setNegativeButton(commands[negative].getAndroidLabel(), this);
+			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, commands[negative].getAndroidLabel(), this);
 		}
 
 		if (neutral >= 0) {
-			builder.setNeutralButton(commands[neutral].getAndroidLabel(), this);
+			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, commands[neutral].getAndroidLabel(), this);
 		}
 
-		alertDialog = builder.create();
 		if (listener == DEFAULT_LISTENER) {
 			alertDialog.setCancelable(true);
 			alertDialog.setCanceledOnTouchOutside(true);
 		} else {
 			alertDialog.setCanceledOnTouchOutside(commands.length == 1 && commands[0] == DISMISS_COMMAND);
 		}
-		return alertDialog;
 	}
 
 	@Override
@@ -237,10 +235,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public void removeCommand(Command cmd) {
 		if (cmd != DISMISS_COMMAND) {
 			super.removeCommand(cmd);
+			if (alertDialog != null) {
+				ViewHandler.postEvent(msgCommandsChanged);
+			}
 			if (countCommands() == 0) {
-				if (alertDialog != null) {
-					ViewHandler.postEvent(msgCommandsChanged);
-				}
 				super.addCommand(DISMISS_COMMAND);
 			}
 		}
