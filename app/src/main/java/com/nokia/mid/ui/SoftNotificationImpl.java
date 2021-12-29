@@ -1,10 +1,10 @@
 package com.nokia.mid.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -22,8 +22,21 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class SoftNotificationImpl extends SoftNotification {
+	@SuppressLint("StaticFieldLeak")
+	private static NotificationManagerCompat notificationmgr;
+	@SuppressLint("StaticFieldLeak")
+	private static MicroActivity activity;
 
-	private SoftNotificationListener[] iListener;
+	static {
+		try {
+			activity = ContextHolder.getActivity();
+			notificationmgr = NotificationManagerCompat.from(activity);
+			instanceMap = new Hashtable<>();
+		} catch (Exception ignored) {
+		}
+	}
+
+	private SoftNotificationListener[] listeners;
 	private String groupText;
 	private String text;
 	private boolean hasImage;
@@ -37,31 +50,31 @@ public class SoftNotificationImpl extends SoftNotification {
 	private SoftNotificationImpl old;
 	private Bitmap bitmap;
 
-	public SoftNotificationImpl(int aNotificationId) {
-		initialize(aNotificationId);
+	public SoftNotificationImpl(int notificationId) {
+		initialize(notificationId);
 	}
 
 	public SoftNotificationImpl() {
 		initialize(-1);
 	}
 
-	protected void initialize(int aNotificationId) {
-		id = aNotificationId;
+	protected void initialize(int notificationId) {
+		id = notificationId;
 		lastInstance = this;
-		iListener = new SoftNotificationListener[1];
-		if(id != -1) {
+		listeners = new SoftNotificationListener[1];
+		if (id != -1) {
 			old = instanceMap.get(id);
 			notification = old.notification;
 		}
 	}
 
-	void notificationCallback(int aEventArg) {
-		synchronized (this.iListener) {
-			SoftNotificationListener listener = this.iListener[0];
+	void notificationCallback(int eventArg) {
+		synchronized (this.listeners) {
+			SoftNotificationListener listener = this.listeners[0];
 			if (listener != null) {
-				if (aEventArg == 1) {
+				if (eventArg == 1) {
 					listener.notificationSelected(this);
-				} else if (aEventArg == 2) {
+				} else if (eventArg == 2) {
 					listener.notificationDismissed(this);
 				}
 			}
@@ -69,25 +82,19 @@ public class SoftNotificationImpl extends SoftNotification {
 	}
 
 	public int getId() {
-		if(notification == null) return -1;
+		if (notification == null) return -1;
 		return id;
 	}
 
 	public void post() throws SoftNotificationException {
 		try {
-			if(id == -1) id = ids++;
+			if (id == -1) id = ids++;
 			instanceMap.put(id, this);
 			String appName = activity.getAppName();
 			String channelId = appName.toLowerCase();
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				NotificationChannel channel = null;
-				for(NotificationChannel c: notificationmgr.getNotificationChannels()) {
-					if(c.getId().equals(channelId)) {
-						channel = c;
-						break;
-					}
-				}
-				if(channel == null) {
+				NotificationChannel channel = notificationmgr.getNotificationChannel(channelId);
+				if (channel == null) {
 					int importance = NotificationManager.IMPORTANCE_DEFAULT;
 					channel = new NotificationChannel(channelId, appName, importance);
 					channel.setDescription("MIDlet");
@@ -96,28 +103,28 @@ public class SoftNotificationImpl extends SoftNotification {
 			}
 			NotificationCompat.Builder builder = new NotificationCompat.Builder(activity, channelId);
 			builder.setContentTitle(appName);
-			if(groupText != null) builder.setGroup(groupText);
-			if(text != null) builder.setContentText(text);
-			if(bitmap != null) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-					builder.setSmallIcon(IconCompat.createWithBitmap(bitmap));
-				} else {
-					builder.setSmallIcon(R.mipmap.ic_launcher);
-				}
+			if (groupText != null) builder.setGroup(groupText);
+			if (text != null) builder.setContentText(text);
+			if (bitmap != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				builder.setSmallIcon(IconCompat.createWithBitmap(bitmap));
 			} else {
 				builder.setSmallIcon(R.mipmap.ic_launcher);
 			}
 			builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+			builder.setAutoCancel(true);
 
-			Intent selectIntent = new Intent(activity, NotificationActivity.class);
-			selectIntent.setAction("select");
-			selectIntent.putExtra("id", id);
-			selectIntent.putExtra("event", 1);
+			@SuppressLint("InlinedApi")
+			int pendingIntentFlags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? PendingIntent.FLAG_IMMUTABLE : 0;
+			if (softAction1 != null) {
+				Intent selectIntent = new Intent(activity, NotificationActivity.class);
+				selectIntent.setAction("select");
+				selectIntent.putExtra("id", id);
+				selectIntent.putExtra("event", 1);
 
-			PendingIntent selectPendingIntent = PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), selectIntent, 0);
-			builder.setContentIntent(selectPendingIntent);
+				PendingIntent selectPendingIntent = PendingIntent.getActivity(activity,
+						(int) System.currentTimeMillis(), selectIntent, pendingIntentFlags);
+				builder.setContentIntent(selectPendingIntent);
 
-			if(softAction1 != null) {
 				builder.addAction(new NotificationCompat.Action.Builder(null,
 						softAction1, selectPendingIntent)
 						.build());
@@ -131,11 +138,11 @@ public class SoftNotificationImpl extends SoftNotification {
 			NotificationCompat.Action dismissAction =
 					new NotificationCompat.Action.Builder(null,
 							softAction2 != null ? softAction2 : "Dismiss",
-							PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), dismissIntent, 0))
+							PendingIntent.getActivity(activity, (int) System.currentTimeMillis(),
+									dismissIntent, pendingIntentFlags))
 							.build();
 			builder.addAction(dismissAction);
 			notification = builder.build();
-			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			notificationmgr.notify(id, notification);
 		} catch (Throwable e) {
 			throw new SoftNotificationException(e);
@@ -143,44 +150,32 @@ public class SoftNotificationImpl extends SoftNotification {
 	}
 
 	public void remove() throws SoftNotificationException {
-		if(notification == null) throw new SoftNotificationException("not posted");
+		if (notification == null) throw new SoftNotificationException("not posted");
 		notificationmgr.cancel(id);
 	}
 
-	public void setListener(SoftNotificationListener aListener) {
-		synchronized (iListener) {
-			iListener[0] = aListener;
+	public void setListener(SoftNotificationListener listener) {
+		synchronized (listeners) {
+			listeners[0] = listener;
 		}
 	}
 
-	public void setText(String aText, String aGroupText) throws SoftNotificationException {
-		text = aText;
-		groupText = aGroupText;
+	public void setText(String text, String groupText) throws SoftNotificationException {
+		this.text = text;
+		this.groupText = groupText;
 	}
 
-	public void setSoftkeyLabels(String aSoftkey1Label, String aSoftkey2Label) throws SoftNotificationException {
-		softAction1 = aSoftkey1Label;
-		softAction2 = aSoftkey2Label;
+	public void setSoftkeyLabels(String softkey1Label, String softkey2Label) throws SoftNotificationException {
+		softAction1 = softkey1Label;
+		softAction2 = softkey2Label;
 	}
 
-	public void setImage(byte[] aImageData) throws SoftNotificationException {
-		Bitmap b = PNGUtils.getFixedBitmap(aImageData, 0, aImageData.length);
+	public void setImage(byte[] imageData) throws SoftNotificationException {
+		Bitmap b = PNGUtils.getFixedBitmap(imageData, 0, imageData.length);
 		if (b == null) {
 			throw new SoftNotificationException("Can't decode image");
 		}
 		bitmap = b;
 		hasImage = true;
-	}
-
-	private static NotificationManagerCompat notificationmgr;
-	private static MicroActivity activity;
-
-	static {
-		try {
-			activity = ContextHolder.getActivity();
-			notificationmgr = NotificationManagerCompat.from(activity);
-			instanceMap = new Hashtable<Integer, SoftNotificationImpl>();
-		} catch (Exception ex) {
-		}
 	}
 }

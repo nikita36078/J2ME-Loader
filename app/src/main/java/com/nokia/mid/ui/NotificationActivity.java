@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import javax.microedition.util.ContextHolder;
-
 public class NotificationActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

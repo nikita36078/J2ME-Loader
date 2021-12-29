@@ -1,7 +1,7 @@
 package com.nokia.mid.ui;
 
-public abstract interface SoftNotificationListener {
-	public abstract void notificationSelected(SoftNotification paramSoftNotification);
+public interface SoftNotificationListener {
+	void notificationSelected(SoftNotification notification);
 
-	public abstract void notificationDismissed(SoftNotification paramSoftNotification);
+	void notificationDismissed(SoftNotification notification);
 }

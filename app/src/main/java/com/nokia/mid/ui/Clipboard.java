@@ -9,7 +9,11 @@ import android.content.Context;
 import javax.microedition.util.ContextHolder;
 
 public abstract class Clipboard {
-	private static ClipboardManager clipboardmgr;
+	private static final ClipboardManager clipboardmgr;
+
+	static {
+		clipboardmgr = (ClipboardManager) ContextHolder.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+	}
 
 	public static void copyToClipboard(String text) {
 		ClipData clip = ClipData.newPlainText("", text);
@@ -26,9 +30,5 @@ public abstract class Clipboard {
 		}
 		ClipData.Item item = clipboardmgr.getPrimaryClip().getItemAt(0);
 		return item.getText().toString();
-	}
-
-	static {
-		clipboardmgr = (ClipboardManager) ContextHolder.getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 	}
 }
