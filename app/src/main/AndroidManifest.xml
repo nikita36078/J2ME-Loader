@@ -126,6 +126,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/nnf_provider_paths" />
         </provider>
+        <activity android:name="com.nokia.mid.ui.NotificationActivity" />
     </application>
 
 </manifest>

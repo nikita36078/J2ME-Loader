@@ -28,6 +28,12 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.util.ContextHolder;
 
 public class DeviceControl {
+	public static int getUserInactivityTime() {
+		return 0;
+	}
+
+	public static void resetUserInactivityTime() {
+	}
 
 	public static void startVibra(int frequency, long duration) {
 		if (frequency < 0 || frequency > 100) {
