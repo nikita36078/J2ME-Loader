@@ -44,6 +44,7 @@
     <string name="warn_install_from_net">Soubor bude stažen z internetu</string>
     <string name="reinstall">Aplikace je již nainstalována.\n\nChcete ji přeinstalovat?\nVšechna data budou uložena.</string>
     <string name="reinstall_newest">Aktualizovat tuto aplikaci na verzi %1$s?\n\nNyní nainstalována: %2$s\nVšechna data budou uložena.</string>
+    <string name="reinstall_older">Nahradit tuto aplikaci verzí %1$s?\n\nNyní nainstalována: %2$s\nStarší verze nemusí správně pracovat s uloženými daty.</string>
     <string name="loading_info">načítání informací…</string>
     <string name="START_CMD">Spustit</string>
     <string name="CANCEL_CMD">Zrušit</string>
