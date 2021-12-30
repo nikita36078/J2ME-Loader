@@ -47,6 +47,7 @@ import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_STORAGE_WARNING_SHOWN;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 
 public class MainActivity extends BaseActivity {
@@ -84,6 +85,11 @@ public class MainActivity extends BaseActivity {
 		if (!preferences.contains(PREF_TOOLBAR)) {
 			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
 			preferences.edit().putBoolean(PREF_TOOLBAR, enable).apply();
+		}
+		boolean warningShown = preferences.getBoolean(PREF_STORAGE_WARNING_SHOWN, false);
+		if (!FileUtils.isExternalStorageLegacy() && !warningShown) {
+			showScopedStorageDialog();
+			preferences.edit().putBoolean(PREF_STORAGE_WARNING_SHOWN, true).apply();
 		}
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
@@ -130,6 +136,16 @@ public class MainActivity extends BaseActivity {
 			Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
 			finish();
 		}
+	}
+
+	private void showScopedStorageDialog() {
+		String message = getString(R.string.scoped_storage_warning) + Config.getEmulatorDir();
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.warning)
+				.setCancelable(false)
+				.setMessage(message)
+				.setPositiveButton(android.R.string.ok, null)
+				.show();
 	}
 
 	private void onPickDirResult(Uri uri) {
