@@ -16,6 +16,7 @@
 #   public *;
 #}
 -keep class javax.** { *; }
+-keep class com.kddi.** { *; }
 -keep class com.siemens.mp.** { *; }
 -keep class com.samsung.util.** { *; }
 -keep class com.sonyericsson.accelerometer.** { *; }
