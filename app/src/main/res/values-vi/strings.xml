@@ -34,7 +34,7 @@
     <string name="midlet_name"><b>Tên: </b></string>
     <string name="midlet_size"><b>K. Thước: </b></string>
     <string name="midlet_source"><b>Nguồn: </b></string>
-    <string name="midlet_vendor"><b>Vendor: </b></string>
+    <string name="midlet_vendor"><b>Nhà cung cấp: </b></string>
     <string name="midlet_version"><b>Phiên bản: </b></string>
     <string name="converting_wait">Đang chuyển đổi JAR...</string>
     <string name="install">cài đặt</string>
@@ -44,7 +44,8 @@
     <string name="warn_install_from_net">Tệp tin sẽ được tải xuống từ Internet</string>
     <string name="reinstall">Ứng dụng đã cài đặt.\n\nBạn có muốn cài đặt lại không?\nTất cả dữ liệu sẽ được lưu.</string>
     <string name="reinstall_newest">Cập nhật ứng dụng này cho phiên bản %1$s?\n\nHiện đã cài đặt: %2$s\nTất cả dữ liệu sẽ được lưu.</string>
-    <string name="loading_info">đang tải thông tin…</string>
+    <string name="reinstall_older">Thay thế ứng dụng này bằng phiên bản %1$s?\n\nHiện đã cài đặt: %2$s\nPhiên bản cũ nhất có thể không hoạt động chính xác với dữ liệu được ghi lại.</string>
+    <string name="loading_info">thông tin đang tải…</string>
     <string name="START_CMD">Bắt đầu</string>
     <string name="CANCEL_CMD">Hủy</string>
     <string name="CLEAR_DATA_CMD">Xóa dữ liệu</string>
@@ -118,7 +119,7 @@
     <string name="reset">Thiết lập lại</string>
     <string name="pref_input_devices_title">Thiết bị đầu vào</string>
     <string name="pref_graphics_mode_title">Chế độ đồ họa:</string>
-    <string name="PREF_FONT_ANTI_ALIASING">Làm trơn</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Khử răng cưa</string>
     <string name="pref_screen_gravity">Trọng lực màn hình</string>
     <string name="pref_screen_gravity_bottom">Đáy</string>
     <string name="pref_screen_gravity_center">Trung tâm</string>
@@ -152,7 +153,7 @@
     <string name="pref_vk_save_alert">Bàn phím tùy chỉnh sẽ được thay thế bằng hiện tại\nLưu?</string>
     <string name="opt_save_screen_params">lưu thông số màn hình</string>
     <string name="common_settings">[THIẾT LẬP CHUNG]</string>
-    <string name="pref_theme_auto_battery">Tự động, bằng Trình Tiết kiệm Pin</string>
+    <string name="pref_theme_auto_battery">Tự động, bằng Trình Tiết Kiệm Pin</string>
     <string name="pref_theme_auto_time">Tự động, theo thời gian</string>
     <string name="pref_theme_light">Sáng</string>
     <string name="pref_theme_night">Tối</string>
