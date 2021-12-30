@@ -153,11 +153,13 @@ public class SoftNotificationImpl extends SoftNotification {
 			dismissIntent.putExtra("id", id);
 			dismissIntent.putExtra("event", 2);
 
+			PendingIntent dismissPendingIntent = PendingIntent.getActivity(activity,
+					(int) System.currentTimeMillis(), dismissIntent, pendingIntentFlags);
+
 			NotificationCompat.Action dismissAction =
 					new NotificationCompat.Action.Builder(null,
-							softAction2 != null ? softAction2 : "Dismiss",
-							PendingIntent.getActivity(activity, (int) System.currentTimeMillis(),
-									dismissIntent, pendingIntentFlags))
+							softAction2 != null ? softAction2 : activity.getString(R.string.dismiss),
+							dismissPendingIntent)
 							.build();
 			builder.addAction(dismissAction);
 			notification = builder.build();
