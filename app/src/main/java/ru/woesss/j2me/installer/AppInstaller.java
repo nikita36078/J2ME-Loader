@@ -20,8 +20,6 @@ import android.app.Application;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.preference.PreferenceManager;
-
 import com.android.dx.command.dexer.Main;
 
 import net.lingala.zip4j.ZipFile;
@@ -38,7 +36,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -47,11 +44,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.jar.JarFile;
 
+import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.ConverterException;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.ZipUtils;
@@ -64,6 +61,7 @@ public class AppInstaller {
 	static final int STATUS_NEWEST = 1;
 	static final int STATUS_NEW = 2;
 	static final int STATUS_UNMATCHED = 3;
+	static final int STATUS_NEED_JAD = 4;
 
 	private final Application context;
 	private final AppRepository appRepository;
@@ -101,6 +99,7 @@ public class AppInstaller {
 	/** Load and check app info from source */
 	void loadInfo(SingleEmitter<Integer> emitter) throws IOException, ConverterException {
 		boolean isLocal;
+		boolean isContentUri = uri.getScheme().equals("content");
 		if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
 			downloadJad();
 			isLocal = false;
@@ -121,13 +120,16 @@ public class AppInstaller {
 			String scheme = uri.getScheme();
 			String host = uri.getHost();
 			if (isLocal && scheme == null && host == null) {
-				if (!checkJarFile(srcFile)) {
+				if (isContentUri) {
+					emitter.onSuccess(STATUS_NEED_JAD);
+					return;
+				} else if (!checkJarFile(srcFile)) {
 					emitter.onSuccess(STATUS_UNMATCHED);
 					return;
 				}
 			}
 		} else if (name.toLowerCase().endsWith(".kjx")) {
-			/** Load kjx file */
+			/* Load kjx file */
 			parseKjx();
 			newDesc = new Descriptor(srcFile, true);
 		} else {
@@ -136,6 +138,19 @@ public class AppInstaller {
 		}
 		int result = checkDescriptor();
 		emitter.onSuccess(result);
+	}
+
+	Single<Integer> updateInfo(Uri jarUri) {
+		return Single.create(emitter -> {
+			srcJar = FileUtils.getFileForUri(context, jarUri);
+			manifest = loadManifest(srcJar);
+			if (!manifest.equals(newDesc)) {
+				emitter.onSuccess(STATUS_UNMATCHED);
+				return;
+			}
+			int result = checkDescriptor();
+			emitter.onSuccess(result);
+		});
 	}
 
 	private void parseKjx() throws ConverterException {

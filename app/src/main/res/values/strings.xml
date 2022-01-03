@@ -56,6 +56,7 @@
     <string name="install">install</string>
     <string name="install_done">Application successfully installed!</string>
     <string name="install_jar_non_matched_jad">This app differs from that described in JAD.\nIgnore JAD and install anyway?</string>
+    <string name="install_jar_needed">Select the JAR file</string>
     <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="reinstall">App already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>

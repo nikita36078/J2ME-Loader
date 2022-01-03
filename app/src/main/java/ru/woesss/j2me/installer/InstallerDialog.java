@@ -30,6 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -47,6 +48,9 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
+import ru.playsoftware.j2meloader.util.Constants;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class InstallerDialog extends DialogFragment {
@@ -61,6 +65,10 @@ public class InstallerDialog extends DialogFragment {
 	private Button btnRun;
 	private AppInstaller installer;
 	private AlertDialog mDialog;
+
+	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
+			FileUtils.getFilePicker(),
+			this::onPickFileResult);
 
 	public InstallerDialog() {
 	}
@@ -128,6 +136,17 @@ public class InstallerDialog extends DialogFragment {
 				.subscribe(new MidletInfoObserver());
 	}
 
+	@SuppressLint("CheckResult")
+	private void onPickFileResult(Uri uri) {
+		if (uri == null) {
+			return;
+		}
+		installer.updateInfo(uri)
+				.subscribeOn(Schedulers.computation())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new MidletInfoObserver());
+	}
+
 	private void hideProgress() {
 		progress.setVisibility(View.INVISIBLE);
 		tvStatus.setText("");
@@ -170,6 +189,15 @@ public class InstallerDialog extends DialogFragment {
 		mDialog.setCancelable(false);
 		mDialog.setCanceledOnTouchOutside(false);
 		tvMessage.setText(message);
+		btnOk.setOnClickListener(positive);
+		showButtons();
+	}
+
+	private void alertSelectJar(View.OnClickListener positive) {
+		hideProgress();
+		mDialog.setCancelable(false);
+		mDialog.setCanceledOnTouchOutside(false);
+		tvMessage.setText(R.string.install_jar_needed);
 		btnOk.setOnClickListener(positive);
 		showButtons();
 	}
@@ -221,6 +249,9 @@ public class InstallerDialog extends DialogFragment {
 					SpannableStringBuilder info = nd.getInfo(getActivity());
 					info.append(getString(R.string.install_jar_non_matched_jad));
 					alertConfirm(info, v -> installApp(installer.getJar(), null));
+					return;
+				case AppInstaller.STATUS_NEED_JAD:
+					alertSelectJar(v -> openFileLauncher.launch(null));
 					return;
 				default:
 					throw new IllegalStateException("Unexpected value: " + status);
