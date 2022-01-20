@@ -17,7 +17,9 @@
     <string name="message_delete">Biztosan törli ezt az alkalmazást?</string>
     <string name="permission_request_failed">Ez az alkalmazás tárhelyírási engedélyt igényel</string>
     <string name="external_storage_not_mounted">Ennek az alkalmazásnak külső tárolóra van szüksége</string>
+    <string name="create">létrehozás</string>
     <string name="action_context_shortcut">Parancsikon létrehozása</string>
+    <string name="action_reinstall">Újratelepítés</string>
     <string name="action_settings">Beállítások</string>
     <string name="action_context_delete">Törlés</string>
     <string name="action_context_rename">Átnevezés</string>
@@ -112,8 +114,11 @@
     <string name="screenshot_saved">A kép mentési helye:</string>
     <string name="log_saved">A naplófájl mentésre került</string>
     <string name="common_settings">[ÁLTALÁNOS BEÁLLÍTÁSOK]</string>
+    <string name="pref_theme_auto_battery">Automatikus, akkumulátorkímélő szerint</string>
+    <string name="pref_theme_auto_time">Automatikus, napszak szerint</string>
     <string name="pref_theme_light">Világos</string>
     <string name="pref_theme_night">Sötét</string>
+    <string name="pref_theme_system">Rendszerbeállítások követése</string>
     <string name="pref_theme_title">Téma</string>
     <string name="pref_requires_restart_summary">Újraindítást igényel</string>
     <string name="pref_enable_actionbar_title">Az ActionBar engedélyezése</string>
