@@ -2,7 +2,7 @@
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2017-2018 Nikita Shakarun
- * Copyright 2020 Yury Kharchenko
+ * Copyright 2020-2022 Yury Kharchenko
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version

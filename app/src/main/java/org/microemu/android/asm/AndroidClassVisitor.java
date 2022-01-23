@@ -2,6 +2,7 @@
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2017-2018 Nikita Shakarun
+ * Copyright (C) 2022 Yury Kharchenko
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -28,12 +29,11 @@
 package org.microemu.android.asm;
 
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class AndroidClassVisitor extends ClassVisitor {
-	static final String TIMER_TASK = "java/util/TimerTask";
-	boolean isTimerTask;
 
 	AndroidClassVisitor(ClassVisitor cv) {
 		super(Opcodes.ASM9, cv);
@@ -41,19 +41,16 @@ public class AndroidClassVisitor extends ClassVisitor {
 
 	@Override
 	public MethodVisitor visitMethod(int access, final String name, String desc, final String signature, final String[] exceptions) {
-		MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-		if (isTimerTask && "run".equals(name) && "()V".equals(desc)) {
-			return new TimerTaskRunPatcher(mv);
-		} else {
-			return new AndroidMethodVisitor(mv);
-		}
+		return new AndroidMethodVisitor(super.visitMethod(access, name, desc, signature, exceptions));
 	}
 
 	@Override
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-		if (TIMER_TASK.equals(superName)) {
-			isTimerTask = true;
-		}
 		super.visit(version, access, name, signature, superName, interfaces);
+	}
+
+	@Override
+	public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
+		return super.visitField(access, name, descriptor, signature, value);
 	}
 }
