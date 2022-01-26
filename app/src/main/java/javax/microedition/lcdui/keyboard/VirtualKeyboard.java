@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_
 import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
 
 public class VirtualKeyboard implements Overlay, Runnable {
-	private static final String TAG = VirtualKeyboard.class.getName();
+	private static final String TAG = VirtualKeyboard.class.getSimpleName();
 
 	private static final String ARROW_LEFT = "\u2190";
 	private static final String ARROW_UP = "\u2191";
@@ -633,6 +634,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						}
 				}
 			}
+		} catch (FileNotFoundException e) {
+			Log.w(TAG, "readLayoutType() threw an FileNotFoundException: " + e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
