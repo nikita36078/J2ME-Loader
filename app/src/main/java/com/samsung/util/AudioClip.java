@@ -40,18 +40,20 @@ public class AudioClip {
 
 	public AudioClip(int type, String filename) throws IOException {
 		if (type < 1 || type > 3) {
-			throw new IllegalArgumentException();
+			// SnowballFight uses track number here
+			Log.e(TAG, "Invalid AudioClipType: " + type);
 		}
 		if (filename == null) {
 			throw new NullPointerException();
 		}
 		InputStream stream = AppClassLoader.getResourceAsStream(null, filename);
-		player = Manager.createPlayer(stream, FORMATS[type - 1]);
+		player = Manager.createPlayer(stream, "audio/midi");
 	}
 
 	public AudioClip(int type, byte[] audioData, int audioOffset, int audioLength) {
 		if (type < 1 || type > 3) {
-			throw new IllegalArgumentException();
+			// SnowballFight uses track number here
+			Log.e(TAG, "Invalid AudioClipType: " + type);
 		}
 		if (audioData == null) {
 			throw new NullPointerException();
@@ -61,7 +63,7 @@ public class AudioClip {
 		}
 		ByteArrayInputStream stream = new ByteArrayInputStream(audioData, audioOffset, audioLength);
 		try {
-			player = Manager.createPlayer(stream, FORMATS[type - 1]);
+			player = Manager.createPlayer(stream, "audio/midi");
 		} catch (IOException e) {
 			Log.e(TAG, "AudioClip: ", e);
 		}

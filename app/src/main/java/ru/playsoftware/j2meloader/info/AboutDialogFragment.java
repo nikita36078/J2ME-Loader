@@ -19,8 +19,8 @@ package ru.playsoftware.j2meloader.info;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.text.util.Linkify;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,10 +42,10 @@ public class AboutDialogFragment extends DialogFragment {
 				.append(getText(R.string.about_crowdin))
 				.append(getText(R.string.about_copyright));
 		TextView tv = new TextView(getActivity());
-		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(Html.fromHtml(message.toString()));
 		tv.setTextSize(16);
 		tv.setMovementMethod(new ScrollingMovementMethod());
+		Linkify.addLinks(tv, Linkify.ALL);
 		float density = getResources().getDisplayMetrics().density;
 		int paddingHorizontal = (int) (density * 20);
 		int paddingVertical = (int) (density * 14);

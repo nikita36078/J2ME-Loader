@@ -86,13 +86,21 @@ public class AppCenterCollector implements Collector {
 			errorLog.errorThreadName = uncaughtExceptionThread.getName();
 		}
 
+		String versionName = report.getString(ReportField.APP_VERSION_NAME);
+		if (versionName != null) {
+			int id = versionName.indexOf('-');
+			if (id > 0) {
+				versionName = versionName.substring(0, id);
+			}
+		}
+
 		errorLog.processId = Process.myPid();
 		errorLog.processName = getProcessName();
 
 		Device device = new Device();
 		device.appBuild = report.getString(ReportField.APP_VERSION_CODE);
 		device.appNamespace = report.getString(ReportField.PACKAGE_NAME);
-		device.appVersion = report.getString(ReportField.APP_VERSION_NAME);
+		device.appVersion = versionName;
 		device.model = report.getString(ReportField.PHONE_MODEL);
 		device.osVersion = report.getString(ReportField.ANDROID_VERSION);
 		device.osApiLevel = Build.VERSION.SDK_INT;

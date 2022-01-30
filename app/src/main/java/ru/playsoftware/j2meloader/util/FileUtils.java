@@ -19,7 +19,11 @@ package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
+
+import androidx.activity.result.contract.ActivityResultContract;
 
 import com.nononsenseapps.filepicker.Utils;
 
@@ -208,5 +212,17 @@ public class FileUtils {
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean isExternalStorageLegacy() {
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || Environment.isExternalStorageLegacy();
+	}
+
+	public static ActivityResultContract<String,Uri> getFilePicker() {
+		if (isExternalStorageLegacy()) {
+			return new PickFileResultContract();
+		} else {
+			return new SAFFileResultContract();
+		}
 	}
 }

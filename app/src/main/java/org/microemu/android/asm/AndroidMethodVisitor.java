@@ -112,6 +112,12 @@ public class AndroidMethodVisitor extends MethodVisitor {
 					name = "setListenerCompat";
 				}
 				break;
+			case "java/lang/System":
+				if (opcode == INVOKESTATIC && name.equals("getProperty")) {
+					mv.visitMethodInsn(opcode, "javax/microedition/shell/MidletSystem", name, desc, itf);
+					return;
+				}
+				break;
 		}
 		mv.visitMethodInsn(opcode, owner, name, desc, itf);
 	}

@@ -28,13 +28,13 @@ public class Constants {
 	public static final String PREF_APP_SORT = "pref_app_sort";
 	public static final String PREF_DEFAULT_PROFILE = "default_profile";
 	public static final String PREF_EMULATOR_DIR = "emulator_dir";
-	public static final String PREF_FIRST_START = "pref_first_start";
 	public static final String PREF_KEEP_SCREEN = "pref_wakelock_switch";
 	public static final String PREF_LAST_PATH = "pref_last_path";
 	public static final String PREF_STATUSBAR = "pref_statusbar_switch";
 	public static final String PREF_THEME = "pref_theme";
 	public static final String PREF_TOOLBAR = "pref_actionbar_switch";
 	public static final String PREF_VIBRATION = "pref_vibration_switch";
+	public static final String PREF_STORAGE_WARNING_SHOWN = "pref_storage_warning_shown";
 
 	public static final int RESULT_NEED_RECREATE = 1;
 

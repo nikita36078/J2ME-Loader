@@ -93,7 +93,7 @@ public abstract class Displayable {
 
 		MicroActivity activity = ContextHolder.getActivity();
 		if (isShown()) {
-			activity.runOnUiThread(() -> activity.setTitle(title));
+			activity.runOnUiThread(() -> activity.getSupportActionBar().setTitle(title));
 		}
 	}
 

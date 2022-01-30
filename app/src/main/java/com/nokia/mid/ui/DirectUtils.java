@@ -38,6 +38,15 @@ import javax.microedition.lcdui.Image;
  */
 public class DirectUtils {
 
+	// S40v6 getFont(int) constants
+	private static final int SMALL_FONT = 1;
+	private static final int MEDIUM_FONT = 2;
+	private static final int LARGE_FONT = 3;
+	private static final int MEDIUM_BOLD_FONT = 4;
+	private static final int DEFAULT_FONT = 5;
+	private static final int IDLE_SCREEN_FONT = 6;
+	private static final int IDLE_SCREEN_FOCUSED_FONT = 7;
+
 	/**
 	 * Converts standard javax.microedition.lcdui.Graphics to DirectGraphics. The returned object refers to the same graphics context. This means that calling draw operations or changing the state, for example, drawing color etc., via the original Graphics reference affect the DirectGraphics object, and vice versa.
 	 * <p>
@@ -81,12 +90,22 @@ public class DirectUtils {
 	}
 
 	public static Font getFont(int identifier) {
-		// TODO: 12.04.2021  unknown how to interpret 'identifier'
-		return Font.getFont(identifier);
+		switch(identifier) {
+			case SMALL_FONT:
+				return Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_SMALL);
+			case MEDIUM_FONT:
+				return Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
+			case LARGE_FONT:
+				return Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_LARGE);
+			case MEDIUM_BOLD_FONT:
+				return Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_MEDIUM);
+			default:
+				return Font.getDefaultFont();
+		}
 	}
 
 	public static javax.microedition.lcdui.Font getFont(int face, int style, int height) {
-		return new Font(face, style, -1, height);
+		return FreeSizeFontInvoker.getFont(face, style, height);
 	}
 
 	public static boolean setHeader(Displayable displayable,

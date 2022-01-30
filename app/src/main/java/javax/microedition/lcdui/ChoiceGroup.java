@@ -90,6 +90,7 @@ public class ChoiceGroup extends Item implements Choice {
 		public void onItemSelected(AdapterView parent, View view, int position, long id) {
 			// prevent onItemSelected call after initializing
 			if (!spinnerInitialized) {
+				spinner.setSelection(selectedIndex);
 				spinnerInitialized = true;
 				return;
 			}
@@ -168,6 +169,10 @@ public class ChoiceGroup extends Item implements Choice {
 			if (images.size() == 0) {
 				images.addAll(Collections.nCopies(size, null));
 			}
+			if (choiceType != MULTIPLE) {
+				selectedIndex = 0;
+				selected.set(0, true);
+			}
 		}
 	}
 
@@ -183,6 +188,7 @@ public class ChoiceGroup extends Item implements Choice {
 
 			if (select) {
 				selectedIndex = index;
+				selected.set(index, true);
 			}
 
 			if (buttongroup != null) {

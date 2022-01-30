@@ -65,7 +65,9 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 
 	public static void notifyDestroyed() {
 		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
-		instance.state = DESTROYED;
+		if (instance != null) {
+			instance.state = DESTROYED;
+		}
 		MicroActivity activity = ContextHolder.getActivity();
 		if (activity != null) {
 			activity.finish();

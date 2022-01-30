@@ -41,6 +41,8 @@
     <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
     <string name="change">Change</string>
     <string name="choose">Choose</string>
+    <string name="warning">Warning</string>
+    <string name="scoped_storage_warning">Your user data is stored in a location which <b>will be deleted</b> when you uninstall the app:\n</string>
 
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
@@ -54,11 +56,12 @@
     <string name="install">install</string>
     <string name="install_done">Application successfully installed!</string>
     <string name="install_jar_non_matched_jad">This app differs from that described in JAD.\nIgnore JAD and install anyway?</string>
+    <string name="install_jar_needed">Select the JAR file</string>
     <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="reinstall">App already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
     <string name="reinstall_newest">Update this app to version %1$s?\n\nCurrently installed: %2$s\nAll data will be saved.</string>
-    <string name="reinstall_oldest">Replace this app with version %1$s?\n\nCurrently installed: %2$s\nOldest version may not working correctly with recorded data.</string>
+    <string name="reinstall_older">Replace this app with version %1$s?\n\nCurrently installed: %2$s\nOlder version may not working correctly with recorded data.</string>
     <string name="loading_info">loading info…</string>
 
     <string name="START_CMD">Start</string>
@@ -172,6 +175,7 @@
     <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
     <string name="opt_save_screen_params">save screen params</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
+    <string name="dismiss">Dismiss</string>
 
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>
     <string name="pref_theme_auto_time">Auto, by time of day</string>
