@@ -42,6 +42,7 @@
     <string name="install">安装</string>
     <string name="install_done">应用程序安装成功！</string>
     <string name="install_jar_non_matched_jad">这个应用程序不同于 JAD 中描述的应用程序。\n 忽略 JAD 并安装吗？</string>
+    <string name="install_jar_needed">选择 JAR 文件</string>
     <string name="invalid_resolution_not_saved">无效分辨率：未保存！</string>
     <string name="warn_install_from_net">将从互联网下载文件</string>
     <string name="reinstall">应用已经安装。\n\n 您想要重新安装吗？\n 所有数据将被保存。</string>
