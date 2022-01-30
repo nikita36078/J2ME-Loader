@@ -138,7 +138,6 @@ dependencies {
     implementation 'ch.acra:acra-dialog:5.8.3'
 
     // Other Libraries
-    implementation 'org.ow2.asm:asm:9.1'
     compileOnly "com.google.auto.service:auto-service-annotations:$autoServiceVersion"
     annotationProcessor "com.google.auto.service:auto-service:$autoServiceVersion"
 }

@@ -39,6 +39,8 @@ import com.android.dx.rop.annotation.AnnotationsList;
 import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
 
+import org.microemu.android.asm.AndroidProducer;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -307,7 +309,7 @@ public class Main {
 
         try {
             for (int i = 0; i < fileNames.length; i++) {
-                processOne(fileNames[i], ClassPathOpener.acceptAll);
+                processOne(fileNames[i], path -> path.endsWith(".class"));
             }
         } catch (StopProcessing ex) {
             /*
@@ -412,7 +414,7 @@ public class Main {
      */
     private boolean processFileBytes(String name, long lastModified, byte[] bytes) {
 
-        boolean isClass = name.endsWith(".class");
+        boolean isClass = name != null && name.endsWith(".class");
         boolean keepResources = (outputResources != null);
 
         if (!isClass && !keepResources) {
@@ -464,6 +466,9 @@ public class Main {
         }
 
         try {
+            // modify byte-code with ASM-java
+            bytes = AndroidProducer.instrument(bytes, name);
+
             new DirectClassFileConsumer(name, bytes, null).call(
                     new ClassParserTask(name, bytes).call());
         } catch (ParseException ex) {

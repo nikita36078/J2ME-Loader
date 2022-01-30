@@ -18,16 +18,17 @@ package com.android.dx.cf.direct;
 
 import com.android.dex.util.FileUtils;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.List;
 
 /**
  * Opens all the class files found in a class path element. Path elements
@@ -173,6 +174,11 @@ public class ClassPathOpener {
      * @return {@code compareTo()}-style result
      */
     private static int compareClassNames(String a, String b) {
+        if (a == null) {
+            return b == null ? 0 : -1;
+        } else if (b == null) {
+            return 1;
+        }
         // Ensure inner classes sort second
         a = a.replace('$','0');
         b = b.replace('$','0');
@@ -231,14 +237,13 @@ public class ClassPathOpener {
     private boolean processArchive(File file) throws IOException {
         ZipFile zip = new ZipFile(file);
 
-        ArrayList<? extends java.util.zip.ZipEntry> entriesList
-                = Collections.list(zip.entries());
+        List<FileHeader> entriesList = zip.getFileHeaders();
 
         if (sort) {
-            Collections.sort(entriesList, new Comparator<ZipEntry>() {
+            Collections.sort(entriesList, new Comparator<FileHeader>() {
                @Override
-			   public int compare (ZipEntry a, ZipEntry b) {
-                   return compareClassNames(a.getName(), b.getName());
+			   public int compare (FileHeader a, FileHeader b) {
+                   return compareClassNames(a.getFileName(), b.getFileName());
                }
             });
         }
@@ -249,10 +254,10 @@ public class ClassPathOpener {
         byte[] buf = new byte[20000];
         boolean any = false;
 
-        for (ZipEntry one : entriesList) {
+        for (FileHeader one : entriesList) {
             final boolean isDirectory = one.isDirectory();
 
-            String path = one.getName();
+            String path = one.getFileName();
             if (filter.accept(path)) {
                 final byte[] bytes;
                 if (!isDirectory) {
@@ -270,7 +275,7 @@ public class ClassPathOpener {
                     bytes = new byte[0];
                 }
 
-                any |= consumer.processFileBytes(path, one.getTime(), bytes);
+                any |= consumer.processFileBytes(path, one.getLastModifiedTime(), bytes);
             }
         }
 

@@ -26,8 +26,6 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import net.lingala.zip4j.model.FileHeader;
 
-import org.microemu.android.asm.AndroidProducer;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -274,12 +272,10 @@ public class AppInstaller {
 				throw new ConverterException("*Jad not matches with Jar");
 			}
 		}
-		File patchedJar = new File(cacheDir, "patched.jar");
-		AndroidProducer.processJar(srcJar, patchedJar);
 		try {
 			Main.main(new String[]{"--no-optimize",
 					"--output=" + tmpDir + Config.MIDLET_DEX_FILE,
-					patchedJar.getAbsolutePath()});
+					srcJar.getAbsolutePath()});
 		} catch (Throwable e) {
 			throw new ConverterException("Dexing error", e);
 		}
