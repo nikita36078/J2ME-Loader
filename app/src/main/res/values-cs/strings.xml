@@ -42,6 +42,7 @@
     <string name="install">instalovat</string>
     <string name="install_done">Aplikace byla úspěšně nainstalována!</string>
     <string name="install_jar_non_matched_jad">Tato aplikace se liší od té popsané v JAD.\nNebrat v úvahu JAD a přesto nainstalovat?</string>
+    <string name="install_jar_needed">Vyberte JAR soubor</string>
     <string name="invalid_resolution_not_saved">Neplatná rozlišení: neuloženo!</string>
     <string name="warn_install_from_net">Soubor bude stažen z internetu</string>
     <string name="reinstall">Aplikace je již nainstalována.\n\nChcete ji přeinstalovat?\nVšechna data budou uložena.</string>
