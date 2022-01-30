@@ -30,6 +30,8 @@
     <string name="create_apps_dir_failed">Error creando una carpeta en la ruta:\n\'%s\'\nSeleccione otra.</string>
     <string name="change">Cambiar</string>
     <string name="choose">Elegir</string>
+    <string name="warning">Advertencia</string>
+    <string name="scoped_storage_warning">Sus datos de usuario están almacenados en una ubicación que <b>se eliminará</b> si desinstala la aplicación:\n</string>
     <string name="donate">Donar</string>
     <string name="midlet_name"><b>Nombre: </b></string>
     <string name="midlet_size"><b>Tamaño: </b></string>
@@ -40,11 +42,12 @@
     <string name="install">instalar</string>
     <string name="install_done">¡Aplicación instalada correctamente!</string>
     <string name="install_jar_non_matched_jad">Esta aplicación difiere de la descrita en el JAD.\n¿Ignorar el JAD e instalar de todos modos?</string>
+    <string name="install_jar_needed">Seleccione el archivo JAR</string>
     <string name="invalid_resolution_not_saved">Resoluciones inválidas: ¡No guardado!</string>
     <string name="warn_install_from_net">El fichero se descargará desde Internet</string>
     <string name="reinstall">Esta aplicación ya está instalada.\n\n¿Quieres reinstalarla?\nLos datos de guardado se conservarán.</string>
     <string name="reinstall_newest">¿Actualizar esta aplicación a la versión %1$s?\n\nVersión actual: %2$s\nLos datos de guardado se conservarán.</string>
-    <string name="reinstall_older">Sustituir esta aplicación con la versión anterior %1$s\n\nVersión actual: %2$s\nUna versión anterior puede no ser compatible con los datos de guardado actuales.</string>
+    <string name="reinstall_older">¿Sustituir esta aplicación con la versión %1$s?\n\nVersión actual: %2$s\nUna versión antigua podría no funcionar correctamente con los datos de una versión posterior de la aplicación.</string>
     <string name="loading_info">cargando información…</string>
     <string name="START_CMD">Iniciar</string>
     <string name="CANCEL_CMD">Cancelar</string>
@@ -153,6 +156,7 @@
     <string name="pref_vk_save_alert">El teclado personalizado será reeemplazado por el actual\n¿Guardar?</string>
     <string name="opt_save_screen_params">guardar parametros de pantalla</string>
     <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
+    <string name="dismiss">Ignorar</string>
     <string name="pref_theme_auto_battery">Automático, según ahorro de batería</string>
     <string name="pref_theme_auto_time">Automático, según la hora del día</string>
     <string name="pref_theme_light">Claro</string>

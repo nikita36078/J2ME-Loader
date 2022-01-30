@@ -44,7 +44,6 @@
     <string name="warn_install_from_net">سيتم تنزيل الملف من الإنترنت</string>
     <string name="reinstall">التطبيق مثبت بالفعل.\n\nهل تريد إعادة تثبيته؟\nسيتم حفظ جميع البيانات.</string>
     <string name="reinstall_newest">قم بتحديث هذا التطبيق إلى الإصدار %1$s؟\n\nالمثبت حاليا: %2$s\nسيتم حفظ جميع البيانات.</string>
-    <string name="reinstall_older">هل تريد استبدال هذا التطبيق بالإصدار %1$s؟\n\nالمثبت حاليا: %2$s\nقد لا يعمل الإصدار الأقدم بشكل صحيح مع البيانات المسجلة.</string>
     <string name="loading_info">جارٍ تحميل المعلومات…</string>
     <string name="START_CMD">إبدأ</string>
     <string name="CANCEL_CMD">الغاء</string>

@@ -44,7 +44,6 @@
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="reinstall">Приложение уже установлено.\n\nВы хотите его переустановить?\nВсе данные будут сохранены.</string>
     <string name="reinstall_newest">Обновить это приложение?\n\nНовая версия: %1$s?\nУстановлено: %2$s\nВсе данные будут сохранены.</string>
-    <string name="reinstall_older">Версия %1$s старше уже установленной %2$s. Приложение может работать неправильно с существующими сохранениями.\n\nВсё равно установить?</string>
     <string name="loading_info">загрузка информации…</string>
     <string name="START_CMD">Пуск</string>
     <string name="CANCEL_CMD">Отмена</string>

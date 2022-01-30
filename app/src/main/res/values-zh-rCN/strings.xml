@@ -30,6 +30,8 @@
     <string name="create_apps_dir_failed">在路径:\n%s\n中创建文件夹失败，选择另一个。</string>
     <string name="change">更改</string>
     <string name="choose">选择</string>
+    <string name="warning">警告</string>
+    <string name="scoped_storage_warning">你的用户数据存储在一个卸载应用时<b>将被删除的</b>位置：\n</string>
     <string name="donate">捐赠</string>
     <string name="midlet_name"><b>名称： </b></string>
     <string name="midlet_size"><b>大小： </b></string>
@@ -40,11 +42,12 @@
     <string name="install">安装</string>
     <string name="install_done">应用程序安装成功！</string>
     <string name="install_jar_non_matched_jad">这个应用程序不同于 JAD 中描述的应用程序。\n 忽略 JAD 并安装吗？</string>
+    <string name="install_jar_needed">选择 JAR 文件</string>
     <string name="invalid_resolution_not_saved">无效分辨率：未保存！</string>
     <string name="warn_install_from_net">将从互联网下载文件</string>
     <string name="reinstall">应用已经安装。\n\n 您想要重新安装吗？\n 所有数据将被保存。</string>
     <string name="reinstall_newest">更新此应用到版本 %1$s？\n\n目前已安装版本： %2$s\n所有数据将被保存。</string>
-    <string name="reinstall_older">将此应用替换为版本 %1$s吗？\n\n目前已安装版本： %2$s\n旧版本可能无法正确使用记录数据。</string>
+    <string name="reinstall_older">将此应用替换为版本 %1$s 吗？\n\n 目前已安装： %2$s\n 旧版本可能无法正确使用记录数据。</string>
     <string name="loading_info">加载信息中…</string>
     <string name="START_CMD">启动</string>
     <string name="CANCEL_CMD">取消</string>
@@ -153,6 +156,7 @@
     <string name="pref_vk_save_alert">自定义键盘将被当前的替换\n保存？</string>
     <string name="opt_save_screen_params">保存屏幕参数</string>
     <string name="common_settings">常用设置</string>
+    <string name="dismiss">忽略</string>
     <string name="pref_theme_auto_battery">自动，按省电模式设置</string>
     <string name="pref_theme_auto_time">自动，按时间设置</string>
     <string name="pref_theme_light">浅色</string>
