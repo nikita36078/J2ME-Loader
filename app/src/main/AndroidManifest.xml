@@ -23,14 +23,16 @@
         android:name=".EmulatorApplication"
         android:allowBackup="false"
         android:appCategory="game"
+        android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        tools:targetApi="q"
+        tools:targetApi="r"
         tools:ignore="RtlEnabled">
         <activity
             android:name=".MainActivity"
