@@ -196,6 +196,10 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public static void setLimitFps(int fpsLimit) {
+		if (fpsLimit == 0 && (graphicsMode == 1 || graphicsMode == 2)) {
+			// hack for async redraw
+			fpsLimit = 1000;
+		}
 		Canvas.fpsLimit = fpsLimit;
 	}
 
