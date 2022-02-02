@@ -42,10 +42,12 @@
     <string name="install">установить</string>
     <string name="install_done">Приложение установлено!</string>
     <string name="install_jar_non_matched_jad">Это приложение не соответствует описанному в JAD. Параметры из JAD не будут использованы\n\nВсё равно установить?</string>
+    <string name="install_jar_needed">Выберите JAR файл</string>
     <string name="invalid_resolution_not_saved">Некорректные размеры: не сохранено!</string>
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="reinstall">Приложение уже установлено.\n\nВы хотите его переустановить?\nВсе данные будут сохранены.</string>
     <string name="reinstall_newest">Обновить это приложение?\n\nНовая версия: %1$s?\nУстановлено: %2$s\nВсе данные будут сохранены.</string>
+    <string name="reinstall_older">Заменить это приложение версией %1$s?\n\nУстановлено: %2$s\nСтарая версия может работать неправильно с записанными данными.</string>
     <string name="loading_info">загрузка информации…</string>
     <string name="START_CMD">Пуск</string>
     <string name="CANCEL_CMD">Отмена</string>
