@@ -30,6 +30,8 @@
     <string name="create_apps_dir_failed">Не удалось создать папку по указанному пути:\n\'%s\'\nвыберите другую.</string>
     <string name="change">Изменить</string>
     <string name="choose">Выбрать</string>
+    <string name="warning">Внимание</string>
+    <string name="scoped_storage_warning">Ваши пользовательские данные хранятся в папке, которая <b>будет удалена</b> при удалении приложения:\n</string>
     <string name="donate">Поддержать</string>
     <string name="midlet_name"><b>Название: </b></string>
     <string name="midlet_size"><b>Размер: </b></string>
@@ -152,6 +154,7 @@
     <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
     <string name="opt_save_screen_params">сохранить параметры экрана</string>
     <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
+    <string name="dismiss">Скрыть</string>
     <string name="pref_theme_auto_battery">Авто, по режиму энергосбережения</string>
     <string name="pref_theme_auto_time">Авто, по времени суток</string>
     <string name="pref_theme_light">Светлая</string>
