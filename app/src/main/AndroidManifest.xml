@@ -37,6 +37,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="true"
             android:launchMode="singleTask"
             android:label="@string/app_name">
             <intent-filter>
@@ -105,7 +106,8 @@
             android:name="javax.microedition.shell.MicroActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize|uiMode"
             android:process=":midlet" />
-        <activity android:name=".settings.SettingsActivity">
+        <activity android:name=".settings.SettingsActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 
