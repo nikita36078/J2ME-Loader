@@ -44,6 +44,7 @@ public class FileUtils {
 	private static final String TAG = FileUtils.class.getName();
 	private static final String TEMP_JAR_NAME = "tmp.jar";
 	private static final String TEMP_JAD_NAME = "tmp.jad";
+	private static final String TEMP_KJX_NAME = "tmp.kjx";
 	private static final int BUFFER_SIZE = 1024;
 	public static final String ILLEGAL_FILENAME_CHARS = "[/\\\\:*?\"<>|]";
 
@@ -123,6 +124,8 @@ public class FileUtils {
 				throw new IOException("Can't read data from uri: " + uri);
 			if (buf[0] == 0x50 && buf[1] == 0x4B) {
 				file = new File(tmpDir, TEMP_JAR_NAME);
+			} else if (buf[0] == 'K' && buf[1] == 'J' && buf[2] == 'X') {
+				file = new File(tmpDir, TEMP_KJX_NAME);
 			} else {
 				file = new File(tmpDir, TEMP_JAD_NAME);
 			}
