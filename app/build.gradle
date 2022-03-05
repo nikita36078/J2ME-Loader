@@ -2,29 +2,29 @@ plugins {
     id 'com.android.application'
 }
 
+archivesBaseName = rootProject.name
+def midletArchivesBaseName
+
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk COMPILE_SDK
+    ndkVersion NDK_VERSION
+    namespace 'ru.playsoftware.j2meloader'
 
     defaultConfig {
-        applicationId "ru.playsoftware.j2meloader"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        applicationId "ru.woesss.j2meloader"
+        minSdk MIN_SDK
+        targetSdk TARGET_SDK
         versionCode 94
         versionName "1.7.5"
-        setProperty("archivesBaseName", "J2ME_Loader-$versionName")
-        ndk {
-            abiFilters 'x86', 'armeabi-v7a'
-        }
+        resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "default"
 
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             applicationIdSuffix '.debug'
@@ -34,15 +34,16 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    lint {
+        disable 'MissingTranslation'
     }
 
-
+    flavorDimensions 'default'
     productFlavors {
         play {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "true"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-play"
             ndk {
                 abiFilters 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
@@ -50,14 +51,35 @@ android {
         }
         open {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-open"
         }
         fdroid {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         dev {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-dev-" + generateVersionCode()
+        }
+        // variant dimension for create android port from J2ME app source
+        midlet {
+            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'false'
+            // configure midlet's port project params here, as default it read from app manifest,
+            // placed to 'app/src/midlet/resources/MIDLET-META-INF/MANIFEST.MF'
+            def props = getMidletManifestProperties()
+            def midletName = props.getValue('MIDlet-Name').trim()
+            def apkName = midletName.replaceAll('[/\\\\:*?\"<>|]', '').replace(' ', '_')
+            applicationId "com.example.androidlet.${apkName.toLowerCase()}"
+            versionName = props.getValue('MIDlet-Version')
+            resValue 'string', 'app_name', midletName
+            midletArchivesBaseName = apkName
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-midlet.pro'
         }
     }
 
@@ -78,15 +100,36 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
-    ndkVersion '22.1.7171670'
-    lint {
-        disable 'MissingTranslation'
+
+    applicationVariants.all {
+        if (buildType.name == 'debug' && flavorName == 'emulator') {
+            resValue 'string', 'app_name', 'JL-Debug'
+        }
+        def baseName = flavorName == 'midlet' ? "${midletArchivesBaseName}-" : "${rootProject.name}_"
+        outputs.all {
+            outputFileName = "${baseName}${versionName}-${dirName}-${buildType.name}.apk".replaceAll('--+', '-')
+        }
     }
 }
 
 static def generateVersionCode() {
     def result = "git rev-list HEAD --count".execute().text.trim()
     return result.toInteger()
+}
+
+def getMidletManifestProperties() {
+    def file = project.file('src/midlet/resources/MIDLET-META-INF/MANIFEST.MF')
+    def mf = new java.util.jar.Manifest()
+    if (file.exists()) {
+        def is = null
+        try {
+            is = new FileInputStream(file)
+            mf.read(is)
+        } finally {
+            if (is != null) is.close()
+        }
+    }
+    return mf.mainAttributes
 }
 
 dependencies {

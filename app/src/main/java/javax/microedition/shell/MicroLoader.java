@@ -30,6 +30,7 @@ import org.acra.ErrorReporter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
@@ -54,12 +55,14 @@ import javax.microedition.util.ContextHolder;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -107,7 +110,18 @@ public class MicroLoader {
 
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
-		Descriptor descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
+		Descriptor descriptor;
+		if (BuildConfig.FULL_EMULATOR) {
+			descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
+		} else {
+			try (InputStream stream = getClass().getResourceAsStream("/PROPERTIES/MANIFEST.MF")) {
+				if (stream == null) {
+					throw new RuntimeException("App manifest not found! It MUST be on project path: 'app/midlet/resources/PROPERTIES/MANIFEST.MF'");
+				}
+				String text = new String(IOUtils.toByteArray(stream));
+				descriptor = new Descriptor(text, false);
+			}
+		}
 		Map<String, String> attr = descriptor.getAttrs();
 		ErrorReporter errorReporter = ACRA.getErrorReporter();
 		String report = errorReporter.getCustomData(Constants.KEY_APPCENTER_ATTACHMENT);
@@ -133,22 +147,31 @@ public class MicroLoader {
 
 	MIDlet loadMIDlet(String mainClass) throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
-		File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
-		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
-		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
-		if (dexOptDir.exists()) {
-			FileUtils.clearDirectory(dexOptDir);
-		} else if (!dexOptDir.mkdir()) {
-			throw new IOException("Can't create directory: [" + dexOptDir + ']');
+		if (BuildConfig.FULL_EMULATOR) {
+			File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
+			File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
+			File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
+			if (dexOptDir.exists()) {
+				FileUtils.clearDirectory(dexOptDir);
+			} else if (!dexOptDir.mkdir()) {
+				throw new IOException("Can't create directory: [" + dexOptDir + ']');
+			}
+			ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
+					dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
+			Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
+			//noinspection unchecked
+			Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
+			Constructor<MIDlet> init = clazz.getDeclaredConstructor();
+			init.setAccessible(true);
+			return init.newInstance();
+		} else {
+			AppClassLoader.setDataDir(appDir);
+			//noinspection unchecked
+			Class<MIDlet> clazz = (Class<MIDlet>) Class.forName(mainClass);
+			Constructor<MIDlet> init = clazz.getDeclaredConstructor();
+			init.setAccessible(true);
+			return init.newInstance();
 		}
-		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
-				dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
-		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
-		//noinspection unchecked
-		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
-		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
-		init.setAccessible(true);
-		return init.newInstance();
 	}
 
 	private void setProperties() {

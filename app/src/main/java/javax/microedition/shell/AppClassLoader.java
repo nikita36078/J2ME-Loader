@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import dalvik.system.DexClassLoader;
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.IOUtils;
 
 public class AppClassLoader extends DexClassLoader {
 	private static final String TAG = AppClassLoader.class.getName();
@@ -47,9 +49,13 @@ public class AppClassLoader extends DexClassLoader {
 			throw new NullPointerException("App path is null");
 		oldResDir = new File(appDir, Config.MIDLET_RES_DIR);
 		instance = this;
-		dataDir = appDir.getParentFile().getParent() + Config.MIDLET_DATA_DIR + appDir.getName();
+		setDataDir(appDir);
 		File jar = new File(appDir, Config.MIDLET_RES_FILE);
 		zipFile = jar.exists() ? new ZipFile(jar) : null;
+	}
+
+	public static void setDataDir(File appDir) {
+		dataDir = appDir.getParentFile().getParent() + Config.MIDLET_DATA_DIR + appDir.getName();
 	}
 
 	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
@@ -108,6 +114,19 @@ public class AppClassLoader extends DexClassLoader {
 			Log.w(TAG, "Can't load res on empty path");
 			return null;
 		}
+		if (!BuildConfig.FULL_EMULATOR) {
+			try {
+				InputStream stream = AppClassLoader.class.getClassLoader().getResourceAsStream(name);
+				if (stream != null) {
+					return IOUtils.toByteArray(stream);
+				}
+				Log.e(TAG, "getResourceBytes: resource not found " + name);
+				return null;
+			} catch (Exception e) {
+				Log.e(TAG, "getResourceBytes: " + name, e);
+				return null;
+			}
+		}
 		if (zipFile == null) {
 			final File file = new File(oldResDir, name);
 			try {
@@ -127,16 +146,14 @@ public class AppClassLoader extends DexClassLoader {
 			byte[] data = new byte[(int) header.getUncompressedSize()];
 			dis.readFully(data);
 			return data;
-		} catch (ZipException e) {
-			Log.e(TAG, "getResourceBytes: ", e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.e(TAG, "getResourceBytes: ", e);
 		} finally {
 			if (dis != null) {
 				try {
 					dis.close();
 				} catch (IOException e) {
-					Log.e(TAG, "getResourceBytes: ", e);
+					Log.e(TAG, "getResourceBytes: error close stream", e);
 				}
 			}
 		}

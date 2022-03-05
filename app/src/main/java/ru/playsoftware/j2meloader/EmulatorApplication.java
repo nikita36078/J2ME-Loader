@@ -72,7 +72,7 @@ public class EmulatorApplication extends Application {
 					.withResTitle(R.string.crash_dialog_title)
 					.withResText(R.string.crash_dialog_message)
 					.withResPositiveButtonText(R.string.report_crash)
-					.withResTheme(R.style.Theme_AppCompat_Dialog)
+					.withResTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_Dialog)
 					.withEnabled(true);
 			ACRA.init(this, builder);
 		}
