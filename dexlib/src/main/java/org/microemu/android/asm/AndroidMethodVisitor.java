@@ -62,6 +62,13 @@ public class AndroidMethodVisitor extends MethodVisitor {
 					return;
 				}
 				break;
+			case "java/lang/Thread":
+				if (name.equals("yield")) {
+					mv.visitLdcInsn(1L);
+					mv.visitMethodInsn(opcode, owner, "sleep", "(J)V", false);
+					return;
+				}
+				break;
 			case "java/lang/String":
 				if (name.equals("<init>") && desc.startsWith("([B") && !desc.endsWith("Ljava/lang/String;)V")) {
 					injectGetPropertyEncoding();
