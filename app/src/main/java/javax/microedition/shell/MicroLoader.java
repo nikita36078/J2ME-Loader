@@ -114,9 +114,10 @@ public class MicroLoader {
 		if (BuildConfig.FULL_EMULATOR) {
 			descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
 		} else {
-			try (InputStream stream = getClass().getResourceAsStream("/PROPERTIES/MANIFEST.MF")) {
+			try (InputStream stream = getClass().getResourceAsStream("/MIDLET-META-INF/MANIFEST.MF")) {
 				if (stream == null) {
-					throw new RuntimeException("App manifest not found! It MUST be on project path: 'app/midlet/resources/PROPERTIES/MANIFEST.MF'");
+					throw new RuntimeException("App manifest not found! It MUST be on project path:" +
+							" 'app/midlet/resources/MIDLET-META-INF/MANIFEST.MF'");
 				}
 				String text = new String(IOUtils.toByteArray(stream));
 				descriptor = new Descriptor(text, false);
