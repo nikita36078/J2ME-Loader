@@ -29,7 +29,6 @@ public class BaseActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		setTheme(R.style.AppTheme);
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setElevation(getResources().getDisplayMetrics().density * 2);
 		}

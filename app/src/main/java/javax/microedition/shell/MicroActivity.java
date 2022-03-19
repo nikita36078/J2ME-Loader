@@ -106,7 +106,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTheme();
+		lockNightMode();
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
@@ -167,15 +167,13 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	public void setTheme() {
+	public void lockNightMode() {
 		int current = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 		if (current == Configuration.UI_MODE_NIGHT_YES) {
 			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 		} else {
 			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 		}
-		setTheme(R.style.AppTheme_NoActionBar);
-
 	}
 
 	@Override

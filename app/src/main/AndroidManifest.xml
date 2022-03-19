@@ -31,6 +31,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="r"
         tools:ignore="RtlEnabled">
@@ -111,6 +112,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize|uiMode"
             android:process=":midlet" />
         <activity android:name=".settings.SettingsActivity"
@@ -121,12 +124,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".donations.DonationsActivity" />
-        <activity android:name=".settings.KeyMapperActivity" />
+        <activity android:name=".donations.DonationsActivity" android:exported="false" />
+        <activity android:name=".settings.KeyMapperActivity" android:exported="false" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
+            android:exported="false"
             android:theme="@style/FilePickerTheme" />
-        <activity android:name=".config.ProfilesActivity" />
+        <activity android:name=".config.ProfilesActivity" android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
