@@ -96,6 +96,14 @@
                 <data android:pathPattern=".*..*.JAD" />
                 <data android:pathPattern=".*..*..*.JAD" />
                 <data android:pathPattern=".*..*..*..*.JAD" />
+                <data android:pathPattern=".*.kjx" />
+                <data android:pathPattern=".*..*.kjx" />
+                <data android:pathPattern=".*..*..*.kjx" />
+                <data android:pathPattern=".*..*..*..*.kjx" />
+                <data android:pathPattern=".*.KJX" />
+                <data android:pathPattern=".*..*.KJX" />
+                <data android:pathPattern=".*..*..*.KJX" />
+                <data android:pathPattern=".*..*..*..*.KJX" />
             </intent-filter>
         </activity>
         <activity
