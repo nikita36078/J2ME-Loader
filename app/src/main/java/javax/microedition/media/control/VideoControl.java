@@ -16,10 +16,9 @@
 
 package javax.microedition.media.control;
 
-import javax.microedition.media.Control;
 import javax.microedition.media.MediaException;
 
-public interface VideoControl extends Control {
+public interface VideoControl extends GUIControl {
 	public static final int USE_DIRECT_VIDEO = 1;
 
 	public Object initDisplayMode(int mode, Object arg);
