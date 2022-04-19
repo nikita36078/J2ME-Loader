@@ -17,6 +17,8 @@
 
 package javax.microedition.lcdui;
 
+import static android.opengl.GLES20.*;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -68,9 +70,6 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
-
-import static android.opengl.GLES20.*;
-import static android.opengl.GLSurfaceView.RENDERMODE_WHEN_DIRTY;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Canvas extends Displayable {
@@ -466,11 +465,11 @@ public abstract class Canvas extends Displayable {
 	public View getDisplayableView() {
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
-			MicroActivity activity = getParentActivity();
+			MicroActivity activity = ContextHolder.getActivity();
 			if (graphicsMode == 1) {
 				GlesView glesView = new GlesView(activity);
 				glesView.setRenderer(renderer);
-				glesView.setRenderMode(RENDERMODE_WHEN_DIRTY);
+				glesView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 				renderer.setView(glesView);
 				innerView = glesView;
 			} else {

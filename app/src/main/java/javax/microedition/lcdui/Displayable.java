@@ -69,8 +69,6 @@ public abstract class Displayable {
 		}
 	};
 
-	public Displayable() {}
-
 	public static void setVirtualSize(int virtualWidth, int virtualHeight) {
 		Displayable.virtualWidth = virtualWidth;
 		Displayable.virtualHeight = virtualHeight;
@@ -84,16 +82,12 @@ public abstract class Displayable {
 		return virtualHeight;
 	}
 
-	public MicroActivity getParentActivity() {
-		return ContextHolder.getActivity();
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
 
 		MicroActivity activity = ContextHolder.getActivity();
 		if (isShown()) {
-			activity.runOnUiThread(() -> activity.getSupportActionBar().setTitle(title));
+			ViewHandler.postEvent(() -> activity.setTitle(title));
 		}
 	}
 
@@ -111,7 +105,7 @@ public abstract class Displayable {
 
 	public View getDisplayableView() {
 		if (layout == null) {
-			Context context = getParentActivity();
+			Context context = ContextHolder.getActivity();
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);

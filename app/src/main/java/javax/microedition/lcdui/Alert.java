@@ -22,11 +22,12 @@ import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.Arrays;
 
 import javax.microedition.lcdui.event.SimpleEvent;
-
-import androidx.appcompat.app.AlertDialog;
+import javax.microedition.util.ContextHolder;
 
 public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public static final int FOREVER = -2;
@@ -161,7 +162,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public AlertDialog prepareDialog() {
-		Context context = getParentActivity();
+		Context context = ContextHolder.getActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
 		builder.setTitle(getTitle());

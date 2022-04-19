@@ -23,6 +23,8 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
+import javax.microedition.util.ContextHolder;
+
 public abstract class CustomItem extends Item {
 	protected static final int KEY_PRESS = 4;
 	protected static final int KEY_RELEASE = 8;
@@ -172,7 +174,7 @@ public abstract class CustomItem extends Item {
 	@Override
 	protected View getItemContentView() {
 		if (view == null) {
-			view = new InnerView(getOwnerForm().getParentActivity());
+			view = new InnerView(ContextHolder.getActivity());
 			int width = getMinContentWidth();
 			int height = getMinContentHeight();
 			view.setMinimumWidth(width);

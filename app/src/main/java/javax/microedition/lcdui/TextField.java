@@ -20,6 +20,8 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.view.View;
 
+import javax.microedition.util.ContextHolder;
+
 public class TextField extends Item {
 	public static final int ANY = 0;
 	public static final int EMAILADDR = 1;
@@ -103,7 +105,7 @@ public class TextField extends Item {
 
 	@Override
 	public View getItemContentView() {
-		Context context = getOwnerForm().getParentActivity();
+		Context context = ContextHolder.getActivity();
 		return textField.getView(context, this);
 	}
 

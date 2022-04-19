@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.list.CompoundItem;
 import javax.microedition.lcdui.list.CompoundListAdapter;
+import javax.microedition.util.ContextHolder;
 
 public class List extends Screen implements Choice {
 	public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
@@ -272,7 +273,7 @@ public class List extends Screen implements Choice {
 
 	@Override
 	public View getScreenView() {
-		Context context = getParentActivity();
+		Context context = ContextHolder.getActivity();
 
 		list = new ListView(context);
 		list.setAdapter(adapter);

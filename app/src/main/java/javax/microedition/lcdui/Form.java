@@ -27,7 +27,7 @@ import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.app.AppCompatActivity;
+import javax.microedition.util.ContextHolder;
 
 public class Form extends Screen {
 	private static final float BORDER_PADDING = 7;
@@ -87,11 +87,7 @@ public class Form extends Screen {
 		items.add(item);
 		item.setOwnerForm(this);
 		if (layout != null) {
-			AppCompatActivity a = getParentActivity();
-			if (a != null) {
-				View v = item.getItemView();
-				a.runOnUiThread(() -> layout.addView(v));
-			}
+			ViewHandler.postEvent(() -> layout.addView(item.getItemView()));
 		}
 		return items.size() - 1;
 	}
@@ -104,11 +100,7 @@ public class Form extends Screen {
 		items.add(index, item);
 		item.setOwnerForm(this);
 		if (layout != null) {
-			AppCompatActivity a = getParentActivity();
-			if (a != null) {
-				View v = item.getItemView();
-				a.runOnUiThread(() -> layout.addView(v, index));
-			}
+			ViewHandler.postEvent(() -> layout.addView(item.getItemView(), index));
 		}
 	}
 
@@ -120,14 +112,11 @@ public class Form extends Screen {
 		items.set(index, item).setOwnerForm(null);
 		item.setOwnerForm(this);
 		if (layout != null) {
-			AppCompatActivity a = getParentActivity();
-			if (a != null) {
-				a.runOnUiThread(() -> {
-					View v = item.getItemView();
-					layout.removeViewAt(index);
-					layout.addView(v, index);
-				});
-			}
+			ViewHandler.postEvent(() -> {
+				View v = item.getItemView();
+				layout.removeViewAt(index);
+				layout.addView(v, index);
+			});
 		}
 	}
 
@@ -135,10 +124,7 @@ public class Form extends Screen {
 		items.remove(index).setOwnerForm(null);
 
 		if (layout != null) {
-			AppCompatActivity a = getParentActivity();
-			if (a != null) {
-				a.runOnUiThread(() -> layout.removeViewAt(index));
-			}
+			ViewHandler.postEvent(() -> layout.removeViewAt(index));
 		}
 	}
 
@@ -150,10 +136,7 @@ public class Form extends Screen {
 		items.clear();
 
 		if (layout != null) {
-			AppCompatActivity a = getParentActivity();
-			if (a != null) {
-				a.runOnUiThread(() -> layout.removeAllViews());
-			}
+			ViewHandler.postEvent(() -> layout.removeAllViews());
 		}
 	}
 
@@ -170,7 +153,7 @@ public class Form extends Screen {
 	@Override
 	public View getScreenView() {
 		if (scrollview == null) {
-			Context context = getParentActivity();
+			Context context = ContextHolder.getActivity();
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);
