@@ -91,6 +91,7 @@ static def generateVersionCode() {
 
 dependencies {
     def roomVersion = '2.4.1'
+    def cameraxVersion = "1.1.0-beta03"
     def autoServiceVersion = "1.0"
 
     implementation project(':dexlib')
@@ -120,6 +121,11 @@ dependencies {
     implementation 'com.github.billthefarmer:mididriver:v1.21'
     implementation 'com.github.nikita36078:pngj:2.2.3'
     implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
+
+    implementation "androidx.camera:camera-core:${cameraxVersion}"
+    implementation "androidx.camera:camera-camera2:${cameraxVersion}"
+    implementation "androidx.camera:camera-lifecycle:${cameraxVersion}"
+    implementation "androidx.camera:camera-view:${cameraxVersion}"
 
     // Android UI
     implementation 'com.github.nikita36078:filepicker:4.3.0'

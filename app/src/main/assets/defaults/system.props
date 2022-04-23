@@ -9,8 +9,8 @@ microedition.media.version: 1.0
 microedition.pim.version: 1.0
 supports.mixing: true
 supports.audio.capture: true
-supports.video.capture: false
-supports.recording: false
+supports.video.capture: true
+supports.recording: true
 com.siemens.mp.systemfolder.ringingtone: fs/MyStuff/Ringtones
 com.siemens.mp.systemfolder.pictures: fs/MyStuff/Pictures
 com.siemens.OSVersion: 11
