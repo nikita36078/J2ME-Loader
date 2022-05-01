@@ -129,8 +129,8 @@ public class GameCanvas extends Canvas {
 	}
 
 	@Override
-	public void callShowNotify() {
+	public void doShowNotify() {
 		keyState = 0;
-		super.callShowNotify();
+		super.doShowNotify();
 	}
 }

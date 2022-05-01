@@ -256,12 +256,12 @@ public abstract class Canvas extends Displayable {
 				KeyMapper.convertKeyCode(keyCode)));
 	}
 
-	public void callShowNotify() {
+	public void doShowNotify() {
 		visible = true;
 		showNotify();
 	}
 
-	public void callHideNotify() {
+	public void doHideNotify() {
 		hideNotify();
 		visible = false;
 	}
@@ -684,13 +684,13 @@ public abstract class Canvas extends Displayable {
 	protected void hideNotify() {
 	}
 
-	public void keyPressed(int keyCode) {
+	protected void keyPressed(int keyCode) {
 	}
 
-	public void keyRepeated(int keyCode) {
+	protected void keyRepeated(int keyCode) {
 	}
 
-	public void keyReleased(int keyCode) {
+	protected void keyReleased(int keyCode) {
 	}
 
 	public void pointerPressed(int pointer, float x, float y) {
@@ -711,13 +711,13 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	public void pointerPressed(int x, int y) {
+	protected void pointerPressed(int x, int y) {
 	}
 
-	public void pointerDragged(int x, int y) {
+	protected void pointerDragged(int x, int y) {
 	}
 
-	public void pointerReleased(int x, int y) {
+	protected void pointerReleased(int x, int y) {
 	}
 
 	void setInvisible() {

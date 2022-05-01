@@ -89,7 +89,7 @@ public class CanvasEvent extends Event {
 		switch (eventType) {
 			case KEY_PRESSED:
 				try {
-					canvas.keyPressed(keyCode);
+					canvas.doKeyPressed(keyCode);
 				} catch (Exception e) {
 					Log.e(TAG, "keyPressed: ", e);
 				}
@@ -97,7 +97,7 @@ public class CanvasEvent extends Event {
 
 			case KEY_REPEATED:
 				try {
-					canvas.keyRepeated(keyCode);
+					canvas.doKeyRepeated(keyCode);
 				} catch (Exception e) {
 					Log.e(TAG, "keyRepeated: ", e);
 				}
@@ -105,7 +105,7 @@ public class CanvasEvent extends Event {
 
 			case KEY_RELEASED:
 				try {
-					canvas.keyReleased(keyCode);
+					canvas.doKeyReleased(keyCode);
 				} catch (Exception e) {
 					Log.e(TAG, "keyReleased: ", e);
 				}
@@ -137,7 +137,7 @@ public class CanvasEvent extends Event {
 
 			case SHOW_NOTIFY:
 				try {
-					canvas.callShowNotify();
+					canvas.doShowNotify();
 				} catch (Exception e) {
 					Log.e(TAG, "showNotify: ", e);
 				}
@@ -145,7 +145,7 @@ public class CanvasEvent extends Event {
 
 			case HIDE_NOTIFY:
 				try {
-					canvas.callHideNotify();
+					canvas.doHideNotify();
 				} catch (Exception e) {
 					Log.e(TAG, "hideNotify: ", e);
 				}
@@ -153,7 +153,7 @@ public class CanvasEvent extends Event {
 
 			case SIZE_CHANGED:
 				try {
-					canvas.sizeChanged(width, height);
+					canvas.doSizeChanged(width, height);
 				} catch (Exception e) {
 					Log.e(TAG, "sizeChanged: ", e);
 				}

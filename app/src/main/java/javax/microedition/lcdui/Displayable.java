@@ -191,7 +191,7 @@ public abstract class Displayable {
 		return ticker;
 	}
 
-	public void sizeChanged(int w, int h) {
+	protected void sizeChanged(int w, int h) {
 	}
 
 	public boolean menuItemSelected(int id) {
@@ -206,5 +206,9 @@ public abstract class Displayable {
 			}
 		}
 		return true;
+	}
+
+	public void doSizeChanged(int width, int height) {
+		sizeChanged(width, height);
 	}
 }
