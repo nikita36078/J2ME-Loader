@@ -133,7 +133,7 @@ public abstract class Canvas extends Displayable {
 	private GLRenderer renderer;
 	private int displayWidth;
 	private int displayHeight;
-	private boolean fullscreen = forceFullscreen;
+	private boolean fullscreen;
 	private boolean visible;
 	private boolean sizeChangedCalled;
 	private Image offscreen;
@@ -147,7 +147,12 @@ public abstract class Canvas extends Displayable {
 	private static int scaleType;
 	private static int screenGravity;
 
-	public Canvas() {
+	protected Canvas() {
+		this(forceFullscreen);
+	}
+
+	protected Canvas(boolean fullscreen) {
+		this.fullscreen = fullscreen;
 		if (graphicsMode == 1) {
 			renderer = new GLRenderer();
 		}

@@ -47,8 +47,7 @@ public abstract class FullCanvas extends Canvas {
 	 * Adds two empty commands to emulate softkey functions.
 	 */
 	protected FullCanvas() {
-		super();
-		super.setFullScreenMode(true);
+		super(true);
 	}
 
 	/**
