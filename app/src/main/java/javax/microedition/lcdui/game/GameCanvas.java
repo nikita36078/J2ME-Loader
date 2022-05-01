@@ -17,11 +17,8 @@
 package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import javax.microedition.lcdui.keyboard.KeyMapper;
-import javax.microedition.lcdui.event.CanvasEvent;
 
 public class GameCanvas extends Canvas {
 
@@ -83,21 +80,25 @@ public class GameCanvas extends Canvas {
 	@Override
 	public void postKeyPressed(int keyCode) {
 		int code = convertGameKeyCode(keyCode);
-		keyState |= code;
-		if (suppressCommands && code != 0) {
-			return;
+		if (code != 0) {
+			this.keyState |= code;
+			if (suppressCommands) {
+				return;
+			}
 		}
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
+		super.postKeyPressed(keyCode);
 	}
 
 	@Override
 	public void postKeyReleased(int keyCode) {
 		int code = convertGameKeyCode(keyCode);
-		keyState &= ~code;
-		if (suppressCommands && code != 0) {
-			return;
+		if (code != 0) {
+			keyState &= ~code;
+			if (suppressCommands) {
+				return;
+			}
 		}
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
+		super.postKeyReleased(keyCode);
 	}
 
 	@Override
@@ -105,7 +106,7 @@ public class GameCanvas extends Canvas {
 		if (suppressCommands && convertGameKeyCode(keyCode) != 0) {
 			return;
 		}
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
+		super.postKeyRepeated(keyCode);
 	}
 
 	@SuppressWarnings("unused")

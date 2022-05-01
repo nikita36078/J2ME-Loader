@@ -116,8 +116,7 @@ public abstract class CustomItem extends Item {
 
 	protected final void repaint(int x, int y, int width, int height) {
 		if (view == null) return;
-		graphics.reset();
-		graphics.setClip(x, y, width, height);
+		graphics.reset(x, y, x + width, y + height);
 		try {
 			paint(graphics, width, height);
 		} catch (Throwable t) {

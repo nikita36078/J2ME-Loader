@@ -53,7 +53,6 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
-import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.graphics.CanvasView;
 import javax.microedition.lcdui.graphics.CanvasWrapper;
 import javax.microedition.lcdui.graphics.GlesView;
@@ -123,7 +122,7 @@ public abstract class Canvas extends Displayable {
 	private static int fpsLimit;
 	private static boolean screenshotRawMode;
 
-	private final Object paintSync = new Object();
+	private final Object bufferLock = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
 	protected int width, height;
 	protected int maxHeight;
@@ -235,15 +234,21 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void postKeyPressed(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this,
+				CanvasEvent.KEY_PRESSED,
+				KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void postKeyReleased(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this,
+				CanvasEvent.KEY_RELEASED,
+				KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void postKeyRepeated(int keyCode) {
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this,
+				CanvasEvent.KEY_REPEATED,
+				KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void callShowNotify() {
@@ -261,8 +266,10 @@ public abstract class Canvas extends Displayable {
 		CanvasWrapper g = canvasWrapper;
 		g.bind(canvas);
 		g.clear(backgroundColor);
-		offscreenCopy.getBitmap().prepareToDraw();
-		g.drawImage(offscreenCopy, virtualScreen);
+		synchronized (bufferLock) {
+			offscreenCopy.getBitmap().prepareToDraw();
+			g.drawImage(offscreenCopy, virtualScreen);
+		}
 		if (fpsCounter != null) {
 			fpsCounter.increment();
 		}
@@ -275,12 +282,16 @@ public abstract class Canvas extends Displayable {
 		return Single.create(emitter -> {
 			Bitmap bitmap;
 			if (screenshotRawMode) {
-				bitmap = Bitmap.createBitmap(offscreenCopy.getBitmap(), 0, 0,
-						offscreenCopy.getWidth(), offscreenCopy.getHeight());
+				synchronized (bufferLock) {
+					bitmap = Bitmap.createBitmap(offscreenCopy.getBitmap(), 0, 0,
+							offscreenCopy.getWidth(), offscreenCopy.getHeight());
+				}
 			} else {
 				bitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
 				canvasWrapper.bind(new android.graphics.Canvas(bitmap));
-				canvasWrapper.drawImage(offscreenCopy, new RectF(0, 0, onWidth, onHeight));
+				synchronized (bufferLock) {
+					canvasWrapper.drawImage(offscreenCopy, new RectF(0, 0, onWidth, onHeight));
+				}
 			}
 			emitter.onSuccess(bitmap);
 		});
@@ -423,8 +434,6 @@ public abstract class Canvas extends Displayable {
 			offscreen.setSize(width, height);
 			offscreenCopy.setSize(width, height);
 		}
-		offscreen.getSingleGraphics().reset();
-		offscreenCopy.getSingleGraphics().reset();
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);
 		}
@@ -493,22 +502,22 @@ public abstract class Canvas extends Displayable {
 
 	@Override
 	public void clearDisplayableView() {
-		synchronized (paintSync) {
-			super.clearDisplayableView();
-			layout = null;
-			innerView = null;
-		}
+		super.clearDisplayableView();
+		layout = null;
+		innerView = null;
 	}
 
 	public void setFullScreenMode(boolean flag) {
-		synchronized (paintSync) {
-			if (fullscreen != flag) {
-				fullscreen = flag;
-				updateSize();
-				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
-						width, height));
-			}
+		if (fullscreen == flag) {
+			return;
 		}
+		fullscreen = flag;
+		updateSize();
+		if (!visible) {
+			return;
+		}
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.SIZE_CHANGED, width, height));
+		repaintInternal();
 	}
 
 	public boolean hasPointerEvents() {
@@ -545,54 +554,75 @@ public abstract class Canvas extends Displayable {
 
 	public final void repaint(int x, int y, int width, int height) {
 		limitFps();
+		boolean post;
+		synchronized (paintEvent) {
+			post = paintEvent.invalidateClip(this, x, y, x + width, y + height) && !paintEvent.isPending;
+			if (post) {
+				paintEvent.isPending = true;
+			}
+		}
+		if (post) {
+			Display.postEvent(paintEvent);
+		}
+	}
+
+	private void repaintInternal() {
+		synchronized (paintEvent) {
+			paintEvent.invalidateClip(this, 0, 0, width, height);
+		}
 		Display.postEvent(paintEvent);
 	}
 
 	// GameCanvas
 	public void flushBuffer(Image image, int x, int y, int width, int height) {
 		limitFps();
-		synchronized (paintSync) {
+		if (width <= 0 || height <= 0 ||
+				x + width < 0 || y + height < 0 ||
+				x >= this.width || y >= this.height) {
+			return;
+		}
+		synchronized (bufferLock) {
 			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
-			if (graphicsMode == 1) {
-				if (innerView != null) {
-					renderer.requestRender();
-				}
-				return;
-			} else if (graphicsMode == 2) {
-				if (innerView != null) {
-					innerView.postInvalidate();
-				}
-				return;
+		}
+		if (graphicsMode == 1) {
+			if (innerView != null) {
+				renderer.requestRender();
 			}
-			if (!parallelRedraw) {
-				repaintScreen();
-			} else if (!uiHandler.hasMessages(0)) {
-				uiHandler.sendEmptyMessage(0);
+			return;
+		} else if (graphicsMode == 2) {
+			if (innerView != null) {
+				innerView.postInvalidate();
 			}
+			return;
+		}
+		if (!parallelRedraw) {
+			repaintScreen();
+		} else if (!uiHandler.hasMessages(0)) {
+			uiHandler.sendEmptyMessage(0);
 		}
 	}
 
 	// ExtendedImage
 	public void flushBuffer(Image image, int x, int y) {
 		limitFps();
-		synchronized (paintSync) {
+		synchronized (bufferLock) {
 			image.copyTo(offscreenCopy, x, y);
-			if (graphicsMode == 1) {
-				if (innerView != null) {
-					renderer.requestRender();
-				}
-				return;
-			} else if (graphicsMode == 2) {
-				if (innerView != null) {
-					innerView.postInvalidate();
-				}
-				return;
+		}
+		if (graphicsMode == 1) {
+			if (innerView != null) {
+				renderer.requestRender();
 			}
-			if (!parallelRedraw) {
-				repaintScreen();
-			} else if (!uiHandler.hasMessages(0)) {
-				uiHandler.sendEmptyMessage(0);
+			return;
+		} else if (graphicsMode == 2) {
+			if (innerView != null) {
+				innerView.postInvalidate();
 			}
+			return;
+		}
+		if (!parallelRedraw) {
+			repaintScreen();
+		} else if (!uiHandler.hasMessages(0)) {
+			uiHandler.sendEmptyMessage(0);
 		}
 	}
 
@@ -621,7 +651,9 @@ public abstract class Canvas extends Displayable {
 			CanvasWrapper g = this.canvasWrapper;
 			g.bind(canvas);
 			g.clear(backgroundColor);
-			g.drawImage(offscreenCopy, virtualScreen);
+			synchronized (bufferLock) {
+				g.drawImage(offscreenCopy, virtualScreen);
+			}
 			surface.unlockCanvasAndPost(canvas);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
@@ -638,52 +670,7 @@ public abstract class Canvas extends Displayable {
 	 * and the calling thread is blocked until it is completed.
 	 */
 	public final void serviceRepaints() {
-		EventQueue queue = Display.getEventQueue();
-
-		/*
-		 * blocking order:
-		 *
-		 * 1 - queue.this
-		 * 2 - queue.queue
-		 *
-		 * accordingly, inside the EventQueue, the order must be the same,
-		 * otherwise mutual blocking of two threads is possible (everything will hang)
-		 */
-
-		//noinspection SynchronizationOnLocalVariableOrMethodParameter
-		synchronized (queue) {
-			/*
-			 * This synchronization actually stops the events processing
-			 * just before changing the value of currentEvent()
-			 *
-			 * Then there are only two options:
-			 */
-
-			if (queue.currentEvent() == paintEvent) {
-				/*
-				 * if repaint() is being processed there now,
-				 * then you just need to wait for it to finish
-				 */
-
-				if (Thread.holdsLock(paintSync)) { // Avoid deadlock
-					return;
-				}
-
-				try {
-					queue.wait();
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			} else if (queue.removeEvents(paintEvent)) {
-				/*
-				 * if now something else is being processed there (not repaint),
-				 * but the repaint was in the queue (and was removed from there),
-				 * then it needs to be synchronously called from here
-				 */
-
-				paintEvent.run();
-			}
-		}
+		Display.getEventQueue().serviceRepaints(paintEvent);
 	}
 
 	protected void showNotify() {
@@ -732,6 +719,18 @@ public abstract class Canvas extends Displayable {
 		this.visible = false;
 	}
 
+	public void doKeyPressed(int keyCode) {
+		keyPressed(keyCode);
+	}
+
+	public void doKeyRepeated(int keyCode) {
+		keyRepeated(keyCode);
+	}
+
+	public void doKeyReleased(int keyCode) {
+		keyReleased(keyCode);
+	}
+
 	private class GLRenderer implements GLSurfaceView.Renderer {
 		private final FloatBuffer vbo = ByteBuffer.allocateDirect(8 * 2 * 4)
 				.order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -767,7 +766,9 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			glClear(GL_COLOR_BUFFER_BIT);
-			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, offscreenCopy.getBitmap(), 0);
+			synchronized (bufferLock) {
+				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, offscreenCopy.getBitmap(), 0);
+			}
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
@@ -853,36 +854,60 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private class PaintEvent extends Event implements EventFilter {
+		private int clipLeft;
+		private int clipTop;
+		private int clipRight;
+		private int clipBottom;
+
+		private boolean isPending;
 
 		private int enqueued = 0;
 
 		@Override
 		public void process() {
-			synchronized (paintSync) {
-				if (surface == null || !surface.isValid() || !visible) {
-					return;
-				}
-				Graphics g = offscreen.getSingleGraphics();
-				g.reset();
-				try {
-					paint(g);
-				} catch (Throwable t) {
-					t.printStackTrace();
-				}
+			if (!visible) {
+				return;
+			}
+			int l, t, r, b;
+			synchronized (this) {
+				isPending = false;
+				l = clipLeft;
+				t = clipTop;
+				r = clipRight;
+				b = clipBottom;
+				clipLeft = 0;
+				clipTop = 0;
+				clipRight = 0;
+				clipBottom = 0;
+			}
+			if (r - l <= 0 || b - t <= 0) {
+				return;
+			}
+			Graphics g = offscreen.getSingleGraphics();
+			g.reset(l, t, r, b);
+			try {
+				paint(g);
+			} catch (Throwable e) {
+				Log.e(TAG, "Error in paint()", e);
+			}
+			synchronized (bufferLock) {
 				offscreen.copyTo(offscreenCopy);
-				if (graphicsMode == 1) {
-					if (innerView != null) {
-						renderer.requestRender();
-					}
-				} else if (graphicsMode == 2) {
-					if (innerView != null) {
-						innerView.postInvalidate();
-					}
-				} else if (!parallelRedraw) {
-					repaintScreen();
-				} else if (!uiHandler.hasMessages(0)) {
-					uiHandler.sendEmptyMessage(0);
+			}
+			if (surface == null || !surface.isValid()) {
+				return;
+			}
+			if (graphicsMode == 1) {
+				if (innerView != null) {
+					renderer.requestRender();
 				}
+			} else if (graphicsMode == 2) {
+				if (innerView != null) {
+					innerView.postInvalidate();
+				}
+			} else if (!parallelRedraw) {
+				repaintScreen();
+			} else if (!uiHandler.hasMessages(0)) {
+				uiHandler.sendEmptyMessage(0);
 			}
 		}
 
@@ -915,10 +940,33 @@ public abstract class Canvas extends Displayable {
 		public boolean accept(Event event) {
 			return event == this;
 		}
+
+		private boolean invalidateClip(Canvas canvas, int l, int t, int r, int b) {
+			boolean empty = clipRight - clipLeft <= 0 && clipBottom - clipTop <= 0;
+			if (empty) {
+				clipLeft = l;
+				clipTop = t;
+				clipRight = r;
+				clipBottom = b;
+			} else {
+				if (clipLeft > l) clipLeft = l;
+				if (clipTop > t) clipTop = t;
+				if (clipRight < r) clipRight = r;
+				if (clipBottom < b) clipBottom = b;
+			}
+			int w = width;
+			int h = height;
+
+			if (clipLeft < 0) clipLeft = 0;
+			if (clipTop < 0) clipTop = 0;
+			if (clipRight > w) clipRight = w;
+			if (clipBottom > h) clipBottom = h;
+
+			return empty;
+		}
 	}
 
 	private class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback, View.OnKeyListener {
-
 		private final View mView;
 		OverlayView overlayView;
 		private final FrameLayout rootView;
@@ -1007,8 +1055,10 @@ public abstract class Canvas extends Displayable {
 					}
 					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
-								CanvasEvent.POINTER_PRESSED, id,
-								convertPointerX(x), convertPointerY(y)));
+								CanvasEvent.POINTER_PRESSED,
+								id,
+								convertPointerX(x),
+								convertPointerY(y)));
 					}
 					break;
 				case MotionEvent.ACTION_MOVE:
@@ -1024,8 +1074,10 @@ public abstract class Canvas extends Displayable {
 							}
 							if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 								Display.postEvent(CanvasEvent.getInstance(Canvas.this,
-										CanvasEvent.POINTER_DRAGGED, id,
-										convertPointerX(x), convertPointerY(y)));
+										CanvasEvent.POINTER_DRAGGED,
+										id,
+										convertPointerX(x),
+										convertPointerY(y)));
 							}
 						}
 					}
@@ -1038,8 +1090,10 @@ public abstract class Canvas extends Displayable {
 						}
 						if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 							Display.postEvent(CanvasEvent.getInstance(Canvas.this,
-									CanvasEvent.POINTER_DRAGGED, id,
-									convertPointerX(x), convertPointerY(y)));
+									CanvasEvent.POINTER_DRAGGED,
+									id,
+									convertPointerX(x),
+									convertPointerY(y)));
 						}
 					}
 					break;
@@ -1057,8 +1111,10 @@ public abstract class Canvas extends Displayable {
 					}
 					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
-								CanvasEvent.POINTER_RELEASED, id,
-								convertPointerX(x), convertPointerY(y)));
+								CanvasEvent.POINTER_RELEASED,
+								id,
+								convertPointerX(x),
+								convertPointerY(y)));
 					}
 					break;
 				case MotionEvent.ACTION_CANCEL:
@@ -1077,17 +1133,34 @@ public abstract class Canvas extends Displayable {
 			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
 			// calculates the relative coordinates to the parent
 			rootView.offsetDescendantRectToMyCoords(mView, offsetViewBounds);
-			synchronized (paintSync) {
-				overlayView.setTargetBounds(offsetViewBounds);
-				displayWidth = newWidth;
-				displayHeight = newHeight;
-				if (checkSizeChanged() || !sizeChangedCalled) {
-					Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
-							width, height));
-					sizeChangedCalled = true;
+			overlayView.setTargetBounds(offsetViewBounds);
+			displayWidth = newWidth;
+			displayHeight = newHeight;
+			if (checkSizeChanged() || !sizeChangedCalled) {
+				Display.postEvent(CanvasEvent.getInstance(Canvas.this,
+						CanvasEvent.SIZE_CHANGED,
+						width,
+						height));
+				repaintInternal();
+				sizeChangedCalled = true;
+			} else {
+				if (graphicsMode == 1) {
+					if (innerView != null) {
+						renderer.requestRender();
+					}
+					return;
+				} else if (graphicsMode == 2) {
+					if (innerView != null) {
+						innerView.postInvalidate();
+					}
+					return;
+				}
+				if (!parallelRedraw) {
+					repaintScreen();
+				} else if (!uiHandler.hasMessages(0)) {
+					uiHandler.sendEmptyMessage(0);
 				}
 			}
-			Display.postEvent(paintEvent);
 		}
 
 		@Override
@@ -1095,10 +1168,9 @@ public abstract class Canvas extends Displayable {
 			if (renderer != null) {
 				renderer.start();
 			}
-			synchronized (paintSync) {
-				surface = holder.getSurface();
-				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
-			}
+			surface = holder.getSurface();
+			Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
+			repaintInternal();
 			if (showFps) {
 				fpsCounter = new FpsCounter(overlayView);
 				overlayView.addLayer(fpsCounter);
@@ -1114,14 +1186,12 @@ public abstract class Canvas extends Displayable {
 			if (renderer != null) {
 				renderer.stop();
 			}
-			synchronized (paintSync) {
-				surface = null;
-				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
-				if (fpsCounter != null) {
-					fpsCounter.stop();
-					overlayView.removeLayer(fpsCounter);
-					fpsCounter = null;
-				}
+			surface = null;
+			Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
+			if (fpsCounter != null) {
+				fpsCounter.stop();
+				overlayView.removeLayer(fpsCounter);
+				fpsCounter = null;
 			}
 			overlayView.setVisibility(false);
 			if (overlay != null) {
