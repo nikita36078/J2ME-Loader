@@ -123,6 +123,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean screenshotRawMode;
 
 	private final Object bufferLock = new Object();
+	private final Object surfaceLock = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
 	protected int width, height;
 	protected int maxHeight;
@@ -644,22 +645,25 @@ public abstract class Canvas extends Displayable {
 
 	@SuppressLint("NewApi")
 	private boolean repaintScreen() {
+		Surface surface = this.surface;
 		if (surface == null || !surface.isValid()) {
 			return true;
 		}
 		try {
-			android.graphics.Canvas canvas = graphicsMode == 3 ?
-					surface.lockHardwareCanvas() : surface.lockCanvas(null);
-			if (canvas == null) {
-				return true;
+			synchronized (surfaceLock) {
+				android.graphics.Canvas canvas = graphicsMode == 3 ?
+						surface.lockHardwareCanvas() : surface.lockCanvas(null);
+				if (canvas == null) {
+					return true;
+				}
+				CanvasWrapper g = this.canvasWrapper;
+				g.bind(canvas);
+				g.clear(backgroundColor);
+				synchronized (bufferLock) {
+					g.drawImage(offscreenCopy, virtualScreen);
+				}
+				surface.unlockCanvasAndPost(canvas);
 			}
-			CanvasWrapper g = this.canvasWrapper;
-			g.bind(canvas);
-			g.clear(backgroundColor);
-			synchronized (bufferLock) {
-				g.drawImage(offscreenCopy, virtualScreen);
-			}
-			surface.unlockCanvasAndPost(canvas);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
 			}
@@ -1191,7 +1195,9 @@ public abstract class Canvas extends Displayable {
 			if (renderer != null) {
 				renderer.stop();
 			}
-			surface = null;
+			synchronized (surfaceLock) {
+				surface = null;
+			}
 			Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
 			if (fpsCounter != null) {
 				fpsCounter.stop();
