@@ -234,7 +234,7 @@ public class InstallerDialog extends DialogFragment {
 						btnRun.setOnClickListener(v -> {
 							installer.clearCache();
 							installer.deleteTemp();
-							Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
+							Config.startApp(requireActivity(), app.getTitle(), app.getPathExt(), false);
 							dismiss();
 						});
 					}
@@ -246,7 +246,7 @@ public class InstallerDialog extends DialogFragment {
 							installer.getCurrentVersion()));
 					break;
 				case AppInstaller.STATUS_UNMATCHED:
-					SpannableStringBuilder info = nd.getInfo(getActivity());
+					SpannableStringBuilder info = nd.getInfo(requireActivity());
 					info.append(getString(R.string.install_jar_non_matched_jad));
 					alertConfirm(info, v -> installApp(installer.getJar(), null));
 					return;
@@ -277,7 +277,7 @@ public class InstallerDialog extends DialogFragment {
 			installer.clearCache();
 			installer.deleteTemp();
 			if (!isAdded()) return;
-			Toast.makeText(getActivity(), getString(R.string.error) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(requireActivity(), getString(R.string.error) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
 			dismissAllowingStateLoss();
 		}
 	}
@@ -306,7 +306,7 @@ public class InstallerDialog extends DialogFragment {
 			if (drawable != null) mDialog.setIcon(drawable);
 			btnOk.setText(R.string.START_CMD);
 			btnOk.setOnClickListener(v -> {
-				Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
+				Config.startApp(requireActivity(), app.getTitle(), app.getPathExt(), false);
 				dismiss();
 			});
 			btnClose.setText(R.string.close);
@@ -330,13 +330,13 @@ public class InstallerDialog extends DialogFragment {
 			}
 			if (message.charAt(0) == '*') {
 				Descriptor nd = installer.getManifest();
-				SpannableStringBuilder info = nd.getInfo(getActivity());
+				SpannableStringBuilder info = nd.getInfo(requireActivity());
 				info.append(getString(R.string.install_jar_non_matched_jad));
 				alertConfirm(info, v -> installApp(installer.getJar(), null));
 			} else {
 				installer.clearCache();
 				installer.deleteTemp();
-				Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+				Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show();
 				dismissAllowingStateLoss();
 			}
 		}

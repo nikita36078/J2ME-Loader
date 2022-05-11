@@ -61,11 +61,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		if (view == null) {
 			LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
 			view = layoutInflater.inflate(R.layout.list_row_jar, viewGroup, false);
-			holder = new ViewHolder();
-			holder.icon = view.findViewById(R.id.list_image);
-			holder.name = view.findViewById(R.id.list_title);
-			holder.author = view.findViewById(R.id.list_author);
-			holder.version = view.findViewById(R.id.list_version);
+			holder = new ViewHolder(view);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -101,6 +97,13 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		TextView name;
 		TextView author;
 		TextView version;
+
+		private ViewHolder(View rootView) {
+			icon = rootView.findViewById(R.id.list_image);
+			name = rootView.findViewById(R.id.list_title);
+			author = rootView.findViewById(R.id.list_author);
+			version = rootView.findViewById(R.id.list_version);
+		}
 	}
 
 	private class AppFilter extends Filter {

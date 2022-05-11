@@ -87,7 +87,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		TextView emptyView = findViewById(R.id.empty_view);
 		listView.setEmptyView(emptyView);
 		registerForContextMenu(listView);
-		adapter = new ProfilesAdapter(this, profiles);
+		adapter = new ProfilesAdapter(getLayoutInflater(), profiles);
 		listView.setAdapter(adapter);
 		final String def = preferences.getString(PREF_DEFAULT_PROFILE, null);
 		if (def != null) {

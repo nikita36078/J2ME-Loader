@@ -71,7 +71,7 @@ public class ShaderTuneAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		LayoutInflater inflater = getLayoutInflater();
 		View v = inflater.inflate(R.layout.dialog_shader_tune, null);
 		LinearLayout container = v.findViewById(R.id.container);
 		Setting[] settings = shader.settings;

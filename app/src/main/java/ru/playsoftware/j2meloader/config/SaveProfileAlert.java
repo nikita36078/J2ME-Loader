@@ -60,9 +60,8 @@ public class SaveProfileAlert extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		configPath = requireArguments().getString(KEY_CONFIG_PATH);
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
-		View v = inflater.inflate(R.layout.dialog_save_profile, null);
+		View v = getLayoutInflater().inflate(R.layout.dialog_save_profile, null);
 		editText = v.findViewById(R.id.editText);
 		cbConfig = v.findViewById(R.id.cbConfig);
 		cbKeyboard = v.findViewById(R.id.cbKeyboard);
@@ -76,7 +75,7 @@ public class SaveProfileAlert extends DialogFragment {
 			String name = editText.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
 			if (name.isEmpty()) {
 				editText.requestFocus();
-				Toast.makeText(getActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
+				Toast.makeText(requireActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
 				return;
 			}
 
@@ -115,7 +114,7 @@ public class SaveProfileAlert extends DialogFragment {
 			dismiss();
 		} catch (IOException e) {
 			e.printStackTrace();
-			Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+			Toast.makeText(requireActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

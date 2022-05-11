@@ -189,10 +189,11 @@ public class AppsListFragment extends ListFragment {
 
 	private void alertRename(final int id) {
 		AppItem item = adapter.getItem(id);
-		EditText editText = new EditText(getActivity());
+		FragmentActivity activity = requireActivity();
+		EditText editText = new EditText(activity);
 		editText.setText(item.getTitle());
 		float density = getResources().getDisplayMetrics().density;
-		LinearLayout linearLayout = new LinearLayout(getContext());
+		LinearLayout linearLayout = new LinearLayout(activity);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT);
 		int margin = (int) (density * 20);
@@ -201,7 +202,7 @@ public class AppsListFragment extends ListFragment {
 		int paddingVertical = (int) (density * 16);
 		int paddingHorizontal = (int) (density * 8);
 		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity)
 				.setTitle(R.string.action_context_rename)
 				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
@@ -232,7 +233,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Config.startApp(getActivity(), item.getTitle(), item.getPathExt(), false);
+		Config.startApp(requireActivity(), item.getTitle(), item.getPathExt(), false);
 	}
 
 	@Override
@@ -263,7 +264,7 @@ public class AppsListFragment extends ListFragment {
 		} else if (itemId == R.id.action_context_rename) {
 			alertRename(index);
 		} else if (itemId == R.id.action_context_settings) {
-			Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
+			Config.startApp(requireActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 		} else if (itemId == R.id.action_context_reinstall) {
 			Uri uri = Uri.fromFile(new File(appItem.getPathExt() + Config.MIDLET_RES_FILE));
 			installApp(uri);
