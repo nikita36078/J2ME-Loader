@@ -172,6 +172,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private final Handler handler;
 	private final File saveFile;
 	private final ProfileModel settings;
+	private final RectF virtualScreen = new RectF();
 
 	private Canvas target;
 	private View overlayView;
@@ -184,7 +185,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private float prevScaleX;
 	private float prevScaleY;
 	private RectF screen;
-	private RectF virtualScreen;
 	private float keySize =
 			Math.min(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight()) / 6.0f;
 	private float snapRadius;
@@ -853,9 +853,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	@Override
-	public void resize(RectF screen, RectF virtualScreen) {
+	public void resize(RectF screen, float left, float top, float right, float bottom) {
 		this.screen = screen;
-		this.virtualScreen = virtualScreen;
+		virtualScreen.set(left, top, right, bottom);
 		snapRadius = keyScales[0];
 		for (int i = 1; i < keyScales.length; i++) {
 			if (keyScales[i] < snapRadius) {

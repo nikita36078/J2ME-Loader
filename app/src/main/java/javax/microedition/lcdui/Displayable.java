@@ -1,7 +1,8 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2020-2022 Yriy Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import javax.microedition.lcdui.commands.AbstractSoftKeysBar;
 import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.shell.MicroActivity;
@@ -41,7 +43,8 @@ public abstract class Displayable {
 	protected static int virtualWidth;
 	protected static int virtualHeight;
 
-	protected CommandListener listener;
+	CommandListener listener;
+	AbstractSoftKeysBar softBar;
 
 	private final ArrayList<Command> commands = new ArrayList<>();
 
@@ -136,13 +139,20 @@ public abstract class Displayable {
 		if (cmd == null) {
 			throw new NullPointerException();
 		}
-		if (!commands.contains(cmd)) {
-			commands.add(cmd);
+		if (commands.contains(cmd)) {
+			return;
+		}
+		commands.add(cmd);
+		if (softBar != null) {
+			softBar.notifyChanged();
 		}
 	}
 
 	public void removeCommand(Command cmd) {
 		commands.remove(cmd);
+		if (softBar != null) {
+			softBar.notifyChanged();
+		}
 	}
 
 	public int countCommands() {
@@ -157,9 +167,9 @@ public abstract class Displayable {
 		this.listener = listener;
 	}
 
-	public void fireCommandAction(Command c, Displayable d) {
+	public void fireCommandAction(Command c) {
 		if (listener != null) {
-			Display.postEvent(CommandActionEvent.getInstance(listener, c, d));
+			Display.postEvent(CommandActionEvent.getInstance(listener, c, this));
 		}
 	}
 

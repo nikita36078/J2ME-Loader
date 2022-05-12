@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,14 @@
 
 package javax.microedition.lcdui;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import javax.microedition.lcdui.commands.ScreenSoftBar;
+
+import ru.playsoftware.j2meloader.R;
 
 public abstract class Screen extends Displayable {
 
@@ -29,7 +36,12 @@ public abstract class Screen extends Displayable {
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
 
-			layout.addView(getScreenView());
+			View screenView = getScreenView();
+			screenView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+			layout.addView(screenView);
+			LayoutInflater inflater = LayoutInflater.from(layout.getContext());
+			View bar = inflater.inflate(R.layout.soft_button_bar, layout, true);
+			softBar = new ScreenSoftBar(this, bar);
 		}
 
 		return layout;
@@ -39,6 +51,8 @@ public abstract class Screen extends Displayable {
 	public void clearDisplayableView() {
 		super.clearDisplayableView();
 		layout = null;
+		softBar.closeMenu();
+		softBar = null;
 		clearScreenView();
 	}
 

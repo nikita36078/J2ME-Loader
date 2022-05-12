@@ -183,13 +183,12 @@ public class Form extends Screen {
 		}
 	}
 
-	public boolean contextMenuItemSelected(MenuItem menuitem) {
+	public void contextMenuItemSelected(MenuItem menuitem) {
 		for (Item item : items) {
 			if (menuitem.getGroupId() == item.hashCode() && item.contextMenuItemSelected(menuitem)) {
-				return true;
+				return;
 			}
 		}
 
-		return false;
 	}
 }

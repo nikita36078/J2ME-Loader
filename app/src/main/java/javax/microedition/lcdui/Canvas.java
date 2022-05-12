@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2022 Nikita Shakarun
+ * Copyright 2018-2022 Yriy Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -31,25 +33,34 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.lcdui.commands.AbstractSoftKeysBar;
 import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
@@ -60,6 +71,7 @@ import javax.microedition.lcdui.graphics.ShaderProgram;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.overlay.FpsCounter;
+import javax.microedition.lcdui.overlay.Layer;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.shell.MicroActivity;
@@ -121,16 +133,21 @@ public abstract class Canvas extends Displayable {
 	private static int scaleRatio;
 	private static int fpsLimit;
 	private static boolean screenshotRawMode;
+	private static int scaleType;
+	private static int screenGravity;
 
 	private final Object bufferLock = new Object();
 	private final Object surfaceLock = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
+	private final SoftBar softBar = new SoftBar();
+	private final CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
+	private final RectF virtualScreen = new RectF();
+
 	protected int width, height;
 	protected int maxHeight;
 	private LinearLayout layout;
 	private SurfaceView innerView;
 	private Surface surface;
-	private final CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
 	private GLRenderer renderer;
 	private int displayWidth;
 	private int displayHeight;
@@ -140,13 +157,12 @@ public abstract class Canvas extends Displayable {
 	private Image offscreen;
 	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
-	private final RectF virtualScreen = new RectF(0, 0, displayWidth, displayHeight);
 	private long lastFrameTime = System.currentTimeMillis();
 	private Handler uiHandler;
 	private final Overlay overlay = ContextHolder.getVk();
 	private FpsCounter fpsCounter;
-	private static int scaleType;
-	private static int screenGravity;
+	private boolean skipLeftSoft;
+	private boolean skipRightSoft;
 
 	protected Canvas() {
 		this(forceFullscreen);
@@ -154,6 +170,7 @@ public abstract class Canvas extends Displayable {
 
 	protected Canvas(boolean fullscreen) {
 		this.fullscreen = fullscreen;
+		super.softBar = softBar;
 		if (graphicsMode == 1) {
 			renderer = new GLRenderer();
 		}
@@ -240,18 +257,37 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void postKeyPressed(int keyCode) {
+		if (keyCode == KEY_SOFT_LEFT && softBar.fireLeftSoft()) {
+			skipLeftSoft = true;
+			return;
+		} else if (keyCode == KEY_SOFT_RIGHT && softBar.fireRightSoft()) {
+			skipRightSoft = true;
+			return;
+		}
 		Display.postEvent(CanvasEvent.getInstance(this,
 				CanvasEvent.KEY_PRESSED,
 				KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void postKeyReleased(int keyCode) {
+		if (keyCode == KEY_SOFT_LEFT && skipLeftSoft) {
+			skipLeftSoft = false;
+			return;
+		} else if (keyCode == KEY_SOFT_RIGHT && skipRightSoft) {
+			skipRightSoft = false;
+			return;
+		}
 		Display.postEvent(CanvasEvent.getInstance(this,
 				CanvasEvent.KEY_RELEASED,
 				KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	public void postKeyRepeated(int keyCode) {
+		if (keyCode == KEY_SOFT_LEFT && skipLeftSoft) {
+			return;
+		} else if (keyCode == KEY_SOFT_RIGHT && skipRightSoft) {
+			return;
+		}
 		Display.postEvent(CanvasEvent.getInstance(this,
 				CanvasEvent.KEY_REPEATED,
 				KeyMapper.convertKeyCode(keyCode)));
@@ -364,17 +400,6 @@ public abstract class Canvas extends Displayable {
 		}
 
 		/*
-		 * calculate the maximum height
-		 */
-		maxHeight = height;
-		/*
-		 * calculate the current height
-		 */
-		if (!fullscreen) {
-			height = (int) (height * FULLSCREEN_HEIGHT_RATIO);
-		}
-
-		/*
 		 * We turn the size of the canvas into the size of the image
 		 * that will be displayed on the screen of the device.
 		 */
@@ -409,7 +434,7 @@ public abstract class Canvas extends Displayable {
 		switch (screenGravity) {
 			case 0: // left
 				onX = 0;
-				onY = (displayHeight - onHeight) / 2;
+				onY = (scaledDisplayHeight - onHeight) / 2;
 				break;
 			case 1: // top
 				onX = (displayWidth - onWidth) / 2;
@@ -417,16 +442,33 @@ public abstract class Canvas extends Displayable {
 				break;
 			case 2: // center
 				onX = (displayWidth - onWidth) / 2;
-				onY = (displayHeight - onHeight) / 2;
+				onY = (scaledDisplayHeight - onHeight) / 2;
 				break;
 			case 3: // right
 				onX = displayWidth - onWidth;
-				onY = (displayHeight - onHeight) / 2;
+				onY = (scaledDisplayHeight - onHeight) / 2;
 				break;
 			case 4: // bottom
 				onX = (displayWidth - onWidth) / 2;
-				onY = displayHeight - onHeight;
+				onY = scaledDisplayHeight - onHeight;
 				break;
+		}
+
+
+		/*
+		 * calculate the maximum height
+		 */
+		maxHeight = height;
+
+		softBar.resize();
+		/*
+		 * calculate the current height
+		 */
+		float softBarHeight = softBar.bounds.height();
+		if (softBarHeight > 0) {
+			float scaleY = (float) onHeight / height;
+			height = (int) (height - softBarHeight / scaleY);
+			onHeight -= softBarHeight;
 		}
 
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
@@ -441,7 +483,7 @@ public abstract class Canvas extends Displayable {
 			offscreenCopy.setSize(width, height);
 		}
 		if (overlay != null) {
-			overlay.resize(screen, virtualScreen);
+			overlay.resize(screen, onX, onY, onX + onWidth, onY + onHeight + softBarHeight);
 		}
 
 		if (graphicsMode == 1) {
@@ -519,6 +561,7 @@ public abstract class Canvas extends Displayable {
 		}
 		fullscreen = flag;
 		updateSize();
+		softBar.notifyChanged();
 		if (!visible) {
 			return;
 		}
@@ -1139,6 +1182,13 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int newWidth, int newHeight) {
+			if (displayWidth > displayHeight) {
+				if (newWidth < newHeight) {
+					softBar.closeMenu();
+				}
+			} else if (newWidth > newHeight) {
+				softBar.closeMenu();
+			}
 			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
 			// calculates the relative coordinates to the parent
 			rootView.offsetDescendantRectToMyCoords(mView, offsetViewBounds);
@@ -1184,6 +1234,7 @@ public abstract class Canvas extends Displayable {
 				fpsCounter = new FpsCounter(overlayView);
 				overlayView.addLayer(fpsCounter);
 			}
+			overlayView.addLayer(softBar, 0);
 			overlayView.setVisibility(true);
 			if (overlay != null) {
 				overlay.setTarget(Canvas.this);
@@ -1204,12 +1255,184 @@ public abstract class Canvas extends Displayable {
 				overlayView.removeLayer(fpsCounter);
 				fpsCounter = null;
 			}
+			overlayView.removeLayer(softBar);
+			softBar.closeMenu();
 			overlayView.setVisibility(false);
 			if (overlay != null) {
 				overlay.setTarget(null);
 				overlay.cancel();
 			}
 		}
+	}
 
+	private class SoftBar extends AbstractSoftKeysBar implements Layer {
+		private final OverlayView overlayView;
+		private final float padding;
+		private final int textColor;
+		private final int bgColor;
+		private final RectF bounds = new RectF();
+
+		private String leftLabel;
+		private String rightLabel;
+		private float textScale = 1.0f;
+
+		private SoftBar() {
+			super(Canvas.this);
+			MicroActivity activity = ContextHolder.getActivity();
+			this.overlayView = activity.findViewById(R.id.vOverlay);
+			DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
+			padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
+			textColor = ContextCompat.getColor(activity, R.color.accent);
+			bgColor = ContextCompat.getColor(activity, R.color.background);
+			notifyChanged();
+		}
+
+		private void showPopup() {
+			PopupWindow popup = prepareMenu(fullscreen ? 0 : 1);
+			popup.setWidth(Math.min(displayWidth, displayHeight) / 2);
+			popup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+			int x = (int) (displayWidth - bounds.right);
+			int y = (int) (displayHeight - bounds.top);
+			popup.showAtLocation(overlayView, Gravity.RIGHT | Gravity.BOTTOM, x, y);
+		}
+
+		@Override
+		protected void onCommandsChanged() {
+			List<Command> list = this.commands;
+			list.clear();
+			Command[] commands = target.getCommands();
+			Arrays.sort(commands);
+			list.addAll(Arrays.asList(commands));
+			if (!fullscreen) {
+				int size = list.size();
+				switch (size) {
+					case 0:
+						break;
+					case 1:
+						leftLabel = list.get(0).getAndroidLabel();
+						rightLabel = null;
+						break;
+					case 2:
+						leftLabel = list.get(0).getAndroidLabel();
+						rightLabel = list.get(1).getAndroidLabel();
+						break;
+					default:
+						leftLabel = list.get(0).getAndroidLabel();
+						rightLabel = overlayView.getResources().getString(R.string.cmd_menu);
+				}
+			}
+			overlayView.postInvalidate();
+		}
+
+		private boolean fireLeftSoft() {
+			int size = commands.size();
+			if (size == 0) {
+				return false;
+			}
+			if (fullscreen) {
+				if (size == 1) {
+					return false;
+				}
+				if (listener != null) {
+					showPopup();
+				}
+				return true;
+			}
+			fireCommandAction(commands.get(0));
+			return true;
+		}
+
+		private boolean fireRightSoft() {
+			int size = commands.size();
+			if (size == 0) {
+				return false;
+			}
+			if (fullscreen && listener == null) {
+				return false;
+			}
+			if (fullscreen || size > 2) {
+				showPopup();
+				return true;
+			}
+			if (size == 1) {
+				return false;
+			}
+			if (listener != null) {
+				fireCommandAction(commands.get(1));
+			}
+			return true;
+		}
+
+		@Override
+		public void paint(CanvasWrapper g) {
+			if (bounds.isEmpty() || commands.size() == 0) {
+				return;
+			}
+			g.setFillColor(bgColor);
+			g.fillRect(bounds);
+
+			if (leftLabel == null) {
+				return;
+			}
+			g.setTextAlign(Paint.Align.LEFT);
+			g.setTextScale(textScale);
+			g.setTextColor(textColor);
+			float y = bounds.centerY();
+			g.drawString(leftLabel, bounds.left + padding * textScale, y);
+			if (rightLabel != null) {
+				g.setTextAlign(Paint.Align.RIGHT);
+				g.drawString(rightLabel, bounds.right - padding * textScale, y);
+			}
+
+			g.setTextAlign(Paint.Align.CENTER);
+			g.setTextScale(1.0f);
+		}
+
+		public void resize() {
+			float left;
+			float right;
+			float bottom;
+			VirtualKeyboard vk = ContextHolder.getVk();
+			if (vk != null && vk.isPhone()) {
+				float vkTop = displayHeight - vk.getPhoneKeyboardHeight() - 1;
+				if (onWidth < displayWidth / 2.0f || onWidth > displayWidth) {
+					textScale = 1.0f;
+					left = 0;
+					right = displayWidth;
+					bottom = vkTop;
+				} else {
+					textScale = (float) onWidth / displayWidth;
+					canvasWrapper.setTextScale(textScale);
+					left = onX;
+					right = onX + onWidth;
+					bottom = onY + onHeight;
+					if (bottom > vkTop) {
+						bottom = vkTop;
+					}
+				}
+			} else {
+				float width = onWidth;
+				float minSide = Math.min(displayWidth, displayHeight);
+				if (width <= minSide) {
+					textScale = width / minSide;
+					canvasWrapper.setTextScale(textScale);
+					left = onX;
+				} else {
+					left = (onX + onWidth) / 2.0f - minSide / 2.0f;
+					if (left + minSide > displayWidth) {
+						left = displayWidth / 2.0f - minSide / 2.0f;
+					}
+					width = minSide;
+				}
+				bottom = onY + onHeight;
+				right = left + width;
+				if (bottom > displayHeight) {
+					bottom = displayHeight;
+				}
+			}
+			float top = fullscreen ? bottom : bottom - canvasWrapper.getTextHeight();
+			bounds.set(left, top, right, bottom);
+			canvasWrapper.setTextScale(1.0f);
+		}
 	}
 }

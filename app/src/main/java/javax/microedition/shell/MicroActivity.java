@@ -1,6 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@
  */
 
 package javax.microedition.shell;
+
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -66,7 +69,6 @@ import java.util.LinkedHashMap;
 import java.util.Objects;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
@@ -83,8 +85,6 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.LogUtils;
-
-import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_DEFAULT = 0;
@@ -421,92 +421,68 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.clear();
+	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		if (current == null) {
-			inflater.inflate(R.menu.midlet_displayable, menu);
-			return true;
-		}
-		boolean hasCommands = current.countCommands() > 0;
-		Menu group;
-		if (hasCommands) {
-			inflater.inflate(R.menu.midlet_common, menu);
-			group = menu.getItem(0).getSubMenu();
-		} else {
-			group = menu;
-		}
-		inflater.inflate(R.menu.midlet_displayable, group);
+		inflater.inflate(R.menu.midlet_displayable, menu);
 		if (current instanceof Canvas) {
 			if (actionBarEnabled) {
-				inflater.inflate(R.menu.midlet_canvas, menu);
-			} else {
-				inflater.inflate(R.menu.midlet_canvas_no_bar, group);
+				menu.findItem(R.id.action_ime_keyboard).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				menu.findItem(R.id.action_take_screenshot).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 			}
 			if (inputMethodManager == null) {
 				menu.findItem(R.id.action_ime_keyboard).setVisible(false);
 			}
-			VirtualKeyboard vk = ContextHolder.getVk();
-			if (vk != null) {
-				inflater.inflate(R.menu.midlet_vk, group);
-				if (vk.getLayoutEditMode() == VirtualKeyboard.LAYOUT_EOF) {
-					menu.findItem(R.id.action_layout_edit_finish).setVisible(false);
-				}
+			if (ContextHolder.getVk() == null) {
+				menu.findItem(R.id.action_submenu_vk).setVisible(false);
 			}
+		} else {
+			menu.setGroupVisible(R.id.action_group_canvas, false);
 		}
-		if (!hasCommands) {
-			return true;
-		}
-		for (Command cmd : current.getCommands()) {
-			menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getAndroidLabel());
-		}
+		return true;
+	}
 
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		VirtualKeyboard vk = ContextHolder.getVk();
+		if (vk != null) {
+			boolean visible = vk.getLayoutEditMode() != VirtualKeyboard.LAYOUT_EOF;
+			menu.findItem(R.id.action_layout_edit_finish).setVisible(visible);
+		}
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
-		if (item.getGroupId() == R.id.action_group_common_settings) {
-			if (id == R.id.action_ime_keyboard) {
-				inputMethodManager.toggleSoftInputFromWindow(
-						layout.getWindowToken(),
-						InputMethodManager.SHOW_FORCED, 0);
-			} else if (id == R.id.action_exit_midlet) {
-				showExitConfirmation();
-			} else if (id == R.id.action_take_screenshot) {
-				takeScreenshot();
-			} else if (id == R.id.action_save_log) {
-				saveLog();
-			} else if (id == R.id.action_limit_fps){
-				showLimitFpsDialog();
-			} else if (ContextHolder.getVk() != null) {
-				// Handled only when virtual keyboard is enabled
-				handleVkOptions(id);
-			}
-			return true;
+		if (id == R.id.action_ime_keyboard) {
+			inputMethodManager.toggleSoftInputFromWindow(layout.getWindowToken(),
+					InputMethodManager.SHOW_FORCED, 0);
+		} else if (id == R.id.action_exit_midlet) {
+			showExitConfirmation();
+		} else if (id == R.id.action_take_screenshot) {
+			takeScreenshot();
+		} else if (id == R.id.action_save_log) {
+			saveLog();
+		} else if (id == R.id.action_limit_fps) {
+			showLimitFpsDialog();
+		} else if (ContextHolder.getVk() != null) {
+			// Handled only when virtual keyboard is enabled
+			handleVkOptions(id);
 		}
-		if (current != null) {
-			return current.menuItemSelected(id);
-		}
-
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 
 	private void handleVkOptions(int id) {
 		VirtualKeyboard vk = ContextHolder.getVk();
 		if (id == R.id.action_layout_edit_mode) {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
-			Toast.makeText(this, R.string.layout_edit_mode,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.layout_edit_mode, Toast.LENGTH_SHORT).show();
 		} else if (id == R.id.action_layout_scale_mode) {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
-			Toast.makeText(this, R.string.layout_scale_mode,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.layout_scale_mode, Toast.LENGTH_SHORT).show();
 		} else if (id == R.id.action_layout_edit_finish) {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-			Toast.makeText(this, R.string.layout_edit_finished,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.layout_edit_finished, Toast.LENGTH_SHORT).show();
 			showSaveVkAlert(false);
 		} else if (id == R.id.action_layout_switch) {
 			showSetLayoutDialog();
@@ -614,7 +590,7 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private void showLimitFpsDialog(){
+	private void showLimitFpsDialog() {
 		EditText editText = new EditText(this);
 		editText.setHint(R.string.unlimited);
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER);

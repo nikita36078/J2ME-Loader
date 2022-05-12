@@ -169,7 +169,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		builder.setMessage(getString());
 		builder.setOnDismissListener(dialog -> {
 			if (countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND && listener != null) {
-				fireCommandAction(DISMISS_COMMAND, this);
+				fireCommandAction(DISMISS_COMMAND);
 			}
 		});
 
@@ -288,15 +288,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
-				fireCommandAction(commands[positive], this);
+				fireCommandAction(commands[positive]);
 				break;
 
 			case DialogInterface.BUTTON_NEGATIVE:
-				fireCommandAction(commands[negative], this);
+				fireCommandAction(commands[negative]);
 				break;
 
 			case DialogInterface.BUTTON_NEUTRAL:
-				fireCommandAction(commands[neutral], this);
+				fireCommandAction(commands[neutral]);
 				break;
 		}
 	}

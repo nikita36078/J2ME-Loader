@@ -31,10 +31,13 @@ public interface Overlay extends Layer {
 	/**
 	 * Called when resizing real (for example, after rotation) or virtual screens.
 	 *
-	 * @param screen        the size of the device real screen
-	 * @param virtualScreen the size of the virtual screen that is available to the midlet
+	 * @param screen the size of the device real screen
+	 * @param left   left side of the virtual screen that is available to the midlet
+	 * @param top    top side of the virtual screen that is available to the midlet
+	 * @param right  right side of the virtual screen that is available to the midlet
+	 * @param bottom bottom side of the virtual screen that is available to the midlet
 	 */
-	void resize(RectF screen, RectF virtualScreen);
+	void resize(RectF screen, float left, float top, float right, float bottom);
 
 	/**
 	 * Called when the hardware key is pressed for the first time.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Kharchenko Yury
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class OverlayView extends View {
 
 	private final CanvasWrapper graphics;
 	private final Rect surfaceRect = new Rect();
-	private ArrayList<Layer> layers = new ArrayList<>();
+	private final ArrayList<Layer> layers = new ArrayList<>();
 	private boolean visible;
 
 	public OverlayView(Context context, AttributeSet attrs) {
@@ -58,7 +58,17 @@ public class OverlayView extends View {
 	}
 
 	public void addLayer(Layer layer) {
+		if (layers.contains(layer)) {
+			return;
+		}
 		layers.add(layer);
+	}
+
+	public void addLayer(Layer layer, int order) {
+		if (layers.contains(layer)) {
+			return;
+		}
+		layers.add(Math.max(0, Math.min(order, layers.size())), layer);
 	}
 
 	public void removeLayer(Layer layer) {

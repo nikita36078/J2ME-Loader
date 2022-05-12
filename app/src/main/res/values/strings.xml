@@ -173,7 +173,7 @@
     <string name="action_keyboard_ime">Keyboard (IME)</string>
     <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
     <string name="opt_save_screen_params">save screen params</string>
-    <string name="common_settings">[COMMON SETTINGS]</string>
+    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Dismiss</string>
 
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>
@@ -209,7 +209,7 @@
 
     <string name="virtual_key_left_soft" translatable="false">L</string>
     <string name="virtual_key_right_soft" translatable="false">R</string>
-    <string name="virtual_key_menu">menu</string>
+    <string name="virtual_key_menu" translatable="false">M</string>
     <string name="virtual_key_d" translatable="false">D</string>
     <string name="virtual_key_c" translatable="false">C</string>
     <string name="virtual_key_left" translatable="false">←</string>
@@ -235,7 +235,7 @@
     <string name="mapping_dialog_key_not_specified">not specified</string>
     <string name="mapping_dialog_title">Press a key</string>
     <string name="reset_mapping">Reset</string>
-    <string name="alert_map_menu">You MUST map \"menu\" key!</string>
+    <string name="alert_map_menu">You MUST map menu (M) key!</string>
 
     <string name="error_name">Enter name!</string>
     <string name="set_as_default">Set as default</string>
