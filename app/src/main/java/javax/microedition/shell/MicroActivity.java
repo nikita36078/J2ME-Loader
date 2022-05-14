@@ -201,7 +201,8 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
+		if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+				current instanceof Canvas) {
 			hideSystemUI();
 		}
 	}
@@ -272,35 +273,6 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private final SimpleEvent msgSetCurrent = new SimpleEvent() {
-		@Override
-		public void process() {
-			current.clearDisplayableView();
-			layout.removeAllViews();
-			layout.addView(current.getDisplayableView());
-			invalidateOptionsMenu();
-			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
-			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
-			if (current instanceof Canvas) {
-				hideSystemUI();
-				if (!actionBarEnabled) {
-					actionBar.hide();
-				} else {
-					final String title = current.getTitle();
-					actionBar.setTitle(title == null ? appName : title);
-					layoutParams.height = (int) (getToolBarHeight() / 1.5);
-				}
-			} else {
-				showSystemUI();
-				actionBar.show();
-				final String title = current.getTitle();
-				actionBar.setTitle(title == null ? appName : title);
-				layoutParams.height = getToolBarHeight();
-			}
-			toolbar.setLayoutParams(layoutParams);
-		}
-	};
-
 	private int getToolBarHeight() {
 		int[] attrs = new int[]{androidx.appcompat.R.attr.actionBarSize};
 		TypedArray ta = obtainStyledAttributes(attrs);
@@ -332,8 +304,8 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	public void setCurrent(Displayable displayable) {
+		ViewHandler.postEvent(new SetCurrentEvent(current, displayable));
 		current = displayable;
-		ViewHandler.postEvent(msgSetCurrent);
 	}
 
 	public Displayable getCurrent() {
@@ -364,8 +336,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU)
-			if (current instanceof Canvas
-					&& layout.dispatchKeyEvent(event)) {
+			if (current instanceof Canvas && layout.dispatchKeyEvent(event)) {
 				return true;
 			} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
 				if (event.getRepeatCount() == 0) {
@@ -382,7 +353,8 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void openOptionsMenu() {
-		if (!actionBarEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
+		if (!actionBarEnabled &&
+				Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
 			showSystemUI();
 		}
 		super.openOptionsMenu();
@@ -643,5 +615,46 @@ public class MicroActivity extends AppCompatActivity {
 
 	public String getAppName() {
 		return appName;
+	}
+
+	private class SetCurrentEvent extends SimpleEvent {
+		private final Displayable current;
+		private final Displayable next;
+
+		private SetCurrentEvent(Displayable current, Displayable next) {
+			this.current = current;
+			this.next = next;
+		}
+
+		@Override
+		public void process() {
+			if (current != null) {
+				current.clearDisplayableView();
+			}
+			layout.removeAllViews();
+			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
+			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
+			if (next instanceof Canvas) {
+				hideSystemUI();
+				if (!actionBarEnabled) {
+					actionBar.hide();
+				} else {
+					final String title = next.getTitle();
+					actionBar.setTitle(title == null ? appName : title);
+					layoutParams.height = (int) (getToolBarHeight() / 1.5);
+				}
+			} else {
+				showSystemUI();
+				actionBar.show();
+				final String title = next != null ? next.getTitle() : null;
+				actionBar.setTitle(title == null ? appName : title);
+				layoutParams.height = getToolBarHeight();
+			}
+			toolbar.setLayoutParams(layoutParams);
+			invalidateOptionsMenu();
+			if (next != null) {
+				layout.addView(next.getDisplayableView());
+			}
+		}
 	}
 }
