@@ -28,8 +28,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Region;
-import android.os.Build;
 import android.util.Log;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
@@ -69,7 +67,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	Graphics(Image image) {
 		this.image = image;
 		canvas = new Canvas(image.getBitmap());
-		canvas.save();
 		canvas.clipRect(image.getBounds());
 		canvas.getClipBounds(clip);
 		drawPaint.setStyle(Paint.Style.STROKE);
@@ -82,8 +79,8 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		setColor(0);
 		setFont(Font.getDefaultFont());
 		setStrokeStyle(SOLID);
-		canvas.restoreToCount(1);
-		canvas.save();
+		canvas.setBitmap(null);
+		canvas.setBitmap(image.getBitmap());
 		canvas.clipRect(cl, ct, cr, cb);
 		canvas.getClipBounds(this.clip);
 		translateX = 0;
@@ -188,14 +185,10 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	public void setClip(int x, int y, int width, int height) {
 		clip.set(x, y, x + width, y + height);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			canvas.restore();
-			canvas.save();
-			canvas.translate(translateX, translateY);
-			canvas.clipRect(clip);
-		} else {
-			canvas.clipRect(clip, Region.Op.REPLACE);
-		}
+		canvas.setBitmap(null);
+		canvas.setBitmap(image.getBitmap());
+		canvas.translate(translateX, translateY);
+		canvas.clipRect(clip);
 		canvas.getClipBounds(clip);
 	}
 
