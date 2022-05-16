@@ -38,7 +38,7 @@ public abstract class SpriteCanvas extends Canvas {
 	}
 
 	public void createFrameBuffer(int fw, int fh) {
-		spriteImage = Image.createTransparentImage(fw, fh);
+		spriteImage = Image.createImage(fw, fh, 0);
 		graphics = spriteImage.getGraphics();
 	}
 

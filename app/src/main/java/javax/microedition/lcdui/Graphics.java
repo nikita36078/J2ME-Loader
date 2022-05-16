@@ -47,7 +47,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	public static final int DOTTED = 1;
 
 	private final Canvas canvas;
-	private final Bitmap canvasBitmap;
+	private final Image image;
 
 	private final Paint drawPaint = new Paint();
 	private final Paint fillPaint = new Paint();
@@ -67,8 +67,8 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	private com.mascotcapsule.micro3d.v3.Graphics3D g3d;
 
 	Graphics(Image image) {
-		canvasBitmap = image.getBitmap();
-		canvas = new Canvas(canvasBitmap);
+		this.image = image;
+		canvas = new Canvas(image.getBitmap());
 		canvas.save();
 		canvas.clipRect(image.getBounds());
 		canvas.getClipBounds(clip);
@@ -526,7 +526,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 						 int x_dest, int y_dest, int anchor) {
 		if (width <= 0 || height <= 0) return;
 		final int[] pixels = new int[width * height];
-		canvasBitmap.getPixels(pixels, 0, width, x_src, y_src, width, height);
+		image.getBitmap().getPixels(pixels, 0, width, x_src, y_src, width, height);
 		float dx;
 		if ((anchor & Graphics.RIGHT) != 0) {
 			dx = x_dest - width;
@@ -548,14 +548,14 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	public void getPixels(int[] pixels, int offset, int stride,
 						  int x, int y, int width, int height) {
-		Bitmap b = canvasBitmap;
+		Bitmap b = image.getBitmap();
 		int w = Math.min(width, b.getWidth() - x);
 		int h = Math.min(height, b.getHeight() - y);
 		b.getPixels(pixels, offset, stride, x, y, w, h);
 	}
 
 	public Bitmap getBitmap() {
-		return canvasBitmap;
+		return image.getBitmap();
 	}
 
 	void flush(Image image, int x, int y, int width, int height) {

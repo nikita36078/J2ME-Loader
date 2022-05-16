@@ -39,7 +39,6 @@ public abstract class CustomItem extends Item {
 	private InnerView view;
 	private Image offscreen;
 	private final RectF bounds = new RectF();
-	private Graphics graphics;
 
 	private class InnerView extends View {
 		public InnerView(Context context) {
@@ -116,6 +115,7 @@ public abstract class CustomItem extends Item {
 
 	protected final void repaint(int x, int y, int width, int height) {
 		if (view == null) return;
+		Graphics graphics = offscreen.getSingleGraphics();
 		graphics.reset(x, y, x + width, y + height);
 		try {
 			paint(graphics, width, height);
@@ -178,8 +178,7 @@ public abstract class CustomItem extends Item {
 			int height = getMinContentHeight();
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
-			offscreen = Image.createTransparentImage(width, height);
-			graphics = offscreen.getSingleGraphics();
+			offscreen = Image.createImage(width, height, 0);
 			view.setOnClickListener(v -> fireDefaultCommandAction());
 		}
 
