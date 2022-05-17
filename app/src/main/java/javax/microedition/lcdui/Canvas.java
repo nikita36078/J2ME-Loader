@@ -21,12 +21,10 @@ package javax.microedition.lcdui;
 import static android.opengl.GLES20.*;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -44,7 +42,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -159,7 +156,7 @@ public abstract class Canvas extends Displayable {
 	private int onX, onY, onWidth, onHeight;
 	private long lastFrameTime = System.currentTimeMillis();
 	private Handler uiHandler;
-	private final Overlay overlay = ContextHolder.getVk();
+	private Overlay overlay;
 	private FpsCounter fpsCounter;
 	private boolean skipLeftSoft;
 	private boolean skipRightSoft;
@@ -363,7 +360,8 @@ public abstract class Canvas extends Displayable {
 
 		// if phone keyboard layout is active, then scale down the virtual screen
 		if (isPhoneSkin) {
-			scaledDisplayHeight = (int) (displayHeight - vk.getPhoneKeyboardHeight() - 1);
+			float vkHeight = vk.getPhoneKeyboardHeight(displayWidth, displayHeight);
+			scaledDisplayHeight = (int) (displayHeight - vkHeight - 1);
 		} else {
 			scaledDisplayHeight = displayHeight;
 		}
@@ -982,12 +980,10 @@ public abstract class Canvas extends Displayable {
 	private class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback, View.OnKeyListener {
 		private final View mView;
 		OverlayView overlayView;
-		private final FrameLayout rootView;
 
 		public ViewCallbacks(View view) {
 			mView = view;
-			rootView = ((Activity) view.getContext()).findViewById(R.id.midletFrame);
-			overlayView = rootView.findViewById(R.id.vOverlay);
+			overlayView = ContextHolder.getActivity().findViewById(R.id.vOverlay);
 		}
 
 		@Override
@@ -1150,10 +1146,6 @@ public abstract class Canvas extends Displayable {
 			} else if (newWidth > newHeight) {
 				softBar.closeMenu();
 			}
-			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
-			// calculates the relative coordinates to the parent
-			rootView.offsetDescendantRectToMyCoords(mView, offsetViewBounds);
-			overlayView.setTargetBounds(offsetViewBounds);
 			displayWidth = newWidth;
 			displayHeight = newHeight;
 			if (checkSizeChanged() || !sizeChangedCalled) {
@@ -1180,6 +1172,7 @@ public abstract class Canvas extends Displayable {
 			}
 			overlayView.addLayer(softBar, 0);
 			overlayView.setVisibility(true);
+			overlay = ContextHolder.getVk();
 			if (overlay != null) {
 				overlay.setTarget(Canvas.this);
 			}
@@ -1205,6 +1198,7 @@ public abstract class Canvas extends Displayable {
 			if (overlay != null) {
 				overlay.setTarget(null);
 				overlay.cancel();
+				overlay = null;
 			}
 		}
 
@@ -1355,7 +1349,7 @@ public abstract class Canvas extends Displayable {
 			float bottom;
 			VirtualKeyboard vk = ContextHolder.getVk();
 			if (vk != null && vk.isPhone()) {
-				float vkTop = displayHeight - vk.getPhoneKeyboardHeight() - 1;
+				float vkTop = displayHeight - vk.getPhoneKeyboardHeight(displayWidth, displayHeight) - 1;
 				if (onWidth < displayWidth / 2.0f || onWidth > displayWidth) {
 					textScale = 1.0f;
 					left = 0;

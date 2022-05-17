@@ -103,6 +103,7 @@ public class MicroActivity extends AppCompatActivity {
 	private InputMethodManager inputMethodManager;
 	private int menuKey;
 	private String appPath;
+	private OverlayView overlayView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,7 @@ public class MicroActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
-		OverlayView overlayView = findViewById(R.id.vOverlay);
+		overlayView = findViewById(R.id.vOverlay);
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -634,6 +635,7 @@ public class MicroActivity extends AppCompatActivity {
 			layout.removeAllViews();
 			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
 			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
+			int toolbarHeight = 0;
 			if (next instanceof Canvas) {
 				hideSystemUI();
 				if (!actionBarEnabled) {
@@ -641,15 +643,18 @@ public class MicroActivity extends AppCompatActivity {
 				} else {
 					final String title = next.getTitle();
 					actionBar.setTitle(title == null ? appName : title);
-					layoutParams.height = (int) (getToolBarHeight() / 1.5);
+					toolbarHeight = (int) (getToolBarHeight() / 1.5);
+					layoutParams.height = toolbarHeight;
 				}
 			} else {
 				showSystemUI();
 				actionBar.show();
 				final String title = next != null ? next.getTitle() : null;
 				actionBar.setTitle(title == null ? appName : title);
-				layoutParams.height = getToolBarHeight();
+				toolbarHeight = getToolBarHeight();
+				layoutParams.height = toolbarHeight;
 			}
+			overlayView.setLocation(0, toolbarHeight);
 			toolbar.setLayoutParams(layoutParams);
 			invalidateOptionsMenu();
 			if (next != null) {

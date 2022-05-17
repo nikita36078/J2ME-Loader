@@ -17,7 +17,6 @@ package javax.microedition.lcdui.overlay;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -28,9 +27,10 @@ import javax.microedition.lcdui.graphics.CanvasWrapper;
 public class OverlayView extends View {
 
 	private final CanvasWrapper graphics;
-	private final Rect surfaceRect = new Rect();
 	private final ArrayList<Layer> layers = new ArrayList<>();
 	private boolean visible;
+	private int x;
+	private int y;
 
 	public OverlayView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -45,7 +45,7 @@ public class OverlayView extends View {
 	protected void onDraw(Canvas canvas) {
 		if (!visible) return;
 		int save = canvas.save();
-		canvas.translate(surfaceRect.left, surfaceRect.top);
+		canvas.translate(x, y);
 		graphics.bind(canvas);
 		for (Layer layer : layers) {
 			layer.paint(graphics);
@@ -53,8 +53,9 @@ public class OverlayView extends View {
 		canvas.restoreToCount(save);
 	}
 
-	public void setTargetBounds(Rect bounds) {
-		surfaceRect.set(bounds);
+	public void setLocation(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	public void addLayer(Layer layer) {

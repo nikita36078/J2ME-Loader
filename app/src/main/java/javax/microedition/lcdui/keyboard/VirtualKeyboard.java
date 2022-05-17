@@ -17,6 +17,9 @@
  */
 package javax.microedition.lcdui.keyboard;
 
+import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_A;
+import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
+
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Handler;
@@ -44,9 +47,6 @@ import javax.microedition.util.ContextHolder;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
-
-import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_A;
-import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String TAG = VirtualKeyboard.class.getSimpleName();
@@ -486,8 +486,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return layoutVariant;
 	}
 
-	public float getPhoneKeyboardHeight() {
-		return PHONE_KEY_ROWS * keySize * PHONE_KEY_SCALE_Y;
+	public float getPhoneKeyboardHeight(float w, float h) {
+		return PHONE_KEY_ROWS * getKeySize(w, h) * PHONE_KEY_SCALE_Y;
 	}
 
 	public void setLayout(int variant) {
@@ -863,24 +863,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 		}
 
-		float min = screen.width();
-		float max = screen.height();
-		boolean landscape = min > max;
-		if (min > max) {
-			float tmp = max;
-			max = min;
-			min = tmp;
-		}
-
-		boolean nonWide = max / min < 2;
-		float keySize;
-		if (isPhone()) {
-			keySize = min / 6.0F;
-		} else if (nonWide || landscape) {
-			keySize = max / 12F;
-		} else {
-			keySize = min / 6.5F;
-		}
+		float keySize = getKeySize(screen.width(), screen.height());
 		snapRadius = keySize * snapRadius / 4;
 		this.keySize = keySize;
 		for (int group = 0; group < keyScaleGroups.length; group++) {
@@ -897,6 +880,28 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 			handler.postDelayed(this, delay);
 		}
+	}
+
+	private float getKeySize(float screenWidth, float screenHeight) {
+		float min = screenWidth;
+		float max = screenHeight;
+		boolean landscape = min > max;
+		if (min > max) {
+			float tmp = max;
+			max = min;
+			min = tmp;
+		}
+
+		boolean nonWide = max / min < 2;
+		float keySize;
+		if (isPhone()) {
+			keySize = min / 6.0F;
+		} else if (nonWide || landscape) {
+			keySize = max / 12F;
+		} else {
+			keySize = min / 6.5F;
+		}
+		return keySize;
 	}
 
 	@Override
