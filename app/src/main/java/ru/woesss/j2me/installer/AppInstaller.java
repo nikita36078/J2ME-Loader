@@ -369,13 +369,23 @@ public class AppInstaller {
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
 		currentApp = appRepository.get(name, vendor);
-		String id = Integer.toHexString((name + vendor).hashCode());
-		appDirName = name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim() + '_' + id;
-		targetDir = new File(Config.getAppDir(), appDirName);
 		if (currentApp == null) {
+			generatePathName(name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim());
 			return STATUS_NEW;
 		}
+		appDirName = currentApp.getPath();
+		targetDir = new File(Config.getAppDir(), appDirName);
 		return newDesc.compareVersion(currentApp.getVersion());
+	}
+
+	private void generatePathName(String name) {
+		String appsDir = Config.getAppDir();
+		File dir = new File(appsDir, name);
+		for (int i = 1; dir.exists(); i++) {
+			dir = new File(appsDir, name + "_" + i);
+		}
+		appDirName = dir.getName();
+		targetDir = dir;
 	}
 
 	private void downloadJar() throws ConverterException {
