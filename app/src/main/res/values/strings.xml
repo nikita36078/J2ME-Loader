@@ -235,7 +235,8 @@
     <string name="mapping_dialog_key_not_specified">not specified</string>
     <string name="mapping_dialog_title">Press a key</string>
     <string name="reset_mapping">Reset</string>
-    <string name="alert_map_menu">You MUST map menu (M) key!</string>
+    <string name="alert_map_menu">Menu key (M) is not assigned!\nThis may make it impossible to access the emulator options</string>
+    <string name="save">Save</string>
 
     <string name="error_name">Enter name!</string>
     <string name="set_as_default">Set as default</string>
