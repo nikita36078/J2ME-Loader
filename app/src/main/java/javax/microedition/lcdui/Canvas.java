@@ -435,8 +435,7 @@ public abstract class Canvas extends Displayable {
 		onWidth = onWidth * scaleRatio / 100;
 		onHeight = onHeight * scaleRatio / 100;
 
-		int screenGravity = isPhoneSkin ? 1 : Canvas.screenGravity;
-		switch (screenGravity) {
+		switch (Canvas.screenGravity) {
 			case 0: // left
 				onX = 0;
 				onY = (scaledDisplayHeight - onHeight) / 2;
