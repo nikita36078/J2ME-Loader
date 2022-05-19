@@ -29,6 +29,7 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Dao
@@ -36,6 +37,9 @@ public interface AppItemDao {
 
 	@RawQuery(observedEntities = AppItem.class)
 	Flowable<List<AppItem>> getAll(SupportSQLiteQuery query);
+
+	@RawQuery(observedEntities = AppItem.class)
+	Single<List<AppItem>> getAllSingle(SupportSQLiteQuery query);
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	void insert(AppItem item);
