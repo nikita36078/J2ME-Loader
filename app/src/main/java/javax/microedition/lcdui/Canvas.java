@@ -401,6 +401,7 @@ public abstract class Canvas extends Displayable {
 		 * We turn the size of the canvas into the size of the image
 		 * that will be displayed on the screen of the device.
 		 */
+		int scaleRatio = Canvas.scaleRatio;
 		switch (scaleType) {
 			case 0:
 				// without scaling
@@ -416,12 +417,18 @@ public abstract class Canvas extends Displayable {
 					onHeight = scaledDisplayHeight;
 					onWidth = width * scaledDisplayHeight / height;
 				}
+				if (scaleRatio > 100) {
+					scaleRatio = 100;
+				}
 				break;
 			case 2:
 				// scaling without preserving the aspect ratio:
 				// just stretch the picture to full screen
 				onWidth = displayWidth;
 				onHeight = scaledDisplayHeight;
+				if (scaleRatio > 100) {
+					scaleRatio = 100;
+				}
 				break;
 		}
 
