@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,4 +57,7 @@ public interface AppItemDao {
 
 	@Query("SELECT * FROM apps WHERE title = :name AND author = :vendor")
 	AppItem get(String name, String vendor);
+
+	@Query("SELECT * FROM apps WHERE id = :id")
+	AppItem get(int id);
 }

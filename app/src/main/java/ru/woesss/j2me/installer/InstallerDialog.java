@@ -52,7 +52,8 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class InstallerDialog extends DialogFragment {
-	private static final String ARG_URI = "param2";
+	private static final String ARG_URI = "InstallerDialog.uri";
+	private static final String ARG_ID = "InstallerDialog.id";
 	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 	private TextView tvStatus;
@@ -76,6 +77,15 @@ public class InstallerDialog extends DialogFragment {
 		InstallerDialog fragment = new InstallerDialog();
 		Bundle args = new Bundle();
 		args.putParcelable(ARG_URI, uri);
+		fragment.setArguments(args);
+		fragment.setCancelable(false);
+		return fragment;
+	}
+
+	public static InstallerDialog newInstance(int id) {
+		InstallerDialog fragment = new InstallerDialog();
+		Bundle args = new Bundle();
+		args.putInt(ARG_ID, id);
 		fragment.setArguments(args);
 		fragment.setCancelable(false);
 		return fragment;
@@ -129,17 +139,36 @@ public class InstallerDialog extends DialogFragment {
 		if (installer != null) {
 			return;
 		}
-		Bundle args = requireArguments();
-		Uri uri = args.getParcelable(ARG_URI);
 		btnOk = mDialog.getButton(DialogInterface.BUTTON_POSITIVE);
 		btnClose = mDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
 		btnRun = mDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
 		hideButtons();
-		installApp(null, uri);
+		Bundle args = requireArguments();
+		Uri uri = args.getParcelable(ARG_URI);
+		if (uri != null) {
+			installApp(null, uri);
+			return;
+		}
+		int id = args.getInt(ARG_ID);
+		reinstallApp(id);
 	}
 
 	private void installApp(String path, Uri uri) {
 		installer = new AppInstaller(path, uri, requireActivity().getApplication(), appRepository);
+		btnClose.setOnClickListener(v -> {
+			installer.deleteTemp();
+			installer.clearCache();
+			dismiss();
+		});
+		Disposable disposable = Single.create(installer::loadInfo)
+				.subscribeOn(Schedulers.computation())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(this::onProgress, this::onError);
+		compositeDisposable.add(disposable);
+	}
+
+	private void reinstallApp(int id) {
+		installer = new AppInstaller(id, requireActivity().getApplication(), appRepository);
 		btnClose.setOnClickListener(v -> {
 			installer.deleteTemp();
 			installer.clearCache();

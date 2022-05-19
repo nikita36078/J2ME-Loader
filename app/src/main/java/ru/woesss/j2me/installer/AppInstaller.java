@@ -62,10 +62,12 @@ public class AppInstaller {
 	static final int STATUS_NEED_JAD = 4;
 	static final int STATUS_SUCCESS = 5;
 
+	private final int id;
 	private final Application context;
 	private final AppRepository appRepository;
-	private final Uri uri;
 	private final File cacheDir;
+
+	private Uri uri;
 	private Descriptor manifest;
 	private Descriptor newDesc;
 	private String appDirName;
@@ -76,10 +78,18 @@ public class AppInstaller {
 	private File srcFile;
 
 	AppInstaller(String path, Uri uri, Application context, AppRepository appRepository) {
+		id = -1;
 		this.appRepository = appRepository;
 		if (path != null) srcFile = new File(path);
 		this.uri = uri;
 		this.context = context;
+		this.cacheDir = new File(context.getCacheDir(), "installer");
+	}
+
+	public AppInstaller(int id, Application context, AppRepository appRepository) {
+		this.id = id;
+		this.context = context;
+		this.appRepository = appRepository;
 		this.cacheDir = new File(context.getCacheDir(), "installer");
 	}
 
@@ -97,6 +107,15 @@ public class AppInstaller {
 
 	/** Load and check app info from source */
 	void loadInfo(SingleEmitter<Integer> emitter) throws IOException, ConverterException {
+		if (id != -1) {
+			currentApp = appRepository.get(id);
+			srcJar = new File(currentApp.getPathExt(), Config.MIDLET_RES_FILE);
+			newDesc = new Descriptor(new File(currentApp.getPathExt(), Config.MIDLET_MANIFEST_FILE), false);
+			appDirName = currentApp.getPath();
+			targetDir = new File(Config.getAppDir(), appDirName);
+			emitter.onSuccess(STATUS_EQUAL);
+			return;
+		}
 		boolean isLocal;
 		boolean isContentUri = uri.getScheme().equals("content");
 		if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
@@ -297,7 +316,7 @@ public class AppInstaller {
 		newDesc.writeTo(new File(tmpDir, Config.MIDLET_MANIFEST_FILE));
 		FileUtils.deleteDirectory(targetDir);
 		if (!tmpDir.renameTo(targetDir)) {
-			throw new ConverterException("Can't rename '" + tmpDir + "' to '" + targetDir + "'");
+			throw new ConverterException("Can't move '" + tmpDir + "' to '" + targetDir + "'");
 		}
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
@@ -307,6 +326,7 @@ public class AppInstaller {
 		}
 		if (currentApp != null) {
 			app.setId(currentApp.getId());
+			app.setTitle(currentApp.getTitle());
 			String path = currentApp.getPath();
 			if (!path.equals(appDirName)) {
 				File rms = new File(Config.getDataDir(), path);

@@ -1,6 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2018-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,11 @@
  */
 
 package ru.playsoftware.j2meloader.applist;
+
+import static ru.playsoftware.j2meloader.util.Constants.KEY_APP_URI;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -88,11 +94,6 @@ import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
-
-import static ru.playsoftware.j2meloader.util.Constants.KEY_APP_URI;
-import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 
 public class AppsListFragment extends ListFragment {
 	private static final String TAG = AppsListFragment.class.getSimpleName();
@@ -180,10 +181,6 @@ public class AppsListFragment extends ListFragment {
 		preferences.edit()
 				.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
 				.apply();
-		installApp(uri);
-	}
-
-	private void installApp(Uri uri) {
 		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 	}
 
@@ -266,8 +263,7 @@ public class AppsListFragment extends ListFragment {
 		} else if (itemId == R.id.action_context_settings) {
 			Config.startApp(requireActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 		} else if (itemId == R.id.action_context_reinstall) {
-			Uri uri = Uri.fromFile(new File(appItem.getPathExt() + Config.MIDLET_RES_FILE));
-			installApp(uri);
+			InstallerDialog.newInstance(appItem.getId()).show(getParentFragmentManager(), "installer");
 		} else if (itemId == R.id.action_context_delete) {
 			alertDelete(appItem);
 		} else {
@@ -397,7 +393,7 @@ public class AppsListFragment extends ListFragment {
 	private void onDbUpdated(List<AppItem> items) {
 		adapter.setItems(items);
 		if (appUri != null) {
-			installApp(appUri);
+			InstallerDialog.newInstance(appUri).show(getParentFragmentManager(), "installer");
 			appUri = null;
 		}
 	}

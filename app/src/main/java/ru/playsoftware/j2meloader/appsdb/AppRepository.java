@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
- * Copyright 2021 Yury Kharchenko
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
  */
 
 package ru.playsoftware.j2meloader.appsdb;
+
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -46,9 +49,6 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.AppUtils;
-
-import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 
 public class AppRepository implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -143,6 +143,10 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 
 	public AppItem get(String name, String vendor) {
 		return appItemDao.get(name, vendor);
+	}
+
+	public AppItem get(int id) {
+		return appItemDao.get(id);
 	}
 
 	public void close() {

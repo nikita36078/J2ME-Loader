@@ -102,7 +102,7 @@ android {
     }
 
     applicationVariants.all {
-        if (buildType.name == 'debug' && flavorName == 'emulator') {
+        if (buildType.name == 'debug' && flavorName == 'dev') {
             resValue 'string', 'app_name', 'JL-Debug'
         }
         def baseName = flavorName == 'midlet' ? "${midletArchivesBaseName}-" : "${rootProject.name}_"
