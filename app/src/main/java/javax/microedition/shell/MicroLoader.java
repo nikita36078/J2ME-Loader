@@ -135,13 +135,14 @@ public class MicroLoader {
 		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion());
 		errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 		MIDlet.initProps(attr);
-		for (Map.Entry<String, String> entry : attr.entrySet()) {
-			if (entry.getKey().matches("MIDlet-[0-9]+")) {
-				String tmp = entry.getValue();
-				String clazz = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
-				String title = tmp.substring(0, tmp.indexOf(',')).trim();
-				midlets.put(clazz, title);
+		for (int i = 1; ; i++) {
+			String v = attr.get("MIDlet-" + i);
+			if (v == null) {
+				break;
 			}
+			String clazz = v.substring(v.lastIndexOf(',') + 1).trim();
+			String title = v.substring(0, v.indexOf(',')).trim();
+			midlets.put(clazz, title);
 		}
 		return midlets;
 	}
