@@ -65,6 +65,7 @@ import org.acra.ErrorReporter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 
@@ -498,21 +499,16 @@ public class MicroActivity extends AppCompatActivity {
 	private void showHideButtonDialog() {
 		final VirtualKeyboard vk = ContextHolder.getVk();
 		boolean[] states = vk.getKeysVisibility();
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		boolean[] changed = states.clone();
+		new AlertDialog.Builder(this)
 				.setTitle(R.string.hide_buttons)
-				.setMultiChoiceItems(vk.getKeyNames(), states, null)
+				.setMultiChoiceItems(vk.getKeyNames(), changed, (dialog, which, isChecked) -> {})
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-					ListView lv = ((AlertDialog) dialog).getListView();
-					SparseBooleanArray current = lv.getCheckedItemPositions();
-					for (int i = 0; i < current.size(); i++) {
-						if (states[current.keyAt(i)] != current.valueAt(i)) {
-							vk.setKeysVisibility(current);
-							showSaveVkAlert(true);
-							return;
-						}
+					if (!Arrays.equals(states, changed)) {
+						vk.setKeysVisibility(changed);
+						showSaveVkAlert(true);
 					}
-				});
-		builder.show();
+				}).show();
 	}
 
 	private void showSaveVkAlert(boolean keepScreenPreferred) {

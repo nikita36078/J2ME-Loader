@@ -721,9 +721,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return states;
 	}
 
-	public void setKeysVisibility(SparseBooleanArray states) {
-		for (int i = 0; i < states.size(); i++) {
-			keypad[states.keyAt(i)].visible = !states.valueAt(i);
+	public void setKeysVisibility(boolean[] states) {
+		for (int i = 0; i < KEYBOARD_SIZE; i++) {
+			keypad[i].visible = !states[i];
 		}
 		overlayView.postInvalidate();
 	}
