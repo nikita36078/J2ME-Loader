@@ -21,6 +21,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
+import com.sonyericsson.accelerometer.AccelerometerSensorConnection;
+
 import org.microemu.microedition.io.ConnectionImplementation;
 
 import java.io.IOException;
@@ -33,12 +35,11 @@ import javax.microedition.sensor.ChannelInfo;
 import javax.microedition.sensor.Data;
 import javax.microedition.sensor.DataImpl;
 import javax.microedition.sensor.DataListener;
-import javax.microedition.sensor.SensorConnection;
 import javax.microedition.sensor.SensorInfo;
 import javax.microedition.sensor.SensorManager;
 import javax.microedition.util.ContextHolder;
 
-public class Connection implements SensorConnection, ConnectionImplementation, SensorEventListener {
+public class Connection extends AccelerometerSensorConnection implements ConnectionImplementation, SensorEventListener {
 
 	private SensorInfo sensorInfo;
 	private ChannelInfo[] channelInfos;
