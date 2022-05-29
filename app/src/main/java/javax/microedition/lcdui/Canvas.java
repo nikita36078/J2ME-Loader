@@ -767,7 +767,6 @@ public abstract class Canvas extends Displayable {
 		private final int[] bgTextureId = new int[1];
 		private ShaderProgram program;
 		private boolean isStarted;
-		private Runnable screenshotTask;
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -801,10 +800,6 @@ public abstract class Canvas extends Displayable {
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
-			}
-			if (screenshotTask != null) {
-				screenshotTask.run();
-				screenshotTask = null;
 			}
 		}
 
@@ -859,16 +854,17 @@ public abstract class Canvas extends Displayable {
 
 		private Single<Bitmap> takeScreenShot() {
 			return Single.<ByteBuffer>create(emitter -> {
-				ByteBuffer buf = ByteBuffer.allocateDirect(onWidth * onHeight * 4).order(ByteOrder.nativeOrder());
-				screenshotTask = () -> {
-					try {
-						glReadPixels(displayWidth - onWidth - onX, displayHeight - onHeight - onY, onWidth, onHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-						emitter.onSuccess(buf);
-					} catch (Throwable e) {
-						emitter.onError(e);
-					}
-				};
-			}).timeout(3, TimeUnit.SECONDS)
+						ByteBuffer buf = ByteBuffer.allocateDirect(onWidth * onHeight * 4).order(ByteOrder.nativeOrder());
+						mView.requestRender();
+						mView.queueEvent(() -> {
+							try {
+								glReadPixels(displayWidth - onWidth - onX, displayHeight - onHeight - onY, onWidth, onHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+								emitter.onSuccess(buf);
+							} catch (Throwable e) {
+								emitter.onError(e);
+							}
+						});
+					}).timeout(3, TimeUnit.SECONDS)
 					.subscribeOn(Schedulers.computation())
 					.observeOn(Schedulers.computation())
 					.map(bb -> {
