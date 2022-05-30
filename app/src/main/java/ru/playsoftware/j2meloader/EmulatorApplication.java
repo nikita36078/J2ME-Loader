@@ -62,20 +62,20 @@ public class EmulatorApplication extends Application {
 			MultiDex.install(this);
 		}
 		ContextHolder.setApplication(this);
-		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) {
-			CoreConfigurationBuilder builder = new CoreConfigurationBuilder(this);
-			builder.withBuildConfigClass(BuildConfig.class)
-					.withParallel(false)
-					.withSendReportsInDevMode(false)
-					.withEnabled(true);
-			builder.getPluginConfigurationBuilder(DialogConfigurationBuilder.class)
-					.withResTitle(R.string.crash_dialog_title)
-					.withResText(R.string.crash_dialog_message)
-					.withResPositiveButtonText(R.string.report_crash)
-					.withResTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_Dialog)
-					.withEnabled(true);
-			ACRA.init(this, builder);
-		}
+		ACRA.init(this, new CoreConfigurationBuilder()
+				.withBuildConfigClass(BuildConfig.class)
+				.withParallel(false)
+				.withSendReportsInDevMode(false)
+				.withPluginConfigurations(new DialogConfigurationBuilder()
+						.withTitle(getString(R.string.crash_dialog_title))
+						.withText(getString(R.string.crash_dialog_message))
+						.withPositiveButtonText(getString(R.string.report_crash))
+						.withResTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_Dialog)
+						.withEnabled(true)
+						.build()
+				));
+		boolean enabled = isSignatureValid() && !BuildConfig.FLAVOR.equals("dev");
+		ACRA.getErrorReporter().setEnabled(enabled);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(themeListener);
 		setNightMode(sp.getString(Constants.PREF_THEME, null));
