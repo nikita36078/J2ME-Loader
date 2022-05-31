@@ -398,16 +398,30 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.midlet_displayable, menu);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			menu.findItem(R.id.action_lock_orientation).setVisible(true);
+		}
+		if (actionBarEnabled) {
+			menu.findItem(R.id.action_ime_keyboard).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			menu.findItem(R.id.action_take_screenshot).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		}
+		if (inputMethodManager == null) {
+			menu.findItem(R.id.action_ime_keyboard).setVisible(false);
+		}
+		if (ContextHolder.getVk() == null) {
+			menu.findItem(R.id.action_submenu_vk).setVisible(false);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (current instanceof Canvas) {
-			if (actionBarEnabled) {
-				menu.findItem(R.id.action_ime_keyboard).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-				menu.findItem(R.id.action_take_screenshot).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			}
-			if (inputMethodManager == null) {
-				menu.findItem(R.id.action_ime_keyboard).setVisible(false);
-			}
-			if (ContextHolder.getVk() == null) {
-				menu.findItem(R.id.action_submenu_vk).setVisible(false);
+			menu.setGroupVisible(R.id.action_group_canvas, true);
+			VirtualKeyboard vk = ContextHolder.getVk();
+			if (vk != null) {
+				boolean visible = vk.getLayoutEditMode() != VirtualKeyboard.LAYOUT_EOF;
+				menu.findItem(R.id.action_layout_edit_finish).setVisible(visible);
 			}
 		} else {
 			menu.setGroupVisible(R.id.action_group_canvas, false);
@@ -416,27 +430,27 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		VirtualKeyboard vk = ContextHolder.getVk();
-		if (vk != null) {
-			boolean visible = vk.getLayoutEditMode() != VirtualKeyboard.LAYOUT_EOF;
-			menu.findItem(R.id.action_layout_edit_finish).setVisible(visible);
-		}
-		return true;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_ime_keyboard) {
-			inputMethodManager.toggleSoftInputFromWindow(layout.getWindowToken(),
-					InputMethodManager.SHOW_FORCED, 0);
-		} else if (id == R.id.action_exit_midlet) {
+		if (id == R.id.action_exit_midlet) {
 			showExitConfirmation();
-		} else if (id == R.id.action_take_screenshot) {
-			takeScreenshot();
 		} else if (id == R.id.action_save_log) {
 			saveLog();
+		} else if (id == R.id.action_lock_orientation) {
+			if (item.isChecked()) {
+				VirtualKeyboard vk = ContextHolder.getVk();
+				int orientation = vk != null && vk.isPhone() ? ORIENTATION_PORTRAIT : microLoader.getOrientation();
+				setOrientation(orientation);
+				item.setChecked(false);
+			} else {
+				item.setChecked(true);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+			}
+		} else if (id == R.id.action_ime_keyboard) {
+			inputMethodManager.toggleSoftInputFromWindow(layout.getWindowToken(),
+					InputMethodManager.SHOW_FORCED, 0);
+		} else if (id == R.id.action_take_screenshot) {
+			takeScreenshot();
 		} else if (id == R.id.action_limit_fps) {
 			showLimitFpsDialog();
 		} else if (ContextHolder.getVk() != null) {
@@ -625,6 +639,7 @@ public class MicroActivity extends AppCompatActivity {
 
 		@Override
 		public void process() {
+			closeOptionsMenu();
 			if (current != null) {
 				current.clearDisplayableView();
 			}
@@ -652,7 +667,6 @@ public class MicroActivity extends AppCompatActivity {
 			}
 			overlayView.setLocation(0, toolbarHeight);
 			toolbar.setLayoutParams(layoutParams);
-			invalidateOptionsMenu();
 			if (next != null) {
 				layout.addView(next.getDisplayableView());
 			}

@@ -171,6 +171,7 @@
     <string name="screenshot_saved">Screenshot has been saved to</string>
     <string name="log_saved">Log has been saved</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
+    <string name="action_lock_orientation">Lock screen rotate</string>
     <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
     <string name="opt_save_screen_params">save screen params</string>
     <string name="cmd_menu">Menu</string>

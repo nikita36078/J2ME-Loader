@@ -5,6 +5,12 @@
     <item
         android:id="@+id/action_save_log"
         android:title="@string/save_log" />
+    <item
+        android:id="@+id/action_lock_orientation"
+        android:title="@string/action_lock_orientation"
+        android:checkable="true"
+        android:checked="false"
+        android:visible="false" />
     <group android:id="@+id/action_group_canvas">
         <item
             android:icon="@drawable/ic_action_keyboard"
