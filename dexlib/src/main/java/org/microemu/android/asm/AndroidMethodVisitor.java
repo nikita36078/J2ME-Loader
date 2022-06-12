@@ -28,12 +28,12 @@
 
 package org.microemu.android.asm;
 
+import static org.objectweb.asm.Opcodes.*;
+
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
-
-import static org.objectweb.asm.Opcodes.*;
 
 public class AndroidMethodVisitor extends MethodVisitor {
 	static boolean USE_PANIC_LOGGING = false;
@@ -125,7 +125,14 @@ public class AndroidMethodVisitor extends MethodVisitor {
 					return;
 				}
 				break;
+			case "java/util/Timer":
+				owner = "javax/microedition/shell/custom/Timer";
+				break;
+			case "java/util/TimerTask":
+				owner = "javax/microedition/shell/custom/TimerTask";
+				break;
 		}
+		desc = desc.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
 		mv.visitMethodInsn(opcode, owner, name, desc, itf);
 	}
 
@@ -141,5 +148,24 @@ public class AndroidMethodVisitor extends MethodVisitor {
 			exceptionHandlers.add(handler);
 		}
 		mv.visitTryCatchBlock(start, end, handler, type);
+	}
+
+	@Override
+	public void visitTypeInsn(int opcode, String type) {
+		type = type.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		super.visitTypeInsn(opcode, type);
+	}
+
+	@Override
+	public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+		descriptor = descriptor.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		owner = owner.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		super.visitFieldInsn(opcode, owner, name, descriptor);
+	}
+
+	@Override
+	public void visitMultiANewArrayInsn(String descriptor, int numDimensions) {
+		descriptor = descriptor.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		super.visitMultiANewArrayInsn(descriptor, numDimensions);
 	}
 }

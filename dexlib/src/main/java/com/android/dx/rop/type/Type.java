@@ -883,12 +883,7 @@ public final class Type implements TypeBearer, Comparable<Type> {
      * @return {@code non-null;} the actual interned object
      */
     private static Type putIntern(Type type) {
-        String descriptor = type.getDescriptor();
-        if (descriptor.contains("Ljava/util/Timer")) {
-            String custom = descriptor.replaceAll("Ljava/util/Timer", "Ljavax/microedition/shell/custom/Timer");
-            type = new Type(custom, BT_OBJECT);
-        }
-        Type result = internTable.putIfAbsent(descriptor, type);
+        Type result = internTable.putIfAbsent(type.getDescriptor(), type);
         return result != null ? result : type;
     }
 
