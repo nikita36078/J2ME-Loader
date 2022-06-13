@@ -414,7 +414,7 @@ public class Main {
      */
     private boolean processFileBytes(String name, long lastModified, byte[] bytes) {
 
-        boolean isClass = name != null && name.endsWith(".class");
+        boolean isClass = name != null && name.toLowerCase().endsWith(".class");
         boolean keepResources = (outputResources != null);
 
         if (!isClass && !keepResources) {

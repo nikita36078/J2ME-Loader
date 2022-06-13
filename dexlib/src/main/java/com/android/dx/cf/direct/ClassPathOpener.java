@@ -147,10 +147,11 @@ public class ClassPathOpener {
             }
 
             String path = file.getPath();
+            String lowerName = file.getName().toLowerCase();
 
-            if (path.endsWith(".zip") ||
-                    path.endsWith(".jar") ||
-                    path.endsWith(".apk")) {
+            if (lowerName.endsWith(".zip") ||
+                    lowerName.endsWith(".jar") ||
+                    lowerName.endsWith(".apk")) {
                 return processArchive(file);
             }
             if (filter.accept(path)) {
