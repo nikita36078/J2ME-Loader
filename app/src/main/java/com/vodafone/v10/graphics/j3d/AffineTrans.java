@@ -34,18 +34,18 @@ public class AffineTrans extends com.mascotcapsule.micro3d.v3.AffineTrans {
 	}
 
 	public void multiply(AffineTrans a) {
-		super.multiply(a);
+		mul(a);
 	}
 
 	public void multiply(AffineTrans a1, AffineTrans a2) {
-		super.multiply(a1, a2);
+		mul(a1, a2);
 	}
 
 	public void rotationV(Vector3D v, int r) {
-		super.setRotation(v, r);
+		setRotation(v, r);
 	}
 
 	public void setViewTrans(Vector3D pos, Vector3D look, Vector3D up) {
-		super.setViewTrans(pos, look, up);
+		lookAt(pos, look, up);
 	}
 }

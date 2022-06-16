@@ -73,6 +73,7 @@ public class Effect3D {
 		isLighting = light != null;
 	}
 
+	@Deprecated
 	public final int getShading() {
 		return mShading;
 	}
@@ -81,6 +82,7 @@ public class Effect3D {
 		return mShading;
 	}
 
+	@Deprecated
 	public final void setShading(int shading) {
 		setShadingType(shading);
 	}
@@ -96,6 +98,7 @@ public class Effect3D {
 		}
 	}
 
+	@Deprecated
 	public final int getThreshold() {
 		return mToonThreshold;
 	}
@@ -104,6 +107,7 @@ public class Effect3D {
 		return mToonThreshold;
 	}
 
+	@Deprecated
 	public final int getThresholdHigh() {
 		return mToonHigh;
 	}
@@ -112,6 +116,7 @@ public class Effect3D {
 		return mToonHigh;
 	}
 
+	@Deprecated
 	public final int getThresholdLow() {
 		return mToonLow;
 	}
@@ -120,6 +125,7 @@ public class Effect3D {
 		return mToonLow;
 	}
 
+	@Deprecated
 	public final void setThreshold(int threshold, int high, int low) {
 		setToonParams(threshold, high, low);
 	}
@@ -138,6 +144,7 @@ public class Effect3D {
 		}
 	}
 
+	@Deprecated
 	public final boolean isSemiTransparentEnabled() {
 		return isTransparency;
 	}
@@ -146,6 +153,7 @@ public class Effect3D {
 		return isTransparency;
 	}
 
+	@Deprecated
 	public final void setSemiTransparentEnabled(boolean isEnable) {
 		isTransparency = isEnable;
 	}
@@ -154,6 +162,7 @@ public class Effect3D {
 		isTransparency = isEnable;
 	}
 
+	@Deprecated
 	public final Texture getSphereMap() {
 		return mTexture;
 	}
@@ -162,6 +171,7 @@ public class Effect3D {
 		return mTexture;
 	}
 
+	@Deprecated
 	public final void setSphereMap(Texture tex) {
 		setSphereTexture(tex);
 	}

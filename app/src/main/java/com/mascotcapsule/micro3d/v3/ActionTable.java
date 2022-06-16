@@ -60,6 +60,7 @@ public class ActionTable {
 		actions = null;
 	}
 
+	@Deprecated
 	public final int getNumAction() {
 		return getNumActions();
 	}
@@ -69,6 +70,7 @@ public class ActionTable {
 		return actions.length;
 	}
 
+	@Deprecated
 	public final int getNumFrame(int idx) {
 		return getNumFrames(idx);
 	}

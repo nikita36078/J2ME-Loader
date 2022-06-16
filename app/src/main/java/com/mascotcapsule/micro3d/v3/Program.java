@@ -137,7 +137,7 @@ abstract class Program {
 		}
 		glUniform1f(uAmbIntensity, Math.max(0, Math.min(light.getAmbientIntensity(), 4096)) * TO_FLOAT);
 		glUniform1f(uDirIntensity, Math.max(0, Math.min(light.getParallelLightIntensity(), 16384)) * TO_FLOAT);
-		Vector3D d = light.getDirection();
+		Vector3D d = light.getParallelLightDirection();
 		float x = d.x;
 		float y = d.y;
 		float z = d.z;

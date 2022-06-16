@@ -1113,8 +1113,8 @@ class Render {
 						light = new Light();
 						effect.setLight(light);
 					}
-					light.getDirection().set(i++, i++, i++);
-					light.setDirIntensity(i++);
+					light.getParallelLightDirection().set(i++, i++, i++);
+					light.setParallelLightIntensity(i++);
 					break;
 				}
 				case COMMAND_FLUSH:
@@ -1142,7 +1142,7 @@ class Render {
 					}
 					break;
 				case COMMAND_THRESHOLD:
-					effect.setThreshold(cmds[i++], cmds[i++], cmds[i++]);
+					effect.setToonParams(cmds[i++], cmds[i++], cmds[i++]);
 					break;
 				case COMMAND_END:
 					return;

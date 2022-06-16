@@ -92,6 +92,7 @@ public class FigureLayout {
 		affine = trans;
 	}
 
+	@Deprecated
 	public final void setAffineTransArray(AffineTrans[] trans) {
 		setAffineTrans(trans);
 	}

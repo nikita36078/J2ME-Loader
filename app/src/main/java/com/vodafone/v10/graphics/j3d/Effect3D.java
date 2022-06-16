@@ -30,6 +30,6 @@ public class Effect3D extends com.mascotcapsule.micro3d.v3.Effect3D {
 	}
 
 	public void setSphereMap(Texture texture) {
-		super.setSphereMap(texture);
+		setSphereTexture(texture);
 	}
 }

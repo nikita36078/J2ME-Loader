@@ -26,10 +26,10 @@ public class Light extends com.mascotcapsule.micro3d.v3.Light {
 	}
 
 	public Vector3D getDirection() {
-		return (Vector3D) super.getDirection();
+		return (Vector3D) getParallelLightDirection();
 	}
 
 	public void setDirection(Vector3D vector3D) {
-		super.setDirection(vector3D);
+		setParallelLightDirection(vector3D);
 	}
 }

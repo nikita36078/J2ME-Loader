@@ -44,10 +44,12 @@ public class Light {
 		mAmbIntensity = src.mAmbIntensity;
 	}
 
+	@Deprecated
 	public final int getDirIntensity() {
 		return mDirIntensity;
 	}
 
+	@Deprecated
 	public final void setDirIntensity(int p) {
 		mDirIntensity = p;
 	}
@@ -60,10 +62,12 @@ public class Light {
 		mDirIntensity = p;
 	}
 
+	@Deprecated
 	public final int getAmbIntensity() {
 		return mAmbIntensity;
 	}
 
+	@Deprecated
 	public final void setAmbIntensity(int p) {
 		mAmbIntensity = p;
 	}
@@ -76,10 +80,12 @@ public class Light {
 		mAmbIntensity = p;
 	}
 
+	@Deprecated
 	public Vector3D getDirection() {
 		return mDirVector;
 	}
 
+	@Deprecated
 	public final void setDirection(Vector3D v) {
 		if (v == null) {
 			throw new NullPointerException();

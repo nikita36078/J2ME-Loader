@@ -70,14 +70,17 @@ public class AffineTrans {
 		set(a, offset);
 	}
 
+	@Deprecated
 	public final void setRotationX(int r) {
 		rotationX(r);
 	}
 
+	@Deprecated
 	public final void setRotationY(int r) {
 		rotationY(r);
 	}
 
+	@Deprecated
 	public final void setRotationZ(int r) {
 		rotationZ(r);
 	}
@@ -206,6 +209,7 @@ public class AffineTrans {
 		set(a, 0);
 	}
 
+	@Deprecated
 	public final Vector3D transPoint(Vector3D v) {
 		return transform(v);
 	}
@@ -262,6 +266,7 @@ public class AffineTrans {
 		m22 = 4096;
 	}
 
+	@Deprecated
 	public final void multiply(AffineTrans a) {
 		mulA2(this, a);
 	}
@@ -273,6 +278,7 @@ public class AffineTrans {
 		mulA2(this, a);
 	}
 
+	@Deprecated
 	public final void multiply(AffineTrans a1, AffineTrans a2) {
 		mulA2(a1, a2);
 	}
@@ -284,6 +290,7 @@ public class AffineTrans {
 		mulA2(a1, a2);
 	}
 
+	@Deprecated
 	public final void rotationV(Vector3D v, int r) {
 		setRotation(v, r);
 	}
@@ -315,6 +322,7 @@ public class AffineTrans {
 		m22 = cos + ((z * z + 2048 >> 12) * nc + 2048 >> 12);
 	}
 
+	@Deprecated
 	public final void setViewTrans(Vector3D pos, Vector3D look, Vector3D up) {
 		lookAt(pos, look, up);
 	}
