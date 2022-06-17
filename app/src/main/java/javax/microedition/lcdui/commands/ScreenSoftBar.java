@@ -35,12 +35,12 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 	private final Button btMiddle;
 	private final Button btRight;
 
-	public ScreenSoftBar(Screen target, View bar) {
+	public ScreenSoftBar(Screen target, View root) {
 		super(target);
-		layout = bar;
-		btLeft = bar.findViewById(R.id.softLeft);
-		btMiddle = bar.findViewById(R.id.softMiddle);
-		btRight = bar.findViewById(R.id.softRight);
+		layout = root.findViewById(R.id.softBar);
+		btLeft = layout.findViewById(R.id.softLeft);
+		btMiddle = layout.findViewById(R.id.softMiddle);
+		btRight = layout.findViewById(R.id.softRight);
 		btLeft.setOnClickListener(this::onClick);
 		btMiddle.setOnClickListener(this::onClick);
 		btRight.setOnClickListener(this::onClick);
