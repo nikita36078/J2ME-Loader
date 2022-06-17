@@ -237,6 +237,7 @@ abstract class Program {
 		int uToonThreshold;
 		int uToonHigh;
 		int uToonLow;
+		int uColorKey;
 
 		Tex() {
 			super(VERTEX, FRAGMENT);
@@ -250,6 +251,7 @@ abstract class Program {
 			uTextureUnit = glGetUniformLocation(id, "uTextureUnit");
 			uSphereUnit = glGetUniformLocation(id, "uSphereUnit");
 			uTexSize = glGetUniformLocation(id, "uTexSize");
+			uColorKey = glGetUniformLocation(id, "uColorKey");
 			uSphereSize = glGetUniformLocation(id, "uSphereSize");
 			uMatrix = glGetUniformLocation(id, "uMatrix");
 			uMatrixMV = glGetUniformLocation(id, "uMatrixMV");
@@ -275,6 +277,7 @@ abstract class Program {
 		void setTex(Texture tex) {
 			if (tex != null) {
 				glUniform2f(uTexSize, tex.width, tex.height);
+				glUniform3fv(uColorKey, 1, tex.getColorKey());
 				glBindTexture(GL_TEXTURE_2D, tex.getId());
 			} else {
 				glUniform2f(uTexSize, 256, 256);
@@ -301,6 +304,7 @@ abstract class Program {
 		int uTexUnit;
 		int uTexSize;
 		int uIsTransparency;
+		int uColorKey;
 
 		Sprite() {
 			super(VERTEX, FRAGMENT);
@@ -311,6 +315,7 @@ abstract class Program {
 			aColorData = glGetAttribLocation(id, "aColorData");
 			uTexUnit = glGetUniformLocation(id, "uTexUnit");
 			uTexSize = glGetUniformLocation(id, "uTexSize");
+			uColorKey = glGetUniformLocation(id, "uColorKey");
 			uIsTransparency = glGetUniformLocation(id, "uIsTransparency");
 		}
 	}

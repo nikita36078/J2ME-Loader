@@ -2,6 +2,7 @@ precision mediump float;
 uniform sampler2D uTextureUnit;
 uniform sampler2D uSphereUnit;
 uniform vec2 uTexSize;
+uniform vec3 uColorKey;
 uniform vec2 uSphereSize;
 uniform vec3 uLightDir;
 uniform float uDirIntensity;
@@ -14,10 +15,12 @@ varying float vIsTransparency;
 varying float vIsReflect;
 varying float vAmbIntensity;
 
+const vec3 COLORKEY_ERROR = vec3(0.5 / 255.0);
+
 void main() {
     vec2 tex = (floor(vTexture) + 0.5);
     vec4 color = texture2D(uTextureUnit, tex / uTexSize);
-    if (vIsTransparency != 0.0 && color.a < 1.0)
+    if (vIsTransparency != 0.0 && all(lessThan(abs(color.rgb - uColorKey), COLORKEY_ERROR)))
             discard;
     if (vAmbIntensity == -1.0) {
         gl_FragColor = vec4(color.rgb, 1.0);

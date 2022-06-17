@@ -24,6 +24,8 @@ import android.opengl.GLUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 import javax.microedition.shell.AppClassLoader;
 
@@ -34,15 +36,15 @@ public class Texture {
 	private static final int BMP_VERSION_CORE = 12;
 	private static int sLastId;
 
+	private final FloatBuffer colorKey =
+			ByteBuffer.allocateDirect(3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+
 	boolean isSphere;
 
 	private Bitmap image;
 	private int mTexId = -2;
 	int width;
 	int height;
-	private byte transR;
-	private byte transG;
-	private byte transB;
 
 	public Texture(byte[] b, boolean isForModel) {
 		if (b == null) {
@@ -60,42 +62,10 @@ public class Texture {
 		}
 		width = image.getWidth();
 		height = image.getHeight();
-		if (isForModel) {
-			setAlpha();
-		}
 	}
 
 	public Texture(String name, boolean isForModel) throws IOException {
 		this(getData(name), isForModel);
-	}
-
-	private void setAlpha() {
-		int width = image.getWidth();
-		int height = image.getHeight();
-		int size = width * height * 4;
-		ByteBuffer bb = ByteBuffer.allocate(size);
-		image.copyPixelsToBuffer(bb);
-		image.recycle();
-		byte[] colors = bb.array();
-		for (int i = 0; i < size; ) {
-			if (colors[i] != transR) {
-				i += 4;
-				continue;
-			}
-			if (colors[++i] != transG) {
-				i += 3;
-				continue;
-			}
-			if (colors[++i] != transB) {
-				i += 2;
-				continue;
-			}
-			colors[++i] = (byte) 0xFE;
-			i++;
-		}
-		image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		bb.rewind();
-		image.copyPixelsFromBuffer(bb);
 	}
 
 	public final void dispose() {
@@ -194,9 +164,10 @@ public class Texture {
 		}
 		int paletteOffset = bInfoSize + BMP_FILE_HEADER_SIZE;
 		// get first color in palette
-		transB = bytes[paletteOffset++];
-		transG = bytes[paletteOffset++];
-		transR = bytes[paletteOffset];
+		float b = (bytes[paletteOffset++] & 0xff) / 255.0f;
+		float g = (bytes[paletteOffset++] & 0xff) / 255.0f;
+		float r = (bytes[paletteOffset] & 0xff) / 255.0f;
+		colorKey.put(r).put(g).put(b);
 	}
 
 	private void fix(byte[] b) {
@@ -214,5 +185,10 @@ public class Texture {
 			b[12] = (byte) ((pdo >> 16) & 0xff);
 			b[13] = (byte) ((pdo >> 24) & 0xff);
 		}
+	}
+
+	FloatBuffer getColorKey() {
+		colorKey.rewind();
+		return colorKey;
 	}
 }

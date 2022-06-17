@@ -916,6 +916,7 @@ class Render {
 		glBindTexture(GL_TEXTURE_2D, texture.getId());
 		glUniform1i(program.uTexUnit, 0);
 		glUniform2f(program.uTexSize, texture.width, texture.height);
+		glUniform3fv(program.uColorKey, 1, texture.getColorKey());
 
 		applyBlending(blendEnabled ? blend >> 4 : 0);
 		glUniform1i(program.uIsTransparency, (command & PATTR_COLORKEY));
