@@ -23,7 +23,7 @@ void main() {
     } else {
         vIsTransparency = aMaterial[2];
         vIsReflect = aMaterial[1];
-        vAmbIntensity = aMaterial[0] != 0.0 ? uAmbIntensity : -1.0;
+        vAmbIntensity = aMaterial[0] > 0.5 ? uAmbIntensity : -1.0;
     }
     vTexture = aColorData;
 }

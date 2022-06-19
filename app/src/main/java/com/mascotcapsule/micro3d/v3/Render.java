@@ -686,10 +686,10 @@ class Render {
 					renderMesh(mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, colors[0]);
 				} else if ((command & PDATA_TEXURE_COORD) != 0) {
 					int tcLen = numPrimitives * 3 * 2;
-					FloatBuffer tcBuf = ByteBuffer.allocateDirect(tcLen * 4)
-							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+					ByteBuffer tcBuf = ByteBuffer.allocateDirect(tcLen)
+							.order(ByteOrder.nativeOrder());
 					for (int i = 0; i < tcLen; i++) {
-						tcBuf.put(texCoords[i]);
+						tcBuf.put((byte) texCoords[i]);
 					}
 					tcBuf.rewind();
 					float[] mvp = MVP_TMP;
@@ -769,19 +769,19 @@ class Render {
 					Matrix.multiplyMM(MVP_TMP, 0, pm, 0, mvm, 0);
 					renderMesh(MVP_TMP, mvm, command, blendEnabled, effect, vcBuf, ncBuf, colors[0]);
 				} else if ((command & PDATA_TEXURE_COORD) != 0) {
-					FloatBuffer tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2 * 4)
-							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+					ByteBuffer tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2)
+							.order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
 						int offset = i * 4 * 2;
 						int pos = offset;
-						tcBuf.put(texCoords[pos++]).put(texCoords[pos++]); // A
-						tcBuf.put(texCoords[pos++]).put(texCoords[pos++]); // B
-						tcBuf.put(texCoords[pos++]).put(texCoords[pos++]); // C
-						tcBuf.put(texCoords[pos++]).put(texCoords[pos]);   // D
+						tcBuf.put((byte) texCoords[pos++]).put((byte) texCoords[pos++]); // A
+						tcBuf.put((byte) texCoords[pos++]).put((byte) texCoords[pos++]); // B
+						tcBuf.put((byte) texCoords[pos++]).put((byte) texCoords[pos++]); // C
+						tcBuf.put((byte) texCoords[pos++]).put((byte) texCoords[pos]);   // D
 						pos = offset;
-						tcBuf.put(texCoords[pos++]).put(texCoords[pos]);   // A
+						tcBuf.put((byte) texCoords[pos++]).put((byte) texCoords[pos]);   // A
 						pos = offset + 2 * 2;
-						tcBuf.put(texCoords[pos++]).put(texCoords[pos]);   // C
+						tcBuf.put((byte) texCoords[pos++]).put((byte) texCoords[pos]);   // C
 					}
 					tcBuf.rewind();
 					float[] mvp = MVP_TMP;
@@ -1019,7 +1019,7 @@ class Render {
 	}
 
 	private void renderMesh(Texture texture, float[] mvp, float[] mv, int command, boolean blendEnabled,
-							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texCoords) {
+							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer texCoords) {
 		Program.Tex program = Program.tex;
 		program.use();
 		glUniform1i(program.uIsPrimitive, GL_TRUE);
@@ -1052,7 +1052,7 @@ class Render {
 		}
 
 		texCoords.rewind();
-		glVertexAttribPointer(program.aColorData, 2, GL_FLOAT, false, 2 * 4, texCoords);
+		glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 2, texCoords);
 		glEnableVertexAttribArray(program.aColorData);
 
 		program.enableTexUnit();
