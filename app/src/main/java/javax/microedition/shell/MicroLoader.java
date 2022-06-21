@@ -16,6 +16,9 @@
 
 package javax.microedition.shell;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -33,7 +36,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,9 +69,6 @@ import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.woesss.j2me.jar.Descriptor;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
@@ -110,9 +112,17 @@ public class MicroLoader {
 
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
+		String jarHash = null;
 		Descriptor descriptor;
 		if (BuildConfig.FULL_EMULATOR) {
 			descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
+			try {
+				byte[] bytes = FileUtils.getBytes(new File(appDir, Config.MIDLET_RES_FILE));
+				byte[] sum = MessageDigest.getInstance("md5").digest(bytes);
+				BigInteger bi = new BigInteger(sum);
+				jarHash = bi.toString(16);
+			} catch (Throwable ignored) {
+			}
 		} else {
 			try (InputStream stream = getClass().getResourceAsStream("/MIDLET-META-INF/MANIFEST.MF")) {
 				if (stream == null) {
@@ -133,6 +143,9 @@ public class MicroLoader {
 		sb.append(Descriptor.MIDLET_NAME).append(": ").append(descriptor.getName()).append("\n");
 		sb.append(Descriptor.MIDLET_VENDOR).append(": ").append(descriptor.getVendor()).append("\n");
 		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion());
+		if (jarHash != null) {
+			sb.append("JAR_HASH_MD5").append(": ").append(jarHash);
+		}
 		errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 		MIDlet.initProps(attr);
 		for (int i = 1; ; i++) {
