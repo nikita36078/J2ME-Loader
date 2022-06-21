@@ -18,8 +18,11 @@ varying float vAmbIntensity;
 const vec3 COLORKEY_ERROR = vec3(0.5 / 255.0);
 
 void main() {
-    vec2 tex = (floor(vTexture) + 0.5);
-    vec4 color = texture2D(uTextureUnit, tex / uTexSize);
+#ifdef FILTER
+    vec4 color = texture2D(uTextureUnit, vTexture / uTexSize);
+#else
+    vec4 color = texture2D(uTextureUnit, (floor(vTexture) + 0.5) / uTexSize);
+#endif
     if (vIsTransparency > 0.5 && all(lessThan(abs(color.rgb - uColorKey), COLORKEY_ERROR)))
             discard;
     if (vAmbIntensity < -0.5) {

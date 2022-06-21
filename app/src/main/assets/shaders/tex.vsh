@@ -25,5 +25,9 @@ void main() {
         vIsReflect = aMaterial[1];
         vAmbIntensity = aMaterial[0] > 0.5 ? uAmbIntensity : -1.0;
     }
+#ifdef FILTER
+    vTexture = aColorData + 0.5;
+#else
     vTexture = aColorData;
+#endif
 }

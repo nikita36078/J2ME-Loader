@@ -894,8 +894,8 @@ class Render {
 
 			byte x0 = (byte) texCoords[texOffset + 3];
 			byte y0 = (byte) texCoords[texOffset + 4];
-			byte x1 = (byte) texCoords[texOffset + 5];
-			byte y1 = (byte) texCoords[texOffset + 6];
+			byte x1 = (byte) (texCoords[texOffset + 5] - 1);
+			byte y1 = (byte) (texCoords[texOffset + 6] - 1);
 
 			tcBuf.put(x0).put(y1);
 			tcBuf.put(x0).put(y0);

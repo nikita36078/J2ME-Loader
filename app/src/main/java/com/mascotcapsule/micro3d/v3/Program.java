@@ -91,7 +91,7 @@ abstract class Program {
 	 * @param shaderCode - String containing the shader code.
 	 * @return - Returns an id for the shader.
 	 */
-	private static int loadShader(int type, String shaderCode) {
+	protected int loadShader(int type, String shaderCode) {
 
 		// create a vertex shader type (GLES20.GL_VERTEX_SHADER)
 		// or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
@@ -243,6 +243,14 @@ abstract class Program {
 			super(VERTEX, FRAGMENT);
 		}
 
+		@Override
+		protected int loadShader(int type, String shaderCode) {
+			if (Boolean.getBoolean("micro3d.v3.texture.filter")) {
+				shaderCode = "#define FILTER\n" + shaderCode;
+			}
+			return super.loadShader(type, shaderCode);
+		}
+
 		protected void getLocations() {
 			aPosition = glGetAttribLocation(id, "aPosition");
 			aNormal = glGetAttribLocation(id, "aNormal");
@@ -308,6 +316,14 @@ abstract class Program {
 
 		Sprite() {
 			super(VERTEX, FRAGMENT);
+		}
+
+		@Override
+		protected int loadShader(int type, String shaderCode) {
+			if (Boolean.getBoolean("micro3d.v3.texture.filter")) {
+				shaderCode = "#define FILTER\n" + shaderCode;
+			}
+			return super.loadShader(type, shaderCode);
 		}
 
 		protected void getLocations() {
