@@ -24,7 +24,6 @@ public class FreeSizeFontInvoker {
     }
 
     public static Font getFont(int face, int style, int height) {
-        // On Symbian^3, the actual font height is less than given
-        return new Font(face, style, -1, (int) ((float)height * 0.78F));
+        return new Font(face, style, -1, height);
     }
 }
