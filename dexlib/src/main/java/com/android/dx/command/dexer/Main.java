@@ -481,6 +481,8 @@ public class Main {
         } catch (ParseException ex) {
             // handled in FileBytesConsumer
             throw ex;
+        } catch(IllegalArgumentException e) {
+            e.printStackTrace();
         } catch(Exception ex) {
             throw new RuntimeException("Exception parsing classes", ex);
         }
