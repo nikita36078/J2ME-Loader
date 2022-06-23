@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import javax.microedition.shell.AppClassLoader;
 
@@ -156,18 +157,109 @@ public class Texture {
 		int paletteSize;
 		if (bInfoSize == BMP_VERSION_CORE) {
 			bpp = bytes[24] | bytes[25] << 8;
+			paletteSize = 256;
 		} else {
 			bpp = bytes[28] | bytes[29] << 8;
+			paletteSize = bytes[0x2e] & 0xFF | (bytes[0x2f] & 0xFF) << 8
+					| (bytes[0x30] & 0xFF) << 16 | (bytes[0x31] & 0xFF) << 24;
+			if (paletteSize == 0) {
+				paletteSize = 256;
+			}
+			int usedPaletteSize = bytes[0x32] & 0xFF | (bytes[0x33] & 0xFF) << 8
+					| (bytes[0x34] & 0xFF) << 16 | (bytes[0x35] & 0xFF) << 24;
+			if (usedPaletteSize > 0 && usedPaletteSize < paletteSize) {
+				paletteSize = usedPaletteSize;
+			}
 		}
 		if (bpp != 8) { // supports only 8-bit per pixel format
 			throw new RuntimeException("Unsupported BMP format: bpp = " + bpp);
 		}
 		int paletteOffset = bInfoSize + BMP_FILE_HEADER_SIZE;
 		// get first color in palette
-		float b = (bytes[paletteOffset++] & 0xff) / 255.0f;
-		float g = (bytes[paletteOffset++] & 0xff) / 255.0f;
-		float r = (bytes[paletteOffset] & 0xff) / 255.0f;
-		colorKey.put(r).put(g).put(b);
+		int b = bytes[paletteOffset++] & 0xff;
+		int g = bytes[paletteOffset++] & 0xff;
+		int r = bytes[paletteOffset++] & 0xff;
+		paletteOffset++;
+
+		int[] palette = new int[paletteSize - 1];
+		for (int i = 0; i < palette.length; i++) {
+			palette[i] = bytes[paletteOffset++] & 0xFF | (bytes[paletteOffset++] & 0xFF) << 8
+					| (bytes[paletteOffset++] & 0xFF) << 16;
+			paletteOffset++;
+		}
+		Arrays.sort(palette);
+		int color0 = b | g << 8 | r << 16;
+		int color = color0;
+		int m = 0;
+		int s = 1;
+		while (true) {
+			int i = Arrays.binarySearch(palette, color);
+			if (i < 0) {
+				break;
+			}
+
+			switch (m) {
+				case 0:
+					m++;
+					if (b + s <= 0xff) {
+						color = color0 + s;
+						break;
+					}
+				case 1:
+					m++;
+					if (b - s >= 0) {
+						color = color0 - s;
+						break;
+					}
+				case 2:
+					m++;
+					if (g + s <= 0xff) {
+						color = color0 + (s << 8);
+						break;
+					}
+				case 3:
+					m++;
+					if (g - s >= 0) {
+						color = color0 - (s << 8);
+						break;
+					}
+				case 4:
+					m++;
+					if (r + s <= 0xff) {
+						color = color0 + (s << 16);
+						break;
+					}
+				case 5:
+					m = 0;
+					if (r + s <= 0xff) {
+						color = color0 + (s << 16);
+					}
+					s++;
+			}
+		}
+		paletteOffset = bInfoSize + BMP_FILE_HEADER_SIZE;
+		// get first color in palette
+		bytes[paletteOffset++] = (byte) color;
+		bytes[paletteOffset++] = (byte) (color >> 8);
+		bytes[paletteOffset  ] = (byte) (color >> 16);
+		colorKey.put((color >> 16 & 0xff) / 255.0f)
+				.put((color >> 8 & 0xff) / 255.0f)
+				.put((color & 0xff) / 255.0f);
+	}
+
+	private boolean containsColor(byte[] bytes, int start, int len, byte b, byte g, byte r) {
+		for (int i = start; i < start + len; ) {
+			if (bytes[i++] != b) {
+				i += 3;
+			} else if (bytes[i++] != g) {
+				i += 2;
+			} else if (bytes[i++] != r) {
+				i += 1;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void fix(byte[] b) {
