@@ -26,13 +26,12 @@ import net.lingala.zip4j.model.FileHeader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import dalvik.system.DexClassLoader;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.IOUtils;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class AppClassLoader extends DexClassLoader {
 	private static final String TAG = AppClassLoader.class.getName();
@@ -71,10 +70,6 @@ public class AppClassLoader extends DexClassLoader {
 		if (normName.charAt(0) == '/') {
 			normName = normName.substring(1);
 		}
-		if (normName.equals("")) {
-			Log.w(TAG, "Can't load res on empty path");
-			return null;
-		}
 		byte[] data = getResourceBytes(normName);
 		if (data == null) {
 			Log.w(TAG, "Can't load res: " + resName);
@@ -87,14 +82,36 @@ public class AppClassLoader extends DexClassLoader {
 		return dataDir;
 	}
 
+	public static byte[] getResourceAsBytes(String resName) {
+		if (resName == null || resName.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
+		// Add support for Siemens file path
+		String normName = resName.replace('\\', '/');
+		// Remove double slashes
+		normName = normName.replaceAll("//+", "/");
+		// Remove leading slash
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
+		}
+		byte[] data = getResourceBytes(normName);
+		if (data == null) {
+			Log.w(TAG, "Can't load res: " + resName);
+			return null;
+		}
+		return data;
+	}
+
 	private static byte[] getResourceBytes(String name) {
+		if (name.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
 		if (zipFile == null) {
 			final File file = new File(oldResDir, name);
 			try {
-				FileInputStream fis = new FileInputStream(file);
-				byte[] data = IOUtils.toByteArray(fis);
-				fis.close();
-				return data;
+				return FileUtils.getBytes(file);
 			} catch (Exception e) {
 				Log.w(TAG, "getResourceBytes: from file=" + file, e);
 				return null;
