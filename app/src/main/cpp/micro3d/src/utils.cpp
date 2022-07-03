@@ -11,16 +11,12 @@ extern "C" {
 JNIEXPORT void JNICALL Java_com_mascotcapsule_micro3d_v3_Utils_fillBuffer
         (JNIEnv *env, jclass /*clazz*/,
          jobject buffer, jobject vertices, jintArray indices) {
-    auto bufPtr = static_cast<Vec3f *>(env->GetDirectBufferAddress(buffer));
+    auto dst = static_cast<Vec3f *>(env->GetDirectBufferAddress(buffer));
     jsize len = env->GetArrayLength(indices);
     auto indexPtr = env->GetIntArrayElements(indices, nullptr);
-    auto vertPtr = static_cast<Vec3f *>(env->GetDirectBufferAddress(vertices));
+    auto src = static_cast<Vec3f *>(env->GetDirectBufferAddress(vertices));
     for (int i = 0; i < len; ++i) {
-        auto src = &vertPtr[indexPtr[i]];
-        auto dst = bufPtr++;
-        dst->x = src->x;
-        dst->y = src->y;
-        dst->z = src->z;
+        *dst++ = src[indexPtr[i]];
     }
     env->ReleaseIntArrayElements(indices, indexPtr, 0);
 }
@@ -76,17 +72,14 @@ Java_com_mascotcapsule_micro3d_v3_Utils_transform(JNIEnv *env, jclass /*clazz*/,
                                                   jfloatArray action_matrices) {
     auto srcVert = static_cast<Vec3f *>(env->GetDirectBufferAddress(src_vertices));
     auto dstVert = static_cast<Vec3f *>(env->GetDirectBufferAddress(dst_vertices));
-    Vec3f *srcNorm;
-    Vec3f *dstNorm;
-    if (src_normals == nullptr) {
-        srcNorm = nullptr;
-        dstNorm = nullptr;
-    } else {
+    Vec3f *srcNorm = nullptr;
+    Vec3f *dstNorm = nullptr;
+    if (src_normals != nullptr) {
         srcNorm = static_cast<Vec3f *>(env->GetDirectBufferAddress(src_normals));
         dstNorm = static_cast<Vec3f *>(env->GetDirectBufferAddress(dst_normals));
     }
     auto bones = static_cast<Bone *>(env->GetDirectBufferAddress(aBones));
-    jlong bonesLen = env->GetDirectBufferCapacity(aBones) / sizeof(Bone);
+    auto bonesLen = static_cast<jsize>((env->GetDirectBufferCapacity(aBones) / sizeof(Bone)));
     jsize actionsLen = 0;
     float *actionsPtr = nullptr;
     Matrix *actions = nullptr;
@@ -99,21 +92,21 @@ Java_com_mascotcapsule_micro3d_v3_Utils_transform(JNIEnv *env, jclass /*clazz*/,
     for (int i = 0; i < bonesLen; ++i) {
         Bone *bone = &bones[i];
         int parent = bone->parent;
-        Matrix *matrix = &tmp[i];
+        Matrix &matrix = tmp[i];
         if (parent == -1) {
-            memcpy(matrix, &bone->matrix, sizeof(Matrix));
+            matrix = bone->matrix;
         } else {
-            multiplyMM(matrix, &tmp[parent], &bone->matrix);
+            matrix.multiply(&tmp[parent], &bone->matrix);
         }
         if (i < actionsLen) {
-            multiplyMM(matrix, matrix, actions++);
+            matrix.multiply(actions++);
         }
         auto boneLen = bone->length;
         for (int j = 0; j < boneLen; ++j) {
-            multiplyMV(dstVert++, srcVert++, matrix);
+            matrix.transformPoint(dstVert++, srcVert++);
 
-            if (srcNorm != nullptr) {
-                multiplyMN(dstNorm++, srcNorm++, matrix);
+            if (src_normals != nullptr) {
+                matrix.transformVector(dstNorm++, srcNorm++);
             }
         }
     }
@@ -123,7 +116,7 @@ Java_com_mascotcapsule_micro3d_v3_Utils_transform(JNIEnv *env, jclass /*clazz*/,
     }
 }
 
-static void multiplyMM(Matrix *m, Matrix *lm, Matrix *rm) {
+void Matrix::multiply(Matrix *lm, Matrix *rm) {
     float l00 = lm->m00;
     float l01 = lm->m01;
     float l02 = lm->m02;
@@ -146,36 +139,38 @@ static void multiplyMM(Matrix *m, Matrix *lm, Matrix *rm) {
     float r22 = rm->m22;
     float r23 = rm->m23;
 
-    m->m00 = l00 * r00 + l01 * r10 + l02 * r20;
-    m->m01 = l00 * r01 + l01 * r11 + l02 * r21;
-    m->m02 = l00 * r02 + l01 * r12 + l02 * r22;
-    m->m03 = l00 * r03 + l01 * r13 + l02 * r23 + lm->m03;
-    m->m10 = l10 * r00 + l11 * r10 + l12 * r20;
-    m->m11 = l10 * r01 + l11 * r11 + l12 * r21;
-    m->m12 = l10 * r02 + l11 * r12 + l12 * r22;
-    m->m13 = l10 * r03 + l11 * r13 + l12 * r23 + lm->m13;
-    m->m20 = l20 * r00 + l21 * r10 + l22 * r20;
-    m->m21 = l20 * r01 + l21 * r11 + l22 * r21;
-    m->m22 = l20 * r02 + l21 * r12 + l22 * r22;
-    m->m23 = l20 * r03 + l21 * r13 + l22 * r23 + lm->m23;
+    m00 = l00 * r00 + l01 * r10 + l02 * r20;
+    m01 = l00 * r01 + l01 * r11 + l02 * r21;
+    m02 = l00 * r02 + l01 * r12 + l02 * r22;
+    m03 = l00 * r03 + l01 * r13 + l02 * r23 + lm->m03;
+    m10 = l10 * r00 + l11 * r10 + l12 * r20;
+    m11 = l10 * r01 + l11 * r11 + l12 * r21;
+    m12 = l10 * r02 + l11 * r12 + l12 * r22;
+    m13 = l10 * r03 + l11 * r13 + l12 * r23 + lm->m13;
+    m20 = l20 * r00 + l21 * r10 + l22 * r20;
+    m21 = l20 * r01 + l21 * r11 + l22 * r21;
+    m22 = l20 * r02 + l21 * r12 + l22 * r22;
+    m23 = l20 * r03 + l21 * r13 + l22 * r23 + lm->m23;
 }
 
-static void multiplyMV(Vec3f *dst, Vec3f *src, Matrix *matrix) {
+void Matrix::multiply(Matrix *rm) {
+    multiply(this, rm);
+}
+
+void Matrix::transformPoint(Vec3f *dst, Vec3f *src) const {
+    transformVector(dst, src);
+    dst->x += m03;
+    dst->y += m13;
+    dst->z += m23;
+}
+
+void Matrix::transformVector(Vec3f *dst, Vec3f *src) const {
     float x = src->x;
     float y = src->y;
     float z = src->z;
-    dst->x = x * matrix->m00 + y * matrix->m01 + z * matrix->m02 + matrix->m03;
-    dst->y = x * matrix->m10 + y * matrix->m11 + z * matrix->m12 + matrix->m13;
-    dst->z = x * matrix->m20 + y * matrix->m21 + z * matrix->m22 + matrix->m23;
-}
-
-static void multiplyMN(Vec3f *dst, Vec3f *src, Matrix *matrix) {
-    float x = src->x;
-    float y = src->y;
-    float z = src->z;
-    dst->x = x * matrix->m00 + y * matrix->m01 + z * matrix->m02;
-    dst->y = x * matrix->m10 + y * matrix->m11 + z * matrix->m12;
-    dst->z = x * matrix->m20 + y * matrix->m21 + z * matrix->m22;
+    dst->x = x * m00 + y * m01 + z * m02;
+    dst->y = x * m10 + y * m11 + z * m12;
+    dst->z = x * m20 + y * m21 + z * m22;
 }
 
 #ifdef __cplusplus
