@@ -122,7 +122,7 @@ public abstract class MIDlet {
 	}
 
 	private void parseJavaAppProtocol(String url) throws ConnectionNotFoundException {
-		if (!url.contains("midlet-name=")) {
+		if (!url.contains("midlet-name") && !url.contains("midlet-uid")) {
 			throw new ConnectionNotFoundException("No midlet-name value");
 		}
 		if (url.startsWith("localapp:")) {
