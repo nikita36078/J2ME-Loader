@@ -127,7 +127,6 @@ public class MicroActivity extends AppCompatActivity {
 		}
 		String arguments = intent.getStringExtra(KEY_START_ARGUMENTS);
 		if (arguments != null) {
-			MidletSystem.setProperty("com.nokia.mid.cmdline.instance", "1");
 			MidletSystem.setProperty("com.nokia.mid.cmdline", arguments);
 			String[] arr = arguments.split(";");
 			for (String s: arr) {
@@ -144,6 +143,7 @@ public class MicroActivity extends AppCompatActivity {
 				}
 			}
 		}
+		MidletSystem.setProperty("com.nokia.mid.cmdline.instance", "1");
 		String appPath = data.toString();
 		microLoader = new MicroLoader(this, appPath);
 		if (!microLoader.init()) {
