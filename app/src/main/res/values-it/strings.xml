@@ -111,7 +111,6 @@
     <string name="take_screenshot">Cattura schermata</string>
     <string name="screenshot_saved">La schermata è stata salvata in</string>
     <string name="log_saved">Il log è stato salvato</string>
-    <string name="common_settings">[IMPOSTAZIONI COMUNI]</string>
     <string name="pref_theme_light">Chiaro</string>
     <string name="pref_theme_night">Scuro</string>
     <string name="pref_theme_title">Tema</string>
