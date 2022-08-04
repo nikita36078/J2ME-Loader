@@ -155,7 +155,6 @@
     <string name="action_keyboard_ime">键盘类型 (IME)</string>
     <string name="pref_vk_save_alert">自定义键盘将被当前的替换\n保存？</string>
     <string name="opt_save_screen_params">保存屏幕参数</string>
-    <string name="common_settings">常用设置</string>
     <string name="dismiss">忽略</string>
     <string name="pref_theme_auto_battery">自动，按省电模式设置</string>
     <string name="pref_theme_auto_time">自动，按时间设置</string>
@@ -181,12 +180,10 @@
     <string name="pref_encoding_title">编码</string>
     <string name="pref_default_settings">默认设置</string>
     <string name="pref_emulator_dir">工作目录</string>
-    <string name="virtual_key_menu">菜单</string>
     <string name="mapping_dialog_message">当前映射: %1$s</string>
     <string name="mapping_dialog_key_not_specified">未指定</string>
     <string name="mapping_dialog_title">按下一个按键</string>
     <string name="reset_mapping">重置</string>
-    <string name="alert_map_menu">您必须映射“菜单”键！</string>
     <string name="error_name">输入名称！</string>
     <string name="set_as_default">设为默认</string>
     <string name="edit">编辑</string>
