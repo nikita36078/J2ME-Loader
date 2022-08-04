@@ -93,7 +93,6 @@
     <string name="take_screenshot">Creează o captură de ecran</string>
     <string name="screenshot_saved">Captura de ecran a fost salvată în</string>
     <string name="log_saved">Jurnalul a fost salvat</string>
-    <string name="common_settings">[SETĂRI COMUNE]</string>
     <string name="pref_theme_light">Luminata</string>
     <string name="pref_theme_night">Intunecata</string>
     <string name="pref_theme_title">Tema</string>
