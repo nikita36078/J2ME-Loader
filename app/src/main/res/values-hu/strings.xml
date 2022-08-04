@@ -113,7 +113,6 @@
     <string name="take_screenshot">Képernyőmentés készítése</string>
     <string name="screenshot_saved">A kép mentési helye:</string>
     <string name="log_saved">A naplófájl mentésre került</string>
-    <string name="common_settings">[ÁLTALÁNOS BEÁLLÍTÁSOK]</string>
     <string name="pref_theme_auto_battery">Automatikus, akkumulátorkímélő szerint</string>
     <string name="pref_theme_auto_time">Automatikus, napszak szerint</string>
     <string name="pref_theme_light">Világos</string>
