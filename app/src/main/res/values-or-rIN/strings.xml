@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="close">ବନ୍ଦ କରନ୍ତୁ</string>
+    <string name="exit">ପ୍ରସ୍ଥାନ</string>
+    <string name="about">ବିଷୟରେ</string>
+    <string name="help">ସହାୟତା</string>
+    <string name="more">ଅଧିକ</string>
+    <string name="search">ସନ୍ଧାନ</string>
+    <string name="licenses">ଲାଇସେନ୍ସ</string>
+    <string name="profiles">ପ୍ରୋଫାଇଲ୍</string>
+    <string name="save_log">ଲଗ୍ ସେଭ୍ କରନ୍ତୁ</string>
+    <string name="about_message">ଏହି ଆପ୍ ଆପଣଙ୍କୁ ଆଣ୍ଡ୍ରଏଡରେ J2ME ଆପ୍ ଏବଂ ଗେମ୍ ଲଞ୍ଚ କରିବାକୁ ଅନୁମତି ଦିଏ। ଏହା ଅଧିକାଂଶ 2D ଖେଳକୁ ସମର୍ଥନ କରେ ଏବଂ କିଛି ସୀମିତତା ସହିତ 3D ମଧ୍ୟ ସମର୍ଥନ କରେ ।&lt;BR&gt;</string>
+    <string name="help_message">&#8226; କେତେକ କ୍ଷେତ୍ରରେ ଫିଲ୍ଟରିଂ ସକ୍ଷମ କରିବା ଦ୍ୱାରା କାର୍ଯ୍ୟଦକ୍ଷତାକୁ ବହୁ ମାତ୍ରାରେ ହ୍ରାସ କରାଯାଇପାରେ । ଯଦି ଖେଳ ଅତ୍ୟଧିକ ଧୀର ତେବେ ଏହି ବିକଳ୍ପକୁ ଅକ୍ଷମ କରନ୍ତୁ ।&lt;BR&gt; \"ତତକ୍ଷଣାତ୍ ପ୍ରକ୍ରିୟାକରଣ ମୋଡ୍\" ଅପ୍ସନ୍ ସକ୍ଷମ କରି ଇମେଜ୍ ଫ୍ଲିକରିଂ ସମସ୍ୟାଗୁଡିକ ସମାଧାନ କରାଯାଇପାରିବ।</string>
+    <string name="author">ଲେଖକ: </string>
+    <string name="version">ସଂସ୍କରଣ: </string>
+    <string name="no_data_for_display">କଣସି ତଥ୍ୟ ନାହିଁ</string>
+    <string name="message_delete">ଆପଣ ପ୍ରକୃତରେ ଏହି ଆପ୍ ଡିଲିଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
+    <string name="permission_request_failed">ଏହି ଆପ୍ ଷ୍ଟୋରେଜ୍ ଲେଖିବା ଅନୁମତି ଆବଶ୍ୟକ କରେ</string>
+    <string name="external_storage_not_mounted">ଏହି ଆପ୍ ବାହ୍ୟ ଷ୍ଟୋରେଜ୍ ଆବଶ୍ୟକ କରେ |</string>
+    <string name="create">ସୃଷ୍ଟି କରନ୍ତୁ</string>
+    <string name="alert_msg_workdir_not_exists">ୱାର୍କିଂ ଡିରେକ୍ଟୋରୀ ପଥରେ ବିଦ୍ୟମାନ ନାହିଁ:\n\'%1$s\'।\n ଆପଣ ଏହାକୁ ସୃଷ୍ଟି କରିବାକୁ କିମ୍ବା ଅନ୍ୟଟି ବାଛିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
+    <string name="action_context_shortcut">ସର୍ଟକଟ୍ ଯୋଡ଼ନ୍ତୁ</string>
+    <string name="action_reinstall">ପୁନଃସଂସ୍ଥାପନ କରନ୍ତୁ</string>
+    <string name="action_settings">ସେଟିଂସ୍</string>
+    <string name="action_context_delete">ଡିଲିଟ୍ କରନ୍ତୁ</string>
+    <string name="action_context_rename">ନାମ ବଦଳାନ୍ତୁ</string>
+    <string name="retry">ପୁନଃଚେଷ୍ଟା କରନ୍ତୁ</string>
+    <string name="err_missing_app">ପ୍ରୟୋଗ ମିଳିଲା ନାହିଁ।\n ଦୟାକରି ଷ୍ଟୋରେଜ୍ ଡିଭାଇସ୍ %sଉପଲବ୍ଧତା ଯାଞ୍ଚ କରନ୍ତୁ କିମ୍ବା ସର୍ଟକଟ୍ ପୁନ ନିର୍ମାଣ କରନ୍ତୁ।</string>
+    <string name="error_disk_io">ସଂରକ୍ଷଣ ତ୍ରୁଟି: ଡିସ୍କ ସ୍ଥାନ ଯାଞ୍ଚ କରନ୍ତୁ</string>
+    <string name="create_apps_dir_failed">ପଥରେ ଏକ ଫୋଲ୍ଡର ସୃଷ୍ଟି କରିବାରେ ବିଫଳ:\n\'%s\'\n ଅନ୍ୟକୁ ଚୟନ କରନ୍ତୁ।</string>
+    <string name="change">ପରିବର୍ତ୍ତନ କରନ୍ତୁ</string>
+    <string name="choose">ବାଛନ୍ତୁ</string>
+    <string name="warning">ଚେତାବନୀ</string>
+    <string name="scoped_storage_warning">ତୁମର ଉପଭୋକ୍ତା ତଥ୍ୟ ଏକ ଅବସ୍ଥାନରେ ଗଚ୍ଛିତ ହୋଇଛି ଯାହାକି ଯେତେବେଳେ ଆପଣ ଆପ୍ ସଂସ୍ଥାପନ କରିବେ <b> ଡିଲିଟ୍ ହେବ </b>: \n</string>
+    <string name="donate">ଦାନ କରନ୍ତୁ</string>
+    <string name="midlet_name"><b>ନାମ: </b></string>
+    <string name="midlet_size"><b>ଆକାର: </b></string>
+</resources>
