@@ -17,7 +17,7 @@
     <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
-    <string name="create">создать</string>
+    <string name="create">nokiaaa</string>
     <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n\"%1$s\".\nВы можете выбрать другую сейчас, нажав кнопку %2$s, и в любое время через настройки</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
     <string name="action_reinstall">Переустановить</string>
@@ -155,7 +155,6 @@
     <string name="action_keyboard_ime">Клавиатура (IME)</string>
     <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
     <string name="opt_save_screen_params">сохранить параметры экрана</string>
-    <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
     <string name="dismiss">Скрыть</string>
     <string name="pref_theme_auto_battery">Авто, по режиму энергосбережения</string>
     <string name="pref_theme_auto_time">Авто, по времени суток</string>
@@ -181,12 +180,10 @@
     <string name="pref_encoding_title">Кодировка</string>
     <string name="pref_default_settings">Стандартные настройки</string>
     <string name="pref_emulator_dir">Рабочая папка</string>
-    <string name="virtual_key_menu">меню</string>
     <string name="mapping_dialog_message">Текущий маппинг: %1$s</string>
     <string name="mapping_dialog_key_not_specified">не задано</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="reset_mapping">Сброс</string>
-    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"</string>
     <string name="error_name">Введите название шаблона!</string>
     <string name="set_as_default">Сделать стандартным</string>
     <string name="edit">Настроить</string>
