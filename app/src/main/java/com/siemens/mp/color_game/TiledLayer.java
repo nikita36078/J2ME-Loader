@@ -62,7 +62,7 @@ public class TiledLayer extends Layer {
 			numOfAnimTiles = 1;
 		} else if (numOfAnimTiles == anim_to_static.length) {
 			// grow anim_to_static table if needed
-			int new_anim_tbl[] = new int[anim_to_static.length * 2];
+			int[] new_anim_tbl = new int[anim_to_static.length * 2];
 			System.arraycopy(anim_to_static, 0,
 					new_anim_tbl, 0, anim_to_static.length);
 			anim_to_static = new_anim_tbl;
