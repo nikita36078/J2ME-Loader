@@ -151,7 +151,6 @@
     <string name="action_keyboard_ime">لوحة المفاتيح (IME)</string>
     <string name="pref_vk_save_alert">سيتم استبدال لوحة المفاتيح المخصصة بـ\nحفظ؟</string>
     <string name="opt_save_screen_params">حفظ ابعاد الشاشة</string>
-    <string name="common_settings">[اعدادات عامه]</string>
     <string name="pref_theme_auto_battery">تلقائياً، بواسطة توفير البطارية</string>
     <string name="pref_theme_auto_time">تلقائيًا، حسب الوقت من اليوم</string>
     <string name="pref_theme_light">فاتح (ابيض)</string>
@@ -176,12 +175,10 @@
     <string name="pref_encoding_title">الترميز</string>
     <string name="pref_default_settings">الإعدادات الإفتراضية</string>
     <string name="pref_emulator_dir">مجلد المفتوح</string>
-    <string name="virtual_key_menu">القائمة</string>
     <string name="mapping_dialog_message">التوجيه الحالي: %1$s</string>
     <string name="mapping_dialog_key_not_specified">غير محدّد</string>
     <string name="mapping_dialog_title">اضغط على أي مفتاح</string>
     <string name="reset_mapping">إعادة تعيين</string>
-    <string name="alert_map_menu">لابد من اعادة ربط مفتاح \"القائمة\" الخاص بك!</string>
     <string name="error_name">أدخل الاسم!</string>
     <string name="set_as_default">تعيين كإفتراضي</string>
     <string name="edit">تعديل</string>
