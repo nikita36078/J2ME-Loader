@@ -11,7 +11,7 @@ android {
     namespace 'ru.playsoftware.j2meloader'
 
     defaultConfig {
-        applicationId "ru.woesss.j2meloader"
+        applicationId "ru.playsoftware.j2meloader"
         minSdk MIN_SDK
         targetSdk TARGET_SDK
         versionCode 94
