@@ -141,9 +141,28 @@ public class MicroActivity extends AppCompatActivity {
 				throw new RuntimeException("Can't access file system");
 			}
 		}
+		String arguments = intent.getStringExtra(KEY_START_ARGUMENTS);
+		if (arguments != null) {
+			MidletSystem.setProperty("com.nokia.mid.cmdline", arguments);
+			String[] arr = arguments.split(";");
+			for (String s: arr) {
+				if (s.length() == 0) {
+					continue;
+				}
+				if (s.contains("=")) {
+					int i = s.indexOf('=');
+					String k = s.substring(0, i);
+					String v = s.substring(i + 1);
+					MidletSystem.setProperty(k, v);
+				} else {
+					MidletSystem.setProperty(s, "");
+				}
+			}
+		}
+		MidletSystem.setProperty("com.nokia.mid.cmdline.instance", "1");
 		microLoader = new MicroLoader(this, appPath);
 		if (!microLoader.init()) {
-			Config.startApp(this, appName, appPath, true);
+			Config.startApp(this, appName, appPath, true, arguments);
 			finish();
 			return;
 		}

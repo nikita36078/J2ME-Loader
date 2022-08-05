@@ -83,6 +83,36 @@ public class AppUtils {
 		return item;
 	}
 
+	public static AppItem findApp(String name, String vendor, String uid) throws IOException {
+		File appsDir = new File(Config.getAppDir());
+		for (String appFolderName : appsDir.list()) {
+			File appDir = new File(appsDir, appFolderName);
+			if (!appDir.isDirectory()) {
+				continue;
+			}
+			File dex = new File(appDir, Config.MIDLET_DEX_FILE);
+			if (!dex.isFile()) {
+				FileUtils.deleteDirectory(appDir);
+				continue;
+			}
+			try {
+				File mf = new File(appDir, Config.MIDLET_MANIFEST_FILE);
+				Descriptor params = new Descriptor(mf, false);
+				if((uid != null && params.getNokiaUID() != null && params.getNokiaUID().equalsIgnoreCase(uid)) ||
+						(name != null && params.getName().equalsIgnoreCase(name) &&
+						(vendor == null || params.getVendor().equalsIgnoreCase(vendor)))
+				) {
+					AppItem item = new AppItem(appDir.getName(), params.getName(),
+							params.getVendor(),
+							params.getVersion());
+					return item;
+				}
+			} catch (Exception e) {
+			}
+		}
+		return null;
+	}
+
 	public static void deleteApp(AppItem item) {
 		File appDir = new File(item.getPathExt());
 		FileUtils.deleteDirectory(appDir);

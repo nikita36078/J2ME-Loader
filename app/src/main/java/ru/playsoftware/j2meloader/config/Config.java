@@ -107,6 +107,10 @@ public class Config {
 	}
 
 	public static void startApp(Context context, String name, String path, boolean showSettings) {
+		startApp(context, name, path, showSettings, null);
+	}
+
+	public static void startApp(Context context, String name, String path, boolean showSettings, String arguments) {
 		File appDir = new File(path);
 		String workDir = appDir.getParentFile().getParent();
 		File file = new File(workDir + Config.MIDLET_CONFIGS_DIR + appDir.getName());
@@ -114,11 +118,13 @@ public class Config {
 			Intent intent = new Intent(ACTION_EDIT, Uri.parse(path),
 					context, ConfigActivity.class);
 			intent.putExtra(KEY_MIDLET_NAME, name);
+			intent.putExtra(KEY_START_ARGUMENTS, arguments);
 			context.startActivity(intent);
 		} else {
 			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(path),
 					context, MicroActivity.class);
 			intent.putExtra(KEY_MIDLET_NAME, name);
+			intent.putExtra(KEY_START_ARGUMENTS, arguments);
 			context.startActivity(intent);
 		}
 	}
