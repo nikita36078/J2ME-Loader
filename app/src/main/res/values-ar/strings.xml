@@ -30,6 +30,8 @@
     <string name="create_apps_dir_failed">فشل في إنشاء مجلد في المسار:\n\'%s\'\nحدد مجلد آخر.</string>
     <string name="change">تغيير</string>
     <string name="choose">اختيار</string>
+    <string name="warning">تحذير</string>
+    <string name="scoped_storage_warning">يتم تخزين بيانات المستخدم في مسار <b>سيتم حذفه</b> عند إلغاء تثبيت التطبيق:\n</string>
     <string name="donate">تبرع</string>
     <string name="midlet_name"><b>الاسم: </b></string>
     <string name="midlet_size"><b>الحجم: </b></string>
@@ -40,10 +42,12 @@
     <string name="install">تثبيت</string>
     <string name="install_done">تم تثبيت التطبيق بنجاح!</string>
     <string name="install_jar_non_matched_jad">هذا التطبيق يختلف عن ذلك الموصوف في JAD.\nتجاهل JAD والتثبيت على أي حال؟</string>
+    <string name="install_jar_needed">حدد ملف JAR</string>
     <string name="invalid_resolution_not_saved">القرارات غير صالحة: لم يتم حفظها!</string>
     <string name="warn_install_from_net">سيتم تنزيل الملف من الإنترنت</string>
     <string name="reinstall">التطبيق مثبت بالفعل.\n\nهل تريد إعادة تثبيته؟\nسيتم حفظ جميع البيانات.</string>
     <string name="reinstall_newest">قم بتحديث هذا التطبيق إلى الإصدار %1$s؟\n\nالمثبت حاليا: %2$s\nسيتم حفظ جميع البيانات.</string>
+    <string name="reinstall_older">هل تريد استبدال هذا التطبيق بالإصدار %1$s؟\n\nالمثبت حاليا: %2$s\nالإصدار القديم قد لا يعمل بشكل صحيح مع البيانات المسجلة.</string>
     <string name="loading_info">جارٍ تحميل المعلومات…</string>
     <string name="START_CMD">إبدأ</string>
     <string name="CANCEL_CMD">الغاء</string>
@@ -149,8 +153,11 @@
     <string name="screenshot_saved">تم حفظ لقطة الشاشة إلى</string>
     <string name="log_saved">تم حفظ السجل</string>
     <string name="action_keyboard_ime">لوحة المفاتيح (IME)</string>
+    <string name="action_lock_orientation">تدوير شاشة القفل</string>
     <string name="pref_vk_save_alert">سيتم استبدال لوحة المفاتيح المخصصة بـ\nحفظ؟</string>
     <string name="opt_save_screen_params">حفظ ابعاد الشاشة</string>
+    <string name="cmd_menu">القائمة</string>
+    <string name="dismiss">إلغاء</string>
     <string name="pref_theme_auto_battery">تلقائياً، بواسطة توفير البطارية</string>
     <string name="pref_theme_auto_time">تلقائيًا، حسب الوقت من اليوم</string>
     <string name="pref_theme_light">فاتح (ابيض)</string>
@@ -175,10 +182,14 @@
     <string name="pref_encoding_title">الترميز</string>
     <string name="pref_default_settings">الإعدادات الإفتراضية</string>
     <string name="pref_emulator_dir">مجلد المفتوح</string>
+    <string name="pref_screenshot_summary">تعطيل القياس والتصفية لقطات الشاشة</string>
+    <string name="pref_screenshot_title">لقطة شاشة خامة</string>
     <string name="mapping_dialog_message">التوجيه الحالي: %1$s</string>
     <string name="mapping_dialog_key_not_specified">غير محدّد</string>
     <string name="mapping_dialog_title">اضغط على أي مفتاح</string>
     <string name="reset_mapping">إعادة تعيين</string>
+    <string name="alert_map_menu">لم يتم تعيين مفتاح القائمة (M)!\nقد يجعل هذا من المستحيل الوصول إلى خيارات المحاكي</string>
+    <string name="save">حفظ</string>
     <string name="error_name">أدخل الاسم!</string>
     <string name="set_as_default">تعيين كإفتراضي</string>
     <string name="edit">تعديل</string>
@@ -190,4 +201,5 @@
     <string name="error_name_exists">هذا الاسم مستخدم، أدخل اسم آخر</string>
     <string name="default_label">"%s (افتراضي)"</string>
     <string name="not_saved_exists">موجود بالفعل</string>
+    <string name="alert_rewrite_profile">ملف تعريف اسمه \"%1$s\" موجود بالفعل.\nهل تريد الكتابة فوقه؟</string>
 </resources>
