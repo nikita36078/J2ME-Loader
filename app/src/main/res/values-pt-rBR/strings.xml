@@ -155,7 +155,6 @@
     <string name="action_keyboard_ime">Teclado (IME)</string>
     <string name="pref_vk_save_alert">O Teclado Personalizado será substituído por\nSalvar?</string>
     <string name="opt_save_screen_params">Salvar parâmetros de tela</string>
-    <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>
     <string name="dismiss">Descartar</string>
     <string name="pref_theme_auto_battery">Automático, por Economia de Bateria</string>
     <string name="pref_theme_auto_time">Automático, por hora do dia</string>
@@ -181,12 +180,10 @@
     <string name="pref_encoding_title">Codificação</string>
     <string name="pref_default_settings">Configurações padrão</string>
     <string name="pref_emulator_dir">Pasta padrão</string>
-    <string name="virtual_key_menu">menu</string>
     <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
     <string name="mapping_dialog_key_not_specified">Não especificado</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="reset_mapping">Redefinir</string>
-    <string name="alert_map_menu">Você DEVE mapear a tecla \"menu\"!</string>
     <string name="error_name">Digitar nome!</string>
     <string name="set_as_default">Definir como padrão</string>
     <string name="edit">Editar</string>

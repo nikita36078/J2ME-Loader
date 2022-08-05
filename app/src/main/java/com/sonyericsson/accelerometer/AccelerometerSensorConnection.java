@@ -18,5 +18,5 @@ package com.sonyericsson.accelerometer;
 
 import javax.microedition.sensor.SensorConnection;
 
-public interface AccelerometerSensorConnection extends SensorConnection {
+public abstract class AccelerometerSensorConnection implements SensorConnection {
 }

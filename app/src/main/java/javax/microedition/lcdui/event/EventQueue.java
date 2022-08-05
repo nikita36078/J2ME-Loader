@@ -17,35 +17,23 @@
 
 package javax.microedition.lcdui.event;
 
-import javax.microedition.util.LinkedEntry;
 import javax.microedition.util.LinkedList;
 
 /**
  * The event queue. A really complicated thing.
  */
 public class EventQueue implements Runnable {
-	protected LinkedList<Event> queue;
-	protected Event event;
-
-	protected boolean enabled;
-	protected Thread thread;
-
-	private final Object waiter;
-	private final Object interlock;
-
-	private boolean running;
-	private boolean continuerun;
-
 	private static boolean immediate;
 
-	public EventQueue() {
-		queue = new LinkedList<>();
+	private final LinkedList<Event> queue = new LinkedList<>();
+	private final Object waiter = new Object();
+	private final Object interlock = new Object();
+	private final Object callbackLock = new Object();
 
-		waiter = new Object();
-		interlock = new Object();
-
-		immediate = false;
-	}
+	private boolean enabled;
+	private Thread thread;
+	private boolean running;
+	private boolean continuerun;
 
 	/**
 	 * Enable immediate processing mode.
@@ -81,14 +69,16 @@ public class EventQueue implements Runnable {
 	public void postEvent(Event event) {
 
 		if (immediate) { // the immediate processing mode is enabled
-			event.run();    // process event on the spot
-			return;            // and nothing to do here
+			event.enterQueue();
+			synchronized (callbackLock) {
+				event.run(); // process event on the spot
+			}
+			return;      // and nothing to do here
 		}
 
 		boolean empty;
 
-		synchronized (queue)    // all operations with the queue must be synchronized (on itself)
-		{
+		synchronized (queue) {   // all operations with the queue must be synchronized (on itself)
 			empty = queue.isEmpty();
 
 			if (empty || event.placeableAfter(queue.getLast())) {
@@ -125,48 +115,6 @@ public class EventQueue implements Runnable {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Remove events from the queue that match the specified filter.
-	 *
-	 * @param filter the event filter for deletion
-	 * @return true, if something has been removed
-	 */
-	public boolean removeEvents(EventFilter filter) {
-		if (queue.isEmpty()) {
-			return false;
-		}
-
-		boolean removed = false;
-
-		synchronized (queue) {
-
-			LinkedEntry<Event> entry = queue.firstEntry();
-			LinkedEntry<Event> last = queue.lastEntry();
-			LinkedEntry<Event> next;
-
-			while (true) {
-
-				next = entry.nextEntry();
-
-				Event element = entry.getElement();
-				if (filter.accept(element)) {
-					element.leaveQueue();
-					element.recycle();
-					queue.recycleEntry(entry);
-					removed = true;
-				}
-
-				if (entry != last) {
-					entry = next;
-				} else {
-					break;
-				}
-			}
-		}
-
-		return removed;
 	}
 
 	/**
@@ -217,13 +165,6 @@ public class EventQueue implements Runnable {
 	}
 
 	/**
-	 * @return the current event being processed, or null
-	 */
-	public Event currentEvent() {
-		return event;
-	}
-
-	/**
 	 * Here is the main event loop.
 	 */
 	@Override
@@ -232,33 +173,15 @@ public class EventQueue implements Runnable {
 			running = true;
 
 			while (enabled) {
-				/*
-				 * blocking order:
-				 *
-				 * 1 - this
-				 * 2 - queue
-				 *
-				 * accordingly, inside the Canvas.serviceRepaints(), the order must be the same,
-				 * otherwise mutual blocking of two threads is possible (everything will hang)
-				 */
 
-				synchronized (this)        // needed for Canvas.serviceRepaints()
-				{
-					synchronized (queue)    // needed for postEvent()
-					{
-						event = queue.removeFirst();    // get the first item and immediately remove from the queue
-					}
+				Event event;
+				synchronized (queue) {
+					event = queue.removeFirst();
 				}
 
 				if (event != null) {
-					event.run();
-
-					synchronized (this) {
-						synchronized (queue) {
-							event = null;
-						}
-
-						this.notifyAll();
+					synchronized (callbackLock) {
+						event.run();
 					}
 				} else {
 					synchronized (waiter) {
@@ -278,6 +201,16 @@ public class EventQueue implements Runnable {
 					}
 				}
 			}
+		}
+	}
+
+	public void serviceRepaints(Event paintEvent) {
+		if (immediate) {
+			return;
+		}
+
+		synchronized (callbackLock) {
+			paintEvent.process();
 		}
 	}
 }

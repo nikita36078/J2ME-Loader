@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,74 +16,91 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+@SuppressWarnings("unused")
 public class Light {
-	private int myAmbIntensity;
-	private int myDirIntensity;
-	private Vector3D myDirVector;
+
+	private Vector3D mDirVector;
+	private int mDirIntensity;
+	private int mAmbIntensity;
 
 	public Light() {
-		this.myDirVector = new Vector3D(0, 0, 4096);
-		this.myDirIntensity = 4096;
-		this.myAmbIntensity = 0;
+		mDirVector = new Vector3D(0, 0, 4096);
+		mDirIntensity = 4096;
+		mAmbIntensity = 0;
 	}
 
 	public Light(Vector3D dir, int dirIntensity, int ambIntensity) {
 		if (dir == null) {
 			throw new NullPointerException();
 		}
-		this.myDirVector = dir;
-		this.myDirIntensity = dirIntensity;
-		this.myAmbIntensity = ambIntensity;
+		mDirVector = dir;
+		mDirIntensity = dirIntensity;
+		mAmbIntensity = ambIntensity;
+	}
+
+	Light(Light src) {
+		mDirVector = new Vector3D(src.mDirVector);
+		mDirIntensity = src.mDirIntensity;
+		mAmbIntensity = src.mAmbIntensity;
 	}
 
 	public final int getDirIntensity() {
-		return getParallelLightIntensity();
-	}
-
-	public final int getParallelLightIntensity() {
-		return this.myDirIntensity;
+		return mDirIntensity;
 	}
 
 	public final void setDirIntensity(int p) {
-		setParallelLightIntensity(p);
+		mDirIntensity = p;
+	}
+
+	public final int getParallelLightIntensity() {
+		return mDirIntensity;
 	}
 
 	public final void setParallelLightIntensity(int p) {
-		this.myDirIntensity = p;
+		mDirIntensity = p;
 	}
 
 	public final int getAmbIntensity() {
-		return getAmbientIntensity();
-	}
-
-	public final int getAmbientIntensity() {
-		return this.myAmbIntensity;
+		return mAmbIntensity;
 	}
 
 	public final void setAmbIntensity(int p) {
-		setAmbientIntensity(p);
+		mAmbIntensity = p;
+	}
+
+	public final int getAmbientIntensity() {
+		return mAmbIntensity;
 	}
 
 	public final void setAmbientIntensity(int p) {
-		this.myAmbIntensity = p;
+		mAmbIntensity = p;
 	}
 
 	public Vector3D getDirection() {
-		return getParallelLightDirection();
-	}
-
-	public final Vector3D getParallelLightDirection() {
-		return this.myDirVector;
+		return mDirVector;
 	}
 
 	public final void setDirection(Vector3D v) {
-		setParallelLightDirection(v);
+		if (v == null) {
+			throw new NullPointerException();
+		}
+		mDirVector = v;
+	}
+
+	public final Vector3D getParallelLightDirection() {
+		return mDirVector;
 	}
 
 	public final void setParallelLightDirection(Vector3D v) {
 		if (v == null) {
 			throw new NullPointerException();
 		}
-		this.myDirVector = v;
+		mDirVector = v;
+	}
+
+	void set(Light src) {
+		mDirVector.set(src.mDirVector);
+		mDirIntensity = src.mDirIntensity;
+		mAmbIntensity = src.mAmbIntensity;
 	}
 }

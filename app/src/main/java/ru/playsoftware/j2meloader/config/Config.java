@@ -29,13 +29,14 @@ import javax.microedition.util.ContextHolder;
 
 import androidx.preference.PreferenceManager;
 
+import ru.playsoftware.j2meloader.BuildConfig;
+import ru.playsoftware.j2meloader.R;
+
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Config {
-
-	public static final String APP_NAME = "J2ME-Loader";
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
 	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String MIDLET_CONFIGS_DIR = "/configs/";
@@ -64,14 +65,18 @@ public class Config {
 
 	static {
 		Context context = ContextHolder.getAppContext();
+		String appName = "J2ME-Loader";
+		if (!BuildConfig.FULL_EMULATOR) {
+			appName = context.getString(R.string.app_name);
+		}
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-				+ "/" + APP_NAME;
+				+ "/" + appName;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String path = FileUtils.isExternalStorageLegacy() ?
 				preferences.getString(PREF_EMULATOR_DIR, null) :
 				context.getExternalFilesDir(null).getPath();
 		if (path == null) {
-			path = Environment.getExternalStorageDirectory() + "/" + APP_NAME;
+			path = Environment.getExternalStorageDirectory() + "/" + appName;
 		}
 		initDirs(path);
 		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);

@@ -2,29 +2,29 @@ plugins {
     id 'com.android.application'
 }
 
+archivesBaseName = rootProject.name
+def midletArchivesBaseName
+
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk COMPILE_SDK
+    ndkVersion NDK_VERSION
+    namespace 'ru.playsoftware.j2meloader'
 
     defaultConfig {
-        applicationId "ru.playsoftware.j2meloader"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        applicationId "ru.woesss.j2meloader"
+        minSdk MIN_SDK
+        targetSdk TARGET_SDK
         versionCode 94
         versionName "1.7.5"
-        setProperty("archivesBaseName", "J2ME_Loader-$versionName")
-        ndk {
-            abiFilters 'x86', 'armeabi-v7a'
-        }
+        resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "default"
 
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             applicationIdSuffix '.debug'
@@ -34,15 +34,16 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    lint {
+        disable 'MissingTranslation'
     }
 
-
+    flavorDimensions 'default'
     productFlavors {
         play {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "true"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-play"
             ndk {
                 abiFilters 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
@@ -50,14 +51,35 @@ android {
         }
         open {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-open"
         }
         fdroid {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         dev {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-dev-" + generateVersionCode()
+        }
+        // variant dimension for create android port from J2ME app source
+        midlet {
+            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
+            buildConfigField 'boolean', 'FULL_EMULATOR', 'false'
+            // configure midlet's port project params here, as default it read from app manifest,
+            // placed to 'app/src/midlet/resources/MIDLET-META-INF/MANIFEST.MF'
+            def props = getMidletManifestProperties()
+            def midletName = props.getValue('MIDlet-Name').trim()
+            def apkName = midletName.replaceAll('[/\\\\:*?\"<>|]', '').replace(' ', '_')
+            applicationId "com.example.androidlet.${apkName.toLowerCase()}"
+            versionName = props.getValue('MIDlet-Version')
+            resValue 'string', 'app_name', midletName
+            midletArchivesBaseName = apkName
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-midlet.pro'
         }
     }
 
@@ -78,9 +100,15 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
-    ndkVersion '22.1.7171670'
-    lint {
-        disable 'MissingTranslation'
+
+    applicationVariants.all {
+        if (buildType.name == 'debug' && flavorName == 'dev') {
+            resValue 'string', 'app_name', 'JL-Debug'
+        }
+        def baseName = flavorName == 'midlet' ? "${midletArchivesBaseName}-" : "${rootProject.name}_"
+        outputs.all {
+            outputFileName = "${baseName}${versionName}-${dirName}-${buildType.name}.apk".replaceAll('--+', '-')
+        }
     }
 }
 
@@ -89,8 +117,23 @@ static def generateVersionCode() {
     return result.toInteger()
 }
 
+def getMidletManifestProperties() {
+    def file = project.file('src/midlet/resources/MIDLET-META-INF/MANIFEST.MF')
+    def mf = new java.util.jar.Manifest()
+    if (file.exists()) {
+        def is = null
+        try {
+            is = new FileInputStream(file)
+            mf.read(is)
+        } finally {
+            if (is != null) is.close()
+        }
+    }
+    return mf.mainAttributes
+}
+
 dependencies {
-    def roomVersion = '2.4.1'
+    def roomVersion = '2.4.3'
     def cameraxVersion = "1.1.0-beta03"
     def autoServiceVersion = "1.0"
 
@@ -100,22 +143,23 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
 
     // Networking && APIs
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.guava:guava:31.0.1-android'
     //noinspection GradleDependency
     implementation 'com.github.nikita36078:donations:2.8'
     playImplementation 'com.github.nikita36078:donations:2.9'
 
     // Threads, Streams and Archives
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'net.lingala.zip4j:zip4j:2.8.0'
+    implementation 'net.lingala.zip4j:zip4j:2.10.0'
 
     // Audio/Video/Graphics
     implementation 'com.github.billthefarmer:mididriver:v1.21'
@@ -135,10 +179,9 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     testImplementation 'junit:junit:4.13.2'
-    implementation 'ch.acra:acra-dialog:5.8.3'
+    implementation 'ch.acra:acra-dialog:5.9.3'
 
     // Other Libraries
-    implementation 'org.ow2.asm:asm:9.1'
     compileOnly "com.google.auto.service:auto-service-annotations:$autoServiceVersion"
     annotationProcessor "com.google.auto.service:auto-service:$autoServiceVersion"
 }

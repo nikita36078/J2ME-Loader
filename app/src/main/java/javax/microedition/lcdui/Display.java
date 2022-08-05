@@ -17,13 +17,13 @@
 
 package javax.microedition.lcdui;
 
+import androidx.appcompat.app.AlertDialog;
+
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
-
-import androidx.appcompat.app.AlertDialog;
 
 @SuppressWarnings("unused")
 public class Display {
@@ -80,7 +80,7 @@ public class Display {
 	}
 
 	public void setCurrent(Displayable disp) {
-		if (disp == null || disp == current) {
+		if (disp == current) {
 			return;
 		}
 		if (current instanceof Canvas) {

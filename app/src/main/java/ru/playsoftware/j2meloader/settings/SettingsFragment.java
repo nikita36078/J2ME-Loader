@@ -45,7 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
-		findPreference("pref_default_settings").setIntent(new Intent(getActivity(), ProfilesActivity.class));
+		findPreference("pref_default_settings").setIntent(new Intent(requireActivity(), ProfilesActivity.class));
 		prefFolder = findPreference(PREF_EMULATOR_DIR);
 		prefFolder.setSummary(Config.getEmulatorDir());
 		if (FileUtils.isExternalStorageLegacy()) {

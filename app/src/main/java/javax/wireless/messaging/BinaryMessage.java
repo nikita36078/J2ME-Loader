@@ -26,8 +26,7 @@ package javax.wireless.messaging;
 
 public interface BinaryMessage extends Message {
 
-	public byte[] getPayloadData();
+	byte[] getPayloadData();
 
-	public void setPayloadData(byte[] data);
-
+	void setPayloadData(byte[] data);
 }

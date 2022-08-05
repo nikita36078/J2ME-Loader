@@ -17,6 +17,8 @@
 
 package javax.microedition.lcdui;
 
+import static javax.microedition.lcdui.game.Sprite.*;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,15 +28,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Region;
-import android.os.Build;
 import android.util.Log;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 
-import static javax.microedition.lcdui.game.Sprite.*;
-
-public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.motorola.graphics.j3d.Graphics3D {
+public class Graphics implements
+		com.vodafone.v10.graphics.j3d.Graphics3D,
+		com.motorola.graphics.j3d.Graphics3D,
+		com.jblend.graphics.j3d.Graphics3D {
 	public static final int HCENTER = 1;
 	public static final int VCENTER = 2;
 	public static final int LEFT = 4;
@@ -47,9 +48,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	public static final int DOTTED = 1;
 
 	private final Canvas canvas;
-	private final Bitmap canvasBitmap;
 	private final Image image;
-	private int canvasInitSave;
 
 	private final Paint drawPaint = new Paint();
 	private final Paint fillPaint = new Paint();
@@ -69,10 +68,8 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	private com.mascotcapsule.micro3d.v3.Graphics3D g3d;
 
 	Graphics(Image image) {
-		canvasBitmap = image.getBitmap();
 		this.image = image;
-		canvas = new Canvas(canvasBitmap);
-		canvasInitSave = canvas.save();
+		canvas = new Canvas(image.getBitmap());
 		canvas.clipRect(image.getBounds());
 		canvas.getClipBounds(clip);
 		drawPaint.setStyle(Paint.Style.STROKE);
@@ -81,14 +78,14 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		fillPaint.setAntiAlias(false);
 	}
 
-	public void reset() {
+	public void reset(float cl, float ct, float cr, float cb) {
 		setColor(0);
 		setFont(Font.getDefaultFont());
 		setStrokeStyle(SOLID);
-		canvas.restoreToCount(canvasInitSave);
-		canvasInitSave = canvas.save();
-		canvas.clipRect(image.getBounds());
-		canvas.getClipBounds(clip);
+		canvas.setBitmap(null);
+		canvas.setBitmap(image.getBitmap());
+		canvas.clipRect(cl, ct, cr, cb);
+		canvas.getClipBounds(this.clip);
 		translateX = 0;
 		translateY = 0;
 	}
@@ -191,14 +188,10 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	public void setClip(int x, int y, int width, int height) {
 		clip.set(x, y, x + width, y + height);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			canvas.restore();
-			canvas.save();
-			canvas.translate(translateX, translateY);
-			canvas.clipRect(clip);
-		} else {
-			canvas.clipRect(clip, Region.Op.REPLACE);
-		}
+		canvas.setBitmap(null);
+		canvas.setBitmap(image.getBitmap());
+		canvas.translate(translateX, translateY);
+		canvas.clipRect(clip);
 		canvas.getClipBounds(clip);
 	}
 
@@ -529,7 +522,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 						 int x_dest, int y_dest, int anchor) {
 		if (width <= 0 || height <= 0) return;
 		final int[] pixels = new int[width * height];
-		canvasBitmap.getPixels(pixels, 0, width, x_src, y_src, width, height);
+		image.getBitmap().getPixels(pixels, 0, width, x_src, y_src, width, height);
 		float dx;
 		if ((anchor & Graphics.RIGHT) != 0) {
 			dx = x_dest - width;
@@ -551,14 +544,14 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	public void getPixels(int[] pixels, int offset, int stride,
 						  int x, int y, int width, int height) {
-		Bitmap b = canvasBitmap;
+		Bitmap b = image.getBitmap();
 		int w = Math.min(width, b.getWidth() - x);
 		int h = Math.min(height, b.getHeight() - y);
 		b.getPixels(pixels, offset, stride, x, y, w, h);
 	}
 
 	public Bitmap getBitmap() {
-		return canvasBitmap;
+		return image.getBitmap();
 	}
 
 	void flush(Image image, int x, int y, int width, int height) {
@@ -579,9 +572,20 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 
 	@Override
 	public synchronized void drawFigure(com.motorola.graphics.j3d.Figure figure,
-						   int x, int y,
-						   com.motorola.graphics.j3d.FigureLayout layout,
-						   com.motorola.graphics.j3d.Effect3D effect) {
+										int x, int y,
+										com.motorola.graphics.j3d.FigureLayout layout,
+										com.motorola.graphics.j3d.Effect3D effect) {
+		if (g3d == null) g3d = new Graphics3D();
+		g3d.bind(this);
+		g3d.drawFigure(figure, x, y, layout, effect);
+		g3d.release(this);
+	}
+
+	@Override
+	public synchronized void drawFigure(com.jblend.graphics.j3d.Figure figure,
+										int x, int y,
+										com.jblend.graphics.j3d.FigureLayout layout,
+										com.jblend.graphics.j3d.Effect3D effect) {
 		if (g3d == null) g3d = new Graphics3D();
 		g3d.bind(this);
 		g3d.drawFigure(figure, x, y, layout, effect);

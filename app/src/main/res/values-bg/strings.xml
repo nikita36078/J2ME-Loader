@@ -139,7 +139,6 @@
     <string name="take_screenshot">Заснемане на екрана</string>
     <string name="screenshot_saved">Снимката на екрана беше записана във</string>
     <string name="log_saved">Регистрационния файл е записан</string>
-    <string name="common_settings">[ОБЩИ НАСТРОЙКИ]</string>
     <string name="pref_theme_light">Светла</string>
     <string name="pref_theme_night">Тъмна</string>
     <string name="pref_theme_title">Тема</string>

@@ -67,7 +67,7 @@ public class EditNameAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		LayoutInflater inflater = getLayoutInflater();
 		@SuppressLint("InflateParams")
 		View v = inflater.inflate(R.layout.dialog_change_name, null);
 		EditText editText = v.findViewById(R.id.editText);
@@ -86,7 +86,7 @@ public class EditNameAlert extends DialogFragment {
 			editText.setText(name);
 			editText.requestFocus();
 			editText.setSelection(name.length());
-			Toast.makeText(getActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
+			Toast.makeText(requireActivity(), R.string.error_name, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final File config = new File(Config.getProfilesDir(), name + Config.MIDLET_CONFIG_FILE);
@@ -94,7 +94,7 @@ public class EditNameAlert extends DialogFragment {
 			editText.setText(name);
 			editText.requestFocus();
 			editText.setSelection(name.length());
-			final Toast toast = Toast.makeText(getActivity(), R.string.not_saved_exists, Toast.LENGTH_SHORT);
+			final Toast toast = Toast.makeText(requireActivity(), R.string.not_saved_exists, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 50);
 			toast.show();
 			return;

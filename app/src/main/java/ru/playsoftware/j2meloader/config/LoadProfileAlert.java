@@ -63,9 +63,8 @@ public class LoadProfileAlert extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		String configPath = requireArguments().getString(KEY_CONFIG_PATH);
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		@SuppressLint("InflateParams")
-		View v = inflater.inflate(R.layout.dialog_load_profile, null);
+		View v = getLayoutInflater().inflate(R.layout.dialog_load_profile, null);
 		ListView listView = v.findViewById(android.R.id.list);
 		ArrayAdapter<Profile> adapter = new ArrayAdapter<>(requireActivity(),
 				android.R.layout.simple_list_item_single_choice, profiles);
@@ -82,7 +81,7 @@ public class LoadProfileAlert extends DialogFragment {
 						final boolean configChecked = cbConfig.isChecked();
 						final boolean vkChecked = cbKeyboard.isChecked();
 						if (pos == -1) {
-							Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+							Toast.makeText(requireActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 							return;
 						}
 						ProfilesManager.load((Profile) listView.getItemAtPosition(pos), configPath,
@@ -90,7 +89,7 @@ public class LoadProfileAlert extends DialogFragment {
 						((ConfigActivity) requireActivity()).loadParams(true);
 					} catch (Exception e) {
 						e.printStackTrace();
-						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+						Toast.makeText(requireActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <activity android:name=".MainActivity" tools:node="remove" />
+        <activity android:name="javax.microedition.shell.MicroActivity"
+            android:exported="true"
+            tools:remove="android:process"
+            tools:replace="android:exported">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".settings.SettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".donations.DonationsActivity" tools:node="remove" />
+        <activity android:name=".settings.KeyMapperActivity" tools:node="remove" />
+        <activity android:name=".filepicker.FilteredFilePickerActivity" tools:node="remove" />
+        <activity android:name=".config.ProfilesActivity" tools:node="remove" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            tools:node="remove">
+        </provider>
+    </application>
+
+</manifest>

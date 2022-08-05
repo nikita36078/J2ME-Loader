@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">ᱵᱚᱸᱫ ᱢᱮ</string>
+    <string name="close">ᱵᱚᱸᱫᱽ</string>
     <string name="exit">ᱵᱟᱹᱰᱨᱟᱹ</string>
     <string name="about">ᱵᱤᱵᱨᱚᱬ</string>
     <string name="help">ᱜᱚᱲᱚ</string>
     <string name="more">ᱵᱟᱹᱲᱛᱤ</string>
     <string name="search">ᱥᱮᱸᱫᱽᱨᱟ</string>
-    <string name="licenses">ᱞᱟᱭᱥᱮᱱᱥᱠᱚ</string>
-    <string name="profiles">ᱯᱨᱚᱯᱷᱟᱭᱤᱞᱠᱚ</string>
+    <string name="licenses">ᱞᱟᱭᱥᱮᱱᱥ ᱠᱚ</string>
+    <string name="profiles">ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱠᱚ</string>
     <string name="save_log">ᱥᱟᱸᱪᱟᱣ ᱞᱚᱜᱽ</string>
     <string name="about_message">ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ J2ME ᱮᱯᱠᱚ ᱟᱨ ᱠᱷᱮᱞ ᱠᱚ ᱫᱟᱹᱲ ᱪᱷᱚᱭᱟᱭ ᱾ ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ ᱒ᱰ ᱠᱷᱮᱞᱠᱚ ᱟᱨ ᱓ᱰ ᱠᱷᱮᱞ ᱠᱚ ᱠᱚ ᱫᱟᱹᱲ ᱪᱷᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ ᱠᱟᱹᱴᱤᱡ ᱞᱤᱢᱤᱴᱮᱥᱚᱱ ᱥᱟᱞᱟᱜ ᱛᱮ ᱾&lt;BR&gt;</string>
     <string name="help_message">&#8226;ᱯᱷᱤᱞᱴᱚᱨᱤᱝ ᱠᱚ ᱠᱷᱟᱹᱛᱤᱨ ᱛᱮ ᱠᱟᱹᱢᱤ ᱠᱚ ᱵᱟᱫᱷᱟ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱜᱟᱭ ᱾ ᱠᱷᱮᱞ ᱫᱚ ᱡᱩᱫᱤ ᱫᱷᱤᱨᱮ ᱥᱮ ᱪᱟᱹᱞᱩᱜ ᱠᱷᱟᱱ ᱫᱚ ᱱᱚᱶᱟ ᱚᱯᱥᱚᱱ ᱵᱚᱸᱫᱚᱭ ᱢᱮ ᱾&lt;BR&gt;&#8226; \"ᱞᱚᱜᱤᱱ ᱯᱨᱚᱥᱮᱥᱤᱝ ᱢᱳᱰ\" ᱚᱯᱥᱚᱱ ᱛᱮ ᱯᱷᱤᱠᱚᱨᱤᱝ ᱤᱥᱩ ᱠᱚ ᱴᱷᱤᱠ ᱫᱟᱲᱮᱭᱟᱜ ᱼᱟ ᱾</string>
     <string name="author">ᱚᱱᱚᱞᱤᱭᱟᱹ: </string>
-    <string name="version">ᱦᱟᱹᱞᱤᱭᱟᱜ: </string>
-    <string name="no_data_for_display">ᱰᱟᱴᱟ ᱵᱚᱱᱩᱜ-ᱟ</string>
+    <string name="version">ᱦᱟᱹᱞᱤᱭᱟᱜ : </string>
+    <string name="no_data_for_display">ᱰᱟᱴᱟ ᱵᱚᱱᱩᱜᱼᱟ</string>
     <string name="message_delete">ᱟᱢ ᱥᱟᱹᱨᱤ ᱛᱮ ᱱᱚᱶᱟ ᱮᱯ ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="permission_request_failed">ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ ᱫᱚᱦᱚ ᱚᱞ ᱯᱟᱹᱨᱢᱤᱥᱚᱱ ᱛᱟᱭ ᱫᱚᱨᱠᱟᱨ</string>
     <string name="external_storage_not_mounted">ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ ᱵᱟᱦᱨᱮ ᱫᱚᱦᱚ ᱡᱟᱭᱜᱟ ᱫᱚᱨᱠᱟᱨ</string>
@@ -31,6 +31,7 @@
     <string name="change">ᱵᱚᱫᱚᱞ</string>
     <string name="choose">ᱵᱟᱪᱷᱟᱣ</string>
     <string name="warning">ᱦᱩᱥᱤᱭᱟᱹᱨ</string>
+    <string name="scoped_storage_warning">ᱟᱢᱟᱜ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱰᱟᱴᱟ ᱫᱚ ᱢᱤᱫ ᱡᱟᱭᱜᱟ ᱨᱮ ᱛᱟᱦᱮᱸᱱᱟ ᱡᱟᱦᱟᱸ <b>ᱫᱚ ᱢᱮᱴᱟᱣᱜᱼᱟ</b> ᱡᱟᱦᱟᱸ ᱛᱤᱥ ᱟᱢ ᱫᱚ ᱮᱯ ᱚᱪᱚᱜᱽ ᱟᱢ : \n</string>
     <string name="donate">ᱫᱟᱱ</string>
     <string name="midlet_name"><b>ᱧᱩᱛᱩᱢ : </b></string>
     <string name="midlet_size"><b>ᱢᱟᱯ : </b></string>
@@ -40,6 +41,14 @@
     <string name="converting_wait">JAR ᱵᱚᱫᱚᱞᱚᱜ ᱠᱟᱱᱟ...</string>
     <string name="install">ᱵᱚᱦᱟᱞ</string>
     <string name="install_done">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱨᱟᱹᱥ ᱞᱮᱠᱷᱟᱛᱮ ᱵᱚᱦᱟᱞ ᱮᱱᱟ!</string>
+    <string name="install_jar_non_matched_jad">ᱟᱢᱟᱜ ᱮᱯ ᱫᱚ ᱵᱟᱛᱟᱣ ᱠᱟᱱ JAD ᱠᱷᱚᱱ ᱵᱷᱮᱜᱟᱨ ᱜᱮᱭᱟ ᱾ JAD ᱫᱚ ᱚᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱮᱞᱠᱟ ᱛᱮ ᱵᱚᱦᱟᱞ ᱟᱢ ᱥᱮ ?</string>
+    <string name="install_jar_needed">JAR ᱨᱮᱫᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ</string>
+    <string name="invalid_resolution_not_saved">ᱵᱷᱩᱞ ᱨᱤᱡᱚᱞᱭᱩᱥᱚᱱ ᱠᱚ : ᱵᱟᱝ ᱥᱟᱧᱪᱟᱣ ᱞᱮᱱᱟ !</string>
+    <string name="warn_install_from_net">ᱨᱮᱫᱽ ᱫᱚ ᱤᱱᱴᱚᱨᱱᱮᱴᱨ ᱠᱷᱚᱱ ᱰᱟᱩᱱᱞᱚᱰ ᱮᱱᱟ</string>
+    <string name="reinstall">ᱮᱯ ᱫᱚ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱵᱚᱦᱟᱞ ᱮᱱᱟ ᱾ \n\n ᱟᱢ ᱪᱮᱫ ᱫᱩᱦᱲᱟᱹ ᱵᱚᱦᱟᱞ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ ? \n ᱡᱷᱚᱛᱚ ᱰᱟᱴᱟ ᱥᱟᱺᱪᱟᱣᱜᱼᱟ ᱾</string>
+    <string name="reinstall_newest">ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ %1$s ᱛᱮ ᱦᱟᱹᱞᱤᱭᱟᱹᱠᱼᱟ ᱥᱮ ? \n\n ᱱᱤᱛᱚᱜ ᱵᱚᱦᱟᱞ ᱠᱟᱱᱟ : %2$s\n ᱡᱷᱚᱛᱚ ᱰᱟᱴᱟ ᱥᱟᱺᱪᱟᱣᱜᱼᱟ ᱾</string>
+    <string name="reinstall_older">ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ %1$s ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱥᱟᱞᱟᱜ ᱵᱚᱫᱚᱞ ᱟᱢ ᱥᱮ? \n\n ᱱᱤᱛᱚᱜ ᱵᱚᱦᱟᱞ ᱠᱟᱱᱟ : %2$s\n ᱢᱟᱨᱮ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱫᱚ ᱨᱮᱠᱚᱰ ᱠᱟᱱ ᱰᱟᱴᱟ ᱥᱟᱞᱟᱜ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ ᱾</string>
+    <string name="loading_info">ᱵᱤᱵ ᱞᱟᱫᱮᱜ ᱠᱟᱱᱟ …</string>
     <string name="START_CMD">ᱮᱦᱚᱵ ᱢᱮ</string>
     <string name="CANCEL_CMD">ᱵᱟᱹᱰᱨᱟᱹ</string>
     <string name="CLEAR_DATA_CMD">ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱢᱮ</string>
@@ -145,9 +154,13 @@
     <string name="log_saved">ᱞᱚᱜ ᱫᱚ ᱥᱟᱸᱪᱟᱣ ᱮᱱᱟ</string>
     <string name="action_keyboard_ime">ᱠᱮᱭᱵᱚᱰ (IME)</string>
     <string name="pref_vk_save_alert">ᱠᱚᱥᱴᱚᱢ ᱠᱤᱵᱚᱰ ᱫᱚ ᱱᱤᱛᱚᱜᱟᱜ ᱥᱟᱞᱟᱜ ᱵᱚᱫᱚᱞᱚᱼᱟ\nᱥᱟᱸᱪᱟᱣᱼᱟ ᱥᱮ?</string>
-    <string name="common_settings">[ᱠᱚᱢᱚᱱ ᱥᱟᱡᱟᱣ ᱠᱚ]</string>
+    <string name="opt_save_screen_params">ᱯᱚᱨᱫᱟ ᱮᱞᱮᱠᱷ ᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱢᱮ</string>
+    <string name="dismiss">ᱵᱚᱸᱫ</string>
+    <string name="pref_theme_auto_battery">ᱟᱡ ᱛᱮ, ᱵᱮᱴᱨᱭ ᱥᱟᱺᱪᱟᱣᱤᱭᱟᱹ</string>
+    <string name="pref_theme_auto_time">ᱟᱡ ᱛᱮ, ᱢᱟᱦᱟᱸ ᱨᱮᱭᱟᱜ ᱚᱠᱛᱚ ᱛᱮ</string>
     <string name="pref_theme_light">ᱟᱨᱥᱟᱞ</string>
     <string name="pref_theme_night">ᱧᱩᱛ</string>
+    <string name="pref_theme_system">ᱥᱭᱥᱴᱚᱢ ᱨᱮᱭᱟᱜ ᱥᱟᱡᱟᱣ ᱠᱚ ᱯᱟᱧᱡᱟᱭ ᱢᱮ</string>
     <string name="pref_theme_title">ᱛᱷᱤᱢ</string>
     <string name="pref_requires_restart_summary">ᱫᱩᱦᱲᱟᱹ ᱨᱤᱥᱴᱟᱴ ᱫᱚᱨᱠᱟᱨ</string>
     <string name="pref_enable_actionbar_title">ᱮᱠᱥᱚᱱᱵᱟᱨ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ</string>
@@ -162,11 +175,13 @@
     <string name="pref_app_sort_title">ᱮᱯ ᱥᱚᱴ ᱚᱰᱟᱹᱨ</string>
     <string name="pref_app_sort_name">ᱧᱩᱛᱩᱢ</string>
     <string name="pref_app_sort_date">ᱢᱟᱦᱟᱸ</string>
+    <string name="pref_app_sort_vendor">ᱟᱹᱠᱷᱨᱤᱧᱤᱡ</string>
     <string name="pref_map_keys">ᱠᱭ ᱴᱮᱯᱤᱝᱠᱚ</string>
     <string name="pref_encoding_title">ᱨᱱᱠᱳᱰᱤᱝ</string>
     <string name="pref_default_settings">ᱢᱩᱞ ᱥᱟᱡᱟᱣᱠᱚ</string>
     <string name="pref_emulator_dir">ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱰᱟᱭᱨᱮᱠᱴᱚᱨᱭ</string>
     <string name="mapping_dialog_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱢᱮᱯᱤᱝ:%1$s</string>
+    <string name="mapping_dialog_key_not_specified">ᱵᱟᱝ ᱱᱤᱨᱫᱷᱟᱹᱨᱤᱛᱟᱜ</string>
     <string name="mapping_dialog_title">ᱠᱭ ᱚᱛᱟᱭ ᱢᱮ</string>
     <string name="reset_mapping">ᱨᱤᱥᱮᱴ</string>
     <string name="error_name">ᱧᱩᱛᱩᱢ ᱟᱫᱮᱨ ᱢᱮ!</string>

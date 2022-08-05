@@ -138,37 +138,29 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:gravity="center_vertical"
                 android:text="@string/PREF_SCALE_RATIO"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tfScreenBack" />
-
-            <SeekBar
-                android:id="@+id/sbScaleRatio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:max="100"
-                app:layout_constraintBottom_toBottomOf="@+id/tfScaleRatioValue"
-                app:layout_constraintEnd_toStartOf="@+id/tfScaleRatioValue"
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="@+id/tfScaleRatioValue" />
+                app:layout_constraintTop_toBottomOf="@+id/tfScreenBack"
+                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintWidth_min="wrap"  />
 
             <EditText
                 android:id="@+id/tfScaleRatioValue"
                 style="@style/EditTextStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
-                android:ems="2"
                 android:gravity="center"
                 android:hint="100"
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
                 app:layout_constraintTop_toBottomOf="@+id/tfScreenBack"
                 tools:ignore="HardcodedText,UnusedAttribute" />
 
@@ -412,9 +404,7 @@
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="cmdScreenBack,textView4,tvScaleType,tvGraphicsMode,tvLimitFps,tvScreenGravity"
-                tools:layout_editor_absoluteX="114dp"
-                tools:layout_editor_absoluteY="5dp" />
+                app:constraint_referenced_ids="textView3,cmdScreenBack,textView4,tvScaleType,tvGraphicsMode,tvLimitFps,tvScreenGravity" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Screen -->

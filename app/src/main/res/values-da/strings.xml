@@ -71,7 +71,6 @@
     <string name="layout_scale_mode">Tastelayout størrelsesjustering</string>
     <string name="layout_switch">Skift tastelayout</string>
     <string name="hide_buttons">Skjul knapper</string>
-    <string name="common_settings">[GENERELLE INDSTILLINGER]</string>
     <string name="pref_enable_actionbar_title">Aktiver handlingslinje</string>
     <string name="pref_enable_actionbar_summary">I fuldskærmsprogrammer</string>
     <string name="pref_app_sort_title">App sorteringsrækkefølge</string>

@@ -86,7 +86,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfScreenHeight;
 	protected AppCompatCheckBox cbLockAspect;
 	protected EditText tfScreenBack;
-	protected SeekBar sbScaleRatio;
 	protected EditText tfScaleRatioValue;
 	protected Spinner spOrientation;
 	protected Spinner spScreenGravity;
@@ -201,7 +200,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				.getString(PREF_DEFAULT_PROFILE, null);
 		loadConfig();
 		if (!params.isNew && !needShow) {
-			needShow = false;
 			startMIDlet();
 			return;
 		}
@@ -218,7 +216,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfScreenBack = findViewById(R.id.tfScreenBack);
 		spScreenGravity = findViewById(R.id.spScreenGravity);
 		spScaleType = findViewById(R.id.spScaleType);
-		sbScaleRatio = findViewById(R.id.sbScaleRatio);
 		tfScaleRatioValue = findViewById(R.id.tfScaleRatioValue);
 		spOrientation = findViewById(R.id.spOrientation);
 		cxFilter = findViewById(R.id.cxFilter);
@@ -277,20 +274,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
 		findViewById(R.id.btEncoding).setOnClickListener(this::showCharsetPicker);
 		btShaderTune.setOnClickListener(this::showShaderSettings);
-		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				if (fromUser) tfScaleRatioValue.setText(String.valueOf(progress));
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
 		tfScaleRatioValue.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,9 +282,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				int length = s.length();
-				if (length > 3) {
-					if (start >= 3) {
-						tfScaleRatioValue.getText().delete(3, length);
+				if (length > 4) {
+					if (start >= 4) {
+						tfScaleRatioValue.getText().delete(4, length);
 					} else {
 						int st = start + count;
 						int end = st + (before == 0 ? count : before);
@@ -315,10 +298,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				if (s.length() == 0) return;
 				try {
 					int progress = Integer.parseInt(s.toString());
-					if (progress <= 100) {
-						sbScaleRatio.setProgress(progress);
-					} else {
-						s.replace(0, s.length(), "100");
+					if (progress > 1000) {
+						s.replace(0, s.length(), "1000");
 					}
 				} catch (NumberFormatException e) {
 					s.clear();
@@ -657,7 +638,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			tfScreenHeight.setText(Integer.toString(screenHeight));
 		}
 		tfScreenBack.setText(String.format("%06X", params.screenBackgroundColor));
-		sbScaleRatio.setProgress(params.screenScaleRatio);
 		tfScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
 		spOrientation.setSelection(params.orientation);
 		spScaleType.setSelection(params.screenScaleType);
@@ -712,7 +692,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.screenBackgroundColor = Integer.parseInt(tfScreenBack.getText().toString(), 16);
 			} catch (NumberFormatException ignored) {
 			}
-			params.screenScaleRatio = sbScaleRatio.getProgress();
+			try {
+				params.screenScaleRatio = Integer.parseInt(tfScaleRatioValue.getText().toString());
+			} catch (NumberFormatException e) {
+				params.screenScaleRatio = 100;
+			}
 			params.orientation = spOrientation.getSelectedItemPosition();
 			params.screenGravity = spScreenGravity.getSelectedItemPosition();
 			params.screenScaleType = spScaleType.getSelectedItemPosition();
@@ -1056,7 +1040,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				int size = Integer.parseInt(src.getText().toString());
 				if (size <= 0) return;
 				int value = Math.round(size * aspect);
-				dst.setText(Integer.toString(value));
+				dst.setText(String.valueOf(value));
 			} catch (NumberFormatException ignored) { }
 		}
 

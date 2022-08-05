@@ -19,6 +19,8 @@ package javax.microedition.lcdui;
 import android.view.View;
 import android.widget.Space;
 
+import javax.microedition.util.ContextHolder;
+
 public class Spacer extends Item {
 	private int width, height;
 	private View view;
@@ -41,7 +43,7 @@ public class Spacer extends Item {
 	@Override
 	public View getItemContentView() {
 		if (view == null) {
-			view = new Space(getOwnerForm().getParentActivity());
+			view = new Space(ContextHolder.getActivity());
 
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);

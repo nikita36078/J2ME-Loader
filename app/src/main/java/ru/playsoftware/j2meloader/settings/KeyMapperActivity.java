@@ -1,5 +1,6 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018-2019 Nikita Shakarun
+ * Copyright 2020-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.gson.GsonBuilder;
 
@@ -196,11 +198,16 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 
 	@Override
 	public void onBackPressed() {
-		SparseIntArray newMap = androidToMIDP;
-		if (newMap.indexOfValue(KeyMapper.KEY_OPTIONS_MENU) < 0) {
-			Toast.makeText(this, R.string.alert_map_menu, Toast.LENGTH_SHORT).show();
+		if (androidToMIDP.indexOfValue(KeyMapper.KEY_OPTIONS_MENU) < 0) {
+			alertMenuKey();
 			return;
 		}
+		save();
+		super.onBackPressed();
+	}
+
+	private void save() {
+		SparseIntArray newMap = androidToMIDP;
 		SparseIntArray oldMap = params.keyMappings;
 		if (equalMaps(newMap, defaultKeyMap)) {
 			newMap = null;
@@ -209,7 +216,18 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			params.keyMappings = newMap;
 			ProfilesManager.saveConfig(params);
 		}
-		super.onBackPressed();
+	}
+
+	private void alertMenuKey() {
+		new AlertDialog.Builder(this)
+				.setMessage(R.string.alert_map_menu)
+				.setTitle(R.string.warning)
+				.setNegativeButton(R.string.save, (d, w) -> {
+					save();
+					super.onBackPressed();
+				})
+				.setPositiveButton(R.string.CANCEL_CMD, null)
+				.show();
 	}
 
 	private boolean equalMaps(SparseIntArray map1, SparseIntArray map2) {

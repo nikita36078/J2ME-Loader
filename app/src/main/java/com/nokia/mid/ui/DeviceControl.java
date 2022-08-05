@@ -24,7 +24,6 @@
 
 package com.nokia.mid.ui;
 
-import javax.microedition.lcdui.Display;
 import javax.microedition.util.ContextHolder;
 
 public class DeviceControl {

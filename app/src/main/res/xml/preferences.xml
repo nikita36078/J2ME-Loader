@@ -28,6 +28,12 @@
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />
     <SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:icon="@drawable/ic_setting_screenshot"
+        android:key="pref_screenshot_switch"
+        android:title="@string/pref_screenshot_title"
+        android:summary="@string/pref_screenshot_summary"/>
+    <SwitchPreferenceCompat
         android:defaultValue="true"
         android:icon="@drawable/ic_setting_enable_vibration"
         android:key="pref_vibration_switch"

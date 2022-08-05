@@ -16,6 +16,10 @@
 
 package javax.microedition.lcdui;
 
+import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+
 public class Command implements Comparable<Command> {
 	public static final int SCREEN = 1;
 	public static final int BACK = 2;
@@ -26,10 +30,10 @@ public class Command implements Comparable<Command> {
 	public static final int EXIT = 7;
 	public static final int ITEM = 8;
 
-	private String shortLabel;
-	private String longLabel;
-	private int commandType;
-	private int priority;
+	private final String shortLabel;
+	private final String longLabel;
+	private final int commandType;
+	private final int priority;
 
 	public Command(String label, int commandType, int priority) {
 		this(label, null, commandType, priority);
@@ -109,6 +113,16 @@ public class Command implements Comparable<Command> {
 
 	@Override
 	public int compareTo(Command cmd) {
-		return cmd.getPriority() - priority;
+		int p = commandType - cmd.commandType;
+		if (p != 0) {
+			return p;
+		}
+		return priority - cmd.priority;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return TextUtils.isEmpty(longLabel) ? getAndroidLabel() : longLabel;
 	}
 }

@@ -26,12 +26,13 @@ import net.lingala.zip4j.model.FileHeader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import dalvik.system.DexClassLoader;
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.IOUtils;
 
 public class AppClassLoader extends DexClassLoader {
@@ -48,9 +49,13 @@ public class AppClassLoader extends DexClassLoader {
 			throw new NullPointerException("App path is null");
 		oldResDir = new File(appDir, Config.MIDLET_RES_DIR);
 		instance = this;
-		dataDir = appDir.getParentFile().getParent() + Config.MIDLET_DATA_DIR + appDir.getName();
+		setDataDir(appDir);
 		File jar = new File(appDir, Config.MIDLET_RES_FILE);
 		zipFile = jar.exists() ? new ZipFile(jar) : null;
+	}
+
+	public static void setDataDir(File appDir) {
+		dataDir = appDir.getParentFile().getParent() + Config.MIDLET_DATA_DIR + appDir.getName();
 	}
 
 	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
@@ -71,10 +76,6 @@ public class AppClassLoader extends DexClassLoader {
 		if (normName.charAt(0) == '/') {
 			normName = normName.substring(1);
 		}
-		if (normName.equals("")) {
-			Log.w(TAG, "Can't load res on empty path");
-			return null;
-		}
 		byte[] data = getResourceBytes(normName);
 		if (data == null) {
 			Log.w(TAG, "Can't load res: " + resName);
@@ -87,14 +88,49 @@ public class AppClassLoader extends DexClassLoader {
 		return dataDir;
 	}
 
+	public static byte[] getResourceAsBytes(String resName) {
+		if (resName == null || resName.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
+		// Add support for Siemens file path
+		String normName = resName.replace('\\', '/');
+		// Remove double slashes
+		normName = normName.replaceAll("//+", "/");
+		// Remove leading slash
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
+		}
+		byte[] data = getResourceBytes(normName);
+		if (data == null) {
+			Log.w(TAG, "Can't load res: " + resName);
+			return null;
+		}
+		return data;
+	}
+
 	private static byte[] getResourceBytes(String name) {
+		if (name.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
+		if (!BuildConfig.FULL_EMULATOR) {
+			try {
+				InputStream stream = AppClassLoader.class.getClassLoader().getResourceAsStream(name);
+				if (stream != null) {
+					return IOUtils.toByteArray(stream);
+				}
+				Log.e(TAG, "getResourceBytes: resource not found " + name);
+				return null;
+			} catch (Exception e) {
+				Log.e(TAG, "getResourceBytes: " + name, e);
+				return null;
+			}
+		}
 		if (zipFile == null) {
 			final File file = new File(oldResDir, name);
 			try {
-				FileInputStream fis = new FileInputStream(file);
-				byte[] data = IOUtils.toByteArray(fis);
-				fis.close();
-				return data;
+				return FileUtils.getBytes(file);
 			} catch (Exception e) {
 				Log.w(TAG, "getResourceBytes: from file=" + file, e);
 				return null;
@@ -110,16 +146,14 @@ public class AppClassLoader extends DexClassLoader {
 			byte[] data = new byte[(int) header.getUncompressedSize()];
 			dis.readFully(data);
 			return data;
-		} catch (ZipException e) {
-			Log.e(TAG, "getResourceBytes: ", e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.e(TAG, "getResourceBytes: ", e);
 		} finally {
 			if (dis != null) {
 				try {
 					dis.close();
 				} catch (IOException e) {
-					Log.e(TAG, "getResourceBytes: ", e);
+					Log.e(TAG, "getResourceBytes: error close stream", e);
 				}
 			}
 		}

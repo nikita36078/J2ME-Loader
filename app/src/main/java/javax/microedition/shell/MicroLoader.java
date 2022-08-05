@@ -16,6 +16,9 @@
 
 package javax.microedition.shell;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -30,9 +33,12 @@ import org.acra.ErrorReporter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,16 +60,15 @@ import javax.microedition.util.ContextHolder;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.woesss.j2me.jar.Descriptor;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
@@ -107,7 +112,27 @@ public class MicroLoader {
 
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
-		Descriptor descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
+		String jarHash = null;
+		Descriptor descriptor;
+		if (BuildConfig.FULL_EMULATOR) {
+			descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
+			try {
+				byte[] bytes = FileUtils.getBytes(new File(appDir, Config.MIDLET_RES_FILE));
+				byte[] sum = MessageDigest.getInstance("md5").digest(bytes);
+				BigInteger bi = new BigInteger(sum);
+				jarHash = bi.toString(16);
+			} catch (Throwable ignored) {
+			}
+		} else {
+			try (InputStream stream = getClass().getResourceAsStream("/MIDLET-META-INF/MANIFEST.MF")) {
+				if (stream == null) {
+					throw new RuntimeException("App manifest not found! It MUST be on project path:" +
+							" 'app/midlet/resources/MIDLET-META-INF/MANIFEST.MF'");
+				}
+				String text = new String(IOUtils.toByteArray(stream));
+				descriptor = new Descriptor(text, false);
+			}
+		}
 		Map<String, String> attr = descriptor.getAttrs();
 		ErrorReporter errorReporter = ACRA.getErrorReporter();
 		String report = errorReporter.getCustomData(Constants.KEY_APPCENTER_ATTACHMENT);
@@ -118,37 +143,50 @@ public class MicroLoader {
 		sb.append(Descriptor.MIDLET_NAME).append(": ").append(descriptor.getName()).append("\n");
 		sb.append(Descriptor.MIDLET_VENDOR).append(": ").append(descriptor.getVendor()).append("\n");
 		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion());
+		if (jarHash != null) {
+			sb.append("JAR_HASH_MD5").append(": ").append(jarHash);
+		}
 		errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 		MIDlet.initProps(attr);
-		for (Map.Entry<String, String> entry : attr.entrySet()) {
-			if (entry.getKey().matches("MIDlet-[0-9]+")) {
-				String tmp = entry.getValue();
-				String clazz = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
-				String title = tmp.substring(0, tmp.indexOf(',')).trim();
-				midlets.put(clazz, title);
+		for (int i = 1; ; i++) {
+			String v = attr.get("MIDlet-" + i);
+			if (v == null) {
+				break;
 			}
+			String clazz = v.substring(v.lastIndexOf(',') + 1).trim();
+			String title = v.substring(0, v.indexOf(',')).trim();
+			midlets.put(clazz, title);
 		}
 		return midlets;
 	}
 
 	MIDlet loadMIDlet(String mainClass) throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
-		File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
-		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
-		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
-		if (dexOptDir.exists()) {
-			FileUtils.clearDirectory(dexOptDir);
-		} else if (!dexOptDir.mkdir()) {
-			throw new IOException("Can't create directory: [" + dexOptDir + ']');
+		if (BuildConfig.FULL_EMULATOR) {
+			File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
+			File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
+			File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
+			if (dexOptDir.exists()) {
+				FileUtils.clearDirectory(dexOptDir);
+			} else if (!dexOptDir.mkdir()) {
+				throw new IOException("Can't create directory: [" + dexOptDir + ']');
+			}
+			ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
+					dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
+			Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
+			//noinspection unchecked
+			Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
+			Constructor<MIDlet> init = clazz.getDeclaredConstructor();
+			init.setAccessible(true);
+			return init.newInstance();
+		} else {
+			AppClassLoader.setDataDir(appDir);
+			//noinspection unchecked
+			Class<MIDlet> clazz = (Class<MIDlet>) Class.forName(mainClass);
+			Constructor<MIDlet> init = clazz.getDeclaredConstructor();
+			init.setAccessible(true);
+			return init.newInstance();
 		}
-		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
-				dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
-		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
-		//noinspection unchecked
-		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
-		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
-		init.setAccessible(true);
-		return init.newInstance();
 	}
 
 	private void setProperties() {

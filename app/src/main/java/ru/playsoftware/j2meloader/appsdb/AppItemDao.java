@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import ru.playsoftware.j2meloader.applist.AppItem;
 
 @Dao
@@ -35,6 +37,9 @@ public interface AppItemDao {
 
 	@RawQuery(observedEntities = AppItem.class)
 	Flowable<List<AppItem>> getAll(SupportSQLiteQuery query);
+
+	@RawQuery(observedEntities = AppItem.class)
+	Single<List<AppItem>> getAllSingle(SupportSQLiteQuery query);
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	void insert(AppItem item);
@@ -56,4 +61,7 @@ public interface AppItemDao {
 
 	@Query("SELECT * FROM apps WHERE title = :name AND author = :vendor")
 	AppItem get(String name, String vendor);
+
+	@Query("SELECT * FROM apps WHERE id = :id")
+	AppItem get(int id);
 }

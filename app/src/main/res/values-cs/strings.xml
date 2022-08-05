@@ -8,7 +8,7 @@
     <string name="search">Vyhledat</string>
     <string name="licenses">Licence</string>
     <string name="profiles">Profily</string>
-    <string name="save_log">Uložit log soubor</string>
+    <string name="save_log">Uložit protokol</string>
     <string name="about_message">Tato aplikace vám umožňuje spouštět J2ME aplikace a hry na Androidu. Podporuje většinu 2D her a také 3D s určitými omezeními.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Povolení filtrování může v některých případech výrazně snížit výkon. Zakažte tuto možnost, pokud je hra příliš pomalá.&lt;BR&gt;&#8226; Problémy s blikáním obrazu lze opravit tak, že povolíte možnost \"Režim okamžitého zpracování\".</string>
     <string name="author">Autor: </string>
@@ -43,7 +43,7 @@
     <string name="install_done">Aplikace byla úspěšně nainstalována!</string>
     <string name="install_jar_non_matched_jad">Tato aplikace se liší od té popsané v JAD.\nNebrat v úvahu JAD a přesto nainstalovat?</string>
     <string name="install_jar_needed">Vyberte JAR soubor</string>
-    <string name="invalid_resolution_not_saved">Neplatná rozlišení: neuloženo!</string>
+    <string name="invalid_resolution_not_saved">Neplatné rozlišení: neuloženo!</string>
     <string name="warn_install_from_net">Soubor bude stažen z internetu</string>
     <string name="reinstall">Aplikace je již nainstalována.\n\nChcete ji přeinstalovat?\nVšechna data budou uložena.</string>
     <string name="reinstall_newest">Aktualizovat tuto aplikaci na verzi %1$s?\n\nNyní nainstalována: %2$s\nVšechna data budou uložena.</string>
@@ -51,7 +51,7 @@
     <string name="loading_info">načítání informací…</string>
     <string name="START_CMD">Spustit</string>
     <string name="CANCEL_CMD">Zrušit</string>
-    <string name="CLEAR_DATA_CMD">Vymazat data</string>
+    <string name="CLEAR_DATA_CMD">Odstranit data</string>
     <string name="RESET_SETTINGS_CMD">Obnovit nastavení</string>
     <string name="RESET_LAYOUT_CMD">Obnovit rozložení kláves</string>
     <string name="load_profile">Načíst profil</string>
@@ -106,7 +106,7 @@
     <string name="pref_orientation_port">Na výšku</string>
     <string name="pref_orientation_land">Na šířku</string>
     <string name="error">Chyba</string>
-    <string name="message_clear_data">Opravdu chcete vymazat data aplikace?</string>
+    <string name="message_clear_data">Opravdu chcete odstranit data aplikace?</string>
     <string name="PREF_VK_TYPE">Typ klávesnice</string>
     <string name="pref_vk_type_arrows">Šipky</string>
     <string name="pref_vk_type_arrows_numbers">Šipky a čísla</string>
@@ -151,11 +151,10 @@
     <string name="hide_buttons">Skrýt tlačítka</string>
     <string name="take_screenshot">Pořídit snímek obrazovky</string>
     <string name="screenshot_saved">Snímek obrazovky byl uložen do</string>
-    <string name="log_saved">Log soubor byl uložen</string>
+    <string name="log_saved">Protokol byl uložen</string>
     <string name="action_keyboard_ime">Klávesnice (IME)</string>
     <string name="pref_vk_save_alert">Vlastní klávesnice bude nahrazena stávající.\nUložit?</string>
     <string name="opt_save_screen_params">uložit parametry obrazovky</string>
-    <string name="common_settings">[SPOLEČNÁ NASTAVENÍ]</string>
     <string name="dismiss">Zavřít</string>
     <string name="pref_theme_auto_battery">Automaticky (podle spořiče baterie)</string>
     <string name="pref_theme_auto_time">Automaticky (podle denní doby)</string>
@@ -181,12 +180,10 @@
     <string name="pref_encoding_title">Kódování</string>
     <string name="pref_default_settings">Výchozí nastavení</string>
     <string name="pref_emulator_dir">Pracovní adresář</string>
-    <string name="virtual_key_menu">menu</string>
     <string name="mapping_dialog_message">Stávající mapování: %1$s</string>
     <string name="mapping_dialog_key_not_specified">nenastaveno</string>
     <string name="mapping_dialog_title">Stiskněte tlačítko</string>
     <string name="reset_mapping">Obnovit</string>
-    <string name="alert_map_menu">Musíte namapovat klávesu MENU!</string>
     <string name="error_name">Zadejte název!</string>
     <string name="set_as_default">Nastavit jako výchozí</string>
     <string name="edit">Upravit</string>

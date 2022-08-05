@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2020-2022 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import com.android.dx.command.dexer.Main;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import net.lingala.zip4j.model.FileHeader;
-
-import org.microemu.android.asm.AndroidProducer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -62,11 +60,14 @@ public class AppInstaller {
 	static final int STATUS_NEW = 2;
 	static final int STATUS_UNMATCHED = 3;
 	static final int STATUS_NEED_JAD = 4;
+	static final int STATUS_SUCCESS = 5;
 
+	private final int id;
 	private final Application context;
 	private final AppRepository appRepository;
-	private final Uri uri;
 	private final File cacheDir;
+
+	private Uri uri;
 	private Descriptor manifest;
 	private Descriptor newDesc;
 	private String appDirName;
@@ -77,10 +78,18 @@ public class AppInstaller {
 	private File srcFile;
 
 	AppInstaller(String path, Uri uri, Application context, AppRepository appRepository) {
+		id = -1;
 		this.appRepository = appRepository;
 		if (path != null) srcFile = new File(path);
 		this.uri = uri;
 		this.context = context;
+		this.cacheDir = new File(context.getCacheDir(), "installer");
+	}
+
+	public AppInstaller(int id, Application context, AppRepository appRepository) {
+		this.id = id;
+		this.context = context;
+		this.appRepository = appRepository;
 		this.cacheDir = new File(context.getCacheDir(), "installer");
 	}
 
@@ -98,6 +107,15 @@ public class AppInstaller {
 
 	/** Load and check app info from source */
 	void loadInfo(SingleEmitter<Integer> emitter) throws IOException, ConverterException {
+		if (id != -1) {
+			currentApp = appRepository.get(id);
+			srcJar = new File(currentApp.getPathExt(), Config.MIDLET_RES_FILE);
+			newDesc = new Descriptor(new File(currentApp.getPathExt(), Config.MIDLET_MANIFEST_FILE), false);
+			appDirName = currentApp.getPath();
+			targetDir = new File(Config.getAppDir(), appDirName);
+			emitter.onSuccess(STATUS_EQUAL);
+			return;
+		}
 		boolean isLocal;
 		boolean isContentUri = uri.getScheme().equals("content");
 		if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
@@ -129,7 +147,7 @@ public class AppInstaller {
 				}
 			}
 		} else if (name.toLowerCase().endsWith(".kjx")) {
-			/* Load kjx file */
+			// Load kjx file
 			parseKjx();
 			newDesc = new Descriptor(srcFile, true);
 		} else {
@@ -157,44 +175,39 @@ public class AppInstaller {
 		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
 			throw new ConverterException("Can't create cache dir");
 		}
-		File kjxFile = srcFile;
-		File jadFile = null;
-		File jarFile = null;
-		try (InputStream inputStream = new FileInputStream(kjxFile);
-			 DataInputStream dis = new DataInputStream(inputStream);
-		) {
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(srcFile))) {
 			byte[] magic = new byte[3];
-			dis.read(magic, 0, 3);
+			dis.readFully(magic, 0, 3);
 			if (!Arrays.equals(magic, "KJX".getBytes())) {
 				throw new ConverterException("Magic KJX does not match: " + new String(magic));
 			}
 
-			byte startJadPos = dis.readByte();
+			/*byte startJadPos = */dis.readByte();
 			byte lenKjxFileName = dis.readByte();
 			dis.skipBytes(lenKjxFileName);
 			int lenJadFileContent = dis.readUnsignedShort();
 			byte lenJadFileName = dis.readByte();
 			byte[] jadFileName = new byte[lenJadFileName];
-			dis.read(jadFileName, 0, lenJadFileName);
+			dis.readFully(jadFileName, 0, lenJadFileName);
 			String strJadFileName = new String(jadFileName);
 
 			int bufSize = 2048;
 			byte[] buf = new byte[bufSize];
 
-			jadFile = new File(cacheDir, strJadFileName);
+			File jadFile = new File(cacheDir, strJadFileName);
 			try (FileOutputStream fos = new FileOutputStream(jadFile)) {
 				int restSize = lenJadFileContent;
-				while(restSize > 0) {
+				while (restSize > 0) {
 					int readSize = dis.read(buf, 0, Math.min(restSize, bufSize));
 					fos.write(buf, 0, readSize);
 					restSize -= readSize;
 				}
 			}
 
-			jarFile = new File(cacheDir, strJadFileName.substring(0, strJadFileName.length() -4) + ".jar");
+			File jarFile = new File(cacheDir, strJadFileName.substring(0, strJadFileName.length() - 4) + ".jar");
 			try (FileOutputStream fos = new FileOutputStream(jarFile)) {
-				int length = 0;
-				while((length = dis.read(buf)) > 0) {
+				int length;
+				while ((length = dis.read(buf)) > 0) {
 					fos.write(buf, 0, length);
 				}
 			}
@@ -259,7 +272,7 @@ public class AppInstaller {
 	}
 
 	/** Install app */
-	void install(SingleEmitter<AppItem> emitter) throws ConverterException, IOException {
+	void install(SingleEmitter<Integer> emitter) throws ConverterException, IOException {
 		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
 			throw new ConverterException("Can't create cache dir");
 		}
@@ -271,15 +284,14 @@ public class AppInstaller {
 			downloadJar();
 			manifest = loadManifest(srcJar);
 			if (!manifest.equals(newDesc)) {
-				throw new ConverterException("*Jad not matches with Jar");
+				emitter.onSuccess(STATUS_UNMATCHED);
+				return;
 			}
 		}
-		File patchedJar = new File(cacheDir, "patched.jar");
-		AndroidProducer.processJar(srcJar, patchedJar);
 		try {
 			Main.main(new String[]{"--no-optimize",
 					"--output=" + tmpDir + Config.MIDLET_DEX_FILE,
-					patchedJar.getAbsolutePath()});
+					srcJar.getAbsolutePath()});
 		} catch (Throwable e) {
 			throw new ConverterException("Dexing error", e);
 		}
@@ -304,7 +316,7 @@ public class AppInstaller {
 		newDesc.writeTo(new File(tmpDir, Config.MIDLET_MANIFEST_FILE));
 		FileUtils.deleteDirectory(targetDir);
 		if (!tmpDir.renameTo(targetDir)) {
-			throw new ConverterException("Can't rename '" + tmpDir + "' to '" + targetDir + "'");
+			throw new ConverterException("Can't move '" + tmpDir + "' to '" + targetDir + "'");
 		}
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
@@ -314,6 +326,7 @@ public class AppInstaller {
 		}
 		if (currentApp != null) {
 			app.setId(currentApp.getId());
+			app.setTitle(currentApp.getTitle());
 			String path = currentApp.getPath();
 			if (!path.equals(appDirName)) {
 				File rms = new File(Config.getDataDir(), path);
@@ -332,7 +345,11 @@ public class AppInstaller {
 				FileUtils.deleteDirectory(appDir);
 			}
 		}
-		emitter.onSuccess(app);
+		currentApp = app;
+		appRepository.insert(app);
+		clearCache();
+		deleteTemp();
+		emitter.onSuccess(STATUS_SUCCESS);
 	}
 
 	private Descriptor loadManifest(File jar) throws IOException {
@@ -372,13 +389,23 @@ public class AppInstaller {
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
 		currentApp = appRepository.get(name, vendor);
-		String id = Integer.toHexString((name + vendor).hashCode());
-		appDirName = name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim() + '_' + id;
-		targetDir = new File(Config.getAppDir(), appDirName);
 		if (currentApp == null) {
+			generatePathName(name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim());
 			return STATUS_NEW;
 		}
+		appDirName = currentApp.getPath();
+		targetDir = new File(Config.getAppDir(), appDirName);
 		return newDesc.compareVersion(currentApp.getVersion());
+	}
+
+	private void generatePathName(String name) {
+		String appsDir = Config.getAppDir();
+		File dir = new File(appsDir, name);
+		for (int i = 1; dir.exists(); i++) {
+			dir = new File(appsDir, name + "_" + i);
+		}
+		appDirName = dir.getName();
+		targetDir = dir;
 	}
 
 	private void downloadJar() throws ConverterException {

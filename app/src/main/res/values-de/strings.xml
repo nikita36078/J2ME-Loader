@@ -92,7 +92,6 @@
     <string name="take_screenshot">Screenshot aufnehmen</string>
     <string name="screenshot_saved">Screenshot wurde gespeichert in</string>
     <string name="log_saved">Protokoll wurde gespeichert</string>
-    <string name="common_settings">[ALLGEMEINE EINSTELLUNGEN]</string>
     <string name="pref_theme_light">Hell</string>
     <string name="pref_theme_night">Dunkel</string>
     <string name="pref_theme_title">Design</string>

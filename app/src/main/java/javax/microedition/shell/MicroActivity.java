@@ -1,6 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@
  */
 
 package javax.microedition.shell;
+
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -60,12 +63,13 @@ import androidx.preference.PreferenceManager;
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
@@ -77,12 +81,11 @@ import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.LogUtils;
-
-import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_DEFAULT = 0;
@@ -100,14 +103,16 @@ public class MicroActivity extends AppCompatActivity {
 	private String appName;
 	private InputMethodManager inputMethodManager;
 	private int menuKey;
+	private String appPath;
+	private OverlayView overlayView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTheme();
+		lockNightMode();
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
-		OverlayView overlayView = findViewById(R.id.vOverlay);
+		overlayView = findViewById(R.id.vOverlay);
 		layout = findViewById(R.id.displayable_container);
 		toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -118,12 +123,23 @@ public class MicroActivity extends AppCompatActivity {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 		ContextHolder.setVibration(sp.getBoolean(PREF_VIBRATION, true));
+		Canvas.setScreenshotRawMode(sp.getBoolean(PREF_SCREENSHOT_SWITCH, false));
 		Intent intent = getIntent();
-		appName = intent.getStringExtra(KEY_MIDLET_NAME);
-		Uri data = intent.getData();
-		if (data == null) {
-			showErrorDialog("Invalid intent: app path is null");
-			return;
+		if (BuildConfig.FULL_EMULATOR) {
+			appName = intent.getStringExtra(KEY_MIDLET_NAME);
+			Uri data = intent.getData();
+			if (data == null) {
+				showErrorDialog("Invalid intent: app path is null");
+				return;
+			}
+			appPath = data.toString();
+		} else {
+			appName = getTitle().toString();
+			appPath = getApplicationInfo().dataDir + "/files/converted/midlet";
+			File dir = new File(appPath);
+			if (!dir.exists() && !dir.mkdirs()) {
+				throw new RuntimeException("Can't access file system");
+			}
 		}
 		String arguments = intent.getStringExtra(KEY_START_ARGUMENTS);
 		if (arguments != null) {
@@ -144,7 +160,6 @@ public class MicroActivity extends AppCompatActivity {
 			}
 		}
 		MidletSystem.setProperty("com.nokia.mid.cmdline.instance", "1");
-		String appPath = data.toString();
 		microLoader = new MicroLoader(this, appPath);
 		if (!microLoader.init()) {
 			Config.startApp(this, appName, appPath, true, arguments);
@@ -164,6 +179,7 @@ public class MicroActivity extends AppCompatActivity {
 		setOrientation(orientation);
 		menuKey = microLoader.getMenuKeyCode();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
@@ -172,15 +188,13 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	public void setTheme() {
+	public void lockNightMode() {
 		int current = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 		if (current == Configuration.UI_MODE_NIGHT_YES) {
 			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 		} else {
 			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 		}
-		setTheme(R.style.AppTheme_NoActionBar);
-
 	}
 
 	@Override
@@ -208,7 +222,8 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
+		if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+				current instanceof Canvas) {
 			hideSystemUI();
 		}
 	}
@@ -279,37 +294,8 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private final SimpleEvent msgSetCurrent = new SimpleEvent() {
-		@Override
-		public void process() {
-			current.clearDisplayableView();
-			layout.removeAllViews();
-			layout.addView(current.getDisplayableView());
-			invalidateOptionsMenu();
-			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
-			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
-			if (current instanceof Canvas) {
-				hideSystemUI();
-				if (!actionBarEnabled) {
-					actionBar.hide();
-				} else {
-					final String title = current.getTitle();
-					actionBar.setTitle(title == null ? appName : title);
-					layoutParams.height = (int) (getToolBarHeight() / 1.5);
-				}
-			} else {
-				showSystemUI();
-				actionBar.show();
-				final String title = current.getTitle();
-				actionBar.setTitle(title == null ? appName : title);
-				layoutParams.height = getToolBarHeight();
-			}
-			toolbar.setLayoutParams(layoutParams);
-		}
-	};
-
 	private int getToolBarHeight() {
-		int[] attrs = new int[]{R.attr.actionBarSize};
+		int[] attrs = new int[]{androidx.appcompat.R.attr.actionBarSize};
 		TypedArray ta = obtainStyledAttributes(attrs);
 		int toolBarHeight = ta.getDimensionPixelSize(0, -1);
 		ta.recycle();
@@ -339,8 +325,8 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	public void setCurrent(Displayable displayable) {
+		ViewHandler.postEvent(new SetCurrentEvent(current, displayable));
 		current = displayable;
-		ViewHandler.postEvent(msgSetCurrent);
 	}
 
 	public Displayable getCurrent() {
@@ -361,9 +347,7 @@ public class MicroActivity extends AppCompatActivity {
 				})
 				.setNeutralButton(R.string.action_settings, (d, w) -> {
 					hideSoftInput();
-					Intent intent = getIntent();
-					Config.startApp(this, intent.getStringExtra(KEY_MIDLET_NAME),
-							intent.getDataString(), true);
+					Config.startApp(this, appName, appPath, true);
 					MidletThread.destroyApp();
 				})
 				.setNegativeButton(android.R.string.cancel, null);
@@ -373,8 +357,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU)
-			if (current instanceof Canvas
-					&& layout.dispatchKeyEvent(event)) {
+			if (current instanceof Canvas && layout.dispatchKeyEvent(event)) {
 				return true;
 			} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
 				if (event.getRepeatCount() == 0) {
@@ -391,7 +374,8 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void openOptionsMenu() {
-		if (!actionBarEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
+		if (!actionBarEnabled &&
+				Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && current instanceof Canvas) {
 			showSystemUI();
 		}
 		super.openOptionsMenu();
@@ -430,92 +414,82 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.clear();
+	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		if (current == null) {
-			inflater.inflate(R.menu.midlet_displayable, menu);
-			return true;
+		inflater.inflate(R.menu.midlet_displayable, menu);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			menu.findItem(R.id.action_lock_orientation).setVisible(true);
 		}
-		boolean hasCommands = current.countCommands() > 0;
-		Menu group;
-		if (hasCommands) {
-			inflater.inflate(R.menu.midlet_common, menu);
-			group = menu.getItem(0).getSubMenu();
-		} else {
-			group = menu;
+		if (actionBarEnabled) {
+			menu.findItem(R.id.action_ime_keyboard).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			menu.findItem(R.id.action_take_screenshot).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
-		inflater.inflate(R.menu.midlet_displayable, group);
+		if (inputMethodManager == null) {
+			menu.findItem(R.id.action_ime_keyboard).setVisible(false);
+		}
+		if (ContextHolder.getVk() == null) {
+			menu.findItem(R.id.action_submenu_vk).setVisible(false);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (current instanceof Canvas) {
-			if (actionBarEnabled) {
-				inflater.inflate(R.menu.midlet_canvas, menu);
-			} else {
-				inflater.inflate(R.menu.midlet_canvas_no_bar, group);
-			}
-			if (inputMethodManager == null) {
-				menu.findItem(R.id.action_ime_keyboard).setVisible(false);
-			}
+			menu.setGroupVisible(R.id.action_group_canvas, true);
 			VirtualKeyboard vk = ContextHolder.getVk();
 			if (vk != null) {
-				inflater.inflate(R.menu.midlet_vk, group);
-				if (vk.getLayoutEditMode() == VirtualKeyboard.LAYOUT_EOF) {
-					menu.findItem(R.id.action_layout_edit_finish).setVisible(false);
-				}
+				boolean visible = vk.getLayoutEditMode() != VirtualKeyboard.LAYOUT_EOF;
+				menu.findItem(R.id.action_layout_edit_finish).setVisible(visible);
 			}
+		} else {
+			menu.setGroupVisible(R.id.action_group_canvas, false);
 		}
-		if (!hasCommands) {
-			return true;
-		}
-		for (Command cmd : current.getCommands()) {
-			menu.add(Menu.NONE, cmd.hashCode(), Menu.NONE, cmd.getAndroidLabel());
-		}
-
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
-		if (item.getGroupId() == R.id.action_group_common_settings) {
-			if (id == R.id.action_ime_keyboard) {
-				inputMethodManager.toggleSoftInputFromWindow(
-						layout.getWindowToken(),
-						InputMethodManager.SHOW_FORCED, 0);
-			} else if (id == R.id.action_exit_midlet) {
-				showExitConfirmation();
-			} else if (id == R.id.action_take_screenshot) {
-				takeScreenshot();
-			} else if (id == R.id.action_save_log) {
-				saveLog();
-			} else if (id == R.id.action_limit_fps){
-				showLimitFpsDialog();
-			} else if (ContextHolder.getVk() != null) {
-				// Handled only when virtual keyboard is enabled
-				handleVkOptions(id);
+		if (id == R.id.action_exit_midlet) {
+			showExitConfirmation();
+		} else if (id == R.id.action_save_log) {
+			saveLog();
+		} else if (id == R.id.action_lock_orientation) {
+			if (item.isChecked()) {
+				VirtualKeyboard vk = ContextHolder.getVk();
+				int orientation = vk != null && vk.isPhone() ? ORIENTATION_PORTRAIT : microLoader.getOrientation();
+				setOrientation(orientation);
+				item.setChecked(false);
+			} else {
+				item.setChecked(true);
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 			}
-			return true;
+		} else if (id == R.id.action_ime_keyboard) {
+			inputMethodManager.toggleSoftInputFromWindow(layout.getWindowToken(),
+					InputMethodManager.SHOW_FORCED, 0);
+		} else if (id == R.id.action_take_screenshot) {
+			takeScreenshot();
+		} else if (id == R.id.action_limit_fps) {
+			showLimitFpsDialog();
+		} else if (ContextHolder.getVk() != null) {
+			// Handled only when virtual keyboard is enabled
+			handleVkOptions(id);
 		}
-		if (current != null) {
-			return current.menuItemSelected(id);
-		}
-
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 
 	private void handleVkOptions(int id) {
 		VirtualKeyboard vk = ContextHolder.getVk();
 		if (id == R.id.action_layout_edit_mode) {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
-			Toast.makeText(this, R.string.layout_edit_mode,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.layout_edit_mode, Toast.LENGTH_SHORT).show();
 		} else if (id == R.id.action_layout_scale_mode) {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
-			Toast.makeText(this, R.string.layout_scale_mode,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.layout_scale_mode, Toast.LENGTH_SHORT).show();
 		} else if (id == R.id.action_layout_edit_finish) {
 			vk.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-			Toast.makeText(this, R.string.layout_edit_finished,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.layout_edit_finished, Toast.LENGTH_SHORT).show();
 			showSaveVkAlert(false);
 		} else if (id == R.id.action_layout_switch) {
 			showSetLayoutDialog();
@@ -558,21 +532,16 @@ public class MicroActivity extends AppCompatActivity {
 	private void showHideButtonDialog() {
 		final VirtualKeyboard vk = ContextHolder.getVk();
 		boolean[] states = vk.getKeysVisibility();
-		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+		boolean[] changed = states.clone();
+		new AlertDialog.Builder(this)
 				.setTitle(R.string.hide_buttons)
-				.setMultiChoiceItems(vk.getKeyNames(), states, null)
+				.setMultiChoiceItems(vk.getKeyNames(), changed, (dialog, which, isChecked) -> {})
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-					ListView lv = ((AlertDialog) dialog).getListView();
-					SparseBooleanArray current = lv.getCheckedItemPositions();
-					for (int i = 0; i < current.size(); i++) {
-						if (states[current.keyAt(i)] != current.valueAt(i)) {
-							vk.setKeysVisibility(current);
-							showSaveVkAlert(true);
-							return;
-						}
+					if (!Arrays.equals(states, changed)) {
+						vk.setKeysVisibility(changed);
+						showSaveVkAlert(true);
 					}
-				});
-		builder.show();
+				}).show();
 	}
 
 	private void showSaveVkAlert(boolean keepScreenPreferred) {
@@ -589,9 +558,9 @@ public class MicroActivity extends AppCompatActivity {
 			cb.setChecked(keepScreenPreferred);
 
 			TypedValue out = new TypedValue();
-			getTheme().resolveAttribute(R.attr.dialogPreferredPadding, out, true);
+			getTheme().resolveAttribute(androidx.appcompat.R.attr.dialogPreferredPadding, out, true);
 			int paddingH = getResources().getDimensionPixelOffset(out.resourceId);
-			int paddingT = getResources().getDimensionPixelOffset(R.dimen.abc_dialog_padding_top_material);
+			int paddingT = getResources().getDimensionPixelOffset(androidx.appcompat.R.dimen.abc_dialog_padding_top_material);
 			dialog.setView(cb, paddingH, paddingT, paddingH, 0);
 
 			dialog.setButton(dialog.BUTTON_POSITIVE, getText(android.R.string.yes), (d, w) -> {
@@ -623,7 +592,7 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private void showLimitFpsDialog(){
+	private void showLimitFpsDialog() {
 		EditText editText = new EditText(this);
 		editText.setHint(R.string.unlimited);
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -676,5 +645,50 @@ public class MicroActivity extends AppCompatActivity {
 
 	public String getAppName() {
 		return appName;
+	}
+
+	private class SetCurrentEvent extends SimpleEvent {
+		private final Displayable current;
+		private final Displayable next;
+
+		private SetCurrentEvent(Displayable current, Displayable next) {
+			this.current = current;
+			this.next = next;
+		}
+
+		@Override
+		public void process() {
+			closeOptionsMenu();
+			if (current != null) {
+				current.clearDisplayableView();
+			}
+			layout.removeAllViews();
+			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
+			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
+			int toolbarHeight = 0;
+			if (next instanceof Canvas) {
+				hideSystemUI();
+				if (!actionBarEnabled) {
+					actionBar.hide();
+				} else {
+					final String title = next.getTitle();
+					actionBar.setTitle(title == null ? appName : title);
+					toolbarHeight = (int) (getToolBarHeight() / 1.5);
+					layoutParams.height = toolbarHeight;
+				}
+			} else {
+				showSystemUI();
+				actionBar.show();
+				final String title = next != null ? next.getTitle() : null;
+				actionBar.setTitle(title == null ? appName : title);
+				toolbarHeight = getToolBarHeight();
+				layoutParams.height = toolbarHeight;
+			}
+			overlayView.setLocation(0, toolbarHeight);
+			toolbar.setLayoutParams(layoutParams);
+			if (next != null) {
+				layout.addView(next.getDisplayableView());
+			}
+		}
 	}
 }

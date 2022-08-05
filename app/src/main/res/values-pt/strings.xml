@@ -124,7 +124,6 @@
     <string name="take_screenshot">Capturar ecrã</string>
     <string name="screenshot_saved">Captura de ecrã foi salva em</string>
     <string name="log_saved">O registro foi salvo</string>
-    <string name="common_settings">[CONFIGURAÇÕES COMUNS]</string>
     <string name="pref_theme_light">Claro</string>
     <string name="pref_theme_night">Escuro</string>
     <string name="pref_theme_title">Tema</string>

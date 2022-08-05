@@ -2,7 +2,7 @@
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2017-2018 Nikita Shakarun
- * Copyright 2020 Yury Kharchenko
+ * Copyright 2020-2022 Yury Kharchenko
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -28,12 +28,12 @@
 
 package org.microemu.android.asm;
 
+import static org.objectweb.asm.Opcodes.*;
+
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
-
-import static org.objectweb.asm.Opcodes.*;
 
 public class AndroidMethodVisitor extends MethodVisitor {
 	static boolean USE_PANIC_LOGGING = false;
@@ -59,6 +59,13 @@ public class AndroidMethodVisitor extends MethodVisitor {
 				if (name.equals("getResourceAsStream")) {
 					mv.visitMethodInsn(INVOKESTATIC, "javax/microedition/util/ContextHolder",
 							name, "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", itf);
+					return;
+				}
+				break;
+			case "java/lang/Thread":
+				if (name.equals("yield")) {
+					mv.visitLdcInsn(1L);
+					mv.visitMethodInsn(opcode, owner, "sleep", "(J)V", false);
 					return;
 				}
 				break;
@@ -118,7 +125,14 @@ public class AndroidMethodVisitor extends MethodVisitor {
 					return;
 				}
 				break;
+			case "java/util/Timer":
+				owner = "javax/microedition/shell/custom/Timer";
+				break;
+			case "java/util/TimerTask":
+				owner = "javax/microedition/shell/custom/TimerTask";
+				break;
 		}
+		desc = desc.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
 		mv.visitMethodInsn(opcode, owner, name, desc, itf);
 	}
 
@@ -134,5 +148,24 @@ public class AndroidMethodVisitor extends MethodVisitor {
 			exceptionHandlers.add(handler);
 		}
 		mv.visitTryCatchBlock(start, end, handler, type);
+	}
+
+	@Override
+	public void visitTypeInsn(int opcode, String type) {
+		type = type.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		super.visitTypeInsn(opcode, type);
+	}
+
+	@Override
+	public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+		descriptor = descriptor.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		owner = owner.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		super.visitFieldInsn(opcode, owner, name, descriptor);
+	}
+
+	@Override
+	public void visitMultiANewArrayInsn(String descriptor, int numDimensions) {
+		descriptor = descriptor.replace("java/util/Timer", "javax/microedition/shell/custom/Timer");
+		super.visitMultiANewArrayInsn(descriptor, numDimensions);
 	}
 }

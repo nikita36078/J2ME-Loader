@@ -24,11 +24,7 @@ import android.os.Looper;
  * Needed, because Android does not allow to change the View from different threads.
  */
 public class ViewHandler {
-	private static Handler handler;
-
-	static {
-		handler = new Handler(Looper.getMainLooper());
-	}
+	private static final Handler handler = new Handler(Looper.getMainLooper());
 
 	public static void postEvent(Runnable event) {
 		handler.post(event);

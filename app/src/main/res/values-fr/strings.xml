@@ -155,7 +155,6 @@
     <string name="action_keyboard_ime">Keyboard (IME)</string>
     <string name="pref_vk_save_alert">Le clavier personnalisé sera remplacé par la sauvegarde\nactuelle ?</string>
     <string name="opt_save_screen_params">enregistrer les paramètres de l\'écran</string>
-    <string name="common_settings">[PARAMÈTRES COMMUNS]</string>
     <string name="dismiss">Ignorer</string>
     <string name="pref_theme_auto_battery">Auto, par économiseur de batterie</string>
     <string name="pref_theme_auto_time">Auto, par heure de la journée</string>
@@ -181,12 +180,10 @@
     <string name="pref_encoding_title">Cryptage</string>
     <string name="pref_default_settings">Paramètres par défaut</string>
     <string name="pref_emulator_dir">Répertoire de travail</string>
-    <string name="virtual_key_menu">menue</string>
     <string name="mapping_dialog_message">Mappage actuel : %1$s</string>
     <string name="mapping_dialog_key_not_specified">non spécifié</string>
     <string name="mapping_dialog_title">Appuyez sur une touche</string>
     <string name="reset_mapping">Réinitialiser</string>
-    <string name="alert_map_menu">Vous DEVEZ mapper la touche \"menu\" !</string>
     <string name="error_name">Entrer le nom!</string>
     <string name="set_as_default">Définir par défaut</string>
     <string name="edit">Paramètres</string>

@@ -17,6 +17,9 @@
  */
 package javax.microedition.lcdui.keyboard;
 
+import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_A;
+import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
+
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Handler;
@@ -30,6 +33,7 @@ import androidx.annotation.NonNull;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
@@ -44,11 +48,8 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 
-import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_A;
-import static javax.microedition.lcdui.keyboard.KeyMapper.SE_KEY_SPECIAL_GAMING_B;
-
 public class VirtualKeyboard implements Overlay, Runnable {
-	private static final String TAG = VirtualKeyboard.class.getName();
+	private static final String TAG = VirtualKeyboard.class.getSimpleName();
 
 	private static final String ARROW_LEFT = "\u2190";
 	private static final String ARROW_UP = "\u2191";
@@ -171,6 +172,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private final Handler handler;
 	private final File saveFile;
 	private final ProfileModel settings;
+	private final RectF virtualScreen = new RectF();
 
 	private Canvas target;
 	private View overlayView;
@@ -183,7 +185,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private float prevScaleX;
 	private float prevScaleY;
 	private RectF screen;
-	private RectF virtualScreen;
 	private float keySize =
 			Math.min(ContextHolder.getDisplayWidth(), ContextHolder.getDisplayHeight()) / 6.0f;
 	private float snapRadius;
@@ -485,8 +486,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return layoutVariant;
 	}
 
-	public float getPhoneKeyboardHeight() {
-		return PHONE_KEY_ROWS * keySize * PHONE_KEY_SCALE_Y;
+	public float getPhoneKeyboardHeight(float w, float h) {
+		return PHONE_KEY_ROWS * getKeySize(w, h) * PHONE_KEY_SCALE_Y;
 	}
 
 	public void setLayout(int variant) {
@@ -633,6 +634,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						}
 				}
 			}
+		} catch (FileNotFoundException e) {
+			Log.w(TAG, "readLayoutType() threw an FileNotFoundException: " + e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -718,9 +721,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		return states;
 	}
 
-	public void setKeysVisibility(SparseBooleanArray states) {
-		for (int i = 0; i < states.size(); i++) {
-			keypad[states.keyAt(i)].visible = !states.valueAt(i);
+	public void setKeysVisibility(boolean[] states) {
+		for (int i = 0; i < KEYBOARD_SIZE; i++) {
+			keypad[i].visible = !states[i];
 		}
 		overlayView.postInvalidate();
 	}
@@ -850,9 +853,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	@Override
-	public void resize(RectF screen, RectF virtualScreen) {
+	public void resize(RectF screen, float left, float top, float right, float bottom) {
 		this.screen = screen;
-		this.virtualScreen = virtualScreen;
+		virtualScreen.set(left, top, right, bottom);
 		snapRadius = keyScales[0];
 		for (int i = 1; i < keyScales.length; i++) {
 			if (keyScales[i] < snapRadius) {
@@ -860,24 +863,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 		}
 
-		float min = screen.width();
-		float max = screen.height();
-		boolean landscape = min > max;
-		if (min > max) {
-			float tmp = max;
-			max = min;
-			min = tmp;
-		}
-
-		boolean nonWide = max / min < 2;
-		float keySize;
-		if (isPhone()) {
-			keySize = min / 6.0F;
-		} else if (nonWide || landscape) {
-			keySize = max / 12F;
-		} else {
-			keySize = min / 6.5F;
-		}
+		float keySize = getKeySize(screen.width(), screen.height());
 		snapRadius = keySize * snapRadius / 4;
 		this.keySize = keySize;
 		for (int group = 0; group < keyScaleGroups.length; group++) {
@@ -894,6 +880,28 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 			handler.postDelayed(this, delay);
 		}
+	}
+
+	private float getKeySize(float screenWidth, float screenHeight) {
+		float min = screenWidth;
+		float max = screenHeight;
+		boolean landscape = min > max;
+		if (min > max) {
+			float tmp = max;
+			max = min;
+			min = tmp;
+		}
+
+		boolean nonWide = max / min < 2;
+		float keySize;
+		if (isPhone()) {
+			keySize = min / 6.0F;
+		} else if (nonWide || landscape) {
+			keySize = max / 12F;
+		} else {
+			keySize = min / 6.5F;
+		}
+		return keySize;
 	}
 
 	@Override

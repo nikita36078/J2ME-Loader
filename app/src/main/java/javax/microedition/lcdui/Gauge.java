@@ -16,13 +16,14 @@
 
 package javax.microedition.lcdui;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import androidx.appcompat.widget.AppCompatSeekBar;
 
-import javax.microedition.shell.MicroActivity;
+import javax.microedition.util.ContextHolder;
 
 public class Gauge extends Item {
 	public static final int CONTINUOUS_IDLE = 0;
@@ -105,12 +106,7 @@ public class Gauge extends Item {
 	@Override
 	protected View getItemContentView() {
 		if (pbar == null) {
-			MicroActivity activity;
-			if (alert != null) {
-				activity = alert.getParentActivity();
-			} else {
-				activity = getOwnerForm().getParentActivity();
-			}
+			Context activity = ContextHolder.getActivity();
 			if (interactive) {
 				pbar = new AppCompatSeekBar(activity);
 				((SeekBar) pbar).setOnSeekBarChangeListener(listener);

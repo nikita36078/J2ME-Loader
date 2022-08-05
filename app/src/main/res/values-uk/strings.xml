@@ -124,7 +124,6 @@
     <string name="take_screenshot">Зробити скріншот</string>
     <string name="screenshot_saved">Скріншот було збережено до</string>
     <string name="log_saved">Журнал помилок збережено</string>
-    <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
     <string name="pref_theme_light">Світла</string>
     <string name="pref_theme_night">Темна</string>
     <string name="pref_theme_title">Тема</string>

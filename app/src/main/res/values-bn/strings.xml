@@ -92,7 +92,6 @@
     <string name="take_screenshot">স্ক্রীনশট নিন</string>
     <string name="screenshot_saved">স্ক্রিনসর্ট সংরক্ষণ করা হয়েছে</string>
     <string name="log_saved">লগ সংরক্ষণ করা হয়েছে</string>
-    <string name="common_settings">[সাধারণ সেটিংস]</string>
     <string name="pref_theme_light">উজ্জ্বল</string>
     <string name="pref_theme_night">গাঢ়</string>
     <string name="pref_theme_title">থিম</string>
