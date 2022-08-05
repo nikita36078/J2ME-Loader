@@ -17,7 +17,7 @@
     <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
-    <string name="create">создать</string>
+    <string name="create">nokiaaa</string>
     <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n\"%1$s\".\nВы можете выбрать другую сейчас, нажав кнопку %2$s, и в любое время через настройки</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
     <string name="action_reinstall">Переустановить</string>
@@ -30,6 +30,8 @@
     <string name="create_apps_dir_failed">Не удалось создать папку по указанному пути:\n\'%s\'\nвыберите другую.</string>
     <string name="change">Изменить</string>
     <string name="choose">Выбрать</string>
+    <string name="warning">Внимание</string>
+    <string name="scoped_storage_warning">Ваши пользовательские данные хранятся в папке, которая <b>будет удалена</b> при удалении приложения:\n</string>
     <string name="donate">Поддержать</string>
     <string name="midlet_name"><b>Название: </b></string>
     <string name="midlet_size"><b>Размер: </b></string>
@@ -40,10 +42,12 @@
     <string name="install">установить</string>
     <string name="install_done">Приложение установлено!</string>
     <string name="install_jar_non_matched_jad">Это приложение не соответствует описанному в JAD. Параметры из JAD не будут использованы\n\nВсё равно установить?</string>
+    <string name="install_jar_needed">Выберите JAR файл</string>
     <string name="invalid_resolution_not_saved">Некорректные размеры: не сохранено!</string>
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="reinstall">Приложение уже установлено.\n\nВы хотите его переустановить?\nВсе данные будут сохранены.</string>
     <string name="reinstall_newest">Обновить это приложение?\n\nНовая версия: %1$s?\nУстановлено: %2$s\nВсе данные будут сохранены.</string>
+    <string name="reinstall_older">Заменить это приложение версией %1$s?\n\nУстановлено: %2$s\nСтарая версия может работать неправильно с записанными данными.</string>
     <string name="loading_info">загрузка информации…</string>
     <string name="START_CMD">Пуск</string>
     <string name="CANCEL_CMD">Отмена</string>
@@ -149,9 +153,11 @@
     <string name="screenshot_saved">Скриншот сохранён в</string>
     <string name="log_saved">Лог сохранен</string>
     <string name="action_keyboard_ime">Клавиатура (IME)</string>
+    <string name="action_lock_orientation">Заблокировать поворот экрана</string>
     <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
     <string name="opt_save_screen_params">сохранить параметры экрана</string>
-    <string name="common_settings">[ОБЩИЕ НАСТРОЙКИ]</string>
+    <string name="cmd_menu">Меню</string>
+    <string name="dismiss">Скрыть</string>
     <string name="pref_theme_auto_battery">Авто, по режиму энергосбережения</string>
     <string name="pref_theme_auto_time">Авто, по времени суток</string>
     <string name="pref_theme_light">Светлая</string>
@@ -176,12 +182,14 @@
     <string name="pref_encoding_title">Кодировка</string>
     <string name="pref_default_settings">Стандартные настройки</string>
     <string name="pref_emulator_dir">Рабочая папка</string>
-    <string name="virtual_key_menu">меню</string>
+    <string name="pref_screenshot_summary">Отключить масштабирование и фильтрацию скриншотов</string>
+    <string name="pref_screenshot_title">Необработанный скриншот</string>
     <string name="mapping_dialog_message">Текущий маппинг: %1$s</string>
     <string name="mapping_dialog_key_not_specified">не задано</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="reset_mapping">Сброс</string>
-    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"</string>
+    <string name="alert_map_menu">Кнопка меню (M) не назначена!\nЭто может сделать невозможным доступ к опциям эмулятора</string>
+    <string name="save">Сохранить</string>
     <string name="error_name">Введите название шаблона!</string>
     <string name="set_as_default">Сделать стандартным</string>
     <string name="edit">Настроить</string>
@@ -193,4 +201,5 @@
     <string name="error_name_exists">Уже есть, введите другое название</string>
     <string name="default_label">"%s (стандартный)"</string>
     <string name="not_saved_exists">Уже существует</string>
+    <string name="alert_rewrite_profile">Профиль \"%1$s\" уже есть.\nХотите его перезаписать?</string>
 </resources>

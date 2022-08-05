@@ -95,7 +95,6 @@
     <string name="take_screenshot">Zrób zrzut ekranu</string>
     <string name="screenshot_saved">Zrzut ekranu został zapisany w</string>
     <string name="log_saved">Log został zapisany</string>
-    <string name="common_settings">[WSPÓLNE USTAWIENIA]</string>
     <string name="pref_theme_light">Jasny</string>
     <string name="pref_theme_night">Ciemny</string>
     <string name="pref_theme_title">Motyw</string>

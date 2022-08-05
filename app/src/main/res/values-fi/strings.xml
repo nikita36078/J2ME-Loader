@@ -73,7 +73,6 @@
     <string name="layout_scale_mode">Näppäinasettelun koonsäätötila</string>
     <string name="layout_switch">Vaihda näppäinasettelu</string>
     <string name="hide_buttons">Piilota painikkeet</string>
-    <string name="common_settings">[YLEISET ASETUKSET]</string>
     <string name="pref_enable_actionbar_title">Ota käyttöön toimintopalkki</string>
     <string name="pref_enable_actionbar_summary">Koko näytön sovelluksissa</string>
     <string name="pref_app_sort_title">Sovellusten lajittelujärjestys</string>

@@ -124,7 +124,6 @@
     <string name="take_screenshot">스크린샷 찍기</string>
     <string name="screenshot_saved">스크린샷이 저장됨</string>
     <string name="log_saved">로그가 저장됨</string>
-    <string name="common_settings">[일반 설정]</string>
     <string name="pref_theme_light">Light</string>
     <string name="pref_theme_night">Dark</string>
     <string name="pref_theme_title">테마</string>

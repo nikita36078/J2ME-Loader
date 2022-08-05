@@ -124,7 +124,6 @@
     <string name="take_screenshot">Maak schermafbeelding</string>
     <string name="screenshot_saved">Schermafbeelding is opgeslagen in</string>
     <string name="log_saved">Logboek is opgeslagen</string>
-    <string name="common_settings">[ALGEMENE INSTELLINGEN]</string>
     <string name="pref_theme_light">Licht</string>
     <string name="pref_theme_night">Donker</string>
     <string name="pref_theme_title">Thema</string>

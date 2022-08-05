@@ -94,7 +94,6 @@
     <string name="take_screenshot">گرفتن عکس از صفحه نمایش</string>
     <string name="screenshot_saved">عکس صفحه نمایش ذخیره شده است</string>
     <string name="log_saved">گزارش ذخیره شده است</string>
-    <string name="common_settings">[تنظیمات مشترک]</string>
     <string name="pref_theme_light">سفید</string>
     <string name="pref_theme_night">سیاه</string>
     <string name="pref_theme_title">پس زمینه</string>

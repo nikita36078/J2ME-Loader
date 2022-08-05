@@ -78,7 +78,6 @@
     <string name="layout_scale_mode">ปรับขนาด keylayout</string>
     <string name="layout_switch">สลับ keylayout</string>
     <string name="hide_buttons">ซ่อนปุ่ม</string>
-    <string name="common_settings">ตั้งค่าทั่วไป</string>
     <string name="pref_theme_light">สว่าง</string>
     <string name="pref_theme_night">มืด</string>
     <string name="pref_theme_title">ธีม</string>
