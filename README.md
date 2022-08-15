@@ -4,8 +4,9 @@
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/j2me-loader/localized.svg)](https://crowdin.com/project/j2me-loader)
 [![GitHub release](https://img.shields.io/github/release/nikita36078/J2ME-Loader.svg)](https://github.com/nikita36078/J2ME-Loader/releases)
 
-J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3D with some limitations (Mascot Capsule 3D games don't work). Emulator has a virtual keyboard, individual settings for each application, scaling support.
+J2ME-Loader is a J2ME emulator for Android. It supports most 2D and 3D games (including Mascot Capsule 3D ones). Emulator has a virtual keyboard, individual settings for each application, scaling support.
 This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoader).
+Special thanks to [woesss](https://github.com/woesss), the author of [JL-Mod](https://github.com/woesss/JL-Mod), for creating open-source Mascot Capsule implementation.
 
 System requirements: Android 4.0+  
 [4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201)  
