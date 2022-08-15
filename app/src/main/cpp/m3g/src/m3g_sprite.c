@@ -454,9 +454,7 @@ static void m3gSpriteDoRender(Node *self,
     glTexCoordPointer(2, GL_SHORT, 0, texvert);
     glEnable(GL_TEXTURE_2D);
     glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_MODULATE);
-    m3gBindTextureImage(imagePow2,
-                        M3G_FILTER_BASE_LEVEL,
-                        m3gIsAccelerated(ctx) ? M3G_FILTER_LINEAR : M3G_FILTER_NEAREST);
+    m3gBindTextureImage(imagePow2, M3G_FILTER_BASE_LEVEL, M3G_FILTER_NEAREST);
 
     glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -186,9 +186,7 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
             glTexCoordPointer(2, GL_SHORT, 0, texvert);
             glEnable(GL_TEXTURE_2D);
             glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (GLfixed) GL_REPLACE);
-            m3gBindTextureImage(imagePow2,
-                                M3G_FILTER_BASE_LEVEL,
-                                m3gIsAccelerated(ctx) ? M3G_FILTER_LINEAR : M3G_FILTER_NEAREST);
+            m3gBindTextureImage(imagePow2, M3G_FILTER_BASE_LEVEL, M3G_FILTER_NEAREST);
 
             /* Set wrapping */
             if (background->modeX == M3G_REPEAT) {
