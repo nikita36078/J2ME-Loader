@@ -1033,17 +1033,8 @@ public abstract class Canvas extends Displayable {
 			if (midpKeyCode == 0) {
 				return false;
 			}
-			long pressedTime = event.getEventTime() - event.getDownTime();
-			if (pressedTime < 100) {
-				mView.postDelayed(() -> {
-					if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
-						postKeyReleased(midpKeyCode);
-					}
-				}, 100 - pressedTime);
-			} else {
-				if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
-					postKeyReleased(midpKeyCode);
-				}
+			if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
+				postKeyReleased(midpKeyCode);
 			}
 			return true;
 		}
