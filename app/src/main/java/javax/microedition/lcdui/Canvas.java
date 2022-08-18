@@ -18,7 +18,35 @@
 
 package javax.microedition.lcdui;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_TEST;
+import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_NEAREST;
+import static android.opengl.GLES20.GL_RGBA;
+import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
+import static android.opengl.GLES20.glActiveTexture;
+import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glDepthMask;
+import static android.opengl.GLES20.glDisable;
+import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glReadPixels;
+import static android.opengl.GLES20.glTexParameteri;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniform2f;
+import static android.opengl.GLES20.glUniform4fv;
+import static android.opengl.GLES20.glViewport;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -985,7 +1013,8 @@ public abstract class Canvas extends Displayable {
 
 		public ViewCallbacks(View view) {
 			mView = view;
-			overlayView = ContextHolder.getActivity().findViewById(R.id.vOverlay);
+			
+			overlayView = ContextHolder.getActivity().binding.overlayView;
 		}
 
 		@Override
@@ -1236,7 +1265,7 @@ public abstract class Canvas extends Displayable {
 		private SoftBar() {
 			super(Canvas.this);
 			MicroActivity activity = ContextHolder.getActivity();
-			this.overlayView = activity.findViewById(R.id.vOverlay);
+			this.overlayView = activity.binding.overlayView;
 			DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
 			padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
 			textColor = ContextCompat.getColor(activity, R.color.accent);

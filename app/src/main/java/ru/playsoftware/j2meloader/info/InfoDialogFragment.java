@@ -18,7 +18,6 @@ package ru.playsoftware.j2meloader.info;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -27,6 +26,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
 import ru.playsoftware.j2meloader.R;
 
 public class InfoDialogFragment extends DialogFragment {

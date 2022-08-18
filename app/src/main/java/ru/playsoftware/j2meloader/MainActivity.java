@@ -17,6 +17,10 @@
 
 package ru.playsoftware.j2meloader;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_STORAGE_WARNING_SHOWN;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,10 +49,6 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.woesss.j2me.installer.InstallerDialog;
-
-import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_STORAGE_WARNING_SHOWN;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 
 public class MainActivity extends BaseActivity {
 	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};

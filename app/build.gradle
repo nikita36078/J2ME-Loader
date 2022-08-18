@@ -110,6 +110,10 @@ android {
             outputFileName = "${baseName}${versionName}-${dirName}-${buildType.name}.apk".replaceAll('--+', '-')
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 static def generateVersionCode() {

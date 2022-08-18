@@ -22,7 +22,6 @@ import androidx.annotation.RequiresApi;
 
 import java.util.HashMap;
 
-import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.VideoItem;
 import javax.microedition.media.control.GUIControl;
 import javax.microedition.media.control.VideoControl;

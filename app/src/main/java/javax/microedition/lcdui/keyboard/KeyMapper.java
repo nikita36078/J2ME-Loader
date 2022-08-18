@@ -17,6 +17,38 @@
 
 package javax.microedition.lcdui.keyboard;
 
+import static javax.microedition.lcdui.Canvas.DOWN;
+import static javax.microedition.lcdui.Canvas.FIRE;
+import static javax.microedition.lcdui.Canvas.GAME_A;
+import static javax.microedition.lcdui.Canvas.GAME_B;
+import static javax.microedition.lcdui.Canvas.GAME_C;
+import static javax.microedition.lcdui.Canvas.GAME_D;
+import static javax.microedition.lcdui.Canvas.KEY_CLEAR;
+import static javax.microedition.lcdui.Canvas.KEY_DOWN;
+import static javax.microedition.lcdui.Canvas.KEY_END;
+import static javax.microedition.lcdui.Canvas.KEY_FIRE;
+import static javax.microedition.lcdui.Canvas.KEY_LEFT;
+import static javax.microedition.lcdui.Canvas.KEY_NUM0;
+import static javax.microedition.lcdui.Canvas.KEY_NUM1;
+import static javax.microedition.lcdui.Canvas.KEY_NUM2;
+import static javax.microedition.lcdui.Canvas.KEY_NUM3;
+import static javax.microedition.lcdui.Canvas.KEY_NUM4;
+import static javax.microedition.lcdui.Canvas.KEY_NUM5;
+import static javax.microedition.lcdui.Canvas.KEY_NUM6;
+import static javax.microedition.lcdui.Canvas.KEY_NUM7;
+import static javax.microedition.lcdui.Canvas.KEY_NUM8;
+import static javax.microedition.lcdui.Canvas.KEY_NUM9;
+import static javax.microedition.lcdui.Canvas.KEY_POUND;
+import static javax.microedition.lcdui.Canvas.KEY_RIGHT;
+import static javax.microedition.lcdui.Canvas.KEY_SEND;
+import static javax.microedition.lcdui.Canvas.KEY_SOFT_LEFT;
+import static javax.microedition.lcdui.Canvas.KEY_SOFT_RIGHT;
+import static javax.microedition.lcdui.Canvas.KEY_STAR;
+import static javax.microedition.lcdui.Canvas.KEY_UP;
+import static javax.microedition.lcdui.Canvas.LEFT;
+import static javax.microedition.lcdui.Canvas.RIGHT;
+import static javax.microedition.lcdui.Canvas.UP;
+
 import android.util.SparseIntArray;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -24,8 +56,6 @@ import android.view.KeyEvent;
 import androidx.collection.SparseArrayCompat;
 
 import ru.playsoftware.j2meloader.config.ProfileModel;
-
-import static javax.microedition.lcdui.Canvas.*;
 
 public class KeyMapper {
 	public static final int KEY_OPTIONS_MENU = 0;

@@ -18,8 +18,10 @@ package ru.playsoftware.j2meloader.filepicker;
 
 import android.os.Environment;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.nononsenseapps.filepicker.FilePickerFragment;
 import com.nononsenseapps.filepicker.LogicHandler;
@@ -29,8 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import ru.playsoftware.j2meloader.R;
 
 public class FilteredFilePickerFragment extends FilePickerFragment {

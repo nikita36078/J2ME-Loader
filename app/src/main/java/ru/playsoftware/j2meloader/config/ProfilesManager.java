@@ -19,6 +19,9 @@ package ru.playsoftware.j2meloader.config;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -36,8 +39,6 @@ import java.util.HashMap;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.XmlUtils;
 

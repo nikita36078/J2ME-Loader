@@ -16,7 +16,21 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
+import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_NEAREST;
+import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
+import static android.opengl.GLES20.glActiveTexture;
+import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glDeleteTextures;
+import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glIsTexture;
+import static android.opengl.GLES20.glTexParameteri;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

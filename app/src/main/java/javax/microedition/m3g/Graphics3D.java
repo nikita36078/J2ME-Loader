@@ -18,7 +18,6 @@
 package javax.microedition.m3g;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 
 import java.util.Hashtable;
 import java.util.Vector;

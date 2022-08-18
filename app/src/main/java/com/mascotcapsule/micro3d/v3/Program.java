@@ -16,7 +16,37 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES20.GL_COMPILE_STATUS;
+import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
+import static android.opengl.GLES20.GL_LINK_STATUS;
+import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_VERTEX_SHADER;
+import static android.opengl.GLES20.glActiveTexture;
+import static android.opengl.GLES20.glAttachShader;
+import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glCompileShader;
+import static android.opengl.GLES20.glCreateProgram;
+import static android.opengl.GLES20.glCreateShader;
+import static android.opengl.GLES20.glDeleteProgram;
+import static android.opengl.GLES20.glDeleteShader;
+import static android.opengl.GLES20.glDetachShader;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetProgramInfoLog;
+import static android.opengl.GLES20.glGetProgramiv;
+import static android.opengl.GLES20.glGetShaderInfoLog;
+import static android.opengl.GLES20.glGetShaderiv;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glLinkProgram;
+import static android.opengl.GLES20.glReleaseShaderCompiler;
+import static android.opengl.GLES20.glShaderSource;
+import static android.opengl.GLES20.glUniform1f;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniform2f;
+import static android.opengl.GLES20.glUniform3f;
+import static android.opengl.GLES20.glUniform3fv;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.glUseProgram;
 import static com.mascotcapsule.micro3d.v3.Util3D.TAG;
 import static com.mascotcapsule.micro3d.v3.Utils.TO_FLOAT;
 

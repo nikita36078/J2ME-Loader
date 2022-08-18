@@ -16,6 +16,9 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT_PROFILE;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -28,10 +31,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
@@ -40,14 +39,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
+import ru.playsoftware.j2meloader.databinding.ActivityProfilesBinding;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
-
-public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
+public class ProfilesActivity extends BaseActivity implements EditNameDialog.Callback, AdapterView.OnItemClickListener {
+	
 	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
+	ActivityProfilesBinding binding;
+	
 	private final ActivityResultLauncher<String> editProfileLauncher = registerForActivityResult(
 			new ActivityResultContract<String, String>() {
 				@NonNull
@@ -74,7 +77,11 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profiles);
+		
+		binding = ActivityProfilesBinding.inflate(getLayoutInflater());
+		View view = binding.getRoot();
+		setContentView(view);
+		
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -83,12 +90,10 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		ArrayList<Profile> profiles = ProfilesManager.getProfiles();
-		ListView listView = findViewById(R.id.list_view);
-		TextView emptyView = findViewById(R.id.empty_view);
-		listView.setEmptyView(emptyView);
-		registerForContextMenu(listView);
+		binding.listView.setEmptyView(binding.emptyView);
+		registerForContextMenu(binding.listView);
 		adapter = new ProfilesAdapter(getLayoutInflater(), profiles);
-		listView.setAdapter(adapter);
+		binding.listView.setAdapter(adapter);
 		final String def = preferences.getString(PREF_DEFAULT_PROFILE, null);
 		if (def != null) {
 			for (int i = profiles.size() - 1; i >= 0; i--) {
@@ -99,7 +104,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 				}
 			}
 		}
-		listView.setOnItemClickListener(this);
+		binding.listView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -115,8 +120,8 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 			finish();
 			return true;
 		} else if (itemId == R.id.add) {
-			EditNameAlert.newInstance(getString(R.string.enter_name), -1)
-					.show(getSupportFragmentManager(), "alert_create_profile");
+			EditNameDialog.newInstance(getString(R.string.enter_name), -1)
+						  .show(getSupportFragmentManager(), "alert_create_profile");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -151,8 +156,8 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 			startActivity(intent);
 			return true;
 		} else if (itemId == R.id.action_context_rename) {
-			EditNameAlert.newInstance(getString(R.string.enter_new_name), index)
-					.show(getSupportFragmentManager(), "alert_rename_profile");
+			EditNameDialog.newInstance(getString(R.string.enter_new_name), index)
+						  .show(getSupportFragmentManager(), "alert_rename_profile");
 		} else if (itemId == R.id.action_context_delete) {
 			profile.delete();
 			adapter.removeItem(index);
@@ -177,5 +182,11 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		parent.showContextMenuForChild(view);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		binding = null;
+		super.onDestroy();
 	}
 }

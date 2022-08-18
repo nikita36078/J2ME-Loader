@@ -20,7 +20,6 @@ package javax.microedition.shell;
 import android.util.Log;
 
 import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
 import java.io.ByteArrayInputStream;

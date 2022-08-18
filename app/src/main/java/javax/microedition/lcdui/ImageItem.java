@@ -16,9 +16,6 @@
 
 package javax.microedition.lcdui;
 
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.ImageView;
 

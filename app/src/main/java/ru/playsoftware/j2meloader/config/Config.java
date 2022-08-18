@@ -16,24 +16,25 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 
+import androidx.preference.PreferenceManager;
+
 import java.io.File;
 
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-import androidx.preference.PreferenceManager;
-
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
-
-import static ru.playsoftware.j2meloader.util.Constants.*;
-
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Config {

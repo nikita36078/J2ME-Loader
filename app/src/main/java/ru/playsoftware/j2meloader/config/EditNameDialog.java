@@ -16,25 +16,24 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.io.File;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import ru.playsoftware.j2meloader.R;
 
-public class EditNameAlert extends DialogFragment {
+import java.io.File;
+
+import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.databinding.DialogChangeNameBinding;
+
+public class EditNameDialog extends DialogFragment {
 
 	private static final String TITLE = "title";
 	private static final String ID = "id";
@@ -42,8 +41,10 @@ public class EditNameAlert extends DialogFragment {
 	private String mTitle;
 	private int mId;
 
-	static EditNameAlert newInstance(String title, int id) {
-		EditNameAlert fragment = new EditNameAlert();
+	DialogChangeNameBinding binding;
+	
+	static EditNameDialog newInstance(String title, int id) {
+		EditNameDialog fragment = new EditNameDialog();
 		Bundle args = new Bundle();
 		args.putString(TITLE, title);
 		args.putInt(ID, id);
@@ -67,16 +68,20 @@ public class EditNameAlert extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		LayoutInflater inflater = getLayoutInflater();
-		@SuppressLint("InflateParams")
-		View v = inflater.inflate(R.layout.dialog_change_name, null);
-		EditText editText = v.findViewById(R.id.editText);
-		Button btNegative = v.findViewById(R.id.btNegative);
-		Button btPositive = v.findViewById(R.id.btPositive);
-		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
-				.setTitle(mTitle).setView(v).create();
-		btNegative.setOnClickListener(v1 -> dismiss());
-		btPositive.setOnClickListener(v1 -> onClickOk(editText));
+		binding = DialogChangeNameBinding.inflate(
+			LayoutInflater.from(
+				getContext()
+			)
+		);
+		
+		AlertDialog dialog = new AlertDialog.Builder(
+			requireActivity()
+		)
+				.setTitle(mTitle)
+				.setView(binding.getRoot())
+				.create();
+		binding.negativeButton.setOnClickListener(v1 -> dismiss());
+		binding.positiveButton.setOnClickListener(v1 -> onClickOk(binding.editText));
 		return dialog;
 	}
 
@@ -107,5 +112,11 @@ public class EditNameAlert extends DialogFragment {
 
 	interface Callback {
 		void onNameChanged(int id, String newName);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		binding = null;
 	}
 }

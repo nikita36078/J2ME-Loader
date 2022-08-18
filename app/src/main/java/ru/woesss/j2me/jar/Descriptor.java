@@ -20,6 +20,8 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +33,6 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.R;
 
 public class Descriptor {

@@ -16,25 +16,26 @@
 
 package ru.playsoftware.j2meloader.settings;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.nononsenseapps.filepicker.Utils;
-
-import java.io.File;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.nononsenseapps.filepicker.Utils;
+
+import java.io.File;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
-
-import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	private Preference prefFolder;

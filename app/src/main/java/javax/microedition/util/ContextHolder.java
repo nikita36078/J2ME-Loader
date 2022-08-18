@@ -21,10 +21,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Process;
 import android.os.Vibrator;
 import android.view.Display;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,9 +44,6 @@ import java.util.Objects;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.shell.MicroActivity;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;

@@ -22,10 +22,10 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import androidx.annotation.NonNull;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.keyboard.DelKeyWorkaround;
-
-import androidx.annotation.NonNull;
 
 public class CanvasView extends SurfaceView {
 	private InputConnection mPublicInputConnection;

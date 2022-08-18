@@ -40,7 +40,12 @@ public abstract class Screen extends Displayable {
 			screenView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
 			layout.addView(screenView);
 			LayoutInflater inflater = LayoutInflater.from(layout.getContext());
-			inflater.inflate(R.layout.soft_button_bar, layout, true);
+			inflater.inflate(
+				R.layout.soft_button_bar,
+				layout,
+				true
+			);
+			
 			softBar = new ScreenSoftBar(this, layout);
 		}
 

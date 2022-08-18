@@ -68,8 +68,6 @@ import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -84,6 +82,7 @@ import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
+import ru.playsoftware.j2meloader.databinding.FragmentAppsListBinding;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
@@ -96,12 +95,15 @@ import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 public class AppsListFragment extends ListFragment {
+	
 	private static final String TAG = AppsListFragment.class.getSimpleName();
 	private final AppsListAdapter adapter = new AppsListAdapter();
 	private Uri appUri;
 	private SharedPreferences preferences;
 	private AppRepository appRepository;
 	private Disposable searchViewDisposable;
+	
+	FragmentAppsListBinding binding;
 
 	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
 			FileUtils.getFilePicker(),
@@ -130,7 +132,12 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_appslist, container, false);
+		binding = FragmentAppsListBinding.inflate(
+			inflater,
+			container,
+			false
+		);
+		return binding.getRoot();
 	}
 
 	@Override
@@ -139,8 +146,7 @@ public class AppsListFragment extends ListFragment {
 		registerForContextMenu(getListView());
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
-		FloatingActionButton fab = view.findViewById(R.id.fab);
-		fab.setOnClickListener(v -> {
+		binding.floatingActionButton.setOnClickListener(v -> {
 			String path = preferences.getString(PREF_LAST_PATH, null);
 			if (path == null) {
 				File dir = Environment.getExternalStorageDirectory();
@@ -150,14 +156,6 @@ public class AppsListFragment extends ListFragment {
 			}
 			openFileLauncher.launch(path);
 		});
-	}
-
-	@Override
-	public void onDestroy() {
-		if (searchViewDisposable != null) {
-			searchViewDisposable.dispose();
-		}
-		super.onDestroy();
 	}
 
 	private void alertDbError(Throwable throwable) {
@@ -432,5 +430,19 @@ public class AppsListFragment extends ListFragment {
 			this.variant = variant;
 			notifyDataSetChanged();
 		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		binding = null;
+	}
+	
+	@Override
+	public void onDestroy() {
+		if (searchViewDisposable != null) {
+			searchViewDisposable.dispose();
+		}
+		super.onDestroy();
 	}
 }

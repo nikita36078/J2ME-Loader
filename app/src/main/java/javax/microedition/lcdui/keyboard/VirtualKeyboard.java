@@ -25,7 +25,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 
 import androidx.annotation.NonNull;

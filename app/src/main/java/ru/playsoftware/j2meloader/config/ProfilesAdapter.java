@@ -16,7 +16,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

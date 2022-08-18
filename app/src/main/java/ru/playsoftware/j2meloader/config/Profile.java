@@ -16,10 +16,11 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import java.io.File;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.io.File;
+
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Profile implements Comparable<Profile> {

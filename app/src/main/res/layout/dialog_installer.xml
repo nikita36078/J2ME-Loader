@@ -7,14 +7,14 @@
     tools:context="ru.woesss.j2me.installer.InstallerDialog">
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/installation_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true" />
 
     <TextView
-        android:id="@+id/tvStatus"
+        android:id="@+id/installation_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -22,13 +22,13 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.microedition.util.ContextHolder;
-
-import androidx.annotation.NonNull;
 
 public class MidletThread extends HandlerThread implements Handler.Callback {
 	private static final String TAG = MidletThread.class.getName();
