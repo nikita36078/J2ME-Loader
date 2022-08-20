@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 
 import javax.microedition.io.Connector;
 import javax.microedition.media.control.RecordControl;
@@ -37,7 +36,6 @@ public class RecordPlayer extends BasePlayer implements RecordControl {
 	private static final int RECORD_STARTED = 2;
 	private static final int RECORD_STOPPED = 3;
 
-	private HashMap<String, Control> controls;
 	private MediaRecorder recorder;
 	private OutputStream stream;
 	private File outputFile;
@@ -46,21 +44,7 @@ public class RecordPlayer extends BasePlayer implements RecordControl {
 	public RecordPlayer() {
 		recorder = new MediaRecorder();
 		state = RECORD_CLOSED;
-		controls = new HashMap<>();
-		controls.put(RecordControl.class.getName(), this);
-	}
-
-	@Override
-	public Control getControl(String controlType) {
-		if (!controlType.contains(".")) {
-			controlType = "javax.microedition.media.control." + controlType;
-		}
-		return controls.get(controlType);
-	}
-
-	@Override
-	public Control[] getControls() {
-		return controls.values().toArray(new Control[0]);
+		addControl(RecordControl.class.getName(), this);
 	}
 
 	@Override

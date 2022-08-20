@@ -18,8 +18,6 @@ package javax.microedition.media;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
-import java.util.HashMap;
-
 import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.tone.ToneSequence;
 
@@ -31,26 +29,12 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 			0x07, (byte) 0xA1, 0x20, 0x00, (byte) 0xC0, 0x01, 0x00, (byte) 0x80, 0x40,
 			0x7F, 0x00, (byte) 0xFF, 0x2F, 0x00
 	};
-	private final HashMap<String, Control> controls = new HashMap<>();
 	private final MidiDriver midiDriver = MidiInterface.getDriver();
 	private byte[] midiSequence = EMPTY_MIDI_SEQUENCE;
 	private long duration;
 
 	public TonePlayer() {
-		controls.put(ToneControl.class.getName(), this);
-	}
-
-	@Override
-	public Control getControl(String controlType) {
-		if (!controlType.contains(".")) {
-			controlType = "javax.microedition.media.control." + controlType;
-		}
-		return controls.get(controlType);
-	}
-
-	@Override
-	public Control[] getControls() {
-		return controls.values().toArray(new Control[0]);
+		addControl(ToneControl.class.getName(), this);
 	}
 
 	@Override
@@ -66,20 +50,12 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 	}
 
 	@Override
-	public long getDuration() {
+	public long doGetDuration() {
 		return duration;
 	}
 
 	@Override
-	public void start() throws MediaException {
+	public void doStart() {
 		midiDriver.write(midiSequence);
-	}
-
-	@Override
-	public void deallocate() {}
-
-	@Override
-	public void close() {
-		deallocate();
 	}
 }

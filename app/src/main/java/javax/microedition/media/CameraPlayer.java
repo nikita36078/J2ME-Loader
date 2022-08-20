@@ -20,9 +20,6 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import java.util.HashMap;
-
-import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.VideoItem;
 import javax.microedition.media.control.GUIControl;
 import javax.microedition.media.control.VideoControl;
@@ -30,27 +27,12 @@ import javax.microedition.media.control.VideoControl;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraPlayer extends BasePlayer implements VideoControl {
 
-	private final HashMap<String, Control> controls;
 	private final CameraController controller;
 
 	public CameraPlayer() {
 		controller = new CameraController();
 
-		controls = new HashMap<>();
-		controls.put(VideoControl.class.getName(), this);
-	}
-
-	@Override
-	public Control getControl(String controlType) {
-		if (!controlType.contains(".")) {
-			controlType = "javax.microedition.media.control." + controlType;
-		}
-		return controls.get(controlType);
-	}
-
-	@Override
-	public Control[] getControls() {
-		return controls.values().toArray(new Control[0]);
+		addControl(VideoControl.class.getName(), this);
 	}
 
 	@Override
