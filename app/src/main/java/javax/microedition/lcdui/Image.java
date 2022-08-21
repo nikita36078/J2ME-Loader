@@ -31,7 +31,7 @@ import javax.microedition.shell.AppClassLoader;
 import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class Image {
-	private final Bitmap bitmap;
+	private Bitmap bitmap;
 	private Graphics graphics;
 	private final Rect bounds;
 	private boolean isBlackWhiteAlpha;
@@ -42,10 +42,6 @@ public class Image {
 		}
 		this.bitmap = bitmap;
 		bounds = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-	}
-
-	public static Image createTransparentImage(int width, int height) {
-		return new Image(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
 	}
 
 	public Bitmap getBitmap() {
@@ -152,8 +148,22 @@ public class Image {
 	}
 
 	void setSize(int width, int height) {
-		bounds.right = width;
-		bounds.bottom = height;
+		if (width > bitmap.getWidth() || height > bitmap.getHeight()) {
+			Bitmap b = bitmap;
+			bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			bounds.right = width;
+			bounds.bottom = height;
+			if (graphics != null) {
+				graphics.reset(0, 0, width, height);
+				graphics.getCanvas().drawBitmap(b, 0, 0, null);
+			}
+		} else {
+			bounds.right = width;
+			bounds.bottom = height;
+			if (graphics != null) {
+				graphics.reset(0, 0, width, height);
+			}
+		}
 	}
 
 	public Rect getBounds() {

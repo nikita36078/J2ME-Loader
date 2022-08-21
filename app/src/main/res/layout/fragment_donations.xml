@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/donations__description"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="J2ME Loader:"
+            android:textAppearance="?android:textAppearanceLarge"
+            tools:ignore="HardcodedText" />
+
+        <ViewStub
+            android:id="@+id/donations_ym_stub_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/donations_ym_me"
+            android:layout="@layout/donation_item_paypal" />
+
+        <ViewStub
+            android:id="@+id/donations_btc_stub_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/donations_btc_me"
+            android:layout="@layout/donation_item_bitcoin" />
+
+        <ViewStub
+            android:id="@+id/donations_eth_stub_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/donations_eth_me"
+            android:layout="@layout/donation_item_bitcoin" />
+
+        <ViewStub
+            android:id="@+id/donations_ltc_stub_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/donations_ltc_me"
+            android:layout="@layout/donation_item_bitcoin" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="JL-Mod:"
+            android:textAppearance="?android:textAppearanceLarge"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Author of Mascot Capsule support, shaders, new rendering modes, optimizations"
+            android:textAppearance="?android:textAppearanceSmall"
+            tools:ignore="HardcodedText" />
+
+        <ViewStub
+            android:id="@+id/donations_paypal_stub_jl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/donations_paypal_jl"
+            android:layout="@layout/donation_item_paypal" />
+
+        <ViewStub
+            android:id="@+id/donations_qiwi_stub_jl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/donations_qiwi_jl"
+            android:layout="@layout/donation_item_paypal" />
+    </LinearLayout>
+</ScrollView>

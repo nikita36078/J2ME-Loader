@@ -17,7 +17,7 @@
     <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
-    <string name="create">создать</string>
+    <string name="create">nokiaaa</string>
     <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n\"%1$s\".\nВы можете выбрать другую сейчас, нажав кнопку %2$s, и в любое время через настройки</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
     <string name="action_reinstall">Переустановить</string>

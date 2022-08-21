@@ -30,19 +30,19 @@ import java.io.InterruptedIOException;
 import javax.microedition.io.Connection;
 
 public interface MessageConnection extends Connection {
+	String BINARY_MESSAGE = "binary";
+	String MULTIPART_MESSAGE = "multipart";
+	String TEXT_MESSAGE = "text";
 
-	public static final java.lang.String BINARY_MESSAGE = "binary";
-	public static final java.lang.String TEXT_MESSAGE = "text";
+	Message newMessage(String type);
 
-	public Message newMessage(String type);
+	Message newMessage(String type, String address);
 
-	public Message newMessage(String type, String address);
+	int numberOfSegments(Message message);
 
-	public int numberOfSegments(Message message);
+	Message receive() throws IOException, InterruptedIOException;
 
-	public Message receive() throws IOException, InterruptedIOException;
+	void send(Message message) throws IOException, InterruptedIOException;
 
-	public void send(Message message) throws IOException, InterruptedIOException;
-
-	public void setMessageListener(MessageListener listener) throws IOException;
+	void setMessageListener(MessageListener listener) throws IOException;
 }

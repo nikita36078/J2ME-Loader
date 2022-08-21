@@ -3,10 +3,10 @@
 [![Build Status](https://app.bitrise.io/app/d9254be52c74982a/status.svg?token=DIHxcpAPIg0VXSHpeXsHHA&branch=master)](https://app.bitrise.io/app/d9254be52c74982a)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/j2me-loader/localized.svg)](https://crowdin.com/project/j2me-loader)
 [![GitHub release](https://img.shields.io/github/release/nikita36078/J2ME-Loader.svg)](https://github.com/nikita36078/J2ME-Loader/releases)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/nikita36078)
 
-J2ME-Loader is a J2ME emulator for Android. It supports most 2D games and also 3D with some limitations (Mascot Capsule 3D games don't work). Emulator has a virtual keyboard, individual settings for each application, scaling support.
-This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoader).
+J2ME-Loader is a J2ME emulator for Android. It supports most 2D and 3D games (including Mascot Capsule 3D ones). Emulator has a virtual keyboard, individual settings for each application, scaling support.
+This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoader).  
+Special thanks to [woesss](https://github.com/woesss), the author of [JL-Mod](https://github.com/woesss/JL-Mod), for creating open-source Mascot Capsule implementation.
 
 System requirements: Android 4.0+  
 [4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201)  
@@ -33,7 +33,14 @@ System requirements: Android 4.0+
 <img src="/screenshots/screen.jpg" width="288" height="512"> <img src="/screenshots/screen2.jpg" width="288" height="512">
 <img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
 
+## Donations
+If you like the project, please consider making a donation to support development.
+ - [ЮMoney](https://yoomoney.ru/to/41001670387745)
+ - Bitcoin (BTC):  `bc1qnzs6zugak4vnm08k8cvl8tkzd09rlxkw4za6gc`
+ - Ethereum (ETH): `0x8DF171bDB5c5a7fd0e99934554B72205797cD99E`
+ - Litecoin (LTC): `ltc1q8r6e6lf60258vgsyw7ncjxn8pdcfg6z5w0pjjs`
+
 ## License
-> Copyright 2017-2021 Nikita Shakarun.
+> Copyright 2017-2022 Nikita Shakarun.
 > Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)

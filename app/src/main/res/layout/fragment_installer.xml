@@ -1,39 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~  Copyright 2020 Yury Kharchenko
-  ~
-  ~  Licensed under the Apache License, Version 2.0 (the "License");
-  ~  you may not use this file except in compliance with the License.
-  ~  You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~  Unless required by applicable law or agreed to in writing, software
-  ~  distributed under the License is distributed on an "AS IS" BASIS,
-  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~  See the License for the specific language governing permissions and
-  ~  limitations under the License.
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:divider="?textColorSecondary"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="ru.woesss.j2me.installer.InstallerDialog">
-
-    <TextView
-        android:id="@+id/tvMidletInfo"
-        style="?android:attr/textAppearanceMedium"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="5dp"
-        android:paddingTop="?android:attr/listPreferredItemHeightSmall"
-        android:textIsSelectable="true"
-        android:minLines="10"
-        android:gravity="center_vertical"
-        tools:text="@string/reinstall_older" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -42,60 +13,11 @@
         android:layout_height="wrap_content"
         android:indeterminate="true" />
 
-
-    <LinearLayout
-        android:id="@+id/buttonBar"
-        style="?attr/buttonBarStyle"
+    <TextView
+        android:id="@+id/tvStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
-
-        <Button
-            android:id="@+id/btnRun"
-            style="?attr/buttonBarNeutralButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/START_CMD"
-            android:visibility="gone"
-            tools:visibility="visible"
-            tools:ignore="ButtonOrder" />
-
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="2dp"
-            android:gravity="center"
-            android:text="@string/loading_info" />
-
-        <Button
-            android:id="@+id/btnClose"
-            style="?attr/buttonBarNegativeButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/cancel"
-            android:visibility="gone"
-            tools:visibility="visible"
-            tools:ignore="ButtonOrder" />
-
-        <Button
-            android:id="@+id/btnOk"
-            style="?attr/buttonBarPositiveButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/install"
-            android:visibility="gone"
-            android:focusable="true"
-            tools:visibility="visible">
-            <requestFocus />
-        </Button>
-
-    </LinearLayout>
+        android:gravity="center"
+        android:text="@string/loading_info" />
 
 </LinearLayout>

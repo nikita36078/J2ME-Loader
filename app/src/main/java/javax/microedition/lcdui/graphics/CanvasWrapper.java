@@ -19,9 +19,11 @@ public class CanvasWrapper {
 	private final Paint fillPaint = new Paint();
 	private final Paint textPaint = new Paint();
 	private final Paint imgPaint = new Paint();
-	private final float textAscent;
-	private final float textCenterOffset;
-	private final float textHeight;
+	private final float textSize;
+
+	private float textAscent;
+	private float textCenterOffset;
+	private float textHeight;
 	private Canvas canvas;
 
 	public CanvasWrapper(boolean filterBitmap) {
@@ -33,8 +35,8 @@ public class CanvasWrapper {
 		Resources res = ContextHolder.getAppContext().getResources();
 		Typeface typeface = Typeface.createFromAsset(res.getAssets(), "Roboto-Regular.ttf");
 		textPaint.setTypeface(typeface);
-		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE_KEYBOARD, res.getDisplayMetrics());
-		textPaint.setTextSize(size);
+		textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE_KEYBOARD, res.getDisplayMetrics());
+		textPaint.setTextSize(textSize);
 		textPaint.setTextAlign(Paint.Align.CENTER);
 		textAscent = textPaint.ascent();
 		float descent = textPaint.descent();
@@ -100,5 +102,21 @@ public class CanvasWrapper {
 		float width = textPaint.measureText(text);
 		canvas.drawRect(0, 0, width, textHeight, fillPaint);
 		canvas.drawText(text, width / 2.0f, -textAscent, textPaint);
+	}
+
+	public float getTextHeight() {
+		return textHeight;
+	}
+
+	public void setTextAlign(Paint.Align align) {
+		textPaint.setTextAlign(align);
+	}
+
+	public void setTextScale(float scale) {
+		textPaint.setTextSize(textSize * scale);
+		textAscent = textPaint.ascent();
+		float descent = textPaint.descent();
+		textHeight = descent - textAscent;
+		textCenterOffset = ((descent + textAscent) / 2);
 	}
 }

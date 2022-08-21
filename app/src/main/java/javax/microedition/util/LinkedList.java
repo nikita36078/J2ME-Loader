@@ -23,17 +23,11 @@ package javax.microedition.util;
  * @param <E> what it contains
  */
 public class LinkedList<E> {
-	private ArrayStack<LinkedEntry<E>> pool;
-
-	private final LinkedEntry<E> head;
-	private final LinkedEntry<E> tail;
+	private final ArrayStack<LinkedEntry<E>> pool = new ArrayStack<>();
+	private final LinkedEntry<E> head = new LinkedEntry<>();
+	private final LinkedEntry<E> tail = new LinkedEntry<>();
 
 	public LinkedList() {
-		pool = new ArrayStack<>();
-
-		head = new LinkedEntry<>();
-		tail = new LinkedEntry<>();
-
 		head.insertBefore(tail);
 	}
 
@@ -126,7 +120,7 @@ public class LinkedList<E> {
 		LinkedEntry<E> entry = pool.pop();
 
 		if (entry == null) {
-			entry = new LinkedEntry();
+			entry = new LinkedEntry<>();
 		}
 
 		entry.setElement(element);

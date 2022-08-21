@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,55 +16,69 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Effect3D {
 	public static final int NORMAL_SHADING = 0;
 	public static final int TOON_SHADING = 1;
-	private boolean myEnable;
-	private Light myLight;
-	private int myShading;
-	private Texture myTex;
-	private int myToonH;
-	private int myToonL;
-	private int myToonT;
+
+	Light light;
+	int mShading;
+	Texture mTexture;
+	int mToonHigh;
+	int mToonLow;
+	int mToonThreshold;
+	boolean isTransparency;
+	boolean isLighting;
+	boolean isReflection;
+	boolean isToonShading;
 
 	public Effect3D() {
-		this.myShading = NORMAL_SHADING;
-		this.myEnable = true;
+		mShading = NORMAL_SHADING;
+		isTransparency = true;
 	}
 
 	public Effect3D(Light light, int shading, boolean isEnableTrans, Texture tex) {
-		switch (shading) {
-			case 0:
-			case 1:
-				if (tex != null) {
-					if (tex.isModel) {
-						throw new IllegalArgumentException();
-					}
-				}
-				this.myLight = light;
-				this.myShading = shading;
-				this.myEnable = isEnableTrans;
-				this.myTex = tex;
-				return;
-			default:
-				throw new IllegalArgumentException();
+		if (shading != NORMAL_SHADING && shading != TOON_SHADING) {
+			throw new IllegalArgumentException();
 		}
+		if (tex != null && !tex.isSphere) {
+			throw new IllegalArgumentException();
+		}
+		setLight(light);
+		mShading = shading;
+		isTransparency = isEnableTrans;
+		mTexture = tex;
+	}
+
+	Effect3D(Effect3D src) {
+		Light sl = src.light;
+		light = sl == null ? null : new Light(sl);
+		mShading = src.mShading;
+		mTexture = src.mTexture;
+		mToonHigh = src.mToonHigh;
+		mToonLow = src.mToonLow;
+		mToonThreshold = src.mToonThreshold;
+		isTransparency = src.isTransparency;
+		isLighting = src.isLighting;
+		isReflection = src.isReflection;
+		isToonShading = src.isToonShading;
 	}
 
 	public final Light getLight() {
-		return this.myLight;
+		return light;
 	}
 
 	public final void setLight(Light light) {
-		this.myLight = light;
+		this.light = light;
+		isLighting = light != null;
 	}
 
 	public final int getShading() {
-		return getShadingType();
+		return mShading;
 	}
 
 	public final int getShadingType() {
-		return this.myShading;
+		return mShading;
 	}
 
 	public final void setShading(int shading) {
@@ -73,9 +87,9 @@ public class Effect3D {
 
 	public final void setShadingType(int shading) {
 		switch (shading) {
-			case 0:
-			case 1:
-				this.myShading = shading;
+			case NORMAL_SHADING:
+			case TOON_SHADING:
+				mShading = shading;
 				return;
 			default:
 				throw new IllegalArgumentException();
@@ -83,27 +97,27 @@ public class Effect3D {
 	}
 
 	public final int getThreshold() {
-		return getToonThreshold();
+		return mToonThreshold;
 	}
 
 	public final int getToonThreshold() {
-		return this.myToonT;
+		return mToonThreshold;
 	}
 
 	public final int getThresholdHigh() {
-		return getToonHigh();
+		return mToonHigh;
 	}
 
 	public final int getToonHigh() {
-		return this.myToonH;
+		return mToonHigh;
 	}
 
 	public final int getThresholdLow() {
-		return getToonLow();
+		return mToonLow;
 	}
 
 	public final int getToonLow() {
-		return this.myToonL;
+		return mToonLow;
 	}
 
 	public final void setThreshold(int threshold, int high, int low) {
@@ -118,34 +132,34 @@ public class Effect3D {
 		} else if (low < 0 || low > 255) {
 			throw new IllegalArgumentException();
 		} else {
-			this.myToonT = threshold;
-			this.myToonH = high;
-			this.myToonL = low;
+			mToonThreshold = threshold;
+			mToonHigh = high;
+			mToonLow = low;
 		}
 	}
 
 	public final boolean isSemiTransparentEnabled() {
-		return isTransparency();
+		return isTransparency;
 	}
 
 	public final boolean isTransparency() {
-		return this.myEnable;
+		return isTransparency;
 	}
 
 	public final void setSemiTransparentEnabled(boolean isEnable) {
-		setTransparency(isEnable);
+		isTransparency = isEnable;
 	}
 
 	public final void setTransparency(boolean isEnable) {
-		this.myEnable = isEnable;
+		isTransparency = isEnable;
 	}
 
 	public final Texture getSphereMap() {
-		return getSphereTexture();
+		return mTexture;
 	}
 
 	public final Texture getSphereTexture() {
-		return this.myTex;
+		return mTexture;
 	}
 
 	public final void setSphereMap(Texture tex) {
@@ -153,11 +167,31 @@ public class Effect3D {
 	}
 
 	public final void setSphereTexture(Texture tex) {
-		if (tex != null) {
-			if (tex.isModel) {
-				throw new IllegalArgumentException();
-			}
+		if (tex != null && !tex.isSphere) {
+			throw new IllegalArgumentException();
 		}
-		this.myTex = tex;
+		mTexture = tex;
+	}
+
+	void set(Effect3D src) {
+		mShading = src.mShading;
+		mTexture = src.mTexture;
+		mToonHigh = src.mToonHigh;
+		mToonLow = src.mToonLow;
+		mToonThreshold = src.mToonThreshold;
+		isTransparency = src.isTransparency;
+		isLighting = src.isLighting;
+		isReflection = src.isReflection;
+		isToonShading = src.isToonShading;
+		Light sl = src.light;
+		if (sl == null) {
+			light = null;
+			return;
+		}
+		if (light == null) {
+			light = new Light(sl);
+			return;
+		}
+		light.set(sl);
 	}
 }

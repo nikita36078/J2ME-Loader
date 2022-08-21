@@ -66,6 +66,7 @@ public class Descriptor {
 	public static final String MIDLET_PERMISSIONS = "MIDlet-Permissions";
 	public static final String MIDLET_PERMISSIONS_OPT = "MIDlet-Permissions-Opt";
 	public static final String MIDLET_PUSH_N = "MIDlet-Push-";
+	public static final String NOKIA_MIDLET_UID_N = "Nokia-MIDlet-UID-";
 
 	private static final String FAIL_ATTRIBUTE = "Fail attribute '%s: %s'";
 	private final boolean isJad;
@@ -266,6 +267,10 @@ public class Descriptor {
 
 	public String getJarUrl() {
 		return attributes.get(MIDLET_JAR_URL);
+	}
+
+	public String getNokiaUID() {
+		return attributes.get(NOKIA_MIDLET_UID_N + "1");
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import javax.microedition.lcdui.Graphics;
 
 public class LayerManager {
 	private int nlayers;
-	private Layer component[] = new Layer[4];
+	private Layer[] component = new Layer[4];
 	private int viewX, viewY, viewWidth, viewHeight;
 
 	public LayerManager() {
@@ -96,7 +96,7 @@ public class LayerManager {
 
 	private void addImpl(Layer layer, int index) {
 		if (nlayers == component.length) {
-			Layer newcomponents[] = new Layer[nlayers + 4];
+			Layer[] newcomponents = new Layer[nlayers + 4];
 			System.arraycopy(component, 0, newcomponents, 0, nlayers);
 			System.arraycopy(component, index, newcomponents,
 					index + 1, nlayers - index);

@@ -38,6 +38,7 @@ import java.util.Collections;
 
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.list.CompoundSpinnerAdapter;
+import javax.microedition.util.ContextHolder;
 
 public class ChoiceGroup extends Item implements Choice {
 	private final ArrayList<String> strings = new ArrayList<>();
@@ -420,7 +421,7 @@ public class ChoiceGroup extends Item implements Choice {
 
 	@Override
 	public View getItemContentView() {
-		Context context = getOwnerForm().getParentActivity();
+		Context context = ContextHolder.getActivity();
 
 		switch (choiceType) {
 			case EXCLUSIVE:
@@ -479,7 +480,7 @@ public class ChoiceGroup extends Item implements Choice {
 	}
 
 	private void addButton(int index, String stringPart, Image imagePart, boolean checked) {
-		Context context = getOwnerForm().getParentActivity();
+		Context context = ContextHolder.getActivity();
 
 		if (buttongroup instanceof RadioGroup) {
 			addButton(new RadioButton(context), index, stringPart, imagePart, checked);
@@ -528,7 +529,7 @@ public class ChoiceGroup extends Item implements Choice {
 	private void initButtonGroup() {
 		buttongroup.setOrientation(LinearLayout.VERTICAL);
 
-		Context context = getOwnerForm().getParentActivity();
+		Context context = ContextHolder.getActivity();
 		int size = selected.size();
 
 		if (buttongroup instanceof RadioGroup) {

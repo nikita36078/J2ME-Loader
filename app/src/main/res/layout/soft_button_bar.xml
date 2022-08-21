@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/softBar"
+    style="?android:attr/buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="4dp"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/softLeft"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical|left"
+        android:clickable="true"
+        android:focusable="true"
+        android:lines="1"
+        tools:text="Soft left" />
+
+    <Button
+        android:id="@+id/softMiddle"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:lines="1"
+        tools:text="OK" />
+
+    <Button
+        android:id="@+id/softRight"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical|right"
+        android:clickable="true"
+        android:focusable="true"
+        android:lines="1"
+        tools:text="Soft right" />
+</LinearLayout>

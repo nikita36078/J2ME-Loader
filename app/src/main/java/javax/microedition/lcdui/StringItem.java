@@ -28,6 +28,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.util.ContextHolder;
 
 public class StringItem extends Item {
 	private String text;
@@ -83,7 +84,7 @@ public class StringItem extends Item {
 	@Override
 	public View getItemContentView() {
 		if (textview == null) {
-			Context context = getOwnerForm().getParentActivity();
+			Context context = ContextHolder.getActivity();
 
 			if (appearanceMode == BUTTON) {
 				textview = new AppCompatButton(context);

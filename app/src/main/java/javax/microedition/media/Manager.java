@@ -18,6 +18,7 @@
 package javax.microedition.media;
 
 import android.Manifest;
+import android.os.Build;
 import android.webkit.MimeTypeMap;
 
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class Manager {
 
 	private static final String FILE_LOCATOR = "file://";
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
+	private static final String CAPTURE_VIDEO_LOCATOR = "capture://video";
+	private static final String CAPTURE_IMAGE_LOCATOR = "capture://image";
 	private static final TimeBase DEFAULT_TIMEBASE = () -> System.nanoTime() / 1000L;
 
 	public static Player createPlayer(String locator) throws IOException {
@@ -54,6 +57,10 @@ public class Manager {
 		} else if (locator.startsWith(CAPTURE_AUDIO_LOCATOR) &&
 				ContextHolder.requestPermission(Manifest.permission.RECORD_AUDIO)) {
 			return new RecordPlayer();
+		} else if ((locator.startsWith(CAPTURE_IMAGE_LOCATOR) || locator.startsWith(CAPTURE_VIDEO_LOCATOR)) &&
+				ContextHolder.requestPermission(Manifest.permission.CAMERA) &&
+				Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			return new CameraPlayer();
 		} else {
 			return new BasePlayer();
 		}

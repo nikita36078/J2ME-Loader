@@ -45,10 +45,11 @@ import javax.microedition.shell.MicroActivity;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {
-
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static WeakReference<MicroActivity> currentActivity;
@@ -104,7 +105,7 @@ public class ContextHolder {
 		}
 	}
 
-	public static InputStream getResourceAsStream(Class resClass, String resName) {
+	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
 		return AppClassLoader.getResourceAsStream(resClass, resName);
 	}
 
@@ -130,12 +131,21 @@ public class ContextHolder {
 	}
 
 	public static File getCacheDir() {
-		return getAppContext().getExternalCacheDir();
+		if (BuildConfig.FULL_EMULATOR) {
+			File dir = new File(Config.getEmulatorDir() + "/cache");
+			if (dir.isDirectory() || dir.mkdirs())
+				return dir;
+		}
+		return getAppContext().getCacheDir();
 	}
 
 	public static boolean requestPermission(String permission) {
-		if (ContextCompat.checkSelfPermission(currentActivity.get(), permission) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(currentActivity.get(), new String[]{permission}, 0);
+		MicroActivity context = currentActivity.get();
+		if (context == null) {
+			return false;
+		}
+		if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(context, new String[]{permission}, 0);
 			return false;
 		} else {
 			return true;
@@ -145,6 +155,7 @@ public class ContextHolder {
 	public static String getAssetAsString(String fileName) {
 		StringBuilder sb = new StringBuilder();
 
+		//noinspection CharsetObjectCanBeUsed
 		try (InputStream is = getAppContext().getAssets().open(fileName);
 			 BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")))) {
 			String str;

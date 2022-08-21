@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.util.ContextHolder;
 
 public class DateField extends Item {
 	public static final int DATE = 1;
@@ -119,7 +120,7 @@ public class DateField extends Item {
 	@Override
 	protected View getItemContentView() {
 		if (layout == null) {
-			Context context = getOwnerForm().getParentActivity();
+			Context context = ContextHolder.getActivity();
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);

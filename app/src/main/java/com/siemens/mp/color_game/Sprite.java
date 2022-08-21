@@ -207,7 +207,7 @@ public class Sprite extends Layer {
 
 	}
 
-	public void setFrameSequence(int sequence[]) {
+	public void setFrameSequence(int[] sequence) {
 
 		if (sequence == null) {
 			// revert to the default sequence

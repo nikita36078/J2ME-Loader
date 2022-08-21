@@ -40,12 +40,6 @@ public class DonationsActivity extends BaseActivity {
 	private static final String[] GOOGLE_CATALOG = new String[]{"j2me.donation.1",
 			"j2me.donation.2", "j2me.donation.3", "j2me.donation.4"};
 
-	/**
-	 * PayPal
-	 */
-	private static final String PAYPAL_USER = "nikita36078@mail.ru";
-	private static final String PAYPAL_CURRENCY_CODE = "USD";
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,15 +49,13 @@ public class DonationsActivity extends BaseActivity {
 		actionBar.setTitle(R.string.donate);
 
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		DonationsFragment donationsFragment;
+		Fragment donationsFragment;
 		if (BuildConfig.DONATIONS_GOOGLE) {
 			donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, true, GOOGLE_PUBKEY, GOOGLE_CATALOG,
 					getResources().getStringArray(R.array.donation_google_catalog_values), false, null, null,
 					null, false, null, null, false, null);
 		} else {
-			donationsFragment = DonationsFragment.newInstance(BuildConfig.DEBUG, false, null, null,
-					null, true, PAYPAL_USER, PAYPAL_CURRENCY_CODE,
-					getString(R.string.donation_paypal_item), false, null, null, false, null);
+			donationsFragment = ru.playsoftware.j2meloader.donations.DonationsFragment.newInstance();
 		}
 
 		ft.replace(R.id.donations_activity_container, donationsFragment, "donationsFragment");
@@ -83,10 +75,8 @@ public class DonationsActivity extends BaseActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
+		if (item.getItemId() == android.R.id.home) {
+			finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}

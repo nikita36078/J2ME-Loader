@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application tools:ignore="GoogleAppIndexingWarning">
+    <application tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
         <activity
             android:name="javax.microedition.shell.MicroActivity"
-            tools:remove="android:process"/>
+            tools:remove="android:process" />
     </application>
 
 </manifest>

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import javax.microedition.lcdui.event.CommandActionEvent;
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.util.ContextHolder;
 
 public abstract class Item implements View.OnCreateContextMenuListener {
 	public static final int PLAIN = 0;
@@ -168,7 +169,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	 */
 	public View getItemView() {
 		if (layout == null) {
-			Context context = owner.getParentActivity();
+			Context context = ContextHolder.getActivity();
 
 			layout = new LinearLayout(context);
 			layout.setOrientation(LinearLayout.VERTICAL);

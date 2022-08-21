@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,97 +16,264 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import java.io.IOException;
-import java.io.InputStream;
+import static com.mascotcapsule.micro3d.v3.Util3D.TAG;
 
-import javax.microedition.util.ContextHolder;
+import android.util.Log;
+import android.util.SparseIntArray;
+
+import com.mascotcapsule.micro3d.v3.RenderNode.FigureNode;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.util.Arrays;
+import java.util.Stack;
+
+import javax.microedition.shell.AppClassLoader;
 
 public class Figure {
-	private Texture[] myTextureArray;
-	private Texture myTextureNow;
+	Stack<FigureNode> stack = new Stack<>();
+	Model data;
+	Texture[] textures;
+	int selectedTex = -1;
+	int currentPattern;
 
+	@SuppressWarnings("unused")
 	public Figure(byte[] b) {
 		if (b == null) {
 			throw new NullPointerException();
 		}
+		try {
+			init(b);
+		} catch (Exception e) {
+			Log.e(TAG, "Error loading data", e);
+			throw new RuntimeException(e);
+		}
 	}
 
+	@SuppressWarnings("unused")
 	public Figure(String name) throws IOException {
-		if (name == null) {
-			throw new NullPointerException();
+		byte[] bytes = AppClassLoader.getResourceAsBytes(name);
+		if (bytes == null) {
+			throw new IOException("Error reading resource: " + name);
 		}
-		InputStream is = ContextHolder.getResourceAsStream(null, name);
-		if (is == null) {
-			throw new IOException();
+		try {
+			init(bytes);
+		} catch (Exception e) {
+			Log.e(TAG, "Error loading data from [" + name + "]", e);
+			throw new RuntimeException(e);
 		}
 	}
 
+	private synchronized void init(byte[] bytes) throws IOException {
+		data = Loader.loadMbacData(bytes);
+		Utils.transform(data.originalVertices, data.vertices,
+				data.originalNormals, data.normals, data.bones, null);
+		sortPolygons();
+		fillTexCoordBuffer();
+	}
+
+	@SuppressWarnings("unused")
 	public final void dispose() {
+		data = null;
 	}
 
-	public final void setPosture(ActionTable act, int action, int frame) {
-		if (act == null) {
+	private void sortPolygons() {
+		Model.Polygon[] polygonsT = data.polygonsT;
+		Arrays.sort(polygonsT, (a, b) -> {
+			int cmp = Integer.compare(a.blendMode, b.blendMode);
+			if (cmp != 0) return cmp;
+			cmp = Integer.compare(a.face, b.face);
+			if (cmp != 0) return cmp;
+			return a.doubleFace - b.doubleFace;
+		});
+		int[][][] subMeshesLengthsT = data.subMeshesLengthsT;
+		int[] indexArray = data.indices;
+		int pos = 0;
+		for (Model.Polygon p : polygonsT) {
+			int[] indices = p.indices;
+			int length = indices.length;
+			subMeshesLengthsT[p.blendMode >> 1][p.face][p.doubleFace] += length;
+			System.arraycopy(indices, 0, indexArray, pos, length);
+			pos += length;
+		}
+
+		Model.Polygon[] polygonsC = data.polygonsC;
+		Arrays.sort(polygonsC, (a, b) -> {
+			int cmp = Integer.compare(a.blendMode, b.blendMode);
+			if (cmp != 0) return cmp;
+			return a.doubleFace - b.doubleFace;
+		});
+		int[][] subMeshesLengthsC = data.subMeshesLengthsC;
+		for (Model.Polygon p : polygonsC) {
+			int[] indices = p.indices;
+			int length = indices.length;
+			subMeshesLengthsC[p.blendMode >> 1][p.doubleFace] += length;
+			System.arraycopy(indices, 0, indexArray, pos, length);
+			pos += length;
+		}
+	}
+
+	@SuppressWarnings("unused")
+	public synchronized final void setPosture(ActionTable actionTable, int action, int frame) {
+		if (actionTable == null) {
 			throw new NullPointerException();
-		} else if (action < 0 || action >= act.getNumAction()) {
+		} else if (action < 0 || action >= actionTable.getNumActions()) {
 			throw new IllegalArgumentException();
+		}
+		Action act = actionTable.actions[action];
+		final SparseIntArray dynamic = act.dynamic;
+		if (dynamic != null) {
+			int iFrame = frame < 0 ? 0 : frame >> 16;
+			for (int i = dynamic.size() - 1; i >= 0; i--) {
+				if (dynamic.keyAt(i) <= iFrame) {
+					currentPattern = dynamic.valueAt(i);
+					applyPattern();
+					break;
+				}
+			}
+		}
+		//noinspection ManualMinMaxCalculation
+		applyBoneAction(act, frame < 0 ? 0 : frame);
+	}
+
+	private void applyPattern() {
+		int[] indexArray = data.indices;
+		int pos = 0;
+		int invalid = data.vertices.capacity() / 3 - 1;
+		for (Model.Polygon p : data.polygonsT) {
+			int[] indices = p.indices;
+			int length = indices.length;
+			int pp = p.pattern;
+			if ((pp & currentPattern) == pp) {
+				for (int i = 0; i < length; i++) {
+					indexArray[pos++] = indices[i];
+				}
+			} else {
+				while (length > 0) {
+					indexArray[pos++] = invalid;
+					length--;
+				}
+			}
+		}
+
+		for (Model.Polygon p : data.polygonsC) {
+			int[] indices = p.indices;
+			int length = indices.length;
+			int pp = p.pattern;
+			if ((pp & currentPattern) == pp) {
+				for (int i = 0; i < length; i++) {
+					indexArray[pos++] = indices[i];
+				}
+			} else {
+				while (length > 0) {
+					indexArray[pos++] = invalid;
+					length--;
+				}
+			}
 		}
 	}
 
 	public final Texture getTexture() {
-		return this.myTextureNow;
+		if (selectedTex < 0) {
+			return null;
+		}
+		return textures[selectedTex];
 	}
 
-	public final void setTexture(Texture t) {
-		if (t == null) {
+	public final void setTexture(Texture tex) {
+		if (tex == null)
 			throw new NullPointerException();
-		} else if (t.isModel) {
-			this.myTextureArray = new Texture[1];
-			this.myTextureArray[0] = t;
-			this.myTextureNow = t;
-		} else {
+		if (tex.isSphere)
 			throw new IllegalArgumentException();
-		}
+
+		textures = new Texture[]{tex};
+		selectedTex = 0;
 	}
 
 	public final void setTexture(Texture[] t) {
-		if (t == null || t.length == 0) {
-			throw new NullPointerException();
-		} else {
-			int i = 0;
-			while (i < t.length) {
-				if (t[i] == null) {
-					throw new NullPointerException();
-				} else if (t[i].isModel) {
-					i++;
-				} else {
-					throw new IllegalArgumentException();
-				}
-			}
-			this.myTextureArray = t;
-			this.myTextureNow = null;
+		if (t == null) throw new NullPointerException();
+		if (t.length == 0) throw new IllegalArgumentException();
+		for (Texture texture : t) {
+			if (texture == null) throw new NullPointerException();
+			if (texture.isSphere) throw new IllegalArgumentException();
 		}
+		textures = t;
+		selectedTex = -1;
 	}
 
+	@SuppressWarnings("WeakerAccess")
 	public final int getNumTextures() {
-		if (this.myTextureArray == null) {
+		if (textures == null) {
 			return 0;
-		} else {
-			return this.myTextureArray.length;
 		}
+		return textures.length;
 	}
 
+	@SuppressWarnings("unused")
 	public final void selectTexture(int idx) {
 		if (idx < 0 || idx >= getNumTextures()) {
 			throw new IllegalArgumentException();
-		} else {
-			this.myTextureNow = this.myTextureArray[idx];
+		}
+		selectedTex = idx;
+	}
+
+	@SuppressWarnings("unused")
+	public final int getNumPattern() {
+		return data.numPatterns;
+	}
+
+	@SuppressWarnings("unused")
+	public synchronized final void setPattern(int idx) {
+		currentPattern = idx;
+		applyPattern();
+	}
+
+	private void applyBoneAction(Action act, int frame) {
+		Action.Bone[] actionBones = act.boneActions;
+		if (actionBones.length == 0) return;
+		synchronized (act.matrices) {
+			for (final Action.Bone actionBone : actionBones) {
+				actionBone.setFrame(frame);
+			}
+			Utils.transform(data.originalVertices, data.vertices,
+					data.originalNormals, data.normals, data.bones, act.matrices);
 		}
 	}
 
-	public final int getNumPattern() {
-		return 0;
+	private void fillTexCoordBuffer() {
+		ByteBuffer buffer = data.texCoordArray;
+		buffer.rewind();
+		for (Model.Polygon poly : data.polygonsT) {
+			buffer.put(poly.texCoords);
+			poly.texCoords = null;
+		}
+		for (Model.Polygon poly : data.polygonsC) {
+			buffer.put(poly.texCoords);
+			poly.texCoords = null;
+		}
+		buffer.rewind();
 	}
 
-	public final void setPattern(int idx) {
+	synchronized FloatBuffer getVertexData() {
+		if (data.vertexArray == null) {
+			data.vertexArray = ByteBuffer.allocateDirect(data.vertexArrayCapacity)
+					.order(ByteOrder.nativeOrder()).asFloatBuffer();
+		}
+		Utils.fillBuffer(data.vertexArray, data.vertices, data.indices);
+		return data.vertexArray;
+	}
+
+	synchronized FloatBuffer getNormalsData() {
+		if (data.originalNormals == null) {
+			return null;
+		}
+		if (data.normalsArray == null) {
+			data.normalsArray = ByteBuffer.allocateDirect(data.vertexArrayCapacity)
+					.order(ByteOrder.nativeOrder()).asFloatBuffer();
+		}
+		Utils.fillBuffer(data.normalsArray, data.normals, data.indices);
+		return data.normalsArray;
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
- * Copyright 2021 Yury Kharchenko
+ * Copyright 2019-2022 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 
 package ru.playsoftware.j2meloader.appsdb;
 
-import android.annotation.SuppressLint;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -47,16 +49,13 @@ import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.AppUtils;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
-
 public class AppRepository implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private final String[] orderTerms;
 	private final Context context;
 	private final MutableLiveData<List<AppItem>> listLiveData = new MutableLiveData<>();
 	private final MutableLiveData<Throwable> errorsLiveData = new MutableLiveData<>();
-	private final CompositeDisposable composer = new CompositeDisposable();
+	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 	private final ErrorObserver errorObserver = new ErrorObserver(errorsLiveData);
 
 	private AppDatabase db;
@@ -90,11 +89,11 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = getAll()
 				.subscribeOn(Schedulers.io())
 				.publish();
-		composer.add(listConnectableFlowable
+		compositeDisposable.add(listConnectableFlowable
 				.firstElement()
 				.subscribe(list -> AppUtils.updateDb(this, new ArrayList<>(list)), errorsLiveData::postValue));
-		composer.add(listConnectableFlowable.subscribe(listLiveData::postValue, errorsLiveData::postValue));
-		composer.add(listConnectableFlowable.connect());
+		compositeDisposable.add(listConnectableFlowable.subscribe(listLiveData::postValue, errorsLiveData::postValue));
+		compositeDisposable.add(listConnectableFlowable.connect());
 	}
 
 	public void observeApps(LifecycleOwner owner, Observer<List<AppItem>> observer) {
@@ -145,25 +144,30 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		return appItemDao.get(name, vendor);
 	}
 
+	public AppItem get(int id) {
+		return appItemDao.get(id);
+	}
+
 	public void close() {
 		if (db != null) {
 			db.close();
 		}
-		composer.clear();
+		compositeDisposable.clear();
 	}
 
 	public int getSort() {
 		return sortVariant;
 	}
 
-	@SuppressLint({"RestrictedApi", "VisibleForTests"})
-	public int setSort(int variant) {
+	private void setSort(int variant) {
 		if (this.sortVariant == variant) {
 			variant |= 0x80000000;
 		}
 		this.sortVariant = variant;
-		db.getInvalidationTracker().notifyObserversByTableNames("apps");
-		return variant;
+		Disposable disposable = appItemDao.getAllSingle(new MutableSortSQLiteQuery(this, orderTerms))
+				.subscribeOn(Schedulers.io())
+				.subscribe(listLiveData::postValue, errorsLiveData::postValue);
+		compositeDisposable.add(disposable);
 	}
 
 	@Override
@@ -183,7 +187,7 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 					}
 				}
 				db.close();
-				composer.clear();
+				compositeDisposable.clear();
 			}
 			initDb(newPath);
 		}

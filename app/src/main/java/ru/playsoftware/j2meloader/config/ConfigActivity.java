@@ -68,6 +68,8 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
+import androidx.core.widget.TextViewCompat;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
@@ -84,7 +86,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfScreenHeight;
 	protected AppCompatCheckBox cbLockAspect;
 	protected EditText tfScreenBack;
-	protected SeekBar sbScaleRatio;
 	protected EditText tfScaleRatioValue;
 	protected Spinner spOrientation;
 	protected Spinner spScreenGravity;
@@ -199,7 +200,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				.getString(PREF_DEFAULT_PROFILE, null);
 		loadConfig();
 		if (!params.isNew && !needShow) {
-			needShow = false;
 			startMIDlet();
 			return;
 		}
@@ -216,7 +216,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfScreenBack = findViewById(R.id.tfScreenBack);
 		spScreenGravity = findViewById(R.id.spScreenGravity);
 		spScaleType = findViewById(R.id.spScaleType);
-		sbScaleRatio = findViewById(R.id.sbScaleRatio);
 		tfScaleRatioValue = findViewById(R.id.tfScaleRatioValue);
 		spOrientation = findViewById(R.id.spOrientation);
 		cxFilter = findViewById(R.id.cxFilter);
@@ -275,20 +274,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
 		findViewById(R.id.btEncoding).setOnClickListener(this::showCharsetPicker);
 		btShaderTune.setOnClickListener(this::showShaderSettings);
-		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				if (fromUser) tfScaleRatioValue.setText(String.valueOf(progress));
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
 		tfScaleRatioValue.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -297,9 +282,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				int length = s.length();
-				if (length > 3) {
-					if (start >= 3) {
-						tfScaleRatioValue.getText().delete(3, length);
+				if (length > 4) {
+					if (start >= 4) {
+						tfScaleRatioValue.getText().delete(4, length);
 					} else {
 						int st = start + count;
 						int end = st + (before == 0 ? count : before);
@@ -313,10 +298,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				if (s.length() == 0) return;
 				try {
 					int progress = Integer.parseInt(s.toString());
-					if (progress <= 100) {
-						sbScaleRatio.setProgress(progress);
-					} else {
-						s.replace(0, s.length(), "100");
+					if (progress > 1000) {
+						s.replace(0, s.length(), "1000");
 					}
 				} catch (NumberFormatException e) {
 					s.clear();
@@ -655,7 +638,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			tfScreenHeight.setText(Integer.toString(screenHeight));
 		}
 		tfScreenBack.setText(String.format("%06X", params.screenBackgroundColor));
-		sbScaleRatio.setProgress(params.screenScaleRatio);
 		tfScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
 		spOrientation.setSelection(params.orientation);
 		spScaleType.setSelection(params.screenScaleType);
@@ -679,17 +661,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxVKForceOpacity.setChecked(params.vkForceOpacity);
 		cxTouchInput.setChecked(params.touchInput);
 		int fpsLimit = params.fpsLimit;
-		if (fpsLimit > 0) {
-			tfFpsLimit.setText(Integer.toString(fpsLimit));
-		}
+		tfFpsLimit.setText(fpsLimit > 0 ? Integer.toString(fpsLimit) : "");
 
 		spLayout.setSelection(params.keyCodesLayout);
 		spButtonsShape.setSelection(params.vkButtonShape);
 		sbVKAlpha.setProgress(params.vkAlpha);
 		int vkHideDelay = params.vkHideDelay;
-		if (vkHideDelay > 0) {
-			tfVKHideDelay.setText(Integer.toString(vkHideDelay));
-		}
+		tfVKHideDelay.setText(vkHideDelay > 0 ? Integer.toString(vkHideDelay) : "");
 
 		tfVKBack.setText(String.format("%06X", params.vkBgColor));
 		tfVKFore.setText(String.format("%06X", params.vkFgColor));
@@ -714,7 +692,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.screenBackgroundColor = Integer.parseInt(tfScreenBack.getText().toString(), 16);
 			} catch (NumberFormatException ignored) {
 			}
-			params.screenScaleRatio = sbScaleRatio.getProgress();
+			try {
+				params.screenScaleRatio = Integer.parseInt(tfScaleRatioValue.getText().toString());
+			} catch (NumberFormatException e) {
+				params.screenScaleRatio = 100;
+			}
 			params.orientation = spOrientation.getSelectedItemPosition();
 			params.screenGravity = spScreenGravity.getSelectedItemPosition();
 			params.screenScaleType = spScaleType.getSelectedItemPosition();
@@ -860,6 +842,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		Intent i = new Intent(this, MicroActivity.class);
 		i.setData(getIntent().getData());
 		i.putExtra(KEY_MIDLET_NAME, getIntent().getStringExtra(KEY_MIDLET_NAME));
+		i.putExtra(KEY_START_ARGUMENTS, getIntent().getStringExtra(KEY_START_ARGUMENTS));
 		startActivity(i);
 		finish();
 	}
@@ -923,7 +906,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void onOk(AmbilWarnaDialog dialog, int color) {
 				et.setText(String.format("%06X", color & 0xFFFFFF));
-				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawablesRelative()[2];
+				ColorDrawable drawable = (ColorDrawable) TextViewCompat.getCompoundDrawablesRelative(et)[2];
 				drawable.setColor(color);
 			}
 
@@ -981,7 +964,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 					editText.getResources().getDisplayMetrics());
 			ColorDrawable colorDrawable = new ColorDrawable();
 			colorDrawable.setBounds(0, 0, size, size);
-			editText.setCompoundDrawablesRelative(null, null, colorDrawable, null);
+			TextViewCompat.setCompoundDrawablesRelative(editText,null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
 		}
@@ -1057,7 +1040,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				int size = Integer.parseInt(src.getText().toString());
 				if (size <= 0) return;
 				int value = Math.round(size * aspect);
-				dst.setText(Integer.toString(value));
+				dst.setText(String.valueOf(value));
 			} catch (NumberFormatException ignored) { }
 		}
 

@@ -41,21 +41,15 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	@NonNull
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View v;
+		LayoutInflater li = getLayoutInflater();
 		switch (viewType) {
 			case LogicHandler.VIEWTYPE_HEADER:
-				v = LayoutInflater.from(getActivity()).inflate(R.layout.listitem_dir,
-						parent, false);
-				return new HeaderViewHolder(v);
+				return new HeaderViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
 			case LogicHandler.VIEWTYPE_CHECKABLE:
-				v = LayoutInflater.from(getActivity()).inflate(R.layout.listitem_checkable,
-						parent, false);
-				return new CheckableViewHolder(v);
+				return new CheckableViewHolder(li.inflate(R.layout.listitem_checkable, parent, false));
 			case LogicHandler.VIEWTYPE_DIR:
 			default:
-				v = LayoutInflater.from(getActivity()).inflate(R.layout.listitem_dir,
-						parent, false);
-				return new DirViewHolder(v);
+				return new DirViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
 		}
 	}
 

@@ -22,11 +22,12 @@ import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.Arrays;
 
 import javax.microedition.lcdui.event.SimpleEvent;
-
-import androidx.appcompat.app.AlertDialog;
+import javax.microedition.util.ContextHolder;
 
 public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public static final int FOREVER = -2;
@@ -161,14 +162,14 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public AlertDialog prepareDialog() {
-		Context context = getParentActivity();
+		Context context = ContextHolder.getActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
 		builder.setOnDismissListener(dialog -> {
 			if (countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND && listener != null) {
-				fireCommandAction(DISMISS_COMMAND, this);
+				fireCommandAction(DISMISS_COMMAND);
 			}
 		});
 
@@ -287,15 +288,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
-				fireCommandAction(commands[positive], this);
+				fireCommandAction(commands[positive]);
 				break;
 
 			case DialogInterface.BUTTON_NEGATIVE:
-				fireCommandAction(commands[negative], this);
+				fireCommandAction(commands[negative]);
 				break;
 
 			case DialogInterface.BUTTON_NEUTRAL:
-				fireCommandAction(commands[neutral], this);
+				fireCommandAction(commands[neutral]);
 				break;
 		}
 	}
@@ -305,7 +306,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	private void dismiss() {
-		if (nextDisplayable != null) Display.getDisplay(null).setCurrent(nextDisplayable);
+		Display.getDisplay(null).setCurrent(nextDisplayable);
 		alertDialog = null;
 	}
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">J2ME Loader</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
@@ -21,7 +20,7 @@
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2021 Nikita Shakarun</string>
+    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2022 Nikita Shakarun</string>
     <string name="author">Author: </string>
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
@@ -172,9 +171,10 @@
     <string name="screenshot_saved">Screenshot has been saved to</string>
     <string name="log_saved">Log has been saved</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
+    <string name="action_lock_orientation">Lock screen rotate</string>
     <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
     <string name="opt_save_screen_params">save screen params</string>
-    <string name="common_settings">[COMMON SETTINGS]</string>
+    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Dismiss</string>
 
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>
@@ -202,13 +202,15 @@
     <string name="pref_encoding_title">Encoding</string>
     <string name="pref_default_settings">Default settings</string>
     <string name="pref_emulator_dir">Working directory</string>
+    <string name="pref_screenshot_summary">Disable scaling and filtering for screenshots</string>
+    <string name="pref_screenshot_title">Raw screenshot</string>
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>
     <string name="_MINUS_ONE" translatable="false">-1</string>
 
     <string name="virtual_key_left_soft" translatable="false">L</string>
     <string name="virtual_key_right_soft" translatable="false">R</string>
-    <string name="virtual_key_menu">menu</string>
+    <string name="virtual_key_menu" translatable="false">M</string>
     <string name="virtual_key_d" translatable="false">D</string>
     <string name="virtual_key_c" translatable="false">C</string>
     <string name="virtual_key_left" translatable="false">←</string>
@@ -234,7 +236,8 @@
     <string name="mapping_dialog_key_not_specified">not specified</string>
     <string name="mapping_dialog_title">Press a key</string>
     <string name="reset_mapping">Reset</string>
-    <string name="alert_map_menu">You MUST map \"menu\" key!</string>
+    <string name="alert_map_menu">Menu key (M) is not assigned!\nThis may make it impossible to access the emulator options</string>
+    <string name="save">Save</string>
 
     <string name="error_name">Enter name!</string>
     <string name="set_as_default">Set as default</string>
@@ -247,4 +250,5 @@
     <string name="error_name_exists">Already exists, enter other name</string>
     <string name="default_label">"%s (default)"</string>
     <string name="not_saved_exists">Already exists</string>
+    <string name="alert_rewrite_profile">A profile named \"%1$s\" already exists.\nDo you want to overwrite it?</string>
 </resources>

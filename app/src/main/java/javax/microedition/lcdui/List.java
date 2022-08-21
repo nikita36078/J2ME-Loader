@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.list.CompoundItem;
 import javax.microedition.lcdui.list.CompoundListAdapter;
+import javax.microedition.util.ContextHolder;
 
 public class List extends Screen implements Choice {
 	public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
@@ -272,7 +273,7 @@ public class List extends Screen implements Choice {
 
 	@Override
 	public View getScreenView() {
-		Context context = getParentActivity();
+		Context context = ContextHolder.getActivity();
 
 		list = new ListView(context);
 		list.setAdapter(adapter);
@@ -300,9 +301,9 @@ public class List extends Screen implements Choice {
 		}
 	}
 
-	public boolean contextMenuItemSelected(MenuItem item, int selectedIndex) {
+	public void contextMenuItemSelected(MenuItem item, int selectedIndex) {
 		if (listener == null) {
-			return false;
+			return;
 		}
 		this.selectedIndex = selectedIndex;
 
@@ -310,22 +311,23 @@ public class List extends Screen implements Choice {
 
 		for (Command cmd : getCommands()) {
 			if (cmd.hashCode() == id) {
-				fireCommandAction(cmd, this);
-				return true;
+				fireCommandAction(cmd);
+				return;
 			}
 		}
-		return false;
 	}
 
 	private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		setSelectedIndex(position, true);
+		boolean newValue = !adapter.getItem(position).isSelected();
+		setSelectedIndex(position, newValue);
 		if (listType == IMPLICIT) {
-			fireCommandAction(selectCommand, List.this);
+			fireCommandAction(selectCommand);
 		}
 	}
 
 	private boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		setSelectedIndex(position, true);
+		boolean newValue = !adapter.getItem(position).isSelected();
+		setSelectedIndex(position, newValue);
 		return getCommands().length == 0;
 	}
 }

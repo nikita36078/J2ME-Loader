@@ -18,7 +18,6 @@ public final class MidletSystem {
         PROPERTY.put(key, value);
     }
 
-
     public static String getProperty(String key) {
         String value = PROPERTY.get(key);
         if (TextUtils.isEmpty(value)) value = System.getProperty(key);

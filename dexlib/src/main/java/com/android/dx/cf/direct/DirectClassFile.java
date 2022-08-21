@@ -512,7 +512,7 @@ public class DirectClassFile implements ClassFile {
              * package/class name.
              */
             String thisClassName = thisClass.getClassType().getClassName();
-            if (!(filePath.endsWith(".class") &&
+            if (!(filePath.toLowerCase().endsWith(".class") &&
                   filePath.startsWith(thisClassName) &&
                   (filePath.length() == (thisClassName.length() + 6)))) {
                 throw new ParseException("class name (" + thisClassName +

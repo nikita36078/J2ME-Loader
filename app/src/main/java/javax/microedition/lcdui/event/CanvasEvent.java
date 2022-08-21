@@ -22,8 +22,8 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.util.ArrayStack;
 
 public class CanvasEvent extends Event {
-
 	private static final String TAG = CanvasEvent.class.getName();
+
 	private static final ArrayStack<CanvasEvent> recycled = new ArrayStack<>();
 
 	public static final int KEY_PRESSED = 0;
@@ -50,60 +50,37 @@ public class CanvasEvent extends Event {
 	private int height;
 
 	public static Event getInstance(Canvas canvas, int eventType) {
-		CanvasEvent instance = recycled.pop();
-
-		if (instance == null) {
-			instance = new CanvasEvent();
-		}
-
-		instance.canvas = canvas;
-		instance.eventType = eventType;
-
-		return instance;
+		return obtain(canvas, eventType);
 	}
 
 	public static Event getInstance(Canvas canvas, int eventType, int keyCode) {
-		CanvasEvent instance = recycled.pop();
-
-		if (instance == null) {
-			instance = new CanvasEvent();
-		}
-
-		instance.canvas = canvas;
-		instance.eventType = eventType;
+		CanvasEvent instance = obtain(canvas, eventType);
 		instance.keyCode = keyCode;
-
 		return instance;
 	}
 
 	public static Event getInstance(Canvas canvas, int eventType, int pointer, float x, float y) {
-		CanvasEvent instance = recycled.pop();
-
-		if (instance == null) {
-			instance = new CanvasEvent();
-		}
-
-		instance.canvas = canvas;
-		instance.eventType = eventType;
+		CanvasEvent instance = obtain(canvas, eventType);
 		instance.pointer = pointer;
 		instance.x = x;
 		instance.y = y;
-
 		return instance;
 	}
 
 	public static Event getInstance(Canvas canvas, int eventType, int width, int height) {
-		CanvasEvent instance = recycled.pop();
+		CanvasEvent instance = obtain(canvas, eventType);
+		instance.width = width;
+		instance.height = height;
+		return instance;
+	}
 
+	private static CanvasEvent obtain(Canvas canvas, int eventType) {
+		CanvasEvent instance = recycled.pop();
 		if (instance == null) {
 			instance = new CanvasEvent();
 		}
-
 		instance.canvas = canvas;
 		instance.eventType = eventType;
-		instance.width = width;
-		instance.height = height;
-
 		return instance;
 	}
 
@@ -112,7 +89,7 @@ public class CanvasEvent extends Event {
 		switch (eventType) {
 			case KEY_PRESSED:
 				try {
-					canvas.keyPressed(keyCode);
+					canvas.doKeyPressed(keyCode);
 				} catch (Exception e) {
 					Log.e(TAG, "keyPressed: ", e);
 				}
@@ -120,7 +97,7 @@ public class CanvasEvent extends Event {
 
 			case KEY_REPEATED:
 				try {
-					canvas.keyRepeated(keyCode);
+					canvas.doKeyRepeated(keyCode);
 				} catch (Exception e) {
 					Log.e(TAG, "keyRepeated: ", e);
 				}
@@ -128,7 +105,7 @@ public class CanvasEvent extends Event {
 
 			case KEY_RELEASED:
 				try {
-					canvas.keyReleased(keyCode);
+					canvas.doKeyReleased(keyCode);
 				} catch (Exception e) {
 					Log.e(TAG, "keyReleased: ", e);
 				}
@@ -160,7 +137,7 @@ public class CanvasEvent extends Event {
 
 			case SHOW_NOTIFY:
 				try {
-					canvas.callShowNotify();
+					canvas.doShowNotify();
 				} catch (Exception e) {
 					Log.e(TAG, "showNotify: ", e);
 				}
@@ -168,7 +145,7 @@ public class CanvasEvent extends Event {
 
 			case HIDE_NOTIFY:
 				try {
-					canvas.callHideNotify();
+					canvas.doHideNotify();
 				} catch (Exception e) {
 					Log.e(TAG, "hideNotify: ", e);
 				}
@@ -176,7 +153,7 @@ public class CanvasEvent extends Event {
 
 			case SIZE_CHANGED:
 				try {
-					canvas.sizeChanged(width, height);
+					canvas.doSizeChanged(width, height);
 				} catch (Exception e) {
 					Log.e(TAG, "sizeChanged: ", e);
 				}
