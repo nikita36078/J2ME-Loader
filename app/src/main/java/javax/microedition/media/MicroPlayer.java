@@ -66,7 +66,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	}
 
 	public void doStop() {
-		player.stop();
+		player.pause();
 	}
 
 	public void doClose() {
