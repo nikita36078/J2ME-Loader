@@ -153,8 +153,10 @@
     <string name="screenshot_saved">Snímek obrazovky byl uložen do</string>
     <string name="log_saved">Protokol byl uložen</string>
     <string name="action_keyboard_ime">Klávesnice (IME)</string>
+    <string name="action_lock_orientation">Zamknout otáčení obrazovky</string>
     <string name="pref_vk_save_alert">Vlastní klávesnice bude nahrazena stávající.\nUložit?</string>
     <string name="opt_save_screen_params">uložit parametry obrazovky</string>
+    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Zavřít</string>
     <string name="pref_theme_auto_battery">Automaticky (podle spořiče baterie)</string>
     <string name="pref_theme_auto_time">Automaticky (podle denní doby)</string>
@@ -180,10 +182,14 @@
     <string name="pref_encoding_title">Kódování</string>
     <string name="pref_default_settings">Výchozí nastavení</string>
     <string name="pref_emulator_dir">Pracovní adresář</string>
+    <string name="pref_screenshot_summary">Zakázat škálování a filtrování snímků obrazovky</string>
+    <string name="pref_screenshot_title">Nezpracovaný snímek obrazovky</string>
     <string name="mapping_dialog_message">Stávající mapování: %1$s</string>
     <string name="mapping_dialog_key_not_specified">nenastaveno</string>
     <string name="mapping_dialog_title">Stiskněte tlačítko</string>
     <string name="reset_mapping">Obnovit</string>
+    <string name="alert_map_menu">Klávesa Menu (M) není přiřazena!\nTo může znemožnit přístup k možnostem emulátoru</string>
+    <string name="save">Uložit</string>
     <string name="error_name">Zadejte název!</string>
     <string name="set_as_default">Nastavit jako výchozí</string>
     <string name="edit">Upravit</string>
@@ -195,4 +201,5 @@
     <string name="error_name_exists">Již existuje, zadejte jiný název</string>
     <string name="default_label">"%s (výchozí)"</string>
     <string name="not_saved_exists">Již existuje</string>
+    <string name="alert_rewrite_profile">Profil s názvem \"%1$s\" již existuje.\nChcete jej přepsat?</string>
 </resources>

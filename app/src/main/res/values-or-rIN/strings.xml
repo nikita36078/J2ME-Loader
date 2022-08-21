@@ -35,4 +35,18 @@
     <string name="donate">ଦାନ କରନ୍ତୁ</string>
     <string name="midlet_name"><b>ନାମ: </b></string>
     <string name="midlet_size"><b>ଆକାର: </b></string>
+    <string name="PREF_WIDTH">ମୋଟେଇ</string>
+    <string name="PREF_HEIGHT">ଉଚ୍ଚତା</string>
+    <string name="PREF_FONT_SMALL">ଛୋଟ</string>
+    <string name="PREF_FONT_MEDIUM">ମଧ୍ୟମ</string>
+    <string name="PREF_FONT_LARGE">ବଡ଼</string>
+    <string name="pref_screen_gravity_bottom">ତଳ</string>
+    <string name="pref_screen_gravity_center">କେନ୍ଦ୍ର</string>
+    <string name="pref_screen_gravity_left">ବାମ</string>
+    <string name="pref_screen_gravity_right">ଡାହାଣ</string>
+    <string name="pref_screen_gravity_top">ଉପର</string>
+    <string name="pref_theme_light">ହାଲୁକା</string>
+    <string name="pref_theme_night">ଗାଢ଼</string>
+    <string name="pref_theme_system">ସିଷ୍ଟମ୍ ସେଟିଂସ୍ କୁ ଅନୁସରଣ କରିବା</string>
+    <string name="pref_theme_title">ଥିମ୍</string>
 </resources>
