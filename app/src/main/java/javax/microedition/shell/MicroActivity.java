@@ -686,6 +686,7 @@ public class MicroActivity extends AppCompatActivity {
 			}
 			overlayView.setLocation(0, toolbarHeight);
 			toolbar.setLayoutParams(layoutParams);
+			invalidateOptionsMenu();
 			if (next != null) {
 				layout.addView(next.getDisplayableView());
 			}
