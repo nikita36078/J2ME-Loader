@@ -326,7 +326,6 @@ class Render {
 					glDisableVertexAttribArray(program.aNormal);
 				}
 
-				glUniform1i(program.uIsPrimitive, GL_FALSE);
 				program.bindMatrices(mvp, mvm);
 				program.setLight(effect.isLighting ? effect.light : null);
 				if (effect.isLighting && effect.mTexture != null) {
@@ -349,14 +348,13 @@ class Render {
 			if (model.hasPolyC) {
 				final Program.Color program = Program.color;
 				program.use();
-				glUniform1i(program.uIsPrimitive, GL_FALSE);
 
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[0]);
 				glEnableVertexAttribArray(program.aPosition);
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 0);
 
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[1]);
-				glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, false, 5, 0);
+				glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 5, 0);
 				glEnableVertexAttribArray(program.aColorData);
 				glEnableVertexAttribArray(program.aMaterial);
 				glVertexAttribPointer(program.aMaterial, 2, GL_UNSIGNED_BYTE, false, 5, 3);
@@ -369,7 +367,6 @@ class Render {
 					glDisableVertexAttribArray(program.aNormal);
 				}
 				program.bindMatrices(mvp, mvm);
-				program.disableUniformColor();
 				program.setLight(effect.isLighting ? effect.light : null);
 				if (effect.isLighting && effect.mTexture != null) {
 					glActiveTexture(GL_TEXTURE2);
@@ -589,9 +586,8 @@ class Render {
 						colorBuf.put((byte) (color & 0xFF));
 					}
 					colorBuf.rewind();
-					glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, false, 3, colorBuf);
+					glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, colorBuf);
 					glEnableVertexAttribArray(program.aColorData);
-					program.disableUniformColor();
 				}
 				vcBuf.rewind();
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vcBuf);
@@ -632,9 +628,8 @@ class Render {
 						colorBuf.put(r).put(g).put(b);
 					}
 					colorBuf.rewind();
-					glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, false, 3, colorBuf);
+					glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, colorBuf);
 					glEnableVertexAttribArray(program.aColorData);
-					program.disableUniformColor();
 				}
 				vcBuf.rewind();
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vcBuf);
@@ -788,7 +783,7 @@ class Render {
 					Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
 					renderMesh(texture, mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, tcBuf);
 				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
-					ByteBuffer colorBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
+					ByteBuffer colorBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3)
 							.order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[i];
@@ -930,7 +925,7 @@ class Render {
 							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, int color) {
 		Program.Color program = Program.color;
 		program.use();
-		glUniform1i(program.uIsPrimitive, GL_TRUE);
+		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
 		if (effect.isLighting && effect.mTexture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
 			glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
@@ -974,7 +969,7 @@ class Render {
 							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer colors) {
 		Program.Color program = Program.color;
 		program.use();
-		glUniform1i(program.uIsPrimitive, GL_TRUE);
+		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
 		if (effect.isLighting && effect.mTexture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
 			glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
@@ -1004,9 +999,8 @@ class Render {
 		}
 
 		colors.rewind();
-		glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, false, 3, colors);
+		glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, colors);
 		glEnableVertexAttribArray(program.aColorData);
-		program.disableUniformColor();
 
 		glDisable(GL_CULL_FACE);
 		int blendMode = command & PATTR_BLEND_SUB;
@@ -1022,7 +1016,10 @@ class Render {
 							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer texCoords) {
 		Program.Tex program = Program.tex;
 		program.use();
-		glUniform1i(program.uIsPrimitive, GL_TRUE);
+		glVertexAttrib3f(program.aMaterial,
+				effect.isLighting ? 1 : 0,
+				effect.isReflection ? 1 : 0,
+				command & PATTR_COLORKEY);
 		if (effect.isLighting && effect.mTexture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
 			glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
@@ -1061,7 +1058,6 @@ class Render {
 		glDisable(GL_CULL_FACE);
 		int blendMode = command & PATTR_BLEND_SUB;
 		applyBlending(blendEnabled ? blendMode >> 4 : 0);
-		program.setTransparency(command & PATTR_COLORKEY);
 		glDrawArrays(GL_TRIANGLES, 0, vertices.capacity() / 3);
 		glDisableVertexAttribArray(program.aPosition);
 		glDisableVertexAttribArray(program.aColorData);

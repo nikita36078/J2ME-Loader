@@ -150,8 +150,6 @@ abstract class Program {
 		private static final String FRAGMENT = "shaders/color.fsh";
 		int uSphereUnit;
 		int uSphereSize;
-		int uColor;
-		int uIsPrimitive;
 		int uToonThreshold;
 		int uToonHigh;
 		int uToonLow;
@@ -166,7 +164,6 @@ abstract class Program {
 			aNormal = glGetAttribLocation(id, "aNormal");
 			aColorData = glGetAttribLocation(id, "aColorData");
 			aMaterial = glGetAttribLocation(id, "aMaterial");
-			uColor = glGetUniformLocation(id, "uColor");
 			uMatrix = glGetUniformLocation(id, "uMatrix");
 			uMatrixMV = glGetUniformLocation(id, "uMatrixMV");
 			uAmbIntensity = glGetUniformLocation(id, "uAmbIntensity");
@@ -174,7 +171,6 @@ abstract class Program {
 			uLightDir = glGetUniformLocation(id, "uLightDir");
 			uSphereUnit = glGetUniformLocation(id, "uSphereUnit");
 			uSphereSize = glGetUniformLocation(id, "uSphereSize");
-			uIsPrimitive = glGetUniformLocation(id, "uIsPrimitive");
 			uToonThreshold = glGetUniformLocation(id, "uToonThreshold");
 			uToonHigh = glGetUniformLocation(id, "uToonHigh");
 			uToonLow = glGetUniformLocation(id, "uToonLow");
@@ -184,7 +180,7 @@ abstract class Program {
 			float r = (rgb >> 16 & 0xff) / 255.0f;
 			float g = (rgb >> 8 & 0xff) / 255.0f;
 			float b = (rgb & 0xff) / 255.0f;
-			glUniform3f(uColor, r, g, b);
+			glVertexAttrib3f(aColorData, r, g, b);
 		}
 
 		void setToonShading(Effect3D effect) {
@@ -192,10 +188,6 @@ abstract class Program {
 			glUniform1f(uToonThreshold, enable ? effect.mToonThreshold : -1.0f);
 			glUniform1f(uToonHigh, effect.mToonHigh);
 			glUniform1f(uToonLow, effect.mToonLow);
-		}
-
-		void disableUniformColor() {
-			glUniform3f(uColor, -1.0f, -1.0f, -1.0f);
 		}
 
 		void bindMatrices(float[] mvp, float[] mv) {
@@ -226,10 +218,8 @@ abstract class Program {
 		private static final String FRAGMENT = "shaders/tex.fsh";
 		int uTextureUnit;
 		int uTexSize;
-		int uIsTransparency;
 		int uSphereUnit;
 		int uSphereSize;
-		int uIsPrimitive;
 		int uToonThreshold;
 		int uToonHigh;
 		int uToonLow;
@@ -259,11 +249,9 @@ abstract class Program {
 			uSphereSize = glGetUniformLocation(id, "uSphereSize");
 			uMatrix = glGetUniformLocation(id, "uMatrix");
 			uMatrixMV = glGetUniformLocation(id, "uMatrixMV");
-			uIsTransparency = glGetUniformLocation(id, "uIsTransparency");
 			uAmbIntensity = glGetUniformLocation(id, "uAmbIntensity");
 			uDirIntensity = glGetUniformLocation(id, "uDirIntensity");
 			uLightDir = glGetUniformLocation(id, "uLightDir");
-			uIsPrimitive = glGetUniformLocation(id, "uIsPrimitive");
 			uToonThreshold = glGetUniformLocation(id, "uToonThreshold");
 			uToonHigh = glGetUniformLocation(id, "uToonHigh");
 			uToonLow = glGetUniformLocation(id, "uToonLow");
@@ -272,10 +260,6 @@ abstract class Program {
 		void enableTexUnit() {
 			glActiveTexture(GL_TEXTURE0);
 			glUniform1i(uTextureUnit, 0);
-		}
-
-		void setTransparency(int transparent) {
-			glUniform1i(uIsTransparency, transparent);
 		}
 
 		void setTex(Texture tex) {
