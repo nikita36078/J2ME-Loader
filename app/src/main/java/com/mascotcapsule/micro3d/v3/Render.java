@@ -36,6 +36,7 @@ import com.mascotcapsule.micro3d.v3.RenderNode.FigureNode;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGL10;
@@ -76,6 +77,7 @@ class Render {
 	private final boolean postCopy2D = !Boolean.getBoolean("micro3d.v3.render.no-mix2D3D");
 	private final boolean preCopy2D = !Boolean.getBoolean("micro3d.v3.render.background.ignore");
 	private int textureIdx;
+	private IntBuffer bufHandles;
 
 	/**
 	 * Utility method for debugging OpenGL calls.
@@ -287,20 +289,22 @@ class Render {
 		float[] pm = getProjectionMatrix(layout, x, y);
 		float[] mvp = MVP_TMP;
 		Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
-		int[] bufHandles = new int[3];
-		glGenBuffers(3, bufHandles, 0);
+		if (bufHandles == null) {
+			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
+			glGenBuffers(3, bufHandles);
+		}
 		vertices.rewind();
 		try {
-			glBindBuffer(GL_ARRAY_BUFFER, bufHandles[0]);
+			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
 			glBufferData(GL_ARRAY_BUFFER, vertices.capacity() * 4, vertices, GL_STREAM_DRAW);
 			ByteBuffer tcBuf = model.texCoordArray;
 			tcBuf.rewind();
-			glBindBuffer(GL_ARRAY_BUFFER, bufHandles[1]);
+			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
 			glBufferData(GL_ARRAY_BUFFER, tcBuf.capacity(), tcBuf, GL_STREAM_DRAW);
 
 			if (normals != null) {
 				normals.rewind();
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[2]);
+				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals, GL_STREAM_DRAW);
 			}
 			if (model.hasPolyT) {
@@ -308,18 +312,18 @@ class Render {
 				program.use();
 				program.setToonShading(effect);
 
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[0]);
+				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
 				glEnableVertexAttribArray(program.aPosition);
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 0);
 
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[1]);
+				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
 				glEnableVertexAttribArray(program.aColorData);
 				glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 5, 0);
 				glEnableVertexAttribArray(program.aMaterial);
 				glVertexAttribPointer(program.aMaterial, 3, GL_UNSIGNED_BYTE, false, 5, 2);
 
 				if (normals != null) {
-					glBindBuffer(GL_ARRAY_BUFFER, bufHandles[2]);
+					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 					glEnableVertexAttribArray(program.aNormal);
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
 				} else {
@@ -349,18 +353,18 @@ class Render {
 				final Program.Color program = Program.color;
 				program.use();
 
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[0]);
+				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
 				glEnableVertexAttribArray(program.aPosition);
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 0);
 
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles[1]);
+				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
 				glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 5, 0);
 				glEnableVertexAttribArray(program.aColorData);
 				glEnableVertexAttribArray(program.aMaterial);
 				glVertexAttribPointer(program.aMaterial, 2, GL_UNSIGNED_BYTE, false, 5, 3);
 
 				if (normals != null) {
-					glBindBuffer(GL_ARRAY_BUFFER, bufHandles[2]);
+					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
 					glEnableVertexAttribArray(program.aNormal);
 				} else {
@@ -385,7 +389,6 @@ class Render {
 			}
 		} finally {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glDeleteBuffers(3, bufHandles, 0);
 		}
 	}
 
