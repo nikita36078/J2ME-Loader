@@ -119,8 +119,7 @@ public class MicroLoader {
 			try {
 				byte[] bytes = FileUtils.getBytes(new File(appDir, Config.MIDLET_RES_FILE));
 				byte[] sum = MessageDigest.getInstance("md5").digest(bytes);
-				BigInteger bi = new BigInteger(sum);
-				jarHash = bi.toString(16);
+				jarHash = String.format("%032x", new BigInteger(1, sum));
 			} catch (Throwable ignored) {
 			}
 		} else {
@@ -142,7 +141,7 @@ public class MicroLoader {
 		}
 		sb.append(Descriptor.MIDLET_NAME).append(": ").append(descriptor.getName()).append("\n");
 		sb.append(Descriptor.MIDLET_VENDOR).append(": ").append(descriptor.getVendor()).append("\n");
-		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion());
+		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion()).append("\n");
 		if (jarHash != null) {
 			sb.append("JAR_HASH_MD5").append(": ").append(jarHash);
 		}
