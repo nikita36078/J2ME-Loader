@@ -81,6 +81,7 @@ public class ToneManager {
 		Player p = null;
 		try {
 			p = Manager.createPlayer(Manager.TONE_DEVICE_LOCATOR);
+			p.realize();
 		} catch (IOException ioe) {
 			throw new MediaException(CANNOT_PLAY_TONE + " " + ioe.getMessage());
 		}

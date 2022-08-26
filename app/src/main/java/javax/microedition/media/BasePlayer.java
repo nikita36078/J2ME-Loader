@@ -91,7 +91,7 @@ public class BasePlayer implements Player, VolumeControl, PanControl {
 	}
 
 	@Override
-	public synchronized void addPlayerListener(PlayerListener playerListener) {
+	public void addPlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		if (!listeners.contains(playerListener) && playerListener != null) {
 			listeners.add(playerListener);
@@ -99,7 +99,7 @@ public class BasePlayer implements Player, VolumeControl, PanControl {
 	}
 
 	@Override
-	public synchronized void removePlayerListener(PlayerListener playerListener) {
+	public void removePlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		listeners.remove(playerListener);
 	}
@@ -187,11 +187,12 @@ public class BasePlayer implements Player, VolumeControl, PanControl {
 	@Override
 	public synchronized void close() {
 		if (state != CLOSED) {
+			deallocate();
 			doClose();
-		}
 
-		state = CLOSED;
-		postEvent(PlayerListener.CLOSED, null);
+			state = CLOSED;
+			postEvent(PlayerListener.CLOSED, null);
+		}
 	}
 
 	protected void checkClosed() {
