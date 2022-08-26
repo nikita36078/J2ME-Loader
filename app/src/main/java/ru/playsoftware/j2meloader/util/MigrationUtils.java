@@ -16,12 +16,8 @@
 
 package ru.playsoftware.j2meloader.util;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
 
 import com.google.gson.stream.JsonReader;
 
@@ -31,9 +27,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
+import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
+
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
 
 public class MigrationUtils {
 

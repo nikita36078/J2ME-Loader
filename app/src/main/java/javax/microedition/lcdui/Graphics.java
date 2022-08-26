@@ -17,14 +17,7 @@
 
 package javax.microedition.lcdui;
 
-import static javax.microedition.lcdui.game.Sprite.TRANS_MIRROR;
-import static javax.microedition.lcdui.game.Sprite.TRANS_MIRROR_ROT180;
-import static javax.microedition.lcdui.game.Sprite.TRANS_MIRROR_ROT270;
-import static javax.microedition.lcdui.game.Sprite.TRANS_MIRROR_ROT90;
-import static javax.microedition.lcdui.game.Sprite.TRANS_NONE;
-import static javax.microedition.lcdui.game.Sprite.TRANS_ROT180;
-import static javax.microedition.lcdui.game.Sprite.TRANS_ROT270;
-import static javax.microedition.lcdui.game.Sprite.TRANS_ROT90;
+import static javax.microedition.lcdui.game.Sprite.*;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

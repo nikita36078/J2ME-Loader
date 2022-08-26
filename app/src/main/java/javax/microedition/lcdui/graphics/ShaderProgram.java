@@ -16,33 +16,6 @@
 
 package javax.microedition.lcdui.graphics;
 
-import static android.opengl.GLES20.GL_COMPILE_STATUS;
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
-import static android.opengl.GLES20.GL_LINK_STATUS;
-import static android.opengl.GLES20.GL_NO_ERROR;
-import static android.opengl.GLES20.GL_VERTEX_SHADER;
-import static android.opengl.GLES20.glAttachShader;
-import static android.opengl.GLES20.glCompileShader;
-import static android.opengl.GLES20.glCreateProgram;
-import static android.opengl.GLES20.glCreateShader;
-import static android.opengl.GLES20.glDeleteProgram;
-import static android.opengl.GLES20.glDeleteShader;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glGetError;
-import static android.opengl.GLES20.glGetProgramInfoLog;
-import static android.opengl.GLES20.glGetProgramiv;
-import static android.opengl.GLES20.glGetShaderInfoLog;
-import static android.opengl.GLES20.glGetShaderiv;
-import static android.opengl.GLES20.glGetUniformLocation;
-import static android.opengl.GLES20.glLinkProgram;
-import static android.opengl.GLES20.glReleaseShaderCompiler;
-import static android.opengl.GLES20.glShaderSource;
-import static android.opengl.GLES20.glUniform2f;
-import static android.opengl.GLES20.glUseProgram;
-import static android.opengl.GLES20.glVertexAttribPointer;
-
 import android.opengl.GLU;
 import android.util.Log;
 import android.widget.Toast;
@@ -54,6 +27,8 @@ import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.FileUtils;
+
+import static android.opengl.GLES20.*;
 
 public class ShaderProgram {
 	private static final String TAG = ShaderProgram.class.getName();

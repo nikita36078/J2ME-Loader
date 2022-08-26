@@ -30,8 +30,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.core.content.FileProvider;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -52,6 +50,8 @@ import java.util.regex.Pattern;
 import javax.microedition.io.file.ConnectionClosedException;
 import javax.microedition.io.file.FileConnection;
 import javax.microedition.util.ContextHolder;
+
+import androidx.core.content.FileProvider;
 
 public class FileSystemFileConnection implements FileConnection {
 	private static final String TAG = FileSystemFileConnection.class.getSimpleName();

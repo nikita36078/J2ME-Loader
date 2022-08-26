@@ -18,14 +18,14 @@ package ru.playsoftware.j2meloader.info;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.webkit.WebView;
+
+import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.DialogFragment;
-
-import javax.microedition.util.ContextHolder;
-
 import ru.playsoftware.j2meloader.R;
 
 public class LicensesDialogFragment extends DialogFragment {
