@@ -9,7 +9,6 @@
     <string name="licenses">Autorisations</string>
     <string name="profiles">Profils</string>
     <string name="save_log">Sauvegarde logs</string>
-    <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android. Elle supporte la plupart des jeux 2D et 3D avec quelques limitations.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Activer le filtrage dans certains cas peut considérablement réduire les performances. Désactiver cette option si le jeu est trop lent.&lt;BR&gt;&#8226; Les problèmes de scintillement d\'image peuvent être résolus en activant l\'option \"Mode de traitement immédiat\".</string>
     <string name="author">Auteur: </string>
     <string name="version">Version: </string>
