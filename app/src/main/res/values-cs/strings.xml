@@ -9,7 +9,6 @@
     <string name="licenses">Licence</string>
     <string name="profiles">Profily</string>
     <string name="save_log">Uložit protokol</string>
-    <string name="about_message">Tato aplikace vám umožňuje spouštět J2ME aplikace a hry na Androidu. Podporuje většinu 2D her a také 3D s určitými omezeními.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Povolení filtrování může v některých případech výrazně snížit výkon. Zakažte tuto možnost, pokud je hra příliš pomalá.&lt;BR&gt;&#8226; Problémy s blikáním obrazu lze opravit tak, že povolíte možnost \"Režim okamžitého zpracování\".</string>
     <string name="author">Autor: </string>
     <string name="version">Verze: </string>
