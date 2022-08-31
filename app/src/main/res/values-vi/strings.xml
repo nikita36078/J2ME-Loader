@@ -9,7 +9,6 @@
     <string name="licenses">Giấy phép</string>
     <string name="profiles">Hồ sơ</string>
     <string name="save_log">Lưu log</string>
-    <string name="about_message">Ứng dụng này cho phép bạn khởi chạy các ứng dụng và các trò chơi J2ME trên Android. Nó hỗ trợ hầu hết các trò chơi 2D với 3D một số hạn chế.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bật tính năng bộ lọc trong một số trường hợp có thể giảm đáng kể hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\" tuỳ chỉnh.</string>
     <string name="author">Người phát triển: </string>
     <string name="version">Ph.bản: </string>
