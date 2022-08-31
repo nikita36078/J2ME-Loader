@@ -8,7 +8,6 @@
     <string name="search">অনুসন্ধান</string>
     <string name="licenses">লাইসেন্স</string>
     <string name="save_log">লগ সংগ্রহ</string>
-    <string name="about_message">এই অ্যাপটির মাধ্যমে J2ME অ্যাপ্লিকেশান এবং গেম Android এ চালাতে পারবেন । এতে অধিকাংশ 2D গেম এবং কিছু সীমাবদ্ধতাসহ ছাড়া অধিকাংশ 3D গেম সমর্থন করে।&lt;BR&gt;</string>
     <string name="help_message">&#8226; ফিল্টারিং এর কিছু কিছু ক্ষেত্রে বিশেষভাবে কার্যক্ষমতা হ্রাস হতে পারে । গেম যদি খুব ধীরে চলে তাহল এটি নিষ্ক্রিয় 
 করে খেলুন । &lt;BR&gt;,&#8226;, \"Immediate processing mode\" অপশনটি সক্রিয় করে ছবির সমস্যা সংশোধন করা যেতে পারে।.</string>
     <string name="author">লেখক: </string>
