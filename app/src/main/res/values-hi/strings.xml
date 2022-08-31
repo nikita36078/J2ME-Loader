@@ -9,7 +9,6 @@
     <string name="licenses">लाइसेंस</string>
     <string name="profiles">प्रोफाइल</string>
     <string name="save_log">लॉग सहेजें</string>
-    <string name="about_message">यह ऐप आपको एंड्रॉइड पर J2ME ऐप और गेम लॉन्च करने की अनुमति देता है। यह कुछ सीमाओं के साथ अधिकांश 2D गेम्स और 3D का भी सपोट करता है ।&lt;BR&gt;</string>
     <string name="help_message">&#8226;कुछ मामलों में फ़िल्टरिंग सक्षम करना प्रदर्शन को कम कर सकता है। यदि गेम बहुत धीमा है तो इस विकल्प को अक्षम करें&lt;BR&gt;&#8226;इमेज फ़्लिकरिंग मुद्दों को \"तत्काल प्रसंस्करण मोड\" विकल्प को सक्षम करके ठीक किया जा सकता है।</string>
     <string name="author">लेखक: </string>
     <string name="version">संस्करण: </string>
