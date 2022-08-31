@@ -153,8 +153,10 @@
     <string name="screenshot_saved">Captura de tela salva em</string>
     <string name="log_saved">Log foi salvo</string>
     <string name="action_keyboard_ime">Teclado (IME)</string>
+    <string name="action_lock_orientation">Bloquear rotação de tela</string>
     <string name="pref_vk_save_alert">O Teclado Personalizado será substituído por\nSalvar?</string>
     <string name="opt_save_screen_params">Salvar parâmetros de tela</string>
+    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Descartar</string>
     <string name="pref_theme_auto_battery">Automático, por Economia de Bateria</string>
     <string name="pref_theme_auto_time">Automático, por hora do dia</string>
@@ -180,10 +182,14 @@
     <string name="pref_encoding_title">Codificação</string>
     <string name="pref_default_settings">Configurações padrão</string>
     <string name="pref_emulator_dir">Pasta padrão</string>
+    <string name="pref_screenshot_summary">Desativar escala e filtragem para capturas de tela</string>
+    <string name="pref_screenshot_title">Captura de tela em raw</string>
     <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
     <string name="mapping_dialog_key_not_specified">Não especificado</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="reset_mapping">Redefinir</string>
+    <string name="alert_map_menu">Tecla de menu (M) não está atribuída!\nIsto pode impossibilitar o acesso às opções do emulador</string>
+    <string name="save">Salvar</string>
     <string name="error_name">Digitar nome!</string>
     <string name="set_as_default">Definir como padrão</string>
     <string name="edit">Editar</string>
@@ -195,4 +201,5 @@
     <string name="error_name_exists">Já existe, insira outro nome</string>
     <string name="default_label">"%s (padrão)"</string>
     <string name="not_saved_exists">Já existe</string>
+    <string name="alert_rewrite_profile">Um perfil chamado \"%1$s\" já existe.\nVocê deseja substituí-lo?</string>
 </resources>
