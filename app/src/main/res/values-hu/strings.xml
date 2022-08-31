@@ -9,7 +9,6 @@
     <string name="licenses">Licencek</string>
     <string name="profiles">Profilok</string>
     <string name="save_log">Napló mentése</string>
-    <string name="about_message">Ez az app lehetővé teszi a J2ME alkalmazások és játékok indítását Androidon. Támogatja a legtöbb 2D-s játékot, illetve a 3D-seket némi korlátozással.&lt;BR&gt;</string>
     <string name="help_message">&#8226; A szűrés engedélyezése esetenként jelentősen csökkentheti a teljesítményt. Tiltsa le, ha a játék túl lassú.&lt;BR&gt;&#8226; A kép villódzása javítható az \"Azonnali feldolgozás\" lehetőséggel.</string>
     <string name="author">Fejlesztő: </string>
     <string name="version">Verzió: </string>
