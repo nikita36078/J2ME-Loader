@@ -9,7 +9,6 @@
     <string name="licenses">라이센스</string>
     <string name="profiles">프로필</string>
     <string name="save_log">로그 저장</string>
-    <string name="about_message">이 앱은 Android 기기에서 다수의 2D와 일부 3D 게임을 지원하는 J2ME 앱과 게임을 실행할 수 있습니다.&lt;BR&gt;</string>
     <string name="help_message">&#8226;어떤 경우에 필터를 활성화하면 성능이 크게 저하될 수 있습니다.게임이 너무 느려지면 이 옵션을 사용하지 마십시오.&lt;BR&gt;&#8226;\"즉각 처리 모드\" 옵션을 사용하여 이미지 플리커링 문제를 해결할 수 있습니다.</string>
     <string name="author">소유자: </string>
     <string name="version">버전: </string>

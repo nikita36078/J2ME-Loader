@@ -9,7 +9,6 @@
     <string name="licenses">Lisensi</string>
     <string name="profiles">Profil</string>
     <string name="save_log">Simpan log</string>
-    <string name="about_message">Aplikasi ini berfungsi untuk menjalankan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga permainan 3D dengan beberapa keterbatasan.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Menghidupkan opsi \"Saring\" di sebagian kasus dapat sangat mengurangi kinerja. Matikan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat diatasi dengan menghidupkan opsi \"Mode pengolahan dengan cepat\".</string>
     <string name="author">Vendor: </string>
     <string name="version">Versi: </string>

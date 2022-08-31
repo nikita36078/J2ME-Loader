@@ -9,7 +9,6 @@
     <string name="licenses">Ліцензії</string>
     <string name="profiles">Профілі</string>
     <string name="save_log">Зберегти у журнал</string>
-    <string name="about_message">Данний додаток дозволяє запускати J2ME програми та ігри на Android. Вона підтримує більшість 2D ігор, а також 3D з деякими обмеженнями.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
     <string name="author">Автор: </string>
     <string name="version">Версія: </string>

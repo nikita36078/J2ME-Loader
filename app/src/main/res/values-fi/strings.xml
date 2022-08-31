@@ -7,7 +7,6 @@
     <string name="more">Lisää</string>
     <string name="search">Hae</string>
     <string name="licenses">Lisenssit</string>
-    <string name="about_message">Tämä sovellus mahdollistaa J2ME-sovellusten ja -ohjelmien käynnistämisen Androidissa. Se tukee useimpia 2D-pelejä ja myös 3D-tekniikkaa rajoitetusti.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Suodattimen käyttöönotto saattaa joissakin tapauksissa huomattavasti vähentää suorituskykyä. Ota se pois käytöstä, jos peli on liian hidas.&lt;BR&gt;&#8226; Kuvan välkkymisen voi korjata laittamalla päälle \"Välittömän käsittelytilan\" asetuksista.</string>
     <string name="author">Tekijä: </string>
     <string name="version">Versio: </string>

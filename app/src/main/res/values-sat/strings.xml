@@ -9,7 +9,6 @@
     <string name="licenses">ᱞᱟᱭᱥᱮᱱᱥ ᱠᱚ</string>
     <string name="profiles">ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱠᱚ</string>
     <string name="save_log">ᱥᱟᱸᱪᱟᱣ ᱞᱚᱜᱽ</string>
-    <string name="about_message">ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ J2ME ᱮᱯᱠᱚ ᱟᱨ ᱠᱷᱮᱞ ᱠᱚ ᱫᱟᱹᱲ ᱪᱷᱚᱭᱟᱭ ᱾ ᱱᱚᱶᱟ ᱮᱯ ᱫᱚ ᱒ᱰ ᱠᱷᱮᱞᱠᱚ ᱟᱨ ᱓ᱰ ᱠᱷᱮᱞ ᱠᱚ ᱠᱚ ᱫᱟᱹᱲ ᱪᱷᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ ᱠᱟᱹᱴᱤᱡ ᱞᱤᱢᱤᱴᱮᱥᱚᱱ ᱥᱟᱞᱟᱜ ᱛᱮ ᱾&lt;BR&gt;</string>
     <string name="help_message">&#8226;ᱯᱷᱤᱞᱴᱚᱨᱤᱝ ᱠᱚ ᱠᱷᱟᱹᱛᱤᱨ ᱛᱮ ᱠᱟᱹᱢᱤ ᱠᱚ ᱵᱟᱫᱷᱟ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱜᱟᱭ ᱾ ᱠᱷᱮᱞ ᱫᱚ ᱡᱩᱫᱤ ᱫᱷᱤᱨᱮ ᱥᱮ ᱪᱟᱹᱞᱩᱜ ᱠᱷᱟᱱ ᱫᱚ ᱱᱚᱶᱟ ᱚᱯᱥᱚᱱ ᱵᱚᱸᱫᱚᱭ ᱢᱮ ᱾&lt;BR&gt;&#8226; \"ᱞᱚᱜᱤᱱ ᱯᱨᱚᱥᱮᱥᱤᱝ ᱢᱳᱰ\" ᱚᱯᱥᱚᱱ ᱛᱮ ᱯᱷᱤᱠᱚᱨᱤᱝ ᱤᱥᱩ ᱠᱚ ᱴᱷᱤᱠ ᱫᱟᱲᱮᱭᱟᱜ ᱼᱟ ᱾</string>
     <string name="author">ᱚᱱᱚᱞᱤᱭᱟᱹ: </string>
     <string name="version">ᱦᱟᱹᱞᱤᱭᱟᱜ : </string>
@@ -153,8 +152,10 @@
     <string name="screenshot_saved">ᱥᱠᱨᱤᱱᱥᱚᱴ ᱫᱚ ᱥᱟᱸᱪᱟᱣ ᱮᱱᱟ</string>
     <string name="log_saved">ᱞᱚᱜ ᱫᱚ ᱥᱟᱸᱪᱟᱣ ᱮᱱᱟ</string>
     <string name="action_keyboard_ime">ᱠᱮᱭᱵᱚᱰ (IME)</string>
+    <string name="action_lock_orientation">ᱠᱩᱞᱩᱯ ᱥᱤᱨᱤᱱ ᱟᱹᱪᱩᱨ</string>
     <string name="pref_vk_save_alert">ᱠᱚᱥᱴᱚᱢ ᱠᱤᱵᱚᱰ ᱫᱚ ᱱᱤᱛᱚᱜᱟᱜ ᱥᱟᱞᱟᱜ ᱵᱚᱫᱚᱞᱚᱼᱟ\nᱥᱟᱸᱪᱟᱣᱼᱟ ᱥᱮ?</string>
     <string name="opt_save_screen_params">ᱯᱚᱨᱫᱟ ᱮᱞᱮᱠᱷ ᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱢᱮ</string>
+    <string name="cmd_menu">ᱢᱮᱱᱩ</string>
     <string name="dismiss">ᱵᱚᱸᱫ</string>
     <string name="pref_theme_auto_battery">ᱟᱡ ᱛᱮ, ᱵᱮᱴᱨᱭ ᱥᱟᱺᱪᱟᱣᱤᱭᱟᱹ</string>
     <string name="pref_theme_auto_time">ᱟᱡ ᱛᱮ, ᱢᱟᱦᱟᱸ ᱨᱮᱭᱟᱜ ᱚᱠᱛᱚ ᱛᱮ</string>
@@ -180,10 +181,12 @@
     <string name="pref_encoding_title">ᱨᱱᱠᱳᱰᱤᱝ</string>
     <string name="pref_default_settings">ᱢᱩᱞ ᱥᱟᱡᱟᱣᱠᱚ</string>
     <string name="pref_emulator_dir">ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱰᱟᱭᱨᱮᱠᱴᱚᱨᱭ</string>
+    <string name="pref_screenshot_title">ᱵᱮᱨᱮᱞ ᱥᱠᱨᱤᱱᱥᱚᱴ</string>
     <string name="mapping_dialog_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱢᱮᱯᱤᱝ:%1$s</string>
     <string name="mapping_dialog_key_not_specified">ᱵᱟᱝ ᱱᱤᱨᱫᱷᱟᱹᱨᱤᱛᱟᱜ</string>
     <string name="mapping_dialog_title">ᱠᱭ ᱚᱛᱟᱭ ᱢᱮ</string>
     <string name="reset_mapping">ᱨᱤᱥᱮᱴ</string>
+    <string name="save">ᱥᱟᱺᱪᱟᱣ</string>
     <string name="error_name">ᱧᱩᱛᱩᱢ ᱟᱫᱮᱨ ᱢᱮ!</string>
     <string name="set_as_default">ᱢᱩᱠ ᱯᱷᱮᱲᱟᱛ ᱛᱮ ᱥᱮᱴ ᱢᱮ</string>
     <string name="edit">ᱥᱟᱯᱲᱟᱣ</string>
@@ -195,4 +198,5 @@
     <string name="error_name_exists">ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ, ᱟᱨ ᱢᱤᱫ ᱧᱩᱛᱩᱢ ᱟᱫᱮᱨ ᱢᱮ</string>
     <string name="default_label">"%s (ᱢᱩᱞ)"</string>
     <string name="not_saved_exists">ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ</string>
+    <string name="alert_rewrite_profile">%1$s ᱧᱩᱛᱩᱢ ᱛᱮ ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱤᱫ ᱢᱚᱲᱟ ᱢᱮᱱᱟᱜᱼᱟ ᱾\n ᱟᱢ ᱪᱮᱫ ᱚᱱᱟ ᱪᱮᱛᱟᱱ ᱨᱮ ᱫᱚᱦᱚ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
 </resources>
