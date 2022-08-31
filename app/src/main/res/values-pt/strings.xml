@@ -9,7 +9,6 @@
     <string name="licenses">Licenças</string>
     <string name="profiles">Perfis</string>
     <string name="save_log">Salvar Registro</string>
-    <string name="about_message">Este app permite emular jogos e aplicativos em J2ME no Android. Ele suporta a maioria dos jogos 2D e 3D com algumas limitações. &lt;BR&gt;</string>
     <string name="help_message">&#8226; Ativar filtros em alguns casos pode afetar o desempenho drasticamente. Desative esta opção se o jogo estiver muito lento.&lt;BR&gt;&#8226;Os problemas de imagem a piscar podem ser resolvidos ativando o \"Modo de processamento imediato\".</string>
     <string name="author">Autor: </string>
     <string name="version">Versão: </string>
