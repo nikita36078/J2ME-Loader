@@ -9,7 +9,6 @@
     <string name="licenses">Licenties</string>
     <string name="profiles">Profielen</string>
     <string name="save_log">Logboek opslaan</string>
-    <string name="about_message">Met deze app kun je J2ME-apps en -games op Android starten. Het ondersteunt de meeste 2D-spellen en ook 3D met enkele beperkingen.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Het inschakelen van filteren kan in sommige gevallen de prestaties aanzienlijk verminderen. Schakel deze optie uit als het spel te traag is.&lt;BR&gt;&#8226; Problemen met het flikken van afbeeldingen kunnen worden opgelost door de optie \"Directe verwerking modus\" in te schakelen.</string>
     <string name="author">Auteur: </string>
     <string name="version">Versie: </string>

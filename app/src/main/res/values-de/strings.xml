@@ -8,7 +8,6 @@
     <string name="search">Suche</string>
     <string name="licenses">Lizenzen</string>
     <string name="save_log">Log speichern</string>
-    <string name="about_message">Diese App ermöglicht es Ihnen, J2Me Anwendungen und Spiele auf Android zu starten. Die meisten 2D-Spiele und, mit einigen Einschränkungen, auch 3D.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Das Aktivieren der Filterung kann in einigen Fällen die Leistung erheblich beeinträchtigen. Deaktivieren Sie diese Option, wenn das Spiel zu langsam ist.&lt;BR&gt;&#8226; Bildflimmerprobleme können behoben werden, indem die Option \"Sofortiger Verarbeitungsmodus\" aktiviert wird.</string>
     <string name="author">Autor: </string>
     <string name="version">Version: </string>
