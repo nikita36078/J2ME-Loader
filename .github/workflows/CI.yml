@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Compile
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Publish Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: build
+          path: |
+            app/build/outputs/apk/*
