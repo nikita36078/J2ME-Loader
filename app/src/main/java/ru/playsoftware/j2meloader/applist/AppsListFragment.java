@@ -69,6 +69,8 @@ import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.filepicker.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -84,7 +86,6 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.databinding.FragmentAppsListBinding;
-import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
@@ -177,7 +178,7 @@ public class AppsListFragment extends ListFragment {
 			return;
 		}
 		preferences.edit()
-				.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
+				.putString(Constants.PREF_LAST_PATH, Utils.getFileForUri(uri).getAbsolutePath())
 				.apply();
 		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 	}

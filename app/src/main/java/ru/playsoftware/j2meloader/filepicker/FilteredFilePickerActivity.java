@@ -16,8 +16,6 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
-import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 
 import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
@@ -25,32 +23,13 @@ import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
 
 import java.io.File;
 
-import ru.playsoftware.j2meloader.R;
-
 public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File> {
-
-	private FilteredFilePickerFragment currentFragment;
 
 	@Override
 	protected AbstractFilePickerFragment<File> getFragment(@Nullable String startPath, int mode, boolean allowMultiple,
 														   boolean allowCreateDir, boolean allowExistingFile, boolean singleClick) {
-		currentFragment = new FilteredFilePickerFragment();
-		currentFragment.setArgs(startPath, mode, allowMultiple, allowCreateDir, allowExistingFile, singleClick);
-		return currentFragment;
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		setTheme(R.style.FilePickerTheme);
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (currentFragment == null || currentFragment.isBackTop()) {
-			super.onBackPressed();
-		} else {
-			currentFragment.goBack();
-		}
+		FilteredFilePickerFragment fragment = new FilteredFilePickerFragment();
+		fragment.setArgs(startPath, mode, allowMultiple, allowCreateDir, allowExistingFile, singleClick);
+		return fragment;
 	}
 }

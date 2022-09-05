@@ -39,4 +39,8 @@ public class AppListModel extends AndroidViewModel {
 	protected void onCleared() {
 		appRepository.close();
 	}
+
+	public void onWorkDirReady() {
+		appRepository.onWorkDirReady();
+	}
 }

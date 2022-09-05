@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 		File dir = new File(emulatorDir);
 		if (dir.isDirectory() && dir.canWrite()) {
 			FileUtils.initWorkDir(dir);
-			appListModel.getAppRepository().onWorkDirReady();
+			appListModel.onWorkDirReady();
 			return;
 		}
 		if (dir.exists() || dir.getParentFile() == null || !dir.getParentFile().isDirectory()
