@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.GsonBuilder;
 
@@ -44,13 +45,12 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.databinding.ActivityKeymapperBinding;
 import ru.playsoftware.j2meloader.util.SparseIntArrayAdapter;
 
-public class KeyMapperActivity extends BaseActivity implements View.OnClickListener {
+public class KeyMapperActivity extends AppCompatActivity implements View.OnClickListener {
 	private static final String KEY_SAVE = "KEY_MAP_SAVE";
 	private final SparseIntArray defaultKeyMap = KeyMapper.getDefaultKeyMap();
 	private final SparseIntArray idToCanvasKey = new SparseIntArray();
