@@ -289,7 +289,7 @@ public class AppInstaller {
 			}
 		}
 		try {
-			Main.main(new String[]{"--no-optimize",
+			Main.main(new String[]{"--no-optimize", "--core-library",
 					"--output=" + tmpDir + Config.MIDLET_DEX_FILE,
 					srcJar.getAbsolutePath()});
 		} catch (Throwable e) {
