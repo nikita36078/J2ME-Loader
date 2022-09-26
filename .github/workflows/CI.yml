@@ -19,9 +19,37 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Publish Artifact
+      - name: Publish Artifact (Debug)
         uses: actions/upload-artifact@main
         with:
           name: build
           path: |
-            app/build/outputs/apk/*
+            app/build/outputs/apk/dev/debug/*.apk
+
+      - name: Publish Artifact (Fdroid)
+        uses: actions/upload-artifact@main
+        with:
+          name: buildFdroid
+          path: |
+            app/build/outputs/apk/fdroid/debug/*.apk
+
+      - name: Publish Artifact (Midlet Sample)
+        uses: actions/upload-artifact@main
+        with:
+          name: buildMidletSample
+          path: |
+            app/build/outputs/apk/midlet/debug/*.apk
+
+      - name: Publish Artifact (Open)
+        uses: actions/upload-artifact@main
+        with:
+          name: buildOpen
+          path: |
+            app/build/outputs/apk/open/debug/*.apk
+
+      - name: Publish Artifact (Play)
+        uses: actions/upload-artifact@main
+        with:
+          name: buildPlay
+          path: |
+            app/build/outputs/apk/play/debug/*.apk
