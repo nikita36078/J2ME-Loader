@@ -35,6 +35,7 @@ import ru.playsoftware.j2meloader.R;
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.ShadersUtils;
 
 public class Config {
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
@@ -60,6 +61,7 @@ public class Config {
 			(sharedPreferences, key) -> {
 				if (key.equals(PREF_EMULATOR_DIR)) {
 					initDirs(sharedPreferences.getString(key, emulatorDir));
+					ShadersUtils.exportAssetsShaders();
 				}
 			};
 
