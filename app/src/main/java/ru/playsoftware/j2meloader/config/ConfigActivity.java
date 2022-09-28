@@ -259,6 +259,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		addFontSizePreset("128 x 160", 13, 15, 20);
 		addFontSizePreset("176 x 220", 15, 18, 22);
 		addFontSizePreset("240 x 320", 18, 22, 26);
+		addFontSizePreset("360 x 640", 22, 26, 30);
 
 		cbLockAspect.setOnCheckedChangeListener(this::onLockAspectChanged);
 		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this::showScreenPresets);
@@ -647,6 +648,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxParallel.setChecked(params.parallelRedrawScreen);
 		cxForceFullscreen.setChecked(params.forceFullscreen);
 		spGraphicsMode.setSelection(params.graphicsMode);
+		spShader.setSelection(0);
+		if (spShaderAdapter != null) {
+			ShaderInfo shader = params.shader;
+			int position = shader == null ? -1 : spShaderAdapter.getPosition(shader);
+			if (position > 0) {
+				spShaderAdapter.getItem(position).values = shader.values;
+				spShader.setSelection(position);
+			}
+		}
 		cxShowFps.setChecked(params.showFps);
 
 		tfFontSizeSmall.setText(Integer.toString(params.fontSizeSmall));
