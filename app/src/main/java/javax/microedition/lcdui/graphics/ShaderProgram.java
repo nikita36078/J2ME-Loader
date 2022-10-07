@@ -101,8 +101,10 @@ public class ShaderProgram {
 			glDeleteShader(vertexId);
 			glDeleteShader(fragmentId);
 			glDeleteProgram(program);
-			return -1;
+			program = -1;
 		}
+		glDeleteShader(vertexId);
+		glDeleteShader(fragmentId);
 		return program;
 	}
 

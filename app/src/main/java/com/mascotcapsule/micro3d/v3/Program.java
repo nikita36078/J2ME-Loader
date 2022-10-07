@@ -41,8 +41,6 @@ abstract class Program {
 	int aNormal;
 	int aColorData;
 	int aMaterial;
-	private int vertexId;
-	private int fragmentId;
 
 	Program(String vertexShader, String fragmentShader) {
 		id = createProgram(vertexShader, fragmentShader);
@@ -63,8 +61,8 @@ abstract class Program {
 		String vertexShaderCode = ContextHolder.getAssetAsString(vertexShader);
 		String fragmentShaderCode = ContextHolder.getAssetAsString(fragmentShader);
 
-		vertexId = loadShader(GL_VERTEX_SHADER, vertexShaderCode);
-		fragmentId = loadShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
+		int vertexId = loadShader(GL_VERTEX_SHADER, vertexShaderCode);
+		int fragmentId = loadShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
 
 		int program = glCreateProgram();             // create empty OpenGL Program
 		glAttachShader(program, vertexId);   // add the vertex shader to program
@@ -77,6 +75,8 @@ abstract class Program {
 			String s = glGetProgramInfoLog(program);
 			Log.e(TAG, "createProgram: " + s);
 		}
+		glDeleteShader(vertexId);
+		glDeleteShader(fragmentId);
 		Render.checkGlError("glLinkProgram");
 		return program;
 	}
@@ -126,10 +126,6 @@ abstract class Program {
 	}
 
 	void delete() {
-		glDetachShader(id, vertexId);
-		glDetachShader(id, fragmentId);
-		glDeleteShader(vertexId);
-		glDeleteShader(fragmentId);
 		glDeleteProgram(id);
 		Render.checkGlError("program delete");
 	}
