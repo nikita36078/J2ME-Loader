@@ -18,12 +18,7 @@
 
 package javax.microedition.shell;
 
-import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_KEEP_SCREEN;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_SCREENSHOT_SWITCH;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_STATUSBAR;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_VIBRATION;
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -103,7 +98,7 @@ public class MicroActivity extends AppCompatActivity {
 	private InputMethodManager inputMethodManager;
 	private int menuKey;
 	private String appPath;
-	
+
 	public ActivityMicroBinding binding;
 
 	@Override
@@ -111,14 +106,12 @@ public class MicroActivity extends AppCompatActivity {
 		lockNightMode();
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
-		
+
 		binding = ActivityMicroBinding.inflate(getLayoutInflater());
 		View view = binding.getRoot();
 		setContentView(view);
-		
-		setSupportActionBar(
-			binding.toolbar
-		);
+		setSupportActionBar(binding.toolbar);
+
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
 		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
@@ -450,11 +443,8 @@ public class MicroActivity extends AppCompatActivity {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 			}
 		} else if (id == R.id.action_ime_keyboard) {
-			inputMethodManager.toggleSoftInputFromWindow(
-				binding.displayableContainer.getWindowToken(),
-				InputMethodManager.SHOW_FORCED,
-				0
-			);
+			inputMethodManager.toggleSoftInputFromWindow(binding.displayableContainer.getWindowToken(),
+					InputMethodManager.SHOW_FORCED, 0);
 		} else if (id == R.id.action_take_screenshot) {
 			takeScreenshot();
 		} else if (id == R.id.action_limit_fps) {
@@ -678,7 +668,7 @@ public class MicroActivity extends AppCompatActivity {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		binding = null;

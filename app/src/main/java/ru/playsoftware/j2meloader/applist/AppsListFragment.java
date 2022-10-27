@@ -95,14 +95,13 @@ import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 public class AppsListFragment extends ListFragment {
-	
 	private static final String TAG = AppsListFragment.class.getSimpleName();
 	private final AppsListAdapter adapter = new AppsListAdapter();
 	private Uri appUri;
 	private SharedPreferences preferences;
 	private AppRepository appRepository;
 	private Disposable searchViewDisposable;
-	
+
 	FragmentAppsListBinding binding;
 
 	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
@@ -132,11 +131,7 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		binding = FragmentAppsListBinding.inflate(
-			inflater,
-			container,
-			false
-		);
+		binding = FragmentAppsListBinding.inflate(inflater, container, false);
 		return binding.getRoot();
 	}
 
@@ -431,13 +426,13 @@ public class AppsListFragment extends ListFragment {
 			notifyDataSetChanged();
 		}
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		binding = null;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		if (searchViewDisposable != null) {

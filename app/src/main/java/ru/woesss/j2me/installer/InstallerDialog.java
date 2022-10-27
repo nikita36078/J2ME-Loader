@@ -54,7 +54,7 @@ public class InstallerDialog extends DialogFragment {
 	private static final String ARG_URI = "InstallerDialog.uri";
 	private static final String ARG_ID = "InstallerDialog.id";
 	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-	
+
 	private AppRepository appRepository;
 	private Button btnOk;
 	private Button btnClose;
@@ -63,7 +63,7 @@ public class InstallerDialog extends DialogFragment {
 	private AlertDialog mDialog;
 
 	private DialogInstallerBinding binding;
-	
+
 	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
 			FileUtils.getFilePicker(),
 			this::onPickFileResult);
@@ -108,11 +108,7 @@ public class InstallerDialog extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-		binding = DialogInstallerBinding.inflate(
-			LayoutInflater.from(
-				getContext()
-			)
-		);
+		binding = DialogInstallerBinding.inflate(LayoutInflater.from(getContext()));
 		mDialog = new AlertDialog.Builder(requireActivity(), getTheme())
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(binding.getRoot())
@@ -125,13 +121,13 @@ public class InstallerDialog extends DialogFragment {
 				.create();
 		return mDialog;
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		binding = null;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		compositeDisposable.dispose();

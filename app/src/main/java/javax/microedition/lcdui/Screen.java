@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 
 import javax.microedition.lcdui.commands.ScreenSoftBar;
 
-import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.databinding.SoftButtonBarBinding;
 
 public abstract class Screen extends Displayable {
@@ -40,19 +39,10 @@ public abstract class Screen extends Displayable {
 			View screenView = getScreenView();
 			screenView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
 			layout.addView(screenView);
-			
+
 			SoftButtonBarBinding binding = SoftButtonBarBinding.inflate(
-				LayoutInflater.from(
-					layout.getContext()
-				),
-				layout,
-				true
-			);
-			
-			softBar = new ScreenSoftBar(
-				this,
-				binding
-			);
+					LayoutInflater.from(layout.getContext()), layout, true);
+			softBar = new ScreenSoftBar(this, binding);
 		}
 
 		return layout;

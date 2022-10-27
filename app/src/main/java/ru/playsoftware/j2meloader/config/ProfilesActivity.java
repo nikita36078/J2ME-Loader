@@ -16,9 +16,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT_PROFILE;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +29,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.ArrayList;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
@@ -39,18 +38,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 
-import java.util.ArrayList;
-
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.databinding.ActivityProfilesBinding;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class ProfilesActivity extends BaseActivity implements EditNameDialog.Callback, AdapterView.OnItemClickListener {
-	
 	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
 	ActivityProfilesBinding binding;
-	
+
 	private final ActivityResultLauncher<String> editProfileLauncher = registerForActivityResult(
 			new ActivityResultContract<String, String>() {
 				@NonNull
@@ -77,11 +75,11 @@ public class ProfilesActivity extends BaseActivity implements EditNameDialog.Cal
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		binding = ActivityProfilesBinding.inflate(getLayoutInflater());
 		View view = binding.getRoot();
 		setContentView(view);
-		
+
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -121,7 +119,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameDialog.Cal
 			return true;
 		} else if (itemId == R.id.add) {
 			EditNameDialog.newInstance(getString(R.string.enter_name), -1)
-						  .show(getSupportFragmentManager(), "alert_create_profile");
+					.show(getSupportFragmentManager(), "alert_create_profile");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -157,7 +155,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameDialog.Cal
 			return true;
 		} else if (itemId == R.id.action_context_rename) {
 			EditNameDialog.newInstance(getString(R.string.enter_new_name), index)
-						  .show(getSupportFragmentManager(), "alert_rename_profile");
+					.show(getSupportFragmentManager(), "alert_rename_profile");
 		} else if (itemId == R.id.action_context_delete) {
 			profile.delete();
 			adapter.removeItem(index);
@@ -183,7 +181,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameDialog.Cal
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		parent.showContextMenuForChild(view);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		binding = null;

@@ -31,11 +31,8 @@ import ru.playsoftware.j2meloader.databinding.SoftButtonBarBinding;
 
 public class ScreenSoftBar extends AbstractSoftKeysBar {
 	private final SoftButtonBarBinding binding;
-	
-	public ScreenSoftBar(
-		Screen target,
-		SoftButtonBarBinding binding
-	) {
+
+	public ScreenSoftBar(Screen target, SoftButtonBarBinding binding) {
 		super(target);
 		// todo высвобождать глобальный binding после использования
 		this.binding = binding;
@@ -82,11 +79,11 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				Command c = list.get(0);
 				binding.leftButton.setText(c.getAndroidLabel());
 				binding.leftButton.setTag(c);
-				
+
 				binding.middleButton.setVisibility(View.INVISIBLE);
 				binding.middleButton.setText("");
 				binding.middleButton.setTag(null);
-				
+
 				binding.rightButton.setVisibility(View.INVISIBLE);
 				binding.rightButton.setText("");
 				binding.rightButton.setTag(null);
@@ -95,11 +92,11 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				c = list.get(0);
 				binding.leftButton.setText(c.getAndroidLabel());
 				binding.leftButton.setTag(c);
-				
+
 				binding.middleButton.setVisibility(View.INVISIBLE);
 				binding.middleButton.setText("");
 				binding.middleButton.setTag(null);
-				
+
 				binding.rightButton.setVisibility(View.VISIBLE);
 				c = list.get(1);
 				binding.rightButton.setText(c.getAndroidLabel());
@@ -109,12 +106,12 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				c = list.get(0);
 				binding.leftButton.setText(c.getAndroidLabel());
 				binding.leftButton.setTag(c);
-				
+
 				binding.middleButton.setVisibility(View.VISIBLE);
 				c = list.get(1);
 				binding.middleButton.setText(c.getAndroidLabel());
 				binding.middleButton.setTag(c);
-				
+
 				binding.rightButton.setVisibility(View.VISIBLE);
 				c = list.get(2);
 				binding.rightButton.setText(c.getAndroidLabel());
@@ -124,12 +121,12 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				c = list.get(0);
 				binding.leftButton.setText(c.getAndroidLabel());
 				binding.leftButton.setTag(c);
-				
+
 				binding.middleButton.setVisibility(View.VISIBLE);
 				c = list.get(1);
 				binding.middleButton.setText(c.getAndroidLabel());
 				binding.middleButton.setTag(c);
-				
+
 				binding.rightButton.setVisibility(View.VISIBLE);
 				binding.rightButton.setText(R.string.cmd_menu);
 				binding.rightButton.setTag(null);

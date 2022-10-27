@@ -23,12 +23,11 @@ import android.view.LayoutInflater;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-
-import java.text.DecimalFormat;
-
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ShaderInfo.Setting;
 import ru.playsoftware.j2meloader.databinding.DialogShaderTuneBinding;
@@ -41,7 +40,7 @@ public class ShaderTuneDialog extends DialogFragment {
 	private final SeekBar[] seekBars = new SeekBar[4];
 	private Callback callback;
 	private float[] values;
-	
+
 	DialogShaderTuneBinding parentBinding;
 
 	static ShaderTuneDialog newInstance(ShaderInfo shader) {
@@ -72,25 +71,18 @@ public class ShaderTuneDialog extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		LayoutInflater inflater = LayoutInflater.from(
-			getContext()
-		);
-		parentBinding = DialogShaderTuneBinding.inflate(
-			inflater
-		);
-		
+		LayoutInflater inflater = LayoutInflater.from(getContext());
+		parentBinding = DialogShaderTuneBinding.inflate(inflater);
+
 		Setting[] settings = shader.settings;
 		DecimalFormat format = new DecimalFormat("#.######");
 		for (int i = 0; i < 4; i++) {
 			Setting setting = settings[i];
 			if (setting == null) continue;
-			
+
 			DialogShaderTuneItemBinding childBinding = DialogShaderTuneItemBinding.inflate(
-				inflater,
-				parentBinding.container,
-				false
-			);
-			
+				inflater, parentBinding.container, false);
+
 			seekBars[i] = childBinding.shaderSettingValue;
 			float value = values != null ? values[i] : setting.def;
 			childBinding.shaderSettingName.setText(getString(R.string.shader_setting, setting.name, format.format(value)));
@@ -119,13 +111,11 @@ public class ShaderTuneDialog extends DialogFragment {
 				childBinding.getRoot()
 			);
 		}
-		
+
 		parentBinding.negativeButton.setOnClickListener(v1 -> dismiss());
 		parentBinding.positiveButton.setOnClickListener(v1 -> onClickOk());
 		parentBinding.neutralButton.setOnClickListener(v1 -> onClickReset());
-		return new AlertDialog.Builder(
-			requireActivity()
-		)
+		return new AlertDialog.Builder(requireActivity())
 			.setTitle(R.string.shader_tuning)
 			.setView(parentBinding.getRoot())
 			.create();
@@ -156,7 +146,7 @@ public class ShaderTuneDialog extends DialogFragment {
 	interface Callback {
 		void onTuneComplete(float[] values);
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();

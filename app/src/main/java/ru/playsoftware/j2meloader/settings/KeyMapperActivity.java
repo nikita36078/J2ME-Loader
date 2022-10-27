@@ -72,123 +72,48 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			finish();
 			return;
 		}
-		
+
 		binding = ActivityKeymapperBinding.inflate(getLayoutInflater());
 		View view = binding.getRoot();
 		setContentView(view);
-		
+
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setTitle(R.string.pref_map_keys);
 		}
 		params = ProfilesManager.loadConfig(new File(path));
-		
+
 		virtualKeyboardMappingsList = new ArrayList<>();
-		addVirtualKeyboardMapping(
-			binding.virtualKeyLeftSoft,
-			Canvas.KEY_SOFT_LEFT
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyRightSoft,
-			Canvas.KEY_SOFT_RIGHT
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyD,
-			Canvas.KEY_SEND
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyC,
-			Canvas.KEY_END
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyLeft,
-			Canvas.KEY_LEFT
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyRight,
-			Canvas.KEY_RIGHT
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyUp,
-			Canvas.KEY_UP
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyDown,
-			Canvas.KEY_DOWN
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyF,
-			Canvas.KEY_FIRE
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey1,
-			Canvas.KEY_NUM1
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey2,
-			Canvas.KEY_NUM2
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey3,
-			Canvas.KEY_NUM3
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey4,
-			Canvas.KEY_NUM4
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey5,
-			Canvas.KEY_NUM5
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey6,
-			Canvas.KEY_NUM6
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey7,
-			Canvas.KEY_NUM7
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey8,
-			Canvas.KEY_NUM8
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey9,
-			Canvas.KEY_NUM9
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKey0,
-			Canvas.KEY_NUM0
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyStar,
-			Canvas.KEY_STAR
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyPound,
-			Canvas.KEY_POUND
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyA,
-			KeyMapper.SE_KEY_SPECIAL_GAMING_A
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyB,
-			KeyMapper.SE_KEY_SPECIAL_GAMING_B
-		);
-		addVirtualKeyboardMapping(
-			binding.virtualKeyMenu,
-			KeyMapper.KEY_OPTIONS_MENU
-		);
-		
+		addVirtualKeyboardMapping(binding.virtualKeyLeftSoft, Canvas.KEY_SOFT_LEFT);
+		addVirtualKeyboardMapping(binding.virtualKeyRightSoft, Canvas.KEY_SOFT_RIGHT);
+		addVirtualKeyboardMapping(binding.virtualKeyD, Canvas.KEY_SEND);
+		addVirtualKeyboardMapping(binding.virtualKeyC, Canvas.KEY_END);
+		addVirtualKeyboardMapping(binding.virtualKeyLeft, Canvas.KEY_LEFT);
+		addVirtualKeyboardMapping(binding.virtualKeyRight, Canvas.KEY_RIGHT);
+		addVirtualKeyboardMapping(binding.virtualKeyUp, Canvas.KEY_UP);
+		addVirtualKeyboardMapping(binding.virtualKeyDown, Canvas.KEY_DOWN);
+		addVirtualKeyboardMapping(binding.virtualKeyF, Canvas.KEY_FIRE);
+		addVirtualKeyboardMapping(binding.virtualKey1, Canvas.KEY_NUM1);
+		addVirtualKeyboardMapping(binding.virtualKey2, Canvas.KEY_NUM2);
+		addVirtualKeyboardMapping(binding.virtualKey3, Canvas.KEY_NUM3);
+		addVirtualKeyboardMapping(binding.virtualKey4, Canvas.KEY_NUM4);
+		addVirtualKeyboardMapping(binding.virtualKey5, Canvas.KEY_NUM5);
+		addVirtualKeyboardMapping(binding.virtualKey6, Canvas.KEY_NUM6);
+		addVirtualKeyboardMapping(binding.virtualKey7, Canvas.KEY_NUM7);
+		addVirtualKeyboardMapping(binding.virtualKey8, Canvas.KEY_NUM8);
+		addVirtualKeyboardMapping(binding.virtualKey9, Canvas.KEY_NUM9);
+		addVirtualKeyboardMapping(binding.virtualKey0,Canvas.KEY_NUM0);
+		addVirtualKeyboardMapping(binding.virtualKeyStar, Canvas.KEY_STAR);
+		addVirtualKeyboardMapping(binding.virtualKeyPound, Canvas.KEY_POUND);
+		addVirtualKeyboardMapping(binding.virtualKeyA, KeyMapper.SE_KEY_SPECIAL_GAMING_A);
+		addVirtualKeyboardMapping(binding.virtualKeyB, KeyMapper.SE_KEY_SPECIAL_GAMING_B);
+		addVirtualKeyboardMapping(binding.virtualKeyMenu, KeyMapper.KEY_OPTIONS_MENU);
+
 		for (ButtonMapping mapping : virtualKeyboardMappingsList) {
-			setupButton(
-				mapping.button,
-				mapping.keyId
-			);
+			setupButton(mapping.button, mapping.keyId);
 		}
-		
+
 		if (savedInstanceState == null) {
 			SparseIntArray keyMap = params.keyMappings;
 			androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
@@ -207,40 +132,22 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			}
 		}
 	}
-	
+
 	static class ButtonMapping {
 		Button button;
 		Integer keyId;
-		
-		public ButtonMapping(
-			Button button,
-			Integer keyId
-		) {
-			this.button = button;
-			this.keyId = keyId;
+
+		public ButtonMapping(Button button, Integer keyId) {
+			this.button = button;this.keyId = keyId;
 		}
 	}
-	
-	void addVirtualKeyboardMapping(
-		Button button,
-		Integer keyId
-	) {
-		virtualKeyboardMappingsList.add(
-			new ButtonMapping(
-				button,
-				keyId
-			)
-		);
+
+	void addVirtualKeyboardMapping(Button button, Integer keyId) {
+		virtualKeyboardMappingsList.add(new ButtonMapping(button, keyId));
 	}
-	
-	private void setupButton(
-		Button button,
-		int index
-	) {
-		idToCanvasKey.put(
-			button.getId(),
-			index
-		);
+
+	private void setupButton(Button button, int index) {
+		idToCanvasKey.put(button.getId(), index);
 		button.setOnClickListener(this);
 	}
 
@@ -360,10 +267,8 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		if (
-			binding.keyMapperLayer.getVisibility() == View.VISIBLE &&
-			event.getAction() == KeyEvent.ACTION_DOWN
-		) {
+		if (binding.keyMapperLayer.getVisibility() == View.VISIBLE
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 			int keyCode = event.getKeyCode();
 			switch (keyCode) {
 				case KeyEvent.KEYCODE_HOME:
@@ -391,7 +296,7 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		}
 		return super.dispatchTouchEvent(event);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		binding = null;

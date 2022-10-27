@@ -16,9 +16,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import static ru.playsoftware.j2meloader.util.Constants.KEY_CONFIG_PATH;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -36,12 +33,15 @@ import java.io.IOException;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.databinding.DialogSaveProfileBinding;
 
+import static ru.playsoftware.j2meloader.util.Constants.KEY_CONFIG_PATH;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 public class SaveProfileDialog extends DialogFragment {
-	
+
 	private String configPath;
 
 	DialogSaveProfileBinding binding;
-	
+
 	@NonNull
 	public static SaveProfileDialog getInstance(String parent) {
 		SaveProfileDialog saveProfileAlert = new SaveProfileDialog();
@@ -55,17 +55,9 @@ public class SaveProfileDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		configPath = requireArguments().getString(KEY_CONFIG_PATH);
-		binding = DialogSaveProfileBinding.inflate(
-			LayoutInflater.from(
-				getContext()
-			)
-		);
-		AlertDialog dialog = new AlertDialog.Builder(
-			requireActivity()
-		)
-			.setTitle(R.string.save_profile)
-			.setView(binding.getRoot())
-			.create();
+		binding = DialogSaveProfileBinding.inflate(LayoutInflater.from(getContext()));
+		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
+				.setTitle(R.string.save_profile).setView(binding.getRoot()).create();
 		binding.negativeButton.setOnClickListener(v1 -> dismiss());
 		binding.positiveButton.setOnClickListener(v1 -> {
 			String name = binding.editText.getText().toString().trim().replaceAll("[/\\\\:*?\"<>|]", "");
@@ -92,10 +84,7 @@ public class SaveProfileDialog extends DialogFragment {
 				.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
 					binding.editText.setText(name);
 					binding.editText.requestFocus();
-					binding.editText.setSelection(
-						0,
-						binding.editText.getText().length()
-					);
+					binding.editText.setSelection(0, binding.editText.getText().length());
 				})
 				.show();
 	}
@@ -104,18 +93,10 @@ public class SaveProfileDialog extends DialogFragment {
 	private void save(String name) {
 		try {
 			Profile profile = new Profile(name);
-			ProfilesManager.save(
-				profile,
-				this.configPath,
-				binding.cbConfig.isChecked(),
-				binding.cbKeyboard.isChecked());
+			ProfilesManager.save(profile, this.configPath, binding.cbConfig.isChecked(), binding.cbKeyboard.isChecked());
 			if (binding.cbDefault.isChecked()) {
-				PreferenceManager.getDefaultSharedPreferences(
-					requireContext()
-			    )
-				 .edit()
-				 .putString(PREF_DEFAULT_PROFILE, name)
-				 .apply();
+				PreferenceManager.getDefaultSharedPreferences(requireContext())
+						.edit().putString(PREF_DEFAULT_PROFILE, name).apply();
 			}
 			Toast.makeText(requireContext(), getString(R.string.saved, name), Toast.LENGTH_SHORT).show();
 			dismiss();
@@ -124,7 +105,7 @@ public class SaveProfileDialog extends DialogFragment {
 			Toast.makeText(requireActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();

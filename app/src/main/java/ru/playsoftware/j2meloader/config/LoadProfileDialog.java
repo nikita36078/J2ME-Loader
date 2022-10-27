@@ -43,7 +43,7 @@ public class LoadProfileDialog extends DialogFragment {
 	private ArrayList<Profile> profiles;
 
 	DialogLoadProfileBinding binding;
-	
+
 	static LoadProfileDialog newInstance(String parent) {
 		LoadProfileDialog fragment = new LoadProfileDialog();
 		Bundle args = new Bundle();
@@ -63,17 +63,9 @@ public class LoadProfileDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		String configPath = requireArguments().getString(KEY_CONFIG_PATH);
-		
-		binding = DialogLoadProfileBinding.inflate(
-			LayoutInflater.from(
-				getContext()
-			)
-		);
-		ArrayAdapter<Profile> adapter = new ArrayAdapter<>(
-			requireActivity(),
-			android.R.layout.simple_list_item_single_choice,
-			profiles
-		);
+		binding = DialogLoadProfileBinding.inflate(LayoutInflater.from(getContext()));
+		ArrayAdapter<Profile> adapter = new ArrayAdapter<>(requireActivity(),
+				android.R.layout.simple_list_item_single_choice, profiles);
 		binding.list.setOnItemClickListener(this::onItemClick);
 		binding.list.setAdapter(adapter);
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
@@ -122,7 +114,7 @@ public class LoadProfileDialog extends DialogFragment {
 		binding.cbKeyboard.setEnabled(hasVk && hasConfig);
 		binding.cbKeyboard.setChecked(hasVk);
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();

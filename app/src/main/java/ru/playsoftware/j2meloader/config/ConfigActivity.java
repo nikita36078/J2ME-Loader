@@ -17,11 +17,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT;
-import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT_PROFILE;
-import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,13 +45,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.widget.TextViewCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.preference.PreferenceManager;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -69,6 +57,13 @@ import java.util.Set;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
+import androidx.core.widget.TextViewCompat;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.databinding.ActivityConfigBinding;
@@ -76,10 +71,12 @@ import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class ConfigActivity extends BaseActivity implements View.OnClickListener, ShaderTuneDialog.Callback {
-	
+
 	private static final String TAG = ConfigActivity.class.getSimpleName();
-	
+
 	protected ArrayList<String> screenPresets = new ArrayList<>();
 
 	protected ArrayList<int[]> fontPresetValues = new ArrayList<>();
@@ -96,7 +93,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private ArrayAdapter<ShaderInfo> spShaderAdapter;
 	private String workDir;
 	private boolean needShow;
-	
+
 	private ActivityConfigBinding binding;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
@@ -166,7 +163,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		display = getWindowManager().getDefaultDisplay();
 		fragmentManager = getSupportFragmentManager();
-		
+
 		fillScreenSizePresets(display.getWidth(), display.getHeight());
 
 		addFontSizePreset("128 x 128", 9, 13, 15);
@@ -257,35 +254,17 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			binding.virtualKeyboardConfigGroup.setVisibility(binding.showVirtualKeyboardToggle.isChecked() ? View.VISIBLE : View.GONE);
 		});
 		binding.screenBackgroundHexColor.addTextChangedListener(
-			new ColorTextWatcher(
-				binding.screenBackgroundHexColor
-			)
-		);
+				new ColorTextWatcher(binding.screenBackgroundHexColor));
 		binding.keyboardNotPressedButtonLabelColorHex.addTextChangedListener(
-			new ColorTextWatcher(
-				binding.keyboardNotPressedButtonLabelColorHex
-			)
-		);
+				new ColorTextWatcher(binding.keyboardNotPressedButtonLabelColorHex));
 		binding.keyboardNotPressedButtonBackgroundColorHex.addTextChangedListener(
-			new ColorTextWatcher(
-				binding.keyboardNotPressedButtonBackgroundColorHex
-			)
-		);
+				new ColorTextWatcher(binding.keyboardNotPressedButtonBackgroundColorHex));
 		binding.keyboardPressedButtonLabelColorHex.addTextChangedListener(
-			new ColorTextWatcher(
-				binding.keyboardPressedButtonLabelColorHex
-			)
-		);
+				new ColorTextWatcher(binding.keyboardPressedButtonLabelColorHex));
 		binding.keyboardPressedButtonBackgroundColorHex.addTextChangedListener(
-			new ColorTextWatcher(
-				binding.keyboardPressedButtonBackgroundColorHex
-			)
-		);
+				new ColorTextWatcher(binding.keyboardPressedButtonBackgroundColorHex));
 		binding.keyboardOutlineColorHex.addTextChangedListener(
-			new ColorTextWatcher(
-				binding.keyboardOutlineColorHex
-			)
-		);
+				new ColorTextWatcher(binding.keyboardOutlineColorHex));
 	}
 
 	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
@@ -312,20 +291,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 			float finalW = w;
 			float finalH = h;
-			binding.screenWidth.setOnFocusChangeListener(
-				new ResolutionAutoFill(
-					binding.screenWidth,
-					binding.screenHeight,
-					finalH / finalW
-				)
-			);
-			binding.screenHeight.setOnFocusChangeListener(
-				new ResolutionAutoFill(
-					binding.screenHeight,
-					binding.screenWidth,
-					finalW / finalH
-				)
-			);
+			binding.screenWidth.setOnFocusChangeListener(new ResolutionAutoFill(
+					binding.screenWidth, binding.screenHeight, finalH / finalW));
+			binding.screenHeight.setOnFocusChangeListener(new ResolutionAutoFill(
+					binding.screenHeight, binding.screenWidth, finalW / finalH));
 
 		} else {
 			View.OnFocusChangeListener listener = binding.screenWidth.getOnFocusChangeListener();
@@ -640,15 +609,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.screenHeight = height;
 			try {
 				params.screenBackgroundColor = Integer.parseInt(
-					binding.screenBackgroundHexColor.getText().toString(),
-					16
-				);
+					binding.screenBackgroundHexColor.getText().toString(), 16);
 			} catch (NumberFormatException ignored) {
 			}
 			try {
-				params.screenScaleRatio = Integer.parseInt(
-					binding.scaleRatio.getText().toString()
-				);
+				params.screenScaleRatio = Integer.parseInt(binding.scaleRatio.getText().toString());
 			} catch (NumberFormatException e) {
 				params.screenScaleRatio = 100;
 			}
@@ -698,37 +663,27 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.vkHideDelay = parseInt(binding.virtualKeyboardHideDelay.getText().toString());
 			try {
 				params.vkBgColor = Integer.parseInt(
-					binding.keyboardNotPressedButtonBackgroundColorHex.getText().toString(),
-					16
-				);
+					binding.keyboardNotPressedButtonBackgroundColorHex.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
 			try {
 				params.vkFgColor = Integer.parseInt(
-					binding.keyboardNotPressedButtonLabelColorHex.getText().toString(),
-					16
-				);
+					binding.keyboardNotPressedButtonLabelColorHex.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
 			try {
 				params.vkBgColorSelected = Integer.parseInt(
-					binding.keyboardPressedButtonBackgroundColorHex.getText().toString(),
-					16
-				);
+					binding.keyboardPressedButtonBackgroundColorHex.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
 			try {
 				params.vkFgColorSelected = Integer.parseInt(
-					binding.keyboardPressedButtonLabelColorHex.getText().toString(),
-					16
-				);
+						binding.keyboardPressedButtonLabelColorHex.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
 			try {
 				params.vkOutlineColor = Integer.parseInt(
-					binding.keyboardOutlineColorHex.getText().toString(),
-					16
-				);
+						binding.keyboardOutlineColorHex.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
 			params.systemProperties = getSystemProperties();
@@ -788,11 +743,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			loadKeyLayout();
 		} else if (itemId == R.id.action_load_profile) {
 			LoadProfileDialog.newInstance(keylayoutFile.getParent())
-                             .show(fragmentManager, "load_profile");
+					.show(fragmentManager, "load_profile");
 		} else if (itemId == R.id.action_save_profile) {
 			saveParams();
 			SaveProfileDialog.getInstance(keylayoutFile.getParent())
-                             .show(fragmentManager, "save_profile");
+					.show(fragmentManager, "save_profile");
 		} else if (itemId == android.R.id.home) {
 			finish();
 		}
@@ -836,29 +791,17 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 							})
 					.show();
 		} else if (id == R.id.select_screen_background_color) {
-			showColorPicker(
-				binding.screenBackgroundHexColor
-			);
+			showColorPicker(binding.screenBackgroundHexColor);
 		} else if (id == R.id.update_keyboard_not_pressed_button_background_color) {
-			showColorPicker(
-				binding.keyboardNotPressedButtonBackgroundColorHex
-			);
+			showColorPicker(binding.keyboardNotPressedButtonBackgroundColorHex);
 		} else if (id == R.id.update_keyboard_not_pressed_button_label_color) {
-			showColorPicker(
-				binding.keyboardNotPressedButtonLabelColorHex
-			);
+			showColorPicker(binding.keyboardNotPressedButtonLabelColorHex);
 		} else if (id == R.id.update_keyboard_pressed_button_label_color) {
-			showColorPicker(
-				binding.keyboardPressedButtonLabelColorHex
-			);
+			showColorPicker(binding.keyboardPressedButtonLabelColorHex);
 		} else if (id == R.id.update_keyboard_pressed_button_background_color) {
-			showColorPicker(
-				binding.keyboardPressedButtonBackgroundColorHex
-			);
+			showColorPicker(binding.keyboardPressedButtonBackgroundColorHex);
 		} else if (id == R.id.update_keyboard_outline_color) {
-			showColorPicker(
-				binding.keyboardOutlineColorHex
-			);
+			showColorPicker(binding.keyboardOutlineColorHex);
 		} else if (id == R.id.show_key_mappings) {
 			Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
 					this, KeyMapperActivity.class);
@@ -1033,7 +976,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		binding = null;

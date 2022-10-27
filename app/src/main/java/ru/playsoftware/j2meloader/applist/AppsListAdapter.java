@@ -59,10 +59,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		ViewHolder holder;
 		if (view == null) {
 			ListRowJarBinding binding = ListRowJarBinding.inflate(
-				LayoutInflater.from(parent.getContext()),
-				parent,
-				false
-			);
+					LayoutInflater.from(parent.getContext()), parent, false);
 			view = binding.getRoot();
 			holder = new ViewHolder(binding);
 			view.setTag(holder);
@@ -81,7 +78,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		holder.binding.name.setText(item.getTitle());
 		holder.binding.author.setText(item.getAuthor());
 		holder.binding.appVersion.setText(item.getVersion());
-		
+
 		return view;
 	}
 
