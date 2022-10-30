@@ -1058,7 +1058,7 @@ public abstract class Canvas extends Displayable {
 					}
 					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 						int cX = Math.round(convertPointerX(x));
-						int cY = Math.round(convertPointerY(x));
+						int cY = Math.round(convertPointerY(y));
 						if(id < 20) {
 							lastPointerPos[id][0] = cX;
 							lastPointerPos[id][1] = cY;
@@ -1083,7 +1083,7 @@ public abstract class Canvas extends Displayable {
 							}
 							if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 								int cX = Math.round(convertPointerX(x));
-								int cY = Math.round(convertPointerY(x));
+								int cY = Math.round(convertPointerY(y));
 								if (id < 20) {
 									int oX = lastPointerPos[id][0];
 									int oY = lastPointerPos[id][1];
@@ -1110,7 +1110,7 @@ public abstract class Canvas extends Displayable {
 						}
 						if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
 							int cX = Math.round(convertPointerX(x));
-							int cY = Math.round(convertPointerY(x));
+							int cY = Math.round(convertPointerY(y));
 							if (id < 20) {
 								int oX = lastPointerPos[id][0];
 								int oY = lastPointerPos[id][1];
@@ -1141,11 +1141,15 @@ public abstract class Canvas extends Displayable {
 						overlay.pointerReleased(id, x, y);
 					}
 					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+						int cX = Math.round(convertPointerX(x));
+						int cY = Math.round(convertPointerY(y));
+						lastPointerPos[id][0] = cX;
+						lastPointerPos[id][1] = cY;
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 								CanvasEvent.POINTER_RELEASED,
 								id,
-								convertPointerX(x),
-								convertPointerY(y)));
+								cX,
+								cY));
 					}
 					break;
 				case MotionEvent.ACTION_CANCEL:
