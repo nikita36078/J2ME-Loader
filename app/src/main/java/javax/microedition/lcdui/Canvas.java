@@ -1086,7 +1086,7 @@ public abstract class Canvas extends Displayable {
 								int cY = Math.round(convertPointerY(x));
 								if (id < 20) {
 									int oX = lastPointerPos[id][0];
-									int oY = lastPointerPos[id][0];
+									int oY = lastPointerPos[id][1];
 									if (oX == cX && oY == cY) {
 										continue;
 									}
@@ -1113,7 +1113,7 @@ public abstract class Canvas extends Displayable {
 							int cY = Math.round(convertPointerY(x));
 							if (id < 20) {
 								int oX = lastPointerPos[id][0];
-								int oY = lastPointerPos[id][0];
+								int oY = lastPointerPos[id][1];
 								if (oX == cX && oY == cY) {
 									continue;
 								}
