@@ -25,6 +25,8 @@ import javax.microedition.lcdui.event.RunnableEvent;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
+import ru.woesss.j2me.jar.Descriptor;
+
 @SuppressWarnings("unused")
 public class Display {
 	public static final int LIST_ELEMENT = 1;
@@ -50,6 +52,8 @@ public class Display {
 
 	private static Display instance;
 	static EventQueue queue = new EventQueue();
+	private static boolean multiTouchSupported;
+	private static String pointerNumber;
 
 	static {
 		queue.startProcessing();
@@ -59,6 +63,10 @@ public class Display {
 
 	public static Display getDisplay(MIDlet midlet) {
 		if (instance == null && midlet != null) {
+			String nokiaUiEnhancement = midlet.getAppProperty(Descriptor.NOKIA_UI_ENHANCEMENT);
+			if(nokiaUiEnhancement != null) {
+				multiTouchSupported = nokiaUiEnhancement.contains("EnableMultiPointTouchEvents");
+			}
 			instance = new Display();
 		}
 		return instance;
@@ -77,6 +85,22 @@ public class Display {
 
 	static EventQueue getEventQueue() {
 		return queue;
+	}
+
+	public static boolean isMultiTouchSupported() {
+		return multiTouchSupported;
+	}
+
+	static void setPointerNumber(int pointerNumber) {
+		Display.pointerNumber = String.valueOf(pointerNumber);
+	}
+
+	static void resetPointerNumber() {
+		pointerNumber = null;
+	}
+
+	public static String getPointerNumber() {
+		return pointerNumber;
 	}
 
 	public void setCurrent(Displayable disp) {

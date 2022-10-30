@@ -718,19 +718,31 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void pointerPressed(int pointer, float x, float y) {
-		if (pointer == 0) {
+		if (Display.isMultiTouchSupported()) {
+			Display.setPointerNumber(pointer);
+			pointerPressed(Math.round(x), Math.round(y));
+			Display.resetPointerNumber();
+		} else if (pointer == 0) {
 			pointerPressed(Math.round(x), Math.round(y));
 		}
 	}
 
 	public void pointerDragged(int pointer, float x, float y) {
-		if (pointer == 0) {
+		if (Display.isMultiTouchSupported()) {
+			Display.setPointerNumber(pointer);
+			pointerDragged(Math.round(x), Math.round(y));
+			Display.resetPointerNumber();
+		} else if (pointer == 0) {
 			pointerDragged(Math.round(x), Math.round(y));
 		}
 	}
 
 	public void pointerReleased(int pointer, float x, float y) {
-		if (pointer == 0) {
+		if (Display.isMultiTouchSupported()) {
+			Display.setPointerNumber(pointer);
+			pointerReleased(Math.round(x), Math.round(y));
+			Display.resetPointerNumber();
+		} else if (pointer == 0) {
 			pointerReleased(Math.round(x), Math.round(y));
 		}
 	}
@@ -1055,7 +1067,7 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.pointerPressed(id, x, y);
 					}
-					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+					if (touchInput && virtualScreen.contains(x, y)) {
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 								CanvasEvent.POINTER_PRESSED,
 								id,
@@ -1074,7 +1086,7 @@ public abstract class Canvas extends Displayable {
 							if (overlay != null) {
 								overlay.pointerDragged(id, x, y);
 							}
-							if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+							if (touchInput && virtualScreen.contains(x, y)) {
 								Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 										CanvasEvent.POINTER_DRAGGED,
 										id,
@@ -1090,7 +1102,7 @@ public abstract class Canvas extends Displayable {
 						if (overlay != null) {
 							overlay.pointerDragged(id, x, y);
 						}
-						if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+						if (touchInput && virtualScreen.contains(x, y)) {
 							Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 									CanvasEvent.POINTER_DRAGGED,
 									id,
