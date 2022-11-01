@@ -51,7 +51,7 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 
 	@Override
 	public long getItemId(int position) {
-		return position;
+		return getItem(position).getId();
 	}
 
 	@Override
