@@ -25,8 +25,17 @@ public class Effect3D extends com.mascotcapsule.micro3d.v3.Effect3D {
 		super(light, shading, isEnableTrans, tex);
 	}
 
+	@Override
+	public Light getLight() {
+		return (Light) light;
+	}
+
 	public void setLight(Light light) {
 		super.setLight(light);
+	}
+
+	public Texture getSphereMap() {
+		return (Texture) texture;
 	}
 
 	public void setSphereMap(Texture texture) {

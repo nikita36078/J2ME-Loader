@@ -18,7 +18,7 @@ package com.jblend.graphics.j3d;
 
 public class Light extends com.mascotcapsule.micro3d.v3.Light {
 	public Light() {
-		super();
+		super(new Vector3D(0, 0, 4096), 4096, 0);
 	}
 
 	public Light(Vector3D dir, int dirIntensity, int ambIntensity) {

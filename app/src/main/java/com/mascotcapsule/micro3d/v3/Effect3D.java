@@ -21,9 +21,9 @@ public class Effect3D {
 	public static final int NORMAL_SHADING = 0;
 	public static final int TOON_SHADING = 1;
 
-	Light light;
+	protected Light light;
 	int mShading;
-	Texture mTexture;
+	protected Texture texture;
 	int mToonHigh;
 	int mToonLow;
 	int mToonThreshold;
@@ -47,14 +47,14 @@ public class Effect3D {
 		setLight(light);
 		mShading = shading;
 		isTransparency = isEnableTrans;
-		mTexture = tex;
+		texture = tex;
 	}
 
 	Effect3D(Effect3D src) {
 		Light sl = src.light;
 		light = sl == null ? null : new Light(sl);
 		mShading = src.mShading;
-		mTexture = src.mTexture;
+		texture = src.texture;
 		mToonHigh = src.mToonHigh;
 		mToonLow = src.mToonLow;
 		mToonThreshold = src.mToonThreshold;
@@ -64,7 +64,7 @@ public class Effect3D {
 		isToonShading = src.isToonShading;
 	}
 
-	public final Light getLight() {
+	public Light getLight() {
 		return light;
 	}
 
@@ -163,12 +163,12 @@ public class Effect3D {
 	}
 
 	@Deprecated
-	public final Texture getSphereMap() {
-		return mTexture;
+	public Texture getSphereMap() {
+		return texture;
 	}
 
 	public final Texture getSphereTexture() {
-		return mTexture;
+		return texture;
 	}
 
 	@Deprecated
@@ -180,12 +180,12 @@ public class Effect3D {
 		if (tex != null && !tex.isSphere) {
 			throw new IllegalArgumentException();
 		}
-		mTexture = tex;
+		texture = tex;
 	}
 
 	void set(Effect3D src) {
 		mShading = src.mShading;
-		mTexture = src.mTexture;
+		texture = src.texture;
 		mToonHigh = src.mToonHigh;
 		mToonLow = src.mToonLow;
 		mToonThreshold = src.mToonThreshold;

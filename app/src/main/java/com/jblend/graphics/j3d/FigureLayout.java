@@ -17,19 +17,23 @@
 package com.jblend.graphics.j3d;
 
 public class FigureLayout extends com.mascotcapsule.micro3d.v3.FigureLayout {
-	public FigureLayout() {
-		super();
-	}
+	public FigureLayout() {}
 
 	public FigureLayout(AffineTrans trans, int sx, int sy, int cx, int cy) {
-		super(trans, sx, sy, cx, cy);
+		setAffineTrans(trans);
+		centerX = cx;
+		centerY = cy;
+		setScale(sx, sy);
 	}
 
 	public AffineTrans getAffineTrans() {
-		return (AffineTrans) super.getAffineTrans();
+		return (AffineTrans) affine;
 	}
 
 	public void setAffineTrans(AffineTrans trans) {
+		if (trans == null) {
+			trans = new AffineTrans(4096, 0, 0, 0, 0, 4096, 0, 0, 0, 0, 4096, 0);
+		}
 		super.setAffineTrans(trans);
 	}
 }

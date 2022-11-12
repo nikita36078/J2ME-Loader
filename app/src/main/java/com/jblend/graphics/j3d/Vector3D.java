@@ -17,8 +17,7 @@
 package com.jblend.graphics.j3d;
 
 public class Vector3D extends com.mascotcapsule.micro3d.v3.Vector3D {
-	public Vector3D() {
-	}
+	public Vector3D() {}
 
 	public Vector3D(int x, int y, int z) {
 		super(x, y, z);
@@ -33,10 +32,7 @@ public class Vector3D extends com.mascotcapsule.micro3d.v3.Vector3D {
 	}
 
 	public static int innerProduct(Vector3D v1, Vector3D v2) {
-		if (v1 == null || v2 == null) {
-			throw new NullPointerException();
-		}
-		return v1.innerProduct(v2);
+		return com.mascotcapsule.micro3d.v3.Vector3D.innerProduct(v1, v2);
 	}
 
 	public static Vector3D outerProduct(Vector3D v1, Vector3D v2) {

@@ -23,6 +23,23 @@ public class AffineTrans extends com.mascotcapsule.micro3d.v3.AffineTrans {
 		super(a);
 	}
 
+	AffineTrans(int m00, int m01, int m02, int m03,
+				int m10, int m11, int m12, int m13,
+				int m20, int m21, int m22, int m23) {
+		this.m00 = m00;
+		this.m01 = m01;
+		this.m02 = m02;
+		this.m03 = m03;
+		this.m10 = m10;
+		this.m11 = m11;
+		this.m12 = m12;
+		this.m13 = m13;
+		this.m20 = m20;
+		this.m21 = m21;
+		this.m22 = m22;
+		this.m23 = m23;
+	}
+
 	public Vector3D transPoint(Vector3D v) {
 		if (v == null) {
 			throw new NullPointerException();

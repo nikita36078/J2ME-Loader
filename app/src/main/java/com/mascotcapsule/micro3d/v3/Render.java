@@ -332,11 +332,11 @@ class Render {
 
 				program.bindMatrices(mvp, mvm);
 				program.setLight(effect.isLighting ? effect.light : null);
-				if (effect.isLighting && effect.mTexture != null) {
+				if (effect.isLighting && effect.texture != null) {
 					glActiveTexture(GL_TEXTURE2);
-					glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
+					glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
 					glUniform1i(program.uSphereUnit, 2);
-					glUniform2f(program.uSphereSize, 64.0f / effect.mTexture.width, 64.0f / effect.mTexture.height);
+					glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
 				} else {
 					glUniform2f(program.uSphereSize, -1, -1);
 				}
@@ -372,11 +372,11 @@ class Render {
 				}
 				program.bindMatrices(mvp, mvm);
 				program.setLight(effect.isLighting ? effect.light : null);
-				if (effect.isLighting && effect.mTexture != null) {
+				if (effect.isLighting && effect.texture != null) {
 					glActiveTexture(GL_TEXTURE2);
-					glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
+					glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
 					glUniform1i(program.uSphereUnit, 2);
-					glUniform2f(program.uSphereSize, 64.0f / effect.mTexture.width, 64.0f / effect.mTexture.height);
+					glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
 				} else {
 					glUniform2f(program.uSphereSize, -1, -1);
 				}
@@ -929,11 +929,11 @@ class Render {
 		Program.Color program = Program.color;
 		program.use();
 		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
-		if (effect.isLighting && effect.mTexture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
+		if (effect.isLighting && effect.texture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
+			glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
 			glUniform1i(program.uSphereUnit, 2);
-			glUniform2f(program.uSphereSize, 64.0f / effect.mTexture.width, 64.0f / effect.mTexture.height);
+			glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
 		} else {
 			glUniform2f(program.uSphereSize, -1, -1);
 		}
@@ -973,11 +973,11 @@ class Render {
 		Program.Color program = Program.color;
 		program.use();
 		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
-		if (effect.isLighting && effect.mTexture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
+		if (effect.isLighting && effect.texture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
+			glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
 			glUniform1i(program.uSphereUnit, 2);
-			glUniform2f(program.uSphereSize, 64.0f / effect.mTexture.width, 64.0f / effect.mTexture.height);
+			glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
 		} else {
 			glUniform2f(program.uSphereSize, -1, -1);
 		}
@@ -1023,11 +1023,11 @@ class Render {
 				effect.isLighting ? 1 : 0,
 				effect.isReflection ? 1 : 0,
 				command & PATTR_COLORKEY);
-		if (effect.isLighting && effect.mTexture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
+		if (effect.isLighting && effect.texture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, effect.mTexture.getId());
+			glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
 			glUniform1i(program.uSphereUnit, 2);
-			glUniform2f(program.uSphereSize, 64.0f / effect.mTexture.width, 64.0f / effect.mTexture.height);
+			glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
 		} else {
 			glUniform2f(program.uSphereSize, -1, -1);
 		}

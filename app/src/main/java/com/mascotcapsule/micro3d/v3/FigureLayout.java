@@ -19,12 +19,12 @@ package com.mascotcapsule.micro3d.v3;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FigureLayout {
 
-	private AffineTrans[] affineArray;
-	AffineTrans affine;
+	protected AffineTrans[] affineArray;
+	protected AffineTrans affine;
 	int scaleX;
 	int scaleY;
-	int centerX;
-	int centerY;
+	protected int centerX;
+	protected int centerY;
 	int parallelWidth;
 	int parallelHeight;
 	int near;
