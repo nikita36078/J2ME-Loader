@@ -11,6 +11,7 @@ Special thanks to [woesss](https://github.com/woesss), the author of [JL-Mod](ht
 System requirements: Android 4.0+  
 [4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201)  
 [XDA-Developers](https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889)  
+[EmuGen wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader)  
 [Discord](https://discord.gg/Ag4rcpz)  
 [Automated builds](https://install.appcenter.ms/users/nikita36078/apps/j2me-loader/distribution_groups/testers)
 
@@ -32,6 +33,7 @@ System requirements: Android 4.0+
 
 <img src="/screenshots/screen.jpg" width="288" height="512"> <img src="/screenshots/screen2.jpg" width="288" height="512">
 <img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
+* For more screenshots check out the [wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader#Screenshots)
 
 ## Donations
 If you like the project, please consider making a donation to support development.
