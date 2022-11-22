@@ -27,7 +27,6 @@ import androidx.activity.result.contract.ActivityResultContract;
 
 import com.nononsenseapps.filepicker.Utils;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,7 +35,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 
+import kotlin.io.FilesKt;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class FileUtils {
@@ -142,11 +143,7 @@ public class FileUtils {
 	}
 
 	public static byte[] getBytes(File file) throws IOException {
-		try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
-			byte[] b = new byte[(int) file.length()];
-			dis.readFully(b);
-			return b;
-		}
+		return FilesKt.readBytes(file);
 	}
 
 	public static void clearDirectory(File dir) {
@@ -194,11 +191,10 @@ public class FileUtils {
 	}
 
 	public static String getText(String path) {
-		try (DataInputStream dis = new DataInputStream(new FileInputStream(path))) {
-			byte[] buf = new byte[dis.available()];
-			dis.readFully(buf);
-			return new String(buf);
-		} catch (IOException e) {
+		try {
+			//noinspection CharsetObjectCanBeUsed
+			return FilesKt.readText(new File(path), Charset.forName("UTF-8"));
+		} catch (Exception e) {
 			Log.e(TAG, "getText: " + path, e);
 		}
 		return "";

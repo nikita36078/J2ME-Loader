@@ -17,14 +17,15 @@
 
 package javax.microedition.util;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Process;
 import android.os.Vibrator;
 import android.view.Display;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,10 +44,8 @@ import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.shell.AppClassLoader;
 import javax.microedition.shell.MicroActivity;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import ru.playsoftware.j2meloader.BuildConfig;
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {
@@ -54,12 +53,11 @@ public class ContextHolder {
 	private static VirtualKeyboard vk;
 	private static WeakReference<MicroActivity> currentActivity;
 	private static Vibrator vibrator;
-	private static Context appContext;
 	private static final ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 	private static boolean vibrationEnabled;
 
 	public static Context getAppContext() {
-		return appContext;
+		return EmulatorApplication.getInstance();
 	}
 
 	public static VirtualKeyboard getVk() {
@@ -224,10 +222,6 @@ public class ContextHolder {
 			return;
 		}
 		vibrator.vibrate(duration);
-	}
-
-	public static void setApplication(Application application) {
-		appContext = application;
 	}
 
 	public static void setVibration(boolean vibrationEnabled) {

@@ -17,12 +17,11 @@
 
 package ru.playsoftware.j2meloader.crashes;
 
-import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Process;
 import android.util.Base64;
+import android.view.Display;
 
 import androidx.annotation.NonNull;
 
@@ -43,8 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.microedition.util.ContextHolder;
-
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.crashes.models.AbstractLog;
 import ru.playsoftware.j2meloader.crashes.models.Attachment;
 import ru.playsoftware.j2meloader.crashes.models.Device;
@@ -95,7 +93,7 @@ public class AppCenterCollector implements Collector {
 		}
 
 		errorLog.processId = Process.myPid();
-		errorLog.processName = getProcessName();
+		errorLog.processName = EmulatorApplication.getProcessName();
 
 		Device device = new Device();
 		device.appBuild = report.getString(ReportField.APP_VERSION_CODE);
@@ -107,7 +105,13 @@ public class AppCenterCollector implements Collector {
 		device.oemName = report.getString(ReportField.BRAND);
 		device.locale = Locale.getDefault().toString();
 		device.timeZoneOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 60 / 1000;
-		device.screenSize = ContextHolder.getDisplayWidth() + "x" + ContextHolder.getDisplayHeight();
+		JSONObject displays = (JSONObject) report.get(ReportField.DISPLAY.toString());
+		if (displays != null) {
+			JSONObject display = (JSONObject) displays.opt(Integer.toString(Display.DEFAULT_DISPLAY));
+			if (display != null) {
+				device.screenSize = display.optString("width") + "x" + display.optString("height");
+			}
+		}
 		errorLog.device = device;
 
 		errorLog.exception = getModelExceptionFromThrowable(reportBuilder.getException());
@@ -140,28 +144,6 @@ public class AppCenterCollector implements Collector {
 		RequestBody requestData = new RequestBody(logs);
 		Gson gson = new Gson();
 		return gson.toJson(requestData);
-	}
-
-	private static String getProcessName() {
-		String processName = "unknown";
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			processName = Application.getProcessName();
-		} else {
-			Context context = ContextHolder.getAppContext();
-			ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-			if (activityManager != null) {
-				List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
-				if (runningAppProcesses != null) {
-					for (ActivityManager.RunningAppProcessInfo info : runningAppProcesses) {
-						if (info.pid == Process.myPid()) {
-							processName = info.processName;
-							break;
-						}
-					}
-				}
-			}
-		}
-		return processName;
 	}
 
 	private ExceptionModel getModelExceptionFromThrowable(Throwable t) {

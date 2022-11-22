@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 import androidx.preference.PreferenceManager;
@@ -38,9 +39,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import javax.microedition.util.ContextHolder;
-
 import ru.playsoftware.j2meloader.util.Constants;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class EmulatorApplication extends Application {
 	private static final String[] VALID_SIGNATURES = {
@@ -49,20 +49,26 @@ public class EmulatorApplication extends Application {
 			"FA8AA497194847D5715BAA62C6344D75A936EBA6" // Private
 	};
 
+	private static EmulatorApplication instance;
+
 	private final SharedPreferences.OnSharedPreferenceChangeListener themeListener = (sharedPreferences, key) -> {
 		if (key.equals(Constants.PREF_THEME)) {
 			setNightMode(sharedPreferences.getString(Constants.PREF_THEME, null));
 		}
 	};
+	public static EmulatorApplication getInstance() {
+		return instance;
+	}
 
 	@SuppressWarnings("ConstantConditions")
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		instance = this;
 		if (BuildConfig.DEBUG) {
 			MultiDex.install(this);
 		}
-		ContextHolder.setApplication(this);
+
 		ACRA.init(this, new CoreConfigurationBuilder()
 				.withBuildConfigClass(BuildConfig.class)
 				.withParallel(false)
@@ -81,6 +87,15 @@ public class EmulatorApplication extends Application {
 		sp.registerOnSharedPreferenceChangeListener(themeListener);
 		setNightMode(sp.getString(Constants.PREF_THEME, null));
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+	}
+
+	@NonNull
+	public static String getProcessName() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			return Application.getProcessName();
+		} else {
+			return FileUtils.getText("/proc/self/cmdline").trim();
+		}
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")
