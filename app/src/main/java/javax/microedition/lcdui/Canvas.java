@@ -788,7 +788,7 @@ public abstract class Canvas extends Displayable {
 			initTex();
 			Bitmap bitmap = offscreenCopy.getBitmap();
 			program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
-			if (shaderFilter != null && shaderFilter.values != null) {
+			if (shaderFilter != null && shaderFilter.values != null && program.uSetting >= 0) {
 				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
 			}
 			isStarted = true;
@@ -797,7 +797,9 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			glViewport(0, 0, width, height);
-			glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);
+			if (program.uPixelDelta >= 0) {
+				glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);
+			}
 		}
 
 		@Override

@@ -53,10 +53,10 @@ public class ShaderProgram {
 					glReleaseShaderCompiler();
 					return;
 				}
-				ViewHandler.postEvent(() -> Toast.makeText(ContextHolder.getActivity(),
-						"Error loading shader - default shader is used!",
-						Toast.LENGTH_LONG).show());
 			}
+			ViewHandler.postEvent(() -> Toast.makeText(ContextHolder.getActivity(),
+					"Error loading shader - default shader is used!",
+					Toast.LENGTH_LONG).show());
 		}
 		String vertexCode = ContextHolder.getAssetAsString(VERTEX);
 		String fragmentCode = ContextHolder.getAssetAsString(FRAGMENT);
@@ -137,6 +137,8 @@ public class ShaderProgram {
 		vbo.position(2);
 		glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, false, 4 * 4, vbo);
 		glEnableVertexAttribArray(aTexCoord);
-		glUniform2f(uTexelDelta, 1.0f / width, 1.0f / height);
+		if (uTexelDelta >= 0) {
+			glUniform2f(uTexelDelta, 1.0f / width, 1.0f / height);
+		}
 	}
 }
