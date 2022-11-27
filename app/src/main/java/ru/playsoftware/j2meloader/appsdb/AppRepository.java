@@ -100,7 +100,7 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		listLiveData.observe(owner, observer);
 	}
 
-	public Flowable<List<AppItem>> getAll() {
+	private Flowable<List<AppItem>> getAll() {
 		return appItemDao.getAll(new MutableSortSQLiteQuery(this, orderTerms));
 	}
 
@@ -155,13 +155,9 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		compositeDisposable.clear();
 	}
 
-	public int getSort() {
-		return sortVariant;
-	}
-
 	private void setSort(int variant) {
 		if (this.sortVariant == variant) {
-			variant |= 0x80000000;
+			return;
 		}
 		this.sortVariant = variant;
 		Disposable disposable = appItemDao.getAllSingle(new MutableSortSQLiteQuery(this, orderTerms))
@@ -236,7 +232,7 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 
 		@Override
 		public String getSql() {
-			int sortVariant = repository.getSort();
+			int sortVariant = repository.sortVariant;
 			String order = sortVariant >= 0 ? " ASC" : " DESC";
 			return SELECT + String.format(orderTerms[sortVariant & 0x7FFFFFFF], order);
 		}

@@ -365,20 +365,16 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private void showSortDialog() {
-		int variant = appRepository.getSort();
-		SortAdapter adapter = new SortAdapter(requireActivity(), variant);
-		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
+		int variant = preferences.getInt(PREF_APP_SORT, 0);
+		FragmentActivity activity = requireActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity)
 				.setTitle(R.string.pref_app_sort_title)
-				.setAdapter(adapter, (d, v) -> {
-					adapter.setVariant(v);
-					setSort(v);
-					d.dismiss();
-				});
+				.setAdapter(new SortAdapter(activity, variant), (d, v) -> setSort(v));
 		builder.show();
 	}
 
 	private void setSort(int sortVariant) {
-		if (appRepository.getSort() == sortVariant) {
+		if (preferences.getInt(PREF_APP_SORT, 0) == sortVariant) {
 			sortVariant |= 0x80000000;
 		}
 		preferences.edit().putInt(PREF_APP_SORT, sortVariant).apply();
@@ -393,17 +389,17 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	private static class SortAdapter extends ArrayAdapter<String> {
-		private int variant;
+		private final int variant;
 		private final Drawable drawableArrowDown;
 		private final Drawable drawableArrowUp;
 
-		public SortAdapter(FragmentActivity activity, int variant) {
-			super(activity,
+		public SortAdapter(Context context, int variant) {
+			super(context,
 					android.R.layout.simple_list_item_1,
-					activity.getResources().getStringArray(R.array.pref_app_sort_entries));
+					context.getResources().getStringArray(R.array.pref_app_sort_entries));
 			this.variant = variant;
-			drawableArrowDown = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_down);
-			drawableArrowUp = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_up);
+			drawableArrowDown = AppCompatResources.getDrawable(context, R.drawable.ic_arrow_down);
+			drawableArrowUp = AppCompatResources.getDrawable(context, R.drawable.ic_arrow_up);
 		}
 
 		@NonNull
@@ -417,14 +413,6 @@ public class AppsListFragment extends ListFragment {
 				tv.setCompoundDrawables(null, null, null, null);
 			}
 			return tv;
-		}
-
-		public void setVariant(int variant) {
-			if (variant == this.variant) {
-				variant |= 0x80000000;
-			}
-			this.variant = variant;
-			notifyDataSetChanged();
 		}
 	}
 
