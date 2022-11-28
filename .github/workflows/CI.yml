@@ -22,7 +22,7 @@ jobs:
       - name: Publish Artifact (Debug)
         uses: actions/upload-artifact@main
         with:
-          name: build
+          name: buildDebug
           path: |
             app/build/outputs/apk/dev/debug/*.apk
 
