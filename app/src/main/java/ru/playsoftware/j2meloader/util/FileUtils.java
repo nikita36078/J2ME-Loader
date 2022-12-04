@@ -105,16 +105,6 @@ public class FileUtils {
 				}
 			}
 		}
-		if ((context.getPackageName() + ".provider").equals(uri.getAuthority())) {
-			try {
-				File file = Utils.getFileForUri(uri);
-				if (file.isFile()) {
-					return file;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		File tmpDir = new File(context.getCacheDir(), "installer");
 		if (!tmpDir.exists() && !tmpDir.mkdirs()) {
 			throw new IOException("Can't create directory: " + tmpDir);

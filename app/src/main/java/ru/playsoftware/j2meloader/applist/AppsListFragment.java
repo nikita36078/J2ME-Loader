@@ -69,8 +69,6 @@ import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.nononsenseapps.filepicker.Utils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -178,7 +176,7 @@ public class AppsListFragment extends ListFragment {
 			return;
 		}
 		preferences.edit()
-				.putString(Constants.PREF_LAST_PATH, Utils.getFileForUri(uri).getAbsolutePath())
+				.putString(Constants.PREF_LAST_PATH, uri.getPath())
 				.apply();
 		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 	}
