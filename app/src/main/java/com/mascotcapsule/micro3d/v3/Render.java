@@ -353,19 +353,20 @@ class Render {
 				final Program.Color program = Program.color;
 				program.use();
 
+				int offset = model.numVerticesPolyT;
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
 				glEnableVertexAttribArray(program.aPosition);
-				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 0);
+				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
 
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
-				glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 5, 0);
+				glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 5, 5 * offset);
 				glEnableVertexAttribArray(program.aColorData);
 				glEnableVertexAttribArray(program.aMaterial);
-				glVertexAttribPointer(program.aMaterial, 2, GL_UNSIGNED_BYTE, false, 5, 3);
+				glVertexAttribPointer(program.aMaterial, 2, GL_UNSIGNED_BYTE, false, 5, 5 * offset + 3);
 
 				if (normals != null) {
 					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
-					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
+					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
 					glEnableVertexAttribArray(program.aNormal);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
@@ -472,7 +473,7 @@ class Render {
 	private void renderModel(Model model, boolean enableBlending) {
 		int[][] meshes = model.subMeshesLengthsC;
 		int length = meshes.length;
-		int pos = model.numVerticesPolyT;
+		int pos = 0;
 		int blendMode = 0;
 		if (flushStep == 1) {
 			if (enableBlending) length = 1;
