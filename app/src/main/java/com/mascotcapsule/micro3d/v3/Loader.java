@@ -31,15 +31,18 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 class Loader {
+	private static final int BMP_FILE_HEADER_SIZE = 14;
+	private static final int BMP_VERSION_3 = 40;
+	private static final int BMP_VERSION_CORE = 12;
 	private static final int[] POOL_NORMALS = new int[]{0, 0, 64, 0, 0, -64, 0, 0};
 	private static final int[] SIZES = {8, 10, 13, 16};
-	private final byte[] mBytes;
+	private final byte[] data;
 	private int pos;
 	private int cached;
 	private int cache;
 
 	private Loader(byte[] bytes) {
-		this.mBytes = bytes;
+		this.data = bytes;
 	}
 
 	static Model loadMbacData(byte[] bytes) throws IOException {
@@ -230,52 +233,52 @@ class Loader {
 	}
 
 	static Action[] loadMtraData(byte[] bytes) throws IOException {
-		Loader reader = new Loader(bytes);
-		if (reader.readUByte() != 'M' || reader.readUByte() != 'T') {
+		Loader loader = new Loader(bytes);
+		if (loader.readUByte() != 'M' || loader.readUByte() != 'T') {
 			throw new RuntimeException("Not a MTRA file");
 		}
-		int version = reader.readUByte();
-		if (reader.readUByte() != 0 || version < 2 || version > 5) {
+		int version = loader.readUByte();
+		if (loader.readUByte() != 0 || version < 2 || version > 5) {
 			throw new RuntimeException("Unsupported version: " + version);
 		}
 
-		int numActions = reader.readUShort();
-		int numBones = reader.readUShort();
+		int numActions = loader.readUShort();
+		int numBones = loader.readUShort();
 		Action[] actions = new Action[numActions];
 		// number of bones by transform types
 		int[] transTypeCounts = new int[8];
 		for (int i = 0; i < 8; i++) {
-			transTypeCounts[i] = reader.readUShort();
+			transTypeCounts[i] = loader.readUShort();
 		}
 		if (transTypeCounts[7] != 0) {
 			// index 7 is unknown, I did not find mtra with non-zero value
 			Log.w(TAG, "ActTableData: transTypeCounts[7] = " + transTypeCounts[7]);
 		}
 		//noinspection unused
-		int dataSize = reader.readInt();
+		int dataSize = loader.readInt();
 		// 'dataSize' and 'transTypeCounts' may be used for allocate memory and verify data)
 
 		for (int action = 0; action < numActions; action++) {
-			int keyframes = reader.readUShort();
+			int keyframes = loader.readUShort();
 			Action act = new Action(keyframes, numBones);
 			actions[action] = act;
 
 			for (int bone = 0; bone < numBones; bone++) {
-				act.boneActions[bone] = reader.readBoneAction(act, bone * 12);
+				act.boneActions[bone] = loader.readBoneAction(act, bone * 12);
 			}
 			if (version < 5) continue;
 			// dynamic polygons chunk
-			int count = reader.readUShort();
+			int count = loader.readUShort();
 			final SparseIntArray sparseIntArray = new SparseIntArray(count);
 			actions[action].dynamic = sparseIntArray;
 			for (int j = 0; j < count; j++) {
-				int frame = reader.readUShort();
-				int pattern = reader.readInt();
+				int frame = loader.readUShort();
+				int pattern = loader.readInt();
 				sparseIntArray.put(frame, pattern);
 			}
 		}
 
-		int available = reader.available();
+		int available = loader.available();
 		if (version >= 4) {
 			available -= 20;
 		}
@@ -284,6 +287,84 @@ class Loader {
 		}
 
 		return actions;
+	}
+
+	static TextureData loadBmpData(byte[] bytes) throws IOException {
+		Loader loader = new Loader(bytes);
+		if (loader.readUByte() != 'B' || loader.readUByte() != 'M') {
+			throw new RuntimeException("Not a BMP!");
+		}
+		loader.skip(BMP_FILE_HEADER_SIZE - 6);
+
+		int rasterOffset = loader.readInt();
+		int dibHeaderSize = loader.readInt();
+
+		int width;
+		int height;
+		boolean reversed;
+		if (dibHeaderSize == BMP_VERSION_CORE) {
+			width = loader.readUShort();
+			height = loader.readUShort();
+			loader.skip(2);
+			int bpp = loader.readUShort();
+			if (bpp != 8) {
+				throw new RuntimeException("Unsupported BMP format: bpp = " + bpp);
+			}
+			reversed = true;
+		} else if (dibHeaderSize == BMP_VERSION_3) {
+			width = loader.readInt();
+			int h = loader.readInt();
+			if (h < 0) {
+				height = -h;
+				reversed = false;
+			} else {
+				height = h;
+				reversed = true;
+			}
+			loader.skip(2);
+			int bpp = loader.readUShort();
+			if (bpp != 8) {
+				throw new RuntimeException("Unsupported BMP format: bpp = " + bpp);
+			}
+			int compression = loader.readInt();
+			if (compression != 0) {
+				throw new RuntimeException("Unsupported BMP format: compression = " + compression);
+			}
+			loader.skip(20);
+		} else {
+			throw new RuntimeException("Unsupported BMP version = " + dibHeaderSize);
+		}
+
+		int paletteOffset = BMP_FILE_HEADER_SIZE + dibHeaderSize;
+
+		ByteBuffer raster = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder());
+		int remainder = width % 4;
+		int stride = remainder == 0 ? width : width + 4 - remainder;
+		if (reversed) {
+			for (int i = height - 1; i >= 0; i--) {
+				for (int j = rasterOffset + i * stride, s = j + width; j < s; j++) {
+					byte idx = bytes[j];
+					int p = (idx & 0xff) * 4 + paletteOffset;
+					byte b = bytes[p++];
+					byte g = bytes[p++];
+					byte r = bytes[p];
+					raster.put(r).put(g).put(b).put((byte) (idx == 0 ? 0 : 0xff));
+				}
+			}
+		} else {
+			for (int i = 0; i < height; i++) {
+				for (int j = rasterOffset + i * stride, s = j + width; j < s; j++) {
+					byte idx = bytes[j];
+					int p = (idx & 0xff) * 4 + paletteOffset;
+					byte b = bytes[p++];
+					byte g = bytes[p++];
+					byte r = bytes[p];
+					raster.put(r).put(g).put(b).put((byte) (idx == 0 ? 0 : 0xff));
+				}
+			}
+		}
+
+		return new TextureData(raster, width, height);
 	}
 
 	private void readVerticesV1(FloatBuffer vertices) throws IOException {
@@ -340,7 +421,7 @@ class Loader {
 		}
 	}
 
-	private void readPolyC(Model data, int numVertex, int numColor, int numTriangles) throws IOException {
+	private void readPolyC(Model model, int numVertex, int numColor, int numTriangles) throws IOException {
 		int materialBits = readUByte();
 		int vertexIndexBits = readUByte();
 		int colorBits = readUByte();
@@ -353,7 +434,7 @@ class Loader {
 			colors[i] = (byte) readUBits(colorBits);
 		}
 
-		Model.Polygon[] polygonsC = data.polygonsC;
+		Model.Polygon[] polygonsC = model.polygonsC;
 		for (int i = 0; i < numTriangles; i++) {
 			int material = readUBits(materialBits) << 1;
 			if ((material & 0xFC09) != 0) {
@@ -411,9 +492,9 @@ class Loader {
 		}
 	}
 
-	private void readPolyV1(Model data, int numVertices, int numPolyT3) throws IOException {
+	private void readPolyV1(Model model, int numVertices, int numPolyT3) throws IOException {
 
-		Model.Polygon[] polygons = data.polygonsT;
+		Model.Polygon[] polygons = model.polygonsT;
 		for (int i = 0; i < numPolyT3; i++) {
 			int material = readUShort();
 			if ((material & 0xFFF9) != 0) {
@@ -469,11 +550,11 @@ class Loader {
 		}
 	}
 
-	private void readPolyV2(Model data, int numVertex, int numTriangles) throws IOException {
+	private void readPolyV2(Model model, int numVertex, int numTriangles) throws IOException {
 		int matBitSize = readUByte();
 		int vertexIdxSize = readUByte();
 
-		Model.Polygon[] polygons = data.polygonsT;
+		Model.Polygon[] polygons = model.polygonsT;
 		for (int i = 0; i < numTriangles; i++) {
 			int material = readUBits(matBitSize);
 			if ((material & 0xFF88) != 0) {
@@ -532,7 +613,7 @@ class Loader {
 		}
 	}
 
-	private void readPolyV3(Model data, int numVertex, int numTriangles) throws IOException {
+	private void readPolyV3(Model model, int numVertex, int numTriangles) throws IOException {
 		int materialBits = readUBits(8);
 		int vertexIndexBits = readUBits(8);
 		int uvBits = readUBits(8);
@@ -540,7 +621,7 @@ class Loader {
 		if (unknownByte != 0) Log.w(TAG, "PolyT v3: unknownByte = " + unknownByte);
 
 
-		Model.Polygon[] polygons = data.polygonsT;
+		Model.Polygon[] polygons = model.polygonsT;
 		for (int i = 0; i < numTriangles; i++) {
 			int material = readUBits(materialBits);
 			if ((material & 0xFC08) != 0)
@@ -599,8 +680,8 @@ class Loader {
 		}
 	}
 
-	private int readBones(int numBones, Model data) throws IOException {
-		ByteBuffer bones = data.bones;
+	private int readBones(int numBones, Model model) throws IOException {
+		ByteBuffer bones = model.bones;
 
 		int boneVertexSum = 0;
 		for (int i = 0; i < numBones; i++) {
@@ -811,33 +892,33 @@ class Loader {
 	}
 
 	private byte readByte() throws IOException {
-		if (pos >= mBytes.length) throw new EOFException();
-		return mBytes[pos++];
+		if (pos >= data.length) throw new EOFException();
+		return data[pos++];
 	}
 
 	private int readUByte() throws IOException {
-		if (pos >= mBytes.length) throw new EOFException();
-		return mBytes[pos++] & 0xff;
+		if (pos >= data.length) throw new EOFException();
+		return data[pos++] & 0xff;
 	}
 
 	private short readShort() throws IOException {
-		if (pos + 1 >= mBytes.length) throw new EOFException();
-		return (short) (mBytes[pos++] & 0xff | mBytes[pos++] << 8);
+		if (pos + 1 >= data.length) throw new EOFException();
+		return (short) (data[pos++] & 0xff | data[pos++] << 8);
 	}
 
 	private int readUShort() throws IOException {
-		if (pos + 1 >= mBytes.length) throw new EOFException();
-		return mBytes[pos++] & 0xff | (mBytes[pos++] & 0xff) << 8;
+		if (pos + 1 >= data.length) throw new EOFException();
+		return data[pos++] & 0xff | (data[pos++] & 0xff) << 8;
 	}
 
 	private int readInt() throws IOException {
-		if (pos + 3 >= mBytes.length) throw new EOFException();
-		return mBytes[pos++] & 0xff | (mBytes[pos++] & 0xff) << 8
-				| (mBytes[pos++] & 0xff) << 16 | mBytes[pos++] << 24;
+		if (pos + 3 >= data.length) throw new EOFException();
+		return data[pos++] & 0xff | (data[pos++] & 0xff) << 8
+				| (data[pos++] & 0xff) << 16 | data[pos++] << 24;
 	}
 
 	private int available() {
-		return mBytes.length - pos;
+		return data.length - pos;
 	}
 
 	private int readUBits(int size) throws IOException {
@@ -864,5 +945,10 @@ class Loader {
 	private void clearCache() {
 		cache = 0;
 		cached = 0;
+	}
+
+	private void skip(int n) throws EOFException {
+		if (pos + n >= data.length) throw new EOFException();
+		pos += n;
 	}
 }

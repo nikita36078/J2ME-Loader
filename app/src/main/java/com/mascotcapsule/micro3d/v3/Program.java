@@ -148,7 +148,6 @@ abstract class Program {
 	static final class Color extends Program {
 		private static final String VERTEX = "shaders/color.vsh";
 		private static final String FRAGMENT = "shaders/color.fsh";
-		int uSphereUnit;
 		int uSphereSize;
 		int uToonThreshold;
 		int uToonHigh;
@@ -169,11 +168,12 @@ abstract class Program {
 			uAmbIntensity = glGetUniformLocation(id, "uAmbIntensity");
 			uDirIntensity = glGetUniformLocation(id, "uDirIntensity");
 			uLightDir = glGetUniformLocation(id, "uLightDir");
-			uSphereUnit = glGetUniformLocation(id, "uSphereUnit");
 			uSphereSize = glGetUniformLocation(id, "uSphereSize");
 			uToonThreshold = glGetUniformLocation(id, "uToonThreshold");
 			uToonHigh = glGetUniformLocation(id, "uToonHigh");
 			uToonLow = glGetUniformLocation(id, "uToonLow");
+			use();
+			glUniform1i(glGetUniformLocation(id, "uSphereUnit"), 2);
 		}
 
 		void setColor(int rgb) {
@@ -200,7 +200,6 @@ abstract class Program {
 		private static final String VERTEX = "shaders/simple.vsh";
 		private static final String FRAGMENT = "shaders/simple.fsh";
 		int aTexture;
-		int uTextureUnit;
 
 		Simple() {
 			super(VERTEX, FRAGMENT);
@@ -209,21 +208,19 @@ abstract class Program {
 		protected void getLocations() {
 			aPosition = glGetAttribLocation(id, "a_position");
 			aTexture = glGetAttribLocation(id, "a_texcoord0");
-			uTextureUnit = glGetUniformLocation(id, "sampler0");
+			use();
+			glUniform1i(glGetUniformLocation(id, "sampler0"), 1);
 		}
 	}
 
 	static final class Tex extends Program {
 		private static final String VERTEX = "shaders/tex.vsh";
 		private static final String FRAGMENT = "shaders/tex.fsh";
-		int uTextureUnit;
 		int uTexSize;
-		int uSphereUnit;
 		int uSphereSize;
 		int uToonThreshold;
 		int uToonHigh;
 		int uToonLow;
-		int uColorKey;
 
 		Tex() {
 			super(VERTEX, FRAGMENT);
@@ -242,10 +239,7 @@ abstract class Program {
 			aNormal = glGetAttribLocation(id, "aNormal");
 			aColorData = glGetAttribLocation(id, "aColorData");
 			aMaterial = glGetAttribLocation(id, "aMaterial");
-			uTextureUnit = glGetUniformLocation(id, "uTextureUnit");
-			uSphereUnit = glGetUniformLocation(id, "uSphereUnit");
 			uTexSize = glGetUniformLocation(id, "uTexSize");
-			uColorKey = glGetUniformLocation(id, "uColorKey");
 			uSphereSize = glGetUniformLocation(id, "uSphereSize");
 			uMatrix = glGetUniformLocation(id, "uMatrix");
 			uMatrixMV = glGetUniformLocation(id, "uMatrixMV");
@@ -255,18 +249,16 @@ abstract class Program {
 			uToonThreshold = glGetUniformLocation(id, "uToonThreshold");
 			uToonHigh = glGetUniformLocation(id, "uToonHigh");
 			uToonLow = glGetUniformLocation(id, "uToonLow");
-		}
-
-		void enableTexUnit() {
-			glActiveTexture(GL_TEXTURE0);
-			glUniform1i(uTextureUnit, 0);
+			use();
+			glUniform1i(glGetUniformLocation(id, "uTextureUnit"), 0);
+			glUniform1i(glGetUniformLocation(id, "uSphereUnit"), 2);
 		}
 
 		void setTex(Texture tex) {
 			if (tex != null) {
-				glUniform2f(uTexSize, tex.width, tex.height);
-				glUniform3fv(uColorKey, 1, tex.getColorKey());
+				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, tex.getId());
+				glUniform2f(uTexSize, tex.getWidth(), tex.getHeight());
 			} else {
 				glUniform2f(uTexSize, 256, 256);
 				glBindTexture(GL_TEXTURE_2D, 0);
@@ -289,10 +281,8 @@ abstract class Program {
 	static class Sprite extends Program {
 		private static final String VERTEX = "shaders/sprite.vsh";
 		private static final String FRAGMENT = "shaders/sprite.fsh";
-		int uTexUnit;
 		int uTexSize;
 		int uIsTransparency;
-		int uColorKey;
 
 		Sprite() {
 			super(VERTEX, FRAGMENT);
@@ -309,10 +299,16 @@ abstract class Program {
 		protected void getLocations() {
 			aPosition = glGetAttribLocation(id, "aPosition");
 			aColorData = glGetAttribLocation(id, "aColorData");
-			uTexUnit = glGetUniformLocation(id, "uTexUnit");
 			uTexSize = glGetUniformLocation(id, "uTexSize");
-			uColorKey = glGetUniformLocation(id, "uColorKey");
 			uIsTransparency = glGetUniformLocation(id, "uIsTransparency");
+			use();
+			glUniform1i(glGetUniformLocation(id, "uTextureUnit"), 0);
+		}
+
+		public void setTexture(Texture texture) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture.getId());
+			glUniform2f(uTexSize, texture.getWidth(), texture.getHeight());
 		}
 	}
 }

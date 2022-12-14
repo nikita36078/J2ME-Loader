@@ -16,12 +16,14 @@ void main() {
         gl_FragColor = vec4(vColor, 1.0);
         return;
     }
-    vec4 spec = uSphereSize.x < -0.5 || vIsReflect < 0.5 ?
-        vec4(0.0) : texture2D(uSphereUnit, (normalize(vNormal).xy + 1.0) * 0.5 * uSphereSize);
     float lambert_factor = max(dot(normalize(vNormal), uLightDir), 0.0);
     float light = min(vAmbIntensity + uDirIntensity * lambert_factor, 1.0);
     if (uToonThreshold > -0.5) {
         light = light < uToonThreshold ? uToonLow : uToonHigh;
     }
-    gl_FragColor = vec4(vColor * light + spec.rgb, 1.0);
+    vec3 color = vColor * light;
+    if (uSphereSize.x > -0.5 && vIsReflect > 0.5) {
+        color += texture2D(uSphereUnit, ((normalize(vNormal).xy + 1.0) * 0.5 * uSphereSize)).rgb;
+    }
+    gl_FragColor = vec4(color, 1.0);
 }

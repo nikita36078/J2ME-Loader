@@ -234,9 +234,6 @@ class Render {
 		glVertexAttribPointer(program.aTexture, 2, GL_FLOAT, false, 4 * 4, BG_VBO);
 		glEnableVertexAttribArray(program.aTexture);
 
-		// юнит текстуры
-		glUniform1i(program.uTextureUnit, 1);
-
 		if (preProcess) {
 			glDisable(GL_BLEND);
 		} else {
@@ -307,6 +304,7 @@ class Render {
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals, GL_STREAM_DRAW);
 			}
+			Texture sphere = effect.texture;
 			if (model.hasPolyT) {
 				final Program.Tex program = Program.tex;
 				program.use();
@@ -332,11 +330,10 @@ class Render {
 
 				program.bindMatrices(mvp, mvm);
 				program.setLight(effect.isLighting ? effect.light : null);
-				if (effect.isLighting && effect.texture != null) {
+				if (effect.isLighting && sphere != null) {
 					glActiveTexture(GL_TEXTURE2);
-					glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
-					glUniform1i(program.uSphereUnit, 2);
-					glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
+					glBindTexture(GL_TEXTURE_2D, sphere.getId());
+					glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
 				} else {
 					glUniform2f(program.uSphereSize, -1, -1);
 				}
@@ -373,11 +370,10 @@ class Render {
 				}
 				program.bindMatrices(mvp, mvm);
 				program.setLight(effect.isLighting ? effect.light : null);
-				if (effect.isLighting && effect.texture != null) {
+				if (effect.isLighting && sphere != null) {
 					glActiveTexture(GL_TEXTURE2);
-					glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
-					glUniform1i(program.uSphereUnit, 2);
-					glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
+					glBindTexture(GL_TEXTURE_2D, sphere.getId());
+					glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
 				} else {
 					glUniform2f(program.uSphereSize, -1, -1);
 				}
@@ -425,7 +421,6 @@ class Render {
 	private void renderModel(Model model, Texture[] textures, Effect3D effect) {
 		if (textures == null || textures.length == 0) return;
 		Program.Tex program = Program.tex;
-		program.enableTexUnit();
 		int[][][] meshes = model.subMeshesLengthsT;
 		int length = meshes.length;
 		int blendMode = 0;
@@ -911,11 +906,7 @@ class Render {
 		glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 2, tcBuf);
 		glEnableVertexAttribArray(program.aColorData);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture.getId());
-		glUniform1i(program.uTexUnit, 0);
-		glUniform2f(program.uTexSize, texture.width, texture.height);
-		glUniform3fv(program.uColorKey, 1, texture.getColorKey());
+		program.setTexture(texture);
 
 		applyBlending(blendEnabled ? blend >> 4 : 0);
 		glUniform1i(program.uIsTransparency, (command & PATTR_COLORKEY));
@@ -930,11 +921,11 @@ class Render {
 		Program.Color program = Program.color;
 		program.use();
 		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
-		if (effect.isLighting && effect.texture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
+		Texture sphere = effect.texture;
+		if (effect.isLighting && sphere != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
-			glUniform1i(program.uSphereUnit, 2);
-			glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
+			glBindTexture(GL_TEXTURE_2D, sphere.getId());
+			glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
 		} else {
 			glUniform2f(program.uSphereSize, -1, -1);
 		}
@@ -974,11 +965,11 @@ class Render {
 		Program.Color program = Program.color;
 		program.use();
 		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
-		if (effect.isLighting && effect.texture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
+		Texture sphere = effect.texture;
+		if (effect.isLighting && sphere != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
-			glUniform1i(program.uSphereUnit, 2);
-			glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
+			glBindTexture(GL_TEXTURE_2D, sphere.getId());
+			glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
 		} else {
 			glUniform2f(program.uSphereSize, -1, -1);
 		}
@@ -1024,11 +1015,11 @@ class Render {
 				effect.isLighting ? 1 : 0,
 				effect.isReflection ? 1 : 0,
 				command & PATTR_COLORKEY);
-		if (effect.isLighting && effect.texture != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
+		Texture sphere = effect.texture;
+		if (effect.isLighting && sphere != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
 			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, effect.texture.getId());
-			glUniform1i(program.uSphereUnit, 2);
-			glUniform2f(program.uSphereSize, 64.0f / effect.texture.width, 64.0f / effect.texture.height);
+			glBindTexture(GL_TEXTURE_2D, sphere.getId());
+			glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
 		} else {
 			glUniform2f(program.uSphereSize, -1, -1);
 		}
@@ -1056,7 +1047,6 @@ class Render {
 		glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 2, texCoords);
 		glEnableVertexAttribArray(program.aColorData);
 
-		program.enableTexUnit();
 		program.setTex(texture);
 
 		glDisable(GL_CULL_FACE);
