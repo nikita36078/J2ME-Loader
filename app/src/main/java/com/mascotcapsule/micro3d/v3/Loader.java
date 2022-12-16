@@ -34,7 +34,7 @@ class Loader {
 	private static final int BMP_FILE_HEADER_SIZE = 14;
 	private static final int BMP_VERSION_3 = 40;
 	private static final int BMP_VERSION_CORE = 12;
-	private static final int[] POOL_NORMALS = new int[]{0, 0, 64, 0, 0, -64, 0, 0};
+	private static final int[] POOL_NORMALS = new int[]{0, 0, 4096, 0, 0, -4096, 0, 0};
 	private static final int[] SIZES = {8, 10, 13, 16};
 	private final byte[] data;
 	private int pos;
@@ -408,10 +408,10 @@ class Loader {
 				y = POOL_NORMALS[type++];
 				x = POOL_NORMALS[type];
 			} else {
-				x = (x << 25) >> 25;
-				y = (readUBits(7) << 25) >> 25;
+				x = (x << 25) >> 19;
+				y = (readUBits(7) << 25) >> 19;
 				int sign = readUBits(1);
-				int dq = 4096 - x * x - y * y;
+				int dq = 4096 * 4096 - x * x - y * y;
 				z = dq > 0 ? (int) Math.round(Math.sqrt(dq)) : 0;
 				if (sign == 1) z = -z;
 			}

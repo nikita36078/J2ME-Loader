@@ -199,7 +199,7 @@ abstract class Program {
 			if (sphere != null) {
 				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_2D, sphere.getId());
-				glUniform2f(uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
+				glUniform2f(uSphereSize, sphere.getWidth(), sphere.getHeight());
 			} else {
 				glUniform2f(uSphereSize, -1, -1);
 			}
@@ -291,7 +291,7 @@ abstract class Program {
 			if (sphere != null) {
 				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_2D, sphere.getId());
-				glUniform2f(uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
+				glUniform2f(uSphereSize, sphere.getWidth(), sphere.getHeight());
 			} else {
 				glUniform2f(uSphereSize, -1, -1);
 			}

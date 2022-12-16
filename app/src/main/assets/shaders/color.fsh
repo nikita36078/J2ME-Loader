@@ -23,7 +23,7 @@ void main() {
     }
     vec3 color = vColor * light;
     if (uSphereSize.x > -0.5 && vIsReflect > 0.5) {
-        color += texture2D(uSphereUnit, ((normalize(vNormal).xy + 1.0) * 0.5 * uSphereSize)).rgb;
+        color += texture2D(uSphereUnit, (vNormal.xy / 128.0 + 32.0) / uSphereSize).rgb;
     }
     gl_FragColor = vec4(color, 1.0);
 }

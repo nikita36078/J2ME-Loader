@@ -29,7 +29,7 @@ void main() {
     }
     color.rgb *= light;
     if (uSphereSize.x > -0.5 && vIsReflect > 0.5) {
-        color.rgb += texture2D(uSphereUnit, ((normalize(vNormal).xy + 1.0) * 0.5 * uSphereSize)).rgb;
+        color.rgb += texture2D(uSphereUnit, (vNormal.xy / 128.0 + 32.0) / uSphereSize).rgb;
     }
     gl_FragColor = vec4(color.rgb, 1.0);
 }
