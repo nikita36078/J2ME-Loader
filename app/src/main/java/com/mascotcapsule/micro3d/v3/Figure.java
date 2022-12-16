@@ -36,8 +36,8 @@ public class Figure {
 	Stack<FigureNode> stack = new Stack<>();
 	Model data;
 	Texture[] textures;
-	int selectedTex = -1;
-	int currentPattern;
+	int textureIndex = -1;
+	int pattern;
 
 	@SuppressWarnings("unused")
 	public Figure(byte[] b) {
@@ -128,7 +128,7 @@ public class Figure {
 			int iFrame = frame < 0 ? 0 : frame >> 16;
 			for (int i = dynamic.size() - 1; i >= 0; i--) {
 				if (dynamic.keyAt(i) <= iFrame) {
-					currentPattern = dynamic.valueAt(i);
+					pattern = dynamic.valueAt(i);
 					applyPattern();
 					break;
 				}
@@ -146,7 +146,7 @@ public class Figure {
 			int[] indices = p.indices;
 			int length = indices.length;
 			int pp = p.pattern;
-			if ((pp & currentPattern) == pp) {
+			if ((pp & pattern) == pp) {
 				for (int i = 0; i < length; i++) {
 					indexArray[pos++] = indices[i];
 				}
@@ -162,7 +162,7 @@ public class Figure {
 			int[] indices = p.indices;
 			int length = indices.length;
 			int pp = p.pattern;
-			if ((pp & currentPattern) == pp) {
+			if ((pp & pattern) == pp) {
 				for (int i = 0; i < length; i++) {
 					indexArray[pos++] = indices[i];
 				}
@@ -176,10 +176,10 @@ public class Figure {
 	}
 
 	public final Texture getTexture() {
-		if (selectedTex < 0) {
+		if (textureIndex < 0) {
 			return null;
 		}
-		return textures[selectedTex];
+		return textures[textureIndex];
 	}
 
 	public final void setTexture(Texture tex) {
@@ -189,7 +189,7 @@ public class Figure {
 			throw new IllegalArgumentException();
 
 		textures = new Texture[]{tex};
-		selectedTex = 0;
+		textureIndex = 0;
 	}
 
 	public final void setTexture(Texture[] t) {
@@ -200,7 +200,7 @@ public class Figure {
 			if (texture.isSphere) throw new IllegalArgumentException();
 		}
 		textures = t;
-		selectedTex = -1;
+		textureIndex = -1;
 	}
 
 	@SuppressWarnings("WeakerAccess")
@@ -216,7 +216,7 @@ public class Figure {
 		if (idx < 0 || idx >= getNumTextures()) {
 			throw new IllegalArgumentException();
 		}
-		selectedTex = idx;
+		textureIndex = idx;
 	}
 
 	@SuppressWarnings("unused")
@@ -226,7 +226,7 @@ public class Figure {
 
 	@SuppressWarnings("unused")
 	public synchronized final void setPattern(int idx) {
-		currentPattern = idx;
+		pattern = idx;
 		applyPattern();
 	}
 

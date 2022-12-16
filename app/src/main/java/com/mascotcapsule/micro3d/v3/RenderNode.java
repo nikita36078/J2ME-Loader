@@ -64,6 +64,7 @@ abstract class RenderNode implements Runnable {
 			} else {
 				this.effect = new Effect3D(effect);
 			}
+			this.effect.isToonShading = effect.toonHigh == Effect3D.TOON_SHADING;
 			this.x = x;
 			this.y = y;
 			synchronized (figure) {

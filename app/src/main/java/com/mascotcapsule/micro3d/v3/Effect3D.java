@@ -22,18 +22,18 @@ public class Effect3D {
 	public static final int TOON_SHADING = 1;
 
 	protected Light light;
-	int mShading;
 	protected Texture texture;
-	int mToonHigh;
-	int mToonLow;
-	int mToonThreshold;
+	int shading;
+	int toonHigh;
+	int toonLow;
+	int toonThreshold;
 	boolean isTransparency;
 	boolean isLighting;
 	boolean isReflection;
 	boolean isToonShading;
 
 	public Effect3D() {
-		mShading = NORMAL_SHADING;
+		shading = NORMAL_SHADING;
 		isTransparency = true;
 	}
 
@@ -45,7 +45,7 @@ public class Effect3D {
 			throw new IllegalArgumentException();
 		}
 		setLight(light);
-		mShading = shading;
+		this.shading = shading;
 		isTransparency = isEnableTrans;
 		texture = tex;
 	}
@@ -53,11 +53,11 @@ public class Effect3D {
 	Effect3D(Effect3D src) {
 		Light sl = src.light;
 		light = sl == null ? null : new Light(sl);
-		mShading = src.mShading;
+		shading = src.shading;
 		texture = src.texture;
-		mToonHigh = src.mToonHigh;
-		mToonLow = src.mToonLow;
-		mToonThreshold = src.mToonThreshold;
+		toonHigh = src.toonHigh;
+		toonLow = src.toonLow;
+		toonThreshold = src.toonThreshold;
 		isTransparency = src.isTransparency;
 		isLighting = src.isLighting;
 		isReflection = src.isReflection;
@@ -70,16 +70,15 @@ public class Effect3D {
 
 	public final void setLight(Light light) {
 		this.light = light;
-		isLighting = light != null;
 	}
 
 	@Deprecated
 	public final int getShading() {
-		return mShading;
+		return shading;
 	}
 
 	public final int getShadingType() {
-		return mShading;
+		return shading;
 	}
 
 	@Deprecated
@@ -91,7 +90,7 @@ public class Effect3D {
 		switch (shading) {
 			case NORMAL_SHADING:
 			case TOON_SHADING:
-				mShading = shading;
+				this.shading = shading;
 				return;
 			default:
 				throw new IllegalArgumentException();
@@ -100,29 +99,29 @@ public class Effect3D {
 
 	@Deprecated
 	public final int getThreshold() {
-		return mToonThreshold;
+		return toonThreshold;
 	}
 
 	public final int getToonThreshold() {
-		return mToonThreshold;
+		return toonThreshold;
 	}
 
 	@Deprecated
 	public final int getThresholdHigh() {
-		return mToonHigh;
+		return toonHigh;
 	}
 
 	public final int getToonHigh() {
-		return mToonHigh;
+		return toonHigh;
 	}
 
 	@Deprecated
 	public final int getThresholdLow() {
-		return mToonLow;
+		return toonLow;
 	}
 
 	public final int getToonLow() {
-		return mToonLow;
+		return toonLow;
 	}
 
 	@Deprecated
@@ -138,9 +137,9 @@ public class Effect3D {
 		} else if (low < 0 || low > 255) {
 			throw new IllegalArgumentException();
 		} else {
-			mToonThreshold = threshold;
-			mToonHigh = high;
-			mToonLow = low;
+			toonThreshold = threshold;
+			toonHigh = high;
+			toonLow = low;
 		}
 	}
 
@@ -184,11 +183,11 @@ public class Effect3D {
 	}
 
 	void set(Effect3D src) {
-		mShading = src.mShading;
+		shading = src.shading;
 		texture = src.texture;
-		mToonHigh = src.mToonHigh;
-		mToonLow = src.mToonLow;
-		mToonThreshold = src.mToonThreshold;
+		toonHigh = src.toonHigh;
+		toonLow = src.toonLow;
+		toonThreshold = src.toonThreshold;
 		isTransparency = src.isTransparency;
 		isLighting = src.isLighting;
 		isReflection = src.isReflection;

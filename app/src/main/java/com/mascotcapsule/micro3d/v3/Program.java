@@ -184,15 +184,25 @@ abstract class Program {
 		}
 
 		void setToonShading(Effect3D effect) {
-			boolean enable = effect.mShading == Effect3D.TOON_SHADING && effect.isToonShading;
-			glUniform1f(uToonThreshold, enable ? effect.mToonThreshold : -1.0f);
-			glUniform1f(uToonHigh, effect.mToonHigh);
-			glUniform1f(uToonLow, effect.mToonLow);
+			boolean enable = effect.shading == Effect3D.TOON_SHADING && effect.isToonShading;
+			glUniform1f(uToonThreshold, enable ? effect.toonThreshold : -1.0f);
+			glUniform1f(uToonHigh, effect.toonHigh);
+			glUniform1f(uToonLow, effect.toonLow);
 		}
 
 		void bindMatrices(float[] mvp, float[] mv) {
 			glUniformMatrix4fv(uMatrix, 1, false, mvp, 0);
 			glUniformMatrix4fv(uMatrixMV, 1, false, mv, 0);
+		}
+
+		void setSphere(Texture sphere) {
+			if (sphere != null) {
+				glActiveTexture(GL_TEXTURE2);
+				glBindTexture(GL_TEXTURE_2D, sphere.getId());
+				glUniform2f(uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
+			} else {
+				glUniform2f(uSphereSize, -1, -1);
+			}
 		}
 	}
 
@@ -266,15 +276,25 @@ abstract class Program {
 		}
 
 		void setToonShading(Effect3D effect) {
-			boolean enable = effect.mShading == Effect3D.TOON_SHADING && effect.isToonShading;
-			glUniform1f(uToonThreshold, enable ? effect.mToonThreshold / 255.0f : -1.0f);
-			glUniform1f(uToonHigh, effect.mToonHigh / 255.0f);
-			glUniform1f(uToonLow, effect.mToonLow / 255.0f);
+			boolean enable = effect.shading == Effect3D.TOON_SHADING && effect.isToonShading;
+			glUniform1f(uToonThreshold, enable ? effect.toonThreshold / 255.0f : -1.0f);
+			glUniform1f(uToonHigh, effect.toonHigh / 255.0f);
+			glUniform1f(uToonLow, effect.toonLow / 255.0f);
 		}
 
 		void bindMatrices(float[] mvp, float[] mv) {
 			glUniformMatrix4fv(uMatrix, 1, false, mvp, 0);
 			glUniformMatrix4fv(uMatrixMV, 1, false, mv, 0);
+		}
+
+		void setSphere(Texture sphere) {
+			if (sphere != null) {
+				glActiveTexture(GL_TEXTURE2);
+				glBindTexture(GL_TEXTURE_2D, sphere.getId());
+				glUniform2f(uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
+			} else {
+				glUniform2f(uSphereSize, -1, -1);
+			}
 		}
 	}
 

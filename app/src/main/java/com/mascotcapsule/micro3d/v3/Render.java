@@ -69,15 +69,16 @@ class Render {
 	private int width, height;
 	private final Rect gClip = new Rect();
 	private final Rect clip = new Rect();
-	private final boolean skipSprites = Boolean.getBoolean("micro3d.v3.skipSprites");
 	private boolean backCopied;
 	private final LinkedList<RenderNode> stack = new LinkedList<>();
 	private int flushStep;
-	private Texture[] textures;
+	private Texture[] textures = {};
 	private final boolean postCopy2D = !Boolean.getBoolean("micro3d.v3.render.no-mix2D3D");
 	private final boolean preCopy2D = !Boolean.getBoolean("micro3d.v3.render.background.ignore");
 	private int textureIdx;
 	private IntBuffer bufHandles;
+	private Texture specular;
+	private final Light light = new Light();
 
 	/**
 	 * Utility method for debugging OpenGL calls.
@@ -299,16 +300,15 @@ class Render {
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
 			glBufferData(GL_ARRAY_BUFFER, tcBuf.capacity(), tcBuf, GL_STREAM_DRAW);
 
-			if (normals != null) {
+			boolean isLight = effect.light != null && normals != null;
+			if (isLight) {
 				normals.rewind();
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals, GL_STREAM_DRAW);
 			}
-			Texture sphere = effect.texture;
 			if (model.hasPolyT) {
 				final Program.Tex program = Program.tex;
 				program.use();
-				program.setToonShading(effect);
 
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
 				glEnableVertexAttribArray(program.aPosition);
@@ -320,25 +320,21 @@ class Render {
 				glEnableVertexAttribArray(program.aMaterial);
 				glVertexAttribPointer(program.aMaterial, 3, GL_UNSIGNED_BYTE, false, 5, 2);
 
-				if (normals != null) {
+				if (isLight) {
 					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 					glEnableVertexAttribArray(program.aNormal);
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
+					program.setToonShading(effect);
+					program.setLight(effect.light);
+					program.setSphere(effect.texture);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
+					program.setLight(null);
 				}
 
 				program.bindMatrices(mvp, mvm);
-				program.setLight(effect.isLighting ? effect.light : null);
-				if (effect.isLighting && sphere != null) {
-					glActiveTexture(GL_TEXTURE2);
-					glBindTexture(GL_TEXTURE_2D, sphere.getId());
-					glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
-				} else {
-					glUniform2f(program.uSphereSize, -1, -1);
-				}
 				// Draw triangles
-				renderModel(model, textures, effect);
+				renderModel(textures, model, effect.isTransparency);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
 				glDisableVertexAttribArray(program.aMaterial);
@@ -361,23 +357,18 @@ class Render {
 				glEnableVertexAttribArray(program.aMaterial);
 				glVertexAttribPointer(program.aMaterial, 2, GL_UNSIGNED_BYTE, false, 5, 5 * offset + 3);
 
-				if (normals != null) {
+				if (isLight) {
 					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
 					glEnableVertexAttribArray(program.aNormal);
+					program.setLight(effect.light);
+					program.setSphere(effect.texture);
+					program.setToonShading(effect);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
+					program.setLight(null);
 				}
 				program.bindMatrices(mvp, mvm);
-				program.setLight(effect.isLighting ? effect.light : null);
-				if (effect.isLighting && sphere != null) {
-					glActiveTexture(GL_TEXTURE2);
-					glBindTexture(GL_TEXTURE_2D, sphere.getId());
-					glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
-				} else {
-					glUniform2f(program.uSphereSize, -1, -1);
-				}
-				program.setToonShading(effect);
 				renderModel(model, effect.isTransparency);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
@@ -391,7 +382,7 @@ class Render {
 
 	private float[] getProjectionMatrix(FigureLayout layout, int x, int y) {
 		float[] pm = new float[16];
-		switch (layout.settingIndex) {
+		switch (layout.projection) {
 			case COMMAND_PARALLEL_SCALE:
 				Utils.parallelScale(pm, x, y, layout, width, height);
 				break;
@@ -418,7 +409,7 @@ class Render {
 		return m;
 	}
 
-	private void renderModel(Model model, Texture[] textures, Effect3D effect) {
+	private void renderModel(Texture[] textures, Model model, boolean enableBlending) {
 		if (textures == null || textures.length == 0) return;
 		Program.Tex program = Program.tex;
 		int[][][] meshes = model.subMeshesLengthsT;
@@ -426,7 +417,7 @@ class Render {
 		int blendMode = 0;
 		int pos = 0;
 		if (flushStep == 1) {
-			if (effect.isTransparency) length = 1;
+			if (enableBlending) length = 1;
 			glDisable(GL_BLEND);
 		} else {
 			int[][] mesh = meshes[blendMode++];
@@ -546,8 +537,7 @@ class Render {
 								  FigureLayout layout) {
 		float[] pm = getProjectionMatrix(layout, 0, 0);
 		float[] mvm = getMvMatrix(layout);
-		int blend = command & Graphics3D.PATTR_BLEND_SUB;
-		boolean blendEnabled = (effect.isTransparency || (command & Graphics3D.ENV_ATTR_SEMI_TRANSPARENT) != 0) && blend != 0;
+		boolean blendEnabled = effect.isTransparency && (command & PATTR_BLEND_SUB) != 0;
 		if (blendEnabled) {
 			if (flushStep == 1) {
 				return;
@@ -592,7 +582,7 @@ class Render {
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vcBuf);
 				glEnableVertexAttribArray(program.aPosition);
 
-				applyBlending(blendEnabled ? blend >> 4 : 0);
+				applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
 				glDrawArrays(GL_POINTS, 0, numPrimitives);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
@@ -634,7 +624,7 @@ class Render {
 				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vcBuf);
 				glEnableVertexAttribArray(program.aPosition);
 
-				applyBlending(blendEnabled ? blend >> 4 : 0);
+				applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
 				glDrawArrays(GL_LINES, 0, numPrimitives * 2);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
@@ -803,15 +793,13 @@ class Render {
 				}
 				break;
 			}
-			case Graphics3D.PRIMITVE_POINT_SPRITES: {
-				renderSprites(texture, command, numPrimitives, vertices, texCoords, layout, pm, mvm, blend, blendEnabled);
+			case PRIMITVE_POINT_SPRITES: {
+				renderSprites(texture, command, numPrimitives, vertices, texCoords, layout, pm, mvm, blendEnabled);
 			}
 		}
 	}
 
-	private void renderSprites(Texture texture, int command, int numPrimitives, int[] vertices, int[] texCoords, FigureLayout layout, float[] pm, float[] mvm, int blend, boolean blendEnabled) {
-		if (skipSprites) return;
-
+	private void renderSprites(Texture texture, int command, int numPrimitives, int[] vertices, int[] texCoords, FigureLayout layout, float[] pm, float[] mvm, boolean blendEnabled) {
 		int numParams;
 		switch (command & PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) {
 			case PDATA_POINT_SPRITE_PARAMS_PER_CMD:
@@ -853,12 +841,12 @@ class Render {
 			float halfWidth;
 			float halfHeight;
 			switch (texCoords[texOffset + 7]) {
-				case Graphics3D.POINT_SPRITE_LOCAL_SIZE | Graphics3D.POINT_SPRITE_PERSPECTIVE:
+				case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_PERSPECTIVE:
 					halfWidth = width * pm[0] * 0.5f;
 					halfHeight = height * pm[5] * 0.5f;
 					break;
-				case Graphics3D.POINT_SPRITE_PIXEL_SIZE | Graphics3D.POINT_SPRITE_PERSPECTIVE:
-					if (layout.settingIndex <= Graphics3D.COMMAND_PARALLEL_SIZE) {
+				case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_PERSPECTIVE:
+					if (layout.projection <= COMMAND_PARALLEL_SIZE) {
 						halfWidth = width / this.width;
 						halfHeight = height / this.height;
 					} else {
@@ -866,8 +854,8 @@ class Render {
 						halfHeight = height / this.height * layout.near;
 					}
 					break;
-				case Graphics3D.POINT_SPRITE_LOCAL_SIZE | Graphics3D.POINT_SPRITE_NO_PERS:
-					if (layout.settingIndex <= Graphics3D.COMMAND_PARALLEL_SIZE) {
+				case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_NO_PERS:
+					if (layout.projection <= COMMAND_PARALLEL_SIZE) {
 						halfWidth = width * pm[0] * 0.5f;
 						halfHeight = height * pm[5] * 0.5f;
 					} else {
@@ -876,7 +864,7 @@ class Render {
 						halfHeight = height * pm[5] / near * 0.5f * vert[3];
 					}
 					break;
-				case Graphics3D.POINT_SPRITE_PIXEL_SIZE | Graphics3D.POINT_SPRITE_NO_PERS:
+				case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_NO_PERS:
 					halfWidth = width / this.width * vert[3];
 					halfHeight = height / this.height * vert[3];
 					break;
@@ -908,7 +896,7 @@ class Render {
 
 		program.setTexture(texture);
 
-		applyBlending(blendEnabled ? blend >> 4 : 0);
+		applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
 		glUniform1i(program.uIsTransparency, (command & PATTR_COLORKEY));
 		glDrawArrays(GL_TRIANGLES, 0, numPrimitives * 6);
 		glDisableVertexAttribArray(program.aPosition);
@@ -920,40 +908,36 @@ class Render {
 							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, int color) {
 		Program.Color program = Program.color;
 		program.use();
-		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
-		Texture sphere = effect.texture;
-		if (effect.isLighting && sphere != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
-			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, sphere.getId());
-			glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
+		if (effect.isLighting && normals != null && (command & PATTR_LIGHTING) != 0) {
+			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0) {
+				glVertexAttrib2f(program.aMaterial, 1, 1);
+				program.setSphere(effect.texture);
+			} else {
+				glVertexAttrib2f(program.aMaterial, 1, 0);
+				program.setSphere(null);
+			}
+			program.setLight(effect.light);
+			program.setToonShading(effect);
+
+			normals.rewind();
+			glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, normals);
+			glEnableVertexAttribArray(program.aNormal);
 		} else {
-			glUniform2f(program.uSphereSize, -1, -1);
-		}
-		if (normals != null && (command & ENV_ATTR_LIGHTING) != 0) {
-			program.setLight(effect.isLighting ? effect.light : null);
-		} else {
+			glVertexAttrib2f(program.aMaterial, 0, 0);
 			program.setLight(null);
+			glDisableVertexAttribArray(program.aNormal);
 		}
-		program.setToonShading(effect);
+
 		program.bindMatrices(mvp, mv);
 
 		vertices.rewind();
 		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vertices);
 		glEnableVertexAttribArray(program.aPosition);
 
-		if (normals != null) {
-			normals.rewind();
-			glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, normals);
-			glEnableVertexAttribArray(program.aNormal);
-		} else {
-			glDisableVertexAttribArray(program.aNormal);
-		}
-
 		program.setColor(color);
 
 		glDisable(GL_CULL_FACE);
-		int blendMode = command & PATTR_BLEND_SUB;
-		applyBlending(blendEnabled ? blendMode >> 4 : 0);
+		applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
 		glDrawArrays(GL_TRIANGLES, 0, vertices.capacity() / 3);
 		glDisableVertexAttribArray(program.aPosition);
 		glDisableVertexAttribArray(program.aNormal);
@@ -964,42 +948,37 @@ class Render {
 							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer colors) {
 		Program.Color program = Program.color;
 		program.use();
-		glVertexAttrib2f(program.aMaterial, effect.isLighting ? 1 : 0, effect.isReflection ? 1 : 0);
-		Texture sphere = effect.texture;
-		if (effect.isLighting && sphere != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
-			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, sphere.getId());
-			glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
-		} else {
-			glUniform2f(program.uSphereSize, -1, -1);
-		}
-		if (normals != null && (command & ENV_ATTR_LIGHTING) != 0) {
-			program.setLight(effect.isLighting ? effect.light : null);
-		} else {
-			program.setLight(null);
-		}
-		program.bindMatrices(mvp, mv);
-		program.setToonShading(effect);
+		if (effect.isLighting && normals != null && (command & PATTR_LIGHTING) != 0) {
+			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0) {
+				glVertexAttrib2f(program.aMaterial, 1, 1);
+				program.setSphere(effect.texture);
+			} else {
+				glVertexAttrib2f(program.aMaterial, 1, 0);
+				program.setSphere(null);
+			}
+			program.setLight(effect.light);
+			program.setToonShading(effect);
 
-		vertices.rewind();
-		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vertices);
-		glEnableVertexAttribArray(program.aPosition);
-
-		if (normals != null) {
 			normals.rewind();
 			glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, normals);
 			glEnableVertexAttribArray(program.aNormal);
 		} else {
+			glVertexAttrib2f(program.aMaterial, 0, 0);
+			program.setLight(null);
 			glDisableVertexAttribArray(program.aNormal);
 		}
+		program.bindMatrices(mvp, mv);
+
+		vertices.rewind();
+		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vertices);
+		glEnableVertexAttribArray(program.aPosition);
 
 		colors.rewind();
 		glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, colors);
 		glEnableVertexAttribArray(program.aColorData);
 
 		glDisable(GL_CULL_FACE);
-		int blendMode = command & PATTR_BLEND_SUB;
-		applyBlending(blendEnabled ? blendMode >> 4 : 0);
+		applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
 		glDrawArrays(GL_TRIANGLES, 0, vertices.capacity() / 3);
 		glDisableVertexAttribArray(program.aColorData);
 		glDisableVertexAttribArray(program.aPosition);
@@ -1011,37 +990,31 @@ class Render {
 							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer texCoords) {
 		Program.Tex program = Program.tex;
 		program.use();
-		glVertexAttrib3f(program.aMaterial,
-				effect.isLighting ? 1 : 0,
-				effect.isReflection ? 1 : 0,
-				command & PATTR_COLORKEY);
-		Texture sphere = effect.texture;
-		if (effect.isLighting && sphere != null && (command & Graphics3D.PATTR_SPHERE_MAP) != 0) {
-			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, sphere.getId());
-			glUniform2f(program.uSphereSize, 64.0f / sphere.getWidth(), 64.0f / sphere.getHeight());
+		if (effect.isLighting && normals != null && (command & PATTR_LIGHTING) != 0) {
+			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0) {
+				glVertexAttrib3f(program.aMaterial, 1, 1, command & PATTR_COLORKEY);
+				program.setSphere(effect.texture);
+			} else {
+				glVertexAttrib3f(program.aMaterial, 1, 0, command & PATTR_COLORKEY);
+				program.setSphere(null);
+			}
+			program.setLight(effect.light);
+			program.setToonShading(effect);
+
+			normals.rewind();
+			glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, normals);
+			glEnableVertexAttribArray(program.aNormal);
 		} else {
-			glUniform2f(program.uSphereSize, -1, -1);
-		}
-		if (normals != null && (command & ENV_ATTR_LIGHTING) != 0) {
-			program.setLight(effect.isLighting ? effect.light : null);
-		} else {
+			glVertexAttrib3f(program.aMaterial, 0, 0, command & PATTR_COLORKEY);
 			program.setLight(null);
+			glDisableVertexAttribArray(program.aNormal);
 		}
-		program.setToonShading(effect);
+
 		program.bindMatrices(mvp, mv);
 
 		vertices.rewind();
 		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, vertices);
 		glEnableVertexAttribArray(program.aPosition);
-
-		if (normals != null) {
-			normals.rewind();
-			glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, normals);
-			glEnableVertexAttribArray(program.aNormal);
-		} else {
-			glDisableVertexAttribArray(program.aNormal);
-		}
 
 		texCoords.rewind();
 		glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 2, texCoords);
@@ -1050,8 +1023,7 @@ class Render {
 		program.setTex(texture);
 
 		glDisable(GL_CULL_FACE);
-		int blendMode = command & PATTR_BLEND_SUB;
-		applyBlending(blendEnabled ? blendMode >> 4 : 0);
+		applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
 		glDrawArrays(GL_TRIANGLES, 0, vertices.capacity() / 3);
 		glDisableVertexAttribArray(program.aPosition);
 		glDisableVertexAttribArray(program.aColorData);
@@ -1063,11 +1035,18 @@ class Render {
 		if (COMMAND_LIST_VERSION_1_0 != cmds[0]) {
 			throw new IllegalArgumentException("Unsupported command list version: " + cmds[0]);
 		}
-		if (textures != null) {
-			this.textures = textures.clone();
-		}
+		setTextureArray(textures);
+		setSpecular(effect.texture);
+		setLight(effect.light);
 		layout = new FigureLayout(layout);
+		layout.centerX += x;
+		layout.centerY += y;
 		effect = new Effect3D(effect);
+		effect.isLighting = effect.light != null;
+		effect.isToonShading = effect.shading == Effect3D.TOON_SHADING;
+		effect.isReflection = effect.texture != null;
+		effect.texture = specular;
+		effect.light = light;
 		for (int i = 1; i < cmds.length; ) {
 			int cmd = cmds[i++];
 			switch (cmd & 0xFF000000) {
@@ -1075,11 +1054,6 @@ class Render {
 					layout.selectAffineTrans(cmd & 0xFFFFFF);
 					break;
 				case COMMAND_AMBIENT_LIGHT: {
-					Light light = effect.getLight();
-					if (light == null) {
-						light = new Light();
-						effect.setLight(light);
-					}
 					light.setAmbientIntensity(i++);
 					break;
 				}
@@ -1098,11 +1072,6 @@ class Render {
 					updateClip();
 					break;
 				case COMMAND_DIRECTION_LIGHT: {
-					Light light = effect.getLight();
-					if (light == null) {
-						light = new Light();
-						effect.setLight(light);
-					}
 					light.getParallelLightDirection().set(i++, i++, i++);
 					light.setParallelLightIntensity(i++);
 					break;
@@ -1203,8 +1172,6 @@ class Render {
 					synchronized (this) {
 						Effect3D effectCopy = new Effect3D(effect);
 						FigureLayout layoutCopy = new FigureLayout(layout);
-						layoutCopy.centerX += x;
-						layoutCopy.centerY += y;
 						Texture finalTex = getTexture();
 						stack.add(new RenderNode() {
 							@Override
@@ -1247,10 +1214,9 @@ class Render {
 	}
 
 	synchronized void postFigure(Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
-		Texture[] ta = figure.textures;
-		if (ta != null) {
-			textures = ta.clone();
-		}
+		setTextureArray(figure.textures);
+		setSpecular(effect.texture);
+		setLight(effect.light);
 		FigureNode rn;
 		if (figure.stack.empty()) {
 			rn = new FigureNode(this, figure, x, y, layout, effect);
@@ -1258,7 +1224,7 @@ class Render {
 			rn = figure.stack.pop();
 			rn.setData(this, x, y, layout, effect);
 		}
-		rn.textures = textures == null ? null : textures.clone();
+		rn.textures = textures.clone();
 		stack.add(rn);
 	}
 
@@ -1266,10 +1232,15 @@ class Render {
 									 int command, int numPrimitives,
 									 int[] vertexCoords, int[] normals, int[] textureCoords, int[] colors) {
 		Effect3D effectCopy = new Effect3D(effect);
+		effectCopy.isLighting = effect.light != null;
+		effectCopy.isToonShading = effect.shading == Effect3D.TOON_SHADING;
+		effectCopy.isReflection = effect.texture != null;
 		FigureLayout layoutCopy = new FigureLayout(layout);
 		layoutCopy.centerX += x;
 		layoutCopy.centerY += y;
 		setTexture(texture);
+		setSpecular(effect.texture);
+		setLight(effect.light);
 		Texture finalTex = getTexture();
 		stack.add(new RenderNode() {
 			@Override
@@ -1283,14 +1254,15 @@ class Render {
 	synchronized void drawFigure(Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
 		bindEglContext();
 		if (!backCopied && preCopy2D) copy2d(true);
+		setTexture(figure.getTexture());
+		setSpecular(effect.texture);
+		setLight(effect.light);
 		try {
 			flushStep = 1;
 			for (int i = 0, stackSize = stack.size(); i < stackSize; i++) {
 				RenderNode r = stack.get(i);
 				r.run();
 			}
-			Texture tex = figure.getTexture();
-			setTexture(tex);
 			Model data = figure.data;
 			FloatBuffer vertices = figure.getVertexData();
 			FloatBuffer normals = figure.getNormalsData();
@@ -1323,12 +1295,35 @@ class Render {
 		stack.clear();
 	}
 
-	void setTexture(Texture texture) {
-		textures = new Texture[]{texture};
-		textureIdx = 0;
+	void setTexture(Texture tex) {
+		if (tex != null) {
+			textures = new Texture[]{tex};
+			textureIdx = 0;
+		}
+	}
+
+	void setTextureArray(Texture[] tex) {
+		if (tex != null && tex.length > 0) {
+			textures = tex.clone();
+		}
 	}
 
 	Texture getTexture() {
-		return textures == null ? null : textureIdx < textures.length ? textures[textureIdx] : null;
+		if (textureIdx < 0 || textureIdx >= textures.length) {
+			return null;
+		}
+		return textures[textureIdx];
+	}
+
+	private void setSpecular(Texture tex) {
+		if (tex != null) {
+			specular = tex;
+		}
+	}
+
+	private void setLight(Light light) {
+		if (light != null) {
+			this.light.set(light);
+		}
 	}
 }

@@ -18,7 +18,6 @@ package com.mascotcapsule.micro3d.v3;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FigureLayout {
-
 	protected AffineTrans[] affineArray;
 	protected AffineTrans affine;
 	int scaleX;
@@ -32,7 +31,7 @@ public class FigureLayout {
 	int angle;
 	int perspectiveWidth;
 	int perspectiveHeight;
-	int settingIndex;
+	int projection;
 
 	public FigureLayout() {
 		this(null, 512, 512, 0, 0);
@@ -59,7 +58,7 @@ public class FigureLayout {
 		perspectiveWidth = src.perspectiveWidth;
 		scaleX = src.scaleX;
 		scaleY = src.scaleY;
-		settingIndex = src.settingIndex;
+		projection = src.projection;
 	}
 
 	public AffineTrans getAffineTrans() {
@@ -115,7 +114,7 @@ public class FigureLayout {
 	public final void setScale(int sx, int sy) {
 		scaleX = sx;
 		scaleY = sy;
-		settingIndex = Graphics3D.COMMAND_PARALLEL_SCALE;
+		projection = Graphics3D.COMMAND_PARALLEL_SCALE;
 	}
 
 	public final int getParallelWidth() {
@@ -132,7 +131,7 @@ public class FigureLayout {
 		}
 		parallelWidth = w;
 		parallelHeight = h;
-		settingIndex = Graphics3D.COMMAND_PARALLEL_SIZE;
+		projection = Graphics3D.COMMAND_PARALLEL_SIZE;
 	}
 
 	public final int getCenterX() {
@@ -155,7 +154,7 @@ public class FigureLayout {
 		near = zNear;
 		far = zFar;
 		this.angle = angle;
-		settingIndex = Graphics3D.COMMAND_PERSPECTIVE_FOV;
+		projection = Graphics3D.COMMAND_PERSPECTIVE_FOV;
 	}
 
 	public final void setPerspective(int zNear, int zFar, int width, int height) {
@@ -166,11 +165,11 @@ public class FigureLayout {
 		far = zFar;
 		perspectiveWidth = width;
 		perspectiveHeight = height;
-		settingIndex = Graphics3D.COMMAND_PERSPECTIVE_WH;
+		projection = Graphics3D.COMMAND_PERSPECTIVE_WH;
 	}
 
 	void set(FigureLayout src) {
-		settingIndex = src.settingIndex;
+		projection = src.projection;
 		scaleY = src.scaleY;
 		scaleX = src.scaleX;
 		perspectiveWidth = src.perspectiveWidth;
