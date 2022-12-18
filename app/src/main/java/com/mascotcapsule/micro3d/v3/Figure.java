@@ -82,10 +82,12 @@ public class Figure {
 	private void sortPolygons() {
 		Model.Polygon[] polygonsT = data.polygonsT;
 		Arrays.sort(polygonsT, (a, b) -> {
-			int cmp = Integer.compare(a.blendMode, b.blendMode);
-			if (cmp != 0) return cmp;
-			cmp = Integer.compare(a.face, b.face);
-			if (cmp != 0) return cmp;
+			if (a.blendMode != b.blendMode) {
+				return a.blendMode - b.blendMode;
+			}
+			if (a.face != b.face) {
+				return a.face - b.face;
+			}
 			return a.doubleFace - b.doubleFace;
 		});
 		int[][][] subMeshesLengthsT = data.subMeshesLengthsT;
@@ -101,8 +103,9 @@ public class Figure {
 
 		Model.Polygon[] polygonsC = data.polygonsC;
 		Arrays.sort(polygonsC, (a, b) -> {
-			int cmp = Integer.compare(a.blendMode, b.blendMode);
-			if (cmp != 0) return cmp;
+			if (a.blendMode != b.blendMode) {
+				return a.blendMode - b.blendMode;
+			}
 			return a.doubleFace - b.doubleFace;
 		});
 		int[][] subMeshesLengthsC = data.subMeshesLengthsC;

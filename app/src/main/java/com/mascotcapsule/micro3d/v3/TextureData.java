@@ -16,20 +16,21 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 class TextureData {
-	private final Buffer raster;
+	private final ByteBuffer raster;
 	final int width;
 	final int height;
 
-	TextureData(Buffer raster, int width, int height) {
+	TextureData(ByteBuffer raster, int width, int height) {
 		this.raster = raster;
 		this.width = width;
 		this.height = height;
 	}
 
-	Buffer getRaster() {
-		return raster.rewind();
+	ByteBuffer getRaster() {
+		raster.rewind();
+		return raster;
 	}
 }
