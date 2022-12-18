@@ -13,8 +13,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdk MIN_SDK
         targetSdk TARGET_SDK
-        versionCode 96
-        versionName "1.7.7"
+        versionCode 97
+        versionName "1.7.8"
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
         }
