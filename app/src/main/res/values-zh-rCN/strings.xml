@@ -184,6 +184,9 @@
     <string name="pref_emulator_dir">工作目录</string>
     <string name="pref_screenshot_summary">禁用屏幕截图的缩放和过滤</string>
     <string name="pref_screenshot_title">原始截图</string>
+    <string name="pref_category_experimental">实验/临时选项</string>
+    <string name="pref_mascot_summary">使用时显示消息</string>
+    <string name="pref_mascot_title">检测吉祥物胶囊3D</string>
     <string name="mapping_dialog_message">当前映射: %1$s</string>
     <string name="mapping_dialog_key_not_specified">未指定</string>
     <string name="mapping_dialog_title">按下一个按键</string>
