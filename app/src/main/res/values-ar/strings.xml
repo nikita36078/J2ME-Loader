@@ -9,6 +9,7 @@
     <string name="licenses">التراخيص</string>
     <string name="profiles">حقوق المستخدم</string>
     <string name="save_log">سجلات الحفظ</string>
+    <string name="about_message">&lt;BR&gt;</string>
     <string name="help_message">&#8226; تمكين التصفية في بعض الحالات يمكن أن يقلل كثيرا من الأداء.قم بتعطيل هذا الخيار إذا كانت اللعبة بطيئة جداً.&lt;BR&gt;&#8226; خفقان الصورة يمكن اصلاحه عن طريق تمكين الخيار \"وضع المعالجة الفورية\".</string>
     <string name="author">المالك: </string>
     <string name="version">الاصدار: </string>

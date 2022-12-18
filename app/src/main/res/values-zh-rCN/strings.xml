@@ -9,6 +9,7 @@
     <string name="licenses">许可</string>
     <string name="profiles">配置文件</string>
     <string name="save_log">存储日志</string>
+    <string name="about_message">此应用允许您在 Android 上启动 J2ME 应用和游戏。它支持大多数 2D 和 3D 游戏(包括吉祥物胶囊 3D 游戏)。&lt;BR&gt;</string>
     <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt;BR&gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
     <string name="author">作者: </string>
     <string name="version">版本: </string>
@@ -183,6 +184,9 @@
     <string name="pref_emulator_dir">工作目录</string>
     <string name="pref_screenshot_summary">禁用屏幕截图的缩放和过滤</string>
     <string name="pref_screenshot_title">原始截图</string>
+    <string name="pref_category_experimental">实验/临时选项</string>
+    <string name="pref_mascot_summary">使用时显示消息</string>
+    <string name="pref_mascot_title">检测吉祥物胶囊3D</string>
     <string name="mapping_dialog_message">当前映射: %1$s</string>
     <string name="mapping_dialog_key_not_specified">未指定</string>
     <string name="mapping_dialog_title">按下一个按键</string>
