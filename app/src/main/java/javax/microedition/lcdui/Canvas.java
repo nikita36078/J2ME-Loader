@@ -23,12 +23,12 @@ import static android.opengl.GLES20.*;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.os.Handler;
 import android.os.Looper;
@@ -52,6 +52,7 @@ import androidx.core.content.ContextCompat;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -864,13 +865,18 @@ public abstract class Canvas extends Displayable {
 		}
 
 		private Single<Bitmap> takeScreenShot() {
-			return Single.<ByteBuffer>create(emitter -> {
-						ByteBuffer buf = ByteBuffer.allocateDirect(onWidth * onHeight * 4).order(ByteOrder.nativeOrder());
+			return Single.<int[]>create(emitter -> {
+						IntBuffer buf = IntBuffer.allocate(onWidth * onHeight * 4);
 						mView.requestRender();
 						mView.queueEvent(() -> {
 							try {
 								glReadPixels(displayWidth - onWidth - onX, displayHeight - onHeight - onY, onWidth, onHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-								emitter.onSuccess(buf);
+								int error = glGetError();
+								if (error != GL_NO_ERROR) {
+									emitter.onError(new RuntimeException(GLU.gluErrorString(error)));
+								} else {
+									emitter.onSuccess(buf.array());
+								}
 							} catch (Throwable e) {
 								emitter.onError(e);
 							}
@@ -878,13 +884,12 @@ public abstract class Canvas extends Displayable {
 					}).timeout(3, TimeUnit.SECONDS)
 					.subscribeOn(Schedulers.computation())
 					.observeOn(Schedulers.computation())
-					.map(bb -> {
-						Bitmap rawBitmap = Bitmap.createBitmap(onWidth, onHeight, Bitmap.Config.ARGB_8888);
-						bb.rewind();
-						rawBitmap.copyPixelsFromBuffer(bb);
-						Matrix m = new Matrix();
-						m.setScale(1.0f, -1.0f);
-						return Bitmap.createBitmap(rawBitmap, 0, 0, onWidth, onHeight, m, false);
+					.map(pixels -> {
+						for (int i = 0, len = pixels.length; i < len; i++) {
+							int p = pixels[i];
+							pixels[i] = (p & 0xff00ff00) | ((p & 0xff0000) >> 16) | ((p & 0xff) << 16);
+						}
+						return Bitmap.createBitmap(pixels, onWidth * (onHeight - 1), -onWidth, onWidth, onHeight, Bitmap.Config.ARGB_8888);
 					});
 		}
 	}
