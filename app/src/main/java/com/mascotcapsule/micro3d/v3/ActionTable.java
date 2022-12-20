@@ -16,75 +16,46 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import static com.mascotcapsule.micro3d.v3.Util3D.TAG;
-
-import android.util.Log;
-
 import java.io.IOException;
 
-import javax.microedition.shell.AppClassLoader;
+import ru.woesss.j2me.micro3d.ActTableImpl;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ActionTable {
-	Action[] actions;
+	final ActTableImpl impl;
 
 	public ActionTable(byte[] b) {
-		if (b == null) {
-			throw new NullPointerException();
-		}
-		try {
-			actions = Loader.loadMtraData(b);
-		} catch (IOException e) {
-			Log.e(TAG, "Error loading data", e);
-			throw new RuntimeException(e);
-		}
+		impl = new ActTableImpl(b);
 	}
 
 	public ActionTable(String name) throws IOException {
-		if (name == null) {
-			throw new NullPointerException();
-		}
-		byte[] bytes = AppClassLoader.getResourceAsBytes(name);
-		if (bytes == null) {
-			throw new IOException();
-		}
-		try {
-			actions = Loader.loadMtraData(bytes);
-		} catch (IOException e) {
-			Log.e(TAG, "Error loading data from [" + name + "]", e);
-			throw new RuntimeException(e);
-		}
+		impl = new ActTableImpl(name);
 	}
 
 	public final void dispose() {
-		actions = null;
+		impl.dispose();
 	}
 
 	@Deprecated
 	public final int getNumAction() {
-		return getNumActions();
+		return impl.getNumActions();
 	}
 
 	public final int getNumActions() {
-		checkDisposed();
-		return actions.length;
+		return impl.getNumActions();
 	}
 
 	@Deprecated
 	public final int getNumFrame(int idx) {
-		return getNumFrames(idx);
+		return impl.getNumFrames(idx);
 	}
 
 	public final int getNumFrames(int idx) {
-		checkDisposed();
-		if (idx < 0 || idx >= actions.length) {
-			throw new IllegalArgumentException();
-		}
-		return actions[idx].keyframes << 16;
+		return impl.getNumFrames(idx);
 	}
 
 	void checkDisposed() {
-		if (actions == null) throw new IllegalStateException("ActionTable disposed!");
+		impl.checkDisposed();
 	}
 
 }

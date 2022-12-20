@@ -16,22 +16,19 @@
 
 package com.vodafone.v10.graphics.j3d;
 
+import ru.woesss.j2me.micro3d.Utils;
+
 public class Util3D {
 
-	public static int sqrt(int x) {
-		if (x == 0) return 0;
-		if (x < 0) {
-			throw new IllegalArgumentException("Negative arg=" + x);
-		}
-		return (int) Math.round(Math.sqrt(x));
+	public static int sqrt(int p) {
+		return Utils.iSqrt(p);
 	}
 
-	public static int sin(int a) {
-		double radian = a * Math.PI / 2048;
-		return (int) Math.round(Math.sin(radian) * 4096);
+	public static int sin(int p) {
+		return Utils.iSin(p);
 	}
 
-	public static int cos(int a) {
-		return sin(a + 1024);
+	public static int cos(int p) {
+		return Utils.iCos(p);
 	}
 }

@@ -32,17 +32,19 @@ public class Vector3D extends com.mascotcapsule.micro3d.v3.Vector3D {
 	}
 
 	public static int innerProduct(Vector3D v1, Vector3D v2) {
-		return com.mascotcapsule.micro3d.v3.Vector3D.innerProduct(v1, v2);
+		if (v1 == null) {
+			throw new NullPointerException();
+		}
+		return v1.innerProduct(v2);
 	}
 
 	public static Vector3D outerProduct(Vector3D v1, Vector3D v2) {
 		if (v1 == null || v2 == null) {
 			throw new NullPointerException();
 		}
-		Vector3D dst = new Vector3D();
-		dst.x = v1.y * v2.z - v1.z * v2.y;
-		dst.y = v1.z * v2.x - v1.x * v2.z;
-		dst.z = v1.x * v2.y - v1.y * v2.x;
-		return dst;
+		int x = v1.y * v2.z - v1.z * v2.y;
+		int y = v1.z * v2.x - v1.x * v2.z;
+		int z = v1.x * v2.y - v1.y * v2.x;
+		return new Vector3D(x, y, z);
 	}
 }

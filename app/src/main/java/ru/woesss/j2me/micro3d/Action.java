@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-package com.mascotcapsule.micro3d.v3;
+package ru.woesss.j2me.micro3d;
 
-import static com.mascotcapsule.micro3d.v3.Utils.IDENTITY_AFFINE;
+import static ru.woesss.j2me.micro3d.Utils.IDENTITY_AFFINE;
 
 import android.util.SparseIntArray;
 

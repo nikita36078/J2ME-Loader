@@ -86,18 +86,9 @@ public class AffineTrans {
 	}
 
 	public final void setIdentity() {
-		this.m00 = 4096;
-		this.m01 = 0;
-		this.m02 = 0;
-		this.m03 = 0;
-		this.m10 = 0;
-		this.m11 = 4096;
-		this.m12 = 0;
-		this.m13 = 0;
-		this.m20 = 0;
-		this.m21 = 0;
-		this.m22 = 4096;
-		this.m23 = 0;
+		m00 = 4096; m01 =    0; m02 =    0; m03 = 0;
+		m10 =    0; m11 = 4096; m12 =    0; m13 = 0;
+		m20 =    0; m21 =    0; m22 = 4096; m23 = 0;
 	}
 
 	public final void get(int[] a) {

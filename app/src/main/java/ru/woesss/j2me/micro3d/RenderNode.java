@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2022 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,9 @@
  *  limitations under the License.
  */
 
-package com.mascotcapsule.micro3d.v3;
+package ru.woesss.j2me.micro3d;
+
+import com.motorola.graphics.j3d.Effect3D;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -27,20 +29,20 @@ abstract class RenderNode implements Runnable {
 	static final class FigureNode extends RenderNode {
 		private final Stack<FigureNode> stack;
 		private Render render;
-		private Effect3D effect;
-		Texture[] textures;
-		private FigureLayout layout;
+		private Effect3dImpl effect;
+		TextureImpl[] textures;
+		private FigureLayoutImpl layout;
 		private final FloatBuffer vertices;
 		private final Model data;
-		private final Figure figure;
+		private final FigureImpl figure;
 		private final FloatBuffer normals;
 		private int x;
 		private int y;
 
-		FigureNode(Render render, Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
-			stack = figure.stack;
-			data = figure.data;
-			this.figure = figure;
+		FigureNode(Render render, FigureImpl impl, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect) {
+			stack = impl.stack;
+			data = impl.data;
+			this.figure = impl;
 			vertices = ByteBuffer.allocateDirect(data.vertexArrayCapacity)
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
 			if (data.originalNormals != null) {
@@ -52,17 +54,17 @@ abstract class RenderNode implements Runnable {
 			setData(render, x, y, layout, effect);
 		}
 
-		void setData(Render render, int x, int y, FigureLayout layout, Effect3D effect) {
+		void setData(Render render, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect) {
 			this.render = render;
 			if (this.layout != null) {
 				this.layout.set(layout);
 			} else {
-				this.layout = new FigureLayout(layout);
+				this.layout = new FigureLayoutImpl(layout);
 			}
 			if (this.effect != null) {
 				this.effect.set(effect);
 			} else {
-				this.effect = new Effect3D(effect);
+				this.effect = new Effect3dImpl(effect);
 			}
 			this.effect.isToonShading = effect.toonHigh == Effect3D.TOON_SHADING;
 			this.x = x;
@@ -77,7 +79,7 @@ abstract class RenderNode implements Runnable {
 
 		@Override
 		public void run() {
-			render.renderFigure(data, x, y, layout, textures, effect, vertices, normals);
+			render.renderFigure(data, x, y, textures, vertices, normals, layout, effect);
 		}
 
 		@Override

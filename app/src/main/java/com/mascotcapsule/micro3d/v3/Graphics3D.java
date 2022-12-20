@@ -24,6 +24,9 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.util.ContextHolder;
 
+import ru.woesss.j2me.micro3d.Render;
+import ru.woesss.j2me.micro3d.TextureImpl;
+
 @SuppressWarnings("unused, WeakerAccess")
 public class Graphics3D {
 
@@ -127,7 +130,8 @@ public class Graphics3D {
 		if (command < 0 || numPrimitives <= 0 || numPrimitives >= 256) {
 			throw new IllegalArgumentException();
 		}
-		render.postPrimitives(texture, x, y, layout, effect, command, numPrimitives,
+		render.postPrimitives(texture == null ? null : texture.impl, x, y,
+				layout.impl, effect.impl, command | (numPrimitives << 16),
 				vertexCoords.clone(), normals.clone(), textureCoords.clone(), colors.clone());
 	}
 
@@ -140,14 +144,21 @@ public class Graphics3D {
 		if (layout == null || effect == null || commandList == null) {
 			throw new NullPointerException();
 		}
-		if (textures != null) {
-			for (Texture texture : textures) {
+		TextureImpl[] tex;
+		if (textures == null) {
+			tex = null;
+		} else {
+			int len = textures.length;
+			tex = new TextureImpl[len];
+			for (int i = 0; i < len; i++) {
+				Texture texture = textures[i];
 				if (texture == null) {
 					throw new NullPointerException();
 				}
+				tex[i] = texture.impl;
 			}
 		}
-		render.drawCmd(textures, x, y, layout, effect, commandList);
+		render.drawCmd(tex, x, y, layout.impl, effect.impl, commandList);
 	}
 
 	public final void drawCommandList(Texture texture,
@@ -157,11 +168,11 @@ public class Graphics3D {
 									  Effect3D effect,
 									  int[] commandList) {
 		if (!isBound) return;
-		Texture[] ta = texture == null ? null : new Texture[]{texture};
+		TextureImpl[] ta = texture == null ? null : new TextureImpl[]{texture.impl};
 		if (layout == null || effect == null || commandList == null) {
 			throw new NullPointerException();
 		}
-		render.drawCmd(ta, x, y, layout, effect, commandList);
+		render.drawCmd(ta, x, y, layout.impl, effect.impl, commandList);
 	}
 
 	public final void renderFigure(Figure figure, int x, int y,
@@ -171,7 +182,7 @@ public class Graphics3D {
 		if (figure == null || layout == null || effect == null) {
 			throw new NullPointerException();
 		}
-		render.postFigure(figure, x, y, layout, effect);
+		render.postFigure(figure.impl, x, y, layout.impl, effect.impl);
 	}
 
 	public final void drawFigure(Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
@@ -179,7 +190,7 @@ public class Graphics3D {
 		if (figure == null || layout == null || effect == null) {
 			throw new NullPointerException();
 		}
-		render.drawFigure(figure, x, y, layout, effect);
+		render.drawFigure(figure.impl, x, y, layout.impl, effect.impl);
 	}
 
 	public final void flush() {

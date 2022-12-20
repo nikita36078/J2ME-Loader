@@ -14,12 +14,12 @@
  *  limitations under the License.
  */
 
-package com.mascotcapsule.micro3d.v3;
+package ru.woesss.j2me.micro3d;
 
-import static com.mascotcapsule.micro3d.v3.Util3D.TAG;
-import static com.mascotcapsule.micro3d.v3.Utils.IDENTITY_AFFINE;
-import static com.mascotcapsule.micro3d.v3.Utils.TO_FLOAT;
-import static com.mascotcapsule.micro3d.v3.Utils.TO_RADIANS;
+import static ru.woesss.j2me.micro3d.Utils.TAG;
+import static ru.woesss.j2me.micro3d.Utils.IDENTITY_AFFINE;
+import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.Utils.TO_RADIANS;
 
 import android.util.Log;
 import android.util.SparseIntArray;

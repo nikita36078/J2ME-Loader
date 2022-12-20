@@ -16,94 +16,79 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import ru.woesss.j2me.micro3d.LightImpl;
+
 @SuppressWarnings("unused")
 public class Light {
-	protected Vector3D direction;
-	protected int dirIntensity;
-	protected int ambIntensity;
+	public final LightImpl impl;
 
 	public Light() {
-		this(new Vector3D(0, 0, 4096), 4096, 0);
+		impl = new LightImpl();
 	}
 
 	public Light(Vector3D dir, int dirIntensity, int ambIntensity) {
-		if (dir == null) {
-			throw new NullPointerException();
-		}
-		direction = dir;
-		this.dirIntensity = dirIntensity;
-		this.ambIntensity = ambIntensity;
+		impl = new LightImpl(dir, dirIntensity, ambIntensity);
 	}
 
-	Light(Light src) {
-		direction = new Vector3D(src.direction);
-		dirIntensity = src.dirIntensity;
-		ambIntensity = src.ambIntensity;
+	public Light(LightImpl src) {
+		impl = new LightImpl(src);
 	}
 
 	@Deprecated
 	public final int getDirIntensity() {
-		return dirIntensity;
+		return impl.getParallelLightIntensity();
 	}
 
 	@Deprecated
 	public final void setDirIntensity(int p) {
-		dirIntensity = p;
+		impl.setParallelLightIntensity(p);
 	}
 
 	public final int getParallelLightIntensity() {
-		return dirIntensity;
+		return impl.getParallelLightIntensity();
 	}
 
 	public final void setParallelLightIntensity(int p) {
-		dirIntensity = p;
+		impl.setParallelLightIntensity(p);
 	}
 
 	@Deprecated
 	public final int getAmbIntensity() {
-		return ambIntensity;
+		return impl.getAmbientIntensity();
 	}
 
 	@Deprecated
 	public final void setAmbIntensity(int p) {
-		ambIntensity = p;
+		impl.setAmbientIntensity(p);
 	}
 
 	public final int getAmbientIntensity() {
-		return ambIntensity;
+		return impl.getAmbientIntensity();
 	}
 
 	public final void setAmbientIntensity(int p) {
-		ambIntensity = p;
+		impl.setAmbientIntensity(p);
 	}
 
 	@Deprecated
 	public Vector3D getDirection() {
-		return direction;
+		return impl.getParallelLightDirection();
 	}
 
 	@Deprecated
 	public final void setDirection(Vector3D v) {
-		if (v == null) {
-			throw new NullPointerException();
-		}
-		direction = v;
+		impl.setParallelLightDirection(v);
 	}
 
 	public final Vector3D getParallelLightDirection() {
-		return direction;
+		return impl.getParallelLightDirection();
 	}
 
 	public final void setParallelLightDirection(Vector3D v) {
-		if (v == null) {
-			throw new NullPointerException();
-		}
-		direction = v;
+		impl.setParallelLightDirection(v);
 	}
 
-	void set(Light src) {
-		direction.set(src.direction);
-		dirIntensity = src.dirIntensity;
-		ambIntensity = src.ambIntensity;
+	public void set(Light src) {
+		impl.set(src.impl);
 	}
 }

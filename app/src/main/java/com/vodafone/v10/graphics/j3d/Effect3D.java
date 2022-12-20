@@ -27,7 +27,7 @@ public class Effect3D extends com.mascotcapsule.micro3d.v3.Effect3D {
 
 	@Override
 	public Light getLight() {
-		return (Light) light;
+		return (Light) super.getLight();
 	}
 
 	public void setLight(Light light) {
@@ -36,7 +36,7 @@ public class Effect3D extends com.mascotcapsule.micro3d.v3.Effect3D {
 
 	@Override
 	public Texture getSphereMap() {
-		return (Texture) texture;
+		return (Texture) super.getSphereTexture();
 	}
 
 	public void setSphereMap(Texture texture) {

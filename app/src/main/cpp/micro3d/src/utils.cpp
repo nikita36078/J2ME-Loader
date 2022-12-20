@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_com_mascotcapsule_micro3d_v3_Utils_fillBuffer
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_micro3d_Utils_fillBuffer
         (JNIEnv *env, jclass /*clazz*/,
          jobject buffer, jobject vertices, jintArray indices) {
     auto dst = static_cast<Vec3f *>(env->GetDirectBufferAddress(buffer));
@@ -21,7 +21,7 @@ JNIEXPORT void JNICALL Java_com_mascotcapsule_micro3d_v3_Utils_fillBuffer
     env->ReleaseIntArrayElements(indices, indexPtr, 0);
 }
 
-JNIEXPORT void JNICALL Java_com_mascotcapsule_micro3d_v3_Utils_glReadPixels
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_micro3d_Utils_glReadPixels
         (JNIEnv *env, jclass /*clazz*/,
          jint x, jint y, jint width, jint height, jobject bitmap_buffer) {
     int ret;
@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_com_mascotcapsule_micro3d_v3_Utils_glReadPixels
 }
 
 JNIEXPORT void JNICALL
-Java_com_mascotcapsule_micro3d_v3_Utils_transform(JNIEnv *env, jclass /*clazz*/,
+Java_ru_woesss_j2me_micro3d_Utils_transform(JNIEnv *env, jclass /*clazz*/,
                                                   jobject src_vertices,
                                                   jobject dst_vertices,
                                                   jobject src_normals,

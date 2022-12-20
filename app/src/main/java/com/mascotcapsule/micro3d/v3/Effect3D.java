@@ -16,191 +16,128 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import ru.woesss.j2me.micro3d.Effect3dImpl;
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Effect3D {
 	public static final int NORMAL_SHADING = 0;
 	public static final int TOON_SHADING = 1;
 
-	protected Light light;
-	protected Texture texture;
-	int shading;
-	int toonHigh;
-	int toonLow;
-	int toonThreshold;
-	boolean isTransparency;
-	boolean isLighting;
-	boolean isReflection;
-	boolean isToonShading;
+	final Effect3dImpl impl;
 
 	public Effect3D() {
-		shading = NORMAL_SHADING;
-		isTransparency = true;
+		impl = new Effect3dImpl();
 	}
 
 	public Effect3D(Light light, int shading, boolean isEnableTrans, Texture tex) {
 		if (shading != NORMAL_SHADING && shading != TOON_SHADING) {
 			throw new IllegalArgumentException();
 		}
-		if (tex != null && !tex.isSphere) {
+		if (tex != null && !tex.impl.isSphere) {
 			throw new IllegalArgumentException();
 		}
-		setLight(light);
-		this.shading = shading;
-		isTransparency = isEnableTrans;
-		texture = tex;
-	}
-
-	Effect3D(Effect3D src) {
-		Light sl = src.light;
-		light = sl == null ? null : new Light(sl);
-		shading = src.shading;
-		texture = src.texture;
-		toonHigh = src.toonHigh;
-		toonLow = src.toonLow;
-		toonThreshold = src.toonThreshold;
-		isTransparency = src.isTransparency;
-		isLighting = src.isLighting;
-		isReflection = src.isReflection;
-		isToonShading = src.isToonShading;
+		impl = new Effect3dImpl(light, shading, isEnableTrans, tex);
 	}
 
 	public Light getLight() {
-		return light;
+		return impl.getLight();
 	}
 
 	public final void setLight(Light light) {
-		this.light = light;
+		impl.setLight(light);
 	}
 
 	@Deprecated
 	public final int getShading() {
-		return shading;
+		return impl.getShadingType();
 	}
 
 	public final int getShadingType() {
-		return shading;
+		return impl.getShadingType();
 	}
 
 	@Deprecated
 	public final void setShading(int shading) {
-		setShadingType(shading);
+		impl.setShadingType(shading);
 	}
 
 	public final void setShadingType(int shading) {
-		switch (shading) {
-			case NORMAL_SHADING:
-			case TOON_SHADING:
-				this.shading = shading;
-				return;
-			default:
-				throw new IllegalArgumentException();
-		}
+		impl.setShadingType(shading);
 	}
 
 	@Deprecated
 	public final int getThreshold() {
-		return toonThreshold;
+		return impl.getToonThreshold();
 	}
 
 	public final int getToonThreshold() {
-		return toonThreshold;
+		return impl.getToonThreshold();
 	}
 
 	@Deprecated
 	public final int getThresholdHigh() {
-		return toonHigh;
+		return impl.getToonHigh();
 	}
 
 	public final int getToonHigh() {
-		return toonHigh;
+		return impl.getToonHigh();
 	}
 
 	@Deprecated
 	public final int getThresholdLow() {
-		return toonLow;
+		return impl.getToonLow();
 	}
 
 	public final int getToonLow() {
-		return toonLow;
+		return impl.getToonLow();
 	}
 
 	@Deprecated
 	public final void setThreshold(int threshold, int high, int low) {
-		setToonParams(threshold, high, low);
+		impl.setToonParams(threshold, high, low);
 	}
 
 	public final void setToonParams(int threshold, int high, int low) {
-		if (threshold < 0 || threshold > 255) {
-			throw new IllegalArgumentException();
-		} else if (high < 0 || high > 255) {
-			throw new IllegalArgumentException();
-		} else if (low < 0 || low > 255) {
-			throw new IllegalArgumentException();
-		} else {
-			toonThreshold = threshold;
-			toonHigh = high;
-			toonLow = low;
-		}
+		impl.setToonParams(threshold, high, low);
 	}
 
 	@Deprecated
 	public final boolean isSemiTransparentEnabled() {
-		return isTransparency;
+		return impl.isTransparency();
 	}
 
 	public final boolean isTransparency() {
-		return isTransparency;
+		return impl.isTransparency();
 	}
 
 	@Deprecated
 	public final void setSemiTransparentEnabled(boolean isEnable) {
-		isTransparency = isEnable;
+		impl.setTransparency(isEnable);
 	}
 
 	public final void setTransparency(boolean isEnable) {
-		isTransparency = isEnable;
+		impl.setTransparency(isEnable);
 	}
 
 	@Deprecated
 	public Texture getSphereMap() {
-		return texture;
+		return impl.getSphereTexture();
 	}
 
 	public final Texture getSphereTexture() {
-		return texture;
+		return impl.getSphereTexture();
 	}
 
 	@Deprecated
 	public final void setSphereMap(Texture tex) {
-		setSphereTexture(tex);
+		impl.setSphereTexture(tex);
 	}
 
 	public final void setSphereTexture(Texture tex) {
-		if (tex != null && !tex.isSphere) {
-			throw new IllegalArgumentException();
-		}
-		texture = tex;
+		impl.setSphereTexture(tex);
 	}
 
 	void set(Effect3D src) {
-		shading = src.shading;
-		texture = src.texture;
-		toonHigh = src.toonHigh;
-		toonLow = src.toonLow;
-		toonThreshold = src.toonThreshold;
-		isTransparency = src.isTransparency;
-		isLighting = src.isLighting;
-		isReflection = src.isReflection;
-		isToonShading = src.isToonShading;
-		Light sl = src.light;
-		if (sl == null) {
-			light = null;
-			return;
-		}
-		if (light == null) {
-			light = new Light(sl);
-			return;
-		}
-		light.set(sl);
+		impl.set(src.impl);
 	}
 }

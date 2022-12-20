@@ -21,13 +21,12 @@ public class FigureLayout extends com.mascotcapsule.micro3d.v3.FigureLayout {
 
 	public FigureLayout(AffineTrans trans, int sx, int sy, int cx, int cy) {
 		setAffineTrans(trans);
-		centerX = cx;
-		centerY = cy;
+		setCenter(cx, cy);
 		setScale(sx, sy);
 	}
 
 	public AffineTrans getAffineTrans() {
-		return (AffineTrans) affine;
+		return (AffineTrans) super.getAffineTrans();
 	}
 
 	public void setAffineTrans(AffineTrans trans) {

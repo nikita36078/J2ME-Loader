@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.mascotcapsule.micro3d.v3;
+package ru.woesss.j2me.micro3d;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

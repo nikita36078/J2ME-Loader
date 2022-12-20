@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2022 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
  *  limitations under the License.
  */
 
-package com.mascotcapsule.micro3d.v3;
+package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
-import static com.mascotcapsule.micro3d.v3.Util3D.TAG;
-import static com.mascotcapsule.micro3d.v3.Utils.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.Utils.TAG;
+import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
 
 import android.util.Log;
+
+import com.mascotcapsule.micro3d.v3.Light;
+import com.mascotcapsule.micro3d.v3.Vector3D;
+import com.motorola.graphics.j3d.Effect3D;
 
 import javax.microedition.util.ContextHolder;
 
@@ -183,8 +187,8 @@ abstract class Program {
 			glVertexAttrib3f(aColorData, r, g, b);
 		}
 
-		void setToonShading(Effect3D effect) {
-			boolean enable = effect.shading == Effect3D.TOON_SHADING && effect.isToonShading;
+		void setToonShading(Effect3dImpl effect) {
+			boolean enable = effect.shading == com.motorola.graphics.j3d.Effect3D.TOON_SHADING && effect.isToonShading;
 			glUniform1f(uToonThreshold, enable ? effect.toonThreshold : -1.0f);
 			glUniform1f(uToonHigh, effect.toonHigh);
 			glUniform1f(uToonLow, effect.toonLow);
@@ -195,7 +199,7 @@ abstract class Program {
 			glUniformMatrix4fv(uMatrixMV, 1, false, mv, 0);
 		}
 
-		void setSphere(Texture sphere) {
+		void setSphere(TextureImpl sphere) {
 			if (sphere != null) {
 				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_2D, sphere.getId());
@@ -264,7 +268,7 @@ abstract class Program {
 			glUniform1i(glGetUniformLocation(id, "uSphereUnit"), 2);
 		}
 
-		void setTex(Texture tex) {
+		void setTex(TextureImpl tex) {
 			if (tex != null) {
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, tex.getId());
@@ -275,7 +279,7 @@ abstract class Program {
 			}
 		}
 
-		void setToonShading(Effect3D effect) {
+		void setToonShading(Effect3dImpl effect) {
 			boolean enable = effect.shading == Effect3D.TOON_SHADING && effect.isToonShading;
 			glUniform1f(uToonThreshold, enable ? effect.toonThreshold / 255.0f : -1.0f);
 			glUniform1f(uToonHigh, effect.toonHigh / 255.0f);
@@ -287,7 +291,7 @@ abstract class Program {
 			glUniformMatrix4fv(uMatrixMV, 1, false, mv, 0);
 		}
 
-		void setSphere(Texture sphere) {
+		void setSphere(TextureImpl sphere) {
 			if (sphere != null) {
 				glActiveTexture(GL_TEXTURE2);
 				glBindTexture(GL_TEXTURE_2D, sphere.getId());
@@ -325,7 +329,7 @@ abstract class Program {
 			glUniform1i(glGetUniformLocation(id, "uTextureUnit"), 0);
 		}
 
-		public void setTexture(Texture texture) {
+		public void setTexture(TextureImpl texture) {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texture.getId());
 			glUniform2f(uTexSize, texture.getWidth(), texture.getHeight());

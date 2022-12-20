@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2022 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-package com.mascotcapsule.micro3d.v3;
+package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
 import static com.mascotcapsule.micro3d.v3.Graphics3D.*;
-import static com.mascotcapsule.micro3d.v3.Util3D.TAG;
-import static com.mascotcapsule.micro3d.v3.Utils.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.Utils.TAG;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,7 +29,9 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.mascotcapsule.micro3d.v3.RenderNode.FigureNode;
+import com.mascotcapsule.micro3d.v3.Light;
+import com.mascotcapsule.micro3d.v3.Texture;
+import com.motorola.graphics.j3d.Effect3D;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -45,7 +46,9 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.lcdui.Graphics;
 
-class Render {
+import ru.woesss.j2me.micro3d.RenderNode.FigureNode;
+
+public class Render {
 	private final static FloatBuffer BG_VBO = ByteBuffer.allocateDirect(8 * 2 * 4)
 			.order(ByteOrder.nativeOrder()).asFloatBuffer()
 			.put(new float[]{
@@ -71,10 +74,11 @@ class Render {
 	private boolean backCopied;
 	private final LinkedList<RenderNode> stack = new LinkedList<>();
 	private int flushStep;
-	private Texture[] textures = {};
+	private final TextureImpl[] textures = new TextureImpl[16];
 	private final boolean postCopy2D = !Boolean.getBoolean("micro3d.v3.render.no-mix2D3D");
 	private final boolean preCopy2D = !Boolean.getBoolean("micro3d.v3.render.background.ignore");
 	private int textureIdx;
+	private int texturesLen;
 	private IntBuffer bufHandles;
 	private Texture specular;
 	private final Light light = new Light();
@@ -95,7 +99,7 @@ class Render {
 		}
 	}
 
-	synchronized static Render getRender() {
+	public synchronized static Render getRender() {
 		if (instance == null) {
 			instance = new Render();
 		}
@@ -134,7 +138,7 @@ class Render {
 		this.eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list);
 	}
 
-	synchronized void bind(Graphics graphics) {
+	public synchronized void bind(Graphics graphics) {
 		this.graphics = graphics;
 		Canvas canvas = graphics.getCanvas();
 		int width = canvas.getWidth();
@@ -273,8 +277,8 @@ class Render {
 		}
 	}
 
-	void renderFigure(Model model, int x, int y, FigureLayout layout, Texture[] textures,
-					  Effect3D effect, FloatBuffer vertices, FloatBuffer normals) {
+	void renderFigure(Model model, int x, int y, TextureImpl[] textures,
+					  FloatBuffer vertices, FloatBuffer normals, FigureLayoutImpl layout, Effect3dImpl effect) {
 		if (!effect.isTransparency && flushStep == 2) return;
 
 		if (!model.hasPolyT && !model.hasPolyC)
@@ -282,8 +286,8 @@ class Render {
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(flushStep == 1);
-		float[] mvm = getMvMatrix(layout);
-		float[] pm = getProjectionMatrix(layout, x, y);
+		float[] mvm = layout.getViewMatrix();
+		float[] pm = layout.getProjectionMatrix(x, y, this.width, this.height);
 		float[] mvp = MVP_TMP;
 		Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
 		if (bufHandles == null) {
@@ -305,6 +309,7 @@ class Render {
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals, GL_STREAM_DRAW);
 			}
+			Texture sphere = effect.texture;
 			if (model.hasPolyT) {
 				final Program.Tex program = Program.tex;
 				program.use();
@@ -325,7 +330,7 @@ class Render {
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
 					program.setToonShading(effect);
 					program.setLight(effect.light);
-					program.setSphere(effect.texture);
+					program.setSphere(sphere == null ? null : sphere.impl);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
 					program.setLight(null);
@@ -361,7 +366,7 @@ class Render {
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
 					glEnableVertexAttribArray(program.aNormal);
 					program.setLight(effect.light);
-					program.setSphere(effect.texture);
+					program.setSphere(sphere == null ? null : sphere.impl);
 					program.setToonShading(effect);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
@@ -379,36 +384,7 @@ class Render {
 		}
 	}
 
-	private float[] getProjectionMatrix(FigureLayout layout, int x, int y) {
-		float[] pm = new float[16];
-		switch (layout.projection) {
-			case COMMAND_PARALLEL_SCALE:
-				Utils.parallelScale(pm, x, y, layout, width, height);
-				break;
-			case COMMAND_PARALLEL_SIZE:
-				Utils.parallelWH(pm, x, y, layout, width, height);
-				break;
-			case COMMAND_PERSPECTIVE_FOV:
-				Utils.perspectiveFov(pm, x, y, layout, width, height);
-				break;
-			case COMMAND_PERSPECTIVE_WH:
-				Utils.perspectiveWH(pm, x, y, layout, width, height);
-				break;
-		}
-		return pm;
-	}
-
-	private float[] getMvMatrix(FigureLayout layout) {
-		AffineTrans a = layout.affine;
-		float[] m = new float[16];
-		m[0] = a.m00 * TO_FLOAT; m[4] = a.m01 * TO_FLOAT; m[ 8] = a.m02 * TO_FLOAT; m[12] = a.m03;
-		m[1] = a.m10 * TO_FLOAT; m[5] = a.m11 * TO_FLOAT; m[ 9] = a.m12 * TO_FLOAT; m[13] = a.m13;
-		m[2] = a.m20 * TO_FLOAT; m[6] = a.m21 * TO_FLOAT; m[10] = a.m22 * TO_FLOAT; m[14] = a.m23;
-		m[3] =             0.0F; m[7] =             0.0F; m[11] =             0.0F; m[15] =  1.0F;
-		return m;
-	}
-
-	private void renderModel(Texture[] textures, Model model, boolean enableBlending) {
+	private void renderModel(TextureImpl[] textures, Model model, boolean enableBlending) {
 		if (textures == null || textures.length == 0) return;
 		Program.Tex program = Program.tex;
 		int[][][] meshes = model.subMeshesLengthsT;
@@ -435,8 +411,12 @@ class Render {
 			}
 			for (int face = 0; face < texMesh.length; face++) {
 				int[] lens = texMesh[face];
-				Texture tex = face >= textures.length ? null : textures[face];
-				program.setTex(tex);
+				if (face >= textures.length) {
+					program.setTex(null);
+				} else {
+					TextureImpl tex = textures[face];
+					program.setTex(tex);
+				}
 				int cnt = lens[0];
 				if (cnt > 0) {
 					glEnable(GL_CULL_FACE);
@@ -493,7 +473,7 @@ class Render {
 		checkGlError("glDrawArrays");
 	}
 
-	synchronized void release() {
+	public synchronized void release() {
 		bindEglContext();
 		stack.clear();
 		if (postCopy2D) {
@@ -504,7 +484,7 @@ class Render {
 		releaseEglContext();
 	}
 
-	synchronized void flush() {
+	public synchronized void flush() {
 		if (stack.isEmpty()) {
 			return;
 		}
@@ -530,12 +510,11 @@ class Render {
 		}
 	}
 
-	private void renderPrimitives(Texture texture, int command, int numPrimitives,
+	private void renderPrimitives(TextureImpl texture, int command,
 								  int[] vertices, int[] normals, int[] texCoords,
-								  int[] colors, Effect3D effect,
-								  FigureLayout layout) {
-		float[] pm = getProjectionMatrix(layout, 0, 0);
-		float[] mvm = getMvMatrix(layout);
+								  int[] colors, FigureLayoutImpl layout, Effect3dImpl effect) {
+		float[] pm = layout.getProjectionMatrix(0, 0, this.width, this.height);
+		float[] mvm = layout.getViewMatrix();
 		boolean blendEnabled = effect.isTransparency && (command & PATTR_BLEND_SUB) != 0;
 		if (blendEnabled) {
 			if (flushStep == 1) {
@@ -547,6 +526,7 @@ class Render {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		glDepthMask(flushStep == 1);
+		int numPrimitives = command >> 16 & 0xff;
 		switch ((command & 0x7000000)) {
 			case PRIMITVE_POINTS: {
 				int vcLen = numPrimitives * 3;
@@ -666,7 +646,7 @@ class Render {
 				if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
 					float[] mvp = MVP_TMP;
 					Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
-					renderMesh(mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, colors[0]);
+					renderMesh(mvp, mvm, command, blendEnabled, vcBuf, ncBuf, colors[0], effect);
 				} else if ((command & PDATA_TEXURE_COORD) != 0) {
 					int tcLen = numPrimitives * 3 * 2;
 					ByteBuffer tcBuf = ByteBuffer.allocateDirect(tcLen)
@@ -677,7 +657,7 @@ class Render {
 					tcBuf.rewind();
 					float[] mvp = MVP_TMP;
 					Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
-					renderMesh(texture, mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, tcBuf);
+					renderMesh(texture, mvp, mvm, command, blendEnabled, vcBuf, ncBuf, tcBuf, effect);
 				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
 					ByteBuffer colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
@@ -692,7 +672,7 @@ class Render {
 					colorBuf.rewind();
 					float[] mvp = MVP_TMP;
 					Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
-					renderMesh(mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, colorBuf);
+					renderMesh(texture, mvp, mvm, command, blendEnabled, vcBuf, ncBuf, colorBuf, effect);
 				}
 				break;
 			}
@@ -750,7 +730,7 @@ class Render {
 				}
 				if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
 					Matrix.multiplyMM(MVP_TMP, 0, pm, 0, mvm, 0);
-					renderMesh(MVP_TMP, mvm, command, blendEnabled, effect, vcBuf, ncBuf, colors[0]);
+					renderMesh(MVP_TMP, mvm, command, blendEnabled, vcBuf, ncBuf, colors[0], effect);
 				} else if ((command & PDATA_TEXURE_COORD) != 0) {
 					ByteBuffer tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2)
 							.order(ByteOrder.nativeOrder());
@@ -769,7 +749,7 @@ class Render {
 					tcBuf.rewind();
 					float[] mvp = MVP_TMP;
 					Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
-					renderMesh(texture, mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, tcBuf);
+					renderMesh(texture, mvp, mvm, command, blendEnabled, vcBuf, ncBuf, tcBuf, effect);
 				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
 					ByteBuffer colorBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3)
 							.order(ByteOrder.nativeOrder());
@@ -788,7 +768,7 @@ class Render {
 					colorBuf.rewind();
 					float[] mvp = MVP_TMP;
 					Matrix.multiplyMM(mvp, 0, pm, 0, mvm, 0);
-					renderMesh(mvp, mvm, command, blendEnabled, effect, vcBuf, ncBuf, colorBuf);
+					renderMesh(texture, mvp, mvm, command, blendEnabled, vcBuf, ncBuf, colorBuf, effect);
 				}
 				break;
 			}
@@ -798,7 +778,9 @@ class Render {
 		}
 	}
 
-	private void renderSprites(Texture texture, int command, int numPrimitives, int[] vertices, int[] texCoords, FigureLayout layout, float[] pm, float[] mvm, boolean blendEnabled) {
+	private void renderSprites(TextureImpl texture, int command, int numPrimitives,
+							   int[] vertices, int[] texCoords, FigureLayoutImpl layout,
+							   float[] pm, float[] mvm, boolean blendEnabled) {
 		int numParams;
 		switch (command & PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) {
 			case PDATA_POINT_SPRITE_PARAMS_PER_CMD:
@@ -904,18 +886,19 @@ class Render {
 	}
 
 	private void renderMesh(float[] mvp, float[] mv, int command, boolean blendEnabled,
-							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, int color) {
+							FloatBuffer vertices, FloatBuffer normals, int color, Effect3dImpl effect) {
 		Program.Color program = Program.color;
 		program.use();
 		if (effect.isLighting && normals != null && (command & PATTR_LIGHTING) != 0) {
-			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0) {
+			Texture sphere = effect.texture;
+			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
 				glVertexAttrib2f(program.aMaterial, 1, 1);
-				program.setSphere(effect.texture);
+				program.setSphere(sphere.impl);
 			} else {
 				glVertexAttrib2f(program.aMaterial, 1, 0);
 				program.setSphere(null);
 			}
-			program.setLight(effect.light);
+			program.setLight(effect.getLight());
 			program.setToonShading(effect);
 
 			normals.rewind();
@@ -943,19 +926,20 @@ class Render {
 		checkGlError("glDrawArrays");
 	}
 
-	private void renderMesh(float[] mvp, float[] mv, int command, boolean blendEnabled,
-							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer colors) {
+	private void renderMesh(TextureImpl texture, float[] mvp, float[] mv, int command, boolean blendEnabled,
+							FloatBuffer vertices, FloatBuffer normals, ByteBuffer colors, Effect3dImpl effect) {
 		Program.Color program = Program.color;
 		program.use();
 		if (effect.isLighting && normals != null && (command & PATTR_LIGHTING) != 0) {
-			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0) {
+			Texture sphere = effect.texture;
+			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
 				glVertexAttrib2f(program.aMaterial, 1, 1);
-				program.setSphere(effect.texture);
+				program.setSphere(sphere.impl);
 			} else {
 				glVertexAttrib2f(program.aMaterial, 1, 0);
 				program.setSphere(null);
 			}
-			program.setLight(effect.light);
+			program.setLight(effect.getLight());
 			program.setToonShading(effect);
 
 			normals.rewind();
@@ -986,18 +970,19 @@ class Render {
 	}
 
 	private void renderMesh(Texture texture, float[] mvp, float[] mv, int command, boolean blendEnabled,
-							Effect3D effect, FloatBuffer vertices, FloatBuffer normals, ByteBuffer texCoords) {
+							FloatBuffer vertices, FloatBuffer normals, ByteBuffer texCoords, Effect3dImpl effect) {
 		Program.Tex program = Program.tex;
 		program.use();
 		if (effect.isLighting && normals != null && (command & PATTR_LIGHTING) != 0) {
-			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0) {
+			Texture sphere = effect.texture;
+			if (effect.isReflection && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
 				glVertexAttrib3f(program.aMaterial, 1, 1, command & PATTR_COLORKEY);
-				program.setSphere(effect.texture);
+				program.setSphere(sphere.impl);
 			} else {
 				glVertexAttrib3f(program.aMaterial, 1, 0, command & PATTR_COLORKEY);
 				program.setSphere(null);
 			}
-			program.setLight(effect.light);
+			program.setLight(effect.getLight());
 			program.setToonShading(effect);
 
 			normals.rewind();
@@ -1019,7 +1004,7 @@ class Render {
 		glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 2, texCoords);
 		glEnableVertexAttribArray(program.aColorData);
 
-		program.setTex(texture);
+		program.setTex(texture.impl);
 
 		glDisable(GL_CULL_FACE);
 		applyBlending(blendEnabled ? (command & PATTR_BLEND_SUB) >> 4 : 0);
@@ -1030,19 +1015,19 @@ class Render {
 		checkGlError("glDrawArrays");
 	}
 
-	void drawCmd(Texture[] textures, int x, int y, FigureLayout layout, Effect3D effect, int[] cmds) {
+	public void drawCmd(TextureImpl[] textures, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect, int[] cmds) {
 		if (COMMAND_LIST_VERSION_1_0 != cmds[0]) {
 			throw new IllegalArgumentException("Unsupported command list version: " + cmds[0]);
 		}
 		setTextureArray(textures);
 		setSpecular(effect.texture);
 		setLight(effect.light);
-		layout = new FigureLayout(layout);
+		layout = new FigureLayoutImpl(layout);
 		layout.centerX += x;
 		layout.centerY += y;
-		effect = new Effect3D(effect);
+		effect = new Effect3dImpl(effect);
 		effect.isLighting = effect.light != null;
-		effect.isToonShading = effect.shading == Effect3D.TOON_SHADING;
+		effect.isToonShading = effect.shading == com.motorola.graphics.j3d.Effect3D.TOON_SHADING;
 		effect.isReflection = effect.texture != null;
 		effect.texture = specular;
 		effect.light = light;
@@ -1058,7 +1043,7 @@ class Render {
 				}
 				case COMMAND_ATTRIBUTE:
 					int params = cmd & 0xFFFFFF;
-					effect.setTransparency((params & ENV_ATTR_SEMI_TRANSPARENT) != 0);
+					effect.isTransparency = (params & ENV_ATTR_SEMI_TRANSPARENT) != 0;
 					effect.isLighting = (params & ENV_ATTR_LIGHTING) != 0;
 					effect.isReflection = (params & ENV_ATTR_SPHERE_MAP) != 0;
 					effect.isToonShading = (params & ENV_ATTR_TOON_SHADING) != 0;
@@ -1169,14 +1154,14 @@ class Render {
 						texCoord = EMPTY_ARRAY;
 					}
 					synchronized (this) {
-						Effect3D effectCopy = new Effect3D(effect);
-						FigureLayout layoutCopy = new FigureLayout(layout);
-						Texture finalTex = getTexture();
+						Effect3dImpl effectCopy = new Effect3dImpl(effect);
+						FigureLayoutImpl layoutCopy = new FigureLayoutImpl(layout);
+						TextureImpl finalTex = getTexture();
 						stack.add(new RenderNode() {
 							@Override
 							public void run() {
-								renderPrimitives(finalTex, cmd, num, vert,
-										norm, texCoord, col, effectCopy, layoutCopy);
+								renderPrimitives(finalTex, cmd, vert,
+										norm, texCoord, col, layoutCopy, effectCopy);
 							}
 						});
 					}
@@ -1212,10 +1197,10 @@ class Render {
 		}
 	}
 
-	synchronized void postFigure(Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
+	public synchronized void postFigure(FigureImpl figure, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect) {
 		setTextureArray(figure.textures);
 		setSpecular(effect.texture);
-		setLight(effect.light);
+		setLight(effect.getLight());
 		FigureNode rn;
 		if (figure.stack.empty()) {
 			rn = new FigureNode(this, figure, x, y, layout, effect);
@@ -1223,37 +1208,41 @@ class Render {
 			rn = figure.stack.pop();
 			rn.setData(this, x, y, layout, effect);
 		}
-		rn.textures = textures.clone();
+		TextureImpl[] copy = new TextureImpl[texturesLen];
+		System.arraycopy(textures, 0, copy, 0, texturesLen);
+		rn.textures = (TextureImpl[]) copy;
 		stack.add(rn);
 	}
 
-	synchronized void postPrimitives(Texture texture, int x, int y, FigureLayout layout, Effect3D effect,
-									 int command, int numPrimitives,
-									 int[] vertexCoords, int[] normals, int[] textureCoords, int[] colors) {
-		Effect3D effectCopy = new Effect3D(effect);
+	public synchronized void postPrimitives(TextureImpl texture, int x, int y,
+											FigureLayoutImpl layout, Effect3dImpl effect,
+											int command,
+											int[] vertexCoords, int[] normals,
+											int[] textureCoords, int[] colors) {
+		Effect3dImpl effectCopy = new Effect3dImpl(effect);
 		effectCopy.isLighting = effect.light != null;
 		effectCopy.isToonShading = effect.shading == Effect3D.TOON_SHADING;
 		effectCopy.isReflection = effect.texture != null;
-		FigureLayout layoutCopy = new FigureLayout(layout);
+		FigureLayoutImpl layoutCopy = new FigureLayoutImpl(layout);
 		layoutCopy.centerX += x;
 		layoutCopy.centerY += y;
 		setTexture(texture);
 		setSpecular(effect.texture);
 		setLight(effect.light);
-		Texture finalTex = getTexture();
+		TextureImpl finalTex = getTexture();
 		stack.add(new RenderNode() {
 			@Override
 			public void run() {
-				renderPrimitives(finalTex, command, numPrimitives, vertexCoords,
-						normals, textureCoords, colors, effectCopy, layoutCopy);
+				renderPrimitives(finalTex, command, vertexCoords,
+						normals, textureCoords, colors, layoutCopy, effectCopy);
 			}
 		});
 	}
 
-	synchronized void drawFigure(Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
+	public synchronized void drawFigure(FigureImpl figure, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect) {
 		bindEglContext();
 		if (!backCopied && preCopy2D) copy2d(true);
-		setTexture(figure.getTexture());
+		setTexture(figure.getTextureImpl());
 		setSpecular(effect.texture);
 		setLight(effect.light);
 		try {
@@ -1265,14 +1254,14 @@ class Render {
 			Model data = figure.data;
 			FloatBuffer vertices = figure.getVertexData();
 			FloatBuffer normals = figure.getNormalsData();
-			renderFigure(data, x, y, layout, textures, effect, vertices, normals);
+			renderFigure(data, x, y, textures, vertices, normals, layout, effect);
 			flushStep = 2;
 			for (int i = 0, stackSize = stack.size(); i < stackSize; i++) {
 				RenderNode r = stack.get(i);
 				r.run();
 				r.recycle();
 			}
-			renderFigure(data, x, y, layout, textures, effect, vertices, normals);
+			renderFigure(data, x, y, textures, vertices, normals, layout, effect);
 			glDisable(GL_BLEND);
 			glDepthMask(true);
 			glClear(GL_DEPTH_BUFFER_BIT);
@@ -1290,25 +1279,41 @@ class Render {
 		((EGL10) EGLContext.getEGL()).eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
 	}
 
-	void reset() {
+	public void reset() {
 		stack.clear();
 	}
 
-	void setTexture(Texture tex) {
-		if (tex != null) {
-			textures = new Texture[]{tex};
-			textureIdx = 0;
+	void setTexture(TextureImpl tex) {
+		if (tex == null) {
+			return;
 		}
+		textures[0] = tex;
+		textureIdx = 0;
+		texturesLen = 1;
+	}
+
+	private void setTextureArray(TextureImpl[] tex) {
+		if (tex == null) {
+			return;
+		}
+		int len = tex.length;
+		System.arraycopy(tex, 0, textures, 0, len);
+		texturesLen = len;
 	}
 
 	void setTextureArray(Texture[] tex) {
-		if (tex != null && tex.length > 0) {
-			textures = tex.clone();
+		if (tex == null) {
+			return;
 		}
+		int len = tex.length;
+		for (int i = 0; i < len; i++) {
+			textures[i] = tex[i].impl;
+		}
+		texturesLen = len;
 	}
 
-	Texture getTexture() {
-		if (textureIdx < 0 || textureIdx >= textures.length) {
+	TextureImpl getTexture() {
+		if (textureIdx < 0 || textureIdx >= texturesLen) {
 			return null;
 		}
 		return textures[textureIdx];
@@ -1322,7 +1327,7 @@ class Render {
 
 	private void setLight(Light light) {
 		if (light != null) {
-			this.light.set(light);
+			this.light.impl.set(light.impl);
 		}
 	}
 }
