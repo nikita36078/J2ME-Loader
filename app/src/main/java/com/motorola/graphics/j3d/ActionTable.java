@@ -18,12 +18,24 @@ package com.motorola.graphics.j3d;
 
 import java.io.IOException;
 
-public class ActionTable extends com.mascotcapsule.micro3d.v3.ActionTable {
+import ru.woesss.j2me.micro3d.ActTableImpl;
+
+public class ActionTable {
+	final ActTableImpl impl;
+
 	public ActionTable(byte[] b) {
-		super(b);
+		impl = new ActTableImpl(b);
 	}
 
 	public ActionTable(String name) throws IOException {
-		super(name);
+		impl = new ActTableImpl(name);
+	}
+
+	public final int getNumAction() {
+		return impl.getNumActions();
+	}
+
+	public final int getNumFrame(int idx) {
+		return impl.getNumFrames(idx);
 	}
 }

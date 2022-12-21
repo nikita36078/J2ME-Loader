@@ -35,7 +35,7 @@ class Action {
 	static final class Bone {
 		private final int type;
 		private final int mtxOffset;
-		final float[] matrix;
+		private final float[] matrix;
 		RollAnim roll;
 		Animation rotate;
 		Animation scale;

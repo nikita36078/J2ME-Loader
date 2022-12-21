@@ -16,33 +16,55 @@
 
 package ru.woesss.j2me.micro3d;
 
-import com.motorola.graphics.j3d.Effect3D;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.Stack;
 
-abstract class RenderNode implements Runnable {
-	protected void recycle() {}
+abstract class RenderNode {
+	protected Render render;
+	final float[] viewMatrix = new float[12];
+	final float[] projMatrix = new float[16];
+	int attrs;
+	Light light;
+	TextureImpl specular;
+	int toonHigh;
+	int toonLow;
+	int toonThreshold;
+
+	RenderNode() {}
+
+	void setData(Render render) {
+		this.render = render;
+		Render.Params params = render.params;
+		System.arraycopy(params.viewMatrix, 0, viewMatrix, 0, 12);
+		System.arraycopy(params.projMatrix, 0, projMatrix, 0, 16);
+		attrs = params.attrs;
+		Light light = params.light;
+		if (this.light == null) {
+			this.light = new Light(light);
+		} else {
+			this.light.set(light.ambIntensity, light.dirIntensity, light.x, light.y, light.z);
+		}
+
+		specular = params.specular;
+		toonHigh = params.toonHigh;
+		toonLow = params.toonLow;
+		toonThreshold = params.toonThreshold;
+	}
+
+	abstract void run();
+
+	void recycle() {}
 
 	static final class FigureNode extends RenderNode {
-		private final Stack<FigureNode> stack;
-		private Render render;
-		private Effect3dImpl effect;
 		TextureImpl[] textures;
-		private FigureLayoutImpl layout;
-		private final FloatBuffer vertices;
-		private final Model data;
-		private final FigureImpl figure;
-		private final FloatBuffer normals;
-		private int x;
-		private int y;
+		final FloatBuffer vertices;
+		final FigureImpl figure;
+		final FloatBuffer normals;
 
-		FigureNode(Render render, FigureImpl impl, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect) {
-			stack = impl.stack;
-			data = impl.data;
-			this.figure = impl;
+		FigureNode(Render render, FigureImpl figure) {
+			this.figure = figure;
+			Model data = figure.model;
 			vertices = ByteBuffer.allocateDirect(data.vertexArrayCapacity)
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
 			if (data.originalNormals != null) {
@@ -51,40 +73,58 @@ abstract class RenderNode implements Runnable {
 			} else {
 				normals = null;
 			}
-			setData(render, x, y, layout, effect);
+			setData(render);
 		}
 
-		void setData(Render render, int x, int y, FigureLayoutImpl layout, Effect3dImpl effect) {
-			this.render = render;
-			if (this.layout != null) {
-				this.layout.set(layout);
-			} else {
-				this.layout = new FigureLayoutImpl(layout);
-			}
-			if (this.effect != null) {
-				this.effect.set(effect);
-			} else {
-				this.effect = new Effect3dImpl(effect);
-			}
-			this.effect.isToonShading = effect.toonHigh == Effect3D.TOON_SHADING;
-			this.x = x;
-			this.y = y;
+		@Override
+		void setData(Render render) {
+			super.setData(render);
+			Render.Params params = render.params;
+			textures = new TextureImpl[params.texturesLen];
+			System.arraycopy(params.textures, 0, textures, 0, params.texturesLen);
 			synchronized (figure) {
-				Utils.fillBuffer(vertices, data.vertices, data.indices);
+				Model model = figure.model;
+				Utils.fillBuffer(vertices, model.vertices, model.indices);
 				if (normals != null) {
-					Utils.fillBuffer(normals, data.normals, data.indices);
+					Utils.fillBuffer(normals, model.normals, model.indices);
 				}
 			}
 		}
 
 		@Override
-		public void run() {
-			render.renderFigure(data, x, y, textures, vertices, normals, layout, effect);
+		void run() {
+			render.renderFigure(this);
 		}
 
 		@Override
-		protected void recycle() {
-			stack.push(this);
+		void recycle() {
+			figure.stack.push(this);
+		}
+	}
+
+	static final class PrimitiveNode extends RenderNode {
+		final int command;
+		final FloatBuffer vertices;
+		final FloatBuffer normals;
+		final ByteBuffer texCoords;
+		final ByteBuffer colors;
+		final TextureImpl texture;
+
+		PrimitiveNode(Render render, int command, FloatBuffer vertices, FloatBuffer normals,
+							 ByteBuffer texCoords, ByteBuffer colors) {
+			setData(render);
+			Render.Params params = render.params;
+			this.texture = params.getTexture();
+			this.command = command;
+			this.vertices = vertices;
+			this.normals = normals;
+			this.texCoords = texCoords;
+			this.colors = colors;
+		}
+
+		@Override
+		void run() {
+			render.renderPrimitive(this);
 		}
 	}
 }

@@ -18,20 +18,34 @@ package com.vodafone.v10.graphics.j3d;
 
 import java.io.IOException;
 
-public class Figure extends com.mascotcapsule.micro3d.v3.Figure {
+import ru.woesss.j2me.micro3d.FigureImpl;
+
+public class Figure {
+	final FigureImpl impl;
+	Texture texture;
+
 	public Figure(byte[] b) {
-		super(b);
+		impl = new FigureImpl(b);
 	}
 
 	public Figure(String name) throws IOException {
-		super(name);
+		impl = new FigureImpl(name);
 	}
 
 	public void setPosture(ActionTable actionTable, int action, int frame) {
-		super.setPosture(actionTable, action, frame);
+		if (actionTable == null) {
+			throw new NullPointerException();
+		}
+		impl.setPosture(actionTable.impl, action, frame);
 	}
 
-	public void setTexture(Texture texture) {
-		super.setTexture(texture);
+	public void setTexture(Texture tex) {
+		if (tex == null) {
+			throw new NullPointerException();
+		}
+		if (!tex.isForModel) {
+			throw new IllegalArgumentException();
+		}
+		texture = tex;
 	}
 }

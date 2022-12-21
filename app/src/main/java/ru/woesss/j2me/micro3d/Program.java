@@ -22,9 +22,9 @@ import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
 
 import android.util.Log;
 
-import com.mascotcapsule.micro3d.v3.Light;
-import com.mascotcapsule.micro3d.v3.Vector3D;
-import com.motorola.graphics.j3d.Effect3D;
+import com.mascotcapsule.micro3d.v3.Graphics3D;
+
+import java.nio.ByteBuffer;
 
 import javax.microedition.util.ContextHolder;
 
@@ -35,12 +35,12 @@ abstract class Program {
 	static Sprite sprite;
 	private static boolean isCreated;
 
-	final int id;
-	int uAmbIntensity;
-	int uDirIntensity;
-	int uLightDir;
-	int uMatrix;
-	int uMatrixMV;
+	protected final int id;
+	protected int uAmbIntensity;
+	protected int uDirIntensity;
+	protected int uLightDir;
+	protected int uMatrix;
+	protected int uNormalMatrix;
 	int aPosition;
 	int aNormal;
 	int aColorData;
@@ -134,17 +134,16 @@ abstract class Program {
 		Render.checkGlError("program delete");
 	}
 
-	public void setLight(Light light) {
+	void setLight(Light light) {
 		if (light == null) {
 			glUniform1f(uAmbIntensity, -1.0f);
 			return;
 		}
-		glUniform1f(uAmbIntensity, Math.max(0, Math.min(light.getAmbientIntensity(), 4096)) * TO_FLOAT);
-		glUniform1f(uDirIntensity, Math.max(0, Math.min(light.getParallelLightIntensity(), 16384)) * TO_FLOAT);
-		Vector3D d = light.getParallelLightDirection();
-		float x = d.x;
-		float y = d.y;
-		float z = d.z;
+		glUniform1f(uAmbIntensity, Math.max(0, Math.min(light.ambIntensity, 4096)) * TO_FLOAT);
+		glUniform1f(uDirIntensity, Math.max(0, Math.min(light.dirIntensity, 16384)) * TO_FLOAT);
+		float x = light.x;
+		float y = light.y;
+		float z = light.z;
 		float rlf = -1.0f / (float) Math.sqrt(x * x + y * y + z * z);
 		glUniform3f(uLightDir, x * rlf, y * rlf, z * rlf);
 	}
@@ -168,7 +167,7 @@ abstract class Program {
 			aColorData = glGetAttribLocation(id, "aColorData");
 			aMaterial = glGetAttribLocation(id, "aMaterial");
 			uMatrix = glGetUniformLocation(id, "uMatrix");
-			uMatrixMV = glGetUniformLocation(id, "uMatrixMV");
+			uNormalMatrix = glGetUniformLocation(id, "uNormalMatrix");
 			uAmbIntensity = glGetUniformLocation(id, "uAmbIntensity");
 			uDirIntensity = glGetUniformLocation(id, "uDirIntensity");
 			uLightDir = glGetUniformLocation(id, "uLightDir");
@@ -180,23 +179,27 @@ abstract class Program {
 			glUniform1i(glGetUniformLocation(id, "uSphereUnit"), 2);
 		}
 
-		void setColor(int rgb) {
-			float r = (rgb >> 16 & 0xff) / 255.0f;
-			float g = (rgb >> 8 & 0xff) / 255.0f;
-			float b = (rgb & 0xff) / 255.0f;
+		void setColor(ByteBuffer rgb) {
+			rgb.rewind();
+			float r = (rgb.get() & 0xff) / 255.0f;
+			float g = (rgb.get() & 0xff) / 255.0f;
+			float b = (rgb.get() & 0xff) / 255.0f;
 			glVertexAttrib3f(aColorData, r, g, b);
 		}
 
-		void setToonShading(Effect3dImpl effect) {
-			boolean enable = effect.shading == com.motorola.graphics.j3d.Effect3D.TOON_SHADING && effect.isToonShading;
-			glUniform1f(uToonThreshold, enable ? effect.toonThreshold : -1.0f);
-			glUniform1f(uToonHigh, effect.toonHigh);
-			glUniform1f(uToonLow, effect.toonLow);
+		void setToonShading(int attrs, int threshold, int high, int low) {
+			if ((attrs & Graphics3D.ENV_ATTR_TOON_SHADING) != 0) {
+				glUniform1f(uToonThreshold, threshold / 255.0f);
+				glUniform1f(uToonHigh, high / 255.0f);
+				glUniform1f(uToonLow, low / 255.0f);
+			} else {
+				glUniform1f(uToonThreshold, -1.0f);
+			}
 		}
 
 		void bindMatrices(float[] mvp, float[] mv) {
 			glUniformMatrix4fv(uMatrix, 1, false, mvp, 0);
-			glUniformMatrix4fv(uMatrixMV, 1, false, mv, 0);
+			glUniformMatrix3fv(uNormalMatrix, 1, false, mv, 0);
 		}
 
 		void setSphere(TextureImpl sphere) {
@@ -256,7 +259,7 @@ abstract class Program {
 			uTexSize = glGetUniformLocation(id, "uTexSize");
 			uSphereSize = glGetUniformLocation(id, "uSphereSize");
 			uMatrix = glGetUniformLocation(id, "uMatrix");
-			uMatrixMV = glGetUniformLocation(id, "uMatrixMV");
+			uNormalMatrix = glGetUniformLocation(id, "uNormalMatrix");
 			uAmbIntensity = glGetUniformLocation(id, "uAmbIntensity");
 			uDirIntensity = glGetUniformLocation(id, "uDirIntensity");
 			uLightDir = glGetUniformLocation(id, "uLightDir");
@@ -279,16 +282,19 @@ abstract class Program {
 			}
 		}
 
-		void setToonShading(Effect3dImpl effect) {
-			boolean enable = effect.shading == Effect3D.TOON_SHADING && effect.isToonShading;
-			glUniform1f(uToonThreshold, enable ? effect.toonThreshold / 255.0f : -1.0f);
-			glUniform1f(uToonHigh, effect.toonHigh / 255.0f);
-			glUniform1f(uToonLow, effect.toonLow / 255.0f);
+		void setToonShading(int attrs, int threshold, int high, int low) {
+			if ((attrs & Graphics3D.ENV_ATTR_TOON_SHADING) != 0) {
+				glUniform1f(uToonThreshold, threshold / 255.0f);
+				glUniform1f(uToonHigh, high / 255.0f);
+				glUniform1f(uToonLow, low / 255.0f);
+			} else {
+				glUniform1f(uToonThreshold, -1.0f);
+			}
 		}
 
 		void bindMatrices(float[] mvp, float[] mv) {
 			glUniformMatrix4fv(uMatrix, 1, false, mvp, 0);
-			glUniformMatrix4fv(uMatrixMV, 1, false, mv, 0);
+			glUniformMatrix3fv(uNormalMatrix, 1, false, mv, 0);
 		}
 
 		void setSphere(TextureImpl sphere) {
@@ -329,7 +335,7 @@ abstract class Program {
 			glUniform1i(glGetUniformLocation(id, "uTextureUnit"), 0);
 		}
 
-		public void setTexture(TextureImpl texture) {
+		void setTexture(TextureImpl texture) {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texture.getId());
 			glUniform2f(uTexSize, texture.getWidth(), texture.getHeight());

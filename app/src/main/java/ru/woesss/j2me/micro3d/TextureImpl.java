@@ -28,16 +28,14 @@ import java.io.IOException;
 import javax.microedition.shell.AppClassLoader;
 
 public class TextureImpl {
-	public static int sLastId;
-	public final boolean isSphere;
-	public final TextureData image;
-	public int mTexId = -2;
+	static int sLastId;
+	final TextureData image;
+	int mTexId = -1;
 
-	public TextureImpl(byte[] b, boolean isForModel) {
+	public TextureImpl(byte[] b) {
 		if (b == null) {
 			throw new NullPointerException();
 		}
-		isSphere = !isForModel;
 		try {
 			image = Loader.loadBmpData(b);
 		} catch (IOException e) {
@@ -46,23 +44,25 @@ public class TextureImpl {
 		}
 	}
 
-	public TextureImpl(String name, boolean isForModel) throws IOException {
-		this(getData(name), isForModel);
+	public TextureImpl(String name) throws IOException {
+		if (name == null) {
+			throw new NullPointerException();
+		}
+		byte[] b = AppClassLoader.getResourceAsBytes(name);
+		if (b == null) {
+			throw new IOException();
+		}
+		try {
+			image = Loader.loadBmpData(b);
+		} catch (IOException e) {
+			Log.e(TAG, "Error loading data from [" + name + "]", e);
+			throw new RuntimeException(e);
+		}
 	}
 
-	public final void dispose() {
-//		synchronized (Render.getRender()) {
-//			Render.getRender().bindEglContext();
-//			if (glIsTexture(mTexId)) {
-//				glDeleteTextures(1, new int[]{mTexId}, 0);
-//				mTexId = -1;
-//			}
-//			Render.getRender().releaseEglContext();
-//		}
-	}
+	public final void dispose() {}
 
-	public int getId() {
-		if (mTexId == -1) throw new IllegalStateException("Already disposed!!!");
+	int getId() {
 		if (GLES20.glIsTexture(mTexId)) {
 			return mTexId;
 		}
@@ -70,18 +70,19 @@ public class TextureImpl {
 		return mTexId;
 	}
 
-	public synchronized static int loadTexture(TextureData bitmap) {
+	static int loadTexture(TextureData bitmap) {
 		final int[] textureIds = new int[1];
 		synchronized (Texture.class) {
 			while (textureIds[0] <= sLastId) {
 				GLES20.glGenTextures(1, textureIds, 0);
 			}
+			sLastId = textureIds[0];
 		}
 		Render.checkGlError("glGenTextures");
 
 		if (bitmap == null) {
 			GLES20.glDeleteTextures(1, textureIds, 0);
-			return 0;
+			return -1;
 		}
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -96,25 +97,23 @@ public class TextureImpl {
 
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
-		int textureId = textureIds[0];
-		sLastId = textureId;
-		return textureId;
+		return textureIds[0];
 	}
 
-	public static byte[] getData(String name) throws IOException {
-		if (name == null) {
-			throw new NullPointerException();
-		}
-		byte[] b = AppClassLoader.getResourceAsBytes(name);
-		if (b == null) throw new IOException();
-		return b;
-	}
-
-	public int getWidth() {
+	int getWidth() {
 		return image.width;
 	}
 
-	public int getHeight() {
+	int getHeight() {
 		return image.height;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+			dispose();
+		} finally {
+			super.finalize();
+		}
 	}
 }

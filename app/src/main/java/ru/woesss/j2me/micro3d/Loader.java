@@ -103,7 +103,7 @@ class Loader {
 					numVertices, numTextures, numPatterns, numColors));
 		}
 
-		Model data = new Model(numVertices, numBones, numPatterns,
+		Model model = new Model(numVertices, numBones, numPatterns,
 				numTextures, numPolyT3, numPolyT4, numPolyC3, numPolyC4);
 		int[][][] patterns = new int[numPatterns][(numTextures + 1)][2];
 		if (version == 5) {
@@ -121,14 +121,14 @@ class Loader {
 		}
 
 		if (vertexFormat == 1) {
-			loader.readVerticesV1(data.originalVertices);
+			loader.readVerticesV1(model.originalVertices);
 		} else if (vertexFormat == 2) {
-			loader.readVerticesV2(data.originalVertices);
+			loader.readVerticesV2(model.originalVertices);
 		} else {
 			throw new RuntimeException("Unexpected vertexFormat: " + vertexFormat);
 		}
 		loader.clearCache();
-		data.originalVertices.rewind();
+		model.originalVertices.rewind();
 
 		if (normalFormat != 0) {
 			FloatBuffer normals = ByteBuffer.allocateDirect(numVertices * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -150,28 +150,28 @@ class Loader {
 				throw new RuntimeException("Unsupported normalFormat: " + normalFormat);
 			}
 			normals.rewind();
-			data.originalNormals = normals;
+			model.originalNormals = normals;
 			int len = numVertices * 3 + 3;
-			data.normals = ByteBuffer.allocateDirect(len * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-			data.normals.put(--len, 1.0f);
+			model.normals = ByteBuffer.allocateDirect(len * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+			model.normals.put(--len, 1.0f);
 		}
 		loader.clearCache();
 
-		if (data.hasPolyC) {
-			loader.readPolyC(data, numVertices, numColors, numPolyC3);
+		if (model.hasPolyC) {
+			loader.readPolyC(model, numVertices, numColors, numPolyC3);
 		}
 
-		if (data.hasPolyT) {
+		if (model.hasPolyT) {
 
 			switch (polygonFormat) {
 				case 1:
-					loader.readPolyV1(data, numVertices, numPolyT3);
+					loader.readPolyV1(model, numVertices, numPolyT3);
 					break;
 				case 2:
-					loader.readPolyV2(data, numVertices, numPolyT3);
+					loader.readPolyV2(model, numVertices, numPolyT3);
 					break;
 				case 3:
-					loader.readPolyV3(data, numVertices, numPolyT3);
+					loader.readPolyV3(model, numVertices, numPolyT3);
 					break;
 				default:
 					throw new RuntimeException("Unexpected polygonFormat: " + polygonFormat);
@@ -184,8 +184,8 @@ class Loader {
 		int t3 = 0;
 		int t4 = numPolyT3;
 
-		Model.Polygon[] polygonsC = data.polygonsC;
-		Model.Polygon[] polygonsT = data.polygonsT;
+		Model.Polygon[] polygonsC = model.polygonsC;
+		Model.Polygon[] polygonsT = model.polygonsT;
 		for (int i = 0; i < numPatterns; i++) {
 			final int[][] pattern = patterns[i];
 			int[] polygons = pattern[0];
@@ -216,7 +216,7 @@ class Loader {
 			}
 		}
 
-		int count = loader.readBones(numBones, data);
+		int count = loader.readBones(numBones, model);
 		if (count != numVertices) {
 			throw new RuntimeException("Bones vertices = " + count + ", but all vertices = " + numVertices);
 		}
@@ -229,7 +229,7 @@ class Loader {
 			Log.e(TAG, "Uninterpreted bytes in MBAC (" + available + ", v=" + version);
 		}
 
-		return data;
+		return model;
 	}
 
 	static Action[] loadMtraData(byte[] bytes) throws IOException {

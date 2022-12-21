@@ -25,7 +25,7 @@ import java.io.IOException;
 import javax.microedition.shell.AppClassLoader;
 
 public class ActTableImpl {
-	public Action[] actions;
+	Action[] actions;
 
 	public ActTableImpl(byte[] b) {
 		if (b == null) {
@@ -72,7 +72,7 @@ public class ActTableImpl {
 		return actions[idx].keyframes << 16;
 	}
 
-	public void checkDisposed() {
+	private void checkDisposed() {
 		if (actions == null) throw new IllegalStateException("ActionTable disposed!");
 	}
 }

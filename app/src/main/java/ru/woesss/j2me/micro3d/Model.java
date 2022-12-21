@@ -21,9 +21,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 class Model {
-
 	final int numPatterns;
-	final int numTextures;
 	final boolean hasPolyC;
 	final boolean hasPolyT;
 
@@ -39,14 +37,13 @@ class Model {
 	final int vertexArrayCapacity;
 	final int[][][] subMeshesLengthsT;
 	final int[][] subMeshesLengthsC;
-	int numVerticesPolyT;
+	final int numVerticesPolyT;
 	final int[] indices;
 	final ByteBuffer bones;
 
 	Model(int vertices, int numBones, int patterns, int numTextures,
 		  int polyT3, int polyT4, int polyC3, int polyC4) {
 		numPatterns = patterns;
-		this.numTextures = numTextures;
 		subMeshesLengthsT = new int[4][numTextures][2];
 		subMeshesLengthsC = new int[4][2];
 		numVerticesPolyT = polyT3 * 3 + polyT4 * 6;

@@ -23,25 +23,19 @@ import ru.woesss.j2me.micro3d.TextureImpl;
 @SuppressWarnings("unused, WeakerAccess")
 public class Texture {
 	public final TextureImpl impl;
+	final boolean isForModel;
 
 	public Texture(byte[] b, boolean isForModel) {
-		impl = new TextureImpl(b, isForModel);
+		this.isForModel = isForModel;
+		impl = new TextureImpl(b);
 	}
 
 	public Texture(String name, boolean isForModel) throws IOException {
-		impl = new TextureImpl(name, isForModel);
+		this.isForModel = isForModel;
+		impl = new TextureImpl(name);
 	}
 
 	public final void dispose() {
 		impl.dispose();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		try {
-			impl.dispose();
-		} finally {
-			super.finalize();
-		}
 	}
 }

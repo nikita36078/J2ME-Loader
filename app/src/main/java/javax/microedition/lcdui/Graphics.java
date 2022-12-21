@@ -32,8 +32,6 @@ import android.graphics.Region;
 import android.os.Build;
 import android.util.Log;
 
-import com.mascotcapsule.micro3d.v3.Graphics3D;
-
 public class Graphics implements
 		com.vodafone.v10.graphics.j3d.Graphics3D,
 		com.motorola.graphics.j3d.Graphics3D,
@@ -67,7 +65,6 @@ public class Graphics implements
 	private int stroke = SOLID;
 
 	private Font font = Font.getDefaultFont();
-	private com.mascotcapsule.micro3d.v3.Graphics3D g3d;
 
 	Graphics(Image image) {
 		this.image = image;
@@ -571,10 +568,7 @@ public class Graphics implements
 										int x, int y,
 										com.vodafone.v10.graphics.j3d.FigureLayout layout,
 										com.vodafone.v10.graphics.j3d.Effect3D effect) {
-		if (g3d == null) g3d = new Graphics3D();
-		g3d.bind(this);
-		g3d.drawFigure(figure, x, y, layout, effect);
-		g3d.release(this);
+		com.vodafone.v10.graphics.j3d.RenderProxy.drawFigure(this, figure, x, y, layout, effect);
 	}
 
 	@Override
@@ -582,10 +576,7 @@ public class Graphics implements
 										int x, int y,
 										com.motorola.graphics.j3d.FigureLayout layout,
 										com.motorola.graphics.j3d.Effect3D effect) {
-		if (g3d == null) g3d = new Graphics3D();
-		g3d.bind(this);
-		g3d.drawFigure(figure, x, y, layout, effect);
-		g3d.release(this);
+		com.motorola.graphics.j3d.RenderProxy.drawFigure(this, figure, x, y, layout, effect);
 	}
 
 	@Override
@@ -593,9 +584,6 @@ public class Graphics implements
 										int x, int y,
 										com.jblend.graphics.j3d.FigureLayout layout,
 										com.jblend.graphics.j3d.Effect3D effect) {
-		if (g3d == null) g3d = new Graphics3D();
-		g3d.bind(this);
-		g3d.drawFigure(figure, x, y, layout, effect);
-		g3d.release(this);
+		com.jblend.graphics.j3d.RenderProxy.drawFigure(this, figure, x, y, layout, effect);
 	}
 }

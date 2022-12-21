@@ -53,9 +53,4 @@ public class ActionTable {
 	public final int getNumFrames(int idx) {
 		return impl.getNumFrames(idx);
 	}
-
-	void checkDisposed() {
-		impl.checkDisposed();
-	}
-
 }

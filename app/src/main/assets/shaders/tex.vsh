@@ -1,5 +1,5 @@
 uniform mat4 uMatrix;
-uniform mat4 uMatrixMV;
+uniform mat3 uNormalMatrix;
 uniform vec2 uTexSize;
 uniform float uAmbIntensity;
 attribute vec4 aPosition;
@@ -14,7 +14,7 @@ varying float vAmbIntensity;
 
 void main() {
     gl_Position = uMatrix * aPosition;
-    vNormal = mat3(uMatrixMV) * aNormal;
+    vNormal = uNormalMatrix * aNormal;
     vIsTransparency = aMaterial[2];
     vIsReflect = aMaterial[1];
     vAmbIntensity = aMaterial[0] > 0.5 ? uAmbIntensity : -1.0;

@@ -18,7 +18,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_micro3d_Utils_fillBuffer
     for (int i = 0; i < len; ++i) {
         *dst++ = src[indexPtr[i]];
     }
-    env->ReleaseIntArrayElements(indices, indexPtr, 0);
+    env->ReleaseIntArrayElements(indices, indexPtr, JNI_ABORT);
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_micro3d_Utils_glReadPixels
@@ -112,7 +112,7 @@ Java_ru_woesss_j2me_micro3d_Utils_transform(JNIEnv *env, jclass /*clazz*/,
     }
     delete[] tmp;
     if (action_matrices != nullptr) {
-        env->ReleaseFloatArrayElements(action_matrices, actionsPtr, 0);
+        env->ReleaseFloatArrayElements(action_matrices, actionsPtr, JNI_ABORT);
     }
 }
 

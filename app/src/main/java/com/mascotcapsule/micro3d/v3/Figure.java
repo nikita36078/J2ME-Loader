@@ -21,6 +21,8 @@ import ru.woesss.j2me.micro3d.FigureImpl;
 import java.io.IOException;
 
 public class Figure {
+	Texture[] textures;
+	int textureIndex = -1;
 	final FigureImpl impl;
 
 	@SuppressWarnings("unused")
@@ -39,44 +41,72 @@ public class Figure {
 	}
 
 	@SuppressWarnings("unused")
-	public final void setPosture(ActionTable actionTable, int action, int frame) {
-		if (actionTable == null) {
-			throw new NullPointerException();
-		} else if (action < 0 || action >= actionTable.getNumActions()) {
-			throw new IllegalArgumentException();
-		}
-		impl.setPosture(actionTable.impl, action, frame);
-	}
-
-	public final Texture getTexture() {
-		return impl.getTexture();
-	}
-
-	public final void setTexture(Texture tex) {
-		impl.setTexture(tex);
-	}
-
-	public final void setTexture(Texture[] t) {
-		impl.setTexture(t);
-	}
-
-	@SuppressWarnings("unused")
-	public final int getNumTextures() {
-		return impl.getNumTextures();
-	}
-
-	@SuppressWarnings("unused")
-	public final void selectTexture(int idx) {
-		impl.selectTexture(idx);
-	}
-
-	@SuppressWarnings("unused")
 	public final int getNumPattern() {
 		return impl.getNumPattern();
 	}
 
 	@SuppressWarnings("unused")
+	public final int getNumTextures() {
+		if (textures == null) {
+			return 0;
+		}
+		return textures.length;
+	}
+
+	public final Texture getTexture() {
+		if (textureIndex < 0) {
+			return null;
+		}
+		return textures[textureIndex];
+	}
+
+	@SuppressWarnings("unused")
+	public final void selectTexture(int idx) {
+		if (idx < 0 || idx >= getNumTextures()) {
+			throw new IllegalArgumentException();
+		}
+		textureIndex = idx;
+	}
+
+	@SuppressWarnings("unused")
 	public final void setPattern(int idx) {
 		impl.setPattern(idx);
+	}
+
+	@SuppressWarnings("unused")
+	public final void setPosture(ActionTable actionTable, int action, int frame) {
+		if (actionTable == null) {
+			throw new NullPointerException();
+		}
+		impl.setPosture(actionTable.impl, action, frame);
+	}
+
+	public final void setTexture(Texture tex) {
+		if (tex == null)
+			throw new NullPointerException();
+		if (!tex.isForModel)
+			throw new IllegalArgumentException();
+
+		textures = new Texture[]{tex};
+		textureIndex = 0;
+	}
+
+	public final void setTexture(Texture[] t) {
+		if (t == null) {
+			throw new NullPointerException();
+		}
+		if (t.length == 0) {
+			throw new IllegalArgumentException();
+		}
+		for (Texture texture : t) {
+			if (texture == null) {
+				throw new NullPointerException();
+			}
+			if (!texture.isForModel) {
+				throw new IllegalArgumentException();
+			}
+		}
+		textures = t;
+		textureIndex = -1;
 	}
 }

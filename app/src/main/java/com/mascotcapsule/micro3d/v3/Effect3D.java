@@ -16,128 +16,137 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import ru.woesss.j2me.micro3d.Effect3dImpl;
-
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Effect3D {
 	public static final int NORMAL_SHADING = 0;
 	public static final int TOON_SHADING = 1;
 
-	final Effect3dImpl impl;
+	Light light;
+	Texture texture;
+	int shading;
+	int toonHigh;
+	int toonLow;
+	int toonThreshold;
+	boolean isTransparency;
 
 	public Effect3D() {
-		impl = new Effect3dImpl();
+		shading = NORMAL_SHADING;
+		isTransparency = true;
 	}
 
 	public Effect3D(Light light, int shading, boolean isEnableTrans, Texture tex) {
-		if (shading != NORMAL_SHADING && shading != TOON_SHADING) {
-			throw new IllegalArgumentException();
-		}
-		if (tex != null && !tex.impl.isSphere) {
-			throw new IllegalArgumentException();
-		}
-		impl = new Effect3dImpl(light, shading, isEnableTrans, tex);
+		setShadingType(shading);
+		setSphereTexture(tex);
+		setLight(light);
+		isTransparency = isEnableTrans;
 	}
 
-	public Light getLight() {
-		return impl.getLight();
-	}
-
-	public final void setLight(Light light) {
-		impl.setLight(light);
+	public final Light getLight() {
+		return light;
 	}
 
 	@Deprecated
 	public final int getShading() {
-		return impl.getShadingType();
+		return shading;
 	}
 
 	public final int getShadingType() {
-		return impl.getShadingType();
+		return shading;
 	}
 
 	@Deprecated
-	public final void setShading(int shading) {
-		impl.setShadingType(shading);
+	public final Texture getSphereMap() {
+		return texture;
 	}
 
-	public final void setShadingType(int shading) {
-		impl.setShadingType(shading);
+	public final Texture getSphereTexture() {
+		return texture;
 	}
 
 	@Deprecated
 	public final int getThreshold() {
-		return impl.getToonThreshold();
-	}
-
-	public final int getToonThreshold() {
-		return impl.getToonThreshold();
+		return toonThreshold;
 	}
 
 	@Deprecated
 	public final int getThresholdHigh() {
-		return impl.getToonHigh();
-	}
-
-	public final int getToonHigh() {
-		return impl.getToonHigh();
+		return toonHigh;
 	}
 
 	@Deprecated
 	public final int getThresholdLow() {
-		return impl.getToonLow();
+		return toonLow;
+	}
+
+	public final int getToonHigh() {
+		return toonHigh;
 	}
 
 	public final int getToonLow() {
-		return impl.getToonLow();
+		return toonLow;
 	}
 
-	@Deprecated
-	public final void setThreshold(int threshold, int high, int low) {
-		impl.setToonParams(threshold, high, low);
-	}
-
-	public final void setToonParams(int threshold, int high, int low) {
-		impl.setToonParams(threshold, high, low);
+	public final int getToonThreshold() {
+		return toonThreshold;
 	}
 
 	@Deprecated
 	public final boolean isSemiTransparentEnabled() {
-		return impl.isTransparency();
+		return isTransparency;
 	}
 
 	public final boolean isTransparency() {
-		return impl.isTransparency();
+		return isTransparency;
+	}
+
+	public final void setLight(Light light) {
+		this.light = light;
 	}
 
 	@Deprecated
 	public final void setSemiTransparentEnabled(boolean isEnable) {
-		impl.setTransparency(isEnable);
-	}
-
-	public final void setTransparency(boolean isEnable) {
-		impl.setTransparency(isEnable);
+		isTransparency = isEnable;
 	}
 
 	@Deprecated
-	public Texture getSphereMap() {
-		return impl.getSphereTexture();
+	public final void setShading(int shading) {
+		setShadingType(shading);
 	}
 
-	public final Texture getSphereTexture() {
-		return impl.getSphereTexture();
+	public final void setShadingType(int shading) {
+		if ((shading & ~TOON_SHADING) != 0) {
+			throw new IllegalArgumentException();
+		}
+		this.shading = shading;
 	}
 
 	@Deprecated
 	public final void setSphereMap(Texture tex) {
-		impl.setSphereTexture(tex);
+		setSphereTexture(tex);
 	}
 
 	public final void setSphereTexture(Texture tex) {
-		impl.setSphereTexture(tex);
+		if (tex != null && tex.isForModel) {
+			throw new IllegalArgumentException();
+		}
+		texture = tex;
 	}
 
-	void set(Effect3D src) {
-		impl.set(src.impl);
+	@Deprecated
+	public final void setThreshold(int threshold, int high, int low) {
+		setToonParams(threshold, high, low);
+	}
+
+	public final void setToonParams(int threshold, int high, int low) {
+		if (((threshold & ~0xff) | (high & ~0xff) | (low & ~0xff)) != 0) {
+			throw new IllegalArgumentException();
+		}
+		toonThreshold = threshold;
+		toonHigh = high;
+		toonLow = low;
+	}
+
+	public final void setTransparency(boolean isEnable) {
+		isTransparency = isEnable;
 	}
 }

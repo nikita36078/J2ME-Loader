@@ -16,20 +16,50 @@
 
 package com.vodafone.v10.graphics.j3d;
 
-public class Light extends com.mascotcapsule.micro3d.v3.Light {
+public class Light {
+	Vector3D direction;
+	int dirIntensity;
+	int ambIntensity;
+
 	public Light() {
-		super(new Vector3D(0, 0, 4096), 4096, 0);
+		direction = new Vector3D(0, 0, 4096);
+		this.dirIntensity = 4096;
+		this.ambIntensity = 0;
 	}
 
 	public Light(Vector3D dir, int dirIntensity, int ambIntensity) {
-		super(dir, dirIntensity, ambIntensity);
+		if (dir == null) {
+			throw new NullPointerException();
+		}
+		direction = dir;
+		this.dirIntensity = dirIntensity;
+		this.ambIntensity = ambIntensity;
+	}
+
+	public int getAmbIntensity() {
+		return ambIntensity;
 	}
 
 	public Vector3D getDirection() {
-		return (Vector3D) getParallelLightDirection();
+		return direction;
 	}
 
-	public void setDirection(Vector3D vector3D) {
-		setParallelLightDirection(vector3D);
+	public int getDirIntensity() {
+		return dirIntensity;
+	}
+
+	public void setAmbIntensity(int ambIntensity) {
+		this.ambIntensity = ambIntensity;
+	}
+
+	public void setDirection(Vector3D dir) {
+		if (dir == null) {
+			throw new NullPointerException();
+		}
+		direction = dir;
+	}
+
+	public void setDirIntensity(int dirIntensity) {
+		this.dirIntensity = dirIntensity;
 	}
 }

@@ -18,12 +18,19 @@ package com.vodafone.v10.graphics.j3d;
 
 import java.io.IOException;
 
-public class Texture extends com.mascotcapsule.micro3d.v3.Texture {
+import ru.woesss.j2me.micro3d.TextureImpl;
+
+public class Texture {
+	public final TextureImpl impl;
+	final boolean isForModel;
+
 	public Texture(byte[] b, boolean isForModel) {
-		super(b, isForModel);
+		this.isForModel = isForModel;
+		impl = new TextureImpl(b);
 	}
 
 	public Texture(String name, boolean isForModel) throws IOException {
-		super(name, isForModel);
+		this.isForModel = isForModel;
+		impl = new TextureImpl(name);
 	}
 }
