@@ -9,6 +9,7 @@
     <string name="licenses">Licence</string>
     <string name="profiles">Profily</string>
     <string name="save_log">Uložit protokol</string>
+    <string name="about_message">Tato aplikace umožňuje spouštět J2ME aplikace a hry na Androidu. Podporuje většinu 2D a 3D her (včetně Mascot Capsule 3D).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Povolení filtrování může v některých případech výrazně snížit výkon. Zakažte tuto možnost, pokud je hra příliš pomalá.&lt;BR&gt;&#8226; Problémy s blikáním obrazu lze opravit tak, že povolíte možnost \"Režim okamžitého zpracování\".</string>
     <string name="author">Autor: </string>
     <string name="version">Verze: </string>
@@ -182,7 +183,7 @@
     <string name="pref_default_settings">Výchozí nastavení</string>
     <string name="pref_emulator_dir">Pracovní adresář</string>
     <string name="pref_screenshot_summary">Zakázat škálování a filtrování snímků obrazovky</string>
-    <string name="pref_screenshot_title">Nezpracovaný snímek obrazovky</string>
+    <string name="pref_screenshot_title">Nezpracované snímky obrazovky</string>
     <string name="mapping_dialog_message">Stávající mapování: %1$s</string>
     <string name="mapping_dialog_key_not_specified">nenastaveno</string>
     <string name="mapping_dialog_title">Stiskněte tlačítko</string>

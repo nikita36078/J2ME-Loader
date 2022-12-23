@@ -9,6 +9,7 @@
     <string name="licenses">Lisanslar</string>
     <string name="profiles">Profiller</string>
     <string name="save_log">Günlüğü kaydet</string>
+    <string name="about_message">Bu uygulama, Android\'de J2ME uygulamalarını ve oyunlarını çalıştırmanızı sağlar. Birçok 2D ve 3D oyunu destekler.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bazı durumlarda filtrelemeyi etkinleştirmek, performansı önemli ölçüde azaltabilir. Oyun çok yavaşsa bu seçeneği devre dışı bırakın.&lt;BR&gt;&#8226; Görüntüde oluşan titreme sorununu \"Acil işleme modu\" seçeneğini etkinleştirerek düzeltilebilirsiniz.</string>
     <string name="author">Geliştirici: </string>
     <string name="version">Sürüm: </string>
@@ -152,8 +153,10 @@
     <string name="screenshot_saved">Ekran görüntüsü şuraya kaydedildi</string>
     <string name="log_saved">Günlük kaydedildi</string>
     <string name="action_keyboard_ime">Klavye (IME)</string>
+    <string name="action_lock_orientation">Ekran döndürmeyi kilitle</string>
     <string name="pref_vk_save_alert">Özel klavye mevcut ile değiştirilecektir.\nYine de kaydet?</string>
     <string name="opt_save_screen_params">ekran parametrelerini kaydet</string>
+    <string name="cmd_menu">Menü</string>
     <string name="dismiss">Reddet</string>
     <string name="pref_theme_auto_battery">Otomatik, Pil Tasarrufu ile</string>
     <string name="pref_theme_auto_time">Otomatik, günün saatine göre</string>
@@ -179,10 +182,14 @@
     <string name="pref_encoding_title">Kodlama</string>
     <string name="pref_default_settings">Varsayılan ayarlar</string>
     <string name="pref_emulator_dir">Çalışma dizini</string>
+    <string name="pref_screenshot_summary">Ekran görüntüleri için ölçeklemeyi ve filtrelemeyi devre dışı bırak</string>
+    <string name="pref_screenshot_title">Ekran görüntüsü</string>
     <string name="mapping_dialog_message">Mevcut atama: %1$s</string>
     <string name="mapping_dialog_key_not_specified">belirtilmemiş</string>
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
     <string name="reset_mapping">Sıfırla</string>
+    <string name="alert_map_menu">Menü tuşu (M) ayarlanmamış!\nBu, emülatör seçeneklerine erişmeyi imkansız hale getirebilir</string>
+    <string name="save">Kaydet</string>
     <string name="error_name">İsim girin!</string>
     <string name="set_as_default">Varsayılan olarak ayarla</string>
     <string name="edit">Düzenle</string>
@@ -194,4 +201,5 @@
     <string name="error_name_exists">Zaten mevcut, başka isim girin</string>
     <string name="default_label">"%s (varsayılan)"</string>
     <string name="not_saved_exists">Zaten mevcut</string>
+    <string name="alert_rewrite_profile">\"%1$s\" zaten var. \nDeğiştirmek istiyor musunuz?</string>
 </resources>

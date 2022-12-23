@@ -9,9 +9,10 @@
     <string name="licenses">Autorisations</string>
     <string name="profiles">Profils</string>
     <string name="save_log">Sauvegarde logs</string>
+    <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android. Elle prend en charge la plupart des jeux 2D et 3D (y compris les jeux Mascot Capsule 3D).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Activer le filtrage dans certains cas peut considérablement réduire les performances. Désactiver cette option si le jeu est trop lent.&lt;BR&gt;&#8226; Les problèmes de scintillement d\'image peuvent être résolus en activant l\'option \"Mode de traitement immédiat\".</string>
     <string name="author">Auteur: </string>
-    <string name="version">Version: </string>
+    <string name="version">Version : </string>
     <string name="no_data_for_display">Aucune donnée</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
     <string name="permission_request_failed">Cette application nécessite une autorisation d\'écriture sur le stockage</string>
@@ -71,7 +72,7 @@
     <string name="PREF_FONT_MEDIUM">Moyen</string>
     <string name="PREF_FONT_LARGE">Grand</string>
     <string name="PREF_FONT_SIZE_IN_SP">Les valeurs sont misent à l’échelle des pixels</string>
-    <string name="PREF_BACKGROUND">Fond</string>
+    <string name="PREF_BACKGROUND">Arrière-plan</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Clavier virtuel</string>
     <string name="PREF_VK_SHOW">Afficher le clavier</string>
     <string name="PREF_VK_FEEDBACK">Retour haptique</string>
@@ -152,8 +153,10 @@
     <string name="screenshot_saved">Capture d\'écran a été enregistrée dans</string>
     <string name="log_saved">Le journal a été sauvegardé</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
+    <string name="action_lock_orientation">Verrouiller l\'orientation de l\'écran</string>
     <string name="pref_vk_save_alert">Le clavier personnalisé sera remplacé par la sauvegarde\nactuelle ?</string>
     <string name="opt_save_screen_params">enregistrer les paramètres de l\'écran</string>
+    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Ignorer</string>
     <string name="pref_theme_auto_battery">Auto, par économiseur de batterie</string>
     <string name="pref_theme_auto_time">Auto, par heure de la journée</string>
@@ -179,10 +182,14 @@
     <string name="pref_encoding_title">Cryptage</string>
     <string name="pref_default_settings">Paramètres par défaut</string>
     <string name="pref_emulator_dir">Répertoire de travail</string>
+    <string name="pref_screenshot_summary">Désactiver la mise à l\'échelle et le filtrage des captures d\'écran</string>
+    <string name="pref_screenshot_title">Capture d\'écran brute</string>
     <string name="mapping_dialog_message">Mappage actuel : %1$s</string>
     <string name="mapping_dialog_key_not_specified">non spécifié</string>
     <string name="mapping_dialog_title">Appuyez sur une touche</string>
     <string name="reset_mapping">Réinitialiser</string>
+    <string name="alert_map_menu">La touche Menu (M) n\'est pas assignée !\n Cela peut rendre l\'accès aux options de l\'émulateur impossible</string>
+    <string name="save">Sauvegarder</string>
     <string name="error_name">Entrer le nom!</string>
     <string name="set_as_default">Définir par défaut</string>
     <string name="edit">Paramètres</string>
@@ -194,4 +201,5 @@
     <string name="error_name_exists">Existe déjà, entrez un autre nom</string>
     <string name="default_label">"%s (par défaut)"</string>
     <string name="not_saved_exists">Existe déjà</string>
+    <string name="alert_rewrite_profile">Un profil ayant pour nom \"%1$s\" existe déjà.\n Voulez-vous le remplacer ?</string>
 </resources>

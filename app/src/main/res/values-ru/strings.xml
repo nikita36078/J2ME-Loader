@@ -9,6 +9,7 @@
     <string name="licenses">Лицензии</string>
     <string name="profiles">Профили</string>
     <string name="save_log">Сохранить лог</string>
+    <string name="about_message">Это приложение позволяет запускать J2ME приложения и игры на Android. Поддерживается большинство 2D и 3D игр (в том числе игры на движке Mascot Capsule 3D).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Включение фильтрации в некоторых случаях может значительно снизить производительность. Отключите эту опцию, если игра работает слишком медленно. &lt;BR&gt;&#8226; Проблемы с мерцанием изображения могут быть решены с помощью опции \"Режим неотложной обработки\".</string>
     <string name="author">Автор: </string>
     <string name="version">Версия: </string>
@@ -183,6 +184,7 @@
     <string name="pref_emulator_dir">Рабочая папка</string>
     <string name="pref_screenshot_summary">Отключить масштабирование и фильтрацию скриншотов</string>
     <string name="pref_screenshot_title">Необработанный скриншот</string>
+    <string name="pref_category_experimental">Экспериментальные/временные опции</string>
     <string name="mapping_dialog_message">Текущий маппинг: %1$s</string>
     <string name="mapping_dialog_key_not_specified">не задано</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
