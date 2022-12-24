@@ -62,8 +62,7 @@ public class Render {
 	private final int[] bgTextureId = new int[]{-1};
 	private final float[] MVP_TMP = new float[16];
 
-	private Graphics graphics;
-	private Bitmap mBitmapBuffer;
+	private Bitmap targetBitmap;
 	private final Rect gClip = new Rect();
 	private final Rect clip = new Rect();
 	private boolean backCopied;
@@ -72,6 +71,8 @@ public class Render {
 	private final boolean postCopy2D = !Boolean.getBoolean("micro3d.v3.render.no-mix2D3D");
 	private final boolean preCopy2D = !Boolean.getBoolean("micro3d.v3.render.background.ignore");
 	private IntBuffer bufHandles;
+	private int clearColor;
+	private TextureImpl targetTexture;
 
 	/**
 	 * Utility method for debugging OpenGL calls.
@@ -126,12 +127,11 @@ public class Render {
 	}
 
 	public synchronized void bind(Graphics graphics) {
-		this.graphics = graphics;
 		Canvas canvas = graphics.getCanvas();
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
 		if (eglContext == null) init();
-		mBitmapBuffer = graphics.getBitmap();
+		targetBitmap = graphics.getBitmap();
 		EGL10 egl = (EGL10) EGLContext.getEGL();
 		if (params.width != width || params.height != height) {
 
@@ -173,6 +173,56 @@ public class Render {
 		egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
 	}
 
+	public synchronized void bind(TextureImpl tex) {
+		targetTexture = tex;
+		int width = tex.getWidth();
+		int height = tex.getHeight();
+		if (eglContext == null) init();
+		EGL10 egl = (EGL10) EGLContext.getEGL();
+		if (params.width != width || params.height != height) {
+
+			if (eglWindowSurface != null) {
+				releaseEglContext();
+				egl.eglDestroySurface(eglDisplay, eglWindowSurface);
+			}
+
+			int[] surface_attribs = {
+					EGL10.EGL_WIDTH, width,
+					EGL10.EGL_HEIGHT, height,
+					EGL10.EGL_NONE};
+			eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
+			egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
+
+			glViewport(0, 0, width, height);
+			Program.create();
+			params.width = width;
+			params.height = height;
+		}
+		egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
+		Rect clip = this.clip;
+		clip.set(0, 0, width, height);
+		int l = clip.left;
+		int t = clip.top;
+		int r = clip.right;
+		int b = clip.bottom;
+		gClip.set(l, t, r, b);
+		if (l == 0 && t == 0 && r == params.width && b == params.height) {
+			glDisable(GL_SCISSOR_TEST);
+		} else {
+			glEnable(GL_SCISSOR_TEST);
+			glScissor(l, t, r - l, b - t);
+		}
+		glClearColor(
+				((clearColor >> 16) & 0xff) / 255.0f,
+				((clearColor >> 8) & 0xff) / 255.0f,
+				(clearColor & 0xff) / 255.0f,
+				1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		backCopied = false;
+		egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+
+	}
+
 	private static void applyBlending(int blendMode) {
 		switch (blendMode) {
 			case Model.Polygon.BLEND_HALF:
@@ -197,6 +247,9 @@ public class Render {
 	}
 
 	private void copy2d(boolean preProcess) {
+		if (targetBitmap == null) {// render to texture
+			return;
+		}
 		if (!glIsTexture(bgTextureId[0])) {
 			glGenTextures(1, bgTextureId, 0);
 			glActiveTexture(GL_TEXTURE1);
@@ -210,7 +263,7 @@ public class Render {
 			glActiveTexture(GL_TEXTURE1);
 			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
 		}
-		GLUtils.texImage2D(GL_TEXTURE_2D, 0, mBitmapBuffer, 0);
+		GLUtils.texImage2D(GL_TEXTURE_2D, 0, targetBitmap, 0);
 		checkGlError("texImage2D");
 
 		final Program.Simple program = Program.simple;
@@ -240,12 +293,14 @@ public class Render {
 		checkGlError("copy2d");
 		if (preProcess) {
 			if (postCopy2D) {
-				mBitmapBuffer.setHasAlpha(true);
-				graphics.getCanvas().drawColor(0, PorterDuff.Mode.SRC);
+				targetBitmap.setHasAlpha(true);
+				Canvas canvas = new Canvas(targetBitmap);
+				canvas.clipRect(gClip);
+				canvas.drawColor(0, PorterDuff.Mode.SRC);
 			}
 			backCopied = true;
 		} else {
-			mBitmapBuffer.setHasAlpha(false);
+			targetBitmap.setHasAlpha(false);
 		}
 	}
 
@@ -461,11 +516,17 @@ public class Render {
 	public synchronized void release() {
 		bindEglContext();
 		stack.clear();
-		if (postCopy2D) {
-			copy2d(false);
+		if (targetTexture != null) {
+			glReadPixels(0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, targetTexture.image.getRaster());
+			targetTexture = null;
+		} else if (targetBitmap != null) {
+			if (postCopy2D) {
+				copy2d(false);
+			}
+			Rect clip = this.gClip;
+			Utils.glReadPixels(clip.left, clip.top, clip.width(), clip.height(), targetBitmap);
+			targetBitmap = null;
 		}
-		Rect clip = this.gClip;
-		Utils.glReadPixels(clip.left, clip.top, clip.width(), clip.height(), mBitmapBuffer);
 		releaseEglContext();
 	}
 
@@ -1476,6 +1537,10 @@ public class Render {
 	public void setCenter(int cx, int cy) {
 		params.centerX = cx;
 		params.centerY = cy;
+	}
+
+	public void setClearColor(int color) {
+		clearColor = color;
 	}
 
 	static class Params {

@@ -18,22 +18,33 @@ package com.motorola.iden.micro3d;
 
 import java.io.IOException;
 
+import ru.woesss.j2me.micro3d.ActTableImpl;
+
 public class ActionTable {
+	final ActTableImpl impl;
+
+	private ActionTable(byte[] data, int offset, int length) throws IOException {
+		impl = new ActTableImpl(data, offset, length);
+	}
+
+	private ActionTable(String name) throws IOException {
+		impl = new ActTableImpl(name);
+	}
 
 	public static ActionTable createActionTable(byte[] data, int offset, int length)
 			throws IOException {
-		return null;
+		return new ActionTable(data, offset, length);
 	}
 
 	public static ActionTable createActionTable(String name) throws IOException {
-		return null;
+		return new ActionTable(name);
 	}
 
 	public int getNumberOfActions() {
-		return 0;
+		return impl.getNumActions();
 	}
 
 	public int getNumberOfFrames(int actionIndex) {
-		return 0;
+		return impl.getNumFrames(actionIndex);
 	}
 }

@@ -39,10 +39,25 @@ public class FigureImpl {
 			throw new NullPointerException();
 		}
 		try {
-			init(b);
+			init(b, 0, b.length);
 		} catch (Exception e) {
 			Log.e(TAG, "Error loading data", e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	public FigureImpl(byte[] b, int offset, int length) throws IOException {
+		if (b == null) {
+			throw new NullPointerException();
+		}
+		if (offset < 0 || offset + length > b.length) {
+			throw new ArrayIndexOutOfBoundsException ();
+		}
+		try {
+			init(b, offset, length);
+		} catch (Exception e) {
+			Log.e(TAG, "Error loading data", e);
+			throw e;
 		}
 	}
 
@@ -52,15 +67,15 @@ public class FigureImpl {
 			throw new IOException("Error reading resource: " + name);
 		}
 		try {
-			init(bytes);
+			init(bytes, 0, bytes.length);
 		} catch (Exception e) {
 			Log.e(TAG, "Error loading data from [" + name + "]", e);
 			throw new RuntimeException(e);
 		}
 	}
 
-	private synchronized void init(byte[] bytes) throws IOException {
-		model = Loader.loadMbacData(bytes);
+	private synchronized void init(byte[] bytes, int offset, int length) throws IOException {
+		model = Loader.loadMbacData(bytes, offset, length);
 		Utils.transform(model.originalVertices, model.vertices,
 				model.originalNormals, model.normals, model.bones, null);
 		sortPolygons();
@@ -217,5 +232,15 @@ public class FigureImpl {
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
 		}
 		Utils.fillBuffer(model.normalsArray, model.normals, model.indices);
+	}
+
+	public synchronized void setPosture(ActTableImpl actTable, int action, int frame, int pattern) {
+		if (action < 0 || action >= actTable.getNumActions()) {
+			throw new IllegalArgumentException();
+		}
+		this.pattern = pattern;
+		applyPattern();
+		//noinspection ManualMinMaxCalculation
+		applyBoneAction(actTable.actions[action], frame < 0 ? 0 : frame);
 	}
 }

@@ -21,29 +21,53 @@ public class Light {
 	public static final int MAX_DIRECTIONAL_LIGHT_INTENSITY = 16384;
 	public static final int MIN_AMBIENT_LIGHT_INTENSITY = 0;
 	public static final int MIN_DIRECTIONAL_LIGHT_INTENSITY = 0;
+	int ambientIntensity;
+	Vector3D direction;
+	int directionalIntensity;
 
 
 	public Light(int ambientIntensity, Vector3D direction, int directionalIntensity) {
+		setDirectionVector(direction);
+		setAmbientIntensity(ambientIntensity);
+		setDirectionalIntensity(directionalIntensity);
+	}
+
+	Light(Light src) {
+		ambientIntensity = src.ambientIntensity;
+		directionalIntensity = src.directionalIntensity;
+		if (src.direction != null) {
+			direction = new Vector3D(src.direction);
+		}
 	}
 
 	public int getAmbientIntensity() {
-		return 0;
+		return ambientIntensity;
 	}
 
 	public int getDirectionalIntensity() {
-		return 0;
+		return directionalIntensity;
 	}
 
 	public Vector3D getDirectionVector() {
-		return null;
+		return direction;
 	}
 
 	public void setAmbientIntensity(int intensity) {
+		ambientIntensity = clamp(intensity, MAX_AMBIENT_LIGHT_INTENSITY);
 	}
 
 	public void setDirectionalIntensity(int intensity) {
+		directionalIntensity = clamp(intensity, MAX_DIRECTIONAL_LIGHT_INTENSITY);
 	}
 
 	public void setDirectionVector(Vector3D direction) {
+		if (direction != null && direction.isZero()) {
+			throw new IllegalArgumentException();
+		}
+		this.direction = direction;
+	}
+
+	private static int clamp(int intensity, int max) {
+		return Math.max(Math.min(intensity, max), 0);
 	}
 }

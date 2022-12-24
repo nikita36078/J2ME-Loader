@@ -22,6 +22,8 @@ public class PointSprite extends Primitive {
 	public static final int PERSPECTIVE_PROJECTION = 0;
 	public static final int PIXEL_SIZE = 1;
 
+	final int[] params = new int[8];
+
 	public PointSprite(Vector3D vertexA,
 					   int width,
 					   int height,
@@ -33,6 +35,21 @@ public class PointSprite extends Primitive {
 					   int displayType,
 					   Layout3D layout,
 					   Texture texture) {
+		super(1);
+		if (vertexA == null) {
+			throw new NullPointerException();
+		}
+		vertices[0] = vertexA;
+		setLayout(layout);
+		setTexture(texture);
+		setWidth(width);
+		setHeight(height);
+		params[2] = rotation;
+		params[3] = textureX;
+		params[4] = textureY;
+		params[5] = textureWidth;
+		params[6] = textureHeight;
+		params[7] = displayType;
 	}
 
 	public int getColor() {
@@ -40,51 +57,74 @@ public class PointSprite extends Primitive {
 	}
 
 	public int getDisplayType() {
-		return 0;
+		return params[7];
 	}
 
 	public int getHeight() {
-		return 0;
+		return params[6];
 	}
 
 	public int getRotation() {
-		return 0;
+		return params[2];
 	}
 
 	public int getTextureCoordinateX(int vertexID) {
-		return 0;
+		// TODO: 26.12.2022 don't understand documentation
+		return params[3];
 	}
 
 	public int getTextureCoordinateY(int vertexID) {
-		return 0;
+		// TODO: 26.12.2022 don't understand documentation
+		return params[4];
 	}
 
 	public Vector3D getVector(int vectorID) {
-		return null;
+		if (vectorID != VERTEX_A) {
+			throw new IllegalArgumentException();
+		}
+		return vertices[0];
 	}
 
 	public int getWidth() {
-		return 0;
+		return params[0];
 	}
 
-	public void setColor(int color) {
-	}
+	public void setColor(int color) {}
 
 	public void setDisplayType(int displayType) {
+		params[7] = displayType;
 	}
 
 	public void setHeight(int height) {
+		if (height < 0) {
+			throw new IllegalArgumentException();
+		}
+		params[6] = height;
 	}
 
 	public void setRotation(int rotation) {
+		params[2] = rotation;
 	}
 
 	public void setTextureCoordinates(int vertexID, int x, int y) {
+		// TODO: 26.12.2022 don't understand documentation
+
 	}
 
 	public void setVector(int vectorID, Vector3D vector) {
+		if (vector == null) {
+			throw new NullPointerException();
+		}
+		if (vectorID != VERTEX_A) {
+			throw new IllegalArgumentException();
+		}
+		vertices[0] = vector;
 	}
 
 	public void setWidth(int width) {
+		if (width < 0) {
+			throw new IllegalArgumentException();
+		}
+		params[5] = width;
 	}
 }

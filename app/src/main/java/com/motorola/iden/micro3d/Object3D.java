@@ -17,25 +17,37 @@
 package com.motorola.iden.micro3d;
 
 public abstract class Object3D {
+	Layout3D layout;
+	Texture sphereTexture;
+	Texture texture;
 
 	public Layout3D getLayout() {
-		return null;
+		return layout;
 	}
 
 	public Texture getSphereTexture() {
-		return null;
+		return sphereTexture;
 	}
 
 	public Texture getTexture() {
-		return null;
+		return texture;
 	}
 
 	public void setLayout(Layout3D layout) {
+		this.layout = layout;
 	}
 
 	public void setSphereTexture(Texture sphereTexture) {
+		if (sphereTexture != null && !sphereTexture.isSphereTexture()) {
+			throw new IllegalArgumentException();
+		}
+		this.sphereTexture = sphereTexture;
 	}
 
 	public void setTexture(Texture texture) {
+		if (texture != null && texture.isSphereTexture()) {
+			throw new IllegalArgumentException();
+		}
+		this.texture = texture;
 	}
 }

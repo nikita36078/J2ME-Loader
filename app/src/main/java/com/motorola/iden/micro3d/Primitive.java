@@ -28,27 +28,42 @@ public abstract class Primitive extends Object3D {
 	public static final int VERTEX_C = 3;
 	public static final int VERTEX_D = 4;
 
+	final Vector3D[] vertices;
+	boolean isColorKey;
+	int blendingType;
+	int color = 0xff0d0d0d;
+
+	protected Primitive(int size) {
+		vertices = new Vector3D[size];
+	}
+
 	public void enableColorKeyTransparency(boolean enable) {
+		isColorKey = enable;
 	}
 
 	public int getBlendingType() {
-		return 0;
+		return blendingType;
 	}
 
 	public int getColor() {
-		return 0;
+		return color;
 	}
 
 	public abstract Vector3D getVector(int vectorID);
 
 	public boolean hasColorKeyTransparency() {
-		return false;
+		return isColorKey;
 	}
 
 	public void setBlendingType(int blendingType) {
+		if (blendingType < BLENDING_NONE || blendingType > BLENDING_SUB) {
+			throw new IllegalArgumentException();
+		}
+		this.blendingType = blendingType;
 	}
 
 	public void setColor(int color) {
+		this.color = color;
 	}
 
 	public abstract void setVector(int vectorID, Vector3D vector);

@@ -19,12 +19,29 @@ package com.motorola.iden.micro3d;
 public class Point extends Primitive {
 
 	public Point(Vector3D vertexA, Layout3D layout, int color) {
+		super(1);
+		if (vertexA == null) {
+			throw new NullPointerException();
+		}
+		vertices[0] = vertexA;
+		setLayout(layout);
+		setColor(color);
 	}
 
 	public Vector3D getVector(int vectorID) {
-		return null;
+		if (vectorID != VERTEX_A) {
+			throw new IllegalArgumentException();
+		}
+		return vertices[0];
 	}
 
 	public void setVector(int vectorID, Vector3D vector) {
+		if (vector == null) {
+			throw new NullPointerException();
+		}
+		if (vectorID != VERTEX_A) {
+			throw new IllegalArgumentException();
+		}
+		vertices[0] = vector;
 	}
 }

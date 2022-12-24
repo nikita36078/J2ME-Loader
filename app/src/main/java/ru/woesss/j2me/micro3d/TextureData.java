@@ -17,14 +17,15 @@
 package ru.woesss.j2me.micro3d;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 class TextureData {
 	private final ByteBuffer raster;
 	final int width;
 	final int height;
 
-	TextureData(ByteBuffer raster, int width, int height) {
-		this.raster = raster;
+	TextureData(int width, int height) {
+		this.raster = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder());
 		this.width = width;
 		this.height = height;
 	}

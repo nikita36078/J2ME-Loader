@@ -16,19 +16,46 @@
 
 package com.motorola.iden.micro3d;
 
-public class Texture {
+import java.io.IOException;
 
-	public static Texture createTexture(byte[] data, int offset, int length, boolean sphereTexture)
-			throws java.io.IOException {
-		return null;
+import ru.woesss.j2me.micro3d.TextureImpl;
+
+public class Texture {
+	TextureImpl impl;
+
+	private boolean isSphereTexture;
+
+	public Texture(byte[] data, int offset, int length, boolean sphereTexture) throws IOException {
+		impl = new TextureImpl(data, offset, length);
+		isSphereTexture = sphereTexture;
+	}
+
+	private Texture(String name, boolean sphereTexture) throws IOException {
+		impl = new TextureImpl(name);
+		isSphereTexture = sphereTexture;
+	}
+
+	Texture(boolean mutable) {
+		if (mutable) {
+			impl = new TextureImpl();
+		}
+	}
+
+	private static Texture createTexture(byte[] data, int offset, int length, boolean sphereTexture)
+			throws IOException {
+		return new Texture(data, offset, length, sphereTexture);
 	}
 
 	public static Texture createTexture(String name, boolean sphereTexture)
-			throws java.io.IOException {
-		return null;
+			throws IOException {
+		return new Texture(name, sphereTexture);
 	}
 
 	public boolean isSphereTexture() {
-		return false;
+		return isSphereTexture;
+	}
+
+	boolean isMutable() {
+		return impl != null && impl.isMutable();
 	}
 }

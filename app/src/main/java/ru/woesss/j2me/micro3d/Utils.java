@@ -21,6 +21,8 @@ import android.graphics.Bitmap;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import ru.playsoftware.j2meloader.BuildConfig;
+
 public class Utils {
 	static final String TAG = "micro3d";
 
@@ -69,6 +71,10 @@ public class Utils {
 	static native void transform(FloatBuffer srcVertices, FloatBuffer dstVertices,
 								 FloatBuffer srcNormals, FloatBuffer dstNormals,
 								 ByteBuffer boneMatrices, float[] actionMatrices);
+
+	public static String getVersion() {
+		return BuildConfig.VERSION_NAME;
+	}
 
 	static {
 		System.loadLibrary("micro3d");

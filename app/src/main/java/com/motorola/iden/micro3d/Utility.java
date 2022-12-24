@@ -16,21 +16,24 @@
 
 package com.motorola.iden.micro3d;
 
+import ru.woesss.j2me.micro3d.MathUtil;
+import ru.woesss.j2me.micro3d.Utils;
+
 public final class Utility {
 
 	public static int cos(int angle) {
-		return 0;
+		return MathUtil.iCos(angle);
 	}
 
 	public static String getVersion() {
-		return "DUMMY_STRING";
+		return Utils.getVersion();
 	}
 
 	public static int sin(int angle) {
-		return 0;
+		return MathUtil.iSin(angle);
 	}
 
 	public static int squareRoot(int x) {
-		return 0;
+		return MathUtil.iSqrt(x);
 	}
 }

@@ -19,6 +19,7 @@ package ru.woesss.j2me.micro3d;
 import static ru.woesss.j2me.micro3d.Utils.TAG;
 
 import android.util.Log;
+import android.util.SparseIntArray;
 
 import java.io.IOException;
 
@@ -32,10 +33,25 @@ public class ActTableImpl {
 			throw new NullPointerException();
 		}
 		try {
-			actions = Loader.loadMtraData(b);
+			actions = Loader.loadMtraData(b, 0, b.length);
 		} catch (IOException e) {
 			Log.e(TAG, "Error loading data", e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	public ActTableImpl(byte[] b, int offset, int length) throws IOException {
+		if (b == null) {
+			throw new NullPointerException();
+		}
+		if (offset < 0 || offset + length > b.length) {
+			throw new ArrayIndexOutOfBoundsException ();
+		}
+		try {
+			actions = Loader.loadMtraData(b, offset, length);
+		} catch (Exception e) {
+			Log.e(TAG, "Error loading data", e);
+			throw e;
 		}
 	}
 
@@ -48,7 +64,7 @@ public class ActTableImpl {
 			throw new IOException();
 		}
 		try {
-			actions = Loader.loadMtraData(bytes);
+			actions = Loader.loadMtraData(bytes, 0, bytes.length);
 		} catch (IOException e) {
 			Log.e(TAG, "Error loading data from [" + name + "]", e);
 			throw new RuntimeException(e);
@@ -74,5 +90,19 @@ public class ActTableImpl {
 
 	private void checkDisposed() {
 		if (actions == null) throw new IllegalStateException("ActionTable disposed!");
+	}
+
+	public int getPattern(int action, int frame, int defValue) {
+		Action act = actions[action];
+		final SparseIntArray dynamic = act.dynamic;
+		if (dynamic != null) {
+			int iFrame = frame < 0 ? 0 : frame >> 16;
+			for (int i = dynamic.size() - 1; i >= 0; i--) {
+				if (dynamic.keyAt(i) <= iFrame) {
+					return dynamic.valueAt(i);
+				}
+			}
+		}
+		return defValue;
 	}
 }

@@ -19,12 +19,30 @@ package com.motorola.iden.micro3d;
 public class Line extends Primitive {
 
 	public Line(Vector3D vertexA, Vector3D vertexB, Layout3D layout, int color) {
+		super(2);
+		if (vertexA == null && vertexB == null) {
+			throw new NullPointerException();
+		}
+		vertices[0] = vertexA;
+		vertices[1] = vertexB;
+		setLayout(layout);
+		setColor(color);
 	}
 
 	public Vector3D getVector(int vectorID) {
-		return null;
+		if (vectorID < VERTEX_A || vectorID > VERTEX_B) {
+			throw new IllegalArgumentException();
+		}
+		return vertices[vectorID - 1];
 	}
 
 	public void setVector(int vectorID, Vector3D vector) {
+		if (vector == null) {
+			throw new NullPointerException();
+		}
+		if (vectorID < VERTEX_A || vectorID > VERTEX_B) {
+			throw new IllegalArgumentException();
+		}
+		vertices[vectorID - 1] = vector;
 	}
 }

@@ -37,16 +37,19 @@ class Loader {
 	private static final int[] POOL_NORMALS = new int[]{0, 0, 4096, 0, 0, -4096, 0, 0};
 	private static final int[] SIZES = {8, 10, 13, 16};
 	private final byte[] data;
+	private final int length;
 	private int pos;
 	private int cached;
 	private int cache;
 
-	private Loader(byte[] bytes) {
-		this.data = bytes;
+	private Loader(byte[] data, int offset, int length) {
+		this.data = data;
+		this.length = length;
+		pos = offset;
 	}
 
-	static Model loadMbacData(byte[] bytes) throws IOException {
-		Loader loader = new Loader(bytes);
+	static Model loadMbacData(byte[] data, int offset, int length) throws IOException {
+		Loader loader = new Loader(data, offset, length);
 		if (loader.readUByte() != 'M' || loader.readUByte() != 'B') {
 			throw new RuntimeException("Not a MBAC file");
 		}
@@ -232,8 +235,8 @@ class Loader {
 		return model;
 	}
 
-	static Action[] loadMtraData(byte[] bytes) throws IOException {
-		Loader loader = new Loader(bytes);
+	static Action[] loadMtraData(byte[] data, int offset, int length) throws IOException {
+		Loader loader = new Loader(data, offset, length);
 		if (loader.readUByte() != 'M' || loader.readUByte() != 'T') {
 			throw new RuntimeException("Not a MTRA file");
 		}
@@ -289,8 +292,8 @@ class Loader {
 		return actions;
 	}
 
-	static TextureData loadBmpData(byte[] bytes) throws IOException {
-		Loader loader = new Loader(bytes);
+	static TextureData loadBmpData(byte[] data, int offset, int length) throws IOException {
+		Loader loader = new Loader(data, offset, length);
 		if (loader.readUByte() != 'B' || loader.readUByte() != 'M') {
 			throw new RuntimeException("Not a BMP!");
 		}
@@ -337,34 +340,35 @@ class Loader {
 
 		int paletteOffset = BMP_FILE_HEADER_SIZE + dibHeaderSize;
 
-		ByteBuffer raster = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder());
+		TextureData textureData = new TextureData(width, height);
+		ByteBuffer raster = textureData.getRaster();
 		int remainder = width % 4;
 		int stride = remainder == 0 ? width : width + 4 - remainder;
 		if (reversed) {
 			for (int i = height - 1; i >= 0; i--) {
 				for (int j = rasterOffset + i * stride, s = j + width; j < s; j++) {
-					byte idx = bytes[j];
+					byte idx = data[j];
 					int p = (idx & 0xff) * 4 + paletteOffset;
-					byte b = bytes[p++];
-					byte g = bytes[p++];
-					byte r = bytes[p];
+					byte b = data[p++];
+					byte g = data[p++];
+					byte r = data[p];
 					raster.put(r).put(g).put(b).put((byte) (idx == 0 ? 0 : 0xff));
 				}
 			}
 		} else {
 			for (int i = 0; i < height; i++) {
 				for (int j = rasterOffset + i * stride, s = j + width; j < s; j++) {
-					byte idx = bytes[j];
+					byte idx = data[j];
 					int p = (idx & 0xff) * 4 + paletteOffset;
-					byte b = bytes[p++];
-					byte g = bytes[p++];
-					byte r = bytes[p];
+					byte b = data[p++];
+					byte g = data[p++];
+					byte r = data[p];
 					raster.put(r).put(g).put(b).put((byte) (idx == 0 ? 0 : 0xff));
 				}
 			}
 		}
 
-		return new TextureData(raster, width, height);
+		return textureData;
 	}
 
 	private void readVerticesV1(FloatBuffer vertices) throws IOException {
@@ -892,33 +896,33 @@ class Loader {
 	}
 
 	private byte readByte() throws IOException {
-		if (pos >= data.length) throw new EOFException();
+		if (pos >= length) throw new EOFException();
 		return data[pos++];
 	}
 
 	private int readUByte() throws IOException {
-		if (pos >= data.length) throw new EOFException();
+		if (pos >= length) throw new EOFException();
 		return data[pos++] & 0xff;
 	}
 
 	private short readShort() throws IOException {
-		if (pos + 1 >= data.length) throw new EOFException();
+		if (pos + 1 >= length) throw new EOFException();
 		return (short) (data[pos++] & 0xff | data[pos++] << 8);
 	}
 
 	private int readUShort() throws IOException {
-		if (pos + 1 >= data.length) throw new EOFException();
+		if (pos + 1 >= length) throw new EOFException();
 		return data[pos++] & 0xff | (data[pos++] & 0xff) << 8;
 	}
 
 	private int readInt() throws IOException {
-		if (pos + 3 >= data.length) throw new EOFException();
+		if (pos + 3 >= length) throw new EOFException();
 		return data[pos++] & 0xff | (data[pos++] & 0xff) << 8
 				| (data[pos++] & 0xff) << 16 | data[pos++] << 24;
 	}
 
 	private int available() {
-		return data.length - pos;
+		return length - pos;
 	}
 
 	private int readUBits(int size) throws IOException {
@@ -948,7 +952,7 @@ class Loader {
 	}
 
 	private void skip(int n) throws EOFException {
-		if (pos + n >= data.length) throw new EOFException();
+		if (pos + n >= length) throw new EOFException();
 		pos += n;
 	}
 }

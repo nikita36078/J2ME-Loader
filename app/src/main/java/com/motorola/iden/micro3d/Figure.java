@@ -16,43 +16,71 @@
 
 package com.motorola.iden.micro3d;
 
-public class Figure extends Object3D {
+import java.io.IOException;
 
-	public static Figure createFigure(byte[] data, int offset, int length)
-			throws java.io.IOException {
-		return null;
+import ru.woesss.j2me.micro3d.FigureImpl;
+
+public class Figure extends Object3D {
+	final FigureImpl impl;
+	ActionTable actionTable;
+	int actionIndex;
+	int frameIndex;
+	int pattern;
+
+	private Figure(byte[] data, int offset, int length) throws IOException {
+		impl = new FigureImpl(data, offset, length);
 	}
 
-	public static Figure createFigure(java.lang.String name) throws java.io.IOException {
-		return null;
+	private Figure(String name) throws IOException {
+		impl = new FigureImpl(name);
+	}
+
+	public static Figure createFigure(byte[] data, int offset, int length) throws IOException {
+		return new Figure(data, offset, length);
+	}
+
+	public static Figure createFigure(String name) throws IOException {
+		return new Figure(name);
 	}
 
 	public int getActionIndex() {
-		return 0;
+		return actionIndex;
 	}
 
 	public ActionTable getActionTable() {
-		return null;
+		return actionTable;
 	}
 
 	public int getFrameIndex() {
-		return 0;
+		return frameIndex;
 	}
 
 	public int getNumberOfPatterns() {
-		return 0;
+		return impl.getNumPattern();
 	}
 
 	public int getPattern() {
-		return 0;
+		return pattern;
 	}
 
 	public void setActionTable(ActionTable actionTable) {
+		if (actionTable == null) {
+			actionIndex = 0;
+			frameIndex = 0;
+		}
+		this.actionTable = actionTable;
 	}
 
 	public void setPattern(int pattern) {
+		this.pattern = pattern;
 	}
 
 	public void setPosture(int actionIndex, int frameIndex) {
+		if (actionTable == null || actionIndex < 0 || actionIndex >= actionTable.getNumberOfActions()) {
+			throw new IllegalArgumentException();
+		}
+		this.actionIndex = actionIndex;
+		this.frameIndex = frameIndex;
+		pattern = actionTable.impl.getPattern(actionIndex, frameIndex, pattern);
 	}
 }
