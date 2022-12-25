@@ -17,7 +17,7 @@
 package ru.woesss.j2me.micro3d;
 
 public class MathUtil {
-	public static final float TO_FLOAT = 2.4414062E-04f;
+	public static final float TO_FLOAT = 1.0f / 4096.0f;
 	static final float TO_RADIANS = (float) (Math.PI / 2048.0);
 	static final float[] IDENTITY_AFFINE = {
 			1.0f, 0.0f, 0.0f, 0.0f,
@@ -86,5 +86,10 @@ public class MathUtil {
 
 	public static float vectorLength(float x, float y, float z) {
 		return (float) Math.sqrt(x * x + y * y + z * z);
+	}
+
+	@SuppressWarnings("ManualMinMaxCalculation")
+	static int clamp(int v, int min, int max) {
+		return v < min ? min : v > max ? max : v;
 	}
 }

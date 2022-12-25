@@ -139,8 +139,8 @@ abstract class Program {
 			glUniform1f(uAmbIntensity, -1.0f);
 			return;
 		}
-		glUniform1f(uAmbIntensity, Math.max(0, Math.min(light.ambIntensity, 4096)) * TO_FLOAT);
-		glUniform1f(uDirIntensity, Math.max(0, Math.min(light.dirIntensity, 16384)) * TO_FLOAT);
+		glUniform1f(uAmbIntensity, MathUtil.clamp(light.ambIntensity, 0, 4096) * TO_FLOAT);
+		glUniform1f(uDirIntensity, MathUtil.clamp(light.dirIntensity, 0, 16384) * TO_FLOAT);
 		float x = light.x;
 		float y = light.y;
 		float z = light.z;
