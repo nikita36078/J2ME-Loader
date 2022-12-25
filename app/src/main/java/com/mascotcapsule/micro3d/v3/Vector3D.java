@@ -18,7 +18,6 @@ package com.mascotcapsule.micro3d.v3;
 
 import ru.woesss.j2me.micro3d.MathUtil;
 
-@SuppressWarnings("unused, WeakerAccess")
 public class Vector3D {
 	public int x;
 	public int y;
@@ -61,7 +60,7 @@ public class Vector3D {
 	}
 
 	public static int innerProduct(Vector3D v1, Vector3D v2) {
-		if (v1 == null || v2 == null) {
+		if (v1 == null) {
 			throw new NullPointerException();
 		}
 		return v1.innerProduct(v2);
@@ -83,11 +82,10 @@ public class Vector3D {
 		if (v1 == null || v2 == null) {
 			throw new NullPointerException();
 		}
-		Vector3D dst = new Vector3D();
-		dst.x = v1.y * v2.z - v1.z * v2.y;
-		dst.y = v1.z * v2.x - v1.x * v2.z;
-		dst.z = v1.x * v2.y - v1.y * v2.x;
-		return dst;
+		int x = v1.y * v2.z - v1.z * v2.y;
+		int y = v1.z * v2.x - v1.x * v2.z;
+		int z = v1.x * v2.y - v1.y * v2.x;
+		return new Vector3D(x, y, z);
 	}
 
 	public final void set(int x, int y, int z) {

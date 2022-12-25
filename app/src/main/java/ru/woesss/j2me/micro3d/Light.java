@@ -17,34 +17,33 @@
 package ru.woesss.j2me.micro3d;
 
 class Light {
-   int ambIntensity;
-   int dirIntensity;
-   int x;
-   int y;
-   int z;
+	int ambIntensity;
+	int dirIntensity;
+	int x;
+	int y;
+	int z;
 
-   Light() {
-      this.ambIntensity = 4096;
-      this.dirIntensity = 0;
-      this.x = 0;
-      this.y = 0;
-      this.z = 4096;
-   }
+	Light() {
+		this.ambIntensity = 4096;
+		this.dirIntensity = 0;
+		this.x = 0;
+		this.y = 0;
+		this.z = 4096;
+	}
 
-   Light(Light light) {
-      this.ambIntensity = light.ambIntensity;
-      this.dirIntensity = light.dirIntensity;
-      this.x = light.x;
-      this.y = light.y;
-      this.z = light.z;
-   }
+	Light(Light light) {
+		this.ambIntensity = light.ambIntensity;
+		this.dirIntensity = light.dirIntensity;
+		this.x = light.x;
+		this.y = light.y;
+		this.z = light.z;
+	}
 
-   void set(int ambIntensity, int dirIntensity, int x, int y, int z) {
-      this.ambIntensity = ambIntensity;
-      this.dirIntensity = dirIntensity;
-      this.x = x;
-      this.y = y;
-      this.z = z;
-   }
-
+	void set(int ambIntensity, int dirIntensity, int x, int y, int z) {
+		this.ambIntensity = ambIntensity;
+		this.dirIntensity = dirIntensity;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 }

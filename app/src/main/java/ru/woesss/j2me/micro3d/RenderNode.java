@@ -110,8 +110,9 @@ abstract class RenderNode {
 		final ByteBuffer colors;
 		final TextureImpl texture;
 
-		PrimitiveNode(Render render, int command, FloatBuffer vertices, FloatBuffer normals,
-							 ByteBuffer texCoords, ByteBuffer colors) {
+		PrimitiveNode(Render render, int command,
+					  FloatBuffer vertices, FloatBuffer normals,
+					  ByteBuffer texCoords, ByteBuffer colors) {
 			setData(render);
 			Render.Params params = render.params;
 			this.texture = params.getTexture();

@@ -83,4 +83,8 @@ public class MathUtil {
 		m[14] = l20 * r03 + l21 * r13 + l22 * r23 + l23;
 		m[15] = l30 * r03 + l31 * r13 + l32 * r23 + l33;
 	}
+
+	public static float vectorLength(float x, float y, float z) {
+		return (float) Math.sqrt(x * x + y * y + z * z);
+	}
 }

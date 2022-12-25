@@ -18,8 +18,8 @@ package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
 import static com.mascotcapsule.micro3d.v3.Graphics3D.*;
-import static ru.woesss.j2me.micro3d.Utils.TAG;
 import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.Utils.TAG;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

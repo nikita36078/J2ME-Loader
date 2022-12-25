@@ -16,9 +16,9 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import ru.woesss.j2me.micro3d.FigureImpl;
-
 import java.io.IOException;
+
+import ru.woesss.j2me.micro3d.FigureImpl;
 
 public class Figure {
 	Texture[] textures;

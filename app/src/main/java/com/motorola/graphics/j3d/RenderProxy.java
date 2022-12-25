@@ -26,7 +26,8 @@ import ru.woesss.j2me.micro3d.Render;
 
 public class RenderProxy {
 
-	public static void drawFigure(Graphics g, Figure figure, int x, int y, FigureLayout layout, Effect3D effect) {
+	public static void drawFigure(Graphics g, Figure figure, int x, int y,
+								  FigureLayout layout, Effect3D effect) {
 		if (figure == null || layout == null || effect == null) {
 			throw new NullPointerException();
 		}
@@ -79,7 +80,6 @@ public class RenderProxy {
 			render.setTexture(texture.impl);
 		}
 
-
 		render.drawFigureV2(figure.impl);
 		render.release();
 	}
@@ -89,5 +89,4 @@ public class RenderProxy {
 		out[1] = a.m10 * TO_FLOAT; out[4] = a.m11 * TO_FLOAT; out[7] = a.m12 * TO_FLOAT; out[10] = a.m13;
 		out[2] = a.m20 * TO_FLOAT; out[5] = a.m21 * TO_FLOAT; out[8] = a.m22 * TO_FLOAT; out[11] = a.m23;
 	}
-
 }
