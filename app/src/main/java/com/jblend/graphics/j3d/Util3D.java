@@ -16,19 +16,19 @@
 
 package com.jblend.graphics.j3d;
 
-import ru.woesss.j2me.micro3d.Utils;
+import ru.woesss.j2me.micro3d.MathUtil;
 
 public class Util3D {
 
 	public static int sqrt(int p) {
-		return Utils.iSqrt(p);
+		return MathUtil.iSqrt(p);
 	}
 
 	public static int sin(int p) {
-		return Utils.iSin(p);
+		return MathUtil.iSin(p);
 	}
 
 	public static int cos(int p) {
-		return Utils.iCos(p);
+		return MathUtil.iCos(p);
 	}
 }

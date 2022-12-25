@@ -16,7 +16,7 @@
 
 package com.jblend.graphics.j3d;
 
-import ru.woesss.j2me.micro3d.Utils;
+import ru.woesss.j2me.micro3d.MathUtil;
 
 public class Vector3D {
 	public int x;
@@ -112,7 +112,7 @@ public class Vector3D {
 			y >>= shift;
 			z >>= shift;
 		}
-		int i = Utils.uSqrt(x * x + y * y + z * z);
+		int i = MathUtil.uSqrt(x * x + y * y + z * z);
 		if (i != 0) {
 			this.x = (x << 12) / i;
 			this.y = (y << 12) / i;

@@ -30,9 +30,9 @@ import java.util.Stack;
 import javax.microedition.shell.AppClassLoader;
 
 public class FigureImpl {
-	public final Stack<RenderNode.FigureNode> stack = new Stack<>();
-	public Model model;
-	public int pattern;
+	final Stack<RenderNode.FigureNode> stack = new Stack<>();
+	Model model;
+	private int pattern;
 
 	public FigureImpl(byte[] b) {
 		if (b == null) {

@@ -19,7 +19,7 @@ package ru.woesss.j2me.micro3d;
 import static android.opengl.GLES20.*;
 import static com.mascotcapsule.micro3d.v3.Graphics3D.*;
 import static ru.woesss.j2me.micro3d.Utils.TAG;
-import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -274,7 +274,7 @@ public class Render {
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(flushStep == 1);
-		Utils.multiplyMM(MVP_TMP, node.projMatrix, node.viewMatrix);
+		MathUtil.multiplyMM(MVP_TMP, node.projMatrix, node.viewMatrix);
 		if (bufHandles == null) {
 			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
 			glGenBuffers(3, bufHandles);
@@ -974,7 +974,7 @@ public class Render {
 				vcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 4 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
 				tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2).order(ByteOrder.nativeOrder());
 				int texOffset = 0;
-				Utils.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
+				MathUtil.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
 				for (int i = 0; i < numPrimitives; i++) {
 					vert[4] = vertices[vo++];
 					vert[5] = vertices[vo++];
@@ -1156,7 +1156,7 @@ public class Render {
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(flushStep == 1);
-		Utils.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
+		MathUtil.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
 		if (bufHandles == null) {
 			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
 			glGenBuffers(3, bufHandles);
@@ -1262,7 +1262,7 @@ public class Render {
 		} else if (flushStep == 2) {
 			return;
 		}
-		Utils.multiplyMM(MVP_TMP, node.projMatrix, node.viewMatrix);
+		MathUtil.multiplyMM(MVP_TMP, node.projMatrix, node.viewMatrix);
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		glDepthMask(flushStep == 1);

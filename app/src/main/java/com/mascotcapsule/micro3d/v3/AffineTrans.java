@@ -16,7 +16,7 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import ru.woesss.j2me.micro3d.Utils;
+import ru.woesss.j2me.micro3d.MathUtil;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class AffineTrans {
@@ -136,24 +136,24 @@ public class AffineTrans {
 	}
 
 	public final void rotationX(int r) {
-		int cos = Utils.iCos(r);
-		int sin = Utils.iSin(r);
+		int cos = MathUtil.iCos(r);
+		int sin = MathUtil.iSin(r);
 		m00 = 4096; m01 =   0; m02 =    0;
 		m10 =    0; m11 = cos; m12 = -sin;
 		m20 =    0; m21 = sin; m22 =  cos;
 	}
 
 	public final void rotationY(int r) {
-		int cos = Utils.iCos(r);
-		int sin = Utils.iSin(r);
+		int cos = MathUtil.iCos(r);
+		int sin = MathUtil.iSin(r);
 		m00 =  cos; m01 =    0; m02 = sin;
 		m10 =    0; m11 = 4096; m12 =   0;
 		m20 = -sin; m21 =    0; m22 = cos;
 	}
 
 	public final void rotationZ(int r) {
-		int cos = Utils.iCos(r);
-		int sin = Utils.iSin(r);
+		int cos = MathUtil.iCos(r);
+		int sin = MathUtil.iSin(r);
 		m00 = cos; m01 = -sin; m02 =    0;
 		m10 = sin; m11 =  cos; m12 =    0;
 		m20 =   0; m21 =    0; m22 = 4096;
@@ -229,8 +229,8 @@ public class AffineTrans {
 		int x = v.x;
 		int y = v.y;
 		int z = v.z;
-		int cos = Utils.iCos(r);
-		int sin = Utils.iSin(r);
+		int cos = MathUtil.iCos(r);
+		int sin = MathUtil.iSin(r);
 		int xs = x * sin + 2048 >> 12;
 		int ys = y * sin + 2048 >> 12;
 		int zs = z * sin + 2048 >> 12;

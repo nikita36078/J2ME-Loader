@@ -18,7 +18,7 @@ package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
 import static ru.woesss.j2me.micro3d.Utils.TAG;
-import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
 
 import android.util.Log;
 

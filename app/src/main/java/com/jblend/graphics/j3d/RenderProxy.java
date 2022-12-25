@@ -16,7 +16,7 @@
 
 package com.jblend.graphics.j3d;
 
-import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 

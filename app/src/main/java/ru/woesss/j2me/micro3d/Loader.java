@@ -17,9 +17,9 @@
 package ru.woesss.j2me.micro3d;
 
 import static ru.woesss.j2me.micro3d.Utils.TAG;
-import static ru.woesss.j2me.micro3d.Utils.IDENTITY_AFFINE;
-import static ru.woesss.j2me.micro3d.Utils.TO_FLOAT;
-import static ru.woesss.j2me.micro3d.Utils.TO_RADIANS;
+import static ru.woesss.j2me.micro3d.MathUtil.IDENTITY_AFFINE;
+import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
+import static ru.woesss.j2me.micro3d.MathUtil.TO_RADIANS;
 
 import android.util.Log;
 import android.util.SparseIntArray;

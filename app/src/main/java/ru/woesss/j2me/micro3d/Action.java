@@ -16,7 +16,7 @@
 
 package ru.woesss.j2me.micro3d;
 
-import static ru.woesss.j2me.micro3d.Utils.IDENTITY_AFFINE;
+import static ru.woesss.j2me.micro3d.MathUtil.IDENTITY_AFFINE;
 
 import android.util.SparseIntArray;
 
