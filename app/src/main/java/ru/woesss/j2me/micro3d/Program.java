@@ -204,8 +204,9 @@ abstract class Program {
 
 		void setSphere(TextureImpl sphere) {
 			if (sphere != null) {
+				int id = sphere.getId();
 				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, sphere.getId());
+				glBindTexture(GL_TEXTURE_2D, id);
 				glUniform2f(uSphereSize, sphere.getWidth(), sphere.getHeight());
 			} else {
 				glUniform2f(uSphereSize, -1, -1);
@@ -273,8 +274,9 @@ abstract class Program {
 
 		void setTex(TextureImpl tex) {
 			if (tex != null) {
+				int id = tex.getId();
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, tex.getId());
+				glBindTexture(GL_TEXTURE_2D, id);
 				glUniform2f(uTexSize, tex.getWidth(), tex.getHeight());
 			} else {
 				glUniform2f(uTexSize, 256, 256);
@@ -299,8 +301,9 @@ abstract class Program {
 
 		void setSphere(TextureImpl sphere) {
 			if (sphere != null) {
+				int id = sphere.getId();
 				glActiveTexture(GL_TEXTURE2);
-				glBindTexture(GL_TEXTURE_2D, sphere.getId());
+				glBindTexture(GL_TEXTURE_2D, id);
 				glUniform2f(uSphereSize, sphere.getWidth(), sphere.getHeight());
 			} else {
 				glUniform2f(uSphereSize, -1, -1);
@@ -336,8 +339,9 @@ abstract class Program {
 		}
 
 		void setTexture(TextureImpl texture) {
+			int id = texture.getId();
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texture.getId());
+			glBindTexture(GL_TEXTURE_2D, id);
 			glUniform2f(uTexSize, texture.getWidth(), texture.getHeight());
 		}
 	}
