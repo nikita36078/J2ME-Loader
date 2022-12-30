@@ -56,7 +56,7 @@ public final class TextureImpl {
 			throw new NullPointerException();
 		}
 		if (offset < 0 || offset + length > b.length) {
-			throw new ArrayIndexOutOfBoundsException ();
+			throw new ArrayIndexOutOfBoundsException();
 		}
 		try {
 			image = Loader.loadBmpData(b, offset, length);

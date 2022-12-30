@@ -54,6 +54,12 @@ public class Render {
 					-1.0f, 1.0f, 0.0f, 1.0f,
 					1.0f, 1.0f, 1.0f, 1.0f
 			});
+	private static final int PDATA_COLOR_MASK = (PDATA_COLOR_PER_COMMAND | PDATA_COLOR_PER_FACE);
+	private static final int PDATA_COLOR_PER_VERTEX = PDATA_COLOR_MASK;
+	private static final int PDATA_NORMAL_MASK = PDATA_NORMAL_PER_VERTEX;
+	private static final int PDATA_TEXCOORD_MASK = PDATA_TEXURE_COORD;
+	private static final int[] PRIMITIVE_SIZES = {0, 1, 2, 3, 4, 1};
+
 	final Params params = new Params();
 	private EGLDisplay eglDisplay;
 	private EGLSurface eglWindowSurface;
@@ -334,20 +340,20 @@ public class Render {
 			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
 			glGenBuffers(3, bufHandles);
 		}
-		node.vertices.rewind();
 		try {
+			FloatBuffer vertices = node.vertices;
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
-			glBufferData(GL_ARRAY_BUFFER, node.vertices.capacity() * 4, node.vertices, GL_STREAM_DRAW);
-			ByteBuffer tcBuf = model.texCoordArray;
-			tcBuf.rewind();
-			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
-			glBufferData(GL_ARRAY_BUFFER, tcBuf.capacity(), tcBuf, GL_STREAM_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, vertices.capacity() * 4, vertices.rewind(), GL_STREAM_DRAW);
 
-			boolean isLight = node.light != null && node.normals != null;
+			ByteBuffer texCoords = model.texCoordArray;
+			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
+			glBufferData(GL_ARRAY_BUFFER, texCoords.capacity(), texCoords.rewind(), GL_STREAM_DRAW);
+
+			FloatBuffer normals = node.normals;
+			boolean isLight = node.light != null && normals != null;
 			if (isLight) {
-				node.normals.rewind();
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
-				glBufferData(GL_ARRAY_BUFFER, node.normals.capacity() * 4, node.normals, GL_STREAM_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals.rewind(), GL_STREAM_DRAW);
 			}
 			TextureImpl sphere = node.specular;
 			if (model.hasPolyT) {
@@ -514,8 +520,8 @@ public class Render {
 	}
 
 	public synchronized void release() {
-		bindEglContext();
 		stack.clear();
+		bindEglContext();
 		if (targetTexture != null) {
 			glReadPixels(0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, targetTexture.image.getRaster());
 			targetTexture = null;
@@ -585,7 +591,7 @@ public class Render {
 		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());
 		glEnableVertexAttribArray(program.aPosition);
 
-		if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
+		if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
 			program.setColor(node.colors);
 		} else {
 			glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, node.colors.rewind());
@@ -634,6 +640,7 @@ public class Render {
 		program.setTex(node.texture);
 
 		glDrawArrays(GL_TRIANGLES, 0, node.vertices.capacity() / 3);
+
 		glDisableVertexAttribArray(program.aPosition);
 		glDisableVertexAttribArray(program.aColorData);
 		glDisableVertexAttribArray(program.aNormal);
@@ -702,55 +709,41 @@ public class Render {
 					return;
 				default:
 					int type = cmd & 0x7000000;
-					if (type == 0) {
-						break;
+					if (type == 0 || cmd < 0) {
+						throw new IllegalArgumentException();
 					}
 					int num = cmd >> 16 & 0xFF;
-					int sizeOf = sizeOf(type);
+					int sizeOf = PRIMITIVE_SIZES[type >> 24];
 					int len = num * 3 * sizeOf;
 					int vo = i;
 					i += len;
 					int no = i;
-					if (type == PRIMITVE_TRIANGLES || type == PRIMITVE_QUADS) {
-						switch (cmd & PDATA_NORMAL_PER_VERTEX) {
-							case PDATA_NORMAL_PER_FACE:
-								i += num * 3;
-								break;
-							case PDATA_NORMAL_PER_VERTEX:
-								i += len;
-								break;
-						}
-					} else if ((cmd & PDATA_NORMAL_PER_VERTEX) != 0) {
-						throw new IllegalArgumentException();
+					if ((cmd & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_FACE) {
+						i += num * 3;
+					} else if ((cmd & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_VERTEX) {
+						i += len;
 					}
 					int to = i;
 					if (type == PRIMITVE_POINT_SPRITES) {
-						switch (cmd & PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) {
-							case PDATA_POINT_SPRITE_PARAMS_PER_CMD:
-								i += 8;
-								break;
-							case PDATA_POINT_SPRITE_PARAMS_PER_FACE:
-							case PDATA_POINT_SPRITE_PARAMS_PER_VERTEX:
-								i += num * 8;
-								break;
+						if ((cmd & PDATA_TEXCOORD_MASK) == PDATA_POINT_SPRITE_PARAMS_PER_CMD) {
+							i += 8;
+						} else if ((cmd & PDATA_TEXCOORD_MASK) != PDATA_TEXURE_COORD_NONE) {
+							i += num * 8;
 						}
-					} else if ((cmd & PDATA_TEXURE_COORD) == PDATA_TEXURE_COORD) {
+					} else if ((cmd & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
 						i += num * 2 * sizeOf;
 					}
 
 					int co = i;
-					switch (cmd & (PDATA_COLOR_PER_COMMAND | PDATA_COLOR_PER_FACE)) {
-						case PDATA_COLOR_PER_COMMAND:
-							i++;
-							break;
-						case PDATA_COLOR_PER_FACE:
-							i += num;
-							break;
-						case (PDATA_COLOR_PER_COMMAND | PDATA_COLOR_PER_FACE):
-							if (type != PRIMITVE_POINT_SPRITES) {
-								i += num * sizeOf;
-							}
-							break;
+					if ((cmd & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
+						i++;
+					} else if ((cmd & PDATA_COLOR_MASK) == PDATA_COLOR_PER_FACE) {
+						i += num;
+					} else if ((cmd & PDATA_COLOR_MASK) == PDATA_COLOR_PER_VERTEX) {
+						i += num * sizeOf;
+					}
+					if (i > cmds.length) {
+						throw new IllegalArgumentException();
 					}
 					postPrimitives(cmd, cmds, vo, cmds, no, cmds, to, cmds, co);
 					break;
@@ -774,17 +767,6 @@ public class Render {
 		releaseEglContext();
 	}
 
-	private int sizeOf(int type) {
-		switch (type) {
-			case PRIMITVE_POINTS:
-			case PRIMITVE_POINT_SPRITES: return 1;
-			case PRIMITVE_LINES:         return 2;
-			case PRIMITVE_TRIANGLES:     return 3;
-			case PRIMITVE_QUADS:         return 4;
-			default:                     return 0;
-		}
-	}
-
 	public synchronized void postFigure(FigureImpl figure) {
 		FigureNode rn;
 		if (figure.stack.empty()) {
@@ -801,8 +783,11 @@ public class Render {
 											int[] normals, int no,
 											int[] textureCoords, int to,
 											int[] colors, int co) {
+		if (command < 0) {
+			throw new IllegalArgumentException();
+		}
 		int numPrimitives = command >> 16 & 0xff;
-		FloatBuffer vcBuf = null;
+		FloatBuffer vcBuf;
 		FloatBuffer ncBuf = null;
 		ByteBuffer tcBuf = null;
 		ByteBuffer colorBuf = null;
@@ -815,13 +800,13 @@ public class Render {
 					vcBuf.put(vertices[vo++]);
 				}
 
-				if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
+				if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
 					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
 					colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
@@ -842,13 +827,13 @@ public class Render {
 					vcBuf.put(vertices[vo++]);
 				}
 
-				if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
+				if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
 					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
 					colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
@@ -870,29 +855,25 @@ public class Render {
 				for (int i = 0; i < vcLen; i++) {
 					vcBuf.put(vertices[vo++]);
 				}
-				switch (command & PDATA_NORMAL_PER_VERTEX) {
-					case PDATA_NORMAL_PER_FACE:
-						ncBuf = ByteBuffer.allocateDirect(vcLen * 4)
-								.order(ByteOrder.nativeOrder()).asFloatBuffer();
-						for (int end = no + numPrimitives * 3; no < end; ) {
-							float x = normals[no++];
-							float y = normals[no++];
-							float z = normals[no++];
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-						}
-						break;
-					case PDATA_NORMAL_PER_VERTEX:
-						ncBuf = ByteBuffer.allocateDirect(vcLen * 4)
-								.order(ByteOrder.nativeOrder()).asFloatBuffer();
-						for (int end = no + vcLen; no < end; ) {
-							ncBuf.put(normals[no++]);
-						}
-						break;
-					default:
+				if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_FACE) {
+					ncBuf = ByteBuffer.allocateDirect(vcLen * 4)
+							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+					for (int end = no + numPrimitives * 3; no < end; ) {
+						float x = normals[no++];
+						float y = normals[no++];
+						float z = normals[no++];
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+					}
+				} else if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_VERTEX) {
+					ncBuf = ByteBuffer.allocateDirect(vcLen * 4)
+							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+					for (int end = no + vcLen; no < end; ) {
+						ncBuf.put(normals[no++]);
+					}
 				}
-				if ((command & PDATA_TEXURE_COORD) == PDATA_TEXURE_COORD) {
+				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
 					if (params.getTexture() == null) {
 						return;
 					}
@@ -901,13 +882,13 @@ public class Render {
 					for (int i = 0; i < tcLen; i++) {
 						tcBuf.put((byte) textureCoords[to++]);
 					}
-				} else if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
 					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
 					colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
@@ -918,6 +899,8 @@ public class Render {
 						colorBuf.put(r).put(g).put(b);
 						colorBuf.put(r).put(g).put(b);
 					}
+				} else {
+					return;
 				}
 				break;
 			}
@@ -936,41 +919,37 @@ public class Render {
 					pos = offset + 2 * 3;
 					vcBuf.put(vertices[pos++]).put(vertices[pos++]).put(vertices[pos]);   // C
 				}
-				switch (command & PDATA_NORMAL_PER_VERTEX) {
-					case PDATA_NORMAL_PER_FACE:
-						ncBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
-								.order(ByteOrder.nativeOrder()).asFloatBuffer();
-						for (int end = no + numPrimitives * 3; no < end; ) {
-							float x = normals[no++];
-							float y = normals[no++];
-							float z = normals[no++];
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-							ncBuf.put(x).put(y).put(z);
-						}
-						break;
-					case PDATA_NORMAL_PER_VERTEX:
-						ncBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
-								.order(ByteOrder.nativeOrder()).asFloatBuffer();
-						for (int i = 0; i < numPrimitives; i++) {
-							int offset = no + i * 4 * 3;
-							int pos = offset;
-							ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos++]); // A
-							ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos++]); // B
-							ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos++]); // C
-							ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // D
-							pos = offset;
-							ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // A
-							pos = offset + 2 * 3;
-							ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // C
-						}
-						break;
-					default:
+				if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_FACE) {
+					ncBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
+							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+					for (int end = no + numPrimitives * 3; no < end; ) {
+						float x = normals[no++];
+						float y = normals[no++];
+						float z = normals[no++];
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+						ncBuf.put(x).put(y).put(z);
+					}
+				} else if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_VERTEX) {
+					ncBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
+							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+					for (int i = 0; i < numPrimitives; i++) {
+						int offset = no + i * 4 * 3;
+						int pos = offset;
+						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos++]); // A
+						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos++]); // B
+						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos++]); // C
+						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // D
+						pos = offset;
+						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // A
+						pos = offset + 2 * 3;
+						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // C
+					}
 				}
-				if ((command & PDATA_TEXURE_COORD) == PDATA_TEXURE_COORD) {
+				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
 					if (params.getTexture() == null) {
 						return;
 					}
@@ -988,13 +967,13 @@ public class Render {
 						pos = offset + 2 * 2;
 						tcBuf.put((byte) textureCoords[pos++]).put((byte) textureCoords[pos]);   // C
 					}
-				} else if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
 					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
 					colorBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3)
 							.order(ByteOrder.nativeOrder());
 					for (int i = 0; i < numPrimitives; i++) {
@@ -1009,6 +988,8 @@ public class Render {
 						colorBuf.put(r).put(g).put(b);
 						colorBuf.put(r).put(g).put(b);
 					}
+				} else {
+					return;
 				}
 				break;
 			}
@@ -1016,89 +997,85 @@ public class Render {
 				if (params.getTexture() == null) {
 					return;
 				}
-				int numParams;
-				switch (command & PDATA_POINT_SPRITE_PARAMS_PER_VERTEX) {
-					case PDATA_POINT_SPRITE_PARAMS_PER_CMD:
-						numParams = 1;
-						break;
-					case PDATA_POINT_SPRITE_PARAMS_PER_FACE:
-					case PDATA_POINT_SPRITE_PARAMS_PER_VERTEX:
-						numParams = numPrimitives;
-						break;
-					default:
-						return;
+				int psParams = command & PDATA_TEXCOORD_MASK;
+				if (psParams == 0) {
+					return;
 				}
 
-				float[] vert = new float[8];
-				float[] quad = new float[4 * 6];
+				float[] vertex = new float[6 * 4];
 
 				vcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 4 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
 				tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2).order(ByteOrder.nativeOrder());
-				int texOffset = 0;
+				int angle = 0;
+				float halfWidth = 0;
+				float halfHeight = 0;
+				byte tx0 = 0;
+				byte ty0 = 0;
+				byte tx1 = 0;
+				byte ty1 = 0;
 				MathUtil.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
 				for (int i = 0; i < numPrimitives; i++) {
-					vert[4] = vertices[vo++];
-					vert[5] = vertices[vo++];
-					vert[6] = vertices[vo++];
-					vert[7] = 1.0f;
-					Matrix.multiplyMV(vert, 0, MVP_TMP, 0, vert, 4);
+					vertex[4] = vertices[vo++];
+					vertex[5] = vertices[vo++];
+					vertex[6] = vertices[vo++];
+					vertex[7] = 1.0f;
+					Matrix.multiplyMV(vertex, 0, MVP_TMP, 0, vertex, 4);
 
-					if (numParams != 1) {
-						texOffset = to + i * 8;
-					}
-
-					float width = textureCoords[texOffset];
-					float height = textureCoords[texOffset + 1];
-					int angle = textureCoords[texOffset + 2];
-					float halfWidth;
-					float halfHeight;
-					switch (textureCoords[texOffset + 7]) {
-						case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_PERSPECTIVE:
-							halfWidth = width * params.projMatrix[0] * 0.5f;
-							halfHeight = height * params.projMatrix[5] * 0.5f;
-							break;
-						case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_PERSPECTIVE:
-							if (params.projection <= COMMAND_PARALLEL_SIZE) {
-								halfWidth = width / params.width;
-								halfHeight = height / params.height;
-							} else {
-								halfWidth = width / params.width * params.near;
-								halfHeight = height / params.height * params.near;
-							}
-							break;
-						case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_NO_PERS:
-							if (params.projection <= COMMAND_PARALLEL_SIZE) {
+					if (psParams != PDATA_POINT_SPRITE_PARAMS_PER_CMD || i == 0) {
+						float width = textureCoords[to++];
+						float height = textureCoords[to++];
+						angle = textureCoords[to++];
+						tx0 = (byte) textureCoords[to++];
+						ty0 = (byte) textureCoords[to++];
+						tx1 = (byte) (textureCoords[to++] - 1);
+						ty1 = (byte) (textureCoords[to++] - 1);
+						switch (textureCoords[to++]) {
+							case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_PERSPECTIVE:
 								halfWidth = width * params.projMatrix[0] * 0.5f;
 								halfHeight = height * params.projMatrix[5] * 0.5f;
-							} else {
-								float near = params.near;
-								halfWidth = width * params.projMatrix[0] / near * 0.5f * vert[3];
-								halfHeight = height * params.projMatrix[5] / near * 0.5f * vert[3];
-							}
-							break;
-						case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_NO_PERS:
-							halfWidth = width / params.width * vert[3];
-							halfHeight = height / params.height * vert[3];
-							break;
-						default:
-							throw new IllegalArgumentException();
+								break;
+							case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_PERSPECTIVE:
+								if (params.projection <= COMMAND_PARALLEL_SIZE) {
+									halfWidth = width / params.width;
+									halfHeight = height / params.height;
+								} else {
+									halfWidth = width / params.width * params.near;
+									halfHeight = height / params.height * params.near;
+								}
+								break;
+							case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_NO_PERS:
+								if (params.projection <= COMMAND_PARALLEL_SIZE) {
+									halfWidth = width * params.projMatrix[0] * 0.5f;
+									halfHeight = height * params.projMatrix[5] * 0.5f;
+								} else {
+									float near = params.near;
+									halfWidth = width * params.projMatrix[0] / near * 0.5f * vertex[3];
+									halfHeight = height * params.projMatrix[5] / near * 0.5f * vertex[3];
+								}
+								break;
+							case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_NO_PERS:
+								halfWidth = width / params.width * vertex[3];
+								halfHeight = height / params.height * vertex[3];
+								break;
+							default:
+								throw new IllegalArgumentException();
+						}
 					}
-					Utils.getSpriteVertex(quad, vert, angle, halfWidth, halfHeight);
-					vcBuf.put(quad);
 
-					byte x0 = (byte) textureCoords[texOffset + 3];
-					byte y0 = (byte) textureCoords[texOffset + 4];
-					byte x1 = (byte) (textureCoords[texOffset + 5] - 1);
-					byte y1 = (byte) (textureCoords[texOffset + 6] - 1);
+					Utils.getSpriteVertex(vertex, angle, halfWidth, halfHeight);
+					vcBuf.put(vertex);
 
-					tcBuf.put(x0).put(y1);
-					tcBuf.put(x0).put(y0);
-					tcBuf.put(x1).put(y1);
-					tcBuf.put(x1).put(y1);
-					tcBuf.put(x0).put(y0);
-					tcBuf.put(x1).put(y0);
+					tcBuf.put(tx0).put(ty1);
+					tcBuf.put(tx0).put(ty0);
+					tcBuf.put(tx1).put(ty1);
+					tcBuf.put(tx1).put(ty1);
+					tcBuf.put(tx0).put(ty0);
+					tcBuf.put(tx1).put(ty0);
 				}
+				break;
 			}
+			default:
+				throw new IllegalArgumentException();
 		}
 		stack.add(new RenderNode.PrimitiveNode(this, command, vcBuf, ncBuf, tcBuf, colorBuf));
 	}
@@ -1224,20 +1201,18 @@ public class Render {
 		}
 		try {
 			FloatBuffer vertices = model.vertexArray;
-			vertices.rewind();
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
-			glBufferData(GL_ARRAY_BUFFER, vertices.capacity() * 4, vertices, GL_STREAM_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, vertices.capacity() * 4, vertices.rewind(), GL_STREAM_DRAW);
+
 			ByteBuffer tcBuf = model.texCoordArray;
-			tcBuf.rewind();
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
-			glBufferData(GL_ARRAY_BUFFER, tcBuf.capacity(), tcBuf, GL_STREAM_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, tcBuf.capacity(), tcBuf.rewind(), GL_STREAM_DRAW);
 
 			FloatBuffer normals = model.normalsArray;
 			boolean isLight = (params.attrs & ENV_ATTR_LIGHTING) != 0 && normals != null;
 			if (isLight) {
-				normals.rewind();
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
-				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals, GL_STREAM_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals.rewind(), GL_STREAM_DRAW);
 			}
 			if (model.hasPolyT) {
 				final Program.Tex program = Program.tex;
@@ -1332,54 +1307,20 @@ public class Render {
 		int numPrimitives = command >> 16 & 0xff;
 		switch ((command & 0x7000000)) {
 			case PRIMITVE_POINTS: {
-				Program.Color program = Program.color;
-				program.use();
-				program.setLight(null);
-				program.bindMatrices(MVP_TMP, node.viewMatrix);
-
-				if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
-					program.setColor(node.colors);
-				} else {
-					glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, node.colors.rewind());
-					glEnableVertexAttribArray(program.aColorData);
-				}
-				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());
-				glEnableVertexAttribArray(program.aPosition);
-
-				glDrawArrays(GL_POINTS, 0, numPrimitives);
-				glDisableVertexAttribArray(program.aPosition);
-				glDisableVertexAttribArray(program.aColorData);
+				renderMesh(node, GL_POINTS);
 				checkGlError("renderPrimitive[PRIMITVE_POINTS]");
 				break;
 			}
 			case PRIMITVE_LINES: {
-				Program.Color program = Program.color;
-				program.use();
-				program.setLight(null);
-				program.bindMatrices(MVP_TMP, node.viewMatrix);
-
-				if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
-					program.setColor(node.colors);
-				} else {
-					glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, node.colors.rewind());
-					glEnableVertexAttribArray(program.aColorData);
-				}
-				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());
-				glEnableVertexAttribArray(program.aPosition);
-
-				glDrawArrays(GL_LINES, 0, numPrimitives * 2);
-				glDisableVertexAttribArray(program.aPosition);
-				glDisableVertexAttribArray(program.aColorData);
+				renderMesh(node, GL_LINES);
 				checkGlError("renderPrimitive[PRIMITVE_LINES]");
 				break;
 			}
 			case PRIMITVE_TRIANGLES:
 			case PRIMITVE_QUADS: {
-				if ((command & PDATA_TEXURE_COORD) == PDATA_TEXURE_COORD) {
+				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
 					renderMeshT(node);
-				} else if ((command & PDATA_COLOR_PER_COMMAND) != 0) {
-					renderMeshC(node);
-				} else if ((command & PDATA_COLOR_PER_FACE) != 0) {
+				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
 					renderMeshC(node);
 				}
 				break;
@@ -1404,6 +1345,28 @@ public class Render {
 			}
 		}
 
+	}
+
+	private void renderMesh(RenderNode.PrimitiveNode node, int type) {
+		Program.Color program = Program.color;
+		program.use();
+		program.setLight(null);
+		program.bindMatrices(MVP_TMP, node.viewMatrix);
+
+		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());
+		glEnableVertexAttribArray(program.aPosition);
+
+		if ((node.command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
+			program.setColor(node.colors);
+		} else {
+			glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, node.colors.rewind());
+			glEnableVertexAttribArray(program.aColorData);
+		}
+
+		glDrawArrays(type, 0, node.vertices.capacity() / 3);
+
+		glDisableVertexAttribArray(program.aPosition);
+		glDisableVertexAttribArray(program.aColorData);
 	}
 
 	public void setOrthographicScale(int scaleX, int scaleY) {
