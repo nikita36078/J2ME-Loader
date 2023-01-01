@@ -46,7 +46,7 @@ import javax.microedition.lcdui.Graphics;
 import ru.woesss.j2me.micro3d.RenderNode.FigureNode;
 
 public class Render {
-	private final static FloatBuffer BG_VBO = ByteBuffer.allocateDirect(8 * 2 * 4)
+	private static final FloatBuffer BG_VBO = ByteBuffer.allocateDirect(8 * 2 * 4)
 			.order(ByteOrder.nativeOrder()).asFloatBuffer()
 			.put(new float[]{
 					-1.0f, -1.0f, 0.0f, 0.0f,
@@ -253,7 +253,7 @@ public class Render {
 	}
 
 	private void copy2d(boolean preProcess) {
-		if (targetBitmap == null) {// render to texture
+		if (targetTexture != null) {// render to texture
 			return;
 		}
 		if (!glIsTexture(bgTextureId[0])) {
@@ -325,23 +325,32 @@ public class Render {
 		}
 	}
 
-	void renderFigure(FigureNode node) {
-		boolean isTransparency = (node.attrs & ENV_ATTR_SEMI_TRANSPARENT) != 0;
+	void renderFigure(Model model,
+					  TextureImpl[] textures,
+					  int attrs,
+					  float[] projMatrix,
+					  float[] viewMatrix,
+					  FloatBuffer vertices,
+					  FloatBuffer normals,
+					  Light light,
+					  TextureImpl specular,
+					  int toonThreshold,
+					  int toonHigh,
+					  int toonLow) {
+		boolean isTransparency = (attrs & ENV_ATTR_SEMI_TRANSPARENT) != 0;
 		if (!isTransparency && flushStep == 2) return;
 
-		Model model = node.figure.model;
 		if (!model.hasPolyT && !model.hasPolyC)
 			return;
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(flushStep == 1);
-		MathUtil.multiplyMM(MVP_TMP, node.projMatrix, node.viewMatrix);
+		MathUtil.multiplyMM(MVP_TMP, projMatrix, viewMatrix);
 		if (bufHandles == null) {
 			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
 			glGenBuffers(3, bufHandles);
 		}
 		try {
-			FloatBuffer vertices = node.vertices;
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
 			glBufferData(GL_ARRAY_BUFFER, vertices.capacity() * 4, vertices.rewind(), GL_STREAM_DRAW);
 
@@ -349,13 +358,11 @@ public class Render {
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
 			glBufferData(GL_ARRAY_BUFFER, texCoords.capacity(), texCoords.rewind(), GL_STREAM_DRAW);
 
-			FloatBuffer normals = node.normals;
-			boolean isLight = node.light != null && normals != null;
+			boolean isLight = (attrs & ENV_ATTR_LIGHTING) != 0 && normals != null;
 			if (isLight) {
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals.rewind(), GL_STREAM_DRAW);
 			}
-			TextureImpl sphere = node.specular;
 			if (model.hasPolyT) {
 				final Program.Tex program = Program.tex;
 				program.use();
@@ -374,17 +381,17 @@ public class Render {
 					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 					glEnableVertexAttribArray(program.aNormal);
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
-					program.setToonShading(node.attrs, node.toonThreshold, node.toonHigh, node.toonLow);
-					program.setLight(node.light);
-					program.setSphere(sphere);
+					program.setToonShading(attrs, toonThreshold, toonHigh, toonLow);
+					program.setLight(light);
+					program.setSphere((attrs & ENV_ATTR_SPHERE_MAP) == 0 ? null : specular);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
 					program.setLight(null);
 				}
 
-				program.bindMatrices(MVP_TMP, node.viewMatrix);
+				program.bindMatrices(MVP_TMP, viewMatrix);
 				// Draw triangles
-				renderModel(node.textures, model, isTransparency);
+				renderModel(textures, model, isTransparency);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
 				glDisableVertexAttribArray(program.aMaterial);
@@ -411,14 +418,14 @@ public class Render {
 					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
 					glEnableVertexAttribArray(program.aNormal);
-					program.setLight(node.light);
-					program.setSphere(sphere);
-					program.setToonShading(node.attrs, node.toonThreshold, node.toonHigh, node.toonLow);
+					program.setLight(light);
+					program.setSphere((attrs & ENV_ATTR_SPHERE_MAP) == 0 ? null : specular);
+					program.setToonShading(attrs, toonThreshold, toonHigh, toonLow);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
 					program.setLight(null);
 				}
-				program.bindMatrices(MVP_TMP, node.viewMatrix);
+				program.bindMatrices(MVP_TMP, viewMatrix);
 				renderModel(model, isTransparency);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
@@ -545,11 +552,11 @@ public class Render {
 			if (!backCopied && preCopy2D) copy2d(true);
 			flushStep = 1;
 			for (RenderNode r : stack) {
-				r.run();
+				r.render(this);
 			}
 			flushStep = 2;
 			for (RenderNode r : stack) {
-				r.run();
+				r.render(this);
 				r.recycle();
 			}
 			glDisable(GL_BLEND);
@@ -566,7 +573,7 @@ public class Render {
 		int command = node.command;
 		Program.Color program = Program.color;
 		program.use();
-		if ((node.attrs & ENV_ATTR_LIGHTING) != 0 && node.normals != null && (command & PATTR_LIGHTING) != 0) {
+		if ((node.attrs & ENV_ATTR_LIGHTING) != 0 && (command & PATTR_LIGHTING) != 0 && node.normals != null) {
 			TextureImpl sphere = node.specular;
 			if ((node.attrs & ENV_ATTR_SPHERE_MAP) != 0 && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
 				glVertexAttrib2f(program.aMaterial, 1, 1);
@@ -609,7 +616,7 @@ public class Render {
 		int command = node.command;
 		Program.Tex program = Program.tex;
 		program.use();
-		if ((node.attrs & ENV_ATTR_LIGHTING) != 0 && node.normals != null && (command & PATTR_LIGHTING) != 0) {
+		if ((node.attrs & ENV_ATTR_LIGHTING) != 0 && (command & PATTR_LIGHTING) != 0 && node.normals != null) {
 			TextureImpl sphere = node.specular;
 			if ((node.attrs & ENV_ATTR_SPHERE_MAP) != 0 && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
 				glVertexAttrib3f(program.aMaterial, 1, 1, command & PATTR_COLORKEY);
@@ -1082,23 +1089,48 @@ public class Render {
 
 	public synchronized void drawFigure(FigureImpl figure) {
 		bindEglContext();
-		if (!backCopied && preCopy2D) copy2d(true);
+		if (!backCopied && preCopy2D) {
+			copy2d(true);
+		}
 		try {
-			flushStep = 1;
-			for (int i = 0, stackSize = stack.size(); i < stackSize; i++) {
-				RenderNode r = stack.get(i);
-				r.run();
-			}
-			Model data = figure.model;
+			Model model = figure.model;
 			figure.prepareBuffers();
-			renderFigureV2(data);
+
+			flushStep = 1;
+			for (RenderNode r : stack) {
+				r.render(this);
+			}
+			renderFigure(model,
+					params.textures,
+					params.attrs,
+					params.projMatrix,
+					params.viewMatrix,
+					model.vertexArray,
+					model.normalsArray,
+					params.light,
+					params.specular,
+					params.toonThreshold,
+					params.toonHigh,
+					params.toonLow);
+
 			flushStep = 2;
-			for (int i = 0, stackSize = stack.size(); i < stackSize; i++) {
-				RenderNode r = stack.get(i);
-				r.run();
+			for (RenderNode r : stack) {
+				r.render(this);
 				r.recycle();
 			}
-			renderFigureV2(data);
+			renderFigure(model,
+					params.textures,
+					params.attrs,
+					params.projMatrix,
+					params.viewMatrix,
+					model.vertexArray,
+					model.normalsArray,
+					params.light,
+					params.specular,
+					params.toonThreshold,
+					params.toonHigh,
+					params.toonLow);
+
 			glDisable(GL_BLEND);
 			glDepthMask(true);
 			glClear(GL_DEPTH_BUFFER_BIT);
@@ -1109,15 +1141,40 @@ public class Render {
 
 	public synchronized void drawFigureV2(FigureImpl figure) {
 		bindEglContext();
-		if (!backCopied && preCopy2D) copy2d(true);
+		if (!backCopied && preCopy2D) {
+			copy2d(true);
+		}
 		try {
 			Model model = figure.model;
 			figure.prepareBuffers();
 
 			flushStep = 1;
-			renderFigureV2(model);
+			renderFigure(model,
+					params.textures,
+					params.attrs,
+					params.projMatrix,
+					params.viewMatrix,
+					model.vertexArray,
+					model.normalsArray,
+					params.light,
+					params.specular,
+					params.toonThreshold,
+					params.toonHigh,
+					params.toonLow);
+
 			flushStep = 2;
-			renderFigureV2(model);
+			renderFigure(model,
+					params.textures,
+					params.attrs,
+					params.projMatrix,
+					params.viewMatrix,
+					model.vertexArray,
+					model.normalsArray,
+					params.light,
+					params.specular,
+					params.toonThreshold,
+					params.toonHigh,
+					params.toonLow);
 
 			glDisable(GL_BLEND);
 			glDepthMask(true);
@@ -1185,109 +1242,6 @@ public class Render {
 		params.attrs = attrs;
 	}
 
-	private void renderFigureV2(Model model) {
-		boolean isTransparency = (params.attrs & ENV_ATTR_SEMI_TRANSPARENT) != 0;
-		if (!isTransparency && flushStep == 2) return;
-
-		if (!model.hasPolyT && !model.hasPolyC)
-			return;
-
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(flushStep == 1);
-		MathUtil.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
-		if (bufHandles == null) {
-			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
-			glGenBuffers(3, bufHandles);
-		}
-		try {
-			FloatBuffer vertices = model.vertexArray;
-			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
-			glBufferData(GL_ARRAY_BUFFER, vertices.capacity() * 4, vertices.rewind(), GL_STREAM_DRAW);
-
-			ByteBuffer tcBuf = model.texCoordArray;
-			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
-			glBufferData(GL_ARRAY_BUFFER, tcBuf.capacity(), tcBuf.rewind(), GL_STREAM_DRAW);
-
-			FloatBuffer normals = model.normalsArray;
-			boolean isLight = (params.attrs & ENV_ATTR_LIGHTING) != 0 && normals != null;
-			if (isLight) {
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
-				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals.rewind(), GL_STREAM_DRAW);
-			}
-			if (model.hasPolyT) {
-				final Program.Tex program = Program.tex;
-				program.use();
-
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
-				glEnableVertexAttribArray(program.aPosition);
-				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 0);
-
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
-				glEnableVertexAttribArray(program.aColorData);
-				glVertexAttribPointer(program.aColorData, 2, GL_UNSIGNED_BYTE, false, 5, 0);
-				glEnableVertexAttribArray(program.aMaterial);
-				glVertexAttribPointer(program.aMaterial, 3, GL_UNSIGNED_BYTE, false, 5, 2);
-
-				if (isLight) {
-					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
-					glEnableVertexAttribArray(program.aNormal);
-					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
-					program.setToonShading(params.attrs, params.toonThreshold, params.toonHigh, params.toonLow);
-					program.setLight(params.light);
-					program.setSphere(params.specular);
-				} else {
-					glDisableVertexAttribArray(program.aNormal);
-					program.setLight(null);
-				}
-
-				program.bindMatrices(MVP_TMP, params.viewMatrix);
-				// Draw triangles
-				renderModel(params.textures, model, isTransparency);
-				glDisableVertexAttribArray(program.aPosition);
-				glDisableVertexAttribArray(program.aColorData);
-				glDisableVertexAttribArray(program.aMaterial);
-				glDisableVertexAttribArray(program.aNormal);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-			}
-
-			if (model.hasPolyC) {
-				final Program.Color program = Program.color;
-				program.use();
-
-				int offset = model.numVerticesPolyT;
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(0));
-				glEnableVertexAttribArray(program.aPosition);
-				glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
-
-				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
-				glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 5, 5 * offset);
-				glEnableVertexAttribArray(program.aColorData);
-				glEnableVertexAttribArray(program.aMaterial);
-				glVertexAttribPointer(program.aMaterial, 2, GL_UNSIGNED_BYTE, false, 5, 5 * offset + 3);
-
-				if (isLight) {
-					glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
-					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
-					glEnableVertexAttribArray(program.aNormal);
-					program.setLight(params.light);
-					program.setSphere(params.specular);
-					program.setToonShading(params.attrs, params.toonThreshold, params.toonHigh, params.toonLow);
-				} else {
-					glDisableVertexAttribArray(program.aNormal);
-					program.setLight(null);
-				}
-				program.bindMatrices(MVP_TMP, params.viewMatrix);
-				renderModel(model, isTransparency);
-				glDisableVertexAttribArray(program.aPosition);
-				glDisableVertexAttribArray(program.aColorData);
-				glDisableVertexAttribArray(program.aMaterial);
-				glDisableVertexAttribArray(program.aNormal);
-			}
-		} finally {
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-	}
-
 	void renderPrimitive(RenderNode.PrimitiveNode node) {
 		int command = node.command;
 		int blend = (node.attrs & ENV_ATTR_SEMI_TRANSPARENT) != 0 ? (command & PATTR_BLEND_SUB) >> 4 : 0;
@@ -1350,7 +1304,7 @@ public class Render {
 	private void renderMesh(RenderNode.PrimitiveNode node, int type) {
 		Program.Color program = Program.color;
 		program.use();
-		program.setLight(null);
+		glVertexAttrib2f(program.aMaterial, 0, 0);
 		program.bindMatrices(MVP_TMP, node.viewMatrix);
 
 		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());

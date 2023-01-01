@@ -21,7 +21,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 abstract class RenderNode {
-	protected Render render;
 	final float[] viewMatrix = new float[12];
 	final float[] projMatrix = new float[16];
 	int attrs;
@@ -34,7 +33,6 @@ abstract class RenderNode {
 	RenderNode() {}
 
 	void setData(Render render) {
-		this.render = render;
 		Render.Params params = render.params;
 		System.arraycopy(params.viewMatrix, 0, viewMatrix, 0, 12);
 		System.arraycopy(params.projMatrix, 0, projMatrix, 0, 16);
@@ -52,7 +50,7 @@ abstract class RenderNode {
 		toonThreshold = params.toonThreshold;
 	}
 
-	abstract void run();
+	abstract void render(Render render);
 
 	void recycle() {}
 
@@ -64,11 +62,11 @@ abstract class RenderNode {
 
 		FigureNode(Render render, FigureImpl figure) {
 			this.figure = figure;
-			Model data = figure.model;
-			vertices = ByteBuffer.allocateDirect(data.vertexArrayCapacity)
+			Model model = figure.model;
+			vertices = ByteBuffer.allocateDirect(model.vertexArrayCapacity)
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
-			if (data.originalNormals != null) {
-				normals = ByteBuffer.allocateDirect(data.vertexArrayCapacity)
+			if (model.originalNormals != null) {
+				normals = ByteBuffer.allocateDirect(model.vertexArrayCapacity)
 						.order(ByteOrder.nativeOrder()).asFloatBuffer();
 			} else {
 				normals = null;
@@ -82,18 +80,23 @@ abstract class RenderNode {
 			Render.Params params = render.params;
 			textures = new TextureImpl[params.texturesLen];
 			System.arraycopy(params.textures, 0, textures, 0, params.texturesLen);
-			synchronized (figure) {
-				Model model = figure.model;
-				Utils.fillBuffer(vertices, model.vertices, model.indices);
-				if (normals != null) {
-					Utils.fillBuffer(normals, model.normals, model.indices);
-				}
-			}
+			figure.fillBuffers(vertices, normals);
 		}
 
 		@Override
-		void run() {
-			render.renderFigure(this);
+		void render(Render render) {
+			render.renderFigure(figure.model,
+					textures,
+					attrs,
+					projMatrix,
+					viewMatrix,
+					vertices,
+					normals,
+					light,
+					specular,
+					toonThreshold,
+					toonHigh,
+					toonLow);
 		}
 
 		@Override
@@ -124,7 +127,7 @@ abstract class RenderNode {
 		}
 
 		@Override
-		void run() {
+		void render(Render render) {
 			render.renderPrimitive(this);
 		}
 	}

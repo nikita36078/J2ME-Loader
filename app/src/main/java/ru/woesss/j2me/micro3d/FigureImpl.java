@@ -24,6 +24,7 @@ import android.util.SparseIntArray;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -242,5 +243,12 @@ public class FigureImpl {
 		applyPattern();
 		//noinspection ManualMinMaxCalculation
 		applyBoneAction(actTable.actions[action], frame < 0 ? 0 : frame);
+	}
+
+	synchronized void fillBuffers(FloatBuffer vertices, FloatBuffer normals) {
+		Utils.fillBuffer(vertices, model.vertices, model.indices);
+		if (normals != null) {
+			Utils.fillBuffer(normals, model.normals, model.indices);
+		}
 	}
 }
