@@ -84,6 +84,7 @@ public class MathUtil {
 		m[15] = l30 * r03 + l31 * r13 + l32 * r23 + l33;
 	}
 
+	@SuppressWarnings("SpellCheckingInspection")
 	public static void rotateM12(float[] m, int ax, int ay, int az, float angle) {
 		angle *= TO_RADIANS;
 		float s = (float) Math.sin(angle);

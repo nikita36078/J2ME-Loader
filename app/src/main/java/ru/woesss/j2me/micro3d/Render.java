@@ -1262,12 +1262,12 @@ public class Render {
 		switch ((command & 0x7000000)) {
 			case PRIMITVE_POINTS: {
 				renderMesh(node, GL_POINTS);
-				checkGlError("renderPrimitive[PRIMITVE_POINTS]");
+				checkGlError("renderPrimitive[PRIMITIVE_POINTS]");
 				break;
 			}
 			case PRIMITVE_LINES: {
 				renderMesh(node, GL_LINES);
-				checkGlError("renderPrimitive[PRIMITVE_LINES]");
+				checkGlError("renderPrimitive[PRIMITIVE_LINES]");
 				break;
 			}
 			case PRIMITVE_TRIANGLES:
@@ -1295,7 +1295,7 @@ public class Render {
 				glDrawArrays(GL_TRIANGLES, 0, numPrimitives * 6);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
-				checkGlError("renderPrimitive[PRIMITVE_POINT_SPRITES]");
+				checkGlError("renderPrimitive[PRIMITIVE_POINT_SPRITES]");
 			}
 		}
 
