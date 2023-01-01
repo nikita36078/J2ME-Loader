@@ -30,9 +30,9 @@ public class Vector3D {
 	public Vector3D() {}
 
 	public Vector3D(int x, int y, int z) {
-		this.x = clamp(x);
-		this.y = clamp(y);
-		this.z = clamp(z);
+		this.x = MathUtil.clamp(x, MIN_VALUE, MAX_VALUE);
+		this.y = MathUtil.clamp(y, MIN_VALUE, MAX_VALUE);
+		this.z = MathUtil.clamp(z, MIN_VALUE, MAX_VALUE);
 	}
 
 	Vector3D(Vector3D src) {
@@ -121,21 +121,21 @@ public class Vector3D {
 	}
 
 	public void set(int x, int y, int z) {
-		this.x = clamp(x);
-		this.y = clamp(y);
-		this.z = clamp(z);
+		this.x = MathUtil.clamp(x, MIN_VALUE, MAX_VALUE);
+		this.y = MathUtil.clamp(y, MIN_VALUE, MAX_VALUE);
+		this.z = MathUtil.clamp(z, MIN_VALUE, MAX_VALUE);
 	}
 
 	public void setX(int x) {
-		this.x = clamp(x);
+		this.x = MathUtil.clamp(x, MIN_VALUE, MAX_VALUE);
 	}
 
 	public void setY(int y) {
-		this.y = clamp(y);
+		this.y = MathUtil.clamp(y, MIN_VALUE, MAX_VALUE);
 	}
 
 	public void setZ(int z) {
-		this.z = clamp(z);
+		this.z = MathUtil.clamp(z, MIN_VALUE, MAX_VALUE);
 	}
 
 	boolean isZero() {
@@ -146,10 +146,5 @@ public class Vector3D {
 		x = src.x;
 		y = src.y;
 		z = src.z;
-	}
-
-	@SuppressWarnings("ManualMinMaxCalculation")
-	private static int clamp(int v) {
-		return v >= MAX_VALUE ? MAX_VALUE : v <= MIN_VALUE ? MIN_VALUE : v;
 	}
 }

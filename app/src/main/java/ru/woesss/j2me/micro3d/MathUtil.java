@@ -156,7 +156,7 @@ public class MathUtil {
 	}
 
 	@SuppressWarnings("ManualMinMaxCalculation")
-	static int clamp(int v, int min, int max) {
+	public static int clamp(int v, int min, int max) {
 		return v < min ? min : v > max ? max : v;
 	}
 }

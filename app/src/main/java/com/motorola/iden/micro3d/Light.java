@@ -16,6 +16,8 @@
 
 package com.motorola.iden.micro3d;
 
+import ru.woesss.j2me.micro3d.MathUtil;
+
 public class Light {
 	public static final int MAX_AMBIENT_LIGHT_INTENSITY = 4096;
 	public static final int MAX_DIRECTIONAL_LIGHT_INTENSITY = 16384;
@@ -53,11 +55,11 @@ public class Light {
 	}
 
 	public void setAmbientIntensity(int intensity) {
-		ambientIntensity = clamp(intensity, MAX_AMBIENT_LIGHT_INTENSITY);
+		ambientIntensity = MathUtil.clamp(intensity, MIN_AMBIENT_LIGHT_INTENSITY, MAX_AMBIENT_LIGHT_INTENSITY);
 	}
 
 	public void setDirectionalIntensity(int intensity) {
-		directionalIntensity = clamp(intensity, MAX_DIRECTIONAL_LIGHT_INTENSITY);
+		directionalIntensity = MathUtil.clamp(intensity, MIN_DIRECTIONAL_LIGHT_INTENSITY, MAX_DIRECTIONAL_LIGHT_INTENSITY);
 	}
 
 	public void setDirectionVector(Vector3D direction) {
@@ -65,9 +67,5 @@ public class Light {
 			throw new IllegalArgumentException();
 		}
 		this.direction = direction;
-	}
-
-	private static int clamp(int intensity, int max) {
-		return Math.max(Math.min(intensity, max), 0);
 	}
 }
