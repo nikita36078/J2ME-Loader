@@ -60,7 +60,7 @@ public class Render {
 	private static final int PDATA_TEXCOORD_MASK = PDATA_TEXURE_COORD;
 	private static final int[] PRIMITIVE_SIZES = {0, 1, 2, 3, 4, 1};
 
-	final Params params = new Params();
+	final Environment env = new Environment();
 	private EGLDisplay eglDisplay;
 	private EGLSurface eglWindowSurface;
 	private EGLConfig eglConfig;
@@ -139,7 +139,7 @@ public class Render {
 		if (eglContext == null) init();
 		targetBitmap = graphics.getBitmap();
 		EGL10 egl = (EGL10) EGLContext.getEGL();
-		if (params.width != width || params.height != height) {
+		if (env.width != width || env.height != height) {
 
 			if (eglWindowSurface != null) {
 				releaseEglContext();
@@ -155,8 +155,8 @@ public class Render {
 
 			glViewport(0, 0, width, height);
 			Program.create();
-			params.width = width;
-			params.height = height;
+			env.width = width;
+			env.height = height;
 			glClearColor(0, 0, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 		}
@@ -168,7 +168,7 @@ public class Render {
 		int r = clip.right;
 		int b = clip.bottom;
 		gClip.set(l, t, r, b);
-		if (l == 0 && t == 0 && r == params.width && b == params.height) {
+		if (l == 0 && t == 0 && r == env.width && b == env.height) {
 			glDisable(GL_SCISSOR_TEST);
 		} else {
 			glEnable(GL_SCISSOR_TEST);
@@ -185,7 +185,7 @@ public class Render {
 		int height = tex.getHeight();
 		if (eglContext == null) init();
 		EGL10 egl = (EGL10) EGLContext.getEGL();
-		if (params.width != width || params.height != height) {
+		if (env.width != width || env.height != height) {
 
 			if (eglWindowSurface != null) {
 				releaseEglContext();
@@ -201,8 +201,8 @@ public class Render {
 
 			glViewport(0, 0, width, height);
 			Program.create();
-			params.width = width;
-			params.height = height;
+			env.width = width;
+			env.height = height;
 		}
 		egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
 		Rect clip = this.clip;
@@ -212,7 +212,7 @@ public class Render {
 		int r = clip.right;
 		int b = clip.bottom;
 		gClip.set(l, t, r, b);
-		if (l == 0 && t == 0 && r == params.width && b == params.height) {
+		if (l == 0 && t == 0 && r == env.width && b == env.height) {
 			glDisable(GL_SCISSOR_TEST);
 		} else {
 			glEnable(GL_SCISSOR_TEST);
@@ -665,11 +665,11 @@ public class Render {
 					selectAffineTrans(cmd & 0xFFFFFF);
 					break;
 				case COMMAND_AMBIENT_LIGHT: {
-					params.light.ambIntensity = i++;
+					env.light.ambIntensity = i++;
 					break;
 				}
 				case COMMAND_ATTRIBUTE:
-					params.attrs = cmd & 0xFFFFFF;
+					env.attrs = cmd & 0xFFFFFF;
 					break;
 				case COMMAND_CENTER:
 					setCenter(cmds[i++], cmds[i++]);
@@ -679,10 +679,10 @@ public class Render {
 					updateClip();
 					break;
 				case COMMAND_DIRECTION_LIGHT: {
-					params.light.x = i++;
-					params.light.y = i++;
-					params.light.z = i++;
-					params.light.dirIntensity = i++;
+					env.light.x = i++;
+					env.light.y = i++;
+					env.light.z = i++;
+					env.light.dirIntensity = i++;
 					break;
 				}
 				case COMMAND_FLUSH:
@@ -706,7 +706,7 @@ public class Render {
 				case COMMAND_TEXTURE_INDEX:
 					int tid = cmd & 0xFFFFFF;
 					if (tid > 0 && tid < 16) {
-						params.textureIdx = tid;
+						env.textureIdx = tid;
 					}
 					break;
 				case COMMAND_THRESHOLD:
@@ -765,7 +765,7 @@ public class Render {
 		int t = clip.top;
 		int r = clip.right;
 		int b = clip.bottom;
-		if (l == 0 && t == 0 && r == params.width && b == params.height) {
+		if (l == 0 && t == 0 && r == env.width && b == env.height) {
 			glDisable(GL_SCISSOR_TEST);
 		} else {
 			glEnable(GL_SCISSOR_TEST);
@@ -881,7 +881,7 @@ public class Render {
 					}
 				}
 				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
-					if (params.getTexture() == null) {
+					if (env.getTexture() == null) {
 						return;
 					}
 					int tcLen = numPrimitives * 3 * 2;
@@ -957,7 +957,7 @@ public class Render {
 					}
 				}
 				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
-					if (params.getTexture() == null) {
+					if (env.getTexture() == null) {
 						return;
 					}
 					tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2)
@@ -1001,7 +1001,7 @@ public class Render {
 				break;
 			}
 			case PRIMITVE_POINT_SPRITES: {
-				if (params.getTexture() == null) {
+				if (env.getTexture() == null) {
 					return;
 				}
 				int psParams = command & PDATA_TEXCOORD_MASK;
@@ -1020,7 +1020,7 @@ public class Render {
 				byte ty0 = 0;
 				byte tx1 = 0;
 				byte ty1 = 0;
-				MathUtil.multiplyMM(MVP_TMP, params.projMatrix, params.viewMatrix);
+				MathUtil.multiplyMM(MVP_TMP, env.projMatrix, env.viewMatrix);
 				for (int i = 0; i < numPrimitives; i++) {
 					vertex[4] = vertices[vo++];
 					vertex[5] = vertices[vo++];
@@ -1038,31 +1038,31 @@ public class Render {
 						ty1 = (byte) (textureCoords[to++] - 1);
 						switch (textureCoords[to++]) {
 							case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_PERSPECTIVE:
-								halfWidth = width * params.projMatrix[0] * 0.5f;
-								halfHeight = height * params.projMatrix[5] * 0.5f;
+								halfWidth = width * env.projMatrix[0] * 0.5f;
+								halfHeight = height * env.projMatrix[5] * 0.5f;
 								break;
 							case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_PERSPECTIVE:
-								if (params.projection <= COMMAND_PARALLEL_SIZE) {
-									halfWidth = width / params.width;
-									halfHeight = height / params.height;
+								if (env.projection <= COMMAND_PARALLEL_SIZE) {
+									halfWidth = width / env.width;
+									halfHeight = height / env.height;
 								} else {
-									halfWidth = width / params.width * params.near;
-									halfHeight = height / params.height * params.near;
+									halfWidth = width / env.width * env.near;
+									halfHeight = height / env.height * env.near;
 								}
 								break;
 							case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_NO_PERS:
-								if (params.projection <= COMMAND_PARALLEL_SIZE) {
-									halfWidth = width * params.projMatrix[0] * 0.5f;
-									halfHeight = height * params.projMatrix[5] * 0.5f;
+								if (env.projection <= COMMAND_PARALLEL_SIZE) {
+									halfWidth = width * env.projMatrix[0] * 0.5f;
+									halfHeight = height * env.projMatrix[5] * 0.5f;
 								} else {
-									float near = params.near;
-									halfWidth = width * params.projMatrix[0] / near * 0.5f * vertex[3];
-									halfHeight = height * params.projMatrix[5] / near * 0.5f * vertex[3];
+									float near = env.near;
+									halfWidth = width * env.projMatrix[0] / near * 0.5f * vertex[3];
+									halfHeight = height * env.projMatrix[5] / near * 0.5f * vertex[3];
 								}
 								break;
 							case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_NO_PERS:
-								halfWidth = width / params.width * vertex[3];
-								halfHeight = height / params.height * vertex[3];
+								halfWidth = width / env.width * vertex[3];
+								halfHeight = height / env.height * vertex[3];
 								break;
 							default:
 								throw new IllegalArgumentException();
@@ -1101,17 +1101,17 @@ public class Render {
 				r.render(this);
 			}
 			renderFigure(model,
-					params.textures,
-					params.attrs,
-					params.projMatrix,
-					params.viewMatrix,
+					env.textures,
+					env.attrs,
+					env.projMatrix,
+					env.viewMatrix,
 					model.vertexArray,
 					model.normalsArray,
-					params.light,
-					params.specular,
-					params.toonThreshold,
-					params.toonHigh,
-					params.toonLow);
+					env.light,
+					env.specular,
+					env.toonThreshold,
+					env.toonHigh,
+					env.toonLow);
 
 			flushStep = 2;
 			for (RenderNode r : stack) {
@@ -1119,17 +1119,17 @@ public class Render {
 				r.recycle();
 			}
 			renderFigure(model,
-					params.textures,
-					params.attrs,
-					params.projMatrix,
-					params.viewMatrix,
+					env.textures,
+					env.attrs,
+					env.projMatrix,
+					env.viewMatrix,
 					model.vertexArray,
 					model.normalsArray,
-					params.light,
-					params.specular,
-					params.toonThreshold,
-					params.toonHigh,
-					params.toonLow);
+					env.light,
+					env.specular,
+					env.toonThreshold,
+					env.toonHigh,
+					env.toonLow);
 
 			glDisable(GL_BLEND);
 			glDepthMask(true);
@@ -1150,31 +1150,31 @@ public class Render {
 
 			flushStep = 1;
 			renderFigure(model,
-					params.textures,
-					params.attrs,
-					params.projMatrix,
-					params.viewMatrix,
+					env.textures,
+					env.attrs,
+					env.projMatrix,
+					env.viewMatrix,
 					model.vertexArray,
 					model.normalsArray,
-					params.light,
-					params.specular,
-					params.toonThreshold,
-					params.toonHigh,
-					params.toonLow);
+					env.light,
+					env.specular,
+					env.toonThreshold,
+					env.toonHigh,
+					env.toonLow);
 
 			flushStep = 2;
 			renderFigure(model,
-					params.textures,
-					params.attrs,
-					params.projMatrix,
-					params.viewMatrix,
+					env.textures,
+					env.attrs,
+					env.projMatrix,
+					env.viewMatrix,
 					model.vertexArray,
 					model.normalsArray,
-					params.light,
-					params.specular,
-					params.toonThreshold,
-					params.toonHigh,
-					params.toonLow);
+					env.light,
+					env.specular,
+					env.toonThreshold,
+					env.toonHigh,
+					env.toonLow);
 
 			glDisable(GL_BLEND);
 			glDepthMask(true);
@@ -1200,9 +1200,9 @@ public class Render {
 		if (tex == null) {
 			return;
 		}
-		params.textures[0] = tex;
-		params.textureIdx = 0;
-		params.texturesLen = 1;
+		env.textures[0] = tex;
+		env.textureIdx = 0;
+		env.texturesLen = 1;
 	}
 
 	public void setTextureArray(TextureImpl[] tex) {
@@ -1210,36 +1210,36 @@ public class Render {
 			return;
 		}
 		int len = tex.length;
-		System.arraycopy(tex, 0, params.textures, 0, len);
-		params.texturesLen = len;
+		System.arraycopy(tex, 0, env.textures, 0, len);
+		env.texturesLen = len;
 	}
 
 	public float[] getViewMatrix() {
-		return params.viewMatrix;
+		return env.viewMatrix;
 	}
 
 	public void setLight(int ambIntensity, int dirIntensity, int x, int y, int z) {
-		params.light.set(ambIntensity, dirIntensity, x, y, z);
+		env.light.set(ambIntensity, dirIntensity, x, y, z);
 	}
 
 	public int getAttributes() {
-		return params.attrs;
+		return env.attrs;
 	}
 
 	public void setToonParam(int tress, int high, int low) {
-		params.toonThreshold = tress;
-		params.toonHigh = high;
-		params.toonLow = low;
+		env.toonThreshold = tress;
+		env.toonHigh = high;
+		env.toonLow = low;
 	}
 
 	public void setSphereTexture(TextureImpl tex) {
 		if (tex != null) {
-			params.specular = tex;
+			env.specular = tex;
 		}
 	}
 
 	public void setAttribute(int attrs) {
-		params.attrs = attrs;
+		env.attrs = attrs;
 	}
 
 	void renderPrimitive(RenderNode.PrimitiveNode node) {
@@ -1324,20 +1324,20 @@ public class Render {
 	}
 
 	public void setOrthographicScale(int scaleX, int scaleY) {
-		params.projection = COMMAND_PARALLEL_SCALE;
-		float vw = params.width;
-		float vh = params.height;
+		env.projection = COMMAND_PARALLEL_SCALE;
+		float vw = env.width;
+		float vh = env.height;
 		float w = vw * (4096.0f / scaleX);
 		float h = vh * (4096.0f / scaleY);
 
 		float sx = 2.0f / w;
 		float sy = 2.0f / h;
 		float sz = 1.0f / 65536.0f;
-		float tx = 2.0f * params.centerX / vw - 1.0f;
-		float ty = 2.0f * params.centerY / vh - 1.0f;
+		float tx = 2.0f * env.centerX / vw - 1.0f;
+		float ty = 2.0f * env.centerY / vh - 1.0f;
 		float tz = 0.0f;
 
-		float[] pm = params.projMatrix;
+		float[] pm = env.projMatrix;
 		pm[ 0] =   sx; pm[ 4] = 0.0f; pm[ 8] = 0.0f; pm[12] =   tx;
 		pm[ 1] = 0.0f; pm[ 5] =   sy; pm[ 9] = 0.0f; pm[13] =   ty;
 		pm[ 2] = 0.0f; pm[ 6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
@@ -1345,17 +1345,17 @@ public class Render {
 	}
 
 	public void setOrthographicW(int w) {
-		params.projection = COMMAND_PARALLEL_SIZE;
-		float vw = params.width;
-		float vh = params.height;
+		env.projection = COMMAND_PARALLEL_SIZE;
+		float vw = env.width;
+		float vh = env.height;
 		float sx = 2.0f / w;
 		float sy = sx * (vw / vh);
 		float sz = 1.0f / 65536.0f;
-		float tx = 2.0f * params.centerX / vw - 1.0f;
-		float ty = 2.0f * params.centerY / vh - 1.0f;
+		float tx = 2.0f * env.centerX / vw - 1.0f;
+		float ty = 2.0f * env.centerY / vh - 1.0f;
 		float tz = 0.0f;
 
-		float[] pm = params.projMatrix;
+		float[] pm = env.projMatrix;
 		pm[0] =   sx; pm[4] = 0.0f; pm[ 8] = 0.0f; pm[12] =   tx;
 		pm[1] = 0.0f; pm[5] =   sy; pm[ 9] = 0.0f; pm[13] =   ty;
 		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
@@ -1363,15 +1363,15 @@ public class Render {
 	}
 
 	public void setOrthographicWH(int w, int h) {
-		params.projection = COMMAND_PARALLEL_SIZE;
+		env.projection = COMMAND_PARALLEL_SIZE;
 		float sx = 2.0f / w;
 		float sy = 2.0f / h;
 		float sz = 1.0f / 65536.0f;
-		float tx = 2.0f * params.centerX / params.width - 1.0f;
-		float ty = 2.0f * params.centerY / params.height - 1.0f;
+		float tx = 2.0f * env.centerX / env.width - 1.0f;
+		float ty = 2.0f * env.centerY / env.height - 1.0f;
 		float tz = 0.0f;
 
-		float[] pm = params.projMatrix;
+		float[] pm = env.projMatrix;
 		pm[0] =   sx; pm[4] = 0.0f; pm[ 8] = 0.0f; pm[12] =   tx;
 		pm[1] = 0.0f; pm[5] =   sy; pm[ 9] = 0.0f; pm[13] =   ty;
 		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
@@ -1379,19 +1379,19 @@ public class Render {
 	}
 
 	public void setPerspectiveFov(int near, int far, int angle) {
-		params.projection = COMMAND_PERSPECTIVE_FOV;
-		params.near = near;
+		env.projection = COMMAND_PERSPECTIVE_FOV;
+		env.near = near;
 		float rd = 1.0f / (near - far);
 		float sx = 1.0f / (float) Math.tan(angle * TO_FLOAT * Math.PI);
-		float vw = params.width;
-		float vh = params.height;
+		float vw = env.width;
+		float vh = env.height;
 		float sy = sx * (vw / vh);
 		float sz = -(far + near) * rd;
-		float tx = 2.0f * params.centerX / vw - 1.0f;
-		float ty = 2.0f * params.centerY / vh - 1.0f;
+		float tx = 2.0f * env.centerX / vw - 1.0f;
+		float ty = 2.0f * env.centerY / vh - 1.0f;
 		float tz = 2.0f * far * near * rd;
 
-		float[] pm = params.projMatrix;
+		float[] pm = env.projMatrix;
 		pm[0] =   sx; pm[4] = 0.0f; pm[ 8] =   tx; pm[12] = 0.0f;
 		pm[1] = 0.0f; pm[5] =   sy; pm[ 9] =   ty; pm[13] = 0.0f;
 		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
@@ -1399,20 +1399,20 @@ public class Render {
 	}
 
 	public void setPerspectiveW(int near, int far, int w) {
-		params.projection = COMMAND_PERSPECTIVE_WH;
-		params.near = near;
-		float vw = params.width;
-		float vh = params.height;
+		env.projection = COMMAND_PERSPECTIVE_WH;
+		env.near = near;
+		float vw = env.width;
+		float vh = env.height;
 
 		float rd = 1.0f / (near - far);
 		float sx = 2.0f * near / (w * TO_FLOAT);
 		float sy = sx * (vw / vh);
 		float sz = -(near + far) * rd;
-		float tx = 2.0f * params.centerX / vw - 1.0f;
-		float ty = 2.0f * params.centerY / vh - 1.0f;
+		float tx = 2.0f * env.centerX / vw - 1.0f;
+		float ty = 2.0f * env.centerY / vh - 1.0f;
 		float tz = 2.0f * far * near * rd;
 
-		float[] pm = params.projMatrix;
+		float[] pm = env.projMatrix;
 		pm[0] =   sx; pm[4] = 0.0f; pm[ 8] =   tx; pm[12] = 0.0f;
 		pm[1] = 0.0f; pm[5] =   sy; pm[ 9] =   ty; pm[13] = 0.0f;
 		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
@@ -1420,8 +1420,8 @@ public class Render {
 	}
 
 	public void setPerspectiveWH(float near, float far, int w, int h) {
-		params.projection = COMMAND_PERSPECTIVE_WH;
-		params.near = near;
+		env.projection = COMMAND_PERSPECTIVE_WH;
+		env.near = near;
 		float width = w * TO_FLOAT;
 		float height = h * TO_FLOAT;
 
@@ -1429,11 +1429,11 @@ public class Render {
 		float sx = 2.0f * near / width;
 		float sy = 2.0f * near / height;
 		float sz = -(near + far) * rd;
-		float tx = 2.0f * params.centerX / params.width - 1.0f;
-		float ty = 2.0f * params.centerY / params.height - 1.0f;
+		float tx = 2.0f * env.centerX / env.width - 1.0f;
+		float ty = 2.0f * env.centerY / env.height - 1.0f;
 		float tz = 2.0f * far * near * rd;
 
-		float[] pm = params.projMatrix;
+		float[] pm = env.projMatrix;
 		pm[0] =   sx; pm[4] = 0.0f; pm[ 8] =   tx; pm[12] = 0.0f;
 		pm[1] = 0.0f; pm[5] =   sy; pm[ 9] =   ty; pm[13] = 0.0f;
 		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
@@ -1441,26 +1441,26 @@ public class Render {
 	}
 
 	public void setViewTransArray(float[] matrices) {
-		params.matrices = matrices;
+		env.matrices = matrices;
 	}
 
 	private void selectAffineTrans(int n) {
-		float[] matrices = params.matrices;
+		float[] matrices = env.matrices;
 		if (matrices != null && matrices.length >= (n + 1) * 12) {
-			System.arraycopy(matrices, n * 12, params.viewMatrix, 0, 12);
+			System.arraycopy(matrices, n * 12, env.viewMatrix, 0, 12);
 		}
 	}
 
 	public void setCenter(int cx, int cy) {
-		params.centerX = cx;
-		params.centerY = cy;
+		env.centerX = cx;
+		env.centerY = cy;
 	}
 
 	public void setClearColor(int color) {
 		clearColor = color;
 	}
 
-	static class Params {
+	static class Environment {
 		final TextureImpl[] textures = new TextureImpl[16];
 		final Light light = new Light();
 		final float[] viewMatrix = new float[12];
@@ -1481,7 +1481,7 @@ public class Render {
 		int texturesLen;
 		TextureImpl specular;
 
-		Params() {}
+		Environment() {}
 
 		TextureImpl getTexture() {
 			if (textureIdx < 0 || textureIdx >= texturesLen) {

@@ -33,21 +33,21 @@ abstract class RenderNode {
 	RenderNode() {}
 
 	void setData(Render render) {
-		Render.Params params = render.params;
-		System.arraycopy(params.viewMatrix, 0, viewMatrix, 0, 12);
-		System.arraycopy(params.projMatrix, 0, projMatrix, 0, 16);
-		attrs = params.attrs;
-		Light light = params.light;
+		Render.Environment env = render.env;
+		System.arraycopy(env.viewMatrix, 0, viewMatrix, 0, 12);
+		System.arraycopy(env.projMatrix, 0, projMatrix, 0, 16);
+		attrs = env.attrs;
+		Light light = env.light;
 		if (this.light == null) {
 			this.light = new Light(light);
 		} else {
 			this.light.set(light.ambIntensity, light.dirIntensity, light.x, light.y, light.z);
 		}
 
-		specular = params.specular;
-		toonHigh = params.toonHigh;
-		toonLow = params.toonLow;
-		toonThreshold = params.toonThreshold;
+		specular = env.specular;
+		toonHigh = env.toonHigh;
+		toonLow = env.toonLow;
+		toonThreshold = env.toonThreshold;
 	}
 
 	abstract void render(Render render);
@@ -77,9 +77,9 @@ abstract class RenderNode {
 		@Override
 		void setData(Render render) {
 			super.setData(render);
-			Render.Params params = render.params;
-			textures = new TextureImpl[params.texturesLen];
-			System.arraycopy(params.textures, 0, textures, 0, params.texturesLen);
+			Render.Environment env = render.env;
+			textures = new TextureImpl[env.texturesLen];
+			System.arraycopy(env.textures, 0, textures, 0, env.texturesLen);
 			figure.fillBuffers(vertices, normals);
 		}
 
@@ -117,8 +117,8 @@ abstract class RenderNode {
 					  FloatBuffer vertices, FloatBuffer normals,
 					  ByteBuffer texCoords, ByteBuffer colors) {
 			setData(render);
-			Render.Params params = render.params;
-			this.texture = params.getTexture();
+			Render.Environment env = render.env;
+			this.texture = env.getTexture();
 			this.command = command;
 			this.vertices = vertices;
 			this.normals = normals;
