@@ -1139,51 +1139,6 @@ public class Render {
 		}
 	}
 
-	public synchronized void drawFigureV2(FigureImpl figure) {
-		bindEglContext();
-		if (!backCopied && preCopy2D) {
-			copy2d(true);
-		}
-		try {
-			Model model = figure.model;
-			figure.prepareBuffers();
-
-			flushStep = 1;
-			renderFigure(model,
-					env.textures,
-					env.attrs,
-					env.projMatrix,
-					env.viewMatrix,
-					model.vertexArray,
-					model.normalsArray,
-					env.light,
-					env.specular,
-					env.toonThreshold,
-					env.toonHigh,
-					env.toonLow);
-
-			flushStep = 2;
-			renderFigure(model,
-					env.textures,
-					env.attrs,
-					env.projMatrix,
-					env.viewMatrix,
-					model.vertexArray,
-					model.normalsArray,
-					env.light,
-					env.specular,
-					env.toonThreshold,
-					env.toonHigh,
-					env.toonLow);
-
-			glDisable(GL_BLEND);
-			glDepthMask(true);
-			glClear(GL_DEPTH_BUFFER_BIT);
-		} finally {
-			releaseEglContext();
-		}
-	}
-
 	private void bindEglContext() {
 		((EGL10) EGLContext.getEGL()).eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
 	}

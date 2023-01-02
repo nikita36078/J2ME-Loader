@@ -80,7 +80,7 @@ public class RenderProxy {
 			render.setTexture(texture.impl);
 		}
 
-		render.drawFigureV2(figure.impl);
+		render.drawFigure(figure.impl);
 		render.release();
 	}
 
