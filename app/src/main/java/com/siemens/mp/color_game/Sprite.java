@@ -483,6 +483,16 @@ public class Sprite extends Layer {
 
 	}
 
+	public void setCollisionRectangle(int x, int y, int width, int height) {
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException();
+		}
+		this.collisionRectX = x;
+		this.collisionRectY = y;
+		this.collisionRectWidth = width;
+		this.collisionRectHeight = height;
+	}
+
 	private void initializeFrames(Image image, int fWidth,
 								  int fHeight, boolean maintainCurFrame) {
 
