@@ -78,6 +78,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	private final SimpleEvent msgSetContextMenuListener = new SimpleEvent() {
 		@Override
 		public void process() {
+			if (layout == null) {
+				return;
+			}
 			if (listener != null) {
 				labelview.setOnCreateContextMenuListener(Item.this);
 				contentview.setOnCreateContextMenuListener(Item.this);
@@ -185,7 +188,13 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 			contentview = getItemContentView();
 			layout.addView(contentview, getLayoutParams());
 
-			ViewHandler.postEvent(msgSetContextMenuListener);
+			if (listener != null) {
+				labelview.setOnCreateContextMenuListener(Item.this);
+				contentview.setOnCreateContextMenuListener(Item.this);
+			} else {
+				labelview.setLongClickable(false);
+				contentview.setLongClickable(false);
+			}
 		}
 
 		return layout;
