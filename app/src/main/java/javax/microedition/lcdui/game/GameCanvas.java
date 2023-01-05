@@ -33,8 +33,10 @@ public class GameCanvas extends Canvas {
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
 	private final Image image;
-	private int keyState;
 	private final boolean suppressCommands;
+
+	private int keyState;
+	private int currentKeyState;
 
 	public GameCanvas(boolean suppressCommands) {
 		super();
@@ -79,21 +81,25 @@ public class GameCanvas extends Canvas {
 
 	@Override
 	public void postKeyPressed(int keyCode) {
-		int code = convertGameKeyCode(keyCode);
-		if (code != 0) {
-			this.keyState |= code;
-			if (suppressCommands) {
-				return;
-			}
+		if (setKeyStates(keyCode)) {
+			return;
 		}
 		super.postKeyPressed(keyCode);
+	}
+
+	@Override
+	public void postKeyRepeated(int keyCode) {
+		if (setKeyStates(keyCode)) {
+			return;
+		}
+		super.postKeyRepeated(keyCode);
 	}
 
 	@Override
 	public void postKeyReleased(int keyCode) {
 		int code = convertGameKeyCode(keyCode);
 		if (code != 0) {
-			keyState &= ~code;
+			currentKeyState &= ~code;
 			if (suppressCommands) {
 				return;
 			}
@@ -101,17 +107,21 @@ public class GameCanvas extends Canvas {
 		super.postKeyReleased(keyCode);
 	}
 
-	@Override
-	public void postKeyRepeated(int keyCode) {
-		if (suppressCommands && convertGameKeyCode(keyCode) != 0) {
-			return;
+	private boolean setKeyStates(int keyCode) {
+		int code = convertGameKeyCode(keyCode);
+		if (code == 0) {
+			return false;
 		}
-		super.postKeyRepeated(keyCode);
+		this.keyState |= code;
+		this.currentKeyState |= code;
+		return suppressCommands;
 	}
 
 	@SuppressWarnings("unused")
 	public int getKeyStates() {
-		return keyState;
+		int keyStates = isShown() ? this.keyState | this.currentKeyState : 0;
+		this.keyState = 0;
+		return keyStates;
 	}
 
 	public Graphics getGraphics() {
@@ -131,6 +141,7 @@ public class GameCanvas extends Canvas {
 	@Override
 	public void doShowNotify() {
 		keyState = 0;
+		currentKeyState = 0;
 		super.doShowNotify();
 	}
 }

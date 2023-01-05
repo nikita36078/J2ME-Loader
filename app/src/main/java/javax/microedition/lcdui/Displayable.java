@@ -89,9 +89,8 @@ public abstract class Displayable {
 	public void setTitle(String title) {
 		this.title = title;
 
-		MicroActivity activity = ContextHolder.getActivity();
 		if (isShown()) {
-			ViewHandler.postEvent(() -> activity.setTitle(title));
+			ViewHandler.postEvent(() -> ContextHolder.getActivity().setTitle(title));
 		}
 	}
 
@@ -101,10 +100,7 @@ public abstract class Displayable {
 
 	public boolean isShown() {
 		MicroActivity activity = ContextHolder.getActivity();
-		if (activity != null) {
-			return activity.isVisible() && activity.getCurrent() == this;
-		}
-		return false;
+		return activity != null && activity.isVisible() && activity.getCurrent() == this;
 	}
 
 	public View getDisplayableView() {

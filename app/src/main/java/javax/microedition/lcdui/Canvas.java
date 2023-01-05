@@ -700,6 +700,11 @@ public abstract class Canvas extends Displayable {
 		Display.getEventQueue().serviceRepaints(paintEvent);
 	}
 
+	@Override
+	public boolean isShown() {
+		return visible;
+	}
+
 	protected void showNotify() {
 	}
 
