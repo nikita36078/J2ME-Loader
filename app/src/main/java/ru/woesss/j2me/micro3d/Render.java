@@ -17,9 +17,6 @@
 package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
-import static com.mascotcapsule.micro3d.v3.Graphics3D.*;
-import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
-import static ru.woesss.j2me.micro3d.Utils.TAG;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -27,11 +24,11 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
-import android.opengl.Matrix;
 import android.util.Log;
 
+import com.mascotcapsule.micro3d.v3.Graphics3D;
+
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.LinkedList;
@@ -46,18 +43,18 @@ import javax.microedition.lcdui.Graphics;
 import ru.woesss.j2me.micro3d.RenderNode.FigureNode;
 
 public class Render {
-	private static final FloatBuffer BG_VBO = ByteBuffer.allocateDirect(8 * 2 * 4)
-			.order(ByteOrder.nativeOrder()).asFloatBuffer()
+	private static final FloatBuffer BG_VBO = BufferUtils.createFloatBuffer(8 * 2)
 			.put(new float[]{
 					-1.0f, -1.0f, 0.0f, 0.0f,
 					1.0f, -1.0f, 1.0f, 0.0f,
 					-1.0f, 1.0f, 0.0f, 1.0f,
 					1.0f, 1.0f, 1.0f, 1.0f
 			});
-	private static final int PDATA_COLOR_MASK = (PDATA_COLOR_PER_COMMAND | PDATA_COLOR_PER_FACE);
+
+	private static final int PDATA_COLOR_MASK = (Graphics3D.PDATA_COLOR_PER_COMMAND | Graphics3D.PDATA_COLOR_PER_FACE);
 	private static final int PDATA_COLOR_PER_VERTEX = PDATA_COLOR_MASK;
-	private static final int PDATA_NORMAL_MASK = PDATA_NORMAL_PER_VERTEX;
-	private static final int PDATA_TEXCOORD_MASK = PDATA_TEXURE_COORD;
+	private static final int PDATA_NORMAL_MASK = Graphics3D.PDATA_NORMAL_PER_VERTEX;
+	private static final int PDATA_TEXCOORD_MASK = Graphics3D.PDATA_TEXURE_COORD;
 	private static final int[] PRIMITIVE_SIZES = {0, 1, 2, 3, 4, 1};
 
 	final Environment env = new Environment();
@@ -65,10 +62,10 @@ public class Render {
 	private EGLSurface eglWindowSurface;
 	private EGLConfig eglConfig;
 	private EGLContext eglContext;
-	private final int[] bgTextureId = new int[]{-1};
+	private final IntBuffer bgTextureId = BufferUtils.createIntBuffer(1).put(-1);
 	private final float[] MVP_TMP = new float[16];
 
-	private Bitmap targetBitmap;
+	private Graphics targetGraphics;
 	private final Rect gClip = new Rect();
 	private final Rect clip = new Rect();
 	private boolean backCopied;
@@ -91,7 +88,7 @@ public class Render {
 		int error = glGetError();
 		if (error != GL_NO_ERROR) {
 			String s = GLU.gluErrorString(error);
-			Log.e(TAG, glOperation + ": glError " + s);
+			Log.e(Utils.TAG, glOperation + ": glError " + s);
 			throw new RuntimeException(glOperation + ": glError " + s);
 		}
 	}
@@ -133,11 +130,13 @@ public class Render {
 	}
 
 	public synchronized void bind(Graphics graphics) {
+		this.targetGraphics = graphics;
 		Canvas canvas = graphics.getCanvas();
 		int width = canvas.getWidth();
 		int height = canvas.getHeight();
-		if (eglContext == null) init();
-		targetBitmap = graphics.getBitmap();
+		if (eglContext == null) {
+			init();
+		}
 		EGL10 egl = (EGL10) EGLContext.getEGL();
 		if (env.width != width || env.height != height) {
 
@@ -183,7 +182,9 @@ public class Render {
 		targetTexture = tex;
 		int width = tex.getWidth();
 		int height = tex.getHeight();
-		if (eglContext == null) init();
+		if (eglContext == null) {
+			init();
+		}
 		EGL10 egl = (EGL10) EGLContext.getEGL();
 		if (env.width != width || env.height != height) {
 
@@ -256,10 +257,11 @@ public class Render {
 		if (targetTexture != null) {// render to texture
 			return;
 		}
-		if (!glIsTexture(bgTextureId[0])) {
-			glGenTextures(1, bgTextureId, 0);
+		if (!glIsTexture(bgTextureId.get(0))) {
+			bgTextureId.rewind();
+			glGenTextures(1, bgTextureId);
 			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
+			glBindTexture(GL_TEXTURE_2D, bgTextureId.get(0));
 			boolean filter = Boolean.getBoolean("micro3d.v3.background.filter");
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter ? GL_LINEAR : GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter ? GL_LINEAR : GL_NEAREST);
@@ -267,9 +269,10 @@ public class Render {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		} else {
 			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
+			glBindTexture(GL_TEXTURE_2D, bgTextureId.get(0));
 		}
-		GLUtils.texImage2D(GL_TEXTURE_2D, 0, targetBitmap, 0);
+		Bitmap targetImage = targetGraphics.getBitmap();
+		GLUtils.texImage2D(GL_TEXTURE_2D, 0, targetImage, 0);
 		checkGlError("texImage2D");
 
 		final Program.Simple program = Program.simple;
@@ -297,21 +300,21 @@ public class Render {
 		glDisableVertexAttribArray(program.aPosition);
 		glDisableVertexAttribArray(program.aTexture);
 		checkGlError("copy2d");
-		if (preProcess) {
-			if (postCopy2D) {
-				targetBitmap.setHasAlpha(true);
-				Canvas canvas = new Canvas(targetBitmap);
-				canvas.clipRect(gClip);
-				canvas.drawColor(0, PorterDuff.Mode.SRC);
-			}
-			backCopied = true;
-		} else {
-			targetBitmap.setHasAlpha(false);
+		if (!preProcess) {
+			return;
 		}
+		if (postCopy2D) {
+			targetImage.setHasAlpha(true);
+			Canvas canvas = new Canvas(targetImage);
+			canvas.clipRect(gClip);
+			canvas.drawColor(0, PorterDuff.Mode.SRC);
+			targetImage.setHasAlpha(false);
+		}
+		backCopied = true;
 	}
 
 	@Override
-	protected synchronized void finalize() throws Throwable {
+	protected void finalize() throws Throwable {
 		try {
 			// Destroy EGL
 			EGL10 egl = (EGL10) EGLContext.getEGL();
@@ -337,17 +340,18 @@ public class Render {
 					  int toonThreshold,
 					  int toonHigh,
 					  int toonLow) {
-		boolean isTransparency = (attrs & ENV_ATTR_SEMI_TRANSPARENT) != 0;
-		if (!isTransparency && flushStep == 2) return;
-
-		if (!model.hasPolyT && !model.hasPolyC)
+		boolean isTransparency = (attrs & Graphics3D.ENV_ATTR_SEMI_TRANSPARENT) != 0;
+		if (!isTransparency && flushStep == 2) {
 			return;
+		} else if (!model.hasPolyT && !model.hasPolyC) {
+			return;
+		}
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(flushStep == 1);
 		MathUtil.multiplyMM(MVP_TMP, projMatrix, viewMatrix);
 		if (bufHandles == null) {
-			bufHandles = ByteBuffer.allocateDirect(4 * 3).order(ByteOrder.nativeOrder()).asIntBuffer();
+			bufHandles = BufferUtils.createIntBuffer(3);
 			glGenBuffers(3, bufHandles);
 		}
 		try {
@@ -358,7 +362,7 @@ public class Render {
 			glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(1));
 			glBufferData(GL_ARRAY_BUFFER, texCoords.capacity(), texCoords.rewind(), GL_STREAM_DRAW);
 
-			boolean isLight = (attrs & ENV_ATTR_LIGHTING) != 0 && normals != null;
+			boolean isLight = (attrs & Graphics3D.ENV_ATTR_LIGHTING) != 0 && normals != null;
 			if (isLight) {
 				glBindBuffer(GL_ARRAY_BUFFER, bufHandles.get(2));
 				glBufferData(GL_ARRAY_BUFFER, normals.capacity() * 4, normals.rewind(), GL_STREAM_DRAW);
@@ -383,7 +387,7 @@ public class Render {
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 0);
 					program.setToonShading(attrs, toonThreshold, toonHigh, toonLow);
 					program.setLight(light);
-					program.setSphere((attrs & ENV_ATTR_SPHERE_MAP) == 0 ? null : specular);
+					program.setSphere((attrs & Graphics3D.ENV_ATTR_SPHERE_MAP) == 0 ? null : specular);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
 					program.setLight(null);
@@ -419,7 +423,7 @@ public class Render {
 					glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, 3 * 4 * offset);
 					glEnableVertexAttribArray(program.aNormal);
 					program.setLight(light);
-					program.setSphere((attrs & ENV_ATTR_SPHERE_MAP) == 0 ? null : specular);
+					program.setSphere((attrs & Graphics3D.ENV_ATTR_SPHERE_MAP) == 0 ? null : specular);
 					program.setToonShading(attrs, toonThreshold, toonHigh, toonLow);
 				} else {
 					glDisableVertexAttribArray(program.aNormal);
@@ -532,13 +536,13 @@ public class Render {
 		if (targetTexture != null) {
 			glReadPixels(0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, targetTexture.image.getRaster());
 			targetTexture = null;
-		} else if (targetBitmap != null) {
+		} else if (targetGraphics != null) {
 			if (postCopy2D) {
 				copy2d(false);
 			}
 			Rect clip = this.gClip;
-			Utils.glReadPixels(clip.left, clip.top, clip.width(), clip.height(), targetBitmap);
-			targetBitmap = null;
+			Utils.glReadPixels(clip.left, clip.top, clip.width(), clip.height(), targetGraphics.getBitmap());
+			targetGraphics = null;
 		}
 		releaseEglContext();
 	}
@@ -549,7 +553,9 @@ public class Render {
 		}
 		bindEglContext();
 		try {
-			if (!backCopied && preCopy2D) copy2d(true);
+			if (!backCopied && preCopy2D) {
+				copy2d(true);
+			}
 			flushStep = 1;
 			for (RenderNode r : stack) {
 				r.render(this);
@@ -573,9 +579,9 @@ public class Render {
 		int command = node.command;
 		Program.Color program = Program.color;
 		program.use();
-		if ((node.attrs & ENV_ATTR_LIGHTING) != 0 && (command & PATTR_LIGHTING) != 0 && node.normals != null) {
+		if ((node.attrs & Graphics3D.ENV_ATTR_LIGHTING) != 0 && (command & Graphics3D.PATTR_LIGHTING) != 0 && node.normals != null) {
 			TextureImpl sphere = node.specular;
-			if ((node.attrs & ENV_ATTR_SPHERE_MAP) != 0 && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
+			if ((node.attrs & Graphics3D.ENV_ATTR_SPHERE_MAP) != 0 && (command & Graphics3D.PATTR_SPHERE_MAP) != 0 && sphere != null) {
 				glVertexAttrib2f(program.aMaterial, 1, 1);
 				program.setSphere(sphere);
 			} else {
@@ -598,7 +604,7 @@ public class Render {
 		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());
 		glEnableVertexAttribArray(program.aPosition);
 
-		if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
+		if ((command & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
 			program.setColor(node.colors);
 		} else {
 			glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, node.colors.rewind());
@@ -616,13 +622,13 @@ public class Render {
 		int command = node.command;
 		Program.Tex program = Program.tex;
 		program.use();
-		if ((node.attrs & ENV_ATTR_LIGHTING) != 0 && (command & PATTR_LIGHTING) != 0 && node.normals != null) {
+		if ((node.attrs & Graphics3D.ENV_ATTR_LIGHTING) != 0 && (command & Graphics3D.PATTR_LIGHTING) != 0 && node.normals != null) {
 			TextureImpl sphere = node.specular;
-			if ((node.attrs & ENV_ATTR_SPHERE_MAP) != 0 && (command & PATTR_SPHERE_MAP) != 0 && sphere != null) {
-				glVertexAttrib3f(program.aMaterial, 1, 1, command & PATTR_COLORKEY);
+			if ((node.attrs & Graphics3D.ENV_ATTR_SPHERE_MAP) != 0 && (command & Graphics3D.PATTR_SPHERE_MAP) != 0 && sphere != null) {
+				glVertexAttrib3f(program.aMaterial, 1, 1, command & Graphics3D.PATTR_COLORKEY);
 				program.setSphere(sphere);
 			} else {
-				glVertexAttrib3f(program.aMaterial, 1, 0, command & PATTR_COLORKEY);
+				glVertexAttrib3f(program.aMaterial, 1, 0, command & Graphics3D.PATTR_COLORKEY);
 				program.setSphere(null);
 			}
 			program.setLight(node.light);
@@ -631,7 +637,7 @@ public class Render {
 			glVertexAttribPointer(program.aNormal, 3, GL_FLOAT, false, 3 * 4, node.normals.rewind());
 			glEnableVertexAttribArray(program.aNormal);
 		} else {
-			glVertexAttrib3f(program.aMaterial, 0, 0, command & PATTR_COLORKEY);
+			glVertexAttrib3f(program.aMaterial, 0, 0, command & Graphics3D.PATTR_COLORKEY);
 			program.setLight(null);
 			glDisableVertexAttribArray(program.aNormal);
 		}
@@ -655,64 +661,64 @@ public class Render {
 	}
 
 	public void drawCommandList(int[] cmds) {
-		if (COMMAND_LIST_VERSION_1_0 != cmds[0]) {
+		if (Graphics3D.COMMAND_LIST_VERSION_1_0 != cmds[0]) {
 			throw new IllegalArgumentException("Unsupported command list version: " + cmds[0]);
 		}
 		for (int i = 1; i < cmds.length; ) {
 			int cmd = cmds[i++];
 			switch (cmd & 0xFF000000) {
-				case COMMAND_AFFINE_INDEX:
+				case Graphics3D.COMMAND_AFFINE_INDEX:
 					selectAffineTrans(cmd & 0xFFFFFF);
 					break;
-				case COMMAND_AMBIENT_LIGHT: {
+				case Graphics3D.COMMAND_AMBIENT_LIGHT: {
 					env.light.ambIntensity = i++;
 					break;
 				}
-				case COMMAND_ATTRIBUTE:
+				case Graphics3D.COMMAND_ATTRIBUTE:
 					env.attrs = cmd & 0xFFFFFF;
 					break;
-				case COMMAND_CENTER:
+				case Graphics3D.COMMAND_CENTER:
 					setCenter(cmds[i++], cmds[i++]);
 					break;
-				case COMMAND_CLIP:
+				case Graphics3D.COMMAND_CLIP:
 					clip.intersect(cmds[i++], cmds[i++], cmds[i++], cmds[i++]);
 					updateClip();
 					break;
-				case COMMAND_DIRECTION_LIGHT: {
+				case Graphics3D.COMMAND_DIRECTION_LIGHT: {
 					env.light.x = i++;
 					env.light.y = i++;
 					env.light.z = i++;
 					env.light.dirIntensity = i++;
 					break;
 				}
-				case COMMAND_FLUSH:
+				case Graphics3D.COMMAND_FLUSH:
 					flush();
 					break;
-				case COMMAND_NOP:
+				case Graphics3D.COMMAND_NOP:
 					i += cmd & 0xFFFFFF;
 					break;
-				case COMMAND_PARALLEL_SCALE:
+				case Graphics3D.COMMAND_PARALLEL_SCALE:
 					setOrthographicScale(cmds[i++], cmds[i++]);
 					break;
-				case COMMAND_PARALLEL_SIZE:
+				case Graphics3D.COMMAND_PARALLEL_SIZE:
 					setOrthographicWH(cmds[i++], cmds[i++]);
 					break;
-				case COMMAND_PERSPECTIVE_FOV:
+				case Graphics3D.COMMAND_PERSPECTIVE_FOV:
 					setPerspectiveFov(cmds[i++], cmds[i++], cmds[i++]);
 					break;
-				case COMMAND_PERSPECTIVE_WH:
+				case Graphics3D.COMMAND_PERSPECTIVE_WH:
 					setPerspectiveWH(cmds[i++], cmds[i++], cmds[i++], cmds[i++]);
 					break;
-				case COMMAND_TEXTURE_INDEX:
+				case Graphics3D.COMMAND_TEXTURE_INDEX:
 					int tid = cmd & 0xFFFFFF;
 					if (tid > 0 && tid < 16) {
 						env.textureIdx = tid;
 					}
 					break;
-				case COMMAND_THRESHOLD:
+				case Graphics3D.COMMAND_THRESHOLD:
 					setToonParam(cmds[i++], cmds[i++], cmds[i++]);
 					break;
-				case COMMAND_END:
+				case Graphics3D.COMMAND_END:
 					return;
 				default:
 					int type = cmd & 0x7000000;
@@ -725,26 +731,26 @@ public class Render {
 					int vo = i;
 					i += len;
 					int no = i;
-					if ((cmd & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_FACE) {
+					if ((cmd & PDATA_NORMAL_MASK) == Graphics3D.PDATA_NORMAL_PER_FACE) {
 						i += num * 3;
-					} else if ((cmd & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_VERTEX) {
+					} else if ((cmd & PDATA_NORMAL_MASK) == Graphics3D.PDATA_NORMAL_PER_VERTEX) {
 						i += len;
 					}
 					int to = i;
-					if (type == PRIMITVE_POINT_SPRITES) {
-						if ((cmd & PDATA_TEXCOORD_MASK) == PDATA_POINT_SPRITE_PARAMS_PER_CMD) {
+					if (type == Graphics3D.PRIMITVE_POINT_SPRITES) {
+						if ((cmd & PDATA_TEXCOORD_MASK) == Graphics3D.PDATA_POINT_SPRITE_PARAMS_PER_CMD) {
 							i += 8;
-						} else if ((cmd & PDATA_TEXCOORD_MASK) != PDATA_TEXURE_COORD_NONE) {
+						} else if ((cmd & PDATA_TEXCOORD_MASK) != Graphics3D.PDATA_TEXURE_COORD_NONE) {
 							i += num * 8;
 						}
-					} else if ((cmd & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
+					} else if ((cmd & PDATA_TEXCOORD_MASK) == Graphics3D.PDATA_TEXURE_COORD) {
 						i += num * 2 * sizeOf;
 					}
 
 					int co = i;
-					if ((cmd & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
+					if ((cmd & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
 						i++;
-					} else if ((cmd & PDATA_COLOR_MASK) == PDATA_COLOR_PER_FACE) {
+					} else if ((cmd & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_FACE) {
 						i += num;
 					} else if ((cmd & PDATA_COLOR_MASK) == PDATA_COLOR_PER_VERTEX) {
 						i += num * sizeOf;
@@ -799,22 +805,21 @@ public class Render {
 		ByteBuffer tcBuf = null;
 		ByteBuffer colorBuf = null;
 		switch ((command & 0x7000000)) {
-			case PRIMITVE_POINTS: {
+			case Graphics3D.PRIMITVE_POINTS: {
 				int vcLen = numPrimitives * 3;
-				vcBuf = ByteBuffer.allocateDirect(vcLen * 4)
-						.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				vcBuf = BufferUtils.createFloatBuffer(vcLen);
 				for (int i = 0; i < vcLen; i++) {
 					vcBuf.put(vertices[vo++]);
 				}
 
-				if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
-					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
+				if ((command & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
+					colorBuf = BufferUtils.createByteBuffer(3);
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
-					colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
+				} else if ((command & PDATA_COLOR_MASK) != Graphics3D.PDATA_COLOR_NONE) {
+					colorBuf = BufferUtils.createByteBuffer(vcLen);
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
 						colorBuf.put((byte) (color >> 16 & 0xFF));
@@ -826,22 +831,21 @@ public class Render {
 				}
 				break;
 			}
-			case PRIMITVE_LINES: {
+			case Graphics3D.PRIMITVE_LINES: {
 				int vcLen = numPrimitives * 2 * 3;
-				vcBuf = ByteBuffer.allocateDirect(vcLen * 4).order(ByteOrder.nativeOrder())
-						.asFloatBuffer();
+				vcBuf = BufferUtils.createFloatBuffer(vcLen);
 				for (int i = 0; i < vcLen; i++) {
 					vcBuf.put(vertices[vo++]);
 				}
 
-				if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
-					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
+				if ((command & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
+					colorBuf = BufferUtils.createByteBuffer(3);
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
-					colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
+				} else if ((command & PDATA_COLOR_MASK) != Graphics3D.PDATA_COLOR_NONE) {
+					colorBuf = BufferUtils.createByteBuffer(vcLen);
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
 						byte r = (byte) (color >> 16 & 0xFF);
@@ -855,16 +859,14 @@ public class Render {
 				}
 				break;
 			}
-			case PRIMITVE_TRIANGLES: {
+			case Graphics3D.PRIMITVE_TRIANGLES: {
 				int vcLen = numPrimitives * 3 * 3;
-				vcBuf = ByteBuffer.allocateDirect(vcLen * 4)
-						.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				vcBuf = BufferUtils.createFloatBuffer(vcLen);
 				for (int i = 0; i < vcLen; i++) {
 					vcBuf.put(vertices[vo++]);
 				}
-				if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_FACE) {
-					ncBuf = ByteBuffer.allocateDirect(vcLen * 4)
-							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				if ((command & PDATA_NORMAL_MASK) == Graphics3D.PDATA_NORMAL_PER_FACE) {
+					ncBuf = BufferUtils.createFloatBuffer(vcLen);
 					for (int end = no + numPrimitives * 3; no < end; ) {
 						float x = normals[no++];
 						float y = normals[no++];
@@ -873,30 +875,29 @@ public class Render {
 						ncBuf.put(x).put(y).put(z);
 						ncBuf.put(x).put(y).put(z);
 					}
-				} else if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_VERTEX) {
-					ncBuf = ByteBuffer.allocateDirect(vcLen * 4)
-							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				} else if ((command & PDATA_NORMAL_MASK) == Graphics3D.PDATA_NORMAL_PER_VERTEX) {
+					ncBuf = BufferUtils.createFloatBuffer(vcLen);
 					for (int end = no + vcLen; no < end; ) {
 						ncBuf.put(normals[no++]);
 					}
 				}
-				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
+				if ((command & PDATA_TEXCOORD_MASK) == Graphics3D.PDATA_TEXURE_COORD) {
 					if (env.getTexture() == null) {
 						return;
 					}
 					int tcLen = numPrimitives * 3 * 2;
-					tcBuf = ByteBuffer.allocateDirect(tcLen).order(ByteOrder.nativeOrder());
+					tcBuf = BufferUtils.createByteBuffer(tcLen);
 					for (int i = 0; i < tcLen; i++) {
 						tcBuf.put((byte) textureCoords[to++]);
 					}
-				} else if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
-					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
+				} else if ((command & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
+					colorBuf = BufferUtils.createByteBuffer(3);
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
-					colorBuf = ByteBuffer.allocateDirect(vcLen).order(ByteOrder.nativeOrder());
+				} else if ((command & PDATA_COLOR_MASK) != Graphics3D.PDATA_COLOR_NONE) {
+					colorBuf = BufferUtils.createByteBuffer(vcLen);
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
 						byte r = (byte) (color >> 16 & 0xFF);
@@ -911,9 +912,8 @@ public class Render {
 				}
 				break;
 			}
-			case PRIMITVE_QUADS: {
-				vcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
-						.order(ByteOrder.nativeOrder()).asFloatBuffer();
+			case Graphics3D.PRIMITVE_QUADS: {
+				vcBuf = BufferUtils.createFloatBuffer(numPrimitives * 6 * 3);
 				for (int i = 0; i < numPrimitives; i++) {
 					int offset = vo + i * 4 * 3;
 					int pos = offset;
@@ -926,9 +926,8 @@ public class Render {
 					pos = offset + 2 * 3;
 					vcBuf.put(vertices[pos++]).put(vertices[pos++]).put(vertices[pos]);   // C
 				}
-				if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_FACE) {
-					ncBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
-							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				if ((command & PDATA_NORMAL_MASK) == Graphics3D.PDATA_NORMAL_PER_FACE) {
+					ncBuf = BufferUtils.createFloatBuffer(numPrimitives * 6 * 3);
 					for (int end = no + numPrimitives * 3; no < end; ) {
 						float x = normals[no++];
 						float y = normals[no++];
@@ -940,9 +939,8 @@ public class Render {
 						ncBuf.put(x).put(y).put(z);
 						ncBuf.put(x).put(y).put(z);
 					}
-				} else if ((command & PDATA_NORMAL_MASK) == PDATA_NORMAL_PER_VERTEX) {
-					ncBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3 * 4)
-							.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				} else if ((command & PDATA_NORMAL_MASK) == Graphics3D.PDATA_NORMAL_PER_VERTEX) {
+					ncBuf = BufferUtils.createFloatBuffer(numPrimitives * 6 * 3);
 					for (int i = 0; i < numPrimitives; i++) {
 						int offset = no + i * 4 * 3;
 						int pos = offset;
@@ -956,12 +954,11 @@ public class Render {
 						ncBuf.put(normals[pos++]).put(normals[pos++]).put(normals[pos]);   // C
 					}
 				}
-				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
+				if ((command & PDATA_TEXCOORD_MASK) == Graphics3D.PDATA_TEXURE_COORD) {
 					if (env.getTexture() == null) {
 						return;
 					}
-					tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2)
-							.order(ByteOrder.nativeOrder());
+					tcBuf = BufferUtils.createByteBuffer(numPrimitives * 6 * 2);
 					for (int i = 0; i < numPrimitives; i++) {
 						int offset = to + i * 4 * 2;
 						int pos = offset;
@@ -974,15 +971,14 @@ public class Render {
 						pos = offset + 2 * 2;
 						tcBuf.put((byte) textureCoords[pos++]).put((byte) textureCoords[pos]);   // C
 					}
-				} else if ((command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
-					colorBuf = ByteBuffer.allocateDirect(3).order(ByteOrder.nativeOrder());
+				} else if ((command & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
+					colorBuf = BufferUtils.createByteBuffer(3);
 					int color = colors[co];
 					colorBuf.put((byte) (color >> 16 & 0xFF));
 					colorBuf.put((byte) (color >> 8 & 0xFF));
 					colorBuf.put((byte) (color & 0xFF));
-				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
-					colorBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 3)
-							.order(ByteOrder.nativeOrder());
+				} else if ((command & PDATA_COLOR_MASK) != Graphics3D.PDATA_COLOR_NONE) {
+					colorBuf = BufferUtils.createByteBuffer(numPrimitives * 6 * 3);
 					for (int i = 0; i < numPrimitives; i++) {
 						int color = colors[co++];
 						byte r = (byte) (color >> 16 & 0xFF);
@@ -1000,7 +996,7 @@ public class Render {
 				}
 				break;
 			}
-			case PRIMITVE_POINT_SPRITES: {
+			case Graphics3D.PRIMITVE_POINT_SPRITES: {
 				if (env.getTexture() == null) {
 					return;
 				}
@@ -1011,8 +1007,8 @@ public class Render {
 
 				float[] vertex = new float[6 * 4];
 
-				vcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 4 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-				tcBuf = ByteBuffer.allocateDirect(numPrimitives * 6 * 2).order(ByteOrder.nativeOrder());
+				vcBuf = BufferUtils.createFloatBuffer(numPrimitives * 6 * 4);
+				tcBuf = BufferUtils.createByteBuffer(numPrimitives * 6 * 2);
 				int angle = 0;
 				float halfWidth = 0;
 				float halfHeight = 0;
@@ -1026,9 +1022,9 @@ public class Render {
 					vertex[5] = vertices[vo++];
 					vertex[6] = vertices[vo++];
 					vertex[7] = 1.0f;
-					Matrix.multiplyMV(vertex, 0, MVP_TMP, 0, vertex, 4);
+					Utils.multiplyMV(vertex, MVP_TMP);
 
-					if (psParams != PDATA_POINT_SPRITE_PARAMS_PER_CMD || i == 0) {
+					if (psParams != Graphics3D.PDATA_POINT_SPRITE_PARAMS_PER_CMD || i == 0) {
 						float width = textureCoords[to++];
 						float height = textureCoords[to++];
 						angle = textureCoords[to++];
@@ -1037,12 +1033,12 @@ public class Render {
 						tx1 = (byte) (textureCoords[to++] - 1);
 						ty1 = (byte) (textureCoords[to++] - 1);
 						switch (textureCoords[to++]) {
-							case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_PERSPECTIVE:
+							case Graphics3D.POINT_SPRITE_LOCAL_SIZE | Graphics3D.POINT_SPRITE_PERSPECTIVE:
 								halfWidth = width * env.projMatrix[0] * 0.5f;
 								halfHeight = height * env.projMatrix[5] * 0.5f;
 								break;
-							case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_PERSPECTIVE:
-								if (env.projection <= COMMAND_PARALLEL_SIZE) {
+							case Graphics3D.POINT_SPRITE_PIXEL_SIZE | Graphics3D.POINT_SPRITE_PERSPECTIVE:
+								if (env.projection <= Graphics3D.COMMAND_PARALLEL_SIZE) {
 									halfWidth = width / env.width;
 									halfHeight = height / env.height;
 								} else {
@@ -1050,8 +1046,8 @@ public class Render {
 									halfHeight = height / env.height * env.near;
 								}
 								break;
-							case POINT_SPRITE_LOCAL_SIZE | POINT_SPRITE_NO_PERS:
-								if (env.projection <= COMMAND_PARALLEL_SIZE) {
+							case Graphics3D.POINT_SPRITE_LOCAL_SIZE | Graphics3D.POINT_SPRITE_NO_PERS:
+								if (env.projection <= Graphics3D.COMMAND_PARALLEL_SIZE) {
 									halfWidth = width * env.projMatrix[0] * 0.5f;
 									halfHeight = height * env.projMatrix[5] * 0.5f;
 								} else {
@@ -1060,7 +1056,7 @@ public class Render {
 									halfHeight = height * env.projMatrix[5] / near * 0.5f * vertex[3];
 								}
 								break;
-							case POINT_SPRITE_PIXEL_SIZE | POINT_SPRITE_NO_PERS:
+							case Graphics3D.POINT_SPRITE_PIXEL_SIZE | Graphics3D.POINT_SPRITE_NO_PERS:
 								halfWidth = width / env.width * vertex[3];
 								halfHeight = height / env.height * vertex[3];
 								break;
@@ -1199,7 +1195,7 @@ public class Render {
 
 	void renderPrimitive(RenderNode.PrimitiveNode node) {
 		int command = node.command;
-		int blend = (node.attrs & ENV_ATTR_SEMI_TRANSPARENT) != 0 ? (command & PATTR_BLEND_SUB) >> 4 : 0;
+		int blend = (node.attrs & Graphics3D.ENV_ATTR_SEMI_TRANSPARENT) != 0 ? (command & Graphics3D.PATTR_BLEND_SUB) >> 4 : 0;
 		if (blend != 0) {
 			if (flushStep == 1) {
 				return;
@@ -1215,26 +1211,26 @@ public class Render {
 		applyBlending(blend);
 		int numPrimitives = command >> 16 & 0xff;
 		switch ((command & 0x7000000)) {
-			case PRIMITVE_POINTS: {
+			case Graphics3D.PRIMITVE_POINTS: {
 				renderMesh(node, GL_POINTS);
 				checkGlError("renderPrimitive[PRIMITIVE_POINTS]");
 				break;
 			}
-			case PRIMITVE_LINES: {
+			case Graphics3D.PRIMITVE_LINES: {
 				renderMesh(node, GL_LINES);
 				checkGlError("renderPrimitive[PRIMITIVE_LINES]");
 				break;
 			}
-			case PRIMITVE_TRIANGLES:
-			case PRIMITVE_QUADS: {
-				if ((command & PDATA_TEXCOORD_MASK) == PDATA_TEXURE_COORD) {
+			case Graphics3D.PRIMITVE_TRIANGLES:
+			case Graphics3D.PRIMITVE_QUADS: {
+				if ((command & PDATA_TEXCOORD_MASK) == Graphics3D.PDATA_TEXURE_COORD) {
 					renderMeshT(node);
-				} else if ((command & PDATA_COLOR_MASK) != PDATA_COLOR_NONE) {
+				} else if ((command & PDATA_COLOR_MASK) != Graphics3D.PDATA_COLOR_NONE) {
 					renderMeshC(node);
 				}
 				break;
 			}
-			case PRIMITVE_POINT_SPRITES: {
+			case Graphics3D.PRIMITVE_POINT_SPRITES: {
 				Program.Sprite program = Program.sprite;
 				program.use();
 
@@ -1246,7 +1242,7 @@ public class Render {
 
 				program.setTexture(node.texture);
 
-				glUniform1i(program.uIsTransparency, (command & PATTR_COLORKEY));
+				glUniform1i(program.uIsTransparency, (command & Graphics3D.PATTR_COLORKEY));
 				glDrawArrays(GL_TRIANGLES, 0, numPrimitives * 6);
 				glDisableVertexAttribArray(program.aPosition);
 				glDisableVertexAttribArray(program.aColorData);
@@ -1265,7 +1261,7 @@ public class Render {
 		glVertexAttribPointer(program.aPosition, 3, GL_FLOAT, false, 3 * 4, node.vertices.rewind());
 		glEnableVertexAttribArray(program.aPosition);
 
-		if ((node.command & PDATA_COLOR_MASK) == PDATA_COLOR_PER_COMMAND) {
+		if ((node.command & PDATA_COLOR_MASK) == Graphics3D.PDATA_COLOR_PER_COMMAND) {
 			program.setColor(node.colors);
 		} else {
 			glVertexAttribPointer(program.aColorData, 3, GL_UNSIGNED_BYTE, true, 3, node.colors.rewind());
@@ -1279,7 +1275,7 @@ public class Render {
 	}
 
 	public void setOrthographicScale(int scaleX, int scaleY) {
-		env.projection = COMMAND_PARALLEL_SCALE;
+		env.projection = Graphics3D.COMMAND_PARALLEL_SCALE;
 		float vw = env.width;
 		float vh = env.height;
 		float w = vw * (4096.0f / scaleX);
@@ -1293,14 +1289,14 @@ public class Render {
 		float tz = 0.0f;
 
 		float[] pm = env.projMatrix;
-		pm[ 0] =   sx; pm[ 4] = 0.0f; pm[ 8] = 0.0f; pm[12] =   tx;
-		pm[ 1] = 0.0f; pm[ 5] =   sy; pm[ 9] = 0.0f; pm[13] =   ty;
-		pm[ 2] = 0.0f; pm[ 6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
-		pm[ 3] = 0.0f; pm[ 7] = 0.0f; pm[11] = 0.0f; pm[15] = 1.0f;
+		pm[0] =   sx; pm[4] = 0.0f; pm[ 8] = 0.0f; pm[12] =   tx;
+		pm[1] = 0.0f; pm[5] =   sy; pm[ 9] = 0.0f; pm[13] =   ty;
+		pm[2] = 0.0f; pm[6] = 0.0f; pm[10] =   sz; pm[14] =   tz;
+		pm[3] = 0.0f; pm[7] = 0.0f; pm[11] = 0.0f; pm[15] = 1.0f;
 	}
 
 	public void setOrthographicW(int w) {
-		env.projection = COMMAND_PARALLEL_SIZE;
+		env.projection = Graphics3D.COMMAND_PARALLEL_SIZE;
 		float vw = env.width;
 		float vh = env.height;
 		float sx = 2.0f / w;
@@ -1318,7 +1314,7 @@ public class Render {
 	}
 
 	public void setOrthographicWH(int w, int h) {
-		env.projection = COMMAND_PARALLEL_SIZE;
+		env.projection = Graphics3D.COMMAND_PARALLEL_SIZE;
 		float sx = 2.0f / w;
 		float sy = 2.0f / h;
 		float sz = 1.0f / 65536.0f;
@@ -1334,10 +1330,10 @@ public class Render {
 	}
 
 	public void setPerspectiveFov(int near, int far, int angle) {
-		env.projection = COMMAND_PERSPECTIVE_FOV;
+		env.projection = Graphics3D.COMMAND_PERSPECTIVE_FOV;
 		env.near = near;
 		float rd = 1.0f / (near - far);
-		float sx = 1.0f / (float) Math.tan(angle * TO_FLOAT * Math.PI);
+		float sx = 1.0f / (float) Math.tan(angle * MathUtil.TO_FLOAT * Math.PI);
 		float vw = env.width;
 		float vh = env.height;
 		float sy = sx * (vw / vh);
@@ -1354,13 +1350,13 @@ public class Render {
 	}
 
 	public void setPerspectiveW(int near, int far, int w) {
-		env.projection = COMMAND_PERSPECTIVE_WH;
+		env.projection = Graphics3D.COMMAND_PERSPECTIVE_WH;
 		env.near = near;
 		float vw = env.width;
 		float vh = env.height;
 
 		float rd = 1.0f / (near - far);
-		float sx = 2.0f * near / (w * TO_FLOAT);
+		float sx = 2.0f * near / (w * MathUtil.TO_FLOAT);
 		float sy = sx * (vw / vh);
 		float sz = -(near + far) * rd;
 		float tx = 2.0f * env.centerX / vw - 1.0f;
@@ -1375,10 +1371,10 @@ public class Render {
 	}
 
 	public void setPerspectiveWH(float near, float far, int w, int h) {
-		env.projection = COMMAND_PERSPECTIVE_WH;
+		env.projection = Graphics3D.COMMAND_PERSPECTIVE_WH;
 		env.near = near;
-		float width = w * TO_FLOAT;
-		float height = h * TO_FLOAT;
+		float width = w * MathUtil.TO_FLOAT;
+		float height = h * MathUtil.TO_FLOAT;
 
 		float rd = 1.0f / (near - far);
 		float sx = 2.0f * near / width;

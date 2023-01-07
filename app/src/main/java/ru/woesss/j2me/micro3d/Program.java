@@ -17,8 +17,6 @@
 package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
-import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
-import static ru.woesss.j2me.micro3d.Utils.TAG;
 
 import android.util.Log;
 
@@ -77,7 +75,7 @@ abstract class Program {
 		glGetProgramiv(program, GL_LINK_STATUS, status, 0);
 		if (status[0] == 0) {
 			String s = glGetProgramInfoLog(program);
-			Log.e(TAG, "createProgram: " + s);
+			Log.e(Utils.TAG, "createProgram: " + s);
 		}
 		glDeleteShader(vertexId);
 		glDeleteShader(fragmentId);
@@ -108,7 +106,7 @@ abstract class Program {
 		glGetShaderiv(shader, GL_COMPILE_STATUS, status, 0);
 		if (status[0] == 0) {
 			String s = glGetShaderInfoLog(shader);
-			Log.e(TAG, "loadShader: " + s);
+			Log.e(Utils.TAG, "loadShader: " + s);
 		}
 		Render.checkGlError("glCompileShader");
 		return shader;
@@ -139,8 +137,8 @@ abstract class Program {
 			glUniform1f(uAmbIntensity, -1.0f);
 			return;
 		}
-		glUniform1f(uAmbIntensity, MathUtil.clamp(light.ambIntensity, 0, 4096) * TO_FLOAT);
-		glUniform1f(uDirIntensity, MathUtil.clamp(light.dirIntensity, 0, 16384) * TO_FLOAT);
+		glUniform1f(uAmbIntensity, MathUtil.clamp(light.ambIntensity, 0, 4096) * MathUtil.TO_FLOAT);
+		glUniform1f(uDirIntensity, MathUtil.clamp(light.dirIntensity, 0, 16384) * MathUtil.TO_FLOAT);
 		float x = light.x;
 		float y = light.y;
 		float z = light.z;

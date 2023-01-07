@@ -16,14 +16,11 @@
 
 package ru.woesss.j2me.micro3d;
 
-import static ru.woesss.j2me.micro3d.Utils.TAG;
-
 import android.util.Log;
 import android.util.SparseIntArray;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.Stack;
@@ -42,7 +39,7 @@ public class FigureImpl {
 		try {
 			init(b, 0, b.length);
 		} catch (Exception e) {
-			Log.e(TAG, "Error loading data", e);
+			Log.e(Utils.TAG, "Error loading data", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -52,12 +49,12 @@ public class FigureImpl {
 			throw new NullPointerException();
 		}
 		if (offset < 0 || offset + length > b.length) {
-			throw new ArrayIndexOutOfBoundsException ();
+			throw new ArrayIndexOutOfBoundsException();
 		}
 		try {
 			init(b, offset, length);
 		} catch (Exception e) {
-			Log.e(TAG, "Error loading data", e);
+			Log.e(Utils.TAG, "Error loading data", e);
 			throw e;
 		}
 	}
@@ -70,7 +67,7 @@ public class FigureImpl {
 		try {
 			init(bytes, 0, bytes.length);
 		} catch (Exception e) {
-			Log.e(TAG, "Error loading data from [" + name + "]", e);
+			Log.e(Utils.TAG, "Error loading data from [" + name + "]", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -220,8 +217,7 @@ public class FigureImpl {
 
 	synchronized void prepareBuffers() {
 		if (model.vertexArray == null) {
-			model.vertexArray = ByteBuffer.allocateDirect(model.vertexArrayCapacity)
-					.order(ByteOrder.nativeOrder()).asFloatBuffer();
+			model.vertexArray = BufferUtils.createFloatBuffer(model.vertexArrayCapacity);
 		}
 		Utils.fillBuffer(model.vertexArray, model.vertices, model.indices);
 
@@ -229,8 +225,7 @@ public class FigureImpl {
 			return;
 		}
 		if (model.normalsArray == null) {
-			model.normalsArray = ByteBuffer.allocateDirect(model.vertexArrayCapacity)
-					.order(ByteOrder.nativeOrder()).asFloatBuffer();
+			model.normalsArray = BufferUtils.createFloatBuffer(model.vertexArrayCapacity);
 		}
 		Utils.fillBuffer(model.normalsArray, model.normals, model.indices);
 	}

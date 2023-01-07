@@ -17,11 +17,11 @@
 package ru.woesss.j2me.micro3d;
 
 import static android.opengl.GLES20.*;
-import static ru.woesss.j2me.micro3d.Utils.TAG;
 
 import android.util.Log;
 
 import java.io.IOException;
+import java.nio.IntBuffer;
 
 import javax.microedition.shell.AppClassLoader;
 
@@ -45,7 +45,7 @@ public final class TextureImpl {
 		try {
 			image = Loader.loadBmpData(b, 0, b.length);
 		} catch (IOException e) {
-			Log.e(TAG, "Error loading data", e);
+			Log.e(Utils.TAG, "Error loading data", e);
 			throw new RuntimeException(e);
 		}
 		isMutable = false;
@@ -61,7 +61,7 @@ public final class TextureImpl {
 		try {
 			image = Loader.loadBmpData(b, offset, length);
 		} catch (Exception e) {
-			Log.e(TAG, "Error loading data", e);
+			Log.e(Utils.TAG, "Error loading data", e);
 			throw e;
 		}
 		isMutable = false;
@@ -78,7 +78,7 @@ public final class TextureImpl {
 		try {
 			image = Loader.loadBmpData(b, 0, b.length);
 		} catch (IOException e) {
-			Log.e(TAG, "Error loading data from [" + name + "]", e);
+			Log.e(Utils.TAG, "Error loading data from [" + name + "]", e);
 			throw new RuntimeException(e);
 		}
 		isMutable = false;
@@ -110,13 +110,14 @@ public final class TextureImpl {
 	}
 
 	private void generateId() {
-		final int[] textureIds = new int[1];
+		final IntBuffer textureIds = BufferUtils.createIntBuffer(1);
 		synchronized (TextureImpl.class) {
-			while (textureIds[0] <= sLastId) {
-				glGenTextures(1, textureIds, 0);
+			while (textureIds.get(0) <= sLastId) {
+				textureIds.rewind();
+				glGenTextures(1, textureIds);
 			}
-			sLastId = textureIds[0];
-			mTexId = textureIds[0];
+			sLastId = textureIds.get(0);
+			mTexId = textureIds.get(0);
 		}
 		Render.checkGlError("glGenTextures");
 	}

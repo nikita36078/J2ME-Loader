@@ -16,9 +16,6 @@
 
 package com.motorola.iden.micro3d;
 
-import static com.mascotcapsule.micro3d.v3.Graphics3D.*;
-import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
-
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 
 import ru.woesss.j2me.micro3d.ActTableImpl;
@@ -30,15 +27,15 @@ import ru.woesss.j2me.micro3d.TextureImpl;
 public class RenderProxy {
 
 	static void getViewTrans(AffineTransform a, float[] out) {
-		out[ 0] = a.m00 * TO_FLOAT;
-		out[ 1] = a.m10 * TO_FLOAT;
-		out[ 2] = a.m20 * TO_FLOAT;
-		out[ 3] = a.m01 * TO_FLOAT;
-		out[ 4] = a.m11 * TO_FLOAT;
-		out[ 5] = a.m21 * TO_FLOAT;
-		out[ 6] = a.m02 * TO_FLOAT;
-		out[ 7] = a.m12 * TO_FLOAT;
-		out[ 8] = a.m22 * TO_FLOAT;
+		out[ 0] = a.m00 * MathUtil.TO_FLOAT;
+		out[ 1] = a.m10 * MathUtil.TO_FLOAT;
+		out[ 2] = a.m20 * MathUtil.TO_FLOAT;
+		out[ 3] = a.m01 * MathUtil.TO_FLOAT;
+		out[ 4] = a.m11 * MathUtil.TO_FLOAT;
+		out[ 5] = a.m21 * MathUtil.TO_FLOAT;
+		out[ 6] = a.m02 * MathUtil.TO_FLOAT;
+		out[ 7] = a.m12 * MathUtil.TO_FLOAT;
+		out[ 8] = a.m22 * MathUtil.TO_FLOAT;
 		out[ 9] = a.m03;
 		out[10] = a.m13;
 		out[11] = a.m23;
@@ -138,7 +135,7 @@ public class RenderProxy {
 			}
 
 			if (layout.isToonShaded) {
-				attrs |= ENV_ATTR_TOON_SHADING;
+				attrs |= Graphics3D.ENV_ATTR_TOON_SHADING;
 				toonThreshold = layout.toonThreshold;
 				toonHighColor = layout.toonHighColor;
 				toonLowColor = layout.toonLowColor;
@@ -268,10 +265,10 @@ public class RenderProxy {
 			if (primitive instanceof Point) {
 				Point point = (Point) primitive;
 
-				command = PRIMITVE_POINTS | PDATA_NORMAL_NONE | 1 << 16;
-				command |= PDATA_COLOR_PER_COMMAND | PDATA_TEXURE_COORD_NONE;
+				command = Graphics3D.PRIMITVE_POINTS | Graphics3D.PDATA_NORMAL_NONE | 1 << 16;
+				command |= Graphics3D.PDATA_COLOR_PER_COMMAND | Graphics3D.PDATA_TEXURE_COORD_NONE;
 				command |= point.blendingType - Primitive.BLENDING_NONE << 5;
-				command |= PATTR_LIGHTING | PATTR_SPHERE_MAP;
+				command |= Graphics3D.PATTR_LIGHTING | Graphics3D.PATTR_SPHERE_MAP;
 
 				Vector3D v = point.vertices[0];
 				data = new int[]{v.x, v.y, v.z, point.color};
@@ -279,10 +276,10 @@ public class RenderProxy {
 			} else if (primitive instanceof Line) {
 				Line line = (Line) primitive;
 
-				command = PRIMITVE_LINES | PDATA_NORMAL_NONE | 1 << 16;
-				command |= PDATA_COLOR_PER_COMMAND | PDATA_TEXURE_COORD_NONE;
+				command = Graphics3D.PRIMITVE_LINES | Graphics3D.PDATA_NORMAL_NONE | 1 << 16;
+				command |= Graphics3D.PDATA_COLOR_PER_COMMAND | Graphics3D.PDATA_TEXURE_COORD_NONE;
 				command |= line.blendingType - Primitive.BLENDING_NONE << 5;
-				command |= PATTR_LIGHTING | PATTR_SPHERE_MAP;
+				command |= Graphics3D.PATTR_LIGHTING | Graphics3D.PATTR_SPHERE_MAP;
 
 				Vector3D v1 = line.vertices[0];
 				Vector3D v2 = line.vertices[1];
@@ -292,42 +289,42 @@ public class RenderProxy {
 				Triangle triangle = (Triangle) primitive;
 
 				int dataSize = 3 * 3;
-				command = PRIMITVE_TRIANGLES | 1 << 16;
-				command |= PATTR_SPHERE_MAP;
+				command = Graphics3D.PRIMITVE_TRIANGLES | 1 << 16;
+				command |= Graphics3D.PATTR_SPHERE_MAP;
 				Vector3D[] normals = triangle.normals;
 				if (triangle.hasFaceNormal) {
-					command |= PDATA_NORMAL_PER_FACE | PATTR_LIGHTING;
+					command |= Graphics3D.PDATA_NORMAL_PER_FACE | Graphics3D.PATTR_LIGHTING;
 					dataSize += 3;
 				} else if (RenderProxy.checkNormals(normals)) {
-					command |= PDATA_NORMAL_PER_VERTEX | PATTR_LIGHTING;
+					command |= Graphics3D.PDATA_NORMAL_PER_VERTEX | Graphics3D.PATTR_LIGHTING;
 					dataSize += 3 * 3;
 				}
 				Texture texture = RenderProxy.getTexture(triangle);
 				if (texture != null) {
 					this.texture = texture.impl;
-					command |= PDATA_COLOR_NONE | PDATA_TEXURE_COORD;
+					command |= Graphics3D.PDATA_COLOR_NONE | Graphics3D.PDATA_TEXURE_COORD;
 					dataSize += 6;
 				} else {
-					command |= PDATA_COLOR_PER_COMMAND | PDATA_TEXURE_COORD_NONE;
+					command |= Graphics3D.PDATA_COLOR_PER_COMMAND | Graphics3D.PDATA_TEXURE_COORD_NONE;
 					dataSize += 1;
 
 				}
 				command |= triangle.blendingType - Primitive.BLENDING_NONE << 5;
 				if (triangle.isColorKey) {
-					command |= PATTR_COLORKEY;
+					command |= Graphics3D.PATTR_COLORKEY;
 				}
 
 				data = new int[dataSize];
 				Vector3D[] vertices = triangle.vertices;
 				normOffset = addVertices(data, 0, vertices, 3);
 				texOffset = normOffset;
-				if ((command & PDATA_NORMAL_PER_FACE) != 0) {
+				if ((command & Graphics3D.PDATA_NORMAL_PER_FACE) != 0) {
 					texOffset = addVertices(data, normOffset, normals, 1);
-				} else if ((command & PDATA_NORMAL_PER_VERTEX) != 0) {
+				} else if ((command & Graphics3D.PDATA_NORMAL_PER_VERTEX) != 0) {
 					texOffset = addVertices(data, normOffset, normals, 3);
 				}
 				colorOffset = texOffset;
-				if ((command & PDATA_TEXURE_COORD) != 0) {
+				if ((command & Graphics3D.PDATA_TEXURE_COORD) != 0) {
 					System.arraycopy(triangle.textureCoords, 0, data, texOffset, 6);
 					colorOffset += 6;
 				}
@@ -335,42 +332,42 @@ public class RenderProxy {
 				Quadrangle quadrangle = (Quadrangle) primitive;
 
 				int dataSize = 4 * 3;
-				command = PRIMITVE_QUADS | 1 << 16;
-				command |= PATTR_SPHERE_MAP;
+				command = Graphics3D.PRIMITVE_QUADS | 1 << 16;
+				command |= Graphics3D.PATTR_SPHERE_MAP;
 				Vector3D[] normals = quadrangle.normals;
 				if (quadrangle.hasFaceNormal) {
-					command |= PDATA_NORMAL_PER_FACE | PATTR_LIGHTING;
+					command |= Graphics3D.PDATA_NORMAL_PER_FACE | Graphics3D.PATTR_LIGHTING;
 					dataSize += 3;
 				} else if (RenderProxy.checkNormals(normals)) {
-					command |= PDATA_NORMAL_PER_VERTEX | PATTR_LIGHTING;
+					command |= Graphics3D.PDATA_NORMAL_PER_VERTEX | Graphics3D.PATTR_LIGHTING;
 					dataSize += 4 * 3;
 				}
 				Texture texture = RenderProxy.getTexture(quadrangle);
 				if (texture != null) {
 					this.texture = texture.impl;
-					command |= PDATA_COLOR_NONE | PDATA_TEXURE_COORD;
+					command |= Graphics3D.PDATA_COLOR_NONE | Graphics3D.PDATA_TEXURE_COORD;
 					dataSize += 8;
 				} else {
-					command |= PDATA_COLOR_PER_COMMAND | PDATA_TEXURE_COORD_NONE;
+					command |= Graphics3D.PDATA_COLOR_PER_COMMAND | Graphics3D.PDATA_TEXURE_COORD_NONE;
 					dataSize += 1;
 
 				}
 				command |= quadrangle.blendingType - Primitive.BLENDING_NONE << 5;
 				if (quadrangle.isColorKey) {
-					command |= PATTR_COLORKEY;
+					command |= Graphics3D.PATTR_COLORKEY;
 				}
 
 				data = new int[dataSize];
 				Vector3D[] vertices = quadrangle.vertices;
 				normOffset = addVertices(data, 0, vertices, 4);
 				texOffset = normOffset;
-				if ((command & PDATA_NORMAL_PER_FACE) != 0) {
+				if ((command & Graphics3D.PDATA_NORMAL_PER_FACE) != 0) {
 					texOffset = addVertices(data, normOffset, normals, 1);
-				} else if ((command & PDATA_NORMAL_PER_VERTEX) != 0) {
+				} else if ((command & Graphics3D.PDATA_NORMAL_PER_VERTEX) != 0) {
 					texOffset = addVertices(data, normOffset, normals, 4);
 				}
 				colorOffset = texOffset;
-				if ((command & PDATA_TEXURE_COORD) != 0) {
+				if ((command & Graphics3D.PDATA_TEXURE_COORD) != 0) {
 					System.arraycopy(quadrangle.textureCoords, 0, data, texOffset, 8);
 					colorOffset += 8;
 				}
@@ -381,9 +378,9 @@ public class RenderProxy {
 					return;
 				}
 
-				command = PRIMITVE_POINT_SPRITES | 1 << 16 | PDATA_TEXURE_COORD;
+				command = Graphics3D.PRIMITVE_POINT_SPRITES | 1 << 16 | Graphics3D.PDATA_TEXURE_COORD;
 				if (sprite.isColorKey) {
-					command |= PATTR_COLORKEY;
+					command |= Graphics3D.PATTR_COLORKEY;
 				}
 
 				data = new int[11];

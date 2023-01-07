@@ -17,7 +17,6 @@
 package ru.woesss.j2me.micro3d;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 class Model {
@@ -49,18 +48,17 @@ class Model {
 		numVerticesPolyT = polyT3 * 3 + polyT4 * 6;
 		int numVertices = (polyT3 + polyC3) * 3 + (polyT4 + polyC4) * 6;
 		indices = new int[numVertices];
-		vertexArrayCapacity = numVertices * 3 * 4;
+		vertexArrayCapacity = numVertices * 3;
 		polygonsC = new Polygon[polyC3 + polyC4];
 		polygonsT = new Polygon[polyT3 + polyT4];
 		hasPolyT = polyT3 + polyT4 > 0;
 		hasPolyC = polyC3 + polyC4 > 0;
-		ByteOrder order = ByteOrder.nativeOrder();
-		texCoordArray = ByteBuffer.allocateDirect(numVertices * 5).order(order);
-		originalVertices = ByteBuffer.allocateDirect(vertices * 3 * 4).order(order).asFloatBuffer();
+		texCoordArray = BufferUtils.createByteBuffer(numVertices * 5);
+		originalVertices = BufferUtils.createFloatBuffer(vertices * 3);
 		int i = vertices * 3 + 3;
-		this.vertices = ByteBuffer.allocateDirect(i * 4).order(order).asFloatBuffer();
+		this.vertices = BufferUtils.createFloatBuffer(i);
 		this.vertices.put(--i, Float.POSITIVE_INFINITY);
-		bones = ByteBuffer.allocateDirect(numBones * (12 + 2) * 4).order(order);
+		bones = BufferUtils.createByteBuffer(numBones * (12 + 2) * 4);
 	}
 
 	static final class Polygon {

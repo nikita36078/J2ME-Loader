@@ -16,12 +16,11 @@
 
 package com.vodafone.v10.graphics.j3d;
 
-import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
-
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 
 import javax.microedition.lcdui.Graphics;
 
+import ru.woesss.j2me.micro3d.MathUtil;
 import ru.woesss.j2me.micro3d.Render;
 
 public class RenderProxy {
@@ -50,13 +49,13 @@ public class RenderProxy {
 
 		int shading = effect.shading;
 		if (shading == Effect3D.TOON_SHADING) {
-			attrs |= Effect3D.TOON_SHADING;
+			attrs |= Graphics3D.ENV_ATTR_TOON_SHADING;
 			int tress = effect.toonThreshold;
 			int high = effect.toonHigh;
 			int low = effect.toonLow;
 			render.setToonParam(tress, high, low);
 		} else {
-			attrs &= ~Effect3D.TOON_SHADING;
+			attrs &= ~Graphics3D.ENV_ATTR_TOON_SHADING;
 		}
 
 		if (effect.isTransparency) {
@@ -85,8 +84,8 @@ public class RenderProxy {
 	}
 
 	private static void getViewTrans(AffineTrans a, float[] out) {
-		out[0] = a.m00 * TO_FLOAT; out[3] = a.m01 * TO_FLOAT; out[6] = a.m02 * TO_FLOAT; out[ 9] = a.m03;
-		out[1] = a.m10 * TO_FLOAT; out[4] = a.m11 * TO_FLOAT; out[7] = a.m12 * TO_FLOAT; out[10] = a.m13;
-		out[2] = a.m20 * TO_FLOAT; out[5] = a.m21 * TO_FLOAT; out[8] = a.m22 * TO_FLOAT; out[11] = a.m23;
+		out[0] = a.m00 * MathUtil.TO_FLOAT; out[3] = a.m01 * MathUtil.TO_FLOAT; out[6] = a.m02 * MathUtil.TO_FLOAT; out[ 9] = a.m03;
+		out[1] = a.m10 * MathUtil.TO_FLOAT; out[4] = a.m11 * MathUtil.TO_FLOAT; out[7] = a.m12 * MathUtil.TO_FLOAT; out[10] = a.m13;
+		out[2] = a.m20 * MathUtil.TO_FLOAT; out[5] = a.m21 * MathUtil.TO_FLOAT; out[8] = a.m22 * MathUtil.TO_FLOAT; out[11] = a.m23;
 	}
 }

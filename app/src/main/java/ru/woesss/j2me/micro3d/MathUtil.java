@@ -57,14 +57,14 @@ public class MathUtil {
 	}
 
 	static void multiplyMM(float[] m, float[] pm, float[] mvm) {
-		float l00 = pm[ 0], l01 = pm[ 4], l02 = pm[ 8], l03 = pm[12];
-		float l10 = pm[ 1], l11 = pm[ 5], l12 = pm[ 9], l13 = pm[13];
-		float l20 = pm[ 2], l21 = pm[ 6], l22 = pm[10], l23 = pm[14];
-		float l30 = pm[ 3], l31 = pm[ 7], l32 = pm[11], l33 = pm[15];
+		float l00 = pm[0], l01 = pm[4], l02 = pm[ 8], l03 = pm[12];
+		float l10 = pm[1], l11 = pm[5], l12 = pm[ 9], l13 = pm[13];
+		float l20 = pm[2], l21 = pm[6], l22 = pm[10], l23 = pm[14];
+		float l30 = pm[3], l31 = pm[7], l32 = pm[11], l33 = pm[15];
 
-		float r00 = mvm[ 0], r01 = mvm[ 3], r02 = mvm[ 6], r03 = mvm[ 9];
-		float r10 = mvm[ 1], r11 = mvm[ 4], r12 = mvm[ 7], r13 = mvm[10];
-		float r20 = mvm[ 2], r21 = mvm[ 5], r22 = mvm[ 8], r23 = mvm[11];
+		float r00 = mvm[0], r01 = mvm[3], r02 = mvm[6], r03 = mvm[ 9];
+		float r10 = mvm[1], r11 = mvm[4], r12 = mvm[7], r13 = mvm[10];
+		float r20 = mvm[2], r21 = mvm[5], r22 = mvm[8], r23 = mvm[11];
 
 		m[ 0] = l00 * r00 + l01 * r10 + l02 * r20;
 		m[ 1] = l10 * r00 + l11 * r10 + l12 * r20;
@@ -133,9 +133,9 @@ public class MathUtil {
 			rm22 = z * z * nc + c;
 		}
 
-		float r00 = m[ 0], r01 = m[ 3], r02 = m[ 6], r03 = m[ 9];
-		float r10 = m[ 1], r11 = m[ 4], r12 = m[ 7], r13 = m[10];
-		float r20 = m[ 2], r21 = m[ 5], r22 = m[ 8], r23 = m[11];
+		float r00 = m[0], r01 = m[3], r02 = m[6], r03 = m[ 9];
+		float r10 = m[1], r11 = m[4], r12 = m[7], r13 = m[10];
+		float r20 = m[2], r21 = m[5], r22 = m[8], r23 = m[11];
 
 		m[ 0] = rm00 * r00 + rm01 * r10 + rm02 * r20;
 		m[ 1] = rm10 * r00 + rm11 * r10 + rm12 * r20;

@@ -16,8 +16,6 @@
 
 package com.motorola.iden.micro3d;
 
-import java.util.Arrays;
-
 public class Layout3D {
 	public static final int PARALLEL_SCALE = 24;
 	public static final int PARALLEL_WIDTH = 25;
@@ -46,17 +44,18 @@ public class Layout3D {
 	}
 
 	public int[] getProjectionParameters() {
+        int[] parameters = projectionParameters;
 		switch (projectionType) {
 			case PARALLEL_SCALE:
 			case PARALLEL_WIDTH_HEIGHT:
-				return Arrays.copyOf(projectionParameters, 2);
+                return new int[]{parameters[0], parameters[1]};
 			case PARALLEL_WIDTH:
-				return Arrays.copyOf(projectionParameters, 1);
+                return new int[]{parameters[0]};
 			case PERSPECTIVE_FOV:
 			case PERSPECTIVE_WIDTH:
-				return Arrays.copyOf(projectionParameters, 3);
+                return new int[]{parameters[0], parameters[1], parameters[2]};
 			case PERSPECTIVE_WIDTH_HEIGHT:
-				return Arrays.copyOf(projectionParameters, 4);
+                return new int[]{parameters[0], parameters[1], parameters[2], parameters[3]};
 			default:
 				throw new IllegalStateException("Unexpected value: " + projectionType);
 		}

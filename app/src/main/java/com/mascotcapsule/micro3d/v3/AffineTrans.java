@@ -72,7 +72,7 @@ public class AffineTrans {
 		a[offset++] = m20;
 		a[offset++] = m21;
 		a[offset++] = m22;
-		a[offset]   = m23;
+		a[offset  ] = m23;
 	}
 
 	public final void lookAt(Vector3D pos, Vector3D look, Vector3D up) {

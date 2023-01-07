@@ -64,17 +64,28 @@ public class Utils {
 		vertex[23] = w;
 	}
 
-	static native void fillBuffer(FloatBuffer buffer, FloatBuffer vertices, int[] indices);
+	public static String getVersion() {
+		return BuildConfig.VERSION_NAME;
+	}
 
-	static native void glReadPixels(int x, int y, int width, int height, Bitmap bitmapBuffer);
+	public static void multiplyMV(float[] v, float[] m) {
+		float x = v[4];
+		float y = v[5];
+		float z = v[6];
+		float w = v[7];
+		v[0] = x * m[0] + y * m[4] + z * m[ 8] + w * m[12];
+		v[1] = x * m[1] + y * m[5] + z * m[ 9] + w * m[13];
+		v[2] = x * m[2] + y * m[6] + z * m[10] + w * m[14];
+		v[3] = x * m[3] + y * m[7] + z * m[11] + w * m[15];
+	}
+
+	static native void fillBuffer(FloatBuffer buffer, FloatBuffer vertices, int[] indices);
 
 	static native void transform(FloatBuffer srcVertices, FloatBuffer dstVertices,
 								 FloatBuffer srcNormals, FloatBuffer dstNormals,
 								 ByteBuffer boneMatrices, float[] actionMatrices);
 
-	public static String getVersion() {
-		return BuildConfig.VERSION_NAME;
-	}
+	static native void glReadPixels(int x, int y, int width, int height, Bitmap bitmapBuffer);
 
 	static {
 		System.loadLibrary("micro3d");

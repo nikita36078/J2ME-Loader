@@ -16,8 +16,6 @@
 
 package ru.woesss.j2me.micro3d;
 
-import static ru.woesss.j2me.micro3d.MathUtil.IDENTITY_AFFINE;
-
 import android.util.SparseIntArray;
 
 class Action {
@@ -55,7 +53,7 @@ class Action {
 			final float[] m = matrix;
 			switch (type) {
 				case 2: {
-					System.arraycopy(IDENTITY_AFFINE, 0, m, mtxOffset, 12);
+					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// translate
@@ -89,7 +87,7 @@ class Action {
 					break;
 				}
 				case 3: {
-					System.arraycopy(IDENTITY_AFFINE, 0, m, mtxOffset, 12);
+					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = translate.values[0].clone();
 
 					// translate (for all frames)
@@ -107,7 +105,7 @@ class Action {
 					break;
 				}
 				case 4: {
-					System.arraycopy(IDENTITY_AFFINE, 0, m, mtxOffset, 12);
+					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// rotate
@@ -120,7 +118,7 @@ class Action {
 					break;
 				}
 				case 5: {
-					System.arraycopy(IDENTITY_AFFINE, 0, m, mtxOffset, 12);
+					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// rotate
@@ -129,7 +127,7 @@ class Action {
 					break;
 				}
 				case 6: {
-					System.arraycopy(IDENTITY_AFFINE, 0, m, mtxOffset, 12);
+					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// translate

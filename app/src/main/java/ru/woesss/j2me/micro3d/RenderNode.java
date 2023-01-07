@@ -17,7 +17,6 @@
 package ru.woesss.j2me.micro3d;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 abstract class RenderNode {
@@ -63,11 +62,9 @@ abstract class RenderNode {
 		FigureNode(Render render, FigureImpl figure) {
 			this.figure = figure;
 			Model model = figure.model;
-			vertices = ByteBuffer.allocateDirect(model.vertexArrayCapacity)
-					.order(ByteOrder.nativeOrder()).asFloatBuffer();
+			vertices = BufferUtils.createFloatBuffer(model.vertexArrayCapacity);
 			if (model.originalNormals != null) {
-				normals = ByteBuffer.allocateDirect(model.vertexArrayCapacity)
-						.order(ByteOrder.nativeOrder()).asFloatBuffer();
+				normals = BufferUtils.createFloatBuffer(model.vertexArrayCapacity);
 			} else {
 				normals = null;
 			}

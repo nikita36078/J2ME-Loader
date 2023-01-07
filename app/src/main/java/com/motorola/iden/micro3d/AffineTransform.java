@@ -215,30 +215,18 @@ public class AffineTransform {
 
 	public void set(int fieldID, int value) {
 		switch (fieldID) {
-			case M00:
-				m00 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M01:
-				m01 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M02:
-				m02 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M03:
-				m03 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M10:
-				m10 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M11:
-				m11 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M12:
-				m12 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M13:
-				m13 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M20:
-				m20 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M21:
-				m21 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M22:
-				m22 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
-			case M23:
-				m23 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M00: m00 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M01: m01 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M02: m02 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M03: m03 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M10: m10 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M11: m11 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M12: m12 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M13: m13 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M20: m20 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M21: m21 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M22: m22 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
+			case M23: m23 = MathUtil.clamp(value, MIN_VALUE, MAX_VALUE);
 			default: throw new IllegalArgumentException();
 		}
 	}

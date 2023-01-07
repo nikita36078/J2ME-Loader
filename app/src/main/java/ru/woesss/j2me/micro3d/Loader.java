@@ -16,18 +16,12 @@
 
 package ru.woesss.j2me.micro3d;
 
-import static ru.woesss.j2me.micro3d.MathUtil.IDENTITY_AFFINE;
-import static ru.woesss.j2me.micro3d.MathUtil.TO_FLOAT;
-import static ru.woesss.j2me.micro3d.MathUtil.TO_RADIANS;
-import static ru.woesss.j2me.micro3d.Utils.TAG;
-
 import android.util.Log;
 import android.util.SparseIntArray;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 class Loader {
@@ -134,7 +128,7 @@ class Loader {
 		model.originalVertices.rewind();
 
 		if (normalFormat != 0) {
-			FloatBuffer normals = ByteBuffer.allocateDirect(numVertices * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+			FloatBuffer normals = BufferUtils.createFloatBuffer(numVertices * 3);
 			if (normalFormat == 1) {
 				try {
 					loader.readNormalsV1(normals);
@@ -155,7 +149,7 @@ class Loader {
 			normals.rewind();
 			model.originalNormals = normals;
 			int len = numVertices * 3 + 3;
-			model.normals = ByteBuffer.allocateDirect(len * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+			model.normals = BufferUtils.createFloatBuffer(len);
 			model.normals.put(--len, 1.0f);
 		}
 		loader.clearCache();
@@ -229,7 +223,7 @@ class Loader {
 			available -= 20;
 		}
 		if (available > 0) {
-			Log.e(TAG, "Uninterpreted bytes in MBAC (" + available + ", v=" + version);
+			Log.e(Utils.TAG, "Uninterpreted bytes in MBAC (" + available + ", v=" + version);
 		}
 
 		return model;
@@ -255,11 +249,11 @@ class Loader {
 		}
 		if (transTypeCounts[7] != 0) {
 			// index 7 is unknown, I did not find mtra with non-zero value
-			Log.w(TAG, "ActTableData: transTypeCounts[7] = " + transTypeCounts[7]);
+			Log.w(Utils.TAG, "ActTableData: transTypeCounts[7] = " + transTypeCounts[7]);
 		}
 		//noinspection unused
 		int dataSize = loader.readInt();
-		// 'dataSize' and 'transTypeCounts' may be used for allocate memory and verify data)
+		// 'dataSize' and 'transTypeCounts' may be used for allocate memory and verify data
 
 		for (int action = 0; action < numActions; action++) {
 			int keyframes = loader.readUShort();
@@ -286,7 +280,7 @@ class Loader {
 			available -= 20;
 		}
 		if (available > 0) {
-			Log.e(TAG, "ActTableData: uninterpreted bytes in MTRA");
+			Log.e(Utils.TAG, "ActTableData: uninterpreted bytes in MTRA");
 		}
 
 		return actions;
@@ -431,7 +425,9 @@ class Loader {
 		int colorBits = readUByte();
 		int colorIdBits = readUByte();
 		int unknownByte = readUByte();
-		if (unknownByte != 0) Log.w(TAG, "PolyC unknownByte = " + unknownByte);
+		if (unknownByte != 0) {
+			Log.w(Utils.TAG, "PolyC unknownByte = " + unknownByte);
+		}
 
 		byte[] colors = new byte[numColor * 3];
 		for (int i = 0; i < colors.length; i++) {
@@ -622,7 +618,9 @@ class Loader {
 		int vertexIndexBits = readUBits(8);
 		int uvBits = readUBits(8);
 		int unknownByte = readUBits(8);
-		if (unknownByte != 0) Log.w(TAG, "PolyT v3: unknownByte = " + unknownByte);
+		if (unknownByte != 0) {
+			Log.w(Utils.TAG, "PolyT v3: unknownByte = " + unknownByte);
+		}
 
 
 		Model.Polygon[] polygons = model.polygonsT;
@@ -698,17 +696,17 @@ class Loader {
 			bones.putInt(boneVertices);
 			bones.putInt(parent);
 
-			bones.putFloat(readShort() * TO_FLOAT);
-			bones.putFloat(readShort() * TO_FLOAT);
-			bones.putFloat(readShort() * TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
 			bones.putFloat(readShort());
-			bones.putFloat(readShort() * TO_FLOAT);
-			bones.putFloat(readShort() * TO_FLOAT);
-			bones.putFloat(readShort() * TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
 			bones.putFloat(readShort());
-			bones.putFloat(readShort() * TO_FLOAT);
-			bones.putFloat(readShort() * TO_FLOAT);
-			bones.putFloat(readShort() * TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
+			bones.putFloat(readShort() * MathUtil.TO_FLOAT);
 			bones.putFloat(readShort());
 
 			boneVertexSum += boneVertices;
@@ -723,21 +721,21 @@ class Loader {
 		switch (type) {
 			case 0:
 				float[] m = act.matrices;
-				m[mtxOffset     ] = readShort() * TO_FLOAT;
-				m[mtxOffset +  1] = readShort() * TO_FLOAT;
-				m[mtxOffset +  2] = readShort() * TO_FLOAT;
+				m[mtxOffset     ] = readShort() * MathUtil.TO_FLOAT;
+				m[mtxOffset +  1] = readShort() * MathUtil.TO_FLOAT;
+				m[mtxOffset +  2] = readShort() * MathUtil.TO_FLOAT;
 				m[mtxOffset +  3] = readShort();
-				m[mtxOffset +  4] = readShort() * TO_FLOAT;
-				m[mtxOffset +  5] = readShort() * TO_FLOAT;
-				m[mtxOffset +  6] = readShort() * TO_FLOAT;
+				m[mtxOffset +  4] = readShort() * MathUtil.TO_FLOAT;
+				m[mtxOffset +  5] = readShort() * MathUtil.TO_FLOAT;
+				m[mtxOffset +  6] = readShort() * MathUtil.TO_FLOAT;
 				m[mtxOffset +  7] = readShort();
-				m[mtxOffset +  8] = readShort() * TO_FLOAT;
-				m[mtxOffset +  9] = readShort() * TO_FLOAT;
-				m[mtxOffset + 10] = readShort() * TO_FLOAT;
+				m[mtxOffset +  8] = readShort() * MathUtil.TO_FLOAT;
+				m[mtxOffset +  9] = readShort() * MathUtil.TO_FLOAT;
+				m[mtxOffset + 10] = readShort() * MathUtil.TO_FLOAT;
 				m[mtxOffset + 11] = readShort();
 				break;
 			case 1:
-				System.arraycopy(IDENTITY_AFFINE, 0, act.matrices, mtxOffset, 12);
+				System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, act.matrices, mtxOffset, 12);
 				break;
 			case 2: {
 				// translate
@@ -757,9 +755,9 @@ class Loader {
 				Action.Animation scale = new Action.Animation(count);
 				for (int j = 0; j < count; j++) {
 					int kf = readUShort(); // key frame
-					float x = readShort() * TO_FLOAT;  // scale.x
-					float y = readShort() * TO_FLOAT;  // scale.y
-					float z = readShort() * TO_FLOAT;  // scale.z
+					float x = readShort() * MathUtil.TO_FLOAT;  // scale.x
+					float y = readShort() * MathUtil.TO_FLOAT;  // scale.y
+					float z = readShort() * MathUtil.TO_FLOAT;  // scale.z
 					scale.set(j, kf, x, y, z);
 				}
 				boneAction.scale = scale;
@@ -781,7 +779,7 @@ class Loader {
 				Action.RollAnim roll = new Action.RollAnim(count);
 				for (int j = 0; j < count; j++) {
 					int kf = readUShort();   // key frame
-					float r = readShort() * TO_RADIANS; // roll
+					float r = readShort() * MathUtil.TO_RADIANS; // roll
 					roll.set(j, kf, r);
 				}
 				boneAction.roll = roll;
@@ -809,7 +807,7 @@ class Loader {
 				boneAction.rotate = rotate;
 
 				// roll (for all frames)
-				float r = readShort() * TO_RADIANS;
+				float r = readShort() * MathUtil.TO_RADIANS;
 				Action.RollAnim roll = new Action.RollAnim(1);
 				roll.set(0, 0, r);
 				boneAction.roll = roll;
@@ -833,7 +831,7 @@ class Loader {
 				Action.RollAnim roll = new Action.RollAnim(count);
 				for (int j = 0; j < count; j++) {
 					int kf = readUShort();   // key frame
-					float r = readShort() * TO_RADIANS; // roll
+					float r = readShort() * MathUtil.TO_RADIANS; // roll
 					roll.set(j, kf, r);
 				}
 				boneAction.roll = roll;
@@ -883,7 +881,7 @@ class Loader {
 				Action.RollAnim roll = new Action.RollAnim(count);
 				for (int j = 0; j < count; j++) {
 					int kf = readUShort();   // key frame
-					float r = readShort() * TO_RADIANS; // roll
+					float r = readShort() * MathUtil.TO_RADIANS; // roll
 					roll.set(j, kf, r);
 				}
 				boneAction.roll = roll;
@@ -927,7 +925,7 @@ class Loader {
 
 	private int readUBits(int size) throws IOException {
 		if (size > 25) {
-			Log.e(TAG, "readUBits(size=" + size + ')');
+			Log.e(Utils.TAG, "readUBits(size=" + size + ')');
 			throw new IllegalArgumentException("Invalid bit size=" + size);
 		}
 		while (size > cached) {

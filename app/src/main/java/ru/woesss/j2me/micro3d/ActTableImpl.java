@@ -16,8 +16,6 @@
 
 package ru.woesss.j2me.micro3d;
 
-import static ru.woesss.j2me.micro3d.Utils.TAG;
-
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -35,7 +33,7 @@ public class ActTableImpl {
 		try {
 			actions = Loader.loadMtraData(b, 0, b.length);
 		} catch (IOException e) {
-			Log.e(TAG, "Error loading data", e);
+			Log.e(Utils.TAG, "Error loading data", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -45,12 +43,12 @@ public class ActTableImpl {
 			throw new NullPointerException();
 		}
 		if (offset < 0 || offset + length > b.length) {
-			throw new ArrayIndexOutOfBoundsException ();
+			throw new ArrayIndexOutOfBoundsException();
 		}
 		try {
 			actions = Loader.loadMtraData(b, offset, length);
 		} catch (Exception e) {
-			Log.e(TAG, "Error loading data", e);
+			Log.e(Utils.TAG, "Error loading data", e);
 			throw e;
 		}
 	}
@@ -66,7 +64,7 @@ public class ActTableImpl {
 		try {
 			actions = Loader.loadMtraData(bytes, 0, bytes.length);
 		} catch (IOException e) {
-			Log.e(TAG, "Error loading data from [" + name + "]", e);
+			Log.e(Utils.TAG, "Error loading data from [" + name + "]", e);
 			throw new RuntimeException(e);
 		}
 	}
