@@ -18,14 +18,12 @@
 package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
 import androidx.activity.result.contract.ActivityResultContract;
-import androidx.annotation.NonNull;
 
 import com.nononsenseapps.filepicker.Utils;
 
@@ -38,8 +36,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
-
-import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.config.Config;
 
@@ -231,41 +227,5 @@ public class FileUtils {
 		} else {
 			return new SAFFileResultContract();
 		}
-	}
-
-	public static boolean copyFileFromAssets(@NonNull String assetsPath, @NonNull File dest, boolean replace) {
-		boolean ret = true;
-		AssetManager assetManager = ContextHolder.getAppContext().getAssets();
-		try {
-			String[] list = assetManager.list(assetsPath);
-			//file
-			if (list == null || list.length == 0) {
-
-				if (dest.isFile()) {
-					if (!replace) return true;
-					if (!dest.delete()) throw new IOException("dest file is exists");
-				}
-
-				File dir = dest.getParentFile();
-				if (dir == null || (!dir.isDirectory() && !dir.mkdirs()))
-					throw new IOException("dest file parent dir don't create.");
-
-				try (InputStream in = assetManager.open(assetsPath); OutputStream out = new FileOutputStream(dest)) {
-					IOUtils.copy(in, out);
-					out.flush();
-				}
-			} else {
-				// directory
-				for (String name : list) {
-					ret &= copyFileFromAssets(assetsPath + "/" + name, new File(dest, name), replace);
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			ret = false;
-		}
-
-		return ret;
 	}
 }
