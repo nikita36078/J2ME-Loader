@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,15 +39,18 @@ public class EditNameAlert extends DialogFragment {
 
 	private static final String TITLE = "title";
 	private static final String ID = "id";
+	private static final String OLD_NAME = "oldName";
 	private Callback callback;
 	private String mTitle;
 	private int mId;
+	private String mOldName;
 
-	static EditNameAlert newInstance(String title, int id) {
+	static EditNameAlert newInstance(String title, int id, String oldName) {
 		EditNameAlert fragment = new EditNameAlert();
 		Bundle args = new Bundle();
 		args.putString(TITLE, title);
 		args.putInt(ID, id);
+		args.putString(OLD_NAME, oldName);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -61,6 +65,7 @@ public class EditNameAlert extends DialogFragment {
 		if (args != null) {
 			mTitle = args.getString(TITLE);
 			mId = args.getInt(ID);
+			mOldName = args.getString(OLD_NAME);
 		}
 	}
 
@@ -75,6 +80,10 @@ public class EditNameAlert extends DialogFragment {
 		Button btPositive = v.findViewById(R.id.btPositive);
 		AlertDialog dialog = new AlertDialog.Builder(requireActivity())
 				.setTitle(mTitle).setView(v).create();
+		if (!TextUtils.isEmpty(mOldName)) {
+			editText.setText(mOldName);
+			editText.setSelection(mOldName.length());
+		}
 		btNegative.setOnClickListener(v1 -> dismiss());
 		btPositive.setOnClickListener(v1 -> onClickOk(editText));
 		return dialog;
