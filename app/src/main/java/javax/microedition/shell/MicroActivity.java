@@ -663,6 +663,7 @@ public class MicroActivity extends AppCompatActivity {
 			}
 			binding.overlayView.setLocation(0, toolbarHeight);
 			binding.toolbar.setLayoutParams(layoutParams);
+			invalidateOptionsMenu();
 			if (next != null) {
 				binding.displayableContainer.addView(next.getDisplayableView());
 			}
