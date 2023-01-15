@@ -113,6 +113,10 @@ android {
                     .replaceAll('--+', '-').replaceAll(' +', '_')
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 static def generateVersionCode() {

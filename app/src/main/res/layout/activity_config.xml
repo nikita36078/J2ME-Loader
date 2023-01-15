@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/configRoot"
+    android:id="@+id/whole_config_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".config.ConfigActivity">
@@ -14,7 +15,7 @@
 
         <!-- Screen -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rootConfigScreen"
+            android:id="@+id/screen_config_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -23,7 +24,7 @@
 
 
             <TextView
-                android:id="@+id/tvConfigScreenTitle"
+                android:id="@+id/screen_config_options_title"
                 style="@style/ConfigTitleTextStyle"
                 android:text="@string/PREF_SCREEN_OPTIONS"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -31,20 +32,20 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/cmdScreenSizePresets"
+                android:id="@+id/show_screen_size_presets"
                 style="@style/ImageButtonStyle"
                 android:layout_width="@dimen/height_config_row"
                 android:layout_height="0dp"
                 android:contentDescription="@string/SIZE_PRESETS"
                 android:gravity="center"
                 app:srcCompat="@drawable/ic_list"
-                app:layout_constraintBottom_toBottomOf="@+id/tfScreenWidth"
+                app:layout_constraintBottom_toBottomOf="@+id/screen_width"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle"
+                app:layout_constraintTop_toBottomOf="@+id/screen_config_options_title"
                 app:tooltipText="@string/SIZE_PRESETS" />
 
             <EditText
-                android:id="@+id/tfScreenWidth"
+                android:id="@+id/screen_width"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -54,27 +55,27 @@
                 android:inputType="numberSigned"
                 android:maxLines="1"
                 android:textSize="22sp"
-                app:layout_constraintEnd_toStartOf="@+id/cmdSwapSizes"
-                app:layout_constraintStart_toEndOf="@+id/cmdScreenSizePresets"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle" />
+                app:layout_constraintEnd_toStartOf="@+id/swap_screen_sides"
+                app:layout_constraintStart_toEndOf="@+id/show_screen_size_presets"
+                app:layout_constraintTop_toBottomOf="@+id/screen_config_options_title" />
 
             <ImageButton
-                android:id="@+id/cmdSwapSizes"
+                android:id="@+id/swap_screen_sides"
                 style="@style/ImageButtonStyle"
                 android:layout_width="@dimen/height_config_row"
                 android:layout_height="0dp"
                 android:contentDescription="@string/SWAP_SIZES"
                 android:gravity="center"
                 app:srcCompat="@drawable/ic_swap"
-                app:layout_constraintBottom_toBottomOf="@+id/tfScreenWidth"
+                app:layout_constraintBottom_toBottomOf="@+id/screen_width"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle"
+                app:layout_constraintTop_toBottomOf="@+id/screen_config_options_title"
                 app:tooltipText="@string/SWAP_SIZES" />
 
             <EditText
-                android:id="@+id/tfScreenHeight"
+                android:id="@+id/screen_height"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -84,44 +85,44 @@
                 android:inputType="numberSigned"
                 android:maxLines="1"
                 android:textSize="22sp"
-                app:layout_constraintEnd_toStartOf="@+id/cmdAddToPreset"
-                app:layout_constraintStart_toEndOf="@+id/cmdSwapSizes"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle" />
+                app:layout_constraintEnd_toStartOf="@+id/add_screen_size_to_presets"
+                app:layout_constraintStart_toEndOf="@+id/swap_screen_sides"
+                app:layout_constraintTop_toBottomOf="@+id/screen_config_options_title" />
 
             <ImageButton
-                android:id="@+id/cmdAddToPreset"
+                android:id="@+id/add_screen_size_to_presets"
                 style="@style/ImageButtonStyle"
                 android:layout_width="@dimen/height_config_row"
                 android:layout_height="0dp"
                 android:gravity="center"
                 app:srcCompat="@drawable/ic_add_preset"
-                app:layout_constraintBottom_toBottomOf="@+id/tfScreenHeight"
+                app:layout_constraintBottom_toBottomOf="@+id/screen_height"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigScreenTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/screen_config_options_title" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/cbLockAspect"
+                android:id="@+id/keep_aspect_ratio_toggle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:text="@string/PREF_KEEP_ASPECT_RATIO"
-                app:layout_constraintTop_toBottomOf="@+id/cmdSwapSizes"
+                app:layout_constraintTop_toBottomOf="@+id/swap_screen_sides"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:id="@+id/cmdScreenBack"
+                android:id="@+id/select_screen_background_color"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_margin="4dp"
                 android:text="@string/PREF_BACKGROUND"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
-                app:layout_constraintBottom_toBottomOf="@+id/tfScreenBack"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
+                app:layout_constraintBottom_toBottomOf="@+id/screen_background_hex_color"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tfScreenBack"
+                app:layout_constraintTop_toTopOf="@+id/screen_background_hex_color"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfScreenBack"
+                android:id="@+id/screen_background_hex_color"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -131,13 +132,13 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cbLockAspect"
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toBottomOf="@+id/keep_aspect_ratio_toggle"
                 tools:ignore="UnusedAttribute" />
 
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/scale_ratio_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:gravity="center_vertical"
@@ -145,12 +146,12 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tfScreenBack"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintTop_toBottomOf="@+id/screen_background_hex_color"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
                 app:layout_constraintWidth_min="wrap"  />
 
             <EditText
-                android:id="@+id/tfScaleRatioValue"
+                android:id="@+id/scale_ratio"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -160,13 +161,13 @@
                 android:inputType="number"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tfScreenBack"
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toBottomOf="@+id/screen_background_hex_color"
                 tools:ignore="HardcodedText,UnusedAttribute" />
 
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/screen_orientation_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:gravity="center_vertical"
@@ -174,24 +175,24 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/scale_ratio_hint"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
-                android:id="@+id/spOrientation"
+                android:id="@+id/screen_orientation_selector"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:entries="@array/PREF_ORIENTATION_ENTRIES"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toTopOf="@+id/textView4" />
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toTopOf="@+id/screen_orientation_hint" />
 
             <TextView
-                android:id="@+id/tvScreenGravity"
+                android:id="@+id/screen_gravity_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:checked="false"
@@ -200,24 +201,24 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/screen_orientation_hint"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
-                android:id="@+id/spScreenGravity"
+                android:id="@+id/screen_gravity_selector"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:entries="@array/pref_screen_gravity_entries"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toBottomOf="@+id/screen_orientation_hint" />
 
             <TextView
-                android:id="@+id/tvScaleType"
+                android:id="@+id/scale_type_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:checked="false"
@@ -226,24 +227,24 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvScreenGravity"
+                app:layout_constraintTop_toBottomOf="@+id/screen_gravity_hint"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
-                android:id="@+id/spScaleType"
+                android:id="@+id/scale_type_selector"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:entries="@array/pref_scale_type_entries"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tvScreenGravity" />
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toBottomOf="@+id/screen_gravity_hint" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxFilter"
+                android:id="@+id/filtering_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -251,10 +252,10 @@
                 android:text="@string/PREF_FILTER"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvScaleType" />
+                app:layout_constraintTop_toBottomOf="@+id/scale_type_hint" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxImmediate"
+                android:id="@+id/immediate_processing_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -262,10 +263,10 @@
                 android:text="@string/PREF_IMMEDIATE"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxFilter" />
+                app:layout_constraintTop_toBottomOf="@+id/filtering_toggle" />
 
             <TextView
-                android:id="@+id/tvGraphicsMode"
+                android:id="@+id/graphical_mode_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:checked="false"
@@ -274,13 +275,13 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxImmediate"
+                app:layout_constraintTop_toBottomOf="@+id/immediate_processing_toggle"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
-                android:id="@+id/spGraphicsMode"
+                android:id="@+id/graphical_mode_selector"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -288,18 +289,18 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxImmediate" />
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toBottomOf="@+id/immediate_processing_toggle" />
 
             <LinearLayout
-                android:id="@+id/shaderContainer"
+                android:id="@+id/shader_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="40dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvGraphicsMode"
+                app:layout_constraintTop_toBottomOf="@+id/graphical_mode_hint"
                 tools:visibility="visible">
 
                 <TextView
@@ -312,7 +313,7 @@
                     android:textSize="15sp" />
 
                 <Spinner
-                    android:id="@+id/spShader"
+                    android:id="@+id/shader_selector"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -320,7 +321,7 @@
                     android:textSize="15sp" />
 
                 <ImageButton
-                    android:id="@+id/btShaderTune"
+                    android:id="@+id/tune_selected_shader"
                     style="@style/ImageButtonStyle"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -332,7 +333,7 @@
             </LinearLayout>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxParallel"
+                android:id="@+id/parallel_screen_redrawing_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -341,11 +342,11 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/shaderContainer"
+                app:layout_constraintTop_toBottomOf="@+id/shader_root"
                 tools:visibility="visible" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxForceFullscreen"
+                android:id="@+id/force_fullscreen_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -353,10 +354,10 @@
                 android:text="@string/PREF_FORCE_FULLSCREEN"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxParallel" />
+                app:layout_constraintTop_toBottomOf="@+id/parallel_screen_redrawing_toggle" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxShowFps"
+                android:id="@+id/show_fps_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -364,11 +365,11 @@
                 android:text="@string/PREF_SHOW_FPS"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxForceFullscreen" />
+                app:layout_constraintTop_toBottomOf="@+id/force_fullscreen_toggle" />
 
 
             <TextView
-                android:id="@+id/tvLimitFps"
+                android:id="@+id/fps_limit_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginBottom="9dp"
@@ -377,13 +378,13 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
-                app:layout_constraintEnd_toStartOf="@+id/barrierScreenConfig"
+                app:layout_constraintEnd_toStartOf="@+id/barrier_screen_config"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxShowFps"
+                app:layout_constraintTop_toBottomOf="@+id/show_fps_toggle"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/etFpsLimit"
+                android:id="@+id/fps_limit"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -395,23 +396,23 @@
                 android:inputType="number|numberSigned"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierScreenConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxShowFps"
+                app:layout_constraintStart_toEndOf="@+id/barrier_screen_config"
+                app:layout_constraintTop_toBottomOf="@+id/show_fps_toggle"
                 tools:ignore="UnusedAttribute" />
 
             <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrierScreenConfig"
+                android:id="@+id/barrier_screen_config"
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="textView3,cmdScreenBack,textView4,tvScaleType,tvGraphicsMode,tvLimitFps,tvScreenGravity" />
+                app:constraint_referenced_ids="scale_ratio_hint,select_screen_background_color,screen_orientation_hint,scale_type_hint,graphical_mode_hint,fps_limit_hint,screen_gravity_hint" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Screen -->
 
         <!-- Font -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rootConfigFont"
+            android:id="@+id/font_config_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -420,7 +421,7 @@
             app:elevation="2dp">
 
             <TextView
-                android:id="@+id/tvConfigFontTitle"
+                android:id="@+id/font_config_options_title"
                 style="@style/ConfigTitleTextStyle"
                 android:text="@string/PREF_FONT_OPTIONS"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -429,7 +430,7 @@
 
 
             <EditText
-                android:id="@+id/tfFontSizeSmall"
+                android:id="@+id/font_size_small"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -438,28 +439,28 @@
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textDirection="ltr"
-                app:layout_constraintEnd_toStartOf="@+id/textView8"
+                app:layout_constraintEnd_toStartOf="@+id/separator_first"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigFontTitle"
+                app:layout_constraintTop_toBottomOf="@+id/font_config_options_title"
                 tools:ignore="UnusedAttribute" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/separator_first"
                 android:layout_width="20dp"
                 android:layout_height="0dp"
                 android:gravity="center"
                 android:text="@string/_FONT_SEPARATOR"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                app:layout_constraintBottom_toBottomOf="@+id/tfFontSizeSmall"
-                app:layout_constraintEnd_toStartOf="@+id/tfFontSizeMedium"
+                app:layout_constraintBottom_toBottomOf="@+id/font_size_small"
+                app:layout_constraintEnd_toStartOf="@+id/font_size_medium"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/tfFontSizeSmall"
-                app:layout_constraintTop_toTopOf="@+id/tfFontSizeSmall" />
+                app:layout_constraintStart_toEndOf="@+id/font_size_small"
+                app:layout_constraintTop_toTopOf="@+id/font_size_small" />
 
             <EditText
-                android:id="@+id/tfFontSizeMedium"
+                android:id="@+id/font_size_medium"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -468,28 +469,28 @@
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textDirection="ltr"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
+                app:layout_constraintEnd_toStartOf="@+id/separator_second"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textView8"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigFontTitle"
+                app:layout_constraintStart_toEndOf="@+id/separator_first"
+                app:layout_constraintTop_toBottomOf="@+id/font_config_options_title"
                 tools:ignore="UnusedAttribute" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/separator_second"
                 android:layout_width="20dp"
                 android:layout_height="0dp"
                 android:gravity="center"
                 android:text="@string/_FONT_SEPARATOR"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                app:layout_constraintBottom_toBottomOf="@+id/tfFontSizeLarge"
-                app:layout_constraintEnd_toStartOf="@+id/tfFontSizeLarge"
+                app:layout_constraintBottom_toBottomOf="@+id/font_size_large"
+                app:layout_constraintEnd_toStartOf="@+id/font_size_large"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/tfFontSizeMedium"
-                app:layout_constraintTop_toTopOf="@+id/tfFontSizeLarge" />
+                app:layout_constraintStart_toEndOf="@+id/font_size_medium"
+                app:layout_constraintTop_toTopOf="@+id/font_size_large" />
 
             <EditText
-                android:id="@+id/tfFontSizeLarge"
+                android:id="@+id/font_size_large"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -501,13 +502,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigFontTitle"
+                app:layout_constraintStart_toEndOf="@+id/separator_second"
+                app:layout_constraintTop_toBottomOf="@+id/font_config_options_title"
                 tools:ignore="UnusedAttribute" />
 
 
             <Button
-                android:id="@+id/cmdFontSizePresets"
+                android:id="@+id/show_font_size_presets"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_margin="4dp"
@@ -515,33 +516,33 @@
                 android:text="@string/SIZE_PRESETS"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tfFontSizeMedium" />
+                app:layout_constraintTop_toBottomOf="@+id/font_size_medium" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxFontSizeInSP"
+                android:id="@+id/show_font_sizes_in_scaled_pixels_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:text="@string/PREF_FONT_SIZE_IN_SP"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cmdFontSizePresets" />
+                app:layout_constraintTop_toBottomOf="@+id/show_font_size_presets" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxFontAA"
+                android:id="@+id/enable_anti_aliasing_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:text="@string/PREF_FONT_ANTI_ALIASING"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxFontSizeInSP" />
+                app:layout_constraintTop_toBottomOf="@+id/show_font_sizes_in_scaled_pixels_toggle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Font -->
 
         <!-- Input -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rootInputConfig"
+            android:id="@+id/input_config_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -550,7 +551,7 @@
             app:elevation="2dp">
 
             <TextView
-                android:id="@+id/tvConfigInputTitle"
+                android:id="@+id/config_input_title"
                 style="@style/ConfigTitleTextStyle"
                 android:layout_marginHorizontal="5dp"
                 android:text="@string/pref_input_devices_title"
@@ -559,7 +560,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxTouchInput"
+                android:id="@+id/enable_touch_input_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -568,12 +569,12 @@
                 app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvConfigInputTitle"
+                app:layout_constraintTop_toBottomOf="@+id/config_input_title"
                 app:layout_constraintWidth_min="wrap" />
 
             <!-- KeyCodes layout -->
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/buttons_layout_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginStart="5dp"
@@ -584,13 +585,13 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxTouchInput"
+                app:layout_constraintTop_toBottomOf="@+id/enable_touch_input_toggle"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
-                android:id="@+id/spLayout"
+                android:id="@+id/buttons_layout_selector"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginEnd="5dp"
@@ -600,12 +601,12 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxTouchInput" />
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/enable_touch_input_toggle" />
             <!-- End keyCodes layout -->
 
             <Button
-                android:id="@+id/cmdKeyMappings"
+                android:id="@+id/show_key_mappings"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginHorizontal="9dp"
@@ -613,25 +614,25 @@
                 android:text="@string/pref_map_keys"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/buttons_layout_hint" />
 
             <!-- Virtual Keyboard settings -->
             <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupVkConfig"
+                android:id="@+id/virtual_keyboard_config_group"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="6dp"
                 android:background="?bg_config_card"
                 android:visibility="gone"
-                app:constraint_referenced_ids="cxVKForceOpacity,cxVKFeedback,tfVKBack,tfVKSelFore,textView7,cmdVKSelFore,cmdVKFore,tfVKOutline,cmdVKBack,sbVKAlpha,cmdVKSelBack,tfVKHideDelay,textView13,spButtonsShape,tvOpacity,cmdVKOutline,textView12,tfVKFore,tfVKSelBack"
+                app:constraint_referenced_ids="force_opacity_for_offscreen_keys_toggle,enable_haptic_feedback_toggle,keyboard_not_pressed_button_background_color_hex,keyboard_pressed_button_label_color_hex,button_shape_hint,update_keyboard_pressed_button_label_color,update_keyboard_not_pressed_button_label_color,keyboard_outline_color_hex,update_keyboard_not_pressed_button_background_color,change_opacity_seekbar,update_keyboard_pressed_button_background_color,virtual_keyboard_hide_delay,ms_hint,button_shape_selector,opacity_hint,update_keyboard_outline_color,virtual_keyboard_hide_delay_hint,keyboard_not_pressed_button_label_color_hex,keyboard_pressed_button_background_color_hex"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cmdKeyMappings"
+                app:layout_constraintTop_toBottomOf="@+id/show_key_mappings"
                 tools:visibility="visible" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxIsShowKeyboard"
+                android:id="@+id/show_virtual_keyboard_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -641,11 +642,11 @@
                 android:text="@string/PREF_VIRTUAL_KEYBOARD_OPTIONS"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cmdKeyMappings" />
+                app:layout_constraintTop_toBottomOf="@+id/show_key_mappings" />
 
             <!-- Key shape type -->
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/button_shape_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginStart="5dp"
@@ -656,13 +657,13 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard"
+                app:layout_constraintTop_toBottomOf="@+id/show_virtual_keyboard_toggle"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
-                android:id="@+id/spButtonsShape"
+                android:id="@+id/button_shape_selector"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginEnd="5dp"
@@ -671,13 +672,13 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxIsShowKeyboard" />
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/show_virtual_keyboard_toggle" />
             <!-- End key shape type -->
 
             <!-- Keys vibration feedback -->
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxVKFeedback"
+                android:id="@+id/enable_haptic_feedback_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -686,11 +687,11 @@
                 android:text="@string/PREF_VK_FEEDBACK"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toBottomOf="@+id/button_shape_hint" />
 
             <!-- Keys opacity -->
             <TextView
-                android:id="@+id/tvOpacity"
+                android:id="@+id/opacity_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginStart="5dp"
@@ -700,25 +701,25 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxVKFeedback"
+                app:layout_constraintTop_toBottomOf="@+id/enable_haptic_feedback_toggle"
                 app:layout_constraintWidth_min="wrap" />
 
             <SeekBar
-                android:id="@+id/sbVKAlpha"
+                android:id="@+id/change_opacity_seekbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:max="255"
-                app:layout_constraintBottom_toBottomOf="@id/tvOpacity"
+                app:layout_constraintBottom_toBottomOf="@id/opacity_hint"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxVKFeedback" />
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/enable_haptic_feedback_toggle" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxVKForceOpacity"
+                android:id="@+id/force_opacity_for_offscreen_keys_toggle"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -727,12 +728,12 @@
                 android:text="@string/PREF_VK_FORCE_OPACITY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvOpacity" />
+                app:layout_constraintTop_toBottomOf="@id/opacity_hint" />
             <!-- End keys opacity -->
 
             <!-- Keys hider -->
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/virtual_keyboard_hide_delay_hint"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginStart="5dp"
@@ -742,13 +743,13 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxVKForceOpacity"
+                app:layout_constraintTop_toBottomOf="@+id/force_opacity_for_offscreen_keys_toggle"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfVKHideDelay"
+                android:id="@+id/virtual_keyboard_hide_delay"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
@@ -757,13 +758,13 @@
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textDirection="ltr"
-                app:layout_constraintEnd_toStartOf="@+id/textView13"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/cxVKForceOpacity"
+                app:layout_constraintEnd_toStartOf="@+id/ms_hint"
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/force_opacity_for_offscreen_keys_toggle"
                 tools:ignore="UnusedAttribute" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/ms_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/height_config_row"
                 android:layout_marginEnd="5dp"
@@ -773,13 +774,13 @@
                 android:textColor="?attr/textColorSecondary"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxVKForceOpacity" />
+                app:layout_constraintTop_toBottomOf="@+id/force_opacity_for_offscreen_keys_toggle" />
 
 
             <!-- Key colors -->
 
             <Button
-                android:id="@+id/cmdVKFore"
+                android:id="@+id/update_keyboard_not_pressed_button_label_color"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginVertical="4dp"
@@ -787,14 +788,14 @@
                 android:layout_marginLeft="9dp"
                 android:text="@string/PREF_VK_FORE"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="@+id/tfVKFore"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintBottom_toBottomOf="@+id/keyboard_not_pressed_button_label_color_hex"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tfVKFore"
+                app:layout_constraintTop_toTopOf="@+id/keyboard_not_pressed_button_label_color_hex"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfVKFore"
+                android:id="@+id/keyboard_not_pressed_button_label_color_hex"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -806,12 +807,12 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/textView12"
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/virtual_keyboard_hide_delay_hint"
                 tools:ignore="UnusedAttribute" />
 
             <Button
-                android:id="@+id/cmdVKBack"
+                android:id="@+id/update_keyboard_not_pressed_button_background_color"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginVertical="4dp"
@@ -819,14 +820,14 @@
                 android:layout_marginLeft="9dp"
                 android:text="@string/PREF_VK_BACK"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@+id/cmdVKSelFore"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintBottom_toTopOf="@+id/update_keyboard_pressed_button_label_color"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cmdVKFore"
+                app:layout_constraintTop_toBottomOf="@+id/update_keyboard_not_pressed_button_label_color"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfVKBack"
+                android:id="@+id/keyboard_not_pressed_button_background_color_hex"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -838,12 +839,12 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tfVKFore"
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/keyboard_not_pressed_button_label_color_hex"
                 tools:ignore="UnusedAttribute" />
 
             <Button
-                android:id="@+id/cmdVKSelFore"
+                android:id="@+id/update_keyboard_pressed_button_label_color"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginVertical="4dp"
@@ -851,14 +852,14 @@
                 android:layout_marginLeft="9dp"
                 android:text="@string/PREF_VK_SEL_FORE"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@+id/tfVKSelBack"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintBottom_toTopOf="@+id/keyboard_pressed_button_background_color_hex"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tfVKBack"
+                app:layout_constraintTop_toBottomOf="@+id/keyboard_not_pressed_button_background_color_hex"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfVKSelFore"
+                android:id="@+id/keyboard_pressed_button_label_color_hex"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -870,13 +871,13 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tfVKBack"
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/keyboard_not_pressed_button_background_color_hex"
                 tools:ignore="UnusedAttribute" />
 
 
             <Button
-                android:id="@+id/cmdVKSelBack"
+                android:id="@+id/update_keyboard_pressed_button_background_color"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginVertical="4dp"
@@ -885,14 +886,14 @@
                 android:layout_marginTop="1dp"
                 android:text="@string/PREF_VK_SEL_BACK"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@+id/tfVKOutline"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintBottom_toTopOf="@+id/keyboard_outline_color_hex"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tfVKSelBack"
+                app:layout_constraintTop_toTopOf="@+id/keyboard_pressed_button_background_color_hex"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfVKSelBack"
+                android:id="@+id/keyboard_pressed_button_background_color_hex"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -904,13 +905,13 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tfVKSelFore"
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/keyboard_pressed_button_label_color_hex"
                 tools:ignore="UnusedAttribute" />
 
 
             <Button
-                android:id="@+id/cmdVKOutline"
+                android:id="@+id/update_keyboard_outline_color"
                 android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginVertical="4dp"
@@ -918,14 +919,14 @@
                 android:layout_marginLeft="9dp"
                 android:text="@string/PREF_VK_OUTLINE"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="@+id/tfVKOutline"
-                app:layout_constraintEnd_toStartOf="@+id/barrierInputConfig"
+                app:layout_constraintBottom_toBottomOf="@+id/keyboard_outline_color_hex"
+                app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tfVKSelBack"
+                app:layout_constraintTop_toBottomOf="@+id/keyboard_pressed_button_background_color_hex"
                 app:layout_constraintWidth_min="wrap" />
 
             <EditText
-                android:id="@+id/tfVKOutline"
+                android:id="@+id/keyboard_outline_color_hex"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -937,16 +938,16 @@
                 android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barrierInputConfig"
-                app:layout_constraintTop_toBottomOf="@+id/tfVKSelBack"
+                app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
+                app:layout_constraintTop_toBottomOf="@+id/keyboard_pressed_button_background_color_hex"
                 tools:ignore="UnusedAttribute" />
 
             <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrierInputConfig"
+                android:id="@+id/input_config_barrier"
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 app:barrierDirection="end"
-                app:constraint_referenced_ids="textView6,tvOpacity,textView7,textView12,cmdVKFore,cmdVKBack,cmdVKSelFore,cmdVKOutline" />
+                app:constraint_referenced_ids="buttons_layout_hint,opacity_hint,button_shape_hint,virtual_keyboard_hide_delay_hint,update_keyboard_not_pressed_button_label_color,update_keyboard_not_pressed_button_background_color,update_keyboard_pressed_button_label_color,update_keyboard_outline_color" />
 
             <!-- Key colors -->
             <!-- Keyboard settings -->
@@ -954,7 +955,7 @@
 
         <!-- System Properties -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/system_properties_config_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -963,7 +964,7 @@
             app:elevation="2dp">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/system_properties_title"
                 style="@style/ConfigTitleTextStyle"
                 android:text="@string/PREF_SYS_PROPS"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -971,16 +972,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/btEncoding"
+                android:id="@+id/update_encoding"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:layout_margin="4dp"
                 android:text="@string/pref_encoding_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toBottomOf="@id/system_properties_title" />
 
             <EditText
-                android:id="@+id/tfSystemProperties"
+                android:id="@+id/system_properties"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -990,7 +991,7 @@
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btEncoding"
+                app:layout_constraintTop_toBottomOf="@+id/update_encoding"
                 tools:ignore="UnusedAttribute" />
 
         </androidx.constraintlayout.widget.ConstraintLayout><!-- System Properties -->

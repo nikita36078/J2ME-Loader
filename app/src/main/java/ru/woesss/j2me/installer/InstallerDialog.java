@@ -27,8 +27,6 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -48,6 +46,7 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.databinding.DialogInstallerBinding;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
@@ -56,14 +55,14 @@ public class InstallerDialog extends DialogFragment {
 	private static final String ARG_ID = "InstallerDialog.id";
 	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-	private TextView tvStatus;
-	private ProgressBar progress;
 	private AppRepository appRepository;
 	private Button btnOk;
 	private Button btnClose;
 	private Button btnRun;
 	private AppInstaller installer;
 	private AlertDialog mDialog;
+
+	private DialogInstallerBinding binding;
 
 	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
 			FileUtils.getFilePicker(),
@@ -109,14 +108,10 @@ public class InstallerDialog extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-		LayoutInflater inflater = getLayoutInflater();
-		@SuppressLint("InflateParams")
-		View view = inflater.inflate(R.layout.fragment_installer, null);
-		tvStatus = view.findViewById(R.id.tvStatus);
-		progress = view.findViewById(R.id.progress);
+		binding = DialogInstallerBinding.inflate(LayoutInflater.from(getContext()));
 		mDialog = new AlertDialog.Builder(requireActivity(), getTheme())
 				.setIcon(R.mipmap.ic_launcher)
-				.setView(view)
+				.setView(binding.getRoot())
 				.setTitle("MIDlet installer")
 				.setMessage("")
 				.setCancelable(false)
@@ -125,6 +120,12 @@ public class InstallerDialog extends DialogFragment {
 				.setNeutralButton(R.string.START_CMD, null)
 				.create();
 		return mDialog;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		binding = null;
 	}
 
 	@Override
@@ -194,13 +195,13 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	private void hideProgress() {
-		progress.setVisibility(View.GONE);
-		tvStatus.setVisibility(View.GONE);
+		binding.installationProgress.setVisibility(View.GONE);
+		binding.installationStatus.setVisibility(View.GONE);
 	}
 
 	private void showProgress() {
-		progress.setVisibility(View.VISIBLE);
-		tvStatus.setVisibility(View.VISIBLE);
+		binding.installationProgress.setVisibility(View.VISIBLE);
+		binding.installationStatus.setVisibility(View.VISIBLE);
 	}
 
 	private void hideButtons() {
@@ -218,7 +219,7 @@ public class InstallerDialog extends DialogFragment {
 		Descriptor nd = installer.getNewDescriptor();
 		SpannableStringBuilder info = nd.getInfo(requireActivity());
 		mDialog.setMessage(info);
-		tvStatus.setText(R.string.converting_wait);
+		binding.installationStatus.setText(R.string.converting_wait);
 		showProgress();
 		hideButtons();
 		Disposable disposable = Single.create(installer::install)
@@ -252,8 +253,8 @@ public class InstallerDialog extends DialogFragment {
 			return;
 		}
 		if (status == AppInstaller.STATUS_SUCCESS) {
-			progress.setVisibility(View.GONE);
-			tvStatus.setText(getString(R.string.install_done));
+			binding.installationProgress.setVisibility(View.GONE);
+			binding.installationStatus.setText(getString(R.string.install_done));
 			AppItem app = installer.getExistsApp();
 			Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 			if (drawable != null) mDialog.setIcon(drawable);
