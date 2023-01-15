@@ -22,8 +22,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import ru.playsoftware.j2meloader.R;
-
 @SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
 

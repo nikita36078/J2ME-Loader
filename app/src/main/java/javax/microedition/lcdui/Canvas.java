@@ -985,7 +985,7 @@ public abstract class Canvas extends Displayable {
 
 		public ViewCallbacks(View view) {
 			mView = view;
-			overlayView = ContextHolder.getActivity().findViewById(R.id.vOverlay);
+			overlayView = ContextHolder.getActivity().binding.overlayView;
 		}
 
 		@Override
@@ -1227,7 +1227,7 @@ public abstract class Canvas extends Displayable {
 		private SoftBar() {
 			super(Canvas.this);
 			MicroActivity activity = ContextHolder.getActivity();
-			this.overlayView = activity.findViewById(R.id.vOverlay);
+			this.overlayView = activity.binding.overlayView;
 			DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
 			padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
 			textColor = ContextCompat.getColor(activity, R.color.accent);

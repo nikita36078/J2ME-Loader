@@ -25,13 +25,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.databinding.ListRowJarBinding;
 
 public class AppsListAdapter extends BaseAdapter implements Filterable {
 
@@ -56,12 +55,13 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	}
 
 	@Override
-	public View getView(int position, View view, ViewGroup viewGroup) {
+	public View getView(int position, View view, ViewGroup parent) {
 		ViewHolder holder;
 		if (view == null) {
-			LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-			view = layoutInflater.inflate(R.layout.list_row_jar, viewGroup, false);
-			holder = new ViewHolder(view);
+			ListRowJarBinding binding = ListRowJarBinding.inflate(
+					LayoutInflater.from(parent.getContext()), parent, false);
+			view = binding.getRoot();
+			holder = new ViewHolder(binding);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -71,13 +71,13 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 		Drawable icon = Drawable.createFromPath(item.getImagePathExt());
 		if (icon != null) {
 			icon.setFilterBitmap(false);
-			holder.icon.setImageDrawable(icon);
+			holder.binding.icon.setImageDrawable(icon);
 		} else {
-			holder.icon.setImageResource(R.mipmap.ic_launcher);
+			holder.binding.icon.setImageResource(R.mipmap.ic_launcher);
 		}
-		holder.name.setText(item.getTitle());
-		holder.author.setText(item.getAuthor());
-		holder.version.setText(item.getVersion());
+		holder.binding.name.setText(item.getTitle());
+		holder.binding.author.setText(item.getAuthor());
+		holder.binding.appVersion.setText(item.getVersion());
 
 		return view;
 	}
@@ -93,16 +93,12 @@ public class AppsListAdapter extends BaseAdapter implements Filterable {
 	}
 
 	private static class ViewHolder {
-		ImageView icon;
-		TextView name;
-		TextView author;
-		TextView version;
+		ListRowJarBinding binding;
 
-		private ViewHolder(View rootView) {
-			icon = rootView.findViewById(R.id.list_image);
-			name = rootView.findViewById(R.id.list_title);
-			author = rootView.findViewById(R.id.list_author);
-			version = rootView.findViewById(R.id.list_version);
+		// todo неясно, может быть здесь стоит binding очищать на этапе
+		// ondestroy/ondestroyview где используется этот класс
+		private ViewHolder(ListRowJarBinding binding) {
+			this.binding = binding;
 		}
 	}
 
