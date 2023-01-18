@@ -122,11 +122,17 @@ public class AffineTrans {
 
 	@Deprecated
 	public final void multiply(AffineTrans a) {
+		if (a == null) {
+			throw new NullPointerException();
+		}
 		mulA2(this, a);
 	}
 
 	@Deprecated
 	public final void multiply(AffineTrans a1, AffineTrans a2) {
+		if (a1 == null || a2 == null) {
+			throw new NullPointerException();
+		}
 		mulA2(a1, a2);
 	}
 

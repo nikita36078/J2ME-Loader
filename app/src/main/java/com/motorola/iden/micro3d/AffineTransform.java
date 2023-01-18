@@ -119,6 +119,10 @@ public class AffineTransform {
 	}
 
 	public void normalize() {
+		if ((m00 & m01 & m02 & m10 & m11 & m12 & m20 & m21 & m22) == 0) {
+			return;
+		}
+
 		Vector3D fv = new Vector3D(this.m00, this.m10, this.m20);
 		fv.normalize();
 		this.m00 = fv.x;

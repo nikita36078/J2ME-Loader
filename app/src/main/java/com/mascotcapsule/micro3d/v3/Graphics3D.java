@@ -109,7 +109,7 @@ public class Graphics3D {
 
 		RenderProxy.getViewTrans(layout.affine, render.getViewMatrix(), 0);
 		RenderProxy.setTextureArray(render, textures);
-		RenderProxy.setAffineArray(render, layout);
+		RenderProxy.setAffineArray(render, layout.affineArray);
 		render.setCenter(layout.centerX + x, layout.centerY + y);
 		RenderProxy.setProjection(render, layout);
 		RenderProxy.setEffects(render, effect);
@@ -129,7 +129,7 @@ public class Graphics3D {
 		}
 
 		RenderProxy.getViewTrans(layout.affine, render.getViewMatrix(), 0);
-		RenderProxy.setAffineArray(render, layout);
+		RenderProxy.setAffineArray(render, layout.affineArray);
 		render.setCenter(layout.centerX + x, layout.centerY + y);
 		RenderProxy.setProjection(render, layout);
 		RenderProxy.setEffects(render, effect);

@@ -131,13 +131,12 @@ public class RenderProxy {
 		}
 	}
 
-	static void setAffineArray(Render render, FigureLayout layout) {
-		AffineTrans[] jAffines = layout.affineArray;
-		if (jAffines != null) {
-			int len = jAffines.length;
+	static void setAffineArray(Render render, AffineTrans[] affineArray) {
+		if (affineArray != null) {
+			int len = affineArray.length;
 			float[] transArray = new float[len * 12];
 			for (int i = 0; i < len; i++) {
-				getViewTrans(jAffines[i], transArray, i);
+				getViewTrans(affineArray[i], transArray, i);
 			}
 			render.setViewTransArray(transArray);
 		}
