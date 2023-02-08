@@ -21,7 +21,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tvShaderSettingName"
+        android:id="@+id/shader_setting_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
@@ -33,7 +33,7 @@
         tools:text="ShaderSetting1:" />
 
     <SeekBar
-        android:id="@+id/sbShaderSettingValue"
+        android:id="@+id/shader_setting_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

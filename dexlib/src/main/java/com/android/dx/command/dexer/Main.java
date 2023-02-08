@@ -465,13 +465,6 @@ public class Main {
             checkClassName(name);
         }
 
-        // skip classes implemented in the emulator to avoid duplication (verification errors)
-        try {
-            Class.forName(name.substring(0, name.length() - 6).replace('/', '.'));
-            return true;
-        } catch (ClassNotFoundException ignored) {
-        }
-
         try {
             // modify byte-code with ASM-java
             bytes = AndroidProducer.instrument(bytes, name);

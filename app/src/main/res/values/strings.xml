@@ -205,6 +205,10 @@
     <string name="pref_emulator_dir">Working directory</string>
     <string name="pref_screenshot_summary">Disable scaling and filtering for screenshots</string>
     <string name="pref_screenshot_title">Raw screenshot</string>
+    <string name="pref_category_experimental">Experimental/temporary options</string>
+    <string name="pref_mascot_summary">Show message when using</string>
+    <string name="pref_mascot_title">Detect Mascot Capsule 3D</string>
+
     <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>
     <string name="_MINUS_ONE" translatable="false">-1</string>

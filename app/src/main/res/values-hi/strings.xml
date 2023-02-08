@@ -9,6 +9,7 @@
     <string name="licenses">लाइसेंस</string>
     <string name="profiles">प्रोफाइल</string>
     <string name="save_log">लॉग सहेजें</string>
+    <string name="about_message">यह ऐप आपको Android पर J2ME ऐप्स और गेम लॉन्च करने की अनुमति देता है। यह अधिकांश 2D और 3D गेम (मैस्कॉट कैप्सूल 3D वाले सहित) का समर्थन करता है।&lt;BR&gt;</string>
     <string name="help_message">&#8226;कुछ मामलों में फ़िल्टरिंग सक्षम करना प्रदर्शन को कम कर सकता है। यदि गेम बहुत धीमा है तो इस विकल्प को अक्षम करें&lt;BR&gt;&#8226;इमेज फ़्लिकरिंग मुद्दों को \"तत्काल प्रसंस्करण मोड\" विकल्प को सक्षम करके ठीक किया जा सकता है।</string>
     <string name="author">लेखक: </string>
     <string name="version">संस्करण: </string>
@@ -152,8 +153,10 @@
     <string name="screenshot_saved">स्क्रीनशॉट को सहेज लिया गया है</string>
     <string name="log_saved">लॉग सहेजा गया है</string>
     <string name="action_keyboard_ime">कीबोर्ड (आईएमई)</string>
+    <string name="action_lock_orientation">लॉक स्क्रीन घुमाएँ</string>
     <string name="pref_vk_save_alert">कस्टम कीबोर्ड को वर्तमान से बदल दिया जाएगा\nसहेजें?</string>
     <string name="opt_save_screen_params">स्क्रीन पैराम सहेजें</string>
+    <string name="cmd_menu">मेन्यू</string>
     <string name="dismiss">खारिज करें</string>
     <string name="pref_theme_auto_battery">ऑटो, बैटरी सेवर द्वारा</string>
     <string name="pref_theme_auto_time">ऑटो, दिन के समय के अनुसार</string>
@@ -179,10 +182,14 @@
     <string name="pref_encoding_title">एन्कोडिंग</string>
     <string name="pref_default_settings">डिफ़ॉल्ट सेटिंग्स</string>
     <string name="pref_emulator_dir">कार्यकारी डाइरेक्टरी</string>
+    <string name="pref_screenshot_summary">स्क्रीनशॉट के लिए स्केलिंग और फ़िल्टरिंग अक्षम करें</string>
+    <string name="pref_screenshot_title">रॉ स्क्रीनशॉट</string>
     <string name="mapping_dialog_message">वर्तमान मानचित्रण: %1$s</string>
     <string name="mapping_dialog_key_not_specified">निर्दिष्ट नहीं है</string>
     <string name="mapping_dialog_title">कोई कि दबाएं</string>
     <string name="reset_mapping">रीसेट</string>
+    <string name="alert_map_menu">मेनू कुंजी (M) असाइन नहीं की गई है!\nइससे एमुलेटर विकल्पों तक पहुंचना असंभव हो सकता है</string>
+    <string name="save">सहेजें</string>
     <string name="error_name">नाम दर्ज!</string>
     <string name="set_as_default">डिफ़ॉल्ट रूप में स्थापित करें</string>
     <string name="edit">संपादित करें</string>
@@ -194,4 +201,5 @@
     <string name="error_name_exists">पहले से मौजूद है, अन्य नाम दर्ज करें</string>
     <string name="default_label">"%s (डिफ़ॉल्ट)"</string>
     <string name="not_saved_exists">पहले से ही मौजूद है</string>
+    <string name="alert_rewrite_profile">\"%1$s\" नाम की एक प्रोफ़ाइल पहले से मौजूद है।\nक्या आप इसे अधिलेखित करना चाहते हैं?</string>
 </resources>

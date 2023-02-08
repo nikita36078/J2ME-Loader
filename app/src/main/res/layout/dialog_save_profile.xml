@@ -41,14 +41,14 @@
             android:visibility="invisible" />
 
         <Button
-            android:id="@+id/btNegative"
+            android:id="@+id/negative_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?attr/buttonBarNegativeButtonStyle"
             android:text="@android:string/cancel" />
 
         <Button
-            android:id="@+id/btPositive"
+            android:id="@+id/positive_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?attr/buttonBarPositiveButtonStyle"

@@ -719,19 +719,31 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void pointerPressed(int pointer, float x, float y) {
-		if (pointer == 0) {
+		if (Display.isMultiTouchSupported()) {
+			Display.setPointerNumber(pointer);
+			pointerPressed(Math.round(x), Math.round(y));
+			Display.resetPointerNumber();
+		} else if (pointer == 0) {
 			pointerPressed(Math.round(x), Math.round(y));
 		}
 	}
 
 	public void pointerDragged(int pointer, float x, float y) {
-		if (pointer == 0) {
+		if (Display.isMultiTouchSupported()) {
+			Display.setPointerNumber(pointer);
+			pointerDragged(Math.round(x), Math.round(y));
+			Display.resetPointerNumber();
+		} else if (pointer == 0) {
 			pointerDragged(Math.round(x), Math.round(y));
 		}
 	}
 
 	public void pointerReleased(int pointer, float x, float y) {
-		if (pointer == 0) {
+		if (Display.isMultiTouchSupported()) {
+			Display.setPointerNumber(pointer);
+			pointerReleased(Math.round(x), Math.round(y));
+			Display.resetPointerNumber();
+		} else if (pointer == 0) {
 			pointerReleased(Math.round(x), Math.round(y));
 		}
 	}
@@ -986,7 +998,7 @@ public abstract class Canvas extends Displayable {
 
 		public ViewCallbacks(View view) {
 			mView = view;
-			overlayView = ContextHolder.getActivity().findViewById(R.id.vOverlay);
+			overlayView = ContextHolder.getActivity().binding.overlayView;
 		}
 
 		@Override
@@ -1056,10 +1068,10 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.pointerPressed(id, x, y);
 					}
-					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+					if (touchInput && virtualScreen.contains(x, y)) {
 						int cX = Math.round(convertPointerX(x));
 						int cY = Math.round(convertPointerY(y));
-						if(id < 20) {
+						if (id < 20) {
 							lastPointerPos[id][0] = cX;
 							lastPointerPos[id][1] = cY;
 						}
@@ -1081,7 +1093,7 @@ public abstract class Canvas extends Displayable {
 							if (overlay != null) {
 								overlay.pointerDragged(id, x, y);
 							}
-							if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+							if (touchInput && virtualScreen.contains(x, y)) {
 								int cX = Math.round(convertPointerX(x));
 								int cY = Math.round(convertPointerY(y));
 								if (id < 20) {
@@ -1108,7 +1120,7 @@ public abstract class Canvas extends Displayable {
 						if (overlay != null) {
 							overlay.pointerDragged(id, x, y);
 						}
-						if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+						if (touchInput && virtualScreen.contains(x, y)) {
 							int cX = Math.round(convertPointerX(x));
 							int cY = Math.round(convertPointerY(y));
 							if (id < 20) {
@@ -1260,7 +1272,7 @@ public abstract class Canvas extends Displayable {
 		private SoftBar() {
 			super(Canvas.this);
 			MicroActivity activity = ContextHolder.getActivity();
-			this.overlayView = activity.findViewById(R.id.vOverlay);
+			this.overlayView = activity.binding.overlayView;
 			DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
 			padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
 			textColor = ContextCompat.getColor(activity, R.color.accent);

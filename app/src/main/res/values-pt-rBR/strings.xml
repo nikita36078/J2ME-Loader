@@ -9,6 +9,7 @@
     <string name="licenses">Licenças</string>
     <string name="profiles">Perfis</string>
     <string name="save_log">Salvar registro</string>
+    <string name="about_message">Este aplicativo permite iniciar aplicativos e jogos J2ME no Android. Ele suporta a maioria dos jogos 2D e 3D (incluindo Mascot Capsule 3D).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Ativando a filtragem em alguns casos pode reduzir muito a performance. Desative esta opção se o jogo estiver muito lento.&lt;BR&gt;&#8226; Problemas de exibição de imagens podem ser corrigidos ao ativar a opção \"Modo de processamento imediato\".</string>
     <string name="author">Autor: </string>
     <string name="version">Versão: </string>
@@ -38,7 +39,7 @@
     <string name="midlet_vendor"><b>Fabricante: </b></string>
     <string name="midlet_version"><b>Versão: </b></string>
     <string name="converting_wait">Convertendo JAR...</string>
-    <string name="install">Instalar</string>
+    <string name="install">instalar</string>
     <string name="install_done">Aplicativo instalado com sucesso!</string>
     <string name="install_jar_non_matched_jad">Este aplicativo é diferente do descrito em JAD.\nIgnorar JAD e instalar mesmo assim?</string>
     <string name="install_jar_needed">Selecione o arquivo JAR</string>
@@ -154,7 +155,7 @@
     <string name="action_keyboard_ime">Teclado (IME)</string>
     <string name="action_lock_orientation">Bloquear rotação de tela</string>
     <string name="pref_vk_save_alert">O Teclado Personalizado será substituído por\nSalvar?</string>
-    <string name="opt_save_screen_params">Salvar parâmetros de tela</string>
+    <string name="opt_save_screen_params">salvar parâmetros de tela</string>
     <string name="cmd_menu">Menu</string>
     <string name="dismiss">Descartar</string>
     <string name="pref_theme_auto_battery">Automático, por Economia de Bateria</string>
@@ -184,7 +185,7 @@
     <string name="pref_screenshot_summary">Desativar escala e filtragem para capturas de tela</string>
     <string name="pref_screenshot_title">Captura de tela em raw</string>
     <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
-    <string name="mapping_dialog_key_not_specified">Não especificado</string>
+    <string name="mapping_dialog_key_not_specified">não especificado</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="reset_mapping">Redefinir</string>
     <string name="alert_map_menu">Tecla de menu (M) não está atribuída!\nIsto pode impossibilitar o acesso às opções do emulador</string>
