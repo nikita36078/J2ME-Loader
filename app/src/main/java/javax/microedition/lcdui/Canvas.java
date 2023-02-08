@@ -160,6 +160,7 @@ public abstract class Canvas extends Displayable {
 	private FpsCounter fpsCounter;
 	private boolean skipLeftSoft;
 	private boolean skipRightSoft;
+	private int[][] lastPointerPos = new int[20][2];
 
 	protected Canvas() {
 		this(forceFullscreen);
@@ -1068,11 +1069,17 @@ public abstract class Canvas extends Displayable {
 						overlay.pointerPressed(id, x, y);
 					}
 					if (touchInput && virtualScreen.contains(x, y)) {
+						int cX = Math.round(convertPointerX(x));
+						int cY = Math.round(convertPointerY(y));
+						if (id < 20) {
+							lastPointerPos[id][0] = cX;
+							lastPointerPos[id][1] = cY;
+						}
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 								CanvasEvent.POINTER_PRESSED,
 								id,
-								convertPointerX(x),
-								convertPointerY(y)));
+								cX,
+								cY));
 					}
 					break;
 				case MotionEvent.ACTION_MOVE:
@@ -1087,11 +1094,22 @@ public abstract class Canvas extends Displayable {
 								overlay.pointerDragged(id, x, y);
 							}
 							if (touchInput && virtualScreen.contains(x, y)) {
+								int cX = Math.round(convertPointerX(x));
+								int cY = Math.round(convertPointerY(y));
+								if (id < 20) {
+									int oX = lastPointerPos[id][0];
+									int oY = lastPointerPos[id][1];
+									if (oX == cX && oY == cY) {
+										continue;
+									}
+									lastPointerPos[id][0] = cX;
+									lastPointerPos[id][1] = cY;
+								}
 								Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 										CanvasEvent.POINTER_DRAGGED,
 										id,
-										convertPointerX(x),
-										convertPointerY(y)));
+										cX,
+										cY));
 							}
 						}
 					}
@@ -1103,11 +1121,22 @@ public abstract class Canvas extends Displayable {
 							overlay.pointerDragged(id, x, y);
 						}
 						if (touchInput && virtualScreen.contains(x, y)) {
+							int cX = Math.round(convertPointerX(x));
+							int cY = Math.round(convertPointerY(y));
+							if (id < 20) {
+								int oX = lastPointerPos[id][0];
+								int oY = lastPointerPos[id][1];
+								if (oX == cX && oY == cY) {
+									continue;
+								}
+								lastPointerPos[id][0] = cX;
+								lastPointerPos[id][1] = cY;
+							}
 							Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 									CanvasEvent.POINTER_DRAGGED,
 									id,
-									convertPointerX(x),
-									convertPointerY(y)));
+									cX,
+									cY));
 						}
 					}
 					break;
@@ -1124,11 +1153,15 @@ public abstract class Canvas extends Displayable {
 						overlay.pointerReleased(id, x, y);
 					}
 					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+						int cX = Math.round(convertPointerX(x));
+						int cY = Math.round(convertPointerY(y));
+						lastPointerPos[id][0] = cX;
+						lastPointerPos[id][1] = cY;
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 								CanvasEvent.POINTER_RELEASED,
 								id,
-								convertPointerX(x),
-								convertPointerY(y)));
+								cX,
+								cY));
 					}
 					break;
 				case MotionEvent.ACTION_CANCEL:
