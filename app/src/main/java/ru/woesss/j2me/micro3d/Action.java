@@ -53,7 +53,6 @@ class Action {
 			final float[] m = matrix;
 			switch (type) {
 				case 2: {
-					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// translate
@@ -87,7 +86,6 @@ class Action {
 					break;
 				}
 				case 3: {
-					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = translate.values[0].clone();
 
 					// translate (for all frames)
@@ -105,7 +103,6 @@ class Action {
 					break;
 				}
 				case 4: {
-					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// rotate
@@ -118,7 +115,6 @@ class Action {
 					break;
 				}
 				case 5: {
-					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// rotate
@@ -127,7 +123,6 @@ class Action {
 					break;
 				}
 				case 6: {
-					System.arraycopy(MathUtil.IDENTITY_AFFINE, 0, m, mtxOffset, 12);
 					float[] arr = new float[3];
 
 					// translate
@@ -157,57 +152,26 @@ class Action {
 		 * @param z Y coord of new z-axis
 		 */
 		private void rotate(float[] m, float x, float y, float z) {
-			if (x == 0.0f && y == 0.0f) {
-				if (z < 0.0f) {// reverse (rotate 180 degrees around x-axis)
-					m[mtxOffset + 5] = -1.0f;
-					m[mtxOffset + 10] = -1.0f;
-				} // else identity (no rotate)
-				return;
-			}
 			// normalize direction vector
 			float rld = 1.0f / (float) Math.sqrt(x * x + y * y + z * z);
 			x *= rld;
 			y *= rld;
 			z *= rld;
 
-			// compute rotate axis R = Z x Z' (x means "cross product")
-			float rx = -y; // 0*z - 1*y
-			float ry = x;  // 1*x - 0*z
-			// rz = 0.0f   // 0*y - 0*x (inlined)
-
-			// and normalize R
-			float rls = 1.0f / (float) Math.sqrt(rx * rx + ry * ry);
-			rx *= rls;
-			ry *= rls;
-
-			// cos = z (inlined)
-			// compute sin from cos
-			float sin = (float) Math.sqrt(1.0f - z * z);
-			if (1.0f == rx && 0.0f == ry) {
-				m[mtxOffset +  5] = z;
-				m[mtxOffset +  6] = -sin;
-				m[mtxOffset +  9] = sin;
-				m[mtxOffset + 10] = z;
-			} else if (0.0f == rx && 1.0f == ry) {
-				m[mtxOffset] = z;
-				m[mtxOffset +  2] = sin;
-				m[mtxOffset +  8] = -sin;
-				m[mtxOffset + 10] = z;
-			} else {
-				float nc = 1.0f - z;
-				float xy = rx * ry;
-				float xs = rx * sin;
-				float ys = ry * sin;
-				m[mtxOffset] = rx * rx * nc + z;
-				m[mtxOffset +  1] = xy * nc;
-				m[mtxOffset +  2] = ys;
-				m[mtxOffset +  4] = xy * nc;
-				m[mtxOffset +  5] = ry * ry * nc + z;
-				m[mtxOffset +  6] = -xs;
-				m[mtxOffset +  8] = -ys;
-				m[mtxOffset +  9] = xs;
-				m[mtxOffset + 10] = z;
-			}
+			float xx = x * x;
+			float yy = y * y;
+			float a = (1 - z) / (yy + xx);
+			float b = a * -(x * y);
+			int off = mtxOffset;
+			m[off     ] = z + yy * a;
+			m[off +  1] = b;
+			m[off +  2] = x;
+			m[off +  4] = b;
+			m[off +  5] = z + xx * a;
+			m[off +  6] = y;
+			m[off +  8] = -x;
+			m[off +  9] = -y;
+			m[off + 10] = z;
 		}
 
 		/**
@@ -215,22 +179,21 @@ class Action {
 		 * @param angle rotate angle in radians
 		 */
 		private void roll(float[] m, float angle) {
-			if (angle == 0.0f)
-				return;
 			float s = (float) Math.sin(angle);
 			float c = (float) Math.cos(angle);
-			float m00 = m[mtxOffset];
-			float m10 = m[mtxOffset + 4];
-			float m20 = m[mtxOffset + 8];
-			float m01 = m[mtxOffset + 1];
-			float m11 = m[mtxOffset + 5];
-			float m21 = m[mtxOffset + 9];
-			m[mtxOffset    ] = m00 * c + m01 * s;
-			m[mtxOffset + 4] = m10 * c + m11 * s;
-			m[mtxOffset + 8] = m20 * c + m21 * s;
-			m[mtxOffset + 1] = m01 * c - m00 * s;
-			m[mtxOffset + 5] = m11 * c - m10 * s;
-			m[mtxOffset + 9] = m21 * c - m20 * s;
+			int off = mtxOffset;
+			float m00 = m[off    ];
+			float m01 = m[off + 1];
+			float m10 = m[off + 4];
+			float m11 = m[off + 5];
+			float m20 = m[off + 8];
+			float m21 = m[off + 9];
+			m[off    ] = m00 * c + m01 * s;
+			m[off + 1] = m01 * c - m00 * s;
+			m[off + 4] = m10 * c + m11 * s;
+			m[off + 5] = m11 * c - m10 * s;
+			m[off + 8] = m20 * c + m21 * s;
+			m[off + 9] = m21 * c - m20 * s;
 		}
 	}
 
