@@ -46,11 +46,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,10 +62,15 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.widget.TextViewCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,9 +96,9 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
-public class AppsListFragment extends ListFragment {
+public class AppsListFragment extends Fragment {
 	private static final String TAG = AppsListFragment.class.getSimpleName();
-	private final AppsListAdapter adapter = new AppsListAdapter();
+	private final AppsListAdapter adapter = new AppsListAdapter(this);
 	private Uri appUri;
 	private SharedPreferences preferences;
 	private AppRepository appRepository;
@@ -121,8 +124,9 @@ public class AppsListFragment extends ListFragment {
 		Bundle args = requireArguments();
 		appUri = args.getParcelable(KEY_APP_URI);
 		args.remove(KEY_APP_URI);
-		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
-		AppListModel appListModel = new ViewModelProvider(requireActivity()).get(AppListModel.class);
+		FragmentActivity activity = requireActivity();
+		preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+		AppListModel appListModel = new ViewModelProvider(activity).get(AppListModel.class);
 		appRepository = appListModel.getAppRepository();
 		appRepository.observeErrors(this, this::alertDbError);
 		appRepository.observeApps(this, this::onDbUpdated);
@@ -137,9 +141,20 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		registerForContextMenu(getListView());
 		setHasOptionsMenu(true);
-		setListAdapter(adapter);
+
+		View emptyView = view.findViewById(android.R.id.empty);
+		adapter.setEmptyView(emptyView);
+		adapter.setLayout(AppsListAdapter.LAYOUT_TYPE_GRID);
+		RecyclerView appListView = view.findViewById(android.R.id.list);
+		GridLayoutManager layoutManager = new GridLayoutManager(requireContext(),
+				getResources().getConfiguration().screenWidthDp / 90,
+				LinearLayoutManager.VERTICAL,
+				false);
+		requireActivity().addOnConfigurationChangedListener(configuration ->
+				layoutManager.setSpanCount(configuration.screenWidthDp / 90));
+		appListView.setLayoutManager(layoutManager);
+		appListView.setAdapter(adapter);
 		binding.floatingActionButton.setOnClickListener(v -> {
 			String path = preferences.getString(PREF_LAST_PATH, null);
 			if (path == null) {
@@ -224,23 +239,15 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
-		AppItem item = adapter.getItem(position);
-		Config.startApp(requireActivity(), item.getTitle(), item.getPathExt(), false);
-	}
-
-	@Override
 	public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
 									ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = requireActivity().getMenuInflater();
 		inflater.inflate(R.menu.context_main, menu);
 		if (!ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())) {
 			menu.findItem(R.id.action_context_shortcut).setVisible(false);
 		}
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		int index = info.position;
-		AppItem appItem = adapter.getItem(index);
+
+		AppItem appItem = ((AppItemLayout.AppItemMenuInfo) menuInfo).appItem;
 		if (!new File(appItem.getPathExt() + Config.MIDLET_RES_FILE).exists()) {
 			menu.findItem(R.id.action_context_reinstall).setVisible(false);
 		}
@@ -248,8 +255,7 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		AppItem appItem = adapter.getItem(info.position);
+		AppItem appItem = ((AppItemLayout.AppItemMenuInfo) item.getMenuInfo()).appItem;
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_context_shortcut) {
 			requestAddShortcut(appItem);
@@ -311,19 +317,19 @@ public class AppsListFragment extends ListFragment {
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
 		searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
-				searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-					@Override
-					public boolean onQueryTextSubmit(String query) {
-						emitter.onNext(query);
-						return true;
-					}
+						searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+							@Override
+							public boolean onQueryTextSubmit(String query) {
+								emitter.onNext(query);
+								return true;
+							}
 
-					@Override
-					public boolean onQueryTextChange(String newText) {
-						emitter.onNext(newText);
-						return true;
-					}
-				})).debounce(300, TimeUnit.MILLISECONDS)
+							@Override
+							public boolean onQueryTextChange(String newText) {
+								emitter.onNext(newText);
+								return true;
+							}
+						})).debounce(300, TimeUnit.MILLISECONDS)
 				.map(String::toLowerCase)
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())

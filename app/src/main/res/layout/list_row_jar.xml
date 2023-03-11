@@ -1,14 +1,18 @@
 <?xml version= "1.0" encoding = "utf-8" ?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ru.playsoftware.j2meloader.applist.AppItemLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:background="?android:selectableItemBackground"
+    android:padding="10dp"
+    android:focusable="true"
+    tools:showIn="@layout/fragment_apps_list">
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/list_image"
         android:layout_width="36dip"
         android:layout_height="36dip"
         android:layout_marginEnd="10dp"
@@ -23,7 +27,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/list_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearance"
@@ -40,7 +44,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/author"
+                android:id="@+id/list_author"
                 style="@style/TextViewVendor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -52,7 +56,7 @@
                 tools:text="Example MIDlet Vendor Ltd." />
 
             <TextView
-                android:id="@+id/app_version"
+                android:id="@+id/list_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:textAppearance"
@@ -62,4 +66,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</ru.playsoftware.j2meloader.applist.AppItemLayout>

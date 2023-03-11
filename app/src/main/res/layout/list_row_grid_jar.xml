@@ -1,0 +1,30 @@
+<?xml version= "1.0" encoding = "utf-8" ?>
+<ru.playsoftware.j2meloader.applist.AppItemLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="?android:selectableItemBackground"
+    android:padding="10dp"
+    tools:showIn="@layout/fragment_apps_list">
+
+    <ImageView
+        android:id="@+id/list_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerCrop"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearance"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="Example MIDlet Name" />
+
+</ru.playsoftware.j2meloader.applist.AppItemLayout>
