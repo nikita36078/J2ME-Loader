@@ -43,6 +43,6 @@ If you like the project, please consider making a donation to support developmen
  - Litecoin (LTC): `ltc1q8r6e6lf60258vgsyw7ncjxn8pdcfg6z5w0pjjs`
 
 ## License
-> Copyright 2017-2022 Nikita Shakarun.
+> Copyright 2017-2023 Nikita Shakarun.
 > Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)

@@ -21,7 +21,7 @@
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2022 Nikita Shakarun</string>
+    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2023 Nikita Shakarun</string>
     <string name="author">Author: </string>
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
