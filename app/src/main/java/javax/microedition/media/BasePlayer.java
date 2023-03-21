@@ -373,7 +373,7 @@ public class BasePlayer implements Player, VolumeControl, PanControl {
 	public void doRealize() throws IOException {
 	}
 
-	public void doPrefetch() {
+	public void doPrefetch()  throws IOException {
 	}
 
 	public void doStart() {
