@@ -15,9 +15,6 @@ android {
         targetSdk TARGET_SDK
         versionCode 97
         versionName "1.7.8"
-        ndk {
-            abiFilters 'x86', 'armeabi-v7a'
-        }
         resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,9 +44,6 @@ android {
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-play"
-            ndk {
-                abiFilters 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-            }
         }
         open {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
