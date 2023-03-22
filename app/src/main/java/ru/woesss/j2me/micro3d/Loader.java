@@ -904,17 +904,17 @@ class Loader {
 	}
 
 	private short readShort() throws IOException {
-		if (pos + 1 >= length) throw new EOFException();
+		if (pos + 2 > length) throw new EOFException();
 		return (short) (data[pos++] & 0xff | data[pos++] << 8);
 	}
 
 	private int readUShort() throws IOException {
-		if (pos + 1 >= length) throw new EOFException();
+		if (pos + 2 > length) throw new EOFException();
 		return data[pos++] & 0xff | (data[pos++] & 0xff) << 8;
 	}
 
 	private int readInt() throws IOException {
-		if (pos + 3 >= length) throw new EOFException();
+		if (pos + 4 > length) throw new EOFException();
 		return data[pos++] & 0xff | (data[pos++] & 0xff) << 8
 				| (data[pos++] & 0xff) << 16 | data[pos++] << 24;
 	}
@@ -950,7 +950,7 @@ class Loader {
 	}
 
 	private void skip(int n) throws EOFException {
-		if (pos + n >= length) throw new EOFException();
+		if (pos + n > length) throw new EOFException();
 		pos += n;
 	}
 }
