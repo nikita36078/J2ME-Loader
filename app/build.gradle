@@ -13,11 +13,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdk MIN_SDK
         targetSdk TARGET_SDK
-        versionCode 96
-        versionName "1.7.7"
-        ndk {
-            abiFilters 'x86', 'armeabi-v7a'
-        }
+        versionCode 97
+        versionName "1.7.8"
         resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,9 +44,6 @@ android {
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-play"
-            ndk {
-                abiFilters 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-            }
         }
         open {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
@@ -112,6 +106,10 @@ android {
             outputFileName = "${baseName}${versionName}-${dirName}-${buildType.name}.apk"
                     .replaceAll('--+', '-').replaceAll(' +', '_')
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 

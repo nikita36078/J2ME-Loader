@@ -16,36 +16,36 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import android.annotation.SuppressLint;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_CONFIG_PATH;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.databinding.DialogLoadProfileBinding;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
-
-public class LoadProfileAlert extends DialogFragment {
+public class LoadProfileDialog extends DialogFragment {
 	private ArrayList<Profile> profiles;
-	private CheckBox cbConfig;
-	private CheckBox cbKeyboard;
 
-	static LoadProfileAlert newInstance(String parent) {
-		LoadProfileAlert fragment = new LoadProfileAlert();
+	DialogLoadProfileBinding binding;
+
+	static LoadProfileDialog newInstance(String parent) {
+		LoadProfileDialog fragment = new LoadProfileDialog();
 		Bundle args = new Bundle();
 		args.putString(KEY_CONFIG_PATH, parent);
 		fragment.setArguments(args);
@@ -63,28 +63,24 @@ public class LoadProfileAlert extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		String configPath = requireArguments().getString(KEY_CONFIG_PATH);
-		@SuppressLint("InflateParams")
-		View v = getLayoutInflater().inflate(R.layout.dialog_load_profile, null);
-		ListView listView = v.findViewById(android.R.id.list);
+		binding = DialogLoadProfileBinding.inflate(LayoutInflater.from(getContext()));
 		ArrayAdapter<Profile> adapter = new ArrayAdapter<>(requireActivity(),
 				android.R.layout.simple_list_item_single_choice, profiles);
-		listView.setOnItemClickListener(this::onItemClick);
-		listView.setAdapter(adapter);
-		cbConfig = v.findViewById(R.id.cbConfig);
-		cbKeyboard = v.findViewById(R.id.cbKeyboard);
+		binding.list.setOnItemClickListener(this::onItemClick);
+		binding.list.setAdapter(adapter);
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 		builder.setTitle(R.string.load_profile)
-				.setView(v)
+				.setView(binding.getRoot())
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> {
 					try {
-						final int pos = listView.getCheckedItemPosition();
-						final boolean configChecked = cbConfig.isChecked();
-						final boolean vkChecked = cbKeyboard.isChecked();
+						final int pos = binding.list.getCheckedItemPosition();
+						final boolean configChecked = binding.cbConfig.isChecked();
+						final boolean vkChecked = binding.cbKeyboard.isChecked();
 						if (pos == -1) {
 							Toast.makeText(requireActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 							return;
 						}
-						ProfilesManager.load((Profile) listView.getItemAtPosition(pos), configPath,
+						ProfilesManager.load((Profile) binding.list.getItemAtPosition(pos), configPath,
 								configChecked, vkChecked);
 						((ConfigActivity) requireActivity()).loadParams(true);
 					} catch (Exception e) {
@@ -100,8 +96,8 @@ public class LoadProfileAlert extends DialogFragment {
 			for (int i = 0, size = profiles.size(); i < size; i++) {
 				Profile profile = profiles.get(i);
 				if (profile.getName().equals(def)) {
-					listView.setItemChecked(i, true);
-					onItemClick(listView, null, i, i);
+					binding.list.setItemChecked(i, true);
+					onItemClick(binding.list, null, i, i);
 					break;
 				}
 			}
@@ -113,10 +109,15 @@ public class LoadProfileAlert extends DialogFragment {
 		final Profile profile = profiles.get(pos);
 		final boolean hasConfig = profile.hasConfig() || profile.hasOldConfig();
 		final boolean hasVk = profile.hasKeyLayout();
-		cbConfig.setEnabled(hasConfig && hasVk);
-		cbConfig.setChecked(hasConfig);
-		cbKeyboard.setEnabled(hasVk && hasConfig);
-		cbKeyboard.setChecked(hasVk);
+		binding.cbConfig.setEnabled(hasConfig && hasVk);
+		binding.cbConfig.setChecked(hasConfig);
+		binding.cbKeyboard.setEnabled(hasVk && hasConfig);
+		binding.cbKeyboard.setChecked(hasVk);
 	}
 
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		binding = null;
+	}
 }

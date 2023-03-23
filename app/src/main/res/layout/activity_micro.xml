@@ -32,7 +32,7 @@
 
     <!-- MUST be transparent and math root container -->
     <javax.microedition.lcdui.overlay.OverlayView
-        android:id="@+id/vOverlay"
+        android:id="@+id/overlay_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

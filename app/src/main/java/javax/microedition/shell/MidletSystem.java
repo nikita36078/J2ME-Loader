@@ -8,6 +8,8 @@ import androidx.annotation.Keep;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.microedition.lcdui.Display;
+
 /** {@link java.lang.System} Delegate for Midlet */
 @Keep
 public final class MidletSystem {
@@ -20,6 +22,9 @@ public final class MidletSystem {
 
     public static String getProperty(String key) {
         String value = PROPERTY.get(key);
+        if (Display.isMultiTouchSupported() && key.equals("com.nokia.pointer.number")) {
+            return Display.getDisplay(null).getPointerNumber();
+        }
         if (TextUtils.isEmpty(value)) value = System.getProperty(key);
         return value;
     }

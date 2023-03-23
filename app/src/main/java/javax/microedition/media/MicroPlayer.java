@@ -54,7 +54,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		player.setDataSource(source.getLocator());
 	}
 
-	public void doPrefetch() {
+	public void doPrefetch() throws IOException {
 		MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 		retriever.setDataSource(source.getLocator());
 		metadata.updateMetaData(retriever);

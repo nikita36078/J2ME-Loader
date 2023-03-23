@@ -45,7 +45,7 @@ import ru.playsoftware.j2meloader.base.BaseActivity;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
-public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
+public class ProfilesActivity extends BaseActivity implements EditNameDialog.Callback, AdapterView.OnItemClickListener {
 	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
 	private final ActivityResultLauncher<String> editProfileLauncher = registerForActivityResult(
@@ -115,7 +115,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 			finish();
 			return true;
 		} else if (itemId == R.id.add) {
-			EditNameAlert.newInstance(getString(R.string.enter_name), -1)
+			EditNameDialog.newInstance(getString(R.string.enter_name), -1, null)
 					.show(getSupportFragmentManager(), "alert_create_profile");
 			return true;
 		}
@@ -151,7 +151,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 			startActivity(intent);
 			return true;
 		} else if (itemId == R.id.action_context_rename) {
-			EditNameAlert.newInstance(getString(R.string.enter_new_name), index)
+			EditNameDialog.newInstance(getString(R.string.enter_new_name), index, profile.getName())
 					.show(getSupportFragmentManager(), "alert_rename_profile");
 		} else if (itemId == R.id.action_context_delete) {
 			profile.delete();

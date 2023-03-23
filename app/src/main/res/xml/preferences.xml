@@ -47,4 +47,12 @@
         android:icon="@drawable/ic_setting_folder"
         android:title="@string/pref_emulator_dir"
         tools:summary="/sdcard/J2ME-Loader" />
+    <PreferenceCategory android:title="@string/pref_category_experimental">
+        <SwitchPreferenceCompat
+            android:key="micro3d_using_message"
+            app:defaultValue="false"
+            android:icon="@drawable/ic_setting_message"
+            android:title="@string/pref_mascot_title"
+            android:summary="@string/pref_mascot_summary" />
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
