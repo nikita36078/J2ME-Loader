@@ -62,9 +62,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.microedition.shell.MicroActivity;
@@ -95,6 +97,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private ArrayAdapter<ShaderInfo> spShaderAdapter;
 	private String workDir;
 	private boolean needShow;
+	private ArrayAdapter<String> spSoundBankAdapter;
 
 	private ActivityConfigBinding binding;
 
@@ -268,7 +271,29 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				new ColorTextWatcher(binding.keyboardPressedButtonBackgroundColorHex));
 		binding.keyboardOutlineColorHex.addTextChangedListener(
 				new ColorTextWatcher(binding.keyboardOutlineColorHex));
-	}
+        initSoundBankSpinner();
+    }
+
+    private void initSoundBankSpinner() {
+        File dir = new File(workDir + "/soundbank");
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        List<String> infos = new ArrayList<>();
+        spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, infos);
+        spSoundBankAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		binding.soundbankSelector.setAdapter(spSoundBankAdapter);
+        String[] files = dir.list((d, n) -> new File(d, n).isFile());
+        if (files != null) {
+            infos.addAll(Arrays.asList(files));
+            Collections.sort(infos);
+        }
+        infos.add(0, "Android built-in soundfont");
+        spSoundBankAdapter.notifyDataSetChanged();
+        int position = infos.indexOf(params.soundBank);
+        binding.soundbankSelector.setSelection(Math.max(position, 0));
+    }
 
 	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
 		if (isChecked) {
@@ -407,10 +432,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-
 			}
 		});
-
 	}
 
 	private void showCharsetPicker(View v) {
@@ -695,6 +718,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 						binding.keyboardOutlineColorHex.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
+			params.soundBank = binding.soundbankSelector.getSelectedItemPosition() > 0 ? (String)
+					binding.soundbankSelector.getSelectedItem() : null;
 			params.systemProperties = getSystemProperties(binding.systemProperties.getText().toString());
 
 			ProfilesManager.saveConfig(params);

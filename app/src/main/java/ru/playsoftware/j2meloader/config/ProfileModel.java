@@ -157,6 +157,9 @@ public class ProfileModel {
 	@SerializedName("KeyMappings")
 	public SparseIntArray keyMappings;
 
+	@SerializedName("SoundBank")
+	public String soundBank;
+
 	@SerializedName("SystemProperties")
 	public String systemProperties;
 

@@ -953,6 +953,52 @@
             <!-- Keyboard settings -->
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Input -->
 
+        <!-- Audio -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/audio_config_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="?attr/bg_config_card"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/audio_config_title"
+                style="@style/ConfigTitleTextStyle"
+                android:text="Audio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/soundbank_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audio_config_title">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Soundfont:"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?attr/textColorSecondary"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/soundbank_selector"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="?attr/textColorSecondary"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout><!-- Audio -->
+
         <!-- System Properties -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/system_properties_config_root"
