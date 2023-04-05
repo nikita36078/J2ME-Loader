@@ -142,13 +142,13 @@ public class FileSystemFileConnection implements FileConnection {
 	@Override
 	public long availableSize() {
 		throwClosed();
-		return file.getFreeSpace();
+		return new File(getFsRoot()).getUsableSpace();
 	}
 
 	@Override
 	public long totalSize() {
 		throwClosed();
-		return file.getTotalSpace();
+		return new File(getFsRoot()).getTotalSpace();
 	}
 
 	@Override
