@@ -17,9 +17,6 @@
 
 package javax.microedition.lcdui.event;
 
-import android.widget.Toast;
-
-import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.util.ArrayStack;
 import javax.microedition.util.ContextHolder;
 
@@ -56,10 +53,7 @@ public class RunnableEvent extends Event {
 	public void enterQueue() {
 		if (++queued > 50 && EventQueue.isImmediate()) {
 			EventQueue.setImmediate(false);
-			ViewHandler.postEvent(() ->
-					Toast.makeText(ContextHolder.getAppContext(),
-							"Immediate mode disabled due to stack overflow",
-							Toast.LENGTH_SHORT).show());
+			ContextHolder.getActivity().toast("Immediate mode disabled due to stack overflow");
 		}
 	}
 

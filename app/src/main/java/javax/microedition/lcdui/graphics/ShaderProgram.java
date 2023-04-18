@@ -16,19 +16,17 @@
 
 package javax.microedition.lcdui.graphics;
 
+import static android.opengl.GLES20.*;
+
 import android.opengl.GLU;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.nio.FloatBuffer;
 
-import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.FileUtils;
-
-import static android.opengl.GLES20.*;
 
 public class ShaderProgram {
 	private static final String TAG = ShaderProgram.class.getName();
@@ -54,9 +52,7 @@ public class ShaderProgram {
 					return;
 				}
 			}
-			ViewHandler.postEvent(() -> Toast.makeText(ContextHolder.getActivity(),
-					"Error loading shader - default shader is used!",
-					Toast.LENGTH_LONG).show());
+			ContextHolder.getActivity().toast("Error loading shader - default shader is used!");
 		}
 		String vertexCode = ContextHolder.getAssetAsString(VERTEX);
 		String fragmentCode = ContextHolder.getAssetAsString(FRAGMENT);

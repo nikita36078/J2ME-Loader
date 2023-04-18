@@ -16,15 +16,15 @@
 
 package ru.woesss.j2me.micro3d;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import javax.microedition.lcdui.ViewHandler;
+import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.BuildConfig;
@@ -94,11 +94,10 @@ public class Utils {
 	static native void glReadPixels(int x, int y, int width, int height, Bitmap bitmapBuffer);
 
 	static {
-		if (PreferenceManager.getDefaultSharedPreferences(ContextHolder.getAppContext()).getBoolean("micro3d_using_message", false)) {
-			ViewHandler.postEvent(
-					() -> Toast.makeText(ContextHolder.getAppContext(),
-							"Mascot Capsule 3D!",
-							Toast.LENGTH_LONG).show());
+		MicroActivity microActivity = ContextHolder.getActivity();
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(microActivity);
+		if (sp.getBoolean("micro3d_using_message", false)) {
+			microActivity.toast("Mascot Capsule 3D!");
 		}
 		System.loadLibrary("c++_shared");
 		System.loadLibrary("micro3d");

@@ -639,6 +639,10 @@ public class MicroActivity extends AppCompatActivity {
 		return appName;
 	}
 
+	public void toast(CharSequence message) {
+		runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
+	}
+
 	private class SetCurrentEvent extends SimpleEvent {
 		private final Displayable current;
 		private final Displayable next;
