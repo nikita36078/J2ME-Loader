@@ -70,7 +70,7 @@ public class LocationProviderImpl extends LocationProvider implements android.lo
         if(!gpsProviderEnabled && !networkProviderEnabled) {
             return LocationProvider.OUT_OF_SERVICE;
         }
-        return gpsState;
+        return LocationProvider.AVAILABLE;
     }
 
     @Override

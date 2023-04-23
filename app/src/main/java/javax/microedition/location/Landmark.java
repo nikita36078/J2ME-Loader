@@ -1,7 +1,5 @@
 package javax.microedition.location;
 
-import java.io.IOException;
-
 public class Landmark {
 	private String name;
 	private QualifiedCoordinates coordinates;

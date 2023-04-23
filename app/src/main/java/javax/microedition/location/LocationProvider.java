@@ -1,16 +1,8 @@
 package javax.microedition.location;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.GpsStatus;
 import android.location.LocationManager;
-import android.os.Build;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import javax.microedition.shell.MidletSystem;
 import javax.microedition.util.ContextHolder;
 
 public abstract class LocationProvider {
@@ -21,25 +13,11 @@ public abstract class LocationProvider {
 	protected static LocationManager locationManager;
 	protected static boolean gpsProviderEnabled;
 	protected static boolean networkProviderEnabled;
-	protected static int gpsState = LocationProvider.AVAILABLE;
 
 	private static void initLocationManager() throws LocationException {
 		if(locationManager == null) {
 			locationManager = (LocationManager) ContextHolder.getActivity().getSystemService(Context.LOCATION_SERVICE);
 		}
-		locationManager.addGpsStatusListener(new GpsStatus.Listener() {
-			@Override
-			public void onGpsStatusChanged(int event) {
-				switch (event) {
-					case GpsStatus.GPS_EVENT_STARTED:
-						gpsState = LocationProvider.AVAILABLE;
-						break;
-					case GpsStatus.GPS_EVENT_STOPPED:
-						gpsState = LocationProvider.TEMPORARILY_UNAVAILABLE;
-						break;
-				}
-			}
-		});
 		gpsProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		networkProviderEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 		if(!gpsProviderEnabled && !networkProviderEnabled) {
