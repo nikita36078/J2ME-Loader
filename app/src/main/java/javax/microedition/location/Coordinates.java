@@ -296,7 +296,15 @@ public class Coordinates {
 		if ((otherLatitude == this.latitude) && (otherLongitude == this.longitude)) {
 			azimuth = 0.0F;
 		} else {
-			azimuth = nativeBearing(this.latitude, this.longitude, otherLatitude, otherLongitude);
+			android.location.Location locationA = new android.location.Location("");
+			locationA.setLatitude(latitude);
+			locationA.setLongitude(longitude);
+
+			android.location.Location locationB = new android.location.Location("");
+			locationB.setLatitude(otherLatitude);
+			locationB.setLongitude(otherLongitude);
+
+			azimuth = locationA.bearingTo(locationB);
 		}
 		return azimuth;
 	}
@@ -315,16 +323,16 @@ public class Coordinates {
 		if ((otherLatitude == this.latitude) && (otherLongitude == this.longitude)) {
 			distance = 0.0F;
 		} else {
-			distance = nativeDistance(this.latitude, this.longitude, otherLatitude, otherLongitude);
+			android.location.Location locationA = new android.location.Location("");
+			locationA.setLatitude(latitude);
+			locationA.setLongitude(longitude);
+
+			android.location.Location locationB = new android.location.Location("");
+			locationB.setLatitude(otherLatitude);
+			locationB.setLongitude(otherLongitude);
+
+			distance = locationA.distanceTo(locationB);
 		}
 		return distance;
-	}
-
-	private float nativeDistance(double paramDouble1, double paramDouble2, double paramDouble3, double paramDouble4) {
-		return 0;
-	}
-
-	private float nativeBearing(double paramDouble1, double paramDouble2, double paramDouble3, double paramDouble4) {
-		return 0;
 	}
 }

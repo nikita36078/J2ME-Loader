@@ -105,6 +105,4 @@ public class LocationProviderImpl extends LocationProvider implements android.lo
             }
         }
     }
-
-    public
 }
