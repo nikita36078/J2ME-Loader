@@ -32,10 +32,16 @@ public class Location {
 	}
 
 	public float getSpeed() {
+		if(!androidLocation.hasSpeed()) {
+			return Float.NaN;
+		}
 		return androidLocation.getSpeed();
 	}
 
 	public float getCourse() {
+		if(!androidLocation.hasBearing()) {
+			return Float.NaN;
+		}
 		return androidLocation.getBearing();
 	}
 
