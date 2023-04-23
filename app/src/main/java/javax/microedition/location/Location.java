@@ -20,7 +20,7 @@ public class Location {
 	}
 
 	public boolean isValid() {
-		return false;
+		return true;
 	}
 
 	public long getTimestamp() {
