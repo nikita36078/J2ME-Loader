@@ -24,6 +24,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.net.Uri;
@@ -72,6 +73,7 @@ import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
+import javax.microedition.location.LocationProviderImpl;
 import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
@@ -693,5 +695,16 @@ public class MicroActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		binding = null;
 		super.onDestroy();
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode == 1) {
+			synchronized (LocationProviderImpl.permissionLock) {
+				LocationProviderImpl.permissionLock.notify();
+			}
+			LocationProviderImpl.permissionResult = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+		}
 	}
 }
