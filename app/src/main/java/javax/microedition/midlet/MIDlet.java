@@ -185,7 +185,7 @@ public abstract class MIDlet {
 			if (item == null) {
 				throw new ConnectionNotFoundException("App (" + name + ", " + vendor + ", " + uid + ") was not found!");
 			}
-			Config.startApp(ContextHolder.getActivity(), item.getTitle(), item.getPathExt(), false, arguments);
+			MidletThread.startAfterDestroy = new String[] { item.getTitle(), item.getPathExt(), arguments };
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConnectionNotFoundException(e);
