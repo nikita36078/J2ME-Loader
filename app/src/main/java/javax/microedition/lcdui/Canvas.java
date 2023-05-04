@@ -25,6 +25,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -609,7 +610,7 @@ public abstract class Canvas extends Displayable {
 	public final void repaint(int x, int y, int width, int height) {
 		limitFps();
 		boolean post;
-		synchronized (paintEvent) {
+		synchronized (paintEvent.clip) {
 			post = paintEvent.invalidateClip(this, x, y, x + width, y + height) && !paintEvent.isPending;
 			if (post) {
 				paintEvent.isPending = true;
@@ -621,7 +622,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private void repaintInternal() {
-		synchronized (paintEvent) {
+		synchronized (paintEvent.clip) {
 			paintEvent.invalidateClip(this, 0, 0, width, height);
 		}
 		Display.postEvent(paintEvent);
@@ -900,33 +901,27 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private class PaintEvent extends Event implements EventFilter {
-		private int clipLeft;
-		private int clipTop;
-		private int clipRight;
-		private int clipBottom;
+		final Rect clip = new Rect();
 
-		private boolean isPending;
+		boolean isPending;
 
 		private int enqueued = 0;
 
 		@Override
-		public void process() {
+		public synchronized void process() {
 			if (!visible) {
 				return;
 			}
 			int l, t, r, b;
-			synchronized (this) {
+			synchronized (clip) {
 				isPending = false;
-				l = clipLeft;
-				t = clipTop;
-				r = clipRight;
-				b = clipBottom;
-				clipLeft = 0;
-				clipTop = 0;
-				clipRight = 0;
-				clipBottom = 0;
+				l = clip.left;
+				t = clip.top;
+				r = clip.right;
+				b = clip.bottom;
+				clip.setEmpty();
 			}
-			if (r - l <= 0 || b - t <= 0) {
+			if (l >= r || t >= b) {
 				return;
 			}
 			Graphics g = offscreen.getSingleGraphics();
@@ -976,26 +971,22 @@ public abstract class Canvas extends Displayable {
 		}
 
 		private boolean invalidateClip(Canvas canvas, int l, int t, int r, int b) {
-			boolean empty = clipRight - clipLeft <= 0 && clipBottom - clipTop <= 0;
+			boolean empty = clip.left >= clip.right || clip.top >= clip.bottom;
 			if (empty) {
-				clipLeft = l;
-				clipTop = t;
-				clipRight = r;
-				clipBottom = b;
+				clip.left = l;
+				clip.top = t;
+				clip.right = r;
+				clip.bottom = b;
 			} else {
-				if (clipLeft > l) clipLeft = l;
-				if (clipTop > t) clipTop = t;
-				if (clipRight < r) clipRight = r;
-				if (clipBottom < b) clipBottom = b;
+				if (clip.left > l) clip.left = l;
+				if (clip.top > t) clip.top = t;
+				if (clip.right < r) clip.right = r;
+				if (clip.bottom < b) clip.bottom = b;
 			}
-			int w = width;
-			int h = height;
-
-			if (clipLeft < 0) clipLeft = 0;
-			if (clipTop < 0) clipTop = 0;
-			if (clipRight > w) clipRight = w;
-			if (clipBottom > h) clipBottom = h;
-
+			if (clip.left < 0) clip.left = 0;
+			if (clip.top < 0) clip.top = 0;
+			if (clip.right > width) clip.right = width;
+			if (clip.bottom > height) clip.bottom = height;
 			return empty;
 		}
 	}
