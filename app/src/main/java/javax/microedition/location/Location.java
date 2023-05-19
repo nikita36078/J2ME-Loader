@@ -13,14 +13,16 @@ public class Location {
 	public static final int MTA_UNASSISTED = 524288;
 	private android.location.Location androidLocation;
 	private int locationMethod;
+	private String nmea;
 
-	protected Location(android.location.Location androidLocation, int method) {
+	protected Location(android.location.Location androidLocation, int method, String nmea) {
 		this.androidLocation = androidLocation;
 		this.locationMethod = method;
+		this.nmea = nmea;
 	}
 
 	public boolean isValid() {
-		return true;
+		return androidLocation != null;
 	}
 
 	public long getTimestamp() {
@@ -28,18 +30,21 @@ public class Location {
 	}
 
 	public QualifiedCoordinates getQualifiedCoordinates() {
+		if (androidLocation == null) {
+			return null;
+		}
 		return new QualifiedCoordinates(androidLocation.getLatitude(), androidLocation.getLongitude(), (float) androidLocation.getAltitude(), androidLocation.getAccuracy(), androidLocation.getAccuracy());
 	}
 
 	public float getSpeed() {
-		if(!androidLocation.hasSpeed()) {
+		if (!androidLocation.hasSpeed()) {
 			return Float.NaN;
 		}
 		return androidLocation.getSpeed();
 	}
 
 	public float getCourse() {
-		if(!androidLocation.hasBearing()) {
+		if (!androidLocation.hasBearing()) {
 			return Float.NaN;
 		}
 		return androidLocation.getBearing();
@@ -54,6 +59,9 @@ public class Location {
 	}
 
 	public String getExtraInfo(String mimetype) {
+		if ("application/X-jsr179-location-nmea".equals(mimetype)) {
+			return nmea;
+		}
 		return null;
 	}
 }
