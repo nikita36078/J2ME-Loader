@@ -241,7 +241,7 @@ public abstract class Canvas extends Displayable {
 		if (res != Integer.MAX_VALUE) {
 			return res;
 		} else {
-			throw new IllegalArgumentException("unknown keycode " + keyCode);
+			return 0;
 		}
 	}
 
