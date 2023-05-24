@@ -183,7 +183,7 @@ public class KeyMapper {
 	}
 
 	public static int getGameAction(int keyCode) {
-		return keyCodeToGameAction.get(keyCode, Integer.MAX_VALUE);
+		return keyCodeToGameAction.get(keyCode, 0);
 	}
 
 	public static String getKeyName(int keyCode) {
