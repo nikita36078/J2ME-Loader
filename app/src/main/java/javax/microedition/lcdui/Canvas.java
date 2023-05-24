@@ -237,12 +237,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public int getGameAction(int keyCode) {
-		int res = KeyMapper.getGameAction(keyCode);
-		if (res != Integer.MAX_VALUE) {
-			return res;
-		} else {
-			throw new IllegalArgumentException("unknown keycode " + keyCode);
-		}
+		return KeyMapper.getGameAction(keyCode);
 	}
 
 	public String getKeyName(int keyCode) {
