@@ -43,16 +43,16 @@
 #define TC_PROGRAM				80
 #define TC_VELOCITY				127
 
-#define TC_FIELD_SILENCE		-1
-#define TC_FIELD_VERSION		-2
-#define TC_FIELD_TEMPO			-3
-#define TC_FIELD_RESOLUTION		-4
-#define TC_FIELD_BLOCK_START	-5
-#define TC_FIELD_BLOCK_END		-6
-#define TC_FIELD_PLAY_BLOCK		-7
-#define TC_FIELD_SET_VOLUME		-8
-#define TC_FIELD_REPEAT			-9
-#define TC_FIELD_INVALID		-10
+#define TC_FIELD_SILENCE		(-1)
+#define TC_FIELD_VERSION		(-2)
+#define TC_FIELD_TEMPO			(-3)
+#define TC_FIELD_RESOLUTION		(-4)
+#define TC_FIELD_BLOCK_START	(-5)
+#define TC_FIELD_BLOCK_END		(-6)
+#define TC_FIELD_PLAY_BLOCK		(-7)
+#define TC_FIELD_SET_VOLUME		(-8)
+#define TC_FIELD_REPEAT			(-9)
+#define TC_FIELD_INVALID		(-10)
 
 /* convert 0-100 volume to 0-127 velocity using fixed point */
 #define TC_VOLUME_CONV			21307064
@@ -690,7 +690,7 @@ static EAS_RESULT TC_ParseHeader (S_EAS_DATA *pEASData, S_TC_DATA* pData)
 		}
 
 		/* or resolution */
-		else if (temp == TC_FIELD_TEMPO)
+		else if (temp == TC_FIELD_RESOLUTION)
 		{
 			if ((result = TC_GetResolution(pEASData, pData)) != EAS_SUCCESS)
 				return result;
