@@ -61,6 +61,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -96,7 +98,7 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
-public class AppsListFragment extends Fragment {
+public class AppsListFragment extends Fragment implements MenuProvider {
 	private static final String TAG = AppsListFragment.class.getSimpleName();
 	private final AppsListAdapter adapter = new AppsListAdapter(this);
 	private Uri appUri;
@@ -141,7 +143,8 @@ public class AppsListFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		setHasOptionsMenu(true);
+		MenuHost menuHost = requireActivity();
+		menuHost.addMenuProvider(this, getViewLifecycleOwner());
 
 		View emptyView = view.findViewById(android.R.id.empty);
 		adapter.setEmptyView(emptyView);
@@ -312,8 +315,8 @@ public class AppsListFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-		inflater.inflate(R.menu.main, menu);
+	public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+		menuInflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
 		searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
@@ -337,7 +340,7 @@ public class AppsListFragment extends Fragment {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onMenuItemSelected(MenuItem item) {
 		FragmentActivity activity = requireActivity();
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_about) {
