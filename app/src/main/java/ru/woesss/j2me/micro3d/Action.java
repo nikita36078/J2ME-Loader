@@ -47,59 +47,60 @@ class Action {
 		}
 
 		void setFrame(int frame) {
-			if (this.frame == frame) return;
+			if (this.frame == frame) {
+				return;
+			}
 			this.frame = frame;
 			float kgf = frame / 65536f;
-			final float[] m = matrix;
 			switch (type) {
 				case 2: {
 					float[] arr = new float[3];
 
 					// translate
 					translate.get(kgf, arr);
-					m[mtxOffset +  3] = arr[0];
-					m[mtxOffset +  7] = arr[1];
-					m[mtxOffset + 11] = arr[2];
+					matrix[mtxOffset +  3] = arr[0];
+					matrix[mtxOffset +  7] = arr[1];
+					matrix[mtxOffset + 11] = arr[2];
 
 					// rotate
 					rotate.get(kgf, arr);
-					rotate(m, arr[0], arr[1], arr[2]);
+					rotate(arr[0], arr[1], arr[2]);
 
 					// roll
 					final float r = roll.get(kgf);
-					roll(m, r);
+					roll(r);
 
 					// scale
 					scale.get(kgf, arr);
 					float x = arr[0];
 					float y = arr[1];
 					float z = arr[2];
-					m[mtxOffset     ] *= x;
-					m[mtxOffset +  1] *= y;
-					m[mtxOffset +  2] *= z;
-					m[mtxOffset +  4] *= x;
-					m[mtxOffset +  5] *= y;
-					m[mtxOffset +  6] *= z;
-					m[mtxOffset +  8] *= x;
-					m[mtxOffset +  9] *= y;
-					m[mtxOffset + 10] *= z;
+					matrix[mtxOffset     ] *= x;
+					matrix[mtxOffset +  1] *= y;
+					matrix[mtxOffset +  2] *= z;
+					matrix[mtxOffset +  4] *= x;
+					matrix[mtxOffset +  5] *= y;
+					matrix[mtxOffset +  6] *= z;
+					matrix[mtxOffset +  8] *= x;
+					matrix[mtxOffset +  9] *= y;
+					matrix[mtxOffset + 10] *= z;
 					break;
 				}
 				case 3: {
 					float[] arr = translate.values[0].clone();
 
 					// translate (for all frames)
-					m[mtxOffset +  3] = arr[0];
-					m[mtxOffset +  7] = arr[1];
-					m[mtxOffset + 11] = arr[2];
+					matrix[mtxOffset +  3] = arr[0];
+					matrix[mtxOffset +  7] = arr[1];
+					matrix[mtxOffset + 11] = arr[2];
 
 					// rotate
 					rotate.get(kgf, arr);
-					rotate(m, arr[0], arr[1], arr[2]);
+					rotate(arr[0], arr[1], arr[2]);
 
 					// roll (for all frames)
 					final float r = roll.values[0];
-					roll(m, r);
+					roll(r);
 					break;
 				}
 				case 4: {
@@ -107,11 +108,11 @@ class Action {
 
 					// rotate
 					rotate.get(kgf, arr);
-					rotate(m, arr[0], arr[1], arr[2]);
+					rotate(arr[0], arr[1], arr[2]);
 
 					// roll
 					final float r = roll.get(kgf);
-					roll(m, r);
+					roll(r);
 					break;
 				}
 				case 5: {
@@ -119,7 +120,7 @@ class Action {
 
 					// rotate
 					rotate.get(kgf, arr);
-					rotate(m, arr[0], arr[1], arr[2]);
+					rotate(arr[0], arr[1], arr[2]);
 					break;
 				}
 				case 6: {
@@ -127,17 +128,17 @@ class Action {
 
 					// translate
 					translate.get(kgf, arr);
-					m[mtxOffset +  3] = arr[0];
-					m[mtxOffset +  7] = arr[1];
-					m[mtxOffset + 11] = arr[2];
+					matrix[mtxOffset +  3] = arr[0];
+					matrix[mtxOffset +  7] = arr[1];
+					matrix[mtxOffset + 11] = arr[2];
 
 					// rotate
 					rotate.get(kgf, arr);
-					rotate(m, arr[0], arr[1], arr[2]);
+					rotate(arr[0], arr[1], arr[2]);
 
 					// roll
 					final float r = roll.get(kgf);
-					roll(m, r);
+					roll(r);
 					break;
 				}
 			}
@@ -146,12 +147,11 @@ class Action {
 		/**
 		 * Rotate matrix to new z-axis
 		 *
-		 * @param m destination matrix
 		 * @param x X coord of new z-axis
 		 * @param y Y coord of new z-axis
 		 * @param z Y coord of new z-axis
 		 */
-		private void rotate(float[] m, float x, float y, float z) {
+		private void rotate(float x, float y, float z) {
 			// normalize direction vector
 			float rld = 1.0f / (float) Math.sqrt(x * x + y * y + z * z);
 			x *= rld;
@@ -160,40 +160,50 @@ class Action {
 
 			float xx = x * x;
 			float yy = y * y;
-			float a = (1 - z) / (yy + xx);
-			float b = a * -(x * y);
-			int off = mtxOffset;
-			m[off     ] = z + yy * a;
-			m[off +  1] = b;
-			m[off +  2] = x;
-			m[off +  4] = b;
-			m[off +  5] = z + xx * a;
-			m[off +  6] = y;
-			m[off +  8] = -x;
-			m[off +  9] = -y;
-			m[off + 10] = z;
+			if (xx > 0.0f || yy > 0.0f) {
+				float a = (1.0f - z) / (yy + xx);
+				float b = a * -(x * y);
+				matrix[mtxOffset     ] = z + yy * a;
+				matrix[mtxOffset +  1] = b;
+				matrix[mtxOffset +  2] = x;
+				matrix[mtxOffset +  4] = b;
+				matrix[mtxOffset +  5] = z + xx * a;
+				matrix[mtxOffset +  6] = y;
+				matrix[mtxOffset +  8] = -x;
+				matrix[mtxOffset +  9] = -y;
+			} else {
+				matrix[mtxOffset     ] = 1.0f;
+				matrix[mtxOffset +  1] = 0.0f;
+				matrix[mtxOffset +  2] = 0.0f;
+				matrix[mtxOffset +  4] = 0.0f;
+				matrix[mtxOffset +  5] = z;
+				matrix[mtxOffset +  6] = 0.0f;
+				matrix[mtxOffset +  8] = 0.0f;
+				matrix[mtxOffset +  9] = 0.0f;
+			}
+			matrix[mtxOffset + 10] = z;
 		}
 
 		/**
-		 * @param m     dest matrix
 		 * @param angle rotate angle in radians
 		 */
-		private void roll(float[] m, float angle) {
+		private void roll(float angle) {
 			float s = (float) Math.sin(angle);
 			float c = (float) Math.cos(angle);
-			int off = mtxOffset;
-			float m00 = m[off    ];
-			float m01 = m[off + 1];
-			float m10 = m[off + 4];
-			float m11 = m[off + 5];
-			float m20 = m[off + 8];
-			float m21 = m[off + 9];
-			m[off    ] = m00 * c + m01 * s;
-			m[off + 1] = m01 * c - m00 * s;
-			m[off + 4] = m10 * c + m11 * s;
-			m[off + 5] = m11 * c - m10 * s;
-			m[off + 8] = m20 * c + m21 * s;
-			m[off + 9] = m21 * c - m20 * s;
+
+			float m00 = matrix[mtxOffset];
+			float m01 = matrix[mtxOffset + 1];
+			float m10 = matrix[mtxOffset + 4];
+			float m11 = matrix[mtxOffset + 5];
+			float m20 = matrix[mtxOffset + 8];
+			float m21 = matrix[mtxOffset + 9];
+
+			matrix[mtxOffset    ] = m00 * c + m01 * s;
+			matrix[mtxOffset + 1] = m01 * c - m00 * s;
+			matrix[mtxOffset + 4] = m10 * c + m11 * s;
+			matrix[mtxOffset + 5] = m11 * c - m10 * s;
+			matrix[mtxOffset + 8] = m20 * c + m21 * s;
+			matrix[mtxOffset + 9] = m21 * c - m20 * s;
 		}
 	}
 
