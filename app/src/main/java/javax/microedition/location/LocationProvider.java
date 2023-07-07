@@ -15,6 +15,7 @@ public abstract class LocationProvider {
 	protected static boolean networkProviderEnabled;
 
 	private static void initLocationManager() throws LocationException {
+		LocationProviderImpl.requestLocationPermission();
 		if (locationManager == null) {
 			locationManager = (LocationManager) ContextHolder.getActivity().getSystemService(Context.LOCATION_SERVICE);
 		}
@@ -39,7 +40,6 @@ public abstract class LocationProvider {
 	public abstract void setLocationListener(LocationListener listener, int interval, int timeout, int maxAge);
 
 	public static Location getLastKnownLocation() {
-		LocationProviderImpl.requestLocationPermission();
 		try {
 			initLocationManager();
 			android.location.Location androidLocation;

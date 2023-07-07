@@ -8,13 +8,10 @@ import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import java.util.concurrent.Executor;
 
 import javax.microedition.util.ContextHolder;
 
@@ -34,6 +31,7 @@ public class LocationProviderImpl extends LocationProvider implements android.lo
     private boolean gotLocation;
 
     public LocationProviderImpl() {
+
         this.provider = gpsProviderEnabled ? LocationManager.GPS_PROVIDER : LocationManager.NETWORK_PROVIDER;
         ContextHolder.getActivity().runOnUiThread(() -> locationManager.addNmeaListener((GpsStatus.NmeaListener) this));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -123,7 +121,8 @@ public class LocationProviderImpl extends LocationProvider implements android.lo
             thread.start();
         }
         this.listener = listener;
-        ContextHolder.getActivity().runOnUiThread(() -> locationManager.requestLocationUpdates(provider, interval < 0 ? 2000 : interval * 1000L, 0, this));
+        ContextHolder.getActivity().runOnUiThread(() ->
+                locationManager.requestLocationUpdates(provider, interval < 0 ? 2000 : interval * 1000L, 0, this));
     }
 
     @Override
@@ -170,7 +169,8 @@ public class LocationProviderImpl extends LocationProvider implements android.lo
             networkProviderEnabled = true;
         }
         if (listener != null) {
-            listener.providerStateChanged(this, !gpsProviderEnabled && !networkProviderEnabled ? LocationProvider.OUT_OF_SERVICE : LocationProvider.AVAILABLE);
+            listener.providerStateChanged(this, !gpsProviderEnabled && !networkProviderEnabled ?
+                    LocationProvider.OUT_OF_SERVICE : LocationProvider.AVAILABLE);
         }
     }
 
@@ -182,7 +182,8 @@ public class LocationProviderImpl extends LocationProvider implements android.lo
             networkProviderEnabled = false;
         }
         if (listener != null) {
-            listener.providerStateChanged(this, !gpsProviderEnabled && !networkProviderEnabled ? LocationProvider.OUT_OF_SERVICE : LocationProvider.AVAILABLE);
+            listener.providerStateChanged(this, !gpsProviderEnabled && !networkProviderEnabled ?
+                    LocationProvider.OUT_OF_SERVICE : LocationProvider.AVAILABLE);
         }
     }
 
