@@ -21,7 +21,7 @@
     <string name="alert_msg_workdir_not_exists">ୱାର୍କିଂ ଡିରେକ୍ଟୋରୀ ପଥରେ ବିଦ୍ୟମାନ ନାହିଁ:\n\'%1$s\'।\n ଆପଣ ଏହାକୁ ସୃଷ୍ଟି କରିବାକୁ କିମ୍ବା ଅନ୍ୟଟି ବାଛିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
     <string name="action_context_shortcut">ସର୍ଟକଟ୍ ଯୋଡ଼ନ୍ତୁ</string>
     <string name="action_reinstall">ପୁନଃସଂସ୍ଥାପନ କରନ୍ତୁ</string>
-    <string name="action_settings">ସେଟିଂସ୍</string>
+    <string name="action_settings">ସେଟିଂ</string>
     <string name="action_context_delete">ଡିଲିଟ୍ କରନ୍ତୁ</string>
     <string name="action_context_rename">ନାମ ବଦଳାନ୍ତୁ</string>
     <string name="retry">ପୁନଃଚେଷ୍ଟା କରନ୍ତୁ</string>
@@ -62,7 +62,7 @@
     <string name="pref_theme_auto_time">ସ୍ଵତଃ, ଦିନ ର ସମୟ ସୁଦ୍ଧା</string>
     <string name="pref_theme_light">ହାଲୁକା</string>
     <string name="pref_theme_night">ଗାଢ଼</string>
-    <string name="pref_theme_system">ସିଷ୍ଟମ୍ ସେଟିଂସ୍ କୁ ଅନୁସରଣ କରିବା</string>
+    <string name="pref_theme_system">ସିଷ୍ଟମ୍ ସେଟିଂକୁ ଅନୁସରଣ କରିବା</string>
     <string name="pref_theme_title">ଥିମ୍</string>
     <string name="pref_requires_restart_summary">ପୁନଃଆରମ୍ଭ ଆବଶ୍ୟକ କରେ</string>
     <string name="pref_enable_actionbar_title">ଆକ୍ସନ୍ ବାର୍ ସକ୍ଷମ କରନ୍ତୁ</string>
@@ -80,7 +80,7 @@
     <string name="pref_app_sort_vendor">ବିକ୍ରେତା</string>
     <string name="pref_map_keys">କି ମ୍ୟାପିଙ୍ଗ୍</string>
     <string name="pref_encoding_title">ଏନକୋଡିଂ</string>
-    <string name="pref_default_settings">ଡିଫଲ୍ଟ ସେଟିଂସମୂହ</string>
+    <string name="pref_default_settings">ଡିଫଲ୍ଟ ସେଟିଂ</string>
     <string name="pref_emulator_dir">ୱାର୍କିଂ ଡିରେକ୍ଟୋରୀ</string>
     <string name="pref_screenshot_summary">ସ୍କ୍ରିନସଟ୍ ପାଇଁ ସ୍କେଲିଂ ଏବଂ ଫିଲ୍ଟରିଂ ଅକ୍ଷମ କରନ୍ତୁ</string>
     <string name="pref_screenshot_title">କଞ୍ଚା ସ୍କ୍ରିନସଟ୍</string>
@@ -97,7 +97,7 @@
     <string name="add_profile_description">ନୂତନ ପ୍ରୋଫାଇଲ୍ ସୃଷ୍ଟି କରନ୍ତୁ</string>
     <string name="enter_name">ନାମ ପ୍ରବେଶ କରନ୍ତୁ</string>
     <string name="enter_new_name">ନୂତନ ନାମ ପ୍ରବେଶ କରନ୍ତୁ</string>
-    <string name="set_default_profile_description">ପରେ ସଂସ୍ଥାପିତ ହେବାକୁ ଥିବା ସମସ୍ତ ଆପ୍ଲିକେସନ୍ ପାଇଁ ଏହି ପ୍ରୋଫାଇଲ୍ ଏକ ମାନକ ସେଟିଂସ୍ ଭାବେ ଚୟନ କରନ୍ତୁ</string>
+    <string name="set_default_profile_description">ପରେ ଅଧିସ୍ଥାପନ ହେବାକୁ ଥିବା ସମସ୍ତ ଆପ୍ ପାଇଁ ଏହି ପ୍ରୋଫାଇଲ୍‌ଟିକୁ ଏକ ମାନକ ସେଟିଂ ଭାଵେ ଚୟନ କରିବା</string>
     <string name="error_name_exists">ପୂର୍ବରୁ ବିଦ୍ୟମାନ ଅଛି, ଅନ୍ୟ ନାମ ପ୍ରବେଶ କରନ୍ତୁ</string>
     <string name="default_label">"%s (ଡିଫଲ୍ଟ)"</string>
     <string name="not_saved_exists">ଆଗରୁ ବିଦ୍ୟମାନ ଅଛି</string>
