@@ -184,6 +184,9 @@
     <string name="pref_emulator_dir">مجلد المفتوح</string>
     <string name="pref_screenshot_summary">تعطيل القياس والتصفية لقطات الشاشة</string>
     <string name="pref_screenshot_title">لقطة شاشة خامة</string>
+    <string name="pref_category_experimental">الخيارات التجريبية/المؤقتة</string>
+    <string name="pref_mascot_summary">إظهار الرسالة عند الاستخدام</string>
+    <string name="pref_mascot_title">كشف كابسول ماسكوت 3D</string>
     <string name="mapping_dialog_message">التوجيه الحالي: %1$s</string>
     <string name="mapping_dialog_key_not_specified">غير محدّد</string>
     <string name="mapping_dialog_title">اضغط على أي مفتاح</string>
