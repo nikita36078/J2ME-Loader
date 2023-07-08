@@ -184,6 +184,9 @@
     <string name="pref_emulator_dir">Pracovní adresář</string>
     <string name="pref_screenshot_summary">Zakázat škálování a filtrování snímků obrazovky</string>
     <string name="pref_screenshot_title">Nezpracované snímky obrazovky</string>
+    <string name="pref_category_experimental">Pokusné/dočasné možnosti</string>
+    <string name="pref_mascot_summary">Zobrazit zprávu při použití</string>
+    <string name="pref_mascot_title">Zjistit použití Mascot Capsule 3D</string>
     <string name="mapping_dialog_message">Stávající mapování: %1$s</string>
     <string name="mapping_dialog_key_not_specified">nenastaveno</string>
     <string name="mapping_dialog_title">Stiskněte tlačítko</string>
