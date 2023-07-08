@@ -184,6 +184,7 @@
     <string name="pref_emulator_dir">Робоча директорія</string>
     <string name="pref_screenshot_summary">Вимкнути масштабування та фільтрацію для знімків екрана</string>
     <string name="pref_screenshot_title">Необроблений знімок екрана</string>
+    <string name="pref_category_experimental">Експериментальні/тимчасові параметри</string>
     <string name="mapping_dialog_message">Поточне зіставлення: %1$s</string>
     <string name="mapping_dialog_key_not_specified">не визначено</string>
     <string name="mapping_dialog_title">Натисніть клавішу</string>
