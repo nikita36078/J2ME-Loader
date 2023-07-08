@@ -75,7 +75,7 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 		if (activity != null) {
 			activity.finish();
 		}
-		if(startAfterDestroy != null) {
+		if (startAfterDestroy != null) {
 			Config.startApp(ContextHolder.getActivity(), startAfterDestroy[0], startAfterDestroy[1], false, startAfterDestroy[2]);
 		}
 		Process.killProcess(Process.myPid());
