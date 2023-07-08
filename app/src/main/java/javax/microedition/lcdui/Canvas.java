@@ -1147,7 +1147,7 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.pointerReleased(id, x, y);
 					}
-					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+					if (touchInput && virtualScreen.contains(x, y)) {
 						int cX = Math.round(convertPointerX(x));
 						int cY = Math.round(convertPointerY(y));
 						lastPointerPos[id][0] = cX;
