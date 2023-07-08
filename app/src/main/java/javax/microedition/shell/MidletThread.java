@@ -30,6 +30,8 @@ import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
 
+import ru.playsoftware.j2meloader.config.Config;
+
 public class MidletThread extends HandlerThread implements Handler.Callback {
 	private static final String TAG = MidletThread.class.getName();
 	private static final UncaughtExceptionHandler uncaughtExceptionHandler = (t, e) ->
@@ -43,6 +45,7 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 	private static final int STARTED = 1;
 	private static final int PAUSED = 2;
 	private static final int DESTROYED = 3;
+	public static String[] startAfterDestroy;
 	private static MidletThread instance;
 	private final MicroLoader microLoader;
 	private final String mainClass;
@@ -71,6 +74,9 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 		MicroActivity activity = ContextHolder.getActivity();
 		if (activity != null) {
 			activity.finish();
+		}
+		if (startAfterDestroy != null) {
+			Config.startApp(ContextHolder.getActivity(), startAfterDestroy[0], startAfterDestroy[1], false, startAfterDestroy[2]);
 		}
 		Process.killProcess(Process.myPid());
 	}
