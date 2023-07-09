@@ -152,6 +152,30 @@ public class ContextHolder {
 		}
 	}
 
+	public static boolean requestPermissions(String[] permissions) {
+		MicroActivity context = currentActivity.get();
+		if (context == null) {
+			return false;
+		}
+		if (!hasPermissions(context, permissions)) {
+			ActivityCompat.requestPermissions(context, permissions, 0);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private static boolean hasPermissions(Context context, String... permissions) {
+		if (context != null && permissions != null) {
+			for (String permission : permissions) {
+				if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	public static String getAssetAsString(String fileName) {
 		StringBuilder sb = new StringBuilder();
 
