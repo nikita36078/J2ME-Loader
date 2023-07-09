@@ -184,6 +184,9 @@
     <string name="pref_emulator_dir">कार्यकारी डाइरेक्टरी</string>
     <string name="pref_screenshot_summary">स्क्रीनशॉट के लिए स्केलिंग और फ़िल्टरिंग अक्षम करें</string>
     <string name="pref_screenshot_title">रॉ स्क्रीनशॉट</string>
+    <string name="pref_category_experimental">प्रायोगिक/अस्थायी विकल्प</string>
+    <string name="pref_mascot_summary">उपयोग करते समय संदेश दिखाएं</string>
+    <string name="pref_mascot_title">शुभंकर कैप्सूल 3D का पता लगाएं</string>
     <string name="mapping_dialog_message">वर्तमान मानचित्रण: %1$s</string>
     <string name="mapping_dialog_key_not_specified">निर्दिष्ट नहीं है</string>
     <string name="mapping_dialog_title">कोई कि दबाएं</string>
