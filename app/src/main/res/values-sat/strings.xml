@@ -184,6 +184,9 @@
     <string name="pref_emulator_dir">ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱰᱟᱭᱨᱮᱠᱴᱚᱨᱭ</string>
     <string name="pref_screenshot_summary">ᱥᱠᱨᱤᱱᱥᱚᱴ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱢᱟᱯ ᱟᱨ ᱪᱷᱟᱹᱱᱤ ᱵᱚᱱᱫᱚᱭ ᱢᱮ</string>
     <string name="pref_screenshot_title">ᱵᱮᱨᱮᱞ ᱥᱠᱨᱤᱱᱥᱚᱴ</string>
+    <string name="pref_category_experimental">ᱮᱠᱥᱯᱮᱨᱤᱢᱮᱱᱴᱟᱞ/ᱠᱷᱟᱴᱟᱚ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱪᱷᱟᱣᱠᱚ</string>
+    <string name="pref_mascot_summary">ᱵᱮᱵᱷᱟᱨ ᱡᱷᱚᱜ ᱠᱷᱚᱵᱚᱨ ᱫᱮᱠᱷᱟᱣ ᱢᱮ</string>
+    <string name="pref_mascot_title">ᱢᱟᱥᱠᱚᱴ ᱠᱮᱯᱥᱩᱞ 3D ᱪᱤᱱᱦᱟᱹᱯ ᱢᱮ</string>
     <string name="mapping_dialog_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱢᱮᱯᱤᱝ:%1$s</string>
     <string name="mapping_dialog_key_not_specified">ᱵᱟᱝ ᱱᱤᱨᱫᱷᱟᱹᱨᱤᱛᱟᱜ</string>
     <string name="mapping_dialog_title">ᱠᱭ ᱚᱛᱟᱭ ᱢᱮ</string>

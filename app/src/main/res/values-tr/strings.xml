@@ -184,6 +184,7 @@
     <string name="pref_emulator_dir">Çalışma dizini</string>
     <string name="pref_screenshot_summary">Ekran görüntüleri için ölçeklemeyi ve filtrelemeyi devre dışı bırak</string>
     <string name="pref_screenshot_title">Ekran görüntüsü</string>
+    <string name="pref_category_experimental">Deneysel/geçici seçenekler</string>
     <string name="mapping_dialog_message">Mevcut atama: %1$s</string>
     <string name="mapping_dialog_key_not_specified">belirtilmemiş</string>
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>

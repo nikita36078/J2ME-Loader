@@ -184,6 +184,9 @@
     <string name="pref_emulator_dir">Pasta padrão</string>
     <string name="pref_screenshot_summary">Desativar escala e filtragem para capturas de tela</string>
     <string name="pref_screenshot_title">Captura de tela em raw</string>
+    <string name="pref_category_experimental">Opções experimentais/temporárias</string>
+    <string name="pref_mascot_summary">Mostrar mensagem ao usar</string>
+    <string name="pref_mascot_title">Detectar Mascot Capsule 3D</string>
     <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
     <string name="mapping_dialog_key_not_specified">não especificado</string>
     <string name="mapping_dialog_title">Pressione um botão</string>

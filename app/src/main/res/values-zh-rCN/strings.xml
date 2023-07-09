@@ -9,7 +9,7 @@
     <string name="licenses">许可</string>
     <string name="profiles">配置文件</string>
     <string name="save_log">存储日志</string>
-    <string name="about_message">此应用允许您在 Android 上启动 J2ME 应用和游戏。它支持大多数 2D 和 3D 游戏(包括吉祥物胶囊 3D 游戏)。&lt;BR&gt;</string>
+    <string name="about_message">此应用允许您在 Android 上启动 J2ME 应用和游戏。它支持大多数 2D 和 3D 游戏(包括 Mascot Capsule 3D 游戏)。&lt;BR&gt;</string>
     <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt;BR&gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
     <string name="author">作者: </string>
     <string name="version">版本: </string>
@@ -47,7 +47,7 @@
     <string name="warn_install_from_net">将从互联网下载文件</string>
     <string name="reinstall">应用已经安装。\n\n 您想要重新安装吗？\n 所有数据将被保存。</string>
     <string name="reinstall_newest">更新此应用到版本 %1$s？\n\n目前已安装版本： %2$s\n所有数据将被保存。</string>
-    <string name="reinstall_older">将此应用替换为版本 %1$s 吗？\n\n 目前已安装： %2$s\n 旧版本可能无法正确使用记录数据。</string>
+    <string name="reinstall_older">将此应用替换为旧版本 %1$s 吗？\n\n 目前已安装： %2$s\n 旧版本可能无法正常使用现有的存档数据。</string>
     <string name="loading_info">加载信息中…</string>
     <string name="START_CMD">启动</string>
     <string name="CANCEL_CMD">取消</string>
@@ -60,7 +60,7 @@
     <string name="PREF_SCALE_RATIO">比例(%)</string>
     <string name="PREF_SCALE_TO_FIT">自适应屏幕</string>
     <string name="PREF_KEEP_ASPECT_RATIO">保持长宽比</string>
-    <string name="PREF_FILTER">图像过滤器</string>
+    <string name="PREF_FILTER">图像虚化</string>
     <string name="PREF_IMMEDIATE">实时处理模式</string>
     <string name="PREF_SHOW_FPS">显示 FPS</string>
     <string name="PREF_FORCE_FULLSCREEN">强制全屏</string>
@@ -75,7 +75,7 @@
     <string name="PREF_BACKGROUND">背景颜色</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
     <string name="PREF_VK_SHOW">显示键盘</string>
-    <string name="PREF_VK_FEEDBACK">触觉反馈</string>
+    <string name="PREF_VK_FEEDBACK">按键振动</string>
     <string name="PREF_VK_FORCE_OPACITY">屏幕外按键强制不透明</string>
     <string name="PREF_TOUCH_INPUT">屏幕触摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
@@ -143,9 +143,9 @@
     <string name="crash_dialog_message">是否向开发者发送错误报告？</string>
     <string name="crash_dialog_title">检测到错误</string>
     <string name="report_crash">发送</string>
-    <string name="layout_edit_finished">编辑模式已完成</string>
-    <string name="layout_edit_finish">完成编辑模式</string>
-    <string name="layout_edit_mode">按键布局编辑</string>
+    <string name="layout_edit_finished">按键布局已保存</string>
+    <string name="layout_edit_finish">保存按键布局</string>
+    <string name="layout_edit_mode">编辑按键布局</string>
     <string name="layout_scale_mode">调整按键大小</string>
     <string name="layout_switch">切换按键布局</string>
     <string name="hide_buttons">隐藏按键</string>
@@ -185,13 +185,13 @@
     <string name="pref_screenshot_summary">禁用屏幕截图的缩放和过滤</string>
     <string name="pref_screenshot_title">原始截图</string>
     <string name="pref_category_experimental">实验/临时选项</string>
-    <string name="pref_mascot_summary">使用时显示消息</string>
-    <string name="pref_mascot_title">检测吉祥物胶囊3D</string>
+    <string name="pref_mascot_summary">在使用时会提示消息</string>
+    <string name="pref_mascot_title">Mascot Capsule 3D 检测</string>
     <string name="mapping_dialog_message">当前映射: %1$s</string>
     <string name="mapping_dialog_key_not_specified">未指定</string>
     <string name="mapping_dialog_title">按下一个按键</string>
     <string name="reset_mapping">重置</string>
-    <string name="alert_map_menu">菜单键 (M) 未分配！\n这可能造成无法访问仿真器选项</string>
+    <string name="alert_map_menu">菜单键 (M) 未分配！\n这可能造成无法打开模拟器的选项菜单</string>
     <string name="save">保存</string>
     <string name="error_name">输入名称！</string>
     <string name="set_as_default">设为默认</string>
