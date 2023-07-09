@@ -166,7 +166,7 @@
     <string name="pref_theme_title">Tema</string>
     <string name="pref_requires_restart_summary">Perlu dibuka ulang</string>
     <string name="pref_enable_actionbar_title">Aktifkan ActionBar</string>
-    <string name="pref_enable_actionbar_summary">Nonaktifkan ini jika ingin layar penuh</string>
+    <string name="pref_enable_actionbar_summary">Nonaktifkan ini untuk layar penuh</string>
     <string name="pref_enable_statusbar_title">Aktifkan bilah status</string>
     <string name="pref_wakelock_title">Layar tetap menyala</string>
     <string name="pref_vibration_title">Aktifkan getar</string>
