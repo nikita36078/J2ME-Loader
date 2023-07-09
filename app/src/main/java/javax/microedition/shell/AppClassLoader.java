@@ -44,7 +44,7 @@ public class AppClassLoader extends DexClassLoader {
 	private static File oldResDir;
 
 	AppClassLoader(String paths, String tmpDir, ClassLoader parent, File appDir) {
-		super(paths, tmpDir, null, new CoreClassLoader(parent));
+		super(paths, tmpDir, null, parent);
 		if (appDir == null)
 			throw new NullPointerException("App path is null");
 		oldResDir = new File(appDir, Config.MIDLET_RES_DIR);
@@ -162,5 +162,26 @@ public class AppClassLoader extends DexClassLoader {
 
 	public static AppClassLoader getInstance() {
 		return instance;
+	}
+
+	@Override
+	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+		// First, check if the class is already loaded
+		Class<?> loadedClass = findLoadedClass(name);
+		if (loadedClass != null) {
+			return loadedClass;
+		}
+
+		try {
+			// Try to load the class from the URLs of this classloader
+			Class<?> localClass = findClass(name);
+			if (resolve) {
+				resolveClass(localClass);
+			}
+			return localClass;
+		} catch (ClassNotFoundException e) {
+			// Class not found in this classloader, delegate to parent classloader
+			return super.loadClass(name, resolve);
+		}
 	}
 }
