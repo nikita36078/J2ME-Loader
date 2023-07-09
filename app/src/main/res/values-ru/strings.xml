@@ -185,6 +185,8 @@
     <string name="pref_screenshot_summary">Отключить масштабирование и фильтрацию скриншотов</string>
     <string name="pref_screenshot_title">Необработанный скриншот</string>
     <string name="pref_category_experimental">Экспериментальные/временные опции</string>
+    <string name="pref_mascot_summary">Показывать сообщение при использовании</string>
+    <string name="pref_mascot_title">Обнаруживать Mascot Capsule 3D</string>
     <string name="mapping_dialog_message">Текущий маппинг: %1$s</string>
     <string name="mapping_dialog_key_not_specified">не задано</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
