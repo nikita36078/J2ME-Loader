@@ -42,24 +42,28 @@ android {
         play {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "true"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro', 'proguard-common.pro'
             versionNameSuffix "-play"
         }
         open {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro', 'proguard-common.pro'
             versionNameSuffix "-open"
         }
         fdroid {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro', 'proguard-common.pro'
         }
         dev {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro', 'proguard-common.pro'
             versionNameSuffix "-dev-" + generateVersionCode()
         }
         // variant dimension for create android port from J2ME app source
@@ -75,7 +79,8 @@ android {
             versionName = props.getValue('MIDlet-Version')
             resValue 'string', 'app_name', midletName
             midletArchivesBaseName = apkName
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-midlet.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-midlet.pro', 'proguard-common.pro'
         }
     }
 
