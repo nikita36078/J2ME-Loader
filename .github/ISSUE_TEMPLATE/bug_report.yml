@@ -1,0 +1,46 @@
+name: Bug Report
+description: File a bug report
+labels: bug
+body:
+  - type: input
+    id: emulator-version
+    attributes:
+      label: Emulator version
+      placeholder: "e.g. 1.7.9"
+    validations:
+      required: true
+  - type: input
+    id: game-version
+    attributes:
+      label: Game version
+      placeholder: "e.g. 1.0.1"
+    validations:
+      required: true
+  - type: input
+    id: game-resolution
+    attributes:
+      label: Game resolution
+      placeholder: "e.g. 240x320"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: "e.g. Samsung Galaxy S20"
+    validations:
+      required: true
+  - type: input
+    id: android-version
+    attributes:
+      label: Android version
+      placeholder: "e.g. Android 12"
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Description of the issue
+      description: What's the issue you encountered?
+    validations:
+      required: true
