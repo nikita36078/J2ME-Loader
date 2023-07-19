@@ -1407,7 +1407,7 @@ EAS_PUBLIC EAS_RESULT EAS_ParseMetaData (EAS_DATA_HANDLE pEASData, EAS_HANDLE pS
     pStream->time = 0;
     VMInitWorkload(pEASData->pVoiceMgr);
     if ((result = EAS_ParseEvents(pEASData, pStream, 0x7fffffff, eParserModeMetaData)) != EAS_SUCCESS)
-        ALOGE("%s: EAS_ParseEvents return %ld", __func__, result);
+        return result;
 
     /* get the parser time */
     if ((result = EAS_GetLocation(pEASData, pStream, playLength)) != EAS_SUCCESS)

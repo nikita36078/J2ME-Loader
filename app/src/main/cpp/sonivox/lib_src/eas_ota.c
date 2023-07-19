@@ -550,6 +550,24 @@ static EAS_RESULT OTA_Event (S_EAS_DATA *pEASData, EAS_VOID_PTR pInstData, EAS_I
             pData->velocity = temp ? (EAS_U8) (temp * OTA_VEL_MUL + OTA_VEL_OFS) : 0;
             break;
 
+        case 0:
+            /* workaround for "New Skool Skater" */
+            /* get filler bits */
+            if ((result = OTA_FetchBitField(pEASData->hwInstData, pData, pData->current.bitCount, &temp)) != EAS_SUCCESS)
+                return result;
+            if (temp != 0) {
+                return EAS_ERROR_FILE_FORMAT;
+            }
+            /* get command-end */
+            if ((result = EAS_HWGetByte(pEASData->hwInstData, pData->fileHandle, &temp)) != EAS_SUCCESS)
+                return result;
+            if (temp != 0) {
+                return EAS_ERROR_FILE_FORMAT;
+            }
+
+            pData->current.patternLen = 0;
+            return EAS_SUCCESS;
+
         default:
             { /* dpp: EAS_ReportEx(_EAS_SEVERITY_ERROR, "Unexpected instruction ID in OTA stream\n"); */ }
             return EAS_ERROR_FILE_FORMAT;
