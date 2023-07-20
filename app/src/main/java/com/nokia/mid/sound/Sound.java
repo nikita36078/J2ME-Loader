@@ -131,6 +131,7 @@ public class Sound {
 			}
 			if (player.getState() == Player.STARTED) {
 				player.stop();
+				player.setMediaTime(0);
 			}
 			player.setLoopCount(loop);
 			player.start();
