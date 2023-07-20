@@ -12,7 +12,11 @@
 
 #define NUM_COMBINE_BUFFERS 4
 
-mmapi::Player::Player(EAS_DATA_HANDLE easHandle) : easHandle(easHandle) {}
+EAS_DLSLIB_HANDLE mmapi::Player::easDlsHandle{nullptr};
+
+mmapi::Player::Player(EAS_DATA_HANDLE easHandle) : easHandle(easHandle) {
+    EAS_SetGlobalDLSLib(easHandle, mmapi::Player::easDlsHandle);
+}
 
 mmapi::Player::~Player() {
     close();
@@ -83,7 +87,8 @@ EAS_RESULT mmapi::Player::start() {
 }
 
 EAS_RESULT mmapi::Player::pause() {
-    if (oboeStream->getState() < oboe::StreamState::Starting || oboeStream->getState() > oboe::StreamState::Started) {
+    if (oboeStream->getState() < oboe::StreamState::Starting ||
+        oboeStream->getState() > oboe::StreamState::Started) {
         return EAS_SUCCESS;
     }
     oboe::Result &&result = oboeStream->pause();

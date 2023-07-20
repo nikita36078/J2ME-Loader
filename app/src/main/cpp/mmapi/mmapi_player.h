@@ -62,6 +62,8 @@ namespace mmapi {
         int setLevel(EAS_I32 level);
         EAS_BOOL isMuted() const;
         EAS_I32 getLevel();
+
+        static EAS_DLSLIB_HANDLE easDlsHandle;
     };
 }
 

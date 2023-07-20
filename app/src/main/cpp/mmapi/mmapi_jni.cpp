@@ -23,6 +23,15 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_initEAS(JNIEnv *en
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
         return result;
     }
+    jclass mlc = env->FindClass("javax/microedition/shell/MicroLoader");
+    jmethodID method = env->GetStaticMethodID(mlc, "getSoundfont", "()Ljava/lang/String;");
+    jobject sb = env->CallStaticObjectMethod(mlc, method);
+    if (sb != nullptr) {
+        mmapi::JStringHolder soundbank(env, reinterpret_cast<jstring>(sb));
+        mmapi::File file(soundbank.ptr, "rb");
+        EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
+        EAS_GetGlobalDLSLib(easHandle, &mmapi::Player::easDlsHandle);
+    }
     return reinterpret_cast<uintptr_t>(easHandle);
 }
 
@@ -47,14 +56,6 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
         return result;
-    }
-    jclass mlc = env->FindClass("javax/microedition/shell/MicroLoader");
-    jmethodID method = env->GetStaticMethodID(mlc, "getSoundfont", "()Ljava/lang/String;");
-    jobject sb = env->CallStaticObjectMethod(mlc, method);
-    if (sb != nullptr) {
-        mmapi::JStringHolder soundbank(env, reinterpret_cast<jstring>(sb));
-        mmapi::File file(soundbank.ptr, "rb");
-        EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
     }
     auto *player = new mmapi::Player(easHandle);
     return reinterpret_cast<jlong>(player);

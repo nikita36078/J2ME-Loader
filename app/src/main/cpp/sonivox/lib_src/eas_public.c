@@ -2486,6 +2486,18 @@ EAS_PUBLIC EAS_RESULT EAS_LoadDLSCollection (EAS_DATA_HANDLE pEASData, EAS_HANDL
 
     return result;
 }
+
+EAS_PUBLIC void EAS_GetGlobalDLSLib (EAS_DATA_HANDLE pEASData, EAS_DLSLIB_HANDLE *ppDls) {
+    *ppDls = pEASData->pVoiceMgr->pGlobalDLS;
+    DLSAddRef(*ppDls);
+}
+
+EAS_PUBLIC void EAS_SetGlobalDLSLib (EAS_DATA_HANDLE pEASData, EAS_DLSLIB_HANDLE pDls) {
+    if (pDls != NULL) {
+        VMSetGlobalDLSLib(pEASData, pDls);
+        DLSAddRef(pDls);
+    }
+}
 #endif
 
 #ifdef EXTERNAL_AUDIO

@@ -968,6 +968,8 @@ EAS_PUBLIC EAS_RESULT EAS_SetPlayMode (EAS_DATA_HANDLE pEASData, EAS_HANDLE pStr
  *----------------------------------------------------------------------------
 */
 EAS_PUBLIC EAS_RESULT EAS_LoadDLSCollection (EAS_DATA_HANDLE pEASData, EAS_HANDLE streamHandle, EAS_FILE_LOCATOR locator);
+EAS_PUBLIC void EAS_GetGlobalDLSLib (EAS_DATA_HANDLE pEASData, EAS_DLSLIB_HANDLE *ppDls);
+EAS_PUBLIC void EAS_SetGlobalDLSLib (EAS_DATA_HANDLE pEASData, EAS_DLSLIB_HANDLE pDls);
 #endif
 
 /*----------------------------------------------------------------------------
