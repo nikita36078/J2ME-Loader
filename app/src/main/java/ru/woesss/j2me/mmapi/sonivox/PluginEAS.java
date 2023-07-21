@@ -20,38 +20,28 @@ import android.util.Log;
 
 import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.Player;
+import javax.microedition.shell.MicroLoader;
 
 import ru.woesss.j2me.mmapi.Plugin;
 
 public class PluginEAS implements Plugin {
 	private static final String TAG = "PluginEAS";
-	private final long easHandle;
 
 	public PluginEAS() {
-		System.loadLibrary("c++_shared");
-		System.loadLibrary("oboe");
-		System.loadLibrary("sonivox");
-		System.loadLibrary("mmapi");
-		long handle;
-		try {
-			handle = EAS.initEAS();
-		} catch (Exception e) {
-			Log.e(TAG, "PluginEAS: init failed", e);
-			handle = 0;
+		String soundBank = MicroLoader.getSoundBank();
+		if (soundBank == null) {
+			throw new IllegalStateException("Sound Bank not selected");
 		}
-		easHandle = handle;
-	}
-
-	@Override
-	public boolean checkFileType(String path) {
-		if (easHandle == 0) {
-			return false;
-		}
-		return EAS.checkFileType(easHandle, path);
+		EAS.init(soundBank);
 	}
 
 	@Override
 	public Player createPlayer(InternalDataSource dataSource) {
-		return new PlayerEAS(dataSource);
+		try {
+			return new PlayerEAS(dataSource);
+		} catch (Exception e) {
+			Log.w(TAG, "createPlayer: ", e);
+			return null;
+		}
 	}
 }

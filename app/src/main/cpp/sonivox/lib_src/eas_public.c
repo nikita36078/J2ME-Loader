@@ -784,8 +784,6 @@ EAS_PUBLIC EAS_RESULT EAS_GetWaveFmtChunk (S_EAS_DATA *pEASData, EAS_HANDLE pStr
 */
 EAS_PUBLIC EAS_RESULT EAS_GetFileType (S_EAS_DATA *pEASData, EAS_HANDLE pStream, EAS_I32 *pFileType)
 {
-    if (!EAS_StreamReady (pEASData, pStream))
-        return EAS_ERROR_NOT_VALID_IN_THIS_STATE;
     return EAS_GetStreamParameter(pEASData, pStream, PARSER_DATA_FILE_TYPE, pFileType);
 }
 

@@ -25,13 +25,22 @@ namespace mmapi {
 
         ~Player() override;
 
-        long setDataSource(const char *path);
+        long init(const char *path);
         EAS_RESULT prefetch();
         EAS_RESULT start();
         EAS_RESULT pause();
         void deallocate();
         void close();
         EAS_I32 setMediaTime(EAS_I32 now);
+        EAS_I32 getMediaTime();
+        void setRepeat(EAS_I32 count);
+        EAS_I32 setPan(EAS_I32 pan);
+        EAS_I32 getPan();
+        void setMute(EAS_BOOL mute);
+        int setLevel(EAS_I32 level);
+        EAS_BOOL isMuted() const;
+        EAS_I32 getLevel();
+        EAS_RESULT realize();
 
         oboe::DataCallbackResult
         onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) override;
@@ -53,15 +62,6 @@ namespace mmapi {
 
     public:
         EAS_I32 duration = -1;
-
-        EAS_I32 getMediaTime();
-        void setRepeat(EAS_I32 count);
-        EAS_I32 setPan(EAS_I32 pan);
-        EAS_I32 getPan();
-        void setMute(EAS_BOOL mute);
-        int setLevel(EAS_I32 level);
-        EAS_BOOL isMuted() const;
-        EAS_I32 getLevel();
 
         static EAS_DLSLIB_HANDLE easDlsHandle;
     };

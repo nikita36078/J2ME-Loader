@@ -2,8 +2,8 @@
 // Created by woesss on 08.07.2023.
 //
 
-#ifndef JL_MOD_MMAPI_ERROR_H
-#define JL_MOD_MMAPI_ERROR_H
+#ifndef JL_MOD_MMAPI_UTIL_H
+#define JL_MOD_MMAPI_UTIL_H
 
  static const char *EAS_ERRORS[]{
         "EAS_SUCCESS",
@@ -48,6 +48,27 @@
         "EAS_ERROR_DATA_INCONSISTENCY",
 };
 
-const char *MMAPI_GetErrorString(int errorCode);
+static const char *EAS_FILE_TYPES[]{
+        "EAS_FILE_UNKNOWN",
+        "EAS_FILE_SMF0",
+        "EAS_FILE_SMF1",
+        "EAS_FILE_SMAF_UNKNOWN",
+        "EAS_FILE_SMAF_MA2",
+        "EAS_FILE_SMAF_MA3",
+        "EAS_FILE_SMAF_MA5",
+        "EAS_FILE_CMX",
+        "EAS_FILE_MFI",
+        "EAS_FILE_OTA",
+        "EAS_FILE_IMELODY",
+        "EAS_FILE_RTTTL",
+        "EAS_FILE_XMF0",
+        "EAS_FILE_XMF1",
+        "EAS_FILE_WAVE_PCM",
+        "EAS_FILE_WAVE_IMA_ADPCM",
+        "EAS_FILE_MMAPI_TONE_CONTROL",
+};
 
-#endif //JL_MOD_MMAPI_ERROR_H
+const char *MMAPI_GetErrorString(int errorCode);
+const char *MMAPI_GetFileTypeString(int type);
+
+#endif //JL_MOD_MMAPI_UTIL_H

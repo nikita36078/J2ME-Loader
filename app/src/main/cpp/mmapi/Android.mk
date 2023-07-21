@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES = \
 	mmapi_jni.cpp \
 	mmapi_player.cpp \
-	mmapi_error.cpp \
+	mmapi_util.cpp \
 	mmapi_file.cpp \
 	mmapi_jstring.cpp
 #	eas_mmapi.c \

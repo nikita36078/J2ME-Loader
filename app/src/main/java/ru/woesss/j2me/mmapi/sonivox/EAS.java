@@ -17,10 +17,8 @@
 package ru.woesss.j2me.mmapi.sonivox;
 
 class EAS {
-	static native long initEAS();
-	static native boolean checkFileType(long easHandle, String path);
 	static native void playerFinalize(long easHandle);
-	static native long playerInit();
+	static native long playerInit(String locator);
 	static native void playerRealize(long handle, String locator);
 	static native long playerPrefetch(long handle);
 	static native void playerStart(long handle);
@@ -36,4 +34,12 @@ class EAS {
 	static native boolean isMuted(long handle);
 	static native int setVolume(long handle, int level);
 	static native int getVolume(long handle);
+	static native void init(String soundBank);
+
+	static {
+		System.loadLibrary("c++_shared");
+		System.loadLibrary("oboe");
+		System.loadLibrary("sonivox");
+		System.loadLibrary("mmapi");
+	}
 }

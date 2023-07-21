@@ -81,12 +81,12 @@ LOCAL_CFLAGS += \
 	-D_CRT_NONSTDC_NO_DEPRECATE \
 	-DMMAPI_SUPPORT \
 	-DJET_INTERFACE \
-	-D_WAVE_PARSER \
 	-Dfalse=0 \
 	-Wno-unused-parameter \
 	-Werror \
 	-D_WAVE_PARSER \
 	-D_CHORUS_ENABLED \
+#	-D_WAVE_PARSER \
 	-D_IMA_DECODER # (needed for IMA-ADPCM wave files)
 LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 

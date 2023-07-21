@@ -51,7 +51,7 @@ public class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 	private int state = UNREALIZED;
 
 	public PlayerEAS(InternalDataSource dataSource) {
-		handle = EAS.playerInit();
+		handle = EAS.playerInit(dataSource.getLocator());
 		this.dataSource = dataSource;
 		controls.put(VolumeControl.class.getName(), this);
 		controls.put(PanControl.class.getName(), this);

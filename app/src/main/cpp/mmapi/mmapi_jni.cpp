@@ -7,57 +7,72 @@
 #include "libsonivox/eas.h"
 #include "mmapi_jstring.h"
 #include "mmapi_file.h"
-#include "mmapi_error.h"
+#include "mmapi_util.h"
 #include "mmapi_player.h"
+#include "../sonivox/log/log.h"
+
+#define LOG_TAG "MMAPI_JNI"
 
 /* for C++ linkage */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_initEAS(JNIEnv *env, jclass /*clazz*/) {
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    ALOGD(__func__);
+    JNIEnv* env;
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) == JNI_OK)
+        return JNI_VERSION_1_6;
+    return JNI_ERR;
+
+}
+
+JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved) {
+    ALOGD(__func__);
+}
+
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
+(JNIEnv *env, jclass clazz, jstring sound_bank) {
+    if (sound_bank == nullptr) {
+        return;
+    }
     EAS_DATA_HANDLE easHandle;
     EAS_RESULT result = EAS_Init(&easHandle);
     if (result != EAS_SUCCESS) {
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
-        return result;
+        return;
     }
-    jclass mlc = env->FindClass("javax/microedition/shell/MicroLoader");
-    jmethodID method = env->GetStaticMethodID(mlc, "getSoundfont", "()Ljava/lang/String;");
-    jobject sb = env->CallStaticObjectMethod(mlc, method);
-    if (sb != nullptr) {
-        mmapi::JStringHolder soundbank(env, reinterpret_cast<jstring>(sb));
-        mmapi::File file(soundbank.ptr, "rb");
-        EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
+    mmapi::JStringHolder sb(env, sound_bank);
+    mmapi::File file(sb.ptr, "rb");
+    result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
+    if (result == EAS_SUCCESS) {
         EAS_GetGlobalDLSLib(easHandle, &mmapi::Player::easDlsHandle);
+    } else {
+        auto &&message = MMAPI_GetErrorString(result);
+        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
     }
-    return reinterpret_cast<uintptr_t>(easHandle);
-}
-
-JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_checkFileType
-(JNIEnv *env, jclass /*clazz*/, jlong eas_handle, jstring path) {
-    auto easHandle = reinterpret_cast<EAS_DATA_HANDLE>(eas_handle);
-    const mmapi::JStringHolder locator(env, path);
-    mmapi::File file(locator.ptr, "rb");
-    EAS_HANDLE stream = nullptr;
-    jboolean result = EAS_OpenFile(easHandle, &file.easFile, &stream) == EAS_SUCCESS;
-    if (result) {
-        EAS_CloseFile(easHandle, stream);
-    }
-    return result;
+    EAS_Shutdown(easHandle);
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
-(JNIEnv *env, jclass /*clazz*/) {
+(JNIEnv *env, jclass /*clazz*/, jstring locator) {
     EAS_DATA_HANDLE easHandle;
     EAS_RESULT result = EAS_Init(&easHandle);
     if (result != EAS_SUCCESS) {
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
-        return result;
+        return 0;
     }
     auto *player = new mmapi::Player(easHandle);
+    mmapi::JStringHolder path(env, locator);
+    result = player->init(path.ptr);
+    if (result != EAS_SUCCESS) {
+        delete player;
+        auto &&message = MMAPI_GetErrorString(result);
+        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
+        return 0;
+    }
     return reinterpret_cast<jlong>(player);
 }
 
@@ -70,8 +85,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerFinalize
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerRealize
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jstring locator) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    mmapi::JStringHolder stringHolder(env, locator);
-    EAS_RESULT result = player->setDataSource(stringHolder.ptr);
+    EAS_RESULT result = player->realize();
     if (result != EAS_SUCCESS) {
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);

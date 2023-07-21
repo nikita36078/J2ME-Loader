@@ -20,6 +20,5 @@ import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.Player;
 
 public interface Plugin {
-	boolean checkFileType(String path);
 	Player createPlayer(InternalDataSource dataSource);
 }

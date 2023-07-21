@@ -6,7 +6,7 @@
 #include "mmapi_file.h"
 #include "libsonivox/eas.h"
 #include "libsonivox/log.h"
-#include "mmapi_error.h"
+#include "mmapi_util.h"
 
 #define LOG_TAG "MMAPI"
 
@@ -42,33 +42,33 @@ EAS_RESULT mmapi::Player::createAudioStream() {
     return EAS_SUCCESS;
 }
 
-long mmapi::Player::setDataSource(const char *path) {
+long mmapi::Player::init(const char *path) {
     if (path == nullptr) {
         return EAS_ERROR_INVALID_PARAMETER;
     }
     file = new File(path, "rb");
     EAS_RESULT result = EAS_OpenFile(easHandle, &file->easFile, &media);
     if (result != EAS_SUCCESS) {
-        delete file;
         return result;
     }
-    if (looping != 0) {
-        EAS_SetRepeat(easHandle, media, looping);
+    result = EAS_Prepare(easHandle, media);
+    if (result != EAS_SUCCESS) {
+        return result;
     }
-    state = REALIZED;
-    return result;
+    EAS_I32 type = EAS_FILE_UNKNOWN;
+    result = EAS_GetFileType(easHandle, media, &type);
+    if (result != EAS_SUCCESS) {
+        return result;
+    }
+    ALOGV("EAS_checkFileType(): %s file recognized", MMAPI_GetFileTypeString(type));
+    if (type == EAS_FILE_WAVE_PCM) {
+        result = EAS_ERROR_INVALID_PCM_TYPE;
+    }
+    return EAS_ParseMetaData(easHandle, media, &duration);
 }
 
 EAS_RESULT mmapi::Player::prefetch() {
-    EAS_RESULT result = EAS_Prepare(easHandle, media);
-    if (result != EAS_SUCCESS) {
-        return result;
-    }
-    result = EAS_ParseMetaData(easHandle, media, &duration);
-    if (result != EAS_SUCCESS) {
-        return result;
-    }
-    result = createAudioStream();
+    EAS_RESULT result = createAudioStream();
     if (result != EAS_SUCCESS) {
         return result;
     }
@@ -205,6 +205,11 @@ EAS_I32 mmapi::Player::getLevel() {
         volume = EAS_GetVolume(easHandle, media);
     }
     return volume;
+}
+
+EAS_RESULT mmapi::Player::realize() {
+    state = REALIZED;
+    return EAS_SUCCESS;
 }
 
 oboe::DataCallbackResult
