@@ -41,6 +41,7 @@ public class Manager {
 	private static final String TAG = "media.Manager";
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
+	public static final String RESOURCE_LOCATOR = "resource://";
 
 	private static final String FILE_LOCATOR = "file://";
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
@@ -57,7 +58,7 @@ public class Manager {
 			return new MidiPlayer();
 		} else if (locator.equals(TONE_DEVICE_LOCATOR)) {
 			return new TonePlayer();
-		} else if (locator.startsWith(FILE_LOCATOR)) {
+		} else if (locator.startsWith(FILE_LOCATOR) || locator.startsWith(RESOURCE_LOCATOR)) {
 			InputStream stream = Connector.openInputStream(locator);
 			String extension = locator.substring(locator.lastIndexOf('.') + 1);
 			String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
@@ -122,7 +123,7 @@ public class Manager {
 	}
 
 	public static String[] getSupportedProtocols(String str) {
-		return new String[]{"device", "file", "http"};
+		return new String[]{"device", "file", "http", "resource"};
 	}
 
 	public static TimeBase getSystemTimeBase() {
