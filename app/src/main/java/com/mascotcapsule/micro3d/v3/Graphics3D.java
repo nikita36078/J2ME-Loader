@@ -16,13 +16,7 @@
 
 package com.mascotcapsule.micro3d.v3;
 
-import android.widget.Toast;
-
-import androidx.preference.PreferenceManager;
-
 import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.ViewHandler;
-import javax.microedition.util.ContextHolder;
 
 import ru.woesss.j2me.micro3d.Render;
 
@@ -223,15 +217,6 @@ public class Graphics3D {
 	private void checkTargetIsValid() throws IllegalStateException {
 		if (render == null) {
 			throw new IllegalStateException("No target is bound");
-		}
-	}
-
-	static {
-		if (PreferenceManager.getDefaultSharedPreferences(ContextHolder.getAppContext()).getBoolean("micro3d_using_message", false)) {
-			ViewHandler.postEvent(
-					() -> Toast.makeText(ContextHolder.getAppContext(),
-							"Mascot Capsule 3D!",
-							Toast.LENGTH_LONG).show());
 		}
 	}
 }
