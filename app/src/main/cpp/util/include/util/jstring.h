@@ -3,7 +3,7 @@
 #ifndef JL_MOD_UTIL_H
 #define JL_MOD_UTIL_H
 
-namespace mmapi {
+namespace util {
     class JStringHolder {
     public:
         JStringHolder(JNIEnv *env, jstring ref);

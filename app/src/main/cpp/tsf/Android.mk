@@ -15,7 +15,7 @@ LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 
 LOCAL_MODULE := tsf
 
-LOCAL_SHARED_LIBRARIES := oboe mmapi
+LOCAL_SHARED_LIBRARIES := oboe util
 
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)

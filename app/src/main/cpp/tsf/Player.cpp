@@ -6,7 +6,7 @@
 #define TSF_IMPLEMENTATION
 #define TML_IMPLEMENTATION
 #include "Player.h"
-#include "../sonivox/log/log.h"
+#include "util/log.h"
 
 #define LOG_TAG "MMAPI"
 

@@ -33,7 +33,7 @@
  *------------------------------------
 */
 #define LOG_TAG "Sonivox"
-#include "log/log.h"
+#include "util/log.h"
 
 #include "eas_types.h"
 #include "eas_math.h"

@@ -5,11 +5,11 @@
 
 #include <cstddef>
 #include "libsonivox/eas.h"
-#include "mmapi_jstring.h"
+#include "util/jstring.h"
 #include "mmapi_file.h"
 #include "mmapi_util.h"
 #include "mmapi_player.h"
-#include "../sonivox/log/log.h"
+#include "util/log.h"
 
 #define LOG_TAG "MMAPI_JNI"
 
@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/) {
     ALOGD(__func__);
     JNIEnv* env;
     if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) == JNI_OK)
@@ -27,12 +27,12 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 
 }
 
-JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved) {
+JNIEXPORT void JNI_OnUnload(JavaVM* /*vm*/, void* /*reserved*/) {
     ALOGD(__func__);
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
-(JNIEnv *env, jclass clazz, jstring sound_bank) {
+(JNIEnv *env, jclass /*clazz*/, jstring sound_bank) {
     if (sound_bank == nullptr) {
         return;
     }
@@ -43,7 +43,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
         return;
     }
-    mmapi::JStringHolder sb(env, sound_bank);
+    util::JStringHolder sb(env, sound_bank);
     mmapi::File file(sb.ptr, "rb");
     result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
     if (result == EAS_SUCCESS) {
@@ -65,7 +65,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
         return 0;
     }
     auto *player = new mmapi::Player(easHandle);
-    mmapi::JStringHolder path(env, locator);
+    util::JStringHolder path(env, locator);
     result = player->init(path.ptr);
     if (result != EAS_SUCCESS) {
         delete player;
@@ -83,7 +83,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerFinalize
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerRealize
-(JNIEnv *env, jclass /*clazz*/, jlong handle, jstring locator) {
+(JNIEnv *env, jclass /*clazz*/, jlong handle, jstring /*locator*/) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
     EAS_RESULT result = player->realize();
     if (result != EAS_SUCCESS) {
@@ -163,7 +163,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setRepeat
 }
 
 JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setPan
-(JNIEnv *env, jclass /*clazz*/, jlong handle, jint pan) {
+(JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint pan) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
     return player->setPan(pan);
 }

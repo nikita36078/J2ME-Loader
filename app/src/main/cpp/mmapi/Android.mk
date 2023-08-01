@@ -7,7 +7,6 @@ LOCAL_SRC_FILES = \
 	mmapi_player.cpp \
 	mmapi_util.cpp \
 	mmapi_file.cpp \
-	mmapi_jstring.cpp
 #	eas_mmapi.c \
 	eas_mmapi_host.c \
 	eas_mmapi_jni.c \
@@ -21,14 +20,13 @@ LOCAL_CFLAGS += -O2 \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 
-LOCAL_LDLIBS := -llog
 LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 
 LOCAL_ARM_MODE := arm
 
 LOCAL_MODULE := mmapi
 
-LOCAL_SHARED_LIBRARIES := oboe sonivox
+LOCAL_SHARED_LIBRARIES := oboe sonivox util
 
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)

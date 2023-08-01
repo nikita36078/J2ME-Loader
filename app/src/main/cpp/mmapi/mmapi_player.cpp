@@ -5,7 +5,7 @@
 #include "mmapi_player.h"
 #include "mmapi_file.h"
 #include "libsonivox/eas.h"
-#include "libsonivox/log.h"
+#include "util/log.h"
 #include "mmapi_util.h"
 
 #define LOG_TAG "MMAPI"

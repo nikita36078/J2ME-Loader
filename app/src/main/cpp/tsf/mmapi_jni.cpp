@@ -4,7 +4,7 @@
 
 #include <jni.h>
 #include "Player.h"
-#include "../mmapi/mmapi_jstring.h"
+#include "util/jstring.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,7 +17,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
         return;
     }
 
-    mmapi::JStringHolder sb(env, sound_bank);
+    util::JStringHolder sb(env, sound_bank);
     if (!tsf_mmapi::Player::initSoundBank(sb.ptr)) {
         env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Unsupported sound bank file");
     }
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
 (JNIEnv *env, jclass /*clazz*/, jstring locator) {
     auto *player = new tsf_mmapi::Player();
-    mmapi::JStringHolder path(env, locator);
+    util::JStringHolder path(env, locator);
     if (player->init(path.ptr)) {
         return reinterpret_cast<jlong>(player);
     }

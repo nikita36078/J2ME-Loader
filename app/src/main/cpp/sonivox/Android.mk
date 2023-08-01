@@ -92,12 +92,11 @@ LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/host_src \
-	$(LOCAL_PATH)/lib_src \
-	$(LOCAL_PATH)/log
+	$(LOCAL_PATH)/lib_src
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_LDLIBS := -llog
+LOCAL_SHARED_LIBRARIES := util
 
 LOCAL_MODULE := sonivox
 

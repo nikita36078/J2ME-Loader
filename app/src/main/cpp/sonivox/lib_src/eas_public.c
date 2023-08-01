@@ -28,7 +28,7 @@
 */
 
 #define LOG_TAG "Sonivox"
-#include "log/log.h"
+#include "util/log.h"
 
 #include "eas_synthcfg.h"
 #include "eas.h"

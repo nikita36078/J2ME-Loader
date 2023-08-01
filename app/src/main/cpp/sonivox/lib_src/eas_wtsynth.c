@@ -29,7 +29,7 @@
 
 // includes
 #define LOG_TAG "SYNTH"
-#include "log/log.h"
+#include "util/log.h"
 
 #include "eas_data.h"
 #include "eas_report.h"
