@@ -120,10 +120,8 @@ void mmapi::Player::close() {
         oboeStream->close();
         oboeStream.reset();
     }
-    if (state >= REALIZED) {
-        EAS_CloseFile(easHandle, media);
-        delete file;
-    }
+    EAS_CloseFile(easHandle, media);
+    delete file;
     EAS_Shutdown(easHandle);
     state = CLOSED;
 }

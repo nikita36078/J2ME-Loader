@@ -16,24 +16,32 @@
 
 package ru.woesss.j2me.mmapi.tsf;
 
+import android.util.Log;
+
 import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.Player;
+import javax.microedition.shell.MicroLoader;
 
 import ru.woesss.j2me.mmapi.Plugin;
 
-public class TsfPlugin implements Plugin {
-   private static final String TAG = "TsfPlugin";
+public class PluginTSF implements Plugin {
+	private static final String TAG = "TsfPlugin";
 
-   public TsfPlugin() {
-   }
+	public PluginTSF() {
+		String soundBank = MicroLoader.getSoundBank();
+		if (soundBank == null) {
+			throw new IllegalStateException("Sound Bank not selected");
+		}
+		TinySoundFont.init(soundBank);
+	}
 
-   @Override
-   public boolean checkFileType(String path) {
-      return TinySoundFont.checkFileTipe(path);
-   }
-
-   @Override
-   public Player createPlayer(InternalDataSource dataSource) {
-      return null;
-   }
+	@Override
+	public Player createPlayer(InternalDataSource dataSource) {
+		try {
+			return new PlayerTSF(dataSource);
+		} catch (Exception e) {
+			Log.w(TAG, "createPlayer: ", e);
+			return null;
+		}
+	}
 }

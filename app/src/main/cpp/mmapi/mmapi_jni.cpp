@@ -99,6 +99,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPrefetch
     if (result != EAS_SUCCESS) {
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
+        return -1LL;
     }
     return player->duration * 1000LL;
 }

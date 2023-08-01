@@ -36,6 +36,7 @@ import javax.microedition.util.ContextHolder;
 
 import ru.woesss.j2me.mmapi.Plugin;
 import ru.woesss.j2me.mmapi.sonivox.PluginEAS;
+import ru.woesss.j2me.mmapi.tsf.PluginTSF;
 
 public class Manager {
 	private static final String TAG = "media.Manager";
@@ -138,6 +139,11 @@ public class Manager {
 	static {
 		try {
 			PLUGINS.add(new PluginEAS());
+		} catch (Throwable e) {
+			Log.w(TAG, "static initializer: ", e);
+		}
+		try {
+			PLUGINS.add(new PluginTSF());
 		} catch (Throwable e) {
 			Log.w(TAG, "static initializer: ", e);
 		}
