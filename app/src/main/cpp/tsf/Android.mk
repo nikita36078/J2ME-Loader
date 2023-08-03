@@ -4,6 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES = \
 	Player.cpp \
+	PlayerListener.cpp \
 	mmapi_jni.cpp \
 
 LOCAL_CFLAGS += -O2 \

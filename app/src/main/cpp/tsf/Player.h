@@ -8,6 +8,7 @@
 #include <oboe/Oboe.h>
 #include "tsf.h"
 #include "tml.h"
+#include "PlayerListener.h"
 
 namespace tsf_mmapi {
     enum State {
@@ -30,6 +31,7 @@ namespace tsf_mmapi {
         int64_t playTime = 0;
         int32_t loopCount = 1;
         tml_message *currentMsg = nullptr;
+        PlayerListener *playerListener = nullptr;
 
     public:
         int64_t duration = -1;
@@ -49,10 +51,11 @@ namespace tsf_mmapi {
         int32_t setPan(int32_t pan);
         int32_t getPan();
         void setMute(bool mute);
-        int32_t setLevel(int32_t level);
+        int32_t setVolume(int32_t level);
         bool isMuted() const;
         int32_t getLevel() const;
         bool realize();
+        void setListener(PlayerListener *listener);
 
         oboe::DataCallbackResult
         onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) override;
@@ -62,6 +65,7 @@ namespace tsf_mmapi {
 
     private:
         bool createAudioStream();
+        static float computeGain(int32_t level);
     };
 
 } // tsf_mmapi

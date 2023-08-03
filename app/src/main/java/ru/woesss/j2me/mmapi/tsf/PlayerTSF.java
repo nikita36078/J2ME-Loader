@@ -19,6 +19,8 @@ package ru.woesss.j2me.mmapi.tsf;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
+import androidx.annotation.Keep;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,12 +54,16 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 
 	public PlayerTSF(InternalDataSource dataSource) {
 		handle = TinySoundFont.playerInit(dataSource.getLocator());
+		if (handle == 0) {
+			throw new RuntimeException();
+		}
 		duration = TinySoundFont.playerGetDuration(handle);
 		this.dataSource = dataSource;
 		controls.put(VolumeControl.class.getName(), this);
 		controls.put(PanControl.class.getName(), this);
 		controls.put(MetaDataControl.class.getName(), metadata);
 		controls.put(EqualizerControl.class.getName(), new InternalEqualizer());
+		TinySoundFont.playerListener(handle, this);
 	}
 
 	@Override
@@ -253,6 +259,19 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 	public synchronized void removePlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		listeners.remove(playerListener);
+	}
+
+	/** @noinspection unused */
+	@Keep // call from native
+	private synchronized void postEvent(int type, long time) {
+		switch (type) {
+			case 1: // endOfMedia
+				postEvent(PlayerListener.END_OF_MEDIA, time);
+				break;
+			case 2: // started
+				postEvent(PlayerListener.STARTED, time);
+				break;
+		}
 	}
 
 	private synchronized void postEvent(String event, Object eventData) {

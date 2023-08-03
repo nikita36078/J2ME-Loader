@@ -20,6 +20,7 @@ namespace tsf_mmapi {
 
     Player::~Player() {
         close();
+        delete playerListener;
     }
 
     bool Player::createAudioStream() {
@@ -40,6 +41,7 @@ namespace tsf_mmapi {
 
         // Set the SoundFont rendering output mode
         tsf_set_output(synth, TSF_STEREO_INTERLEAVED, oboeStream->getSampleRate(), 0.0f);
+        tsf_set_volume(synth, computeGain(volume));
         return true;
     }
 
@@ -131,9 +133,7 @@ namespace tsf_mmapi {
             count--;
         }
         looping = count;
-        if (state < REALIZED) {
-            return;
-        }
+        loopCount = count;
     }
 
     int32_t Player::setPan(int32_t pan) {
@@ -149,15 +149,19 @@ namespace tsf_mmapi {
             tsf_set_volume(synth, 0.0f);
             muted = true;
         } else if (!mute && muted) {
-            tsf_set_volume(synth, static_cast<float>(volume) / 100.0f);
+            tsf_set_volume(synth, computeGain(volume));
             muted = false;
         }
     }
 
-    int32_t Player::setLevel(int32_t level) {
+    int32_t Player::setVolume(int32_t level) {
         volume = level;
-        tsf_set_volume(synth, static_cast<float>(level) / 100.0f);
+        tsf_set_volume(synth, computeGain(level));
         return volume;
+    }
+
+    float Player::computeGain(int32_t level) {
+        return static_cast<float>(1.0 - log(101 - level) / log(101));
     }
 
     bool Player::isMuted() const {
@@ -173,8 +177,32 @@ namespace tsf_mmapi {
         return true;
     }
 
+    bool Player::initSoundBank(const char *sound_bank) {
+        tsf *synth = tsf_load_filename(sound_bank);
+        if (synth == nullptr) {
+            return false;
+        }
+        tsf_mmapi::Player::soundBank = synth;
+        return true;
+    }
+
+    void Player::setListener(PlayerListener *listener) {
+        this->playerListener = listener;
+    }
+
     oboe::DataCallbackResult
     Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
+        if (currentMsg == nullptr) {
+            playerListener->postEvent(END_OF_MEDIA, playTime);
+            if (looping == -1 || (--loopCount) > 0) {
+                currentMsg = media;
+                playTime = 0;
+                tsf_reset(synth);
+                playerListener->postEvent(START, playTime);
+            } else {
+                return oboe::DataCallbackResult::Stop;
+            }
+        }
         //Number of samples to process
         int sampleBlock = TSF_RENDER_EFFECTSAMPLEBLOCK;
         auto *stream = static_cast<float *>(audioData);
@@ -183,7 +211,7 @@ namespace tsf_mmapi {
             if (sampleBlock > numFrames) sampleBlock = numFrames;
 
             //Loop through all MIDI messages which need to be played up until the current playback time
-            for (playTime += sampleBlock * (1000000LL / audioStream->getSampleRate());
+            for (playTime += sampleBlock * 1000000LL / audioStream->getSampleRate();
                  currentMsg && playTime >= currentMsg->time * 1000LL; currentMsg = currentMsg->next) {
                 switch (currentMsg->type) {
                     case TML_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
@@ -193,7 +221,7 @@ namespace tsf_mmapi {
                         break;
                     case TML_NOTE_ON: //play a note
                         tsf_channel_note_on(synth, currentMsg->channel, currentMsg->key,
-                                            currentMsg->velocity / 127.0f);
+                                            static_cast<float>(currentMsg->velocity) / 127.0f);
                         break;
                     case TML_NOTE_OFF: //stop a note
                         tsf_channel_note_off(synth, currentMsg->channel, currentMsg->key);
@@ -223,14 +251,4 @@ namespace tsf_mmapi {
             }
         }
     }
-
-    bool Player::initSoundBank(const char *sound_bank) {
-        tsf *synth = tsf_load_filename(sound_bank);
-        if (synth == nullptr) {
-            return false;
-        }
-        tsf_mmapi::Player::soundBank = synth;
-        return true;
-    }
-
 } // tsf_mmapi

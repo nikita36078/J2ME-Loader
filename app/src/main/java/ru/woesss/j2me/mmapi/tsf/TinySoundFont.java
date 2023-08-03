@@ -36,6 +36,7 @@ class TinySoundFont {
 	static native int getVolume(long handle);
 	static native void playerFinalize(long handle);
 	static native long playerGetDuration(long handle);
+	static native void playerListener(long handle, PlayerTSF listener);
 
 	static {
 		System.loadLibrary("c++_shared");
