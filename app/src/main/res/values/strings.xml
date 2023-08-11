@@ -177,6 +177,7 @@
     <string name="opt_save_screen_params">save screen params</string>
     <string name="cmd_menu">Menu</string>
     <string name="dismiss">Dismiss</string>
+    <string name="show">Show</string>
 
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>
     <string name="pref_theme_auto_time">Auto, by time of day</string>

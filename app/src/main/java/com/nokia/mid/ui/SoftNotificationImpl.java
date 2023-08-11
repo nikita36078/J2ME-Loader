@@ -16,6 +16,7 @@
 
 package com.nokia.mid.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -38,10 +39,25 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class SoftNotificationImpl extends SoftNotification {
+	final static int EVENT_ACCEPT = 1;
+	final static int EVENT_DISMISS = 2;
+
 	@SuppressLint("StaticFieldLeak")
 	private static NotificationManagerCompat notificationmgr;
 	@SuppressLint("StaticFieldLeak")
 	private static MicroActivity activity;
+
+	private SoftNotificationListener[] listeners;
+	private String groupText;
+	private String text;
+	private Notification notification;
+	private String softAction1;
+	private String softAction2;
+	private int id;
+	private static int ids = 1;
+	static Hashtable<Integer, SoftNotificationImpl> instanceMap;
+	private SoftNotificationImpl old;
+	private Bitmap bitmap;
 
 	static {
 		try {
@@ -51,20 +67,6 @@ public class SoftNotificationImpl extends SoftNotification {
 		} catch (Exception ignored) {
 		}
 	}
-
-	private SoftNotificationListener[] listeners;
-	private String groupText;
-	private String text;
-	private boolean hasImage;
-	private static SoftNotificationImpl lastInstance;
-	private Notification notification;
-	private String softAction1;
-	private String softAction2;
-	private int id;
-	private static int ids = 1;
-	static Hashtable<Integer, SoftNotificationImpl> instanceMap;
-	private SoftNotificationImpl old;
-	private Bitmap bitmap;
 
 	public SoftNotificationImpl(int notificationId) {
 		initialize(notificationId);
@@ -76,7 +78,6 @@ public class SoftNotificationImpl extends SoftNotification {
 
 	protected void initialize(int notificationId) {
 		id = notificationId;
-		lastInstance = this;
 		listeners = new SoftNotificationListener[1];
 		if (id != -1) {
 			old = instanceMap.get(id);
@@ -88,9 +89,9 @@ public class SoftNotificationImpl extends SoftNotification {
 		synchronized (this.listeners) {
 			SoftNotificationListener listener = this.listeners[0];
 			if (listener != null) {
-				if (eventArg == 1) {
+				if (eventArg == EVENT_ACCEPT) {
 					listener.notificationSelected(this);
-				} else if (eventArg == 2) {
+				} else if (eventArg == EVENT_DISMISS) {
 					listener.notificationDismissed(this);
 				}
 			}
@@ -103,6 +104,10 @@ public class SoftNotificationImpl extends SoftNotification {
 	}
 
 	public void post() throws SoftNotificationException {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+				!ContextHolder.requestPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+			throw new SoftNotificationException();
+		}
 		try {
 			if (id == -1) id = ids++;
 			instanceMap.put(id, this);
@@ -133,35 +138,30 @@ public class SoftNotificationImpl extends SoftNotification {
 
 			@SuppressLint("InlinedApi")
 			int pendingIntentFlags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? PendingIntent.FLAG_IMMUTABLE : 0;
-			if (softAction1 != null) {
-				Intent selectIntent = new Intent(activity, NotificationActivity.class);
-				selectIntent.setAction("select");
-				selectIntent.putExtra("id", id);
-				selectIntent.putExtra("event", 1);
 
-				PendingIntent selectPendingIntent = PendingIntent.getActivity(activity,
-						(int) System.currentTimeMillis(), selectIntent, pendingIntentFlags);
-				builder.setContentIntent(selectPendingIntent);
+			Intent selectIntent = new Intent(activity, NotificationBroadcastReceiver.class);
+			selectIntent.putExtra("id", id);
+			selectIntent.putExtra("event", EVENT_ACCEPT);
 
-				builder.addAction(new NotificationCompat.Action.Builder(null,
-						softAction1, selectPendingIntent)
-						.build());
-			}
+			PendingIntent selectPendingIntent = PendingIntent.getBroadcast(activity,
+					(int) System.currentTimeMillis(), selectIntent, pendingIntentFlags);
+			builder.setContentIntent(selectPendingIntent);
+			builder.addAction(new NotificationCompat.Action.Builder(null,
+					softAction1 != null ? softAction2 : activity.getString(R.string.show),
+					selectPendingIntent)
+					.build());
 
-			Intent dismissIntent = new Intent(activity, NotificationActivity.class);
-			dismissIntent.setAction("dismiss");
+			Intent dismissIntent = new Intent(activity, NotificationBroadcastReceiver.class);
 			dismissIntent.putExtra("id", id);
-			dismissIntent.putExtra("event", 2);
+			dismissIntent.putExtra("event", EVENT_DISMISS);
 
-			PendingIntent dismissPendingIntent = PendingIntent.getActivity(activity,
+			PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(activity,
 					(int) System.currentTimeMillis(), dismissIntent, pendingIntentFlags);
+			builder.addAction(new NotificationCompat.Action.Builder(null,
+					softAction2 != null ? softAction2 : activity.getString(R.string.dismiss),
+					dismissPendingIntent)
+					.build());
 
-			NotificationCompat.Action dismissAction =
-					new NotificationCompat.Action.Builder(null,
-							softAction2 != null ? softAction2 : activity.getString(R.string.dismiss),
-							dismissPendingIntent)
-							.build();
-			builder.addAction(dismissAction);
 			notification = builder.build();
 			notificationmgr.notify(id, notification);
 		} catch (Throwable e) {
@@ -196,6 +196,5 @@ public class SoftNotificationImpl extends SoftNotification {
 			throw new SoftNotificationException("Can't decode image");
 		}
 		bitmap = b;
-		hasImage = true;
 	}
 }
