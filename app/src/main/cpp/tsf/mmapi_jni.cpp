@@ -28,8 +28,8 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
         return;
     }
 
-    util::JStringHolder sb(env, sound_bank);
-    if (!tsf_mmapi::Player::initSoundBank(sb.ptr)) {
+    util::JStringPtr sb(env, sound_bank);
+    if (!tsf_mmapi::Player::initSoundBank(*sb)) {
         env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Unsupported sound bank file");
     }
 }
@@ -37,8 +37,8 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
 (JNIEnv *env, jclass /*clazz*/, jstring locator) {
     auto *player = new tsf_mmapi::Player();
-    util::JStringHolder path(env, locator);
-    if (player->init(path.ptr)) {
+    util::JStringPtr path(env, locator);
+    if (player->init(*path)) {
         return reinterpret_cast<jlong>(player);
     }
     delete player;

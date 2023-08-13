@@ -43,8 +43,8 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
         return;
     }
-    util::JStringHolder sb(env, sound_bank);
-    mmapi::File file(sb.ptr, "rb");
+    util::JStringPtr sb(env, sound_bank);
+    mmapi::File file(*sb, "rb");
     result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
     if (result == EAS_SUCCESS) {
         EAS_GetGlobalDLSLib(easHandle, &mmapi::Player::easDlsHandle);
@@ -65,8 +65,8 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
         return 0;
     }
     auto *player = new mmapi::Player(easHandle);
-    util::JStringHolder path(env, locator);
-    result = player->init(path.ptr);
+    util::JStringPtr path(env, locator);
+    result = player->init(*path);
     if (result != EAS_SUCCESS) {
         delete player;
         auto &&message = MMAPI_GetErrorString(result);
