@@ -53,6 +53,8 @@ import javax.microedition.util.ContextHolder;
 
 import androidx.core.content.FileProvider;
 
+import ru.playsoftware.j2meloader.config.Config;
+
 public class FileSystemFileConnection implements FileConnection {
 	private static final String TAG = FileSystemFileConnection.class.getSimpleName();
 
@@ -65,7 +67,6 @@ public class FileSystemFileConnection implements FileConnection {
 			"1:/",
 			"fs/MyStuff/",
 	};
-	private static final String[] FS_ROOTS = {System.getProperty("user.home")};
 
 	private final String host;
 	private final String root;
@@ -114,12 +115,15 @@ public class FileSystemFileConnection implements FileConnection {
 	}
 
 	private String getFsRoot() {
-		return FS_ROOTS[0] + DIR_SEP_STR;
+		if (root.equalsIgnoreCase(FC_ROOTS[1])) {
+			return Config.getFsExternalDir();
+		}
+		return Config.getFsInternalDir();
 	}
 
 	private static String getRoot(String path) {
 		for (String root : FC_ROOTS) {
-			if (path.startsWith(root))
+			if (path.toLowerCase().startsWith(root))
 				return root;
 		}
 		int separator = path.indexOf(DIR_SEP);
@@ -131,6 +135,7 @@ public class FileSystemFileConnection implements FileConnection {
 	static Enumeration<String> listRoots() {
 		Vector<String> list = new Vector<>();
 		list.add(FC_ROOTS[0]);
+		list.add(FC_ROOTS[1]);
 		return list.elements();
 	}
 

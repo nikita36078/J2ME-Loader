@@ -38,6 +38,7 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Config {
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
+	public static final String FS_DIR = "/fs/";
 	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String MIDLET_CONFIGS_DIR = "/configs/";
 	public static final String MIDLET_DATA_DIR = "/data/";
@@ -104,6 +105,18 @@ public class Config {
 
 	public static String getShadersDir() {
 		return emulatorDir + SHADERS_DIR;
+	}
+
+	public static String getFsInternalDir() {
+		return emulatorDir + FS_DIR + "c/";
+	}
+
+	public static String getFsExternalDir() {
+		if (FileUtils.isExternalStorageLegacy()) {
+			return Environment.getExternalStorageDirectory().getPath() + "/";
+		} else {
+			return emulatorDir + FS_DIR + "e/";
+		}
 	}
 
 	public static void startApp(Context context, String name, String path, boolean showSettings) {

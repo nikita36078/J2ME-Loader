@@ -102,6 +102,14 @@ public class MicroLoader {
 		if (cacheDir != null && cacheDir.exists()) {
 			FileUtils.clearDirectory(cacheDir);
 		}
+		File internalDriveDir = new File(Config.getFsInternalDir());
+		if (!internalDriveDir.exists()) {
+			internalDriveDir.mkdirs();
+		}
+		File externalDriveDir = new File(Config.getFsExternalDir());
+		if (!externalDriveDir.exists()) {
+			externalDriveDir.mkdirs();
+		}
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitNetwork()
 				.penaltyLog()
@@ -201,7 +209,7 @@ public class MicroLoader {
 		System.setProperty("fileconn.dir.cache", dataUri + "/cache");
 		System.setProperty("fileconn.dir.private", dataUri + "/private");
 		System.setProperty("fileconn.dir.music", musicUri);
-		System.setProperty("user.home", primaryStoragePath);
+		System.setProperty("user.home", Config.getFsInternalDir());
 	}
 
 	public int getOrientation() {
