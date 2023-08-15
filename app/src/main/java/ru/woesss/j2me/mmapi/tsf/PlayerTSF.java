@@ -263,7 +263,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 
 	/** @noinspection unused */
 	@Keep // call from native
-	private synchronized void postEvent(int type, long time) {
+	private void postEvent(int type, long time) {
 		switch (type) {
 			case 1: // endOfMedia
 				postEvent(PlayerListener.END_OF_MEDIA, time);

@@ -8,6 +8,7 @@
 #include <oboe/Oboe.h>
 #include "libsonivox/eas.h"
 #include "mmapi_file.h"
+#include "PlayerListener.h"
 
 namespace mmapi {
     enum State {
@@ -59,11 +60,16 @@ namespace mmapi {
         EAS_I32 volume = 100;
         EAS_I32 looping = 0;
         File *file = nullptr;
+        EAS_I32 timeSet = -1;
+        EAS_I32 loopCount = 1;
+        PlayerListener *playerListener = nullptr;
 
     public:
         EAS_I32 duration = -1;
 
         static EAS_DLSLIB_HANDLE easDlsHandle;
+
+        void setListener(PlayerListener *pListener);
     };
 }
 

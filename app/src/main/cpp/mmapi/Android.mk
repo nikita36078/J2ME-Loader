@@ -7,6 +7,7 @@ LOCAL_SRC_FILES = \
 	mmapi_player.cpp \
 	mmapi_util.cpp \
 	mmapi_file.cpp \
+	PlayerListener.cpp \
 #	eas_mmapi.c \
 	eas_mmapi_host.c \
 	eas_mmapi_jni.c \

@@ -20,6 +20,7 @@ mmapi::Player::Player(EAS_DATA_HANDLE easHandle) : easHandle(easHandle) {
 
 mmapi::Player::~Player() {
     close();
+    delete playerListener;
 }
 
 EAS_RESULT mmapi::Player::createAudioStream() {
@@ -104,9 +105,7 @@ void mmapi::Player::deallocate() {
     oboeStream->close();
     oboeStream.reset();
     EAS_Locate(easHandle, media, 0, EAS_FALSE);
-    if (looping != 0) {
-        EAS_SetRepeat(easHandle, media, looping);
-    }
+    loopCount = looping;
     state = REALIZED;
 }
 
@@ -127,16 +126,13 @@ void mmapi::Player::close() {
 }
 
 EAS_I32 mmapi::Player::setMediaTime(EAS_I32 now) {
-    EAS_RESULT result = EAS_Locate(easHandle, media, now, EAS_FALSE);
-    if (result != EAS_SUCCESS) {
-        ALOGE("%s: EAS_Locate return %s", __func__, MMAPI_GetErrorString(result));
+    if (now < 0) {
+        now = 0;
+    } else if (now > duration) {
+        now = duration;
     }
-    EAS_I32 pTime = -1;
-    result = EAS_GetLocation(easHandle, media, &pTime);
-    if (result != EAS_SUCCESS) {
-        ALOGE("%s: EAS_GetLocation return %s", __func__, MMAPI_GetErrorString(result));
-    }
-    return pTime;
+    timeSet = now;
+    return now;
 }
 
 EAS_I32 mmapi::Player::getMediaTime() {
@@ -153,13 +149,7 @@ void mmapi::Player::setRepeat(EAS_I32 count) {
         count--;
     }
     looping = count;
-    if (state < REALIZED) {
-        return;
-    }
-    EAS_RESULT result = EAS_SetRepeat(easHandle, media, count);
-    if (result != EAS_SUCCESS) {
-        ALOGE("%s: EAS_SetRepeat return %s", __func__, MMAPI_GetErrorString(result));
-    }
+    loopCount = count;
 }
 
 EAS_I32 mmapi::Player::setPan(EAS_I32 pan) {
@@ -214,8 +204,22 @@ oboe::DataCallbackResult
 mmapi::Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
     EAS_STATE easState;
     EAS_State(easHandle, media, &easState);
-    if ((easState == EAS_STATE_STOPPED) || (easState == EAS_STATE_ERROR)) {
-        return oboe::DataCallbackResult::Stop;
+    if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
+        playerListener->postEvent(END_OF_MEDIA, getMediaTime());
+        if (looping == -1 || (--loopCount) > 0) {
+            setMediaTime(0);
+            playerListener->postEvent(START, 0);
+        } else {
+            return oboe::DataCallbackResult::Stop;
+        }
+    }
+
+    if (timeSet != -1) {
+        EAS_RESULT result = EAS_Locate(easHandle, media, timeSet, EAS_FALSE);
+        if (result != EAS_SUCCESS) {
+            ALOGE("%s: EAS_Locate() return %s", __func__, MMAPI_GetErrorString(result));
+        }
+        timeSet = -1;
     }
 
     auto *p = static_cast<EAS_PCM *>(audioData);
@@ -225,18 +229,12 @@ mmapi::Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int
         EAS_I32 numRendered;
         result = EAS_Render(easHandle, p, easConfig->mixBufferSize, &numRendered);
         if (result != EAS_SUCCESS) {
-            ALOGE("EAS_Render() returned %ld, numBytesOutput = %d", result, numFramesOutput);
+            playerListener->postEvent(ERROR, result);
+            ALOGE("EAS_Render() returned %s, numBytesOutput = %d", MMAPI_GetErrorString(result), numFramesOutput);
             return oboe::DataCallbackResult::Stop; // Stop processing to prevent infinite loops.
         }
         p += numRendered * easConfig->numChannels;
         numFramesOutput += numRendered;
-    }
-    EAS_I32 mediaTime(0);
-    result = EAS_GetLocation(easHandle, media, &mediaTime);
-    if (result == EAS_SUCCESS) {
-        if (mediaTime >= duration) {
-            ALOGD("%s: END_OF_MEDIA", __func__);
-        }
     }
     return oboe::DataCallbackResult::Continue;
 }
@@ -248,4 +246,8 @@ void mmapi::Player::onErrorAfterClose(oboe::AudioStream *stream, oboe::Result re
             oboeStream->requestStart();
         }
     }
+}
+
+void mmapi::Player::setListener(mmapi::PlayerListener *listener) {
+    this->playerListener = listener;
 }

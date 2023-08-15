@@ -19,16 +19,12 @@ extern "C" {
 #endif
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/) {
-    ALOGD(__func__);
     JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) == JNI_OK)
-        return JNI_VERSION_1_6;
-    return JNI_ERR;
-
-}
-
-JNIEXPORT void JNI_OnUnload(JavaVM* /*vm*/, void* /*reserved*/) {
-    ALOGD(__func__);
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
+        return JNI_ERR;
+    }
+    mmapi::JNIEnvPtr::vm = vm;
+    return JNI_VERSION_1_6;
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
@@ -140,7 +136,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jlong new_time) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
     jlong now = player->setMediaTime(new_time / 1000LL);
-    if (now >= 0) {
+    if (now > 0) {
         now *= 1000;
     }
     return now;
@@ -150,7 +146,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
     jlong now = player->getMediaTime();
-    if (now >= 0) {
+    if (now > 0) {
         now *= 1000;
     }
     return now;
@@ -196,6 +192,12 @@ JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
     return player->getLevel();
+}
+
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerListener
+(JNIEnv *env, jclass clazz, jlong handle, jobject listener) {
+    auto *player = reinterpret_cast<mmapi::Player *>(handle);
+    player->setListener(new mmapi::PlayerListener(env, listener));
 }
 
 #ifdef __cplusplus

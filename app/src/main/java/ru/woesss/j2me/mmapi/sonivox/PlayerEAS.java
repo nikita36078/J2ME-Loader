@@ -19,6 +19,8 @@ package ru.woesss.j2me.mmapi.sonivox;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
+import androidx.annotation.Keep;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +59,7 @@ public class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 		controls.put(PanControl.class.getName(), this);
 		controls.put(MetaDataControl.class.getName(), metadata);
 		controls.put(EqualizerControl.class.getName(), new InternalEqualizer());
+		EAS.playerListener(handle, this);
 	}
 
 	@Override
@@ -252,6 +255,22 @@ public class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 	public synchronized void removePlayerListener(PlayerListener playerListener) {
 		checkClosed();
 		listeners.remove(playerListener);
+	}
+
+	/** @noinspection unused */
+	@Keep // call from native
+	private void postEvent(int type, long time) {
+		switch (type) {
+			case 1: // endOfMedia
+				postEvent(PlayerListener.END_OF_MEDIA, time);
+				break;
+			case 2: // started
+				postEvent(PlayerListener.STARTED, time);
+				break;
+			case 3: // error
+				postEvent(PlayerListener.ERROR, null);
+				break;
+		}
 	}
 
 	private synchronized void postEvent(String event, Object eventData) {

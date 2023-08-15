@@ -35,6 +35,7 @@ class EAS {
 	static native int setVolume(long handle, int level);
 	static native int getVolume(long handle);
 	static native void init(String soundBank);
+	static native void playerListener(long handle, PlayerEAS listener);
 
 	static {
 		System.loadLibrary("c++_shared");
