@@ -66,6 +66,8 @@ namespace tsf_mmapi {
 
     private:
         bool createAudioStream();
+        void processEvents(bool playMode);
+
         static float computeGain(int32_t level);
     };
 
