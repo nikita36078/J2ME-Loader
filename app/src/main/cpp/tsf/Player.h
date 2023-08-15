@@ -54,7 +54,7 @@ namespace tsf_mmapi {
         void setMute(bool mute);
         int32_t setVolume(int32_t level);
         bool isMuted() const;
-        int32_t getLevel() const;
+        int32_t getVolume() const;
         bool realize();
         void setListener(PlayerListener *listener);
 

@@ -17,15 +17,16 @@
 package ru.woesss.j2me.mmapi.sonivox;
 
 class EAS {
-	static native void playerFinalize(long easHandle);
+	static native void init(String soundBank);
 	static native long playerInit(String locator);
+	static native void playerFinalize(long handle);
 	static native void playerRealize(long handle, String locator);
 	static native long playerPrefetch(long handle);
 	static native void playerStart(long handle);
 	static native void playerPause(long handle);
 	static native void playerDeallocate(long handle);
 	static native void playerClose(long handle);
-	static native long setMediaTime(long handle, long newTime);
+	static native long setMediaTime(long handle, long now);
 	static native long getMediaTime(long handle);
 	static native void setRepeat(long handle, int count);
 	static native int setPan(long handle, int pan);
@@ -34,7 +35,7 @@ class EAS {
 	static native boolean isMuted(long handle);
 	static native int setVolume(long handle, int level);
 	static native int getVolume(long handle);
-	static native void init(String soundBank);
+	static native long playerGetDuration(long handle);
 	static native void playerListener(long handle, PlayerEAS listener);
 
 	static {

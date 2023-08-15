@@ -26,22 +26,22 @@ namespace mmapi {
 
         ~Player() override;
 
-        long init(const char *path);
-        EAS_RESULT prefetch();
-        EAS_RESULT start();
-        EAS_RESULT pause();
+        EAS_RESULT init(const char *path);
+        bool prefetch();
+        bool start();
+        bool pause();
         void deallocate();
         void close();
-        EAS_I32 setMediaTime(EAS_I32 now);
-        EAS_I32 getMediaTime();
-        void setRepeat(EAS_I32 count);
-        EAS_I32 setPan(EAS_I32 pan);
-        EAS_I32 getPan();
-        void setMute(EAS_BOOL mute);
-        int setLevel(EAS_I32 level);
-        EAS_BOOL isMuted() const;
-        EAS_I32 getLevel();
-        EAS_RESULT realize();
+        int64_t setMediaTime(int64_t now);
+        int64_t getMediaTime();
+        void setRepeat(int32_t count);
+        int32_t setPan(int32_t pan);
+        int32_t getPan();
+        void setMute(bool mute);
+        int setVolume(int32_t level);
+        bool isMuted() const;
+        int32_t getVolume();
+        bool realize();
 
         oboe::DataCallbackResult
         onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) override;
@@ -49,8 +49,9 @@ namespace mmapi {
         void onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) override;
 
     private:
-        EAS_RESULT createAudioStream();
+        bool createAudioStream();
 
+        static EAS_DLSLIB_HANDLE easDlsHandle;
         const S_EAS_LIB_CONFIG *easConfig = EAS_Config();
         EAS_DATA_HANDLE easHandle;
         EAS_HANDLE media = nullptr;
@@ -67,9 +68,9 @@ namespace mmapi {
     public:
         EAS_I32 duration = -1;
 
-        static EAS_DLSLIB_HANDLE easDlsHandle;
-
         void setListener(PlayerListener *pListener);
+
+        static EAS_RESULT initSoundBank(const char *string);
     };
 }
 

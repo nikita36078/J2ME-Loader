@@ -39,7 +39,7 @@ import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.VolumeControl;
 
-public class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
+class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 	private static final String TAG = "PlayerEAS";
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
@@ -48,12 +48,13 @@ public class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 	private final InternalMetaData metadata = new InternalMetaData();
 	private final InternalDataSource dataSource;
 	private final long handle;
-	private long duration = TIME_UNKNOWN;
+	private final long duration;
 
 	private int state = UNREALIZED;
 
 	public PlayerEAS(InternalDataSource dataSource) {
 		handle = EAS.playerInit(dataSource.getLocator());
+		duration = EAS.playerGetDuration(handle);
 		this.dataSource = dataSource;
 		controls.put(VolumeControl.class.getName(), this);
 		controls.put(PanControl.class.getName(), this);
@@ -95,7 +96,7 @@ public class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			duration = EAS.playerPrefetch(handle);
+			EAS.playerPrefetch(handle);
 			state = PREFETCHED;
 		}
 	}

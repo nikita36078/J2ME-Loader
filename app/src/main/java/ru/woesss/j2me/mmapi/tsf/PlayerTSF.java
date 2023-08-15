@@ -48,7 +48,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 	private final InternalMetaData metadata = new InternalMetaData();
 	private final InternalDataSource dataSource;
 	private final long handle;
-	private long duration = TIME_UNKNOWN;
+	private final long duration;
 
 	private int state = UNREALIZED;
 
@@ -99,7 +99,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			duration = TinySoundFont.playerPrefetch(handle);
+			TinySoundFont.playerPrefetch(handle);
 			state = PREFETCHED;
 		}
 	}
@@ -270,6 +270,9 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 				break;
 			case 2: // started
 				postEvent(PlayerListener.STARTED, time);
+				break;
+			case 3: // error
+				postEvent(PlayerListener.ERROR, null);
 				break;
 		}
 	}

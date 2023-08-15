@@ -7,6 +7,7 @@
 #include "PlayerListener.h"
 #include "util/jstring.h"
 
+/* for C++ linkage */
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,7 +19,6 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/) {
     }
     tsf_mmapi::JNIEnvPtr::vm = vm;
     return JNI_VERSION_1_6;
-
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
@@ -46,7 +46,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerFinalize
-        (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
+(JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<tsf_mmapi::Player *>(handle);
     delete player;
 }
@@ -145,7 +145,7 @@ JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_setVolume
 JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_getVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<tsf_mmapi::Player *>(handle);
-    return player->getLevel();
+    return player->getVolume();
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerGetDuration

@@ -11,7 +11,8 @@ namespace tsf_mmapi {
 
     enum EventType {
         END_OF_MEDIA = 1,
-        START = 2
+        START = 2,
+        ERROR = 3
     };
 
     class JNIEnvPtr {

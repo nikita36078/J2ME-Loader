@@ -19,6 +19,7 @@ package ru.woesss.j2me.mmapi.tsf;
 class TinySoundFont {
 	static native void init(String soundBank);
 	static native long playerInit(String locator);
+	static native void playerFinalize(long handle);
 	static native void playerRealize(long handle, String locator);
 	static native long playerPrefetch(long handle);
 	static native void playerStart(long handle);
@@ -34,7 +35,6 @@ class TinySoundFont {
 	static native boolean isMuted(long handle);
 	static native int setVolume(long handle, int level);
 	static native int getVolume(long handle);
-	static native void playerFinalize(long handle);
 	static native long playerGetDuration(long handle);
 	static native void playerListener(long handle, PlayerTSF listener);
 

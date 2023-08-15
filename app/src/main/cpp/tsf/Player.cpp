@@ -115,10 +115,10 @@ namespace tsf_mmapi {
     }
 
     int64_t Player::setMediaTime(int64_t now) {
-        if (now >= duration) {
-            now = duration;
-        } else if (now < 0) {
+        if (now < 0) {
             now = 0;
+        } else if (now > duration) {
+            now = duration;
         }
         timeSet = now;
         return now;
@@ -160,21 +160,21 @@ namespace tsf_mmapi {
         return volume;
     }
 
-    float Player::computeGain(int32_t level) {
-        return static_cast<float>(1.0 - log(101 - level) / log(101));
-    }
-
     bool Player::isMuted() const {
         return muted;
     }
 
-    int32_t Player::getLevel() const {
+    int32_t Player::getVolume() const {
         return volume;
     }
 
     bool Player::realize() {
         state = REALIZED;
         return true;
+    }
+
+    void Player::setListener(PlayerListener *listener) {
+        this->playerListener = listener;
     }
 
     bool Player::initSoundBank(const char *sound_bank) {
@@ -186,8 +186,36 @@ namespace tsf_mmapi {
         return true;
     }
 
-    void Player::setListener(PlayerListener *listener) {
-        this->playerListener = listener;
+    float Player::computeGain(int32_t level) {
+        return static_cast<float>(1.0 - log(101 - level) / log(101));
+    }
+
+    void Player::processEvents(bool playMode) {
+        for (; currentMsg && playTime >= currentMsg->time * 1000LL; currentMsg = currentMsg->next) {
+            switch (currentMsg->type) {
+                case TML_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
+                    tsf_channel_set_presetnumber(synth, currentMsg->channel,
+                                                 currentMsg->program,
+                                                 (currentMsg->channel == 9));
+                    break;
+                case TML_NOTE_ON: //play a note
+                    if (playMode) {
+                        tsf_channel_note_on(synth, currentMsg->channel, currentMsg->key,
+                                            static_cast<float>(currentMsg->velocity) / 127.0f);
+                    }
+                    break;
+                case TML_NOTE_OFF: //stop a note
+                    tsf_channel_note_off(synth, currentMsg->channel, currentMsg->key);
+                    break;
+                case TML_PITCH_BEND: //pitch wheel modification
+                    tsf_channel_set_pitchwheel(synth, currentMsg->channel, currentMsg->pitch_bend);
+                    break;
+                case TML_CONTROL_CHANGE: //MIDI controller messages
+                    tsf_channel_midi_control(synth, currentMsg->channel, currentMsg->control,
+                                             currentMsg->control_value);
+                    break;
+            }
+        }
     }
 
     oboe::DataCallbackResult
@@ -227,34 +255,6 @@ namespace tsf_mmapi {
             tsf_render_float(synth, stream, sampleBlock, 0);
         }
         return oboe::DataCallbackResult::Continue;
-    }
-
-    void Player::processEvents(bool playMode) {
-        for (; currentMsg && playTime >= currentMsg->time * 1000LL; currentMsg = currentMsg->next) {
-            switch (currentMsg->type) {
-                case TML_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
-                    tsf_channel_set_presetnumber(synth, currentMsg->channel,
-                                                 currentMsg->program,
-                                                 (currentMsg->channel == 9));
-                    break;
-                case TML_NOTE_ON: //play a note
-                    if (playMode) {
-                        tsf_channel_note_on(synth, currentMsg->channel, currentMsg->key,
-                                            static_cast<float>(currentMsg->velocity) / 127.0f);
-                    }
-                    break;
-                case TML_NOTE_OFF: //stop a note
-                    tsf_channel_note_off(synth, currentMsg->channel, currentMsg->key);
-                    break;
-                case TML_PITCH_BEND: //pitch wheel modification
-                    tsf_channel_set_pitchwheel(synth, currentMsg->channel, currentMsg->pitch_bend);
-                    break;
-                case TML_CONTROL_CHANGE: //MIDI controller messages
-                    tsf_channel_midi_control(synth, currentMsg->channel, currentMsg->control,
-                                             currentMsg->control_value);
-                    break;
-            }
-        }
     }
 
     void Player::onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) {

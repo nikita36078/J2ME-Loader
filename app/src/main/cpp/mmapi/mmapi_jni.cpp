@@ -1,8 +1,8 @@
 //
 // Created by woesss on 08.07.2023.
 //
-#include <jni.h>
 
+#include <jni.h>
 #include <cstddef>
 #include "libsonivox/eas.h"
 #include "util/jstring.h"
@@ -32,23 +32,13 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
     if (sound_bank == nullptr) {
         return;
     }
-    EAS_DATA_HANDLE easHandle;
-    EAS_RESULT result = EAS_Init(&easHandle);
+
+    util::JStringPtr sb(env, sound_bank);
+    EAS_RESULT result = mmapi::Player::initSoundBank(*sb);
     if (result != EAS_SUCCESS) {
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
-        return;
     }
-    util::JStringPtr sb(env, sound_bank);
-    mmapi::File file(*sb, "rb");
-    result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
-    if (result == EAS_SUCCESS) {
-        EAS_GetGlobalDLSLib(easHandle, &mmapi::Player::easDlsHandle);
-    } else {
-        auto &&message = MMAPI_GetErrorString(result);
-        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
-    }
-    EAS_Shutdown(easHandle);
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
@@ -185,17 +175,23 @@ JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_isMuted
 JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint level) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    return player->setLevel(level);
+    return player->setVolume(level);
 }
 
 JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    return player->getLevel();
+    return player->getVolume();
+}
+
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerGetDuration
+(JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
+    auto *player = reinterpret_cast<mmapi::Player *>(handle);
+    return player->duration;
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerListener
-(JNIEnv *env, jclass clazz, jlong handle, jobject listener) {
+        (JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
     player->setListener(new mmapi::PlayerListener(env, listener));
 }
