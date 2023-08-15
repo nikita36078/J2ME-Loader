@@ -120,8 +120,8 @@ namespace tsf_mmapi {
         } else if (now < 0) {
             now = 0;
         }
-        playTime = now;
-        return playTime;
+        timeSet = now;
+        return now;
     }
 
     int64_t Player::getMediaTime() const {
@@ -202,6 +202,14 @@ namespace tsf_mmapi {
             } else {
                 return oboe::DataCallbackResult::Stop;
             }
+        }
+        if (timeSet != -1) {
+            if (timeSet < playTime) {
+                tsf_reset(synth);
+                currentMsg = media;
+            }
+            playTime = timeSet;
+            timeSet = -1;
         }
         //Number of samples to process
         int sampleBlock = TSF_RENDER_EFFECTSAMPLEBLOCK;

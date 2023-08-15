@@ -29,6 +29,7 @@ namespace tsf_mmapi {
         int32_t volume = 100;
         int32_t looping = 0;
         int64_t playTime = 0;
+        int64_t timeSet = -1;
         int32_t loopCount = 1;
         tml_message *currentMsg = nullptr;
         PlayerListener *playerListener = nullptr;
