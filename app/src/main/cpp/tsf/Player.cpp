@@ -2,7 +2,7 @@
 // Created by woesss on 01.08.2023.
 //
 
-
+#include <forward_list>
 #define TSF_IMPLEMENTATION
 #define TML_IMPLEMENTATION
 #include "Player.h"
@@ -191,6 +191,7 @@ namespace tsf_mmapi {
     }
 
     void Player::processEvents(bool playMode) {
+        std::forward_list<tml_message *> notes;
         for (; currentMsg && playTime >= currentMsg->time * 1000LL; currentMsg = currentMsg->next) {
             switch (currentMsg->type) {
                 case TML_PROGRAM_CHANGE: //channel program (preset) change (special handling for 10th MIDI channel with drums)
@@ -202,9 +203,16 @@ namespace tsf_mmapi {
                     if (playMode) {
                         tsf_channel_note_on(synth, currentMsg->channel, currentMsg->key,
                                             static_cast<float>(currentMsg->velocity) / 127.0f);
+                    } else {
+                        notes.push_front(currentMsg);
                     }
                     break;
                 case TML_NOTE_OFF: //stop a note
+                    if (!playMode) {
+                        notes.remove_if([this](tml_message *m) {
+                            return m->channel == currentMsg->channel && m->key == currentMsg->key;
+                        });
+                    }
                     tsf_channel_note_off(synth, currentMsg->channel, currentMsg->key);
                     break;
                 case TML_PITCH_BEND: //pitch wheel modification
@@ -215,6 +223,12 @@ namespace tsf_mmapi {
                                              currentMsg->control_value);
                     break;
             }
+        }
+        if (!playMode) {
+            for (const auto &m: notes) {
+                tsf_channel_note_on(synth, m->channel, m->key, static_cast<float>(m->velocity) / 127.0f);
+            }
+            notes.clear();
         }
     }
 
