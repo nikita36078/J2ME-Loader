@@ -21,7 +21,6 @@ import android.util.Log;
 
 import androidx.annotation.Keep;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -54,9 +53,6 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 
 	public PlayerTSF(InternalDataSource dataSource) {
 		handle = TinySoundFont.playerInit(dataSource.getLocator());
-		if (handle == 0) {
-			throw new RuntimeException();
-		}
 		duration = TinySoundFont.playerGetDuration(handle);
 		this.dataSource = dataSource;
 		controls.put(VolumeControl.class.getName(), this);
@@ -71,13 +67,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 		checkClosed();
 
 		if (state == UNREALIZED) {
-			try {
-				dataSource.connect();
-				TinySoundFont.playerRealize(handle, dataSource.getLocator());
-			} catch (IOException e) {
-				throw new MediaException(e);
-			}
-
+			TinySoundFont.playerRealize(handle);
 			state = REALIZED;
 		}
 	}

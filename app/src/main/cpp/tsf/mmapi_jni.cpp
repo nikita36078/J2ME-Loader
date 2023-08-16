@@ -24,7 +24,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/) {
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
 (JNIEnv *env, jclass /*clazz*/, jstring sound_bank) {
     if (sound_bank == nullptr) {
-        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Unsupported sound bank file is null");
+        env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Sound bank file is null");
         return;
     }
 
@@ -36,13 +36,14 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
 (JNIEnv *env, jclass /*clazz*/, jstring locator) {
-    auto *player = new tsf_mmapi::Player();
+    tsf_mmapi::Player *player;
     util::JStringPtr path(env, locator);
-    if (player->init(*path)) {
-        return reinterpret_cast<jlong>(player);
+    bool result = tsf_mmapi::Player::createPlayer(*path, &player);
+    if (!result) {
+        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), "Unsupported file type");
+        return 0;
     }
-    delete player;
-    return 0;
+    return reinterpret_cast<jlong>(player);
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerFinalize
@@ -52,33 +53,40 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerFinaliz
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerRealize
-(JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jstring /*locator*/) {
+(JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<tsf_mmapi::Player *>(handle);
-    player->realize();
+    if (!player->realize()) {
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), "Dummy message");
+    }
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPrefetch
-(JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPrefetch
+(JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<tsf_mmapi::Player *>(handle);
-    if (!player->prefetch()) {
-        return -1LL;
+    oboe::Result result = player->prefetch();
+    if (result != oboe::Result::OK) {
+        auto &&message = oboe::convertToText(result);
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
     }
-    return player->duration;
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerStart
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<tsf_mmapi::Player *>(handle);
-    if (!player->start()) {
-        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), "Native start failed");
+    oboe::Result result = player->start();
+    if (result != oboe::Result::OK) {
+        auto message = oboe::convertToText(result);
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
     }
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPause
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<tsf_mmapi::Player *>(handle);
-    if (!player->pause()) {
-        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), "Native start failed");
+    oboe::Result result = player->pause();
+    if (result != oboe::Result::OK) {
+        auto message = oboe::convertToText(result);
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
     }
 }
 

@@ -43,18 +43,10 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
 (JNIEnv *env, jclass /*clazz*/, jstring locator) {
-    EAS_DATA_HANDLE easHandle;
-    EAS_RESULT result = EAS_Init(&easHandle);
-    if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
-        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
-        return 0;
-    }
-    auto *player = new mmapi::Player(easHandle);
+    mmapi::Player *player;
     util::JStringPtr path(env, locator);
-    result = player->init(*path);
+    EAS_RESULT result = mmapi::Player::createPlayer(*path, &player);
     if (result != EAS_SUCCESS) {
-        delete player;
         auto &&message = MMAPI_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
         return 0;
@@ -69,33 +61,29 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerFinalize
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerRealize
-(JNIEnv *env, jclass /*clazz*/, jlong handle, jstring /*locator*/) {
+(JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    EAS_RESULT result = player->realize();
-    if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
-        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
+    if (!player->realize()) {
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), "Dummy message");
     }
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPrefetch
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPrefetch
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
-    auto player = reinterpret_cast<mmapi::Player *>(handle);
-    EAS_RESULT result = player->prefetch();
-    if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
+    auto *player = reinterpret_cast<mmapi::Player *>(handle);
+    oboe::Result result = player->prefetch();
+    if (result != oboe::Result::OK) {
+        auto &&message = oboe::convertToText(result);
         env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
-        return -1LL;
     }
-    return player->duration * 1000LL;
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerStart
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    EAS_RESULT result = player->start();
-    if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
+    oboe::Result result = player->start();
+    if (result != oboe::Result::OK) {
+        auto message = oboe::convertToText(result);
         env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
     }
 }
@@ -103,9 +91,9 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerStart
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPause
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    EAS_RESULT result = player->pause();
-    if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
+    oboe::Result result = player->pause();
+    if (result != oboe::Result::OK) {
+        auto message = oboe::convertToText(result);
         env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
     }
 }
@@ -123,23 +111,15 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerClose
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setMediaTime
-(JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jlong new_time) {
+(JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jlong now) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    jlong now = player->setMediaTime(new_time / 1000LL);
-    if (now > 0) {
-        now *= 1000;
-    }
-    return now;
+    return player->setMediaTime(now);
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::Player *>(handle);
-    jlong now = player->getMediaTime();
-    if (now > 0) {
-        now *= 1000;
-    }
-    return now;
+    return player->getMediaTime();
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setRepeat

@@ -13,7 +13,10 @@
 namespace tsf_mmapi {
     tsf *Player::soundBank{};
 
-    Player::Player() : synth(tsf_copy(soundBank)), playTime(0) {
+    Player::Player(tsf *synth, tml_message *midi) : synth(synth), media(midi), currentMsg(midi) {
+        unsigned int timeLength = 0;
+        tml_get_info(midi, nullptr, nullptr, nullptr, nullptr, &timeLength);
+        duration = timeLength * 1000LL;
         //Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
         tsf_channel_set_bank_preset(synth, 9, 128, 0);
     }
@@ -23,68 +26,70 @@ namespace tsf_mmapi {
         delete playerListener;
     }
 
-    bool Player::createAudioStream() {
+    bool Player::createPlayer(const char *path, Player **pPlayer) {
+        tsf *synth = tsf_copy(soundBank);
+        if (synth == nullptr) {
+            return false;
+        }
+        tml_message *midi = tml_load_filename(path);
+        if (midi == nullptr) {
+            return false;
+        }
+        *pPlayer = new tsf_mmapi::Player(synth, midi);
+        return true;
+    }
+
+    oboe::Result Player::createAudioStream() {
         oboe::AudioStreamBuilder builder;
         builder.setDirection(oboe::Direction::Output);
         builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
         builder.setSharingMode(oboe::SharingMode::Shared);
-        builder.setChannelCount(2);
         builder.setFormat(oboe::AudioFormat::Float);
+        builder.setChannelCount(2);
         builder.setCallback(this);
 
-        oboe::Result &&result = builder.openStream(oboeStream);
+        oboe::Result result = builder.openStream(oboeStream);
         if (result != oboe::Result::OK) {
             oboeStream.reset();
             ALOGE("%s: can't open audio stream. %s", __func__, convertToText(result));
-            return false;
+            return result;
         }
 
         // Set the SoundFont rendering output mode
         tsf_set_output(synth, TSF_STEREO_INTERLEAVED, oboeStream->getSampleRate(), 0.0f);
         tsf_set_volume(synth, computeGain(volume));
-        return true;
+        return result;
     }
 
-    bool Player::init(const char *path) {
-        media = tml_load_filename(path);
-        if (media) {
-            unsigned int time_length = 0;
-            tml_get_info(media, nullptr, nullptr, nullptr, nullptr, &time_length);
-            duration = time_length * 1000LL;
-            currentMsg = media;
-        }
-        return media != nullptr;
-    }
-
-    bool Player::prefetch() {
-        bool result = createAudioStream();
-        if (result) {
+    oboe::Result Player::prefetch() {
+        oboe::Result result = createAudioStream();
+        if (result == oboe::Result::OK) {
             state = PREFETCHED;
         }
         return result;
     }
 
-    bool Player::start() {
-        oboe::Result &&result = oboeStream->start();
-        if (result == oboe::Result::OK) {
-            state = STARTED;
-            return true;
+    oboe::Result Player::start() {
+        oboe::Result result = oboeStream->start();
+        if (result != oboe::Result::OK) {
+            ALOGE("%s: can't start audio stream. %s", __func__, oboe::convertToText(result));
+            return result;
         }
-        ALOGE("%s: can't start audio stream. %s", __func__, convertToText(result));
-        return false;
+        state = STARTED;
+        return result;
     }
 
-    bool Player::pause() {
+    oboe::Result Player::pause() {
         if (oboeStream->getState() < oboe::StreamState::Starting ||
             oboeStream->getState() > oboe::StreamState::Started) {
-            return true;
+            return oboe::Result::OK;
         }
-        oboe::Result &&result = oboeStream->pause();
-        if (result == oboe::Result::OK) {
-            state = PREFETCHED;
-            return true;
+        oboe::Result result = oboeStream->pause();
+        if (result != oboe::Result::OK) {
+            return result;
         }
-        return false;
+        state = PREFETCHED;
+        return result;
     }
 
     void Player::deallocate() {
@@ -92,6 +97,7 @@ namespace tsf_mmapi {
         oboeStream->close();
         oboeStream.reset();
         playTime = 0LL;
+        tsf_reset(synth);
         loopCount = looping;
         currentMsg = media;
         state = REALIZED;
@@ -120,7 +126,7 @@ namespace tsf_mmapi {
         } else if (now > duration) {
             now = duration;
         }
-        timeSet = now;
+        timeToSet = now;
         return now;
     }
 
@@ -245,13 +251,13 @@ namespace tsf_mmapi {
                 return oboe::DataCallbackResult::Stop;
             }
         }
-        if (timeSet != -1) {
-            if (timeSet < playTime) {
+        if (timeToSet != -1) {
+            if (timeToSet < playTime) {
                 tsf_reset(synth);
                 currentMsg = media;
             }
-            playTime = timeSet;
-            timeSet = -1;
+            playTime = timeToSet;
+            timeToSet = -1;
             processEvents(false);
         }
         //Number of samples to process
@@ -273,10 +279,16 @@ namespace tsf_mmapi {
 
     void Player::onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) {
         if (result == oboe::Result::ErrorDisconnected) {
-            bool res = createAudioStream();
-            if (res && state == STARTED) {
+            oboe::Result res = createAudioStream();
+            if (res != oboe::Result::OK) {
+                ALOGE("%s: reconnect error=%s", __func__, oboe::convertToText(res));
+                playerListener->postEvent(ERROR, 0);
+            } else if (state == STARTED) {
                 oboeStream->requestStart();
             }
+        } else {
+            ALOGE("%s: %s", __func__, oboe::convertToText(result));
+            playerListener->postEvent(ERROR, 0);
         }
     }
 } // tsf_mmapi

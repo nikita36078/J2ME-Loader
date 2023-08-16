@@ -21,29 +21,29 @@ namespace tsf_mmapi {
 
     class Player : public oboe::AudioStreamCallback {
         static tsf *soundBank;
+
         tsf *synth;
-        tml_message *media = nullptr;
+        tml_message *media;
         std::shared_ptr<oboe::AudioStream> oboeStream;
         State state = UNREALIZED;
         bool muted = false;
         int32_t volume = 100;
         int32_t looping = 0;
-        int64_t playTime = 0;
-        int64_t timeSet = -1;
+        int64_t timeToSet = -1;
         int32_t loopCount = 1;
-        tml_message *currentMsg = nullptr;
         PlayerListener *playerListener = nullptr;
+        int64_t playTime = 0;
+        tml_message *currentMsg;
 
     public:
-        int64_t duration = -1;
+        int64_t duration;
 
-        Player();
+        Player(tsf *synth, tml_message *midi);
         ~Player() override;
 
-        bool init(const char *path);
-        bool prefetch();
-        bool start();
-        bool pause();
+        oboe::Result prefetch();
+        oboe::Result start();
+        oboe::Result pause();
         void deallocate();
         void close();
         int64_t setMediaTime(int64_t now);
@@ -63,9 +63,10 @@ namespace tsf_mmapi {
         void onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) override;
 
         static bool initSoundBank(const char *sound_bank);
+        static bool createPlayer(const char *path, Player **pPlayer);
 
     private:
-        bool createAudioStream();
+        oboe::Result createAudioStream();
         void processEvents(bool playMode);
 
         static float computeGain(int32_t level);

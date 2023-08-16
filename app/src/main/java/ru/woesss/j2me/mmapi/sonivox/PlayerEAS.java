@@ -21,7 +21,6 @@ import android.util.Log;
 
 import androidx.annotation.Keep;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -68,13 +67,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 		checkClosed();
 
 		if (state == UNREALIZED) {
-			try {
-				dataSource.connect();
-				EAS.playerRealize(handle, dataSource.getLocator());
-			} catch (IOException e) {
-				throw new MediaException(e);
-			}
-
+			EAS.playerRealize(handle);
 			state = REALIZED;
 		}
 	}

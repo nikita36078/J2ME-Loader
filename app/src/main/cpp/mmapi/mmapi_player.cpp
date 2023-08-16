@@ -9,14 +9,17 @@
 #include "mmapi_util.h"
 
 #define LOG_TAG "MMAPI"
-
 #define NUM_COMBINE_BUFFERS 4
 
 namespace mmapi {
-    EAS_DLSLIB_HANDLE Player::easDlsHandle{nullptr};
+    EAS_DLSLIB_HANDLE Player::soundBank{nullptr};
 
-    Player::Player(EAS_DATA_HANDLE easHandle) : easHandle(easHandle) {
-        EAS_SetGlobalDLSLib(easHandle, Player::easDlsHandle);
+    Player::Player(EAS_DATA_HANDLE easHandle, File *file, EAS_HANDLE stream, int64_t duration)
+            : easHandle(easHandle),
+            file(file),
+            media(stream),
+            duration(duration) {
+        EAS_SetGlobalDLSLib(easHandle, Player::soundBank);
     }
 
     Player::~Player() {
@@ -24,7 +27,61 @@ namespace mmapi {
         delete playerListener;
     }
 
-    bool Player::createAudioStream() {
+    EAS_RESULT Player::createPlayer(const char *path, Player **pPlayer) {
+        EAS_DATA_HANDLE easHandle;
+        EAS_RESULT result = EAS_Init(&easHandle);
+        if (result != EAS_SUCCESS) {
+            return result;
+        }
+        if (path == nullptr) {
+            result = EAS_ERROR_INVALID_PARAMETER;
+            EAS_Shutdown(easHandle);
+            return result;
+        }
+        File *file = new File(path, "rb");
+        EAS_HANDLE stream;
+        result = EAS_OpenFile(easHandle, &file->easFile, &stream);
+        if (result != EAS_SUCCESS) {
+            delete file;
+            EAS_Shutdown(easHandle);
+            return result;
+        }
+        result = EAS_Prepare(easHandle, stream);
+        if (result != EAS_SUCCESS) {
+            EAS_CloseFile(easHandle, stream);
+            EAS_Shutdown(easHandle);
+            delete file;
+            return result;
+        }
+        EAS_I32 type = EAS_FILE_UNKNOWN;
+        result = EAS_GetFileType(easHandle, stream, &type);
+        if (result != EAS_SUCCESS) {
+            EAS_CloseFile(easHandle, stream);
+            EAS_Shutdown(easHandle);
+            delete file;
+            return result;
+        }
+        ALOGV("EAS_checkFileType(): %s file recognized", MMAPI_GetFileTypeString(type));
+        if (type == EAS_FILE_WAVE_PCM) {
+            EAS_CloseFile(easHandle, stream);
+            EAS_Shutdown(easHandle);
+            delete file;
+            result = EAS_ERROR_INVALID_PCM_TYPE;
+            return result;
+        }
+        EAS_I32 duration;
+        result = EAS_ParseMetaData(easHandle, stream, &duration);
+        if (result != EAS_SUCCESS) {
+            EAS_CloseFile(easHandle, stream);
+            EAS_Shutdown(easHandle);
+            delete file;
+            return result;
+        }
+        *pPlayer = new Player(easHandle, file, stream, duration > 0 ? duration * 1000LL : -1);
+        return result;
+    }
+
+    oboe::Result Player::createAudioStream() {
         oboe::AudioStreamBuilder builder;
         builder.setDirection(oboe::Direction::Output);
         builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
@@ -35,69 +92,43 @@ namespace mmapi {
         builder.setCallback(this);
         builder.setFramesPerDataCallback(easConfig->mixBufferSize * NUM_COMBINE_BUFFERS);
 
-        oboe::Result &&result = builder.openStream(oboeStream);
+        oboe::Result result = builder.openStream(oboeStream);
         if (result != oboe::Result::OK) {
             oboeStream.reset();
-            ALOGE("%s: can't open audio stream. %s", __func__, convertToText(result));
-            return false;
+            ALOGE("%s: can't open audio stream. %s", __func__, oboe::convertToText(result));
         }
-        return true;
+        return result;
     }
 
-    EAS_RESULT Player::init(const char *path) {
-        if (path == nullptr) {
-            return EAS_ERROR_INVALID_PARAMETER;
-        }
-        file = new File(path, "rb");
-        EAS_RESULT result = EAS_OpenFile(easHandle, &file->easFile, &media);
-        if (result != EAS_SUCCESS) {
-            return result;
-        }
-        result = EAS_Prepare(easHandle, media);
-        if (result != EAS_SUCCESS) {
-            return result;
-        }
-        EAS_I32 type = EAS_FILE_UNKNOWN;
-        result = EAS_GetFileType(easHandle, media, &type);
-        if (result != EAS_SUCCESS) {
-            return result;
-        }
-        ALOGV("EAS_checkFileType(): %s file recognized", MMAPI_GetFileTypeString(type));
-        if (type == EAS_FILE_WAVE_PCM) {
-            result = EAS_ERROR_INVALID_PCM_TYPE;
-        }
-        return EAS_ParseMetaData(easHandle, media, &duration);
-    }
-
-    bool Player::prefetch() {
-        bool result = createAudioStream();
-        if (result) {
+    oboe::Result Player::prefetch() {
+        oboe::Result result = createAudioStream();
+        if (result == oboe::Result::OK) {
             state = PREFETCHED;
         }
         return result;
     }
 
-    bool Player::start() {
-        oboe::Result &&result = oboeStream->start();
-        if (result == oboe::Result::OK) {
-            state = STARTED;
-            return true;
+    oboe::Result Player::start() {
+        oboe::Result result = oboeStream->start();
+        if (result != oboe::Result::OK) {
+            ALOGE("%s: can't start audio stream. %s", __func__, oboe::convertToText(result));
+            return result;
         }
-        ALOGE("%s: can't start audio stream. %s", __func__, convertToText(result));
-        return false;
+        state = STARTED;
+        return result;
     }
 
-    bool Player::pause() {
+    oboe::Result Player::pause() {
         if (oboeStream->getState() < oboe::StreamState::Starting ||
             oboeStream->getState() > oboe::StreamState::Started) {
-            return true;
+            return oboe::Result::OK;
         }
-        oboe::Result &&result = oboeStream->pause();
-        if (result == oboe::Result::OK) {
-            state = PREFETCHED;
-            return true;
+        oboe::Result result = oboeStream->pause();
+        if (result != oboe::Result::OK) {
+            return result;
         }
-        return false;
+        state = PREFETCHED;
+        return result;
     }
 
     void Player::deallocate() {
@@ -120,8 +151,8 @@ namespace mmapi {
             oboeStream.reset();
         }
         EAS_CloseFile(easHandle, media);
-        delete file;
         EAS_Shutdown(easHandle);
+        delete file;
         state = CLOSED;
     }
 
@@ -131,7 +162,7 @@ namespace mmapi {
         } else if (now > duration) {
             now = duration;
         }
-        timeSet = now;
+        timeToSet = now;
         return now;
     }
 
@@ -141,7 +172,7 @@ namespace mmapi {
         if (result != EAS_SUCCESS) {
             ALOGE("%s: EAS_GetLocation return %s", __func__, MMAPI_GetErrorString(result));
         }
-        return pTime;
+        return pTime * 1000LL;
     }
 
     void Player::setRepeat(int32_t count) {
@@ -204,17 +235,17 @@ namespace mmapi {
         this->playerListener = listener;
     }
 
-    EAS_RESULT Player::initSoundBank(const char *string) {
+    EAS_RESULT Player::initSoundBank(const char *sound_bank) {
         EAS_DATA_HANDLE easHandle;
         EAS_RESULT result = EAS_Init(&easHandle);
         if (result != EAS_SUCCESS) {
             return result;
         }
 
-        mmapi::File file(string, "rb");
+        mmapi::File file(sound_bank, "rb");
         result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
         if (result == EAS_SUCCESS) {
-            EAS_GetGlobalDLSLib(easHandle, &mmapi::Player::easDlsHandle);
+            EAS_GetGlobalDLSLib(easHandle, &mmapi::Player::soundBank);
         }
         EAS_Shutdown(easHandle);
         return result;
@@ -235,12 +266,12 @@ namespace mmapi {
             }
         }
 
-        if (timeSet != -1) {
-            EAS_RESULT result = EAS_Locate(easHandle, media, timeSet, EAS_FALSE);
+        if (timeToSet != -1) {
+            EAS_RESULT result = EAS_Locate(easHandle, media, static_cast<EAS_I32>(timeToSet / 1000LL), EAS_FALSE);
             if (result != EAS_SUCCESS) {
                 ALOGE("%s: EAS_Locate() return %s", __func__, MMAPI_GetErrorString(result));
             }
-            timeSet = -1;
+            timeToSet = -1;
         }
 
         auto *p = static_cast<EAS_PCM *>(audioData);
@@ -263,10 +294,16 @@ namespace mmapi {
 
     void Player::onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) {
         if (result == oboe::Result::ErrorDisconnected) {
-            bool res = createAudioStream();
-            if (res && state == STARTED) {
+            oboe::Result res = createAudioStream();
+            if (res != oboe::Result::OK) {
+                ALOGE("%s: reconnect error=%s", __func__, oboe::convertToText(res));
+                playerListener->postEvent(ERROR, 0);
+            } else if (state == STARTED) {
                 oboeStream->requestStart();
             }
+        } else {
+            ALOGE("%s: %s", __func__, oboe::convertToText(result));
+            playerListener->postEvent(ERROR, 0);
         }
     }
 } // mmapi

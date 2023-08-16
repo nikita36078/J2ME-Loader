@@ -20,16 +20,30 @@ namespace mmapi {
     };
 
     class Player : public oboe::AudioStreamCallback {
+        static EAS_DLSLIB_HANDLE soundBank;
+
+        const S_EAS_LIB_CONFIG *easConfig = EAS_Config();
+        EAS_DATA_HANDLE easHandle;
+        EAS_HANDLE media;
+        std::shared_ptr<oboe::AudioStream> oboeStream;
+        State state = UNREALIZED;
+        bool muted = false;
+        int32_t volume = 100;
+        int32_t looping = 0;
+        int64_t timeToSet = -1;
+        int32_t loopCount = 1;
+        PlayerListener *playerListener = nullptr;
+        File *file;
 
     public:
-        Player(EAS_DATA_HANDLE easHandle);
+        int64_t duration;
 
+        Player(EAS_DATA_HANDLE easHandle, File *file, EAS_HANDLE stream, int64_t duration);
         ~Player() override;
 
-        EAS_RESULT init(const char *path);
-        bool prefetch();
-        bool start();
-        bool pause();
+        oboe::Result prefetch();
+        oboe::Result start();
+        oboe::Result pause();
         void deallocate();
         void close();
         int64_t setMediaTime(int64_t now);
@@ -38,39 +52,21 @@ namespace mmapi {
         int32_t setPan(int32_t pan);
         int32_t getPan();
         void setMute(bool mute);
-        int setVolume(int32_t level);
+        int32_t setVolume(int32_t level);
         bool isMuted() const;
         int32_t getVolume();
         bool realize();
+        void setListener(PlayerListener *listener);
 
         oboe::DataCallbackResult
         onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) override;
-
         void onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) override;
 
+        static EAS_RESULT initSoundBank(const char *sound_bank);
+        static EAS_RESULT createPlayer(const char *path, Player **pPlayer);
+
     private:
-        bool createAudioStream();
-
-        static EAS_DLSLIB_HANDLE easDlsHandle;
-        const S_EAS_LIB_CONFIG *easConfig = EAS_Config();
-        EAS_DATA_HANDLE easHandle;
-        EAS_HANDLE media = nullptr;
-        std::shared_ptr<oboe::AudioStream> oboeStream;
-        State state = UNREALIZED;
-        EAS_BOOL muted = EAS_FALSE;
-        EAS_I32 volume = 100;
-        EAS_I32 looping = 0;
-        File *file = nullptr;
-        EAS_I32 timeSet = -1;
-        EAS_I32 loopCount = 1;
-        PlayerListener *playerListener = nullptr;
-
-    public:
-        EAS_I32 duration = -1;
-
-        void setListener(PlayerListener *pListener);
-
-        static EAS_RESULT initSoundBank(const char *string);
+        oboe::Result createAudioStream();
     };
 }
 

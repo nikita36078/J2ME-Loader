@@ -20,8 +20,8 @@ class EAS {
 	static native void init(String soundBank);
 	static native long playerInit(String locator);
 	static native void playerFinalize(long handle);
-	static native void playerRealize(long handle, String locator);
-	static native long playerPrefetch(long handle);
+	static native void playerRealize(long handle);
+	static native void playerPrefetch(long handle);
 	static native void playerStart(long handle);
 	static native void playerPause(long handle);
 	static native void playerDeallocate(long handle);
