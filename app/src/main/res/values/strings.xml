@@ -43,6 +43,7 @@
     <string name="choose">Choose</string>
     <string name="warning">Warning</string>
     <string name="scoped_storage_warning">Your user data is stored in a location which <b>will be deleted</b> when you uninstall the app:\n</string>
+    <string name="error_no_picker">Please install a file picker app</string>
 
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>

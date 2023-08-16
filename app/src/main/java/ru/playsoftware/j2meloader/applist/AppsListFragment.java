@@ -25,6 +25,7 @@ import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -149,7 +150,12 @@ public class AppsListFragment extends ListFragment {
 					path = dir.getAbsolutePath();
 				}
 			}
-			openFileLauncher.launch(path);
+			try {
+				openFileLauncher.launch(path);
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(getContext(), R.string.error_no_picker, Toast.LENGTH_SHORT).show();
+				e.printStackTrace();
+			}
 		});
 	}
 
