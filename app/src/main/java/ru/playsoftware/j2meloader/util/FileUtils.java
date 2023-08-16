@@ -78,7 +78,7 @@ public class FileUtils {
 		}
 	}
 
-	public static void deleteDirectory(File dir) {
+	public static boolean deleteDirectory(File dir) {
 		if (dir.isDirectory()) {
 			File[] listFiles = dir.listFiles();
 			if (listFiles != null && listFiles.length != 0) {
@@ -89,7 +89,9 @@ public class FileUtils {
 		}
 		if (!dir.delete() && dir.exists()) {
 			Log.w(TAG, "Can't delete file: " + dir);
+			return false;
 		}
+		return true;
 	}
 
 	public static File getFileForUri(Context context, Uri uri) throws IOException {
