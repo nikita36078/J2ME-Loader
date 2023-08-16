@@ -40,7 +40,7 @@ namespace mmapi {
 
         private:
             oboe::Result createAudioStream() override;
-            void processEvents();
+            void processEvents(bool playMode);
 
             static float computeGain(int32_t level);
         }; // class Player

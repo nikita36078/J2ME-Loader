@@ -2,7 +2,6 @@
 // Created by woesss on 01.08.2023.
 //
 
-
 #define TSF_IMPLEMENTATION
 #define TML_IMPLEMENTATION
 
@@ -132,7 +131,7 @@ namespace mmapi {
             return static_cast<float>(1.0 - log(101 - level) / log(101));
         }
 
-        void Player::processEvents() {
+        void Player::processEvents(bool playMode) {
             //Loop through all MIDI messages which need to be played up until the current playback time
             for (; currentMsg && playTime >= currentMsg->time * 1000LL; currentMsg = currentMsg->next) {
                 switch (currentMsg->type) {
@@ -143,11 +142,15 @@ namespace mmapi {
                                                      (currentMsg->channel == 9));
                         break;
                     case TML_NOTE_ON: //play a note
-                        tsf_channel_note_on(synth, currentMsg->channel, currentMsg->key,
-                                            static_cast<float>(currentMsg->velocity) / 127.0f);
+                        if (playMode) {
+                            tsf_channel_note_on(synth, currentMsg->channel, currentMsg->key,
+                                                static_cast<float>(currentMsg->velocity) / 127.0f);
+                        }
                         break;
                     case TML_NOTE_OFF: //stop a note
-                        tsf_channel_note_off(synth, currentMsg->channel, currentMsg->key);
+                        if (playMode) {
+                            tsf_channel_note_off(synth, currentMsg->channel, currentMsg->key);
+                        }
                         break;
                     case TML_PITCH_BEND: //pitch wheel modification
                         tsf_channel_set_pitchwheel(synth, currentMsg->channel,
@@ -181,10 +184,12 @@ namespace mmapi {
                     //Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
                     tsf_channel_set_bank_preset(synth, 9, 128, 0);
                     currentMsg = media;
+                } else {
+                    tsf_note_off_all(synth);
                 }
-                playTime = timeToSet;
+                playTime = timeToSet - 1;
                 timeToSet = -1;
-                processEvents();
+                processEvents(false);
             }
             //Number of samples to process
             int sampleBlock = TSF_RENDER_EFFECTSAMPLEBLOCK;
@@ -194,7 +199,7 @@ namespace mmapi {
                 if (sampleBlock > numFrames) sampleBlock = numFrames;
 
                 playTime += sampleBlock * 1000000LL / audioStream->getSampleRate();
-                processEvents();
+                processEvents(true);
 
                 // Render the block of audio samples in float format
                 tsf_render_float(synth, stream, sampleBlock);
