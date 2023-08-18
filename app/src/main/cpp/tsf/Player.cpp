@@ -240,12 +240,13 @@ namespace tsf_mmapi {
 
     oboe::DataCallbackResult
     Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
+        memset(audioData, 0, sizeof(float) * audioStream->getChannelCount());
         if (currentMsg == nullptr) {
             playerListener->postEvent(END_OF_MEDIA, playTime);
+            currentMsg = media;
+            playTime = 0;
+            tsf_reset(synth);
             if (looping == -1 || (--loopCount) > 0) {
-                currentMsg = media;
-                playTime = 0;
-                tsf_reset(synth);
                 playerListener->postEvent(START, playTime);
             } else {
                 return oboe::DataCallbackResult::Stop;

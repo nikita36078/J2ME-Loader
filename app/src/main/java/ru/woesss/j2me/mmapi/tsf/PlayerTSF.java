@@ -146,11 +146,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-		if (state < PREFETCHED) {
-			return 0;
-		} else {
-			return TinySoundFont.setMediaTime(handle, now);
-		}
+		return TinySoundFont.setMediaTime(handle, now);
 	}
 
 	@Override

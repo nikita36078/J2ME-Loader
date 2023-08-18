@@ -129,11 +129,10 @@ public class Sound {
 			if (loop == 0) {
 				loop = -1;
 			}
-			if (player.getState() == Player.STARTED) {
-				player.stop();
-				player.setMediaTime(0);
-			}
+			player.stop();
 			player.setLoopCount(loop);
+			player.prefetch();
+			player.setMediaTime(0);
 			player.start();
 			postEvent(SOUND_PLAYING);
 		} catch (MediaException e) {

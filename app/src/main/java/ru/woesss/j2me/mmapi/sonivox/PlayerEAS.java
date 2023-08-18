@@ -146,11 +146,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl {
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-		if (state < PREFETCHED) {
-			return 0;
-		} else {
-			return EAS.setMediaTime(handle, now);
-		}
+		return EAS.setMediaTime(handle, now);
 	}
 
 	@Override

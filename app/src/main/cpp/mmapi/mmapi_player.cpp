@@ -252,14 +252,17 @@ namespace mmapi {
     }
 
     oboe::DataCallbackResult
-    Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData,
-                                int32_t numFrames) {
+    Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
+        memset(audioData, 0, sizeof(EAS_PCM) * easConfig->numChannels);
         EAS_STATE easState;
         EAS_State(easHandle, media, &easState);
         if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
             playerListener->postEvent(END_OF_MEDIA, getMediaTime());
+            EAS_RESULT result = EAS_Locate(easHandle, media, 0, EAS_FALSE);
+            if (result != EAS_SUCCESS) {
+                ALOGE("%s: EAS_Locate() return %s", __func__, MMAPI_GetErrorString(result));
+            }
             if (looping == -1 || (--loopCount) > 0) {
-                setMediaTime(0);
                 playerListener->postEvent(START, 0);
             } else {
                 return oboe::DataCallbackResult::Stop;
@@ -282,7 +285,9 @@ namespace mmapi {
             result = EAS_Render(easHandle, p, easConfig->mixBufferSize, &numRendered);
             if (result != EAS_SUCCESS) {
                 playerListener->postEvent(ERROR, result);
-                ALOGE("EAS_Render() returned %s, numBytesOutput = %d", MMAPI_GetErrorString(result),
+                ALOGE("%s: EAS_Render() returned %s, numFramesOutput = %d",
+                      __func__,
+                      MMAPI_GetErrorString(result),
                       numFramesOutput);
                 return oboe::DataCallbackResult::Stop; // Stop processing to prevent infinite loops.
             }
