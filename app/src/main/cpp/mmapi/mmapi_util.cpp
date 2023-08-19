@@ -6,7 +6,7 @@
 #include "mmapi_util.h"
 #include "libsonivox/eas_types.h"
 
-const char *MMAPI_GetErrorString(int errorCode) {
+const char *EAS_GetErrorString(int errorCode) {
     int idx = -errorCode;
     if (idx < sizeof(EAS_ERRORS) / sizeof(EAS_ERRORS[0])) {
         return EAS_ERRORS[idx];
@@ -19,7 +19,7 @@ const char *MMAPI_GetErrorString(int errorCode) {
     }
 }
 
-const char *MMAPI_GetFileTypeString(int type) {
+const char *EAS_GetFileTypeString(int type) {
     if (type >= 0 && type < sizeof(EAS_ERRORS) / sizeof(EAS_ERRORS[0])) {
         return EAS_FILE_TYPES[type];
     }

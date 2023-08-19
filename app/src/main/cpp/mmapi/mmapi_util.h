@@ -68,7 +68,7 @@ static const char *EAS_FILE_TYPES[]{
         "EAS_FILE_MMAPI_TONE_CONTROL",
 };
 
-const char *MMAPI_GetErrorString(int errorCode);
-const char *MMAPI_GetFileTypeString(int type);
+const char *EAS_GetErrorString(int errorCode);
+const char *EAS_GetFileTypeString(int type);
 
 #endif //JL_MOD_MMAPI_UTIL_H

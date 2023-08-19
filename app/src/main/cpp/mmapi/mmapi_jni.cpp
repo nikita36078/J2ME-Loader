@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
     util::JStringPtr sb(env, sound_bank);
     EAS_RESULT result = mmapi::Player::initSoundBank(*sb);
     if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
+        auto &&message = EAS_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
     }
 }
@@ -47,7 +47,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
     util::JStringPtr path(env, locator);
     EAS_RESULT result = mmapi::Player::createPlayer(*path, &player);
     if (result != EAS_SUCCESS) {
-        auto &&message = MMAPI_GetErrorString(result);
+        auto &&message = EAS_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
         return 0;
     }

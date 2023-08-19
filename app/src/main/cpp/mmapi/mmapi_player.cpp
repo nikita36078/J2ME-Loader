@@ -61,7 +61,7 @@ namespace mmapi {
             delete file;
             return result;
         }
-        ALOGV("EAS_checkFileType(): %s file recognized", MMAPI_GetFileTypeString(type));
+        ALOGV("EAS_checkFileType(): %s file recognized", EAS_GetFileTypeString(type));
         if (type == EAS_FILE_WAVE_PCM) {
             EAS_CloseFile(easHandle, stream);
             EAS_Shutdown(easHandle);
@@ -170,7 +170,7 @@ namespace mmapi {
         EAS_I32 pTime = -1;
         EAS_RESULT result = EAS_GetLocation(easHandle, media, &pTime);
         if (result != EAS_SUCCESS) {
-            ALOGE("%s: EAS_GetLocation return %s", __func__, MMAPI_GetErrorString(result));
+            ALOGE("%s: EAS_GetLocation return %s", __func__, EAS_GetErrorString(result));
         }
         return pTime * 1000LL;
     }
@@ -260,7 +260,7 @@ namespace mmapi {
             playerListener->postEvent(END_OF_MEDIA, getMediaTime());
             EAS_RESULT result = EAS_Locate(easHandle, media, 0, EAS_FALSE);
             if (result != EAS_SUCCESS) {
-                ALOGE("%s: EAS_Locate() return %s", __func__, MMAPI_GetErrorString(result));
+                ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
             }
             if (looping == -1 || (--loopCount) > 0) {
                 playerListener->postEvent(START, 0);
@@ -272,7 +272,7 @@ namespace mmapi {
         if (timeToSet != -1) {
             EAS_RESULT result = EAS_Locate(easHandle, media, static_cast<EAS_I32>(timeToSet / 1000LL), EAS_FALSE);
             if (result != EAS_SUCCESS) {
-                ALOGE("%s: EAS_Locate() return %s", __func__, MMAPI_GetErrorString(result));
+                ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
             }
             timeToSet = -1;
         }
@@ -287,7 +287,7 @@ namespace mmapi {
                 playerListener->postEvent(ERROR, result);
                 ALOGE("%s: EAS_Render() returned %s, numFramesOutput = %d",
                       __func__,
-                      MMAPI_GetErrorString(result),
+                      EAS_GetErrorString(result),
                       numFramesOutput);
                 return oboe::DataCallbackResult::Stop; // Stop processing to prevent infinite loops.
             }
