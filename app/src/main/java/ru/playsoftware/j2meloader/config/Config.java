@@ -17,18 +17,22 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 
+import androidx.preference.PreferenceManager;
+
 import java.io.File;
 
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
-
-import androidx.preference.PreferenceManager;
 
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
@@ -51,6 +55,7 @@ public class Config {
 	public static final String MIDLET_RES_FILE = "/res.jar";
 	public static final String SCREENSHOTS_DIR;
 	public static final String SHADERS_DIR = "/shaders/";
+	public static final String SOUNDBANKS_DIR = "/soundbanks/";
 
 	private static String emulatorDir;
 	private static String dataDir;

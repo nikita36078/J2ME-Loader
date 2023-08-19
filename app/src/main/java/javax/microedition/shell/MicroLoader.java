@@ -51,13 +51,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
-import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
@@ -72,18 +70,21 @@ import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.util.Constants;
+import javax.microedition.lcdui.Display;
+import javax.microedition.m3g.Graphics3D;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
+	private static String soundBank;
 
+	ProfileModel params;
 	private final File appDir;
 	private final Context context;
 	private final String workDir;
 	private final String appDirName;
-	private ProfileModel params;
 
 	MicroLoader(Context context, String appPath) {
 		this.context = context;
@@ -281,6 +282,10 @@ public class MicroLoader {
 
 			KeyMapper.setKeyMapping(params);
 			Canvas.setHasTouchInput(params.touchInput);
+			File sb = new File(workDir + Config.SOUNDBANKS_DIR + params.soundBank);
+			if (sb.exists()) {
+				soundBank = sb.getPath();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -320,5 +325,9 @@ public class MicroLoader {
 			return KeyEvent.KEYCODE_BACK;
 		}
 		return mappings.keyAt(i);
+	}
+
+	public static String getSoundBank() {
+		return soundBank;
 	}
 }

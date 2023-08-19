@@ -274,26 +274,31 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
         initSoundBankSpinner();
     }
 
-    private void initSoundBankSpinner() {
-        File dir = new File(workDir + "/soundbank");
-        if (!dir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            dir.mkdirs();
-        }
-        List<String> infos = new ArrayList<>();
-        spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, infos);
-        spSoundBankAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	private void initSoundBankSpinner() {
+		File dir = new File(workDir + Config.SOUNDBANKS_DIR);
+		if (!dir.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			dir.mkdirs();
+		}
+		spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+		spSoundBankAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		binding.soundbankSelector.setAdapter(spSoundBankAdapter);
-        String[] files = dir.list((d, n) -> new File(d, n).isFile());
-        if (files != null) {
-            infos.addAll(Arrays.asList(files));
-            Collections.sort(infos);
-        }
-        infos.add(0, "Android built-in soundfont");
-        spSoundBankAdapter.notifyDataSetChanged();
-        int position = infos.indexOf(params.soundBank);
-        binding.soundbankSelector.setSelection(Math.max(position, 0));
-    }
+		spSoundBankAdapter.add(getString(R.string.default_label, "Android"));
+		String[] files = dir.list((d, n) -> new File(d, n).isFile());
+		if (files != null) {
+			Arrays.sort(files, (o1, o2) -> {
+				int res = o1.toLowerCase().compareTo(o2.toLowerCase());
+				if (res != 0) {
+					return res;
+				}
+				return o1.compareTo(o2);
+			});
+			spSoundBankAdapter.addAll(files);
+		}
+		spSoundBankAdapter.notifyDataSetChanged();
+		int position = spSoundBankAdapter.getPosition(params.soundBank);
+		binding.soundbankSelector.setSelection(Math.max(position, 0));
+	}
 
 	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
 		if (isChecked) {
@@ -365,8 +370,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			//noinspection ResultOfMethodCallIgnored
 			dir.mkdirs();
 		}
-		ArrayList<ShaderInfo> infos = new ArrayList<>();
-		spShaderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, infos);
+		ArrayList<ShaderInfo> list = new ArrayList<>();
+		spShaderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
 		spShaderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		binding.shaderSelector.setAdapter(spShaderAdapter);
 		File[] files = dir.listFiles((f) -> f.isFile() && f.getName().toLowerCase().endsWith(".ini"));
@@ -378,7 +383,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				for (String line : split) {
 					if (line.startsWith("[")) {
 						if (info != null && info.fragment != null && info.vertex != null) {
-							infos.add(info);
+							list.add(info);
 						}
 						info = new ShaderInfo(line.replaceAll("[\\[\\]]", ""), "unknown");
 					} else if (info != null) {
@@ -390,18 +395,18 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					}
 				}
 				if (info != null && info.fragment != null && info.vertex != null) {
-					infos.add(info);
+					list.add(info);
 				}
 			}
-			Collections.sort(infos);
+			Collections.sort(list);
 		}
-		infos.add(0, new ShaderInfo(getString(R.string.identity_filter), "woesss"));
+		list.add(0, new ShaderInfo(getString(R.string.identity_filter), "woesss"));
 		spShaderAdapter.notifyDataSetChanged();
 		ShaderInfo selected = params.shader;
 		if (selected != null) {
-			int position = infos.indexOf(selected);
+			int position = list.indexOf(selected);
 			if (position > 0) {
-				infos.get(position).values = selected.values;
+				list.get(position).values = selected.values;
 				binding.shaderSelector.setSelection(position);
 			}
 		}
