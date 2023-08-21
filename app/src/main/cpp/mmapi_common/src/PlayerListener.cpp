@@ -8,6 +8,15 @@
 
 #define LOG_TAG "MMAPI"
 
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/) {
+    JNIEnv* env;
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6) != JNI_OK) {
+        return JNI_ERR;
+    }
+    mmapi::JNIEnvPtr::vm = vm;
+    return JNI_VERSION_1_6;
+}
+
 namespace mmapi {
     PlayerListener::PlayerListener(JNIEnv *env, jobject pListener)
             : listener(env->NewGlobalRef(pListener)),

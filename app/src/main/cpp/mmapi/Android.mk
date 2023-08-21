@@ -7,14 +7,6 @@ LOCAL_SRC_FILES = \
 	mmapi_player.cpp \
 	mmapi_util.cpp \
 	mmapi_file.cpp \
-	PlayerListener.cpp \
-#	eas_mmapi.c \
-	eas_mmapi_host.c \
-	eas_mmapi_jni.c \
-	eas_mmapi_wave.c \
-	eas_mmapi_android.c \
-    eas_wavein_oboe.cpp \
-    eas_waveout_oboe.cpp \
 
 
 LOCAL_CFLAGS += -O2 \
@@ -27,7 +19,7 @@ LOCAL_ARM_MODE := arm
 
 LOCAL_MODULE := mmapi
 
-LOCAL_SHARED_LIBRARIES := oboe sonivox util
+LOCAL_SHARED_LIBRARIES := oboe sonivox util mmapi_common
 
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)

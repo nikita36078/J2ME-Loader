@@ -4,7 +4,6 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES = \
 	Player.cpp \
-	PlayerListener.cpp \
 	mmapi_jni.cpp \
 
 LOCAL_CFLAGS += -O2 \
@@ -16,7 +15,7 @@ LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 
 LOCAL_MODULE := tsf
 
-LOCAL_SHARED_LIBRARIES := oboe util
+LOCAL_SHARED_LIBRARIES := oboe util mmapi_common
 
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)

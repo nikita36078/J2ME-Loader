@@ -5,6 +5,8 @@
 #ifndef JL_MOD_MMAPI_UTIL_H
 #define JL_MOD_MMAPI_UTIL_H
 
+#include <stdint.h>
+
  static const char *EAS_ERRORS[]{
         "EAS_SUCCESS",
         "EAS_FAILURE",
@@ -68,7 +70,7 @@ static const char *EAS_FILE_TYPES[]{
         "EAS_FILE_MMAPI_TONE_CONTROL",
 };
 
-const char *EAS_GetErrorString(int errorCode);
-const char *EAS_GetFileTypeString(int type);
+const char *EAS_GetErrorString(int32_t errorCode);
+const char *EAS_GetFileTypeString(int32_t type);
 
 #endif //JL_MOD_MMAPI_UTIL_H
