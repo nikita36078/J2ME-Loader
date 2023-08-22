@@ -16,8 +16,11 @@
 
 package javax.microedition.lcdui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.RectF;
+import android.view.MotionEvent;
 import android.view.View;
 
 public abstract class CustomItem extends Item {
@@ -33,8 +36,8 @@ public abstract class CustomItem extends Item {
 
 	private InnerView view;
 	private Image offscreen;
-	private int onWidth, onHeight;
-	private Graphics graphics = new Graphics();
+	private final RectF bounds = new RectF();
+	private Graphics graphics;
 
 	private class InnerView extends View {
 		public InnerView(Context context) {
@@ -52,9 +55,27 @@ public abstract class CustomItem extends Item {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			view.setMinimumHeight(onHeight);
-			graphics.setSurfaceCanvas(canvas);
-			graphics.drawImage(offscreen, 0, 0, onWidth, onHeight, false, 255);
+			view.setMinimumHeight((int) bounds.bottom);
+			canvas.drawBitmap(offscreen.getBitmap(), null, bounds, null);
+		}
+
+		@SuppressLint("ClickableViewAccessibility")
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+			switch (event.getActionMasked()) {
+				case MotionEvent.ACTION_DOWN:
+					pointerPressed(convertPointerX(event.getX()), convertPointerY(event.getY()));
+					break;
+				case MotionEvent.ACTION_MOVE:
+					pointerDragged(convertPointerX(event.getX()), convertPointerY(event.getY()));
+					break;
+				case MotionEvent.ACTION_UP:
+					pointerReleased(convertPointerX(event.getX()), convertPointerY(event.getY()));
+					break;
+				default:
+					return super.onTouchEvent(event);
+			}
+			return true;
 		}
 	}
 
@@ -91,7 +112,7 @@ public abstract class CustomItem extends Item {
 	}
 
 	protected final void repaint(int x, int y, int width, int height) {
-		graphics.setCanvas(offscreen.getCanvas(), offscreen.getBitmap());
+		if (view == null) return;
 		graphics.reset();
 		graphics.setClip(x, y, width, height);
 		try {
@@ -133,10 +154,18 @@ public abstract class CustomItem extends Item {
 	protected void pointerReleased(int x, int y) {
 	}
 
+	private int convertPointerX(float x) {
+		return (int) (x * getMinContentWidth() / bounds.right);
+	}
+
+	private int convertPointerY(float y) {
+		return (int) (y * getMinContentHeight() / bounds.bottom);
+	}
+
 	private void updateSize() {
-		float mult = view.getWidth() / (float) getMinContentWidth();
-		onWidth = (int) (getMinContentWidth() * mult);
-		onHeight = (int) (getMinContentHeight() * mult);
+		float scale = view.getWidth() / (float) getMinContentWidth();
+		bounds.right = getMinContentWidth() * scale;
+		bounds.bottom = getMinContentHeight() * scale;
 	}
 
 	@Override
@@ -148,6 +177,7 @@ public abstract class CustomItem extends Item {
 			view.setMinimumWidth(width);
 			view.setMinimumHeight(height);
 			offscreen = Image.createImage(width, height);
+			graphics = offscreen.getGraphics();
 		}
 
 		return view;

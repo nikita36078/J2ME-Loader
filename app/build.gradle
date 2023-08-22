@@ -10,7 +10,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         maxSdkVersion 10
         versionCode 59
-        versionName "1.4.2-vk-2.3-2"
+        versionName "1.4.2-vk-2.3-6"
         setProperty("archivesBaseName", "J2ME_Loader-$versionName")
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
