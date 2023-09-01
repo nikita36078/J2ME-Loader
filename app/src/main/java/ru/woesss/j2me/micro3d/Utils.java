@@ -88,6 +88,7 @@ public class Utils {
 	static native void glReadPixels(int x, int y, int width, int height, Bitmap bitmapBuffer);
 
 	static {
+		System.loadLibrary("c++_shared");
 		System.loadLibrary("micro3d");
 	}
 }

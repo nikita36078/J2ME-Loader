@@ -66,6 +66,7 @@ class Platform {
 		{
 			// UI thread is available, so load native library if not already loaded
 			if (!libraryLoaded) {
+				System.loadLibrary("c++_shared");
 				System.loadLibrary("javam3g");
 				libraryLoaded = true;
 			}
