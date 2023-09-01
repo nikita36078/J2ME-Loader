@@ -1,7 +1,7 @@
 #include <jni.h>
 
-#ifndef JL_MOD_UTIL_H
-#define JL_MOD_UTIL_H
+#ifndef MMAPI_JSTRING_H
+#define MMAPI_JSTRING_H
 
 namespace util {
     class JStringPtr {
@@ -18,4 +18,4 @@ namespace util {
     };
 }
 
-#endif //JL_MOD_UTIL_H
+#endif //MMAPI_JSTRING_H

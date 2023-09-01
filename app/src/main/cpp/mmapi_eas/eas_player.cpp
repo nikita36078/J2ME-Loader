@@ -2,11 +2,11 @@
 // Created by woesss on 08.07.2023.
 //
 
-#include "mmapi_player.h"
-#include "mmapi_file.h"
+#include "eas_player.h"
+#include "eas_file.h"
 #include "libsonivox/eas.h"
 #include "util/log.h"
-#include "mmapi_util.h"
+#include "eas_strings.h"
 
 #define LOG_TAG "MMAPI"
 #define NUM_COMBINE_BUFFERS 4
@@ -15,7 +15,7 @@ namespace mmapi {
     namespace eas {
         EAS_DLSLIB_HANDLE Player::soundBank{nullptr};
 
-        Player::Player(EAS_DATA_HANDLE easHandle, File *file, EAS_HANDLE stream, const int64_t duration)
+        Player::Player(EAS_DATA_HANDLE easHandle, FileImpl *file, EAS_HANDLE stream, const int64_t duration)
                 : BasePlayer(duration), easHandle(easHandle), file(file), media(stream) {
             EAS_SetGlobalDLSLib(easHandle, Player::soundBank);
         }
@@ -35,7 +35,7 @@ namespace mmapi {
                 EAS_Shutdown(easHandle);
                 return result;
             }
-            File *file = new File(path, "rb");
+            FileImpl *file = new FileImpl(path, "rb");
             EAS_HANDLE stream;
             result = EAS_OpenFile(easHandle, &file->easFile, &stream);
             if (result != EAS_SUCCESS) {
@@ -130,7 +130,7 @@ namespace mmapi {
                 return result;
             }
 
-            mmapi::File file(sound_bank, "rb");
+            FileImpl file(sound_bank, "rb");
             result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
             if (result == EAS_SUCCESS) {
                 EAS_GetGlobalDLSLib(easHandle, &Player::soundBank);
@@ -186,6 +186,5 @@ namespace mmapi {
             }
             return oboe::DataCallbackResult::Continue;
         }
-
-    } // eas
-} // mmapi
+    } // namespace eas
+} // namespace mmapi

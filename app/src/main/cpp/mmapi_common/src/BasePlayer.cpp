@@ -3,7 +3,7 @@
 //
 
 #include "BasePlayer.h"
-#include "util/log.h"
+#include "log.h"
 
 #define LOG_TAG "mmapi"
 
@@ -139,4 +139,4 @@ namespace mmapi {
             playerListener->postEvent(ERROR, 0);
         }
     }
-} // mmapi
+} // namespace mmapi

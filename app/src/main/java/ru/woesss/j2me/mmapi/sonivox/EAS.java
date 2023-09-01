@@ -41,7 +41,8 @@ class EAS {
 	static {
 		System.loadLibrary("c++_shared");
 		System.loadLibrary("oboe");
+		System.loadLibrary("mmapi_common");
 		System.loadLibrary("sonivox");
-		System.loadLibrary("mmapi");
+		System.loadLibrary("mmapi_eas");
 	}
 }

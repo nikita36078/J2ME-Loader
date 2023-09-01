@@ -2,10 +2,9 @@
 // Created by woesss on 01.08.2023.
 //
 
-#ifndef MMAPI_TINY_PLAYER_H
-#define MMAPI_TINY_PLAYER_H
+#ifndef MMAPI_TSF_PLAYER_H
+#define MMAPI_TSF_PLAYER_H
 
-#include <oboe/Oboe.h>
 #include "tsf.h"
 #include "tml.h"
 #include "mmapi/PlayerListener.h"
@@ -13,7 +12,7 @@
 
 namespace mmapi {
     namespace tiny {
-        class Player : public mmapi::BasePlayer {
+        class Player : public BasePlayer {
             static tsf *soundBank;
 
             tsf *synth;
@@ -45,4 +44,4 @@ namespace mmapi {
     } // namespace tiny
 } // namespace mmapi
 
-#endif //MMAPI_TINY_PLAYER_H
+#endif //MMAPI_TSF_PLAYER_H

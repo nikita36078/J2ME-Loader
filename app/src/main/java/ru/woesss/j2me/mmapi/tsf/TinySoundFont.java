@@ -41,7 +41,7 @@ class TinySoundFont {
 	static {
 		System.loadLibrary("c++_shared");
 		System.loadLibrary("oboe");
-		System.loadLibrary("sonivox");
-		System.loadLibrary("tsf");
+		System.loadLibrary("mmapi_common");
+		System.loadLibrary("mmapi_tsf");
 	}
 }

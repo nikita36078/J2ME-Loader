@@ -2,12 +2,12 @@
 // Created by woesss on 01.08.2023.
 //
 
-#include <forward_list>
 
 #define TSF_IMPLEMENTATION
 #define TML_IMPLEMENTATION
 
-#include "Player.h"
+#include <forward_list>
+#include "tsf_player.h"
 #include "util/log.h"
 
 #define LOG_TAG "MMAPI"
@@ -53,7 +53,7 @@ namespace mmapi {
             oboe::Result result = builder.openStream(oboeStream);
             if (result != oboe::Result::OK) {
                 oboeStream.reset();
-                ALOGE("%s: can't open audio stream. %s", __func__, convertToText(result));
+                ALOGE("%s: can't open audio stream. %s", __func__, oboe::convertToText(result));
                 return result;
             }
 
@@ -151,12 +151,12 @@ namespace mmapi {
                              int32_t numFrames) {
             memset(audioData, 0, sizeof(float) * audioStream->getChannelCount());
             if (currentMsg == nullptr) {
-                playerListener->postEvent(mmapi::EventType::END_OF_MEDIA, playTime);
+                playerListener->postEvent(END_OF_MEDIA, playTime);
                 currentMsg = media;
                 playTime = 0;
                 tsf_reset(synth);
                 if (looping == -1 || (--loopCount) > 0) {
-                    playerListener->postEvent(mmapi::EventType::START, playTime);
+                    playerListener->postEvent(START, playTime);
                 } else {
                     return oboe::DataCallbackResult::Stop;
                 }

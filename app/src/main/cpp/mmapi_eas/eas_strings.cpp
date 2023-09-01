@@ -3,7 +3,7 @@
 //
 
 #include <cstdio>
-#include "mmapi_util.h"
+#include "eas_strings.h"
 #include "libsonivox/eas_types.h"
 
 const char *EAS_GetErrorString(int32_t errorCode) {

@@ -2,8 +2,8 @@
 // Created by woesss on 08.07.2023.
 //
 
-#ifndef JL_MOD_MMAPI_UTIL_H
-#define JL_MOD_MMAPI_UTIL_H
+#ifndef MMAPI_EAS_STRINGS_H
+#define MMAPI_EAS_STRINGS_H
 
 #include <stdint.h>
 
@@ -73,4 +73,4 @@ static const char *EAS_FILE_TYPES[]{
 const char *EAS_GetErrorString(int32_t errorCode);
 const char *EAS_GetFileTypeString(int32_t type);
 
-#endif //JL_MOD_MMAPI_UTIL_H
+#endif //MMAPI_EAS_STRINGS_H

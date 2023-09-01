@@ -4,8 +4,8 @@
 
 #include <jni.h>
 #include "util/jstring.h"
-#include "mmapi_util.h"
-#include "mmapi_player.h"
+#include "eas_player.h"
+#include "eas_strings.h"
 
 /* for C++ linkage */
 #ifdef __cplusplus
@@ -121,8 +121,8 @@ JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setPan
 
 JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getPan
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
-        auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-        return player->getPan();
+    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
+    return player->getPan();
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setMute
@@ -156,7 +156,7 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerGetDuration
 }
 
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerListener
-        (JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
+(JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->setListener(new mmapi::PlayerListener(env, listener));
 }

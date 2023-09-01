@@ -2,14 +2,22 @@
 // Created by woesss on 13.08.2023.
 //
 
-#ifndef JL_MOD_PLAYERLISTENER_H
-#define JL_MOD_PLAYERLISTENER_H
+#ifndef MMAPI_PLAYER_LISTENER_H
+#define MMAPI_PLAYER_LISTENER_H
 
 #include <jni.h>
 
 namespace mmapi {
 
-    enum EventType {
+    enum PlayerState {
+        CLOSED = 0,
+        UNREALIZED = 100,
+        REALIZED = 200,
+        PREFETCHED = 300,
+        STARTED = 400,
+    };
+
+    enum PlayerListenerEvent {
         END_OF_MEDIA = 1,
         START = 2,
         ERROR = 3
@@ -33,11 +41,10 @@ namespace mmapi {
         PlayerListener(JNIEnv *env, jobject pListener);
         virtual ~PlayerListener();
 
-        void sendEvent(EventType eventType, const int64_t time);
-        void postEvent(EventType type, int64_t time);
+        void sendEvent(PlayerListenerEvent eventType, const int64_t time);
+        void postEvent(PlayerListenerEvent type, int64_t time);
 
     };
+} // mmapi
 
-} // tsf_mmapi
-
-#endif //JL_MOD_PLAYERLISTENER_H
+#endif //MMAPI_PLAYER_LISTENER_H

@@ -5,9 +5,8 @@
 #ifndef MMAPI_EAS_PLAYER_H
 #define MMAPI_EAS_PLAYER_H
 
-#include <oboe/Oboe.h>
 #include "libsonivox/eas.h"
-#include "mmapi_file.h"
+#include "eas_file.h"
 #include "mmapi/PlayerListener.h"
 #include "mmapi/BasePlayer.h"
 
@@ -19,10 +18,10 @@ namespace mmapi {
             const S_EAS_LIB_CONFIG *easConfig = EAS_Config();
             EAS_DATA_HANDLE easHandle;
             EAS_HANDLE media;
-            File *file;
+            FileImpl *file;
 
         public:
-            Player(EAS_DATA_HANDLE easHandle, File *file, EAS_HANDLE stream, const int64_t duration);
+            Player(EAS_DATA_HANDLE easHandle, FileImpl *file, EAS_HANDLE stream, const int64_t duration);
             ~Player() override;
 
             void deallocate() override;

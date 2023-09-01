@@ -14,18 +14,11 @@ namespace mmapi {
         bool muted = false;
         int32_t volume = 100;
     protected:
-        enum State {
-            CLOSED = 0,
-            UNREALIZED = 100,
-            REALIZED = 200,
-            PREFETCHED = 300,
-            STARTED = 400,
-        };
         int32_t loopCount = 1;
         int32_t looping = 0;
         std::shared_ptr<oboe::AudioStream> oboeStream;
         int64_t timeToSet = -1;
-        State state = UNREALIZED;
+        PlayerState state = UNREALIZED;
         PlayerListener *playerListener = nullptr;
     public:
         const int64_t duration;
@@ -53,8 +46,7 @@ namespace mmapi {
 
     protected:
         virtual oboe::Result createAudioStream() = 0;
-    };
-
-} // mmapi
+    }; // class BasePlayer
+} // namespace mmapi
 
 #endif //MMAPI_BASE_PLAYER_H

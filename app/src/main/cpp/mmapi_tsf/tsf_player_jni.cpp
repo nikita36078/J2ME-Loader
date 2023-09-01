@@ -3,9 +3,8 @@
 //
 
 #include <jni.h>
-#include "Player.h"
-#include "mmapi/PlayerListener.h"
 #include "util/jstring.h"
+#include "tsf_player.h"
 
 /* for C++ linkage */
 #ifdef __cplusplus

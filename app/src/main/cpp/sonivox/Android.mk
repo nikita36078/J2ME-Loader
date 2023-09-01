@@ -17,6 +17,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+LOCAL_MODULE := sonivox
+
 LOCAL_SRC_FILES = \
 	lib_src/eas_chorus.c \
 	lib_src/eas_chorusdata.c \
@@ -96,9 +98,7 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_SHARED_LIBRARIES := util
-
-LOCAL_MODULE := sonivox
+LOCAL_SHARED_LIBRARIES := mmapi_common
 
 ifeq ($(TARGET_ARCH),arm)
 LOCAL_SRC_FILES += \

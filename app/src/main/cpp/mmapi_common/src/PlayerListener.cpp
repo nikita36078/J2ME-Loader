@@ -4,7 +4,7 @@
 
 #include <thread>
 #include "PlayerListener.h"
-#include "util/log.h"
+#include "log.h"
 
 #define LOG_TAG "MMAPI"
 
@@ -27,7 +27,7 @@ namespace mmapi {
         env->DeleteGlobalRef(listener);
     }
 
-    void PlayerListener::sendEvent(EventType eventType, const int64_t time) {
+    void PlayerListener::sendEvent(PlayerListenerEvent eventType, const int64_t time) {
         if (listener == nullptr || method == nullptr) {
             ALOGE("%s: obj=%p, mID=%p", __func__, listener, method);
             return;
@@ -36,7 +36,7 @@ namespace mmapi {
         env->CallVoidMethod(listener, method, eventType, time);
     }
 
-    void PlayerListener::postEvent(EventType type, int64_t time) {
+    void PlayerListener::postEvent(PlayerListenerEvent type, int64_t time) {
         std::thread thread(&PlayerListener::sendEvent, this, type, time);
         thread.detach();
     }
@@ -73,4 +73,4 @@ namespace mmapi {
     JNIEnv *JNIEnvPtr::operator->() const {
         return env;
     }
-} // tsf_mmapi
+} // namespace mmapi
