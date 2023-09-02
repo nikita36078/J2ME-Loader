@@ -50,63 +50,52 @@ public class InternalDataSource extends DataSource {
 		this.mediaFile = File.createTempFile("media", extension, ContextHolder.getCacheDir());
 		this.type = type;
 
-		final RandomAccessFile raf = new RandomAccessFile(mediaFile, "rw");
-
 		final String name = mediaFile.getName();
 		Log.d(TAG, "Starting media pipe: " + name);
 
-		int length = stream.available();
-		if (length >= 0) {
-			raf.setLength(length);
-			Log.d(TAG, "Changing file size to " + length + " bytes: " + name);
-		}
-
-		byte[] buf = new byte[0x10000];
-		int read;
-		try {
-			while (true) {
-				read = stream.read(buf);
-				if (read > 0) {
-					raf.write(buf, 0, read);
-				} else if (read < 0) {
-					break;
-				}
+		try (RandomAccessFile raf = new RandomAccessFile(mediaFile, "rw")) {
+			int length = stream.available();
+			if (length >= 0) {
+				raf.setLength(length);
+				Log.d(TAG, "Changing file size to " + length + " bytes: " + name);
 			}
-			raf.close();
-			Log.d(TAG, "Media pipe closed: " + name);
+			byte[] buf = new byte[4096];
+			int read;
+			while ((read = stream.read(buf)) != -1) {
+				raf.write(buf, 0, read);
+			}
 		} catch (IOException e) {
-			Log.d(TAG, "Media pipe failure: " + e.toString());
-		} finally {
-			stream.close();
+			Log.d(TAG, "Media pipe failure: " + e);
+			throw e;
 		}
+		Log.d(TAG, "Media pipe closed: " + name);
 
-		try {
-			convert();
-		} catch (Throwable e) {
-			// Thrown on fake Oppo devices
-			e.printStackTrace();
-		}
+		convert();
 	}
 
 	private void convert() {
-		MediaInformationSession session = FFprobeKit.getMediaInformation(mediaFile.getPath());
-		MediaInformation mediaInformation = session.getMediaInformation();
-		if (mediaInformation != null) {
-			StreamInformation streamInformation = mediaInformation.getStreams().get(0);
-			if (streamInformation.getCodec().contains("adpcm")) {
-				String newName = mediaFile.getPath() + ".wav";
-				String cmd = "-i " + mediaFile.getPath() + " -acodec pcm_u8 -ar 16000 " + newName;
-				FFmpegSession ffmpegSession = FFmpegKit.execute(cmd);
-				ReturnCode rc = ffmpegSession.getReturnCode();
-				if (rc.isValueSuccess()) {
-					Log.i(TAG, "Command execution completed successfully.");
-					mediaFile.delete();
-					mediaFile = new File(newName);
-				} else {
-					Log.i(TAG, String.format(
-							"Command execution failed with rc=%d and the output below.", rc.getValue()));
+		try {
+			MediaInformationSession session = FFprobeKit.getMediaInformation(mediaFile.getPath());
+			MediaInformation mediaInformation = session.getMediaInformation();
+			if (mediaInformation != null && "mmf".equals(mediaInformation.getFormat())) {
+				StreamInformation streamInformation = mediaInformation.getStreams().get(0);
+				if (streamInformation.getCodec().contains("adpcm")) {
+					String newName = mediaFile.getPath() + ".wav";
+					String cmd = "-i " + mediaFile.getPath() + " -acodec pcm_u8 -ar 16000 " + newName;
+					FFmpegSession ffmpegSession = FFmpegKit.execute(cmd);
+					ReturnCode rc = ffmpegSession.getReturnCode();
+					if (rc.isValueSuccess()) {
+						Log.i(TAG, "Command execution completed successfully.");
+						mediaFile.delete();
+						mediaFile = new File(newName);
+					} else {
+						Log.i(TAG, String.format(
+								"Command execution failed with rc=%d and the output below.", rc.getValue()));
+					}
 				}
 			}
+		} catch (Throwable t) {
+			Log.e(TAG, "FFmpeg error", t);
 		}
 	}
 

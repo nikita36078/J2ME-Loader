@@ -118,7 +118,7 @@ public class AudioClip {
 		try {
 			player.stop();
 		} catch (MediaException e) {
-			Log.e(TAG, "stop: ", e);
+			Log.e(TAG, "pause: ", e);
 		}
 	}
 }

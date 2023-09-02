@@ -58,4 +58,9 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 	public void doStart() {
 		midiDriver.write(midiSequence);
 	}
+
+	@Override
+	public void doSetVolume(float left, float right) {
+		midiDriver.setVolume((int) left);
+	}
 }

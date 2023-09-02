@@ -101,8 +101,6 @@ LOCAL_LDLIBS := -llog
 
 LOCAL_MODULE := sonivox
 
-LOCAL_EXPORT_C_INCLUDES  :=	$(LOCAL_PATH)/include
-
 ifeq ($(TARGET_ARCH),arm)
 LOCAL_SRC_FILES += \
 	lib_src/ARM-E_filter_gnu.s \
@@ -128,5 +126,8 @@ endif
 ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
 endif
+
+LOCAL_EXPORT_C_INCLUDES  :=	$(LOCAL_PATH)/include
+LOCAL_EXPORT_CFLAGS := $(LOCAL_CFLAGS)
 
 include $(BUILD_SHARED_LIBRARY)

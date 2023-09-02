@@ -19,12 +19,16 @@ package javax.microedition.media;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.VolumeControl;
 
 public class BasePlayer implements Player, VolumeControl, PanControl {
+	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
+			new Thread(r, "MidletPlayerCallback"));
 	private TimeBase timeBase;
 	protected int state;
 	private int loopCount;
@@ -107,8 +111,7 @@ public class BasePlayer implements Player, VolumeControl, PanControl {
 	public synchronized void postEvent(String event, Object eventData) {
 		for (PlayerListener listener : listeners) {
 			// Callbacks should be async
-			Runnable r = () -> listener.playerUpdate(this, event, eventData);
-			(new Thread(r, "MIDletPlayerCallback")).start();
+			callbackExecutor.execute(() -> listener.playerUpdate(this, event, eventData));
 		}
 	}
 

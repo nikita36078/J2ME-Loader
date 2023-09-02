@@ -3,7 +3,11 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES = \
-
+	mmapi_jni.cpp \
+	mmapi_player.cpp \
+	mmapi_error.cpp \
+	mmapi_file.cpp \
+	mmapi_jstring.cpp
 #	eas_mmapi.c \
 	eas_mmapi_host.c \
 	eas_mmapi_jni.c \
