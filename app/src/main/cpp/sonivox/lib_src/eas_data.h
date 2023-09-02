@@ -57,7 +57,7 @@
 #endif
 
 #ifndef MAX_NUMBER_STREAMS
-#define MAX_NUMBER_STREAMS          32
+#define MAX_NUMBER_STREAMS          4
 #endif
 
 /* flags for S_EAS_STREAM */

@@ -58,7 +58,8 @@ LOCAL_SRC_FILES = \
 	lib_src/wt_22khz.c \
 	host_src/eas_config.c \
 	host_src/eas_report.c \
-	host_src/eas_wave.c
+	host_src/eas_wave.c \
+	host_src/eas_hostmm.c
 
 LOCAL_CFLAGS += \
 	-O2 \
@@ -76,8 +77,11 @@ LOCAL_CFLAGS += \
 	-DDLS_SYNTHESIZER \
 	-D_REVERB_ENABLED \
 	-DFILE_HEADER_SEARCH \
+	-D_CRT_SECURE_NO_DEPRECATE \
+	-D_CRT_NONSTDC_NO_DEPRECATE \
 	-DMMAPI_SUPPORT \
 	-DJET_INTERFACE \
+	-D_WAVE_PARSER \
 	-Dfalse=0 \
 	-Wno-unused-parameter \
 	-Werror \
@@ -93,24 +97,31 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_ARM_MODE := arm
 
+LOCAL_LDLIBS := -llog
+
 LOCAL_MODULE := sonivox
+
+LOCAL_EXPORT_C_INCLUDES  :=	$(LOCAL_PATH)/include
 
 ifeq ($(TARGET_ARCH),arm)
 LOCAL_SRC_FILES += \
 	lib_src/ARM-E_filter_gnu.s \
-	lib_src/ARM-E_interpolate_loop_gnu.s \
-	lib_src/ARM-E_interpolate_noloop_gnu.s \
 	lib_src/ARM-E_mastergain_gnu.s \
+# not used with -D_16_BIT_SAMPLES
+#	lib_src/ARM-E_interpolate_loop_gnu.s \
+	lib_src/ARM-E_interpolate_noloop_gnu.s \
 	lib_src/ARM-E_voice_gain_gnu.s
 
 LOCAL_ASFLAGS += \
 	-xassembler-with-cpp \
-	-D SAMPLE_RATE_22050=1 \
-	-D STEREO_OUTPUT=1 \
-	-D FILTER_ENABLED=1 \
+	-DSAMPLE_RATE_22050=1 \
+	-DSTEREO_OUTPUT=1 \
+	-DFILTER_ENABLED=1 \
 	-D SAMPLES_16_BIT=1
 
 LOCAL_CFLAGS += -D NATIVE_EAS_KERNEL
+
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/lib_src/ARM_synth_constants_gnu.inc
 endif
 
 # Don't strip debug builds
@@ -118,4 +129,4 @@ ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
 endif
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)

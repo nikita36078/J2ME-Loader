@@ -50,7 +50,7 @@
 #endif
 
 #ifndef MAX_VIRTUAL_SYNTHESIZERS
-#define MAX_VIRTUAL_SYNTHESIZERS    32
+#define MAX_VIRTUAL_SYNTHESIZERS    4
 #endif
 
 /* defines */

@@ -59,7 +59,7 @@
 
 /* number of mixBuffers to read from EAS_Render() before writing
  * all together to the wave device */
-#define MMAPI_AUDIODEVICE_BUFFERS	32
+#define MMAPI_AUDIODEVICE_BUFFERS	4
 
 /*
  * the size of the circular buffer for streaming buffer mode.

@@ -481,11 +481,15 @@ static EAS_RESULT TC_Reset (S_EAS_DATA *pEASData, EAS_VOID_PTR pInstData)
 	pData->time = 0;
 
 	/* reset file position and re-parse header */
-	pData->state = EAS_STATE_ERROR;
-	if ((result = EAS_HWFileSeek(pEASData->hwInstData, pData->fileHandle, pData->fileOffset)) != EAS_SUCCESS)
+	result= EAS_HWFileSeek(pEASData->hwInstData, pData->fileHandle, pData->fileOffset);
+	if (result != EAS_SUCCESS) {
+		pData->state = EAS_STATE_ERROR;
 		return result;
-	if ((result = TC_ParseHeader (pEASData,  pData)) != EAS_SUCCESS)
+	}
+	if ((result = TC_ParseHeader (pEASData,  pData)) != EAS_SUCCESS) {
+		pData->state = EAS_STATE_ERROR;
 		return result;
+	}
 
 	pData->state = EAS_STATE_READY;
 	return EAS_SUCCESS;

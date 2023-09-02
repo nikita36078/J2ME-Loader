@@ -81,7 +81,7 @@ typedef struct mmapi_file_struct_tag {
 	MMAPI_RecordingData record;
 	union {
 		/* the locator for OPEN_MODE_NATIVE. Only valid during OpenFile call! */
-		EAS_CHAR* locator;
+		const EAS_CHAR* locator;
 		/* locator for OPEN_MODE_MEMORY and OPEN_MODE_STREAM */
 		MMAPI_MediaBuffer* mb;
 	};
@@ -120,7 +120,7 @@ void MMAPI_Shutdown(MMAPI_DATA_HANDLE mHandle);
  *         error
  *----------------------------------------------------------------------------
 */
-MMAPI_FILE_HANDLE MMAPI_OpenFile(MMAPI_DATA_HANDLE mHandle, EAS_CHAR* locator, MMAPI_OPEN_MODE mode);
+MMAPI_FILE_HANDLE MMAPI_OpenFile(MMAPI_DATA_HANDLE mHandle, const EAS_CHAR *locator, MMAPI_OPEN_MODE mode);
 
 
 /*----------------------------------------------------------------------------
@@ -377,7 +377,7 @@ EAS_I32 MMAPI_GetDuration(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle);
  * @return true if successful, false on error
  *----------------------------------------------------------------------------
 */
-EAS_BOOL MMAPI_OpenRecording(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle, EAS_CHAR* locator);
+EAS_BOOL MMAPI_OpenRecording(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle, const EAS_CHAR* locator);
 
 
 /*----------------------------------------------------------------------------
@@ -537,7 +537,7 @@ EAS_I32 MMAPI_HWOutput(MMAPI_OUTPUT_HANDLE handle, EAS_PCM* samples, EAS_I32 cou
 /* ---------------------------------------------------------------------------- */
 
 
-EAS_BOOL MMAPI_LoadDLSCollection(MMAPI_DATA_HANDLE mHandle, EAS_CHAR *locator);
+EAS_BOOL MMAPI_LoadDLSCollection(MMAPI_DATA_HANDLE mHandle, const EAS_CHAR *locator);
 
 #ifdef __cplusplus
 }  /* end extern "C" */

@@ -194,7 +194,7 @@ void MMAPI_Shutdown(MMAPI_DATA_HANDLE mHandle) {
  * locators, and from MMAPI_WriteBuffer() for STREAM, MEMORY, and TONE
  * locators.
  */
-EAS_RESULT MMAPI_OpenFileImpl(MMAPI_DATA_STRUCT* mdh, MMAPI_FILE_STRUCT* mfh, EAS_CHAR* locator) {
+EAS_RESULT MMAPI_OpenFileImpl(MMAPI_DATA_STRUCT* mdh, MMAPI_FILE_STRUCT* mfh, const EAS_CHAR* locator) {
 	EAS_RESULT res = -1;
 
 	#ifdef SONIVOX_DEBUG
@@ -266,8 +266,8 @@ EAS_RESULT MMAPI_OpenFileImpl(MMAPI_DATA_STRUCT* mdh, MMAPI_FILE_STRUCT* mfh, EA
 
 
 MMAPI_FILE_HANDLE MMAPI_OpenFile(MMAPI_DATA_HANDLE mHandle,
-							EAS_CHAR* locator,
-							MMAPI_OPEN_MODE mode) {
+								 const EAS_CHAR *locator,
+								 MMAPI_OPEN_MODE mode) {
 	MMAPI_DATA_STRUCT* mdh = (MMAPI_DATA_STRUCT*) mHandle;
 	MMAPI_FILE_STRUCT* mfh;
 	EAS_RESULT res = EAS_SUCCESS;
@@ -699,7 +699,6 @@ EAS_BOOL MMAPI_Resume(MMAPI_DATA_HANDLE mHandle,
 	MMAPI_DATA_STRUCT* mdh = (MMAPI_DATA_STRUCT*) mHandle;
 	MMAPI_FILE_STRUCT* mfh = (MMAPI_FILE_STRUCT*) fHandle;
 	EAS_RESULT res = EAS_SUCCESS;
-	EAS_STATE state = EAS_STATE_READY;
 
 #ifdef SONIVOX_DEBUG
 	EAS_Report(5, "MMAPI_Resume()\n");
@@ -724,13 +723,10 @@ EAS_BOOL MMAPI_Resume(MMAPI_DATA_HANDLE mHandle,
 	#endif
 
 	if (res == EAS_SUCCESS) {
-		EAS_State(mdh->easHandle, mfh->handle, &state);
-		if (state == EAS_STATE_PAUSED || state == EAS_STATE_PAUSING) {
-			/* if in PAUSING state, EAS_Resume() will probably cause
+		/* if in PAUSING state, EAS_Resume() will probably cause
 			 * an error, but at least we consistently report an error
 			 * if unable to resume */
-			res = EAS_Resume(mdh->easHandle, mfh->handle);
-		}
+		res = EAS_Resume(mdh->easHandle, mfh->handle);
 	}
 #ifdef SONIVOX_DEBUG
 	if (res != EAS_SUCCESS) {
@@ -745,7 +741,6 @@ EAS_BOOL MMAPI_Pause(MMAPI_DATA_HANDLE mHandle,
 	MMAPI_DATA_STRUCT* mdh = (MMAPI_DATA_STRUCT*) mHandle;
 	MMAPI_FILE_STRUCT* mfh = (MMAPI_FILE_STRUCT*) fHandle;
 	EAS_RESULT res = EAS_SUCCESS;
-	EAS_STATE state = EAS_STATE_READY;
 
 #ifdef SONIVOX_DEBUG
 	EAS_Report(5, "MMAPI_Pause()\n");
@@ -757,10 +752,7 @@ EAS_BOOL MMAPI_Pause(MMAPI_DATA_HANDLE mHandle,
 	}
 	#endif
 
-	EAS_State(mdh->easHandle, mfh->handle, &state);
-	if (state != EAS_STATE_PAUSED && state != EAS_STATE_PAUSING) {
-		res = EAS_Pause(mdh->easHandle, mfh->handle);
-	}
+	res = EAS_Pause(mdh->easHandle, mfh->handle);
 #ifdef SONIVOX_DEBUG
 	if (res != EAS_SUCCESS) {
 		EAS_Report(2, "MMAPI_Pause: res=%d...\n", (int) res);
@@ -1108,7 +1100,7 @@ EAS_I32 MMAPI_GetDuration(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle) 
  * Set up the Recording Data struct, and possibly allocate the media buffer struct.
  * Then open the host file (either as a stream or native file).
  */
-EAS_BOOL MMAPI_OpenRecording(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle, EAS_CHAR* locator) {
+EAS_BOOL MMAPI_OpenRecording(MMAPI_DATA_HANDLE mHandle, MMAPI_FILE_HANDLE fHandle, const EAS_CHAR* locator) {
 	MMAPI_DATA_STRUCT* mdh = (MMAPI_DATA_STRUCT*) mHandle;
 	MMAPI_FILE_STRUCT* mfh = (MMAPI_FILE_STRUCT*) fHandle;
 	/* need a temporary file struct for opening the file/stream */
@@ -1451,7 +1443,7 @@ void MMAPI_CloseInteractiveMIDI(MMAPI_DATA_STRUCT* mdh, EAS_HANDLE midiHandle) {
 }
 
 
-EAS_BOOL MMAPI_LoadDLSCollection(MMAPI_DATA_HANDLE mHandle, EAS_CHAR *locator) {
+EAS_BOOL MMAPI_LoadDLSCollection(MMAPI_DATA_HANDLE mHandle, const EAS_CHAR *locator) {
 	MMAPI_DATA_STRUCT* mdh = (MMAPI_DATA_STRUCT*) mHandle;
 	EAS_RESULT res = EAS_SUCCESS;
 	

@@ -140,10 +140,9 @@ typedef EAS_I32 EAS_FILE_MODE;
 
 /* file locator e.g. filename or memory pointer */
 typedef struct s_eas_file_tag {
-    const char* path;
-    int         fd;
-    long long   offset;
-    long long   length;
+    void *handle;
+    int(*readAt)(void *handle, void *buf, int offset, int size);
+    int(*size)(void *handle);
 } EAS_FILE, *EAS_FILE_LOCATOR;
 
 /* handle to stream */

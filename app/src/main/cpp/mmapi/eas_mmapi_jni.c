@@ -29,7 +29,7 @@
 /* static int nInit(); */
 JNIEXPORT jlong JNICALL Java_com_sonivox_mmapi_EAS_nInit(JNIEnv *env, jclass clazz) {
 	MMAPI_DATA_HANDLE easHandle = MMAPI_Init();
-	return (jlong) easHandle;
+	return (intptr_t) easHandle;
 }
 
 /* static void nShutdown(int easHandle); */
@@ -56,7 +56,7 @@ JNIEXPORT jlong JNICALL Java_com_sonivox_mmapi_EAS_nOpenFile
         (*env)->ReleaseStringUTFChars(env, locator, sLocator);
     }
 
-    return (jlong) fileHandle;
+    return (intptr_t) fileHandle;
 }
 
 /* static void nCloseFile(int easHandle, int fileHandle); */
@@ -317,9 +317,11 @@ JNIEXPORT jboolean JNICALL Java_com_sonivox_mmapi_EAS_nLoadDLSCollection
 	MMAPI_DATA_HANDLE easHandle = (MMAPI_DATA_HANDLE) eas_handle;
 	EAS_BOOL result;
 
-	const char *sLocator = (*env)->GetStringUTFChars(env, locator, NULL);
+	const char *sLocator = locator == NULL ? NULL : (*env)->GetStringUTFChars(env, locator, NULL);
 	result = MMAPI_LoadDLSCollection(easHandle, sLocator);
-	(*env)->ReleaseStringUTFChars(env, locator, sLocator);
+	if (locator != NULL) {
+		(*env)->ReleaseStringUTFChars(env, locator, sLocator);
+	}
 
 	return result;
 }
