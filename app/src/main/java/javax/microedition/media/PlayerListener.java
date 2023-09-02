@@ -17,15 +17,22 @@
 package javax.microedition.media;
 
 public interface PlayerListener {
-	public static final String CLOSED = "closed";
-	public static final String DEVICE_AVAILABLE = "deviceAvailable";
-	public static final String DEVICE_UNAVAILABLE = "deviceUnavailable";
-	public static final String DURATION_UPDATED = "durationUpdated";
-	public static final String END_OF_MEDIA = "endOfMedia";
-	public static final String ERROR = "error";
-	public static final String STARTED = "started";
-	public static final String STOPPED = "stopped";
-	public static final String VOLUME_CHANGED = "volumeChanged";
+	String BUFFERING_STARTED = "bufferingStarted";
+	String BUFFERING_STOPPED = "bufferingStopped";
+	String CLOSED = "closed";
+	String DEVICE_AVAILABLE = "deviceAvailable";
+	String DEVICE_UNAVAILABLE = "deviceUnavailable";
+	String DURATION_UPDATED = "durationUpdated";
+	String END_OF_MEDIA = "endOfMedia";
+	String ERROR = "error";
+	String STARTED = "started";
+	String STOPPED = "stopped";
+	String VOLUME_CHANGED = "volumeChanged";
+	String RECORD_STARTED = "recordStarted";
+	String RECORD_STOPPED = "recordStopped";
+	String RECORD_ERROR = "recordError";
+	String SIZE_CHANGED = "sizeChanged";
+	String STOPPED_AT_TIME = "stoppedAtTime";
 
-	public void playerUpdate(Player player, String event, Object eventData);
+	void playerUpdate(Player player, String event, Object eventData);
 }

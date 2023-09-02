@@ -50,5 +50,4 @@ public abstract class DataSource implements Controllable {
 
 	@Override
 	public abstract Control getControl(String control);
-
 }

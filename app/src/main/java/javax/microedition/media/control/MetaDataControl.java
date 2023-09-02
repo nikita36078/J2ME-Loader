@@ -19,25 +19,25 @@ package javax.microedition.media.control;
 import javax.microedition.media.Control;
 
 public interface MetaDataControl extends Control {
-	public static final String TRACK_NUMBER_KEY = "tracknum";
-	public static final String ALBUM_KEY = "album";
-	public static final String ARTIST_KEY = "artist";
-	public static final String AUTHOR_KEY = "author";
-	public static final String COMPOSER_KEY = "composer";
-	public static final String DATE_KEY = "date";
-	public static final String GENRE_KEY = "genre";
-	public static final String TITLE_KEY = "title";
-	public static final String YEAR_KEY = "year";
-	public static final String DURATION_KEY = "duration";
-	public static final String NUM_TRACKS_KEY = "numtracks";
-	public static final String WRITER_KEY = "writer";
-	public static final String MIME_TYPE_KEY = "mimetype";
-	public static final String ALBUM_ARTIST_KEY = "albumartist";
-	public static final String DISC_NUMBER_KEY = "discnum";
-	public static final String COMPILATION_KEY = "compilation";
-	public static final String COPYRIGHT_KEY = "copyright";
+	String TRACK_NUMBER_KEY = "tracknum";
+	String ALBUM_KEY = "album";
+	String ARTIST_KEY = "artist";
+	String AUTHOR_KEY = "author";
+	String COMPOSER_KEY = "composer";
+	String DATE_KEY = "date";
+	String GENRE_KEY = "genre";
+	String TITLE_KEY = "title";
+	String YEAR_KEY = "year";
+	String DURATION_KEY = "duration";
+	String NUM_TRACKS_KEY = "numtracks";
+	String WRITER_KEY = "writer";
+	String MIME_TYPE_KEY = "mimetype";
+	String ALBUM_ARTIST_KEY = "albumartist";
+	String DISC_NUMBER_KEY = "discnum";
+	String COMPILATION_KEY = "compilation";
+	String COPYRIGHT_KEY = "copyright";
 
-	public String[] getKeys();
+	String[] getKeys();
 
-	public String getKeyValue(String key);
+	String getKeyValue(String key);
 }

@@ -27,4 +27,3 @@ public interface FramePositioningControl extends Control {
 
 	public int skip(int framesToSkip);
 }
-

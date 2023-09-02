@@ -47,7 +47,11 @@ public class AudioClip {
 			throw new NullPointerException();
 		}
 		InputStream stream = AppClassLoader.getResourceAsStream(null, filename);
-		player = Manager.createPlayer(stream, "audio/midi");
+		try {
+			player = Manager.createPlayer(stream, "audio/midi");
+		} catch (MediaException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public AudioClip(int type, byte[] audioData, int audioOffset, int audioLength) {
@@ -66,6 +70,8 @@ public class AudioClip {
 			player = Manager.createPlayer(stream, "audio/midi");
 		} catch (IOException e) {
 			Log.e(TAG, "AudioClip: ", e);
+		} catch (MediaException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

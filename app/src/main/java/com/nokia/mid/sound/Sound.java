@@ -119,6 +119,8 @@ public class Sound {
 			state = SOUND_STOPPED;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (MediaException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -180,21 +182,22 @@ public class Sound {
 		int high = FREQ_TABLE.length - 1;
 
 		while (low <= high) {
-			int mid = (low + high) >>> 1;
+			int mid = (low + high) >> 1;
 			int midVal = FREQ_TABLE[mid];
 
-			if (midVal < freq) {
+			if (freq > midVal) {
 				low = mid + 1;
-			} else if (midVal > freq) {
+			} else if (freq < midVal) {
 				high = mid - 1;
 			} else {
 				return mid;
 			}
 		}
-		if ((freq - FREQ_TABLE[low - 1]) < (FREQ_TABLE[low] - freq)) {
-			return low - 1;
-		} else {
-			return low;
+
+		if (freq < (FREQ_TABLE[low - 1] + FREQ_TABLE[low]) >> 1) {
+			low--;
 		}
+
+		return low;
 	}
 }

@@ -41,7 +41,7 @@ public class Manager {
 	private static final String CAPTURE_IMAGE_LOCATOR = "capture://image";
 	private static final TimeBase DEFAULT_TIMEBASE = () -> System.nanoTime() / 1000L;
 
-	public static Player createPlayer(String locator) throws IOException {
+	public static Player createPlayer(String locator) throws IOException, MediaException {
 		if (locator == null) {
 			throw new IllegalArgumentException();
 		}
@@ -86,7 +86,8 @@ public class Manager {
 		}
 	}
 
-	public static Player createPlayer(final InputStream stream, String type) throws IOException {
+	public static Player createPlayer(final InputStream stream, String type)
+			throws IOException, MediaException {
 		if (stream == null) {
 			throw new IllegalArgumentException();
 		}
