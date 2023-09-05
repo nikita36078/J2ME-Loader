@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 
+import androidx.annotation.Keep;
 import androidx.preference.PreferenceManager;
 
 import java.io.File;
@@ -56,6 +57,7 @@ public class Config {
 	public static final String SCREENSHOTS_DIR;
 	public static final String SHADERS_DIR = "/shaders/";
 	public static final String SOUNDBANKS_DIR = "/soundbanks/";
+	public static final String APPS_DB_NAME = "/J2ME-apps.db";
 
 	private static String emulatorDir;
 	private static String dataDir;
@@ -63,9 +65,10 @@ public class Config {
 	private static String profilesDir;
 	private static String appDir;
 
+	@Keep
 	private static final SharedPreferences.OnSharedPreferenceChangeListener sPrefListener =
 			(sharedPreferences, key) -> {
-				if (key.equals(PREF_EMULATOR_DIR)) {
+				if (PREF_EMULATOR_DIR.equals(key)) {
 					initDirs(sharedPreferences.getString(key, emulatorDir));
 				}
 			};

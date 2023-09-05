@@ -79,7 +79,7 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		String emulatorDir = Config.getEmulatorDir();
 		File dir = new File(emulatorDir);
 		if (dir.isDirectory() && dir.canWrite()) {
-			initDb(emulatorDir);
+			initDb(emulatorDir + Config.APPS_DB_NAME);
 		}
 	}
 
@@ -171,16 +171,11 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		if (PREF_APP_SORT.equals(key)) {
 			setSort(sp.getInt(PREF_APP_SORT, 0));
 		} else if (PREF_EMULATOR_DIR.equals(key)) {
-			String newPath = sp.getString(key, null);
+			String newPath = sp.getString(key, null) + Config.APPS_DB_NAME;
 			if (db != null) {
 				String databaseName = db.getOpenHelper().getDatabaseName();
-				if (databaseName != null) {
-					String dbDir = new File(databaseName).getParent();
-					if (dbDir != null) {
-						if (dbDir.equals(newPath)) {
-							return;
-						}
-					}
+				if (databaseName != null && databaseName.equals(newPath)) {
+					return;
 				}
 				db.close();
 				compositeDisposable.clear();

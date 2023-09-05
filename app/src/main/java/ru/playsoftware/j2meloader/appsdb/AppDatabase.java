@@ -29,11 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
 	public abstract AppItemDao appItemDao();
 
-	static synchronized AppDatabase open(Context context, String dir) {
-		return Room.databaseBuilder(
-				context.getApplicationContext(),
-				AppDatabase.class,
-				dir + "/J2ME-apps.db")
-				.build();
+	static synchronized AppDatabase open(Context context, String path) {
+		return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, path).build();
 	}
 }
