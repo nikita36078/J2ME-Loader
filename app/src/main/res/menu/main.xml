@@ -7,37 +7,51 @@
         android:id="@+id/action_search"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+    <item
+        android:id="@+id/action_view"
+        android:title="@string/pref_apps_view"
+        android:icon="@drawable/ic_action_apps_view_list"
+        app:showAsAction="always"
+        android:orderInCategory="1">
+    </item>
     <item
         android:id="@+id/action_sort"
         android:title="@string/pref_app_sort_title"
-        android:icon="@drawable/ic_setting_sort"
-        app:showAsAction="ifRoom"
-        android:orderInCategory="0">
+        android:icon="@drawable/ic_action_sort"
+        app:showAsAction="always"
+        android:orderInCategory="2">
     </item>
     <item
         android:id="@+id/action_about"
         android:title="@string/about"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="3" />
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="4" />
     <item
         android:id="@+id/action_profiles"
         android:title="@string/profiles"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="5" />
     <item
         android:id="@+id/action_help"
         android:title="@string/help"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="6" />
     <item
         android:id="@+id/action_save_log"
         android:title="@string/save_log"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="8" />
     <item
         android:id="@+id/action_exit_app"
         android:title="@string/exit"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="9" />
 
 </menu>

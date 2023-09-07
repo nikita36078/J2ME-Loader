@@ -20,9 +20,11 @@ package ru.playsoftware.j2meloader.applist;
 
 import static ru.playsoftware.j2meloader.util.Constants.KEY_APP_URI;
 import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APPS_VIEW;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_LAST_PATH;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
@@ -68,11 +70,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,24 +92,24 @@ import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
-import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 public class AppsListFragment extends Fragment implements MenuProvider {
 	private static final String TAG = AppsListFragment.class.getSimpleName();
+
+	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
+			FileUtils.getFilePicker(),
+			this::onPickFileResult);
 	private final AppsListAdapter adapter = new AppsListAdapter(this);
 	private Uri appUri;
 	private SharedPreferences preferences;
 	private AppRepository appRepository;
 	private Disposable searchViewDisposable;
-
-	FragmentAppsListBinding binding;
-
-	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
-			FileUtils.getFilePicker(),
-			this::onPickFileResult);
+	private GridLayoutManager layoutManager;
+	private FragmentAppsListBinding binding;
+	private DividerItemDecoration itemDecoration;
 
 	public static AppsListFragment newInstance(Uri data) {
 		AppsListFragment fragment = new AppsListFragment();
@@ -135,7 +134,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentAppsListBinding.inflate(inflater, container, false);
 		return binding.getRoot();
 	}
@@ -146,18 +145,25 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		MenuHost menuHost = requireActivity();
 		menuHost.addMenuProvider(this, getViewLifecycleOwner());
 
-		View emptyView = view.findViewById(android.R.id.empty);
-		adapter.setEmptyView(emptyView);
-		adapter.setLayout(AppsListAdapter.LAYOUT_TYPE_GRID);
-		RecyclerView appListView = view.findViewById(android.R.id.list);
-		GridLayoutManager layoutManager = new GridLayoutManager(requireContext(),
-				getResources().getConfiguration().screenWidthDp / 90,
-				LinearLayoutManager.VERTICAL,
-				false);
-		requireActivity().addOnConfigurationChangedListener(configuration ->
-				layoutManager.setSpanCount(configuration.screenWidthDp / 90));
-		appListView.setLayoutManager(layoutManager);
-		appListView.setAdapter(adapter);
+		adapter.setEmptyView(binding.empty);
+		int viewType = preferences.getInt(PREF_APPS_VIEW, AppsListAdapter.LAYOUT_TYPE_GRID);
+		int spanCount;
+		if (viewType == AppsListAdapter.LAYOUT_TYPE_GRID) {
+			spanCount = getResources().getConfiguration().screenWidthDp / 90;
+		} else {
+			spanCount = 1;
+			itemDecoration = new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL);
+			binding.list.addItemDecoration(itemDecoration);
+		}
+		adapter.setLayout(viewType);
+		layoutManager = new GridLayoutManager(requireContext(), spanCount);
+		requireActivity().addOnConfigurationChangedListener(configuration -> {
+			if (adapter.getItemViewType(0) == AppsListAdapter.LAYOUT_TYPE_GRID) {
+				layoutManager.setSpanCount(configuration.screenWidthDp / 90);
+			}
+		});
+		binding.list.setLayoutManager(layoutManager);
+		binding.list.setAdapter(adapter);
 		binding.floatingActionButton.setOnClickListener(v -> {
 			String path = preferences.getString(PREF_LAST_PATH, null);
 			if (path == null) {
@@ -194,7 +200,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 			return;
 		}
 		preferences.edit()
-				.putString(Constants.PREF_LAST_PATH, uri.getPath())
+				.putString(PREF_LAST_PATH, uri.getPath())
 				.apply();
 		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 	}
@@ -337,8 +343,13 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
+		int type = preferences.getInt(PREF_APPS_VIEW, AppsListAdapter.LAYOUT_TYPE_GRID);
+		if (type == AppsListAdapter.LAYOUT_TYPE_LIST) {
+			menu.findItem(R.id.action_view).setIcon(R.drawable.ic_action_apps_view_grid);
+		}
 	}
 
+	@SuppressLint("NotifyDataSetChanged")
 	@Override
 	public boolean onMenuItemSelected(MenuItem item) {
 		FragmentActivity activity = requireActivity();
@@ -351,7 +362,6 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 			startActivity(intentProfiles);
 		} else if (item.getItemId() == R.id.action_settings) {
 			startActivity(new Intent(activity, SettingsActivity.class));
-			return true;
 		} else if (itemId == R.id.action_help) {
 			HelpDialogFragment helpDialogFragment = new HelpDialogFragment();
 			helpDialogFragment.show(getChildFragmentManager(), "help");
@@ -367,8 +377,35 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 			activity.finish();
 		} else if (itemId == R.id.action_sort) {
 			showSortDialog();
+		} else if (itemId == R.id.action_view) {
+			int viewType = adapter.getItemViewType(0);
+			viewType = (viewType + 1) % 2;
+			if (viewType == AppsListAdapter.LAYOUT_TYPE_LIST) {
+				item.setIcon(R.drawable.ic_action_apps_view_grid);
+			} else {
+				item.setIcon(R.drawable.ic_action_apps_view_list);
+			}
+			int spanCount;
+			if (viewType == AppsListAdapter.LAYOUT_TYPE_GRID) {
+				spanCount = getResources().getConfiguration().screenWidthDp / 90;
+				if (itemDecoration != null) {
+					binding.list.removeItemDecoration(itemDecoration);
+				}
+			} else {
+				spanCount = 1;
+				if (itemDecoration == null) {
+					itemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+				}
+				binding.list.addItemDecoration(itemDecoration);
+			}
+			layoutManager.setSpanCount(spanCount);
+			adapter.setLayout(viewType);
+			adapter.notifyDataSetChanged();
+			preferences.edit().putInt(PREF_APPS_VIEW, viewType).apply();
+		} else {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private void showSortDialog() {

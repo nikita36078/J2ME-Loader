@@ -27,6 +27,7 @@ public class Constants {
 	public static final String KEY_START_ARGUMENTS = "startArguments";
 
 	public static final String PREF_APP_SORT = "pref_app_sort";
+	public static final String PREF_APPS_VIEW = "pref_apps_view";
 	public static final String PREF_DEFAULT_PROFILE = "default_profile";
 	public static final String PREF_EMULATOR_DIR = "emulator_dir";
 	public static final String PREF_KEEP_SCREEN = "pref_wakelock_switch";
