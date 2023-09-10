@@ -19,7 +19,9 @@ LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_SHARED_LIBRARIES := sonivox mmapi_common
+LOCAL_SHARED_LIBRARIES := mmapi_common
+
+LOCAL_STATIC_LIBRARIES := sonivox
 
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)
