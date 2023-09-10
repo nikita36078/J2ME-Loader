@@ -49,6 +49,7 @@ namespace mmapi {
             builder.setFormat(oboe::AudioFormat::Float);
             builder.setChannelCount(2);
             builder.setCallback(this);
+            builder.setFormatConversionAllowed(true);
 
             oboe::Result result = builder.openStream(oboeStream);
             if (result != oboe::Result::OK) {
