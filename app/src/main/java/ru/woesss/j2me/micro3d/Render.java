@@ -1296,6 +1296,9 @@ public class Render {
 	}
 
 	public void setOrthographicW(int w) {
+		if (w <= 0) {
+			return;
+		}
 		env.projection = Graphics3D.COMMAND_PARALLEL_SIZE;
 		float vw = env.width;
 		float vh = env.height;
@@ -1314,6 +1317,9 @@ public class Render {
 	}
 
 	public void setOrthographicWH(int w, int h) {
+		if (w <= 0 || h <= 0) {
+			return;
+		}
 		env.projection = Graphics3D.COMMAND_PARALLEL_SIZE;
 		float sx = 2.0f / w;
 		float sy = 2.0f / h;
@@ -1330,6 +1336,10 @@ public class Render {
 	}
 
 	public void setPerspectiveFov(int near, int far, int angle) {
+		if (near <= 0 || far <= 0 || near >= far) {
+			return;
+		}
+		angle = MathUtil.clamp(angle, 2, 2046);
 		env.projection = Graphics3D.COMMAND_PERSPECTIVE_FOV;
 		env.near = near;
 		float rd = 1.0f / (near - far);
@@ -1350,6 +1360,9 @@ public class Render {
 	}
 
 	public void setPerspectiveW(int near, int far, int w) {
+		if (near <= 0 || far <= 0 || near >= far || w <= 0) {
+			return;
+		}
 		env.projection = Graphics3D.COMMAND_PERSPECTIVE_WH;
 		env.near = near;
 		float vw = env.width;
@@ -1371,6 +1384,9 @@ public class Render {
 	}
 
 	public void setPerspectiveWH(float near, float far, int w, int h) {
+		if (near <= 0 || far <= 0 || near >= far || w == 0 || h == 0) {
+			return;
+		}
 		env.projection = Graphics3D.COMMAND_PERSPECTIVE_WH;
 		env.near = near;
 		float width = w * MathUtil.TO_FLOAT;
