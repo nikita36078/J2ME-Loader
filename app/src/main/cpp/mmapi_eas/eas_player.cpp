@@ -140,20 +140,18 @@ namespace mmapi {
         }
 
         oboe::DataCallbackResult
-        Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData,
-                             int32_t numFrames) {
-            memset(audioData, 0, sizeof(EAS_PCM) * easConfig->numChannels);
+        Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
+            memset(audioData, 0, sizeof(EAS_PCM) * easConfig->numChannels * numFrames);
             EAS_STATE easState;
             EAS_State(easHandle, media, &easState);
             if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
-                playerListener->postEvent(END_OF_MEDIA, getMediaTime());
-                EAS_RESULT result = EAS_Locate(easHandle, media, 0, EAS_FALSE);
-                if (result != EAS_SUCCESS) {
-                    ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
-                }
+                int64_t playTime = getMediaTime();
+                timeToSet = 0;
                 if (looping == -1 || (--loopCount) > 0) {
-                    playerListener->postEvent(START, 0);
+                    playerListener->postEvent(RESTART, playTime);
                 } else {
+                    state = PREFETCHED;
+                    playerListener->postEvent(STOP, playTime);
                     return oboe::DataCallbackResult::Stop;
                 }
             }

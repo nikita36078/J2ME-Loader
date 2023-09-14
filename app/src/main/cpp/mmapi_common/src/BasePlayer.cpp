@@ -77,9 +77,6 @@ namespace mmapi {
     }
 
     void BasePlayer::setRepeat(int32_t count) {
-        if (count > 0) {
-            count--;
-        }
         looping = count;
         loopCount = count;
     }

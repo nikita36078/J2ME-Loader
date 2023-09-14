@@ -14,7 +14,7 @@ namespace mmapi {
         bool muted = false;
         int32_t volume = 100;
     protected:
-        int32_t loopCount = 1;
+        int32_t loopCount = 0;
         int32_t looping = 0;
         std::shared_ptr<oboe::AudioStream> oboeStream;
         int64_t timeToSet = -1;

@@ -251,14 +251,17 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl {
 	@Keep // call from native
 	private void postEvent(int type, long time) {
 		switch (type) {
-			case 1: // endOfMedia
+			case 1: // restart
 				postEvent(PlayerListener.END_OF_MEDIA, time);
+				postEvent(PlayerListener.STARTED, 0);
 				break;
-			case 2: // started
-				postEvent(PlayerListener.STARTED, time);
+			case 2: // stop
+				postEvent(PlayerListener.END_OF_MEDIA, time);
+				state = PREFETCHED;
 				break;
 			case 3: // error
 				postEvent(PlayerListener.ERROR, null);
+				state = PREFETCHED;
 				break;
 		}
 	}

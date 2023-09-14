@@ -18,9 +18,9 @@ namespace mmapi {
     };
 
     enum PlayerListenerEvent {
-        END_OF_MEDIA = 1,
-        START = 2,
-        ERROR = 3
+        RESTART = 1,
+        STOP = 2,
+        ERROR = 3,
     };
 
     class JNIEnvPtr {

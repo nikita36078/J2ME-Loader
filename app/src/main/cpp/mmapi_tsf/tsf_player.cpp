@@ -133,18 +133,16 @@ namespace mmapi {
         Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
             memset(audioData, 0, sizeof(float) * NUM_CHANNELS * numFrames);
             if (currentMsg == nullptr) {
-                playerListener->postEvent(END_OF_MEDIA, playTime);
-                currentMsg = media;
-                playTime = 0;
-                tsf_reset(synth);
-                //Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
-                tsf_channel_set_bank_preset(synth, 9, 128, 0);
+                timeToSet = 0;
                 if (looping == -1 || (--loopCount) > 0) {
-                    playerListener->postEvent(START, playTime);
+                    playerListener->postEvent(RESTART, playTime);
                 } else {
+                    state = PREFETCHED;
+                    playerListener->postEvent(STOP, playTime);
                     return oboe::DataCallbackResult::Stop;
                 }
             }
+
             if (timeToSet != -1) {
                 if (timeToSet < playTime) {
                     tsf_reset(synth);
