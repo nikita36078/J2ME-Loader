@@ -1,5 +1,6 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018-2019 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  * Copyright 2022 Arman Jussupgaliyev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
