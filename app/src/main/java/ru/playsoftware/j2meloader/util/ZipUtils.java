@@ -1,5 +1,6 @@
 /*
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 
 package ru.playsoftware.j2meloader.util;
 
-import net.lingala.zip4j.ZipFile;
+import ru.woesss.util.zip.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 
 import java.io.BufferedInputStream;
@@ -30,17 +31,18 @@ public class ZipUtils {
 	private static final int BUFFER_SIZE = 8096;
 
 	public static void unzipEntry(File srcZip, String name, File dst) throws IOException {
-		ZipFile zip = new ZipFile(srcZip);
-		FileHeader entry = zip.getFileHeader(name);
-		if (entry == null) {
-			throw new IOException("Entry '" + name + "' not found in zip: " + srcZip);
-		}
-		try (BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
-			 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE)) {
-			byte[] data = new byte[BUFFER_SIZE];
-			int read;
-			while ((read = bis.read(data)) != -1) {
-				bos.write(data, 0, read);
+		try (ZipFile zip = new ZipFile(srcZip)) {
+			FileHeader entry = zip.getFileHeader(name);
+			if (entry == null) {
+				throw new IOException("Entry '" + name + "' not found in zip: " + srcZip);
+			}
+			try (BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
+				 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE)) {
+				byte[] data = new byte[BUFFER_SIZE];
+				int read;
+				while ((read = bis.read(data)) != -1) {
+					bos.write(data, 0, read);
+				}
 			}
 		}
 	}

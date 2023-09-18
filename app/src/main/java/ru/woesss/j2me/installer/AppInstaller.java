@@ -1,17 +1,17 @@
 /*
- *  Copyright 2020-2022 Yury Kharchenko
+ * Copyright 2020-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ru.woesss.j2me.installer;
@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
 
-import net.lingala.zip4j.ZipFile;
+import ru.woesss.util.zip.ZipFile;
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import net.lingala.zip4j.model.FileHeader;
 
@@ -353,17 +353,20 @@ public class AppInstaller {
 	}
 
 	private Descriptor loadManifest(File jar) throws IOException {
-		ZipFile zip = new ZipFile(jar);
-		FileHeader manifest = zip.getFileHeader(JarFile.MANIFEST_NAME);
-		if (manifest == null) throw new IOException("JAR not have " + JarFile.MANIFEST_NAME);
-		try (ZipInputStream is = zip.getInputStream(manifest)) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
-			byte[] buf = new byte[4096];
-			int read;
-			while ((read = is.read(buf)) != -1) {
-				baos.write(buf, 0, read);
+		try (ZipFile zip = new ZipFile(jar)) {
+			FileHeader manifest = zip.getFileHeader(JarFile.MANIFEST_NAME);
+			if (manifest == null) {
+				throw new IOException("JAR not have " + JarFile.MANIFEST_NAME);
 			}
-			return new Descriptor(baos.toString(), false);
+			try (ZipInputStream is = zip.getInputStream(manifest)) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
+				byte[] buf = new byte[4096];
+				int read;
+				while ((read = is.read(buf)) != -1) {
+					baos.write(buf, 0, read);
+				}
+				return new Descriptor(baos.toString(), false);
+			}
 		}
 	}
 
