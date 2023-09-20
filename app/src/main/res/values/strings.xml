@@ -176,6 +176,9 @@
     <string name="cmd_menu">Menu</string>
     <string name="dismiss">Dismiss</string>
     <string name="show">Show</string>
+    <string name="msg_error_loading_shader">Unsupported shader, default shader is used!</string>
+    <string name="msg_immediate_mode_disabled">Immediate mode disabled due to stack overflow</string>
+    <string name="msg_mascot_capsule" translatable="false">Mascot Capsule 3D!</string>
 
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>
     <string name="pref_theme_auto_time">Auto, by time of day</string>

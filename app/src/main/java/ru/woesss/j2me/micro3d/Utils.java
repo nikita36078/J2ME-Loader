@@ -1,17 +1,17 @@
 /*
- *  Copyright 2022 Yury Kharchenko
+ * Copyright 2020-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ru.woesss.j2me.micro3d;
@@ -28,6 +28,7 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.BuildConfig;
+import ru.playsoftware.j2meloader.R;
 
 public class Utils {
 	static final String TAG = "micro3d";
@@ -97,7 +98,7 @@ public class Utils {
 		MicroActivity microActivity = ContextHolder.getActivity();
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(microActivity);
 		if (sp.getBoolean("micro3d_using_message", false)) {
-			microActivity.toast("Mascot Capsule 3D!");
+			microActivity.toast(R.string.msg_mascot_capsule);
 		}
 		System.loadLibrary("c++_shared");
 		System.loadLibrary("micro3d");
