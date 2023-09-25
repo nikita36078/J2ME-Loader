@@ -59,11 +59,11 @@ namespace mmapi {
                 return result;
             }
             ALOGV("EAS_checkFileType(): %s file recognized", EAS_GetFileTypeString(type));
-            if (type == EAS_FILE_WAVE_PCM) {
+            if (type == EAS_FILE_UNKNOWN) {
                 EAS_CloseFile(easHandle, stream);
                 EAS_Shutdown(easHandle);
                 delete file;
-                result = EAS_ERROR_INVALID_PCM_TYPE;
+                result = EAS_ERROR_FILE_FORMAT;
                 return result;
             }
             EAS_I32 duration;

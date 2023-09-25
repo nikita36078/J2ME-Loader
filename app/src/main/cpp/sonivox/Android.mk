@@ -86,7 +86,6 @@ LOCAL_CFLAGS += \
 	-Dfalse=0 \
 	-Wno-unused-parameter \
 	-Werror \
-	-D_WAVE_PARSER \
 	-D_CHORUS_ENABLED \
 #	-D_WAVE_PARSER \
 	-D_IMA_DECODER # (needed for IMA-ADPCM wave files)
