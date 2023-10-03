@@ -38,7 +38,7 @@ public class BlockEndEvent extends Event {
 			throw new IllegalArgumentException("Illegal BLOCK_END");
 		}
 		// If valid, go back to last position before entering block
-		int lastPos = ((Integer) returnPositionStack.pop()).intValue();
+		int lastPos = returnPositionStack.pop();
 		retVal = lastPos - position;
 		return retVal;
 	}
@@ -69,7 +69,7 @@ public class BlockEndEvent extends Event {
 	protected void checkEventAtNextPosition(int position) throws IllegalArgumentException {
 		// After this event there can be:
 		// Tone, BlockStart, PlayBlock, Volume, Repeat
-		int type = 0;
+		int type;
 		try {
 			type = sequence[position];
 		} catch (ArrayIndexOutOfBoundsException aioobe) {

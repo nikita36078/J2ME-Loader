@@ -17,32 +17,34 @@
 
 package javax.microedition.media.tone;
 
-import java.io.IOException;
+import android.util.Log;
+
+import java.util.Vector;
 
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
+import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.ToneControl;
 
-/**
- * Manager.playTone implementation
- */
-public class ToneManager {
-	private static final String TONE_SEQUENCE_CONTENT_TYPE = "audio/x-tone-seq";
+/** Manager.playTone implementation */
+public class ToneManager implements PlayerListener {
+	private static final String TAG = ToneManager.class.getSimpleName();
+
 	private static final int TONE_SEQUENCE_VERSION = 1;
 	private static final int TONE_SEQUENCE_RESOLUTION = 64;
 	private static final int TONE_SEQUENCE_TEMPO = 30;
 	private static final int DURATION_DIVIDE = 240000;
 	private static final String CANNOT_PLAY_TONE = "Cannot play tone";
 
-	public static void play(int note, int duration, int volume) throws MediaException {
-		Player p = createPlayer(note, duration, volume);
-		try {
-			p.start();
-		} catch (MediaException me) {
-			throw me;
-		}
-		p.deallocate();
+	/** @noinspection MismatchedQueryAndUpdateOfCollection*/
+	// Holds tone players
+	private final Vector<Player> players = new Vector<>();
+
+	private ToneManager() {}
+
+	public static ToneManager getInstance() {
+		return InstanceHolder.instance;
 	}
 
 	public static Player createPlayer(int note, int duration, int volume) throws MediaException {
@@ -61,13 +63,12 @@ public class ToneManager {
 			throw new IllegalArgumentException("Duration must be positive");
 		}
 
-		int curDuration = duration * TONE_SEQUENCE_RESOLUTION *
-				TONE_SEQUENCE_TEMPO / DURATION_DIVIDE;
+		int tsDuration = duration * TONE_SEQUENCE_RESOLUTION * TONE_SEQUENCE_TEMPO / DURATION_DIVIDE;
 
-		if (curDuration < MidiToneConstants.TONE_SEQUENCE_NOTE_MIN_DURATION) {
-			curDuration = MidiToneConstants.TONE_SEQUENCE_NOTE_MIN_DURATION;
-		} else if (curDuration > MidiToneConstants.TONE_SEQUENCE_NOTE_MAX_DURATION) {
-			curDuration = MidiToneConstants.TONE_SEQUENCE_NOTE_MAX_DURATION;
+		if (tsDuration < MidiToneConstants.TONE_SEQUENCE_NOTE_MIN_DURATION) {
+			tsDuration = MidiToneConstants.TONE_SEQUENCE_NOTE_MIN_DURATION;
+		} else if (tsDuration > MidiToneConstants.TONE_SEQUENCE_NOTE_MAX_DURATION) {
+			tsDuration = MidiToneConstants.TONE_SEQUENCE_NOTE_MAX_DURATION;
 		}
 
 		byte[] sequence = {
@@ -75,18 +76,47 @@ public class ToneManager {
 				ToneControl.TEMPO, TONE_SEQUENCE_TEMPO,
 				ToneControl.RESOLUTION, TONE_SEQUENCE_RESOLUTION,
 				ToneControl.SET_VOLUME, (byte) volume,
-				(byte) note, (byte) curDuration
+				(byte) note, (byte) tsDuration
 		};
 
-		Player p = null;
 		try {
-			p = Manager.createPlayer(Manager.TONE_DEVICE_LOCATOR);
-			p.realize();
-		} catch (IOException ioe) {
-			throw new MediaException(CANNOT_PLAY_TONE + " " + ioe.getMessage());
+			Player player = Manager.createPlayer(Manager.TONE_DEVICE_LOCATOR);
+			player.realize();
+			ToneControl control = (ToneControl) player.getControl(MidiToneConstants.TONE_CONTROL_FULL_NAME);
+			control.setSequence(sequence);
+			return player;
+		} catch (Exception e) {
+			Log.e(TAG, "createPlayer: " + CANNOT_PLAY_TONE, e);
+			throw new MediaException(CANNOT_PLAY_TONE);
 		}
-		ToneControl toneControl = (ToneControl) p.getControl("ToneControl");
-		toneControl.setSequence(sequence);
-		return p;
+	}
+
+	/**
+	 * Play tone.
+	 *
+	 * @see Manager#playTone(int, int, int)
+	 */
+	synchronized public void playTone(int note, int duration, int volume) throws MediaException {
+		Player p = createPlayer(note, duration, volume);
+
+		p.addPlayerListener(this);
+		players.addElement(p);
+		try {
+			p.start();
+		} catch (MediaException me) {
+			players.removeElement(p);
+			throw me;
+		}
+	}
+
+	public void playerUpdate(Player player, String event, Object eventData) {
+		if (END_OF_MEDIA.equals(event) || ERROR.equals(event)) {
+			player.close();
+			players.removeElement(player);
+		}
+	}
+
+	private static final class InstanceHolder {
+		static final ToneManager instance = new ToneManager();
 	}
 }

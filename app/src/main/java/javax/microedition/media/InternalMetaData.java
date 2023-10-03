@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2019 Nikita Shakarun
+ * Copyright 2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +19,70 @@
 package javax.microedition.media;
 
 import android.media.MediaMetadataRetriever;
+import android.util.Log;
+
+import androidx.collection.SparseArrayCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.microedition.media.control.MetaDataControl;
-
-import androidx.collection.SparseArrayCompat;
+import javax.microedition.media.protocol.DataSource;
 
 public class InternalMetaData implements MetaDataControl {
-	private static ArrayList<Integer> androidMetaKeys;
-	private static SparseArrayCompat<String> androidMetaToMIDP;
+	private static final String TAG = InternalMetaData.class.getSimpleName();
+
+	private static final ArrayList<Integer> androidMetaKeys = new ArrayList<>();
+	private static final SparseArrayCompat<String> androidMetaToMIDP = new SparseArrayCompat<>();
+
+	private final ArrayList<String> metaKeys = new ArrayList<>();
+	private final HashMap<String, String> metaData = new HashMap<>();
+
+	private static void mapMetaKey(int android, String midp) {
+		androidMetaKeys.add(android);
+		androidMetaToMIDP.put(android, midp);
+	}
+
+	private void updateMetaData(MediaMetadataRetriever retriever) {
+		metaKeys.clear();
+		metaData.clear();
+
+		String key, value;
+
+		for (Integer keyCode : androidMetaKeys) {
+			value = retriever.extractMetadata(keyCode);
+
+			if (value != null) {
+				key = androidMetaToMIDP.get(keyCode);
+
+				metaKeys.add(key);
+				metaData.put(key, value);
+			}
+		}
+	}
+
+	@Override
+	public String[] getKeys() {
+		return metaKeys.toArray(new String[0]);
+	}
+
+	@Override
+	public String getKeyValue(String key) {
+		return metaData.get(key);
+	}
+
+	public void updateMetaData(DataSource source) {
+		try {
+			MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+			retriever.setDataSource(source.getLocator());
+			updateMetaData(retriever);
+			retriever.release();
+		} catch (Exception e) {
+			Log.w(TAG, "updateMetaData: ", e);
+		}
+	}
 
 	static {
-		androidMetaKeys = new ArrayList<>();
-		androidMetaToMIDP = new SparseArrayCompat<>();
-
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, TRACK_NUMBER_KEY);
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ALBUM, ALBUM_KEY);
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ARTIST, ARTIST_KEY);
@@ -50,46 +99,5 @@ public class InternalMetaData implements MetaDataControl {
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, ALBUM_ARTIST_KEY);
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER, DISC_NUMBER_KEY);
 		mapMetaKey(MediaMetadataRetriever.METADATA_KEY_COMPILATION, COMPILATION_KEY);
-	}
-
-	private static void mapMetaKey(int android, String midp) {
-		androidMetaKeys.add(android);
-		androidMetaToMIDP.put(android, midp);
-	}
-
-	private ArrayList<String> metakeys;
-	private HashMap<String, String> metadata;
-
-	public InternalMetaData() {
-		metakeys = new ArrayList<>();
-		metadata = new HashMap<>();
-	}
-
-	public void updateMetaData(MediaMetadataRetriever retriever) {
-		metakeys.clear();
-		metadata.clear();
-
-		String key, value;
-
-		for (Integer keyCode : androidMetaKeys) {
-			value = retriever.extractMetadata(keyCode);
-
-			if (value != null) {
-				key = androidMetaToMIDP.get(keyCode);
-
-				metakeys.add(key);
-				metadata.put(key, value);
-			}
-		}
-	}
-
-	@Override
-	public String[] getKeys() {
-		return metakeys.toArray(new String[0]);
-	}
-
-	@Override
-	public String getKeyValue(String key) {
-		return metadata.get(key);
 	}
 }

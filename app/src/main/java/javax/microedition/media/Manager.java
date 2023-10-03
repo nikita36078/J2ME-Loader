@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2021-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +43,8 @@ public class Manager {
 	private static final String TAG = "media.Manager";
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
-	public static final String RESOURCE_LOCATOR = "resource://";
 
+	private static final String RESOURCE_LOCATOR = "resource://";
 	private static final String FILE_LOCATOR = "file://";
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
 	private static final String CAPTURE_VIDEO_LOCATOR = "capture://video";
@@ -58,7 +59,7 @@ public class Manager {
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
 			return new MidiPlayer();
 		} else if (locator.equals(TONE_DEVICE_LOCATOR)) {
-			return new TonePlayer();
+			return new MicroPlayer(locator);
 		} else if (locator.startsWith(FILE_LOCATOR) || locator.startsWith(RESOURCE_LOCATOR)) {
 			InputStream stream = Connector.openInputStream(locator);
 			String extension = locator.substring(locator.lastIndexOf('.') + 1);
@@ -133,7 +134,7 @@ public class Manager {
 
 	public synchronized static void playTone(int note, int duration, int volume)
 			throws MediaException {
-		ToneManager.play(note, duration, volume);
+		ToneManager.getInstance().playTone(note, duration, volume);
 	}
 
 	static {

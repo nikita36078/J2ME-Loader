@@ -21,6 +21,11 @@ package javax.microedition.media.tone;
  * MIDI and tone related common constants
  */
 public class MidiToneConstants {
+
+	// Fully qualified name for ToneControl
+	public static final String TONE_CONTROL_FULL_NAME =
+			"javax.microedition.media.control.ToneControl";
+
 	// MIDI constants
 
 	// Note on message ID

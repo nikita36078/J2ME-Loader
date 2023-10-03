@@ -39,7 +39,7 @@ public class PlayBlockEvent extends Event {
 		if (retVal != 0) {
 			// Push the position to stack that is going to be
 			// played after this play block has completed
-			returnPositionStack.push(new Integer(position + EVENT_SIZE));
+			returnPositionStack.push(position + EVENT_SIZE);
 
 			int data = sequence[position + 1];
 			retVal = findBlock(data) - position;
@@ -61,7 +61,7 @@ public class PlayBlockEvent extends Event {
 		int retVal = 0;
 
 		if (type == ToneControl.PLAY_BLOCK) {
-			if (data < PLAY_BLOCK_MIN_VALUE || data > PLAY_BLOCK_MAX_VALUE) {
+			if (data < PLAY_BLOCK_MIN_VALUE) {
 				throw new IllegalArgumentException("Block number out of range");
 			}
 			findBlock(data);   // for check only
@@ -73,7 +73,7 @@ public class PlayBlockEvent extends Event {
 	/**
 	 * Find block
 	 *
-	 * @param block number
+	 * @param blockNumber number
 	 * @return position of corresponding BLOCK_START event
 	 * @throws IllegalArgumentException if block is not found
 	 */
@@ -96,7 +96,7 @@ public class PlayBlockEvent extends Event {
 		// After this event there can be:
 		// Tone, BlockEnd PlayBlock, Volume, Repeat or end of sequence
 
-		int type = 0;
+		int type;
 		try {
 			type = sequence[position];
 		} catch (ArrayIndexOutOfBoundsException aioobe) {

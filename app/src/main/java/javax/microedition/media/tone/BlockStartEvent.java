@@ -43,9 +43,9 @@ public class BlockStartEvent extends Event {
 		int retVal = 0;
 
 		if (type == ToneControl.BLOCK_START) {
-			if (data > MidiToneConstants.TONE_MAX_BLOCK || data < MidiToneConstants.TONE_MIN_BLOCK) {
-				throw new IllegalArgumentException(
-						"Illegal sequence, block number not in range, valid range is 0 <= tempo <= 127");
+			if (data < MidiToneConstants.TONE_MIN_BLOCK) {
+				throw new IllegalArgumentException("Illegal sequence, block number not in range, " +
+						"valid range is 0 <= tempo <= 127");
 			}
 			enterBlock(data);
 			retVal = EVENT_SIZE;
@@ -61,7 +61,7 @@ public class BlockStartEvent extends Event {
 	protected void checkEventAtNextPosition(int position) throws IllegalArgumentException {
 		// After this event there can be:
 		// Tone, PlayBlock, Volume, Repeat
-		int type = 0;
+		int type;
 		try {
 			type = sequence[position];
 		} catch (ArrayIndexOutOfBoundsException aioobe) {

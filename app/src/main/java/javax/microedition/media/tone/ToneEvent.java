@@ -55,8 +55,7 @@ public class ToneEvent extends Event {
 
 		if (type == ToneControl.SILENCE) {
 			retVal = processToneEvent(type, data, true, midiSequence);
-		} else if (type >= MidiToneConstants.TONE_MIN_NOTE &&
-				type <= MidiToneConstants.TONE_MAX_NOTE) {
+		} else if (type >= MidiToneConstants.TONE_MIN_NOTE) {
 			retVal = processToneEvent(type, data, false, midiSequence);
 		}
 		return retVal;
@@ -82,10 +81,8 @@ public class ToneEvent extends Event {
 		byte data = toneSequence[position + 1];
 		int retVal = 0;
 
-		if (type >= ToneControl.SILENCE &&
-				type <= MidiToneConstants.TONE_MAX_NOTE) {
-			if (data < MidiToneConstants.TONE_SEQUENCE_NOTE_MIN_DURATION ||
-					data > MidiToneConstants.TONE_SEQUENCE_NOTE_MAX_DURATION) {
+		if (type >= ToneControl.SILENCE) {
+			if (data < MidiToneConstants.TONE_SEQUENCE_NOTE_MIN_DURATION) {
 				throw new IllegalArgumentException(
 						"Note duration out of range, valid range is 1 <= duration <=127");
 			}
@@ -116,15 +113,11 @@ public class ToneEvent extends Event {
 		}
 
 		// write 'note on' on delta time 0
-		midiSequence.writeMidiEvent(0,
-				firstMidiEventType,
-				type,
-				MidiToneConstants.MIDI_MAX_VELOCITY);
+		midiSequence.writeMidiEvent(0, firstMidiEventType,
+				type, MidiToneConstants.MIDI_MAX_VELOCITY);
 		// write 'note off' after delta time represented by  'data' variable
-		midiSequence.writeMidiEvent(data,
-				MidiToneConstants.MIDI_NOTE_OFF,
-				type,
-				MidiToneConstants.MIDI_MAX_VELOCITY);
+		midiSequence.writeMidiEvent(data, MidiToneConstants.MIDI_NOTE_OFF,
+				type, MidiToneConstants.MIDI_MAX_VELOCITY);
 
 		// N.B.! Above MIDI_NOTE_ON and MIDI_NOTE_OFF can be written without channel
 		// value because MidiSequence attached correct channel value to them anyway.
@@ -136,13 +129,12 @@ public class ToneEvent extends Event {
 	 *
 	 * @param position position in tone sequence array where to check
 	 */
-	protected void checkEventAtNextPosition(int position)
-			throws IllegalArgumentException {
+	protected void checkEventAtNextPosition(int position) throws IllegalArgumentException {
 		// After this event there can be:
 		// Tone, BlockEnd, PlayBlock, Volume, Repeat or
 		// end of sequence
 
-		int type = 0;
+		int type;
 		try {
 			type = sequence[position];
 		} catch (ArrayIndexOutOfBoundsException aioobe) {

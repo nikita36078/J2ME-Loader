@@ -42,19 +42,15 @@ public class EventList extends Event {
 	}
 
 	public int advance(int position) throws MidiSequenceException {
-		// first check that we have at least two bytes left in iSequence
-		// in position.
+		// first check that we have at least two bytes left in iSequence in position.
 		if (sequence.length - position < EVENT_SIZE) {
 			// return with 0 if end of sequence is reached
 			return 0;
 		}
 
-		Event event = null;
-		int retVal = 0;
-
 		for (Enumeration<Event> e = events.elements(); e.hasMoreElements(); ) {
-			event = e.nextElement();
-			retVal = event.advance(position);
+			Event event = e.nextElement();
+			int retVal = event.advance(position);
 			if (retVal != 0) {
 				return retVal;
 			}
@@ -73,11 +69,9 @@ public class EventList extends Event {
 	 * @param position position to validate
 	 */
 	public int validate(int position) throws IllegalArgumentException {
-		Event event = null;
-		int retVal = 0;
 		for (Enumeration<Event> e = events.elements(); e.hasMoreElements(); ) {
-			event = e.nextElement();
-			retVal = event.validate(position);
+			Event event = e.nextElement();
+			int retVal = event.validate(position);
 			if (retVal != 0) {
 				return retVal;
 			}

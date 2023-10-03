@@ -43,16 +43,13 @@ public class RepeatEvent extends Event {
 	 */
 	public int advance(int position) throws MidiSequenceException {
 		// it is already checked that there is at least two bytes left
-		byte type = sequence[position];
 		byte data = sequence[position + 1];
 		int retVal = doValidate(position);
 		if (retVal == 0) {
 			return 0;
 		}
 		for (int i = 0; i < data; i++) {
-			retVal = ToneEvent.staticAdvance(position + EVENT_SIZE,
-					sequence,
-					midiSequence);
+			retVal = ToneEvent.staticAdvance(position + EVENT_SIZE, sequence, midiSequence);
 			// This would go unnoticed if not checked here.
 			if (retVal == 0) {
 				throw new IllegalArgumentException(
@@ -75,15 +72,14 @@ public class RepeatEvent extends Event {
 		byte data = sequence[position + 1];
 		int retVal = 0;
 		if (type == ToneControl.REPEAT) {
-			if (data < REPEAT_MIN_MULTIPLIER || data > REPEAT_MAX_MULTIPLIER) {
+			if (data < REPEAT_MIN_MULTIPLIER) {
 				throw new IllegalArgumentException(
 						"Repeat multiplier out of range, valid range is 2 <= multiplier <= 127");
 			}
 
 			// Check that there is two more bytes available
 			if (sequence.length - (position + EVENT_SIZE) < EVENT_SIZE) {
-				throw new IllegalArgumentException(
-						"Illegal ToneControl.REPEAT event, " +
+				throw new IllegalArgumentException("Illegal ToneControl.REPEAT event, " +
 								"there should be two more bytes available after REPEAT event");
 			}
 			retVal = EVENT_SIZE + EVENT_SIZE;
@@ -101,7 +97,7 @@ public class RepeatEvent extends Event {
 		// Tone, BlockEnd, PlayBlock, Volume, Repeat or
 		// end of sequence
 
-		int type = 0;
+		int type;
 		try {
 			type = sequence[position];
 		} catch (ArrayIndexOutOfBoundsException aioobe) {

@@ -23,7 +23,7 @@ import javax.microedition.media.Controllable;
 
 public abstract class DataSource implements Controllable {
 
-	private String sourceLocator;
+	private final String sourceLocator;
 
 	public DataSource(String locator) {
 		sourceLocator = locator;

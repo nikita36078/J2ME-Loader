@@ -31,13 +31,13 @@ public class ToneSequence {
 	private static final String TAG = ToneSequence.class.getName();
 
 	/* Hold original tone sequence bytes */
-	private byte[] toneSequence;
+	private final byte[] toneSequence;
 
 	/* Holds the new tone sequence converted to MIDI */
-	private MidiSequence midiSequence;
+	private final MidiSequence midiSequence;
 
 	/* Event list used to hold tone event processors */
-	private EventList eventList;
+	private final EventList eventList;
 
 	public ToneSequence(byte[] sequence) {
 		toneSequence = sequence;
@@ -53,8 +53,8 @@ public class ToneSequence {
 		// Check input; tone sequence must be even length
 		// ie. multiple of event size
 		if ((toneSequence.length % Event.EVENT_SIZE) != 0) {
-			throw new IllegalArgumentException(
-					"Illegal sequence, tone sequence must be multiple of single tone event size (2)");
+			throw new IllegalArgumentException("Illegal sequence, " +
+					"tone sequence must be multiple of single tone event size (2)");
 		}
 
 		// Validate header bytes
@@ -86,7 +86,7 @@ public class ToneSequence {
 
 		// Validate rest of the sequence
 
-		int count = 0; // Offset to new position in tone sequence. >= 0
+		int count; // Offset to new position in tone sequence. >= 0
 		while (checkPos < toneSequence.length) {
 			count = eventList.validate(checkPos);
 			checkPos += count;

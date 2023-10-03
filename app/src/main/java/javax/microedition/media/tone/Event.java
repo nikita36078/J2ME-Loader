@@ -25,10 +25,10 @@ import java.util.Stack;
  * Base class for tone event processors
  */
 public abstract class Event {
+	private static final String TAG = Event.class.getName();
+
 	/* Size of single tone event in bytes */
 	public static final byte EVENT_SIZE = 2;
-
-	private static final String TAG = Event.class.getName();
 
 	/* Hold original tone sequence bytes */
 	protected byte[] sequence;
@@ -134,7 +134,7 @@ public abstract class Event {
 	 * @param blockNum number of block to enter
 	 */
 	protected void enterBlock(int blockNum) {
-		currentBlockNumStack.push(new Integer(blockNum));
+		currentBlockNumStack.push(blockNum);
 	}
 
 	/**
@@ -147,12 +147,12 @@ public abstract class Event {
 	 */
 	protected void leaveBlock(int blockNum) throws IllegalArgumentException {
 		if (currentBlockNumStack.isEmpty()) {
-			Log.w(TAG, "MMA: Event: leaveBlock: Not inside block, IAE");
+			Log.e(TAG, "MMA: Event: leaveBlock: Not inside block, IAE");
 			throw new IllegalArgumentException("Illegal Sequence, invalid block number found");
 		}
 
-		if (blockNum != (currentBlockNumStack.pop().intValue())) {
-			Log.w(TAG, "MMA: Event: leaveBlock: Incorrect block number, IAE");
+		if (blockNum != currentBlockNumStack.pop()) {
+			Log.e(TAG, "MMA: Event: leaveBlock: Incorrect block number, IAE");
 			throw new IllegalArgumentException("Illegal Sequence, invalid block number found");
 		}
 	}

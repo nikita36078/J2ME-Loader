@@ -16,7 +16,6 @@
 
 package ru.woesss.j2me.mmapi.tsf;
 
-import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import androidx.annotation.Keep;
@@ -82,10 +81,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 
 		if (state == REALIZED) {
 			try {
-				MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-				retriever.setDataSource(dataSource.getLocator());
-				metadata.updateMetaData(retriever);
-				retriever.release();
+				metadata.updateMetaData(dataSource);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

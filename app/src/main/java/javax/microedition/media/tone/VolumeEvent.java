@@ -44,7 +44,6 @@ public class VolumeEvent extends Event {
 			}
 		}
 		// it is already checked that there is at least two bytes left
-		byte type = sequence[position];
 		byte data = sequence[position + 1];
 
 		// calculate equivalent midi TONE_VOLUME
@@ -56,9 +55,6 @@ public class VolumeEvent extends Event {
 			volume = MidiToneConstants.MIDI_MIN_VOLUME;
 		}
 
-		if (volume > MidiToneConstants.MIDI_MAX_VOLUME) {
-			volume = MidiToneConstants.MIDI_MAX_VOLUME;
-		}
 		// write TONE_VOLUME change on delta time 0
 		midiSequence.writeMidiEvent(
 				0,
@@ -98,13 +94,12 @@ public class VolumeEvent extends Event {
 	 *
 	 * @param position position in tone sequence array where to check
 	 */
-	protected void checkEventAtNextPosition(int position)
-			throws IllegalArgumentException {
+	protected void checkEventAtNextPosition(int position) throws IllegalArgumentException {
 		// After this event there can be:
 		// Tone, BlockEnd, PlayBlock, Volume, Repeat or
 		// end of sequence
 
-		int type = 0;
+		int type;
 		try {
 			type = sequence[position];
 		} catch (ArrayIndexOutOfBoundsException aioobe) {

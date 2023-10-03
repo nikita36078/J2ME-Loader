@@ -25,6 +25,10 @@ import java.io.IOException;
  * This class represents midi sequence
  */
 public class MidiSequence {
+
+	/* Value of minute expressed as microseconds */
+	private static final int MINUTE_AS_MICROSECONDS = 60000000;
+
 	/* MIDI events track stream granularity */
 	private static final int MIDI_EVENTS_TRACK_GRANULARITY = 100;
 
@@ -43,7 +47,48 @@ public class MidiSequence {
 
 	private static final int MIDI_EVENTS_MAX_BYTE_COUNT = 32768;
 
+	/* Length of MIDI file header. This includes following:
+	   MThd block id, MThd length, midi format, MTrk chunk amount and PPQN */
+	private static final byte FILE_HEADER_LENGTH = 14;
+
+	/* Length of MTrk block. This includes: MTrk block id, MTrk length */
+	private static final byte MTRK_HEADER_LENGTH = 8;
+
+	/* Length of MIDI track header. This includes:
+	   tempo change, tempo value, program change */
+	private static final int TRACK_HEADER_LENGTH = 10;
+
+	/* Length of MIDI track trailer */
+	private static final int TRACK_TRAILER_LENGTH = 4;
+
+	// MIDI file header constants
+
+	/* Header block for MThd */
+	private static final byte[] MIDI_HEADER_MTHD = {0x4D, 0x54, 0x68, 0x64};
+
+	/* Header block for MThd block length; value is 6 */
+	private static final byte[] MIDI_HEADER_MTHD_LENGTH = {0x00, 0x00, 0x00, 0x06};
+
+	/* Header block for used MIDI format; format is 0 */
+	private static final byte[] MIDI_HEADER_MIDI_FORMAT = {0x00, 0x00};
+
+	/* Header block for amount of MTrk blocks used */
+	private static final byte[] MIDI_HEADER_MTRK_CHUNK_AMOUNT = {0x00, 0x01};
+
+	/* Value for first byte in PPQN block in midi file header */
+	private static final byte MIDI_HEADER_PPQN_FIRST_BYTE = 0x00;
+
 	// MIDI track constants
+
+	/* Header block for MTrk */
+	private static final byte[] MIDI_HEADER_MTRK = {0x4D, 0x54, 0x72, 0x6B};
+
+	/* Tempo change command. Includes delta time ( 0x00 )
+	   and command (0xFF5103) */
+	private static final byte[] TRACK_HEADER_TEMPO_CHANGE = {0x00, (byte) 0xFF, 0x51, 0x03};
+
+	/* Track end meta event */
+	private static final byte[] TRACK_TRAILER = {0x00, (byte) 0xFF, 0x2F, 0x00};
 
 	/* Length of single midi event without the variable length
 	   delta time */
@@ -70,7 +115,7 @@ public class MidiSequence {
 	private static final byte TONE_MULTIPLIER = 1;
 
 	/* Midi channel for generated MIDI sequence */
-	private byte channel;
+	private final byte channel;
 
 	/* Tempo in MIDI terms */
 	private int tempo;
@@ -79,13 +124,13 @@ public class MidiSequence {
 	private int resolution;
 
 	/* Instrument used to represent tone */
-	private byte instrument;
+	private final byte instrument;
 
 	/* Counter for written midi events */
 	private int midiEventsByteCount;
 
 	/* MIDI sequence written using writeEvent( ) */
-	private ByteArrayOutputStream midiTrackEvents;
+	private final ByteArrayOutputStream midiTrackEvents;
 
 	/* Tone sequence duration */
 	private int duration;
@@ -110,8 +155,14 @@ public class MidiSequence {
 	public ByteArrayInputStream getStream() throws IOException {
 		midiTrackEvents.flush();
 		byte[] midiTrackEvents = this.midiTrackEvents.toByteArray();
-		ByteArrayOutputStream concateStream = new ByteArrayOutputStream(midiTrackEvents.length);
+		int size = FILE_HEADER_LENGTH + MTRK_HEADER_LENGTH + TRACK_HEADER_LENGTH +
+				midiTrackEvents.length + TRACK_TRAILER_LENGTH;
+		ByteArrayOutputStream concateStream = new ByteArrayOutputStream(size);
+
+		writeHeader(concateStream, midiTrackEvents.length);
 		concateStream.write(midiTrackEvents);
+		writeTrailer(concateStream);
+
 		ByteArrayInputStream midi = new ByteArrayInputStream(concateStream.toByteArray());
 
 		concateStream.close();
@@ -124,8 +175,13 @@ public class MidiSequence {
 	public byte[] getByteArray() throws IOException {
 		midiTrackEvents.flush();
 		byte[] midiTrackEvents = this.midiTrackEvents.toByteArray();
-		ByteArrayOutputStream concateStream = new ByteArrayOutputStream(midiTrackEvents.length);
+		int size = FILE_HEADER_LENGTH + MTRK_HEADER_LENGTH + TRACK_HEADER_LENGTH +
+				midiTrackEvents.length + TRACK_TRAILER_LENGTH;
+		ByteArrayOutputStream concateStream = new ByteArrayOutputStream(size);
+
+		writeHeader(concateStream, midiTrackEvents.length);
 		concateStream.write(midiTrackEvents);
+		writeTrailer(concateStream);
 
 		byte[] midi = concateStream.toByteArray();
 		concateStream.close();
@@ -172,7 +228,7 @@ public class MidiSequence {
 		if (midiEventsByteCount > MIDI_EVENTS_MAX_BYTE_COUNT) {
 			throw new MidiSequenceException();
 		}
-		midiEventsByteCount += writeVarLen(length);
+		midiEventsByteCount += writeVarLen(midiTrackEvents, length);
 
 		// Write down cumulative count of event lengths (sum will
 		// make up duration of this midi sequence. Only audible events
@@ -193,12 +249,13 @@ public class MidiSequence {
 	}
 
 	/**
-	 * Write time interval value
+	 * Write time interval value as MIDI variable length data to byte array.
 	 *
+	 * @param out   output stream
 	 * @param value time before the event in question happens, relative to
 	 *              current time. Must be between 0 and 0x0FFFFFFF
 	 */
-	private int writeVarLen(int value) {
+	private int writeVarLen(ByteArrayOutputStream out, int value) {
 		if ((value > MIDI_VARIABLE_LENGTH_MAX_VALUE) || (value < 0)) {
 			throw new IllegalArgumentException("Input(time) value is not within range");
 		}
@@ -241,6 +298,7 @@ public class MidiSequence {
 
 		// write the buffer out as 1-4 bytes.
 		while (true) {
+			out.write(buffer);
 			byteCount++;
 
 			// check if the indicator bit (8th) is set.
@@ -256,6 +314,77 @@ public class MidiSequence {
 	}
 
 	/**
+	 * Writes midi header
+	 *
+	 * @param aOut              output stream
+	 * @param aMidiEventsLength lenght of midi event content in bytes
+	 */
+	private void writeHeader(ByteArrayOutputStream aOut, int aMidiEventsLength) throws IOException {
+		// MIDI FILE HEADER
+
+		// write 'MThd' block id
+		aOut.write(MIDI_HEADER_MTHD);
+
+		// write MThd block length
+		aOut.write(MIDI_HEADER_MTHD_LENGTH);
+
+		// write midi format; format is 0
+		aOut.write(MIDI_HEADER_MIDI_FORMAT);
+
+		// write MTrk chunk amount; only one track
+		aOut.write(MIDI_HEADER_MTRK_CHUNK_AMOUNT);
+
+		// write PPQN resolution (pulses per quarternote)
+		aOut.write(MIDI_HEADER_PPQN_FIRST_BYTE);
+		aOut.write(resolution);
+
+		// MTrk HEADER
+
+		// write 'MTrk' for the only track
+		aOut.write(MIDI_HEADER_MTRK);
+
+		// calculate real track length
+		int trackLength = TRACK_HEADER_LENGTH + aMidiEventsLength + TRACK_TRAILER_LENGTH;
+
+		// write track length in bytes.
+		// Literal numeric values (24,16,8) indicate shift offset in bits
+		// 0xFF is used to mask out everything but the lowest byte.
+		aOut.write((trackLength >> 24) & 0xFF);
+		aOut.write((trackLength >> 16) & 0xFF);
+		aOut.write((trackLength >> 8) & 0xFF);
+		aOut.write(trackLength & 0xFF);
+
+		// TRACK HEADER
+
+		// write tempo change at beginning
+		aOut.write(TRACK_HEADER_TEMPO_CHANGE);
+
+		// calculate tempo in microseconds per quarter note
+		int mpqn = MINUTE_AS_MICROSECONDS / tempo;
+
+		// write tempo value
+		// Literal numeric values (16,8) indicate shift offset in bits
+		// 0xFF is used to mask out everything but the lowest byte.
+		aOut.write((mpqn >> 16) & 0xFF);
+		aOut.write((mpqn >> 8) & 0xFF);
+		aOut.write(mpqn & 0xFF);
+
+		// change program at beginning (at delta time 0)
+		writeVarLen(aOut, 0);
+		aOut.write((byte) (MidiToneConstants.MIDI_PROGRAM_CHANGE | channel));
+		aOut.write(instrument);   // instrument number
+	}
+
+	/**
+	 * Write midi trailer
+	 *
+	 * @param aOut output stream
+	 */
+	private void writeTrailer(ByteArrayOutputStream aOut) throws IOException {
+		aOut.write(TRACK_TRAILER);
+	}
+
+	/**
 	 * Return duration accumulated so far.
 	 *
 	 * @return long duration in microseconds
@@ -263,7 +392,6 @@ public class MidiSequence {
 	public long getCumulativeDuration() {
 		// duration * seconds in minute * microseconds in second /
 		// (resolution * tempo)
-		long duration = (long) this.duration * 60 * 1000000 / (resolution * tempo);
-		return duration;
+		return (long) duration * 60 * 1000000 / ((long) resolution * tempo);
 	}
 }
