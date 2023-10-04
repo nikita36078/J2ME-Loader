@@ -3,10 +3,8 @@
 //
 
 #include "eas_player.h"
-#include "eas_file.h"
-#include "libsonivox/eas.h"
 #include "util/log.h"
-#include "eas_strings.h"
+#include "eas_util.h"
 
 #define LOG_TAG "MMAPI"
 #define NUM_COMBINE_BUFFERS 4
@@ -15,7 +13,7 @@ namespace mmapi {
     namespace eas {
         EAS_DLSLIB_HANDLE Player::soundBank{nullptr};
 
-        Player::Player(EAS_DATA_HANDLE easHandle, FileImpl *file, EAS_HANDLE stream, const int64_t duration)
+        Player::Player(EAS_DATA_HANDLE easHandle, BaseFile *file, EAS_HANDLE stream, const int64_t duration)
                 : BasePlayer(duration), easHandle(easHandle), file(file), media(stream) {
             EAS_SetGlobalDLSLib(easHandle, Player::soundBank);
         }
@@ -24,57 +22,29 @@ namespace mmapi {
             close();
         }
 
-        int32_t Player::createPlayer(const char *path, Player **pPlayer) {
+        int32_t Player::createPlayer(const char *locator, Player **pPlayer) {
+            if (locator == nullptr) {
+                return EAS_ERROR_INVALID_PARAMETER;
+            }
             EAS_DATA_HANDLE easHandle;
             EAS_RESULT result = EAS_Init(&easHandle);
             if (result != EAS_SUCCESS) {
                 return result;
             }
-            if (path == nullptr) {
-                result = EAS_ERROR_INVALID_PARAMETER;
-                EAS_Shutdown(easHandle);
-                return result;
+            if (strcmp(locator, "device://tone") == 0) {
+                *pPlayer = new Player(easHandle, nullptr, nullptr, -1);
+                return EAS_SUCCESS;
             }
-            FileImpl *file = new FileImpl(path, "rb");
+            BaseFile *file = new IOFile(locator, "rb");;
             EAS_HANDLE stream;
-            result = EAS_OpenFile(easHandle, &file->easFile, &stream);
+            int64_t duration;
+            result = openSource(easHandle, file, &stream, &duration);
             if (result != EAS_SUCCESS) {
-                delete file;
-                EAS_Shutdown(easHandle);
-                return result;
-            }
-            result = EAS_Prepare(easHandle, stream);
-            if (result != EAS_SUCCESS) {
-                EAS_CloseFile(easHandle, stream);
                 EAS_Shutdown(easHandle);
                 delete file;
                 return result;
             }
-            EAS_I32 type = EAS_FILE_UNKNOWN;
-            result = EAS_GetFileType(easHandle, stream, &type);
-            if (result != EAS_SUCCESS) {
-                EAS_CloseFile(easHandle, stream);
-                EAS_Shutdown(easHandle);
-                delete file;
-                return result;
-            }
-            ALOGV("EAS_checkFileType(): %s file recognized", EAS_GetFileTypeString(type));
-            if (type == EAS_FILE_UNKNOWN) {
-                EAS_CloseFile(easHandle, stream);
-                EAS_Shutdown(easHandle);
-                delete file;
-                result = EAS_ERROR_FILE_FORMAT;
-                return result;
-            }
-            EAS_I32 duration;
-            result = EAS_ParseMetaData(easHandle, stream, &duration);
-            if (result != EAS_SUCCESS) {
-                EAS_CloseFile(easHandle, stream);
-                EAS_Shutdown(easHandle);
-                delete file;
-                return result;
-            }
-            *pPlayer = new Player(easHandle, file, stream, duration > 0 ? duration * 1000LL : -1);
+            *pPlayer = new Player(easHandle, file, stream, duration);
             return result;
         }
 
@@ -99,27 +69,37 @@ namespace mmapi {
 
         void Player::deallocate() {
             BasePlayer::deallocate();
-            EAS_Locate(easHandle, media, 0, EAS_FALSE);
+            if (media != nullptr) {
+                EAS_Locate(easHandle, media, 0, EAS_FALSE);
+            }
         }
 
         void Player::close() {
             BasePlayer::close();
-            EAS_CloseFile(easHandle, media);
+            if (media != nullptr) {
+                EAS_CloseFile(easHandle, media);
+            }
             EAS_Shutdown(easHandle);
             delete file;
         }
 
         int64_t Player::getMediaTime() {
             long pTime = -1;
-            long result1 = EAS_GetLocation(easHandle, media, &pTime);
-            if (result1 != EAS_SUCCESS) {
-                ALOGE("%s: EAS_GetLocation return %s", __func__, EAS_GetErrorString(result1));
+            if (media == nullptr) {
+                return pTime;
+            }
+            EAS_RESULT result = EAS_GetLocation(easHandle, media, &pTime);
+            if (result != EAS_SUCCESS) {
+                ALOGE("%s: EAS_GetLocation return %s", __func__, EAS_GetErrorString(result));
+                return pTime;
             }
             return pTime * 1000LL;
         }
 
         int32_t Player::setVolume(int32_t level) {
-            EAS_SetVolume(easHandle, media, level);
+            if (media != nullptr) {
+                EAS_SetVolume(easHandle, media, level);
+            }
             return BasePlayer::setVolume(level);
         }
 
@@ -130,13 +110,75 @@ namespace mmapi {
                 return result;
             }
 
-            FileImpl file(sound_bank, "rb");
+            IOFile file(sound_bank, "rb");
             result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
             if (result == EAS_SUCCESS) {
                 EAS_GetGlobalDLSLib(easHandle, &Player::soundBank);
             }
             EAS_Shutdown(easHandle);
             return result;
+        }
+
+        int32_t Player::setDataSource(BaseFile *pFile) {
+            EAS_HANDLE stream = nullptr;
+            int32_t result = openSource(easHandle, pFile, &stream, &duration);
+            if (result != EAS_SUCCESS) {
+                return result;
+            }
+            if (media != nullptr) {
+                EAS_CloseFile(easHandle, media);
+                delete file;
+            }
+            media = stream;
+            file = pFile;
+            return result;
+        }
+
+        int32_t Player::openSource(EAS_DATA_HANDLE easHandle,
+                                   BaseFile *pFile,
+                                   EAS_HANDLE *outStream,
+                                   int64_t *outDuration) {
+            EAS_HANDLE stream;
+            EAS_RESULT result = EAS_OpenFile(easHandle, &pFile->easFile, &stream);
+            if (result != EAS_SUCCESS) {
+                result = EAS_MMAPIToneControl(easHandle, &pFile->easFile, &stream);
+            }
+            if (result != EAS_SUCCESS) {
+                return result;
+            }
+            result = EAS_Prepare(easHandle, stream);
+            if (result != EAS_SUCCESS) {
+                EAS_CloseFile(easHandle, stream);
+                return result;
+            }
+            EAS_I32 type = EAS_FILE_UNKNOWN;
+            result = EAS_GetFileType(easHandle, stream, &type);
+            if (result != EAS_SUCCESS) {
+                EAS_CloseFile(easHandle, stream);
+                return result;
+            }
+            ALOGV("EAS_checkFileType(): %s file recognized", EAS_GetFileTypeString(type));
+            if (type == EAS_FILE_UNKNOWN) {
+                EAS_CloseFile(easHandle, stream);
+                result = EAS_ERROR_FILE_FORMAT;
+                return result;
+            }
+            EAS_I32 length = -1;
+            result = EAS_ParseMetaData(easHandle, stream, &length);
+            if (result != EAS_SUCCESS) {
+                EAS_CloseFile(easHandle, stream);
+                return result;
+            }
+            *outStream = stream;
+            *outDuration = length >= 0 ? length * 1000LL : length;
+            return EAS_SUCCESS;
+        }
+
+        oboe::Result Player::prefetch() {
+            if (media == nullptr) {
+                return oboe::Result::ErrorInvalidState;
+            }
+            return BasePlayer::prefetch();
         }
 
         oboe::DataCallbackResult

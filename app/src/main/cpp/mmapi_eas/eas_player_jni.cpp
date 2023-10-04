@@ -3,9 +3,9 @@
 //
 
 #include <jni.h>
-#include "util/jstring.h"
 #include "eas_player.h"
-#include "eas_strings.h"
+#include "util/jstring.h"
+#include "eas_util.h"
 
 /* for C++ linkage */
 #ifdef __cplusplus
@@ -21,19 +21,19 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
     util::JStringPtr sb(env, sound_bank);
     int32_t result = mmapi::eas::Player::initSoundBank(*sb);
     if (result != 0) {
-        const char *message = EAS_GetErrorString(result);
+        const char *message = mmapi::eas::EAS_GetErrorString(result);
         env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
     }
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
-(JNIEnv *env, jclass /*clazz*/, jstring locator) {
+(JNIEnv *env, jclass /*clazz*/, jstring pLocator) {
     mmapi::eas::Player *player;
-    util::JStringPtr path(env, locator);
-    int32_t result = mmapi::eas::Player::createPlayer(*path, &player);
+    util::JStringPtr locator(env, pLocator);
+    int32_t result = mmapi::eas::Player::createPlayer(*locator, &player);
     if (result != 0) {
-        const char *message = EAS_GetErrorString(result);
-        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), message);
+        const char *message = mmapi::eas::EAS_GetErrorString(result);
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
         return 0;
     }
     return reinterpret_cast<jlong>(player);
@@ -159,6 +159,18 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerListener
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->setListener(new mmapi::PlayerListener(env, listener));
+}
+
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerSetDataSource
+(JNIEnv *env, jclass /*clazz*/, jlong handle, jbyteArray data) {
+    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
+    auto *file = new mmapi::eas::MemFile(env, data);
+    int32_t result = player->setDataSource(file);
+    if (result != 0) {
+        delete file;
+        const char *message = mmapi::eas::EAS_GetErrorString(result);
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
+    }
 }
 
 #ifdef __cplusplus

@@ -8,7 +8,7 @@ LOCAL_SRC_FILES = \
 	eas_file.cpp \
 	eas_player.cpp \
 	eas_player_jni.cpp \
-	eas_strings.cpp \
+	eas_util.cpp \
 
 
 LOCAL_CFLAGS += -O2 \

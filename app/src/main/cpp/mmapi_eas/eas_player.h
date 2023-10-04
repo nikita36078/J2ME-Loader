@@ -18,24 +18,33 @@ namespace mmapi {
             const S_EAS_LIB_CONFIG *easConfig = EAS_Config();
             EAS_DATA_HANDLE easHandle;
             EAS_HANDLE media;
-            FileImpl *file;
+            BaseFile *file;
 
         public:
-            Player(EAS_DATA_HANDLE easHandle, FileImpl *file, EAS_HANDLE stream, const int64_t duration);
+            Player(EAS_DATA_HANDLE easHandle, BaseFile *file, EAS_HANDLE stream, const int64_t duration);
             ~Player() override;
 
             void deallocate() override;
             void close() override;
             int64_t getMediaTime() override;
+            oboe::Result prefetch() override;
             int32_t setVolume(int32_t level) override;
+            int32_t setDataSource(BaseFile *pFile);
 
-            oboe::DataCallbackResult
-            onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) override;
+            oboe::DataCallbackResult onAudioReady(oboe::AudioStream *audioStream,
+                                                  void *audioData,
+                                                  int32_t numFrames)
+                                                  override;
 
             static int32_t initSoundBank(const char *sound_bank);
-            static int32_t createPlayer(const char *path, Player **pPlayer);
+            static int32_t createPlayer(const char *locator, Player **pPlayer);
 
         private:
+            static int32_t openSource(EAS_DATA_HANDLE easHandle,
+                                      BaseFile *pFile,
+                                      EAS_HANDLE *outStream,
+                                      int64_t *outDuration);
+
             oboe::Result createAudioStream() override;
         }; // class Player
     } // namespace eas
