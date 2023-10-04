@@ -29,28 +29,29 @@ import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.BasePlayer2;
 import javax.microedition.media.Control;
-import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.InternalEqualizer;
 import javax.microedition.media.InternalMetaData;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.VolumeControl;
+import javax.microedition.media.protocol.DataSource;
 
 class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl {
 	private static final String TAG = "PlayerEAS";
+
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
 	private final ArrayList<PlayerListener> listeners = new ArrayList<>();
 	private final HashMap<String, Control> controls = new HashMap<>();
 	private final InternalMetaData metadata = new InternalMetaData();
-	private final InternalDataSource dataSource;
+	private final DataSource dataSource;
 	private final long handle;
 	private final long duration;
 
 	private int state = UNREALIZED;
 
-	public PlayerEAS(InternalDataSource dataSource) {
+	public PlayerEAS(DataSource dataSource) {
 		handle = EAS.playerInit(dataSource.getLocator());
 		duration = EAS.playerGetDuration(handle);
 		this.dataSource = dataSource;

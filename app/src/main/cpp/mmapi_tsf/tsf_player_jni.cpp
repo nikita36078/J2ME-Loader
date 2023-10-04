@@ -3,8 +3,9 @@
 //
 
 #include <jni.h>
-#include "util/jstring.h"
 #include "tsf_player.h"
+#include "util/jstring.h"
+#include "util/jbytearray.h"
 
 /* for C++ linkage */
 #ifdef __cplusplus
@@ -26,12 +27,12 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
-(JNIEnv *env, jclass /*clazz*/, jstring locator) {
+(JNIEnv *env, jclass /*clazz*/, jstring pLocator) {
     mmapi::tiny::Player *player;
-    util::JStringPtr path(env, locator);
-    int32_t result = mmapi::tiny::Player::createPlayer(*path, &player);
+    util::JStringPtr locator(env, pLocator);
+    int32_t result = mmapi::tiny::Player::createPlayer(*locator, &player);
     if (result != 0) {
-        env->ThrowNew(env->FindClass("java/lang/RuntimeException"), "Unsupported file type");
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), "Unsupported file type");
         return 0;
     }
     return reinterpret_cast<jlong>(player);
@@ -157,6 +158,16 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerListene
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     player->setListener(new mmapi::PlayerListener(env, listener));
+}
+
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerSetDataSource
+(JNIEnv *env, jclass /*clazz*/, jlong handle, jbyteArray data) {
+    auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
+    util::JByteArrayPtr ptr(env, data);
+    int32_t result = player->setDataSource(&ptr);
+    if (result != 0) {
+        env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), "Unsupported file type");
+    }
 }
 
 #ifdef __cplusplus

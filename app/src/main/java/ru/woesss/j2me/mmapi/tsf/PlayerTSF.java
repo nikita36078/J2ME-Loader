@@ -1,17 +1,17 @@
 /*
- *  Copyright 2023 Yury Kharchenko
+ * Copyright 2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ru.woesss.j2me.mmapi.tsf;
@@ -22,6 +22,7 @@ import androidx.annotation.Keep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,35 +30,41 @@ import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.BasePlayer2;
 import javax.microedition.media.Control;
-import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.InternalEqualizer;
 import javax.microedition.media.InternalMetaData;
+import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.MetaDataControl;
+import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
+import javax.microedition.media.protocol.DataSource;
+import javax.microedition.media.tone.ToneSequence;
 
-class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
+import ru.woesss.j2me.mmapi.protocol.device.DeviceMetaData;
+
+class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneControl {
 	private static final String TAG = "PlayerTSF";
+
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
 	private final ArrayList<PlayerListener> listeners = new ArrayList<>();
-	private final HashMap<String, Control> controls = new HashMap<>();
-	private final InternalMetaData metadata = new InternalMetaData();
-	private final InternalDataSource dataSource;
+	private final InternalMetaData metadata;
+	private final DataSource dataSource;
 	private final long handle;
-	private final long duration;
 
+	private Map<String, Control> controls;
 	private int state = UNREALIZED;
 
-	public PlayerTSF(InternalDataSource dataSource) {
-		handle = TinySoundFont.playerInit(dataSource.getLocator());
-		duration = TinySoundFont.playerGetDuration(handle);
+	public PlayerTSF(DataSource dataSource) {
 		this.dataSource = dataSource;
-		controls.put(VolumeControl.class.getName(), this);
-		controls.put(PanControl.class.getName(), this);
-		controls.put(MetaDataControl.class.getName(), metadata);
-		controls.put(EqualizerControl.class.getName(), new InternalEqualizer());
+		String locator = dataSource.getLocator();
+		if (Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
+			metadata = new DeviceMetaData();
+		} else {
+			metadata = new InternalMetaData();
+		}
+		handle = TinySoundFont.playerInit(locator);
 		TinySoundFont.playerListener(handle, this);
 	}
 
@@ -67,6 +74,17 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 
 		if (state == UNREALIZED) {
 			TinySoundFont.playerRealize(handle);
+			if (controls == null) {
+				controls = new HashMap<>();
+				String locator = dataSource.getLocator();
+				if (Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
+					controls.put(ToneControl.class.getName(), this);
+				}
+				controls.put(VolumeControl.class.getName(), this);
+				controls.put(PanControl.class.getName(), this);
+				controls.put(MetaDataControl.class.getName(), metadata);
+				controls.put(EqualizerControl.class.getName(), new InternalEqualizer());
+			}
 			state = REALIZED;
 		}
 	}
@@ -83,7 +101,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 			try {
 				metadata.updateMetaData(dataSource);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.w(TAG, "prefetch: update metadata failed", e);
 			}
 			TinySoundFont.playerPrefetch(handle);
 			state = PREFETCHED;
@@ -130,12 +148,11 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 	@Override
 	public void close() {
 		if (state != CLOSED) {
+			state = CLOSED;
 			TinySoundFont.playerClose(handle);
 		}
 
 		dataSource.disconnect();
-
-		state = CLOSED;
 		postEvent(PlayerListener.CLOSED, null);
 	}
 
@@ -157,7 +174,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 
 	@Override
 	public long getDuration() {
-		return duration;
+		return TinySoundFont.playerGetDuration(handle);
 	}
 
 	@Override
@@ -217,6 +234,9 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 	@Override
 	public Control getControl(String controlType) {
 		checkRealized();
+		if (controlType == null) {
+			throw new IllegalArgumentException();
+		}
 		if (!controlType.contains(".")) {
 			controlType = "javax.microedition.media.control." + controlType;
 		}
@@ -276,15 +296,32 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 	}
 
 	private void checkRealized() {
-		checkClosed();
-
-		if (state == UNREALIZED) {
+		if (state < REALIZED) {
 			throw new IllegalStateException("call realize() before using the player");
+		}
+	}
+
+	@Override
+	public void setSequence(byte[] sequence) {
+		if (state >= PREFETCHED) {
+			throw new IllegalStateException();
+		} else if (sequence == null) {
+			throw new IllegalArgumentException("sequence is NULL");
+		}
+		try {
+			ToneSequence tone = new ToneSequence(sequence);
+			tone.process();
+			sequence = tone.getByteArray();
+			TinySoundFont.playerSetDataSource(handle, sequence);
+		} catch (Exception e) {
+			Log.e(TAG, "setSequence: ", e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
 		TinySoundFont.playerFinalize(handle);
+		super.finalize();
 	}
 }

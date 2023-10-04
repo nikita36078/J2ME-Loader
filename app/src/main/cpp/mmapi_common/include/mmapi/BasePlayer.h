@@ -21,9 +21,10 @@ namespace mmapi {
         PlayerState state = UNREALIZED;
         PlayerListener *playerListener = nullptr;
     public:
-        const int64_t duration;
+        int64_t duration;
 
         BasePlayer(const int64_t duration);
+        BasePlayer(const BasePlayer &) = delete;
         ~BasePlayer() override;
 
         virtual oboe::Result prefetch();

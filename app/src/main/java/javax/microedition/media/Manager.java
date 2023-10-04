@@ -59,6 +59,12 @@ public class Manager {
 		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
 			return new MidiPlayer();
 		} else if (locator.equals(TONE_DEVICE_LOCATOR)) {
+			for (Plugin plugin : PLUGINS) {
+				Player player = plugin.createPlayer(locator);
+				if (player != null) {
+					return player;
+				}
+			}
 			return new MicroPlayer(locator);
 		} else if (locator.startsWith(FILE_LOCATOR) || locator.startsWith(RESOURCE_LOCATOR)) {
 			InputStream stream = Connector.openInputStream(locator);

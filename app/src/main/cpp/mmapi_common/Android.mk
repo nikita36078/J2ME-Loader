@@ -8,6 +8,7 @@ LOCAL_SRC_FILES = \
 	src/PlayerListener.cpp \
 	src/BasePlayer.cpp \
 	src/jstring.cpp \
+	src/jbytearray.cpp \
 
 LOCAL_CFLAGS += -O2 \
 

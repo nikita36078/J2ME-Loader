@@ -6,7 +6,6 @@
 #define TSF_IMPLEMENTATION
 #define TML_IMPLEMENTATION
 
-#include <forward_list>
 #include "tsf_player.h"
 #include "util/log.h"
 
@@ -27,16 +26,23 @@ namespace mmapi {
             close();
         }
 
-        int32_t Player::createPlayer(const char *path, Player **pPlayer) {
+        int32_t Player::createPlayer(const char *locator, Player **pPlayer) {
+            if (locator == nullptr) {
+                return -3;
+            }
             tsf *synth = tsf_copy(soundBank);
             if (synth == nullptr) {
                 return -1;
             }
-            tml_message *midi = tml_load_filename(path);
+            if (strcmp(locator, "device://tone") == 0) {
+                *pPlayer = new Player(synth, nullptr, -1);
+                return 0;
+            }
+            tml_message *midi = tml_load_filename(locator);
             if (midi == nullptr) {
                 return -2;
             }
-            unsigned int timeLength = -1;
+            unsigned int timeLength;
             tml_get_info(midi, nullptr, nullptr, nullptr, nullptr, &timeLength);
             *pPlayer = new Player(synth, midi, timeLength * 1000LL);
             return 0;
@@ -72,7 +78,9 @@ namespace mmapi {
 
         void Player::close() {
             BasePlayer::close();
-            tml_free(media);
+            if (media != nullptr) {
+                tml_free(media);
+            }
             tsf_close(synth);
             media = nullptr;
             synth = nullptr;
@@ -94,6 +102,29 @@ namespace mmapi {
             }
             Player::soundBank = synth;
             return 0;
+        }
+
+        int32_t Player::setDataSource(util::JByteArrayPtr *data) {
+            tml_message *midi = tml_load_memory(data->buffer, data->length);
+            if (midi == nullptr) {
+                return -2;
+            }
+            unsigned int timeLength;
+            tml_get_info(midi, nullptr, nullptr, nullptr, nullptr, &timeLength);
+            duration = timeLength * 1000LL;
+            if (media != nullptr) {
+                tml_free(media);
+            }
+            media = midi;
+            currentMsg = midi;
+            return 0;
+        }
+
+        oboe::Result Player::prefetch() {
+            if (media == nullptr) {
+                return oboe::Result::ErrorInvalidState;
+            }
+            return BasePlayer::prefetch();
         }
 
         float Player::computeGain(int32_t level) {

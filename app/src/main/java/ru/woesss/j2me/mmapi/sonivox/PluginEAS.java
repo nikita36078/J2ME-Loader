@@ -18,8 +18,8 @@ package ru.woesss.j2me.mmapi.sonivox;
 
 import android.util.Log;
 
-import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.Player;
+import javax.microedition.media.protocol.DataSource;
 import javax.microedition.shell.MicroLoader;
 
 import ru.woesss.j2me.mmapi.Plugin;
@@ -36,12 +36,17 @@ public class PluginEAS implements Plugin {
 	}
 
 	@Override
-	public Player createPlayer(InternalDataSource dataSource) {
+	public Player createPlayer(DataSource dataSource) {
 		try {
 			return new PlayerEAS(dataSource);
 		} catch (Exception e) {
 			Log.w(TAG, "createPlayer: ", e);
 			return null;
 		}
+	}
+
+	@Override
+	public Player createPlayer(String locator) {
+		return null;
 	}
 }

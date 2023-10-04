@@ -9,6 +9,7 @@
 #include "tml.h"
 #include "mmapi/PlayerListener.h"
 #include "mmapi/BasePlayer.h"
+#include "util/jbytearray.h"
 
 namespace mmapi {
     namespace tiny {
@@ -27,13 +28,15 @@ namespace mmapi {
             void deallocate() override;
             void close() override;
             int64_t getMediaTime() override;
+            oboe::Result prefetch() override;
             int32_t setVolume(int32_t level) override;
+            int32_t setDataSource(util::JByteArrayPtr *data);
 
             oboe::DataCallbackResult
             onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) override;
 
             static int32_t initSoundBank(const char *sound_bank);
-            static int32_t createPlayer(const char *path, Player **pPlayer);
+            static int32_t createPlayer(const char *locator, Player **pPlayer);
 
         private:
             oboe::Result createAudioStream() override;

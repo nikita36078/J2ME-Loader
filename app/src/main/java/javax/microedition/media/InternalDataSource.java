@@ -35,10 +35,10 @@ import java.io.RandomAccessFile;
 
 import ru.woesss.j2me.mmapi.FileCacheDataSource;
 
-public class InternalDataSource extends FileCacheDataSource {
+class InternalDataSource extends FileCacheDataSource {
 	private static final String TAG = InternalDataSource.class.getName();
 
-	public InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
+	InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
 		super(type);
 
 		final String name = mediaFile.getName();
