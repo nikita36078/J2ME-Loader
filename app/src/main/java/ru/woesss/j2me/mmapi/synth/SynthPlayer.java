@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.mmapi.synth.eas;
+package ru.woesss.j2me.mmapi.synth;
 
 import android.util.Log;
 
@@ -39,11 +39,12 @@ import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
+import javax.microedition.media.tone.ToneSequence;
 
 import ru.woesss.j2me.mmapi.protocol.device.DeviceMetaData;
 
-class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneControl {
-	private static final String TAG = "PlayerEAS";
+class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, ToneControl {
+	private static final String TAG = SynthPlayer.class.getSimpleName();
 
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
@@ -51,11 +52,13 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	private final InternalMetaData metadata;
 	private final DataSource dataSource;
 	private final long handle;
+	private final Library library;
 
 	private Map<String, Control> controls;
 	private int state = UNREALIZED;
 
-	public PlayerEAS(DataSource dataSource) {
+	SynthPlayer(Library library, DataSource dataSource) {
+		this.library = library;
 		this.dataSource = dataSource;
 		String locator = dataSource.getLocator();
 		if (Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
@@ -63,8 +66,8 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		} else {
 			metadata = new InternalMetaData();
 		}
-		handle = LibEAS.createPlayer(locator);
-		LibEAS.setListener(handle, this);
+		handle = library.createPlayer(locator);
+		library.setListener(handle, this);
 	}
 
 	@Override
@@ -72,7 +75,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		checkClosed();
 
 		if (state == UNREALIZED) {
-			LibEAS.realize(handle);
+			library.realize(handle);
 			if (controls == null) {
 				controls = new HashMap<>();
 				String locator = dataSource.getLocator();
@@ -102,7 +105,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 			} catch (Exception e) {
 				Log.w(TAG, "prefetch: update metadata failed", e);
 			}
-			LibEAS.prefetch(handle);
+			library.prefetch(handle);
 			state = PREFETCHED;
 		}
 	}
@@ -112,7 +115,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		prefetch();
 
 		if (state == PREFETCHED) {
-			LibEAS.start(handle);
+			library.start(handle);
 
 			state = STARTED;
 			postEvent(PlayerListener.STARTED, getMediaTime());
@@ -123,7 +126,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	public void stop() throws MediaException {
 		checkClosed();
 		if (state == STARTED) {
-			LibEAS.pause(handle);
+			library.pause(handle);
 
 			state = PREFETCHED;
 			postEvent(PlayerListener.STOPPED, getMediaTime());
@@ -139,7 +142,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		}
 
 		if (state == PREFETCHED) {
-			LibEAS.deallocate(handle);
+			library.deallocate(handle);
 			state = UNREALIZED;
 		}
 	}
@@ -148,7 +151,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	public void close() {
 		if (state != CLOSED) {
 			state = CLOSED;
-			LibEAS.close(handle);
+			library.close(handle);
 		}
 
 		dataSource.disconnect();
@@ -158,7 +161,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-		return LibEAS.setMediaTime(handle, now);
+		return library.setMediaTime(handle, now);
 	}
 
 	@Override
@@ -167,13 +170,13 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
 		} else {
-			return LibEAS.getMediaTime(handle);
+			return library.getMediaTime(handle);
 		}
 	}
 
 	@Override
 	public long getDuration() {
-		return LibEAS.getDuration(handle);
+		return library.getDuration(handle);
 	}
 
 	@Override
@@ -185,7 +188,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		if (count == 0) {
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
-		LibEAS.setRepeat(handle, count);
+		library.setRepeat(handle, count);
 	}
 
 	@Override
@@ -201,33 +204,33 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 
 	@Override
 	public int setPan(int pan) {
-		return LibEAS.setPan(handle, pan);
+		return library.setPan(handle, pan);
 	}
 
 	@Override
 	public int getPan() {
-		return LibEAS.getPan(handle);
+		return library.getPan(handle);
 	}
 
 	@Override
 	public void setMute(boolean mute) {
-		LibEAS.setMute(handle, mute);
+		library.setMute(handle, mute);
 
 	}
 
 	@Override
 	public boolean isMuted() {
-		return LibEAS.isMuted(handle);
+		return library.isMuted(handle);
 	}
 
 	@Override
 	public int setLevel(int level) {
-		return LibEAS.setVolume(handle, level);
+		return library.setVolume(handle, level);
 	}
 
 	@Override
 	public int getLevel() {
-		return LibEAS.getVolume(handle);
+		return library.getVolume(handle);
 	}
 
 	@Override
@@ -308,7 +311,12 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 			throw new IllegalArgumentException("sequence is NULL");
 		}
 		try {
-			LibEAS.setDataSource(handle, sequence);
+			if (!library.hasToneControl()) {
+				ToneSequence tone = new ToneSequence(sequence);
+				tone.process();
+				sequence = tone.getByteArray();
+			}
+			library.setDataSource(handle, sequence);
 		} catch (Exception e) {
 			Log.e(TAG, "setSequence: ", e);
 			throw new IllegalArgumentException(e);
@@ -317,7 +325,7 @@ class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 
 	@Override
 	protected void finalize() throws Throwable {
-		LibEAS.finalize(handle);
+		library.finalize(handle);
 		super.finalize();
 	}
 }

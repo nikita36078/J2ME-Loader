@@ -51,6 +51,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -639,7 +640,7 @@ public class MicroActivity extends AppCompatActivity {
 		return appName;
 	}
 
-	public void toast(CharSequence message) {
+	public void toast(@StringRes int message) {
 		runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
 	}
 

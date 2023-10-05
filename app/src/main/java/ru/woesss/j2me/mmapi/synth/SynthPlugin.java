@@ -14,32 +14,29 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.mmapi.synth.tsf;
+package ru.woesss.j2me.mmapi.synth;
 
 import android.util.Log;
 
 import javax.microedition.media.Player;
 import javax.microedition.media.protocol.DataSource;
-import javax.microedition.shell.MicroLoader;
 
 import ru.woesss.j2me.mmapi.Plugin;
 import ru.woesss.j2me.mmapi.protocol.device.DeviceDataSource;
 
-public class PluginTSF implements Plugin {
-	private static final String TAG = "TsfPlugin";
+public class SynthPlugin implements Plugin {
+	private static final String TAG = SynthPlugin.class.getSimpleName();
 
-	public PluginTSF() {
-		String soundBank = MicroLoader.getSoundBank();
-		if (soundBank == null) {
-			throw new IllegalStateException("Sound Bank not selected");
-		}
-		LibTSF.loadSoundBank(soundBank);
+	private final Library library;
+
+	public SynthPlugin(Library library) {
+		this.library = library;
 	}
 
 	@Override
 	public Player createPlayer(DataSource dataSource) {
 		try {
-			return new PlayerTSF(dataSource);
+			return new SynthPlayer(library, dataSource);
 		} catch (Exception e) {
 			Log.w(TAG, "createPlayer: ", e);
 			return null;
@@ -49,7 +46,7 @@ public class PluginTSF implements Plugin {
 	@Override
 	public Player createPlayer(String locator) {
 		try {
-			return new PlayerTSF(new DeviceDataSource(locator));
+			return new SynthPlayer(library, new DeviceDataSource(locator));
 		} catch (Exception e) {
 			Log.w(TAG, "createPlayer: ", e);
 			return null;

@@ -16,28 +16,63 @@
 
 package ru.woesss.j2me.mmapi.synth.eas;
 
-class LibEAS {
-	static native void loadSoundBank(String soundBank);
-	static native long createPlayer(String locator);
-	static native void finalize(long handle);
-	static native void realize(long handle);
-	static native void prefetch(long handle);
-	static native void start(long handle);
-	static native void pause(long handle);
-	static native void deallocate(long handle);
-	static native void close(long handle);
-	static native long setMediaTime(long handle, long now);
-	static native long getMediaTime(long handle);
-	static native void setRepeat(long handle, int count);
-	static native int setPan(long handle, int pan);
-	static native int getPan(long handle);
-	static native void setMute(long handle, boolean mute);
-	static native boolean isMuted(long handle);
-	static native int setVolume(long handle, int level);
-	static native int getVolume(long handle);
-	static native long getDuration(long handle);
-	static native void setListener(long handle, Object listener);
-	static native void setDataSource(long handle, byte[] data);
+import javax.microedition.shell.MicroLoader;
+
+import ru.woesss.j2me.mmapi.synth.Library;
+
+public class LibEAS implements Library {
+
+	public LibEAS() {
+		loadSoundBank(MicroLoader.getSoundBank());
+	}
+
+	@Override
+	public native void loadSoundBank(String soundBank);
+	@Override
+	public native long createPlayer(String locator);
+	@Override
+	public native void finalize(long handle);
+	@Override
+	public native void realize(long handle);
+	@Override
+	public native void prefetch(long handle);
+	@Override
+	public native void start(long handle);
+	@Override
+	public native void pause(long handle);
+	@Override
+	public native void deallocate(long handle);
+	@Override
+	public native void close(long handle);
+	@Override
+	public native long setMediaTime(long handle, long now);
+	@Override
+	public native long getMediaTime(long handle);
+	@Override
+	public native void setRepeat(long handle, int count);
+	@Override
+	public native int setPan(long handle, int pan);
+	@Override
+	public native int getPan(long handle);
+	@Override
+	public native void setMute(long handle, boolean mute);
+	@Override
+	public native boolean isMuted(long handle);
+	@Override
+	public native int setVolume(long handle, int level);
+	@Override
+	public native int getVolume(long handle);
+	@Override
+	public native long getDuration(long handle);
+	@Override
+	public native void setListener(long handle, Object listener);
+	@Override
+	public native void setDataSource(long handle, byte[] data);
+
+	@Override
+	public boolean hasToneControl() {
+		return true;
+	}
 
 	static {
 		System.loadLibrary("c++_shared");
