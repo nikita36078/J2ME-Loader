@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.mmapi.tsf;
+package ru.woesss.j2me.mmapi.synth.eas;
 
-class TinySoundFont {
-	static native void init(String soundBank);
-	static native long playerInit(String locator);
-	static native void playerFinalize(long handle);
-	static native void playerRealize(long handle);
-	static native void playerPrefetch(long handle);
-	static native void playerStart(long handle);
-	static native void playerPause(long handle);
-	static native void playerDeallocate(long handle);
-	static native void playerClose(long handle);
+class LibEAS {
+	static native void loadSoundBank(String soundBank);
+	static native long createPlayer(String locator);
+	static native void finalize(long handle);
+	static native void realize(long handle);
+	static native void prefetch(long handle);
+	static native void start(long handle);
+	static native void pause(long handle);
+	static native void deallocate(long handle);
+	static native void close(long handle);
 	static native long setMediaTime(long handle, long now);
 	static native long getMediaTime(long handle);
 	static native void setRepeat(long handle, int count);
@@ -35,14 +35,14 @@ class TinySoundFont {
 	static native boolean isMuted(long handle);
 	static native int setVolume(long handle, int level);
 	static native int getVolume(long handle);
-	static native long playerGetDuration(long handle);
-	static native void playerListener(long handle, PlayerTSF listener);
-	static native void playerSetDataSource(long handle, byte[] data);
+	static native long getDuration(long handle);
+	static native void setListener(long handle, Object listener);
+	static native void setDataSource(long handle, byte[] data);
 
 	static {
 		System.loadLibrary("c++_shared");
 		System.loadLibrary("oboe");
 		System.loadLibrary("mmapi_common");
-		System.loadLibrary("mmapi_tsf");
+		System.loadLibrary("mmapi_eas");
 	}
 }

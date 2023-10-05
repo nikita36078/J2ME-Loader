@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_loadSoundBank
 (JNIEnv *env, jclass /*clazz*/, jstring sound_bank) {
     if (sound_bank == nullptr) {
         return;
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_init
     }
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_createPlayer
 (JNIEnv *env, jclass /*clazz*/, jstring pLocator) {
     mmapi::eas::Player *player;
     util::JStringPtr locator(env, pLocator);
@@ -39,13 +39,13 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerInit
     return reinterpret_cast<jlong>(player);
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerFinalize
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_finalize
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     delete player;
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerRealize
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_realize
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     if (!player->realize()) {
@@ -53,7 +53,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerRealize
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPrefetch
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_prefetch
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     oboe::Result result = player->prefetch();
@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPrefetch
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerStart
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_start
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     oboe::Result result = player->start();
@@ -73,7 +73,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerStart
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPause
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_pause
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     oboe::Result result = player->pause();
@@ -83,85 +83,85 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerPause
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerDeallocate
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_deallocate
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->deallocate();
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerClose
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_close
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->close();
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setMediaTime
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jlong now) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->setMediaTime(now);
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getMediaTime
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->getMediaTime();
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setRepeat
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setRepeat
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint count) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->setRepeat(count);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setPan
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setPan
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint pan) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->setPan(pan);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getPan
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getPan
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->getPan();
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setMute
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setMute
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jboolean mute) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->setMute(mute);
 }
 
-JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_isMuted
+JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_isMuted
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->isMuted();
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_setVolume
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint level) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->setVolume(level);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_getVolume
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->getVolume();
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerGetDuration
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getDuration
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     return player->duration;
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerListener
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setListener
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     player->setListener(new mmapi::PlayerListener(env, listener));
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_sonivox_EAS_playerSetDataSource
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setDataSource
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jbyteArray data) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
     auto *file = new mmapi::eas::MemFile(env, data);

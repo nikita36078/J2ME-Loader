@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_loadSoundBank
 (JNIEnv *env, jclass /*clazz*/, jstring sound_bank) {
     if (sound_bank == nullptr) {
         env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"), "Sound bank file is null");
@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_init
     }
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_createPlayer
 (JNIEnv *env, jclass /*clazz*/, jstring pLocator) {
     mmapi::tiny::Player *player;
     util::JStringPtr locator(env, pLocator);
@@ -38,13 +38,13 @@ JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerInit
     return reinterpret_cast<jlong>(player);
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerFinalize
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_finalize
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     delete player;
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerRealize
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_realize
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     if (!player->realize()) {
@@ -52,7 +52,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerRealize
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPrefetch
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_prefetch
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     oboe::Result result = player->prefetch();
@@ -62,7 +62,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPrefetc
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerStart
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_start
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     oboe::Result result = player->start();
@@ -72,7 +72,7 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerStart
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPause
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_pause
 (JNIEnv *env, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     oboe::Result result = player->pause();
@@ -82,85 +82,85 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerPause
     }
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerDeallocate
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_deallocate
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     player->deallocate();
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerClose
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_close
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     player->close();
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_setMediaTime
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jlong now) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->setMediaTime(now);
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_getMediaTime
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_getMediaTime
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->getMediaTime();
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_setRepeat
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setRepeat
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint count) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     player->setRepeat(count);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_setPan
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setPan
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint pan) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->setPan(pan);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_getPan
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_getPan
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->getPan();
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_setMute
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setMute
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jboolean mute) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     player->setMute(mute);
 }
 
-JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_isMuted
+JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_isMuted
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->isMuted();
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_setVolume
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle, jint level) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->setVolume(level);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_getVolume
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_getVolume
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->getVolume();
 }
 
-JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerGetDuration
+JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_getDuration
 (JNIEnv */*env*/, jclass /*clazz*/, jlong handle) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     return player->duration;
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerListener
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setListener
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jobject listener) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     player->setListener(new mmapi::PlayerListener(env, listener));
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_tsf_TinySoundFont_playerSetDataSource
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setDataSource
 (JNIEnv *env, jclass /*clazz*/, jlong handle, jbyteArray data) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
     util::JByteArrayPtr ptr(env, data);

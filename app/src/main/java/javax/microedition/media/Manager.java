@@ -36,8 +36,8 @@ import javax.microedition.media.tone.ToneManager;
 import javax.microedition.util.ContextHolder;
 
 import ru.woesss.j2me.mmapi.Plugin;
-import ru.woesss.j2me.mmapi.sonivox.PluginEAS;
-import ru.woesss.j2me.mmapi.tsf.PluginTSF;
+import ru.woesss.j2me.mmapi.synth.eas.PluginEAS;
+import ru.woesss.j2me.mmapi.synth.tsf.PluginTSF;
 
 public class Manager {
 	private static final String TAG = "media.Manager";

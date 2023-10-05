@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.mmapi.tsf;
+package ru.woesss.j2me.mmapi.synth.eas;
 
 import android.util.Log;
 
@@ -39,12 +39,11 @@ import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
-import javax.microedition.media.tone.ToneSequence;
 
 import ru.woesss.j2me.mmapi.protocol.device.DeviceMetaData;
 
-class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneControl {
-	private static final String TAG = "PlayerTSF";
+class PlayerEAS extends BasePlayer2 implements VolumeControl, PanControl, ToneControl {
+	private static final String TAG = "PlayerEAS";
 
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
@@ -56,7 +55,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	private Map<String, Control> controls;
 	private int state = UNREALIZED;
 
-	public PlayerTSF(DataSource dataSource) {
+	public PlayerEAS(DataSource dataSource) {
 		this.dataSource = dataSource;
 		String locator = dataSource.getLocator();
 		if (Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
@@ -64,8 +63,8 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		} else {
 			metadata = new InternalMetaData();
 		}
-		handle = TinySoundFont.playerInit(locator);
-		TinySoundFont.playerListener(handle, this);
+		handle = LibEAS.createPlayer(locator);
+		LibEAS.setListener(handle, this);
 	}
 
 	@Override
@@ -73,7 +72,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		checkClosed();
 
 		if (state == UNREALIZED) {
-			TinySoundFont.playerRealize(handle);
+			LibEAS.realize(handle);
 			if (controls == null) {
 				controls = new HashMap<>();
 				String locator = dataSource.getLocator();
@@ -103,7 +102,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 			} catch (Exception e) {
 				Log.w(TAG, "prefetch: update metadata failed", e);
 			}
-			TinySoundFont.playerPrefetch(handle);
+			LibEAS.prefetch(handle);
 			state = PREFETCHED;
 		}
 	}
@@ -113,7 +112,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		prefetch();
 
 		if (state == PREFETCHED) {
-			TinySoundFont.playerStart(handle);
+			LibEAS.start(handle);
 
 			state = STARTED;
 			postEvent(PlayerListener.STARTED, getMediaTime());
@@ -124,7 +123,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	public void stop() throws MediaException {
 		checkClosed();
 		if (state == STARTED) {
-			TinySoundFont.playerPause(handle);
+			LibEAS.pause(handle);
 
 			state = PREFETCHED;
 			postEvent(PlayerListener.STOPPED, getMediaTime());
@@ -140,7 +139,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		}
 
 		if (state == PREFETCHED) {
-			TinySoundFont.playerDeallocate(handle);
+			LibEAS.deallocate(handle);
 			state = UNREALIZED;
 		}
 	}
@@ -149,7 +148,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	public void close() {
 		if (state != CLOSED) {
 			state = CLOSED;
-			TinySoundFont.playerClose(handle);
+			LibEAS.close(handle);
 		}
 
 		dataSource.disconnect();
@@ -159,7 +158,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-		return TinySoundFont.setMediaTime(handle, now);
+		return LibEAS.setMediaTime(handle, now);
 	}
 
 	@Override
@@ -168,13 +167,13 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
 		} else {
-			return TinySoundFont.getMediaTime(handle);
+			return LibEAS.getMediaTime(handle);
 		}
 	}
 
 	@Override
 	public long getDuration() {
-		return TinySoundFont.playerGetDuration(handle);
+		return LibEAS.getDuration(handle);
 	}
 
 	@Override
@@ -186,7 +185,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 		if (count == 0) {
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
-		TinySoundFont.setRepeat(handle, count);
+		LibEAS.setRepeat(handle, count);
 	}
 
 	@Override
@@ -202,33 +201,33 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 
 	@Override
 	public int setPan(int pan) {
-		return TinySoundFont.setPan(handle, pan);
+		return LibEAS.setPan(handle, pan);
 	}
 
 	@Override
 	public int getPan() {
-		return TinySoundFont.getPan(handle);
+		return LibEAS.getPan(handle);
 	}
 
 	@Override
 	public void setMute(boolean mute) {
-		TinySoundFont.setMute(handle, mute);
+		LibEAS.setMute(handle, mute);
 
 	}
 
 	@Override
 	public boolean isMuted() {
-		return TinySoundFont.isMuted(handle);
+		return LibEAS.isMuted(handle);
 	}
 
 	@Override
 	public int setLevel(int level) {
-		return TinySoundFont.setVolume(handle, level);
+		return LibEAS.setVolume(handle, level);
 	}
 
 	@Override
 	public int getLevel() {
-		return TinySoundFont.getVolume(handle);
+		return LibEAS.getVolume(handle);
 	}
 
 	@Override
@@ -309,10 +308,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 			throw new IllegalArgumentException("sequence is NULL");
 		}
 		try {
-			ToneSequence tone = new ToneSequence(sequence);
-			tone.process();
-			sequence = tone.getByteArray();
-			TinySoundFont.playerSetDataSource(handle, sequence);
+			LibEAS.setDataSource(handle, sequence);
 		} catch (Exception e) {
 			Log.e(TAG, "setSequence: ", e);
 			throw new IllegalArgumentException(e);
@@ -321,7 +317,7 @@ class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl, ToneCo
 
 	@Override
 	protected void finalize() throws Throwable {
-		TinySoundFont.playerFinalize(handle);
+		LibEAS.finalize(handle);
 		super.finalize();
 	}
 }
