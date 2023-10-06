@@ -164,8 +164,8 @@ namespace mmapi {
         Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
             memset(audioData, 0, sizeof(float) * NUM_CHANNELS * numFrames);
             if (currentMsg == nullptr) {
-                timeToSet = 0;
                 if (looping == -1 || (--loopCount) > 0) {
+                    timeToSet = 0;
                     playerListener->postEvent(RESTART, playTime);
                 } else {
                     state = PREFETCHED;

@@ -96,6 +96,19 @@ namespace mmapi {
             return pTime * 1000LL;
         }
 
+        int64_t Player::setMediaTime(int64_t now) {
+            int64_t time = BasePlayer::setMediaTime(now);
+            if (state != STARTED && media != nullptr) {
+                EAS_I32 ms = static_cast<EAS_I32>(timeToSet / 1000LL);
+                EAS_RESULT result = EAS_Locate(easHandle, media, ms, EAS_FALSE);
+                if (result != EAS_SUCCESS) {
+                    ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
+                }
+                timeToSet = -1;
+            }
+            return time;
+        }
+
         int32_t Player::setVolume(int32_t level) {
             if (media != nullptr) {
                 EAS_SetVolume(easHandle, media, level);
@@ -188,8 +201,8 @@ namespace mmapi {
             EAS_State(easHandle, media, &easState);
             if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
                 int64_t playTime = getMediaTime();
-                timeToSet = 0;
                 if (looping == -1 || (--loopCount) > 0) {
+                    timeToSet = 0;
                     playerListener->postEvent(RESTART, playTime);
                 } else {
                     state = PREFETCHED;
@@ -199,8 +212,8 @@ namespace mmapi {
             }
 
             if (timeToSet != -1) {
-                EAS_RESULT result = EAS_Locate(easHandle, media,
-                                               static_cast<EAS_I32>(timeToSet / 1000LL), EAS_FALSE);
+                EAS_I32 ms = static_cast<EAS_I32>(timeToSet / 1000LL);
+                EAS_RESULT result = EAS_Locate(easHandle, media, ms, EAS_FALSE);
                 if (result != EAS_SUCCESS) {
                     ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
                 }
