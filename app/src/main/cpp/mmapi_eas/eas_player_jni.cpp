@@ -6,6 +6,7 @@
 #include "eas_player.h"
 #include "util/jstring.h"
 #include "eas_util.h"
+#include "util/jbytearray.h"
 
 /* for C++ linkage */
 #ifdef __cplusplus
@@ -171,6 +172,13 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setDataSource
         const char *message = mmapi::eas::EAS_GetErrorString(result);
         env->ThrowNew(env->FindClass("javax/microedition/media/MediaException"), message);
     }
+}
+
+JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_writeMIDI
+(JNIEnv *env, jobject /*thiz*/, jlong handle, jbyteArray data, jint offset, jint length) {
+    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
+    util::JByteArrayPtr ptr(env, data, offset, length);
+    return player->writeMIDI(ptr);
 }
 
 #ifdef __cplusplus

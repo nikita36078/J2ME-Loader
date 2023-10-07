@@ -38,6 +38,7 @@ public interface Library {
 	long getDuration(long handle);
 	void setListener(long handle, Object listener);
 	void setDataSource(long handle, byte[] data);
+	int writeMIDI(long handle, byte[] data, int offset, int length);
 
 	boolean hasToneControl();
 }

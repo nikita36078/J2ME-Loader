@@ -54,9 +54,7 @@ public class Manager {
 		if (locator == null) {
 			throw new IllegalArgumentException();
 		}
-		if (locator.equals(MIDI_DEVICE_LOCATOR)) {
-			return new MidiPlayer();
-		} else if (locator.equals(TONE_DEVICE_LOCATOR)) {
+		if (MIDI_DEVICE_LOCATOR.equals(locator) || TONE_DEVICE_LOCATOR.equals(locator)) {
 			for (Plugin plugin : PLUGINS) {
 				Player player = plugin.createPlayer(locator);
 				if (player != null) {

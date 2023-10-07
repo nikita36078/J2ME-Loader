@@ -32,16 +32,19 @@ public class SynthPluginFactory {
 	private static final String TAG = SynthPluginFactory.class.getSimpleName();
 
 	public static void loadPlugins(List<Plugin> plugins) {
-		if (MicroLoader.getSoundBank() == null) {
+		String soundBank = MicroLoader.getSoundBank();
+		if (soundBank == null) {
+			plugins.add(new MIDIDevicePlugin());
 			return;
 		}
 		try {
-			plugins.add(new SynthPlugin(new LibEAS()));
+			plugins.add(new SynthPlugin(new LibEAS(soundBank)));
 		} catch (Throwable e) {
 			Log.w(TAG, "create EAS plugin failed", e);
+			plugins.add(new MIDIDevicePlugin());
 		}
 		try {
-			plugins.add(new SynthPlugin(new LibTSF()));
+			plugins.add(new SynthPlugin(new LibTSF(soundBank)));
 		} catch (Throwable e) {
 			Log.w(TAG, "create TSF plugin failed", e);
 		}

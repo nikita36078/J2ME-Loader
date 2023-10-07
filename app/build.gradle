@@ -181,7 +181,6 @@ dependencies {
     implementation 'net.lingala.zip4j:zip4j:2.10.0'
 
     // Audio/Video/Graphics
-    implementation 'io.github.nikita36078:mididriver:v1.30'
     implementation 'com.github.nikita36078:pngj:2.2.3'
     implementation 'io.github.nikita36078:ffmpeg-kit:6.0.LTS'
     implementation "com.google.oboe:oboe:1.10.0"

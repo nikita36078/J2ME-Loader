@@ -9,6 +9,7 @@
 #include "eas_file.h"
 #include "mmapi/PlayerListener.h"
 #include "mmapi/BasePlayer.h"
+#include "util/jbytearray.h"
 
 namespace mmapi {
     namespace eas {
@@ -22,15 +23,18 @@ namespace mmapi {
 
         public:
             Player(EAS_DATA_HANDLE easHandle, BaseFile *file, EAS_HANDLE stream, const int64_t duration);
+            Player(EAS_DATA_HANDLE easHandle, EAS_HANDLE stream);
             ~Player() override;
 
             void deallocate() override;
             void close() override;
             int64_t getMediaTime() override;
+            oboe::Result pause() override;
             oboe::Result prefetch() override;
             int64_t setMediaTime(int64_t now) override;
             int32_t setVolume(int32_t level) override;
             int32_t setDataSource(BaseFile *pFile);
+            jint writeMIDI(util::JByteArrayPtr &data);
 
             oboe::DataCallbackResult onAudioReady(oboe::AudioStream *audioStream,
                                                   void *audioData,

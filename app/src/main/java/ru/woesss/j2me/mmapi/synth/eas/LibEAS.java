@@ -16,14 +16,14 @@
 
 package ru.woesss.j2me.mmapi.synth.eas;
 
-import javax.microedition.shell.MicroLoader;
-
 import ru.woesss.j2me.mmapi.synth.Library;
 
 public class LibEAS implements Library {
 
-	public LibEAS() {
-		loadSoundBank(MicroLoader.getSoundBank());
+	public LibEAS() {}
+
+	public LibEAS(String soundBank) {
+		loadSoundBank(soundBank);
 	}
 
 	@Override
@@ -68,6 +68,8 @@ public class LibEAS implements Library {
 	public native void setListener(long handle, Object listener);
 	@Override
 	public native void setDataSource(long handle, byte[] data);
+	@Override
+	public native int writeMIDI(long handle, byte[] data, int offset, int length);
 
 	@Override
 	public boolean hasToneControl() {

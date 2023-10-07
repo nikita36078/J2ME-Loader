@@ -5,6 +5,7 @@
 #include "eas_player.h"
 #include "util/log.h"
 #include "eas_util.h"
+#include "libsonivox/eas_reverb.h"
 
 #define LOG_TAG "MMAPI"
 #define NUM_COMBINE_BUFFERS 4
@@ -15,8 +16,17 @@ namespace mmapi {
 
         Player::Player(EAS_DATA_HANDLE easHandle, BaseFile *file, EAS_HANDLE stream, const int64_t duration)
                 : BasePlayer(duration), easHandle(easHandle), file(file), media(stream) {
-            EAS_SetGlobalDLSLib(easHandle, Player::soundBank);
+            EAS_DLSLIB_HANDLE dls = Player::soundBank;
+            if (dls == nullptr) {
+                EAS_SetParameter(easHandle, EAS_MODULE_REVERB, EAS_PARAM_REVERB_PRESET, EAS_PARAM_REVERB_CHAMBER);
+                EAS_SetParameter(easHandle, EAS_MODULE_REVERB, EAS_PARAM_REVERB_BYPASS, EAS_FALSE);
+            } else {
+                EAS_SetGlobalDLSLib(easHandle, dls);
+            }
         }
+
+        Player::Player(EAS_DATA_HANDLE easHandle, EAS_HANDLE stream)
+                : Player(easHandle, nullptr, stream, -1) {}
 
         Player::~Player() {
             close();
@@ -33,6 +43,15 @@ namespace mmapi {
             }
             if (strcmp(locator, "device://tone") == 0) {
                 *pPlayer = new Player(easHandle, nullptr, nullptr, -1);
+                return EAS_SUCCESS;
+            } else if (strcmp(locator, "device://midi") == 0) {
+                EAS_HANDLE stream;
+                result = EAS_OpenMIDIStream(easHandle, &stream, nullptr);
+                if (result != EAS_SUCCESS) {
+                    EAS_Shutdown(easHandle);
+                    return result;
+                }
+                *pPlayer = new Player(easHandle, stream);
                 return EAS_SUCCESS;
             }
             BaseFile *file = new IOFile(locator, "rb");;
@@ -77,15 +96,19 @@ namespace mmapi {
         void Player::close() {
             BasePlayer::close();
             if (media != nullptr) {
-                EAS_CloseFile(easHandle, media);
+                if (file == nullptr) {
+                    EAS_CloseMIDIStream(easHandle, media);
+                } else {
+                    EAS_CloseFile(easHandle, media);
+                    delete file;
+                }
             }
             EAS_Shutdown(easHandle);
-            delete file;
         }
 
         int64_t Player::getMediaTime() {
             long pTime = -1;
-            if (media == nullptr) {
+            if (media == nullptr || file == nullptr) {
                 return pTime;
             }
             EAS_RESULT result = EAS_GetLocation(easHandle, media, &pTime);
@@ -98,7 +121,7 @@ namespace mmapi {
 
         int64_t Player::setMediaTime(int64_t now) {
             int64_t time = BasePlayer::setMediaTime(now);
-            if (state != STARTED && media != nullptr) {
+            if (time >= 0 && state != STARTED && media != nullptr) {
                 EAS_I32 ms = static_cast<EAS_I32>(timeToSet / 1000LL);
                 EAS_RESULT result = EAS_Locate(easHandle, media, ms, EAS_FALSE);
                 if (result != EAS_SUCCESS) {
@@ -110,10 +133,11 @@ namespace mmapi {
         }
 
         int32_t Player::setVolume(int32_t level) {
+            int32_t volume = BasePlayer::setVolume(level);
             if (media != nullptr) {
-                EAS_SetVolume(easHandle, media, level);
+                EAS_SetVolume(easHandle, media, volume);
             }
-            return BasePlayer::setVolume(level);
+            return volume;
         }
 
         int32_t Player::initSoundBank(const char *sound_bank) {
@@ -132,6 +156,11 @@ namespace mmapi {
             return result;
         }
 
+        jint Player::writeMIDI(util::JByteArrayPtr &data) {
+            EAS_WriteMIDIStream(easHandle, media, (EAS_U8 *) data.buffer, data.length);
+            return data.length;
+        }
+
         int32_t Player::setDataSource(BaseFile *pFile) {
             EAS_HANDLE stream = nullptr;
             int32_t result = openSource(easHandle, pFile, &stream, &duration);
@@ -144,6 +173,7 @@ namespace mmapi {
             }
             media = stream;
             file = pFile;
+            setVolume(getVolume());
             return result;
         }
 
@@ -191,13 +221,27 @@ namespace mmapi {
             if (media == nullptr) {
                 return oboe::Result::ErrorInvalidState;
             }
-            return BasePlayer::prefetch();
+            oboe::Result result = BasePlayer::prefetch();
+            if (result != oboe::Result::OK) {
+                return result;
+            }
+            if (file == nullptr) { // interactive midi
+                BasePlayer::start();
+            }
+            return result;
+        }
+
+        oboe::Result Player::pause() {
+            if (file == nullptr) { // interactive midi
+                return oboe::Result::OK;
+            }
+            return BasePlayer::pause();
         }
 
         oboe::DataCallbackResult
         Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
             memset(audioData, 0, sizeof(EAS_PCM) * easConfig->numChannels * numFrames);
-            EAS_STATE easState;
+            EAS_STATE easState = EAS_STATE_PLAY;
             EAS_State(easHandle, media, &easState);
             if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
                 int64_t playTime = getMediaTime();

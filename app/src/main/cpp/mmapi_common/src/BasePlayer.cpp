@@ -101,6 +101,11 @@ namespace mmapi {
     }
 
     int32_t BasePlayer::setVolume(int32_t level) {
+        if (level < 0) {
+            level = 0;
+        } else if (level > 100) {
+            level = 100;
+        }
         volume = level;
         return level;
     }

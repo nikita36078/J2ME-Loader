@@ -16,6 +16,9 @@
 
 package ru.woesss.j2me.mmapi.synth;
 
+import static javax.microedition.media.Manager.MIDI_DEVICE_LOCATOR;
+import static javax.microedition.media.Manager.TONE_DEVICE_LOCATOR;
+
 import android.util.Log;
 
 import androidx.annotation.Keep;
@@ -32,15 +35,16 @@ import javax.microedition.media.BasePlayer2;
 import javax.microedition.media.Control;
 import javax.microedition.media.InternalEqualizer;
 import javax.microedition.media.InternalMetaData;
-import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.PlayerListener;
+import javax.microedition.media.control.MIDIControl;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
 import javax.microedition.media.tone.ToneSequence;
 
+import ru.woesss.j2me.mmapi.control.MIDIControlImpl;
 import ru.woesss.j2me.mmapi.protocol.device.DeviceMetaData;
 
 class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, ToneControl {
@@ -62,14 +66,14 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 	private int state = UNREALIZED;
 
 	SynthPlayer(Library library, DataSource dataSource) {
-		this.library = library;
-		this.dataSource = dataSource;
 		String locator = dataSource.getLocator();
-		if (Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
+		if (MIDI_DEVICE_LOCATOR.equals(locator) || TONE_DEVICE_LOCATOR.equals(locator)) {
 			metadata = new DeviceMetaData();
 		} else {
 			metadata = new InternalMetaData();
 		}
+		this.library = library;
+		this.dataSource = dataSource;
 		handle = library.createPlayer(locator);
 		library.setListener(handle, this);
 	}
@@ -83,10 +87,14 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 			if (controls == null) {
 				controls = new HashMap<>();
 				String locator = dataSource.getLocator();
-				if (Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
+				if (MIDI_DEVICE_LOCATOR.equals(locator)) {
+					controls.put(MIDIControl.class.getName(), new MIDIControlImpl(this, library, handle));
+				} else if (TONE_DEVICE_LOCATOR.equals(locator)) {
 					controls.put(ToneControl.class.getName(), this);
+					controls.put(VolumeControl.class.getName(), this);
+				} else {
+					controls.put(VolumeControl.class.getName(), this);
 				}
-				controls.put(VolumeControl.class.getName(), this);
 				controls.put(PanControl.class.getName(), this);
 				controls.put(MetaDataControl.class.getName(), metadata);
 				controls.put(EqualizerControl.class.getName(), new InternalEqualizer());

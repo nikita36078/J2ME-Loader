@@ -91,8 +91,9 @@ namespace mmapi {
         }
 
         int32_t Player::setVolume(int32_t level) {
-            tsf_set_volume(synth, computeGain(level));
-            return BasePlayer::setVolume(level);
+            int32_t volume = BasePlayer::setVolume(level);
+            tsf_set_volume(synth, computeGain(volume));
+            return volume;
         }
 
         int32_t Player::initSoundBank(const char *sound_bank) {

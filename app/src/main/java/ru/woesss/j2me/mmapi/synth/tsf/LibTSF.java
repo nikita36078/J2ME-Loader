@@ -16,14 +16,12 @@
 
 package ru.woesss.j2me.mmapi.synth.tsf;
 
-import javax.microedition.shell.MicroLoader;
-
 import ru.woesss.j2me.mmapi.synth.Library;
 
 public class LibTSF implements Library {
 
-	public LibTSF() {
-		loadSoundBank(MicroLoader.getSoundBank());
+	public LibTSF(String soundBank) {
+		loadSoundBank(soundBank);
 	}
 
 	@Override
@@ -68,6 +66,10 @@ public class LibTSF implements Library {
 	public native void setListener(long handle, Object listener);
 	@Override
 	public native void setDataSource(long handle, byte[] data);
+	@Override
+	public int writeMIDI(long handle, byte[] data, int offset, int length) {
+		return 0;
+	}
 
 	@Override
 	public boolean hasToneControl() {
