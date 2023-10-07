@@ -16,6 +16,8 @@
 
 package javax.microedition.media;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +29,12 @@ import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.VolumeControl;
 
 public class BasePlayer implements Player, VolumeControl, PanControl {
-	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
-			new Thread(r, "MidletPlayerCallback"));
+	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r -> {
+		Thread thread = new Thread(r, "MidletPlayerCallback");
+		thread.setUncaughtExceptionHandler((t, e) ->
+				Log.e(t.getName(), "UncaughtException in " + t, e));
+		return thread;
+	});
 	private TimeBase timeBase;
 	protected int state;
 	private int loopCount;
