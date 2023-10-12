@@ -98,4 +98,13 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 		binding.setText(c.getAndroidLabel());
 		binding.setTag(c);
 	}
+
+	public void showMenu() {
+		PopupWindow popup = prepareMenu(2);
+		int y = binding.rightButton.getHeight();
+		View rootView = binding.rightButton.getRootView();
+		popup.setWidth(Math.min(rootView.getWidth(), rootView.getHeight()) / 2);
+		popup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+		popup.showAtLocation(rootView, Gravity.RIGHT | Gravity.BOTTOM, 0, y);
+	}
 }

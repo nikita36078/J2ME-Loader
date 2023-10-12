@@ -2,8 +2,7 @@
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2020 Nikita Shakarun
- * Copyright 2020-2022 Yriy Kharchenko
- * Copyright 2021 Arman Jussupgaliyev
+ * Copyright 2020-2023 Yriy Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,10 +43,9 @@ public abstract class Displayable {
 	protected static int virtualWidth;
 	protected static int virtualHeight;
 
+	final ArrayList<Command> commands = new ArrayList<>();
 	CommandListener listener;
 	AbstractSoftKeysBar softBar;
-
-	private final ArrayList<Command> commands = new ArrayList<>();
 
 	private String title;
 	private int tickerMode;
@@ -162,7 +160,7 @@ public abstract class Displayable {
 		}
 	}
 
-	public int countCommands() {
+	int countCommands() {
 		return commands.size();
 	}
 

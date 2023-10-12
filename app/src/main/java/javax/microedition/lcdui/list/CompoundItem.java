@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,32 +26,33 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
 
 public class CompoundItem {
-	private final String text;
-	private final Image icon;
+	private String stringPart;
+	private Image imagePart;
 	private Drawable imageDrawable;
-	private boolean selected = false;
+	private boolean selected;
 	private Font mFont = Font.getDefaultFont();
 
-	public CompoundItem(String stringPart) {
-		this(stringPart, null);
+	public CompoundItem(String stringPart, Image imagePart) {
+		this(stringPart, imagePart, false);
 	}
 
-	public CompoundItem(String stringPart, Image imagePart) {
-		this.text = stringPart;
-		this.icon = imagePart;
+	public CompoundItem(String stringPart, Image imagePart, boolean selected) {
+		this.stringPart = stringPart;
+		this.imagePart = imagePart;
+		this.selected = selected;
 	}
 
 	public String getString() {
-		return text;
+		return stringPart;
 	}
 
 	public Image getImage() {
-		return icon;
+		return imagePart;
 	}
 
 	public Drawable getDrawable(float height) {
-		if (imageDrawable == null && icon != null) {
-			Bitmap bitmap = icon.getBitmap();
+		if (imageDrawable == null && imagePart != null) {
+			Bitmap bitmap = imagePart.getBitmap();
 			int width = Math.round(bitmap.getWidth() * height / bitmap.getHeight());
 			imageDrawable = new BitmapDrawable(bitmap);
 			imageDrawable.setBounds(0, 0, width, Math.round(height));
@@ -75,5 +77,11 @@ public class CompoundItem {
 			font = Font.getDefaultFont();
 		}
 		mFont = font;
+	}
+
+	public void set(String stringPart, Image imagePart) {
+		this.stringPart = stringPart;
+		this.imagePart = imagePart;
+		imageDrawable = null;
 	}
 }

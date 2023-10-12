@@ -1,7 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2018 Nikita Shakarun
- * Copyright 2023 Arman Jussupgaliyev
+ * Copyright 2018-2021 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,413 +19,309 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
+import android.widget.ListAdapter;
+import android.widget.SpinnerAdapter;
 
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.appcompat.widget.AppCompatSpinner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.microedition.lcdui.event.SimpleEvent;
+import javax.microedition.lcdui.list.ChoiceGroupView;
+import javax.microedition.lcdui.list.CompoundAdapter;
+import javax.microedition.lcdui.list.CompoundItem;
+import javax.microedition.lcdui.list.CompoundListAdapter;
 import javax.microedition.lcdui.list.CompoundSpinnerAdapter;
 import javax.microedition.util.ContextHolder;
 
 public class ChoiceGroup extends Item implements Choice {
-	private final ArrayList<String> strings = new ArrayList<>();
-	private final ArrayList<Image> images = new ArrayList<>();
-	private final ArrayList<CompoundButton> buttons = new ArrayList<>();
-	private final ArrayList<Boolean> selected = new ArrayList<>();
-
-	private Spinner spinner;
-	private CompoundSpinnerAdapter adapter;
-	private LinearLayout buttongroup;
-
+	private final CompoundAdapter adapter;
 	private final int choiceType;
-	private int selectedIndex = -1;
+	private final ArrayList<CompoundItem> items = new ArrayList<>();
+
+	private AdapterView<?> view;
 	private int fitPolicy;
 
 	private final SimpleEvent msgSetSelection = new SimpleEvent() {
 		@Override
 		public void process() {
-			spinner.setSelection(selectedIndex);
-		}
-	};
-
-	private final SimpleEvent msgDeleteAll = new SimpleEvent() {
-		@Override
-		public void process() {
-			if (buttongroup != null) {
-				buttons.clear();
-				buttongroup.removeAllViews();
-			} else if (spinner != null) {
-				adapter.deleteAll();
+			AdapterView<?> v = view;
+			if (v != null) {
+				v.setSelection(getSelectedIndex());
 			}
 		}
 	};
-
-	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
-		@Override
-		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			selectedIndex = checkedId;
-			notifyStateChanged();
-		}
-	}
-
-	private class CheckListener implements CompoundButton.OnCheckedChangeListener {
-		@Override
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			int index = buttonView.getId();
-
-			synchronized (selected) {
-				if (index >= 0 && index < selected.size()) {
-					selected.set(index, isChecked);
-				}
-			}
-
-			if (choiceType == MULTIPLE) {
-				notifyStateChanged();
-			}
-		}
-	}
-
-	private class SpinnerListener implements AdapterView.OnItemSelectedListener {
-		@Override
-		public void onItemSelected(AdapterView parent, View view, int position, long id) {
-			// prevent onItemSelected call after initializing
-			if (!spinnerInitialized) {
-				spinner.setSelection(selectedIndex);
-				spinnerInitialized = true;
-				return;
-			}
-			synchronized (selected) {
-				if (selectedIndex >= 0 && selectedIndex < selected.size()) {
-					selected.set(selectedIndex, Boolean.FALSE);
-				}
-
-				if (position >= 0 && position < selected.size()) {
-					selected.set(position, Boolean.TRUE);
-				}
-			}
-
-			selectedIndex = position;
-			notifyStateChanged();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView parent) {
-			synchronized (selected) {
-				if (selectedIndex >= 0 && selectedIndex < selected.size()) {
-					selected.set(selectedIndex, Boolean.FALSE);
-				}
-			}
-
-			selectedIndex = -1;
-			notifyStateChanged();
-		}
-	}
-
-	private final RadioListener radiolistener = new RadioListener();
-	private final CheckListener checklistener = new CheckListener();
-	private final SpinnerListener spinnerListener = new SpinnerListener();
-	private boolean spinnerInitialized;
 
 	public ChoiceGroup(String label, int choiceType) {
 		switch (choiceType) {
-			case POPUP:
 			case EXCLUSIVE:
 			case MULTIPLE:
-				this.choiceType = choiceType;
+				adapter = new CompoundListAdapter(choiceType, items);
 				break;
-
+			case POPUP:
+				adapter = new CompoundSpinnerAdapter(items);
+				break;
 			default:
 				throw new IllegalArgumentException("choice type " + choiceType + " is not supported");
 		}
 
-		fitPolicy = Choice.TEXT_WRAP_DEFAULT;
+		this.choiceType = choiceType;
 		setLabel(label);
 	}
 
 	public ChoiceGroup(String label, int choiceType, String[] stringElements, Image[] imageElements) {
 		this(label, choiceType);
-
-		if (stringElements != null && imageElements != null && imageElements.length != stringElements.length) {
-			throw new IllegalArgumentException("string and image arrays have different length");
+		if (stringElements == null) {
+			throw new NullPointerException("String elements array is NULL");
+		} else if (imageElements != null && imageElements.length != stringElements.length) {
+			throw new IllegalArgumentException("String and image arrays have different length");
 		}
 
-		if (stringElements != null) {
-			strings.addAll(Arrays.asList(stringElements));
+		for (int i = 0; i < stringElements.length; i++) {
+			String stringPart = stringElements[i];
+			if (stringPart == null) {
+				throw new NullPointerException("stringElements contains NULL value");
+			}
+			Image imagePart = imageElements != null ? imageElements[i] : null;
+			items.add(new CompoundItem(stringPart, imagePart));
 		}
 
-		if (imageElements != null) {
-			images.addAll(Arrays.asList(imageElements));
-		}
-
-		int size = Math.max(strings.size(), images.size());
-
-		if (size > 0) {
-			selected.addAll(Collections.nCopies(size, Boolean.FALSE));
-
-			if (strings.size() == 0) {
-				strings.addAll(Collections.nCopies(size, null));
-			}
-
-			if (images.size() == 0) {
-				images.addAll(Collections.nCopies(size, null));
-			}
-			if (choiceType != MULTIPLE) {
-				selectedIndex = 0;
-				selected.set(0, true);
-			}
+		if (choiceType != MULTIPLE && stringElements.length > 0) {
+			items.get(0).setSelected(true);
 		}
 	}
 
 	@Override
 	public int append(String stringPart, Image imagePart) {
-		synchronized (selected) {
-			int index = selected.size();
-			boolean select = index == 0 && choiceType != MULTIPLE;
-
-			strings.add(stringPart);
-			images.add(imagePart);
-			selected.add(select);
-
-			if (select) {
-				selectedIndex = index;
-				selected.set(index, true);
-			}
-			ViewHandler.postEvent(new SimpleEvent() {
-				@Override
-				public void process() {
-					if (buttongroup != null) {
-						addButton(index, stringPart, imagePart, select);
-					} else if (spinner != null) {
-						adapter.add(stringPart, imagePart);
-
-						if (select) {
-							spinner.setSelection(index);
-						}
-					}
-				}
-			});
-
-			return index;
+		if (stringPart == null) {
+			throw new NullPointerException("stringPart is NULL");
 		}
+
+		int index;
+		synchronized (items) {
+			index = items.size();
+			items.add(new CompoundItem(stringPart, imagePart, index == 0 && choiceType != MULTIPLE));
+			adapter.notifyDataSetChanged();
+		}
+		if (index == 0 && choiceType == POPUP && view != null) {
+			ViewHandler.postEvent(msgSetSelection);
+		}
+
+		return index;
 	}
 
 	@Override
 	public void delete(int elementNum) {
-		synchronized (selected) {
-			strings.remove(elementNum);
-			images.remove(elementNum);
-			selected.remove(elementNum);
-
-			if (selected.size() == 0) {
-				selectedIndex = -1;
+		int size;
+		synchronized (items) {
+			size = items.size();
+			if (elementNum < 0 || elementNum >= size) {
+				throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + size);
 			}
-
-			ViewHandler.postEvent(new SimpleEvent() {
-				@Override
-				public void process() {
-					if (buttongroup != null) {
-						buttons.remove(elementNum);
-						buttongroup.removeViewAt(elementNum);
-
-						updateButtonIDs(elementNum);
-					} else if (spinner != null) {
-						adapter.delete(elementNum);
-					}
-				}
-			});
+			items.remove(elementNum);
+			adapter.notifyDataSetChanged();
+		}
+		if (size == 1 && choiceType == POPUP && view != null) {
+			ViewHandler.postEvent(msgSetSelection);
 		}
 	}
 
 	@Override
 	public void deleteAll() {
-		synchronized (selected) {
-			strings.clear();
-			images.clear();
-			selected.clear();
-
-			selectedIndex = -1;
-
-			ViewHandler.postEvent(msgDeleteAll);
+		synchronized (items) {
+			items.clear();
+			adapter.notifyDataSetChanged();
+		}
+		if (choiceType == POPUP && view != null) {
+			ViewHandler.postEvent(msgSetSelection);
 		}
 	}
 
 	@Override
 	public Image getImage(int elementNum) {
-		return images.get(elementNum);
-	}
-
-	@Override
-	public int getSelectedFlags(boolean[] selectedArray) {
-		synchronized (selected) {
-			if (selectedArray.length < selected.size()) {
-				throw new IllegalArgumentException("return array is too short");
+		synchronized (items) {
+			if (elementNum < 0 || elementNum >= items.size()) {
+				String msg = "elementNum = " + elementNum + ", but size = " + items.size();
+				throw new IndexOutOfBoundsException(msg);
 			}
-
-			int index = 0;
-			int selectedCount = 0;
-
-			for (Boolean flag : selected) {
-				if (flag) {
-					selectedCount++;
-				}
-
-				selectedArray[index++] = flag;
-			}
-
-			while (index < selectedArray.length) {
-				selectedArray[index++] = false;
-			}
-
-			return selectedCount;
+			return items.get(elementNum).getImage();
 		}
 	}
 
 	@Override
+	public int getSelectedFlags(boolean[] selectedArray) {
+		int index;
+		int selectedCount;
+		synchronized (items) {
+			int size = items.size();
+			if (selectedArray.length < size) {
+				throw new IllegalArgumentException("return array is too short");
+			}
+
+			index = 0;
+			selectedCount = 0;
+
+			while (index < size) {
+				boolean flag = items.get(index).isSelected();
+				selectedArray[index++] = flag;
+				if (flag) {
+					selectedCount++;
+				}
+			}
+		}
+
+		while (index < selectedArray.length) {
+			selectedArray[index++] = false;
+		}
+
+		return selectedCount;
+	}
+
+	@Override
 	public int getSelectedIndex() {
-		return selectedIndex;
+		if (choiceType == MULTIPLE) {
+			return -1;
+		}
+		synchronized (items) {
+			for (int i = 0; i < items.size(); i++) {
+				if (items.get(i).isSelected()) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 	@Override
 	public String getString(int elementNum) {
-		return strings.get(elementNum);
+		synchronized (items) {
+			if (elementNum < 0 || elementNum >= items.size()) {
+				String msg = "elementNum = " + elementNum + ", but size = " + items.size();
+				throw new IndexOutOfBoundsException(msg);
+			}
+			return items.get(elementNum).getString();
+		}
 	}
 
 	@Override
 	public void insert(int elementNum, String stringPart, Image imagePart) {
-		synchronized (selected) {
-			boolean select = selected.size() == 0 && choiceType != MULTIPLE;
-
-			strings.add(elementNum, stringPart);
-			images.add(elementNum, imagePart);
-			selected.add(elementNum, select);
-
-			if (select) {
-				selectedIndex = elementNum;
+		if (stringPart == null) {
+			throw new NullPointerException("stringPart is NULL");
+		}
+		int size;
+		synchronized (items) {
+			size = items.size();
+			if (elementNum < 0 || elementNum > size) {
+				throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + size);
 			}
 
-			ViewHandler.postEvent(new SimpleEvent() {
-				@Override
-				public void process() {
-					if (buttongroup != null) {
-						addButton(elementNum, stringPart, imagePart, select);
-					} else if (spinner != null) {
-						adapter.insert(elementNum, stringPart, imagePart);
-
-						if (select) {
-							spinner.setSelection(elementNum);
-						}
-					}
-				}
-			});
+			boolean select = size == 0 && choiceType != MULTIPLE;
+			items.add(elementNum, new CompoundItem(stringPart, imagePart, select));
+			adapter.notifyDataSetChanged();
+		}
+		if (size == 0 && choiceType == POPUP && view != null) {
+			ViewHandler.postEvent(msgSetSelection);
 		}
 	}
 
 	@Override
 	public boolean isSelected(int elementNum) {
-		synchronized (selected) {
-			return selected.get(elementNum);
+		synchronized (items) {
+			if (elementNum < 0 || elementNum >= items.size()) {
+				throw new IndexOutOfBoundsException("elementNum = " + elementNum + ", but size = " + items.size());
+			}
+			return items.get(elementNum).isSelected();
 		}
 	}
 
 	@Override
 	public void set(int elementNum, String stringPart, Image imagePart) {
-		synchronized (selected) {
-			strings.set(elementNum, stringPart);
-			images.set(elementNum, imagePart);
-			ViewHandler.postEvent(new SimpleEvent() {
-				@Override
-				public void process() {
-					if (buttongroup != null) {
-						CompoundButton button = buttons.get(elementNum);
+		if (stringPart == null) {
+			throw new NullPointerException("stringPart is NULL");
+		}
+		synchronized (items) {
+			if (elementNum < 0 || elementNum >= items.size()) {
+				String msg = "elementNum = " + elementNum + ", but size = " + items.size();
+				throw new IndexOutOfBoundsException(msg);
+			}
 
-						button.setText(stringPart);
-
-						if (imagePart != null) {
-							button.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(imagePart.getBitmap()), null, null, null);
-						} else {
-							button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-						}
-
-						button.setCompoundDrawablePadding(button.getPaddingLeft());
-					} else if (adapter != null) {
-						adapter.set(elementNum, stringPart, imagePart);
-					}
-				}
-			});
+			items.get(elementNum).set(stringPart, imagePart);
+			adapter.notifyDataSetChanged();
 		}
 	}
 
 	@Override
 	public void setSelectedFlags(boolean[] selectedArray) {
-		if (choiceType == EXCLUSIVE || choiceType == POPUP) {
-			for (int i = 0; i < selectedArray.length; i++) {
+		if (selectedArray == null) {
+			throw new NullPointerException();
+		}
+
+		synchronized (items) {
+			int size = items.size();
+			if (selectedArray.length < size) {
+				throw new IllegalArgumentException("Array is too short");
+			}
+
+			if (choiceType == MULTIPLE) {
+				for (int i = 0; i < size; i++) {
+					items.get(i).setSelected(selectedArray[i]);
+				}
+				adapter.notifyDataSetChanged();
+				return;
+			}
+
+			for (int i = 0; i < size; i++) {
 				if (selectedArray[i]) {
 					setSelectedIndex(i, true);
 					return;
 				}
 			}
-		}
-
-		synchronized (selected) {
-			if (selectedArray.length < selected.size()) {
-				throw new IllegalArgumentException("array is too short");
-			}
-
-			int size = selected.size();
-
-			if (buttongroup != null) {
-				for (int i = 0; i < size; i++) {
-					selected.set(i, selectedArray[i]);
-					buttons.get(i).setChecked(selectedArray[i]);
-				}
-			} else {
-				for (int i = 0; i < size; i++) {
-					selected.set(i, selectedArray[i]);
-				}
-			}
+			setSelectedIndex(0, true);
 		}
 	}
 
 	@Override
-	public void setSelectedIndex(int elementNum, boolean flag) {
-		synchronized (selected) {
-			selected.set(elementNum, flag);
-
-			if (flag) {
-				selectedIndex = elementNum;
+	public void setSelectedIndex(int elementNum, boolean selected) {
+		synchronized (items) {
+			if (elementNum < 0 || elementNum >= items.size()) {
+				String msg = "elementNum = " + elementNum + ", but size = " + items.size();
+				throw new IndexOutOfBoundsException(msg);
 			}
-
-			if (buttongroup != null) {
-				buttons.get(elementNum).setChecked(flag);
-			} else if (spinner != null) {
-				if (flag) {
-					ViewHandler.postEvent(msgSetSelection);
+			if (choiceType != MULTIPLE) {
+				if (!selected) {
+					return;
+				}
+				for (CompoundItem item : items) {
+					item.setSelected(false);
 				}
 			}
+			items.get(elementNum).setSelected(selected);
+			adapter.notifyDataSetChanged();
+		}
+		if (choiceType == POPUP && view != null) {
+			ViewHandler.postEvent(msgSetSelection);
 		}
 	}
 
 	@Override
 	public void setFont(int elementNum, Font font) {
+		synchronized (items) {
+			if (elementNum < 0 || elementNum >= items.size()) {
+				String msg = "elementNum = " + elementNum + ", but size = " + items.size();
+				throw new IndexOutOfBoundsException(msg);
+			}
+			items.get(elementNum).setFont(font);
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
 	public Font getFont(int elementNum) {
-		return Font.getDefaultFont();
+		synchronized (items) {
+			return items.get(elementNum).getFont();
+		}
 	}
 
 	@Override
@@ -440,8 +336,8 @@ public class ChoiceGroup extends Item implements Choice {
 
 	@Override
 	public int size() {
-		synchronized (selected) {
-			return selected.size();
+		synchronized (items) {
+			return items.size();
 		}
 	}
 
@@ -450,122 +346,73 @@ public class ChoiceGroup extends Item implements Choice {
 		Context context = ContextHolder.getActivity();
 
 		switch (choiceType) {
-			case EXCLUSIVE:
-				if (buttongroup == null) {
-					buttongroup = new RadioGroup(context);
-					initButtonGroup();
+			case EXCLUSIVE, MULTIPLE -> {
+				if (view == null) {
+					ChoiceGroupView list = new ChoiceGroupView(context);
+					view = list;
+					list.setAdapter((ListAdapter) adapter);
 
-					((RadioGroup) buttongroup).setOnCheckedChangeListener(radiolistener);
+					list.setOnItemClickListener(this::onItemClick);
 				}
+				return view;
+			}
+			case POPUP -> {
+				if (view == null) {
+					AppCompatSpinner spinner = new AppCompatSpinner(context);
+					view = spinner;
+					spinner.setAdapter((SpinnerAdapter) adapter);
 
-				return buttongroup;
-
-			case MULTIPLE:
-				if (buttongroup == null) {
-					buttongroup = new LinearLayout(context);
-					initButtonGroup();
+					msgSetSelection.run();
+					view.setOnItemSelectedListener(new ItemSelectedListener());
 				}
-
-				return buttongroup;
-
-			case POPUP:
-				if (spinner == null) {
-					adapter = new CompoundSpinnerAdapter();
-
-					spinner = new AppCompatSpinner(context);
-					spinner.setAdapter(adapter);
-
-					int size = selected.size();
-
-					for (int i = 0; i < size; i++) {
-						adapter.add(strings.get(i), images.get(i));
-					}
-
-					if (selectedIndex >= 0 && selectedIndex < selected.size()) {
-						spinner.setSelection(selectedIndex);
-					}
-
-					spinnerInitialized = false;
-					spinner.setOnItemSelectedListener(spinnerListener);
-				}
-
-				return spinner;
-
-			default:
-				throw new InternalError();
+				return view;
+			}
+			default -> throw new InternalError();
 		}
 	}
 
 	@Override
 	public void clearItemContentView() {
-		buttongroup = null;
-		buttons.clear();
-
-		spinner = null;
-		adapter = null;
+		view = null;
 	}
 
-	private void addButton(int index, String stringPart, Image imagePart, boolean checked) {
-		Context context = ContextHolder.getActivity();
-
-		if (buttongroup instanceof RadioGroup) {
-			addButton(new RadioButton(context), index, stringPart, imagePart, checked);
-		} else {
-			addButton(new CheckBox(context), index, stringPart, imagePart, checked);
-		}
-	}
-
-	private void addButton(CompoundButton button, int index, String stringPart, Image imagePart, boolean checked) {
-		int w = LinearLayout.LayoutParams.MATCH_PARENT;
-		int h = LinearLayout.LayoutParams.WRAP_CONTENT;
-		button.setLayoutParams(new LinearLayout.LayoutParams(w, h));
-		button.setText(stringPart);
-
-		if (imagePart != null) {
-			button.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(imagePart.getBitmap()), null, null, null);
-		}
-
-		button.setCompoundDrawablePadding(button.getPaddingLeft());
-
-		button.setId(index);
-		button.setChecked(checked);
-		button.setOnCheckedChangeListener(checklistener);
-
-		if (index == buttons.size()) {
-			buttons.add(button);
-		} else {
-			buttons.add(index++, button);
-
-			if (buttons.get(index).getId() != index) {
-				updateButtonIDs(index);
+	void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		synchronized (items) {
+			CompoundItem item = items.get(position);
+			if (choiceType == MULTIPLE) {
+				item.setSelected(!item.isSelected());
+				adapter.notifyDataSetChanged();
+				notifyStateChanged();
+				return;
+			}
+			if (!item.isSelected()) {
+				for (CompoundItem it : items) {
+					it.setSelected(false);
+				}
+				item.setSelected(true);
+				adapter.notifyDataSetChanged();
+				notifyStateChanged();
 			}
 		}
-
-		buttongroup.addView(button);
 	}
 
-	private void updateButtonIDs(int fromIndex) {
-		int size = buttons.size();
-
-		for (int i = fromIndex; i < size; i++) {
-			buttons.get(i).setId(i);
-		}
-	}
-
-	private void initButtonGroup() {
-		buttongroup.setOrientation(LinearLayout.VERTICAL);
-
-		Context context = ContextHolder.getActivity();
-		int size = selected.size();
-
-		if (buttongroup instanceof RadioGroup) {
-			for (int i = 0; i < size; i++) {
-				addButton(new AppCompatRadioButton(context), i, strings.get(i), images.get(i), selected.get(i));
+	private class ItemSelectedListener implements AdapterView.OnItemSelectedListener {
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			synchronized (items) {
+				CompoundItem item = items.get(position);
+				if (!item.isSelected()) {
+					for (CompoundItem it : items) {
+						it.setSelected(false);
+					}
+					item.setSelected(true);
+					adapter.notifyDataSetChanged();
+				}
 			}
-		} else {
-			for (int i = 0; i < size; i++) {
-				addButton(new AppCompatCheckBox(context), i, strings.get(i), images.get(i), selected.get(i));
-			}
+			notifyStateChanged();
 		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {}
 	}
 }

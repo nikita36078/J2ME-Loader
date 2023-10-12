@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +21,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 
+import java.util.ArrayList;
+
 public class CompoundSpinnerAdapter extends CompoundAdapter implements SpinnerAdapter {
+	public CompoundSpinnerAdapter(ArrayList<CompoundItem> items) {
+		super(items);
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		return getView(position, convertView, parent, android.R.layout.simple_spinner_item, false);
+		return getView(position, convertView, parent, android.R.layout.simple_spinner_item);
 	}
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		return getView(position, convertView, parent, android.R.layout.simple_spinner_dropdown_item, true);
+		return getView(position, convertView, parent, android.R.layout.simple_spinner_dropdown_item);
 	}
 }
