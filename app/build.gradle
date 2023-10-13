@@ -116,7 +116,12 @@ android {
         }
     }
 
-    applicationVariants.all {
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
+
+    applicationVariants.configureEach {
         if (buildType.name == 'debug' && flavorName != 'midlet') {
             resValue 'string', 'app_name', 'JL-Debug'
         }
