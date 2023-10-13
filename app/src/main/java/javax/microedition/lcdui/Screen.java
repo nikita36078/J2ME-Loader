@@ -52,8 +52,10 @@ public abstract class Screen extends Displayable {
 	public void clearDisplayableView() {
 		super.clearDisplayableView();
 		layout = null;
-		softBar.closeMenu();
-		softBar = null;
+		if (softBar != null) {
+			softBar.closeMenu();
+			softBar = null;
+		}
 		clearScreenView();
 	}
 
