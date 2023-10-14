@@ -11,6 +11,7 @@ LOCAL_SRC_FILES = \
 LOCAL_CFLAGS += -O2 \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
+                    $(LOCAL_PATH)/TinySoundFont \
 
 LOCAL_LDFLAGS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 
