@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
- * Copyright 2019-2022 Yury Kharchenko
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import ru.playsoftware.j2meloader.applist.AppItem;
@@ -42,22 +43,22 @@ public interface AppItemDao {
 	Single<List<AppItem>> getAllSingle(SupportSQLiteQuery query);
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	void insert(AppItem item);
+	Completable insert(AppItem item);
 
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
-	void insert(List<AppItem> items);
+	Completable insert(List<AppItem> items);
 
 	@Update
-	void update(AppItem item);
+	Completable update(AppItem item);
 
 	@Delete
-	void delete(AppItem item);
+	Completable delete(AppItem item);
 
 	@Delete
-	void delete(List<AppItem> items);
+	Completable delete(List<AppItem> items);
 
 	@Query("DELETE FROM apps")
-	void deleteAll();
+	Completable deleteAll();
 
 	@Query("SELECT * FROM apps WHERE title = :name AND author = :vendor")
 	AppItem get(String name, String vendor);
