@@ -61,6 +61,18 @@ public class ChoiceGroup extends Item implements Choice {
 		}
 	};
 
+	private final SimpleEvent msgDeleteAll = new SimpleEvent() {
+		@Override
+		public void process() {
+			if (buttongroup != null) {
+				buttons.clear();
+				buttongroup.removeAllViews();
+			} else if (spinner != null) {
+				adapter.deleteAll();
+			}
+		}
+	};
+
 	private class RadioListener implements RadioGroup.OnCheckedChangeListener {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -191,16 +203,20 @@ public class ChoiceGroup extends Item implements Choice {
 				selectedIndex = index;
 				selected.set(index, true);
 			}
+			ViewHandler.postEvent(new SimpleEvent() {
+				@Override
+				public void process() {
+					if (buttongroup != null) {
+						addButton(index, stringPart, imagePart, select);
+					} else if (spinner != null) {
+						adapter.add(stringPart, imagePart);
 
-			if (buttongroup != null) {
-				addButton(index, stringPart, imagePart, select);
-			} else if (spinner != null) {
-				adapter.add(stringPart, imagePart);
-
-				if (select) {
-					spinner.setSelection(index);
+						if (select) {
+							spinner.setSelection(index);
+						}
+					}
 				}
-			}
+			});
 
 			return index;
 		}
@@ -217,14 +233,19 @@ public class ChoiceGroup extends Item implements Choice {
 				selectedIndex = -1;
 			}
 
-			if (buttongroup != null) {
-				buttons.remove(elementNum);
-				buttongroup.removeViewAt(elementNum);
+			ViewHandler.postEvent(new SimpleEvent() {
+				@Override
+				public void process() {
+					if (buttongroup != null) {
+						buttons.remove(elementNum);
+						buttongroup.removeViewAt(elementNum);
 
-				updateButtonIDs(elementNum);
-			} else if (spinner != null) {
-				adapter.delete(elementNum);
-			}
+						updateButtonIDs(elementNum);
+					} else if (spinner != null) {
+						adapter.delete(elementNum);
+					}
+				}
+			});
 		}
 	}
 
@@ -237,12 +258,7 @@ public class ChoiceGroup extends Item implements Choice {
 
 			selectedIndex = -1;
 
-			if (buttongroup != null) {
-				buttons.clear();
-				buttongroup.removeAllViews();
-			} else if (spinner != null) {
-				adapter.deleteAll();
-			}
+			ViewHandler.postEvent(msgDeleteAll);
 		}
 	}
 
@@ -300,15 +316,20 @@ public class ChoiceGroup extends Item implements Choice {
 				selectedIndex = elementNum;
 			}
 
-			if (buttongroup != null) {
-				addButton(elementNum, stringPart, imagePart, select);
-			} else if (spinner != null) {
-				adapter.insert(elementNum, stringPart, imagePart);
+			ViewHandler.postEvent(new SimpleEvent() {
+				@Override
+				public void process() {
+					if (buttongroup != null) {
+						addButton(elementNum, stringPart, imagePart, select);
+					} else if (spinner != null) {
+						adapter.insert(elementNum, stringPart, imagePart);
 
-				if (select) {
-					spinner.setSelection(elementNum);
+						if (select) {
+							spinner.setSelection(elementNum);
+						}
+					}
 				}
-			}
+			});
 		}
 	}
 
@@ -324,22 +345,26 @@ public class ChoiceGroup extends Item implements Choice {
 		synchronized (selected) {
 			strings.set(elementNum, stringPart);
 			images.set(elementNum, imagePart);
+			ViewHandler.postEvent(new SimpleEvent() {
+				@Override
+				public void process() {
+					if (buttongroup != null) {
+						CompoundButton button = buttons.get(elementNum);
 
-			if (buttongroup != null) {
-				CompoundButton button = buttons.get(elementNum);
+						button.setText(stringPart);
 
-				button.setText(stringPart);
+						if (imagePart != null) {
+							button.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(imagePart.getBitmap()), null, null, null);
+						} else {
+							button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+						}
 
-				if (imagePart != null) {
-					button.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(imagePart.getBitmap()), null, null, null);
-				} else {
-					button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+						button.setCompoundDrawablePadding(button.getPaddingLeft());
+					} else if (adapter != null) {
+						adapter.set(elementNum, stringPart, imagePart);
+					}
 				}
-
-				button.setCompoundDrawablePadding(button.getPaddingLeft());
-			} else if (adapter != null) {
-				adapter.set(elementNum, stringPart, imagePart);
-			}
+			});
 		}
 	}
 
