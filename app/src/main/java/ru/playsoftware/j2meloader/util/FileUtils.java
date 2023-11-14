@@ -150,12 +150,13 @@ public class FileUtils {
 	}
 
 	public static void clearDirectory(File dir) {
-		if (!dir.isDirectory()) return;
 		final File[] files = dir.listFiles();
-		if (files == null) return;
+		if (files == null) {
+			return;
+		}
 		for (File file : files) {
 			if (file.isDirectory()) {
-				deleteDirectory(dir);
+				deleteDirectory(file);
 			} else {
 				//noinspection ResultOfMethodCallIgnored
 				file.delete();

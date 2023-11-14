@@ -1,5 +1,6 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018-2021 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 package javax.microedition.shell;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,6 +27,8 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
+
+import androidx.core.content.ContextCompat;
 
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
@@ -60,6 +63,8 @@ import javax.microedition.util.ContextHolder;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.io.ConstantsKt;
+import kotlin.io.FilesKt;
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
@@ -171,12 +176,20 @@ public class MicroLoader {
 			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
 		if (BuildConfig.FULL_EMULATOR) {
 			File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
-			File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
+			File codeCacheDir = ContextCompat.getCodeCacheDir(context);
 			File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
 			if (dexOptDir.exists()) {
 				FileUtils.clearDirectory(dexOptDir);
 			} else if (!dexOptDir.mkdir()) {
 				throw new IOException("Can't create directory: [" + dexOptDir + ']');
+			}
+			if (SDK_INT >= UPSIDE_DOWN_CAKE) {
+				File dexCache = new File(dexOptDir, appDirName);
+				FilesKt.copyTo(dexSource, dexCache, true, ConstantsKt.DEFAULT_BUFFER_SIZE);
+				if (!dexCache.setReadOnly()) {
+					throw new IOException("Can't set readOnly flag for dex cache file");
+				}
+				dexSource = dexCache;
 			}
 			ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
 					dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
