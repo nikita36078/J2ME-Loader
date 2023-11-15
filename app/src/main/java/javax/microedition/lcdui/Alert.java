@@ -67,13 +67,6 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 	};
 
-	private final SimpleEvent msgDismiss = new SimpleEvent() {
-		@Override
-		public void process() {
-			alertDialog.dismiss();
-		}
-	};
-
 	private final SimpleEvent msgCommandsChanged = new SimpleEvent() {
 		@Override
 		public void process() {
@@ -163,7 +156,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public boolean finiteTimeout() {
-		return timeout > 0 && countCommands() < 2;
+		return timeout > 0 && countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND;
 	}
 
 	public AlertDialog prepareDialog() {
@@ -277,7 +270,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	@Override
 	public void clearDisplayableView() {
 		if (alertDialog != null) {
-			ViewHandler.postEvent(msgDismiss);
+			alertDialog.dismiss();
 		}
 	}
 
@@ -308,7 +301,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	void setReturnScreen(Displayable nextDisplayable) {
-		if (null != nextDisplayable && nextDisplayable instanceof Alert) {
+		if (nextDisplayable != null && nextDisplayable instanceof Alert) {
 			throw new IllegalArgumentException("Alert cannot return to Alert");
 		}
 		this.nextDisplayable = nextDisplayable;
