@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.microedition.lcdui.Command;
@@ -37,9 +38,14 @@ public abstract class AbstractSoftKeysBar {
 	protected final List<Command> commands = new ArrayList<>();
 	private PopupWindow popup;
 	private ArrayAdapter<Command> adapter;
+	protected boolean middleSoft;
+	protected Command middle;
+	protected Command right;
+	protected int menuStartIndex;
 
-	protected AbstractSoftKeysBar(Displayable target) {
+	protected AbstractSoftKeysBar(Displayable target, boolean middleSoft) {
 		this.target = target;
+		this.middleSoft = middleSoft;
 	}
 
 	public void notifyChanged() {
@@ -67,7 +73,44 @@ public abstract class AbstractSoftKeysBar {
 		return popup;
 	}
 
-	protected abstract void onCommandsChanged();
+	protected void onCommandsChanged() {
+		commands.clear();
+		Command[] arr = target.getCommands();
+		Arrays.sort(arr);
+		commands.addAll(Arrays.asList(arr));
+		middle = null;
+		right = null;
+		for (Command cmd: arr) {
+			int type = cmd.getCommandType();
+			switch(type) {
+				case Command.OK:
+					if (middle != null) continue;
+					middle = cmd;
+					commands.remove(cmd);
+					break;
+				case Command.BACK:
+				case Command.EXIT:
+					if (right != null) continue;
+					right = cmd;
+					commands.remove(cmd);
+					break;
+			}
+		}
+		int i = 0;
+		if (middle != null) {
+			commands.add(0, middle);
+			if (commands.size() == 1 || !middleSoft) {
+				middle = null;
+			} else {
+				i++;
+			}
+		}
+		if (right != null) {
+			commands.add(0, right);
+			i++;
+		}
+		menuStartIndex = i;
+	}
 
 	public void closeMenu() {
 		if (popup != null && popup.isShowing()) {

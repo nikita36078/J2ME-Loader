@@ -1265,7 +1265,7 @@ public abstract class Canvas extends Displayable {
 		private float textScale = 1.0f;
 
 		private SoftBar() {
-			super(Canvas.this);
+			super(Canvas.this, false);
 			MicroActivity activity = ContextHolder.getActivity();
 			this.overlayView = activity.binding.overlayView;
 			DisplayMetrics metrics = activity.getResources().getDisplayMetrics();
@@ -1286,27 +1286,23 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		protected void onCommandsChanged() {
-			List<Command> list = this.commands;
-			list.clear();
-			Command[] commands = target.getCommands();
-			Arrays.sort(commands);
-			list.addAll(Arrays.asList(commands));
+			super.onCommandsChanged();
 			if (!fullscreen) {
-				int size = list.size();
+				int size = commands.size();
 				switch (size) {
 					case 0:
 						break;
 					case 1:
-						leftLabel = list.get(0).getAndroidLabel();
+						leftLabel = commands.get(0).getAndroidLabel();
 						rightLabel = null;
 						break;
 					case 2:
-						leftLabel = list.get(0).getAndroidLabel();
-						rightLabel = list.get(1).getAndroidLabel();
+						leftLabel = commands.get(1).getAndroidLabel();
+						rightLabel = commands.get(0).getAndroidLabel();
 						break;
 					default:
-						leftLabel = list.get(0).getAndroidLabel();
-						rightLabel = overlayView.getResources().getString(R.string.cmd_menu);
+						leftLabel = overlayView.getResources().getString(R.string.cmd_menu);
+						rightLabel = commands.get(0).getAndroidLabel();
 				}
 			}
 			overlayView.postInvalidate();
@@ -1318,15 +1314,19 @@ public abstract class Canvas extends Displayable {
 				return false;
 			}
 			if (fullscreen) {
-				if (size == 1) {
-					return false;
-				}
 				if (listener != null) {
 					showPopup();
+					return true;
 				}
+				return false;
+			}
+			if (size > 2) {
+				showPopup();
 				return true;
 			}
-			fireCommandAction(commands.get(0));
+			if (listener != null) {
+				fireCommandAction(commands.get(size > 1 ? 1 : 0));
+			}
 			return true;
 		}
 
@@ -1335,18 +1335,18 @@ public abstract class Canvas extends Displayable {
 			if (size == 0) {
 				return false;
 			}
-			if (fullscreen && listener == null) {
-				return false;
-			}
-			if (fullscreen || size > 2) {
-				showPopup();
-				return true;
-			}
-			if (size == 1) {
+			if (fullscreen) {
+				if (size == 1) {
+					return false;
+				}
+				if (listener != null) {
+					showPopup();
+					return true;
+				}
 				return false;
 			}
 			if (listener != null) {
-				fireCommandAction(commands.get(1));
+				fireCommandAction(commands.get(0));
 			}
 			return true;
 		}
