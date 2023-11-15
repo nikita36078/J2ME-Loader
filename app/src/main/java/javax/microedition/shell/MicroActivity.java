@@ -661,7 +661,7 @@ public class MicroActivity extends AppCompatActivity {
 			if (current != null) {
 				current.clearDisplayableView();
 			}
-			if(next instanceof Alert) {
+			if (next instanceof Alert) {
 				return;
 			}
 			binding.displayableContainer.removeAllViews();

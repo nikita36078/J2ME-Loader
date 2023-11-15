@@ -64,7 +64,7 @@ public class Display {
 	public static Display getDisplay(MIDlet midlet) {
 		if (instance == null && midlet != null) {
 			String nokiaUiEnhancement = midlet.getAppProperty(Descriptor.NOKIA_UI_ENHANCEMENT);
-			if(nokiaUiEnhancement != null) {
+			if (nokiaUiEnhancement != null) {
 				multiTouchSupported = nokiaUiEnhancement.contains("EnableMultiPointTouchEvents");
 			}
 			instance = new Display();

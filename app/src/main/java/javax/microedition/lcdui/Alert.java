@@ -276,7 +276,6 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	@Override
 	public void clearDisplayableView() {
-		System.out.println("clearScreenView");
 		if (alertDialog != null) {
 			ViewHandler.postEvent(msgDismiss);
 		}
@@ -309,7 +308,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	void setReturnScreen(Displayable nextDisplayable) {
-		if(null != nextDisplayable && nextDisplayable instanceof Alert) {
+		if (null != nextDisplayable && nextDisplayable instanceof Alert) {
 			throw new IllegalArgumentException("Alert cannot return to Alert");
 		}
 		this.nextDisplayable = nextDisplayable;
