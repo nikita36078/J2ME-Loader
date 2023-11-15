@@ -47,8 +47,6 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	private int timeout;
 	private Gauge indicator;
 	private AlertDialog alertDialog;
-
-	private Form form;
 	private Displayable nextDisplayable;
 
 	private Command[] commands;
@@ -66,6 +64,13 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		public void process() {
 			BitmapDrawable bitmapDrawable = new BitmapDrawable(image.getBitmap());
 			alertDialog.setIcon(bitmapDrawable);
+		}
+	};
+
+	private final SimpleEvent msgDismiss = new SimpleEvent() {
+		@Override
+		public void process() {
+			alertDialog.dismiss();
 		}
 	};
 
@@ -265,23 +270,25 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	@Override
-	public View getScreenView() {
-		if (form == null) {
-			form = new Form(getTitle());
+	public View getDisplayableView() {
+		return null;
+	}
 
-			form.append(image);
-			form.append(text);
+	@Override
+	public void clearDisplayableView() {
+		System.out.println("clearScreenView");
+		if (alertDialog != null) {
+			ViewHandler.postEvent(msgDismiss);
 		}
+	}
 
-		return form.getDisplayableView();
+	@Override
+	public View getScreenView() {
+		return null;
 	}
 
 	@Override
 	public void clearScreenView() {
-		if (form != null) {
-			form.clearDisplayableView();
-			form = null;
-		}
 	}
 
 	@Override
@@ -301,12 +308,19 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 	}
 
-	void setNextDisplayable(Displayable nextDisplayable) {
+	void setReturnScreen(Displayable nextDisplayable) {
+		if(null != nextDisplayable && nextDisplayable instanceof Alert) {
+			throw new IllegalArgumentException("Alert cannot return to Alert");
+		}
 		this.nextDisplayable = nextDisplayable;
 	}
 
-	private void dismiss() {
+	void dismiss() {
+		if (alertDialog == null) {
+			return;
+		}
 		Display.getDisplay(null).setCurrent(nextDisplayable);
+		nextDisplayable = null;
 		alertDialog = null;
 	}
 }

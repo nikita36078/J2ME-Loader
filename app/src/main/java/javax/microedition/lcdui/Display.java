@@ -113,22 +113,21 @@ public class Display {
 		}
 		if (disp instanceof Alert) {
 			Alert alert = (Alert) disp;
-			alert.setNextDisplayable(current);
+			alert.setReturnScreen(current);
 			showAlert(alert);
-		} else {
-			current = disp;
-			showCurrent();
 		}
+		current = disp;
+		showCurrent();
 	}
 
 	public void setCurrent(final Alert alert, Displayable disp) {
 		if (disp == null) {
 			throw new NullPointerException();
-		} else if (disp instanceof Alert) {
-			throw new IllegalArgumentException();
 		}
-		alert.setNextDisplayable(disp);
+		alert.setReturnScreen(disp);
 		showAlert(alert);
+		current = alert;
+		showCurrent();
 	}
 
 	private void showAlert(Alert alert) {
@@ -136,7 +135,7 @@ public class Display {
 			AlertDialog alertDialog = alert.prepareDialog();
 			alertDialog.show();
 			if (alert.finiteTimeout()) {
-				ViewHandler.postDelayed(alertDialog::dismiss, alert.getTimeout());
+				ViewHandler.postDelayed(alert::dismiss, alert.getTimeout());
 			}
 		});
 	}
