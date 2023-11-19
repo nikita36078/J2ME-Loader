@@ -66,13 +66,17 @@ namespace mmapi {
         state = CLOSED;
     }
 
+    int64_t BasePlayer::getMediaTime() {
+        return playTime;
+    }
+
     int64_t BasePlayer::setMediaTime(int64_t now) {
         if (now < 0) {
             now = 0;
         } else if (now > duration) {
             now = duration;
         }
-        timeToSet = now;
+        seekTime = now;
         return now;
     }
 

@@ -72,7 +72,7 @@ namespace mmapi {
 
         void Player::deallocate() {
             BasePlayer::deallocate();
-            timeToSet = 0;
+            seekTime = 0;
         }
 
         void Player::close() {
@@ -83,10 +83,6 @@ namespace mmapi {
             tsf_close(synth);
             media = nullptr;
             synth = nullptr;
-        }
-
-        int64_t Player::getMediaTime() {
-            return playTime;
         }
 
         int32_t Player::setVolume(int32_t level) {
@@ -167,9 +163,9 @@ namespace mmapi {
         oboe::DataCallbackResult
         Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
             memset(audioData, 0, sizeof(float) * NUM_CHANNELS * numFrames);
-            if (currentMsg == nullptr) {
+            if (seekTime == -1 && currentMsg == nullptr) {
+                seekTime = 0;
                 if (looping == -1 || (--loopCount) > 0) {
-                    timeToSet = 0;
                     playerListener->postEvent(RESTART, playTime);
                 } else {
                     state = PREFETCHED;
@@ -178,8 +174,8 @@ namespace mmapi {
                 }
             }
 
-            if (timeToSet != -1) {
-                if (timeToSet < playTime) {
+            if (seekTime != -1) {
+                if (seekTime < playTime) {
                     tsf_reset(synth);
                     //Initialize preset on special 10th MIDI channel to use percussion sound bank (128) if available
                     tsf_channel_set_bank_preset(synth, 9, 128, 0);
@@ -187,8 +183,8 @@ namespace mmapi {
                 } else {
                     tsf_note_off_all(synth);
                 }
-                playTime = timeToSet - 1;
-                timeToSet = -1;
+                playTime = seekTime - 1;
+                seekTime = -1;
                 processEvents(false);
             }
             //Number of samples to process

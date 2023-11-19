@@ -88,8 +88,8 @@ namespace mmapi {
 
         void Player::deallocate() {
             BasePlayer::deallocate();
-            if (media != nullptr) {
-                EAS_Locate(easHandle, media, 0, EAS_FALSE);
+            if (file != nullptr) {
+                seekTime = 0;
             }
         }
 
@@ -107,29 +107,17 @@ namespace mmapi {
         }
 
         int64_t Player::getMediaTime() {
-            long pTime = -1;
-            if (media == nullptr || file == nullptr) {
-                return pTime;
+            if (file == nullptr) {
+                return -1;
             }
-            EAS_RESULT result = EAS_GetLocation(easHandle, media, &pTime);
-            if (result != EAS_SUCCESS) {
-                ALOGE("%s: EAS_GetLocation return %s", __func__, EAS_GetErrorString(result));
-                return pTime;
-            }
-            return pTime * 1000LL;
+            return BasePlayer::getMediaTime();
         }
 
         int64_t Player::setMediaTime(int64_t now) {
-            int64_t time = BasePlayer::setMediaTime(now);
-            if (time >= 0 && state != STARTED && media != nullptr) {
-                EAS_I32 ms = static_cast<EAS_I32>(timeToSet / 1000LL);
-                EAS_RESULT result = EAS_Locate(easHandle, media, ms, EAS_FALSE);
-                if (result != EAS_SUCCESS) {
-                    ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
-                }
-                timeToSet = -1;
+            if (file == nullptr) {
+                return -1;
             }
-            return time;
+            return BasePlayer::setMediaTime(now);
         }
 
         int32_t Player::setVolume(int32_t level) {
@@ -241,27 +229,28 @@ namespace mmapi {
         oboe::DataCallbackResult
         Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
             memset(audioData, 0, sizeof(EAS_PCM) * easConfig->numChannels * numFrames);
-            EAS_STATE easState = EAS_STATE_PLAY;
-            EAS_State(easHandle, media, &easState);
-            if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
-                int64_t playTime = getMediaTime();
-                if (looping == -1 || (--loopCount) > 0) {
-                    timeToSet = 0;
-                    playerListener->postEvent(RESTART, playTime);
-                } else {
-                    state = PREFETCHED;
-                    playerListener->postEvent(STOP, playTime);
-                    return oboe::DataCallbackResult::Stop;
+            if (seekTime == -1) {
+                EAS_STATE easState = EAS_STATE_PLAY;
+                EAS_State(easHandle, media, &easState);
+                if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
+                    seekTime = 0;
+                    if (looping == -1 || (--loopCount) > 0) {
+                        playerListener->postEvent(RESTART, playTime);
+                    } else {
+                        state = PREFETCHED;
+                        playerListener->postEvent(STOP, playTime);
+                        return oboe::DataCallbackResult::Stop;
+                    }
                 }
             }
 
-            if (timeToSet != -1) {
-                EAS_I32 ms = static_cast<EAS_I32>(timeToSet / 1000LL);
+            if (seekTime != -1) {
+                EAS_I32 ms = static_cast<EAS_I32>(seekTime / 1000LL);
                 EAS_RESULT result = EAS_Locate(easHandle, media, ms, EAS_FALSE);
                 if (result != EAS_SUCCESS) {
                     ALOGE("%s: EAS_Locate() return %s", __func__, EAS_GetErrorString(result));
                 }
-                timeToSet = -1;
+                seekTime = -1;
             }
 
             auto *p = static_cast<EAS_PCM *>(audioData);
@@ -280,6 +269,15 @@ namespace mmapi {
                 }
                 p += numRendered * easConfig->numChannels;
                 numFramesOutput += numRendered;
+            }
+
+            if (file != nullptr) {
+                EAS_I32 pTime = -1;
+                result = EAS_GetLocation(easHandle, media, &pTime);
+                if (result != EAS_SUCCESS) {
+                    ALOGE("%s: EAS_GetLocation return %s", __func__, EAS_GetErrorString(result));
+                }
+                playTime = pTime != -1 ? pTime * 1000LL : -1;
             }
             return oboe::DataCallbackResult::Continue;
         }

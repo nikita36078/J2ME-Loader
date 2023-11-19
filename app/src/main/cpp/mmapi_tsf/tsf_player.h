@@ -18,7 +18,6 @@ namespace mmapi {
 
             tsf *synth;
             tml_message *media;
-            int64_t playTime = 0;
             tml_message *currentMsg;
 
         public:
@@ -27,7 +26,6 @@ namespace mmapi {
 
             void deallocate() override;
             void close() override;
-            int64_t getMediaTime() override;
             oboe::Result prefetch() override;
             int32_t setVolume(int32_t level) override;
             int32_t setDataSource(util::JByteArrayPtr *data);
