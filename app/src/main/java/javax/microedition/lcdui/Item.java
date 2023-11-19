@@ -72,7 +72,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	int preferredHeight = -1;
 	private int layoutmode;
 
-	private Form owner;
+	private Screen owner;
 
 	final ArrayList<Command> commands = new ArrayList<>();
 	ItemCommandListener listener = null;
@@ -118,6 +118,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setLabel(String value) {
+		if (owner instanceof Alert) {
+			throw new IllegalStateException("Item is owned by Alert");
+		}
 		if (layout != null) {
 			if (label == null && value != null) {
 				labelmode = LABEL_SHOW;
@@ -137,12 +140,12 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		return label;
 	}
 
-	public void setOwnerForm(Form form) {
-		owner = form;
+	public void setOwner(Screen owner) {
+		this.owner = owner;
 		clearItemView();
 	}
 
-	public Form getOwnerForm() {
+	public Screen getOwner() {
 		if (owner == null) {
 			throw new IllegalStateException("call setOwnerForm() before calling getOwnerForm()");
 		}
@@ -150,17 +153,22 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		return owner;
 	}
 
-	public boolean hasOwnerForm() {
+	public boolean hasOwner() {
 		return owner != null;
 	}
 
 	public void notifyStateChanged() {
-		if (owner != null) {
-			owner.notifyItemStateChanged(this);
+		if (owner instanceof Form form) {
+			form.notifyItemStateChanged(this);
+		} else {
+			throw new IllegalStateException("Item is not owned by a Form");
 		}
 	}
 
 	public void setLayout(int value) {
+		if (owner instanceof Alert) {
+			throw new IllegalStateException("Item is owned by Alert");
+		}
 		layoutmode = value;
 	}
 
@@ -269,6 +277,8 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	public void addCommand(Command cmd) {
 		if (cmd == null) {
 			throw new NullPointerException();
+		} else if (owner instanceof Alert) {
+			throw new IllegalStateException("Item is owned by Alert");
 		}
 		if (!commands.contains(cmd)) {
 			commands.add(cmd);
@@ -283,6 +293,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setDefaultCommand(Command cmd) {
+		if (owner instanceof Alert) {
+			throw new IllegalStateException("Item is owned by Alert");
+		}
 		defaultCommand = cmd;
 		if (cmd == null) {
 			return;
@@ -292,6 +305,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setItemCommandListener(ItemCommandListener listener) {
+		if (owner instanceof Alert) {
+			throw new IllegalStateException("Item is owned by Alert");
+		}
 		this.listener = listener;
 
 		if (layout != null) {
@@ -302,6 +318,8 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	public void setPreferredSize(int width, int height) {
 		if (width < -1 || height < -1) {
 			throw new IllegalArgumentException();
+		} else if (owner instanceof Alert) {
+			throw new IllegalStateException("Item is owned by Alert");
 		}
 		preferredWidth = width;
 		preferredHeight = height;

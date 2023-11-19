@@ -165,8 +165,8 @@ public class Display {
 	}
 
 	public void setCurrentItem(Item item) {
-		if (item.hasOwnerForm()) {
-			setCurrent(item.getOwnerForm());
+		if (item.hasOwner()) {
+			setCurrent(item.getOwner());
 		}
 	}
 

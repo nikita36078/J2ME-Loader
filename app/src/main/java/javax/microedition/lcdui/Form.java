@@ -2,7 +2,6 @@
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2018 Nikita Shakarun
- * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,13 +53,13 @@ public class Form extends Screen {
 			if (item == null) {
 				throw new NullPointerException("Item at index " + i + " is null");
 			}
-			if (item.hasOwnerForm()) {
+			if (item.hasOwner()) {
 				throw new IllegalStateException("Item at index " + i + " is already owned by another container");
 			}
 		}
 		for (Item item : elements) {
 			items.add(item);
-			item.setOwnerForm(this);
+			item.setOwner(this);
 		}
 	}
 
@@ -80,78 +79,65 @@ public class Form extends Screen {
 		return append(new ImageItem(null, img, ImageItem.LAYOUT_DEFAULT, null));
 	}
 
-	public int append(Item item) {
-		if (item.hasOwnerForm()) {
+	public int append(final Item item) {
+		if (item.hasOwner()) {
 			throw new IllegalStateException();
 		}
 
 		items.add(item);
-		item.setOwnerForm(this);
-		ViewHandler.postEvent(() -> {
-			LinearLayout layout = this.layout;
-			if (layout != null) {
-				layout.addView(item.getItemView());
-			}
-		});
+		item.setOwner(this);
+		if (layout != null) {
+			ViewHandler.postEvent(() -> layout.addView(item.getItemView()));
+		}
 		return items.size() - 1;
 	}
 
-	public void insert(int index, Item item) {
-		if (item.hasOwnerForm()) {
+	public void insert(final int index, final Item item) {
+		if (item.hasOwner()) {
 			throw new IllegalStateException();
 		}
 
 		items.add(index, item);
-		item.setOwnerForm(this);
-		ViewHandler.postEvent(() -> {
-			LinearLayout layout = this.layout;
-			if (layout != null) {
-				layout.addView(item.getItemView(), index);
-			}
-		});
+		item.setOwner(this);
+		if (layout != null) {
+			ViewHandler.postEvent(() -> layout.addView(item.getItemView(), index));
+		}
 	}
 
-	public void set(int index, Item item) {
-		if (item.hasOwnerForm()) {
+	public void set(final int index, final Item item) {
+		if (item.hasOwner()) {
 			throw new IllegalStateException();
 		}
 
-		items.set(index, item).setOwnerForm(null);
-		item.setOwnerForm(this);
-		ViewHandler.postEvent(() -> {
-			LinearLayout layout = this.layout;
-			if (layout != null) {
+		items.set(index, item).setOwner(null);
+		item.setOwner(this);
+		if (layout != null) {
+			ViewHandler.postEvent(() -> {
 				View v = item.getItemView();
 				layout.removeViewAt(index);
 				layout.addView(v, index);
-			}
-		});
+			});
+		}
 	}
 
-	public void delete(int index) {
-		items.remove(index).setOwnerForm(null);
+	public void delete(final int index) {
+		items.remove(index).setOwner(null);
 
-		ViewHandler.postEvent(() -> {
-			LinearLayout layout = this.layout;
-			if (layout != null) {
-				layout.removeViewAt(index);
-			}
-		});
+		if (layout != null) {
+			ViewHandler.postEvent(() -> layout.removeViewAt(index));
+		}
 	}
 
 	public void deleteAll() {
 		for (Item item : items) {
-			item.setOwnerForm(null);
+			item.setOwner(null);
 		}
 
 		items.clear();
 
-		ViewHandler.postEvent(() -> {
-			LinearLayout layout = this.layout;
-			if (layout != null) {
-				layout.removeAllViews();
-			}
-		});
+		if (layout != null) {
+			ViewHandler.postEvent(() -> layout.removeAllViews());
+		}
 	}
 
 	public void setItemStateListener(ItemStateListener listener) {
@@ -203,5 +189,6 @@ public class Form extends Screen {
 				return;
 			}
 		}
+
 	}
 }

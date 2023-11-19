@@ -129,15 +129,21 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public void setIndicator(Gauge indicator) {
-		if (indicator != null && (indicator.isInteractive() ||
-				indicator.hasOwnerForm() ||
-				indicator.commands.size() > 0 ||
-				indicator.listener != null ||
-				indicator.getLabel() != null ||
-				indicator.preferredWidth != -1 ||
-				indicator.preferredHeight != -1 ||
-				indicator.getLayout() != Item.LAYOUT_DEFAULT)) {
-			throw new IllegalArgumentException();
+		if (indicator != null) {
+			if (indicator.isInteractive() ||
+					indicator.hasOwner() ||
+					indicator.commands.size() > 0 ||
+					indicator.listener != null ||
+					indicator.getLabel() != null ||
+					indicator.preferredWidth != -1 ||
+					indicator.preferredHeight != -1 ||
+					indicator.getLayout() != Item.LAYOUT_DEFAULT) {
+				throw new IllegalArgumentException();
+			}
+			indicator.setOwner(this);
+		}
+		if (this.indicator != null) {
+			this.indicator.setOwner(null);
 		}
 		if (indicator == null) {
 			if (this.indicator != null) {
