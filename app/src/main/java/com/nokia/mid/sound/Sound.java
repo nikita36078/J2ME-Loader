@@ -46,12 +46,9 @@ public class Sound {
 	private Player player;
 	private int state;
 	private SoundListener soundListener;
-	private PlayerListener playerListener = new PlayerListener() {
-		@Override
-		public void playerUpdate(Player player, String event, Object eventData) {
-			if ("endOfMedia".equals(event)) {
-				Sound.this.postEvent(SOUND_STOPPED);
-			}
+	private PlayerListener playerListener = (player, event, eventData) -> {
+		if ("endOfMedia".equals(event)) {
+			postEvent(SOUND_STOPPED);
 		}
 	};
 
