@@ -22,6 +22,7 @@ import java.io.IOException;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
+import javax.microedition.media.PlayerListener;
 import javax.microedition.media.tone.MidiToneConstants;
 import javax.microedition.media.tone.ToneManager;
 
@@ -45,6 +46,11 @@ public class Sound {
 	private Player player;
 	private int state;
 	private SoundListener soundListener;
+	private PlayerListener playerListener = (player, event, eventData) -> {
+		if ("endOfMedia".equals(event)) {
+			postEvent(SOUND_STOPPED);
+		}
+	};
 
 	public Sound(int freq, long duration) {
 		init(freq, duration);
@@ -108,6 +114,7 @@ public class Sound {
 				player.close();
 			}
 			player = Manager.createPlayer(new ByteArrayInputStream(data), mime);
+			player.addPlayerListener(playerListener);
 			state = SOUND_STOPPED;
 		} catch (IOException e) {
 			e.printStackTrace();
