@@ -1,6 +1,5 @@
 /*
  * Copyright 2017 Nikita Shakarun
- * Copyright 2023 Arman Jussupgaliyev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +16,24 @@
 
 package com.nokia.mid.sound;
 
+import static javax.microedition.media.PlayerListener.*;
+
+import android.util.Log;
+
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 import javax.microedition.media.Manager;
-import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
 import javax.microedition.media.tone.MidiToneConstants;
 import javax.microedition.media.tone.ToneManager;
 
 public class Sound {
+	private static final String TAG = "Nokia.Sound";
+
 	public static final int FORMAT_TONE = 1;
 	public static final int FORMAT_WAV = 5;
+
 	public static final int SOUND_PLAYING = 0;
 	public static final int SOUND_STOPPED = 1;
 	public static final int SOUND_UNINITIALIZED = 3;
@@ -44,14 +48,19 @@ public class Sound {
 			3839, 4067, 4309, 4565, 4837, 5125, 5429, 5752, 6094, 6456, 6840, 7247, 7678, 8134,
 			8618, 9130, 9673, 10249, 10858, 11504, 12188, 12912
 	};
+
+	private final PlayerListener playerListener = (player, event, eventData) -> {
+		switch (event) {
+			case END_OF_MEDIA, STOPPED -> postEvent(SOUND_STOPPED);
+			case STARTED -> postEvent(SOUND_PLAYING);
+			case CLOSED -> postEvent(SOUND_UNINITIALIZED);
+		}
+	};
+
+	private SoundListener soundListener;
 	private Player player;
 	private int state;
 	private SoundListener soundListener;
-	private PlayerListener playerListener = (player, event, eventData) -> {
-		if ("endOfMedia".equals(event)) {
-			postEvent(SOUND_STOPPED);
-		}
-	};
 
 	public Sound(int freq, long duration) {
 		init(freq, duration);
@@ -91,82 +100,79 @@ public class Sound {
 			}
 			int note = convertFreqToNote(freq);
 			player = ToneManager.createPlayer(note, (int) duration, MidiToneConstants.TONE_MAX_VOLUME);
+			player.addPlayerListener(playerListener);
 			state = SOUND_STOPPED;
-		} catch (MediaException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG, "init(freq): ", e);
+			state = SOUND_UNINITIALIZED;
 		}
 	}
 
 	public void init(byte[] data, int type) {
+		if (data == null) {
+			throw new NullPointerException();
+		}
 		try {
-			String mime;
-			switch (type) {
-				case FORMAT_TONE:
+			String mime = switch (type) {
+				case FORMAT_TONE -> {
 					ToneVerifier.fix(data);
-					mime = "audio/midi";
-					break;
-				case FORMAT_WAV:
-					mime = "audio/wav";
-					break;
-				default:
-					throw new IllegalArgumentException();
-			}
+					yield "audio/midi";
+				}
+				case FORMAT_WAV -> "audio/wav";
+				default -> throw new IllegalArgumentException();
+			};
 			if (player != null) {
 				player.close();
 			}
 			player = Manager.createPlayer(new ByteArrayInputStream(data), mime);
 			player.addPlayerListener(playerListener);
 			state = SOUND_STOPPED;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (MediaException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			Log.e(TAG, "init(byte[]): ", e);
+			state = SOUND_UNINITIALIZED;
 		}
 	}
 
 	public void play(int loop) {
 		try {
-			if (loop == 0) {
-				loop = -1;
-			}
 			player.stop();
-			player.setLoopCount(loop);
+			player.setLoopCount(loop == 0 ? -1 : loop);
 			player.prefetch();
 			player.setMediaTime(0);
 			player.start();
-			postEvent(SOUND_PLAYING);
-		} catch (MediaException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG, "play: ", e);
 		}
 	}
 
 	public void release() {
-		player.close();
-		postEvent(SOUND_UNINITIALIZED);
+		try {
+			player.close();
+		} catch (Exception e) {
+			Log.e(TAG, "release: ", e);
+		}
 	}
 
 	public void resume() {
 		try {
 			player.start();
-			postEvent(SOUND_PLAYING);
-		} catch (MediaException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG, "resume: ", e);
 		}
 	}
 
 	public void setGain(int i) {
 	}
 
-	public void setSoundListener(SoundListener soundListener) {
-		this.soundListener = soundListener;
+	public void setSoundListener(SoundListener listener) {
+		soundListener = listener;
 	}
 
 	public void stop() {
 		try {
 			player.stop();
-			postEvent(SOUND_STOPPED);
-		} catch (MediaException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG, "stop: ", e);
 		}
 	}
 
@@ -177,7 +183,7 @@ public class Sound {
 		}
 	}
 
-	public static int convertFreqToNote(int freq) {
+	private static int convertFreqToNote(int freq) {
 		int low = 0;
 		int high = FREQ_TABLE.length - 1;
 
