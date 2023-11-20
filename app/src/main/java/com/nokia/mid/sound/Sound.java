@@ -1,5 +1,6 @@
 /*
- * Copyright 2017 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2021-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import javax.microedition.media.Manager;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
+import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.tone.MidiToneConstants;
 import javax.microedition.media.tone.ToneManager;
 
@@ -60,7 +62,7 @@ public class Sound {
 	private SoundListener soundListener;
 	private Player player;
 	private int state;
-	private SoundListener soundListener;
+	private int gain = 255;
 
 	public Sound(int freq, long duration) {
 		init(freq, duration);
@@ -79,7 +81,7 @@ public class Sound {
 	}
 
 	public int getGain() {
-		return -1;
+		return gain;
 	}
 
 	public int getState() {
@@ -100,6 +102,9 @@ public class Sound {
 			}
 			int note = convertFreqToNote(freq);
 			player = ToneManager.createPlayer(note, (int) duration, MidiToneConstants.TONE_MAX_VOLUME);
+			if (player instanceof VolumeControl control) {
+				control.setLevel(gain * 100 / 255);
+			}
 			player.addPlayerListener(playerListener);
 			state = SOUND_STOPPED;
 		} catch (Exception e) {
@@ -125,6 +130,9 @@ public class Sound {
 				player.close();
 			}
 			player = Manager.createPlayer(new ByteArrayInputStream(data), mime);
+			if (player instanceof VolumeControl control) {
+				control.setLevel(gain * 100 / 255);
+			}
 			player.addPlayerListener(playerListener);
 			state = SOUND_STOPPED;
 		} catch (Exception e) {
@@ -161,7 +169,16 @@ public class Sound {
 		}
 	}
 
-	public void setGain(int i) {
+	public void setGain(int gain) {
+		if (gain < 0) {
+			gain = 0;
+		} else if (gain > 255) {
+			gain = 255;
+		}
+		this.gain = gain;
+		if (player instanceof VolumeControl control) {
+			control.setLevel(gain * 100 / 255);
+		}
 	}
 
 	public void setSoundListener(SoundListener listener) {
