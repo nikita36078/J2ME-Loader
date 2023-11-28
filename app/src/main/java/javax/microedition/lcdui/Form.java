@@ -2,6 +2,7 @@
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,53 +80,63 @@ public class Form extends Screen {
 		return append(new ImageItem(null, img, ImageItem.LAYOUT_DEFAULT, null));
 	}
 
-	public int append(final Item item) {
+	public int append(Item item) {
 		if (item.hasOwner()) {
 			throw new IllegalStateException();
 		}
 
 		items.add(item);
 		item.setOwner(this);
-		if (layout != null) {
-			ViewHandler.postEvent(() -> layout.addView(item.getItemView()));
-		}
+		ViewHandler.postEvent(() -> {
+			LinearLayout layout = this.layout;
+			if (layout != null) {
+				layout.addView(item.getItemView());
+			}
+		});
 		return items.size() - 1;
 	}
 
-	public void insert(final int index, final Item item) {
+	public void insert(int index, Item item) {
 		if (item.hasOwner()) {
 			throw new IllegalStateException();
 		}
 
 		items.add(index, item);
 		item.setOwner(this);
-		if (layout != null) {
-			ViewHandler.postEvent(() -> layout.addView(item.getItemView(), index));
-		}
+		ViewHandler.postEvent(() -> {
+			LinearLayout layout = this.layout;
+			if (layout != null) {
+				layout.addView(item.getItemView(), index);
+			}
+		});
 	}
 
-	public void set(final int index, final Item item) {
+	public void set(int index, Item item) {
 		if (item.hasOwner()) {
 			throw new IllegalStateException();
 		}
 
 		items.set(index, item).setOwner(null);
 		item.setOwner(this);
-		if (layout != null) {
-			ViewHandler.postEvent(() -> {
+		ViewHandler.postEvent(() -> {
+			LinearLayout layout = this.layout;
+			if (layout != null) {
 				View v = item.getItemView();
 				layout.removeViewAt(index);
 				layout.addView(v, index);
-			});
-		}
+			}
+		});
 	}
 
-	public void delete(final int index) {
+	public void delete(int index) {
 		items.remove(index).setOwner(null);
 
-		if (layout != null) {
-			ViewHandler.postEvent(() -> layout.removeViewAt(index));
-		}
+		ViewHandler.postEvent(() -> {
+			LinearLayout layout = this.layout;
+			if (layout != null) {
+				layout.removeViewAt(index);
+			}
+		});
 	}
 
 	public void deleteAll() {
@@ -135,9 +146,12 @@ public class Form extends Screen {
 
 		items.clear();
 
-		if (layout != null) {
-			ViewHandler.postEvent(() -> layout.removeAllViews());
-		}
+		ViewHandler.postEvent(() -> {
+			LinearLayout layout = this.layout;
+			if (layout != null) {
+				layout.removeAllViews();
+			}
+		});
 	}
 
 	public void setItemStateListener(ItemStateListener listener) {
@@ -189,6 +203,5 @@ public class Form extends Screen {
 				return;
 			}
 		}
-
 	}
 }
