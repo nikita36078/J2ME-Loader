@@ -449,7 +449,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 						int r = colors[si] >> 12 & 0x0F00;
 						int g = colors[si] >> 8 & 0x00F0;
 						int b = colors[si] >> 4 & 0x000F;
-						colors[offset++] = (short) (a | r | g | b);
+						pixels[offset++] = (short) (a | r | g | b);
 					}
 				}
 				break;
@@ -461,7 +461,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 						int r = colors[si] >> 12 & 0x0F00;
 						int g = colors[si] >> 8 & 0x00F0;
 						int b = colors[si] >> 4 & 0x000F;
-						colors[offset++] = (short) (r | g | b);
+						pixels[offset++] = (short) (r | g | b);
 					}
 				}
 				break;
@@ -473,7 +473,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 						int r = colors[si] >> 8 & 0xF800;
 						int g = colors[si] >> 5 & 0x07E0;
 						int b = colors[si] >> 3 & 0x001F;
-						colors[offset++] = (short) (r | g | b);
+						pixels[offset++] = (short) (r | g | b);
 					}
 				}
 				break;
