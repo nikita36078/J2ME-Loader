@@ -51,6 +51,7 @@
         <item>Siemens</item>
         <item>Motorola</item>
         <item>Custom</item>
+        <item>Nokia E62</item>
     </string-array>
     <string-array name="pref_graphics_mode_entries" tools:ignore="InconsistentArrays">
         <item>@string/pref_graphics_software</item>
