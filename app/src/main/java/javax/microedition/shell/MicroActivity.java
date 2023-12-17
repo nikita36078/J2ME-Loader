@@ -66,6 +66,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 
+import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
@@ -659,6 +660,9 @@ public class MicroActivity extends AppCompatActivity {
 			closeOptionsMenu();
 			if (current != null) {
 				current.clearDisplayableView();
+			}
+			if (next instanceof Alert) {
+				return;
 			}
 			binding.displayableContainer.removeAllViews();
 			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());

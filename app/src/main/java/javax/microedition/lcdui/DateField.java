@@ -71,6 +71,7 @@ public class DateField extends Item {
 		@Override
 		public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			calendar.set(year, monthOfYear, dayOfMonth);
+			notifyStateChanged();
 		}
 	}
 
@@ -79,6 +80,7 @@ public class DateField extends Item {
 		public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 			calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			calendar.set(Calendar.MINUTE, minute);
+			notifyStateChanged();
 		}
 	}
 
