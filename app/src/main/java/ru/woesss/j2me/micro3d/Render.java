@@ -1,17 +1,17 @@
 /*
- *  Copyright 2022 Yury Kharchenko
+ * Copyright 2022-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ru.woesss.j2me.micro3d;
@@ -1425,6 +1425,38 @@ public class Render {
 
 	public void setClearColor(int color) {
 		clearColor = color;
+	}
+
+	public synchronized void flushToBuffer() {
+		if (stack.isEmpty()) {
+			return;
+		}
+		bindEglContext();
+		try {
+			copy2d(true);
+			flushStep = 1;
+			for (RenderNode r : stack) {
+				r.render(this);
+			}
+			flushStep = 2;
+			for (RenderNode r : stack) {
+				r.render(this);
+				r.recycle();
+			}
+			glDisable(GL_BLEND);
+			glDepthMask(true);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glFlush();
+			if (targetTexture != null) {
+				glReadPixels(0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, targetTexture.image.getRaster());
+			} else if (targetGraphics != null) {
+				Rect clip = this.gClip;
+				Utils.glReadPixels(clip.left, clip.top, clip.width(), clip.height(), targetGraphics.getBitmap());
+			}
+		} finally {
+			stack.clear();
+			releaseEglContext();
+		}
 	}
 
 	static class Environment {

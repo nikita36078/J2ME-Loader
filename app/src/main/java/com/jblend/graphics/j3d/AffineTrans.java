@@ -1,17 +1,17 @@
 /*
- *  Copyright 2022 Yury Kharchenko
+ * Copyright 2022-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jblend.graphics.j3d;
@@ -62,6 +62,7 @@ public class AffineTrans {
 		mulA2(a1, a2);
 	}
 
+	/** @noinspection unused*/
 	public void rotationV(Vector3D v, int r) {
 		if (v == null) {
 			throw new NullPointerException();
@@ -89,6 +90,7 @@ public class AffineTrans {
 		m22 = cos + ((z * z + 2048 >> 12) * nc + 2048 >> 12);
 	}
 
+	/** @noinspection unused*/
 	public void rotationX(int r) {
 		int cos = MathUtil.iCos(r);
 		int sin = MathUtil.iSin(r);
@@ -97,6 +99,7 @@ public class AffineTrans {
 		m20 =    0; m21 = sin; m22 =  cos;
 	}
 
+	/** @noinspection unused*/
 	public void rotationY(int r) {
 		int cos = MathUtil.iCos(r);
 		int sin = MathUtil.iSin(r);
@@ -105,6 +108,7 @@ public class AffineTrans {
 		m20 = -sin; m21 =    0; m22 = cos;
 	}
 
+	/** @noinspection unused*/
 	public void rotationZ(int r) {
 		int cos = MathUtil.iCos(r);
 		int sin = MathUtil.iSin(r);
@@ -113,18 +117,22 @@ public class AffineTrans {
 		m20 =   0; m21 =    0; m22 = 4096;
 	}
 
-	public void set(int[] a) {
+	public void set(int[][] a) {
 		if (a == null) {
 			throw new NullPointerException();
 		}
-		if (a.length < 12) {
+		if (a.length < 3) {
 			throw new IllegalArgumentException();
 		}
-		m00 = a[0]; m01 = a[1]; m02 = a[ 2]; m03 = a[ 3];
-		m10 = a[4]; m11 = a[5]; m12 = a[ 6]; m13 = a[ 7];
-		m20 = a[8]; m21 = a[9]; m22 = a[10]; m23 = a[11];
+		if (a[0].length < 4 || (a[1].length < 4) || (a[2].length < 4)) {
+			throw new IllegalArgumentException();
+		}
+		m00 = a[0][0]; m01 = a[0][1]; m02 = a[0][2]; m03 = a[0][3];
+		m10 = a[1][0]; m11 = a[1][1]; m12 = a[1][2]; m13 = a[1][3];
+		m20 = a[2][0]; m21 = a[2][1]; m22 = a[2][2]; m23 = a[2][3];
 	}
 
+	/** @noinspection unused*/
 	public void setViewTrans(Vector3D pos, Vector3D look, Vector3D up) {
 		if (pos == null || look == null || up == null) {
 			throw new NullPointerException();
@@ -156,6 +164,7 @@ public class AffineTrans {
 		m23 = mpx * tmp.x + mpy * tmp.y + mpz * tmp.z + 2048 >> 12;
 	}
 
+	/** @noinspection unused*/
 	public Vector3D transPoint(Vector3D v) {
 		if (v == null) {
 			throw new NullPointerException();

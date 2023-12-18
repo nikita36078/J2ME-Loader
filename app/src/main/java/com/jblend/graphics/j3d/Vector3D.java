@@ -1,17 +1,17 @@
 /*
- *  Copyright 2022 Yury Kharchenko
+ * Copyright 2022-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jblend.graphics.j3d;
@@ -50,6 +50,7 @@ public class Vector3D {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
+	/** @noinspection unused*/
 	public static int innerProduct(Vector3D v1, Vector3D v2) {
 		if (v1 == null) {
 			throw new NullPointerException();
@@ -57,7 +58,8 @@ public class Vector3D {
 		return v1.innerProduct(v2);
 	}
 
-	public final void outerProduct(Vector3D v) {
+	/** @noinspection unused*/
+	public void outerProduct(Vector3D v) {
 		if (v == null) {
 			throw new NullPointerException();
 		}
@@ -79,25 +81,25 @@ public class Vector3D {
 		return new Vector3D(x, y, z);
 	}
 
-	public final void set(int x, int y, int z) {
+	public void set(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public final void setX(int x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 
-	public final void setY(int y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 
-	public final void setZ(int z) {
+	public void setZ(int z) {
 		this.z = z;
 	}
 
-	public final void unit() {
+	public void unit() {
 		int x = this.x;
 		int y = this.y;
 		int z = this.z;
