@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2020-2023 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,25 +18,21 @@ package ru.woesss.j2me.jar;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 
-import java.io.EOFException;
+import androidx.annotation.Nullable;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Descriptor {
-	private static final String TAG = Descriptor.class.getName();
-
 	private static final char UNICODE_BOM = '\uFEFF';
 	private static final String MANIFEST_VERSION = "Manifest-Version";
 	// required in JAD and Manifest
@@ -75,7 +71,11 @@ public class Descriptor {
 
 	public Descriptor(String source, boolean isJad) throws IOException {
 		this.isJad = isJad;
-		init(source);
+		try {
+			parse(source);
+		} catch (Exception e) {
+			throw new DescriptorException("Bad descriptor: \n" + source, e);
+		}
 		if (isJad) {
 			verifyJadAttrs();
 		}
@@ -84,26 +84,7 @@ public class Descriptor {
 	}
 
 	public Descriptor(File file, boolean isJad) throws IOException {
-		this.isJad = isJad;
-		byte[] buf;
-		try (InputStream inputStream = new FileInputStream(file)) {
-			int count = inputStream.available();
-			buf = new byte[count];
-			int n = 0;
-			while (n < buf.length) {
-				int read = inputStream.read(buf, n, buf.length - n);
-				if (read < 0) {
-					throw new EOFException();
-				}
-				n += read;
-			}
-		}
-		init(new String(buf));
-		if (isJad) {
-			verifyJadAttrs();
-		}
-		verify();
-
+		this(FileUtils.getText(file.getPath()), isJad);
 	}
 
 	public int compareVersion(String version) {
@@ -171,15 +152,6 @@ public class Descriptor {
 		return attributes;
 	}
 
-	private void init(String source) throws DescriptorException {
-		try {
-			parse(source);
-		} catch (Exception e) {
-			Log.e(TAG, source);
-			throw new DescriptorException("Bad descriptor", e);
-		}
-	}
-
 	private void parse(String source) {
 		String[] lines = source.split("[\\n\\r]+");
 		int length = lines.length;
@@ -187,26 +159,29 @@ public class Descriptor {
 			throw new IllegalArgumentException("Descriptor source is empty");
 		}
 		String line0 = lines[0];
-		if (line0.charAt(0) == UNICODE_BOM)
+		if (line0.length() > 0 && line0.charAt(0) == UNICODE_BOM)
 			lines[0] = line0.substring(1);
 		Map<String, String> attrs = attributes;
 		final StringBuilder sb = new StringBuilder("1.0");
 		String key = MANIFEST_VERSION;
 		for (String line : lines) {
-			if (line.trim().isEmpty()) {
-				continue;
-			}
 			int colon = line.indexOf(':');
 			if (colon == -1) {
-				if (line.charAt(0) == ' ') sb.append(line, 1, line.length());
-				else sb.append(line);
+				if (line.isEmpty()) {
+					continue;
+				}
+				if (line.charAt(0) == ' ') {
+					sb.append(line, 1, line.length());
+				} else {
+					sb.append(line);
+				}
 			} else {
 				attrs.put(key, sb.toString().trim());
 				sb.setLength(0);
-				key = line.substring(0, colon++).trim();
-				if (line.charAt(colon) == ' ')
-					colon++;
-				sb.append(line, colon, line.length());
+				key = line.substring(0, colon).trim();
+				if (line.length() > ++colon) {
+					sb.append(line, colon, line.length());
+				}
 			}
 		}
 		attrs.put(key, sb.toString().trim());
@@ -280,12 +255,12 @@ public class Descriptor {
 
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!(obj instanceof Descriptor))
-			return false;
-		Descriptor o = (Descriptor) obj;
-		return getName().equals(o.getName()) && getVendor().equals(o.getVendor());
+		} else if (obj instanceof Descriptor o) {
+			return getName().equals(o.getName()) && getVendor().equals(o.getVendor());
+		}
+		return false;
 	}
 
 	public SpannableStringBuilder getInfo(Context c) {

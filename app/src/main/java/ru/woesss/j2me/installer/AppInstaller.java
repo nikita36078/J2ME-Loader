@@ -22,11 +22,9 @@ import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
 
-import ru.woesss.util.zip.ZipFile;
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import net.lingala.zip4j.model.FileHeader;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,8 +47,10 @@ import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.ConverterException;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.playsoftware.j2meloader.util.ZipUtils;
 import ru.woesss.j2me.jar.Descriptor;
+import ru.woesss.util.zip.ZipFile;
 
 public class AppInstaller {
 	private static final String TAG = AppInstaller.class.getSimpleName();
@@ -359,13 +359,8 @@ public class AppInstaller {
 				throw new IOException("JAR not have " + JarFile.MANIFEST_NAME);
 			}
 			try (ZipInputStream is = zip.getInputStream(manifest)) {
-				ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
-				byte[] buf = new byte[4096];
-				int read;
-				while ((read = is.read(buf)) != -1) {
-					baos.write(buf, 0, read);
-				}
-				return new Descriptor(baos.toString(), false);
+				String text = new String(IOUtils.toByteArray(is));
+				return new Descriptor(text, false);
 			}
 		}
 	}
