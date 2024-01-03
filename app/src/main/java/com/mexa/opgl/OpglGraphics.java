@@ -16,6 +16,22 @@
 
 package com.mexa.opgl;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+
+import java.nio.ByteOrder;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+import javax.microedition.khronos.opengles.GL11Ext;
+import javax.microedition.lcdui.Graphics;
+
+/** @noinspection unused*/
 public class OpglGraphics {
 	public static final int GL_ACTIVE_TEXTURE = 34016;
 	public static final int GL_ADD = 260;
@@ -387,8 +403,39 @@ public class OpglGraphics {
 	public static final int GL_ZERO = 0;
 
 	private static final OpglGraphics INSTANCE = new OpglGraphics();
+	private final EGL10 egl;
+	private final EGLDisplay eglDisplay;
+	private final EGLConfig eglConfig;
+	private final EGLContext eglContext;
+	private final GL11 gl;
+	private Graphics graphics;
+	private int width;
+	private int height;
+	private EGLSurface eglWindowSurface;
+	private Bitmap imageBuffer;
+	private java.nio.ByteBuffer pixelBuffer;
+	private final Matrix matrix = new Matrix();
 
 	private OpglGraphics() {
+		egl = (EGL10) EGLContext.getEGL();
+		eglDisplay = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+		egl.eglInitialize(eglDisplay, null);
+
+		int[] configAttrs = {
+				EGL10.EGL_RED_SIZE, 8,
+				EGL10.EGL_GREEN_SIZE, 8,
+				EGL10.EGL_BLUE_SIZE, 8,
+				EGL10.EGL_ALPHA_SIZE, 8,
+				EGL10.EGL_DEPTH_SIZE, 16,
+				EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
+				EGL10.EGL_NONE
+		};
+		EGLConfig[] eglConfigs = new EGLConfig[1];
+		egl.eglChooseConfig(eglDisplay, configAttrs, eglConfigs, 1, null);
+		eglConfig = eglConfigs[0];
+
+		eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, null);
+		this.gl = (GL11) eglContext.getGL();
 	}
 
 	public static synchronized OpglGraphics getInstance() {
@@ -396,48 +443,139 @@ public class OpglGraphics {
 	}
 
 	public void bind(Object target) {
+		if (target == null) {
+			throw new NullPointerException("target is NULL");
+		} else if (target == graphics) {
+			throw new IllegalStateException();
+		} else if (!(target instanceof Graphics)) {
+			throw new IllegalArgumentException();
+		}
+		graphics = (Graphics) target;
+		Bitmap bitmap = graphics.getBitmap();
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		if (width != this.width || height != this.height || eglWindowSurface == null) {
+			this.width = width;
+			this.height = height;
+			imageBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			pixelBuffer = java.nio.ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder());
+
+			if (eglWindowSurface != null) {
+				releaseEglContext();
+				egl.eglDestroySurface(eglDisplay, eglWindowSurface);
+			}
+
+			int[] surface_attribs = {
+					EGL10.EGL_WIDTH, width,
+					EGL10.EGL_HEIGHT, height,
+					EGL10.EGL_LARGEST_PBUFFER, 1,
+					EGL10.EGL_NONE};
+			eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
+
+			matrix.setScale(1.0f, -1.0f, width / 2.0f, height / 2.0f);
+		}
+		bindEglContext();
+		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		releaseEglContext();
 	}
 
 	public void release() {
+		if (pixelBuffer == null || width <= 0 || height <= 0) {
+			return;
+		}
+		bindEglContext();
+		gl.glFinish();
+		gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixelBuffer.rewind());
+		imageBuffer.copyPixelsFromBuffer(pixelBuffer.rewind());
+		graphics.getCanvas().drawBitmap(imageBuffer, matrix, null);
+		releaseEglContext();
+		graphics = null;
+	}
+
+	private void bindEglContext() {
+		egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
+	}
+
+	private void releaseEglContext() {
+		egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
 	}
 
 	public void glActiveTexture(int texture) {
+		bindEglContext();
+		gl.glActiveTexture(texture);
+		releaseEglContext();
 	}
 
 	public void glAlphaFunc(int func, float ref) {
+		bindEglContext();
+		gl.glAlphaFunc(func, ref);
+		releaseEglContext();
 	}
 
 	public void glBindTexture(int target, int texture) {
+		bindEglContext();
+		gl.glBindTexture(target, texture);
+		releaseEglContext();
 	}
 
 	public void glBlendFunc(int sfactor, int dfactor) {
+		bindEglContext();
+		gl.glBlendFunc(sfactor, dfactor);
+		releaseEglContext();
 	}
 
 	public void glClear(int mask) {
+		bindEglContext();
+		gl.glClear(mask);
+		releaseEglContext();
 	}
 
 	public void glClearColor(float red, float green, float blue, float alpha) {
+		bindEglContext();
+		gl.glClearColor(red, green, blue, alpha);
+		releaseEglContext();
 	}
 
 	public void glClearDepthf(float depth) {
+		bindEglContext();
+		gl.glClearDepthf(depth);
+		releaseEglContext();
 	}
 
 	public void glClearStencil(int s) {
+		bindEglContext();
+		gl.glClearStencil(s);
+		releaseEglContext();
 	}
 
 	public void glClientActiveTexture(int texture) {
+		bindEglContext();
+		gl.glClientActiveTexture(texture);
+		releaseEglContext();
 	}
 
 	public void glColor4f(float red, float green, float blue, float alpha) {
+		bindEglContext();
+		gl.glColor4f(red, green, blue, alpha);
+		releaseEglContext();
 	}
 
 	public void glColorMask(boolean red, boolean green, boolean blue, boolean alpha) {
+		bindEglContext();
+		gl.glColorMask(red, green, blue, alpha);
+		releaseEglContext();
 	}
 
 	public void glColorPointer(int size, int type, int stride, Buffer pointer) {
+		bindEglContext();
+		gl.glColorPointer(size, type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glColorPointer(int size, int type, int stride, int offset) {
+		bindEglContext();
+		gl.glColorPointer(size, type, stride, offset);
+		releaseEglContext();
 	}
 
 	public void glCompressedTexImage2D(int target,
@@ -447,6 +585,9 @@ public class OpglGraphics {
 									   int height,
 									   int border,
 									   ByteBuffer data) {
+		bindEglContext();
+		gl.glCompressedTexImage2D(target, level, internalformat, width, height, border, data.length(), data.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glCompressedTexSubImage2D(int target,
@@ -457,6 +598,9 @@ public class OpglGraphics {
 										  int height,
 										  int format,
 										  ByteBuffer data) {
+		bindEglContext();
+		gl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.length(), data.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glCopyTexImage2D(int target,
@@ -467,6 +611,9 @@ public class OpglGraphics {
 								 int width,
 								 int height,
 								 int border) {
+		bindEglContext();
+		gl.glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
+		releaseEglContext();
 	}
 
 	public void glCopyTexSubImage2D(int target,
@@ -477,176 +624,347 @@ public class OpglGraphics {
 									int y,
 									int width,
 									int height) {
+		bindEglContext();
+		gl.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
+		releaseEglContext();
 	}
 
 	public void glCullFace(int mode) {
+		bindEglContext();
+		gl.glCullFace(mode);
+		releaseEglContext();
 	}
 
 	public void glDeleteTextures(int[] textures) {
+		bindEglContext();
+		gl.glDeleteTextures(textures.length, textures, 0);
+		releaseEglContext();
 	}
 
 	public void glDepthFunc(int func) {
+		bindEglContext();
+		gl.glDepthFunc(func);
+		releaseEglContext();
 	}
 
 	public void glDepthMask(boolean flag) {
+		bindEglContext();
+		gl.glDepthMask(flag);
+		releaseEglContext();
 	}
 
 	public void glDepthRangef(float zNear, float zFar) {
+		bindEglContext();
+		gl.glDepthRangef(zNear, zFar);
+		releaseEglContext();
 	}
 
 	public void glDisable(int cap) {
+		bindEglContext();
+		gl.glDisable(cap);
+		releaseEglContext();
 	}
 
 	public void glDisableClientState(int array) {
+		bindEglContext();
+		gl.glDisableClientState(array);
+		releaseEglContext();
 	}
 
 	public void glDrawArrays(int mode, int first, int count) {
+		bindEglContext();
+		gl.glDrawArrays(mode, first, count);
+		releaseEglContext();
 	}
 
 	public void glDrawElements(int mode, int type, Buffer indices) {
+		bindEglContext();
+		gl.glDrawElements(mode, indices.length(), type, indices.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glDrawElements(int mode, int count, int type, int offset) {
+		bindEglContext();
+		gl.glDrawElements(mode, count, type, offset);
+		releaseEglContext();
 	}
 
 	public void glEnable(int cap) {
+		bindEglContext();
+		gl.glEnable(cap);
+		releaseEglContext();
 	}
 
 	public void glEnableClientState(int array) {
+		bindEglContext();
+		gl.glEnableClientState(array);
+		releaseEglContext();
 	}
 
 	public void glFlush() {
+		bindEglContext();
+		gl.glFlush();
+		releaseEglContext();
 	}
 
 	public void glFogf(int pname, float param) {
+		bindEglContext();
+		gl.glFogf(pname, param);
+		releaseEglContext();
 	}
 
 	public void glFogfv(int pname, float[] params) {
+		bindEglContext();
+		gl.glFogfv(pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glFrontFace(int mode) {
+		bindEglContext();
+		gl.glFrontFace(mode);
+		releaseEglContext();
 	}
 
 	public void glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) {
+		bindEglContext();
+		gl.glFrustumf(left, right, bottom, top, zNear, zFar);
+		releaseEglContext();
 	}
 
 	public void glGenTextures(int[] textures) {
+		bindEglContext();
+		gl.glGenTextures(textures.length, textures, 0);
+		releaseEglContext();
 	}
 
 	public int glGetError() {
-		return 0;
+		bindEglContext();
+		int error = gl.glGetError();
+		releaseEglContext();
+		return error;
 	}
 
 	public void glGetIntegerv(int pname, int[] params) {
+		bindEglContext();
+		gl.glGetIntegerv(pname, params, 0);
+		releaseEglContext();
 	}
 
 	public String glGetString(int name) {
-		return "DUMMY_STRING";
+		bindEglContext();
+		String s = gl.glGetString(name);
+		releaseEglContext();
+		return s;
 	}
 
 	public void glHint(int target, int mode) {
+		bindEglContext();
+		gl.glHint(target, mode);
+		releaseEglContext();
 	}
 
 	public void glLightModelf(int pname, float param) {
+		bindEglContext();
+		gl.glLightModelf(pname, param);
+		releaseEglContext();
 	}
 
 	public void glLightModelfv(int pname, float[] params) {
+		bindEglContext();
+		gl.glLightModelfv(pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glLightf(int light, int pname, float param) {
+		bindEglContext();
+		gl.glLightf(light, pname, param);
+		releaseEglContext();
 	}
 
 	public void glLightfv(int light, int pname, float[] params) {
+		bindEglContext();
+		gl.glLightfv(light, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glLineWidth(float width) {
+		bindEglContext();
+		gl.glLineWidth(width);
+		releaseEglContext();
 	}
 
 	public void glLoadIdentity() {
+		bindEglContext();
+		gl.glLoadIdentity();
+		releaseEglContext();
 	}
 
 	public void glLoadMatrixf(float[] m) {
+		bindEglContext();
+		gl.glLoadMatrixf(m, 0);
+		releaseEglContext();
 	}
 
 	public void glLogicOp(int opcode) {
+		bindEglContext();
+		gl.glLogicOp(opcode);
+		releaseEglContext();
 	}
 
 	public void glMaterialf(int face, int pname, float param) {
+		bindEglContext();
+		gl.glMaterialf(face, pname, param);
+		releaseEglContext();
 	}
 
 	public void glMaterialfv(int face, int pname, float[] params) {
+		bindEglContext();
+		gl.glMaterialfv(face, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glMatrixMode(int mode) {
+		bindEglContext();
+		gl.glMatrixMode(mode);
+		releaseEglContext();
 	}
 
 	public void glMultMatrixf(float[] m) {
+		bindEglContext();
+		gl.glMultMatrixf(m, 0);
+		releaseEglContext();
 	}
 
 	public void glMultiTexCoord4f(int target, float s, float t, float r, float q) {
+		bindEglContext();
+		gl.glMultiTexCoord4f(target, s, t, r, q);
+		releaseEglContext();
 	}
 
 	public void glNormal3f(float nx, float ny, float nz) {
+		bindEglContext();
+		gl.glNormal3f(nx, ny, nz);
+		releaseEglContext();
 	}
 
 	public void glNormalPointer(int type, int stride, Buffer pointer) {
+		bindEglContext();
+		gl.glNormalPointer(type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glNormalPointer(int type, int stride, int offset) {
+		bindEglContext();
+		gl.glNormalPointer(type, stride, offset);
+		releaseEglContext();
 	}
 
 	public void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) {
+		bindEglContext();
+		gl.glOrthof(left, right, bottom, top, zNear, zFar);
+		releaseEglContext();
 	}
 
 	public void glPixelStorei(int pname, int param) {
+		bindEglContext();
+		gl.glPixelStorei(pname, param);
+		releaseEglContext();
 	}
 
 	public void glPointSize(float size) {
+		bindEglContext();
+		gl.glPointSize(size);
+		releaseEglContext();
 	}
 
 	public void glPolygonOffset(float factor, float units) {
+		bindEglContext();
+		gl.glPolygonOffset(factor, units);
+		releaseEglContext();
 	}
 
 	public void glPopMatrix() {
+		bindEglContext();
+		gl.glPopMatrix();
+		releaseEglContext();
 	}
 
 	public void glPushMatrix() {
+		bindEglContext();
+		gl.glPushMatrix();
+		releaseEglContext();
 	}
 
 	public void glRotatef(float angle, float x, float y, float z) {
+		bindEglContext();
+		gl.glRotatef(angle, x, y, z);
+		releaseEglContext();
 	}
 
 	public void glSampleCoverage(float value, boolean invert) {
+		bindEglContext();
+		gl.glSampleCoverage(value, invert);
+		releaseEglContext();
 	}
 
 	public void glScalef(float x, float y, float z) {
+		bindEglContext();
+		gl.glScalef(x, y, z);
+		releaseEglContext();
 	}
 
 	public void glScissor(int x, int y, int width, int height) {
+		bindEglContext();
+		gl.glScissor(x, y, width, height);
+		releaseEglContext();
 	}
 
 	public void glShadeModel(int mode) {
+		bindEglContext();
+		gl.glShadeModel(mode);
+		releaseEglContext();
 	}
 
 	public void glStencilFunc(int func, int ref, int mask) {
+		bindEglContext();
+		gl.glStencilFunc(func, ref, mask);
+		releaseEglContext();
 	}
 
 	public void glStencilMask(int mask) {
+		bindEglContext();
+		gl.glStencilMask(mask);
+		releaseEglContext();
 	}
 
 	public void glStencilOp(int fail, int zfail, int zpass) {
+		bindEglContext();
+		gl.glStencilOp(fail, zfail, zpass);
+		releaseEglContext();
 	}
 
 	public void glTexCoordPointer(int size, int type, int stride, Buffer pointer) {
+		bindEglContext();
+		gl.glTexCoordPointer(size, type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glTexCoordPointer(int size, int type, int stride, int offset) {
+		bindEglContext();
+		gl.glTexCoordPointer(size, type, stride, offset);
+		releaseEglContext();
 	}
 
 	public void glTexEnvf(int target, int pname, float param) {
+		bindEglContext();
+		gl.glTexEnvf(target, pname, param);
+		releaseEglContext();
 	}
 
 	public void glTexEnvfv(int target, int pname, float[] params) {
+		bindEglContext();
+		gl.glTexEnvfv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glTexImage2D(int target,
@@ -658,9 +976,15 @@ public class OpglGraphics {
 							 int format,
 							 int type,
 							 Buffer pixels) {
+		bindEglContext();
+		gl.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glTexParameterf(int target, int pname, float param) {
+		bindEglContext();
+		gl.glTexParameterf(target, pname, param);
+		releaseEglContext();
 	}
 
 	public void glTexSubImage2D(int target,
@@ -672,134 +996,263 @@ public class OpglGraphics {
 								int format,
 								int type,
 								Buffer pixels) {
+		bindEglContext();
+		gl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glTranslatef(float x, float y, float z) {
+		bindEglContext();
+		gl.glTranslatef(x, y, z);
+		releaseEglContext();
 	}
 
 	public void glVertexPointer(int size, int type, int stride, Buffer pointer) {
+		bindEglContext();
+		gl.glVertexPointer(size, type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glVertexPointer(int size, int type, int stride, int offset) {
+		bindEglContext();
+		gl.glVertexPointer(size, type, stride, offset);
+		releaseEglContext();
 	}
 
 	public void glViewport(int x, int y, int width, int height) {
+		bindEglContext();
+		gl.glViewport(x, y, width, height);
+		releaseEglContext();
 	}
 
 	public void glBindBuffer(int target, int buffer) {
+		bindEglContext();
+		gl.glBindBuffer(target, buffer);
+		releaseEglContext();
 	}
 
 	public void glBufferData(int target, Buffer data, int usage) {
+		bindEglContext();
+		gl.glBufferData(target, data.length(), data.getNioBuffer(), usage);
+		releaseEglContext();
 	}
 
 	public void glBufferSubData(int target, int offset, Buffer data) {
+		bindEglContext();
+		gl.glBufferSubData(target, offset, data.length(), data.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glClipPlanef(int plane, float[] equation) {
+		bindEglContext();
+		gl.glClipPlanef(plane, equation, 0);
+		releaseEglContext();
 	}
 
 	public void glColor4ub(byte red, byte green, byte blue, byte alpha) {
+		bindEglContext();
+		gl.glColor4ub(red, green, blue, alpha);
+		releaseEglContext();
 	}
 
 	public void glDeleteBuffers(int[] buffers) {
+		bindEglContext();
+		gl.glDeleteBuffers(buffers.length, buffers, 0);
+		releaseEglContext();
 	}
 
 	public void glGetBooleanv(int pname, boolean[] params) {
+		bindEglContext();
+		gl.glGetBooleanv(pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGetBufferParameteriv(int target, int pname, int[] params) {
+		bindEglContext();
+		gl.glGetBufferParameteriv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGetClipPlanef(int pname, float[] equation) {
+		bindEglContext();
+		gl.glGetClipPlanef(pname, equation, 0);
+		releaseEglContext();
 	}
 
 	public void glGetFloatv(int pname, float[] params) {
+		bindEglContext();
+		gl.glGetFloatv(pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGetLightfv(int light, int pname, float[] params) {
+		bindEglContext();
+		gl.glGetLightfv(light, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGetMaterialfv(int face, int pname, float[] params) {
+		bindEglContext();
+		gl.glGetMaterialfv(face, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGetTexEnvfv(int env, int pname, float[] params) {
+//		bindEglContext();
+//		((GL11Ext) gl).glGetTexEnvfv(env, pname, params, 0);
+//		releaseEglContext();
 	}
 
 	public void glGetTexParameterfv(int target, int pname, float[] params) {
+		bindEglContext();
+		gl.glGetTexParameterfv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGenBuffers(int[] buffers) {
+		bindEglContext();
+		gl.glGenBuffers(buffers.length, buffers, 0);
+		releaseEglContext();
 	}
 
 	public void glGetTexEnviv(int env, int pname, int[] params) {
+		bindEglContext();
+		gl.glGetTexEnviv(env, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glGetTexParameteriv(int target, int pname, int[] params) {
+		bindEglContext();
+		gl.glGetTexParameteriv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public boolean glIsBuffer(int buffer) {
+		bindEglContext();
+		gl.glIsBuffer(buffer);
+		releaseEglContext();
 		return false;
 	}
 
 	public boolean glIsEnabled(int cap) {
+		bindEglContext();
+		gl.glIsEnabled(cap);
+		releaseEglContext();
 		return false;
 	}
 
 	public boolean glIsTexture(int texture) {
+		bindEglContext();
+		gl.glIsTexture(texture);
+		releaseEglContext();
 		return false;
 	}
 
 	public void glPointParameterf(int pname, float param) {
+		bindEglContext();
+		gl.glPointParameterf(pname, param);
+		releaseEglContext();
 	}
 
 	public void glPointParameterfv(int pname, float[] params) {
+		bindEglContext();
+		gl.glPointParameterfv(pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glTexEnvi(int target, int pname, int param) {
+		bindEglContext();
+		gl.glTexEnvi(target, pname, param);
+		releaseEglContext();
 	}
 
 	public void glTexEnviv(int target, int pname, int[] params) {
+		bindEglContext();
+		gl.glTexEnviv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glTexParameterfv(int target, int pname, float[] params) {
+		bindEglContext();
+		gl.glTexParameterfv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glTexParameteri(int target, int pname, int param) {
+		bindEglContext();
+		gl.glTexParameteri(target, pname, param);
+		releaseEglContext();
 	}
 
 	public void glTexParameteriv(int target, int pname, int[] params) {
+		bindEglContext();
+		gl.glTexParameteriv(target, pname, params, 0);
+		releaseEglContext();
 	}
 
 	public void glPointSizePointerOES(int type, int stride, Buffer pointer) {
+		bindEglContext();
+		gl.glPointSizePointerOES(type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glPointSizePointerOES(int type, int stride, int offset) {
+//		bindEglContext();
+//		((GL11Ext) gl).glPointSizePointerOES(type, stride, offset);
+//		releaseEglContext();
 	}
 
 	public void glCurrentPaletteMatrixOES(int index) {
+		bindEglContext();
+		((GL11Ext) gl).glCurrentPaletteMatrixOES(index);
+		releaseEglContext();
 	}
 
 	public void glLoadPaletteFromModelViewMatrixOES() {
+		bindEglContext();
+		((GL11Ext) gl).glLoadPaletteFromModelViewMatrixOES();
+		releaseEglContext();
 	}
 
 	public void glMatrixIndexPointerOES(int size, int type, int stride, Buffer pointer) {
+		bindEglContext();
+		((GL11Ext) gl).glMatrixIndexPointerOES(size, type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glMatrixIndexPointerOES(int size, int type, int stride, int offset) {
+		bindEglContext();
+		((GL11Ext) gl).glMatrixIndexPointerOES(size, type, stride, offset);
+		releaseEglContext();
 	}
 
 	public void glWeightPointerOES(int size, int type, int stride, Buffer pointer) {
+		bindEglContext();
+		((GL11Ext) gl).glWeightPointerOES(size, type, stride, pointer.getNioBuffer());
+		releaseEglContext();
 	}
 
 	public void glWeightPointerOES(int size, int type, int stride, int offset) {
+		bindEglContext();
+		((GL11Ext) gl).glWeightPointerOES(size, type, stride, offset);
+		releaseEglContext();
 	}
 
 	public void glDrawTexsOES(short x, short y, short z, short width, short height) {
+		bindEglContext();
+		((GL11Ext) gl).glDrawTexsOES(x, y, z, width, height);
+		releaseEglContext();
 	}
 
 	public void glDrawTexiOES(int x, int y, int z, int width, int height) {
+		bindEglContext();
+		((GL11Ext) gl).glDrawTexiOES(x, y, z, width, height);
+		releaseEglContext();
 	}
 
 	public void glDrawTexfOES(float x, float y, float z, float width, float height) {
+		bindEglContext();
+		((GL11Ext) gl).glDrawTexfOES(x, y, z, width, height);
+		releaseEglContext();
 	}
 }

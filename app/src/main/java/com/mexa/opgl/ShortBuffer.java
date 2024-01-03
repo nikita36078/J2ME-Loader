@@ -16,22 +16,38 @@
 
 package com.mexa.opgl;
 
+import ru.woesss.j2me.micro3d.BufferUtils;
+
 public class ShortBuffer extends Buffer {
-	private ShortBuffer() {
+
+	private ShortBuffer(int size) {
+		super(BufferUtils.createShortBuffer(size));
+	}
+
+	private ShortBuffer(ShortBuffer buffer) {
+		this(buffer.length());
+		java.nio.ShortBuffer nio = (java.nio.ShortBuffer) super.buffer;
+		nio.put((java.nio.ShortBuffer) buffer.getNioBuffer());
 	}
 
 	public static ShortBuffer allocateDirect(int size) {
-		return new ShortBuffer();
+		return new ShortBuffer(size);
 	}
 
 	public static ShortBuffer allocateDirect(ShortBuffer buffer) {
-		return buffer;
+		return new ShortBuffer(buffer);
 	}
 
 	public short[] get(int srcIndex, short[] buf, int dstIndex, int length) {
+		java.nio.ShortBuffer nio = (java.nio.ShortBuffer) super.buffer;
+		nio.position(srcIndex);
+		nio.get(buf, dstIndex, length);
 		return buf;
 	}
 
 	public void put(int dstIndex, short[] buf, int srcIndex, int length) {
+		java.nio.ShortBuffer nio = (java.nio.ShortBuffer) super.buffer;
+		nio.position(dstIndex);
+		nio.put(buf, srcIndex, length);
 	}
 }

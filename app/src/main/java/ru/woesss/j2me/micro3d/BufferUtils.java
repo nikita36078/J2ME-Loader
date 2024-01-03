@@ -20,19 +20,24 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
-class BufferUtils {
+public class BufferUtils {
 	private BufferUtils(){}
 
-	static IntBuffer createIntBuffer(int capacity) {
+	public static IntBuffer createIntBuffer(int capacity) {
 		return createByteBuffer(capacity * 4).asIntBuffer();
 	}
 
-	static FloatBuffer createFloatBuffer(int capacity) {
+	public static FloatBuffer createFloatBuffer(int capacity) {
 		return createByteBuffer(capacity * 4).asFloatBuffer();
 	}
 
-	static ByteBuffer createByteBuffer(int capacity) {
+	public static ByteBuffer createByteBuffer(int capacity) {
 		return ByteBuffer.allocateDirect(capacity).order(ByteOrder.nativeOrder());
+	}
+
+	public static ShortBuffer createShortBuffer(int capacity) {
+		return createByteBuffer(capacity * 2).asShortBuffer();
 	}
 }

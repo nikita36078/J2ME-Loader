@@ -16,17 +16,38 @@
 
 package com.mexa.opgl;
 
+import android.os.Build;
+
 public abstract class Buffer {
-	Buffer() {
+	final java.nio.Buffer buffer;
+	int offset;
+	int length;
+
+	Buffer(java.nio.Buffer buffer) {
+		this.buffer = buffer;
+		length = buffer.capacity();
 	}
 
 	public int length() {
-		return 0;
+		return length;
 	}
 
 	public synchronized void setBounds(int offset, int length) {
+		this.offset = offset;
+		this.length = length;
 	}
 
 	public synchronized void resetBounds() {
+		offset = 0;
+		length = buffer.capacity();
+	}
+
+	final java.nio.Buffer getNioBuffer() {
+		buffer.rewind();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+			return buffer.slice(offset, length);
+		} else {
+			return buffer.position(offset).limit(length);
+		}
 	}
 }
