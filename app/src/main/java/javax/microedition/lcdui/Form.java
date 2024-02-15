@@ -135,9 +135,11 @@ public class Form extends Screen {
 
 		items.clear();
 
-		if (layout != null) {
-			ViewHandler.postEvent(() -> layout.removeAllViews());
-		}
+		ViewHandler.postEvent(() -> {
+			if(layout != null) {
+				layout.removeAllViews();
+			}
+		});
 	}
 
 	public void setItemStateListener(ItemStateListener listener) {
