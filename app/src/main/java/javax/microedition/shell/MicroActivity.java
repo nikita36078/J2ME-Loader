@@ -68,6 +68,7 @@ import java.util.Objects;
 
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
@@ -657,40 +658,47 @@ public class MicroActivity extends AppCompatActivity {
 
 		@Override
 		public void process() {
-			closeOptionsMenu();
-			if (current != null) {
-				current.clearDisplayableView();
-			}
-			if (next instanceof Alert) {
-				return;
-			}
-			binding.displayableContainer.removeAllViews();
-			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
-			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.toolbar.getLayoutParams();
-			int toolbarHeight = 0;
-			if (next instanceof Canvas) {
-				hideSystemUI();
-				if (!actionBarEnabled) {
-					actionBar.hide();
+			try {
+				closeOptionsMenu();
+				if (current != null) {
+					current.clearDisplayableView();
+				}
+				if (next instanceof Alert) {
+					return;
+				}
+				binding.displayableContainer.removeAllViews();
+				ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
+				LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.toolbar.getLayoutParams();
+				int toolbarHeight = 0;
+				if (next instanceof Canvas) {
+					hideSystemUI();
+					if (!actionBarEnabled) {
+						actionBar.hide();
+					} else {
+						final String title = next.getTitle();
+						actionBar.setTitle(title == null ? appName : title);
+						toolbarHeight = (int) (getToolBarHeight() / 1.5);
+						layoutParams.height = toolbarHeight;
+					}
 				} else {
-					final String title = next.getTitle();
+					showSystemUI();
+					actionBar.show();
+					final String title = next != null ? next.getTitle() : null;
 					actionBar.setTitle(title == null ? appName : title);
-					toolbarHeight = (int) (getToolBarHeight() / 1.5);
+					toolbarHeight = getToolBarHeight();
 					layoutParams.height = toolbarHeight;
 				}
-			} else {
-				showSystemUI();
-				actionBar.show();
-				final String title = next != null ? next.getTitle() : null;
-				actionBar.setTitle(title == null ? appName : title);
-				toolbarHeight = getToolBarHeight();
-				layoutParams.height = toolbarHeight;
-			}
-			binding.overlayView.setLocation(0, toolbarHeight);
-			binding.toolbar.setLayoutParams(layoutParams);
-			invalidateOptionsMenu();
-			if (next != null) {
-				binding.displayableContainer.addView(next.getDisplayableView());
+				binding.overlayView.setLocation(0, toolbarHeight);
+				binding.toolbar.setLayoutParams(layoutParams);
+				invalidateOptionsMenu();
+				if (next != null) {
+					binding.displayableContainer.addView(next.getDisplayableView());
+				}
+			} finally {
+				Display display = Display.getDisplay(null);
+				synchronized(display) {
+					display.notify();
+				}
 			}
 		}
 	}
