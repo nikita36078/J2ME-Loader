@@ -27,7 +27,7 @@ namespace mmapi {
             void deallocate() override;
             void close() override;
             oboe::Result prefetch() override;
-            int32_t setVolume(int32_t level) override;
+            void setVolume(int32_t level) override;
             int32_t setDataSource(util::JByteArrayPtr *data);
 
             oboe::DataCallbackResult
@@ -36,8 +36,10 @@ namespace mmapi {
             static int32_t initSoundBank(const char *sound_bank);
             static int32_t createPlayer(const char *locator, Player **pPlayer);
 
-        private:
+        protected:
             oboe::Result createAudioStream() override;
+
+        private:
             void processEvents(bool playMode);
 
             static float computeGain(int32_t level);

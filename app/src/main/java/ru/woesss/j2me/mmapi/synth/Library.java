@@ -29,12 +29,8 @@ public interface Library {
 	long setMediaTime(long handle, long now);
 	long getMediaTime(long handle);
 	void setRepeat(long handle, int count);
-	int setPan(long handle, int pan);
-	int getPan(long handle);
-	void setMute(long handle, boolean mute);
-	boolean isMuted(long handle);
-	int setVolume(long handle, int level);
-	int getVolume(long handle);
+	void setPan(long handle, int pan);
+	void setVolume(long handle, int level);
 	long getDuration(long handle);
 	void setListener(long handle, Object listener);
 	void setDataSource(long handle, byte[] data);

@@ -65,8 +65,7 @@ namespace mmapi {
             }
 
             // Set the SoundFont rendering output mode
-            tsf_set_output(synth, TSF_STEREO_INTERLEAVED, oboeStream->getSampleRate(), 0.0f);
-            tsf_set_volume(synth, computeGain(getVolume()));
+            tsf_set_output(synth, TSF_STEREO_INTERLEAVED, oboeStream->getSampleRate(), synth->globalGainDB);
             return result;
         }
 
@@ -85,10 +84,11 @@ namespace mmapi {
             synth = nullptr;
         }
 
-        int32_t Player::setVolume(int32_t level) {
-            int32_t volume = BasePlayer::setVolume(level);
-            tsf_set_volume(synth, computeGain(volume));
-            return volume;
+        void Player::setVolume(int32_t level) {
+            if (synth == nullptr) {
+                return;
+            }
+            tsf_set_volume(synth, computeGain(level));
         }
 
         int32_t Player::initSoundBank(const char *sound_bank) {

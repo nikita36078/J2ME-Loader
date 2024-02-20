@@ -46,9 +46,11 @@ namespace mmapi {
     }
 
     void BasePlayer::deallocate() {
-        oboeStream->stop();
-        oboeStream->close();
-        oboeStream.reset();
+        if (oboeStream != nullptr) {
+            oboeStream->stop();
+            oboeStream->close();
+            oboeStream.reset();
+        }
         loopCount = looping;
         state = REALIZED;
     }
@@ -85,42 +87,7 @@ namespace mmapi {
         loopCount = count;
     }
 
-    int32_t BasePlayer::setPan(int32_t pan) {
-        return 0;
-    }
-
-    int32_t BasePlayer::getPan() {
-        return 0;
-    }
-
-    void BasePlayer::setMute(bool mute) {
-        if (mute && !muted) {
-            volume = getVolume();
-            setVolume(0);
-            muted = true;
-        } else if (!mute && muted) {
-            setVolume(volume);
-            muted = false;
-        }
-    }
-
-    int32_t BasePlayer::setVolume(int32_t level) {
-        if (level < 0) {
-            level = 0;
-        } else if (level > 100) {
-            level = 100;
-        }
-        volume = level;
-        return level;
-    }
-
-    bool BasePlayer::isMuted() const {
-        return muted;
-    }
-
-    int32_t BasePlayer::getVolume() {
-        return volume;
-    }
+    void BasePlayer::setPan(int32_t /*pan*/) {}
 
     bool BasePlayer::realize() {
         state = REALIZED;

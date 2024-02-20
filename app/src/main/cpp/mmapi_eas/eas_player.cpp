@@ -104,6 +104,9 @@ namespace mmapi {
                 }
             }
             EAS_Shutdown(easHandle);
+            file = nullptr;
+            media = nullptr;
+            easHandle = nullptr;
         }
 
         int64_t Player::getMediaTime() {
@@ -120,12 +123,12 @@ namespace mmapi {
             return BasePlayer::setMediaTime(now);
         }
 
-        int32_t Player::setVolume(int32_t level) {
-            int32_t volume = BasePlayer::setVolume(level);
-            if (media != nullptr) {
-                EAS_SetVolume(easHandle, media, volume);
+        void Player::setVolume(int32_t level) {
+            if (easHandle == nullptr) {
+                return;
             }
-            return volume;
+            // FIXME: clumsy workaround to normalize loudness distribution
+            EAS_SetVolume(easHandle, nullptr, level / 2 + 40);
         }
 
         int32_t Player::initSoundBank(const char *sound_bank) {
@@ -161,7 +164,6 @@ namespace mmapi {
             }
             media = stream;
             file = pFile;
-            setVolume(getVolume());
             return result;
         }
 

@@ -114,40 +114,16 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setRepeat
     player->setRepeat(count);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setPan
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setPan
 (JNIEnv */*env*/, jobject /*thiz*/, jlong handle, jint pan) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-    return player->setPan(pan);
+    player->setPan(pan);
 }
 
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getPan
-(JNIEnv */*env*/, jobject /*thiz*/, jlong handle) {
-    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-    return player->getPan();
-}
-
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setMute
-(JNIEnv */*env*/, jobject /*thiz*/, jlong handle, jboolean mute) {
-    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-    player->setMute(mute);
-}
-
-JNIEXPORT jboolean JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_isMuted
-(JNIEnv */*env*/, jobject /*thiz*/, jlong handle) {
-    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-    return player->isMuted();
-}
-
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setVolume
+JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_setVolume
 (JNIEnv */*env*/, jobject /*thiz*/, jlong handle, jint level) {
     auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-    return player->setVolume(level);
-}
-
-JNIEXPORT jint JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getVolume
-(JNIEnv */*env*/, jobject /*thiz*/, jlong handle) {
-    auto *player = reinterpret_cast<mmapi::eas::Player *>(handle);
-    return player->getVolume();
+    player->setVolume(level);
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_eas_LibEAS_getDuration

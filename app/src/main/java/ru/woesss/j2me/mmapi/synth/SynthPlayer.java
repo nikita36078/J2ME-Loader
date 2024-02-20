@@ -64,6 +64,9 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 
 	private Map<String, Control> controls;
 	private int state = UNREALIZED;
+	private int volume = 100;
+	private boolean mute;
+	private int pan;
 
 	SynthPlayer(Library library, DataSource dataSource) {
 		String locator = dataSource.getLocator();
@@ -188,6 +191,7 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 
 	@Override
 	public long getDuration() {
+		checkClosed();
 		return library.getDuration(handle);
 	}
 
@@ -216,33 +220,69 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 
 	@Override
 	public int setPan(int pan) {
-		return library.setPan(handle, pan);
+		if (pan < -100) {
+			pan = -100;
+		} else if (pan > 100) {
+			pan = 100;
+		}
+		if (this.pan == pan) {
+			return pan;
+		}
+		this.pan = pan;
+		if (state == CLOSED) {
+			return pan;
+		}
+		library.setPan(handle, pan);
+		return pan;
 	}
 
 	@Override
 	public int getPan() {
-		return library.getPan(handle);
+		return pan;
 	}
 
 	@Override
 	public void setMute(boolean mute) {
-		library.setMute(handle, mute);
-
+		if (this.mute == mute) {
+			return;
+		}
+		this.mute = mute;
+		if (state == CLOSED) {
+			return;
+		}
+		library.setVolume(handle, mute ? 0 : volume);
+		postEvent(PlayerListener.VOLUME_CHANGED, this);
 	}
 
 	@Override
 	public boolean isMuted() {
-		return library.isMuted(handle);
+		return mute;
 	}
 
 	@Override
 	public int setLevel(int level) {
-		return library.setVolume(handle, level);
+		if (level < 0) {
+			level = 0;
+		} else if (level > 100) {
+			level = 100;
+		}
+		if (volume == level) {
+			return level;
+		}
+		volume = level;
+		if (state == CLOSED) {
+			return level;
+		}
+		if (!mute) {
+			library.setVolume(handle, level);
+		}
+		postEvent(PlayerListener.VOLUME_CHANGED, this);
+		return level;
 	}
 
 	@Override
 	public int getLevel() {
-		return library.getVolume(handle);
+		return volume;
 	}
 
 	@Override
@@ -266,7 +306,7 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 	@Override
 	public synchronized void addPlayerListener(PlayerListener playerListener) {
 		checkClosed();
-		if (!listeners.contains(playerListener) && playerListener != null) {
+		if (playerListener != null && !listeners.contains(playerListener)) {
 			listeners.add(playerListener);
 		}
 	}
@@ -281,18 +321,21 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 	@Keep // call from native
 	private void postEvent(int type, long time) {
 		switch (type) {
-			case 1: // restart
+			case 1 -> { // restart
 				postEvent(PlayerListener.END_OF_MEDIA, time);
 				postEvent(PlayerListener.STARTED, 0);
-				break;
-			case 2: // stop
+			}
+			case 2 -> { // stop
 				postEvent(PlayerListener.END_OF_MEDIA, time);
 				state = PREFETCHED;
-				break;
-			case 3: // error
+			}
+			case 3 -> { // error
 				postEvent(PlayerListener.ERROR, null);
 				state = PREFETCHED;
-				break;
+			}
+			case 4 -> { // volume
+				postEvent(PlayerListener.VOLUME_CHANGED, this);
+			}
 		}
 	}
 
@@ -310,6 +353,7 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 	}
 
 	private void checkRealized() {
+		checkClosed();
 		if (state < REALIZED) {
 			throw new IllegalStateException("call realize() before using the player");
 		}

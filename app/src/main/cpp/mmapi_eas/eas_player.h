@@ -32,7 +32,7 @@ namespace mmapi {
             oboe::Result pause() override;
             oboe::Result prefetch() override;
             int64_t setMediaTime(int64_t now) override;
-            int32_t setVolume(int32_t level) override;
+            void setVolume(int32_t level) override;
             int32_t setDataSource(BaseFile *pFile);
             jint writeMIDI(util::JByteArrayPtr &data);
 
@@ -44,13 +44,14 @@ namespace mmapi {
             static int32_t initSoundBank(const char *sound_bank);
             static int32_t createPlayer(const char *locator, Player **pPlayer);
 
+        protected:
+            oboe::Result createAudioStream() override;
+
         private:
             static int32_t openSource(EAS_DATA_HANDLE easHandle,
                                       BaseFile *pFile,
                                       EAS_HANDLE *outStream,
                                       int64_t *outDuration);
-
-            oboe::Result createAudioStream() override;
         }; // class Player
     } // namespace eas
 } // namespace mmapi

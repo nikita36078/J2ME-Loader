@@ -51,17 +51,9 @@ public class LibEAS implements Library {
 	@Override
 	public native void setRepeat(long handle, int count);
 	@Override
-	public native int setPan(long handle, int pan);
+	public native void setPan(long handle, int pan);
 	@Override
-	public native int getPan(long handle);
-	@Override
-	public native void setMute(long handle, boolean mute);
-	@Override
-	public native boolean isMuted(long handle);
-	@Override
-	public native int setVolume(long handle, int level);
-	@Override
-	public native int getVolume(long handle);
+	public native void setVolume(long handle, int level);
 	@Override
 	public native long getDuration(long handle);
 	@Override
