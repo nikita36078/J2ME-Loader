@@ -27,7 +27,6 @@ namespace mmapi {
             void deallocate() override;
             void close() override;
             oboe::Result prefetch() override;
-            void setVolume(int32_t level) override;
             int32_t setDataSource(util::JByteArrayPtr *data);
 
             oboe::DataCallbackResult
@@ -41,8 +40,6 @@ namespace mmapi {
 
         private:
             void processEvents(bool playMode);
-
-            static float computeGain(int32_t level);
         }; // class Player
     } // namespace tiny
 } // namespace mmapi

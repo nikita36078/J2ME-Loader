@@ -65,6 +65,7 @@ namespace mmapi {
                 return result;
             }
             *pPlayer = new Player(easHandle, file, stream, duration);
+            (*pPlayer)->playTime = 0;
             return result;
         }
 
@@ -110,28 +111,6 @@ namespace mmapi {
             easHandle = nullptr;
         }
 
-        int64_t Player::getMediaTime() {
-            if (file == nullptr) {
-                return -1;
-            }
-            return BasePlayer::getMediaTime();
-        }
-
-        int64_t Player::setMediaTime(int64_t now) {
-            if (file == nullptr) {
-                return -1;
-            }
-            return BasePlayer::setMediaTime(now);
-        }
-
-        void Player::setVolume(int32_t level) {
-            if (easHandle == nullptr) {
-                return;
-            }
-            // FIXME: clumsy workaround to normalize loudness distribution
-            EAS_SetVolume(easHandle, nullptr, level / 2 + 40);
-        }
-
         int32_t Player::initSoundBank(const char *sound_bank) {
             EAS_DATA_HANDLE easHandle;
             EAS_RESULT result = EAS_Init(&easHandle);
@@ -165,6 +144,7 @@ namespace mmapi {
             }
             media = stream;
             file = pFile;
+            playTime = 0;
             return result;
         }
 
@@ -204,7 +184,7 @@ namespace mmapi {
                 return result;
             }
             *outStream = stream;
-            *outDuration = length >= 0 ? length * 1000LL : length;
+            *outDuration = length > 0 ? length * 1000LL : length;
             return EAS_SUCCESS;
         }
 
@@ -256,12 +236,12 @@ namespace mmapi {
                 seekTime = -1;
             }
 
-            auto *p = static_cast<EAS_PCM *>(audioData);
+            auto *stream = static_cast<EAS_PCM *>(audioData);
             int numFramesOutput = 0;
             EAS_RESULT result;
             for (int i = 0; i < NUM_COMBINE_BUFFERS; i++) {
                 EAS_I32 numRendered;
-                result = EAS_Render(easHandle, p, easConfig->mixBufferSize, &numRendered);
+                result = EAS_Render(easHandle, stream, easConfig->mixBufferSize, &numRendered);
                 if (result != EAS_SUCCESS) {
                     playerListener->postEvent(ERROR, result);
                     ALOGE("%s: EAS_Render() returned %s, numFramesOutput = %d",
@@ -270,7 +250,10 @@ namespace mmapi {
                           numFramesOutput);
                     return oboe::DataCallbackResult::Stop; // Stop processing to prevent infinite loops.
                 }
-                p += numRendered * easConfig->numChannels;
+                for (int j = 0; j < numRendered; ++j) {
+                    *stream++ *= gainLeft;
+                    *stream++ *= gainRight;
+                }
                 numFramesOutput += numRendered;
             }
 

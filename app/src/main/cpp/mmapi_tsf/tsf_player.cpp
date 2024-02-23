@@ -44,6 +44,7 @@ namespace mmapi {
             unsigned int timeLength;
             tml_get_info(midi, nullptr, nullptr, nullptr, nullptr, &timeLength);
             *pPlayer = new Player(synth, midi, timeLength * 1000LL);
+            (*pPlayer)->playTime = 0;
             return 0;
         }
 
@@ -64,8 +65,7 @@ namespace mmapi {
                 return result;
             }
 
-            // Set the SoundFont rendering output mode
-            tsf_set_output(synth, TSF_STEREO_INTERLEAVED, oboeStream->getSampleRate(), synth->globalGainDB);
+            synth->outSampleRate = oboeStream->getSampleRate();
             return result;
         }
 
@@ -82,13 +82,6 @@ namespace mmapi {
             tsf_close(synth);
             media = nullptr;
             synth = nullptr;
-        }
-
-        void Player::setVolume(int32_t level) {
-            if (synth == nullptr) {
-                return;
-            }
-            tsf_set_volume(synth, computeGain(level));
         }
 
         int32_t Player::initSoundBank(const char *sound_bank) {
@@ -113,6 +106,7 @@ namespace mmapi {
             }
             media = midi;
             currentMsg = midi;
+            playTime = 0;
             return 0;
         }
 
@@ -121,10 +115,6 @@ namespace mmapi {
                 return oboe::Result::ErrorInvalidState;
             }
             return BasePlayer::prefetch();
-        }
-
-        float Player::computeGain(int32_t level) {
-            return static_cast<float>(1.0 - log(101 - level) / log(101));
         }
 
         void Player::processEvents(bool playMode) {
@@ -190,15 +180,21 @@ namespace mmapi {
             //Number of samples to process
             int sampleBlock = TSF_RENDER_EFFECTSAMPLEBLOCK;
             auto *stream = static_cast<float *>(audioData);
-            for (; numFrames > 0; numFrames -= sampleBlock, stream += sampleBlock * NUM_CHANNELS) {
+            for (; numFrames > 0; numFrames -= sampleBlock) {
                 //We progress the MIDI playback and then process TSF_RENDER_EFFECTSAMPLEBLOCK samples at once
-                if (sampleBlock > numFrames) sampleBlock = numFrames;
+                if (sampleBlock > numFrames) {
+                    sampleBlock = numFrames;
+                }
 
                 playTime += sampleBlock * 1000000LL / audioStream->getSampleRate();
                 processEvents(true);
 
                 // Render the block of audio samples in float format
                 tsf_render_float(synth, stream, sampleBlock);
+                for (int j = 0; j < sampleBlock; ++j) {
+                    *stream++ *= gainLeft;
+                    *stream++ *= gainRight;
+                }
             }
             return oboe::DataCallbackResult::Continue;
         }

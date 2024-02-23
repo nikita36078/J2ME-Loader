@@ -15,10 +15,12 @@ namespace mmapi {
         int32_t loopCount = 0;
         int32_t looping = 0;
         std::shared_ptr<oboe::AudioStream> oboeStream;
-        int64_t playTime = 0;
+        int64_t playTime = -1;
         int64_t seekTime = -1;
         PlayerState state = UNREALIZED;
         PlayerListener *playerListener = nullptr;
+        float gainLeft = 1;
+        float gainRight = 1;
     public:
         int64_t duration;
 
@@ -30,14 +32,13 @@ namespace mmapi {
         virtual oboe::Result pause();
         virtual void deallocate();
         virtual void close();
-        virtual int64_t setMediaTime(int64_t now);
-        virtual int64_t getMediaTime();
-        virtual void setVolume(int32_t level) = 0;
 
         oboe::Result start();
         bool realize();
+        int64_t getMediaTime();
+        int64_t setMediaTime(int64_t now);
         void setRepeat(int32_t count);
-        void setPan(int32_t pan);
+        void setVolume(float_t left, float_t right);
         void setListener(PlayerListener *listener);
         void onErrorAfterClose(oboe::AudioStream *stream, oboe::Result result) override;
 

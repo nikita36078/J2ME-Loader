@@ -87,7 +87,10 @@ namespace mmapi {
         loopCount = count;
     }
 
-    void BasePlayer::setPan(int32_t /*pan*/) {}
+    void mmapi::BasePlayer::setVolume(float_t left, float_t right) {
+        gainLeft = left;
+        gainRight = right;
+    }
 
     bool BasePlayer::realize() {
         state = REALIZED;

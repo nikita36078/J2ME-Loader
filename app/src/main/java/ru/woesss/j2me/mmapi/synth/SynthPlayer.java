@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -158,7 +158,7 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 
 		if (state == PREFETCHED) {
 			library.deallocate(handle);
-			state = UNREALIZED;
+			state = REALIZED;
 		}
 	}
 
@@ -232,7 +232,9 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 		if (state == CLOSED) {
 			return pan;
 		}
-		library.setPan(handle, pan);
+		if (!mute) {
+			updateVolume();
+		}
 		return pan;
 	}
 
@@ -250,7 +252,11 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 		if (state == CLOSED) {
 			return;
 		}
-		library.setVolume(handle, mute ? 0 : volume);
+		if (mute) {
+			library.setVolume(handle, 0, 0);
+		} else {
+			updateVolume();
+		}
 		postEvent(PlayerListener.VOLUME_CHANGED, this);
 	}
 
@@ -274,7 +280,7 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 			return level;
 		}
 		if (!mute) {
-			library.setVolume(handle, level);
+			updateVolume();
 		}
 		postEvent(PlayerListener.VOLUME_CHANGED, this);
 		return level;
@@ -333,9 +339,6 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 				postEvent(PlayerListener.ERROR, null);
 				state = PREFETCHED;
 			}
-			case 4 -> { // volume
-				postEvent(PlayerListener.VOLUME_CHANGED, this);
-			}
 		}
 	}
 
@@ -383,5 +386,25 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 	protected void finalize() throws Throwable {
 		library.finalize(handle);
 		super.finalize();
+	}
+
+	private void updateVolume() {
+		float gain = volumeToGain(volume);
+		if (pan == 0) {
+			library.setVolume(handle, gain, gain);
+		} else if (pan < 0) {
+			library.setVolume(handle, gain, volumeToGain(volume * (100 + pan) / 100));
+		} else {
+			library.setVolume(handle, volumeToGain(volume * (100 - pan) / 100), gain);
+		}
+	}
+
+	private float volumeToGain(int volume) {
+		if (volume <= 0) {
+			return 0.0f;
+		} else if (volume >= 100) {
+			return 1.0f;
+		}
+		return (float) (1 - (Math.log(100 - volume) / Math.log(100)));
 	}
 }

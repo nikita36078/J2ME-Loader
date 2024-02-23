@@ -28,11 +28,8 @@ namespace mmapi {
 
             void deallocate() override;
             void close() override;
-            int64_t getMediaTime() override;
             oboe::Result pause() override;
             oboe::Result prefetch() override;
-            int64_t setMediaTime(int64_t now) override;
-            void setVolume(int32_t level) override;
             int32_t setDataSource(BaseFile *pFile);
             jint writeMIDI(util::JByteArrayPtr &data);
 

@@ -112,16 +112,10 @@ JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setRepeat
     player->setRepeat(count);
 }
 
-JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setPan
-(JNIEnv */*env*/, jobject /*thiz*/, jlong handle, jint pan) {
-    auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
-    player->setPan(pan);
-}
-
 JNIEXPORT void JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_setVolume
-(JNIEnv */*env*/, jobject /*thiz*/, jlong handle, jint level) {
+(JNIEnv */*env*/, jobject /*thiz*/, jlong handle, jfloat left, jfloat right) {
     auto *player = reinterpret_cast<mmapi::tiny::Player *>(handle);
-    player->setVolume(level);
+    player->setVolume(left, right);
 }
 
 JNIEXPORT jlong JNICALL Java_ru_woesss_j2me_mmapi_synth_tsf_LibTSF_getDuration

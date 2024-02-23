@@ -284,23 +284,25 @@ public class BasePlayer implements Player, VolumeControl, PanControl {
 		if (mute) {
 			left = right = 0;
 		} else {
-			if (level == 100) {
-				left = right = 1.0f;
-			} else {
-				left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
-			}
-
-			if (pan >= 0) {
-				left *= (float) (100 - pan) / 100f;
-			}
-
-			if (pan < 0) {
-				right *= (float) (100 + pan) / 100f;
+			left = right = volumeToGain(level);
+			if (pan > 0) {
+				left = volumeToGain(level * (100 - pan) / 100);
+			} else if (pan < 0) {
+				right =  volumeToGain(level * (100 + pan) / 100);
 			}
 		}
 
 		doSetVolume(left, right);
 		postEvent(PlayerListener.VOLUME_CHANGED, this);
+	}
+
+	private float volumeToGain(int volume) {
+		if (volume <= 0) {
+			return 0.0f;
+		} else if (volume >= 100) {
+			return 1.0f;
+		}
+		return (float) (1 - (Math.log(100 - volume) / Math.log(100)));
 	}
 
 	@Override

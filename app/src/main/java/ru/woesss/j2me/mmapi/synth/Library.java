@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,7 @@ public interface Library {
 	long setMediaTime(long handle, long now);
 	long getMediaTime(long handle);
 	void setRepeat(long handle, int count);
-	void setPan(long handle, int pan);
-	void setVolume(long handle, int level);
+	void setVolume(long handle, float left, float right);
 	long getDuration(long handle);
 	void setListener(long handle, Object listener);
 	void setDataSource(long handle, byte[] data);
