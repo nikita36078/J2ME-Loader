@@ -41,6 +41,7 @@ namespace mmapi {
             if (result != EAS_SUCCESS) {
                 return result;
             }
+            EAS_SetHeaderSearchFlag(easHandle, false);
             if (strcmp(locator, "device://tone") == 0) {
                 *pPlayer = new Player(easHandle, nullptr, nullptr, -1);
                 return EAS_SUCCESS;
@@ -137,7 +138,7 @@ namespace mmapi {
             if (result != EAS_SUCCESS) {
                 return result;
             }
-
+            EAS_SetHeaderSearchFlag(easHandle, false);
             IOFile file(sound_bank, "rb");
             result = EAS_LoadDLSCollection(easHandle, nullptr, &file.easFile);
             if (result == EAS_SUCCESS) {
