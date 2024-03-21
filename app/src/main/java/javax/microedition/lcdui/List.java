@@ -297,7 +297,9 @@ public class List extends Screen implements Choice {
 		menu.clear();
 
 		for (Command cmd : getCommands()) {
-			menu.add(hashCode(), cmd.hashCode(), cmd.getPriority(), cmd.getAndroidLabel());
+			if (cmd == selectCommand || cmd.getCommandType() == Command.ITEM) {
+				menu.add(hashCode(), cmd.hashCode(), cmd.getPriority(), cmd.getAndroidLabel());
+			}
 		}
 	}
 
