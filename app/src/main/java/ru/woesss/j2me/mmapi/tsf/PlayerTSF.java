@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
-import javax.microedition.media.BasePlayer;
+import javax.microedition.media.BasePlayer2;
 import javax.microedition.media.Control;
 import javax.microedition.media.InternalDataSource;
 import javax.microedition.media.InternalEqualizer;
@@ -38,7 +38,7 @@ import javax.microedition.media.PlayerListener;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.VolumeControl;
 
-class PlayerTSF extends BasePlayer implements VolumeControl, PanControl {
+class PlayerTSF extends BasePlayer2 implements VolumeControl, PanControl {
 	private static final String TAG = "PlayerTSF";
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
