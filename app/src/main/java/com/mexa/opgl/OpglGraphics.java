@@ -427,7 +427,7 @@ public class OpglGraphics {
 				EGL10.EGL_BLUE_SIZE, 8,
 				EGL10.EGL_ALPHA_SIZE, 8,
 				EGL10.EGL_DEPTH_SIZE, 16,
-				EGL10.EGL_STENCIL_SIZE, EGL10.EGL_DONT_CARE,
+				EGL10.EGL_STENCIL_SIZE, 8,
 				EGL10.EGL_NONE
 		};
 		EGLConfig[] eglConfigs = new EGLConfig[1];
@@ -438,7 +438,7 @@ public class OpglGraphics {
 		this.gl = (GL11) eglContext.getGL();
 	}
 
-	public static synchronized OpglGraphics getInstance() {
+	public static OpglGraphics getInstance() {
 		return INSTANCE;
 	}
 

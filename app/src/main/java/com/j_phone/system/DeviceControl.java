@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public class DeviceControl {
 	}
 
 	public int getDeviceState(int device) {
-		if (device != 3) {
+		if (device != KEY_STATE) {
 			return 0;
 		}
 		VirtualKeyboard vk = ContextHolder.getVk();
@@ -72,7 +72,10 @@ public class DeviceControl {
 	}
 
 	public boolean setDeviceActive(int device, boolean active) {
-		return true;
+		return switch (device) {
+			case VIBRATION -> ContextHolder.vibrate(active ? 5000 : 0);
+			default -> true;
+		};
 	}
 
 	public void blink(int a, int b, int c) {}
