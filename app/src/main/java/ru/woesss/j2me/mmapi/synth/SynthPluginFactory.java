@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,6 @@ public class SynthPluginFactory {
 			plugins.add(new SynthPlugin(new LibEAS(soundBank)));
 		} catch (Throwable e) {
 			Log.w(TAG, "create EAS plugin failed", e);
-			plugins.add(new MIDIDevicePlugin());
 		}
 		try {
 			plugins.add(new SynthPlugin(new LibTSF(soundBank)));
@@ -50,6 +49,7 @@ public class SynthPluginFactory {
 		}
 		if (plugins.isEmpty()) {
 			ContextHolder.getActivity().toast(R.string.msg_unsupported_soundbank);
+			plugins.add(new MIDIDevicePlugin());
 		}
 	}
 }
