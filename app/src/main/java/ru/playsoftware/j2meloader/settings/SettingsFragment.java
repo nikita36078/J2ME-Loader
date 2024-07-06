@@ -16,9 +16,13 @@
 
 package ru.playsoftware.j2meloader.settings;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.widget.Toast;
 
 import com.nononsenseapps.filepicker.Utils;
 
@@ -35,12 +39,29 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_STR;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	private Preference prefFolder;
 	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
 			new PickDirResultContract(),
 			this::onPickDirResult);
+
+	private final ActivityResultLauncher<String> changeWorkDirLauncher = registerForActivityResult(
+			FileUtils.getDirPicker(),
+			this::onChangeWorkDirResult);
+
+	private void onChangeWorkDirResult(Uri uri) {
+		if (uri == null) {
+			return;
+		}
+		String filePath = FileUtils.fileUriToStr(uri);
+		requireActivity().getSharedPreferences(PREF_STR, Context.MODE_WORLD_WRITEABLE).edit().putString(PREF_EMULATOR_DIR, filePath).apply();
+		prefFolder = findPreference(PREF_EMULATOR_DIR);
+		prefFolder.setSummary(filePath);
+
+	}
+
 
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
@@ -54,6 +75,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 				return true;
 			});
 		}
+		findPreference(PREF_EMULATOR_DIR).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				File dir = Environment.getExternalStorageDirectory();
+				if (dir.canRead()) {
+					try {
+						changeWorkDirLauncher.launch(dir.getAbsolutePath());
+					} catch (ActivityNotFoundException e) {
+						Toast.makeText(getContext(), R.string.error_no_picker, Toast.LENGTH_SHORT).show();
+						e.printStackTrace();
+					}
+				}
+				return false;
+			}
+		});
+
 	}
 
 	private void onPickDirResult(Uri uri) {
@@ -72,7 +109,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 					.show();
 			return;
 		}
-		getPreferenceManager().getSharedPreferences().edit()
+		requireActivity().getSharedPreferences(PREF_STR, Context.MODE_WORLD_WRITEABLE).edit()
 				.putString(PREF_EMULATOR_DIR, path)
 				.apply();
 		prefFolder.setSummary(path);

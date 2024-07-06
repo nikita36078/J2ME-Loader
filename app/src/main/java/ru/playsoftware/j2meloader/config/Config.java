@@ -16,6 +16,11 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_START_ARGUMENTS;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,13 +32,8 @@ import java.io.File;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-import androidx.preference.PreferenceManager;
-
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
-
-import static ru.playsoftware.j2meloader.util.Constants.*;
-
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Config {
@@ -56,6 +56,7 @@ public class Config {
 	private static String configsDir;
 	private static String profilesDir;
 	private static String appDir;
+	public static String PREF_STR="j2meloader";
 
 	private static final SharedPreferences.OnSharedPreferenceChangeListener sPrefListener =
 			(sharedPreferences, key) -> {
@@ -72,13 +73,21 @@ public class Config {
 		}
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 				+ "/" + appName;
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		String path = FileUtils.isExternalStorageLegacy() ?
-				preferences.getString(PREF_EMULATOR_DIR, null) :
-				context.getExternalFilesDir(null).getPath();
+		SharedPreferences preferences = context.getSharedPreferences(PREF_STR,Context.MODE_PRIVATE);
+
+		//注释掉该行，可以读取自定义路径
+		//comment the line code , will read custom path.
+//		String path = FileUtils.isExternalStorageLegacy() ?
+//				preferences.getString(PREF_EMULATOR_DIR, null) :
+//				context.getExternalFilesDir(null).getPath();
+
+		//加上该行代码，可以读取自己设置的路径，而不是自动配置路径
+		//add the code line , will read custom path , and not auto path.
+		String path = preferences.getString(PREF_EMULATOR_DIR, context.getExternalFilesDir(null).getPath());
 		if (path == null) {
 			path = Environment.getExternalStorageDirectory() + "/" + appName;
 		}
+
 		initDirs(path);
 		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);
 	}

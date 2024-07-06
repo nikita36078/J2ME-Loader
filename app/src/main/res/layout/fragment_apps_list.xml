@@ -19,11 +19,33 @@
         android:text="@string/no_data_for_display"
         android:textSize="18sp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/ic_add_white" />
+        android:orientation="vertical"
+        >
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_add_white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:backgroundTint="@android:color/darker_gray"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_add_white" />
+
+
+    </LinearLayout>
+
+
+
 </FrameLayout>

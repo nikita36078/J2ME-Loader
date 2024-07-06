@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import androidx.activity.result.contract.ActivityResultContract;
+import androidx.core.content.FileProvider;
 
 import com.nononsenseapps.filepicker.Utils;
 
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.util.List;
 
 import ru.playsoftware.j2meloader.config.Config;
 
@@ -230,4 +232,56 @@ public class FileUtils {
 			return new SAFFileResultContract();
 		}
 	}
+
+	public static ActivityResultContract<String,Uri> getDirPicker() {
+		if (isExternalStorageLegacy()) {
+			return new PickDirResultContract();
+		} else {
+			return new SAFDirResultContract();
+		}
+	}
+
+	public static  void getAllFileByEndName(String filePath, String file_end_name, List<File> files){
+
+		//获取指定目录下的所有文件或者目录的File数组
+		File[] fileArray = new File(filePath).listFiles();
+		//遍历该File数组，得到每一个File对象
+		if(fileArray != null){
+			for (File file :fileArray){
+				//判断file对象是否为目录
+				if (file.isDirectory()){
+					//是：递归调用
+					getAllFileByEndName(file.getAbsolutePath(),file_end_name,files);
+				}else{
+					//否：获取绝对路径输出在控制台
+					String filepath = file.getAbsolutePath();
+					if(filepath.indexOf(file_end_name) != -1){
+						files.add(file);
+					}
+				}
+			}
+		}
+	}
+
+	public static Uri toUri(Context context,String filePath) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			return FileProvider.getUriForFile(context, context.getApplicationInfo().packageName + ".fileprovider", new File(filePath));
+		}
+		return Uri.fromFile(new File(filePath));
+	}
+
+	public static String fileUriToStr(Uri uri){
+		String storage = Environment.getExternalStorageDirectory().toString();
+		String path = uri.getPath();
+		if (path.indexOf("tree/primary") != -1) {
+			return storage + "/" + path.replaceAll("/tree/primary:", "");
+		} else if (path.indexOf("document/primary") != -1) {
+			String filePath = storage + "/" + path.replaceAll("/document/primary:", "");
+			filePath = new File(filePath).getParent();
+			return filePath;
+		} else {
+			return new File(path).getParent();
+		}
+	}
+
 }

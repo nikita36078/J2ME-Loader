@@ -1,18 +1,19 @@
-# J2ME-Loader 
-Base on [J2ME-Loader](https://github.com/nikita36078/J2ME-Loader)
+# J2ME-Loader
+该项目基于 [J2ME-Loader](https://github.com/nikita36078/J2ME-Loader) 制作
 
-# UPDATE:
+# 更新日志: 
 
 - V1.8.0
 
-1.Add all jar files in the installation folder.
+1.添加一键安装文件夹内所有jar文件功能.
 
-2.Add custom working folder path.
+2.添加自定义工作路径功能.
 
-3.Add armv7-a and arm64 support.
+3.添加arm跟arm64支持.
 
 
-## License
+
+## 开源许可
 > Copyright 2017-2023 Nikita Shakarun.
 > Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)

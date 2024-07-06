@@ -18,11 +18,18 @@
 package ru.playsoftware.j2meloader;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Process;
+import android.provider.Settings;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -31,7 +38,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.filepicker.Utils;
 
@@ -48,10 +54,11 @@ import ru.woesss.j2me.installer.InstallerDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_STORAGE_WARNING_SHOWN;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_STR;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
 
 public class MainActivity extends BaseActivity {
-	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission_group.STORAGE,Manifest.permission.INSTALL_PACKAGES, Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE,Manifest.permission.REQUEST_COMPANION_PROFILE_WATCH};
 
 	private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
 			new ActivityResultContracts.RequestMultiplePermissions(),
@@ -67,9 +74,35 @@ public class MainActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		Context context = this;
+
 		if (FileUtils.isExternalStorageLegacy()) {
 			permissionsLauncher.launch(STORAGE_PERMISSIONS);
 		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			this.requestPermissions(STORAGE_PERMISSIONS,0);
+		}
+		//request storage permission  Android 4.x~14
+		// 通过api判断手机当前版本号
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			// 安卓11，判断有没有“所有文件访问权限”权限
+			if (!Environment.isExternalStorageManager()) {
+				Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+				intent.setData(Uri.parse("package:" + context.getPackageName()));
+				context.startActivity(intent);
+			}
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			// 安卓6 判断有没有读写权限权限
+			if (checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+				Toast.makeText(context, "is request READ_EXTERNAL_STORAGE permission", Toast.LENGTH_SHORT).show();
+			}else{
+				Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+				intent.setData(Uri.parse("package:" + context.getPackageName()));
+				context.startActivity(intent);
+			}
+		}
+
+
 		appListModel = new ViewModelProvider(this).get(AppListModel.class);
 		if (savedInstanceState == null) {
 			Intent intent = getIntent();
@@ -81,7 +114,7 @@ public class MainActivity extends BaseActivity {
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.container, fragment).commit();
 		}
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		preferences = context.getSharedPreferences(PREF_STR,MODE_WORLD_WRITEABLE);
 		if (!preferences.contains(PREF_TOOLBAR)) {
 			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
 			preferences.edit().putBoolean(PREF_TOOLBAR, enable).apply();
@@ -92,6 +125,11 @@ public class MainActivity extends BaseActivity {
 			preferences.edit().putBoolean(PREF_STORAGE_WARNING_SHOWN, true).apply();
 		}
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+	}
+
+	public int checkSelfPermission(Context context , String permission){
+		ContextWrapper c = new ContextWrapper(context);
+		return c.checkPermission(permission, Process.myUid(),Process.myUid());
 	}
 
 	private void checkAndCreateDirs() {

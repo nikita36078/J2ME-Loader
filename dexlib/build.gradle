@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdk MIN_SDK
         targetSdk TARGET_SDK
-        versionCode 1
-        versionName "1.13"
     }
 
     buildTypes {

@@ -37,8 +37,10 @@ public class Constants {
 	public static final String PREF_VIBRATION = "pref_vibration_switch";
 	public static final String PREF_SCREENSHOT_SWITCH = "pref_screenshot_switch";
 	public static final String PREF_STORAGE_WARNING_SHOWN = "pref_storage_warning_shown";
+	public static final String PREF_STR = "j2meloader";
 
 	public static final int RESULT_NEED_RECREATE = 1;
+
 
 	private Constants(){}
 }

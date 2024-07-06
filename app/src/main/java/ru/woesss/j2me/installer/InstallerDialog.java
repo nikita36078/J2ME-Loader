@@ -67,7 +67,6 @@ public class InstallerDialog extends DialogFragment {
 	private final ActivityResultLauncher<String> openFileLauncher = registerForActivityResult(
 			FileUtils.getFilePicker(),
 			this::onPickFileResult);
-
 	/**
 	 * @param uri original uri from intent.
 	 * @return A new instance of fragment InstallerDialog.
@@ -89,6 +88,7 @@ public class InstallerDialog extends DialogFragment {
 		fragment.setCancelable(false);
 		return fragment;
 	}
+
 
 	@Override
 	public void onAttach(@NonNull Context context) {
@@ -265,6 +265,7 @@ public class InstallerDialog extends DialogFragment {
 			});
 			btnClose.setText(R.string.close);
 			showButtons();
+
 			return;
 		}
 		Descriptor nd = installer.getNewDescriptor();
