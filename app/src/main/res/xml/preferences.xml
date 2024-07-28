@@ -12,6 +12,12 @@
         android:title="@string/pref_theme_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_black_background"
+        android:key="pref_black_background"
+        android:summary="@string/pref_black_background_summary"
+        android:title="@string/pref_black_background_title" />
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
         android:icon="@drawable/ic_setting_enable_action_bar"
         android:key="pref_actionbar_switch"
         android:summary="@string/pref_enable_actionbar_summary"

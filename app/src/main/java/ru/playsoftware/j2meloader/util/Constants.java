@@ -34,6 +34,7 @@ public class Constants {
 	public static final String PREF_STATUSBAR = "pref_statusbar_switch";
 	public static final String PREF_ADD_CUTOUT_AREA = "pref_add_cutout_area";
 	public static final String PREF_THEME = "pref_theme";
+	public static final String PREF_BLACK_BACKGROUND = "pref_black_background";
 	public static final String PREF_TOOLBAR = "pref_actionbar_switch";
 	public static final String PREF_VIBRATION = "pref_vibration_switch";
 	public static final String PREF_SCREENSHOT_SWITCH = "pref_screenshot_switch";
