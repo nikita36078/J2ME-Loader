@@ -34,7 +34,7 @@ android {
     }
 
     lint {
-        disable 'MissingTranslation'
+        disable 'MissingTranslation', 'ExtraTranslation'
     }
 
     flavorDimensions 'default'
