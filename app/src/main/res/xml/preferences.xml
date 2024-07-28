@@ -24,6 +24,13 @@
         android:title="@string/pref_enable_statusbar_title" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_setting_add_cutout_area"
+        android:key="pref_add_cutout_area"
+        android:title="@string/pref_add_cutout_area_title"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+    <SwitchPreferenceCompat
+        android:defaultValue="false"
         android:icon="@drawable/ic_setting_keep_screen_on"
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />

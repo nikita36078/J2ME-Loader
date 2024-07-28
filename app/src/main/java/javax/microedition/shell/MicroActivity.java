@@ -118,6 +118,10 @@ public class MicroActivity extends AppCompatActivity {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
 		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
+		if (sp.getBoolean(PREF_ADD_CUTOUT_AREA, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			getWindow().getAttributes().layoutInDisplayCutoutMode =
+					WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+		}
 		if (sp.getBoolean(PREF_KEEP_SCREEN, false)) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}

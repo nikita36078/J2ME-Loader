@@ -18,6 +18,7 @@ package ru.playsoftware.j2meloader.settings;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.nononsenseapps.filepicker.Utils;
@@ -34,6 +35,7 @@ import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_ADD_CUTOUT_AREA;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -53,6 +55,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 				openDirLauncher.launch(null);
 				return true;
 			});
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			findPreference(PREF_ADD_CUTOUT_AREA).setVisible(true);
 		}
 	}
 
