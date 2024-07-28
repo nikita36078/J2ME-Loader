@@ -40,27 +40,23 @@ android {
     flavorDimensions 'default'
     productFlavors {
         play {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "true"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro', 'proguard-common.pro'
             versionNameSuffix "-play"
         }
         open {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro', 'proguard-common.pro'
             versionNameSuffix "-open"
         }
         fdroid {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro', 'proguard-common.pro'
         }
         dev {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro', 'proguard-common.pro'
@@ -68,7 +64,6 @@ android {
         }
         // variant dimension for create android port from J2ME app source
         midlet {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
             buildConfigField 'boolean', 'FULL_EMULATOR', 'false'
             // configure midlet's port project params here, as default it read from app manifest,
             // placed to 'app/src/midlet/resources/MIDLET-META-INF/MANIFEST.MF'
@@ -159,9 +154,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.google.guava:guava:31.0.1-android'
-    //noinspection GradleDependency
-    implementation 'com.github.nikita36078:donations:2.8'
-    playImplementation 'com.github.nikita36078:donations:2.9'
 
     // Threads, Streams and Archives
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'

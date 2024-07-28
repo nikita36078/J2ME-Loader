@@ -35,14 +35,7 @@ System requirements: Android 4.0+
 <img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
 * For more screenshots check out the [wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader#Screenshots)
 
-## Donations
-If you like the project, please consider making a donation to support development.
- - [ЮMoney](https://yoomoney.ru/to/41001670387745)
- - Bitcoin (BTC):  `bc1qnzs6zugak4vnm08k8cvl8tkzd09rlxkw4za6gc`
- - Ethereum (ETH): `0x8DF171bDB5c5a7fd0e99934554B72205797cD99E`
- - Litecoin (LTC): `ltc1q8r6e6lf60258vgsyw7ncjxn8pdcfg6z5w0pjjs`
-
 ## License
-> Copyright 2017-2023 Nikita Shakarun.
+> Copyright 2017-2024 Nikita Shakarun.
 > Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)

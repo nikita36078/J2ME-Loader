@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string-array name="donation_google_catalog_values" translatable="false">
-        <item>1 USD</item>
-        <item>2 USD</item>
-        <item>5 USD</item>
-        <item>10 USD</item>
-    </string-array>
     <string-array name="pref_theme_entries" tools:ignore="InconsistentArrays">
         <item>@string/pref_theme_light</item>
         <item>@string/pref_theme_night</item>
