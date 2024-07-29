@@ -28,7 +28,6 @@
     <string name="create_apps_dir_failed">Неуспешно създаване на папка във:\n\'%s\'\nизберете друга.</string>
     <string name="change">Промени</string>
     <string name="choose">Избери</string>
-    <string name="donate">Даряване</string>
     <string name="midlet_name"><b>Име: </b></string>
     <string name="midlet_size"><b>Размер: </b></string>
     <string name="midlet_source"><b>Източник: </b></string>
