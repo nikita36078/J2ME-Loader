@@ -9,6 +9,7 @@
     <string name="licenses">Giấy phép</string>
     <string name="profiles">Hồ sơ</string>
     <string name="save_log">Lưu log</string>
+    <string name="about_message">Ứng dụng này cho phép bạn khởi động J2ME ứng dụng cùng trò chơi trên Android. Nó duy trì đại đa số 2D cùng 3D trò chơi (bao gồm Mascot Capsule 3D trò chơi).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bật tính năng bộ lọc trong một số trường hợp có thể giảm đáng kể hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\" tuỳ chỉnh.</string>
     <string name="author">Người phát triển: </string>
     <string name="version">Ph.bản: </string>
@@ -31,7 +32,6 @@
     <string name="choose">Chọn</string>
     <string name="warning">Cảnh báo</string>
     <string name="scoped_storage_warning">Dữ liệu người dùng của bạn được lưu trữ trong một vị trí mà<b>sẽ bị xóa</b> khi bạn gỡ ứng dụng:\n</string>
-    <string name="donate">Ủng hộ</string>
     <string name="midlet_name"><b>Tên: </b></string>
     <string name="midlet_size"><b>K. Thước: </b></string>
     <string name="midlet_source"><b>Nguồn: </b></string>
@@ -152,8 +152,10 @@
     <string name="screenshot_saved">Ảnh chụp màn hình đã được lưu đến</string>
     <string name="log_saved">Log đã được lưu</string>
     <string name="action_keyboard_ime">Bàn phím (IME)</string>
+    <string name="action_lock_orientation">tỏa định màn hình xoay tròn</string>
     <string name="pref_vk_save_alert">Bàn phím tùy chỉnh sẽ được thay thế bằng hiện tại\nLưu?</string>
     <string name="opt_save_screen_params">lưu thông số màn hình</string>
+    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Loại bỏ</string>
     <string name="pref_theme_auto_battery">Tự động, bằng Trình Tiết Kiệm Pin</string>
     <string name="pref_theme_auto_time">Tự động, theo thời gian</string>
