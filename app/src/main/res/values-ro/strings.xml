@@ -19,7 +19,6 @@
     <string name="action_settings">Setări</string>
     <string name="action_context_delete">Șterge</string>
     <string name="action_context_rename">Renumeste</string>
-    <string name="donate">Donează</string>
     <string name="converting_wait">Se convertește JAR...</string>
     <string name="START_CMD">Start</string>
     <string name="CANCEL_CMD">Anulare</string>
