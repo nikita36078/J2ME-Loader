@@ -23,7 +23,6 @@
     <string name="retry">リトライ</string>
     <string name="error_disk_io">ストレージエラー: ディスク容量を確認してください</string>
     <string name="choose">選択</string>
-    <string name="donate">寄付する</string>
     <string name="midlet_name"><b>名前: </b></string>
     <string name="midlet_size"><b>サイズ: </b></string>
     <string name="midlet_vendor"><b>作者: </b></string>
