@@ -15,7 +15,6 @@
     <string name="action_context_shortcut">Tilføj genvej</string>
     <string name="action_settings">Indstillinger</string>
     <string name="action_context_delete">Slet</string>
-    <string name="donate">Donér</string>
     <string name="converting_wait">Konverterer JAR...</string>
     <string name="START_CMD">Start</string>
     <string name="CANCEL_CMD">Annullér</string>
