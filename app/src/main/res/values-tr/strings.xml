@@ -32,7 +32,6 @@
     <string name="choose">Seç</string>
     <string name="warning">Uyarı</string>
     <string name="scoped_storage_warning">Kullanıcı verileriniz, uygulamayı kaldırdığınızda <b>silinecek</b> bir konumda depolanır:\n</string>
-    <string name="donate">Bağış yap</string>
     <string name="midlet_name"><b>İsim: </b></string>
     <string name="midlet_size"><b>Boyut: </b></string>
     <string name="midlet_source"><b>Kaynak: </b></string>
