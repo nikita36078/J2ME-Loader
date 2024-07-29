@@ -10,7 +10,6 @@
     <string name="version">Version: </string>
     <string name="action_settings">Inställningar</string>
     <string name="action_context_delete">Radera</string>
-    <string name="donate">Donera</string>
     <string name="CANCEL_CMD">Avbryt</string>
     <string name="PREF_SHOW_FPS">Visa FPS</string>
     <string name="PREF_BACKGROUND">Bakgrund</string>
