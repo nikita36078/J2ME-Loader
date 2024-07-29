@@ -23,7 +23,6 @@
     <string name="err_missing_app">Applicatie niet gevonden.\nControleer beschikbaarheid van opslagapparaat %sof maak de snelkoppeling opnieuw aan.</string>
     <string name="error_disk_io">Opslagfout: controleer schijfruimte</string>
     <string name="create_apps_dir_failed">Het aanmaken van een map in het pad is mislukt:\n\'%s\'\nselecteer een andere.</string>
-    <string name="donate">Doneer</string>
     <string name="converting_wait">Converteren JAR...</string>
     <string name="START_CMD">Start</string>
     <string name="CANCEL_CMD">Annuleren</string>
