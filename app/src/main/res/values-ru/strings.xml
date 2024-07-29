@@ -32,7 +32,6 @@
     <string name="choose">Выбрать</string>
     <string name="warning">Внимание</string>
     <string name="scoped_storage_warning">Ваши пользовательские данные хранятся в папке, которая <b>будет удалена</b> при удалении приложения:\n</string>
-    <string name="donate">Поддержать</string>
     <string name="midlet_name"><b>Название: </b></string>
     <string name="midlet_size"><b>Размер: </b></string>
     <string name="midlet_source"><b>Источник: </b></string>
