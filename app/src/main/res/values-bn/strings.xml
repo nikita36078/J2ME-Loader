@@ -20,7 +20,6 @@
     <string name="action_settings">সেটিংস</string>
     <string name="action_context_delete">মুছে ফেলুন</string>
     <string name="action_context_rename">নাম পরিবর্তন করুন</string>
-    <string name="donate">দান করুন ।</string>
     <string name="converting_wait">JAR রূপান্তর...</string>
     <string name="START_CMD">শুরু</string>
     <string name="CANCEL_CMD">বাতিল</string>
