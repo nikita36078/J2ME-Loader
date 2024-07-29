@@ -21,7 +21,6 @@
     <string name="action_context_delete">Elimina</string>
     <string name="action_context_rename">Rinomina</string>
     <string name="create_apps_dir_failed">Impossibile creare una cartella nel percorso:\n\'%s\'\n selezionarne un\'altra.</string>
-    <string name="donate">Dona</string>
     <string name="converting_wait">Conversione del file JAR...</string>
     <string name="START_CMD">Avvia</string>
     <string name="CANCEL_CMD">Annulla</string>
