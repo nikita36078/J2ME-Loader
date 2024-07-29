@@ -18,7 +18,6 @@
     <string name="action_settings">Asetukset</string>
     <string name="action_context_delete">Poista</string>
     <string name="action_context_rename">Nimeä uudelleen</string>
-    <string name="donate">Lahjoita</string>
     <string name="converting_wait">Muunnetaan JARia...</string>
     <string name="START_CMD">Käynnistä</string>
     <string name="CANCEL_CMD">Peruuta</string>
