@@ -32,7 +32,6 @@
     <string name="choose">ବାଛନ୍ତୁ</string>
     <string name="warning">ଚେତାବନୀ</string>
     <string name="scoped_storage_warning">ତୁମର ଉପଭୋକ୍ତା ତଥ୍ୟ ଏକ ଅବସ୍ଥାନରେ ଗଚ୍ଛିତ ହୋଇଛି ଯାହାକି ଯେତେବେଳେ ଆପଣ ଆପ୍ ସଂସ୍ଥାପନ କରିବେ <b> ଡିଲିଟ୍ ହେବ </b>: \n</string>
-    <string name="donate">ଦାନ କରନ୍ତୁ</string>
     <string name="midlet_name"><b>ନାମ: </b></string>
     <string name="midlet_size"><b>ଆକାର: </b></string>
     <string name="midlet_source"><b>ଉତ୍ସ: </b></string>
@@ -46,6 +45,9 @@
     <string name="invalid_resolution_not_saved">ଅବୈଧ ରିଜୋଲ୍ୟୁସନ୍: ସଞ୍ଚୟ ହୋଇନାହିଁ!</string>
     <string name="warn_install_from_net">ଫାଇଲ୍ ଇଣ୍ଟର୍ନେଟ୍ ରୁ ଡାଉନଲୋଡ୍ ହେବ</string>
     <string name="reinstall">ଆପ୍ଲିକେସନ୍ ପୂର୍ବରୁ ସଂସ୍ଥାପିତ ହୋଇଛି।\n\nଆପଣ ଏହାକୁ ପୁନଃସଂସ୍ଥାପନ କରିବାକୁ ଚାହାଁନ୍ତି?\nଡାଟା ସଞ୍ଚୟ ହେବ।</string>
+    <string name="START_CMD">ଆରମ୍ଭ କରନ୍ତୁ</string>
+    <string name="CANCEL_CMD">ବାତିଲ୍ କର</string>
+    <string name="CLEAR_DATA_CMD">ତଥ୍ୟ ସଫା କରନ୍ତୁ</string>
     <string name="PREF_WIDTH">ମୋଟେଇ</string>
     <string name="PREF_HEIGHT">ଉଚ୍ଚତା</string>
     <string name="PREF_FONT_SMALL">ଛୋଟ</string>

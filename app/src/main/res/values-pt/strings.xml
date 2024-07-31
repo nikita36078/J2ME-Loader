@@ -23,7 +23,6 @@
     <string name="err_missing_app">Aplicativo não encontrado. \nVerifique a% de disponibilidade do dispositivo de armazenamento ou recrie o atalho.</string>
     <string name="error_disk_io">Erro de armazenamento: verifique o espaço em disco</string>
     <string name="create_apps_dir_failed">Falha ao criar uma pasta no caminho:\n\'%s\'\nselecione outra.</string>
-    <string name="donate">Doar</string>
     <string name="converting_wait">Convertendo JAR...</string>
     <string name="START_CMD">Iniciar</string>
     <string name="CANCEL_CMD">Cancelar</string>

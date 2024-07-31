@@ -32,7 +32,6 @@
     <string name="choose">Vybrat</string>
     <string name="warning">Varování</string>
     <string name="scoped_storage_warning">Vaše uživatelská data jsou uložena v místě, které <b>bude smazáno</b> při odinstalaci aplikace:\n</string>
-    <string name="donate">Podpořit</string>
     <string name="midlet_name"><b>Název: </b></string>
     <string name="midlet_size"><b>Velikost: </b></string>
     <string name="midlet_source"><b>Zdroj: </b></string>

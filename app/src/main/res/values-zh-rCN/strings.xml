@@ -8,7 +8,7 @@
     <string name="search">搜索</string>
     <string name="licenses">许可</string>
     <string name="profiles">配置文件</string>
-    <string name="save_log">存储日志</string>
+    <string name="save_log">保存日志</string>
     <string name="about_message">此应用允许您在 Android 上启动 J2ME 应用和游戏。它支持大多数 2D 和 3D 游戏(包括 Mascot Capsule 3D 游戏)。&lt;BR&gt;</string>
     <string name="help_message">&#8226; 在某些情况下启用过滤可能大大降低性能。如果游戏太慢，请禁用此选项。&lt;BR&gt;&#8226;通过启用 \"立即处理模式\" 选项，可以修复图像闪烁问题。</string>
     <string name="author">作者: </string>
@@ -32,7 +32,6 @@
     <string name="choose">选择</string>
     <string name="warning">警告</string>
     <string name="scoped_storage_warning">你的用户数据存储在一个卸载应用时<b>将被删除的</b>位置：\n</string>
-    <string name="donate">捐赠</string>
     <string name="midlet_name"><b>名称： </b></string>
     <string name="midlet_size"><b>大小： </b></string>
     <string name="midlet_source"><b>源: </b></string>

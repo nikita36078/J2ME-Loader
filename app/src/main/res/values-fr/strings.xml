@@ -32,7 +32,6 @@
     <string name="choose">Sélectionnez le type de d\'initiative</string>
     <string name="warning">Attention</string>
     <string name="scoped_storage_warning">Vos données utilisateur sont stockées à un emplacement qui <b>sera supprimé</b> lorsque vous désinstallerez l\'application:\n</string>
-    <string name="donate">Donner</string>
     <string name="midlet_name"><b>Nom : </b></string>
     <string name="midlet_size"><b>Taille: </b></string>
     <string name="midlet_source"><b>Source : </b></string>

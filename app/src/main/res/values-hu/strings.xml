@@ -23,7 +23,6 @@
     <string name="action_context_delete">Törlés</string>
     <string name="action_context_rename">Átnevezés</string>
     <string name="create_apps_dir_failed">Könyvtár létrehozása sikertelen a következő útvonalon:\n\'%s\'\nVálasszon másikat.</string>
-    <string name="donate">Támogatás</string>
     <string name="converting_wait">JAR konvertálása...</string>
     <string name="START_CMD">Indítás</string>
     <string name="CANCEL_CMD">Mégse</string>

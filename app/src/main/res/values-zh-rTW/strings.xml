@@ -20,7 +20,6 @@
     <string name="action_settings">設置</string>
     <string name="action_context_delete">刪除</string>
     <string name="action_context_rename">重命名</string>
-    <string name="donate">捐贈</string>
     <string name="converting_wait">正在安裝...</string>
     <string name="START_CMD">啟動</string>
     <string name="CANCEL_CMD">取消</string>

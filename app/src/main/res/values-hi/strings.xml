@@ -32,7 +32,6 @@
     <string name="choose">चुनें</string>
     <string name="warning">चेतावनी</string>
     <string name="scoped_storage_warning">आपका उपयोगकर्ता डेटा एक ऐसे स्थान पर संग्रहीत किया जाता है, जिसे आपके द्वारा ऐप को अनइंस्टॉल करने पर <b>हटाया जाएगा</b>:\n</string>
-    <string name="donate">दान करें</string>
     <string name="midlet_name"><b>नाम: </b></string>
     <string name="midlet_size"><b>आकार: </b></string>
     <string name="midlet_source"><b>स्रोत: </b></string>
@@ -104,7 +103,7 @@
     <string name="pref_orientation_default">पूर्व निर्धारित</string>
     <string name="pref_orientation_auto">स्वतः</string>
     <string name="pref_orientation_port">उर्ध्व</string>
-    <string name="pref_orientation_land">आड़ा</string>
+    <string name="pref_orientation_land">स्थल-दृश्य आड़ा</string>
     <string name="error">गलती  </string>
     <string name="message_clear_data">क्या आप वास्तव में ऐप डेटा साफ़ करना चाहते हैं?</string>
     <string name="PREF_VK_TYPE">कीबोर्ड के प्रकार</string>
@@ -204,5 +203,5 @@
     <string name="error_name_exists">पहले से मौजूद है, अन्य नाम दर्ज करें</string>
     <string name="default_label">"%s (डिफ़ॉल्ट)"</string>
     <string name="not_saved_exists">पहले से ही मौजूद है</string>
-    <string name="alert_rewrite_profile">\"%1$s\" नाम की एक प्रोफ़ाइल पहले से मौजूद है।\nक्या आप इसे अधिलेखित करना चाहते हैं?</string>
+    <string name="alert_rewrite_profile">\"%1$s\" नाम की एक प्रोफ़ाइल पहले से मौजूद है।\n क्या आप इसे अधिलेखित करना चाहते हैं?</string>
 </resources>

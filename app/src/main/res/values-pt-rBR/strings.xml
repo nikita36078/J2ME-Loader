@@ -32,7 +32,6 @@
     <string name="choose">Escolher</string>
     <string name="warning">Atenção</string>
     <string name="scoped_storage_warning">Seus dados de usuário são armazenados em um local que <b>será excluído</b> quando você desinstalar o aplicativo:\n</string>
-    <string name="donate">Doar</string>
     <string name="midlet_name"><b>Nome: </b></string>
     <string name="midlet_size"><b>Tamanho: </b></string>
     <string name="midlet_source"><b>Fonte: </b></string>

@@ -32,7 +32,6 @@
     <string name="choose">Вибрати</string>
     <string name="warning">Увага</string>
     <string name="scoped_storage_warning">Ваші дані користувача зберігаються у місці, яке <b>буде видалено</b>, коли ви видалите додаток:\n</string>
-    <string name="donate">Пожертвувати</string>
     <string name="midlet_name"><b>Назва: </b></string>
     <string name="midlet_size"><b>Розмір: </b></string>
     <string name="midlet_source"><b>Джерело: </b></string>
@@ -185,6 +184,8 @@
     <string name="pref_screenshot_summary">Вимкнути масштабування та фільтрацію для знімків екрана</string>
     <string name="pref_screenshot_title">Необроблений знімок екрана</string>
     <string name="pref_category_experimental">Експериментальні/тимчасові параметри</string>
+    <string name="pref_mascot_summary">Показувати повідомлення при використанні</string>
+    <string name="pref_mascot_title">Виявляти Mascot Capsule 3D</string>
     <string name="mapping_dialog_message">Поточне зіставлення: %1$s</string>
     <string name="mapping_dialog_key_not_specified">не визначено</string>
     <string name="mapping_dialog_title">Натисніть клавішу</string>
