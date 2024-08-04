@@ -4,10 +4,6 @@ plugins {
 
 def midletArchivesBaseName
 
-Properties keystoreProps = new Properties()
-keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
-
-
 android {
     compileSdk COMPILE_SDK
     ndkVersion NDK_VERSION
@@ -26,10 +22,19 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProps['keyAlias']
-            keyPassword keystoreProps['keyPassword']
-            storeFile file(keystoreProps['storeFile'])
-            storePassword keystoreProps['storePassword']
+            if (System.getenv()['BITRISE_IO']) {
+                keyAlias System.getenv('BITRISEIO_ANDROID_KEYSTORE_ALIAS')
+                keyPassword System.getenv('BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD')
+                storeFile file(System.getenv['BITRISEIO_ANDROID_KEYSTORE_URL'])
+                storePassword System.getenv('BITRISEIO_ANDROID_KEYSTORE_PASSWORD')
+            } else {
+                Properties keystoreProps = new Properties()
+                keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+                storeFile file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+            }
         }
     }
 
