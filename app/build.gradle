@@ -4,6 +4,10 @@ plugins {
 
 def midletArchivesBaseName
 
+Properties keystoreProps = new Properties()
+keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
+
+
 android {
     compileSdk COMPILE_SDK
     ndkVersion NDK_VERSION
@@ -18,6 +22,15 @@ android {
         resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProps['keyAlias']
+            keyPassword keystoreProps['keyPassword']
+            storeFile file(keystoreProps['storeFile'])
+            storePassword keystoreProps['storePassword']
+        }
     }
 
     buildTypes {
