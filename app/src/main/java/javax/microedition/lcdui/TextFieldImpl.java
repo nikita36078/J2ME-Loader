@@ -192,7 +192,7 @@ class TextFieldImpl {
 				@Override
 				public void afterTextChanged(Editable s) {
 					text = s.toString();
-					item.notifyStateChanged();
+					if (item != null) item.notifyStateChanged();
 				}
 			});
 
