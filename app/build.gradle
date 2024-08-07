@@ -13,8 +13,8 @@ android {
         applicationId "ru.playsoftware.j2meloader"
         minSdk MIN_SDK
         targetSdk TARGET_SDK
-        versionCode 100
-        versionName "1.8.1"
+        versionCode 101
+        versionName "1.8.2"
         resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
