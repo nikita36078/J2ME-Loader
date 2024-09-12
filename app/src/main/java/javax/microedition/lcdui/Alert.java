@@ -312,7 +312,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 			return;
 		}
 		Display display = Display.getDisplay(null);
-		if(display.getCurrent() == this)
+		if (display.getCurrent() == this)
 			display.setCurrent(nextDisplayable);
 		nextDisplayable = null;
 		alertDialog = null;
