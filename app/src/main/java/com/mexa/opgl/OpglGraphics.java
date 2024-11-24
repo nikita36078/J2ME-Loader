@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,12 @@ package com.mexa.opgl;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.opengl.GLUtils;
 
-import java.nio.ByteOrder;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -31,7 +35,8 @@ import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11Ext;
 import javax.microedition.lcdui.Graphics;
 
-/** @noinspection unused*/
+import ru.woesss.j2me.micro3d.BufferUtils;
+
 public class OpglGraphics {
 	public static final int GL_ACTIVE_TEXTURE = 34016;
 	public static final int GL_ADD = 260;
@@ -403,11 +408,14 @@ public class OpglGraphics {
 	public static final int GL_ZERO = 0;
 
 	private static final OpglGraphics INSTANCE = new OpglGraphics();
+
 	private final EGL10 egl;
 	private final EGLDisplay eglDisplay;
 	private final EGLConfig eglConfig;
 	private final EGLContext eglContext;
 	private final GL11 gl;
+	private final ExecutorService executor;
+
 	private Graphics graphics;
 	private int width;
 	private int height;
@@ -436,6 +444,11 @@ public class OpglGraphics {
 
 		eglContext = egl.eglCreateContext(eglDisplay, eglConfig, EGL10.EGL_NO_CONTEXT, null);
 		this.gl = (GL11) eglContext.getGL();
+		int error = egl.eglGetError();
+		if (error != EGL10.EGL_SUCCESS) {
+			throw new RuntimeException("EGL filed: " + GLUtils.getEGLErrorString(error));
+		}
+		this.executor = Executors.newSingleThreadExecutor(r -> new Thread(r, "OpglRenderer"));
 	}
 
 	public static OpglGraphics getInstance() {
@@ -450,132 +463,97 @@ public class OpglGraphics {
 		} else if (!(target instanceof Graphics)) {
 			throw new IllegalArgumentException();
 		}
-		graphics = (Graphics) target;
-		Bitmap bitmap = graphics.getBitmap();
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-		if (width != this.width || height != this.height || eglWindowSurface == null) {
-			this.width = width;
-			this.height = height;
-			imageBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-			pixelBuffer = java.nio.ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder());
+		asyncExec(() -> {
+			graphics = (Graphics) target;
+			Bitmap bitmap = graphics.getBitmap();
+			int width = bitmap.getWidth();
+			int height = bitmap.getHeight();
+			if (width != this.width || height != this.height || eglWindowSurface == null) {
+				this.width = width;
+				this.height = height;
+				imageBuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+				pixelBuffer = BufferUtils.createByteBuffer(width * height * 4);
 
-			if (eglWindowSurface != null) {
-				releaseEglContext();
-				egl.eglDestroySurface(eglDisplay, eglWindowSurface);
+				if (eglWindowSurface != null) {
+					egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+					egl.eglDestroySurface(eglDisplay, eglWindowSurface);
+				}
+
+				int[] surface_attribs = {
+						EGL10.EGL_WIDTH, width,
+						EGL10.EGL_HEIGHT, height,
+						EGL10.EGL_LARGEST_PBUFFER, 1,
+						EGL10.EGL_NONE};
+				eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
+
+				egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
+				gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			}
-
-			int[] surface_attribs = {
-					EGL10.EGL_WIDTH, width,
-					EGL10.EGL_HEIGHT, height,
-					EGL10.EGL_LARGEST_PBUFFER, 1,
-					EGL10.EGL_NONE};
-			eglWindowSurface = egl.eglCreatePbufferSurface(eglDisplay, eglConfig, surface_attribs);
-
-			matrix.setScale(1.0f, -1.0f, width / 2.0f, height / 2.0f);
-		}
-		bindEglContext();
-		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		releaseEglContext();
+		});
 	}
 
 	public void release() {
-		if (pixelBuffer == null || width <= 0 || height <= 0) {
-			return;
-		}
-		bindEglContext();
-		gl.glFinish();
-		gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixelBuffer.rewind());
-		imageBuffer.copyPixelsFromBuffer(pixelBuffer.rewind());
-		graphics.getCanvas().drawBitmap(imageBuffer, matrix, null);
-		releaseEglContext();
-		graphics = null;
-	}
-
-	private void bindEglContext() {
-		egl.eglMakeCurrent(eglDisplay, eglWindowSurface, eglWindowSurface, eglContext);
-	}
-
-	private void releaseEglContext() {
-		egl.eglMakeCurrent(eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+		syncExec(() -> {
+			if (graphics == null || width <= 0 || height <= 0) {
+				return;
+			}
+			gl.glReadPixels(0, 0, width, height, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, pixelBuffer.rewind());
+			imageBuffer.copyPixelsFromBuffer(pixelBuffer.rewind());
+			graphics.getCanvas().drawBitmap(imageBuffer, matrix, null);
+			graphics = null;
+		});
 	}
 
 	public void glActiveTexture(int texture) {
-		bindEglContext();
-		gl.glActiveTexture(texture);
-		releaseEglContext();
+		asyncExec(() -> gl.glActiveTexture(texture));
 	}
 
 	public void glAlphaFunc(int func, float ref) {
-		bindEglContext();
-		gl.glAlphaFunc(func, ref);
-		releaseEglContext();
+		asyncExec(() -> gl.glAlphaFunc(func, ref));
 	}
 
 	public void glBindTexture(int target, int texture) {
-		bindEglContext();
-		gl.glBindTexture(target, texture);
-		releaseEglContext();
+		asyncExec(() -> gl.glBindTexture(target, texture));
 	}
 
 	public void glBlendFunc(int sfactor, int dfactor) {
-		bindEglContext();
-		gl.glBlendFunc(sfactor, dfactor);
-		releaseEglContext();
+		asyncExec(() -> gl.glBlendFunc(sfactor, dfactor));
 	}
 
 	public void glClear(int mask) {
-		bindEglContext();
-		gl.glClear(mask);
-		releaseEglContext();
+		asyncExec(() -> gl.glClear(mask));
 	}
 
 	public void glClearColor(float red, float green, float blue, float alpha) {
-		bindEglContext();
-		gl.glClearColor(red, green, blue, alpha);
-		releaseEglContext();
+		asyncExec(() -> gl.glClearColor(red, green, blue, alpha));
 	}
 
 	public void glClearDepthf(float depth) {
-		bindEglContext();
-		gl.glClearDepthf(depth);
-		releaseEglContext();
+		asyncExec(() -> gl.glClearDepthf(depth));
 	}
 
 	public void glClearStencil(int s) {
-		bindEglContext();
-		gl.glClearStencil(s);
-		releaseEglContext();
+		asyncExec(() -> gl.glClearStencil(s));
 	}
 
 	public void glClientActiveTexture(int texture) {
-		bindEglContext();
-		gl.glClientActiveTexture(texture);
-		releaseEglContext();
+		asyncExec(() -> gl.glClientActiveTexture(texture));
 	}
 
 	public void glColor4f(float red, float green, float blue, float alpha) {
-		bindEglContext();
-		gl.glColor4f(red, green, blue, alpha);
-		releaseEglContext();
+		asyncExec(() -> gl.glColor4f(red, green, blue, alpha));
 	}
 
 	public void glColorMask(boolean red, boolean green, boolean blue, boolean alpha) {
-		bindEglContext();
-		gl.glColorMask(red, green, blue, alpha);
-		releaseEglContext();
+		asyncExec(() -> gl.glColorMask(red, green, blue, alpha));
 	}
 
 	public void glColorPointer(int size, int type, int stride, Buffer pointer) {
-		bindEglContext();
-		gl.glColorPointer(size, type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glColorPointer(size, type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glColorPointer(int size, int type, int stride, int offset) {
-		bindEglContext();
-		gl.glColorPointer(size, type, stride, offset);
-		releaseEglContext();
+		asyncExec(() -> gl.glColorPointer(size, type, stride, offset));
 	}
 
 	public void glCompressedTexImage2D(int target,
@@ -585,9 +563,14 @@ public class OpglGraphics {
 									   int height,
 									   int border,
 									   ByteBuffer data) {
-		bindEglContext();
-		gl.glCompressedTexImage2D(target, level, internalformat, width, height, border, data.length(), data.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glCompressedTexImage2D(target,
+				level,
+				internalformat,
+				width,
+				height,
+				border,
+				data.length(),
+				data.getNioBuffer()));
 	}
 
 	public void glCompressedTexSubImage2D(int target,
@@ -598,9 +581,15 @@ public class OpglGraphics {
 										  int height,
 										  int format,
 										  ByteBuffer data) {
-		bindEglContext();
-		gl.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.length(), data.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glCompressedTexSubImage2D(target,
+				level,
+				xoffset,
+				yoffset,
+				width,
+				height,
+				format,
+				data.length(),
+				data.getNioBuffer()));
 	}
 
 	public void glCopyTexImage2D(int target,
@@ -611,9 +600,7 @@ public class OpglGraphics {
 								 int width,
 								 int height,
 								 int border) {
-		bindEglContext();
-		gl.glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
-		releaseEglContext();
+		asyncExec(() -> gl.glCopyTexImage2D(target, level, internalformat, x, y, width, height, border));
 	}
 
 	public void glCopyTexSubImage2D(int target,
@@ -624,347 +611,231 @@ public class OpglGraphics {
 									int y,
 									int width,
 									int height) {
-		bindEglContext();
-		gl.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
-		releaseEglContext();
+		asyncExec(() -> gl.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height));
 	}
 
 	public void glCullFace(int mode) {
-		bindEglContext();
-		gl.glCullFace(mode);
-		releaseEglContext();
+		asyncExec(() -> gl.glCullFace(mode));
 	}
 
 	public void glDeleteTextures(int[] textures) {
-		bindEglContext();
-		gl.glDeleteTextures(textures.length, textures, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glDeleteTextures(textures.length, textures, 0));
 	}
 
 	public void glDepthFunc(int func) {
-		bindEglContext();
-		gl.glDepthFunc(func);
-		releaseEglContext();
+		asyncExec(() -> gl.glDepthFunc(func));
 	}
 
 	public void glDepthMask(boolean flag) {
-		bindEglContext();
-		gl.glDepthMask(flag);
-		releaseEglContext();
+		asyncExec(() -> gl.glDepthMask(flag));
 	}
 
 	public void glDepthRangef(float zNear, float zFar) {
-		bindEglContext();
-		gl.glDepthRangef(zNear, zFar);
-		releaseEglContext();
+		asyncExec(() -> gl.glDepthRangef(zNear, zFar));
 	}
 
 	public void glDisable(int cap) {
-		bindEglContext();
-		gl.glDisable(cap);
-		releaseEglContext();
+		asyncExec(() -> gl.glDisable(cap));
 	}
 
 	public void glDisableClientState(int array) {
-		bindEglContext();
-		gl.glDisableClientState(array);
-		releaseEglContext();
+		asyncExec(() -> gl.glDisableClientState(array));
 	}
 
 	public void glDrawArrays(int mode, int first, int count) {
-		bindEglContext();
-		gl.glDrawArrays(mode, first, count);
-		releaseEglContext();
+		asyncExec(() -> gl.glDrawArrays(mode, first, count));
 	}
 
 	public void glDrawElements(int mode, int type, Buffer indices) {
-		bindEglContext();
-		gl.glDrawElements(mode, indices.length(), type, indices.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glDrawElements(mode, indices.length(), type, indices.getNioBuffer()));
 	}
 
 	public void glDrawElements(int mode, int count, int type, int offset) {
-		bindEglContext();
-		gl.glDrawElements(mode, count, type, offset);
-		releaseEglContext();
+		asyncExec(() -> gl.glDrawElements(mode, count, type, offset));
 	}
 
 	public void glEnable(int cap) {
-		bindEglContext();
-		gl.glEnable(cap);
-		releaseEglContext();
+		asyncExec(() -> gl.glEnable(cap));
 	}
 
 	public void glEnableClientState(int array) {
-		bindEglContext();
-		gl.glEnableClientState(array);
-		releaseEglContext();
+		asyncExec(() -> gl.glEnableClientState(array));
 	}
 
 	public void glFlush() {
-		bindEglContext();
-		gl.glFlush();
-		releaseEglContext();
+		asyncExec(gl::glFlush);
 	}
 
 	public void glFogf(int pname, float param) {
-		bindEglContext();
-		gl.glFogf(pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glFogf(pname, param));
 	}
 
 	public void glFogfv(int pname, float[] params) {
-		bindEglContext();
-		gl.glFogfv(pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glFogfv(pname, params, 0));
 	}
 
 	public void glFrontFace(int mode) {
-		bindEglContext();
-		gl.glFrontFace(mode);
-		releaseEglContext();
+		asyncExec(() -> gl.glFrontFace(mode));
 	}
 
 	public void glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) {
-		bindEglContext();
-		gl.glFrustumf(left, right, bottom, top, zNear, zFar);
-		releaseEglContext();
+		asyncExec(() -> gl.glFrustumf(left, right, bottom, top, zNear, zFar));
 	}
 
 	public void glGenTextures(int[] textures) {
-		bindEglContext();
-		gl.glGenTextures(textures.length, textures, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGenTextures(textures.length, textures, 0));
 	}
 
 	public int glGetError() {
-		bindEglContext();
-		int error = gl.glGetError();
-		releaseEglContext();
-		return error;
+		return blockingGet(gl::glGetError);
 	}
 
 	public void glGetIntegerv(int pname, int[] params) {
-		bindEglContext();
-		gl.glGetIntegerv(pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetIntegerv(pname, params, 0));
 	}
 
 	public String glGetString(int name) {
-		bindEglContext();
-		String s = gl.glGetString(name);
-		releaseEglContext();
-		return s;
+		return blockingGet(() -> gl.glGetString(name));
 	}
 
 	public void glHint(int target, int mode) {
-		bindEglContext();
-		gl.glHint(target, mode);
-		releaseEglContext();
+		asyncExec(() -> gl.glHint(target, mode));
 	}
 
 	public void glLightModelf(int pname, float param) {
-		bindEglContext();
-		gl.glLightModelf(pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glLightModelf(pname, param));
 	}
 
 	public void glLightModelfv(int pname, float[] params) {
-		bindEglContext();
-		gl.glLightModelfv(pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glLightModelfv(pname, params, 0));
 	}
 
 	public void glLightf(int light, int pname, float param) {
-		bindEglContext();
-		gl.glLightf(light, pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glLightf(light, pname, param));
 	}
 
 	public void glLightfv(int light, int pname, float[] params) {
-		bindEglContext();
-		gl.glLightfv(light, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glLightfv(light, pname, params, 0));
 	}
 
 	public void glLineWidth(float width) {
-		bindEglContext();
-		gl.glLineWidth(width);
-		releaseEglContext();
+		asyncExec(() -> gl.glLineWidth(width));
 	}
 
 	public void glLoadIdentity() {
-		bindEglContext();
-		gl.glLoadIdentity();
-		releaseEglContext();
+		asyncExec(gl::glLoadIdentity);
 	}
 
 	public void glLoadMatrixf(float[] m) {
-		bindEglContext();
-		gl.glLoadMatrixf(m, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glLoadMatrixf(m, 0));
 	}
 
 	public void glLogicOp(int opcode) {
-		bindEglContext();
-		gl.glLogicOp(opcode);
-		releaseEglContext();
+		asyncExec(() -> gl.glLogicOp(opcode));
 	}
 
 	public void glMaterialf(int face, int pname, float param) {
-		bindEglContext();
-		gl.glMaterialf(face, pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glMaterialf(face, pname, param));
 	}
 
 	public void glMaterialfv(int face, int pname, float[] params) {
-		bindEglContext();
-		gl.glMaterialfv(face, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glMaterialfv(face, pname, params, 0));
 	}
 
 	public void glMatrixMode(int mode) {
-		bindEglContext();
-		gl.glMatrixMode(mode);
-		releaseEglContext();
+		asyncExec(() -> gl.glMatrixMode(mode));
 	}
 
 	public void glMultMatrixf(float[] m) {
-		bindEglContext();
-		gl.glMultMatrixf(m, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glMultMatrixf(m, 0));
 	}
 
 	public void glMultiTexCoord4f(int target, float s, float t, float r, float q) {
-		bindEglContext();
-		gl.glMultiTexCoord4f(target, s, t, r, q);
-		releaseEglContext();
+		asyncExec(() -> gl.glMultiTexCoord4f(target, s, t, r, q));
 	}
 
 	public void glNormal3f(float nx, float ny, float nz) {
-		bindEglContext();
-		gl.glNormal3f(nx, ny, nz);
-		releaseEglContext();
+		asyncExec(() -> gl.glNormal3f(nx, ny, nz));
 	}
 
 	public void glNormalPointer(int type, int stride, Buffer pointer) {
-		bindEglContext();
-		gl.glNormalPointer(type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glNormalPointer(type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glNormalPointer(int type, int stride, int offset) {
-		bindEglContext();
-		gl.glNormalPointer(type, stride, offset);
-		releaseEglContext();
+		asyncExec(() -> gl.glNormalPointer(type, stride, offset));
 	}
 
 	public void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) {
-		bindEglContext();
-		gl.glOrthof(left, right, bottom, top, zNear, zFar);
-		releaseEglContext();
+		asyncExec(() -> gl.glOrthof(left, right, bottom, top, zNear, zFar));
 	}
 
 	public void glPixelStorei(int pname, int param) {
-		bindEglContext();
-		gl.glPixelStorei(pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glPixelStorei(pname, param));
 	}
 
 	public void glPointSize(float size) {
-		bindEglContext();
-		gl.glPointSize(size);
-		releaseEglContext();
+		asyncExec(() -> gl.glPointSize(size));
 	}
 
 	public void glPolygonOffset(float factor, float units) {
-		bindEglContext();
-		gl.glPolygonOffset(factor, units);
-		releaseEglContext();
+		asyncExec(() -> gl.glPolygonOffset(factor, units));
 	}
 
 	public void glPopMatrix() {
-		bindEglContext();
-		gl.glPopMatrix();
-		releaseEglContext();
+		asyncExec(gl::glPopMatrix);
 	}
 
 	public void glPushMatrix() {
-		bindEglContext();
-		gl.glPushMatrix();
-		releaseEglContext();
+		asyncExec(gl::glPushMatrix);
 	}
 
 	public void glRotatef(float angle, float x, float y, float z) {
-		bindEglContext();
-		gl.glRotatef(angle, x, y, z);
-		releaseEglContext();
+		asyncExec(() -> gl.glRotatef(angle, x, y, z));
 	}
 
 	public void glSampleCoverage(float value, boolean invert) {
-		bindEglContext();
-		gl.glSampleCoverage(value, invert);
-		releaseEglContext();
+		asyncExec(() -> gl.glSampleCoverage(value, invert));
 	}
 
 	public void glScalef(float x, float y, float z) {
-		bindEglContext();
-		gl.glScalef(x, y, z);
-		releaseEglContext();
+		asyncExec(() -> gl.glScalef(x, y, z));
 	}
 
 	public void glScissor(int x, int y, int width, int height) {
-		bindEglContext();
-		gl.glScissor(x, y, width, height);
-		releaseEglContext();
+		asyncExec(() -> gl.glScissor(x, y, width, height));
 	}
 
 	public void glShadeModel(int mode) {
-		bindEglContext();
-		gl.glShadeModel(mode);
-		releaseEglContext();
+		asyncExec(() -> gl.glShadeModel(mode));
 	}
 
 	public void glStencilFunc(int func, int ref, int mask) {
-		bindEglContext();
-		gl.glStencilFunc(func, ref, mask);
-		releaseEglContext();
+		asyncExec(() -> gl.glStencilFunc(func, ref, mask));
 	}
 
 	public void glStencilMask(int mask) {
-		bindEglContext();
-		gl.glStencilMask(mask);
-		releaseEglContext();
+		asyncExec(() -> gl.glStencilMask(mask));
 	}
 
 	public void glStencilOp(int fail, int zfail, int zpass) {
-		bindEglContext();
-		gl.glStencilOp(fail, zfail, zpass);
-		releaseEglContext();
+		asyncExec(() -> gl.glStencilOp(fail, zfail, zpass));
 	}
 
 	public void glTexCoordPointer(int size, int type, int stride, Buffer pointer) {
-		bindEglContext();
-		gl.glTexCoordPointer(size, type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glTexCoordPointer(size, type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glTexCoordPointer(int size, int type, int stride, int offset) {
-		bindEglContext();
-		gl.glTexCoordPointer(size, type, stride, offset);
-		releaseEglContext();
+		asyncExec(() -> gl.glTexCoordPointer(size, type, stride, offset));
 	}
 
 	public void glTexEnvf(int target, int pname, float param) {
-		bindEglContext();
-		gl.glTexEnvf(target, pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glTexEnvf(target, pname, param));
 	}
 
 	public void glTexEnvfv(int target, int pname, float[] params) {
-		bindEglContext();
-		gl.glTexEnvfv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glTexEnvfv(target, pname, params, 0));
 	}
 
 	public void glTexImage2D(int target,
@@ -976,15 +847,19 @@ public class OpglGraphics {
 							 int format,
 							 int type,
 							 Buffer pixels) {
-		bindEglContext();
-		gl.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glTexImage2D(target,
+				level,
+				internalformat,
+				width,
+				height,
+				border,
+				format,
+				type,
+				pixels.getNioBuffer()));
 	}
 
 	public void glTexParameterf(int target, int pname, float param) {
-		bindEglContext();
-		gl.glTexParameterf(target, pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glTexParameterf(target, pname, param));
 	}
 
 	public void glTexSubImage2D(int target,
@@ -996,263 +871,206 @@ public class OpglGraphics {
 								int format,
 								int type,
 								Buffer pixels) {
-		bindEglContext();
-		gl.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glTexSubImage2D(target,
+				level,
+				xoffset,
+				yoffset,
+				width,
+				height,
+				format,
+				type,
+				pixels.getNioBuffer()));
 	}
 
 	public void glTranslatef(float x, float y, float z) {
-		bindEglContext();
-		gl.glTranslatef(x, y, z);
-		releaseEglContext();
+		asyncExec(() -> gl.glTranslatef(x, y, z));
 	}
 
 	public void glVertexPointer(int size, int type, int stride, Buffer pointer) {
-		bindEglContext();
-		gl.glVertexPointer(size, type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glVertexPointer(size, type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glVertexPointer(int size, int type, int stride, int offset) {
-		bindEglContext();
-		gl.glVertexPointer(size, type, stride, offset);
-		releaseEglContext();
+		asyncExec(() -> gl.glVertexPointer(size, type, stride, offset));
 	}
 
 	public void glViewport(int x, int y, int width, int height) {
-		bindEglContext();
-		gl.glViewport(x, y, width, height);
-		releaseEglContext();
+		asyncExec(() -> gl.glViewport(x, y, width, height));
 	}
 
 	public void glBindBuffer(int target, int buffer) {
-		bindEglContext();
-		gl.glBindBuffer(target, buffer);
-		releaseEglContext();
+		asyncExec(() -> gl.glBindBuffer(target, buffer));
 	}
 
 	public void glBufferData(int target, Buffer data, int usage) {
-		bindEglContext();
-		gl.glBufferData(target, data.length(), data.getNioBuffer(), usage);
-		releaseEglContext();
+		syncExec(() -> gl.glBufferData(target, data.length(), data.getNioBuffer(), usage));
 	}
 
 	public void glBufferSubData(int target, int offset, Buffer data) {
-		bindEglContext();
-		gl.glBufferSubData(target, offset, data.length(), data.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glBufferSubData(target, offset, data.length(), data.getNioBuffer()));
 	}
 
 	public void glClipPlanef(int plane, float[] equation) {
-		bindEglContext();
-		gl.glClipPlanef(plane, equation, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glClipPlanef(plane, equation, 0));
 	}
 
 	public void glColor4ub(byte red, byte green, byte blue, byte alpha) {
-		bindEglContext();
-		gl.glColor4ub(red, green, blue, alpha);
-		releaseEglContext();
+		asyncExec(() -> gl.glColor4ub(red, green, blue, alpha));
 	}
 
 	public void glDeleteBuffers(int[] buffers) {
-		bindEglContext();
-		gl.glDeleteBuffers(buffers.length, buffers, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glDeleteBuffers(buffers.length, buffers, 0));
 	}
 
 	public void glGetBooleanv(int pname, boolean[] params) {
-		bindEglContext();
-		gl.glGetBooleanv(pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetBooleanv(pname, params, 0));
 	}
 
 	public void glGetBufferParameteriv(int target, int pname, int[] params) {
-		bindEglContext();
-		gl.glGetBufferParameteriv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetBufferParameteriv(target, pname, params, 0));
 	}
 
 	public void glGetClipPlanef(int pname, float[] equation) {
-		bindEglContext();
-		gl.glGetClipPlanef(pname, equation, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetClipPlanef(pname, equation, 0));
 	}
 
 	public void glGetFloatv(int pname, float[] params) {
-		bindEglContext();
-		gl.glGetFloatv(pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetFloatv(pname, params, 0));
 	}
 
 	public void glGetLightfv(int light, int pname, float[] params) {
-		bindEglContext();
-		gl.glGetLightfv(light, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetLightfv(light, pname, params, 0));
 	}
 
 	public void glGetMaterialfv(int face, int pname, float[] params) {
-		bindEglContext();
-		gl.glGetMaterialfv(face, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetMaterialfv(face, pname, params, 0));
 	}
 
 	public void glGetTexEnvfv(int env, int pname, float[] params) {
-//		bindEglContext();
+//		execute(() -> {
 //		((GL11Ext) gl).glGetTexEnvfv(env, pname, params, 0);
-//		releaseEglContext();
+//		});
 	}
 
 	public void glGetTexParameterfv(int target, int pname, float[] params) {
-		bindEglContext();
-		gl.glGetTexParameterfv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetTexParameterfv(target, pname, params, 0));
 	}
 
 	public void glGenBuffers(int[] buffers) {
-		bindEglContext();
-		gl.glGenBuffers(buffers.length, buffers, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGenBuffers(buffers.length, buffers, 0));
 	}
 
 	public void glGetTexEnviv(int env, int pname, int[] params) {
-		bindEglContext();
-		gl.glGetTexEnviv(env, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetTexEnviv(env, pname, params, 0));
 	}
 
 	public void glGetTexParameteriv(int target, int pname, int[] params) {
-		bindEglContext();
-		gl.glGetTexParameteriv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glGetTexParameteriv(target, pname, params, 0));
 	}
 
 	public boolean glIsBuffer(int buffer) {
-		bindEglContext();
-		gl.glIsBuffer(buffer);
-		releaseEglContext();
-		return false;
+		return blockingGet(() -> gl.glIsBuffer(buffer));
 	}
 
 	public boolean glIsEnabled(int cap) {
-		bindEglContext();
-		gl.glIsEnabled(cap);
-		releaseEglContext();
-		return false;
+		return blockingGet(() -> gl.glIsEnabled(cap));
 	}
 
 	public boolean glIsTexture(int texture) {
-		bindEglContext();
-		gl.glIsTexture(texture);
-		releaseEglContext();
-		return false;
+		return blockingGet(() -> gl.glIsTexture(texture));
 	}
 
 	public void glPointParameterf(int pname, float param) {
-		bindEglContext();
-		gl.glPointParameterf(pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glPointParameterf(pname, param));
 	}
 
 	public void glPointParameterfv(int pname, float[] params) {
-		bindEglContext();
-		gl.glPointParameterfv(pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glPointParameterfv(pname, params, 0));
 	}
 
 	public void glTexEnvi(int target, int pname, int param) {
-		bindEglContext();
-		gl.glTexEnvi(target, pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glTexEnvi(target, pname, param));
 	}
 
 	public void glTexEnviv(int target, int pname, int[] params) {
-		bindEglContext();
-		gl.glTexEnviv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glTexEnviv(target, pname, params, 0));
 	}
 
 	public void glTexParameterfv(int target, int pname, float[] params) {
-		bindEglContext();
-		gl.glTexParameterfv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glTexParameterfv(target, pname, params, 0));
 	}
 
 	public void glTexParameteri(int target, int pname, int param) {
-		bindEglContext();
-		gl.glTexParameteri(target, pname, param);
-		releaseEglContext();
+		asyncExec(() -> gl.glTexParameteri(target, pname, param));
 	}
 
 	public void glTexParameteriv(int target, int pname, int[] params) {
-		bindEglContext();
-		gl.glTexParameteriv(target, pname, params, 0);
-		releaseEglContext();
+		syncExec(() -> gl.glTexParameteriv(target, pname, params, 0));
 	}
 
 	public void glPointSizePointerOES(int type, int stride, Buffer pointer) {
-		bindEglContext();
-		gl.glPointSizePointerOES(type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> gl.glPointSizePointerOES(type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glPointSizePointerOES(int type, int stride, int offset) {
-//		bindEglContext();
+//		executor.execute(() -> {
 //		((GL11Ext) gl).glPointSizePointerOES(type, stride, offset);
-//		releaseEglContext();
+//		});
 	}
 
 	public void glCurrentPaletteMatrixOES(int index) {
-		bindEglContext();
-		((GL11Ext) gl).glCurrentPaletteMatrixOES(index);
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glCurrentPaletteMatrixOES(index));
 	}
 
 	public void glLoadPaletteFromModelViewMatrixOES() {
-		bindEglContext();
-		((GL11Ext) gl).glLoadPaletteFromModelViewMatrixOES();
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glLoadPaletteFromModelViewMatrixOES());
 	}
 
 	public void glMatrixIndexPointerOES(int size, int type, int stride, Buffer pointer) {
-		bindEglContext();
-		((GL11Ext) gl).glMatrixIndexPointerOES(size, type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> ((GL11Ext) gl).glMatrixIndexPointerOES(size, type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glMatrixIndexPointerOES(int size, int type, int stride, int offset) {
-		bindEglContext();
-		((GL11Ext) gl).glMatrixIndexPointerOES(size, type, stride, offset);
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glMatrixIndexPointerOES(size, type, stride, offset));
 	}
 
 	public void glWeightPointerOES(int size, int type, int stride, Buffer pointer) {
-		bindEglContext();
-		((GL11Ext) gl).glWeightPointerOES(size, type, stride, pointer.getNioBuffer());
-		releaseEglContext();
+		syncExec(() -> ((GL11Ext) gl).glWeightPointerOES(size, type, stride, pointer.getNioBuffer()));
 	}
 
 	public void glWeightPointerOES(int size, int type, int stride, int offset) {
-		bindEglContext();
-		((GL11Ext) gl).glWeightPointerOES(size, type, stride, offset);
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glWeightPointerOES(size, type, stride, offset));
 	}
 
 	public void glDrawTexsOES(short x, short y, short z, short width, short height) {
-		bindEglContext();
-		((GL11Ext) gl).glDrawTexsOES(x, y, z, width, height);
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glDrawTexsOES(x, y, z, width, height));
 	}
 
 	public void glDrawTexiOES(int x, int y, int z, int width, int height) {
-		bindEglContext();
-		((GL11Ext) gl).glDrawTexiOES(x, y, z, width, height);
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glDrawTexiOES(x, y, z, width, height));
 	}
 
 	public void glDrawTexfOES(float x, float y, float z, float width, float height) {
-		bindEglContext();
-		((GL11Ext) gl).glDrawTexfOES(x, y, z, width, height);
-		releaseEglContext();
+		asyncExec(() -> ((GL11Ext) gl).glDrawTexfOES(x, y, z, width, height));
+	}
+
+	private void asyncExec(Runnable task) {
+		executor.execute(task);
+	}
+
+	private void syncExec(Runnable task) {
+		try {
+			executor.submit(task).get();
+		} catch (ExecutionException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private <T> T blockingGet(Callable<T> task) {
+		try {
+			return executor.submit(task).get();
+		} catch (ExecutionException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
