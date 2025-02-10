@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2023 Nikita Shakarun
+ * Copyright 2019-2025 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -212,6 +213,19 @@ public class ContextHolder {
 			vibrator.cancel();
 		}
 		return true;
+	}
+
+	public static void vibratePeriodically(int durationOn, int durationOff) {
+		if (!vibrationEnabled) {
+			return;
+		}
+		if (vibrator == null) {
+			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		}
+		if (vibrator == null || !vibrator.hasVibrator()) {
+			return;
+		}
+		vibrator.vibrate(new long[]{0, durationOn, durationOff}, 1);
 	}
 
 	public static void vibrateKey(int duration) {
