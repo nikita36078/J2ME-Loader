@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2025 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.microedition.media.control.MIDIControl;
 import ru.woesss.j2me.mmapi.synth.Library;
 
 public class MIDIControlImpl implements MIDIControl {
-	private final long handle; // = 0;
+	private final long handle;
 
 	private final Player player;
 	private final Library library;
@@ -32,6 +32,11 @@ public class MIDIControlImpl implements MIDIControl {
 		this.player = player;
 		this.library = library;
 		handle = playerHandle;
+	}
+
+	/** stub mode */
+	public MIDIControlImpl(Player player) {
+		this(player, null, 0);
 	}
 
 	@Override
@@ -131,7 +136,9 @@ public class MIDIControlImpl implements MIDIControl {
 			data = new byte[] {(byte) type, (byte) data1, (byte) data2};
 		}
 
-		library.writeMIDI(handle, data, 0, data.length);
+		if (library != null) {
+			library.writeMIDI(handle, data, 0, data.length);
+		}
 	}
 
 	@Override
@@ -139,6 +146,9 @@ public class MIDIControlImpl implements MIDIControl {
 		checkRealized();
 		if (data == null || offset < 0 || offset + length > data.length || length < 0) {
 			throw new IllegalArgumentException("longMidiEvent parameter out of range");
+		}
+		if (library == null) {
+			return 0;
 		}
 		return library.writeMIDI(handle, data, offset, length);
 	}

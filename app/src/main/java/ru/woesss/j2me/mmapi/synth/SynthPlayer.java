@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Yury Kharchenko
+ * Copyright 2023-2025 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,15 +89,11 @@ class SynthPlayer extends BasePlayer2 implements VolumeControl, PanControl, Tone
 			library.realize(handle);
 			if (controls == null) {
 				controls = new HashMap<>();
-				String locator = dataSource.getLocator();
-				if (MIDI_DEVICE_LOCATOR.equals(locator)) {
-					controls.put(MIDIControl.class.getName(), new MIDIControlImpl(this, library, handle));
-				} else if (TONE_DEVICE_LOCATOR.equals(locator)) {
+				if (TONE_DEVICE_LOCATOR.equals(dataSource.getLocator())) {
 					controls.put(ToneControl.class.getName(), this);
-					controls.put(VolumeControl.class.getName(), this);
-				} else {
-					controls.put(VolumeControl.class.getName(), this);
 				}
+				controls.put(VolumeControl.class.getName(), this);
+				controls.put(MIDIControl.class.getName(), new MIDIControlImpl(this, library, handle));
 				controls.put(PanControl.class.getName(), this);
 				controls.put(MetaDataControl.class.getName(), metadata);
 				controls.put(EqualizerControl.class.getName(), new InternalEqualizer());

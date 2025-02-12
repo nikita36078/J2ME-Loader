@@ -19,11 +19,12 @@ namespace mmapi {
             const S_EAS_LIB_CONFIG *easConfig = EAS_Config();
             EAS_DATA_HANDLE easHandle;
             EAS_HANDLE media;
+            EAS_HANDLE interactive;
             BaseFile *file;
 
         public:
             Player(EAS_DATA_HANDLE easHandle, BaseFile *file, EAS_HANDLE stream, const int64_t duration);
-            Player(EAS_DATA_HANDLE easHandle, EAS_HANDLE stream);
+            Player(EAS_DATA_HANDLE easHandle);
             ~Player() override;
 
             void deallocate() override;

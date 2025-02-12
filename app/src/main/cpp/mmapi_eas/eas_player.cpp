@@ -23,10 +23,14 @@ namespace mmapi {
             } else {
                 EAS_SetGlobalDLSLib(easHandle, dls);
             }
+
+            EAS_RESULT result = EAS_OpenMIDIStream(easHandle, &interactive, stream);
+            if (result != EAS_SUCCESS) {
+                ALOGE("EAS_OpenMIDIStream return: %s", EAS_GetErrorString(result));
+            }
         }
 
-        Player::Player(EAS_DATA_HANDLE easHandle, EAS_HANDLE stream)
-                : Player(easHandle, nullptr, stream, -1) {}
+        Player::Player(EAS_DATA_HANDLE easHandle) : Player(easHandle, nullptr, nullptr, -1) {}
 
         Player::~Player() {
             close();
@@ -43,16 +47,10 @@ namespace mmapi {
             }
             EAS_SetHeaderSearchFlag(easHandle, false);
             if (strcmp(locator, "device://tone") == 0) {
-                *pPlayer = new Player(easHandle, nullptr, nullptr, -1);
+                *pPlayer = new Player(easHandle);
                 return EAS_SUCCESS;
             } else if (strcmp(locator, "device://midi") == 0) {
-                EAS_HANDLE stream;
-                result = EAS_OpenMIDIStream(easHandle, &stream, nullptr);
-                if (result != EAS_SUCCESS) {
-                    EAS_Shutdown(easHandle);
-                    return result;
-                }
-                *pPlayer = new Player(easHandle, stream);
+                *pPlayer = new Player(easHandle);
                 return EAS_SUCCESS;
             }
             BaseFile *file = new IOFile(locator, "rb");;
@@ -98,16 +96,16 @@ namespace mmapi {
         void Player::close() {
             BasePlayer::close();
             if (media != nullptr) {
-                if (file == nullptr) {
-                    EAS_CloseMIDIStream(easHandle, media);
-                } else {
-                    EAS_CloseFile(easHandle, media);
-                    delete file;
-                }
+                EAS_CloseFile(easHandle, media);
+                delete file;
+            }
+            if (interactive != nullptr) {
+                EAS_CloseMIDIStream(easHandle, interactive);
             }
             EAS_Shutdown(easHandle);
             file = nullptr;
             media = nullptr;
+            interactive = nullptr;
             easHandle = nullptr;
         }
 
@@ -128,7 +126,10 @@ namespace mmapi {
         }
 
         jint Player::writeMIDI(util::JByteArrayPtr &data) {
-            EAS_WriteMIDIStream(easHandle, media, (EAS_U8 *) data.buffer, data.length);
+            EAS_RESULT result = EAS_WriteMIDIStream(easHandle, interactive, (EAS_U8 *) data.buffer, data.length);
+            if (result != EAS_SUCCESS) {
+                ALOGE("EAS_WriteMIDIStream return: %s", EAS_GetErrorString(result));
+            }
             return data.length;
         }
 
@@ -189,7 +190,7 @@ namespace mmapi {
         }
 
         oboe::Result Player::prefetch() {
-            if (media == nullptr) {
+            if (media == nullptr && interactive == nullptr) {
                 return oboe::Result::ErrorInvalidState;
             }
             oboe::Result result = BasePlayer::prefetch();
@@ -212,7 +213,7 @@ namespace mmapi {
         oboe::DataCallbackResult
         Player::onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames) {
             memset(audioData, 0, sizeof(EAS_PCM) * easConfig->numChannels * numFrames);
-            if (seekTime == -1) {
+            if (seekTime == -1 && media) {
                 EAS_STATE easState = EAS_STATE_PLAY;
                 EAS_State(easHandle, media, &easState);
                 if (easState == EAS_STATE_STOPPED || easState == EAS_STATE_ERROR) {
@@ -227,7 +228,7 @@ namespace mmapi {
                 }
             }
 
-            if (seekTime != -1) {
+            if (seekTime != -1 && media) {
                 EAS_I32 ms = static_cast<EAS_I32>(seekTime / 1000LL);
                 EAS_RESULT result = EAS_Locate(easHandle, media, ms, EAS_FALSE);
                 if (result != EAS_SUCCESS) {
@@ -257,7 +258,7 @@ namespace mmapi {
                 numFramesOutput += numRendered;
             }
 
-            if (file != nullptr) {
+            if (media != nullptr) {
                 EAS_I32 pTime = -1;
                 result = EAS_GetLocation(easHandle, media, &pTime);
                 if (result != EAS_SUCCESS) {
