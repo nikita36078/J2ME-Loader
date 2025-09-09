@@ -477,6 +477,7 @@ public class Main {
         } catch(IllegalArgumentException e) {
             e.printStackTrace();
         } catch(Exception ex) {
+            ex.printStackTrace();
             throw new RuntimeException("Exception parsing classes", ex);
         }
 
@@ -883,7 +884,7 @@ public class Main {
         public final DxContext context;
 
         /** whether to run in debug mode */
-        public boolean debug = false;
+        public boolean debug = true;
 
         /** whether to emit warning messages */
         public boolean warnings = true;

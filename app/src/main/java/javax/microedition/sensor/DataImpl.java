@@ -50,13 +50,52 @@ public class DataImpl implements Data {
 		return channelInfo;
 	}
 
+	/**
+	 * 强制兼容
+	 * @return
+	 */
 	@Override
 	public double[] getDoubleValues() {
-		if (channelInfo.getDataType() != ChannelInfo.TYPE_DOUBLE) {
-			throw new IllegalStateException();
+		if (doubleValues != null) {
+			return doubleValues;
 		}
-		return doubleValues;
+
+		// 兼容处理：把 int、object 都转成 double
+		switch (channelInfo.getDataType()) {
+			case ChannelInfo.TYPE_DOUBLE:
+				return doubleValues;
+
+			case ChannelInfo.TYPE_INT:
+				if (intValues != null) {
+					doubleValues = new double[intValues.length];
+					for (int i = 0; i < intValues.length; i++) {
+						doubleValues[i] = intValues[i] * 0.01; // 防止后面再 *100
+					}
+					return doubleValues;
+				}
+
+			case ChannelInfo.TYPE_OBJECT:
+				if (objectValues != null) {
+					doubleValues = new double[objectValues.length];
+					for (int i = 0; i < objectValues.length; i++) {
+						Object v = objectValues[i];
+						if (v instanceof Number) {
+							doubleValues[i] = ((Number) v).doubleValue();
+						} else {
+							throw new IllegalStateException();
+							//doubleValues[i] = Double.NaN; // 非数值填 NaN
+						}
+					}
+					return doubleValues;
+				}
+				break;
+		}
+
+		// 默认兜底，避免崩溃
+		//return new double[0];
+		throw new IllegalStateException();
 	}
+
 
 	@Override
 	public int[] getIntValues() {
