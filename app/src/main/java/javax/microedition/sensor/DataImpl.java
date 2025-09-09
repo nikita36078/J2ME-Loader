@@ -69,7 +69,7 @@ public class DataImpl implements Data {
 				if (intValues != null) {
 					doubleValues = new double[intValues.length];
 					for (int i = 0; i < intValues.length; i++) {
-						doubleValues[i] = intValues[i] * 0.01; // 防止后面再 *100
+						doubleValues[i] = intValues[i] * 0.001; // 防止后面再 *100
 					}
 					return doubleValues;
 				}
