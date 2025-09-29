@@ -17,7 +17,7 @@
 package javax.microedition.sensor;
 
 public class DataImpl implements Data {
-	private ChannelInfo channelInfo;
+	private final ChannelInfo channelInfo;
 	private double[] doubleValues;
 	private int[] intValues;
 	private Object[] objectValues;
@@ -50,17 +50,13 @@ public class DataImpl implements Data {
 		return channelInfo;
 	}
 
-	/**
-	 * 强制兼容
-	 * @return
-	 */
 	@Override
 	public double[] getDoubleValues() {
 		if (doubleValues != null) {
 			return doubleValues;
 		}
 
-		// 兼容处理：把 int、object 都转成 double
+		// Compatibility handling: convert int and object to double
 		switch (channelInfo.getDataType()) {
 			case ChannelInfo.TYPE_DOUBLE:
 				return doubleValues;
@@ -69,10 +65,11 @@ public class DataImpl implements Data {
 				if (intValues != null) {
 					doubleValues = new double[intValues.length];
 					for (int i = 0; i < intValues.length; i++) {
-						doubleValues[i] = intValues[i] * 0.001; // 防止后面再 *100
+						doubleValues[i] = intValues[i] * 0.001; // prevent multiplying by 100
 					}
 					return doubleValues;
 				}
+				break;
 
 			case ChannelInfo.TYPE_OBJECT:
 				if (objectValues != null) {
@@ -83,7 +80,6 @@ public class DataImpl implements Data {
 							doubleValues[i] = ((Number) v).doubleValue();
 						} else {
 							throw new IllegalStateException();
-							//doubleValues[i] = Double.NaN; // 非数值填 NaN
 						}
 					}
 					return doubleValues;
@@ -91,11 +87,9 @@ public class DataImpl implements Data {
 				break;
 		}
 
-		// 默认兜底，避免崩溃
-		//return new double[0];
+		// Default fallback
 		throw new IllegalStateException();
 	}
-
 
 	@Override
 	public int[] getIntValues() {
