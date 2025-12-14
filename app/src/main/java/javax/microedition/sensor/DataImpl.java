@@ -17,7 +17,7 @@
 package javax.microedition.sensor;
 
 public class DataImpl implements Data {
-	private ChannelInfo channelInfo;
+	private final ChannelInfo channelInfo;
 	private double[] doubleValues;
 	private int[] intValues;
 	private Object[] objectValues;
@@ -52,10 +52,43 @@ public class DataImpl implements Data {
 
 	@Override
 	public double[] getDoubleValues() {
-		if (channelInfo.getDataType() != ChannelInfo.TYPE_DOUBLE) {
-			throw new IllegalStateException();
+		if (doubleValues != null) {
+			return doubleValues;
 		}
-		return doubleValues;
+
+		// Compatibility handling: convert int and object to double
+		switch (channelInfo.getDataType()) {
+			case ChannelInfo.TYPE_DOUBLE:
+				return doubleValues;
+
+			case ChannelInfo.TYPE_INT:
+				if (intValues != null) {
+					doubleValues = new double[intValues.length];
+					for (int i = 0; i < intValues.length; i++) {
+						doubleValues[i] = intValues[i] * 0.001; // prevent multiplying by 100
+					}
+					return doubleValues;
+				}
+				break;
+
+			case ChannelInfo.TYPE_OBJECT:
+				if (objectValues != null) {
+					doubleValues = new double[objectValues.length];
+					for (int i = 0; i < objectValues.length; i++) {
+						Object v = objectValues[i];
+						if (v instanceof Number) {
+							doubleValues[i] = ((Number) v).doubleValue();
+						} else {
+							throw new IllegalStateException();
+						}
+					}
+					return doubleValues;
+				}
+				break;
+		}
+
+		// Default fallback
+		throw new IllegalStateException();
 	}
 
 	@Override

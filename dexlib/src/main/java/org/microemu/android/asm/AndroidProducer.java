@@ -43,7 +43,7 @@ public class AndroidProducer {
 
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		ClassVisitor cv = new AndroidClassVisitor(cw);
-		cr.accept(cv, ClassReader.SKIP_DEBUG);
+		cr.accept(cv, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 
 		return cw.toByteArray();
 	}
