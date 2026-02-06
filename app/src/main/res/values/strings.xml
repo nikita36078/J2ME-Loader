@@ -18,7 +18,7 @@
     <string name="about_email" translatable="false">&lt;BR>Email: &lt;a href="mailto:j2me.loader@mail.ru">j2me.loader@mail.ru&lt;/a></string>
     <string name="about_github" translatable="false">&lt;BR>GitHub: &lt;a href="https://github.com/nikita36078/J2ME-Loader">github.com/nikita36078/J2ME-Loader&lt;/a></string>
     <string name="about_emugen_wiki" translatable="false">&lt;BR>EmuGen Wiki: &lt;a href="https://emulation.gametechwiki.com/index.php/J2ME_Loader">emulation.gametechwiki.com/index.php/J2ME_Loader&lt;/a></string>
-    <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
+    <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="https://4pda.to/forum/index.php?showtopic=824201">4pda.to/forum/index.php?showtopic=824201&lt;/a></string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
     <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2024 Nikita Shakarun</string>
