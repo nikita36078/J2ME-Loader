@@ -9,7 +9,7 @@ This project is a fork of [J2meLoader](https://github.com/NaikSoftware/J2meLoade
 Special thanks to [woesss](https://github.com/woesss), the author of [JL-Mod](https://github.com/woesss/JL-Mod), for creating open-source Mascot Capsule implementation.
 
 System requirements: Android 4.0+  
-[4PDA.ru discussion](http://4pda.ru/forum/index.php?showtopic=824201)  
+[4PDA discussion](https://4pda.to/forum/index.php?showtopic=824201)  
 [XDA-Developers](https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889)  
 [EmuGen wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader)  
 [Discord](https://discord.gg/Ag4rcpz)  
