@@ -9,18 +9,18 @@
     <string name="licenses">授權</string>
     <string name="profiles">設定檔</string>
     <string name="save_log">儲存紀錄</string>
-    <string name="help_message">&#8226; • 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; •通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
+    <string name="help_message">&#8226; 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; 通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
     <string name="author">作者: </string>
     <string name="version">版本： </string>
     <string name="no_data_for_display">暫無數據</string>
     <string name="message_delete">確定要刪除此應用？</string>
     <string name="permission_request_failed">本應用需要穫取存儲讀寫權限</string>
-    <string name="external_storage_not_mounted">該功能需要存儲權限，請去設置授予存儲權限，以便您繼續使用該功能。</string>
+    <string name="external_storage_not_mounted">該功能需要存儲權限，請去設置授予存儲權限，以便你繼續使用該功能。</string>
     <string name="action_context_shortcut">添加到桌面</string>
     <string name="action_settings">設置</string>
     <string name="action_context_delete">刪除</string>
     <string name="action_context_rename">重命名</string>
-    <string name="converting_wait">正在安裝...</string>
+    <string name="converting_wait">JAR轉換中…</string>
     <string name="START_CMD">啟動</string>
     <string name="CANCEL_CMD">取消</string>
     <string name="CLEAR_DATA_CMD">清除數據</string>
@@ -33,7 +33,6 @@
     <string name="PREF_FILTER">畫質優化(在某些情況下啟用可能降低性能，如果運行卡頓，可關閉此項)</string>
     <string name="PREF_IMMEDIATE">即時處理模式(如果遊戲圖像運行閃爍，可以通過啟用此項解決)</string>
     <string name="PREF_SHOW_FPS">顯示 FPS</string>
-    <string name="PREF_FORCE_FULLSCREEN">Force fullsreen</string>
     <string name="PREF_FONT_OPTIONS">字體選項</string>
     <string name="PREF_WIDTH">寬度</string>
     <string name="PREF_HEIGHT">高度</string>
@@ -52,7 +51,7 @@
     <string name="PREF_VK_OUTLINE">邊框</string>
     <string name="PREF_VK_ALPHA">透明度： </string>
     <string name="PREF_VK_HIDE_DELAY">隱藏延遲: </string>
-    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_UNIT_MS">毫秒</string>
     <string name="PREF_VK_SEL_FORE">標籤 (P)</string>
     <string name="PREF_VK_SEL_BACK">按鍵 (P)</string>
     <string name="PREF_VK_KEY_SIZES">按鍵呎吋</string>
@@ -91,7 +90,7 @@
     <string name="hide_buttons">隱藏按鍵</string>
     <string name="take_screenshot">屏幕截圖</string>
     <string name="screenshot_saved">屏幕截圖已保存到</string>
-    <string name="action_keyboard_ime">鍵盤類型)</string>
+    <string name="action_keyboard_ime">鍵盤 (IME)</string>
     <string name="pref_theme_light">白色主題</string>
     <string name="pref_theme_night">深色主題</string>
     <string name="pref_theme_title">主題</string>
