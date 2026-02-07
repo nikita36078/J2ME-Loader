@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Дереккөз: </b></string>
     <string name="midlet_vendor"><b>Сатушы: </b></string>
     <string name="midlet_version"><b>Нұсқа: </b></string>
-    <string name="converting_wait">JAR файлды түрлендіруде...</string>
+    <string name="converting_wait">JAR файлды түрлендіруде…</string>
     <string name="install">орнату</string>
     <string name="install_done">Қолданба сәтті орнатылды!</string>
     <string name="install_jar_non_matched_jad">Бұл қолданба JAD ішінде сипатталған қолданбадан ерекшеленеді.\nJAD қолданбасын айналып өтіп сонда да жүктегіңіз келеме?</string>
