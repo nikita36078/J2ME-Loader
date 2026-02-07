@@ -23,7 +23,7 @@
     <string name="err_missing_app">Aplicativo não encontrado. \nVerifique a% de disponibilidade do dispositivo de armazenamento ou recrie o atalho.</string>
     <string name="error_disk_io">Erro de armazenamento: verifique o espaço em disco</string>
     <string name="create_apps_dir_failed">Falha ao criar uma pasta no caminho:\n\'%s\'\nselecione outra.</string>
-    <string name="converting_wait">Convertendo JAR...</string>
+    <string name="converting_wait">Convertendo JAR…</string>
     <string name="START_CMD">Iniciar</string>
     <string name="CANCEL_CMD">Cancelar</string>
     <string name="CLEAR_DATA_CMD">Limpar dados</string>
@@ -63,11 +63,9 @@
     <string name="PREF_VK_OUTLINE">Contorno</string>
     <string name="PREF_VK_ALPHA">Transparência: </string>
     <string name="PREF_VK_HIDE_DELAY">Esconder Atraso: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Rótulos (P)</string>
     <string name="PREF_VK_SEL_BACK">Botões (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tamanhos de chave</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Teclas: </string>
     <string name="PREF_VK_NUM_KEYS">Dígitos: </string>
     <string name="PREF_VK_FIRE_KEY">Selec: </string>
@@ -89,10 +87,8 @@
     <string name="PREF_SHADER_FILTER">Sombras:</string>
     <string name="identity_filter">Rápido (sem filtro)</string>
     <string name="shader_tuning">Ajuste de Sombra</string>
-    <string name="reset">Reset</string>
     <string name="pref_input_devices_title">Dispositivos de entrada</string>
     <string name="pref_graphics_mode_title">Modo gráfico:</string>
-    <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
     <string name="pref_screen_gravity">Gravidade da tela</string>
     <string name="pref_screen_gravity_bottom">Botão</string>
     <string name="pref_screen_gravity_center">Centro</string>
