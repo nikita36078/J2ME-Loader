@@ -1,4 +1,6 @@
 # J2ME-Loader
+<img src="https://raw.githubusercontent.com/nikita36078/J2ME-Loader/refs/heads/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
+
 ## About
 J2ME-Loader is a J2ME and EZplus emulator for Android. It supports most J2ME 2D and 3D games (including Mascot Capsule 3D ones). Emulator has a virtual keyboard, individual settings for each application, scaling support.
 
