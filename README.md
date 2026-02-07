@@ -1,8 +1,8 @@
-# J2ME-Loader
+# J2ME Loader
 <img src="https://raw.githubusercontent.com/nikita36078/J2ME-Loader/refs/heads/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
 
 ## About
-J2ME-Loader is a J2ME and EZplus emulator for Android. It supports most J2ME 2D and 3D games (including Mascot Capsule 3D ones). Emulator has a virtual keyboard, individual settings for each application, scaling support.
+J2ME Loader is a J2ME and EZplus emulator for Android. It supports most J2ME 2D and 3D games (including Mascot Capsule 3D ones). Emulator has a virtual keyboard, individual settings for each application, scaling support.
 
 System requirements: Android 4.0+
 Filename extensions: .JAD + .JAR (J2ME), .KJX (EZplus).
@@ -37,12 +37,15 @@ EZplus apps support added by ohayoyogi.
 [Discord](https://discord.gg/Ag4rcpz)
 
 ## Forums
-[4PDA](https://4pda.to/forum/index.php?showtopic=824201)  
+[4PDA](https://4pda.to/forum/index.php?showtopic=824201) (Russian)
+
 [XDA Forums](https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889)
 
 ## Compatibility
-[List of the tested Java Games (Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Touchscreen))  
-[List of the tested Java Games (Non Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Non-Touchscreen))  
+[List of the tested Java Games (Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Touchscreen))
+
+[List of the tested Java Games (Non Touchscreen)](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Tested-Java-Games-(Non-Touchscreen))
+
 [List of the Java Games with Bugs](https://github.com/nikita36078/J2ME-Loader/wiki/List-of-Java-Games-with-Bugs)
 
 ## Tips
@@ -56,5 +59,5 @@ EZplus apps support added by ohayoyogi.
 
 ## License
 > Copyright 2017-2024 Nikita Shakarun.
-> Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
-> (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)
+
+> Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0). See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.
