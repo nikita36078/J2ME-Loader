@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Zdroj: </b></string>
     <string name="midlet_vendor"><b>Dodavatel: </b></string>
     <string name="midlet_version"><b>Verze: </b></string>
-    <string name="converting_wait">Probíhá převod JAR...</string>
+    <string name="converting_wait">Probíhá převod JAR…</string>
     <string name="install">instalovat</string>
     <string name="install_done">Aplikace byla úspěšně nainstalována!</string>
     <string name="install_jar_non_matched_jad">Tato aplikace se liší od té popsané v JAD.\nNebrat v úvahu JAD a přesto nainstalovat?</string>
@@ -87,11 +87,9 @@
     <string name="PREF_VK_OUTLINE">Obrys</string>
     <string name="PREF_VK_ALPHA">Neprůhlednost: </string>
     <string name="PREF_VK_HIDE_DELAY">Skrýt zpoždění: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Popisky (P)</string>
     <string name="PREF_VK_SEL_BACK">Tlačítka (P)</string>
     <string name="PREF_VK_KEY_SIZES">Velikosti kláves</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Softwarové klávesy: </string>
     <string name="PREF_VK_NUM_KEYS">Číslice: </string>
     <string name="PREF_VK_FIRE_KEY">Akce: </string>
@@ -115,7 +113,6 @@
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (šipky)</string>
     <string name="PREF_LAYOUT">Rozložení</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Rychlé (bez filtru)</string>
     <string name="shader_tuning">Ladění shaderu</string>
     <string name="reset">Obnovit</string>
@@ -155,7 +152,6 @@
     <string name="action_lock_orientation">Zamknout otáčení obrazovky</string>
     <string name="pref_vk_save_alert">Vlastní klávesnice bude nahrazena stávající.\nUložit?</string>
     <string name="opt_save_screen_params">uložit parametry obrazovky</string>
-    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Zavřít</string>
     <string name="pref_theme_auto_battery">Automaticky (podle spořiče baterie)</string>
     <string name="pref_theme_auto_time">Automaticky (podle denní doby)</string>
