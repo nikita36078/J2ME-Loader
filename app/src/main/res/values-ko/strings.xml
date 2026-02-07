@@ -23,7 +23,7 @@
     <string name="err_missing_app">앱을 찾을 수 없습니다.\n%s스토리지를 확인하거나 바로가기를 다시 만들어 주세요.</string>
     <string name="error_disk_io">Storage 오류: 디스크 공간을 확인해주세요</string>
     <string name="create_apps_dir_failed">경로에 폴더를 만들지 못함:\n\'%s\'\n다른 폴더를 선택하세요.</string>
-    <string name="converting_wait">Jar 변환 중...</string>
+    <string name="converting_wait">JAR 변환 중…</string>
     <string name="START_CMD">시작</string>
     <string name="CANCEL_CMD">취소</string>
     <string name="CLEAR_DATA_CMD">데이터 제거</string>
@@ -63,7 +63,6 @@
     <string name="PREF_VK_OUTLINE">테두리</string>
     <string name="PREF_VK_ALPHA">투명도: </string>
     <string name="PREF_VK_HIDE_DELAY">지연 숨기기: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">라벨 (P)</string>
     <string name="PREF_VK_SEL_BACK">버튼 (P)</string>
     <string name="PREF_VK_KEY_SIZES">키 크기</string>
@@ -122,11 +121,8 @@
     <string name="take_screenshot">스크린샷 찍기</string>
     <string name="screenshot_saved">스크린샷이 저장됨</string>
     <string name="log_saved">로그가 저장됨</string>
-    <string name="pref_theme_light">Light</string>
-    <string name="pref_theme_night">Dark</string>
     <string name="pref_theme_title">테마</string>
     <string name="pref_requires_restart_summary">재시작이 필요함</string>
-    <string name="pref_enable_actionbar_title">Enable ActionBar</string>
     <string name="pref_enable_actionbar_summary">전체 화면 애플리케이션</string>
     <string name="pref_enable_statusbar_title">상태바 사용</string>
     <string name="pref_wakelock_title">스크린을 항상 밝게 유지</string>
