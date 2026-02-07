@@ -24,9 +24,13 @@ Filename extensions: .JAD + .JAR (J2ME), .KJX (EZplus).
 ## Thanks
 [J2meLoader](https://github.com/NaikSoftware/J2meLoader) by NaikSoftware. J2ME Loader is a fork of it.
 
-[JL-Mod](https://github.com/woesss/JL-Mod) by woesss for creating open-source Mascot Capsule implementation.
+M3G and Bluetooth support by cerg2010cerg2010.
 
-EZplus apps support added by ohayoyogi.
+KJX file support by ohayoyogi.
+
+multitouch support by shinovon.
+
+[JL-Mod](https://github.com/woesss/JL-Mod) by woesss for creating open-source Mascot Capsule implementation.
 
 [rasofang](https://github.com/soundsnow/rasofang) ([web](https://soundsnow.github.io/rasofang/)) by soundsnow for recommended resolution settings.
 
