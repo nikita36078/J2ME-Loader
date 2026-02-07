@@ -12,7 +12,6 @@
     <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android. Elle prend en charge la plupart des jeux 2D et 3D (y compris les jeux Mascot Capsule 3D).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Activer le filtrage dans certains cas peut considérablement réduire les performances. Désactiver cette option si le jeu est trop lent.&lt;BR&gt;&#8226; Les problèmes de scintillement d\'image peuvent être résolus en activant l\'option \"Mode de traitement immédiat\".</string>
     <string name="author">Auteur: </string>
-    <string name="version">Version : </string>
     <string name="no_data_for_display">Aucune donnée</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
     <string name="permission_request_failed">Cette application nécessite une autorisation d\'écriture sur le stockage</string>
@@ -34,10 +33,8 @@
     <string name="scoped_storage_warning">Vos données utilisateur sont stockées à un emplacement qui <b>sera supprimé</b> lorsque vous désinstallerez l\'application:\n</string>
     <string name="midlet_name"><b>Nom : </b></string>
     <string name="midlet_size"><b>Taille: </b></string>
-    <string name="midlet_source"><b>Source : </b></string>
     <string name="midlet_vendor"><b>Vendeur : </b></string>
-    <string name="midlet_version"><b>Version : </b></string>
-    <string name="converting_wait">Conversion JAD...</string>
+    <string name="converting_wait">Conversion JAR…</string>
     <string name="install">Installer</string>
     <string name="install_done">Votre application est installé</string>
     <string name="install_jar_non_matched_jad">Cette application diffère de celle décrite dans JAD.\nIgnorer JAD et installer quand même ?</string>
@@ -87,7 +84,6 @@
     <string name="PREF_VK_OUTLINE">Contour</string>
     <string name="PREF_VK_ALPHA">Opacité: </string>
     <string name="PREF_VK_HIDE_DELAY">Masquer le délai: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Étiquettes (P)</string>
     <string name="PREF_VK_SEL_BACK">Boutons (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tailles de clé</string>
@@ -101,8 +97,6 @@
     <string name="PREF_SYS_PROPS">Propriétés système</string>
     <string name="PREF_ORIENTATION">Orientation de l\'écran</string>
     <string name="pref_orientation_default">Sans aucun paramètre</string>
-    <string name="pref_orientation_auto">Auto</string>
-    <string name="pref_orientation_port">Portrait</string>
     <string name="pref_orientation_land">Paysages</string>
     <string name="error">Erreur</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données de l\'application ?</string>
@@ -115,7 +109,6 @@
     <string name="pref_vk_type_phone">Tel</string>
     <string name="pref_vk_type_phone_arrows">Téléphone (Flèches)</string>
     <string name="PREF_LAYOUT">Mise en forme</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Rapide mais sans filtre</string>
     <string name="shader_tuning">Régler le Shader</string>
     <string name="reset">Restaurer</string>
@@ -151,11 +144,9 @@
     <string name="take_screenshot">Effectuer une capture d\'écran</string>
     <string name="screenshot_saved">Capture d\'écran a été enregistrée dans</string>
     <string name="log_saved">Le journal a été sauvegardé</string>
-    <string name="action_keyboard_ime">Keyboard (IME)</string>
     <string name="action_lock_orientation">Verrouiller l\'orientation de l\'écran</string>
     <string name="pref_vk_save_alert">Le clavier personnalisé sera remplacé par la sauvegarde\nactuelle ?</string>
     <string name="opt_save_screen_params">enregistrer les paramètres de l\'écran</string>
-    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Ignorer</string>
     <string name="pref_theme_auto_battery">Auto, par économiseur de batterie</string>
     <string name="pref_theme_auto_time">Auto, par heure de la journée</string>
@@ -175,7 +166,6 @@
     <string name="pref_button_shape_round">Rectangle arrondi</string>
     <string name="pref_app_sort_title">Ordre de tri des applications</string>
     <string name="pref_app_sort_name">Nom</string>
-    <string name="pref_app_sort_date">Date </string>
     <string name="pref_app_sort_vendor">Vendeur</string>
     <string name="pref_map_keys">Mappage des touches</string>
     <string name="pref_encoding_title">Cryptage</string>
