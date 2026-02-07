@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Fonte: </b></string>
     <string name="midlet_vendor"><b>Fabricante: </b></string>
     <string name="midlet_version"><b>Versão: </b></string>
-    <string name="converting_wait">Convertendo JAR...</string>
+    <string name="converting_wait">Convertendo JAR…</string>
     <string name="install">instalar</string>
     <string name="install_done">Aplicativo instalado com sucesso!</string>
     <string name="install_jar_non_matched_jad">Este aplicativo é diferente do descrito em JAD.\nIgnorar JAD e instalar mesmo assim?</string>
@@ -87,7 +87,6 @@
     <string name="PREF_VK_OUTLINE">Contorno</string>
     <string name="PREF_VK_ALPHA">Opacidade: </string>
     <string name="PREF_VK_HIDE_DELAY">Esconder atraso: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Rótulos (P)</string>
     <string name="PREF_VK_SEL_BACK">Botões (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tamanho dos botões</string>
@@ -114,7 +113,6 @@
     <string name="pref_vk_type_numbers_arrows">Números &amp; setas</string>
     <string name="pref_vk_type_phone">Telefone</string>
     <string name="pref_vk_type_phone_arrows">Telefone (setas)</string>
-    <string name="PREF_LAYOUT">Layout</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Rápido (sem filtro)</string>
     <string name="shader_tuning">Ajustar Shader</string>
@@ -155,7 +153,6 @@
     <string name="action_lock_orientation">Bloquear rotação de tela</string>
     <string name="pref_vk_save_alert">O Teclado Personalizado será substituído por\nSalvar?</string>
     <string name="opt_save_screen_params">salvar parâmetros de tela</string>
-    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Descartar</string>
     <string name="pref_theme_auto_battery">Automático, por Economia de Bateria</string>
     <string name="pref_theme_auto_time">Automático, por hora do dia</string>
