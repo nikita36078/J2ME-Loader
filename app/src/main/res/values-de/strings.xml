@@ -17,7 +17,6 @@
     <string name="message_delete">Möchten Sie diese App wirklich löschen?</string>
     <string name="permission_request_failed">Diese App benötigt Schreibrechte</string>
     <string name="external_storage_not_mounted">Diese App benötigt externen Speicher</string>
-    <string name="create">create</string>
     <string name="alert_msg_workdir_not_exists">Arbeitsverzeichnis existiert nicht im Pfad:\n\'%1$s\'.\nMöchten Sie es erstellen oder ein anderes auswählen?</string>
     <string name="action_context_shortcut">Verknüpfung hinzufügen</string>
     <string name="action_reinstall">Neuinstallieren</string>
@@ -32,12 +31,10 @@
     <string name="choose">Auswählen</string>
     <string name="warning">Warnhinweis</string>
     <string name="scoped_storage_warning">Deine Nutzerdaten werden auf deinem Gerät lokal gespeichert und beim Deinstallieren der App &lt;b&gt;automatisch gelöscht&lt;\b&gt;\n</string>
-    <string name="midlet_name"><b>Name: </b></string>
     <string name="midlet_size"><b>Größe: </b></string>
     <string name="midlet_source"><b>Quelle: </b></string>
     <string name="midlet_vendor"><b>Hersteller: </b></string>
-    <string name="midlet_version"><b>Version: </b></string>
-    <string name="converting_wait">Konvertiere Jar...</string>
+    <string name="converting_wait">Konvertiere JAR…</string>
     <string name="install">Installieren</string>
     <string name="install_done">Die Anwendung wurde erfolgreich eingerichtet!</string>
     <string name="install_jar_non_matched_jad">Diese App unterscheidet sich von dem, was in JAD beschrieben wird.\nMöchtest du JAD ignorieren und sie trotzdem installieren?</string>
@@ -59,7 +56,6 @@
     <string name="PREF_SCALE_RATIO">Skalierung (%)</string>
     <string name="PREF_SCALE_TO_FIT">Passend skalieren</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Seitenverhältnis beibehalten</string>
-    <string name="PREF_FILTER">Filter</string>
     <string name="PREF_IMMEDIATE">Sofortiger Verarbeitungsmodus</string>
     <string name="PREF_SHOW_FPS">FPS anzeigen</string>
     <string name="PREF_FORCE_FULLSCREEN">Vollbild erzwingen</string>
@@ -83,11 +79,9 @@
     <string name="PREF_VK_OUTLINE">Umrandung</string>
     <string name="PREF_VK_ALPHA">Deckkraft: </string>
     <string name="PREF_VK_HIDE_DELAY">Verzögerung beim Verstecken: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Beschriftungen (P)</string>
     <string name="PREF_VK_SEL_BACK">Schaltfächen (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tastengrössen</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Virtuelle Tasten: </string>
     <string name="PREF_VK_NUM_KEYS">Ziffern: </string>
     <string name="PREF_VK_FIRE_KEY">Feuer: </string>
@@ -109,8 +103,6 @@
     <string name="pref_vk_type_numbers_arrows">Nummern &amp; Pfeile</string>
     <string name="pref_vk_type_phone">Telefon</string>
     <string name="pref_vk_type_phone_arrows">Telefon (Pfeile)</string>
-    <string name="PREF_LAYOUT">Layout</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Schnell (kein Filter)</string>
     <string name="shader_tuning">Shadereinstellungen</string>
     <string name="reset">Zurücksetzen</string>
@@ -164,7 +156,6 @@
     <string name="pref_button_shape_rect">Rechteckig</string>
     <string name="pref_button_shape_round">Abgerundetes Rechteck</string>
     <string name="pref_app_sort_title">App-Sortierung</string>
-    <string name="pref_app_sort_name">Name</string>
     <string name="pref_app_sort_date">Datum</string>
     <string name="pref_map_keys">Tastenzuordnung</string>
     <string name="pref_encoding_title">Zeichenkodierung</string>

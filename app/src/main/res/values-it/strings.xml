@@ -21,7 +21,7 @@
     <string name="action_context_delete">Elimina</string>
     <string name="action_context_rename">Rinomina</string>
     <string name="create_apps_dir_failed">Impossibile creare una cartella nel percorso:\n\'%s\'\n selezionarne un\'altra.</string>
-    <string name="converting_wait">Conversione del file JAR...</string>
+    <string name="converting_wait">Conversione del file JAR…</string>
     <string name="START_CMD">Avvia</string>
     <string name="CANCEL_CMD">Annulla</string>
     <string name="CLEAR_DATA_CMD">Cancella i dati</string>
@@ -52,7 +52,6 @@
     <string name="PREF_VK_FORCE_OPACITY">Forza l\'opacità per i tasti fuori schermo</string>
     <string name="PREF_TOUCH_INPUT">Input tocco</string>
     <string name="PREF_HW_ACCELERATION">Accelerazione hardware (instabile)</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="pref_graphics_hw_gles">Accelerazione HW (OpenGL ES)</string>
     <string name="pref_graphics_hw_view">Accelerazione HW (Finestra)</string>
     <string name="pref_graphics_hw_surface">Accelerazione HW (Superficie)</string>
@@ -61,11 +60,9 @@
     <string name="PREF_VK_OUTLINE">Contorno</string>
     <string name="PREF_VK_ALPHA">Opacità: </string>
     <string name="PREF_VK_HIDE_DELAY">Ritardo scomparsa: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etichette (P)</string>
     <string name="PREF_VK_SEL_BACK">Tasti (P)</string>
     <string name="PREF_VK_KEY_SIZES">Dimensioni tasto</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Tasti virtuali: </string>
     <string name="PREF_VK_NUM_KEYS">Cifre: </string>
     <string name="PREF_VK_FIRE_KEY">Fuoco: </string>
@@ -84,9 +81,7 @@
     <string name="pref_vk_type_phone">Telefono</string>
     <string name="pref_vk_type_phone_arrows">Telefono (frecce)</string>
     <string name="PREF_LAYOUT">Posizionamento</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Veloce (nessun filtro)</string>
-    <string name="shader_tuning">Tuning Shader</string>
     <string name="reset">Reimposta</string>
     <string name="pref_input_devices_title">Dispositivo di input</string>
     <string name="pref_graphics_mode_title">Modalità grafica:</string>

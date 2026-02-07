@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>ᱥᱨᱚᱛ : </b></string>
     <string name="midlet_vendor"><b>ᱵᱮᱯᱟᱨᱤᱭᱟᱹ : </b></string>
     <string name="midlet_version"><b>ᱦᱟᱹᱞᱤᱭᱟᱹᱠ : </b></string>
-    <string name="converting_wait">JAR ᱵᱚᱫᱚᱞᱚᱜ ᱠᱟᱱᱟ...</string>
+    <string name="converting_wait">JAR ᱵᱚᱫᱚᱞᱚᱜ ᱠᱟᱱᱟ…</string>
     <string name="install">ᱵᱚᱦᱟᱞ</string>
     <string name="install_done">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱨᱟᱹᱥ ᱞᱮᱠᱷᱟᱛᱮ ᱵᱚᱦᱟᱞ ᱮᱱᱟ!</string>
     <string name="install_jar_non_matched_jad">ᱟᱢᱟᱜ ᱮᱯ ᱫᱚ ᱵᱟᱛᱟᱣ ᱠᱟᱱ JAD ᱠᱷᱚᱱ ᱵᱷᱮᱜᱟᱨ ᱜᱮᱭᱟ ᱾ JAD ᱫᱚ ᱚᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱮᱞᱠᱟ ᱛᱮ ᱵᱚᱦᱟᱞ ᱟᱢ ᱥᱮ ?</string>
@@ -87,7 +87,6 @@
     <string name="PREF_VK_OUTLINE">ᱟᱩᱴᱞᱟᱭᱤᱱ</string>
     <string name="PREF_VK_ALPHA">ᱚᱯᱟᱥᱤᱴᱭ: </string>
     <string name="PREF_VK_HIDE_DELAY">ᱰᱤᱞᱭ ᱩᱠᱩᱭᱢᱮ: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">ᱞᱮᱣᱮᱞᱠᱚ (P)</string>
     <string name="PREF_VK_SEL_BACK">ᱵᱩᱛᱟᱹᱢᱠᱚ (P)</string>
     <string name="PREF_VK_KEY_SIZES">ᱠᱭ ᱢᱟᱯᱠᱚ</string>

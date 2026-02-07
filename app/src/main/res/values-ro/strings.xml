@@ -19,8 +19,7 @@
     <string name="action_settings">Setări</string>
     <string name="action_context_delete">Șterge</string>
     <string name="action_context_rename">Renumeste</string>
-    <string name="converting_wait">Se convertește JAR...</string>
-    <string name="START_CMD">Start</string>
+    <string name="converting_wait">Se convertește JAR…</string>
     <string name="CANCEL_CMD">Anulare</string>
     <string name="CLEAR_DATA_CMD">Curata date</string>
     <string name="RESET_SETTINGS_CMD">Resetează setările</string>
@@ -52,11 +51,9 @@
     <string name="PREF_VK_OUTLINE">Contur</string>
     <string name="PREF_VK_ALPHA">Opacitate: </string>
     <string name="PREF_VK_HIDE_DELAY">Ascunde întârzierea: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etichete (P)</string>
     <string name="PREF_VK_SEL_BACK">Butoane (P)</string>
     <string name="PREF_VK_KEY_SIZES">Dimensiune tastă</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Taste moi: </string>
     <string name="PREF_VK_NUM_KEYS">Cifre: </string>
     <string name="PREF_VK_FIRE_KEY">Foc: </string>

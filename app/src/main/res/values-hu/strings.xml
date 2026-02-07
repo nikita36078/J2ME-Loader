@@ -23,7 +23,7 @@
     <string name="action_context_delete">Törlés</string>
     <string name="action_context_rename">Átnevezés</string>
     <string name="create_apps_dir_failed">Könyvtár létrehozása sikertelen a következő útvonalon:\n\'%s\'\nVálasszon másikat.</string>
-    <string name="converting_wait">JAR konvertálása...</string>
+    <string name="converting_wait">JAR konvertálása…</string>
     <string name="START_CMD">Indítás</string>
     <string name="CANCEL_CMD">Mégse</string>
     <string name="CLEAR_DATA_CMD">Adatok törlése</string>
@@ -63,7 +63,6 @@
     <string name="PREF_VK_OUTLINE">Körvonal</string>
     <string name="PREF_VK_ALPHA">Áttetszőség: </string>
     <string name="PREF_VK_HIDE_DELAY">Elrejtés késése: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Címkék (P)</string>
     <string name="PREF_VK_SEL_BACK">Gombok (P)</string>
     <string name="PREF_VK_KEY_SIZES">Gombméretek</string>

@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Nguồn: </b></string>
     <string name="midlet_vendor"><b>Nhà cung cấp: </b></string>
     <string name="midlet_version"><b>Ph. bản: </b></string>
-    <string name="converting_wait">Đang chuyển đổi JAR...</string>
+    <string name="converting_wait">Đang chuyển đổi JAR…</string>
     <string name="install">cài đặt</string>
     <string name="install_done">Ứng dụng đã cài đặt thành công!</string>
     <string name="install_jar_non_matched_jad">Ứng dụng này khác với mô tả trong JAD.\nBỏ qua JAD và cài đặt?</string>
@@ -115,7 +115,6 @@
     <string name="pref_vk_type_phone">Điện thoại</string>
     <string name="pref_vk_type_phone_arrows">Điện thoại(mũi tên)</string>
     <string name="PREF_LAYOUT">Bố cục</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Nhanh (không bộ lọc)</string>
     <string name="shader_tuning">Điều Chỉnh Shader</string>
     <string name="reset">Thiết lập lại</string>
@@ -155,7 +154,6 @@
     <string name="action_lock_orientation">tỏa định màn hình xoay tròn</string>
     <string name="pref_vk_save_alert">Bàn phím tùy chỉnh sẽ được thay thế bằng hiện tại\nLưu?</string>
     <string name="opt_save_screen_params">lưu thông số màn hình</string>
-    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Loại bỏ</string>
     <string name="pref_theme_auto_battery">Tự động, bằng Trình Tiết Kiệm Pin</string>
     <string name="pref_theme_auto_time">Tự động, theo thời gian</string>
@@ -176,7 +174,6 @@
     <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
     <string name="pref_app_sort_name">Tên</string>
     <string name="pref_app_sort_date">Ngày tháng</string>
-    <string name="pref_app_sort_vendor">Vendor</string>
     <string name="pref_map_keys">Phím ánh xạ</string>
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>

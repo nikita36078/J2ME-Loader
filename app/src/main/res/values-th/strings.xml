@@ -16,7 +16,7 @@
     <string name="action_settings">การตั้งค่า</string>
     <string name="action_context_delete">ลบ</string>
     <string name="action_context_rename">เปลี่ยนชื่อ</string>
-    <string name="converting_wait">กำลังแปลง JAR...</string>
+    <string name="converting_wait">กำลังแปลง JAR…</string>
     <string name="START_CMD">เริ่ม</string>
     <string name="CANCEL_CMD">ยกเลิก</string>
     <string name="CLEAR_DATA_CMD">ล้างข้อมูล</string>
@@ -46,14 +46,11 @@
     <string name="PREF_VK_OUTLINE">เค้าร่าง</string>
     <string name="PREF_VK_ALPHA">ความทึบ: </string>
     <string name="PREF_VK_HIDE_DELAY">Hide delay: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">ป้ายชื่อ (P)</string>
     <string name="PREF_VK_SEL_BACK">ปุ่ม (P)</string>
     <string name="PREF_VK_KEY_SIZES">ขนาดปุ่ม</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">ซอฟต์คีย์: </string>
     <string name="PREF_VK_NUM_KEYS">ตัวเลข: </string>
-    <string name="PREF_VK_FIRE_KEY">Fire: </string>
     <string name="PREF_VK_SIZE_HINT">ขนาด</string>
     <string name="SIZE_PRESETS">ค่าที่ตั้งไว้</string>
     <string name="SWAP_SIZES">ขนาด Swap</string>

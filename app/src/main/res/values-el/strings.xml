@@ -33,7 +33,7 @@
     <string name="midlet_source"><b>Πηγή: </b></string>
     <string name="midlet_vendor"><b>Εκδότης: </b></string>
     <string name="midlet_version"><b>Έκδοση: </b></string>
-    <string name="converting_wait">Γίνεται μετατροπή του αρχείου JAR...</string>
+    <string name="converting_wait">Γίνεται μετατροπή του αρχείου JAR…</string>
     <string name="install">εγκατάσταση</string>
     <string name="install_done">Η εφαρμογή εγκαταστάθηκε με επιτυχία!</string>
     <string name="install_jar_non_matched_jad">Αυτή η εφαρμογή διαφέρει με αυτά που περιγράφονται στο αρχείο JAD.\nΘέλετε να γίνει αγνόηση του JAD και να γίνει εγκατάσταση ούτως η άλλως;</string>
@@ -85,7 +85,6 @@
     <string name="PREF_VK_HIDE_DELAY">Απόκρυψη καθυστέρησης: </string>
     <string name="PREF_VK_SEL_FORE">Ετικέτες (πατημένα)</string>
     <string name="PREF_VK_SEL_BACK">Πλήκτρα (πατημένα)</string>
-    <string name="PREF_VK_KEY_SIZES"></string>
     <string name="PREF_VK_SIZE_HINT">Μέγεθος</string>
     <string name="SIZE_PRESETS">Πρότυπα</string>
     <string name="SWAP_SIZES">Αλλαγή μεγεθών</string>

@@ -50,7 +50,7 @@
     <string name="midlet_source"><b>Source: </b></string>
     <string name="midlet_vendor"><b>Vendor: </b></string>
     <string name="midlet_version"><b>Version: </b></string>
-    <string name="converting_wait">Converting JAR...</string>
+    <string name="converting_wait">Converting JAR…</string>
     <string name="install">install</string>
     <string name="install_done">Application successfully installed!</string>
     <string name="install_jar_non_matched_jad">This app differs from that described in JAD.\nIgnore JAD and install anyway?</string>

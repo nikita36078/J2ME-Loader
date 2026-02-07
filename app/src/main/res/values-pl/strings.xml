@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Źródło: </b></string>
     <string name="midlet_vendor"><b>Dostawca: </b></string>
     <string name="midlet_version"><b>Wersja: </b></string>
-    <string name="converting_wait">Konwertuję plik JAR...</string>
+    <string name="converting_wait">Konwertuję plik JAR…</string>
     <string name="install">instaluj</string>
     <string name="install_done">Aplikacja zainstalowana pomyślnie!</string>
     <string name="install_jar_non_matched_jad">Ta aplikacja różni się od opisanej w JAD.\nIgnorować JAD i mimo to zainstalować?</string>
@@ -87,7 +87,6 @@
     <string name="PREF_VK_OUTLINE">Zarys</string>
     <string name="PREF_VK_ALPHA">Nieprzezroczystość: </string>
     <string name="PREF_VK_HIDE_DELAY">Ukryj opóźnienie: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etykiety (P)</string>
     <string name="PREF_VK_SEL_BACK">Przyciski (P)</string>
     <string name="PREF_VK_KEY_SIZES">Kluczowe rozmiary</string>
@@ -96,7 +95,6 @@
     <string name="PREF_VK_NUM_KEYS">Cyfry: </string>
     <string name="PREF_VK_FIRE_KEY">Ogień: </string>
     <string name="PREF_VK_SIZE_HINT">Rozmiar</string>
-    <string name="SIZE_PRESETS">Presets</string>
     <string name="SWAP_SIZES">Zamień rozmiary</string>
     <string name="PREF_SYS_PROPS">Właściwości systemu</string>
     <string name="PREF_ORIENTATION">Orientacja ekranu</string>
@@ -117,7 +115,6 @@
     <string name="PREF_LAYOUT">Układ</string>
     <string name="PREF_SHADER_FILTER">Shadery</string>
     <string name="identity_filter">Szybko (bez filtra)</string>
-    <string name="reset">Reset</string>
     <string name="pref_input_devices_title">Urządzenie wejściowe</string>
     <string name="parallel_screen_redrawing">Równoległe przerysowywanie obrazu</string>
     <string name="saved">Zapisano</string>

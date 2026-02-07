@@ -9,7 +9,6 @@
     <string name="licenses">التراخيص</string>
     <string name="profiles">الملفات الشخصية</string>
     <string name="save_log">سجلات الحفظ</string>
-    <string name="about_message">&lt;BR&gt;</string>
     <string name="help_message">&#8226; تمكين التصفية في بعض الحالات يمكن أن يقلل كثيرا من الأداء.قم بتعطيل هذا الخيار إذا كانت اللعبة بطيئة جداً.&lt;BR&gt;&#8226; خفقان الصورة يمكن اصلاحه عن طريق تمكين الخيار \"وضع المعالجة الفورية\".</string>
     <string name="author">المالك: </string>
     <string name="version">الاصدار: </string>
@@ -37,7 +36,7 @@
     <string name="midlet_source"><b>المصدر: </b></string>
     <string name="midlet_vendor"><b>المصدر: </b></string>
     <string name="midlet_version"><b>الإصدار: </b></string>
-    <string name="converting_wait">جار تحويل ملف تطبيق جافا...</string>
+    <string name="converting_wait">جار تحويل ملف تطبيق جافا…</string>
     <string name="install">تثبيت</string>
     <string name="install_done">تم تثبيت التطبيق بنجاح!</string>
     <string name="install_jar_non_matched_jad">هذا التطبيق يختلف عن ذلك الموصوف في JAD.\nتجاهل JAD والتثبيت على أي حال؟</string>

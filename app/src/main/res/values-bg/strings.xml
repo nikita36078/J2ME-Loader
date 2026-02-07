@@ -33,7 +33,7 @@
     <string name="midlet_source"><b>Източник: </b></string>
     <string name="midlet_vendor"><b>Доставчик: </b></string>
     <string name="midlet_version"><b>Версия: </b></string>
-    <string name="converting_wait">Конвертиране на JAR...</string>
+    <string name="converting_wait">Конвертиране на JAR…</string>
     <string name="install">инсталиране</string>
     <string name="install_done">Приложението е инсталирано успешно!</string>
     <string name="install_jar_non_matched_jad">Приложението се различава от посоченото във JAD.\nИгнорирай и продължи?</string>

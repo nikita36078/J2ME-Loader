@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>स्रोत: </b></string>
     <string name="midlet_vendor"><b>विक्रेता: </b></string>
     <string name="midlet_version"><b>संस्करण: </b></string>
-    <string name="converting_wait">जार में परिवर्तित ...</string>
+    <string name="converting_wait">जार में परिवर्तित …</string>
     <string name="install">इंस्टॉल</string>
     <string name="install_done">एप्लिकेशन सफलतापूर्वक इंस्टॉल किया गया!</string>
     <string name="install_jar_non_matched_jad">यह ऐप JAD में वर्णित ऐप से अलग है।\nJAD पर ध्यान न दें और फिर भी इंस्टॉल करें?</string>
