@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Origen: </b></string>
     <string name="midlet_vendor"><b>Proveedor: </b></string>
     <string name="midlet_version"><b>Versión: </b></string>
-    <string name="converting_wait">Convirtiendo JAR...</string>
+    <string name="converting_wait">Convirtiendo JAR…</string>
     <string name="install">instalar</string>
     <string name="install_done">¡Aplicación instalada correctamente!</string>
     <string name="install_jar_non_matched_jad">Esta aplicación difiere de la descrita en el JAD.\n¿Ignorar el JAD e instalar de todos modos?</string>
@@ -78,7 +78,6 @@
     <string name="PREF_VK_FORCE_OPACITY">Forzar la opacidad de las teclas afuera de la pantalla</string>
     <string name="PREF_TOUCH_INPUT">Entrada táctil</string>
     <string name="PREF_HW_ACCELERATION">Aceleración por Hardware (Inestable)</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="pref_graphics_hw_gles">Aceleración por hardware (OpenGL ES)</string>
     <string name="pref_graphics_hw_view">Aceleración por hardware (ventana)</string>
     <string name="pref_graphics_hw_surface">Aceleración por hardware (superficie)</string>
@@ -87,11 +86,9 @@
     <string name="PREF_VK_OUTLINE">Contorno</string>
     <string name="PREF_VK_ALPHA">Opacidad: </string>
     <string name="PREF_VK_HIDE_DELAY">Ocultar retraso: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etiquetas (P)</string>
     <string name="PREF_VK_SEL_BACK">Botones (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tamaño de teclas</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Teclas de función: </string>
     <string name="PREF_VK_NUM_KEYS">Dígitos: </string>
     <string name="PREF_VK_FIRE_KEY">Fuego: </string>
@@ -104,7 +101,6 @@
     <string name="pref_orientation_auto">Automática</string>
     <string name="pref_orientation_port">Vertical</string>
     <string name="pref_orientation_land">Horizontal</string>
-    <string name="error">Error</string>
     <string name="message_clear_data">¿Realmente quieres borrar los datos de la aplicación?</string>
     <string name="PREF_VK_TYPE">Tipo de teclado</string>
     <string name="pref_vk_type_arrows">Flechas</string>
@@ -115,7 +111,6 @@
     <string name="pref_vk_type_phone">Teléfono</string>
     <string name="pref_vk_type_phone_arrows">Teléfono (flechas)</string>
     <string name="PREF_LAYOUT">Diseño</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="identity_filter">Rápido (sin filtro)</string>
     <string name="shader_tuning">Ajustes de shaders</string>
     <string name="reset">Restablecer</string>
