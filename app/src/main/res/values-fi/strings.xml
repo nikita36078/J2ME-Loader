@@ -18,7 +18,7 @@
     <string name="action_settings">Asetukset</string>
     <string name="action_context_delete">Poista</string>
     <string name="action_context_rename">Nimeä uudelleen</string>
-    <string name="converting_wait">Muunnetaan JARia...</string>
+    <string name="converting_wait">Muunnetaan JARia…</string>
     <string name="START_CMD">Käynnistä</string>
     <string name="CANCEL_CMD">Peruuta</string>
     <string name="CLEAR_DATA_CMD">Tyhjennä tiedot</string>
@@ -47,7 +47,6 @@
     <string name="PREF_VK_OUTLINE">Ääriviivat</string>
     <string name="PREF_VK_ALPHA">Sameus: </string>
     <string name="PREF_VK_HIDE_DELAY">Piilotusviive: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Selitteet (P)</string>
     <string name="PREF_VK_SEL_BACK">Painikkeet (P)</string>
     <string name="PREF_VK_KEY_SIZES">Näppäinkoot</string>
