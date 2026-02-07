@@ -35,9 +35,8 @@
     <string name="midlet_name"><b>Nama: </b></string>
     <string name="midlet_size"><b>Ukuran: </b></string>
     <string name="midlet_source"><b>Sumber: </b></string>
-    <string name="midlet_vendor"><b>Vendor: </b></string>
     <string name="midlet_version"><b>Versi: </b></string>
-    <string name="converting_wait">Mengkonversi JAR...</string>
+    <string name="converting_wait">Mengkonversi JAR…</string>
     <string name="install">pasang</string>
     <string name="install_done">Aplikasi telah berhasil dipasang!</string>
     <string name="install_jar_non_matched_jad">Aplikasi ini berbeda dari yang dideskripsikan di JAD.\nAbaikan JAD dan tetap pasang?</string>
@@ -59,7 +58,6 @@
     <string name="PREF_SCALE_RATIO">Skala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Sesuaikan dengan skala</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Pertahankan aspek rasio</string>
-    <string name="PREF_FILTER">Filter</string>
     <string name="PREF_IMMEDIATE">Mode pemrosesan seketika</string>
     <string name="PREF_SHOW_FPS">Tampilkan FPS</string>
     <string name="PREF_FORCE_FULLSCREEN">Paksa layar penuh</string>
@@ -87,12 +85,10 @@
     <string name="PREF_VK_OUTLINE">Garis luar</string>
     <string name="PREF_VK_ALPHA">Opasitas: </string>
     <string name="PREF_VK_HIDE_DELAY">Waktu sebelum sembunyi: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Label (ditekan)</string>
     <string name="PREF_VK_SEL_BACK">Tombol (ditekan)</string>
     <string name="PREF_VK_KEY_SIZES">Ukuran tombol</string>
     <string name="PREF_VK_NAV_KEYS">Tuas kendali: </string>
-    <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
     <string name="PREF_VK_NUM_KEYS">Angka: </string>
     <string name="PREF_VK_FIRE_KEY">Tembak/OK: </string>
     <string name="PREF_VK_SIZE_HINT">Ukuran</string>
@@ -121,7 +117,6 @@
     <string name="reset">Atur ulang</string>
     <string name="pref_input_devices_title">Perangkat masukan</string>
     <string name="pref_graphics_mode_title">Mode grafik:</string>
-    <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
     <string name="pref_screen_gravity">Gravitasi layar</string>
     <string name="pref_screen_gravity_bottom">Bawah</string>
     <string name="pref_screen_gravity_center">Tengah</string>
@@ -155,7 +150,6 @@
     <string name="action_lock_orientation">Tahan rotasi layar</string>
     <string name="pref_vk_save_alert">Papan ketik kustom akan diganti yang sekarang\nSimpan?</string>
     <string name="opt_save_screen_params">simpan parameter layar</string>
-    <string name="cmd_menu">Menu</string>
     <string name="dismiss">Abaikan</string>
     <string name="pref_theme_auto_battery">Otomatis, ikut Penghemat Baterai</string>
     <string name="pref_theme_auto_time">Otomatis, ikut waktu harinya</string>
@@ -176,7 +170,6 @@
     <string name="pref_app_sort_title">Urutan aplikasi</string>
     <string name="pref_app_sort_name">Nama</string>
     <string name="pref_app_sort_date">Tanggal</string>
-    <string name="pref_app_sort_vendor">Vendor</string>
     <string name="pref_map_keys">Pemetaan tombol</string>
     <string name="pref_encoding_title">Pengkodean</string>
     <string name="pref_default_settings">Pengaturan bawaan</string>
