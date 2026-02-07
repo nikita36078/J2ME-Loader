@@ -37,7 +37,7 @@
     <string name="midlet_source"><b>Kaynak: </b></string>
     <string name="midlet_vendor"><b>Sahibi: </b></string>
     <string name="midlet_version"><b>Sürüm: </b></string>
-    <string name="converting_wait">JAR dönüştürülüyor...</string>
+    <string name="converting_wait">JAR dönüştürülüyor…</string>
     <string name="install">yükle</string>
     <string name="install_done">Uygulama başarıyla yüklendi!</string>
     <string name="install_jar_non_matched_jad">Bu uygulama, JAD\'de açıklanandan farklıdır.\nJAD yoksayılıp yine de yüklensin mi?</string>
@@ -87,7 +87,6 @@
     <string name="PREF_VK_OUTLINE">Dış hatlar</string>
     <string name="PREF_VK_ALPHA">Opaklık: </string>
     <string name="PREF_VK_HIDE_DELAY">Gizleme gecikmesi: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Metinler (P)</string>
     <string name="PREF_VK_SEL_BACK">Tuşlar (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tuş boyutları</string>
