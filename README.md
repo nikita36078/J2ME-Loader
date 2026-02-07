@@ -12,16 +12,22 @@ Filename extensions: .JAD + .JAR (J2ME), .KJX (EZplus).
 
 ## Download
 [![Bitrise build status](https://app.bitrise.io/app/d9254be52c74982a/status.svg?token=DIHxcpAPIg0VXSHpeXsHHA&branch=master)](https://app.bitrise.io/app/d9254be52c74982a)
-[![GitHub release](https://img.shields.io/github/release/nikita36078/J2ME-Loader.svg)](https://github.com/nikita36078/J2ME-Loader/releases)  
-[Visual Studio App Center automated builds](https://install.appcenter.ms/users/nikita36078/apps/j2me-loader/distribution_groups/testers)  
+[![GitHub release](https://img.shields.io/github/release/nikita36078/J2ME-Loader.svg)](https://github.com/nikita36078/J2ME-Loader/releases)
+
+[Visual Studio App Center automated builds](https://install.appcenter.ms/users/nikita36078/apps/j2me-loader/distribution_groups/testers)
+
 <a href="https://play.google.com/store/apps/details?id=ru.playsoftware.j2meloader">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
 <a href="https://f-droid.org/app/ru.playsoftware.j2meloader">
 <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="75"></a>
 
 ## Thanks
-[J2meLoader](https://github.com/NaikSoftware/J2meLoader) by NaikSoftware. J2ME Loader is a fork of it.  
-[JL-Mod](https://github.com/woesss/JL-Mod) by woesss for creating open-source Mascot Capsule implementation.  
+[J2meLoader](https://github.com/NaikSoftware/J2meLoader) by NaikSoftware. J2ME Loader is a fork of it.
+
+[JL-Mod](https://github.com/woesss/JL-Mod) by woesss for creating open-source Mascot Capsule implementation.
+
+EZplus apps support added by ohayoyogi.
+
 [rasofang](https://github.com/soundsnow/rasofang) ([web](https://soundsnow.github.io/rasofang/)) by soundsnow for recommended resolution settings.
 
 ## Wiki
@@ -44,10 +50,9 @@ Filename extensions: .JAD + .JAR (J2ME), .KJX (EZplus).
  - Image flickering issues can be fixed by enabling the "Immediate processing mode" option.
 
 ## Screenshots
-
+* For more screenshots check out the [wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader#Screenshots)
 <img src="/screenshots/screen.jpg" width="288" height="512"> <img src="/screenshots/screen2.jpg" width="288" height="512">
 <img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
-* For more screenshots check out the [wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader#Screenshots)
 
 ## License
 > Copyright 2017-2024 Nikita Shakarun.
