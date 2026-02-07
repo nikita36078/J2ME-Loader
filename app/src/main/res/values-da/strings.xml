@@ -7,7 +7,6 @@
     <string name="licenses">Licenser</string>
     <string name="help_message">&#8226; Aktivering af filtrering kan i nogle tilfælde reducere ydeevnen. Deaktiver denne indstilling, hvis spillet er for langsomt.&lt;BR&gt;&#8226; Problemer med flimmer kan rettes ved aktivering af indstillingen \"Omgående behandlingstilstand\".</string>
     <string name="author">Forfatter: </string>
-    <string name="version">Version: </string>
     <string name="no_data_for_display">Ingen data</string>
     <string name="message_delete">Vil du slette denne app?</string>
     <string name="permission_request_failed">Denne app kræver skrivetilladelse til lager</string>
@@ -15,8 +14,7 @@
     <string name="action_context_shortcut">Tilføj genvej</string>
     <string name="action_settings">Indstillinger</string>
     <string name="action_context_delete">Slet</string>
-    <string name="converting_wait">Konverterer JAR...</string>
-    <string name="START_CMD">Start</string>
+    <string name="converting_wait">Konverterer JAR…</string>
     <string name="CANCEL_CMD">Annullér</string>
     <string name="CLEAR_DATA_CMD">Ryd data</string>
     <string name="RESET_SETTINGS_CMD">Nulstil indstillinger</string>
@@ -44,12 +42,9 @@
     <string name="PREF_VK_OUTLINE">Kontur</string>
     <string name="PREF_VK_ALPHA">Gennemsigtighed: </string>
     <string name="PREF_VK_HIDE_DELAY">Skjul forsinkelse: </string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VK_SEL_FORE">Etiketter (P)</string>
     <string name="PREF_VK_SEL_BACK">Knapper (P)</string>
     <string name="PREF_VK_KEY_SIZES">Tastestørrelser</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
-    <string name="PREF_VK_SOFT_KEYS">Softkeys: </string>
     <string name="PREF_VK_NUM_KEYS">Cifre: </string>
     <string name="PREF_VK_FIRE_KEY">Skyd: </string>
     <string name="PREF_VK_SIZE_HINT">Størrelse</string>
@@ -62,7 +57,6 @@
     <string name="select_dialog_title">Vælg MIDlet</string>
     <string name="crash_dialog_message">Vil du sende en fejlrapport til udvikleren?</string>
     <string name="crash_dialog_title">Fejl registreret</string>
-    <string name="report_crash">Send</string>
     <string name="layout_edit_finished">Redigeringstilstand afsluttet</string>
     <string name="layout_edit_finish">Afslut redigeringstilstand</string>
     <string name="layout_edit_mode">Tastelayout redigeringstilstand</string>
