@@ -17,7 +17,6 @@
 package com.example.porting;
 
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.Command;
@@ -60,20 +59,11 @@ public class HelloMidlet extends MIDlet implements CommandListener {
 		if (stream == null) {
 			return "Resource file not found.";
 		}
-		DataInputStream dis = null;
-		try {
-			dis = new DataInputStream(stream);
+		try (DataInputStream dis = new DataInputStream(stream)) {
 			return dis.readUTF();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "Error read resource file.";
-		} finally {
-			if (dis != null) {
-				try {
-					dis.close();
-				} catch (IOException ignored) {
-				}
-			}
 		}
 	}
 

@@ -180,8 +180,8 @@ public class BootActivity extends AppCompatActivity {
             String iconEntry = desc.getIcon();
             if (iconEntry != null) {
                 File iconFile = new File(targetDir, Config.MIDLET_ICON_FILE.substring(1));
-                net.lingala.zip4j.ZipFile zip = new net.lingala.zip4j.ZipFile(resJar);
-                net.lingala.zip4j.model.FileHeader fh = zip.getFileHeader(iconEntry);
+                ZipFile zip = new ZipFile(resJar);
+                FileHeader fh = zip.getFileHeader(iconEntry);
                 if (fh != null) {
                     ru.playsoftware.j2meloader.util.ZipUtils.unzipEntry(resJar, iconEntry, iconFile);
                 }

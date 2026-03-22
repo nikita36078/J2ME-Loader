@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 MIDlet-Name: My Game
 MIDlet-Vendor: My Studio
 MIDlet-Version: 1.0
-MIDlet-1: My Game, /icon.png, com.example.MyMidlet
+MIDlet-1: My Game, /icon.png, com.example.porting.HelloMidlet
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
 
