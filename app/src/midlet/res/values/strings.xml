@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Override info dialog content for wrapper mode -->
+    <string name="help_message">Long-press the screen or press the device menu button for display options.</string>
+    <string name="about_message">J2ME game wrapper. Built with J2ME Loader.</string>
+</resources>

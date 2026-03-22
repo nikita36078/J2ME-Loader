@@ -74,11 +74,16 @@ public class Config {
 		SCREENSHOTS_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 				+ "/" + appName;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		String path = FileUtils.isExternalStorageLegacy() ?
-				preferences.getString(PREF_EMULATOR_DIR, null) :
-				context.getExternalFilesDir(null).getPath();
-		if (path == null) {
-			path = Environment.getExternalStorageDirectory() + "/" + appName;
+		String path;
+		if (!BuildConfig.FULL_EMULATOR) {
+			path = context.getFilesDir().getAbsolutePath();
+		} else if (FileUtils.isExternalStorageLegacy()) {
+			path = preferences.getString(PREF_EMULATOR_DIR, null);
+			if (path == null) {
+				path = Environment.getExternalStorageDirectory() + "/" + appName;
+			}
+		} else {
+			path = context.getExternalFilesDir(null).getPath();
 		}
 		initDirs(path);
 		preferences.registerOnSharedPreferenceChangeListener(sPrefListener);

@@ -3,32 +3,44 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application>
+        <!-- Remove main app-list entry point; BootActivity is the single launcher -->
         <activity android:name=".MainActivity" tools:node="remove" />
-        <activity android:name="javax.microedition.shell.MicroActivity"
+
+        <!-- Direct-boot launcher: installs game.jar on first run, then boots directly -->
+        <activity
+            android:name=".BootActivity"
             android:exported="true"
-            tools:remove="android:process"
-            tools:replace="android:exported">
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".settings.SettingsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+
+        <!-- MicroActivity: J2ME emulator process; launched by BootActivity / Config.startApp() -->
+        <activity
+            android:name="javax.microedition.shell.MicroActivity"
+            android:exported="false"
+            tools:replace="android:exported"
+            tools:remove="android:process" />
+
+        <!-- SettingsActivity: replaced by stub in midlet source set; user cannot access settings -->
+        <activity android:name=".settings.SettingsActivity"
+            tools:replace="android:exported"
+            android:exported="false">
         </activity>
+
+        <!-- Remove activities not needed in wrapper mode -->
         <activity android:name=".donations.DonationsActivity" tools:node="remove" />
         <activity android:name=".settings.KeyMapperActivity" tools:node="remove" />
         <activity android:name=".filepicker.FilteredFilePickerActivity" tools:node="remove" />
         <activity android:name=".config.ProfilesActivity" tools:node="remove" />
 
+        <!-- Remove SAF document provider (not needed in wrapper mode) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
-            tools:node="remove">
-        </provider>
+            tools:node="remove" />
     </application>
 
 </manifest>

@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
-MIDlet-1: Midlet Port Sample, , com.example.porting.HelloMidlet
-MIDlet-Name: Midlet Port Sample
-MIDlet-Vendor: woesss
-MIDlet-Version: 2.0
-MicroEdition-Configuration: CLDC-1.0
+MIDlet-Name: My Game
+MIDlet-Vendor: My Studio
+MIDlet-Version: 1.0
+MIDlet-1: My Game, /icon.png, com.example.MyMidlet
+MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
+
