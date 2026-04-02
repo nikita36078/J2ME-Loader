@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 Nikita Shakarun
+ * Copyright 2026 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +27,8 @@ import javax.bluetooth.L2CAPConnection;
 
 public class L2CAPConnectionImpl implements L2CAPConnection {
 	public BluetoothSocket socket;
-	private OutputStream os;
-	private InputStream is;
+	private final OutputStream os;
+	private final InputStream is;
 
 	public L2CAPConnectionImpl(BluetoothSocket socket) throws IOException {
 		this.socket = socket;

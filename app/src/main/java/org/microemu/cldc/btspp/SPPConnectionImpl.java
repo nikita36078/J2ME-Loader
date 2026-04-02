@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 Nikita Shakarun
+ * Copyright 2026 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +31,13 @@ public class SPPConnectionImpl implements StreamConnection {
 	private BTInputStream btin = null;
 	private BTOutputStream btout = null;
 	public BluetoothSocket socket;
-	private boolean skipAfterWrite;
+	private final boolean skipAfterWrite;
 
 	// Android closes socket when one of streams is closed, we need to workaround it
 	// Also if we're connecting with SPP profile the data we write is returned back to InputStream
 	// This is not an expected behavior
 	private static class BTInputStream extends InputStream {
-		private InputStream is;
+		private final InputStream is;
 
 		public BTInputStream(InputStream is) {
 			this.is = is;
@@ -81,12 +82,14 @@ public class SPPConnectionImpl implements StreamConnection {
 	}
 
 	private static class BTOutputStream extends OutputStream {
-		private OutputStream os;
-		public InputStream is;
+		private final OutputStream os;
+		public DataInputStream is;
 
 		public BTOutputStream(OutputStream os, InputStream is) {
 			this.os = os;
-			this.is = is;
+			if (is != null) {
+				this.is = new DataInputStream(is);
+			}
 		}
 
 		public void close() throws IOException {
@@ -101,19 +104,19 @@ public class SPPConnectionImpl implements StreamConnection {
 		public void write(byte[] b) throws IOException {
 			os.write(b);
 			if (is != null)
-				is.skip(b.length);
+				is.skipBytes(b.length);
 		}
 
 		public void write(byte[] b, int off, int len) throws IOException {
 			os.write(b, off, len);
 			if (is != null)
-				is.skip(len);
+				is.skipBytes(len);
 		}
 
 		public void write(int b) throws IOException {
 			os.write(b);
 			if (is != null)
-				is.skip(1);
+				is.skipBytes(1);
 		}
 	}
 
