@@ -53,9 +53,8 @@ public class AppCenterSender implements ReportSender {
 		if (log == null || log.isEmpty()) {
 			return;
 		}
-		// Force TLSv1.2 for Android 4.1-4.4
-		boolean forceTls12 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-				&& Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+		// Force TLSv1.2 for Android 4.4
+		boolean forceTls12 = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
 
 		HurlStack hurlStack = new HurlStack(null, forceTls12 ? new TLSSocketFactory(context) : null);
 		RequestQueue queue = Volley.newRequestQueue(context, hurlStack);
