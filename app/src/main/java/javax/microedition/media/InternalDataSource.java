@@ -20,11 +20,13 @@ package javax.microedition.media;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import com.arthenica.mobileffmpeg.Config;
-import com.arthenica.mobileffmpeg.FFmpeg;
-import com.arthenica.mobileffmpeg.FFprobe;
-import com.arthenica.mobileffmpeg.MediaInformation;
-import com.arthenica.mobileffmpeg.StreamInformation;
+import com.arthenica.ffmpegkit.FFmpegKit;
+import com.arthenica.ffmpegkit.FFmpegSession;
+import com.arthenica.ffmpegkit.FFprobeKit;
+import com.arthenica.ffmpegkit.MediaInformation;
+import com.arthenica.ffmpegkit.MediaInformationSession;
+import com.arthenica.ffmpegkit.ReturnCode;
+import com.arthenica.ffmpegkit.StreamInformation;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,20 +89,22 @@ public class InternalDataSource extends DataSource {
 	}
 
 	private void convert() {
-		MediaInformation mediaInformation = FFprobe.getMediaInformation(mediaFile.getPath());
+		MediaInformationSession session = FFprobeKit.getMediaInformation(mediaFile.getPath());
+		MediaInformation mediaInformation = session.getMediaInformation();
 		if (mediaInformation != null) {
 			StreamInformation streamInformation = mediaInformation.getStreams().get(0);
 			if (streamInformation.getCodec().contains("adpcm")) {
 				String newName = mediaFile.getPath() + ".wav";
 				String cmd = "-i " + mediaFile.getPath() + " -acodec pcm_u8 -ar 16000 " + newName;
-				int rc = FFmpeg.execute(cmd);
-				if (rc == Config.RETURN_CODE_SUCCESS) {
+				FFmpegSession ffmpegSession = FFmpegKit.execute(cmd);
+				ReturnCode rc = ffmpegSession.getReturnCode();
+				if (rc.isValueSuccess()) {
 					Log.i(TAG, "Command execution completed successfully.");
 					mediaFile.delete();
 					mediaFile = new File(newName);
 				} else {
 					Log.i(TAG, String.format(
-							"Command execution failed with rc=%d and the output below.", rc));
+							"Command execution failed with rc=%d and the output below.", rc.getValue()));
 				}
 			}
 		}

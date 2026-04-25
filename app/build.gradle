@@ -179,9 +179,9 @@ dependencies {
     implementation 'net.lingala.zip4j:zip4j:2.10.0'
 
     // Audio/Video/Graphics
-    implementation 'com.github.billthefarmer:mididriver:v1.21'
+    implementation 'io.github.nikita36078:mididriver:v1.30'
     implementation 'com.github.nikita36078:pngj:2.2.3'
-    implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
+    implementation 'io.github.nikita36078:ffmpeg-kit:6.0.LTS'
 
     implementation "androidx.camera:camera-core:${cameraxVersion}"
     implementation "androidx.camera:camera-camera2:${cameraxVersion}"
