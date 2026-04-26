@@ -20,10 +20,6 @@ ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
 endif
 
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_ARM_NEON := false
-endif
-
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -40,10 +36,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/micro3d/inc
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
-endif
-
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_ARM_NEON := false
 endif
 
 include $(BUILD_SHARED_LIBRARY)
