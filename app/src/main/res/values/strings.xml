@@ -265,6 +265,10 @@
     <string name="error_name_exists">Already exists, enter other name</string>
     <string name="default_label">"%s (default)"</string>
     <string name="not_saved_exists">Already exists</string>
+    <string name="preset_cannot_delete">Cannot delete a preset resolution</string>
+    <string name="delete_resolution_title">Delete resolution?</string>
+    <string name="delete_resolution_message">Delete %s?</string>
+    <string name="edit_resolution_title">Edit resolution</string>
     <string name="alert_rewrite_profile">A profile named \"%1$s\" already exists.\nDo you want to overwrite it?</string>
     <string name="msg_no_matches">No matches for \"%1$s\"</string>
     <string name="msg_unsupported_soundbank">Unsupported soundbank, default bank is used!</string>
