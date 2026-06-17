@@ -12,7 +12,12 @@
         <item name="bg_config_card">@drawable/bg_config_card</item>
         <item name="textColorPrimary">@color/text_primary</item>
         <item name="textColorSecondary">@color/text_secondary</item>
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="AppAlertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="colorAccent">@color/btn_bg_normal</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
