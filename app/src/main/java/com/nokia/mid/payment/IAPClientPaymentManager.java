@@ -1,6 +1,9 @@
 package com.nokia.mid.payment;
 
+import java.io.IOException;
 import java.io.InputStream;
+
+import javax.microedition.util.ContextHolder;
 
 /**
  * <p>
@@ -333,8 +336,9 @@ public final class IAPClientPaymentManager extends Object {
 	 * @param name name of the desired resource
 	 * @return a <code>java.io.InputStream</code> object.
 	 */
-	public InputStream getDRMResourceAsStream(String name) {
-		return null;
+	public InputStream getDRMResourceAsStream(String name) throws IOException {
+		InputStream is = ContextHolder.getResourceAsStream(null, name);
+		return new DrmResourceInputStream(is);
 	}
 
 	private static final class InstanceHolder {

@@ -1,186 +1,406 @@
 package com.nokia.mid.payment;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class DrmResourceInputStream extends InputStream {
+/**
+ * Parses an OMA DRM 2.0 DCF file and exposes its raw encrypted ODDA payload.
+ * <p>
+ * This class does not decrypt protected content. The content-encryption key is
+ * supplied by a separate DRM rights database and is not present in plain text
+ * in the DCF container.
+ */
+public final class DrmResourceInputStream extends FilterInputStream {
+	private static final Charset ASCII = StandardCharsets.US_ASCII;
 
-	/**
-	 * Reads the next byte of data from the input stream.
-	 *
-	 * @return the next byte of data, or <code>-1</code> if the end of the stream is reached.
-	 * @throws IOException - if an I/O error occurs.
-	 */
-	public int read() throws IOException {
-		return 0;
+	private final DRMInfo drmInfo;
+
+	public DrmResourceInputStream(InputStream encryptedInput)
+			throws IOException {
+		this(parse(encryptedInput));
 	}
 
-	/**
-	 * Closes this input stream and releases any system resources associated with the stream.
-	 *
-	 * @throws IOException if an I/O error occurs.
-	 */
-	public void close() throws IOException {
+	private DrmResourceInputStream(DRMInfo drmInfo) {
+		super(new ByteArrayInputStream(drmInfo.payload));
+		this.drmInfo = drmInfo;
+		printProperties(System.out);
 	}
 
-	/**
-	 * Returns the number of bytes that can be read (or skipped over) from
-	 * this input stream without blocking by the next caller of a method for
-	 * this input stream.  The next caller might be the same thread or
-	 * another thread.
-	 *
-	 * @return the number of bytes that can be read from this input stream without blocking.
-	 * @throws IOException if an I/O error occurs.
-	 */
-	public int available() throws IOException {
-		return 0;
+	public void printProperties(PrintStream out) {
+		out.println("File size: " + drmInfo.fileLength + " bytes");
+		out.println("Major brand: " + value(drmInfo.majorBrand));
+		out.println("DCF version: 0x" + Long.toHexString(drmInfo.dcfVersion));
+		out.println("MIME type: " + value(drmInfo.mimeType));
+		out.println("Encryption method: " + encryptionName(drmInfo.encryptionMethod)
+				+ " (" + drmInfo.encryptionMethod + ")");
+		out.println("Padding method: " + paddingName(drmInfo.paddingMethod)
+				+ " (" + drmInfo.paddingMethod + ")");
+		out.println("Plaintext length: " + lengthValue(drmInfo.plainTextLength));
+		out.println("Content ID: " + value(drmInfo.contentId));
+		out.println("Rights issuer URL: " + value(drmInfo.rightsIssuerUrl));
+		out.println("Textual headers: " + printable(drmInfo.textualHeaders));
+		out.println("Group ID: " + value(drmInfo.groupId));
+		out.println("Group-key encryption: "
+				+ encryptionName(drmInfo.groupKeyEncryptionMethod)
+				+ " (" + drmInfo.groupKeyEncryptionMethod + ")");
+		out.println("Encrypted group key: " + drmInfo.encryptedGroupKey.length
+				+ " bytes, hex=" + toHex(drmInfo.encryptedGroupKey));
+		out.println("ODDA payload offset: " + drmInfo.payloadOffset);
+		out.println("ODDA encrypted data length: "
+				+ drmInfo.encryptedDataLength + " bytes");
+		if (drmInfo.plainTextLength >= 0 && drmInfo.encryptedDataLength >= 0) {
+			out.println("Encrypted overhead/padding: "
+					+ (drmInfo.encryptedDataLength - drmInfo.plainTextLength)
+					+ " bytes");
+		}
+		out.println("Boxes:");
+		for (Box box : drmInfo.boxes) {
+			out.println(repeat(box.depth) + box.type
+					+ " offset=" + box.offset
+					+ " size=" + box.size
+					+ " header=" + box.headerSize);
+		}
 	}
 
-	/**
-	 * Reads up to <code>len</code> bytes of data from the input stream into
-	 * an array of bytes.  An attempt is made to read as many as
-	 * <code>len</code> bytes, but a smaller number may be read, possibly
-	 * zero. The number of bytes actually read is returned as an integer.
-	 *
-	 * <p> This method blocks until input data is available, end of file is
-	 * detected, or an exception is thrown.
-	 *
-	 * <p> If <code>b</code> is <code>null</code>, a
-	 * <code>NullPointerException</code> is thrown.
-	 *
-	 * <p> If <code>off</code> is negative, or <code>len</code> is negative, or
-	 * <code>off+len</code> is greater than the length of the array
-	 * <code>b</code>, then an <code>IndexOutOfBoundsException</code> is
-	 * thrown.
-	 *
-	 * <p> If <code>len</code> is zero, then no bytes are read and
-	 * <code>0</code> is returned; otherwise, there is an attempt to read at
-	 * least one byte. If no byte is available because the stream is at end of
-	 * file, the value <code>-1</code> is returned; otherwise, at least one
-	 * byte is read and stored into <code>b</code>.
-	 *
-	 * <p> The first byte read is stored into element <code>b[off]</code>, the
-	 * next one into <code>b[off+1]</code>, and so on. The number of bytes read
-	 * is, at most, equal to <code>len</code>. Let <i>k</i> be the number of
-	 * bytes actually read; these bytes will be stored in elements
-	 * <code>b[off]</code> through <code>b[off+</code><i>k</i><code>-1]</code>,
-	 * leaving elements <code>b[off+</code><i>k</i><code>]</code> through
-	 * <code>b[off+len-1]</code> unaffected.
-	 *
-	 * <p> In every case, elements <code>b[0]</code> through
-	 * <code>b[off]</code> and elements <code>b[off+len]</code> through
-	 * <code>b[b.length-1]</code> are unaffected.
-	 *
-	 * <p> If the first byte cannot be read for any reason other than end of
-	 * file, then an <code>IOException</code> is thrown. In particular, an
-	 * <code>IOException</code> is thrown if the input stream has been closed.
-	 *
-	 * @param b   the buffer into which the data is read.
-	 * @param off the start offset in array <code>b</code> at which the data is written.
-	 * @param len the maximum number of bytes to read.
-	 * @return the total number of bytes read into the buffer, or <code>-1</code> if there is no more data because the end of the stream has been reached.
-	 * @throws IOException if an I/O error occurs.<DT>
-	 * @see InputStream#read()
-	 */
-	public int read(byte[] b, int off, int len) throws IOException {
-		return 0;
+	public static String encryptionName(int method) {
+		return switch (method) {
+			case 0 -> "none";
+			case 1 -> "AES-128-CBC";
+			case 2 -> "AES-128-CTR";
+			default -> method < 0 ? "not present" : "unknown";
+		};
 	}
 
-	/**
-	 * Marks the current position in this input stream. A subsequent call to
-	 * the <code>reset</code> method repositions this stream at the last marked
-	 * position so that subsequent reads re-read the same bytes.
-	 *
-	 * <p> The <code>readlimit</code> arguments tells this input stream to
-	 * allow that many bytes to be read before the mark position gets
-	 * invalidated. This is not used in this implementation.
-	 *
-	 * <p> The general contract of <code>mark</code> is that, if the method
-	 * <code>markSupported</code> returns <code>true</code>, the stream somehow
-	 * remembers all the bytes read after the call to <code>mark</code> and
-	 * stands ready to supply those same bytes again if and whenever the method
-	 * <code>reset</code> is called.  However, the stream is not required to
-	 * remember any data at all if more than <code>readlimit</code> bytes are
-	 * read from the stream before <code>reset</code> is called.
-	 * <p>
-	 *
-	 * @param readlimit the maximum limit of bytes that can be read before the mark position becomes invalid.
-	 * @see InputStream#reset()
-	 */
-	public void mark(int readlimit) {
-
+	public static String paddingName(int method) {
+		return switch (method) {
+			case 0 -> "none";
+			case 1 -> "RFC 2630 / PKCS#7";
+			default -> method < 0 ? "not present" : "unknown";
+		};
 	}
 
-	/**
-	 * Tests if this input stream supports the <code>mark</code> and
-	 * <code>reset</code> methods. The <code>markSupported</code> method of
-	 * <code>InputStream</code> returns <code>true</code>.
-	 * <p>
-	 *
-	 * @return <code>true</code> if this true type supports the mark and reset method; <code>false</code> otherwise.
-	 * @see InputStream#mark(int)
-	 * @see InputStream#reset()
-	 */
-	public boolean markSupported() {
-		return false;
+	private static DRMInfo parse(InputStream encryptedInput)
+			throws IOException {
+		if (encryptedInput == null) {
+			throw new NullPointerException("encryptedInput");
+		}
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		byte[] buffer = new byte[4096];
+		try (encryptedInput) {
+			int count;
+			while ((count = encryptedInput.read(buffer)) >= 0) {
+				if (count > 0) {
+					output.write(buffer, 0, count);
+				}
+			}
+		}
+		return new Parser(output.toByteArray()).parse();
 	}
 
-	/**
-	 * Repositions this stream to the position at the time the
-	 * <code>mark</code> method was last called on this input stream.
-	 *
-	 * <p> The general contract of <code>reset</code> is:
-	 * <p>
-	 * <ul><li> If the method <code>markSupported</code> returns <code>true</code>, then:
-	 * <ul><li> If the method <code>mark</code> has not been called since
-	 * the stream was created, or the number of bytes read from the stream
-	 * since <code>mark</code> was last called is larger than the argument
-	 * to <code>mark</code> at that last call, then an
-	 * <code>IOException</code> might be thrown.
-	 *
-	 * <li> If such an <code>IOException</code> is not thrown, then the
-	 * stream is reset to a state such that all the bytes read since the
-	 * most recent call to <code>mark</code> (or since the start of the
-	 * file, if <code>mark</code> has not been called) will be resupplied
-	 * to subsequent callers of the <code>read</code> method, followed by
-	 * any bytes that otherwise would have been the next input data as of
-	 * the time of the call to <code>reset</code>. </ul>
-	 *
-	 * <li> If the method <code>markSupported</code> returns
-	 * <code>false</code>, then:
-	 *
-	 * <ul><li> The call to <code>reset</code> may throw an
-	 * <code>IOException</code>.
-	 *
-	 * <li> If an <code>IOException</code> is not thrown, then the stream
-	 * is reset to a fixed state that depends on the particular type of the
-	 * input stream and how it was created. The bytes that will be supplied
-	 * to subsequent callers of the <code>read</code> method depend on the
-	 * particular type of the input stream. </ul></ul>
-	 * <p>
-	 *
-	 * @throws IOException if this stream has not been marked or if the mark has been invalidated.
-	 * @see InputStream#mark(int)
-	 * @see IOException
-	 */
-	public void reset() throws IOException {
+	private static String lengthValue(long value) {
+		return value < 0 ? "<not present>" : value + " bytes";
 	}
 
-	/**
-	 * Skips over and discards <code>n</code> bytes of data from this input
-	 * stream. The <code>skip</code> method may, for a variety of reasons, end
-	 * up skipping over some smaller number of bytes, possibly <code>0</code>.
-	 * This may result from any of a number of conditions; reaching end of file
-	 * before <code>n</code> bytes have been skipped is only one possibility.
-	 * The actual number of bytes skipped is returned.  If <code>n</code> is
-	 * negative, no bytes are skipped.
-	 * <p>
-	 *
-	 * @param n the number of bytes to be skipped.
-	 * @return the actual number of bytes skipped.
-	 * @throws IOException if an I/O error occurs.
-	 */
-	public long skip(long n) throws IOException {
-		return 0;
+	private static String value(String value) {
+		return value == null || value.isEmpty()
+				? "<not present>" : value;
+	}
+
+	private static String printable(byte[] bytes) {
+		if (bytes.length == 0) {
+			return "<not present>";
+		}
+		StringBuilder result = new StringBuilder(bytes.length);
+		for (byte aByte : bytes) {
+			int c = aByte & 0xff;
+			result.append(c >= 32 && c <= 126 ? (char) c : '.');
+		}
+		return result.toString();
+	}
+
+	private static String toHex(byte[] bytes) {
+		if (bytes.length == 0) {
+			return "<not present>";
+		}
+		StringBuilder result = new StringBuilder(bytes.length * 2);
+		for (byte aByte : bytes) {
+			result.append(String.format("%02x", aByte & 0xff));
+		}
+		return result.toString();
+	}
+
+	private static String repeat(int count) {
+		StringBuilder result =
+				new StringBuilder("  ".length() * count);
+		for (int i = 0; i < count; i++) {
+			result.append("  ");
+		}
+		return result.toString();
+	}
+
+	private static final class DRMInfo {
+		long fileLength;
+		final List<Box> boxes = new ArrayList<>();
+		String majorBrand;
+		long dcfVersion;
+		String mimeType;
+		int encryptionMethod = -1;
+		int paddingMethod = -1;
+		long plainTextLength = -1;
+		String contentId;
+		String rightsIssuerUrl;
+		byte[] textualHeaders = new byte[0];
+		String groupId;
+		int groupKeyEncryptionMethod = -1;
+		byte[] encryptedGroupKey = new byte[0];
+		long encryptedDataLength = -1;
+		long payloadOffset = -1;
+		byte[] payload;
+	}
+
+	private static final class Parser {
+		private final byte[] data;
+		private final DRMInfo parsed = new DRMInfo();
+
+		Parser(byte[] data) {
+			this.data = data;
+			parsed.fileLength = data.length;
+		}
+
+		DRMInfo parse() throws IOException {
+			require(data.length >= 20,
+					"File is too small for an OMA2 DCF header");
+
+			Box ftyp = readBox(0, 0, data.length);
+			require("ftyp".equals(ftyp.type),
+					"Expected ftyp box at offset 0");
+			require(ftyp.size >= 16, "Invalid ftyp box");
+			parsed.majorBrand = readString(ftyp.dataOffset, 4);
+			parsed.dcfVersion = readUInt32(ftyp.dataOffset + 4);
+
+			long offset = ftyp.end();
+			boolean foundContainer = false;
+			while (offset < data.length) {
+				Box box = readBox(offset, 0, data.length);
+				if ("odrm".equals(box.type)) {
+					parseOdrm(box);
+					foundContainer = true;
+				}
+				offset = box.end();
+			}
+
+			require(foundContainer, "No odrm container found");
+			require(parsed.payloadOffset >= 0,
+					"No odda content object found");
+			require(parsed.encryptedDataLength >= 0,
+					"Invalid odda data length");
+			require(parsed.encryptedDataLength <= Integer.MAX_VALUE,
+					"ODDA payload is too large");
+			require(parsed.payloadOffset + parsed.encryptedDataLength
+					<= data.length, "ODDA payload extends beyond the file");
+
+			int start = (int) parsed.payloadOffset;
+			int end = start + (int) parsed.encryptedDataLength;
+			parsed.payload = Arrays.copyOfRange(data, start, end);
+			return parsed;
+		}
+
+		private void parseOdrm(Box odrm) throws IOException {
+			long offset = odrm.dataOffset + 4;
+			while (offset < odrm.end()) {
+				Box child = readBox(offset, odrm.depth + 1, odrm.end());
+				if ("odhe".equals(child.type)) {
+					parseOdhe(child);
+				} else if ("odda".equals(child.type)) {
+					parseOdda(child);
+				}
+				offset = child.end();
+			}
+		}
+
+		private void parseOdhe(Box odhe) throws IOException {
+			long offset = odhe.dataOffset + 4;
+			require(offset < odhe.end(), "Truncated odhe box");
+
+			int mimeLength = readUInt8(offset++);
+			require(offset + mimeLength <= odhe.end(),
+					"Invalid MIME type length");
+			parsed.mimeType = readString(offset, mimeLength);
+			offset += mimeLength;
+
+			while (offset < odhe.end()) {
+				Box child = readBox(offset, odhe.depth + 1, odhe.end());
+				if ("ohdr".equals(child.type)) {
+					parseOhdr(child);
+				}
+				offset = child.end();
+			}
+		}
+
+		private void parseOhdr(Box ohdr) throws IOException {
+			long offset = ohdr.dataOffset + 4;
+			require(offset + 16 <= ohdr.end(),
+					"Truncated ohdr fixed fields");
+
+			parsed.encryptionMethod = readUInt8(offset++);
+			parsed.paddingMethod = readUInt8(offset++);
+			parsed.plainTextLength = readUInt64(offset);
+			offset += 8;
+
+			int contentIdLength = readUInt16(offset);
+			int issuerLength = readUInt16(offset + 2);
+			int textualLength = readUInt16(offset + 4);
+			offset += 6;
+
+			require(offset + contentIdLength + issuerLength + textualLength
+					<= ohdr.end(), "OHDR strings extend beyond the box");
+			parsed.contentId = readString(offset, contentIdLength);
+			offset += contentIdLength;
+			parsed.rightsIssuerUrl = readString(offset, issuerLength);
+			offset += issuerLength;
+			parsed.textualHeaders = readBytes(offset, textualLength);
+			offset += textualLength;
+
+			while (offset < ohdr.end()) {
+				Box child = readBox(offset, ohdr.depth + 1, ohdr.end());
+				if ("grpi".equals(child.type)) {
+					parseGrpi(child);
+				}
+				offset = child.end();
+			}
+		}
+
+		private void parseGrpi(Box grpi) throws IOException {
+			long offset = grpi.dataOffset + 4;
+			require(offset + 5 <= grpi.end(), "Truncated grpi fields");
+
+			int groupIdLength = readUInt16(offset);
+			parsed.groupKeyEncryptionMethod = readUInt8(offset + 2);
+			int groupKeyLength = readUInt16(offset + 3);
+			offset += 5;
+
+			require(offset + groupIdLength + groupKeyLength <= grpi.end(),
+					"GRPI data extends beyond the box");
+			parsed.groupId = readString(offset, groupIdLength);
+			offset += groupIdLength;
+			parsed.encryptedGroupKey = readBytes(offset, groupKeyLength);
+		}
+
+		private void parseOdda(Box odda) throws IOException {
+			long offset = odda.dataOffset + 4;
+			require(offset + 8 <= odda.end(),
+					"Truncated odda data length");
+			parsed.encryptedDataLength = readUInt64(offset);
+			parsed.payloadOffset = offset + 8;
+			require(parsed.payloadOffset + parsed.encryptedDataLength
+					<= odda.end(), "ODDA data length exceeds its box");
+		}
+
+		private Box readBox(long offset, int depth, long parentEnd)
+				throws IOException {
+			require(offset >= 0 && offset + 8 <= parentEnd,
+					"Truncated box at " + offset);
+			long size32 = readUInt32(offset);
+			String type = readString(offset + 4, 4);
+			long size;
+			int headerSize = 8;
+
+			if (size32 == 1) {
+				require(offset + 16 <= parentEnd,
+						"Truncated extended box at " + offset);
+				size = readUInt64(offset + 8);
+				headerSize = 16;
+			} else if (size32 == 0) {
+				size = parentEnd - offset;
+			} else {
+				size = size32;
+			}
+
+			require(size >= headerSize,
+					"Invalid " + type + " box size at " + offset);
+			require(size <= parentEnd - offset,
+					type + " box exceeds its parent");
+
+			Box box = new Box(type, offset, size, headerSize, depth);
+			parsed.boxes.add(box);
+			return box;
+		}
+
+		private int readUInt8(long offset) throws IOException {
+			require(offset >= 0 && offset < data.length,
+					"Unexpected EOF at " + offset);
+			return data[(int) offset] & 0xff;
+		}
+
+		private int readUInt16(long offset) throws IOException {
+			return (readUInt8(offset) << 8) | readUInt8(offset + 1);
+		}
+
+		private long readUInt32(long offset) throws IOException {
+			return ((long) readUInt8(offset) << 24)
+					| ((long) readUInt8(offset + 1) << 16)
+					| ((long) readUInt8(offset + 2) << 8)
+					| readUInt8(offset + 3);
+		}
+
+		private long readUInt64(long offset) throws IOException {
+			long high = readUInt32(offset);
+			long low = readUInt32(offset + 4);
+			require(high <= 0x7fffffffL,
+					"64-bit value is too large for Java long");
+			return (high << 32) | low;
+		}
+
+		private String readString(long offset, int length)
+				throws IOException {
+			return new String(readBytes(offset, length), ASCII);
+		}
+
+		private byte[] readBytes(long offset, int length)
+				throws IOException {
+			require(length >= 0, "Negative byte count");
+			require(offset >= 0 && offset + length <= data.length,
+					"Unexpected EOF at " + offset);
+			return Arrays.copyOfRange(data, (int) offset, (int) offset + length);
+		}
+
+		private void require(boolean condition, String message)
+				throws IOException {
+			if (!condition) {
+				throw new IOException(message);
+			}
+		}
+	}
+
+	private static final class Box {
+		final String type;
+		final long offset;
+		final long size;
+		final int headerSize;
+		final int depth;
+		final long dataOffset;
+
+		Box(String type, long offset, long size, int headerSize, int depth) {
+			this.type = type;
+			this.offset = offset;
+			this.size = size;
+			this.headerSize = headerSize;
+			this.depth = depth;
+			this.dataOffset = offset + headerSize;
+		}
+
+		long end() {
+			return offset + size;
+		}
 	}
 }
