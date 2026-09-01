@@ -32,7 +32,7 @@ System requirements: Android 4.0+
 ## Screenshots
 
 <img src="/screenshots/screen.jpg" width="288" height="512"> <img src="/screenshots/screen2.jpg" width="288" height="512">
-<img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen4.jpg" width="288" height="512">
+<img src="/screenshots/screen3.jpg" width="288" height="512"> <img src="/screenshots/screen7.jpg" width="288" height="512">
 * For more screenshots check out the [wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader#Screenshots)
 
 ## License
