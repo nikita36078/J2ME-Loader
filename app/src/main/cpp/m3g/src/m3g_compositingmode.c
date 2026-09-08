@@ -86,7 +86,18 @@ static void m3gApplyCompositingMode(CompositingMode *compositingMode, RenderCont
             glDisable(GL_ALPHA_TEST);
         }
         else {
-            glAlphaFunc(GL_GEQUAL, compositingMode->alphaThreshold);
+            GLfloat threshold = compositingMode->alphaThreshold;
+            if (threshold >= 1.0f) {
+                /* A threshold of exactly 1.0 is not reliable across
+                 * GLES 1.1 implementations: fully opaque texels can
+                 * end up one LSB below 1.0 in fixed-point texture
+                 * pipelines (e.g. 254/255 after an 8-bit modulate,
+                 * or 0xFFFF/0x10000), which fails the test and makes
+                 * the whole object invisible on such GPUs. Relax it
+                 * just enough to let fully opaque texels through. */
+                threshold = 0.99f;
+            }
+            glAlphaFunc(GL_GEQUAL, threshold);
             glEnable(GL_ALPHA_TEST);
         }
 
