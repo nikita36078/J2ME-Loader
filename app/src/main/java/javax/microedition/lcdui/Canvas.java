@@ -54,7 +54,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -558,6 +557,10 @@ public abstract class Canvas extends Displayable {
 		super.clearDisplayableView();
 		layout = null;
 		innerView = null;
+	}
+
+	public void getVirtualScreenBounds(RectF out) {
+		out.set(virtualScreen);
 	}
 
 	public void setFullScreenMode(boolean flag) {

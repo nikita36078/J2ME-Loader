@@ -40,6 +40,8 @@ public class VideoItem extends Item {
 		if (view == null) {
 			Context context = ContextHolder.getAppContext();
 			view = new PreviewView(context);
+			// Scrolling support
+			view.setImplementationMode(PreviewView.ImplementationMode.COMPATIBLE);
 			controller.setUp(view);
 		}
 		return view;
@@ -48,5 +50,6 @@ public class VideoItem extends Item {
 	@Override
 	protected void clearItemContentView() {
 		view = null;
+		controller.tearDown();
 	}
 }

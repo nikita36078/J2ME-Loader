@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.TypedValue;
@@ -76,6 +77,11 @@ public class CanvasWrapper {
 		Bitmap bitmap = image.getBitmap();
 		bitmap.prepareToDraw();
 		canvas.drawBitmap(bitmap, image.getBounds(), dst, imgPaint);
+	}
+
+	public void drawBitmap(Bitmap bitmap, Rect src, RectF dst) {
+		bitmap.prepareToDraw();
+		canvas.drawBitmap(bitmap, src, dst, imgPaint);
 	}
 
 	public void fillRect(RectF rect) {
