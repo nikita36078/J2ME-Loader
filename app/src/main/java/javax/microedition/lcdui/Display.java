@@ -149,6 +149,15 @@ public class Display {
 		return current;
 	}
 
+	/**
+	 * @return the displayable that a still-running midlet is showing, or {@code null}.
+	 * Used to re-attach the view after the host activity was recreated (e.g. after
+	 * a long screen-off) without reloading the midlet.
+	 */
+	public static Displayable getCurrentDisplayable() {
+		return instance != null ? instance.current : null;
+	}
+
 	public void callSerially(Runnable r) {
 		postEvent(RunnableEvent.getInstance(r));
 	}

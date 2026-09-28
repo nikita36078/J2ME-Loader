@@ -32,6 +32,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -56,6 +58,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import org.acra.ACRA;
@@ -69,6 +72,7 @@ import java.util.Objects;
 
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
@@ -92,6 +96,7 @@ public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_AUTO = 1;
 	private static final int ORIENTATION_PORTRAIT = 2;
 	private static final int ORIENTATION_LANDSCAPE = 3;
+	private static final int REQUEST_BATTERY_OPTIMIZATION = 100;
 
 	private Displayable current;
 	private boolean visible;
@@ -145,32 +150,45 @@ public class MicroActivity extends AppCompatActivity {
 				throw new RuntimeException("Can't access file system");
 			}
 		}
-		String arguments = intent.getStringExtra(KEY_START_ARGUMENTS);
-		if (arguments != null) {
-			MidletSystem.setProperty("com.nokia.mid.cmdline", arguments);
-			String[] arr = arguments.split(";");
-			for (String s: arr) {
-				if (s.length() == 0) {
-					continue;
-				}
-				if (s.contains("=")) {
-					int i = s.indexOf('=');
-					String k = s.substring(0, i);
-					String v = s.substring(i + 1);
-					MidletSystem.setProperty(k, v);
-				} else {
-					MidletSystem.setProperty(s, "");
-				}
+		// If a midlet is already running in this process (the activity was destroyed
+		// while backgrounded, e.g. after a long screen-off), re-attach to it instead
+		// of reloading the game from the jar.
+		boolean resume = MidletThread.isActive();
+		if (resume) {
+			microLoader = MidletThread.getLoader();
+			if (microLoader == null) {
+				resume = false;
 			}
 		}
-		MidletSystem.setProperty("com.nokia.mid.cmdline.instance", "1");
-		microLoader = new MicroLoader(this, appPath);
-		if (!microLoader.init()) {
-			Config.startApp(this, appName, appPath, true, arguments);
-			finish();
-			return;
+
+		if (!resume) {
+			String arguments = intent.getStringExtra(KEY_START_ARGUMENTS);
+			if (arguments != null) {
+				MidletSystem.setProperty("com.nokia.mid.cmdline", arguments);
+				String[] arr = arguments.split(";");
+				for (String s: arr) {
+					if (s.length() == 0) {
+						continue;
+					}
+					if (s.contains("=")) {
+						int i = s.indexOf('=');
+						String k = s.substring(0, i);
+						String v = s.substring(i + 1);
+						MidletSystem.setProperty(k, v);
+					} else {
+						MidletSystem.setProperty(s, "");
+					}
+				}
+			}
+			MidletSystem.setProperty("com.nokia.mid.cmdline.instance", "1");
+			microLoader = new MicroLoader(this, appPath);
+			if (!microLoader.init()) {
+				Config.startApp(this, appName, appPath, true, arguments);
+				finish();
+				return;
+			}
+			microLoader.applyConfiguration();
 		}
-		microLoader.applyConfiguration();
 		VirtualKeyboard vk = ContextHolder.getVk();
 		int orientation = microLoader.getOrientation();
 		if (vk != null) {
@@ -184,12 +202,74 @@ public class MicroActivity extends AppCompatActivity {
 		menuKey = microLoader.getMenuKeyCode();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
-		try {
-			loadMIDlet();
-		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorDialog(e.toString());
+		if (resume) {
+			// Restore the live view of the running midlet without reloading it.
+			// The old layout is still attached to the destroyed activity, so clear
+			// it first and let the displayable rebuild its view for this activity.
+			Displayable displayable = Display.getCurrentDisplayable();
+			if (displayable != null) {
+				displayable.clearDisplayableView();
+				setCurrent(displayable);
+			}
+		} else {
+			try {
+				loadMIDlet();
+			} catch (Exception e) {
+				e.printStackTrace();
+				showErrorDialog(e.toString());
+			}
 		}
+
+		// Start foreground service to keep MIDlet running in background
+		startMidletForegroundService(resume);
+	}
+
+	private void startMidletForegroundService(boolean resume) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		boolean backgroundService = sp.getBoolean(PREF_BACKGROUND_SERVICE, true);
+		if (backgroundService) {
+			MidletForegroundService.start(this, appName);
+			// Only nag about battery optimization when a new game session starts,
+			// not every time the activity is recreated from the background.
+			if (!resume) {
+				checkBatteryOptimization();
+			}
+		}
+	}
+
+	private void checkBatteryOptimization() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+			if (pm != null && !pm.isIgnoringBatteryOptimizations(getPackageName())) {
+				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				if (sp.getBoolean(PREF_BACKGROUND_SERVICE, true)) {
+					showBatteryOptimizationDialog();
+				}
+			}
+		}
+	}
+
+	private void showBatteryOptimizationDialog() {
+		new AlertDialog.Builder(this)
+			.setTitle(R.string.battery_optimization_dialog_title)
+			.setMessage(R.string.battery_optimization_dialog_message)
+			.setPositiveButton(android.R.string.ok, (d, w) -> {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+					try {
+						Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+						intent.setData(Uri.parse("package:" + getPackageName()));
+						startActivityForResult(intent, REQUEST_BATTERY_OPTIMIZATION);
+					} catch (Exception e) {
+						try {
+							Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+							startActivity(intent);
+						} catch (Exception ignored) {}
+					}
+				}
+			})
+			.setNegativeButton(android.R.string.cancel, null)
+			.setCancelable(true)
+			.show();
 	}
 
 	public void lockNightMode() {
@@ -212,7 +292,13 @@ public class MicroActivity extends AppCompatActivity {
 	public void onPause() {
 		visible = false;
 		hideSoftInput();
-		MidletThread.pauseApp();
+		// While the background service is enabled the midlet must keep running in
+		// the background (e.g. auto-farm with the screen off). Only pause it when
+		// background running is disabled by the user.
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		if (!sp.getBoolean(PREF_BACKGROUND_SERVICE, true)) {
+			MidletThread.pauseApp();
+		}
 		super.onPause();
 	}
 
@@ -702,6 +788,10 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	protected void onDestroy() {
+		// Deliberately keep the foreground service running: it keeps the process
+		// (and the midlet) alive while the activity is destroyed in the background,
+		// e.g. after a long screen-off. The process is killed when the user really
+		// exits the game, which tears the service down with it.
 		binding = null;
 		super.onDestroy();
 	}

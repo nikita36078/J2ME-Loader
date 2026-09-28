@@ -67,6 +67,22 @@ public class MidletThread extends HandlerThread implements Handler.Callback {
 		instance = new MidletThread(microLoader, mainClass);
 	}
 
+	/**
+	 * @return {@code true} if a midlet instance is still alive in this process and
+	 * can be resumed instead of being loaded from scratch.
+	 */
+	public static boolean isActive() {
+		return instance != null && instance.isAlive()
+				&& instance.state != DESTROYED && instance.midlet != null;
+	}
+
+	/**
+	 * @return the {@link MicroLoader} of the running midlet, or {@code null}.
+	 */
+	public static MicroLoader getLoader() {
+		return instance != null ? instance.microLoader : null;
+	}
+
 	public static void notifyDestroyed() {
 		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 		if (instance != null) {

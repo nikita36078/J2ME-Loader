@@ -41,6 +41,12 @@
         android:key="pref_wakelock_switch"
         android:title="@string/pref_wakelock_title" />
     <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:icon="@drawable/ic_setting_keep_screen_on"
+        android:key="pref_background_service"
+        android:summary="@string/pref_background_service_summary"
+        android:title="@string/pref_background_service_title" />
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:icon="@drawable/ic_setting_screenshot"
         android:key="pref_screenshot_switch"
