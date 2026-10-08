@@ -117,6 +117,26 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int KEY_MENU = 27;
 	private static final int KEYBOARD_SIZE = 28;
 
+	private static final int[] DIRECTION_KEYS = {
+			KEY_UP_LEFT,
+			KEY_UP,
+			KEY_UP_RIGHT,
+			KEY_LEFT,
+			KEY_RIGHT,
+			KEY_DOWN_LEFT,
+			KEY_DOWN,
+			KEY_DOWN_RIGHT
+	};
+
+	private static final int DIR_UP = 1;
+	private static final int DIR_DOWN = 2;
+	private static final int DIR_LEFT = 4;
+	private static final int DIR_RIGHT = 8;
+
+	private static final float JOYSTICK_TOUCH_MARGIN = 1.15f;
+	private static final float JOYSTICK_DEAD_ZONE = 0.30f;
+	private static final float JOYSTICK_KNOB_SCALE = 0.18f;
+
 	private static final float SCALE_SNAP_RADIUS = 0.05f;
 
 	private static final int FEEDBACK_DURATION = 50;
@@ -168,6 +188,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	// the average user usually has no more than 10 fingers...
 	private final VirtualKey[] associatedKeys = new VirtualKey[10];
 	private final int[] snapStack = new int[KEYBOARD_SIZE];
+	private final Joystick joystick = new Joystick();
 
 	private final Handler handler;
 	private final File saveFile;
@@ -223,6 +244,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		keypad[KEY_FIRE] = new VirtualKey(Canvas.KEY_FIRE, "F");
 		keypad[KEY_MENU] = new MenuKey();
+
+		for (int key : DIRECTION_KEYS) {
+			keypad[key].isDirectionKey = true;
+		}
 
 		layoutVariant = readLayoutType();
 
@@ -803,6 +828,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		for (VirtualKey key : keypad) {
 			key.opaque &= opaque;
 		}
+		if (settings.vkJoystick) {
+			joystick.updateBounds();
+			joystick.opaque = opaque;
+		}
+	}
+
+	private boolean joystickActive() {
+		return settings.vkJoystick && layoutEditMode == LAYOUT_EOF;
 	}
 
 	public boolean isPhone() {
@@ -878,6 +911,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					return;
 				}
 			}
+			if (joystick.isPressed()) {
+				return;
+			}
 			handler.postDelayed(this, delay);
 		}
 	}
@@ -907,8 +943,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void paint(CanvasWrapper g) {
 		if (visible) {
+			boolean joystickMode = joystickActive();
+			if (joystickMode) {
+				joystick.paint(g);
+			}
 			for (VirtualKey key : keypad) {
-				if (key.visible) {
+				if (key.visible && !(joystickMode && key.isDirectionKey)) {
 					key.paint(g);
 				}
 			}
@@ -930,6 +970,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						overlayView.postInvalidate();
 						break;
 					}
+				}
+				if (associatedKeys[pointer] == null && joystickActive() && joystick.tryPress(pointer, x, y)) {
+					vibrate();
+					overlayView.postInvalidate();
 				}
 				break;
 			case LAYOUT_KEYS:
@@ -973,6 +1017,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
 					return false;
+				}
+				if (joystick.isControlledBy(pointer)) {
+					joystick.onDrag(x, y);
+					overlayView.postInvalidate();
+					break;
 				}
 				VirtualKey aKey = associatedKeys[pointer];
 				if (aKey == null) {
@@ -1045,6 +1094,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (pointer > associatedKeys.length) {
 				return false;
 			}
+			if (joystick.isControlledBy(pointer)) {
+				joystick.onUp();
+				overlayView.postInvalidate();
+			}
 			VirtualKey key = associatedKeys[pointer];
 			if (key != null) {
 				associatedKeys[pointer] = null;
@@ -1101,6 +1154,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void cancel() {
+		joystick.release();
 		for (VirtualKey key : keypad) {
 			key.selected = false;
 			handler.removeCallbacks(key);
@@ -1213,6 +1267,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		boolean selected;
 		boolean visible = true;
 		boolean opaque = true;
+		boolean isDirectionKey;
 		int corners;
 		private final int hashCode;
 		private int repeatCount;
@@ -1229,7 +1284,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		boolean contains(float x, float y) {
-			return visible && rect.contains(x, y);
+			return visible && !(isDirectionKey && joystickActive()) && rect.contains(x, y);
 		}
 
 		void paint(CanvasWrapper g) {
@@ -1302,6 +1357,183 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			selected = false;
 			handler.removeCallbacks(this);
 			target.postKeyReleased(keyCode);
+		}
+	}
+
+	/**
+	 * Analog joystick that replaces the 8 direction keys (the 3x3 D-pad cluster)
+	 * with a single circular control. Directions are quantized into 8 sectors and
+	 * reported by driving the four base direction keys, so key repeat and
+	 * Vodafone key states keep working.
+	 */
+	private class Joystick {
+		final RectF rect = new RectF();
+		boolean opaque = true;
+		private final RectF knobRect = new RectF();
+		private float knobRadius;
+		private float knobX;
+		private float knobY;
+		private int pointerId = -1;
+		private int directions;
+
+		void updateBounds() {
+			float left = Float.MAX_VALUE;
+			float top = Float.MAX_VALUE;
+			float right = -Float.MAX_VALUE;
+			float bottom = -Float.MAX_VALUE;
+			for (int index : DIRECTION_KEYS) {
+				RectF r = keypad[index].rect;
+				if (r.left < left) left = r.left;
+				if (r.top < top) top = r.top;
+				if (r.right > right) right = r.right;
+				if (r.bottom > bottom) bottom = r.bottom;
+			}
+			float width = right - left;
+			float height = bottom - top;
+			// center the base on a square so the circle covers the former cluster
+			if (width > height) {
+				float d = (width - height) / 2;
+				left += d;
+				right -= d;
+			} else if (height > width) {
+				float d = (height - width) / 2;
+				top += d;
+				bottom -= d;
+			}
+			rect.set(left, top, right, bottom);
+			knobRadius = Math.min(width, height) * JOYSTICK_KNOB_SCALE;
+		}
+
+		boolean contains(float x, float y) {
+			if (rect.isEmpty()) {
+				return false;
+			}
+			float dx = x - rect.centerX();
+			float dy = y - rect.centerY();
+			float radius = rect.width() * 0.5f * JOYSTICK_TOUCH_MARGIN;
+			return dx * dx + dy * dy <= radius * radius;
+		}
+
+		boolean isControlledBy(int pointer) {
+			return pointerId == pointer;
+		}
+
+		boolean isPressed() {
+			return pointerId != -1;
+		}
+
+		boolean tryPress(int pointer, float x, float y) {
+			if (pointerId != -1 || !contains(x, y)) {
+				return false;
+			}
+			pointerId = pointer;
+			updateDirection(x, y);
+			return true;
+		}
+
+		void onDrag(float x, float y) {
+			updateDirection(x, y);
+		}
+
+		void onUp() {
+			pointerId = -1;
+			knobX = 0;
+			knobY = 0;
+			applyDirections(0);
+		}
+
+		void release() {
+			if (pointerId != -1) {
+				onUp();
+			}
+		}
+
+		private void updateDirection(float x, float y) {
+			float dx = x - rect.centerX();
+			float dy = y - rect.centerY();
+			float radius = rect.width() * 0.5f;
+			float dist = (float) Math.hypot(dx, dy);
+
+			float maxOffset = radius - knobRadius;
+			if (dist > maxOffset && dist > 0) {
+				knobX = dx / dist * maxOffset;
+				knobY = dy / dist * maxOffset;
+			} else {
+				knobX = dx;
+				knobY = dy;
+			}
+
+			int dirs = 0;
+			if (dist >= radius * JOYSTICK_DEAD_ZONE) {
+				// quantize into 8 sectors of 45° centered on each direction
+				double angle = Math.toDegrees(Math.atan2(-dy, dx));
+				int sector = (int) Math.floor((angle + 22.5) / 45) & 7;
+				switch (sector) {
+					case 0: dirs = DIR_RIGHT; break;
+					case 1: dirs = DIR_RIGHT | DIR_UP; break;
+					case 2: dirs = DIR_UP; break;
+					case 3: dirs = DIR_UP | DIR_LEFT; break;
+					case 4: dirs = DIR_LEFT; break;
+					case 5: dirs = DIR_LEFT | DIR_DOWN; break;
+					case 6: dirs = DIR_DOWN; break;
+					case 7: dirs = DIR_DOWN | DIR_RIGHT; break;
+				}
+			}
+			applyDirections(dirs);
+		}
+
+		private void applyDirections(int dirs) {
+			int changed = dirs ^ directions;
+			if (changed == 0) {
+				return;
+			}
+			if ((changed & DIR_UP) != 0) {
+				setDirectionPressed(KEY_UP, (dirs & DIR_UP) != 0);
+			}
+			if ((changed & DIR_DOWN) != 0) {
+				setDirectionPressed(KEY_DOWN, (dirs & DIR_DOWN) != 0);
+			}
+			if ((changed & DIR_LEFT) != 0) {
+				setDirectionPressed(KEY_LEFT, (dirs & DIR_LEFT) != 0);
+			}
+			if ((changed & DIR_RIGHT) != 0) {
+				setDirectionPressed(KEY_RIGHT, (dirs & DIR_RIGHT) != 0);
+			}
+			directions = dirs;
+		}
+
+		private void setDirectionPressed(int keyIndex, boolean pressed) {
+			VirtualKey key = keypad[keyIndex];
+			if (pressed) {
+				key.onDown();
+			} else {
+				key.onUp();
+			}
+		}
+
+		void paint(CanvasWrapper g) {
+			int alpha = (opaque ? 0xFF : settings.vkAlpha) << 24;
+			float cx = rect.centerX();
+			float cy = rect.centerY();
+
+			g.setFillColor(alpha | settings.vkBgColor);
+			g.setDrawColor(alpha | settings.vkOutlineColor);
+			g.fillArc(rect, 0, 360);
+			g.drawArc(rect, 0, 360);
+
+			g.setTextColor(alpha | settings.vkFgColor);
+			float arrowOffset = rect.width() * 0.325f;
+			g.drawString(ARROW_UP, cx, cy - arrowOffset);
+			g.drawString(ARROW_DOWN, cx, cy + arrowOffset);
+			g.drawString(ARROW_LEFT, cx - arrowOffset, cy);
+			g.drawString(ARROW_RIGHT, cx + arrowOffset, cy);
+
+			knobRect.set(cx + knobX - knobRadius, cy + knobY - knobRadius,
+					cx + knobX + knobRadius, cy + knobY + knobRadius);
+			int knobColor = directions != 0 ? settings.vkBgColorSelected : settings.vkBgColor;
+			g.setFillColor(alpha | knobColor);
+			g.fillArc(knobRect, 0, 360);
+			g.drawArc(knobRect, 0, 360);
 		}
 	}
 

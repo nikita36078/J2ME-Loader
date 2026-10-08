@@ -45,6 +45,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虛擬鍵盤</string>
     <string name="PREF_VK_SHOW">顯示鍵盤</string>
     <string name="PREF_VK_FEEDBACK">觸覺反饋</string>
+    <string name="PREF_VK_JOYSTICK">用虛擬搖桿代替方向鍵</string>
     <string name="PREF_TOUCH_INPUT">屏幕觸摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不穩定)</string>
     <string name="PREF_VK_BACK">按鍵</string>

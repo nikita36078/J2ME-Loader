@@ -624,7 +624,7 @@
                 android:layout_marginTop="6dp"
                 android:background="?bg_config_card"
                 android:visibility="gone"
-                app:constraint_referenced_ids="force_opacity_for_offscreen_keys_toggle,enable_haptic_feedback_toggle,keyboard_not_pressed_button_background_color_hex,keyboard_pressed_button_label_color_hex,button_shape_hint,update_keyboard_pressed_button_label_color,update_keyboard_not_pressed_button_label_color,keyboard_outline_color_hex,update_keyboard_not_pressed_button_background_color,change_opacity_seekbar,update_keyboard_pressed_button_background_color,virtual_keyboard_hide_delay,ms_hint,button_shape_selector,opacity_hint,update_keyboard_outline_color,virtual_keyboard_hide_delay_hint,keyboard_not_pressed_button_label_color_hex,keyboard_pressed_button_background_color_hex"
+                app:constraint_referenced_ids="force_opacity_for_offscreen_keys_toggle,enable_haptic_feedback_toggle,virtual_joystick_toggle,keyboard_not_pressed_button_background_color_hex,keyboard_pressed_button_label_color_hex,button_shape_hint,update_keyboard_pressed_button_label_color,update_keyboard_not_pressed_button_label_color,keyboard_outline_color_hex,update_keyboard_not_pressed_button_background_color,change_opacity_seekbar,update_keyboard_pressed_button_background_color,virtual_keyboard_hide_delay,ms_hint,button_shape_selector,opacity_hint,update_keyboard_outline_color,virtual_keyboard_hide_delay_hint,keyboard_not_pressed_button_label_color_hex,keyboard_pressed_button_background_color_hex"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -676,6 +676,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/show_virtual_keyboard_toggle" />
             <!-- End key shape type -->
 
+            <!-- Virtual joystick instead of D-pad -->
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/virtual_joystick_toggle"
+                style="@style/SwitchStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_config_row"
+                android:layout_marginHorizontal="5dp"
+                android:checked="false"
+                android:text="@string/PREF_VK_JOYSTICK"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_shape_hint" />
+
             <!-- Keys vibration feedback -->
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/enable_haptic_feedback_toggle"
@@ -687,7 +700,7 @@
                 android:text="@string/PREF_VK_FEEDBACK"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_shape_hint" />
+                app:layout_constraintTop_toBottomOf="@+id/virtual_joystick_toggle" />
 
             <!-- Keys opacity -->
             <TextView

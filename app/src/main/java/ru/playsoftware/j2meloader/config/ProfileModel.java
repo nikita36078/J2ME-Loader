@@ -116,6 +116,9 @@ public class ProfileModel {
 	@SerializedName("VirtualKeyboardType")
 	public int vkType;
 
+	@SerializedName("VirtualKeyboardJoystick")
+	public boolean vkJoystick;
+
 	@SerializedName("ButtonShape")
 	public int vkButtonShape;
 

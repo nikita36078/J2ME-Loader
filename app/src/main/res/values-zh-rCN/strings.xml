@@ -75,6 +75,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
     <string name="PREF_VK_SHOW">显示键盘</string>
     <string name="PREF_VK_FEEDBACK">按键振动</string>
+    <string name="PREF_VK_JOYSTICK">用虚拟摇杆代替方向键</string>
     <string name="PREF_VK_FORCE_OPACITY">屏幕外按键强制不透明</string>
     <string name="PREF_TOUCH_INPUT">屏幕触摸</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不稳定)</string>
