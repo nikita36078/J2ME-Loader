@@ -39,3 +39,6 @@ captures/
 .externalNativeBuild
 .cxx
 keystore.properties
+
+# CI throwaway keystore
+*.keystore
