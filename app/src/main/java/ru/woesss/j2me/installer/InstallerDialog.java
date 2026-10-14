@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2022 Yury Kharchenko
+ *  Copyright 2020-2023 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -183,11 +185,11 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	@SuppressLint("CheckResult")
-	private void onPickFileResult(Uri uri) {
-		if (uri == null) {
+	private void onPickFileResult(List<Uri> uris) {
+		if (uris == null || uris.isEmpty()) {
 			return;
 		}
-		Disposable disposable = installer.updateInfo(uri)
+		Disposable disposable = installer.updateInfo(uris.get(0))
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(this::onProgress, this::onError);

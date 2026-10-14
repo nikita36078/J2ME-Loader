@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '8.5.1' apply false
-    id 'com.android.library' version '8.5.1' apply false
+    id 'com.android.application' version '9.4.1' apply false
+    id 'com.android.library' version '9.4.1' apply false
 }
 
 tasks.register('clean', Delete) {
@@ -9,7 +9,7 @@ tasks.register('clean', Delete) {
 }
 
 ext {
-    COMPILE_SDK = 34
+    COMPILE_SDK = 37
     MIN_SDK = 19
     TARGET_SDK = 34
     NDK_VERSION = '25.1.8937393'

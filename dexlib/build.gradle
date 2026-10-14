@@ -3,29 +3,33 @@ plugins {
 }
 
 android {
-    compileSdk COMPILE_SDK
+    compileSdk = COMPILE_SDK
     namespace 'ru.playsoftware.j2meloader.dexlib'
 
     defaultConfig {
         minSdk MIN_SDK
         targetSdk TARGET_SDK
-        buildConfigField 'int', 'VERSION_CODE', "1"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     lint {
         abortOnError false
     }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_21
+        sourceCompatibility JavaVersion.VERSION_21
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'net.lingala.zip4j:zip4j:2.11.0'
-    implementation 'org.ow2.asm:asm:9.8'
+    implementation 'net.lingala.zip4j:zip4j:2.11.6'
+    implementation 'org.ow2.asm:asm:9.11'
 }

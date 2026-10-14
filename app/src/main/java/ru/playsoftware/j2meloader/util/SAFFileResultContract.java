@@ -17,6 +17,7 @@
 package ru.playsoftware.j2meloader.util;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,22 +28,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-public class SAFFileResultContract extends ActivityResultContract<String, Uri> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SAFFileResultContract extends ActivityResultContract<String, List<Uri>> {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @NonNull
     @Override
     public Intent createIntent(@NonNull Context context, String input) {
         Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         i.setType("*/*") ;
+        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         return i;
     }
 
+    @Nullable
     @Override
-    public Uri parseResult(int resultCode, @Nullable Intent intent) {
-        if (resultCode == Activity.RESULT_OK && intent != null) {
-            return intent.getData();
+    public List<Uri> parseResult(int resultCode, @Nullable Intent intent) {
+        if (resultCode != Activity.RESULT_OK || intent == null) {
+            return null;
         }
-        return null;
+        List<Uri> uris = new ArrayList<>();
+        ClipData clipData = intent.getClipData();
+        if (clipData != null) {
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+                Uri uri = clipData.getItemAt(i).getUri();
+                if (uri != null) {
+                    uris.add(uri);
+                }
+            }
+        } else {
+            Uri data = intent.getData();
+            if (data != null) {
+                uris.add(data);
+            }
+        }
+        return uris.isEmpty() ? null : uris;
     }
 }

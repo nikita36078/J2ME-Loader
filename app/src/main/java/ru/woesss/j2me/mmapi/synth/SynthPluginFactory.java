@@ -16,6 +16,7 @@
 
 package ru.woesss.j2me.mmapi.synth;
 
+import android.os.Build;
 import android.util.Log;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class SynthPluginFactory {
 	private static final String TAG = SynthPluginFactory.class.getSimpleName();
 
 	public static void loadPlugins(List<Plugin> plugins) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+			return;
+		}
+
 		String soundBank = MicroLoader.getSoundBank();
 		if (soundBank == null) {
 			plugins.add(new MIDIDevicePlugin());

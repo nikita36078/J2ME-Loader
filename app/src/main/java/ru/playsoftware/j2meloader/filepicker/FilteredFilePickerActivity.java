@@ -16,12 +16,19 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
 import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File> {
 
@@ -31,5 +38,19 @@ public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File>
 		FilteredFilePickerFragment fragment = new FilteredFilePickerFragment();
 		fragment.setArgs(startPath, mode, allowMultiple, allowCreateDir, allowExistingFile, singleClick);
 		return fragment;
+	}
+
+	@Override
+	public void onFilesPicked(@NonNull List<Uri> files) {
+		// Don't put uris into ClipData: it causes FileUriExposedException
+		Intent i = new Intent();
+		i.putExtra(EXTRA_ALLOW_MULTIPLE, true);
+		ArrayList<String> paths = new ArrayList<>();
+		for (Uri file : files) {
+			paths.add(file.toString());
+		}
+		i.putStringArrayListExtra(EXTRA_PATHS, paths);
+		setResult(Activity.RESULT_OK, i);
+		finish();
 	}
 }

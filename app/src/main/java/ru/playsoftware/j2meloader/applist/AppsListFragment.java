@@ -94,6 +94,7 @@ import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
+import ru.woesss.j2me.installer.BatchInstallerDialog;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 public class AppsListFragment extends Fragment implements MenuProvider {
@@ -195,14 +196,18 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		}
 	}
 
-	private void onPickFileResult(Uri uri) {
-		if (uri == null) {
+	private void onPickFileResult(List<Uri> uris) {
+		if (uris == null || uris.isEmpty()) {
 			return;
 		}
 		preferences.edit()
-				.putString(PREF_LAST_PATH, uri.getPath())
+				.putString(PREF_LAST_PATH, uris.get(0).getPath())
 				.apply();
-		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
+		if (uris.size() == 1) {
+			InstallerDialog.newInstance(uris.get(0)).show(getParentFragmentManager(), "installer");
+		} else {
+			BatchInstallerDialog.newInstance(uris).show(getParentFragmentManager(), "installer");
+		}
 	}
 
 	private void alertRename(AppItem item) {

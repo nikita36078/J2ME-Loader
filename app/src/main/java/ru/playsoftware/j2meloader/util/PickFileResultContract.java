@@ -26,27 +26,38 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.filepicker.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 
-public class PickFileResultContract extends ActivityResultContract<String, Uri> {
+public class PickFileResultContract extends ActivityResultContract<String, List<Uri>> {
 	@NonNull
 	@Override
 	public Intent createIntent(@NonNull Context context, String input) {
 		Intent i = new Intent(context, FilteredFilePickerActivity.class);
-		i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-		i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, true);
+		i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, true);
+		i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, false);
 		i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
 		i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
 		i.putExtra(FilePickerActivity.EXTRA_START_PATH, input);
 		return i;
 	}
 
+	@Nullable
 	@Override
-	public Uri parseResult(int resultCode, @Nullable Intent intent) {
-		if (resultCode == Activity.RESULT_OK && intent != null) {
-			return intent.getData();
+	public List<Uri> parseResult(int resultCode, @Nullable Intent intent) {
+		if (resultCode != Activity.RESULT_OK || intent == null) {
+			return null;
 		}
-		return null;
+		List<Uri> uris = new ArrayList<>();
+		for (Uri uri : Utils.getSelectedFilesFromResult(intent)) {
+			if (uri != null) {
+				uris.add(uri);
+			}
+		}
+		return uris.isEmpty() ? null : uris;
 	}
 }

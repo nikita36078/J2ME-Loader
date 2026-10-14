@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import kotlin.io.FilesKt;
 import ru.playsoftware.j2meloader.config.Config;
@@ -184,7 +185,7 @@ public class FileUtils {
 		return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || Environment.isExternalStorageLegacy();
 	}
 
-	public static ActivityResultContract<String,Uri> getFilePicker() {
+	public static ActivityResultContract<String, List<Uri>> getFilePicker() {
 		if (isExternalStorageLegacy()) {
 			return new PickFileResultContract();
 		} else {
