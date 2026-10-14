@@ -36,6 +36,6 @@ System requirements: Android 4.0+
 * For more screenshots check out the [wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader#Screenshots)
 
 ## License
-> Copyright 2017-2024 Nikita Shakarun.
+> Copyright 2017-2026 Nikita Shakarun.
 > Licensed under the [Apache License, Version 2.0.](http://www.apache.org/licenses/LICENSE-2.0)  
 > (See the [LICENSE](https://github.com/nikita36078/J2ME-Loader/blob/master/LICENSE) file for the whole license text.)
