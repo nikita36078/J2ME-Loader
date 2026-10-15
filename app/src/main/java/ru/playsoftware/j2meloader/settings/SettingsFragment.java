@@ -56,8 +56,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		prefFolder.setOnPreferenceClickListener(preference -> {
 			if (FileUtils.isExternalStorageLegacy()) {
 				openDirLauncher.launch(null);
-			} else {
-				openPicker();
 			}
 			return true;
 		});
