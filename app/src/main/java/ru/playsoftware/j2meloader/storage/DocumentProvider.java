@@ -38,7 +38,6 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
-@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class DocumentProvider extends DocumentsProvider {
 	private static final String ALL_MIME_TYPES = "*/*";
 
@@ -77,12 +76,8 @@ public class DocumentProvider extends DocumentsProvider {
 		row.add(Root.COLUMN_ROOT_ID, getDocIdForFile(baseDir));
 		row.add(Root.COLUMN_SUMMARY, null);
 
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			row.add(Root.COLUMN_FLAGS, Root.FLAG_SUPPORTS_CREATE);
-		} else {
-			row.add(Root.COLUMN_FLAGS, Root.FLAG_SUPPORTS_CREATE |
-					Root.FLAG_SUPPORTS_IS_CHILD);
-		}
+		row.add(Root.COLUMN_FLAGS, Root.FLAG_SUPPORTS_CREATE |
+				Root.FLAG_SUPPORTS_IS_CHILD);
 
 		row.add(Root.COLUMN_TITLE, getContext().getString(R.string.app_name));
 		row.add(Root.COLUMN_DOCUMENT_ID, getDocIdForFile(baseDir));
@@ -297,10 +292,7 @@ public class DocumentProvider extends DocumentsProvider {
 				flags |= Document.FLAG_SUPPORTS_WRITE;
 			}
 			flags |= Document.FLAG_SUPPORTS_DELETE;
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				flags |= Document.FLAG_SUPPORTS_RENAME;
-			}
+			flags |= Document.FLAG_SUPPORTS_RENAME;
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 				flags |= Document.FLAG_SUPPORTS_MOVE;
 				flags |= Document.FLAG_SUPPORTS_COPY;

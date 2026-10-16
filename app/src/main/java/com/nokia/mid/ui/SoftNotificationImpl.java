@@ -125,7 +125,7 @@ public class SoftNotificationImpl extends SoftNotification {
 			NotificationCompat.Builder builder = new NotificationCompat.Builder(activity, channelId);
 			builder.setContentTitle(appName);
 			if (text != null) builder.setContentText(text);
-			if (groupText != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (groupText != null) {
 				builder.setGroup(groupText);
 			}
 			if (bitmap != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

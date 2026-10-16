@@ -91,7 +91,7 @@
         <item name="android:minHeight">38dp</item>
         <item name="android:paddingLeft">6dp</item>
         <item name="android:paddingRight">6dp</item>
-        <item name="android:elevation" tools:targetApi="lollipop">1dp</item>
+        <item name="android:elevation" >1dp</item>
         <item name="android:background">@drawable/bg_button</item>
     </style>
 

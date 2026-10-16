@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -64,7 +63,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		}
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void openPicker() {
 		try {
 			startActivity(getFileManagerIntentOnDocumentProvider(Intent.ACTION_VIEW));
@@ -96,7 +94,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		return intent;
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private Intent getFileManagerIntentOnDocumentProvider(String action) {
 		String authority = requireContext().getPackageName() + ".documentProvider";
 		String root = new File(Config.getEmulatorDir()).getAbsolutePath();

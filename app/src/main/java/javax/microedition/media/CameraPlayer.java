@@ -33,7 +33,6 @@ import javax.microedition.media.control.VideoControl;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraPlayer extends BasePlayer implements VideoControl, Layer {
 
 	private final CameraController controller;

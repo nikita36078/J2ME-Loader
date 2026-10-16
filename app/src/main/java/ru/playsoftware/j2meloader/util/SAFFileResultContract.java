@@ -26,13 +26,11 @@ import android.os.Build;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SAFFileResultContract extends ActivityResultContract<String, List<Uri>> {
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @NonNull
     @Override
     public Intent createIntent(@NonNull Context context, String input) {

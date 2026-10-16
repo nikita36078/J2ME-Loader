@@ -17,7 +17,6 @@
 package ru.playsoftware.j2meloader.crashes;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -53,10 +52,8 @@ public class AppCenterSender implements ReportSender {
 		if (log == null || log.isEmpty()) {
 			return;
 		}
-		// Force TLSv1.2 for Android 4.4
-		boolean forceTls12 = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
 
-		HurlStack hurlStack = new HurlStack(null, forceTls12 ? new TLSSocketFactory(context) : null);
+		HurlStack hurlStack = new HurlStack(null, null);
 		RequestQueue queue = Volley.newRequestQueue(context, hurlStack);
 		StringRequest postRequest = new StringRequest(Request.Method.POST, BASE_URL,
 				response -> Log.d(TAG, "send success: " + response),

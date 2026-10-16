@@ -52,7 +52,6 @@ import java.util.concurrent.Executors;
 
 import javax.microedition.util.ContextHolder;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraController {
 	private static final Size FRAME_SIZE = new Size(640, 480);
 

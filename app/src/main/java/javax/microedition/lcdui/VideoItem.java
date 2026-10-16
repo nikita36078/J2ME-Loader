@@ -17,16 +17,13 @@
 package javax.microedition.lcdui;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 
-import androidx.annotation.RequiresApi;
 import androidx.camera.view.PreviewView;
 
 import javax.microedition.media.CameraController;
 import javax.microedition.util.ContextHolder;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class VideoItem extends Item {
 	private PreviewView view;
 	private final CameraController controller;

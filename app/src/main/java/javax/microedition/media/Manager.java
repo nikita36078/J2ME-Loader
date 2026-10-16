@@ -19,8 +19,6 @@
 package javax.microedition.media;
 
 import android.Manifest;
-import android.os.Build;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.IOException;
@@ -71,8 +69,7 @@ public class Manager {
 				ContextHolder.requestPermission(Manifest.permission.RECORD_AUDIO)) {
 			return new RecordPlayer();
 		} else if ((locator.startsWith(CAPTURE_IMAGE_LOCATOR) || locator.startsWith(CAPTURE_VIDEO_LOCATOR)) &&
-				ContextHolder.requestPermission(Manifest.permission.CAMERA) &&
-				Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				ContextHolder.requestPermission(Manifest.permission.CAMERA)) {
 			return new CameraPlayer();
 		} else {
 			return new BasePlayer();

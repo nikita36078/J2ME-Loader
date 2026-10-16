@@ -17,7 +17,6 @@
 package javax.microedition.lcdui.list;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ListView;
@@ -43,7 +42,6 @@ public class ChoiceGroupView extends ListView {
 		maxHeight = computeMaxHeight(context);
 	}
 
-	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 	public ChoiceGroupView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		maxHeight = computeMaxHeight(context);
