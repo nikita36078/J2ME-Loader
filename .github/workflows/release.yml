@@ -18,6 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          submodules: 'true'
           fetch-depth: 0
 
       - name: Set up JDK 21
@@ -70,3 +71,4 @@ jobs:
           path: dist
           delete: "true"
           name: "Automated CI builds"
+          prerelease: "true"
