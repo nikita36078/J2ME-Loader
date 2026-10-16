@@ -12,7 +12,7 @@ System requirements: Android 4.0+
 [XDA-Developers](https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889)  
 [EmuGen wiki](https://emulation.gametechwiki.com/index.php/J2ME_Loader)  
 [Discord](https://discord.gg/Ag4rcpz)  
-[Automated builds](https://install.appcenter.ms/users/nikita36078/apps/j2me-loader/distribution_groups/testers)
+[Automated builds](https://github.com/nikita36078/J2ME-Loader/releases/tag/continuous)
 
 <a href="https://play.google.com/store/apps/details?id=ru.playsoftware.j2meloader">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a>
