@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-release:
-    name: Build signed release APKs
+    name: Build release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -51,12 +51,12 @@ jobs:
       - name: Build release APKs
         run: |
           chmod +x gradlew
-          ./gradlew assembleOpenRelease
+          ./gradlew assembleDevRelease
 
       - name: Collect APK
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/open/release/*.apk dist/
+          cp app/build/outputs/apk/dev/release/*.apk dist/
 
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
