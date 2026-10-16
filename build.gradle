@@ -10,7 +10,7 @@ tasks.register('clean', Delete) {
 
 ext {
     COMPILE_SDK = 37
-    MIN_SDK = 19
+    MIN_SDK = 21
     TARGET_SDK = 34
-    NDK_VERSION = '25.1.8937393'
+    NDK_VERSION = '29.0.14206865'
 }

@@ -272,7 +272,7 @@ static EGLSurface m3gCreateWindowSurface(M3Genum format,
                                          M3GNativeWindow wnd)
 {
     EGLSurface surf;
-    EGLConfig config = m3gQueryEGLConfig(format, bufferBits, EGL_WINDOW_BIT, NULL);
+    EGLConfig config = m3gQueryEGLConfig(format, bufferBits, EGL_WINDOW_BIT, 0);
     
     if (!config) {
         return NULL;
@@ -353,7 +353,7 @@ static EGLSurface m3gCreatePBufferSurface(M3Genum format,
     attrib[3] = height;
     attrib[4] = EGL_NONE;
     
-    config = m3gQueryEGLConfig(format, bufferBits, EGL_PBUFFER_BIT, NULL);
+    config = m3gQueryEGLConfig(format, bufferBits, EGL_PBUFFER_BIT, 0);
     if (!config) {
         return NULL;
     }
