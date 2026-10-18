@@ -1,6 +1,7 @@
 /*
  *  Copyright 2018 Nikita Shakarun
  *  Copyright 2021 Yury Kharchenko
+ *  Copyright 2023 Cansor
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,6 +37,7 @@ public class KeyMapper {
 	private static final int SIEMENS_LAYOUT = 1;
 	private static final int MOTOROLA_LAYOUT = 2;
 	private static final int CUSTOM_LAYOUT = 3;
+	private static final int NOKIA_E62_LAYOUT = 4;
 
 	private static final int SIEMENS_KEY_UP = -59;
 	private static final int SIEMENS_KEY_DOWN = -60;
@@ -50,6 +52,18 @@ public class KeyMapper {
 	private static final int MOTOROLA_KEY_FIRE = -20;
 	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
 	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
+	private static final int NOKIA_E62_KEY_NUM0 = 109;
+	private static final int NOKIA_E62_KEY_NUM1 = 114;
+	private static final int NOKIA_E62_KEY_NUM2 = 116;
+	private static final int NOKIA_E62_KEY_NUM3 = 121;
+	private static final int NOKIA_E62_KEY_NUM4 = 102;
+	private static final int NOKIA_E62_KEY_NUM5 = 103;
+	private static final int NOKIA_E62_KEY_NUM6 = 104;
+	private static final int NOKIA_E62_KEY_NUM7 = 118;
+	private static final int NOKIA_E62_KEY_NUM8 = 98;
+	private static final int NOKIA_E62_KEY_NUM9 = 110;
+	private static final int NOKIA_E62_KEY_STAR = 117;
+	private static final int NOKIA_E62_KEY_POUND = 106;
 
 	private static final SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
 	private static final SparseIntArray keyCodeToCustom = new SparseIntArray();
@@ -135,6 +149,19 @@ public class KeyMapper {
 			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
 			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
 			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
+		} else if (layoutType == NOKIA_E62_LAYOUT) {
+			keyCodeToCustom.put(KEY_NUM0, NOKIA_E62_KEY_NUM0);
+			keyCodeToCustom.put(KEY_NUM1, NOKIA_E62_KEY_NUM1);
+			keyCodeToCustom.put(KEY_NUM2, NOKIA_E62_KEY_NUM2);
+			keyCodeToCustom.put(KEY_NUM3, NOKIA_E62_KEY_NUM3);
+			keyCodeToCustom.put(KEY_NUM4, NOKIA_E62_KEY_NUM4);
+			keyCodeToCustom.put(KEY_NUM5, NOKIA_E62_KEY_NUM5);
+			keyCodeToCustom.put(KEY_NUM6, NOKIA_E62_KEY_NUM6);
+			keyCodeToCustom.put(KEY_NUM7, NOKIA_E62_KEY_NUM7);
+			keyCodeToCustom.put(KEY_NUM8, NOKIA_E62_KEY_NUM8);
+			keyCodeToCustom.put(KEY_NUM9, NOKIA_E62_KEY_NUM9);
+			keyCodeToCustom.put(KEY_STAR, NOKIA_E62_KEY_STAR);
+			keyCodeToCustom.put(KEY_POUND, NOKIA_E62_KEY_POUND);
 		}
 	}
 
