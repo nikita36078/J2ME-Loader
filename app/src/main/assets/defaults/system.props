@@ -1,4 +1,4 @@
-microedition.configuration: CDLC-1.1
+microedition.configuration: CLDC-1.1
 microedition.profiles: MIDP-2.0
 microedition.encoding: ISO-8859-1
 microedition.platform: Nokia6233/05.10
