@@ -34,7 +34,6 @@ import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
@@ -42,7 +41,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,7 +51,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,6 +81,7 @@ import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.databinding.ActivityConfigBinding;
+import ru.playsoftware.j2meloader.databinding.DialogChangePresetBinding;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
@@ -883,7 +882,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				if (!customPresets.contains(item)) {
 					Toast.makeText(this, R.string.preset_cannot_delete, Toast.LENGTH_SHORT).show();
 				} else {
-					showPencilMenu(view, item);
+					showPresetPopup(view, item);
 				}
 				return true;
 			});
@@ -891,7 +890,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		presetsDialog.show();
 	}
 
-	private void showPencilMenu(View anchor, String preset) {
+	private void showPresetPopup(View anchor, String preset) {
 		PopupMenu popup = new PopupMenu(this, anchor);
 		Menu menu = popup.getMenu();
 		SpannableString editLabel = new SpannableString(getString(R.string.edit));
@@ -921,31 +920,15 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		int sep = preset.indexOf(" x ");
 		String currentWidth = preset.substring(0, sep);
 		String currentHeight = preset.substring(sep + 3);
-		int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
-				getResources().getDisplayMetrics());
-		LinearLayout layout = new LinearLayout(this);
-		layout.setOrientation(LinearLayout.HORIZONTAL);
-		layout.setPadding(padding * 3, padding, padding * 3, padding);
-		layout.setGravity(Gravity.CENTER_VERTICAL);
-		EditText etWidth = new EditText(this);
-		etWidth.setInputType(InputType.TYPE_CLASS_NUMBER);
-		etWidth.setText(currentWidth);
-		etWidth.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-		TextView xLabel = new TextView(this);
-		xLabel.setText(" x ");
-		EditText etHeight = new EditText(this);
-		etHeight.setInputType(InputType.TYPE_CLASS_NUMBER);
-		etHeight.setText(currentHeight);
-		etHeight.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-		layout.addView(etWidth);
-		layout.addView(xLabel);
-		layout.addView(etHeight);
+		DialogChangePresetBinding dialogBinding = DialogChangePresetBinding.inflate(LayoutInflater.from(this));
+		dialogBinding.etWidth.setText(currentWidth);
+		dialogBinding.etHeight.setText(currentHeight);
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.edit_resolution_title)
-				.setView(layout)
+				.setView(dialogBinding.getRoot())
 				.setPositiveButton(R.string.save, (d, w) -> {
-					int newW = parseInt(etWidth.getText().toString().trim());
-					int newH = parseInt(etHeight.getText().toString().trim());
+					int newW = parseInt(dialogBinding.etWidth.getText().toString().trim());
+					int newH = parseInt(dialogBinding.etHeight.getText().toString().trim());
 					if (newW <= 0 || newH <= 0) {
 						Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 						return;
@@ -1061,7 +1044,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			View icon = convertView.findViewById(R.id.custom_icon);
 			if (customPresets.contains(item)) {
 				icon.setVisibility(View.VISIBLE);
-				icon.setOnClickListener(clickedView -> showPencilMenu(clickedView, item));
+				icon.setOnClickListener(clickedView -> showPresetPopup(clickedView, item));
 			} else {
 				icon.setVisibility(View.GONE);
 				icon.setOnClickListener(null);
