@@ -88,6 +88,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener, ShaderTuneDialog.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
+	private static final String RESOLUTION_TEMPLATE = " x ";
 
 	protected ArrayList<String> screenPresets = new ArrayList<>();
 	protected Set<String> customPresets = new HashSet<>();
@@ -532,14 +533,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		screenPresets.add("800 x 480");
 
 		if (w > h) {
-			screenPresets.add(h * 3 / 4 + " x " + h);
-			screenPresets.add(h * 4 / 3 + " x " + h);
+			screenPresets.add(h * 3 / 4 + RESOLUTION_TEMPLATE + h);
+			screenPresets.add(h * 4 / 3 + RESOLUTION_TEMPLATE + h);
 		} else {
-			screenPresets.add(w + " x " + w * 4 / 3);
-			screenPresets.add(w + " x " + w * 3 / 4);
+			screenPresets.add(w + RESOLUTION_TEMPLATE + w * 4 / 3);
+			screenPresets.add(w + RESOLUTION_TEMPLATE + w * 3 / 4);
 		}
 
-		screenPresets.add(w + " x " + h);
+		screenPresets.add(w + RESOLUTION_TEMPLATE + h);
 		Set<String> preset = PreferenceManager.getDefaultSharedPreferences(this)
 				.getStringSet("ResolutionsPreset", null);
 		if (preset != null) {
@@ -557,15 +558,15 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 	private void sortPresets() {
 		Collections.sort(screenPresets, (o1, o2) -> {
-			int sep1 = o1.indexOf(" x ");
-			int sep2 = o2.indexOf(" x ");
+			int sep1 = o1.indexOf(RESOLUTION_TEMPLATE);
+			int sep2 = o2.indexOf(RESOLUTION_TEMPLATE);
 			if (sep1 == -1) {
 				if (sep2 != -1) return -1;
 				else return 0;
 			} else if (sep2 == -1) return 1;
-			int r = Integer.decode(o1.substring(0, sep1)).compareTo(Integer.decode(o2.substring(0, sep2)));
+			int r = Integer.valueOf(o1.substring(0, sep1)).compareTo(Integer.decode(o2.substring(0, sep2)));
 			if (r != 0) return r;
-			return Integer.decode(o1.substring(sep1 + 3)).compareTo(Integer.decode(o2.substring(sep2 + 3)));
+			return Integer.valueOf(o1.substring(sep1 + 3)).compareTo(Integer.decode(o2.substring(sep2 + 3)));
 		});
 	}
 
@@ -869,7 +870,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				.setTitle(R.string.SIZE_PRESETS)
 				.setAdapter(presetsAdapter, (d, which) -> {
 					String string = screenPresets.get(which);
-					int separator = string.indexOf(" x ");
+					int separator = string.indexOf(RESOLUTION_TEMPLATE);
 					binding.screenWidth.setText(string.substring(0, separator));
 					binding.screenHeight.setText(string.substring(separator + 3));
 				})
@@ -917,7 +918,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	private void showEditResolutionDialog(String preset) {
-		int sep = preset.indexOf(" x ");
+		int sep = preset.indexOf(RESOLUTION_TEMPLATE);
 		String currentWidth = preset.substring(0, sep);
 		String currentHeight = preset.substring(sep + 3);
 		DialogChangePresetBinding dialogBinding = DialogChangePresetBinding.inflate(LayoutInflater.from(this));
@@ -933,7 +934,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 						Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 						return;
 					}
-					String newPreset = newW + " x " + newH;
+					String newPreset = newW + RESOLUTION_TEMPLATE + newH;
 					if (!newPreset.equals(preset)) {
 						updateCustomPreset(preset, newPreset);
 					}
@@ -1002,7 +1003,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		String preset = width + " x " + height;
+		String preset = width + RESOLUTION_TEMPLATE + height;
 		if (screenPresets.contains(preset)) {
 			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
 			return;
