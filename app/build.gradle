@@ -25,11 +25,14 @@ android {
     signingConfigs {
         release {
             Properties keystoreProps = new Properties()
-            keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
-            keyAlias keystoreProps['keyAlias']
-            keyPassword keystoreProps['keyPassword']
-            storeFile file(keystoreProps['storeFile'])
-            storePassword keystoreProps['storePassword']
+            File keystorePropsFile = rootProject.file("keystore.properties")
+            if (keystorePropsFile.exists()) {
+                keystoreProps.load(new FileInputStream(keystorePropsFile))
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+                storeFile file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+            }
         }
     }
 
