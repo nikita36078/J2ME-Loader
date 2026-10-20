@@ -137,7 +137,7 @@ androidComponents {
         def baseName = variant.flavorName == 'midlet' ? "${midletArchivesBaseName}-" : "${rootProject.name}-"
         variant.outputs.each { output ->
             output.outputFileName.set(output.versionName.map { versionName ->
-                "${baseName}${versionName}-${variant.name}-${variant.buildType}.apk"
+                "${baseName}${versionName}-${variant.buildType}.apk"
                         .replaceAll('--+', '-').replaceAll(' +', '_')
             })
         }
