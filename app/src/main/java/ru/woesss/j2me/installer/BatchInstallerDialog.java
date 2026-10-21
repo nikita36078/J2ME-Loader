@@ -20,10 +20,8 @@ package ru.woesss.j2me.installer;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +33,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,6 +49,7 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.databinding.DialogInstallerBinding;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class BatchInstallerDialog extends DialogFragment {
@@ -156,7 +154,7 @@ public class BatchInstallerDialog extends DialogFragment {
 		showProgress();
 		Context context = requireContext();
 		for (Uri uri : uris) {
-			uriNames.put(uri, getDisplayName(context, uri));
+			uriNames.put(uri, FileUtils.getDisplayName(context, uri));
 		}
 		nextFile();
 	}
@@ -347,31 +345,5 @@ public class BatchInstallerDialog extends DialogFragment {
 	private void showProgress() {
 		binding.installationProgress.setVisibility(View.VISIBLE);
 		binding.installationStatus.setVisibility(View.VISIBLE);
-	}
-
-	@NonNull
-	private static String getDisplayName(@NonNull Context context, Uri uri) {
-		if ("file".equals(uri.getScheme())) {
-			String path = uri.getPath();
-			if (path != null) {
-				return new File(path).getName();
-			}
-		}
-		try (Cursor cursor = context.getContentResolver().query(uri,
-				new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
-			if (cursor != null && cursor.moveToFirst()) {
-				int column = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-				if (column != -1) {
-					String name = cursor.getString(column);
-					if (name != null) {
-						return name;
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String name = uri.getLastPathSegment();
-		return name == null ? "" : name;
 	}
 }

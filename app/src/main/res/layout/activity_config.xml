@@ -330,6 +330,14 @@
                     android:visibility="gone"
                     tools:visibility="visible" />
 
+                <ImageButton
+                    android:id="@+id/browse_shaders"
+                    style="@style/ImageButtonStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="4dp"
+                    android:contentDescription="@string/browse"
+                    app:srcCompat="@drawable/ic_add" />
             </LinearLayout>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -996,6 +1004,14 @@
                     android:textColor="?attr/textColorSecondary"
                     android:textSize="15sp" />
 
+                <ImageButton
+                    android:id="@+id/browse_soundbanks"
+                    style="@style/ImageButtonStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="4dp"
+                    android:contentDescription="@string/browse"
+                    app:srcCompat="@drawable/ic_add" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Audio -->
 

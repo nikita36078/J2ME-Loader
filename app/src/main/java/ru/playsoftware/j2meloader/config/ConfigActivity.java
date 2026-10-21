@@ -55,6 +55,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -73,7 +75,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.microedition.shell.MicroActivity;
@@ -109,9 +110,19 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private ArrayAdapter<ShaderInfo> spShaderAdapter;
 	private String workDir;
 	private boolean needShow;
-	private ArrayAdapter<String> spSoundBankAdapter;
-
 	private ActivityConfigBinding binding;
+
+	private final ActivityResultLauncher<Intent> filesLauncher =
+			registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+				if (result.getResultCode() != RESULT_OK) {
+					return;
+				}
+				initSoundBankSpinner();
+				spShaderAdapter = null;
+				if (binding.graphicalModeSelector.getSelectedItemPosition() == 1) {
+					initShaderSpinner();
+				}
+			});
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -284,7 +295,22 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		binding.keyboardOutlineColorHex.addTextChangedListener(
 				new ColorTextWatcher(binding.keyboardOutlineColorHex));
         initSoundBankSpinner();
+        binding.browseShaders.setOnClickListener(v ->
+				browseFiles(ConfigFilesActivity.FileType.SHADERS));
+        binding.browseSoundbanks.setOnClickListener(v ->
+				browseFiles(ConfigFilesActivity.FileType.SOUNDBANKS));
     }
+
+	private void browseFiles(ConfigFilesActivity.FileType type) {
+		Intent intent = new Intent(this, ConfigFilesActivity.class)
+				.putExtra(ConfigFilesActivity.EXTRA_TYPE, type);
+		try {
+			filesLauncher.launch(intent);
+		} catch (Exception e) {
+			Toast.makeText(this, R.string.error_no_picker, Toast.LENGTH_SHORT).show();
+			Log.e(TAG, "Can't open files browser", e);
+		}
+	}
 
 	private void initSoundBankSpinner() {
 		File dir = new File(workDir + Config.SOUNDBANKS_DIR);
@@ -292,7 +318,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			//noinspection ResultOfMethodCallIgnored
 			dir.mkdirs();
 		}
-		spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+		ArrayAdapter<String> spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 		spSoundBankAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		binding.soundbankSelector.setAdapter(spSoundBankAdapter);
 		spSoundBankAdapter.add(getString(R.string.default_label, "Android"));

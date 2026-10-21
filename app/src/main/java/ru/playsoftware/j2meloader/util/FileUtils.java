@@ -19,12 +19,15 @@
 package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,6 +135,50 @@ public class FileUtils {
 			}
 		}
 		return file;
+	}
+
+	public static void copyFileFromUri(Context context, Uri uri, File dest) throws IOException {
+		try (InputStream in = context.getContentResolver().openInputStream(uri);
+			 OutputStream out = new FileOutputStream(dest)) {
+			if (in == null) {
+				throw new IOException("Can't read data from uri: " + uri);
+			}
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+		} catch (IOException | RuntimeException e) {
+			//noinspection ResultOfMethodCallIgnored
+			dest.delete();
+			throw e;
+		}
+	}
+
+	@NonNull
+	public static String getDisplayName(@NonNull Context context, Uri uri) {
+		if ("file".equals(uri.getScheme())) {
+			String path = uri.getPath();
+			if (path != null) {
+				return new File(path).getName();
+			}
+		}
+		try (Cursor cursor = context.getContentResolver().query(uri,
+				new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+			if (cursor != null && cursor.moveToFirst()) {
+				int column = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+				if (column != -1) {
+					String name = cursor.getString(column);
+					if (name != null) {
+						return name;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String name = uri.getLastPathSegment();
+		return name == null ? "" : name;
 	}
 
 	public static byte[] getBytes(File file) throws IOException {

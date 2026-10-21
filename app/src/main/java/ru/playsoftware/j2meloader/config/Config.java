@@ -117,6 +117,10 @@ public class Config {
 		return emulatorDir + SHADERS_DIR;
 	}
 
+	public static String getSoundbanksDir() {
+		return emulatorDir + SOUNDBANKS_DIR;
+	}
+
 	public static String getFsInternalDir() {
 		return emulatorDir + FS_DIR + "c/";
 	}

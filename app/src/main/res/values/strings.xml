@@ -136,6 +136,13 @@
     <string name="pref_vk_type_phone_arrows">Phone (arrows)</string>
     <string name="PREF_LAYOUT">Layout</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="browse">Browse</string>
+    <string name="shaders">Shaders</string>
+    <string name="soundbanks">Soundbanks</string>
+    <string name="delete_file_title">Delete file?</string>
+    <string name="delete_file_message">Do you really want to delete \"%1$s\"?</string>
+    <string name="error_delete_file">Failed to delete \"%1$s\"</string>
+    <string name="error_add_file">Failed to add \"%1$s\"</string>
     <string name="identity_filter">Fast (no filter)</string>
     <string name="shader_tuning">Shader Tuning</string>
     <string name="shader_setting" translatable="false">%s: %s</string>

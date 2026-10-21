@@ -119,6 +119,9 @@
             android:exported="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".config.ConfigFilesActivity"
+            android:exported="false" />
+        <activity
             android:name="javax.microedition.shell.MicroActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar"
