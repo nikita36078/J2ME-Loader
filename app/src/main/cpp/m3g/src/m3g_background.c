@@ -63,6 +63,7 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
 {
     GLbitfield glBits = 0;
     GLfixed temp[4];
+    M3Gbool colorClear = M3G_FALSE;
     
     if (background->depthClearEnable) {
         glBits |= GL_DEPTH_BUFFER_BIT;
@@ -81,6 +82,7 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
             background->modeY == M3G_BORDER)
         {
             glBits |= GL_COLOR_BUFFER_BIT;
+            colorClear = M3G_TRUE;
             m3gGLColor(background->color, temp);
             glClearColorx(temp[0], temp[1], temp[2], temp[3]);
         }
@@ -88,6 +90,14 @@ static void m3gApplyBackground(RenderContext *ctx, Background *background)
     
     /* Clear color and/or depth buffer (or neither) */
     glClear(glBits);
+
+    /* For a target shared with 2D drawing the color clear must also
+     * be applied to the target itself. The next M3G draw uploads the
+     * target into the back buffer, so 2D content drawn before that
+     * draw becomes the backdrop for alpha blending. */
+    if (colorClear) {
+        m3gFillTargetRect(ctx, background->color);
+    }
 
     /* Apply background image using a quad that
        fills the viewport */

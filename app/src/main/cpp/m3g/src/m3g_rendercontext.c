@@ -36,6 +36,7 @@
 #include "m3g_lightmanager.h"
 #include "m3g_vertexbuffer.h"
 #include "m3g_world.h"
+#include "m3g_image.h"
 
 /*----------------------------------------------------------------------
  * Private data types
@@ -936,6 +937,48 @@ static void m3gPopSpace(RenderContext *ctx)
 
 /*!
  * \internal
+ * \brief Clears a memory target that is shared with 2D drawing
+ *
+ * The back buffer only contains the M3G layer and is alpha-blended
+ * over the target when it is released, so the target itself must be
+ * cleared to the background color here.
+ */
+static void m3gFillTargetRect(RenderContext *ctx, M3Guint argb)
+{
+    if (ctx->target.type == SURFACE_MEMORY &&
+        ctx->target.pixels != NULL) {
+
+        M3Gint x0 = M3G_MAX(ctx->scissor.x, 0);
+        M3Gint y0 = M3G_MAX(ctx->scissor.y, 0);
+        M3Gint x1 = M3G_MIN(ctx->scissor.x + ctx->scissor.width, ctx->target.width);
+        M3Gint y1 = M3G_MIN(ctx->scissor.y + ctx->scissor.height, ctx->target.height);
+        M3Guint color = 0xFF000000u | (argb & 0x00FFFFFFu);
+        M3Gubyte pixel[4];
+        M3Gint y;
+
+        if (x0 >= x1 || y0 >= y1) {
+            return;
+        }
+
+        m3gConvertPixels(M3G_ARGB8, (const M3Gubyte *) &color,
+                         ctx->target.format, pixel, 1);
+
+        M3Guint value;
+        m3gCopy(&value, pixel, 4);
+        for (y = y0; y < y1; ++y) {
+            M3Gint row = ctx->target.height - 1 - y;
+            M3Guint *dst = (M3Guint *) ((M3Gubyte *) ctx->target.pixels
+                + row * ctx->target.stride) + x0;
+            M3Gint x;
+            for (x = x0; x < x1; ++x) {
+                *dst++ = value;
+            }
+        }
+    }
+}
+
+/*!
+ * \internal
  * \brief Clears the current buffer(s)
  */
 static void m3gClearInternal(RenderContext *ctx, Background *bg)
@@ -980,7 +1023,20 @@ static void m3gClearInternal(RenderContext *ctx, Background *bg)
     
     if (bg != NULL) {
         m3gApplyBackground(ctx, bg);
-        if (ctx->target.buffered && bg->colorClearEnable) {
+        if (ctx->target.type == SURFACE_MEMORY) {
+            /* The color clear was applied to the target bitmap. If a
+             * background image was rendered as well, copy the back
+             * buffer into the bitmap first. The next M3G draw will
+             * upload the bitmap so that 2D drawing done in between
+             * becomes the backdrop for blending. */
+            if (bg->image != NULL && ctx->target.buffered) {
+                m3gUpdateTargetBuffer(ctx);
+            }
+            if (ctx->target.buffered) {
+                ctx->backBuffer.contentsValid = M3G_FALSE;
+            }
+        }
+        else if (ctx->target.buffered && bg->colorClearEnable) {
             ctx->backBuffer.contentsValid = M3G_TRUE;
         }
     }
@@ -988,8 +1044,10 @@ static void m3gClearInternal(RenderContext *ctx, Background *bg)
         glClearColorx(0, 0, 0, 0);
         glClearDepthx(1 << 16);
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        m3gFillTargetRect(ctx, 0xFF000000);
         if (ctx->target.buffered) {
-            ctx->backBuffer.contentsValid = M3G_TRUE;
+            ctx->backBuffer.contentsValid =
+                (ctx->target.type == SURFACE_MEMORY) ? M3G_FALSE : M3G_TRUE;
         }
     }
         

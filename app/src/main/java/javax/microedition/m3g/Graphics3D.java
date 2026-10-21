@@ -160,20 +160,6 @@ public class Graphics3D {
 			final int width = buffer.getWidth();
 			final int height = buffer.getHeight();
 
-			// TODO: draw on background? Probably should fix alpha
-			/*
-			android.graphics.Bitmap bitmap;
-			try {
-				java.lang.reflect.Field mBitmap = canvas.getClass().getDeclaredField("mBitmap");
-				mBitmap.setAccessible(true);
-				bitmap = (Bitmap) mBitmap.get(canvas);
-				bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-				for (int i = 0; i < pixels.length; i++)
-					pixels[i] |= 0xFF000000;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/
-
 			Platform.executeInUIThread(
 					new M3gRunnable() {
 						@Override

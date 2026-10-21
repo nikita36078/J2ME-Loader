@@ -53,4 +53,6 @@ static void m3gUpdateColorMaskStatus(RenderContext *ctx,
                                      M3Gbool newColorWrite,
                                      M3Gbool newAlphaWrite);
 
+static void m3gFillTargetRect(RenderContext *ctx, M3Guint argb);
+
 #endif /*__M3G_RENDERCONTEXT_H__*/
