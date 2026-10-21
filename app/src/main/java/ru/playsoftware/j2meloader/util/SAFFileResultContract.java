@@ -36,6 +36,7 @@ public class SAFFileResultContract extends ActivityResultContract<String, List<U
     public Intent createIntent(@NonNull Context context, String input) {
         Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         i.setType("*/*") ;
+        i.addCategory(Intent.CATEGORY_OPENABLE);
         i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         return i;
