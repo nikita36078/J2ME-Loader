@@ -5,6 +5,7 @@ files:
       android_code:
         af: af
         ar: ar
+        az: az
         bg: bg
         bn: bn
         ca: ca
@@ -38,4 +39,5 @@ files:
         th: th
         tr: tr
         uk: uk
+        uz: uz
         vi: vi
