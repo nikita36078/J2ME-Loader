@@ -7,7 +7,9 @@
     <string name="more">بیشتر</string>
     <string name="search">جستجو</string>
     <string name="licenses">مجوزها</string>
+    <string name="profiles">نمایه‌ ها</string>
     <string name="save_log">ذخیره گزارش</string>
+    <string name="about_message">این برنامه به شما اجازه می دهد تا برنامه های J2ME و بازی های ۲ بُعدی و ۳ بُعدی (به همراه Mascot Capsule 3D ها) را در گوشی اندروید خود اجرا کنید</string>
     <string name="help_message">• فعال کردن فیلتر در بعضی موارد می تواند عملکرد را به شدت کاهش دهد اگر بازی خیلی کند است این گزینه را غیرفعال کنید
 • با فعال کردن گزینه \"حالت پردازش فوری\" می توانید مشکل لرزش تصویر را برطرف کنید</string>
     <string name="author">برنامه نویس :</string>
@@ -16,10 +18,13 @@
     <string name="message_delete">آیا واقعا می خواهید این برنامه یا بازی را حذف کنید؟</string>
     <string name="permission_request_failed">این برنامه به مجوز نوشتن در حافظه نیاز دارد</string>
     <string name="external_storage_not_mounted">این برنامه به مجوز نوشتن و ذخیره سازی در حافظه خارجی نیاز دارد</string>
+    <string name="create">ساخت</string>
     <string name="action_context_shortcut">نماد این برنامه یا بازی به صفحه اصلی دستگاه اضافه شود</string>
+    <string name="action_reinstall">نصب دوباره</string>
     <string name="action_settings">تنظیمات</string>
     <string name="action_context_delete">حذف</string>
     <string name="action_context_rename">تغییر نام</string>
+    <string name="retry">تلاش دوباره</string>
     <string name="change">تغییر</string>
     <string name="choose">انتخاب</string>
     <string name="warning">هشدار</string>
@@ -79,18 +84,28 @@
     <string name="error">خطا</string>
     <string name="message_clear_data">آیا واقعا می خواهید اطلاعات برنامه را پاک کنید؟</string>
     <string name="PREF_VK_TYPE">نوع صفحه کلید</string>
+    <string name="pref_vk_type_arrows">نشانگر ها</string>
+    <string name="pref_vk_type_arrows_numbers">نشانگر ها به &amp; عدد</string>
     <string name="pref_vk_type_custom">سفارشی</string>
+    <string name="pref_vk_type_numbers">تعداد</string>
+    <string name="pref_vk_type_numbers_arrows">تعداد &amp; نشانگر ها</string>
     <string name="pref_vk_type_phone">گوشی</string>
     <string name="pref_vk_type_phone_arrows">گوشی (جهت ها)</string>
     <string name="PREF_LAYOUT">طرح</string>
-    <string name="identity_filter">سریع (بدون فیلتر)</string>
+    <string name="identity_filter">سریع (بدون فیلتر)
+</string>
+    <string name="reset">بازنشانی</string>
     <string name="pref_graphics_mode_title">حالت گرافیکی :</string>
+    <string name="PREF_FONT_ANTI_ALIASING">شفاف سازی</string>
     <string name="pref_screen_gravity_bottom">پایین</string>
     <string name="pref_screen_gravity_center">مرکز</string>
     <string name="pref_screen_gravity_left">چپ</string>
     <string name="pref_screen_gravity_right">راست</string>
     <string name="pref_screen_gravity_top">بالا</string>
+    <string name="pref_vk_hide_hint">غیرفعال</string>
+    <string name="unlimited">نامحدود</string>
     <string name="parallel_screen_redrawing">بازخوانی صفحه موازی</string>
+    <string name="saved">ذخیره شد</string>
     <string name="FORCE_CLOSE_CONFIRMATION">توقف اجباری برنامه ممکن است باعث از بین رفتن اطلاعات شود و یا آن را به طور کامل متوقف کند آیا ادامه می دهید؟</string>
     <string name="CONFIRMATION_REQUIRED">به تایید نیاز دارد</string>
     <string name="select_dialog_title">انتخاب میدلت</string>
