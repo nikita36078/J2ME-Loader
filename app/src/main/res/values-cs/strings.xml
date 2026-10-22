@@ -32,6 +32,7 @@
     <string name="choose">Vybrat</string>
     <string name="warning">Varování</string>
     <string name="scoped_storage_warning">Vaše uživatelská data jsou uložena v místě, které <b>bude smazáno</b> při odinstalaci aplikace:\n</string>
+    <string name="error_no_picker">Nainstalujte prosím aplikaci pro výběr souborů</string>
     <string name="midlet_name"><b>Název: </b></string>
     <string name="midlet_size"><b>Velikost: </b></string>
     <string name="midlet_source"><b>Zdroj: </b></string>
@@ -88,8 +89,8 @@
     <string name="PREF_VK_ALPHA">Neprůhlednost: </string>
     <string name="PREF_VK_HIDE_DELAY">Skrýt zpoždění: </string>
     <string name="PREF_UNIT_MS">ms</string>
-    <string name="PREF_VK_SEL_FORE">Popisky (P)</string>
-    <string name="PREF_VK_SEL_BACK">Tlačítka (P)</string>
+    <string name="PREF_VK_SEL_FORE">Popisky (S)</string>
+    <string name="PREF_VK_SEL_BACK">Tlačítka (S)</string>
     <string name="PREF_VK_KEY_SIZES">Velikosti kláves</string>
     <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_SOFT_KEYS">Softwarové klávesy: </string>
@@ -157,6 +158,7 @@
     <string name="opt_save_screen_params">uložit parametry obrazovky</string>
     <string name="cmd_menu">Menu</string>
     <string name="dismiss">Zavřít</string>
+    <string name="show">Zobrazit</string>
     <string name="pref_theme_auto_battery">Automaticky (podle spořiče baterie)</string>
     <string name="pref_theme_auto_time">Automaticky (podle denní doby)</string>
     <string name="pref_theme_light">Světlý</string>
@@ -166,7 +168,10 @@
     <string name="pref_requires_restart_summary">Vyžaduje znovuspuštění</string>
     <string name="pref_enable_actionbar_title">Povolit panel akcí</string>
     <string name="pref_enable_actionbar_summary">V celoobrazovkových aplikacích</string>
+    <string name="pref_black_background_title">Černé pozadí</string>
+    <string name="pref_black_background_summary">Pro tmavý vzhled</string>
     <string name="pref_enable_statusbar_title">Povolit stavovou lištu</string>
+    <string name="pref_add_cutout_area_title">Přidat oblast výřezu</string>
     <string name="pref_wakelock_title">Nevypínat obrazovku</string>
     <string name="pref_vibration_title">Povolit vibrace</string>
     <string name="pref_button_shape_title">Tvar tlačítka</string>
