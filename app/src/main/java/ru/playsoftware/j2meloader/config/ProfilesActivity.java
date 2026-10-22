@@ -38,14 +38,14 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
-public class ProfilesActivity extends AppCompatActivity implements EditNameDialog.Callback, AdapterView.OnItemClickListener {
+public class ProfilesActivity extends BaseActivity implements EditNameDialog.Callback, AdapterView.OnItemClickListener {
 	private ProfilesAdapter adapter;
 	private SharedPreferences preferences;
 	private final ActivityResultLauncher<String> editProfileLauncher = registerForActivityResult(

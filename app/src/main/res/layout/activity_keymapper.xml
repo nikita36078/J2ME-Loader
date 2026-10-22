@@ -9,9 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layoutDirection="ltr"
-        android:fillViewport="true"
-        android:fitsSystemWindows="true"
-        tools:targetApi="jelly_bean_mr1">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"

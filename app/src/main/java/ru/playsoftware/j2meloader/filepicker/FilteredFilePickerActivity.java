@@ -18,10 +18,19 @@ package ru.playsoftware.j2meloader.filepicker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
 
+import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
 import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
@@ -30,7 +39,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.playsoftware.j2meloader.R;
+
 public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File> {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		EdgeToEdge.enable(
+				this,
+				SystemBarStyle.dark(ContextCompat.getColor(this, R.color.primary)),
+				SystemBarStyle.dark(Color.BLACK)
+		);
+		View view = findViewById(android.R.id.content);
+		ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
+			Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+			v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+			return WindowInsetsCompat.CONSUMED;
+		});
+	}
 
 	@Override
 	protected AbstractFilePickerFragment<File> getFragment(@Nullable String startPath, int mode, boolean allowMultiple,

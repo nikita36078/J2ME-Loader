@@ -34,7 +34,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,9 +46,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.databinding.ActivityBackupBinding;
 
-public class BackupActivity extends AppCompatActivity {
+public class BackupActivity extends BaseActivity {
 	private static final String TAG = SettingsFragment.class.getSimpleName();
 
 	private final ActivityResultLauncher<String> exportLauncher = registerForActivityResult(

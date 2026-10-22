@@ -165,7 +165,7 @@ def getMidletManifestProperties() {
 }
 
 dependencies {
-    def roomVersion = '2.6.1' // api 19
+    def roomVersion = '2.8.5'
     def cameraxVersion = "1.6.2"
     def autoServiceVersion = "1.1.1"
 
@@ -176,9 +176,10 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
-    implementation 'androidx.appcompat:appcompat:1.6.1'  // api 19
+    implementation "androidx.activity:activity:1.13.0"
+    implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
-    implementation 'com.google.android.material:material:1.12.0'  // api 19
+    implementation 'com.google.android.material:material:1.13.0' // api21
     implementation 'androidx.preference:preference:1.2.1'
 
     // Networking && APIs

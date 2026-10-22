@@ -31,7 +31,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,12 +42,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.databinding.ActivityConfigFilesBinding;
 import ru.playsoftware.j2meloader.databinding.ItemConfigFileBinding;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.SAFFileResultContract;
 
-public class ConfigFilesActivity extends AppCompatActivity {
+public class ConfigFilesActivity extends BaseActivity {
 	protected enum FileType {
 		SHADERS,
 		SOUNDBANKS,

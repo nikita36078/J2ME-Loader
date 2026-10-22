@@ -28,6 +28,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -44,12 +45,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -57,6 +61,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.preference.PreferenceManager;
 
 import org.acra.ACRA;
@@ -97,9 +107,13 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean visible;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
+	private boolean cutoutsEnabled;
 	private MicroLoader microLoader;
 	private String appName;
 	private InputMethodManager inputMethodManager;
+	private boolean imeVisible;
+	private int statusBarInset;
+	private int toolbarHeight;
 	private int menuKey;
 	private String appPath;
 
@@ -119,10 +133,9 @@ public class MicroActivity extends AppCompatActivity {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
 		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
-		if (sp.getBoolean(PREF_ADD_CUTOUT_AREA, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			getWindow().getAttributes().layoutInDisplayCutoutMode =
-					WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-		}
+		cutoutsEnabled = sp.getBoolean(PREF_ADD_CUTOUT_AREA, false) &&
+				Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+		setupInsets();
 		if (sp.getBoolean(PREF_KEEP_SCREEN, false)) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
@@ -305,17 +318,78 @@ public class MicroActivity extends AppCompatActivity {
 		return toolBarHeight;
 	}
 
-	private void hideSystemUI() {
-		int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-		if (!statusBarEnabled) {
-			flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN;
+	private void setupInsets() {
+		EdgeToEdge.enable(
+				this,
+				SystemBarStyle.dark(ContextCompat.getColor(this, R.color.primary)),
+				SystemBarStyle.dark(Color.BLACK)
+		);
+
+		ViewCompat.setOnApplyWindowInsetsListener(binding.midletFrame, (v, windowInsets) -> {
+			int typeMask = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime();
+			if (!cutoutsEnabled) {
+				typeMask |= WindowInsetsCompat.Type.displayCutout();
+			}
+			Insets insets = windowInsets.getInsets(typeMask);
+			statusBarInset = insets.top;
+
+			ViewGroup.LayoutParams params = binding.statusbarView.getLayoutParams();
+			params.height = insets.top;
+			binding.statusbarView.setLayoutParams(params);
+
+			v.setPadding(insets.left, 0, insets.right, insets.bottom);
+			updateOverlayLocation();
+			return WindowInsetsCompat.CONSUMED;
+		});
+
+		// On API < 30 the IME insets are not dispatched
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+			getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+				WindowInsetsCompat rootInsets = ViewCompat.getRootWindowInsets(binding.midletFrame);
+				boolean visible = rootInsets != null
+						&& rootInsets.isVisible(WindowInsetsCompat.Type.ime());
+				if (visible == imeVisible) {
+					return;
+				}
+				imeVisible = visible;
+				if (current instanceof Canvas) {
+					if (visible) {
+						showSystemUI();
+					} else {
+						hideSystemUI();
+					}
+				} else { ViewCompat.requestApplyInsets(binding.midletFrame); }
+			});
 		}
-		getWindow().getDecorView().setSystemUiVisibility(flags);
+	}
+
+	private void updateOverlayLocation() {
+		binding.overlayView.setLocation(0, statusBarInset + toolbarHeight);
+	}
+
+	private WindowInsetsControllerCompat getWindowInsetsController() {
+		Window window = getWindow();
+		return WindowCompat.getInsetsController(window, window.getDecorView());
+	}
+
+	private void hideSystemUI() {
+		int typeMask = WindowInsetsCompat.Type.navigationBars();
+		if (!statusBarEnabled) {
+			typeMask |= WindowInsetsCompat.Type.statusBars();
+		}
+
+		WindowInsetsControllerCompat windowInsetsController = getWindowInsetsController();
+		windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+		windowInsetsController.hide(typeMask);
+		// For API < 30
+		ViewCompat.requestApplyInsets(binding.midletFrame);
 	}
 
 	private void showSystemUI() {
-		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+		WindowInsetsControllerCompat windowInsetsController = getWindowInsetsController();
+		windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
+		// For API < 30
+		ViewCompat.requestApplyInsets(binding.midletFrame);
 	}
 
 	public void setCurrent(Displayable displayable) {
@@ -661,7 +735,8 @@ public class MicroActivity extends AppCompatActivity {
 			binding.displayableContainer.removeAllViews();
 			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
 			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.toolbar.getLayoutParams();
-			int toolbarHeight = 0;
+			int toolbarPadding = binding.toolbar.getPaddingTop();
+			toolbarHeight = 0;
 			if (next instanceof Canvas) {
 				hideSystemUI();
 				if (!actionBarEnabled) {
@@ -680,8 +755,9 @@ public class MicroActivity extends AppCompatActivity {
 				toolbarHeight = getToolBarHeight();
 				layoutParams.height = toolbarHeight;
 			}
-			binding.overlayView.setLocation(0, toolbarHeight);
+			updateOverlayLocation();
 			binding.toolbar.setLayoutParams(layoutParams);
+			binding.toolbar.setPadding(0, toolbarPadding, 0, 0);
 			invalidateOptionsMenu();
 			if (next != null) {
 				binding.displayableContainer.addView(next.getDisplayableView());

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.util;
+package ru.woesss.j2me.installer;
 
 public class ConverterException extends Exception {
 

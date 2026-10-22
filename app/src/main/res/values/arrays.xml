@@ -4,11 +4,13 @@
         <item>@string/pref_theme_light</item>
         <item>@string/pref_theme_night</item>
         <item>@string/pref_theme_auto_time</item>
+        <item>@string/pref_theme_auto_battery</item>
     </string-array>
     <string-array name="pref_theme_values" translatable="false" tools:ignore="InconsistentArrays">
         <item>light</item>
         <item>dark</item>
         <item>auto-time</item>
+        <item>auto-battery</item>
     </string-array>
     <string-array name="pref_app_sort_entries">
         <item>@string/pref_app_sort_name</item>

@@ -60,7 +60,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
@@ -81,13 +80,14 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.databinding.ActivityConfigBinding;
 import ru.playsoftware.j2meloader.databinding.DialogChangePresetBinding;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ConfigActivity extends AppCompatActivity implements View.OnClickListener, ShaderTuneDialog.Callback {
+public class ConfigActivity extends BaseActivity implements View.OnClickListener, ShaderTuneDialog.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
 	private static final String RESOLUTION_TEMPLATE = " x ";
 
