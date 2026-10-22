@@ -135,6 +135,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".settings.BackupActivity"
+            android:exported="false" />
         <activity android:name=".settings.KeyMapperActivity" android:exported="false" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"

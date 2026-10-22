@@ -60,6 +60,11 @@
         android:icon="@drawable/ic_setting_folder"
         android:title="@string/pref_emulator_dir"
         tools:summary="/sdcard/J2ME-Loader" />
+    <Preference
+        android:key="pref_backup"
+        android:icon="@drawable/ic_setting_backup"
+        android:summary="@string/pref_backup_summary"
+        android:title="@string/pref_backup" />
     <PreferenceCategory android:title="@string/pref_category_experimental">
         <SwitchPreferenceCompat
             android:key="micro3d_using_message"

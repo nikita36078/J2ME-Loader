@@ -222,6 +222,17 @@
     <string name="pref_emulator_dir">Working directory</string>
     <string name="pref_screenshot_summary">Disable scaling and filtering for screenshots</string>
     <string name="pref_screenshot_title">Raw screenshot</string>
+    <string name="pref_backup">Import/export data</string>
+    <string name="pref_backup_summary">Save or restore apps and other app data</string>
+    <string name="pref_export_data">Export data</string>
+    <string name="pref_import_data">Import data</string>
+    <string name="backup_export_title">Exporting data…</string>
+    <string name="backup_import_title">Importing data…</string>
+    <string name="backup_export_done">Data exported</string>
+    <string name="backup_import_done">Data imported</string>
+    <string name="backup_import_confirm">Existing files with the same names will be overwritten.\n\nContinue?</string>
+    <string name="backup_export_failed">Failed to export data</string>
+    <string name="backup_import_failed">Failed to import data</string>
     <string name="pref_category_experimental">Experimental/temporary options</string>
     <string name="pref_mascot_summary">Show message when using</string>
     <string name="pref_mascot_title">Detect Mascot Capsule 3D</string>

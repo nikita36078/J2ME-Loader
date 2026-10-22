@@ -16,6 +16,7 @@
 
 package ru.playsoftware.j2meloader.settings;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_ADD_CUTOUT_AREA;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 
 import android.content.ActivityNotFoundException;
@@ -38,8 +39,6 @@ import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_ADD_CUTOUT_AREA;
-
 public class SettingsFragment extends PreferenceFragmentCompat {
 	private Preference prefFolder;
 	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
@@ -50,6 +49,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
 		findPreference("pref_default_settings").setIntent(new Intent(requireActivity(), ProfilesActivity.class));
+		findPreference("pref_backup").setOnPreferenceClickListener(preference -> {
+			Intent intent = new Intent(requireActivity(), BackupActivity.class);
+			startActivity(intent);
+			return true;
+		});
 		prefFolder = findPreference(PREF_EMULATOR_DIR);
 		prefFolder.setSummary(Config.getEmulatorDir());
 		prefFolder.setOnPreferenceClickListener(preference -> {
