@@ -45,9 +45,9 @@
     <string name="install_jar_needed">Selecciona el archivo JAR</string>
     <string name="invalid_resolution_not_saved">Resoluciones no válidas: ¡no guardado!</string>
     <string name="warn_install_from_net">El archivo se descargará desde Internet</string>
-    <string name="reinstall">Esta aplicación ya está instalada.\n\n¿Quieres reinstalarla?\nLos datos se conservarán.</string>
-    <string name="reinstall_newest">¿Actualizar esta aplicación a la versión %1$s?\n\nVersión actual: %2$s\nLos datos se conservarán.</string>
-    <string name="reinstall_older">¿Reemplazar esta aplicación por la versión %1$s?\n\nVersión actual: %2$s\nUna versión antigua podría no funcionar correctamente con los datos de una versión posterior de la aplicación.</string>
+    <string name="reinstall">Esta aplicación ya está instalada.\n\n¿Quieres reinstalarla?\nSe conservarán todos los datos.</string>
+    <string name="reinstall_newest">¿Actualizar esta aplicación a la versión %1$s?\n\nVersión actual: %2$s\nSe conservarán todos los datos.</string>
+    <string name="reinstall_older">¿Reemplazar esta aplicación por la versión %1$s?\n\nVersión actual: %2$s\nUna versión antigua podría no ejecutarse correctamente con los datos de una versión posterior.</string>
     <string name="loading_info">cargando información…</string>
     <string name="START_CMD">Iniciar</string>
     <string name="CANCEL_CMD">Cancelar</string>
@@ -137,7 +137,7 @@
     <string name="unlimited">sin límite</string>
     <string name="parallel_screen_redrawing">Redibujado paralelo de pantalla</string>
     <string name="saved">Guardado</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">¡Forzar el cierre de la aplicación puede resultar en pérdida de datos o incluso dañarla completamente!\n¿Quieres proceder?</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">¡Forzar el cierre de la aplicación puede generar pérdida de datos o incluso dañarla completamente!\n¿Quieres continuar?</string>
     <string name="CONFIRMATION_REQUIRED">Se requiere confirmación</string>
     <string name="select_dialog_title">Seleccionar MIDlet</string>
     <string name="crash_dialog_message">¿Quieres enviar un informe del error al desarrollador?</string>
