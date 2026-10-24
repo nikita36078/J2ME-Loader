@@ -148,6 +148,7 @@
     <string name="shader_setting" translatable="false">%s: %s</string>
     <string name="reset">Reset</string>
     <string name="pref_input_devices_title">Input devices</string>
+    <string name="pref_language">Language</string>
     <string name="pref_graphics_mode_title">Graphics mode:</string>
     <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
     <string name="pref_screen_gravity">Screen gravity</string>

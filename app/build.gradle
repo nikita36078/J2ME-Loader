@@ -22,6 +22,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    androidResources {
+        generateLocaleConfig true
+    }
+
     signingConfigs {
         release {
             Properties keystoreProps = new Properties()

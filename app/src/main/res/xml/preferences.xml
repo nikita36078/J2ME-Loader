@@ -10,6 +10,12 @@
         android:key="pref_theme"
         app:useSimpleSummaryProvider="true"
         android:title="@string/pref_theme_title" />
+    <ListPreference
+        android:icon="@drawable/ic_setting_translate"
+        android:key="pref_language"
+        android:title="@string/pref_language"
+        app:persistent="false"
+        app:useSimpleSummaryProvider="true" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
         android:icon="@drawable/ic_setting_black_background"
