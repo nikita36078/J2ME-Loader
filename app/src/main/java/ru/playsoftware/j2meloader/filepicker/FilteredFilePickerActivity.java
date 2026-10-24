@@ -16,8 +16,11 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_BLACK_BACKGROUND;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +34,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
 import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
@@ -45,6 +49,10 @@ public class FilteredFilePickerActivity extends AbstractFilePickerActivity<File>
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		if (sp.getBoolean(PREF_BLACK_BACKGROUND, false)) {
+			getTheme().applyStyle(R.style.ThemeOverlay_App_Dark, true);
+		}
 		super.onCreate(savedInstanceState);
 		EdgeToEdge.enable(
 				this,

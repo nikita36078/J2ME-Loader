@@ -121,7 +121,12 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		if (sp.getBoolean(PREF_BLACK_BACKGROUND, false)) {
+			getTheme().applyStyle(R.style.ThemeOverlay_App_Dark, true);
+		}
 		lockNightMode();
+
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 
@@ -130,7 +135,6 @@ public class MicroActivity extends AppCompatActivity {
 		setContentView(view);
 		setSupportActionBar(binding.toolbar);
 
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
 		statusBarEnabled = sp.getBoolean(PREF_STATUSBAR, false);
 		cutoutsEnabled = sp.getBoolean(PREF_ADD_CUTOUT_AREA, false) &&
