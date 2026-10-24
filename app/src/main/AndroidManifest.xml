@@ -118,7 +118,7 @@
         <activity
             android:name=".config.ConfigActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".config.ConfigFilesActivity"
             android:exported="false" />
