@@ -28,6 +28,8 @@ import javax.microedition.io.Connection;
 import javax.microedition.util.ActivityResultListener;
 import javax.microedition.util.ContextHolder;
 
+import org.microemu.microedition.io.ServiceRecordHolder;
+
 public class LocalDevice implements ActivityResultListener {
 	private static LocalDevice dev;
 	private DiscoveryAgent agent;
@@ -168,27 +170,38 @@ public class LocalDevice implements ActivityResultListener {
 		if (!(notifier instanceof org.microemu.cldc.btspp.Connection || notifier instanceof org.microemu.cldc.btl2cap.Connection))
 			throw new java.lang.IllegalArgumentException("not a RFCOMM connection");
 
+		J2MEServiceRecord record;
 		if (notifier instanceof org.microemu.cldc.btspp.Connection) {
 			org.microemu.cldc.btspp.Connection conn = (org.microemu.cldc.btspp.Connection) notifier;
 			if (conn.socket == null)
 				// probably calling this for local device, so socket isn't opened
-				return new J2MEServiceRecord(null, conn.connUuid, false, false);
+				record = new J2MEServiceRecord(null, conn.connUuid, false, false);
 			else
-				return new J2MEServiceRecord(new RemoteDevice(conn.socket.getRemoteDevice()), conn.connUuid, false, false);
+				record = new J2MEServiceRecord(new RemoteDevice(conn.socket.getRemoteDevice()), conn.connUuid, false, false);
 		} else {
 			org.microemu.cldc.btl2cap.Connection conn = (org.microemu.cldc.btl2cap.Connection) notifier;
 			if (conn.socket == null)
 				// probably calling this for local device, so socket isn't opened
-				return new J2MEServiceRecord(null, conn.connUuid, false, true);
+				record = new J2MEServiceRecord(null, conn.connUuid, false, true);
 			else
-				return new J2MEServiceRecord(new RemoteDevice(conn.socket.getRemoteDevice()), conn.connUuid, false, true);
+				record = new J2MEServiceRecord(new RemoteDevice(conn.socket.getRemoteDevice()), conn.connUuid, false, true);
 		}
+		record.setNotifier(notifier);
+		return record;
 	}
 
-	// Not supported on Android due to API limitations
+	// Android cannot publish arbitrary SDP attributes. Store the updated
+	// record on the notifier so it can be sent to J2ME-Loader peers through
+	// the service-name channel.
 	public void updateRecord(ServiceRecord srvRecord) throws ServiceRegistrationException {
 		if (srvRecord == null) {
 			throw new NullPointerException("Service Record is null");
+		}
+		if (srvRecord instanceof J2MEServiceRecord) {
+			Object notifier = ((J2MEServiceRecord) srvRecord).getNotifier();
+			if (notifier instanceof ServiceRecordHolder) {
+				((ServiceRecordHolder) notifier).setServiceRecord(srvRecord);
+			}
 		}
 	}
 }

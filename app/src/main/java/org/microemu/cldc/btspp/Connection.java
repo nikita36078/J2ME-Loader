@@ -23,22 +23,25 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import javax.bluetooth.service.BluetoothNameService;
 import org.microemu.microedition.io.ConnectionImplementation;
+import org.microemu.microedition.io.ServiceRecordHolder;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
+import javax.bluetooth.ServiceRecord;
 import javax.bluetooth.UUID;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
 
-public class Connection implements ConnectionImplementation, StreamConnectionNotifier {
+public class Connection implements ConnectionImplementation, StreamConnectionNotifier, ServiceRecordHolder {
 	private static final String TAG = "btspp.Connection";
 	private BluetoothServerSocket serverSocket = null;
 	private BluetoothServerSocket nameServerSocket = null;
 	public BluetoothSocket socket = null;
 	public javax.bluetooth.UUID connUuid = null;
 	private boolean skipAfterWrite = false;
+	private ServiceRecord serviceRecord;
 
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
@@ -92,28 +95,12 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 			UUID NameUuid = new UUID(0x1102);
 			nameServerSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(srvname, NameUuid.uuid);
 
-			String finalSrvname = srvname;
 			// Send service name to client
-			Thread connectThread = new Thread(() -> {
-				try {
-					byte[] dstByte = new byte[256];
-					byte[] srcByte = finalSrvname.getBytes();
-					System.arraycopy(srcByte, 0, dstByte, 0, srcByte.length);
-					BluetoothSocket connectSocket = nameServerSocket.accept();
-					OutputStream os = connectSocket.getOutputStream();
-					os.write(0);
-					os.write(dstByte);
-					os.flush();
-					nameServerSocket.close();
-				} catch (IOException e) {
-					Log.w(TAG, "openConnection: ", e);
-				}
-			});
-			connectThread.start();
+			new BluetoothNameService(nameServerSocket, srvname, false, this).start();
 			if (secure) {
-				serverSocket = adapter.listenUsingRfcommWithServiceRecord(finalSrvname, btUuid);
+				serverSocket = adapter.listenUsingRfcommWithServiceRecord(srvname, btUuid);
 			} else {
-				serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(finalSrvname, btUuid);
+				serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(srvname, btUuid);
 			}
 			return this;
 		} else {
@@ -137,6 +124,16 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 			}
 			return new SPPConnectionImpl(socket, false);
 		}
+	}
+
+	@Override
+	public void setServiceRecord(ServiceRecord record) {
+		serviceRecord = record;
+	}
+
+	@Override
+	public ServiceRecord getServiceRecord() {
+		return serviceRecord;
 	}
 
 	@Override

@@ -26,6 +26,10 @@ import android.content.IntentFilter;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
 
+import javax.bluetooth.service.ServiceRecordCodec;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -58,6 +62,7 @@ public class DiscoveryAgent {
 		public volatile boolean discovering = false;
 
 		private String serviceName = null;
+		private byte[] serviceInfo = null;
 		private boolean btl2cap = false;
 		private int id;
 
@@ -85,6 +90,46 @@ public class DiscoveryAgent {
 			return new java.util.UUID(buffer.getLong(), buffer.getLong());
 		}
 
+		private void updateServiceInfo(BluetoothDevice device, UUID nameUuid) {
+			try {
+				BluetoothSocket bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(nameUuid.uuid);
+				if (!bluetoothSocket.isConnected()) {
+					bluetoothSocket.connect();
+				}
+				DataInputStream socketStream = new DataInputStream(bluetoothSocket.getInputStream());
+				byte[] resByte = new byte[256];
+				btl2cap = socketStream.read() == 1;
+
+				socketStream.read(resByte);
+				if (attrs != null && attrs.length > 0) {
+					serviceName = new String(resByte).trim();
+				}
+
+				serviceInfo = new byte[socketStream.readInt()];
+				socketStream.readFully(serviceInfo);
+				bluetoothSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				serviceInfo = null;
+			}
+		}
+
+		private J2MEServiceRecord getServiceRecord(UUID uuid) {
+			ByteArrayInputStream bais = new ByteArrayInputStream(serviceInfo);
+			J2MEServiceRecord receivedRecord = new J2MEServiceRecord(dev, uuid, false, btl2cap);
+			if (serviceInfo.length > 0) {
+				try {
+					ServiceRecordCodec.read(receivedRecord, bais);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (serviceName != null) {
+				receivedRecord.setServiceName(serviceName);
+			}
+			return receivedRecord;
+		}
+
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (BluetoothDevice.ACTION_UUID.equals(action)) {
@@ -109,36 +154,18 @@ public class DiscoveryAgent {
 						if (uuidExtra[i].equals(SppUuid))
 							supportsSPP = true;
 						if (uuidExtra[i].equals(NameUuid)) {
-							// Workaround to get service name
-							if (!btl2cap && serviceName == null) {
-								try {
-									BluetoothSocket bluetoothSocket = dev.dev.createInsecureRfcommSocketToServiceRecord(NameUuid.uuid);
-									if (!bluetoothSocket.isConnected()) {
-										bluetoothSocket.connect();
-									}
-									InputStream is = bluetoothSocket.getInputStream();
-									byte[] resByte = new byte[256];
-									btl2cap = is.read() == 1;
-									is.read(resByte);
-									if (attrs != null && attrs.length > 0) {
-										serviceName = new String(resByte).trim();
-									}
-									bluetoothSocket.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							}
+							updateServiceInfo(dev.dev, NameUuid);
 						}
 						for (int j = 0; !stop && j < uuids.length; j++) {
 							if (uuidExtra[i].uuid.equals(uuids[j].uuid) || uuidExtra[i].uuid.equals(byteSwappedUuid(uuids[j].uuid))) {
-								J2MEServiceRecord record = new J2MEServiceRecord(dev, uuids[j], false, btl2cap);
-								records.add(record);
+								J2MEServiceRecord receivedRecord;
+								if (serviceInfo != null) {
+									receivedRecord = getServiceRecord(uuids[j]);
+								} else {
+									receivedRecord = new J2MEServiceRecord(dev, uuids[j], false, btl2cap);
+								}
+								records.add(receivedRecord);
 							}
-						}
-					}
-					if (serviceName != null) {
-						for (J2MEServiceRecord record : records) {
-							record.setServiceName(serviceName);
 						}
 					}
 

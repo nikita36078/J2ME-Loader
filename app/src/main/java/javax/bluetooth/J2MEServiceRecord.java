@@ -23,6 +23,7 @@ class J2MEServiceRecord implements ServiceRecord {
 	private UUID uuid;
 	private boolean skipAfterWrite;
 	private boolean btl2cap;
+	private Object notifier;
 	private HashMap<Integer, DataElement> dataElements = new HashMap<>();
 
 	private static final int PROTOCOL_DESCRIPTOR_LIST = 0x0004;
@@ -46,6 +47,14 @@ class J2MEServiceRecord implements ServiceRecord {
 
 	public RemoteDevice getHostDevice() {
 		return dev;
+	}
+
+	void setNotifier(Object notifier) {
+		this.notifier = notifier;
+	}
+
+	Object getNotifier() {
+		return notifier;
 	}
 
 	public String getConnectionURL(int requiredSecurity, boolean mustBeMaster) {

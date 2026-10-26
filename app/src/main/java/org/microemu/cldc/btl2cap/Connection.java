@@ -23,22 +23,25 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import javax.bluetooth.service.BluetoothNameService;
 import org.microemu.microedition.io.ConnectionImplementation;
+import org.microemu.microedition.io.ServiceRecordHolder;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import javax.bluetooth.L2CAPConnection;
 import javax.bluetooth.L2CAPConnectionNotifier;
+import javax.bluetooth.ServiceRecord;
 import javax.bluetooth.UUID;
 
-public class Connection implements ConnectionImplementation, L2CAPConnectionNotifier {
+public class Connection implements ConnectionImplementation, L2CAPConnectionNotifier, ServiceRecordHolder {
 	private static final String TAG = "btl2cap.Connection";
 	private BluetoothServerSocket serverSocket = null;
 	private BluetoothServerSocket nameServerSocket = null;
 	public BluetoothSocket socket = null;
 	public javax.bluetooth.UUID connUuid = null;
 	private boolean skipAfterWrite = false;
+	private ServiceRecord serviceRecord;
 
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
@@ -94,22 +97,7 @@ public class Connection implements ConnectionImplementation, L2CAPConnectionNoti
 
 			String finalSrvname = srvname;
 			// Send service name to client
-			Thread connectThread = new Thread(() -> {
-				try {
-					byte[] dstByte = new byte[256];
-					byte[] srcByte = finalSrvname.getBytes();
-					System.arraycopy(srcByte, 0, dstByte, 0, srcByte.length);
-					BluetoothSocket connectSocket = nameServerSocket.accept();
-					OutputStream os = connectSocket.getOutputStream();
-					os.write(1);
-					os.write(dstByte);
-					os.flush();
-					nameServerSocket.close();
-				} catch (IOException e) {
-					Log.w(TAG, "openConnection: ", e);
-				}
-			});
-			connectThread.start();
+			new BluetoothNameService(nameServerSocket, srvname, true, this).start();
 			if (secure) {
 				serverSocket = adapter.listenUsingRfcommWithServiceRecord(finalSrvname, btUuid);
 			} else {
@@ -137,6 +125,16 @@ public class Connection implements ConnectionImplementation, L2CAPConnectionNoti
 			}
 			return new L2CAPConnectionImpl(socket);
 		}
+	}
+
+	@Override
+	public void setServiceRecord(ServiceRecord record) {
+		serviceRecord = record;
+	}
+
+	@Override
+	public ServiceRecord getServiceRecord() {
+		return serviceRecord;
 	}
 
 	@Override
