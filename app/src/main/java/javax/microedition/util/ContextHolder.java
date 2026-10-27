@@ -99,6 +99,8 @@ public class ContextHolder {
 	}
 
 	public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
+		MicroActivity context = currentActivity.get();
+		context.setPauseSuppressed(false);
 		for (ActivityResultListener listener : resultListeners) {
 			listener.onActivityResult(requestCode, resultCode, data);
 		}
@@ -162,6 +164,12 @@ public class ContextHolder {
 		} else {
 			return true;
 		}
+	}
+
+	public static void startActivityForResult(Intent intent, int requestCode) {
+		MicroActivity context = currentActivity.get();
+		context.setPauseSuppressed(true);
+		context.startActivityForResult(intent, requestCode);
 	}
 
 	private static boolean hasPermissions(Context context, String... permissions) {

@@ -105,6 +105,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	private Displayable current;
 	private boolean visible;
+	private boolean pauseSuppressed;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
 	private boolean cutoutsEnabled;
@@ -222,14 +223,18 @@ public class MicroActivity extends AppCompatActivity {
 	public void onResume() {
 		super.onResume();
 		visible = true;
-		MidletThread.resumeApp();
+		if (!pauseSuppressed) {
+			MidletThread.resumeApp();
+		}
 	}
 
 	@Override
 	public void onPause() {
-		visible = false;
 		hideSoftInput();
-		MidletThread.pauseApp();
+		if (!pauseSuppressed) {
+			visible = false;
+			MidletThread.pauseApp();
+		}
 		super.onPause();
 	}
 
@@ -407,6 +412,10 @@ public class MicroActivity extends AppCompatActivity {
 
 	public boolean isVisible() {
 		return visible;
+	}
+
+	public void setPauseSuppressed(boolean pauseSuppressed) {
+		this.pauseSuppressed = pauseSuppressed;
 	}
 
 	public void showExitConfirmation() {
