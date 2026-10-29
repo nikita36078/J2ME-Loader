@@ -19,21 +19,26 @@ package org.microemu.cldc.btl2cap;
 
 import android.bluetooth.BluetoothSocket;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.bluetooth.L2CAPConnection;
 
 public class L2CAPConnectionImpl implements L2CAPConnection {
+	// Android exposes RFCOMM, which is a byte stream. Add a frame length so
+	// one send() maps to one receive(), as J2ME L2CAP applications expect.
+	private static final int MAX_FRAME_SIZE = 1024 * 1024;
+
 	public BluetoothSocket socket;
-	private final OutputStream os;
-	private final InputStream is;
+	private final DataInputStream is;
+	private final DataOutputStream os;
 
 	public L2CAPConnectionImpl(BluetoothSocket socket) throws IOException {
 		this.socket = socket;
-		this.os = socket.getOutputStream();
-		this.is = socket.getInputStream();
+		this.os = new DataOutputStream(socket.getOutputStream());
+		this.is = new DataInputStream(socket.getInputStream());
 	}
 
 	@Override
@@ -48,12 +53,47 @@ public class L2CAPConnectionImpl implements L2CAPConnection {
 
 	@Override
 	public void send(byte[] data) throws IOException {
-		os.write(data);
+		if (data == null) {
+			throw new NullPointerException();
+		}
+		if (data.length > MAX_FRAME_SIZE) {
+			throw new IOException("L2CAP frame is too large: " + data.length);
+		}
+		synchronized (os) {
+			os.writeInt(data.length);
+			os.write(data);
+			os.flush();
+		}
 	}
 
 	@Override
 	public int receive(byte[] inBuf) throws IOException {
-		return is.read(inBuf);
+		if (inBuf == null) {
+			throw new NullPointerException();
+		}
+		int length = is.readInt();
+		if (length < 0 || length > MAX_FRAME_SIZE) {
+			throw new IOException("Invalid L2CAP frame length: " + length);
+		}
+		int read = Math.min(length, inBuf.length);
+		if (read > 0) {
+			is.readFully(inBuf, 0, read);
+		}
+		int remaining = length - read;
+		while (remaining > 0) {
+			long skipped = is.skip(remaining);
+			if (skipped > 0) {
+				remaining -= (int) skipped;
+			} else {
+				byte[] discard = new byte[Math.min(remaining, 256)];
+				int count = is.read(discard);
+				if (count < 0) {
+					throw new EOFException();
+				}
+				remaining -= count;
+			}
+		}
+		return read;
 	}
 
 	@Override
@@ -63,7 +103,8 @@ public class L2CAPConnectionImpl implements L2CAPConnection {
 
 	@Override
 	public void close() throws IOException {
-		if (socket != null)
+		if (socket != null) {
 			socket.close();
+		}
 	}
 }
