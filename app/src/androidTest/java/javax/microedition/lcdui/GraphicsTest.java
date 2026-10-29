@@ -250,6 +250,39 @@ public class GraphicsTest {
 		assertTrue(validate(image, spotsToValidate));
 	}
 
+	@Test
+	public void setClipNegativeSize() {
+		Image image = Image.createImage(testWidth, testHeight);
+		Graphics graphics = image.getGraphics();
+
+		graphics.setColor(WHITE);
+		graphics.fillRect(0, 0, testWidth, testHeight);
+		graphics.setColor(RED);
+
+		// A negative size must not mirror the clip to the other side of the rect
+		graphics.setClip(5, 10, 10, -4);
+		graphics.fillRect(0, 0, testWidth, testHeight);
+		graphics.setClip(0, 0, testWidth, testHeight);
+		final int[] spots = {
+				5, 5, WHITE,
+				5, 10, WHITE,
+				10, 5, WHITE,
+				5, 14, WHITE
+		};
+		assertTrue(validate(image, spots));
+
+		// Same for a negative width
+		graphics.setClip(10, 5, -4, 10);
+		graphics.fillRect(0, 0, testWidth, testHeight);
+		graphics.setClip(0, 0, testWidth, testHeight);
+		final int[] spots2 = {
+				5, 5, WHITE,
+				14, 5, WHITE,
+				10, 10, WHITE
+		};
+		assertTrue(validate(image, spots2));
+	}
+
 	private boolean validate(Image image, final int[] spotsToValidate) {
 		for (int i = 0; i < spotsToValidate.length; i += 3) {
 			int c = getPixel(image, spotsToValidate[i], spotsToValidate[i + 1]);

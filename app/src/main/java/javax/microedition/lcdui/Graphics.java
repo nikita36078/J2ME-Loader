@@ -193,7 +193,12 @@ public class Graphics implements
 	}
 
 	public void setClip(int x, int y, int width, int height) {
-		clip.set(x, y, x + width, y + height);
+		if (width < 0 || height < 0) {
+			// Android normalizes an inverted rect instead of emptying it
+			clip.set(x, y, x, y);
+		} else {
+			clip.set(x, y, x + width, y + height);
+		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			canvas.restore();
 			canvas.save();
@@ -206,7 +211,11 @@ public class Graphics implements
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
-		clip.set(x, y, x + width, y + height);
+		if (width < 0 || height < 0) {
+			clip.set(x, y, x, y);
+		} else {
+			clip.set(x, y, x + width, y + height);
+		}
 		canvas.clipRect(clip);
 		canvas.getClipBounds(clip);
 	}
