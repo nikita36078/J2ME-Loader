@@ -165,6 +165,8 @@
     <string name="unlimited">unlimited</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
     <string name="saved">Saved</string>
+    <string name="pref_other_options_title">Other options</string>
+    <string name="pref_disable_pause">Disable pause when minimized</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>

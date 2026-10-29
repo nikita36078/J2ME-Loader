@@ -106,6 +106,7 @@ public class MicroActivity extends AppCompatActivity {
 	private Displayable current;
 	private boolean visible;
 	private boolean pauseSuppressed;
+	private boolean pauseDisabled;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
 	private boolean cutoutsEnabled;
@@ -199,6 +200,7 @@ public class MicroActivity extends AppCompatActivity {
 			}
 		}
 		setOrientation(orientation);
+		pauseDisabled = microLoader.isPauseDisabled();
 		menuKey = microLoader.getMenuKeyCode();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
@@ -231,7 +233,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onPause() {
 		hideSoftInput();
-		if (!pauseSuppressed) {
+		if (!pauseSuppressed && !pauseDisabled) {
 			visible = false;
 			MidletThread.pauseApp();
 		}

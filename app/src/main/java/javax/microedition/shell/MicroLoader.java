@@ -231,6 +231,10 @@ public class MicroLoader {
 		return params.orientation;
 	}
 
+	public boolean isPauseDisabled() {
+		return params.disablePause;
+	}
+
 	void setLimitFps(int fps) {
 		if (fps == -1) Canvas.setLimitFps(params.fpsLimit);
 		else Canvas.setLimitFps(fps);

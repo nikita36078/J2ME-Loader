@@ -488,7 +488,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			if (idx != -1) {
 				int nl = text.indexOf('\n', idx);
 				text = text.substring(0, idx + key.length()) + " " + charsets[w] + (nl == -1 ? "\n" : text.substring(nl));
-                binding.systemProperties.setText(text);
+				binding.systemProperties.setText(text);
 				return;
 			}
 
@@ -680,6 +680,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
 		}
 		binding.systemProperties.setText(getSystemProperties(systemProperties));
+		binding.disablePauseToggle.setChecked(params.disablePause);
 	}
 
 	private void saveParams() {
@@ -770,6 +771,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.soundBank = binding.soundbankSelector.getSelectedItemPosition() > 0 ? (String)
 					binding.soundbankSelector.getSelectedItem() : null;
 			params.systemProperties = getSystemProperties(binding.systemProperties.getText().toString());
+
+			params.disablePause = binding.disablePauseToggle.isChecked();
 
 			ProfilesManager.saveConfig(params);
 		} catch (Throwable t) {

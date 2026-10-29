@@ -163,6 +163,9 @@ public class ProfileModel {
 	@SerializedName("SystemProperties")
 	public String systemProperties;
 
+	@SerializedName("DisablePause")
+	public boolean disablePause;
+
 	@SuppressWarnings("unused") // Gson uses default constructor if present
 	public ProfileModel() {
 		isNew = false;
@@ -199,5 +202,7 @@ public class ProfileModel {
 		vkFgColorSelected = 0xFFFFFF;
 		vkOutlineColor = 0xFFFFFF;
 		systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
+
+		disablePause = false;
 	}
 }
