@@ -690,8 +690,10 @@ class Loader {
 			int boneVertices = readUShort();
 			int parent = readShort();
 
-			if (parent < -1) {
-				throw new RuntimeException("Format error (negative parent). Please report this bug");
+			if (parent < -1 || parent >= numBones) {
+				throw new IOException("MBAC format error: bone " + i
+						+ " has invalid parent index " + parent
+						+ " (numBones=" + numBones + ")");
 			}
 			bones.putInt(boneVertices);
 			bones.putInt(parent);
