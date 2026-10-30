@@ -114,7 +114,7 @@ public class LocalDevice implements ActivityResultListener {
 
 		Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 		lock = true;
-		ContextHolder.getActivity().startActivityForResult(discoverableIntent, 1);
+		ContextHolder.startActivityForResult(discoverableIntent, 1);
 		return true;
 	}
 
