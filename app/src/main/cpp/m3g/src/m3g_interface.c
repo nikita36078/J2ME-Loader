@@ -1671,9 +1671,11 @@ M3G_API M3GInterface m3gCreateInterface(
 
 #       if !defined(M3G_NGL_CONTEXT_API)
         /* Before messing with EGL state, check if EGL is already
-         * initialized by the calling application. */
+         * initialized by the calling application. Take a new reference to avoid crash when
+         * eglTerminate() is called in GLSurfaceView */
     
-        if (eglQueryString(eglGetDisplay(EGL_DEFAULT_DISPLAY), EGL_VERSION)) {
+        if (eglQueryString(eglGetDisplay(EGL_DEFAULT_DISPLAY), EGL_VERSION)
+            && eglInitialize(eglGetDisplay(EGL_DEFAULT_DISPLAY), NULL, NULL)) {
             ++m3g->glRefCount;
         }
 #       endif /*!M3G_NGL_CONTEXT_API*/
