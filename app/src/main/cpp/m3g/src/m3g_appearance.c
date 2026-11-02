@@ -197,6 +197,18 @@ static void m3gApplyAppearance(const Appearance *appearance,
         m3gApplyMaterial(appearance->material, alphaFactor);
         m3gApplyFog(appearance->fog);
 
+        if (m3gIsUnlitTextures(M3G_INTERFACE(ctx))) {
+            /* Lighting is disabled: keep the material colour as primary */
+            M3Gfloat c[4];
+            if (appearance->material != NULL) {
+                m3gFloatColor(appearance->material->diffuseColor, 1.0f, c);
+                glColor4f(c[0], c[1], c[2], 1.0f);
+            }
+            else {
+                glColor4f(1.f, 1.f, 1.f, 1.f);
+            }
+        }
+
         for (i = 0; i < M3G_NUM_TEXTURE_UNITS; ++i) {
             Texture *tex = appearance->texture[i];
             glActiveTexture(GL_TEXTURE0 + i);

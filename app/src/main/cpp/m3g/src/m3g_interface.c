@@ -26,6 +26,8 @@
 #   error included by m3g_core.c; do not compile separately.
 #endif
 
+#include <stdio.h>
+#include <string.h>
 #include "m3g_array.h"
 #include "m3g_gl.h"
 
@@ -143,6 +145,9 @@ struct M3GInterfaceImpl
     M3Gbool supportAntialiasing;
     M3Gbool colorMaskWorkaround;
     M3Gbool twoSidedLightingWorkaround;
+
+    /*! Set when lit fragments lose their texture (old Xclipse drivers) */
+    M3Gbool unlitTextures;
 };
 
 #if defined(M3G_DEBUG)
@@ -1227,6 +1232,39 @@ static m3gErrorHandler *m3gSetErrorHandler(Interface *m3g, m3gErrorHandler *erro
 
 /*!
  * \internal
+ * \brief Detects Xclipse drivers that drop textures from lit fragments
+ *
+ * The renderer string looks like
+ * "ANGLE (Samsung Xclipse 530) on Vulkan 1.3.231". Driver releases with
+ * Vulkan 1.3.279 or newer (ANGLE 24.1.271 and later) render lit and
+ * textured fragments correctly; earlier ones (Vulkan 1.3.231) return
+ * only the material colour.
+ */
+static M3Gbool m3gIsBrokenXclipse(const char *renderer)
+{
+    const char *vulkan;
+    int major = 0, minor = 0, patch = 0;
+
+    if (renderer == NULL || strstr(renderer, "Xclipse") == NULL) {
+        return M3G_FALSE;
+    }
+
+    vulkan = strstr(renderer, "Vulkan ");
+    if (vulkan == NULL || sscanf(vulkan + 7, "%d.%d.%d", &major, &minor, &patch) != 3) {
+        return M3G_FALSE;
+    }
+
+    if (major < 1) {
+        return M3G_TRUE;
+    }
+    if (minor < 3) {
+        return M3G_TRUE;
+    }
+    return (patch < 279) ? M3G_TRUE : M3G_FALSE;
+}
+
+/*!
+ * \internal
  * \brief Gets various constants from the GL driver
  */
 
@@ -1287,6 +1325,12 @@ static void m3gConfigureGL(Interface *m3g)
     */
 
 	info = glGetString(GL_RENDERER);
+
+    /* Xclipse drivers before Vulkan 1.3.279 return the flat material
+     * colour for lit, textured fragments: GL_MODULATE combined with
+     * GL_LIGHTING loses the texture sample. Render unlit there (see
+     * m3gIsUnlitTextures). */
+    m3g->unlitTextures = m3gIsBrokenXclipse((const char *) info);
 
     // on Android this string does not contain "HW", but renderer always(???) hardware
 #ifdef M3G_TARGET_ANDROID
@@ -1469,6 +1513,15 @@ static M3Gbool m3gGetColorMaskWorkaround(Interface *m3g)
 static M3Gbool m3gGetTwoSidedLightingWorkaround(Interface *m3g)
 {
     return m3g->twoSidedLightingWorkaround;
+}
+
+/*!
+ * \internal
+ * \brief Returns M3G_TRUE when lit fragments lose their texture
+ */
+static M3Gbool m3gIsUnlitTextures(Interface *m3g)
+{
+    return m3g->unlitTextures;
 }
 
 /*!

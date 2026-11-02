@@ -139,7 +139,10 @@ static void m3gLockVertexBuffer(const VertexBuffer *buffer,
             + (a >> (NODE_ALPHA_FACTOR_BITS + 7));
         
         glDisableClientState(GL_COLOR_ARRAY);
-        glColor4x(r, g, b, a);
+        /* Keep the material colour when lighting is disabled */
+        if (!m3gIsUnlitTextures(M3G_INTERFACE(buffer))) {
+            glColor4x(r, g, b, a);
+        }
     }
 
     if (buffer->normals != NULL) {

@@ -86,7 +86,12 @@ static void m3gApplyMaterial(Material *material, M3Gint alphaFactor)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, colors);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
 
-        glEnable(GL_LIGHTING);
+        if (m3gIsUnlitTextures(M3G_INTERFACE(material))) {
+            glDisable(GL_LIGHTING);
+        }
+        else {
+            glEnable(GL_LIGHTING);
+        }
     }
     else {
         m3gApplyDefaultMaterial();

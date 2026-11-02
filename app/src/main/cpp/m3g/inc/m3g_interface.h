@@ -58,6 +58,7 @@ static void m3gRecycle(Interface *m3g, void *ptr, M3Gsize bytes);
 
 static M3Gbool m3gGetColorMaskWorkaround(Interface *m3g);
 static M3Gbool m3gGetTwoSidedLightingWorkaround(Interface *m3g);
+static M3Gbool m3gIsUnlitTextures(Interface *m3g);
 
 /*--------------------------------------------------------------------
  * Debug memory allocation functions
