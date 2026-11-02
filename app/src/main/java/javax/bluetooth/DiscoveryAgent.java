@@ -237,7 +237,7 @@ public class DiscoveryAgent {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					Thread.sleep(15000);
+					Thread.sleep(60000);
 					if (adapter.isDiscovering())
 						adapter.cancelDiscovery();
 				} catch (InterruptedException e) {
