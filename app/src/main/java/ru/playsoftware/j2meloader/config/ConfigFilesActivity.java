@@ -19,6 +19,8 @@ package ru.playsoftware.j2meloader.config;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,12 +65,13 @@ public class ConfigFilesActivity extends BaseActivity {
 	private ActivityConfigFilesBinding binding;
 	private File dir;
 	private FileAdapter adapter;
+	private FileType type;
 	private final CompositeDisposable disposables = new CompositeDisposable();
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		FileType type = (FileType) getIntent().getSerializableExtra(EXTRA_TYPE);
+		type = (FileType) getIntent().getSerializableExtra(EXTRA_TYPE);
 		if (type == null) {
 			finish();
 			return;
@@ -103,9 +106,19 @@ public class ConfigFilesActivity extends BaseActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.config_files, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			finish();
+			return true;
+		} else if (item.getItemId() == R.id.action_help) {
+			showHelp();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -115,6 +128,15 @@ public class ConfigFilesActivity extends BaseActivity {
 	protected void onDestroy() {
 		disposables.clear();
 		super.onDestroy();
+	}
+
+	private void showHelp() {
+		int helpMessage = type == FileType.SHADERS ? R.string.config_files_shader_help :
+				R.string.config_files_soundbank_help;
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.help)
+				.setMessage(helpMessage)
+				.show();
 	}
 
 	private void openFilePicker() {
