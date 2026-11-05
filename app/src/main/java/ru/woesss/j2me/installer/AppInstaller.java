@@ -232,7 +232,7 @@ public class AppInstaller {
 		try {
 			connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.setInstanceFollowRedirects(true);
-			connection.setReadTimeout(3 * 60 * 1000);
+			connection.setReadTimeout(30 * 1000);
 			connection.setConnectTimeout(15000);
 			int code = connection.getResponseCode();
 			if (code == HttpURLConnection.HTTP_MOVED_PERM
@@ -241,7 +241,7 @@ public class AppInstaller {
 				connection.disconnect();
 				connection = (HttpURLConnection) new URL(urlStr).openConnection();
 				connection.setInstanceFollowRedirects(true);
-				connection.setReadTimeout(3 * 60 * 1000);
+				connection.setReadTimeout(30 * 1000);
 				connection.setConnectTimeout(15000);
 			}
 			try (InputStream inputStream = connection.getInputStream();
@@ -428,7 +428,7 @@ public class AppInstaller {
 		try {
 			connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.setInstanceFollowRedirects(true);
-			connection.setReadTimeout(3 * 60 * 1000);
+			connection.setReadTimeout(60 * 1000);
 			connection.setConnectTimeout(15000);
 			int code = connection.getResponseCode();
 			if (code == HttpURLConnection.HTTP_MOVED_PERM
@@ -437,7 +437,7 @@ public class AppInstaller {
 				connection.disconnect();
 				connection = (HttpURLConnection) new URL(urlStr).openConnection();
 				connection.setInstanceFollowRedirects(true);
-				connection.setReadTimeout(3 * 60 * 1000);
+				connection.setReadTimeout(60 * 1000);
 				connection.setConnectTimeout(15000);
 			}
 			try (InputStream inputStream = connection.getInputStream();
