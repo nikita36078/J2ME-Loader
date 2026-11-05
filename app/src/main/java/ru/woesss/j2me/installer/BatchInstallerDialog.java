@@ -61,8 +61,6 @@ public class BatchInstallerDialog extends DialogFragment {
 	private final List<String> failedNames = new ArrayList<>();
 	private final Map<Uri, String> uriNames = new HashMap<>();
 	private boolean started;
-	private boolean cancelled;
-	private boolean finished;
 	private boolean jarAttempted;
 	private int total;
 	private int processed;
@@ -135,13 +133,8 @@ public class BatchInstallerDialog extends DialogFragment {
 		}
 		started = true;
 		btnClose = mDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-		btnClose.setOnClickListener(v -> {
-			if (finished) {
-				dismiss();
-			} else {
-				cancel();
-			}
-		});
+		btnClose.setVisibility(View.GONE);
+		btnClose.setOnClickListener(v -> dismiss());
 		ArrayList<Uri> uris = requireArguments().getParcelableArrayList(ARG_URIS);
 		if (uris == null || uris.isEmpty()) {
 			dismissAllowingStateLoss();
@@ -160,9 +153,6 @@ public class BatchInstallerDialog extends DialogFragment {
 	}
 
 	private void nextFile() {
-		if (cancelled) {
-			return;
-		}
 		if (uriQueue.isEmpty()) {
 			onFinished();
 			return;
@@ -187,7 +177,7 @@ public class BatchInstallerDialog extends DialogFragment {
 	}
 
 	private void onProgress(@NonNull Integer status) {
-		if (!isAdded() || cancelled) {
+		if (!isAdded()) {
 			return;
 		}
 		Descriptor nd = installer.getNewDescriptor();
@@ -301,7 +291,7 @@ public class BatchInstallerDialog extends DialogFragment {
 
 	private void onError(Throwable e) {
 		e.printStackTrace();
-		if (!isAdded() || cancelled) {
+		if (!isAdded()) {
 			return;
 		}
 		addFailedName();
@@ -311,7 +301,6 @@ public class BatchInstallerDialog extends DialogFragment {
 	}
 
 	private void onFinished() {
-		finished = true;
 		SpannableStringBuilder message = new SpannableStringBuilder(
 				getString(R.string.install_multiple_done, installed));
 		if (!failedNames.isEmpty()) {
@@ -329,12 +318,7 @@ public class BatchInstallerDialog extends DialogFragment {
 		mDialog.setMessage(message);
 		hideProgress();
 		btnClose.setText(R.string.close);
-	}
-
-	private void cancel() {
-		cancelled = true;
-		compositeDisposable.clear();
-		dismiss();
+		btnClose.setVisibility(View.VISIBLE);
 	}
 
 	private void hideProgress() {
