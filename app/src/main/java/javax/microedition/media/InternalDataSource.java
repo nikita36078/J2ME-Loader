@@ -72,14 +72,13 @@ class InternalDataSource extends FileCacheDataSource {
 			if (mediaInformation != null) {
 				StreamInformation streamInformation = mediaInformation.getStreams().get(0);
 				if (streamInformation.getCodec().contains("adpcm")) {
-					int dot = path.lastIndexOf('.');
-					String newName = (dot == -1 ? path : path.substring(0, dot)) + ".wav";
+					String newName = path + "_ff.wav";
 					String cmd = "-i " + path + " -acodec pcm_u8 -ar 16000 " + newName;
 					FFmpegSession ffmpegSession = FFmpegKit.execute(cmd);
 					ReturnCode rc = ffmpegSession.getReturnCode();
 					if (rc.isValueSuccess()) {
 						Log.i(TAG, "Command execution completed successfully.");
-						if (mediaFile.delete()) {
+						if (!mediaFile.delete()) {
 							Log.w(TAG, "convert: error delete file=" + mediaFile);
 						}
 						mediaFile = new File(newName);
