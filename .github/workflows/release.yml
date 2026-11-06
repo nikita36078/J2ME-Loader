@@ -64,11 +64,20 @@ jobs:
           name: apks
           path: dist/*.apk
 
-      - name: Upload APKs
-        uses: tcnksm/ghr@v0
+      - name: Move continuous tag
+        run: |
+          git tag -f continuous "$GITHUB_SHA"
+          git push --force origin "refs/tags/continuous"
+
+      - name: Update GitHub release
+        uses: ncipollo/release-action@v1
         with:
           tag: continuous
-          path: dist
-          delete: "true"
-          name: "Automated CI builds"
-          prerelease: "true"
+          commit: ${{ github.sha }}
+          name: Automated CI builds
+          body: Automated builds from the latest commits on master.
+          prerelease: true
+          allowUpdates: true
+          removeArtifacts: true
+          artifactErrorsFailBuild: true
+          artifacts: dist/*.apk
