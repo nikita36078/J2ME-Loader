@@ -144,9 +144,17 @@ public class DocumentProvider extends DocumentsProvider {
 			throws FileNotFoundException {
 		File parent = getFileForDocId(documentId);
 		File file = new File(parent.getPath(), displayName);
+		final boolean isDirectory = mimeType.equals(Document.MIME_TYPE_DIR);
+		if (file.exists()) {
+			if (file.isDirectory() == isDirectory && file.canWrite()) {
+				return getDocIdForFile(file);
+			}
+			throw new FileNotFoundException("Failed to create document with name " +
+					displayName + ": a document with the same name already exists in " + documentId);
+		}
 		try {
 			boolean wasNewFileCreated;
-			if (mimeType.equals(Document.MIME_TYPE_DIR)) {
+			if (isDirectory) {
 				wasNewFileCreated = file.mkdir();
 			} else {
 				wasNewFileCreated = file.createNewFile();
@@ -286,7 +294,7 @@ public class DocumentProvider extends DocumentsProvider {
 
 		int flags = 0;
 		if (file.canWrite()) {
-			if (file.canWrite()) {
+			if (file.isDirectory()) {
 				flags |= Document.FLAG_DIR_SUPPORTS_CREATE;
 			} else {
 				flags |= Document.FLAG_SUPPORTS_WRITE;
