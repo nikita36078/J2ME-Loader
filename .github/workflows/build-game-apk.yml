@@ -30,6 +30,30 @@ jobs:
           chmod +x gradlew
           ./gradlew --no-daemon :app:assembleOpenDebug
 
+      - name: Install and launch game in Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
+          disable-animations: true
+          script: |
+            APK="$(find app/build/outputs/apk/open/debug -name '*.apk' -print -quit)"
+            test -n "$APK"
+            adb install -r "$APK"
+            adb shell am start -n com.tuananh.bolacthoitiensu.debug/ru.playsoftware.j2meloader.MainActivity
+            sleep 60
+            adb shell dumpsys activity activities > /tmp/activities.txt
+            if ! grep -q "javax.microedition.shell.MicroActivity" /tmp/activities.txt; then
+              adb logcat -d -t 4000 > /tmp/game-logcat.txt
+              cat /tmp/activities.txt
+              tail -n 250 /tmp/game-logcat.txt
+              exit 1
+            fi
+            adb logcat -d -t 2000 | grep -E "FATAL EXCEPTION|Dexing error|No MIDlets found|tribes" || true
+
       - name: Upload installable APK
         uses: actions/upload-artifact@v4
         with:
