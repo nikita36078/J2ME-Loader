@@ -38,9 +38,15 @@ import java.util.ArrayList;
 public class AndroidMethodVisitor extends MethodVisitor {
 	static boolean USE_PANIC_LOGGING = false;
 	private final ArrayList<Label> exceptionHandlers = new ArrayList<>();
+	private final boolean returnsBoolean;
 
 	public AndroidMethodVisitor(MethodVisitor methodVisitor) {
+		this(methodVisitor, false);
+	}
+
+	AndroidMethodVisitor(MethodVisitor methodVisitor, boolean returnsBoolean) {
 		super(ASM9, methodVisitor);
+		this.returnsBoolean = returnsBoolean;
 	}
 
 	@Override
@@ -50,6 +56,18 @@ public class AndroidMethodVisitor extends MethodVisitor {
 			mv.visitInsn(DUP);
 			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Throwable", "printStackTrace", "()V", false);
 		}
+	}
+
+	@Override
+	public void visitInsn(int opcode) {
+		if (opcode == IRETURN && returnsBoolean) {
+			// JVMS 6.5: ireturn narrows boolean results with value & 1. The DEX
+			// verifier doesn't apply that conversion implicitly and rejects, for
+			// example, a short value returned from a boolean method.
+			super.visitInsn(ICONST_1);
+			super.visitInsn(IAND);
+		}
+		super.visitInsn(opcode);
 	}
 
 	@Override
