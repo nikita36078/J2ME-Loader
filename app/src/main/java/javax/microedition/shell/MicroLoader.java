@@ -185,14 +185,12 @@ public class MicroLoader {
 			} else if (!dexOptDir.mkdir()) {
 				throw new IOException("Can't create directory: [" + dexOptDir + ']');
 			}
-			if (SDK_INT >= UPSIDE_DOWN_CAKE) {
-				File dexCache = new File(dexOptDir, appDirName);
-				FilesKt.copyTo(dexSource, dexCache, true, ConstantsKt.DEFAULT_BUFFER_SIZE);
-				if (!dexCache.setReadOnly()) {
-					throw new IOException("Can't set readOnly flag for dex cache file");
-				}
-				dexSource = dexCache;
+			File dexCache = new File(dexOptDir, appDirName);
+			FilesKt.copyTo(dexSource, dexCache, true, ConstantsKt.DEFAULT_BUFFER_SIZE);
+			if (!dexCache.setReadOnly()) {
+				throw new IOException("Can't set readOnly flag for dex cache file");
 			}
+			dexSource = dexCache;
 			ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
 					dexOptDir.getAbsolutePath(), context.getClassLoader(), appDir);
 			Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
