@@ -40,9 +40,9 @@ jobs:
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
           disable-animations: true
           script: |
-            APK="$(find app/build/outputs -type f -name '*.apk' -print -quit)"
+            APK="$(find app/build/outputs -name '*.apk' -print -quit)"
             echo "APK path: ${APK:-NOT_FOUND}"
-            test -n "$APK" || (echo "No APK found under app/build/outputs"; find app/build/outputs -maxdepth 7 -type f -print; exit 1)
+            test -n "$APK" || (echo "No APK found under app/build/outputs"; find app/build/outputs -maxdepth 7 -print; exit 1)
             adb install -r "$APK"
             adb shell am start -n com.tuananh.bolacthoitiensu.debug/ru.playsoftware.j2meloader.MainActivity
             sleep 60
