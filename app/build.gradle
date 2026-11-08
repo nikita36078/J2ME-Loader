@@ -134,7 +134,7 @@ android {
 
 androidComponents {
     onVariants(selector().all()) { variant ->
-        if (variant.buildType == 'debug' && variant.flavorName != 'midlet') {
+        if (variant.buildType == 'debug' && variant.flavorName != 'midlet' && variant.flavorName != 'open') {
             variant.resValues.put(
                     variant.makeResValueKey('string', 'app_name'),
                     new ResValue('JL-Debug', null))
