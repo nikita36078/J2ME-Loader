@@ -782,6 +782,8 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	protected void onDestroy() {
+		// Stop the MIDlet thread explicitly (fixes stuck audio)
+		MidletThread.destroyApp();
 		binding = null;
 		super.onDestroy();
 	}
