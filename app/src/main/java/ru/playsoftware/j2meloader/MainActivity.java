@@ -110,6 +110,7 @@ public class MainActivity extends BaseActivity {
 		if (dir.isDirectory() && dir.canWrite()) {
 			FileUtils.initWorkDir(dir);
 			appListModel.onWorkDirReady();
+			startEmbeddedGame();
 			return;
 		}
 		if (dir.exists() || dir.getParentFile() == null || !dir.getParentFile().isDirectory()
@@ -138,7 +139,7 @@ public class MainActivity extends BaseActivity {
 			Toast.makeText(this, "Không thể tạo cấu hình game.", Toast.LENGTH_LONG).show();
 			return;
 		}
-		File profileFile = new File(profileDir.getAbsolutePath() + Config.MIDLET_CONFIG_FILE);
+		File profileFile = new File(profileDir, Config.MIDLET_CONFIG_FILE);
 		if (!profileFile.exists()) {
 			ProfileModel profile = new ProfileModel(profileDir);
 			profile.orientation = 3;
@@ -218,6 +219,8 @@ public class MainActivity extends BaseActivity {
 			return;
 		}
 		preferences.edit().putString(PREF_EMULATOR_DIR, path).apply();
+		appListModel.onWorkDirReady();
+		startEmbeddedGame();
 	}
 
 	@Override
