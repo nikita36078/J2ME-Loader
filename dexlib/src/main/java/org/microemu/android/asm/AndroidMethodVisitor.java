@@ -39,14 +39,20 @@ public class AndroidMethodVisitor extends MethodVisitor {
 	static boolean USE_PANIC_LOGGING = false;
 	private final ArrayList<Label> exceptionHandlers = new ArrayList<>();
 	private final boolean returnsBoolean;
+	private final MethodRenamer renamer;
 
 	public AndroidMethodVisitor(MethodVisitor methodVisitor) {
-		this(methodVisitor, false);
+		this(methodVisitor, false, null);
 	}
 
 	AndroidMethodVisitor(MethodVisitor methodVisitor, boolean returnsBoolean) {
+		this(methodVisitor, returnsBoolean, null);
+	}
+
+	AndroidMethodVisitor(MethodVisitor methodVisitor, boolean returnsBoolean, MethodRenamer renamer) {
 		super(ASM9, methodVisitor);
 		this.returnsBoolean = returnsBoolean;
+		this.renamer = renamer;
 	}
 
 	@Override
@@ -72,6 +78,12 @@ public class AndroidMethodVisitor extends MethodVisitor {
 
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+		if (renamer != null) {
+			String renamed = renamer.getRenamedMethod(owner, name, desc);
+			if (renamed != null) {
+				name = renamed;
+			}
+		}
 		switch (owner) {
 			case "java/lang/Class":
 				if (name.equals("getResourceAsStream")) {

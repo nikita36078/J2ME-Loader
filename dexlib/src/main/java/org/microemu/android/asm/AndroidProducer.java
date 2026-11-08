@@ -36,13 +36,18 @@ public class AndroidProducer {
 
 	public static byte[] instrument(final byte[] classData, String classFileName)
 			throws IllegalArgumentException {
+		return instrument(classData, classFileName, null);
+	}
+
+	public static byte[] instrument(final byte[] classData, String classFileName,
+									MethodRenamer renamer) throws IllegalArgumentException {
 		ClassReader cr = new ClassReader(classData);
 		if (!cr.getClassName().equals(classFileName.substring(0, classFileName.length() - 6))) {
 			throw new IllegalArgumentException("Class name does not match path");
 		}
 
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassVisitor cv = new AndroidClassVisitor(cw);
+		ClassVisitor cv = new AndroidClassVisitor(cw, renamer);
 		cr.accept(cv, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 
 		return cw.toByteArray();

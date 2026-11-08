@@ -40,6 +40,7 @@ import com.android.dx.rop.cst.CstNat;
 import com.android.dx.rop.cst.CstString;
 
 import org.microemu.android.asm.AndroidProducer;
+import org.microemu.android.asm.MethodRenamer;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -176,6 +177,9 @@ public class Main {
 
     private final DxContext context;
 
+    /** Method renames for this conversion (currently Thread final-method conflicts). */
+    private MethodRenamer methodRenamer;
+
     public Main(DxContext context) {
         this.context = context;
     }
@@ -288,6 +292,10 @@ public class Main {
      * @return whether processing was successful
      */
     private boolean processAllFiles() {
+        String[] fileNames = args.fileNames;
+        Arrays.sort(fileNames);
+        methodRenamer = scanClasses(fileNames);
+
         createDexFile();
 
         if (args.jarOutput) {
@@ -295,8 +303,6 @@ public class Main {
         }
 
         anyFilesProcessed = false;
-        String[] fileNames = args.fileNames;
-        Arrays.sort(fileNames);
 
         // translate classes in parallel
         classTranslatorPool = new ThreadPoolExecutor(args.numThreads,
@@ -404,6 +410,37 @@ public class Main {
         anyFilesProcessed |= res;
     }
 
+    /**
+     * Pre-scans all input class files to collect method renames that must be
+     * applied consistently to declarations and call sites.
+     */
+    private MethodRenamer scanClasses(String[] fileNames) {
+        MethodRenamer.Builder builder = new MethodRenamer.Builder();
+        ClassPathOpener.FileNameFilter filter = path -> path.endsWith(".class");
+        ClassPathOpener.Consumer consumer = new ClassPathOpener.Consumer() {
+            @Override
+            public boolean processFileBytes(String name, long lastModified, byte[] bytes) {
+                try {
+                    builder.addClass(bytes);
+                } catch (RuntimeException ignored) {
+                    // The main dexing pass will report a broken class file.
+                }
+                return true;
+            }
+
+            @Override
+            public void onException(Exception ex) {
+            }
+
+            @Override
+            public void onProcessArchiveStart(File file) {
+            }
+        };
+        for (String fileName : fileNames) {
+            new ClassPathOpener(fileName, true, filter, consumer).process();
+        }
+        return builder.build();
+    }
 
     /**
      * Processes one file, which may be either a class or a resource.
@@ -467,7 +504,7 @@ public class Main {
 
         try {
             // modify byte-code with ASM-java
-            bytes = AndroidProducer.instrument(bytes, name);
+            bytes = AndroidProducer.instrument(bytes, name, methodRenamer);
 
             new DirectClassFileConsumer(name, bytes, null).call(
                     new ClassParserTask(name, bytes).call());
