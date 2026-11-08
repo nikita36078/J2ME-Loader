@@ -40,6 +40,8 @@ public class Graphics3D {
 	// Singleton instances
 	private static Graphics3D s_instance = null;
 
+	private static boolean unlitTexturesWorkaround;
+
 	//------------------------------------------------------------------
 	// Instance data
 	//------------------------------------------------------------------
@@ -110,6 +112,14 @@ public class Graphics3D {
 
 	public static void initGraphics3D() {
 		s_instance = null;
+	}
+
+	public static void setUnlitTexturesWorkaround(boolean enabled) {
+		unlitTexturesWorkaround = enabled;
+	}
+
+	static boolean isUnlitTexturesWorkaroundEnabled() {
+		return unlitTexturesWorkaround;
 	}
 
 	private Graphics3D() {

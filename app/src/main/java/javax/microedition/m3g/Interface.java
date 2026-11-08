@@ -316,7 +316,7 @@ class Interface {
 					new M3gRunnable() {
 						@Override
 						public void doRun() {
-							handle = _ctor();
+							handle = _ctor(Graphics3D.isUnlitTexturesWorkaroundEnabled());
 						}
 					});
 			iNativeInitialized = true;
@@ -348,7 +348,7 @@ class Interface {
 	}
 
 	// Native constructor
-	private static native long _ctor();
+	private static native long _ctor(boolean unlitTexturesWorkaround);
 
 	// Native class ID resolver
 	private static native int _getClassID(long hObject);

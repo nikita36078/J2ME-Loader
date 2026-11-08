@@ -271,6 +271,7 @@ public class MicroLoader {
 			Canvas.setFilterBitmap(params.screenFilter);
 			EventQueue.setImmediate(params.immediateMode);
 			Canvas.setGraphicsMode(params.graphicsMode, params.parallelRedrawScreen);
+			Graphics3D.setUnlitTexturesWorkaround(params.m3gForceDisableLighting);
 			ShaderInfo shader = params.shader;
 			if (shader != null) {
 				shader.dir = workDir + Config.SHADERS_DIR;

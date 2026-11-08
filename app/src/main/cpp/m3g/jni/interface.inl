@@ -37,7 +37,8 @@ static int createInterface(M3Gparams* aCs)
 /*
  * Must be executed in UI thread
  */
-JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEnv, jclass)
+JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEnv, jclass,
+        jboolean aUnlitTexturesWorkaround)
 {
     /*EGLDisplay oldDisplay = eglGetCurrentDisplay();
     EGLSurface oldDrawSurface = eglGetCurrentSurface(EGL_DRAW);
@@ -81,6 +82,7 @@ JNIEXPORT jlong JNICALL Java_javax_microedition_m3g_Interface__1ctor(JNIEnv* aEn
     cs.mallocFunc = malloc;
     cs.freeFunc   = free;
     cs.errorFunc = errorHandler;
+    cs.unlitTexturesWorkaround = aUnlitTexturesWorkaround ? M3G_TRUE : M3G_FALSE;
 
     M3G_DO_LOCK
     /* Call to the Eventserver side */

@@ -77,6 +77,9 @@ public class ProfileModel {
 	@SerializedName("GraphicsMode")
 	public int graphicsMode;
 
+	@SerializedName("M3GForceDisableLighting")
+	public boolean m3gForceDisableLighting;
+
 	@SerializedName("Shader")
 	public ShaderInfo shader;
 
@@ -202,7 +205,5 @@ public class ProfileModel {
 		vkFgColorSelected = 0xFFFFFF;
 		vkOutlineColor = 0xFFFFFF;
 		systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
-
-		disablePause = false;
 	}
 }

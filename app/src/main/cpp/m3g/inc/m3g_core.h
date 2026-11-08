@@ -609,6 +609,8 @@ typedef struct {
     /*@shared@*/ m3gEndRenderFunc       *endRenderFunc;
     /*@shared@*/ m3gReleaseTargetFunc   *releaseTargetFunc;
     /*@shared@*/ void                   *userContext;
+    /*! Enable the unlit textures workaround on affected Xclipse drivers */
+    M3Gbool                             unlitTexturesWorkaround;
 } M3Gparams;
 
 /*----------------------------------------------------------------------

@@ -1090,6 +1090,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/config_other_title"
                 app:layout_constraintWidth_min="wrap" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/force_disable_lighting_toggle"
+                style="@style/SwitchStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_config_row"
+                android:checked="false"
+                android:text="@string/PREF_FORCE_DISABLE_3D_LIGHTING"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/disable_pause_toggle" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 

@@ -639,6 +639,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		binding.forceFullscreenToggle.setChecked(params.forceFullscreen);
 		binding.graphicalModeSelector.setSelection(params.graphicsMode);
 		binding.showFpsToggle.setChecked(params.showFps);
+		binding.forceDisableLightingToggle.setChecked(params.m3gForceDisableLighting);
 		binding.shaderSelector.setSelection(0);
 		if (spShaderAdapter != null) {
 			ShaderInfo shader = params.shader;
@@ -715,6 +716,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.parallelRedrawScreen = binding.parallelScreenRedrawingToggle.isChecked();
 			params.forceFullscreen = binding.forceFullscreenToggle.isChecked();
 			params.showFps = binding.showFpsToggle.isChecked();
+			params.m3gForceDisableLighting = binding.forceDisableLightingToggle.isChecked();
 			params.fpsLimit = parseInt(binding.fpsLimit.getText().toString());
 
 			try {
