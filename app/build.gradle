@@ -225,7 +225,7 @@ dependencies {
 
 // Bundle the user's Java ME game in the standalone APK.
 def embeddedGameAssetsDir = layout.buildDirectory.dir("generated/embeddedGameAssets")
-android.sourceSets.main.assets.srcDir(embeddedGameAssetsDir)
+android.sourceSets.main.assets.srcDir(embeddedGameAssetsDir.get().asFile)
 
 tasks.register("prepareEmbeddedGameAssets", Copy) {
     from(rootProject.file("Bolacthoitiensu.jar"))
