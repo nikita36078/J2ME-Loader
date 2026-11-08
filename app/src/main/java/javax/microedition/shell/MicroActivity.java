@@ -195,7 +195,7 @@ public class MicroActivity extends AppCompatActivity {
 		if (vk != null) {
 			vk.setView(binding.overlayView);
 			binding.overlayView.addLayer(vk);
-			if (vk.isPhone()) {
+			if (vk.isPhone() && !"Bo lac thoi tien su".equalsIgnoreCase(appName)) {
 				orientation = ORIENTATION_PORTRAIT;
 			}
 		}
@@ -281,6 +281,8 @@ public class MicroActivity extends AppCompatActivity {
 		String[] midletsClassArray = midlets.keySet().toArray(new String[0]);
 		if (size == 0) {
 			throw new Exception("No MIDlets found");
+		} else if ("Bo lac thoi tien su".equalsIgnoreCase(appName) && midlets.containsKey("tribes")) {
+			MidletThread.create(microLoader, "tribes");
 		} else if (size == 1) {
 			MidletThread.create(microLoader, midletsClassArray[0]);
 		} else {
