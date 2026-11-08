@@ -40,7 +40,7 @@ jobs:
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
           disable-animations: true
           script: |
-            APK="$(find app/build/outputs/apk/open/debug -name '*.apk' -print -quit)"
+            APK="$(find app/build/outputs -type f -name '*.apk' -print -quit)"
             test -n "$APK"
             adb install -r "$APK"
             adb shell am start -n com.tuananh.bolacthoitiensu.debug/ru.playsoftware.j2meloader.MainActivity
