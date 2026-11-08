@@ -38,12 +38,19 @@ import java.io.File;
 import java.util.Map;
 
 import ru.playsoftware.j2meloader.applist.AppListModel;
+import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.config.ProfileModel;
+import ru.playsoftware.j2meloader.config.ProfilesManager;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.woesss.j2me.installer.InstallerDialog;
+import ru.woesss.j2me.installer.EmbeddedGameInstaller;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 import static ru.playsoftware.j2meloader.util.Constants.PREF_STORAGE_WARNING_SHOWN;
@@ -61,6 +68,7 @@ public class MainActivity extends BaseActivity {
 
 	private SharedPreferences preferences;
 	private AppListModel appListModel;
+	private boolean embeddedLaunchStarted;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +78,9 @@ public class MainActivity extends BaseActivity {
 			permissionsLauncher.launch(STORAGE_PERMISSIONS);
 		}
 		appListModel = new ViewModelProvider(this).get(AppListModel.class);
+		if (!FileUtils.isExternalStorageLegacy()) {
+			checkAndCreateDirs();
+		}
 		if (savedInstanceState == null) {
 			Intent intent = getIntent();
 			Uri uri = null;
@@ -107,6 +118,36 @@ public class MainActivity extends BaseActivity {
 			return;
 		}
 		alertCreateDir();
+	}
+
+	private void startEmbeddedGame() {
+		if (embeddedLaunchStarted) return;
+		embeddedLaunchStarted = true;
+		EmbeddedGameInstaller.install(getApplication(), appListModel.getAppRepository())
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(app -> launchEmbeddedGame(app), error -> {
+					embeddedLaunchStarted = false;
+					Toast.makeText(this, "Không thể cài game: " + error.getMessage(), Toast.LENGTH_LONG).show();
+				});
+	}
+
+	private void launchEmbeddedGame(AppItem app) {
+		File profileDir = new File(Config.getConfigsDir(), app.getPath());
+		if (!profileDir.exists() && !profileDir.mkdirs()) {
+			Toast.makeText(this, "Không thể tạo cấu hình game.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		File profileFile = new File(profileDir.getAbsolutePath() + Config.MIDLET_CONFIG_FILE);
+		if (!profileFile.exists()) {
+			ProfileModel profile = new ProfileModel(profileDir);
+			profile.orientation = 3;
+			profile.screenWidth = 320;
+			profile.screenHeight = 240;
+			ProfilesManager.saveConfig(profile);
+		}
+		Config.startApp(this, app.getTitle(), app.getPathExt(), false);
+		finish();
 	}
 
 	private void alertDirCannotCreate(String emulatorDir) {
