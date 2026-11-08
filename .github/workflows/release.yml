@@ -65,9 +65,17 @@ jobs:
           path: dist/*.apk
 
       - name: Move continuous tag
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git tag -f continuous "$GITHUB_SHA"
-          git push --force origin "refs/tags/continuous"
+          base="repos/$GITHUB_REPOSITORY/git"
+          if gh api "$base/ref/tags/continuous" >/dev/null 2>&1; then
+            gh api -X PATCH "$base/refs/tags/continuous" \
+              -f sha="$GITHUB_SHA" -F force=true >/dev/null
+          else
+            gh api -X POST "$base/refs" \
+              -f ref="refs/tags/continuous" -f sha="$GITHUB_SHA" >/dev/null
+          fi
 
       - name: Update GitHub release
         uses: ncipollo/release-action@v1
