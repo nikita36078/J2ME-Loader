@@ -41,22 +41,13 @@ jobs:
           disable-animations: true
           script: |
             APK="$(find app/build/outputs -type f -name '*.apk' -print -quit)"
-            if [ -z "$APK" ]; then
-              echo "No APK found under app/build/outputs"
-              find app/build/outputs -maxdepth 7 -type f -print || true
-              exit 1
-            fi
-            echo "Installing APK: $APK"
+            echo "APK path: ${APK:-NOT_FOUND}"
+            test -n "$APK" || (echo "No APK found under app/build/outputs"; find app/build/outputs -maxdepth 7 -type f -print; exit 1)
             adb install -r "$APK"
             adb shell am start -n com.tuananh.bolacthoitiensu.debug/ru.playsoftware.j2meloader.MainActivity
             sleep 60
             adb shell dumpsys activity activities > /tmp/activities.txt
-            if ! grep -q "javax.microedition.shell.MicroActivity" /tmp/activities.txt; then
-              adb logcat -d -t 4000 > /tmp/game-logcat.txt
-              cat /tmp/activities.txt
-              tail -n 250 /tmp/game-logcat.txt
-              exit 1
-            fi
+            grep -q "javax.microedition.shell.MicroActivity" /tmp/activities.txt || (adb logcat -d -t 4000 > /tmp/game-logcat.txt; cat /tmp/activities.txt; tail -n 250 /tmp/game-logcat.txt; exit 1)
             adb logcat -d -t 2000 | grep -E "FATAL EXCEPTION|Dexing error|No MIDlets found|tribes" || true
 
       - name: Upload installable APK
