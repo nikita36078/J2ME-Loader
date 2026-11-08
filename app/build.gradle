@@ -17,7 +17,7 @@ android {
         targetSdk TARGET_SDK
         versionCode 101
         versionName "1.8.2"
-        resValue 'string', 'app_name', rootProject.name
+        resValue 'string', 'app_name', 'Bộ lạc thời tiền sử'
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,6 +67,7 @@ android {
             versionNameSuffix "-play"
         }
         open {
+            applicationId 'com.tuananh.bolacthoitiensu'
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro', 'proguard-common.pro'
