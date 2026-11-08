@@ -41,7 +41,12 @@ jobs:
           disable-animations: true
           script: |
             APK="$(find app/build/outputs -type f -name '*.apk' -print -quit)"
-            test -n "$APK"
+            if [ -z "$APK" ]; then
+              echo "No APK found under app/build/outputs"
+              find app/build/outputs -maxdepth 7 -type f -print || true
+              exit 1
+            fi
+            echo "Installing APK: $APK"
             adb install -r "$APK"
             adb shell am start -n com.tuananh.bolacthoitiensu.debug/ru.playsoftware.j2meloader.MainActivity
             sleep 60
@@ -58,6 +63,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Bo-lac-thoi-tien-su-APK
-          path: app/build/outputs/apk/open/debug/*.apk
+          path: app/build/outputs/**/*.apk
           if-no-files-found: error
           retention-days: 14
