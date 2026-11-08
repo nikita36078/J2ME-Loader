@@ -220,3 +220,18 @@ dependencies {
     compileOnly "com.google.auto.service:auto-service-annotations:$autoServiceVersion"
     annotationProcessor "com.google.auto.service:auto-service:$autoServiceVersion"
 }
+
+
+// Bundle the user's Java ME game in the standalone APK.
+def embeddedGameAssetsDir = layout.buildDirectory.dir("generated/embeddedGameAssets")
+android.sourceSets.main.assets.srcDir(embeddedGameAssetsDir)
+
+tasks.register("prepareEmbeddedGameAssets", Copy) {
+    from(rootProject.file("Bolacthoitiensu.jar"))
+    into(embeddedGameAssetsDir)
+    rename { "Bolacthoitiensu.jar" }
+}
+
+tasks.named("preBuild").configure {
+    dependsOn("prepareEmbeddedGameAssets")
+}
