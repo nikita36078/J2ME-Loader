@@ -172,6 +172,10 @@
     <string name="config_files_soundbank_help">DLS/SF2 soundbanks are supported</string>
     <string name="config_files_shader_help">PPSSPP-compatible shaders are supported</string>
 
+    <string name="key_code_settings">Button codes</string>
+    <string name="key_code_invalid">Invalid key code</string>
+    <string name="key_code_duplicate">Code %1$d is already used</string>
+
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>
     <string name="select_dialog_title">Select MIDlet</string>

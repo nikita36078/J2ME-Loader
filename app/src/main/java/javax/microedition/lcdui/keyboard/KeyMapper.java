@@ -36,7 +36,7 @@ public class KeyMapper {
 	private static final int DEFAULT_LAYOUT = 0;
 	private static final int SIEMENS_LAYOUT = 1;
 	private static final int MOTOROLA_LAYOUT = 2;
-	private static final int CUSTOM_LAYOUT = 3;
+	public static final int CUSTOM_LAYOUT = 3;
 	private static final int NOKIA_E62_LAYOUT = 4;
 
 	private static final int SIEMENS_KEY_UP = -59;
@@ -107,7 +107,8 @@ public class KeyMapper {
 		mapGameAction(GAME_D, KEY_POUND);
 	}
 
-	private static void remapKeys() {
+	private static void remapKeys(ProfileModel params) {
+		keyCodeToCustom.clear();
 		if (layoutType == SIEMENS_LAYOUT) {
 			keyCodeToCustom.put(KEY_LEFT, SIEMENS_KEY_LEFT);
 			keyCodeToCustom.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
@@ -162,6 +163,30 @@ public class KeyMapper {
 			keyCodeToCustom.put(KEY_NUM9, NOKIA_E62_KEY_NUM9);
 			keyCodeToCustom.put(KEY_STAR, NOKIA_E62_KEY_STAR);
 			keyCodeToCustom.put(KEY_POUND, NOKIA_E62_KEY_POUND);
+		} else if (layoutType == CUSTOM_LAYOUT) {
+			SparseIntArray customKeys = params.keyCodeMap;
+			if (customKeys == null) {
+				return;
+			}
+			for (int i = 0, size = customKeys.size(); i < size; i++) {
+				int defaultKeyCode = customKeys.keyAt(i);
+				int keyCode = customKeys.valueAt(i);
+				if (defaultKeyCode == keyCode) {
+					continue;
+				}
+				keyCodeToCustom.put(defaultKeyCode, keyCode);
+				String name = getKeyName(defaultKeyCode);
+				if (name != null) {
+					keyCodeToKeyName.put(keyCode, name);
+				}
+				int gameAction = keyCodeToGameAction.get(defaultKeyCode, 0);
+				if (gameAction != 0) {
+					keyCodeToGameAction.put(keyCode, gameAction);
+					if (gameActionToKeyCode.get(gameAction, 0) == defaultKeyCode) {
+						gameActionToKeyCode.put(gameAction, keyCode);
+					}
+				}
+			}
 		}
 	}
 
@@ -202,7 +227,7 @@ public class KeyMapper {
 			}
 		}
 		androidToMIDP = map;
-		remapKeys();
+		remapKeys(params);
 	}
 
 	public static int getKeyCode(int gameAction) {

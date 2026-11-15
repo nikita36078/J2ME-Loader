@@ -76,6 +76,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
@@ -214,6 +215,17 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		binding.updateKeyboardOutlineColor.setOnClickListener(this);
 		binding.updateEncoding.setOnClickListener(this::showCharsetPicker);
 		binding.tuneSelectedShader.setOnClickListener(this::showShaderSettings);
+		binding.tuneKeyCodes.setOnClickListener(this::showKeyCodeSettings);
+		binding.buttonsLayoutSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				updateKeyCodesButtonVisibility();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
 		binding.scaleRatio.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -396,6 +408,18 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		ShaderInfo shader = (ShaderInfo) binding.shaderSelector.getSelectedItem();
 		params.shader = shader;
 		ShaderTuneDialog.newInstance(shader).show(getSupportFragmentManager(), "ShaderTuning");
+	}
+
+	private void showKeyCodeSettings(View v) {
+		Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
+				this, KeyCodesActivity.class);
+		startActivity(i);
+	}
+
+	private void updateKeyCodesButtonVisibility() {
+		int visible = binding.buttonsLayoutSelector.getSelectedItemPosition() == KeyMapper.CUSTOM_LAYOUT
+				? View.VISIBLE : View.GONE;
+		binding.tuneKeyCodes.setVisibility(visible);
 	}
 
 	private void initShaderSpinner() {
@@ -665,6 +689,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		binding.fpsLimit.setText(fpsLimit > 0 ? Integer.toString(fpsLimit) : "");
 
 		binding.buttonsLayoutSelector.setSelection(params.keyCodesLayout);
+		updateKeyCodesButtonVisibility();
 		binding.buttonShapeSelector.setSelection(params.vkButtonShape);
 		binding.changeOpacitySeekbar.setProgress(params.vkAlpha);
 		int vkHideDelay = params.vkHideDelay;

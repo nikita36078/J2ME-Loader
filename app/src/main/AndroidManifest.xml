@@ -140,6 +140,7 @@
             android:name=".settings.BackupActivity"
             android:exported="false" />
         <activity android:name=".settings.KeyMapperActivity" android:exported="false" />
+        <activity android:name=".config.KeyCodesActivity" android:exported="false" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:exported="false"
