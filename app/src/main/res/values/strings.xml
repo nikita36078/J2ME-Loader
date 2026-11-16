@@ -127,6 +127,7 @@
     <string name="pref_orientation_land">Landscape</string>
     <string name="error">Error</string>
     <string name="message_clear_data">Do you really want to clear app data?</string>
+    <string name="pref_edit_layout">Edit layout</string>
     <string name="PREF_VK_TYPE">Keyboard type</string>
     <string name="pref_vk_type_arrows">Arrows</string>
     <string name="pref_vk_type_arrows_numbers">Arrows &amp; numbers</string>
@@ -175,6 +176,8 @@
     <string name="key_code_settings">Button codes</string>
     <string name="key_code_invalid">Invalid key code</string>
     <string name="key_code_duplicate">Code %1$d is already used</string>
+
+    <string name="key_layout_title">Keyboard layout</string>
 
     <string name="FORCE_CLOSE_CONFIRMATION">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation required</string>

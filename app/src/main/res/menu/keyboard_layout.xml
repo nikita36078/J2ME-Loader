@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_layout_edit_mode"
+        android:title="@string/layout_edit_mode" />
+    <item
+        android:id="@+id/action_layout_scale_mode"
+        android:title="@string/layout_scale_mode" />
+    <item
+        android:id="@+id/action_hide_buttons"
+        android:title="@string/hide_buttons" />
+    <item
+        android:id="@+id/action_layout_switch"
+        android:title="@string/layout_switch" />
+    <item
+        android:id="@+id/action_layout_save"
+        android:title="@string/save"
+        app:showAsAction="ifRoom|withText" />
+</menu>

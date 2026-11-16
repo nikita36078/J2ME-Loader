@@ -644,7 +644,7 @@
                 android:layout_marginTop="6dp"
                 android:background="?bg_config_card"
                 android:visibility="gone"
-                app:constraint_referenced_ids="force_opacity_for_offscreen_keys_toggle,enable_haptic_feedback_toggle,keyboard_not_pressed_button_background_color_hex,keyboard_pressed_button_label_color_hex,button_shape_hint,update_keyboard_pressed_button_label_color,update_keyboard_not_pressed_button_label_color,keyboard_outline_color_hex,update_keyboard_not_pressed_button_background_color,change_opacity_seekbar,update_keyboard_pressed_button_background_color,virtual_keyboard_hide_delay,ms_hint,button_shape_selector,opacity_hint,update_keyboard_outline_color,virtual_keyboard_hide_delay_hint,keyboard_not_pressed_button_label_color_hex,keyboard_pressed_button_background_color_hex"
+                app:constraint_referenced_ids="force_opacity_for_offscreen_keys_toggle,enable_haptic_feedback_toggle,keyboard_not_pressed_button_background_color_hex,keyboard_pressed_button_label_color_hex,button_shape_hint,update_keyboard_pressed_button_label_color,update_keyboard_not_pressed_button_label_color,keyboard_outline_color_hex,update_keyboard_not_pressed_button_background_color,change_opacity_seekbar,update_keyboard_pressed_button_background_color,virtual_keyboard_hide_delay,ms_hint,button_shape_selector,opacity_hint,update_keyboard_outline_color,virtual_keyboard_hide_delay_hint,keyboard_not_pressed_button_label_color_hex,keyboard_pressed_button_background_color_hex,edit_keyboard_layout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -664,6 +664,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/show_key_mappings" />
 
+            <Button
+                android:id="@+id/edit_keyboard_layout"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginHorizontal="9dp"
+                android:layout_marginVertical="4dp"
+                android:text="@string/pref_edit_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_virtual_keyboard_toggle" />
+
             <!-- Key shape type -->
             <TextView
                 android:id="@+id/button_shape_hint"
@@ -678,7 +689,7 @@
                 app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toStartOf="@+id/input_config_barrier"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/show_virtual_keyboard_toggle"
+                app:layout_constraintTop_toBottomOf="@+id/edit_keyboard_layout"
                 app:layout_constraintWidth_min="wrap" />
 
             <Spinner
@@ -691,7 +702,7 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/input_config_barrier"
-                app:layout_constraintTop_toBottomOf="@+id/show_virtual_keyboard_toggle" />
+                app:layout_constraintTop_toBottomOf="@+id/edit_keyboard_layout" />
             <!-- End key shape type -->
 
             <!-- Keys vibration feedback -->

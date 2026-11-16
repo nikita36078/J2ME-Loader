@@ -216,6 +216,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		binding.updateEncoding.setOnClickListener(this::showCharsetPicker);
 		binding.tuneSelectedShader.setOnClickListener(this::showShaderSettings);
 		binding.tuneKeyCodes.setOnClickListener(this::showKeyCodeSettings);
+		binding.editKeyboardLayout.setOnClickListener(this::showKeyboardLayoutEditor);
 		binding.buttonsLayoutSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -413,6 +414,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private void showKeyCodeSettings(View v) {
 		Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
 				this, KeyCodesActivity.class);
+		startActivity(i);
+	}
+
+	private void showKeyboardLayoutEditor(View v) {
+		Intent i = new Intent(getIntent().getAction(), Uri.parse(configDir.getPath()),
+				this, KeyboardLayoutActivity.class);
 		startActivity(i);
 	}
 
