@@ -53,7 +53,7 @@ public class ContextHolder {
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static WeakReference<MicroActivity> currentActivity;
-	private static Vibrator vibrator;
+	private static VibrationController vibrationController;
 	private static final ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 	private static boolean vibrationEnabled;
 
@@ -207,43 +207,27 @@ public class ContextHolder {
 		if (!vibrationEnabled) {
 			return false;
 		}
-		if (vibrator == null) {
-			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		if (vibrationController == null) {
+			vibrationController = new VibrationController(getAppContext());
 		}
-		if (vibrator == null || !vibrator.hasVibrator()) {
-			return false;
-		}
-		if (duration > 0) {
-			vibrator.vibrate(duration);
-		} else if (duration < 0) {
-			throw new IllegalStateException();
-		} else {
-			vibrator.cancel();
-		}
-		return true;
+		return vibrationController.vibrate(duration);
 	}
 
 	public static void vibratePeriodically(int durationOn, int durationOff) {
 		if (!vibrationEnabled) {
 			return;
 		}
-		if (vibrator == null) {
-			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		if (vibrationController == null) {
+			vibrationController = new VibrationController(getAppContext());
 		}
-		if (vibrator == null || !vibrator.hasVibrator()) {
-			return;
-		}
-		vibrator.vibrate(new long[]{0, durationOn, durationOff}, 1);
+		vibrationController.vibratePeriodically(durationOn, durationOff);
 	}
 
 	public static void vibrateKey(int duration) {
-		if (vibrator == null) {
-			vibrator = (Vibrator) getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+		if (vibrationController == null) {
+			vibrationController = new VibrationController(getAppContext());
 		}
-		if (vibrator == null || !vibrator.hasVibrator()) {
-			return;
-		}
-		vibrator.vibrate(duration);
+		vibrationController.vibrate(duration);
 	}
 
 	public static void setVibration(boolean vibrationEnabled) {
