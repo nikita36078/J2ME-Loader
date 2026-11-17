@@ -40,10 +40,17 @@ class TextFieldImpl {
 	private int maxSize;
 	private int constraints;
 
+	private boolean userChange = true;
+
 	private final SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
 		public void process() {
-			textview.setText(text);
+			userChange = false;
+			try {
+				textview.setText(text);
+			} finally {
+				userChange = true;
+			}
 		}
 	};
 
@@ -192,15 +199,11 @@ class TextFieldImpl {
 				@Override
 				public void afterTextChanged(Editable s) {
 					text = s.toString();
-					if (item != null) item.notifyStateChanged();
+					if (item != null && userChange) item.notifyStateChanged();
 				}
 			});
 
-			if (item != null) {
-				textview.setOnFocusChangeListener((v, hasFocus) -> {
-					if (!hasFocus) item.notifyStateChanged();
-				});
-			} else {
+			if (item == null) {
 				textview.setLayoutParams(new LinearLayout.LayoutParams(
 						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 				textview.setGravity(Gravity.TOP);
