@@ -12,6 +12,7 @@ supports.mixing: true
 supports.audio.capture: true
 supports.video.capture: true
 supports.recording: true
+video.snapshot.encodings: encoding=png encoding=jpeg encoding=image/png encoding=image/jpeg encoding=image/jpg
 com.siemens.mp.systemfolder.ringingtone: fs/MyStuff/Ringtones
 com.siemens.mp.systemfolder.pictures: fs/MyStuff/Pictures
 com.siemens.OSVersion: 11

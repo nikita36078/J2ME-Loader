@@ -242,7 +242,7 @@ public class CameraController {
 	}
 
 	private static boolean isJpeg(String imageType) {
-		return imageType != null && imageType.contains("jpeg");
+		return imageType != null && (imageType.contains("jpeg") || imageType.contains("jpg"));
 	}
 
 	private Bitmap rotateImageIfRequired(Bitmap img, int orientation) throws IOException {
