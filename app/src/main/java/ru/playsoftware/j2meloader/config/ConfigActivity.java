@@ -856,6 +856,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		} else if (itemId == R.id.action_reset_settings) {
 			params = new ProfileModel(configDir);
 			loadParams(false);
+			saveParams();
 		} else if (itemId == R.id.action_reset_layout) {//noinspection ResultOfMethodCallIgnored
 			keylayoutFile.delete();
 			loadKeyLayout();
