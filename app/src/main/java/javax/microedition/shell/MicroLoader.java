@@ -216,11 +216,24 @@ public class MicroLoader {
 				+ (country.length() == 2 ? "-" + country : ""));
 		// FIXME: 21.10.2020 Config.getDataDir() may be in different storage
 		final String primaryStoragePath = Environment.getExternalStorageDirectory().getPath();
-		String dataUri = "file:///c:" + Config.getDataDir().substring(primaryStoragePath.length()) + appDirName;
-		String musicUri = "file:///c:" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-				.getPath().substring(primaryStoragePath.length());
+		String baseUri = "file:///c:";
+		String dataUri = baseUri;
+		String musicUri = baseUri;
+		String photoUri = baseUri;
+		if (FileUtils.isExternalStorageLegacy()) {
+			dataUri += Config.getDataDir().substring(primaryStoragePath.length()) + appDirName;
+			musicUri += Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+					.getPath().substring(primaryStoragePath.length());
+			photoUri += Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+					.getPath().substring(primaryStoragePath.length());
+		} else {
+			dataUri += "/data/" + appDirName;
+			musicUri += "/music";
+			photoUri += "/pictures";
+		}
 		System.setProperty("fileconn.dir.cache", dataUri + "/cache");
 		System.setProperty("fileconn.dir.private", dataUri + "/private");
+		System.setProperty("fileconn.dir.photos", photoUri);
 		System.setProperty("fileconn.dir.music", musicUri);
 		System.setProperty("user.home", Config.getFsInternalDir());
 	}
