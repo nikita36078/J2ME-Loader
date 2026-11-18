@@ -43,6 +43,7 @@ public class ChoiceGroup extends Item implements Choice {
 
 	private AdapterView<?> view;
 	private int fitPolicy;
+	private boolean spinnerInitialized;
 
 	private final SimpleEvent msgSetSelection = new SimpleEvent() {
 		@Override
@@ -363,6 +364,7 @@ public class ChoiceGroup extends Item implements Choice {
 					spinner.setAdapter((SpinnerAdapter) adapter);
 
 					msgSetSelection.run();
+					spinnerInitialized = false;
 					view.setOnItemSelectedListener(new ItemSelectedListener());
 				}
 				return view;
@@ -399,7 +401,16 @@ public class ChoiceGroup extends Item implements Choice {
 	private class ItemSelectedListener implements AdapterView.OnItemSelectedListener {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			if (!spinnerInitialized) {
+				spinnerInitialized = true;
+				return;
+			}
+
+			boolean changed = false;
 			synchronized (items) {
+				if (position < 0 || position >= items.size()) {
+					return;
+				}
 				CompoundItem item = items.get(position);
 				if (!item.isSelected()) {
 					for (CompoundItem it : items) {
@@ -407,9 +418,12 @@ public class ChoiceGroup extends Item implements Choice {
 					}
 					item.setSelected(true);
 					adapter.notifyDataSetChanged();
+					changed = true;
 				}
 			}
-			notifyStateChanged();
+			if (changed) {
+				notifyStateChanged();
+			}
 		}
 
 		@Override
