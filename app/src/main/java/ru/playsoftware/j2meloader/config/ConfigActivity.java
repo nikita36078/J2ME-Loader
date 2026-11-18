@@ -347,7 +347,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			spSoundBankAdapter.addAll(files);
 		}
 		spSoundBankAdapter.notifyDataSetChanged();
-		int position = spSoundBankAdapter.getPosition(params.soundBank);
+		updateSoundBankSelection();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateSoundBankSelection() {
+		ArrayAdapter<String> adapter = (ArrayAdapter<String>) binding.soundbankSelector.getAdapter();
+		int position = adapter == null ? -1 : adapter.getPosition(params.soundBank);
 		binding.soundbankSelector.setSelection(Math.max(position, 0));
 	}
 
@@ -714,6 +720,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		}
 		binding.systemProperties.setText(getSystemProperties(systemProperties));
 		binding.disablePauseToggle.setChecked(params.disablePause);
+		updateSoundBankSelection();
 	}
 
 	private void saveParams() {
