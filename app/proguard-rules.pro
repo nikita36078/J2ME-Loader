@@ -23,6 +23,7 @@
 -keep class com.sprintpcs.media.** { *; }
 -keep class com.mascotcapsule.micro3d.v3.** { *; }
 -keep class com.mexa.** { *; }
+-keep class com.mot.** { *; }
 -keep class com.j_phone.** { *; }
 -keep class com.jblend.** { *; }
 -keep class com.motorola.** { *; }
