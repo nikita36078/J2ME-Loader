@@ -160,8 +160,6 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	public void notifyStateChanged() {
 		if (owner instanceof Form form) {
 			form.notifyItemStateChanged(this);
-		} else {
-			throw new IllegalStateException("Item is not owned by a Form");
 		}
 	}
 
