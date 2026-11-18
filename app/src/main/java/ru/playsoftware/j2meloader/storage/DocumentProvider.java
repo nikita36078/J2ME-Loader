@@ -16,13 +16,16 @@
 
 package ru.playsoftware.j2meloader.storage;
 
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
 import android.provider.DocumentsContract.Root;
 import android.provider.DocumentsProvider;
@@ -100,9 +103,14 @@ public class DocumentProvider extends DocumentsProvider {
 									  String sortOrder) throws FileNotFoundException {
 		final MatrixCursor result = new MatrixCursor(resolveDocumentProjection(projection));
 		final File parent = getFileForDocId(parentDocumentId);
-		for (File file : parent.listFiles()) {
-			includeFile(result, null, file);
+		final File[] children = parent.listFiles();
+		if (children != null) {
+			for (File file : children) {
+				includeFile(result, null, file);
+			}
 		}
+		result.setNotificationUri(getContext().getContentResolver(),
+				DocumentsContract.buildChildDocumentsUri(getAuthority(), parentDocumentId));
 		return result;
 	}
 
@@ -168,6 +176,7 @@ public class DocumentProvider extends DocumentsProvider {
 			throw new FileNotFoundException("Failed to create document with name " +
 					displayName + " and documentId " + documentId);
 		}
+		notifyChildrenChanged(parent);
 		return getDocIdForFile(file);
 	}
 
@@ -194,6 +203,7 @@ public class DocumentProvider extends DocumentsProvider {
 			throw new FileNotFoundException("Failed to rename document. Error: " + e.getMessage());
 		}
 
+		notifyChildrenChanged(sourceParentFile);
 		return getDocIdForFile(destFile);
 	}
 
@@ -209,6 +219,7 @@ public class DocumentProvider extends DocumentsProvider {
 		if (!deleteSucceeded) {
 			throw new FileNotFoundException("Failed to delete document with id " + documentId);
 		}
+		notifyChildrenChanged(file.getParentFile());
 	}
 
 	private String copyDocument(String sourceDocumentId, String sourceParentDocumentId,
@@ -232,6 +243,7 @@ public class DocumentProvider extends DocumentsProvider {
 			throw new FileNotFoundException("Failed to copy document: " + sourceDocumentId +
 					". " + e.getMessage());
 		}
+		notifyChildrenChanged(parent);
 		return getDocIdForFile(newFile);
 	}
 
@@ -322,6 +334,22 @@ public class DocumentProvider extends DocumentsProvider {
 		row.add(Document.COLUMN_LAST_MODIFIED, file.lastModified());
 		row.add(Document.COLUMN_FLAGS, flags);
 		row.add(Document.COLUMN_ICON, R.mipmap.ic_launcher);
+	}
+
+	private void notifyChildrenChanged(File parent) {
+		if (parent == null) {
+			return;
+		}
+		Context context = getContext();
+		if (context == null) {
+			return;
+		}
+		Uri uri = DocumentsContract.buildChildDocumentsUri(getAuthority(), getDocIdForFile(parent));
+		context.getContentResolver().notifyChange(uri, null);
+	}
+
+	private String getAuthority() {
+		return getContext().getPackageName() + ".documentProvider";
 	}
 
 	private String getDocIdForFile(File file) {
