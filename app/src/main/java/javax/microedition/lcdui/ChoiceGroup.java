@@ -264,6 +264,9 @@ public class ChoiceGroup extends Item implements Choice {
 			if (selectedArray.length < size) {
 				throw new IllegalArgumentException("Array is too short");
 			}
+			if (size == 0) {
+				return;
+			}
 
 			if (choiceType == MULTIPLE) {
 				for (int i = 0; i < size; i++) {

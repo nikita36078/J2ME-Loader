@@ -265,6 +265,9 @@ public class List extends Screen implements Choice {
 			if (selectedArray.length < size) {
 				throw new IllegalArgumentException("Array is too short");
 			}
+			if (size == 0) {
+				return;
+			}
 
 			if (listType == MULTIPLE) {
 				for (int i = 0; i < size; i++) {
