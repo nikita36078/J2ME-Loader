@@ -110,19 +110,26 @@ public class MicroLoader {
 			FileUtils.clearDirectory(cacheDir);
 		}
 		File internalDriveDir = new File(Config.getFsInternalDir());
-		if (!internalDriveDir.exists()) {
-			internalDriveDir.mkdirs();
-		}
+		ensureDirectory(internalDriveDir);
 		File externalDriveDir = new File(Config.getFsExternalDir());
-		if (!externalDriveDir.exists()) {
-			externalDriveDir.mkdirs();
-		}
+		ensureDirectory(externalDriveDir);
+		File appDataDir = new File(Config.getDataDir(), appDirName);
+		ensureDirectory(new File(appDataDir, "private"));
+		ensureDirectory(new File(appDataDir, "cache"));
+		ensureDirectory(new File(externalDriveDir, Environment.DIRECTORY_PICTURES));
+		ensureDirectory(new File(externalDriveDir, Environment.DIRECTORY_MUSIC));
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitNetwork()
 				.penaltyLog()
 				.build();
 		StrictMode.setThreadPolicy(policy);
 		return true;
+	}
+
+	private static void ensureDirectory(File dir) {
+		if (!dir.isDirectory() && !dir.mkdirs()) {
+			Log.w(TAG, "Can't create directory: " + dir);
+		}
 	}
 
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
@@ -214,27 +221,14 @@ public class MicroLoader {
 		final String country = defaultLocale.getCountry();
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
-		// FIXME: 21.10.2020 Config.getDataDir() may be in different storage
-		final String primaryStoragePath = Environment.getExternalStorageDirectory().getPath();
-		String baseUri = "file:///c:";
-		String dataUri = baseUri;
-		String musicUri = baseUri;
-		String photoUri = baseUri;
-		if (FileUtils.isExternalStorageLegacy()) {
-			dataUri += Config.getDataDir().substring(primaryStoragePath.length()) + appDirName;
-			musicUri += Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-					.getPath().substring(primaryStoragePath.length());
-			photoUri += Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-					.getPath().substring(primaryStoragePath.length());
-		} else {
-			dataUri += "/data/" + appDirName;
-			musicUri += "/music";
-			photoUri += "/pictures";
-		}
-		System.setProperty("fileconn.dir.cache", dataUri + "/cache");
-		System.setProperty("fileconn.dir.private", dataUri + "/private");
-		System.setProperty("fileconn.dir.photos", photoUri);
-		System.setProperty("fileconn.dir.music", musicUri);
+		// sys -> <emulatorDir>/data, e -> public storage
+		String dataUri = "file:///sys/" + appDirName;
+		System.setProperty("fileconn.dir.cache", dataUri + "/cache/");
+		System.setProperty("fileconn.dir.private", dataUri + "/private/");
+		System.setProperty("fileconn.dir.photos",
+				"file:///e:/" + Environment.DIRECTORY_PICTURES + "/");
+		System.setProperty("fileconn.dir.music",
+				"file:///e:/" + Environment.DIRECTORY_MUSIC + "/");
 		System.setProperty("user.home", Config.getFsInternalDir());
 	}
 

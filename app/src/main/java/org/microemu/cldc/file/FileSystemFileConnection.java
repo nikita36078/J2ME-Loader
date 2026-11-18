@@ -60,9 +60,12 @@ public class FileSystemFileConnection implements FileConnection {
 
 	private static final char DIR_SEP = '/';
 	private static final String DIR_SEP_STR = "/";
+	// Service root mapped to the emulator data directory
+	private static final String ROOT_SYS = "sys/";
 	private static final String[] FC_ROOTS = {
 			"c:/",
 			"e:/",
+			ROOT_SYS,
 			"0:/",
 			"1:/",
 			"fs/MyStuff/",
@@ -117,6 +120,9 @@ public class FileSystemFileConnection implements FileConnection {
 	private String getFsRoot() {
 		if (root.equalsIgnoreCase(FC_ROOTS[1])) {
 			return Config.getFsExternalDir();
+		}
+		if (root.equalsIgnoreCase(ROOT_SYS)) {
+			return Config.getDataDir();
 		}
 		return Config.getFsInternalDir();
 	}
