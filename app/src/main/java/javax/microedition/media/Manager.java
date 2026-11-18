@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.microedition.io.Connector;
 import javax.microedition.media.protocol.DataSource;
@@ -82,7 +83,7 @@ public class Manager {
 		}
 		String type = source.getContentType();
 		String[] supportedTypes = getSupportedContentTypes(null);
-		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
+		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase(Locale.ROOT))) {
 			source.connect();
 			SourceStream[] sourceStreams = source.getStreams();
 			if (sourceStreams == null || sourceStreams.length == 0) {
@@ -110,7 +111,7 @@ public class Manager {
 			}
 		}
 		String[] supportedTypes = getSupportedContentTypes(null);
-		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
+		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase(Locale.ROOT))) {
 			return new MicroPlayer(datasource);
 		} else {
 			return new BasePlayer();
