@@ -82,11 +82,28 @@ public class BackupManager {
 		}
 		report(listener, 0);
 
-		try (OutputStream out = context.getContentResolver().openOutputStream(uri, "wt")) {
-			writeArchive(out, files, totalSize, listener);
+		File tmpFile = File.createTempFile("backup-export-", ".zip", context.getCacheDir());
+		try {
+			try (OutputStream out = new FileOutputStream(tmpFile)) {
+				writeArchive(out, files, totalSize, listener);
+			}
+			try (InputStream in = new BufferedInputStream(new FileInputStream(tmpFile), BUFFER_SIZE);
+				 OutputStream out = context.getContentResolver().openOutputStream(uri, "wt")) {
+				if (out == null) {
+					throw new IOException("Can't open output stream: " + uri);
+				}
+				byte[] buffer = new byte[BUFFER_SIZE];
+				int read;
+				while ((read = in.read(buffer)) != -1) {
+					out.write(buffer, 0, read);
+				}
+			}
 		} catch (IOException | RuntimeException e) {
 			Log.e(TAG, "exportToZip: ", e);
 			throw e;
+		} finally {
+			//noinspection ResultOfMethodCallIgnored
+			tmpFile.delete();
 		}
 		report(listener, 100);
 	}
