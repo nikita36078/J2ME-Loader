@@ -1152,6 +1152,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		overlayView = view;
 	}
 
+	public void release() {
+		handler.removeCallbacksAndMessages(null);
+		handler.getLooper().quitSafely();
+	}
+
 	public int getKeyStatesVodafone() {
 		int keyStates = 0;
 		for (int i = 0; i < keypad.length; i++) {

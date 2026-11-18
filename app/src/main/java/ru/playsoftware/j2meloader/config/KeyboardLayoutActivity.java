@@ -163,7 +163,7 @@ public class KeyboardLayoutActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		if (vk != null) {
-			vk.cancel();
+			vk.release();
 		}
 		super.onDestroy();
 	}
