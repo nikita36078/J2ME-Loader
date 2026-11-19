@@ -37,7 +37,7 @@ import javax.bluetooth.UUID;
 public class Connection implements ConnectionImplementation, L2CAPConnectionNotifier, ServiceRecordHolder {
 	private static final String TAG = "btl2cap.Connection";
 	private BluetoothServerSocket serverSocket = null;
-	private BluetoothServerSocket nameServerSocket = null;
+	private BluetoothNameService nameService = null;
 	public BluetoothSocket socket = null;
 	public javax.bluetooth.UUID connUuid = null;
 	private boolean skipAfterWrite = false;
@@ -93,11 +93,12 @@ public class Connection implements ConnectionImplementation, L2CAPConnectionNoti
 			// Android 6.0.1 bug: UUID is reversed
 			// see https://issuetracker.google.com/issues/37075233
 			UUID NameUuid = new UUID(0x1102);
-			nameServerSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(srvname, NameUuid.uuid);
+			BluetoothServerSocket nameServerSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(srvname, NameUuid.uuid);
 
 			String finalSrvname = srvname;
 			// Send service name to client
-			new BluetoothNameService(nameServerSocket, srvname, true, this).start();
+			nameService = new BluetoothNameService(nameServerSocket, srvname, true, this);
+			nameService.start();
 			if (secure) {
 				serverSocket = adapter.listenUsingRfcommWithServiceRecord(finalSrvname, btUuid);
 			} else {
@@ -151,8 +152,8 @@ public class Connection implements ConnectionImplementation, L2CAPConnectionNoti
 		if (serverSocket != null) {
 			serverSocket.close();
 		}
-		if (nameServerSocket != null) {
-			nameServerSocket.close();
+		if (nameService != null) {
+			nameService.shutdown();
 		}
 	}
 }

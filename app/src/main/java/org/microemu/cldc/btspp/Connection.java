@@ -37,7 +37,7 @@ import javax.microedition.io.StreamConnectionNotifier;
 public class Connection implements ConnectionImplementation, StreamConnectionNotifier, ServiceRecordHolder {
 	private static final String TAG = "btspp.Connection";
 	private BluetoothServerSocket serverSocket = null;
-	private BluetoothServerSocket nameServerSocket = null;
+	private BluetoothNameService nameService = null;
 	public BluetoothSocket socket = null;
 	public javax.bluetooth.UUID connUuid = null;
 	private boolean skipAfterWrite = false;
@@ -93,10 +93,11 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 			// Android 6.0.1 bug: UUID is reversed
 			// see https://issuetracker.google.com/issues/37075233
 			UUID NameUuid = new UUID(0x1102);
-			nameServerSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(srvname, NameUuid.uuid);
+			BluetoothServerSocket nameServerSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(srvname, NameUuid.uuid);
 
 			// Send service name to client
-			new BluetoothNameService(nameServerSocket, srvname, false, this).start();
+			nameService = new BluetoothNameService(nameServerSocket, srvname, false, this);
+			nameService.start();
 			if (secure) {
 				serverSocket = adapter.listenUsingRfcommWithServiceRecord(srvname, btUuid);
 			} else {
@@ -150,8 +151,8 @@ public class Connection implements ConnectionImplementation, StreamConnectionNot
 		if (serverSocket != null) {
 			serverSocket.close();
 		}
-		if (nameServerSocket != null) {
-			nameServerSocket.close();
+		if (nameService != null) {
+			nameService.shutdown();
 		}
 	}
 }

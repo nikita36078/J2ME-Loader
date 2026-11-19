@@ -25,6 +25,7 @@ import org.microemu.microedition.io.ServiceRecordHolder;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.bluetooth.ServiceRecord;
@@ -35,6 +36,7 @@ public final class BluetoothNameService extends Thread {
 	private final String name;
 	private final boolean l2cap;
 	private final ServiceRecordHolder recordHolder;
+	private boolean stopped;
 
 	public BluetoothNameService(BluetoothServerSocket serverSocket, String name, boolean l2cap,
 								ServiceRecordHolder recordHolder) {
@@ -45,46 +47,64 @@ public final class BluetoothNameService extends Thread {
 		setDaemon(true);
 	}
 
+	public void shutdown() {
+		stopped = true;
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			Log.w(TAG, "shutdown: ", e);
+		}
+	}
+
 	@Override
 	public void run() {
-		BluetoothSocket connectSocket = null;
-		try {
-			byte[] dstByte = new byte[256];
-			byte[] srcByte = name.getBytes();
-			System.arraycopy(srcByte, 0, dstByte, 0, Math.min(srcByte.length, dstByte.length));
-			connectSocket = serverSocket.accept();
-			OutputStream os = connectSocket.getOutputStream();
-			DataOutputStream socketStream = new DataOutputStream(os);
+		byte[] dstByte = new byte[256];
+		byte[] srcByte = name.getBytes();
+		System.arraycopy(srcByte, 0, dstByte, 0, Math.min(srcByte.length, dstByte.length));
 
-			socketStream.write(l2cap ? 1 : 0);
-			socketStream.write(dstByte);
-
-			ServiceRecord record = recordHolder.getServiceRecord();
-			if (record != null) {
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ServiceRecordCodec.write(record, baos);
-				byte[] serviceByte = baos.toByteArray();
-				socketStream.writeInt(serviceByte.length);
-				socketStream.write(serviceByte);
-			} else {
-				Log.w(TAG, "No local service record to send");
-				socketStream.writeInt(0);
+		while (!stopped) {
+			BluetoothSocket connectSocket;
+			try {
+				connectSocket = serverSocket.accept();
+			} catch (IOException e) {
+				if (!stopped) {
+					Log.w(TAG, "accept: ", e);
+				}
+				break;
 			}
-			socketStream.flush();
-		} catch (IOException | RuntimeException e) {
-			Log.w(TAG, "run: ", e);
-		} finally {
-			if (connectSocket != null) {
+			try {
+				OutputStream os = connectSocket.getOutputStream();
+				DataOutputStream socketStream = new DataOutputStream(os);
+
+				socketStream.write(l2cap ? 1 : 0);
+				socketStream.write(dstByte);
+
+				ServiceRecord record = recordHolder.getServiceRecord();
+				if (record != null) {
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ServiceRecordCodec.write(record, baos);
+					byte[] serviceByte = baos.toByteArray();
+					socketStream.writeInt(serviceByte.length);
+					socketStream.write(serviceByte);
+				} else {
+					Log.w(TAG, "No local service record to send");
+					socketStream.writeInt(0);
+				}
+				// Wait for client to read
+				InputStream is = connectSocket.getInputStream();
+				//noinspection StatementWithEmptyBody
+				while (is.read() != -1) {
+				}
+			} catch (IOException | RuntimeException e) {
+				if (!stopped) {
+					Log.w(TAG, "run: ", e);
+				}
+			} finally {
 				try {
 					connectSocket.close();
 				} catch (IOException e) {
 					Log.w(TAG, "close: ", e);
 				}
-			}
-			try {
-				serverSocket.close();
-			} catch (IOException e) {
-				Log.w(TAG, "close: ", e);
 			}
 		}
 	}
