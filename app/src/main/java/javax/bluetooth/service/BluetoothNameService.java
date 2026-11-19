@@ -47,11 +47,12 @@ public final class BluetoothNameService extends Thread {
 
 	@Override
 	public void run() {
+		BluetoothSocket connectSocket = null;
 		try {
 			byte[] dstByte = new byte[256];
 			byte[] srcByte = name.getBytes();
 			System.arraycopy(srcByte, 0, dstByte, 0, Math.min(srcByte.length, dstByte.length));
-			BluetoothSocket connectSocket = serverSocket.accept();
+			connectSocket = serverSocket.accept();
 			OutputStream os = connectSocket.getOutputStream();
 			DataOutputStream socketStream = new DataOutputStream(os);
 
@@ -70,10 +71,21 @@ public final class BluetoothNameService extends Thread {
 				socketStream.writeInt(0);
 			}
 			socketStream.flush();
-
-			serverSocket.close();
-		} catch (IOException e) {
-			Log.w(TAG, "openConnection: ", e);
+		} catch (IOException | RuntimeException e) {
+			Log.w(TAG, "run: ", e);
+		} finally {
+			if (connectSocket != null) {
+				try {
+					connectSocket.close();
+				} catch (IOException e) {
+					Log.w(TAG, "close: ", e);
+				}
+			}
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				Log.w(TAG, "close: ", e);
+			}
 		}
 	}
 }

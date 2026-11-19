@@ -91,8 +91,9 @@ public class DiscoveryAgent {
 		}
 
 		private void updateServiceInfo(BluetoothDevice device, UUID nameUuid) {
+			BluetoothSocket bluetoothSocket = null;
 			try {
-				BluetoothSocket bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(nameUuid.uuid);
+				bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(nameUuid.uuid);
 				if (!bluetoothSocket.isConnected()) {
 					bluetoothSocket.connect();
 				}
@@ -100,26 +101,36 @@ public class DiscoveryAgent {
 				byte[] resByte = new byte[256];
 				btl2cap = socketStream.read() == 1;
 
-				socketStream.read(resByte);
+				socketStream.readFully(resByte);
 				if (attrs != null && attrs.length > 0) {
 					serviceName = new String(resByte).trim();
 				}
 
-				serviceInfo = new byte[socketStream.readInt()];
+				int length = socketStream.readInt();
+				if (length < 0 || length > ServiceRecordCodec.MAX_RECORD_SIZE) {
+					throw new IOException("Invalid service record length: " + length);
+				}
+				serviceInfo = new byte[length];
 				socketStream.readFully(serviceInfo);
-				bluetoothSocket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				serviceInfo = null;
+			} finally {
+				if (bluetoothSocket != null) {
+					try {
+						bluetoothSocket.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 
 		private J2MEServiceRecord getServiceRecord(UUID uuid) {
-			ByteArrayInputStream bais = new ByteArrayInputStream(serviceInfo);
 			J2MEServiceRecord receivedRecord = new J2MEServiceRecord(dev, uuid, false, btl2cap);
-			if (serviceInfo.length > 0) {
+			if (serviceInfo != null && serviceInfo.length > 0) {
 				try {
-					ServiceRecordCodec.read(receivedRecord, bais);
+					ServiceRecordCodec.read(receivedRecord, new ByteArrayInputStream(serviceInfo));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -132,59 +143,70 @@ public class DiscoveryAgent {
 
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (BluetoothDevice.ACTION_UUID.equals(action)) {
-				BluetoothDevice d = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				if (d.equals(dev.dev)) {
-					LinkedList<J2MEServiceRecord> records = new LinkedList<J2MEServiceRecord>();
-					UUID[] uuidExtra = null;
-					UUID SppUuid = new UUID(0x1101);
-					UUID NameUuid = new UUID(0x1102);
-					// SE phones publish a SPP service UUID instead of requested one
-					boolean supportsSPP = false;
-					{
-						Parcelable[] uuidParcel = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-						if (uuidParcel != null) {
-							uuidExtra = new UUID[uuidParcel.length];
-							for (int i = 0; i < uuidExtra.length; i++)
-								uuidExtra[i] = new UUID(((ParcelUuid) uuidParcel[i]).getUuid());
-						}
-					}
+			if (!BluetoothDevice.ACTION_UUID.equals(action)) {
+				return;
+			}
+			BluetoothDevice d = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+			if (d == null || !d.equals(dev.dev)) {
+				return;
+			}
 
-					for (int i = 0; !stop && (uuidExtra != null) && (i < uuidExtra.length); i++) {
-						if (uuidExtra[i].equals(SppUuid))
-							supportsSPP = true;
-						if (uuidExtra[i].equals(NameUuid)) {
-							updateServiceInfo(dev.dev, NameUuid);
-						}
-						for (int j = 0; !stop && j < uuids.length; j++) {
-							if (uuidExtra[i].uuid.equals(uuids[j].uuid) || uuidExtra[i].uuid.equals(byteSwappedUuid(uuids[j].uuid))) {
-								J2MEServiceRecord receivedRecord;
-								if (serviceInfo != null) {
-									receivedRecord = getServiceRecord(uuids[j]);
-								} else {
-									receivedRecord = new J2MEServiceRecord(dev, uuids[j], false, btl2cap);
-								}
-								records.add(receivedRecord);
-							}
-						}
-					}
+			UUID sppUuid = new UUID(0x1101);
+			UUID nameUuid = new UUID(0x1102);
+			UUID[] uuidExtra = null;
+			Parcelable[] uuidParcel = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
+			if (uuidParcel != null) {
+				uuidExtra = new UUID[uuidParcel.length];
+				for (int i = 0; i < uuidExtra.length; i++)
+					uuidExtra[i] = new UUID(((ParcelUuid) uuidParcel[i]).getUuid());
+			}
 
-					if (records.isEmpty()) {
-						if (supportsSPP) {
-							listener.servicesDiscovered(transID, new J2MEServiceRecord[]
-									{new J2MEServiceRecord(dev, new UUID(0x1101), true, false)});
+			serviceName = null;
+			serviceInfo = null;
+			btl2cap = false;
+
+			// SE phones publish a SPP service UUID instead of requested one
+			boolean supportsSPP = false;
+			boolean hasNameService = false;
+			if (uuidExtra != null) {
+				for (UUID uuid : uuidExtra) {
+					if (uuid.equals(sppUuid))
+						supportsSPP = true;
+					if (uuid.equals(nameUuid))
+						hasNameService = true;
+				}
+			}
+
+			// Read service info first
+			if (hasNameService && !stop) {
+				updateServiceInfo(dev.dev, nameUuid);
+			}
+
+			LinkedList<J2MEServiceRecord> records = new LinkedList<>();
+			if (uuidExtra != null) {
+				for (int i = 0; !stop && i < uuidExtra.length; i++) {
+					for (int j = 0; !stop && j < uuids.length; j++) {
+						if (uuidExtra[i].uuid.equals(uuids[j].uuid) || uuidExtra[i].uuid.equals(byteSwappedUuid(uuids[j].uuid))) {
+							records.add(getServiceRecord(uuids[j]));
 						}
-					} else {
-						J2MEServiceRecord[] casted = records.toArray(new J2MEServiceRecord[0]);
-						listener.servicesDiscovered(transID, casted);
-					}
-					listener.serviceSearchCompleted(transID, (records.isEmpty() && !supportsSPP) ? DiscoveryListener.SERVICE_SEARCH_NO_RECORDS :
-							stop ? DiscoveryListener.SERVICE_SEARCH_TERMINATED : DiscoveryListener.SERVICE_SEARCH_COMPLETED);
-					ContextHolder.getAppContext().unregisterReceiver(this);
-					synchronized (transList) {
-						transList.remove(this);
 					}
 				}
+			}
+
+			if (records.isEmpty()) {
+				if (supportsSPP) {
+					listener.servicesDiscovered(transID, new J2MEServiceRecord[]
+							{new J2MEServiceRecord(dev, new UUID(0x1101), true, false)});
+				}
+			} else {
+				J2MEServiceRecord[] casted = records.toArray(new J2MEServiceRecord[0]);
+				listener.servicesDiscovered(transID, casted);
+			}
+			listener.serviceSearchCompleted(transID, (records.isEmpty() && !supportsSPP) ? DiscoveryListener.SERVICE_SEARCH_NO_RECORDS :
+					stop ? DiscoveryListener.SERVICE_SEARCH_TERMINATED : DiscoveryListener.SERVICE_SEARCH_COMPLETED);
+			ContextHolder.getAppContext().unregisterReceiver(this);
+			synchronized (transList) {
+				transList.remove(this);
 			}
 		}
 
