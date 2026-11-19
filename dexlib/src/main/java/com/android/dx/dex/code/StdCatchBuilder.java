@@ -29,25 +29,79 @@ import java.util.HashSet;
 /**
  * Constructor of {@link CatchTable} instances from {@link RopMethod}
  * and associated data.
+ *
+ * <p>The ROP-level information needed to build the table (block throw
+ * points, handler targets and catch types) is captured in the constructor,
+ * so the whole ROP method graph becomes collectable right after translation,
+ * instead of staying reachable through this instance until the dex file is written.</p>
  */
 public final class StdCatchBuilder implements CatchBuilder {
     /** the maximum range of a single catch handler, in code units */
     private static final int MAX_CATCH_RANGE = 65535;
 
-    /** {@code non-null;} method to build the list for */
-    private final RopMethod method;
+    /** empty block list, used when the method has no catch handlers */
+    private static final ThrowingBlock[] EMPTY = new ThrowingBlock[0];
 
-    /** {@code non-null;} block output order */
-    private final int[] order;
+    /** {@code non-null;} blocks that can throw, in output order */
+    private final ThrowingBlock[] blocks;
 
-    /** {@code non-null;} address objects for each block */
-    private final BlockAddresses addresses;
+    /** whether the method has any catch handlers at all */
+    private final boolean hasAnyCatches;
+
+    /** {@code non-null;} all catch types used by the method */
+    private final HashSet<Type> catchTypes;
 
     /**
-     * Constructs an instance. It merely holds onto its parameters for
-     * a subsequent call to {@link #build}.
+     * Captured data for a single block that can throw. Addresses are resolved
+     * when the table is built, after the Dalv instruction list has been laid
+     * out.
+     */
+    private static final class ThrowingBlock {
+        /** {@code non-null;} address of the last (throwing) instruction */
+        final CodeAddress start;
+
+        /** {@code non-null;} address just past the end of the block */
+        final CodeAddress end;
+
+        /** {@code null-ok;} handler types, or {@code null} if none */
+        final CstType[] types;
+
+        /** {@code null-ok;} handler target addresses, or {@code null} if none */
+        final CodeAddress[] handlers;
+
+        private ThrowingBlock(CodeAddress start, CodeAddress end,
+                CstType[] types, CodeAddress[] handlers) {
+            this.start = start;
+            this.end = end;
+            this.types = types;
+            this.handlers = handlers;
+        }
+
+        /**
+         * Makes the {@link CatchHandlerList} for this block. Addresses are
+         * resolved here, after the Dalv instruction list has been laid out.
+         *
+         * @return {@code non-null;} the handler list
+         */
+        private CatchHandlerList makeHandlers() {
+            if (types == null) {
+                return CatchHandlerList.EMPTY;
+            }
+
+            CatchHandlerList result = new CatchHandlerList(types.length);
+            for (int i = 0; i < types.length; i++) {
+                result.set(i, types[i], handlers[i].getAddress());
+            }
+            result.setImmutable();
+            return result;
+        }
+    }
+
+    /**
+     * Constructs an instance. It captures the data needed to build the catch
+     * table and does not retain the ROP method.
      *
-     * @param method {@code non-null;} method to build the list for
+     * @param method {@code non-null;} the original method
      * @param order {@code non-null;} block output order
      * @param addresses {@code non-null;} address objects for each block
      */
@@ -65,74 +119,28 @@ public final class StdCatchBuilder implements CatchBuilder {
             throw new NullPointerException("addresses == null");
         }
 
-        this.method = method;
-        this.order = order;
-        this.addresses = addresses;
-    }
+        BasicBlockList ropBlocks = method.getBlocks();
+        int len = order.length;
+        ArrayList<ThrowingBlock> list = new ArrayList<>(len);
+        HashSet<Type> types = new HashSet<>(20);
+        boolean any = false;
 
-    /** {@inheritDoc} */
-    @Override
-	public CatchTable build() {
-        return build(method, order, addresses);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-	public boolean hasAnyCatches() {
-        BasicBlockList blocks = method.getBlocks();
-        int size = blocks.size();
-
-        for (int i = 0; i < size; i++) {
-            BasicBlock block = blocks.get(i);
-            TypeList catches = block.getLastInsn().getCatches();
-            if (catches.size() != 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-	public HashSet<Type> getCatchTypes() {
-        HashSet<Type> result = new HashSet<Type>(20);
-        BasicBlockList blocks = method.getBlocks();
-        int size = blocks.size();
-
-        for (int i = 0; i < size; i++) {
-            BasicBlock block = blocks.get(i);
+        for (int i = 0; i < len; i++) {
+            BasicBlock block = ropBlocks.labelToBlock(order[i]);
             TypeList catches = block.getLastInsn().getCatches();
             int catchSize = catches.size();
 
+            /*
+             * All declared types take part in catch type interning, even
+             * ones after a catch-all (which shouldn't normally occur).
+             */
             for (int j = 0; j < catchSize; j++) {
-                result.add(catches.getType(j));
+                types.add(catches.getType(j));
             }
-        }
 
-        return result;
-    }
-
-    /**
-     * Builds and returns the catch table for a given method.
-     *
-     * @param method {@code non-null;} method to build the list for
-     * @param order {@code non-null;} block output order
-     * @param addresses {@code non-null;} address objects for each block
-     * @return {@code non-null;} the constructed table
-     */
-    public static CatchTable build(RopMethod method, int[] order,
-            BlockAddresses addresses) {
-        int len = order.length;
-        BasicBlockList blocks = method.getBlocks();
-        ArrayList<CatchTable.Entry> resultList =
-            new ArrayList<CatchTable.Entry>(len);
-        CatchHandlerList currentHandlers = CatchHandlerList.EMPTY;
-        BasicBlock currentStartBlock = null;
-        BasicBlock currentEndBlock = null;
-
-        for (int i = 0; i < len; i++) {
-            BasicBlock block = blocks.labelToBlock(order[i]);
+            if (catchSize != 0) {
+                any = true;
+            }
 
             if (!block.canThrow()) {
                 /*
@@ -143,25 +151,86 @@ public final class StdCatchBuilder implements CatchBuilder {
                 continue;
             }
 
-            CatchHandlerList handlers = handlersFor(block, addresses);
+            IntList successors = block.getSuccessors();
+            CstType[] cstTypes = null;
+            CodeAddress[] handlerAddrs = null;
+
+            if (catchSize != 0) {
+                int primary = block.getPrimarySuccessor();
+
+                if (((primary == -1) && (successors.size() != catchSize))
+                        || ((primary != -1) &&
+                                ((successors.size() != (catchSize + 1))
+                                        || (primary != successors.get(catchSize))))) {
+                    /*
+                     * Blocks that throw are supposed to list their primary
+                     * successor -- if any -- last in the successors list, but
+                     * that constraint appears to be violated here.
+                     */
+                    throw new RuntimeException(
+                            "shouldn't happen: weird successors list");
+                }
+
+                /*
+                 * Reduce the effective catchSize if we spot a catch-all that
+                 * isn't at the end.
+                 */
+                for (int j = 0; j < catchSize; j++) {
+                    Type type = catches.getType(j);
+                    if (type.equals(Type.OBJECT)) {
+                        catchSize = j + 1;
+                        break;
+                    }
+                }
+
+                cstTypes = new CstType[catchSize];
+                handlerAddrs = new CodeAddress[catchSize];
+
+                for (int j = 0; j < catchSize; j++) {
+                    cstTypes[j] = new CstType(catches.getType(j));
+                    handlerAddrs[j] = addresses.getStart(successors.get(j));
+                }
+            }
+
+            list.add(new ThrowingBlock(addresses.getLast(block),
+                    addresses.getEnd(block), cstTypes, handlerAddrs));
+        }
+
+        this.blocks = any ? list.toArray(new ThrowingBlock[list.size()]) : EMPTY;
+        this.hasAnyCatches = any;
+        this.catchTypes = types;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public CatchTable build() {
+        int len = blocks.length;
+        ArrayList<CatchTable.Entry> resultList = new ArrayList<>(len);
+        CatchHandlerList currentHandlers = CatchHandlerList.EMPTY;
+        ThrowingBlock currentStart = null;
+        ThrowingBlock currentEnd = null;
+
+        for (int i = 0; i < len; i++) {
+            ThrowingBlock block = blocks[i];
+            CatchHandlerList handlers = block.makeHandlers();
 
             if (currentHandlers.size() == 0) {
                 // This is the start of a new catch range.
-                currentStartBlock = block;
-                currentEndBlock = block;
+                currentStart = block;
+                currentEnd = block;
                 currentHandlers = handlers;
                 continue;
             }
 
             if (currentHandlers.equals(handlers)
-                    && rangeIsValid(currentStartBlock, block, addresses)) {
+                    && rangeIsValid(currentStart, block)) {
                 /*
                  * The block we are looking at now has the same handlers
                  * as the block that started the currently open catch
                  * range, and adding it to the currently open range won't
                  * cause it to be too long.
                  */
-                currentEndBlock = block;
+                currentEnd = block;
                 continue;
             }
 
@@ -171,23 +240,19 @@ public final class StdCatchBuilder implements CatchBuilder {
              * one. Note: We only emit an entry if it has associated handlers.
              */
             if (currentHandlers.size() != 0) {
-                CatchTable.Entry entry =
-                    makeEntry(currentStartBlock, currentEndBlock,
-                            currentHandlers, addresses);
-                resultList.add(entry);
+                resultList.add(makeEntry(currentStart, currentEnd,
+                        currentHandlers));
             }
 
-            currentStartBlock = block;
-            currentEndBlock = block;
+            currentStart = block;
+            currentEnd = block;
             currentHandlers = handlers;
         }
 
         if (currentHandlers.size() != 0) {
             // Emit an entry for the range that was left hanging.
-            CatchTable.Entry entry =
-                makeEntry(currentStartBlock, currentEndBlock,
-                        currentHandlers, addresses);
-            resultList.add(entry);
+            resultList.add(makeEntry(currentStart, currentEnd,
+                    currentHandlers));
         }
 
         // Construct the final result.
@@ -208,82 +273,51 @@ public final class StdCatchBuilder implements CatchBuilder {
         return result;
     }
 
-    /**
-     * Makes the {@link CatchHandlerList} for the given basic block.
-     *
-     * @param block {@code non-null;} block to get entries for
-     * @param addresses {@code non-null;} address objects for each block
-     * @return {@code non-null;} array of entries
-     */
-    private static CatchHandlerList handlersFor(BasicBlock block,
-            BlockAddresses addresses) {
-        IntList successors = block.getSuccessors();
-        int succSize = successors.size();
-        int primary = block.getPrimarySuccessor();
-        TypeList catches = block.getLastInsn().getCatches();
-        int catchSize = catches.size();
+    /** {@inheritDoc} */
+    @Override
+    public boolean hasAnyCatches() {
+        return hasAnyCatches;
+    }
 
-        if (catchSize == 0) {
-            return CatchHandlerList.EMPTY;
-        }
-
-        if (((primary == -1) && (succSize != catchSize))
-                || ((primary != -1) &&
-                        ((succSize != (catchSize + 1))
-                                || (primary != successors.get(catchSize))))) {
-            /*
-             * Blocks that throw are supposed to list their primary
-             * successor -- if any -- last in the successors list, but
-             * that constraint appears to be violated here.
-             */
-            throw new RuntimeException(
-                    "shouldn't happen: weird successors list");
-        }
-
-        /*
-         * Reduce the effective catchSize if we spot a catch-all that
-         * isn't at the end.
-         */
-        for (int i = 0; i < catchSize; i++) {
-            Type type = catches.getType(i);
-            if (type.equals(Type.OBJECT)) {
-                catchSize = i + 1;
-                break;
-            }
-        }
-
-        CatchHandlerList result = new CatchHandlerList(catchSize);
-
-        for (int i = 0; i < catchSize; i++) {
-            CstType oneType = new CstType(catches.getType(i));
-            CodeAddress oneHandler = addresses.getStart(successors.get(i));
-            result.set(i, oneType, oneHandler.getAddress());
-        }
-
-        result.setImmutable();
-        return result;
+    /** {@inheritDoc} */
+    @Override
+    public HashSet<Type> getCatchTypes() {
+        // Return a copy, so callers can't modify our internal state.
+        return new HashSet<>(catchTypes);
     }
 
     /**
-     * Makes a {@link CatchTable#Entry} for the given block range and
+     * Builds and returns the catch table for a given method.
+     *
+     * @param method {@code non-null;} method to build the list for
+     * @param order {@code non-null;} block output order
+     * @param addresses {@code non-null;} address objects for each block
+     * @return {@code non-null;} the constructed table
+     */
+    public static CatchTable build(RopMethod method, int[] order,
+            BlockAddresses addresses) {
+        return new StdCatchBuilder(method, order, addresses).build();
+    }
+
+    /**
+     * Makes a {@link CatchTable.Entry} for the given block range and
      * handlers.
      *
      * @param start {@code non-null;} the start block for the range (inclusive)
-     * @param end {@code non-null;} the start block for the range (also inclusive)
+     * @param end {@code non-null;} the end block for the range (also inclusive)
      * @param handlers {@code non-null;} the handlers for the range
-     * @param addresses {@code non-null;} address objects for each block
+     * @return {@code non-null;} an appropriately-constructed instance
      */
-    private static CatchTable.Entry makeEntry(BasicBlock start,
-            BasicBlock end, CatchHandlerList handlers,
-            BlockAddresses addresses) {
+    private static CatchTable.Entry makeEntry(ThrowingBlock start,
+            ThrowingBlock end, CatchHandlerList handlers) {
         /*
          * We start at the *last* instruction of the start block, since
          * that's the instruction that can throw...
          */
-        CodeAddress startAddress = addresses.getLast(start);
+        CodeAddress startAddress = start.start;
 
         // ...And we end *after* the last instruction of the end block.
-        CodeAddress endAddress = addresses.getEnd(end);
+        CodeAddress endAddress = end.end;
 
         return new CatchTable.Entry(startAddress.getAddress(),
                 endAddress.getAddress(), handlers);
@@ -295,23 +329,14 @@ public final class StdCatchBuilder implements CatchBuilder {
      * under 65536 code units.
      *
      * @param start {@code non-null;} the start block for the range (inclusive)
-     * @param end {@code non-null;} the start block for the range (also inclusive)
-     * @param addresses {@code non-null;} address objects for each block
-     * @return {@code true} if the range is valid as a catch range
+     * @param end {@code non-null;} the end block for the range (also inclusive)
+     * @return {@code true} if the range is valid
      */
-    private static boolean rangeIsValid(BasicBlock start, BasicBlock end,
-            BlockAddresses addresses) {
-        if (start == null) {
-            throw new NullPointerException("start == null");
-        }
-
-        if (end == null) {
-            throw new NullPointerException("end == null");
-        }
-
+    private static boolean rangeIsValid(ThrowingBlock start,
+            ThrowingBlock end) {
         // See above about selection of instructions.
-        int startAddress = addresses.getLast(start).getAddress();
-        int endAddress = addresses.getEnd(end).getAddress();
+        int startAddress = start.start.getAddress();
+        int endAddress = end.end.getAddress();
 
         return (endAddress - startAddress) <= MAX_CATCH_RANGE;
     }
