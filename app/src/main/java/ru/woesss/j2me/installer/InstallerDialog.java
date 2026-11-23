@@ -132,7 +132,8 @@ public class InstallerDialog extends DialogFragment {
 
 	@Override
 	public void onDestroy() {
-		compositeDisposable.dispose();
+		// Avoid crash when the dialog is dismissed while the dexer is running
+		//compositeDisposable.dispose();
 		super.onDestroy();
 	}
 

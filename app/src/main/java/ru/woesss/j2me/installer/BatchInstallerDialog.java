@@ -121,7 +121,8 @@ public class BatchInstallerDialog extends DialogFragment {
 
 	@Override
 	public void onDestroy() {
-		compositeDisposable.dispose();
+		// Avoid crash when the dialog is dismissed while the dexer is running
+		//compositeDisposable.dispose();
 		super.onDestroy();
 	}
 
@@ -291,12 +292,12 @@ public class BatchInstallerDialog extends DialogFragment {
 
 	private void onError(Throwable e) {
 		e.printStackTrace();
+		installer.deleteTemp();
+		installer.clearCache();
 		if (!isAdded()) {
 			return;
 		}
 		addFailedName();
-		installer.deleteTemp();
-		installer.clearCache();
 		nextFile();
 	}
 
