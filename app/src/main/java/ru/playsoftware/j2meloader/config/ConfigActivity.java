@@ -74,6 +74,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.microedition.lcdui.keyboard.KeyMapper;
@@ -449,7 +450,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		spShaderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
 		spShaderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		binding.shaderSelector.setAdapter(spShaderAdapter);
-		File[] files = dir.listFiles((f) -> f.isFile() && f.getName().toLowerCase().endsWith(".ini"));
+		File[] files = dir.listFiles((f) -> f.isFile() && f.getName().toLowerCase(Locale.ROOT).endsWith(".ini"));
 		if (files != null) {
 			for (File file : files) {
 				String text = FileUtils.getText(file.getAbsolutePath());
