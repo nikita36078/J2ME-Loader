@@ -58,6 +58,10 @@ android {
         disable 'MissingTranslation', 'ExtraTranslation'
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     flavorDimensions 'default'
     productFlavors {
         play {
