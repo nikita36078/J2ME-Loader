@@ -54,6 +54,7 @@ public class BackupManager {
 	// Extra files that are never copied when importing an old working directory
 	private static final String[] SKIPPED_LEGACY_ROOT_FILES = {"log.txt", "DATA_VERSION"};
 	private static final String LEGACY_APPS_DIR = "converted";
+	private static final String PART_SUFFIX = ".part";
 
 	public interface ProgressListener {
 		void onProgress(int percent);
@@ -150,8 +151,14 @@ public class BackupManager {
 		List<LegacyFile> files = new ArrayList<>();
 		collectLegacyFiles(resolver, treeUri, rootId, "", files);
 		long totalSize = 0;
+		long requiredSize = 0;
 		for (LegacyFile f : files) {
 			totalSize += Math.max(f.size, 1);
+			requiredSize += Math.max(f.size, 0);
+		}
+		if (workDir.getUsableSpace() < requiredSize) {
+			throw new IOException("Not enough free space: need " + requiredSize
+					+ " bytes, have " + workDir.getUsableSpace());
 		}
 		String rootPrefix = workDir.getCanonicalPath() + File.separator;
 		long done = 0;
@@ -168,15 +175,28 @@ public class BackupManager {
 					throw new IOException("Can't create directory: " + parent);
 				}
 				Uri docUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, f.documentId);
-				try (InputStream in = resolver.openInputStream(docUri);
-					 OutputStream out = new BufferedOutputStream(new FileOutputStream(file), BUFFER_SIZE)) {
-					if (in == null) {
-						throw new IOException("Can't read: " + f.path);
+				// Write to a temp file first so a failure never leaves a truncated target
+				File part = new File(file.getPath() + PART_SUFFIX);
+				try {
+					try (InputStream in = resolver.openInputStream(docUri);
+						 OutputStream out = new BufferedOutputStream(new FileOutputStream(part), BUFFER_SIZE)) {
+						if (in == null) {
+							throw new IOException("Can't read: " + f.path);
+						}
+						int read;
+						while ((read = in.read(buffer)) != -1) {
+							out.write(buffer, 0, read);
+						}
 					}
-					int read;
-					while ((read = in.read(buffer)) != -1) {
-						out.write(buffer, 0, read);
+					if (file.exists() && !file.delete()) {
+						throw new IOException("Can't replace: " + file);
 					}
+					if (!part.renameTo(file)) {
+						throw new IOException("Can't rename: " + part);
+					}
+				} finally {
+					//noinspection ResultOfMethodCallIgnored
+					part.delete();
 				}
 				done += Math.max(f.size, 1);
 				int percent = (int) (done * 100 / totalSize);
@@ -264,7 +284,7 @@ public class BackupManager {
 		}
 	}
 
-	private static boolean isLegacySkipped(String name) {
+	static boolean isLegacySkipped(String name) {
 		for (String skipped : SKIPPED_LEGACY_ROOT_FILES) {
 			if (skipped.equals(name)) {
 				return true;
@@ -411,7 +431,7 @@ public class BackupManager {
 		}
 	}
 
-	private static boolean isSkipped(String path) {
+	static boolean isSkipped(String path) {
 		if (path.equals(SKIPPED_APP_TEMP_DIR) || path.startsWith(SKIPPED_APP_TEMP_DIR + "/")) {
 			return true;
 		}
@@ -426,7 +446,7 @@ public class BackupManager {
 		return false;
 	}
 
-	private static String normalizeEntryName(String name) {
+	static String normalizeEntryName(String name) {
 		String path = name.replace('\\', '/');
 		while (path.startsWith("./")) {
 			path = path.substring(2);
@@ -434,7 +454,7 @@ public class BackupManager {
 		return path;
 	}
 
-	private static boolean isSafeEntryName(String path) {
+	static boolean isSafeEntryName(String path) {
 		if (path.isEmpty() || path.startsWith("/")) {
 			return false;
 		}
