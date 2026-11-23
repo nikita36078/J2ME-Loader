@@ -32,6 +32,7 @@
     <string name="choose">Вибрати</string>
     <string name="warning">Увага</string>
     <string name="scoped_storage_warning">Ваші дані користувача зберігаються у місці, яке <b>буде видалено</b>, коли ви видалите додаток:\n</string>
+    <string name="error_no_picker">Будь ласка, встановіть збирач файлів</string>
     <string name="midlet_name"><b>Назва: </b></string>
     <string name="midlet_size"><b>Розмір: </b></string>
     <string name="midlet_source"><b>Джерело: </b></string>
@@ -157,6 +158,7 @@
     <string name="opt_save_screen_params">зберегти параметри екрана</string>
     <string name="cmd_menu">Меню</string>
     <string name="dismiss">Скасувати</string>
+    <string name="show">Показати</string>
     <string name="pref_theme_auto_battery">Авто, по режиму економії батареї</string>
     <string name="pref_theme_auto_time">Авто, по часу доби</string>
     <string name="pref_theme_light">Світла</string>
@@ -166,7 +168,10 @@
     <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
     <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
     <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
+    <string name="pref_black_background_title">Чорний фон</string>
+    <string name="pref_black_background_summary">Темна тема</string>
     <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
+    <string name="pref_add_cutout_area_title">Додати область вирізу</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_vibration_title">Увімкнути вібрацію</string>
     <string name="pref_button_shape_title">Форма кнопок</string>

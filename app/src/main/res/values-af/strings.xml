@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="close">Maak toe</string>
+    <string name="help_message">• Die aktivering van filter in sommige gevalle kan werkverrigting aansienlik verminder. Deaktiveer hierdie opsie as die speletjie te stadig is.&lt;BR&gt;• Probleme met beeldflikkering kan opgelos word deur die opsie \"Onmiddellike verwerkingsmodus\" te aktiveer.</string>
 </resources>

@@ -32,6 +32,7 @@
     <string name="choose">اختيار</string>
     <string name="warning">تحذير</string>
     <string name="scoped_storage_warning">يتم تخزين بيانات المستخدم في مسار <b>سيتم حذفه</b> عند إلغاء تثبيت التطبيق:\n</string>
+    <string name="error_no_picker">الرجاء تثبيت تطبيق منتقي الملفات</string>
     <string name="midlet_name"><b>الاسم: </b></string>
     <string name="midlet_size"><b>الحجم: </b></string>
     <string name="midlet_source"><b>المصدر: </b></string>
@@ -157,6 +158,7 @@
     <string name="opt_save_screen_params">حفظ ابعاد الشاشة</string>
     <string name="cmd_menu">القائمة</string>
     <string name="dismiss">إلغاء</string>
+    <string name="show">إظهار</string>
     <string name="pref_theme_auto_battery">تلقائياً، بواسطة توفير البطارية</string>
     <string name="pref_theme_auto_time">تلقائيًا، حسب الوقت من اليوم</string>
     <string name="pref_theme_light">فاتح (ابيض)</string>
@@ -166,7 +168,10 @@
     <string name="pref_requires_restart_summary">يتطلب إعادة التشغيل</string>
     <string name="pref_enable_actionbar_title">تفعيل اكشن بار</string>
     <string name="pref_enable_actionbar_summary">في تطبيقات ملء الشاشة</string>
+    <string name="pref_black_background_title">خلفية سوداء</string>
+    <string name="pref_black_background_summary">للسمة المظلمة</string>
     <string name="pref_enable_statusbar_title">تمكين شريط الحالة</string>
+    <string name="pref_add_cutout_area_title">إضافة منطقة القطع</string>
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="pref_vibration_title">تفعيل الإهتزاز</string>
     <string name="pref_button_shape_title">شكل الزر</string>

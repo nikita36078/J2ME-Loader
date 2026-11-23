@@ -32,6 +32,7 @@
     <string name="choose">ᱵᱟᱪᱷᱟᱣ</string>
     <string name="warning">ᱦᱩᱥᱤᱭᱟᱹᱨ</string>
     <string name="scoped_storage_warning">ᱟᱢᱟᱜ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱰᱟᱴᱟ ᱫᱚ ᱢᱤᱫ ᱡᱟᱭᱜᱟ ᱨᱮ ᱛᱟᱦᱮᱸᱱᱟ ᱡᱟᱦᱟᱸ <b>ᱫᱚ ᱢᱮᱴᱟᱣᱜᱼᱟ</b> ᱡᱟᱦᱟᱸ ᱛᱤᱥ ᱟᱢ ᱫᱚ ᱮᱯ ᱚᱪᱚᱜᱽ ᱟᱢ : \n</string>
+    <string name="error_no_picker">ᱫᱟᱭᱟᱠᱟᱛᱮ ᱢᱤᱫᱴᱟᱹᱝ ᱨᱮᱫᱽ ᱵᱟᱪᱷᱟᱣ ᱮᱯ ᱵᱚᱦᱟᱞ ᱢᱮ</string>
     <string name="midlet_name"><b>ᱧᱩᱛᱩᱢ : </b></string>
     <string name="midlet_size"><b>ᱢᱟᱯ : </b></string>
     <string name="midlet_source"><b>ᱥᱨᱚᱛ : </b></string>
@@ -40,7 +41,8 @@
     <string name="converting_wait">JAR ᱵᱚᱫᱚᱞᱚᱜ ᱠᱟᱱᱟ...</string>
     <string name="install">ᱵᱚᱦᱟᱞ</string>
     <string name="install_done">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱨᱟᱹᱥ ᱞᱮᱠᱷᱟᱛᱮ ᱵᱚᱦᱟᱞ ᱮᱱᱟ!</string>
-    <string name="install_jar_non_matched_jad">ᱟᱢᱟᱜ ᱮᱯ ᱫᱚ ᱵᱟᱛᱟᱣ ᱠᱟᱱ JAD ᱠᱷᱚᱱ ᱵᱷᱮᱜᱟᱨ ᱜᱮᱭᱟ ᱾ JAD ᱫᱚ ᱚᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱮᱞᱠᱟ ᱛᱮ ᱵᱚᱦᱟᱞ ᱟᱢ ᱥᱮ ?</string>
+    <string name="install_jar_non_matched_jad">ᱟᱢᱟᱜ ᱮᱯ ᱫᱚ ᱵᱟᱛᱟᱣ ᱠᱟᱱ JAD ᱠᱷᱚᱱ ᱵᱷᱮᱜᱟᱨ ᱜᱮᱭᱟ ᱾ JAD ᱫᱚ ᱚᱲᱟᱜ ᱠᱟᱛᱮ ᱡᱮᱞᱠᱟ ᱛᱮ ᱵᱚᱦᱟᱞ ᱟᱢ ᱥᱮ ?
+</string>
     <string name="install_jar_needed">JAR ᱨᱮᱫᱽ ᱵᱟᱪᱷᱟᱣ ᱢᱮ</string>
     <string name="invalid_resolution_not_saved">ᱵᱷᱩᱞ ᱨᱤᱡᱚᱞᱭᱩᱥᱚᱱ ᱠᱚ : ᱵᱟᱝ ᱥᱟᱧᱪᱟᱣ ᱞᱮᱱᱟ !</string>
     <string name="warn_install_from_net">ᱨᱮᱫᱽ ᱫᱚ ᱤᱱᱴᱚᱨᱱᱮᱴᱨ ᱠᱷᱚᱱ ᱰᱟᱩᱱᱞᱚᱰ ᱮᱱᱟ</string>
@@ -157,6 +159,7 @@
     <string name="opt_save_screen_params">ᱯᱚᱨᱫᱟ ᱮᱞᱮᱠᱷ ᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱢᱮ</string>
     <string name="cmd_menu">ᱢᱮᱱᱩ</string>
     <string name="dismiss">ᱵᱚᱸᱫ</string>
+    <string name="show">ᱫᱮᱠᱷᱟᱣ</string>
     <string name="pref_theme_auto_battery">ᱟᱡ ᱛᱮ, ᱵᱮᱴᱨᱭ ᱥᱟᱺᱪᱟᱣᱤᱭᱟᱹ</string>
     <string name="pref_theme_auto_time">ᱟᱡ ᱛᱮ, ᱢᱟᱦᱟᱸ ᱨᱮᱭᱟᱜ ᱚᱠᱛᱚ ᱛᱮ</string>
     <string name="pref_theme_light">ᱟᱨᱥᱟᱞ</string>
@@ -166,7 +169,10 @@
     <string name="pref_requires_restart_summary">ᱫᱩᱦᱲᱟᱹ ᱨᱤᱥᱴᱟᱴ ᱫᱚᱨᱠᱟᱨ</string>
     <string name="pref_enable_actionbar_title">ᱮᱠᱥᱚᱱᱵᱟᱨ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ</string>
     <string name="pref_enable_actionbar_summary">ᱯᱷᱩᱞᱥᱡᱨᱤᱱ ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱚ ᱨᱮ</string>
+    <string name="pref_black_background_title">ᱦᱮᱸᱫᱮ ᱵᱮᱠᱜᱽᱨᱟᱩᱱᱰ</string>
+    <string name="pref_black_background_summary">ᱧᱩᱛ ᱛᱷᱤᱢ ᱞᱟᱹᱜᱤᱫ</string>
     <string name="pref_enable_statusbar_title">ᱥᱴᱮᱴᱟᱹᱥᱵᱽᱟᱨ ᱮᱢ ᱪᱷᱚ</string>
+    <string name="pref_add_cutout_area_title">ᱜᱮᱫ ᱡᱟᱭᱜᱟ ᱥᱮᱞᱮᱫ ᱢᱮ</string>
     <string name="pref_wakelock_title">ᱥᱠᱨᱤᱱ ᱚᱱ ᱠᱟᱜ ᱢᱮ</string>
     <string name="pref_vibration_title">ᱣᱟᱭᱵᱨᱮᱥᱚᱱ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ</string>
     <string name="pref_button_shape_title">ᱵᱩᱛᱟᱹᱢ ᱨᱩᱯ</string>
