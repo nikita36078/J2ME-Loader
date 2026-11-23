@@ -9,7 +9,7 @@
     <string name="licenses">Giấy phép</string>
     <string name="profiles">Hồ sơ</string>
     <string name="save_log">Lưu log</string>
-    <string name="about_message">Ứng dụng này cho phép bạn khởi động J2ME ứng dụng cùng trò chơi trên Android. Nó duy trì đại đa số 2D cùng 3D trò chơi (bao gồm Mascot Capsule 3D trò chơi).&lt;BR&gt;</string>
+    <string name="about_message">Ứng dụng này cho phép bạn khởi động J2ME ứng dụng cùng trò chơi trên Android. Nó duy trì đại đa số 2D cùng trò chơi 3D (bao gồm trò chơi Mascot Capsule 3D).&lt;BR&gt;</string>
     <string name="help_message">&#8226; Bật tính năng bộ lọc trong một số trường hợp có thể giảm đáng kể hiệu suất. Tắt tùy chọn này nếu trò chơi quá chậm.&lt;BR&gt;&#8226; Các vấn đề nhấp nháy hình ảnh có thể được khắc phục bằng cách bật tuỳ chọn \"Chế độ xử lý ngay lập tức\" tuỳ chỉnh.</string>
     <string name="author">Người phát triển: </string>
     <string name="version">Ph.bản: </string>
@@ -32,6 +32,7 @@
     <string name="choose">Chọn</string>
     <string name="warning">Cảnh báo</string>
     <string name="scoped_storage_warning">Dữ liệu người dùng của bạn được lưu trữ trong một vị trí mà<b>sẽ bị xóa</b> khi bạn gỡ ứng dụng:\n</string>
+    <string name="error_no_picker">Vui lòng cài đặt ứng dụng chọn tập tin</string>
     <string name="midlet_name"><b>Tên: </b></string>
     <string name="midlet_size"><b>K. Thước: </b></string>
     <string name="midlet_source"><b>Nguồn: </b></string>
@@ -80,8 +81,8 @@
     <string name="PREF_HW_ACCELERATION">Gia tốc HW (không ổn định)</string>
     <string name="pref_graphics_software">Chương trình</string>
     <string name="pref_graphics_hw_gles">Gia tốc HW(OpenGL ES)</string>
-    <string name="pref_graphics_hw_view">Gia tốc HW(window)</string>
-    <string name="pref_graphics_hw_surface">Gia tốc HW(surface)</string>
+    <string name="pref_graphics_hw_view">Gia tốc HW (window)</string>
+    <string name="pref_graphics_hw_surface">Gia tốc HW (surface)</string>
     <string name="PREF_VK_BACK">Nút</string>
     <string name="PREF_VK_FORE">Đường đánh dấu</string>
     <string name="PREF_VK_OUTLINE">Đường nét</string>
@@ -152,11 +153,12 @@
     <string name="screenshot_saved">Ảnh chụp màn hình đã được lưu đến</string>
     <string name="log_saved">Log đã được lưu</string>
     <string name="action_keyboard_ime">Bàn phím (IME)</string>
-    <string name="action_lock_orientation">tỏa định màn hình xoay tròn</string>
+    <string name="action_lock_orientation">Khóa xoay màn hình</string>
     <string name="pref_vk_save_alert">Bàn phím tùy chỉnh sẽ được thay thế bằng hiện tại\nLưu?</string>
     <string name="opt_save_screen_params">lưu thông số màn hình</string>
     <string name="cmd_menu">Menu</string>
     <string name="dismiss">Loại bỏ</string>
+    <string name="show">Xem</string>
     <string name="pref_theme_auto_battery">Tự động, bằng Trình Tiết Kiệm Pin</string>
     <string name="pref_theme_auto_time">Tự động, theo thời gian</string>
     <string name="pref_theme_light">Sáng</string>
@@ -166,7 +168,10 @@
     <string name="pref_requires_restart_summary">Yêu cầu khởi động lại</string>
     <string name="pref_enable_actionbar_title">Bật thanh hành động</string>
     <string name="pref_enable_actionbar_summary">Trong các ứng dụng toàn màn hình</string>
+    <string name="pref_black_background_title">Nền đen</string>
+    <string name="pref_black_background_summary">Dành cho giao diện tối</string>
     <string name="pref_enable_statusbar_title">Bật thanh trạng thái</string>
+    <string name="pref_add_cutout_area_title">Thêm vết cắt màn hình</string>
     <string name="pref_wakelock_title">Giữ màn hình mở</string>
     <string name="pref_vibration_title">Bật rung động</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
@@ -181,10 +186,17 @@
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>
     <string name="pref_emulator_dir">Thư mục làm việc</string>
+    <string name="pref_screenshot_summary">Vô hiệu kích thước hiển thị tùy chỉnh và hiệu ứng khi chụp màn hình</string>
+    <string name="pref_screenshot_title">Chụp ảnh màn hình RAW</string>
+    <string name="pref_category_experimental">Tùy chọn đang thử nghiệm/tạm thời</string>
+    <string name="pref_mascot_summary">Hiển thị thông báo khi sử dụng</string>
+    <string name="pref_mascot_title">Phát hiện Mascot Capsule 3D</string>
     <string name="mapping_dialog_message">Ánh xạ dòng: %1$s</string>
     <string name="mapping_dialog_key_not_specified">không chỉ định</string>
     <string name="mapping_dialog_title">Bấm một phím</string>
     <string name="reset_mapping">Thiết lập lại</string>
+    <string name="alert_map_menu">Phím menu (M) chưa được gán!\nBạn có thể không truy cập được vào các tùy chọn của trình giả lập</string>
+    <string name="save">Lưu</string>
     <string name="error_name">Nhập tên!</string>
     <string name="set_as_default">Đặt như mặc định</string>
     <string name="edit">Chỉnh sửa</string>
@@ -196,4 +208,5 @@
     <string name="error_name_exists">Đã tồn tại, nhập tên khác</string>
     <string name="default_label">"%s (mặc định)"</string>
     <string name="not_saved_exists">Đã tồn tại</string>
+    <string name="alert_rewrite_profile">Một hồ sơ tên \"%1$s\" đã tồn tại.\nBạn có muốn ghi đè không?</string>
 </resources>
