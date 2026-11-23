@@ -32,6 +32,7 @@
     <string name="choose">Seç</string>
     <string name="warning">Uyarı</string>
     <string name="scoped_storage_warning">Kullanıcı verileriniz, uygulamayı kaldırdığınızda <b>silinecek</b> bir konumda depolanır:\n</string>
+    <string name="error_no_picker">Lütfen bir dosya seçici uygulaması yükleyin</string>
     <string name="midlet_name"><b>İsim: </b></string>
     <string name="midlet_size"><b>Boyut: </b></string>
     <string name="midlet_source"><b>Kaynak: </b></string>
@@ -157,6 +158,7 @@
     <string name="opt_save_screen_params">ekran parametrelerini kaydet</string>
     <string name="cmd_menu">Menü</string>
     <string name="dismiss">Reddet</string>
+    <string name="show">Göster</string>
     <string name="pref_theme_auto_battery">Otomatik, Pil Tasarrufu ile</string>
     <string name="pref_theme_auto_time">Otomatik, günün saatine göre</string>
     <string name="pref_theme_light">Açık</string>
@@ -166,7 +168,10 @@
     <string name="pref_requires_restart_summary">Yeniden başlatma gerektirir</string>
     <string name="pref_enable_actionbar_title">Başlık çubuğunu etkinleştir</string>
     <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
+    <string name="pref_black_background_title">Siyah arka plan</string>
+    <string name="pref_black_background_summary">Koyu tema için</string>
     <string name="pref_enable_statusbar_title">Durum çubuğunu etkinleştir</string>
+    <string name="pref_add_cutout_area_title">Kesim alanı ekle</string>
     <string name="pref_wakelock_title">Ekranı açık tut</string>
     <string name="pref_vibration_title">Titreşimi etkinleştir</string>
     <string name="pref_button_shape_title">Tuş şekli</string>
@@ -184,6 +189,8 @@
     <string name="pref_screenshot_summary">Ekran görüntüleri için ölçeklemeyi ve filtrelemeyi devre dışı bırak</string>
     <string name="pref_screenshot_title">Ekran görüntüsü</string>
     <string name="pref_category_experimental">Deneysel/geçici seçenekler</string>
+    <string name="pref_mascot_summary">kullanırken mesaj göster</string>
+    <string name="pref_mascot_title">Mascot Capsule 3D\'yi algıla</string>
     <string name="mapping_dialog_message">Mevcut atama: %1$s</string>
     <string name="mapping_dialog_key_not_specified">belirtilmemiş</string>
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
