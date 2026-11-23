@@ -59,6 +59,10 @@ public class BackupActivity extends BaseActivity {
 			new ActivityResultContracts.OpenDocument(),
 			this::onImportFilePicked);
 
+	private final ActivityResultLauncher<Uri> importDirLauncher = registerForActivityResult(
+			new ActivityResultContracts.OpenDocumentTree(),
+			this::onImportDirPicked);
+
 	private AlertDialog progressDialog;
 	private ProgressBar progressBar;
 
@@ -72,6 +76,7 @@ public class BackupActivity extends BaseActivity {
 		setContentView(binding.getRoot());
 		binding.backupExport.setOnClickListener(v -> openExportPicker());
 		binding.backupImport.setOnClickListener(v -> openImportPicker());
+		binding.backupImportFolder.setOnClickListener(v -> openImportDirPicker());
 
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
@@ -139,6 +144,42 @@ public class BackupActivity extends BaseActivity {
 			Toast.makeText(this, R.string.error_no_picker, Toast.LENGTH_SHORT).show();
 			Log.e(TAG, "Can't open file picker", e);
 		}
+	}
+
+	private void openImportDirPicker() {
+		try {
+			importDirLauncher.launch(null);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, R.string.error_no_picker, Toast.LENGTH_SHORT).show();
+			Log.e(TAG, "Can't open folder picker", e);
+		}
+	}
+
+	private void onImportDirPicked(@Nullable Uri uri) {
+		if (uri == null) {
+			return;
+		}
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.pref_import_folder)
+				.setMessage(R.string.backup_import_confirm)
+				.setPositiveButton(R.string.pref_import_folder, (dialog, which) -> startImportDir(uri))
+				.setNegativeButton(android.R.string.cancel, null)
+				.show();
+	}
+
+	private void startImportDir(Uri uri) {
+		Context context = getApplicationContext();
+		showProgress(R.string.backup_import_title);
+		disposables.add(Completable.fromAction(() ->
+						BackupManager.importFromDirectory(context, uri, this::onBackupProgress))
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(() -> {
+					dismissProgress();
+					Toast.makeText(this, R.string.backup_import_done,
+							Toast.LENGTH_SHORT).show();
+					triggerRebirth();
+				}, throwable -> onBackupError(throwable, R.string.backup_import_folder_failed)));
 	}
 
 	private void onExportTargetPicked(@Nullable Uri uri) {

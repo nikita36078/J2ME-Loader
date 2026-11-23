@@ -26,4 +26,13 @@
         android:text="@string/pref_import_data"
         app:drawableStartCompat="@drawable/ic_setting_import" />
 
+    <Button
+        android:id="@+id/backup_import_folder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawablePadding="8dp"
+        android:text="@string/pref_import_folder"
+        app:drawableStartCompat="@drawable/ic_setting_import" />
+
 </LinearLayout>

@@ -247,6 +247,8 @@
     <string name="backup_import_confirm">Existing files with the same names will be overwritten.\n\nContinue?</string>
     <string name="backup_export_failed">Failed to export data</string>
     <string name="backup_import_failed">Failed to import data</string>
+    <string name="pref_import_folder">Import old folder</string>
+    <string name="backup_import_folder_failed">Failed to import folder. Select the old J2ME-Loader folder (the one containing "converted", "data" and "configs").</string>
     <string name="pref_category_experimental">Experimental/temporary options</string>
     <string name="pref_mascot_summary">Show message when using</string>
     <string name="pref_mascot_title">Detect Mascot Capsule 3D</string>
