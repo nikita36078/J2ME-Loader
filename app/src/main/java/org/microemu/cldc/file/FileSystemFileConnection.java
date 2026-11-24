@@ -129,7 +129,8 @@ public class FileSystemFileConnection implements FileConnection {
 
 	private static String getRoot(String path) {
 		for (String root : FC_ROOTS) {
-			if (path.toLowerCase().startsWith(root))
+			// Case-insensitive match without lowercasing for "fs/MyStuff/"
+			if (path.regionMatches(true, 0, root, 0, root.length()))
 				return root;
 		}
 		int separator = path.indexOf(DIR_SEP);
