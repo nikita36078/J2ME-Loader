@@ -19,8 +19,10 @@
 package javax.microedition.lcdui.keyboard;
 
 import android.util.SparseIntArray;
+import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import androidx.collection.SparseArrayCompat;
 
@@ -32,6 +34,23 @@ public class KeyMapper {
 	public static final int KEY_OPTIONS_MENU = 0;
 	public static final int SE_KEY_SPECIAL_GAMING_A = -13;
 	public static final int SE_KEY_SPECIAL_GAMING_B = -14;
+
+	public static final int AXIS_RIGHT_STICK_UP = -101;
+	public static final int AXIS_RIGHT_STICK_DOWN = -102;
+	public static final int AXIS_RIGHT_STICK_LEFT = -103;
+	public static final int AXIS_RIGHT_STICK_RIGHT = -104;
+	public static final int AXIS_LEFT_TRIGGER = -105;
+	public static final int AXIS_RIGHT_TRIGGER = -106;
+
+	public static final int STICK_UP = 1;
+	public static final int STICK_DOWN = 2;
+	public static final int STICK_LEFT = 4;
+	public static final int STICK_RIGHT = 8;
+	public static final int TRIGGER_LEFT = 16;
+	public static final int TRIGGER_RIGHT = 32;
+
+	private static final float STICK_THRESHOLD = 0.5f;
+	private static final float TRIGGER_THRESHOLD = 0.5f;
 
 	private static final int DEFAULT_LAYOUT = 0;
 	private static final int SIEMENS_LAYOUT = 1;
@@ -208,6 +227,108 @@ public class KeyMapper {
 		}
 		// TODO: 27.06.2021 ignored ascent char combination
 		return event.getUnicodeChar() & KeyCharacterMap.COMBINING_ACCENT_MASK;
+	}
+
+	public static int convertAndroidKeyCode(int keyCode) {
+		return androidToMIDP.get(keyCode, 0);
+	}
+
+	public static boolean isGamepadEvent(MotionEvent event) {
+		return event.isFromSource(InputDevice.SOURCE_JOYSTICK);
+	}
+
+	public static int getRightStickMask(MotionEvent event) {
+		InputDevice device = event.getDevice();
+		int source = event.getSource();
+		int axisX = MotionEvent.AXIS_RX;
+		int axisY = MotionEvent.AXIS_RY;
+		if (device != null && !hasMotionRange(device, source, axisX)) {
+			// Some controllers report the right stick as Z/RZ
+			axisX = MotionEvent.AXIS_Z;
+			axisY = MotionEvent.AXIS_RZ;
+		}
+		return makeStickMask(event.getAxisValue(axisX), event.getAxisValue(axisY));
+	}
+
+	public static int getRightStickDirection(MotionEvent event) {
+		int mask = getRightStickMask(event);
+		if ((mask & STICK_UP) != 0) {
+			return AXIS_RIGHT_STICK_UP;
+		}
+		if ((mask & STICK_DOWN) != 0) {
+			return AXIS_RIGHT_STICK_DOWN;
+		}
+		if ((mask & STICK_LEFT) != 0) {
+			return AXIS_RIGHT_STICK_LEFT;
+		}
+		if ((mask & STICK_RIGHT) != 0) {
+			return AXIS_RIGHT_STICK_RIGHT;
+		}
+		return 0;
+	}
+
+	public static int getTriggerMask(MotionEvent event) {
+		int mask = 0;
+		if (isTriggerPressed(event, MotionEvent.AXIS_LTRIGGER, MotionEvent.AXIS_BRAKE)) {
+			mask |= TRIGGER_LEFT;
+		}
+		if (isTriggerPressed(event, MotionEvent.AXIS_RTRIGGER, MotionEvent.AXIS_GAS)) {
+			mask |= TRIGGER_RIGHT;
+		}
+		return mask;
+	}
+
+	public static int getTriggerDirection(MotionEvent event) {
+		int mask = getTriggerMask(event);
+		if ((mask & TRIGGER_LEFT) != 0) {
+			return AXIS_LEFT_TRIGGER;
+		}
+		if ((mask & TRIGGER_RIGHT) != 0) {
+			return AXIS_RIGHT_TRIGGER;
+		}
+		return 0;
+	}
+
+	private static boolean isTriggerPressed(MotionEvent event, int primaryAxis, int fallbackAxis) {
+		int axis = hasMotionRange(event, primaryAxis) ? primaryAxis : fallbackAxis;
+		return hasMotionRange(event, axis)
+				&& event.getAxisValue(axis) >= TRIGGER_THRESHOLD;
+	}
+
+	private static boolean hasMotionRange(MotionEvent event, int axis) {
+		InputDevice device = event.getDevice();
+		if (device == null) {
+			return false;
+		}
+		int source = event.getSource();
+		InputDevice.MotionRange range = device.getMotionRange(axis, source);
+		if (range == null) {
+			range = device.getMotionRange(axis);
+		}
+		return range != null && range.getMax() > range.getMin();
+	}
+
+	private static boolean hasMotionRange(InputDevice device, int source, int axis) {
+		InputDevice.MotionRange range = device.getMotionRange(axis, source);
+		if (range == null) {
+			range = device.getMotionRange(axis);
+		}
+		return range != null && range.getMax() > range.getMin();
+	}
+
+	private static int makeStickMask(float x, float y) {
+		int mask = 0;
+		if (y <= -STICK_THRESHOLD) {
+			mask |= STICK_UP;
+		} else if (y >= STICK_THRESHOLD) {
+			mask |= STICK_DOWN;
+		}
+		if (x <= -STICK_THRESHOLD) {
+			mask |= STICK_LEFT;
+		} else if (x >= STICK_THRESHOLD) {
+			mask |= STICK_RIGHT;
+		}
+		return mask;
 	}
 
 	public static int convertKeyCode(int keyCode) {

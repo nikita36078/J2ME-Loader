@@ -138,7 +138,8 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		Integer keyId;
 
 		public ButtonMapping(Button button, Integer keyId) {
-			this.button = button;this.keyId = keyId;
+			this.button = button;
+			this.keyId = keyId;
 		}
 	}
 
@@ -182,10 +183,22 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		if (idx < 0) {
 			keyName = getString(R.string.mapping_dialog_key_not_specified);
 		} else {
-			keyName = KeyEvent.keyCodeToString(androidToMIDP.keyAt(idx));
+			keyName = getAndroidKeyName(androidToMIDP.keyAt(idx));
 		}
 		binding.keyMapperPopupMsg.setText(getString(R.string.mapping_dialog_message, keyName));
 		binding.keyMapperLayer.setVisibility(View.VISIBLE);
+	}
+
+	private String getAndroidKeyName(int keyCode) {
+		return switch (keyCode) {
+			case KeyMapper.AXIS_RIGHT_STICK_UP -> "AXIS_RIGHT_STICK_UP";
+			case KeyMapper.AXIS_RIGHT_STICK_DOWN -> "AXIS_RIGHT_STICK_DOWN";
+			case KeyMapper.AXIS_RIGHT_STICK_LEFT -> "AXIS_RIGHT_STICK_LEFT";
+			case KeyMapper.AXIS_RIGHT_STICK_RIGHT -> "AXIS_RIGHT_STICK_RIGHT";
+			case KeyMapper.AXIS_LEFT_TRIGGER -> "AXIS_LEFT_TRIGGER";
+			case KeyMapper.AXIS_RIGHT_TRIGGER -> "AXIS_RIGHT_TRIGGER";
+			default -> KeyEvent.keyCodeToString(keyCode);
+		};
 	}
 
 	private void deleteDuplicates(int value) {
@@ -283,6 +296,26 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			}
 		}
 		return super.dispatchKeyEvent(event);
+	}
+
+	@Override
+	public boolean dispatchGenericMotionEvent(MotionEvent event) {
+		if (binding.keyMapperLayer.getVisibility() == View.VISIBLE
+				&& event.getAction() == MotionEvent.ACTION_MOVE
+				&& KeyMapper.isGamepadEvent(event)
+				&& canvasKey != KeyMapper.KEY_OPTIONS_MENU) {
+			int axisKey = KeyMapper.getTriggerDirection(event);
+			if (axisKey == 0) {
+				axisKey = KeyMapper.getRightStickDirection(event);
+			}
+			if (axisKey != 0) {
+				deleteDuplicates(canvasKey);
+				androidToMIDP.put(axisKey, canvasKey);
+				binding.keyMapperLayer.setVisibility(View.GONE);
+				return true;
+			}
+		}
+		return super.dispatchGenericMotionEvent(event);
 	}
 
 	@Override

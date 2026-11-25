@@ -53,7 +53,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -161,6 +160,7 @@ public abstract class Canvas extends Displayable {
 	private FpsCounter fpsCounter;
 	private boolean skipLeftSoft;
 	private boolean skipRightSoft;
+	private int gamepadAxisMask;
 	private int[][] lastPointerPos = new int[20][2];
 
 	protected Canvas() {
@@ -285,6 +285,65 @@ public abstract class Canvas extends Displayable {
 		Display.postEvent(CanvasEvent.getInstance(this,
 				CanvasEvent.KEY_REPEATED,
 				KeyMapper.convertKeyCode(keyCode)));
+	}
+
+	public boolean handleGamepadMotionEvent(MotionEvent event) {
+		if (!KeyMapper.isGamepadEvent(event)) {
+			return false;
+		}
+		int action = event.getActionMasked();
+		if (action == MotionEvent.ACTION_CANCEL) {
+			setGamepadAxisMask(0);
+			return true;
+		}
+		if (action != MotionEvent.ACTION_MOVE) {
+			return false;
+		}
+		return setGamepadAxisMask(KeyMapper.getRightStickMask(event) |
+				KeyMapper.getTriggerMask(event));
+	}
+
+	private boolean setGamepadAxisMask(int mask) {
+		int changed = gamepadAxisMask ^ mask;
+		gamepadAxisMask = mask;
+		if (changed == 0) {
+			return false;
+		}
+		if ((changed & KeyMapper.STICK_UP) != 0) {
+			postGamepadKey(KeyMapper.AXIS_RIGHT_STICK_UP, (mask & KeyMapper.STICK_UP) != 0);
+		}
+		if ((changed & KeyMapper.STICK_DOWN) != 0) {
+			postGamepadKey(KeyMapper.AXIS_RIGHT_STICK_DOWN, (mask & KeyMapper.STICK_DOWN) != 0);
+		}
+		if ((changed & KeyMapper.STICK_LEFT) != 0) {
+			postGamepadKey(KeyMapper.AXIS_RIGHT_STICK_LEFT, (mask & KeyMapper.STICK_LEFT) != 0);
+		}
+		if ((changed & KeyMapper.STICK_RIGHT) != 0) {
+			postGamepadKey(KeyMapper.AXIS_RIGHT_STICK_RIGHT, (mask & KeyMapper.STICK_RIGHT) != 0);
+		}
+		if ((changed & KeyMapper.TRIGGER_LEFT) != 0) {
+			postGamepadKey(KeyMapper.AXIS_LEFT_TRIGGER, (mask & KeyMapper.TRIGGER_LEFT) != 0);
+		}
+		if ((changed & KeyMapper.TRIGGER_RIGHT) != 0) {
+			postGamepadKey(KeyMapper.AXIS_RIGHT_TRIGGER, (mask & KeyMapper.TRIGGER_RIGHT) != 0);
+		}
+		return true;
+	}
+
+	private void postGamepadKey(int androidKeyCode, boolean pressed) {
+		int keyCode = KeyMapper.convertAndroidKeyCode(androidKeyCode);
+		if (keyCode == 0) {
+			return;
+		}
+		if (pressed) {
+			if (overlay == null || !overlay.keyPressed(keyCode)) {
+				postKeyPressed(keyCode);
+			}
+		} else {
+			if (overlay == null || !overlay.keyReleased(keyCode)) {
+				postKeyReleased(keyCode);
+			}
+		}
 	}
 
 	public void doShowNotify() {
@@ -545,6 +604,7 @@ public abstract class Canvas extends Displayable {
 			innerView.getHolder().addCallback(callback);
 			innerView.setOnTouchListener(callback);
 			innerView.setOnKeyListener(callback);
+			innerView.setOnGenericMotionListener(callback);
 			innerView.setFocusableInTouchMode(true);
 			layout.addView(innerView);
 			innerView.requestFocus();
@@ -997,7 +1057,8 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	private class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback, View.OnKeyListener {
+	private class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback,
+			View.OnKeyListener, View.OnGenericMotionListener {
 		private final View mView;
 		OverlayView overlayView;
 
@@ -1178,6 +1239,11 @@ public abstract class Canvas extends Displayable {
 					return false;
 			}
 			return true;
+		}
+
+		@Override
+		public boolean onGenericMotion(View view, MotionEvent motionEvent) {
+			return handleGamepadMotionEvent(motionEvent);
 		}
 
 		@Override
