@@ -1,212 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">Закрити</string>
-    <string name="exit">Вихід</string>
-    <string name="about">Про додаток</string>
-    <string name="help">Довідка</string>
-    <string name="more">Більше</string>
-    <string name="search">Пошук</string>
-    <string name="licenses">Ліцензії</string>
-    <string name="profiles">Профілі</string>
-    <string name="save_log">Зберегти у журнал</string>
-    <string name="about_message">Цей додаток дозволяє запускати J2ME програми та ігри на Android. Він підтримує більшість 2D та 3D ігор (у тому числі Mascot Capsule 3D on).&lt;BR&gt;</string>
-    <string name="help_message">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
-    <string name="author">Автор: </string>
-    <string name="version">Версія: </string>
-    <string name="no_data_for_display">Немає даних</string>
-    <string name="message_delete">Ви дійсно хочете видалити данний додаток?</string>
-    <string name="permission_request_failed">Данний додаток вимагає дозволу записування данних</string>
-    <string name="external_storage_not_mounted">Данний додаток вимагає збереження даних у зовнішню пам\'ять</string>
-    <string name="create">створити</string>
-    <string name="alert_msg_workdir_not_exists">Робочий каталог не існує за шляхом:\n\'%1$s\'.\nВи хочете створити його чи вибрати інший?</string>
-    <string name="action_context_shortcut">Додати ярлик</string>
-    <string name="action_reinstall">Перевстановити</string>
-    <string name="action_settings">Налаштування</string>
-    <string name="action_context_delete">Видалити</string>
-    <string name="action_context_rename">Перейменувати</string>
-    <string name="retry">повторити</string>
-    <string name="err_missing_app">Додаток не знайдено.\nПеревірте файли на пристрої %s або заново створіть ярлик.</string>
-    <string name="error_disk_io">Помилка сховища: перевірте вільне місце на диску</string>
-    <string name="create_apps_dir_failed">Не вдалося створити папку за вказаним шляхом:\n\'%s\nвиберіть іншу.</string>
-    <string name="change">Змінити</string>
-    <string name="choose">Вибрати</string>
-    <string name="warning">Увага</string>
-    <string name="scoped_storage_warning">Ваші дані користувача зберігаються у місці, яке <b>буде видалено</b>, коли ви видалите додаток:\n</string>
-    <string name="error_no_picker">Будь ласка, встановіть збирач файлів</string>
-    <string name="midlet_name"><b>Назва: </b></string>
-    <string name="midlet_size"><b>Розмір: </b></string>
-    <string name="midlet_source"><b>Джерело: </b></string>
-    <string name="midlet_vendor"><b>Постачальник: </b></string>
-    <string name="midlet_version"><b>Версія: </b></string>
-    <string name="converting_wait">Перетворення JAR...</string>
-    <string name="install">встановити</string>
-    <string name="install_done">Додаток успішно встановлено!</string>
-    <string name="install_jar_non_matched_jad">Цей додаток відрізняється від описаної в JAD.\nІгнорувати JAD і все одно встановити?</string>
-    <string name="install_jar_needed">Виберіть файл JAR</string>
-    <string name="invalid_resolution_not_saved">Недійсні розміри: не збережено!</string>
-    <string name="warn_install_from_net">Файл буде завантажено з Інтернету</string>
-    <string name="reinstall">Додаток вже встановлено.\n\nВстановити його повторно?\nУсі дані буде збережено.</string>
-    <string name="reinstall_newest">Оновити цей додаток до версії %1$s?\n\nНаразі встановлено: %2$s\nУсі дані буде збережено.</string>
-    <string name="reinstall_older">Замінити цей додаток версією %1$s?\n\nНаразі встановлено: %2$s\nСтаріша версія може не працювати належним чином із записаними даними.</string>
-    <string name="loading_info">завантаження інформації…</string>
-    <string name="START_CMD">Розпочати</string>
-    <string name="CANCEL_CMD">Скасувати</string>
-    <string name="CLEAR_DATA_CMD">Очистити дані</string>
-    <string name="RESET_SETTINGS_CMD">Скидання налаштувань</string>
-    <string name="RESET_LAYOUT_CMD">Скинути розкладку клавіатури</string>
-    <string name="load_profile">Завантажити профіль</string>
-    <string name="save_profile">Зберегти профіль</string>
-    <string name="PREF_SCREEN_OPTIONS">Налаштування екрану</string>
-    <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
-    <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
-    <string name="PREF_KEEP_ASPECT_RATIO">Зберігати пропорції</string>
-    <string name="PREF_FILTER">Фільтр</string>
-    <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
-    <string name="PREF_SHOW_FPS">Показувати FPS</string>
-    <string name="PREF_FORCE_FULLSCREEN">Примусовий повний екран</string>
-    <string name="PREF_LIMIT_FPS">Обмеження FPS</string>
-    <string name="PREF_FONT_OPTIONS">Параметри шрифту</string>
-    <string name="PREF_WIDTH">Ширина</string>
-    <string name="PREF_HEIGHT">Висота</string>
-    <string name="PREF_FONT_SMALL">Малий</string>
-    <string name="PREF_FONT_MEDIUM">Середній</string>
-    <string name="PREF_FONT_LARGE">Великий</string>
-    <string name="PREF_FONT_SIZE_IN_SP">Значення в масштабованих пікселях</string>
-    <string name="PREF_BACKGROUND">Фон</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
-    <string name="PREF_VK_SHOW">Показати клавіатуру</string>
-    <string name="PREF_VK_FEEDBACK">Вібрація при натисканні</string>
-    <string name="PREF_VK_FORCE_OPACITY">Примусова прозорість для вимк. екрану</string>
-    <string name="PREF_TOUCH_INPUT">Сенсорний ввід</string>
-    <string name="PREF_HW_ACCELERATION">Апаратне прискорення (нестабільне)</string>
-    <string name="pref_graphics_software">Програмне</string>
-    <string name="pref_graphics_hw_gles">Апаратне прискорення (OpenGL ES)</string>
-    <string name="pref_graphics_hw_view">Апаратне прискорення (window)</string>
-    <string name="pref_graphics_hw_surface">Апаратне прискорення (surface)</string>
-    <string name="PREF_VK_BACK">Клавіші</string>
-    <string name="PREF_VK_FORE">Позначки</string>
-    <string name="PREF_VK_OUTLINE">Контур</string>
-    <string name="PREF_VK_ALPHA">Прозорість: </string>
-    <string name="PREF_VK_HIDE_DELAY">Затримка приховування: </string>
-    <string name="PREF_UNIT_MS">мс</string>
-    <string name="PREF_VK_SEL_FORE">Позначки (П)</string>
-    <string name="PREF_VK_SEL_BACK">Клавіші (П)</string>
-    <string name="PREF_VK_KEY_SIZES">Розмір клавіш</string>
-    <string name="PREF_VK_NAV_KEYS">Джойстик: </string>
-    <string name="PREF_VK_SOFT_KEYS">Софт-клавіші: </string>
-    <string name="PREF_VK_NUM_KEYS">Цифри: </string>
-    <string name="PREF_VK_FIRE_KEY">Вогонь: </string>
-    <string name="PREF_VK_SIZE_HINT">Розмір</string>
-    <string name="SIZE_PRESETS">Шаблони</string>
-    <string name="SWAP_SIZES">Поміняти розміри</string>
-    <string name="PREF_SYS_PROPS">Властивості системи</string>
-    <string name="PREF_ORIENTATION">Орієнтація екрану</string>
-    <string name="pref_orientation_default">За замовчуванням</string>
-    <string name="pref_orientation_auto">Авто</string>
-    <string name="pref_orientation_port">Портретна</string>
-    <string name="pref_orientation_land">Альбомна</string>
-    <string name="error">Помилка</string>
-    <string name="message_clear_data">Ви дійсно хочете очистити програмні дані?</string>
-    <string name="PREF_VK_TYPE">Тип клавіатури</string>
-    <string name="pref_vk_type_arrows">Стрілки</string>
-    <string name="pref_vk_type_arrows_numbers">Стрілки &amp; числа</string>
-    <string name="pref_vk_type_custom">Користувацький</string>
-    <string name="pref_vk_type_numbers">Числа</string>
-    <string name="pref_vk_type_numbers_arrows">Числа &amp; стрілки</string>
-    <string name="pref_vk_type_phone">Телефон</string>
-    <string name="pref_vk_type_phone_arrows">Телефонна (стрілки)</string>
-    <string name="PREF_LAYOUT">Розкладка</string>
-    <string name="PREF_SHADER_FILTER">Шейдер:</string>
-    <string name="identity_filter">Швидко (без фільтрів)</string>
-    <string name="shader_tuning">Шейдер-Тюнінг</string>
-    <string name="reset">Скинути</string>
-    <string name="pref_input_devices_title">Пристрої введення</string>
-    <string name="pref_graphics_mode_title">Режим графіки:</string>
-    <string name="PREF_FONT_ANTI_ALIASING">Згладжування</string>
-    <string name="pref_screen_gravity">Розміщення</string>
-    <string name="pref_screen_gravity_bottom">Знизу</string>
-    <string name="pref_screen_gravity_center">По центру</string>
-    <string name="pref_screen_gravity_left">Ліворуч</string>
-    <string name="pref_screen_gravity_right">Праворуч</string>
-    <string name="pref_screen_gravity_top">Вгорі</string>
-    <string name="pref_screen_scale_type">Масштабування</string>
-    <string name="pref_screen_scale_type_fill">Заповнити вікно (ігнорувати пропорції)</string>
-    <string name="pref_screen_scale_type_fit">За розмірами вікна</string>
-    <string name="pref_screen_scale_type_none">Як є</string>
-    <string name="pref_vk_hide_hint">вимкнено</string>
-    <string name="unlimited">необмежено</string>
-    <string name="parallel_screen_redrawing">Паралельне перемальовування екрану</string>
-    <string name="saved">Збережено</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання додатку може призвести до втрати даних або навіть до повного виведення його з ладу! \nПродовжити?</string>
-    <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
-    <string name="select_dialog_title">Обрати MIDlet</string>
-    <string name="crash_dialog_message">Чи ви хочете, надіслати розробнику звіт про помилку?</string>
-    <string name="crash_dialog_title">Виявлена помилка</string>
-    <string name="report_crash">Надіслати</string>
-    <string name="layout_edit_finished">Режим редагування завершено</string>
-    <string name="layout_edit_finish">Завершити режим редагування</string>
-    <string name="layout_edit_mode">Режим редагування клавіатури</string>
-    <string name="layout_scale_mode">Режим зміни розмірів клавіатури</string>
-    <string name="layout_switch">Переключення розкладки клавіатури</string>
-    <string name="hide_buttons">Приховати клавіші</string>
-    <string name="take_screenshot">Зробити скріншот</string>
-    <string name="screenshot_saved">Скріншот було збережено до</string>
-    <string name="log_saved">Журнал помилок збережено</string>
-    <string name="action_keyboard_ime">Клавіатура (IME)</string>
-    <string name="action_lock_orientation">Заблокувати обертання екрана</string>
-    <string name="pref_vk_save_alert">Користувацьку клавіатуру буде замінено поточною\nЗберегти?</string>
-    <string name="opt_save_screen_params">зберегти параметри екрана</string>
-    <string name="cmd_menu">Меню</string>
-    <string name="dismiss">Скасувати</string>
-    <string name="show">Показати</string>
-    <string name="pref_theme_auto_battery">Авто, по режиму економії батареї</string>
-    <string name="pref_theme_auto_time">Авто, по часу доби</string>
-    <string name="pref_theme_light">Світла</string>
-    <string name="pref_theme_night">Темна</string>
-    <string name="pref_theme_system">Слідкувати налаштуваннями системи</string>
-    <string name="pref_theme_title">Тема</string>
-    <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
-    <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
-    <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
-    <string name="pref_black_background_title">Чорний фон</string>
-    <string name="pref_black_background_summary">Темна тема</string>
-    <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
-    <string name="pref_add_cutout_area_title">Додати область вирізу</string>
-    <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
-    <string name="pref_vibration_title">Увімкнути вібрацію</string>
-    <string name="pref_button_shape_title">Форма кнопок</string>
-    <string name="pref_button_shape_oval">Овал</string>
-    <string name="pref_button_shape_rect">Прямокутник</string>
-    <string name="pref_button_shape_round">Заокруглений прямокутник</string>
-    <string name="pref_app_sort_title">Порядок сортування додатків</string>
-    <string name="pref_app_sort_name">Назва</string>
-    <string name="pref_app_sort_date">Дата</string>
-    <string name="pref_app_sort_vendor">Постачальник</string>
-    <string name="pref_map_keys">Зіставлення клавіш</string>
-    <string name="pref_encoding_title">Кодування</string>
-    <string name="pref_default_settings">Налаштування за замовчуванням</string>
-    <string name="pref_emulator_dir">Робоча директорія</string>
-    <string name="pref_screenshot_summary">Вимкнути масштабування та фільтрацію для знімків екрана</string>
-    <string name="pref_screenshot_title">Необроблений знімок екрана</string>
-    <string name="pref_category_experimental">Експериментальні/тимчасові параметри</string>
-    <string name="pref_mascot_summary">Показувати повідомлення при використанні</string>
-    <string name="pref_mascot_title">Виявляти Mascot Capsule 3D</string>
-    <string name="mapping_dialog_message">Поточне зіставлення: %1$s</string>
-    <string name="mapping_dialog_key_not_specified">не визначено</string>
-    <string name="mapping_dialog_title">Натисніть клавішу</string>
-    <string name="reset_mapping">Скинути</string>
-    <string name="alert_map_menu">Клавіша меню (M) не призначена!\nЦе може унеможливити доступ до параметрів емулятора</string>
-    <string name="save">Зберегти</string>
-    <string name="error_name">Введіть ім\'я!</string>
-    <string name="set_as_default">Встановити за замовчуванням</string>
-    <string name="edit">Редагувати</string>
-    <string name="add">Додати</string>
-    <string name="add_profile_description">Створити новий профіль</string>
-    <string name="enter_name">Введіть ім\'я</string>
-    <string name="enter_new_name">Введіть нове ім\'я</string>
-    <string name="set_default_profile_description">Виберіть цей профіль як стандартні налаштування для всіх програм, які будуть встановлені пізніше</string>
-    <string name="error_name_exists">Уже існує, введіть інше ім\'я</string>
-    <string name="default_label">"%s (за замовчуванням)"</string>
-    <string name="not_saved_exists">Вже існує</string>
-    <string name="alert_rewrite_profile">Профіль під назвою \"%1$s\" уже існує.\nВи хочете перезаписати його?</string>
+    <string name="navigation_drawer_open" comment="Accessibility label for opening a navigation drawer, used by the Android support library. The current UI has no drawer; the default English wording is fine.">Відкрити панель навігації</string>
+    <string name="navigation_drawer_close" comment="Accessibility label for closing a navigation drawer, used by the Android support library. The current UI has no drawer; the default English wording is fine.">Закрити вікно навігації</string>
+    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">Закрити</string>
+    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">Вихід</string>
+    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">Про додаток</string>
+    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">Довідка</string>
+    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">Більше</string>
+    <string name="search" comment="Title and accessibility label of the search icon in the app list toolbar; tapping it opens an inline search field that filters installed apps by name as the user types. Single word.">Пошук</string>
+    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">Ліцензії</string>
+    <string name="profiles" comment="Overflow menu item and Settings row title. Opens the Profiles screen: named sets of per-app emulator settings that can be applied to other apps.">Профілі</string>
+    <string name="save_log" comment="Overflow menu item on the app list and in the in-game menu. Writes the emulator log to a file; the toast 'Log has been saved' follows.">Зберегти у журнал</string>
+    <string name="about_message" comment="First paragraph of the About dialog: one-sentence description of the app and the games it supports. Ends with &lt;BR&gt; markup that makes a line break; keep the tag.">Цей додаток дозволяє запускати J2ME програми та ігри на Android. Він підтримує більшість 2D та 3D ігор (у тому числі Mascot Capsule 3D on).&lt;BR&gt;</string>
+    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226; Увімкнення фільтрації в деяких випадках може значно сповільнити швидкодію. Вимкніть цей параметр, якщо гра є занадто повільною.&lt;BR&gt;&#8226; Проблема із мерехтінням зображення може бути вирішена шляхом увімкнення \"режиму невідкладної обробки\".</string>
+    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">Автор: </string>
+    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">Версія: </string>
+    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">Немає даних</string>
+    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">Ви дійсно хочете видалити данний додаток?</string>
+    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">Данний додаток вимагає дозволу записування данних</string>
+    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">Данний додаток вимагає збереження даних у зовнішню пам\'ять</string>
+    <string name="create" comment="Lowercase positive button in the missing-working-directory dialog: creates the folder at the shown path. Also used as a plain verb label.">створити</string>
+    <string name="alert_msg_workdir_not_exists" comment="Startup dialog when the working directory where apps are stored does not exist. %1$s = full folder path, shown inside straight quotes on its own line. Buttons: Create, Change, Exit.">Робочий каталог не існує за шляхом:\n\'%1$s\'.\nВи хочете створити його чи вибрати інший?</string>
+    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">Додати ярлик</string>
+    <string name="action_reinstall" comment="Long-press context menu item for an installed app. Runs the installer again for the same JAR/JAD and keeps app data.">Перевстановити</string>
+    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">Налаштування</string>
+    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">Видалити</string>
+    <string name="action_context_rename" comment="Long-press context menu item for an app and for a profile. Opens a dialog to change its display name.">Перейменувати</string>
+    <string name="retry" comment="Lowercase negative button in the storage-permission dialog that asks for the permission again. Deliberately lowercase in English.">повторити</string>
+    <string name="err_missing_app" comment="Error dialog when an installed app is missing, for example after the storage was unmounted or a shortcut points to deleted data. %s is a storage description already wrapped in quotes and followed by a space (it can be empty), so do not add punctuation around it. Suggests re-creating the shortcut; button Exit.">Додаток не знайдено.\nПеревірте файли на пристрої %s або заново створіть ярлик.</string>
+    <string name="error_disk_io" comment="Toast when the app list database fails with a disk I/O error, for example storage is full or was disconnected. Suggests checking free disk space; no period.">Помилка сховища: перевірте вільне місце на диску</string>
+    <string name="create_apps_dir_failed" comment="Error dialog when the working directory cannot be created. %s = folder path, placed inside straight quotes on its own line. Buttons: Choose and Exit.">Не вдалося створити папку за вказаним шляхом:\n\'%s\nвиберіть іншу.</string>
+    <string name="change" comment="Button in the missing-working-directory dialog: opens a folder picker to choose another location for the working directory.">Змінити</string>
+    <string name="choose" comment="Positive button in the 'failed to create folder' dialog: opens the folder picker to pick a different working directory.">Вибрати</string>
+    <string name="warning" comment="Dialog title for warnings, for example when the working directory is in a location Android deletes on uninstall, or when no Menu key is assigned in the key mapper. Single short noun.">Увага</string>
+    <string name="scoped_storage_warning" comment="Startup warning when the working directory is in app-private storage that Android deletes on uninstall. Contains &lt;b&gt;...&lt;/b&gt; around 'will be deleted'; the folder path is appended right after the colon and the line break. Keep the tags and the trailing colon.">Ваші дані користувача зберігаються у місці, яке <b>буде видалено</b>, коли ви видалите додаток:\n</string>
+    <string name="error_no_picker" comment="Toast when the device has no system file or folder picker. Asks the user to install a file picker app.">Будь ласка, встановіть збирач файлів</string>
+    <string name="midlet_name" comment="Label before the MIDlet name in the app details shown by the installer (before installing). Contains &lt;b&gt;...&lt;/b&gt; markup and a trailing space; keep both. Not a sentence."><b>Назва: </b></string>
+    <string name="midlet_size" comment="Label before the app file size in the installer's app details. Contains &lt;b&gt;...&lt;/b&gt; markup and a trailing space; keep both. Not a sentence."><b>Розмір: </b></string>
+    <string name="midlet_source" comment="Label before the source URL or file path of the app in the installer's app details. Contains &lt;b&gt;...&lt;/b&gt; markup and a trailing space; keep both. The current details view does not display this line, so it is low priority."><b>Джерело: </b></string>
+    <string name="midlet_vendor" comment="Label before the app vendor name in the installer's app details. Contains &lt;b&gt;...&lt;/b&gt; markup and a trailing space; keep both. Not a sentence."><b>Постачальник: </b></string>
+    <string name="midlet_version" comment="Label before the app version in the installer's app details. Contains &lt;b&gt;...&lt;/b&gt; markup and a trailing space; keep both. Not a sentence."><b>Версія: </b></string>
+    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">Перетворення JAR...</string>
+    <string name="install" comment="Lowercase word used as label and inside installer sentences, meaning 'install this app'. Not a title, no period.">встановити</string>
+    <string name="install_done" comment="Success message in the installer dialog after one app was installed. A sentence with an exclamation mark.">Додаток успішно встановлено!</string>
+    <string name="install_jar_non_matched_jad" comment="Confirmation when the selected JAR does not match the description in its JAD file. Yes ignores the JAD and installs anyway.">Цей додаток відрізняється від описаної в JAD.\nІгнорувати JAD і все одно встановити?</string>
+    <string name="install_jar_needed" comment="Message of the blocking installer dialog when the picked JAD file has no matching JAR: asks the user to choose the JAR. The positive button continues the installation.">Виберіть файл JAR</string>
+    <string name="invalid_resolution_not_saved" comment="Toast for an invalid custom screen resolution. Not referenced by the current code (invalid values are rejected with the generic 'Error' toast). Low priority.">Недійсні розміри: не збережено!</string>
+    <string name="warn_install_from_net" comment="Informational line in the installer when the picked file is a URL: the file will be downloaded before installing.">Файл буде завантажено з Інтернету</string>
+    <string name="reinstall" comment="Dialog message when the same app is already installed: asks to reinstall and reassures that all data will be kept.">Додаток вже встановлено.\n\nВстановити його повторно?\nУсі дані буде збережено.</string>
+    <string name="reinstall_newest" comment="Dialog message when a newer version replaces the installed app. %1$s = version being installed, %2$s = version currently installed. Keep both placeholders and the line breaks.">Оновити цей додаток до версії %1$s?\n\nНаразі встановлено: %2$s\nУсі дані буде збережено.</string>
+    <string name="reinstall_older" comment="Dialog message when an older version replaces the installed app. %1$s = version being installed, %2$s = version currently installed. Warns that saved data may not work with the older version.">Замінити цей додаток версією %1$s?\n\nНаразі встановлено: %2$s\nСтаріша версія може не працювати належним чином із записаними даними.</string>
+    <string name="loading_info" comment="Placeholder text in the installer while the JAR manifest is being read. Lowercase, with ellipsis.">завантаження інформації…</string>
+    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">Розпочати</string>
+    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">Скасувати</string>
+    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">Очистити дані</string>
+    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">Скидання налаштувань</string>
+    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">Скинути розкладку клавіатури</string>
+    <string name="load_profile" comment="Overflow menu item on the per-app config screen and title of the dialog that lists profiles to apply to this app.">Завантажити профіль</string>
+    <string name="save_profile" comment="Overflow menu item on the per-app config screen and title of the dialog that saves the current per-app settings as a reusable profile.">Зберегти профіль</string>
+    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">Налаштування екрану</string>
+    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">Масштаб(%)</string>
+    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">Підганяти розмір</string>
+    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">Зберігати пропорції</string>
+    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">Фільтр</string>
+    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">Режим невідкладної обробки</string>
+    <string name="PREF_SHOW_FPS" comment="Switch label in the Screen card. Draws a frame-rate counter over the emulated screen.">Показувати FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN" comment="Switch label in the Screen card. Hides the system status and navigation bars while the MIDlet runs.">Примусовий повний екран</string>
+    <string name="PREF_LIMIT_FPS" comment="Label to the left of the numeric FPS limit field in the Screen card, and an in-game menu item that opens the same setting as a dialog. Leave room for the value field.">Обмеження FPS</string>
+    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">Параметри шрифту</string>
+    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">Ширина</string>
+    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">Висота</string>
+    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">Малий</string>
+    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">Середній</string>
+    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">Великий</string>
+    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">Значення в масштабованих пікселях</string>
+    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">Фон</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">Віртуальна клавіатура</string>
+    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">Показати клавіатуру</string>
+    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">Вібрація при натисканні</string>
+    <string name="PREF_VK_FORCE_OPACITY" comment="Switch label in the Input devices card. Keeps virtual keys fully opaque even where they overlap the emulated game screen; otherwise overlapping keys become semi-transparent so the game stays visible.">Примусова прозорість для вимк. екрану</string>
+    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">Сенсорний ввід</string>
+    <string name="PREF_HW_ACCELERATION" comment="Old combined hardware acceleration switch from earlier versions, replaced by the Graphics mode dropdown. Not shown in the current UI.">Апаратне прискорення (нестабільне)</string>
+    <string name="pref_graphics_software" comment="Option in the graphics-mode dropdown: software renderer, the most compatible mode.">Програмне</string>
+    <string name="pref_graphics_hw_gles" comment="Option in the graphics-mode dropdown: hardware acceleration through OpenGL ES. Keep 'OpenGL ES' untranslated.">Апаратне прискорення (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view" comment="Option in the graphics-mode dropdown: hardware acceleration through a hardware-accelerated View (window). Parentheses are part of the mode name.">Апаратне прискорення (window)</string>
+    <string name="pref_graphics_hw_surface" comment="Old graphics mode from earlier versions; the current Graphics mode dropdown offers Software, OpenGL ES and window only. Not shown in the current UI.">Апаратне прискорення (surface)</string>
+    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">Клавіші</string>
+    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">Позначки</string>
+    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">Контур</string>
+    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">Прозорість: </string>
+    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">Затримка приховування: </string>
+    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">мс</string>
+    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">Позначки (П)</string>
+    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">Клавіші (П)</string>
+    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">Розмір клавіш</string>
+    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">Джойстик: </string>
+    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">Софт-клавіші: </string>
+    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">Цифри: </string>
+    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">Вогонь: </string>
+    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">Розмір</string>
+    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">Шаблони</string>
+    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">Поміняти розміри</string>
+    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">Властивості системи</string>
+    <string name="PREF_ORIENTATION" comment="Label of the screen-orientation dropdown in the Screen card. The values are pref_orientation_default, _auto, _port and _land.">Орієнтація екрану</string>
+    <string name="pref_orientation_default" comment="Option in the screen-orientation dropdown: keep the orientation the MIDlet declares (JAD/MIDlet property), no override.">За замовчуванням</string>
+    <string name="pref_orientation_auto" comment="Option in the screen-orientation dropdown: follow device rotation while the MIDlet runs. Short label in a spinner.">Авто</string>
+    <string name="pref_orientation_port" comment="Option in the screen-orientation dropdown: always run this MIDlet in portrait, ignoring device rotation.">Портретна</string>
+    <string name="pref_orientation_land" comment="Option in the screen-orientation dropdown: always run this MIDlet in landscape, ignoring device rotation.">Альбомна</string>
+    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">Помилка</string>
+    <string name="message_clear_data" comment="Confirmation dialog message for Clear data. OK deletes the app's data permanently. Question mark.">Ви дійсно хочете очистити програмні дані?</string>
+    <string name="PREF_VK_TYPE" comment="Intended title 'Keyboard type' of the virtual keyboard type picker. The current dialog is titled 'Switch keylayout' and uses the pref_vk_type_* option strings.">Тип клавіатури</string>
+    <string name="pref_vk_type_arrows" comment="Option in the 'Switch keylayout' dialog that changes the virtual keyboard: arrow keys only, without a digit row. Shown in a single-choice list.">Стрілки</string>
+    <string name="pref_vk_type_arrows_numbers" comment="Option in the 'Switch keylayout' dialog: arrow keys placed above the row of digits. Must stay distinguishable from 'Numbers &amp; arrows'.">Стрілки &amp; числа</string>
+    <string name="pref_vk_type_custom" comment="Option in the 'Switch keylayout' dialog: keep the layout that the user edited and saved.">Користувацький</string>
+    <string name="pref_vk_type_numbers" comment="Option in the 'Switch keylayout' dialog that changes the virtual keyboard: digit keys only, without arrows. Shown in a single-choice list.">Числа</string>
+    <string name="pref_vk_type_numbers_arrows" comment="Option in the 'Switch keylayout' dialog: a row of digits placed above the arrow keys.">Числа &amp; стрілки</string>
+    <string name="pref_vk_type_phone" comment="Option in the 'Switch keylayout' dialog: classic phone keypad layout with digits and letters.">Телефон</string>
+    <string name="pref_vk_type_phone_arrows" comment="Option in the 'Switch keylayout' dialog: phone keypad plus arrow keys. Parentheses are part of the layout name.">Телефонна (стрілки)</string>
+    <string name="PREF_LAYOUT" comment="Label of the hardware key layout dropdown in the Input devices card. The values (Nokia/SE, Siemens, Motorola, Custom, Nokia E62) are intentionally not translated.">Розкладка</string>
+    <string name="PREF_SHADER_FILTER" comment="Label to the left of the shader dropdown in the Screen card, with a trailing colon. Visible only for hardware graphics modes.">Шейдер:</string>
+    <string name="identity_filter" comment="First entry of the shader dropdown: the built-in shader that applies no post-processing (fastest). Shown next to the Shader label in the Screen card.">Швидко (без фільтрів)</string>
+    <string name="shader_tuning" comment="Title of the Shader Tuning dialog and accessibility label of its tune icon in the Screen card. The dialog appears only for shaders that expose adjustable parameters; shown near a shader dropdown.">Шейдер-Тюнінг</string>
+    <string name="reset" comment="Menu item in the Button codes screen and button in the Shader Tuning dialog. Restores default values. Single verb.">Скинути</string>
+    <string name="pref_input_devices_title" comment="Title of the third card on the per-app config screen: touch input, hardware key layout, key mappings and all virtual keyboard settings.">Пристрої введення</string>
+    <string name="pref_graphics_mode_title" comment="Label of the graphics-mode dropdown in the Screen card, with a trailing colon. Values are pref_graphics_software, pref_graphics_hw_gles and pref_graphics_hw_view.">Режим графіки:</string>
+    <string name="PREF_FONT_ANTI_ALIASING" comment="Switch label in the Font card. Enables smoothing of emulated text; keep the hyphenated spelling used in the language.">Згладжування</string>
+    <string name="pref_screen_gravity" comment="Label of the alignment dropdown in the Screen card. Values are pref_screen_gravity_left, _top, _center, _right, _bottom: where the emulated screen sits when it does not fill the window.">Розміщення</string>
+    <string name="pref_screen_gravity_bottom" comment="Option in the screen alignment dropdown: pin the emulated screen to the bottom edge.">Знизу</string>
+    <string name="pref_screen_gravity_center" comment="Option in the screen alignment dropdown: place the emulated screen in the center of the window when it does not fill it.">По центру</string>
+    <string name="pref_screen_gravity_left" comment="Option in the screen alignment dropdown: pin the emulated screen to the left edge.">Ліворуч</string>
+    <string name="pref_screen_gravity_right" comment="Option in the screen alignment dropdown: pin the emulated screen to the right edge.">Праворуч</string>
+    <string name="pref_screen_gravity_top" comment="Option in the screen alignment dropdown: pin the emulated screen to the top edge.">Вгорі</string>
+    <string name="pref_screen_scale_type" comment="Label of the scaling-mode dropdown in the Screen card. Values are pref_screen_scale_type_none, _fit and _fill.">Масштабування</string>
+    <string name="pref_screen_scale_type_fill" comment="Option in the scaling-mode dropdown: stretch the emulated screen to fill the whole window, ignoring aspect ratio.">Заповнити вікно (ігнорувати пропорції)</string>
+    <string name="pref_screen_scale_type_fit" comment="Option in the scaling-mode dropdown: scale the emulated screen so the whole picture fits inside the window, keeping proportions.">За розмірами вікна</string>
+    <string name="pref_screen_scale_type_none" comment="Option in the scaling-mode dropdown: draw at the original size without scaling (short phrase; 'As is' is the English original).">Як є</string>
+    <string name="pref_vk_hide_hint" comment="Hint inside the empty hide-delay field: an empty value means the keyboard never hides automatically. Lowercase in English.">вимкнено</string>
+    <string name="unlimited" comment="Hint inside the empty FPS limit field: an empty field means no frame-rate limit. All lowercase in English, no period.">необмежено</string>
+    <string name="parallel_screen_redrawing" comment="Switch label in the Screen card, visible in the software graphics mode. Draws the emulated screen in parallel with the MIDlet thread to improve speed; hidden for hardware modes.">Паралельне перемальовування екрану</string>
+    <string name="saved" comment="Toast after a profile is saved or a screen-size preset is added. The code passes a profile name as an extra argument but the visible text has no placeholder; do not add one.">Збережено</string>
+    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">Примусове закривання додатку може призвести до втрати даних або навіть до повного виведення його з ладу! \nПродовжити?</string>
+    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">Необхідне підтвердження</string>
+    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">Обрати MIDlet</string>
+    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">Чи ви хочете, надіслати розробнику звіт про помилку?</string>
+    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">Виявлена помилка</string>
+    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">Надіслати</string>
+    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">Режим редагування завершено</string>
+    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">Завершити режим редагування</string>
+    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">Режим редагування клавіатури</string>
+    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">Режим зміни розмірів клавіатури</string>
+    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">Переключення розкладки клавіатури</string>
+    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">Приховати клавіші</string>
+    <string name="take_screenshot" comment="In-game menu item with a camera icon. Saves a PNG of the emulated screen to the device pictures folder, then shows a toast with the file path.">Зробити скріншот</string>
+    <string name="screenshot_saved" comment="Toast prefix: a space and the saved file path are appended by the app. Do not add a period or a placeholder.">Скріншот було збережено до</string>
+    <string name="log_saved" comment="Toast after the log file was written to storage. Shown briefly at the bottom of the screen; past tense, no placeholder, no period in English.">Журнал помилок збережено</string>
+    <string name="action_keyboard_ime" comment="In-game menu item. Shows the system on-screen keyboard (IME) so text can be typed into the MIDlet.">Клавіатура (IME)</string>
+    <string name="action_lock_orientation" comment="Checkable in-game menu item, visible for canvas MIDlets. Locks the current screen rotation while the app runs.">Заблокувати обертання екрана</string>
+    <string name="pref_vk_save_alert" comment="Message of the confirmation dialog after the virtual keyboard was changed: the stored custom keyboard is about to be replaced by the current one. Two lines, question mark; title is CONFIRMATION_REQUIRED.">Користувацьку клавіатуру буде замінено поточною\nЗберегти?</string>
+    <string name="opt_save_screen_params" comment="Checkbox inside the 'save custom keyboard?' dialog, shown only for phone-style keyboards: also save the current positions and sizes of the screen keys. Lowercase, short.">зберегти параметри екрана</string>
+    <string name="cmd_menu" comment="Label of the left soft key drawn over the emulated MIDlet screen when the MIDlet defines more than one command; tapping it opens the command list. Must be very short to fit a key cap.">Меню</string>
+    <string name="dismiss" comment="Default action label of the Android notification used to emulate a MIDlet soft notification: closes it without opening the app. Single verb.">Скасувати</string>
+    <string name="show" comment="Default action label of the Android notification used to emulate a MIDlet soft notification: opens the app. Single verb.">Показати</string>
+    <string name="pref_theme_auto_battery" comment="Option in the Theme dropdown: switch to the dark theme automatically while the system Battery Saver is active. 'Battery Saver' is the Android feature name.">Авто, по режиму економії батареї</string>
+    <string name="pref_theme_auto_time" comment="Option in the Theme dropdown: switch between light and dark automatically depending on the time of day.">Авто, по часу доби</string>
+    <string name="pref_theme_light" comment="Option in the Theme dropdown: light color scheme. The chosen theme is shown as the summary of the Theme settings row.">Світла</string>
+    <string name="pref_theme_night" comment="Option in the Theme dropdown: dark color scheme. English uses 'Dark', not 'Night'.">Темна</string>
+    <string name="pref_theme_system" comment="First entry of the Language dropdown in Settings: use the device language. The same wording is also intended for a 'follow system' theme option, so prefer a neutral phrase such as 'System default'.">Слідкувати налаштуваннями системи</string>
+    <string name="pref_theme_title" comment="Settings row title. Opens the theme dropdown whose options are pref_theme_light, _night, _auto_time and _auto_battery; the chosen option is shown as the row summary.">Тема</string>
+    <string name="pref_requires_restart_summary" comment="Generic preference summary 'Requires restart'. Not referenced by the current settings XML; kept as a reusable summary for options that need an app restart.">Необхідне перезавантаження</string>
+    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">Увімкнути ActionBar</string>
+    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">У повноекранних додатках</string>
+    <string name="pref_black_background_title" comment="Switch title in Settings: use pure black instead of dark grey for backgrounds in the dark theme.">Чорний фон</string>
+    <string name="pref_black_background_summary" comment="Summary under the 'Black background' switch: explains the option applies to the dark theme. Short phrase, no period.">Темна тема</string>
+    <string name="pref_enable_statusbar_title" comment="Switch title in Settings: show the Android status bar over fullscreen MIDlets. The summary below it is the shared 'In fullscreen applications'.">Увімкнути рядок стану</string>
+    <string name="pref_add_cutout_area_title" comment="Switch title in Settings, shown only on Android 9 and newer: let the MIDlet use the area around the display cutout (notch). Short phrase.">Додати область вирізу</string>
+    <string name="pref_wakelock_title" comment="Switch title in Settings: keep the screen on while a MIDlet runs, so it does not dim or lock during play. No summary.">Зберігати екран увімкненим</string>
+    <string name="pref_vibration_title" comment="Switch title in Settings: allow MIDlets to vibrate the device through the J2ME vibration API. Enabled by default; no summary.">Увімкнути вібрацію</string>
+    <string name="pref_button_shape_title" comment="Label of the virtual key shape dropdown. Values are pref_button_shape_oval, _rect and _round.">Форма кнопок</string>
+    <string name="pref_button_shape_oval" comment="Option in the virtual key shape dropdown: keys are drawn as ovals. Short label inside a spinner.">Овал</string>
+    <string name="pref_button_shape_rect" comment="Option in the virtual key shape dropdown: keys are drawn as rectangles with sharp corners. Short label inside a spinner.">Прямокутник</string>
+    <string name="pref_button_shape_round" comment="Option in the key shape dropdown: rectangles with rounded corners (distinct from 'Rectangle').">Заокруглений прямокутник</string>
+    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">Порядок сортування додатків</string>
+    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">Назва</string>
+    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">Дата</string>
+    <string name="pref_app_sort_vendor" comment="Option in the app list sort popup: group and sort apps by their vendor (author).">Постачальник</string>
+    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">Зіставлення клавіш</string>
+    <string name="pref_encoding_title" comment="Button in the System properties card and the title of the dialog listing available text encodings used by the MIDlet. Single noun.">Кодування</string>
+    <string name="pref_default_settings" comment="Row title from earlier versions; the Settings row now reuses the 'Profiles' title. Not shown in the current UI.">Налаштування за замовчуванням</string>
+    <string name="pref_emulator_dir" comment="Settings row title in the Settings screen. Opens a folder picker for the working directory where installed apps and their data are stored.">Робоча директорія</string>
+    <string name="pref_screenshot_summary" comment="Summary under the Raw screenshot switch: explains that scaling and filtering are turned off for screenshots.">Вимкнути масштабування та фільтрацію для знімків екрана</string>
+    <string name="pref_screenshot_title" comment="Switch title in Settings: take screenshots at the raw emulated resolution, without scaling or filtering.">Необроблений знімок екрана</string>
+    <string name="pref_category_experimental" comment="Header of the last section in Settings, holding temporary and experimental options. Keep the slash; short phrase.">Експериментальні/тимчасові параметри</string>
+    <string name="pref_mascot_summary" comment="Summary under the Mascot Capsule switch: show a message when that 3D API is used. Short phrase.">Показувати повідомлення при використанні</string>
+    <string name="pref_mascot_title" comment="Switch title in the experimental section: detect when a MIDlet uses Mascot Capsule 3D and show a notice.">Виявляти Mascot Capsule 3D</string>
+    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">Поточне зіставлення: %1$s</string>
+    <string name="mapping_dialog_key_not_specified" comment="Fallback shown instead of the key name in the 'Current mapping:' line when no hardware key is assigned yet. Lowercase in English.">не визначено</string>
+    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">Натисніть клавішу</string>
+    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">Скинути</string>
+    <string name="alert_map_menu" comment="Warning dialog in the key mapper when the Menu key (M) has no assignment: without it the in-game options menu may become unreachable. Two lines, exclamation mark; keep '(M)'.">Клавіша меню (M) не призначена!\nЦе може унеможливити доступ до параметрів емулятора</string>
+    <string name="save" comment="Toolbar action in the Keyboard layout editor and in the Button codes screen. Applies and stores the changes. Single verb.">Зберегти</string>
+    <string name="error_name" comment="Toast shown when the profile name field is empty and the user confirms the dialog. Exclamation mark, very short, no placeholder.">Введіть ім\'я!</string>
+    <string name="set_as_default" comment="Context menu item for a profile and checkbox in the Save profile dialog. Makes the profile the standard settings for apps installed later.">Встановити за замовчуванням</string>
+    <string name="edit" comment="Context menu item for a profile and for a custom screen-size preset. Opens the editor for that item.">Редагувати</string>
+    <string name="add" comment="Toolbar plus button in Profiles (tooltip 'Create new profile'), in the shader/soundbank file manager, and accessibility label of the plus icon that stores the current screen size as a preset. One short verb.">Додати</string>
+    <string name="add_profile_description" comment="Tooltip of the plus button in the Profiles screen: creates a new empty profile. Sentence without a period.">Створити новий профіль</string>
+    <string name="enter_name" comment="Title and name-field hint of the dialog that creates a new profile. Sentence case, no question mark.">Введіть ім\'я</string>
+    <string name="enter_new_name" comment="Title and hint of the dialog that renames a profile. The name field is prefilled with the current name, which the user replaces.">Введіть нове ім\'я</string>
+    <string name="set_default_profile_description" comment="Tooltip of the 'Set as default' context menu item: the chosen profile becomes the standard settings for all apps installed afterwards. Long sentence, no period.">Виберіть цей профіль як стандартні налаштування для всіх програм, які будуть встановлені пізніше</string>
+    <string name="error_name_exists" comment="Validation message for a duplicate profile name. Not referenced by the current code; kept for the profile name dialog.">Уже існує, введіть інше ім\'я</string>
+    <string name="default_label" comment="Marks the default profile in the Profiles list and the built-in soundbank in the soundbank dropdown. %s is a name (a profile name, or 'Android' for the soundbank) inserted before the word default. Keep the space and the parentheses.">"%s (за замовчуванням)"</string>
+    <string name="not_saved_exists" comment="Toast when adding or renaming a screen-size preset that already exists. Short phrase, no period.">Вже існує</string>
+    <string name="alert_rewrite_profile" comment="Confirmation when saving a profile under a name that already exists. %1$s = profile name inside straight quotes. Question mark.">Профіль під назвою \"%1$s\" уже існує.\nВи хочете перезаписати його?</string>
 </resources>
