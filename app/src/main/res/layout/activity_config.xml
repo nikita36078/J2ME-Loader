@@ -1022,49 +1022,6 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout><!-- Audio -->
 
-        <!-- System Properties -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/system_properties_config_root"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="?attr/bg_config_card"
-            android:padding="5dp"
-            app:elevation="2dp">
-
-            <TextView
-                android:id="@+id/system_properties_title"
-                style="@style/ConfigTitleTextStyle"
-                android:text="@string/PREF_SYS_PROPS"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/update_encoding"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_margin="4dp"
-                android:text="@string/pref_encoding_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/system_properties_title" />
-
-            <EditText
-                android:id="@+id/system_properties"
-                style="@style/EditTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/PREF_SYS_PROPS_HINT"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:textDirection="ltr"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_encoding"
-                tools:ignore="UnusedAttribute" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout><!-- System Properties -->
-
         <!-- Other -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/other_config_root"
@@ -1110,6 +1067,49 @@
                 app:layout_constraintTop_toBottomOf="@+id/disable_pause_toggle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- System Properties -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/system_properties_config_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="?attr/bg_config_card"
+            android:padding="5dp"
+            app:elevation="2dp">
+
+            <TextView
+                android:id="@+id/system_properties_title"
+                style="@style/ConfigTitleTextStyle"
+                android:text="@string/PREF_SYS_PROPS"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/update_encoding"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_margin="4dp"
+                android:text="@string/pref_encoding_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/system_properties_title" />
+
+            <EditText
+                android:id="@+id/system_properties"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/PREF_SYS_PROPS_HINT"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:textDirection="ltr"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/update_encoding"
+                tools:ignore="UnusedAttribute" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout><!-- System Properties -->
     </LinearLayout>
 
 </ScrollView>
