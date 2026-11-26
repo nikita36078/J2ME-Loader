@@ -1024,16 +1024,21 @@ static void m3gClearInternal(RenderContext *ctx, Background *bg)
     if (bg != NULL) {
         m3gApplyBackground(ctx, bg);
         if (ctx->target.type == SURFACE_MEMORY) {
-            /* The color clear was applied to the target bitmap. If a
-             * background image was rendered as well, copy the back
-             * buffer into the bitmap first. The next M3G draw will
-             * upload the bitmap so that 2D drawing done in between
-             * becomes the backdrop for blending. */
-            if (bg->image != NULL && ctx->target.buffered) {
-                m3gUpdateTargetBuffer(ctx);
-            }
-            if (ctx->target.buffered) {
-                ctx->backBuffer.contentsValid = M3G_FALSE;
+            /* Only when the color buffer was cleared does the target
+             * bitmap need to be uploaded again. If color clearing is
+             * disabled, the back buffer is expected to persist between
+             * frames (e.g. for menu backgrounds). */
+            if (bg->colorClearEnable) {
+                /* If a background image was rendered as well, copy the
+                 * back buffer into the bitmap first. The next M3G draw
+                 * will upload the bitmap so that 2D drawing done in
+                 * between becomes the backdrop for blending. */
+                if (bg->image != NULL && ctx->target.buffered) {
+                    m3gUpdateTargetBuffer(ctx);
+                }
+                if (ctx->target.buffered) {
+                    ctx->backBuffer.contentsValid = M3G_FALSE;
+                }
             }
         }
         else if (ctx->target.buffered && bg->colorClearEnable) {
