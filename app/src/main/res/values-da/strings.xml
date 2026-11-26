@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="exit">Afslut</string>
-    <string name="about">Om</string>
-    <string name="help">Hjælp</string>
-    <string name="more">Mere</string>
-    <string name="licenses">Licenser</string>
-    <string name="help_message">&#8226; Aktivering af filtrering kan i nogle tilfælde reducere ydeevnen. Deaktiver denne indstilling, hvis spillet er for langsomt.&lt;BR&gt;&#8226; Problemer med flimmer kan rettes ved aktivering af indstillingen \"Omgående behandlingstilstand\".</string>
-    <string name="author">Forfatter: </string>
-    <string name="version">Version: </string>
-    <string name="no_data_for_display">Ingen data</string>
-    <string name="message_delete">Vil du slette denne app?</string>
-    <string name="permission_request_failed">Denne app kræver skrivetilladelse til lager</string>
-    <string name="external_storage_not_mounted">Denne app kræver eksternt lager</string>
-    <string name="action_context_shortcut">Tilføj genvej</string>
-    <string name="action_settings">Indstillinger</string>
-    <string name="action_context_delete">Slet</string>
-    <string name="converting_wait">Konverterer JAR...</string>
-    <string name="START_CMD">Start</string>
-    <string name="CANCEL_CMD">Annullér</string>
-    <string name="CLEAR_DATA_CMD">Ryd data</string>
-    <string name="RESET_SETTINGS_CMD">Nulstil indstillinger</string>
-    <string name="RESET_LAYOUT_CMD">Nulstil tastelayout</string>
-    <string name="PREF_SCREEN_OPTIONS">Skærmindstillinger</string>
-    <string name="PREF_SCALE_RATIO">Skalér(%)</string>
-    <string name="PREF_SCALE_TO_FIT">Skalér tilpasset</string>
-    <string name="PREF_KEEP_ASPECT_RATIO">Behold billedformat</string>
-    <string name="PREF_FILTER">Filtrér</string>
-    <string name="PREF_IMMEDIATE">Omgående behandlingstilstand</string>
-    <string name="PREF_FONT_OPTIONS">Skrifttype Indstillinger</string>
-    <string name="PREF_WIDTH">Bredde</string>
-    <string name="PREF_HEIGHT">Højde</string>
-    <string name="PREF_FONT_SMALL">Lille</string>
-    <string name="PREF_FONT_MEDIUM">Mellem</string>
-    <string name="PREF_FONT_LARGE">Stor</string>
-    <string name="PREF_FONT_SIZE_IN_SP">Værdier er i skaleret pixels</string>
-    <string name="PREF_BACKGROUND">Baggrund</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuelt tastatur</string>
-    <string name="PREF_VK_SHOW">Vis tastatur</string>
-    <string name="PREF_VK_FEEDBACK">Berøringsvibration</string>
-    <string name="PREF_TOUCH_INPUT">Berøringsinput</string>
-    <string name="PREF_VK_BACK">Knapper</string>
-    <string name="PREF_VK_FORE">Etiketter</string>
-    <string name="PREF_VK_OUTLINE">Kontur</string>
-    <string name="PREF_VK_ALPHA">Gennemsigtighed: </string>
-    <string name="PREF_VK_HIDE_DELAY">Skjul forsinkelse: </string>
-    <string name="PREF_UNIT_MS">ms</string>
-    <string name="PREF_VK_SEL_FORE">Etiketter (P)</string>
-    <string name="PREF_VK_SEL_BACK">Knapper (P)</string>
-    <string name="PREF_VK_KEY_SIZES">Tastestørrelser</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
-    <string name="PREF_VK_SOFT_KEYS">Softkeys: </string>
-    <string name="PREF_VK_NUM_KEYS">Cifre: </string>
-    <string name="PREF_VK_FIRE_KEY">Skyd: </string>
-    <string name="PREF_VK_SIZE_HINT">Størrelse</string>
-    <string name="SIZE_PRESETS">Forudindstillinger</string>
-    <string name="SWAP_SIZES">Bytte størrelser</string>
-    <string name="PREF_SYS_PROPS">Systemindstillinger</string>
-    <string name="error">Fejl</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Tvangslukning af programmet kan medføre tab af data eller endda ødelægge det helt!\nFortsæt?</string>
-    <string name="CONFIRMATION_REQUIRED">Bekræftelse kræves</string>
-    <string name="select_dialog_title">Vælg MIDlet</string>
-    <string name="crash_dialog_message">Vil du sende en fejlrapport til udvikleren?</string>
-    <string name="crash_dialog_title">Fejl registreret</string>
-    <string name="report_crash">Send</string>
-    <string name="layout_edit_finished">Redigeringstilstand afsluttet</string>
-    <string name="layout_edit_finish">Afslut redigeringstilstand</string>
-    <string name="layout_edit_mode">Tastelayout redigeringstilstand</string>
-    <string name="layout_scale_mode">Tastelayout størrelsesjustering</string>
-    <string name="layout_switch">Skift tastelayout</string>
-    <string name="hide_buttons">Skjul knapper</string>
-    <string name="pref_enable_actionbar_title">Aktiver handlingslinje</string>
-    <string name="pref_enable_actionbar_summary">I fuldskærmsprogrammer</string>
-    <string name="pref_app_sort_title">App sorteringsrækkefølge</string>
-    <string name="pref_app_sort_name">Navn</string>
-    <string name="pref_app_sort_date">Dato</string>
-    <string name="pref_map_keys">Konfigurer taster</string>
-    <string name="mapping_dialog_message">Nuværende tastekonfiguration: %1$s</string>
-    <string name="mapping_dialog_title">Tryk på en tast</string>
-    <string name="reset_mapping">Nulstil</string>
+    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">Afslut</string>
+    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">Om</string>
+    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">Hjælp</string>
+    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">Mere</string>
+    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">Licenser</string>
+    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226; Aktivering af filtrering kan i nogle tilfælde reducere ydeevnen. Deaktiver denne indstilling, hvis spillet er for langsomt.&lt;BR&gt;&#8226; Problemer med flimmer kan rettes ved aktivering af indstillingen \"Omgående behandlingstilstand\".</string>
+    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">Forfatter: </string>
+    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">Version: </string>
+    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">Ingen data</string>
+    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">Vil du slette denne app?</string>
+    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">Denne app kræver skrivetilladelse til lager</string>
+    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">Denne app kræver eksternt lager</string>
+    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">Tilføj genvej</string>
+    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">Indstillinger</string>
+    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">Slet</string>
+    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">Konverterer JAR...</string>
+    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">Start</string>
+    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">Annullér</string>
+    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">Ryd data</string>
+    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">Nulstil indstillinger</string>
+    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">Nulstil tastelayout</string>
+    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">Skærmindstillinger</string>
+    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">Skalér(%)</string>
+    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">Skalér tilpasset</string>
+    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">Behold billedformat</string>
+    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">Filtrér</string>
+    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">Omgående behandlingstilstand</string>
+    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">Skrifttype Indstillinger</string>
+    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">Bredde</string>
+    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">Højde</string>
+    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">Lille</string>
+    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">Mellem</string>
+    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">Stor</string>
+    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">Værdier er i skaleret pixels</string>
+    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">Baggrund</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">Virtuelt tastatur</string>
+    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">Vis tastatur</string>
+    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">Berøringsvibration</string>
+    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">Berøringsinput</string>
+    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">Knapper</string>
+    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">Etiketter</string>
+    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">Kontur</string>
+    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">Gennemsigtighed: </string>
+    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">Skjul forsinkelse: </string>
+    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">ms</string>
+    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">Etiketter (P)</string>
+    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">Knapper (P)</string>
+    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">Tastestørrelser</string>
+    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">Joystick: </string>
+    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">Softkeys: </string>
+    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">Cifre: </string>
+    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">Skyd: </string>
+    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">Størrelse</string>
+    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">Forudindstillinger</string>
+    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">Bytte størrelser</string>
+    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">Systemindstillinger</string>
+    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">Fejl</string>
+    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">Tvangslukning af programmet kan medføre tab af data eller endda ødelægge det helt!\nFortsæt?</string>
+    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">Bekræftelse kræves</string>
+    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">Vælg MIDlet</string>
+    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">Vil du sende en fejlrapport til udvikleren?</string>
+    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">Fejl registreret</string>
+    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">Send</string>
+    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">Redigeringstilstand afsluttet</string>
+    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">Afslut redigeringstilstand</string>
+    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">Tastelayout redigeringstilstand</string>
+    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">Tastelayout størrelsesjustering</string>
+    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">Skift tastelayout</string>
+    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">Skjul knapper</string>
+    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">Aktiver handlingslinje</string>
+    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">I fuldskærmsprogrammer</string>
+    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">App sorteringsrækkefølge</string>
+    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">Navn</string>
+    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">Dato</string>
+    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">Konfigurer taster</string>
+    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">Nuværende tastekonfiguration: %1$s</string>
+    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">Tryk på en tast</string>
+    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">Nulstil</string>
 </resources>
