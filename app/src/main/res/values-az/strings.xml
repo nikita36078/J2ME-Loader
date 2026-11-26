@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">Bağla</string>
-    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">Çıx</string>
+    <string name="close">Bağla</string>
+    <string name="exit">Çıx</string>
 </resources>
