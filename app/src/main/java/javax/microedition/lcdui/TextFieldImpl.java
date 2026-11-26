@@ -45,6 +45,9 @@ class TextFieldImpl {
 	private final SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
 		public void process() {
+			if (textview == null) {
+				return;
+			}
 			userChange = false;
 			try {
 				textview.setText(text);

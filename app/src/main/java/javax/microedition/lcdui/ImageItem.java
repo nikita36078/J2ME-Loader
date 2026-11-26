@@ -78,6 +78,9 @@ public class ImageItem extends Item {
 	}
 
 	private void updateImageView() {
+		if (imageView == null) {
+			return;
+		}
 		if (image != null) {
 			int virtualWidth = Displayable.getVirtualWidth();
 			int displayWidth = ContextHolder.getDisplayWidth();

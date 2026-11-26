@@ -38,6 +38,9 @@ public class StringItem extends Item {
 	private final SimpleEvent msgSetText = new SimpleEvent() {
 		@Override
 		public void process() {
+			if (textview == null) {
+				return;
+			}
 			if (appearanceMode == HYPERLINK && text != null) {
 				SpannableStringBuilder s = new SpannableStringBuilder(text);
 				s.setSpan(new URLSpan(text), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

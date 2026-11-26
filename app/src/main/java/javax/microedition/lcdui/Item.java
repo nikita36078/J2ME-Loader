@@ -97,6 +97,9 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	private final SimpleEvent msgSetLabel = new SimpleEvent() {
 		@Override
 		public void process() {
+			if (layout == null) {
+				return;
+			}
 			labelview.setText(label);
 
 			switch (labelmode) {
