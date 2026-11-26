@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">Maak toe</string>
-    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">• Die aktivering van filter in sommige gevalle kan werkverrigting aansienlik verminder. Deaktiveer hierdie opsie as die speletjie te stadig is.&lt;BR&gt;• Probleme met beeldflikkering kan opgelos word deur die opsie \"Onmiddellike verwerkingsmodus\" te aktiveer.</string>
+    <string name="close">Maak toe</string>
+    <string name="help_message">• Die aktivering van filter in sommige gevalle kan werkverrigting aansienlik verminder. Deaktiveer hierdie opsie as die speletjie te stadig is.&lt;BR&gt;• Probleme met beeldflikkering kan opgelos word deur die opsie \"Onmiddellike verwerkingsmodus\" te aktiveer.</string>
 </resources>
