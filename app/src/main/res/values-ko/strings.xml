@@ -1,159 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">가까운</string>
-    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">종료</string>
-    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">앱 정보</string>
-    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">도움 및 지원</string>
-    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">더보기</string>
-    <string name="search" comment="Title and accessibility label of the search icon in the app list toolbar; tapping it opens an inline search field that filters installed apps by name as the user types. Single word.">검색</string>
-    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">라이센스</string>
-    <string name="profiles" comment="Overflow menu item and Settings row title. Opens the Profiles screen: named sets of per-app emulator settings that can be applied to other apps.">프로필</string>
-    <string name="save_log" comment="Overflow menu item on the app list and in the in-game menu. Writes the emulator log to a file; the toast 'Log has been saved' follows.">로그 저장</string>
-    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226;어떤 경우에 필터를 활성화하면 성능이 크게 저하될 수 있습니다.게임이 너무 느려지면 이 옵션을 사용하지 마십시오.&lt;BR&gt;&#8226;\"즉각 처리 모드\" 옵션을 사용하여 이미지 플리커링 문제를 해결할 수 있습니다.</string>
-    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">소유자: </string>
-    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">버전: </string>
-    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">데이터가 없음</string>
-    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">이 앱을 삭제하시겠습니까?</string>
-    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">이 앱은 스토리지 읽기 및 쓰기 권한을 얻어이 필요함</string>
-    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">이 앱은 외부 스토리지가 필요함</string>
-    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">바로가기 추가</string>
-    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">설정</string>
-    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">삭제</string>
-    <string name="action_context_rename" comment="Long-press context menu item for an app and for a profile. Opens a dialog to change its display name.">이름 바꾸기</string>
-    <string name="err_missing_app" comment="Error dialog when an installed app is missing, for example after the storage was unmounted or a shortcut points to deleted data. %s is a storage description already wrapped in quotes and followed by a space (it can be empty), so do not add punctuation around it. Suggests re-creating the shortcut; button Exit.">앱을 찾을 수 없습니다.\n%s스토리지를 확인하거나 바로가기를 다시 만들어 주세요.</string>
-    <string name="error_disk_io" comment="Toast when the app list database fails with a disk I/O error, for example storage is full or was disconnected. Suggests checking free disk space; no period.">Storage 오류: 디스크 공간을 확인해주세요</string>
-    <string name="create_apps_dir_failed" comment="Error dialog when the working directory cannot be created. %s = folder path, placed inside straight quotes on its own line. Buttons: Choose and Exit.">경로에 폴더를 만들지 못함:\n\'%s\'\n다른 폴더를 선택하세요.</string>
-    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">Jar 변환 중...</string>
-    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">시작</string>
-    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">취소</string>
-    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">데이터 제거</string>
-    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">설정 초기화</string>
-    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">키 레이아웃 초기화</string>
-    <string name="load_profile" comment="Overflow menu item on the per-app config screen and title of the dialog that lists profiles to apply to this app.">프로필 불러오기</string>
-    <string name="save_profile" comment="Overflow menu item on the per-app config screen and title of the dialog that saves the current per-app settings as a reusable profile.">프로필 저장</string>
-    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">화면 옵션</string>
-    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">비율(%)</string>
-    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">스케일 맞추기</string>
-    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">측면 비율 유지</string>
-    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">필터</string>
-    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">인스턴트 메시징 모드(게임 그래픽 실행이 깜박이면 이를 시작함으로써 해결할 수 있습니다)</string>
-    <string name="PREF_SHOW_FPS" comment="Switch label in the Screen card. Draws a frame-rate counter over the emulated screen.">FPS 표시</string>
-    <string name="PREF_FORCE_FULLSCREEN" comment="Switch label in the Screen card. Hides the system status and navigation bars while the MIDlet runs.">전체 화면 강제</string>
-    <string name="PREF_LIMIT_FPS" comment="Label to the left of the numeric FPS limit field in the Screen card, and an in-game menu item that opens the same setting as a dialog. Leave room for the value field.">FPS 제한</string>
-    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">글꼴 옵션</string>
-    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">넓이</string>
-    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">고도</string>
-    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">작다</string>
-    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">중</string>
-    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">크다</string>
-    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">화면 해상도 단위로 축척</string>
-    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">배경색</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">가상 키보드</string>
-    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">키보드 표시</string>
-    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">진동 피드백</string>
-    <string name="PREF_VK_FORCE_OPACITY" comment="Switch label in the Input devices card. Keeps virtual keys fully opaque even where they overlap the emulated game screen; otherwise overlapping keys become semi-transparent so the game stays visible.">화면 밖 키에 대해 불투명 강제 적용</string>
-    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">스크린 터치</string>
-    <string name="PREF_HW_ACCELERATION" comment="Old combined hardware acceleration switch from earlier versions, replaced by the Graphics mode dropdown. Not shown in the current UI.">하드웨어 가속 (불안정)</string>
-    <string name="pref_graphics_software" comment="Option in the graphics-mode dropdown: software renderer, the most compatible mode.">소프트웨어</string>
-    <string name="pref_graphics_hw_gles" comment="Option in the graphics-mode dropdown: hardware acceleration through OpenGL ES. Keep 'OpenGL ES' untranslated.">하드웨어 가속 (OpenGL ES)</string>
-    <string name="pref_graphics_hw_view" comment="Option in the graphics-mode dropdown: hardware acceleration through a hardware-accelerated View (window). Parentheses are part of the mode name.">하드웨어 가속 (window)</string>
-    <string name="pref_graphics_hw_surface" comment="Old graphics mode from earlier versions; the current Graphics mode dropdown offers Software, OpenGL ES and window only. Not shown in the current UI.">하드웨어 가속 (surface)</string>
-    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">버튼</string>
-    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">라벨</string>
-    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">테두리</string>
-    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">투명도: </string>
-    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">지연 숨기기: </string>
-    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">ms</string>
-    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">라벨 (P)</string>
-    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">버튼 (P)</string>
-    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">키 크기</string>
-    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">조이스틱: </string>
-    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">소프트 키: </string>
-    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">숫자: </string>
-    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">발사: </string>
-    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">크기</string>
-    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">프리셋</string>
-    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">스왑 사이즈</string>
-    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">시스템 속성</string>
-    <string name="PREF_ORIENTATION" comment="Label of the screen-orientation dropdown in the Screen card. The values are pref_orientation_default, _auto, _port and _land.">화면 방향</string>
-    <string name="pref_orientation_default" comment="Option in the screen-orientation dropdown: keep the orientation the MIDlet declares (JAD/MIDlet property), no override.">기본</string>
-    <string name="pref_orientation_auto" comment="Option in the screen-orientation dropdown: follow device rotation while the MIDlet runs. Short label in a spinner.">자동</string>
-    <string name="pref_orientation_port" comment="Option in the screen-orientation dropdown: always run this MIDlet in portrait, ignoring device rotation.">세로</string>
-    <string name="pref_orientation_land" comment="Option in the screen-orientation dropdown: always run this MIDlet in landscape, ignoring device rotation.">가로</string>
-    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">오류</string>
-    <string name="message_clear_data" comment="Confirmation dialog message for Clear data. OK deletes the app's data permanently. Question mark.">앱 데이터를 지우시겠습니까?</string>
-    <string name="PREF_VK_TYPE" comment="Intended title 'Keyboard type' of the virtual keyboard type picker. The current dialog is titled 'Switch keylayout' and uses the pref_vk_type_* option strings.">키보드 유형</string>
-    <string name="pref_vk_type_phone" comment="Option in the 'Switch keylayout' dialog: classic phone keypad layout with digits and letters.">휴대폰</string>
-    <string name="pref_vk_type_phone_arrows" comment="Option in the 'Switch keylayout' dialog: phone keypad plus arrow keys. Parentheses are part of the layout name.">휴대폰 (화살표)</string>
-    <string name="PREF_LAYOUT" comment="Label of the hardware key layout dropdown in the Input devices card. The values (Nokia/SE, Siemens, Motorola, Custom, Nokia E62) are intentionally not translated.">레이아웃</string>
-    <string name="PREF_SHADER_FILTER" comment="Label to the left of the shader dropdown in the Screen card, with a trailing colon. Visible only for hardware graphics modes.">셰이더:</string>
-    <string name="identity_filter" comment="First entry of the shader dropdown: the built-in shader that applies no post-processing (fastest). Shown next to the Shader label in the Screen card.">빠름 (필터 없음)</string>
-    <string name="shader_tuning" comment="Title of the Shader Tuning dialog and accessibility label of its tune icon in the Screen card. The dialog appears only for shaders that expose adjustable parameters; shown near a shader dropdown.">셰이더 튜닝</string>
-    <string name="reset" comment="Menu item in the Button codes screen and button in the Shader Tuning dialog. Restores default values. Single verb.">리셋</string>
-    <string name="pref_input_devices_title" comment="Title of the third card on the per-app config screen: touch input, hardware key layout, key mappings and all virtual keyboard settings.">입력 장치</string>
-    <string name="pref_graphics_mode_title" comment="Label of the graphics-mode dropdown in the Screen card, with a trailing colon. Values are pref_graphics_software, pref_graphics_hw_gles and pref_graphics_hw_view.">그래픽 모드:</string>
-    <string name="PREF_FONT_ANTI_ALIASING" comment="Switch label in the Font card. Enables smoothing of emulated text; keep the hyphenated spelling used in the language.">안티앨리어싱</string>
-    <string name="pref_screen_gravity" comment="Label of the alignment dropdown in the Screen card. Values are pref_screen_gravity_left, _top, _center, _right, _bottom: where the emulated screen sits when it does not fill the window.">화면 위치</string>
-    <string name="pref_screen_gravity_bottom" comment="Option in the screen alignment dropdown: pin the emulated screen to the bottom edge.">아래</string>
-    <string name="pref_screen_gravity_center" comment="Option in the screen alignment dropdown: place the emulated screen in the center of the window when it does not fill it.">중앙</string>
-    <string name="pref_screen_gravity_left" comment="Option in the screen alignment dropdown: pin the emulated screen to the left edge.">왼쪽</string>
-    <string name="pref_screen_gravity_right" comment="Option in the screen alignment dropdown: pin the emulated screen to the right edge.">오른쪽</string>
-    <string name="pref_screen_gravity_top" comment="Option in the screen alignment dropdown: pin the emulated screen to the top edge.">위</string>
-    <string name="pref_screen_scale_type" comment="Label of the scaling-mode dropdown in the Screen card. Values are pref_screen_scale_type_none, _fit and _fill.">스케일 종류</string>
-    <string name="pref_screen_scale_type_fill" comment="Option in the scaling-mode dropdown: stretch the emulated screen to fill the whole window, ignoring aspect ratio.">화면 채우기 (측면 비율 무시)</string>
-    <string name="pref_screen_scale_type_fit" comment="Option in the scaling-mode dropdown: scale the emulated screen so the whole picture fits inside the window, keeping proportions.">화면에 맞추기</string>
-    <string name="pref_screen_scale_type_none" comment="Option in the scaling-mode dropdown: draw at the original size without scaling (short phrase; 'As is' is the English original).">이와</string>
-    <string name="pref_vk_hide_hint" comment="Hint inside the empty hide-delay field: an empty value means the keyboard never hides automatically. Lowercase in English.">비활성화</string>
-    <string name="unlimited" comment="Hint inside the empty FPS limit field: an empty field means no frame-rate limit. All lowercase in English, no period.">제한 없음</string>
-    <string name="parallel_screen_redrawing" comment="Switch label in the Screen card, visible in the software graphics mode. Draws the emulated screen in parallel with the MIDlet thread to improve speed; hidden for hardware modes.">동기화 화면 그리기</string>
-    <string name="saved" comment="Toast after a profile is saved or a screen-size preset is added. The code passes a profile name as an extra argument but the visible text has no placeholder; do not add one.">저장됨</string>
-    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">앱을 강제 종료하면 데이터가 소실되거나 손상될 수 있습니다!\n계속하시겠습니까?</string>
-    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">확인이 필요함</string>
-    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">MIDlet 선택</string>
-    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">개발자에게 오류 보고서를 전송할까요?</string>
-    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">오류가 감지됨</string>
-    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">보내기</string>
-    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">편집 모드 완료됨</string>
-    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">편집 모드 완료</string>
-    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">키 배치 편집</string>
-    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">키 크기 조정</string>
-    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">키 배치 바꾸기</string>
-    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">숨김 버튼</string>
-    <string name="take_screenshot" comment="In-game menu item with a camera icon. Saves a PNG of the emulated screen to the device pictures folder, then shows a toast with the file path.">스크린샷 찍기</string>
-    <string name="screenshot_saved" comment="Toast prefix: a space and the saved file path are appended by the app. Do not add a period or a placeholder.">스크린샷이 저장됨</string>
-    <string name="log_saved" comment="Toast after the log file was written to storage. Shown briefly at the bottom of the screen; past tense, no placeholder, no period in English.">로그가 저장됨</string>
-    <string name="pref_theme_light" comment="Option in the Theme dropdown: light color scheme. The chosen theme is shown as the summary of the Theme settings row.">Light</string>
-    <string name="pref_theme_night" comment="Option in the Theme dropdown: dark color scheme. English uses 'Dark', not 'Night'.">Dark</string>
-    <string name="pref_theme_title" comment="Settings row title. Opens the theme dropdown whose options are pref_theme_light, _night, _auto_time and _auto_battery; the chosen option is shown as the row summary.">테마</string>
-    <string name="pref_requires_restart_summary" comment="Generic preference summary 'Requires restart'. Not referenced by the current settings XML; kept as a reusable summary for options that need an app restart.">재시작이 필요함</string>
-    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">Enable ActionBar</string>
-    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">전체 화면 애플리케이션</string>
-    <string name="pref_enable_statusbar_title" comment="Switch title in Settings: show the Android status bar over fullscreen MIDlets. The summary below it is the shared 'In fullscreen applications'.">상태바 사용</string>
-    <string name="pref_wakelock_title" comment="Switch title in Settings: keep the screen on while a MIDlet runs, so it does not dim or lock during play. No summary.">스크린을 항상 밝게 유지</string>
-    <string name="pref_vibration_title" comment="Switch title in Settings: allow MIDlets to vibrate the device through the J2ME vibration API. Enabled by default; no summary.">진동 활성화</string>
-    <string name="pref_button_shape_title" comment="Label of the virtual key shape dropdown. Values are pref_button_shape_oval, _rect and _round.">버튼 모양</string>
-    <string name="pref_button_shape_oval" comment="Option in the virtual key shape dropdown: keys are drawn as ovals. Short label inside a spinner.">타원형</string>
-    <string name="pref_button_shape_rect" comment="Option in the virtual key shape dropdown: keys are drawn as rectangles with sharp corners. Short label inside a spinner.">직사각형</string>
-    <string name="pref_button_shape_round" comment="Option in the key shape dropdown: rectangles with rounded corners (distinct from 'Rectangle').">원형 직사각형</string>
-    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">애플리케이션 정렬</string>
-    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">이름</string>
-    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">날짜</string>
-    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">키 매핑</string>
-    <string name="pref_encoding_title" comment="Button in the System properties card and the title of the dialog listing available text encodings used by the MIDlet. Single noun.">인코딩</string>
-    <string name="pref_default_settings" comment="Row title from earlier versions; the Settings row now reuses the 'Profiles' title. Not shown in the current UI.">기본 설정</string>
-    <string name="pref_emulator_dir" comment="Settings row title in the Settings screen. Opens a folder picker for the working directory where installed apps and their data are stored.">작업 디렉토리</string>
-    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">현재 맵핑: %1$s</string>
-    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">버튼을 누르세요</string>
-    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">리셋</string>
-    <string name="error_name" comment="Toast shown when the profile name field is empty and the user confirms the dialog. Exclamation mark, very short, no placeholder.">이름 입력!</string>
-    <string name="set_as_default" comment="Context menu item for a profile and checkbox in the Save profile dialog. Makes the profile the standard settings for apps installed later.">기본값으로 설정</string>
-    <string name="edit" comment="Context menu item for a profile and for a custom screen-size preset. Opens the editor for that item.">편집</string>
-    <string name="add" comment="Toolbar plus button in Profiles (tooltip 'Create new profile'), in the shader/soundbank file manager, and accessibility label of the plus icon that stores the current screen size as a preset. One short verb.">추가하다</string>
-    <string name="add_profile_description" comment="Tooltip of the plus button in the Profiles screen: creates a new empty profile. Sentence without a period.">새 프로파일 만들기</string>
-    <string name="enter_name" comment="Title and name-field hint of the dialog that creates a new profile. Sentence case, no question mark.">이름 입력</string>
-    <string name="enter_new_name" comment="Title and hint of the dialog that renames a profile. The name field is prefilled with the current name, which the user replaces.">새 이름 입력</string>
-    <string name="set_default_profile_description" comment="Tooltip of the 'Set as default' context menu item: the chosen profile becomes the standard settings for all apps installed afterwards. Long sentence, no period.">나중에 설치할 모든 앱에 대한 기본 설정으로 이 프로파일 선택</string>
-    <string name="error_name_exists" comment="Validation message for a duplicate profile name. Not referenced by the current code; kept for the profile name dialog.">이미 있음, 다른 이름을 입력하세요</string>
-    <string name="default_label" comment="Marks the default profile in the Profiles list and the built-in soundbank in the soundbank dropdown. %s is a name (a profile name, or 'Android' for the soundbank) inserted before the word default. Keep the space and the parentheses.">"%s (기본)"</string>
-    <string name="not_saved_exists" comment="Toast when adding or renaming a screen-size preset that already exists. Short phrase, no period.">이미 존재함</string>
+    <string name="close">가까운</string>
+    <string name="exit">종료</string>
+    <string name="about">앱 정보</string>
+    <string name="help">도움 및 지원</string>
+    <string name="more">더보기</string>
+    <string name="search">검색</string>
+    <string name="licenses">라이센스</string>
+    <string name="profiles">프로필</string>
+    <string name="save_log">로그 저장</string>
+    <string name="help_message">&#8226;어떤 경우에 필터를 활성화하면 성능이 크게 저하될 수 있습니다.게임이 너무 느려지면 이 옵션을 사용하지 마십시오.&lt;BR&gt;&#8226;\"즉각 처리 모드\" 옵션을 사용하여 이미지 플리커링 문제를 해결할 수 있습니다.</string>
+    <string name="author">소유자: </string>
+    <string name="version">버전: </string>
+    <string name="no_data_for_display">데이터가 없음</string>
+    <string name="message_delete">이 앱을 삭제하시겠습니까?</string>
+    <string name="permission_request_failed">이 앱은 스토리지 읽기 및 쓰기 권한을 얻어이 필요함</string>
+    <string name="external_storage_not_mounted">이 앱은 외부 스토리지가 필요함</string>
+    <string name="action_context_shortcut">바로가기 추가</string>
+    <string name="action_settings">설정</string>
+    <string name="action_context_delete">삭제</string>
+    <string name="action_context_rename">이름 바꾸기</string>
+    <string name="err_missing_app">앱을 찾을 수 없습니다.\n%s스토리지를 확인하거나 바로가기를 다시 만들어 주세요.</string>
+    <string name="error_disk_io">Storage 오류: 디스크 공간을 확인해주세요</string>
+    <string name="create_apps_dir_failed">경로에 폴더를 만들지 못함:\n\'%s\'\n다른 폴더를 선택하세요.</string>
+    <string name="converting_wait">Jar 변환 중...</string>
+    <string name="START_CMD">시작</string>
+    <string name="CANCEL_CMD">취소</string>
+    <string name="CLEAR_DATA_CMD">데이터 제거</string>
+    <string name="RESET_SETTINGS_CMD">설정 초기화</string>
+    <string name="RESET_LAYOUT_CMD">키 레이아웃 초기화</string>
+    <string name="load_profile">프로필 불러오기</string>
+    <string name="save_profile">프로필 저장</string>
+    <string name="PREF_SCREEN_OPTIONS">화면 옵션</string>
+    <string name="PREF_SCALE_RATIO">비율(%)</string>
+    <string name="PREF_SCALE_TO_FIT">스케일 맞추기</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">측면 비율 유지</string>
+    <string name="PREF_FILTER">필터</string>
+    <string name="PREF_IMMEDIATE">인스턴트 메시징 모드(게임 그래픽 실행이 깜박이면 이를 시작함으로써 해결할 수 있습니다)</string>
+    <string name="PREF_SHOW_FPS">FPS 표시</string>
+    <string name="PREF_FORCE_FULLSCREEN">전체 화면 강제</string>
+    <string name="PREF_LIMIT_FPS">FPS 제한</string>
+    <string name="PREF_FONT_OPTIONS">글꼴 옵션</string>
+    <string name="PREF_WIDTH">넓이</string>
+    <string name="PREF_HEIGHT">고도</string>
+    <string name="PREF_FONT_SMALL">작다</string>
+    <string name="PREF_FONT_MEDIUM">중</string>
+    <string name="PREF_FONT_LARGE">크다</string>
+    <string name="PREF_FONT_SIZE_IN_SP">화면 해상도 단위로 축척</string>
+    <string name="PREF_BACKGROUND">배경색</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">가상 키보드</string>
+    <string name="PREF_VK_SHOW">키보드 표시</string>
+    <string name="PREF_VK_FEEDBACK">진동 피드백</string>
+    <string name="PREF_VK_FORCE_OPACITY">화면 밖 키에 대해 불투명 강제 적용</string>
+    <string name="PREF_TOUCH_INPUT">스크린 터치</string>
+    <string name="PREF_HW_ACCELERATION">하드웨어 가속 (불안정)</string>
+    <string name="pref_graphics_software">소프트웨어</string>
+    <string name="pref_graphics_hw_gles">하드웨어 가속 (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">하드웨어 가속 (window)</string>
+    <string name="pref_graphics_hw_surface">하드웨어 가속 (surface)</string>
+    <string name="PREF_VK_BACK">버튼</string>
+    <string name="PREF_VK_FORE">라벨</string>
+    <string name="PREF_VK_OUTLINE">테두리</string>
+    <string name="PREF_VK_ALPHA">투명도: </string>
+    <string name="PREF_VK_HIDE_DELAY">지연 숨기기: </string>
+    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_VK_SEL_FORE">라벨 (P)</string>
+    <string name="PREF_VK_SEL_BACK">버튼 (P)</string>
+    <string name="PREF_VK_KEY_SIZES">키 크기</string>
+    <string name="PREF_VK_NAV_KEYS">조이스틱: </string>
+    <string name="PREF_VK_SOFT_KEYS">소프트 키: </string>
+    <string name="PREF_VK_NUM_KEYS">숫자: </string>
+    <string name="PREF_VK_FIRE_KEY">발사: </string>
+    <string name="PREF_VK_SIZE_HINT">크기</string>
+    <string name="SIZE_PRESETS">프리셋</string>
+    <string name="SWAP_SIZES">스왑 사이즈</string>
+    <string name="PREF_SYS_PROPS">시스템 속성</string>
+    <string name="PREF_ORIENTATION">화면 방향</string>
+    <string name="pref_orientation_default">기본</string>
+    <string name="pref_orientation_auto">자동</string>
+    <string name="pref_orientation_port">세로</string>
+    <string name="pref_orientation_land">가로</string>
+    <string name="error">오류</string>
+    <string name="message_clear_data">앱 데이터를 지우시겠습니까?</string>
+    <string name="PREF_VK_TYPE">키보드 유형</string>
+    <string name="pref_vk_type_phone">휴대폰</string>
+    <string name="pref_vk_type_phone_arrows">휴대폰 (화살표)</string>
+    <string name="PREF_LAYOUT">레이아웃</string>
+    <string name="PREF_SHADER_FILTER">셰이더:</string>
+    <string name="identity_filter">빠름 (필터 없음)</string>
+    <string name="shader_tuning">셰이더 튜닝</string>
+    <string name="reset">리셋</string>
+    <string name="pref_input_devices_title">입력 장치</string>
+    <string name="pref_graphics_mode_title">그래픽 모드:</string>
+    <string name="PREF_FONT_ANTI_ALIASING">안티앨리어싱</string>
+    <string name="pref_screen_gravity">화면 위치</string>
+    <string name="pref_screen_gravity_bottom">아래</string>
+    <string name="pref_screen_gravity_center">중앙</string>
+    <string name="pref_screen_gravity_left">왼쪽</string>
+    <string name="pref_screen_gravity_right">오른쪽</string>
+    <string name="pref_screen_gravity_top">위</string>
+    <string name="pref_screen_scale_type">스케일 종류</string>
+    <string name="pref_screen_scale_type_fill">화면 채우기 (측면 비율 무시)</string>
+    <string name="pref_screen_scale_type_fit">화면에 맞추기</string>
+    <string name="pref_screen_scale_type_none">이와</string>
+    <string name="pref_vk_hide_hint">비활성화</string>
+    <string name="unlimited">제한 없음</string>
+    <string name="parallel_screen_redrawing">동기화 화면 그리기</string>
+    <string name="saved">저장됨</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">앱을 강제 종료하면 데이터가 소실되거나 손상될 수 있습니다!\n계속하시겠습니까?</string>
+    <string name="CONFIRMATION_REQUIRED">확인이 필요함</string>
+    <string name="select_dialog_title">MIDlet 선택</string>
+    <string name="crash_dialog_message">개발자에게 오류 보고서를 전송할까요?</string>
+    <string name="crash_dialog_title">오류가 감지됨</string>
+    <string name="report_crash">보내기</string>
+    <string name="layout_edit_finished">편집 모드 완료됨</string>
+    <string name="layout_edit_finish">편집 모드 완료</string>
+    <string name="layout_edit_mode">키 배치 편집</string>
+    <string name="layout_scale_mode">키 크기 조정</string>
+    <string name="layout_switch">키 배치 바꾸기</string>
+    <string name="hide_buttons">숨김 버튼</string>
+    <string name="take_screenshot">스크린샷 찍기</string>
+    <string name="screenshot_saved">스크린샷이 저장됨</string>
+    <string name="log_saved">로그가 저장됨</string>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_night">Dark</string>
+    <string name="pref_theme_title">테마</string>
+    <string name="pref_requires_restart_summary">재시작이 필요함</string>
+    <string name="pref_enable_actionbar_title">Enable ActionBar</string>
+    <string name="pref_enable_actionbar_summary">전체 화면 애플리케이션</string>
+    <string name="pref_enable_statusbar_title">상태바 사용</string>
+    <string name="pref_wakelock_title">스크린을 항상 밝게 유지</string>
+    <string name="pref_vibration_title">진동 활성화</string>
+    <string name="pref_button_shape_title">버튼 모양</string>
+    <string name="pref_button_shape_oval">타원형</string>
+    <string name="pref_button_shape_rect">직사각형</string>
+    <string name="pref_button_shape_round">원형 직사각형</string>
+    <string name="pref_app_sort_title">애플리케이션 정렬</string>
+    <string name="pref_app_sort_name">이름</string>
+    <string name="pref_app_sort_date">날짜</string>
+    <string name="pref_map_keys">키 매핑</string>
+    <string name="pref_encoding_title">인코딩</string>
+    <string name="pref_default_settings">기본 설정</string>
+    <string name="pref_emulator_dir">작업 디렉토리</string>
+    <string name="mapping_dialog_message">현재 맵핑: %1$s</string>
+    <string name="mapping_dialog_title">버튼을 누르세요</string>
+    <string name="reset_mapping">리셋</string>
+    <string name="error_name">이름 입력!</string>
+    <string name="set_as_default">기본값으로 설정</string>
+    <string name="edit">편집</string>
+    <string name="add">추가하다</string>
+    <string name="add_profile_description">새 프로파일 만들기</string>
+    <string name="enter_name">이름 입력</string>
+    <string name="enter_new_name">새 이름 입력</string>
+    <string name="set_default_profile_description">나중에 설치할 모든 앱에 대한 기본 설정으로 이 프로파일 선택</string>
+    <string name="error_name_exists">이미 있음, 다른 이름을 입력하세요</string>
+    <string name="default_label">"%s (기본)"</string>
+    <string name="not_saved_exists">이미 존재함</string>
 </resources>
