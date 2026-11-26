@@ -1,93 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="exit">ออก</string>
-    <string name="about">เกี่ยวกับ</string>
-    <string name="help">ช่วยเหลือ</string>
-    <string name="more">อื่น ๆ</string>
-    <string name="licenses">ใบอนุญาต</string>
-    <string name="help_message">&#8226; การเปิดใช้งานการกรองข้อมูลอาจทำให้ลดประสิทธิภาพการทำงาน. ปิดใช้งานนี้ตัวเลือกถ้าเกมจะช้าเกินไป.&lt;BR&gt;&#8226; ภาพริบหรี่ปัญหาสามารถแก้ไขได้ โดยเปิดใช้ตัวเลือก \"โหมดการประมวลผลทันที\".</string>
-    <string name="author">ผู้เขียน: </string>
-    <string name="version">รุ่น: </string>
-    <string name="no_data_for_display">ไม่​มี​ข้อมูล</string>
-    <string name="message_delete">ท่านต้องการลบแอปฯนี้หรือไม่?</string>
-    <string name="permission_request_failed">แอปฯนี้ต้องใช้สิทธิ์ในการเขียนที่เก็บข้อมูล</string>
-    <string name="external_storage_not_mounted">แอปฯนี้ต้องใช้สิทธิ์ที่เก็บข้อมูลภายนอก</string>
-    <string name="action_context_shortcut">เพิ่มทางลัด</string>
-    <string name="action_settings">การตั้งค่า</string>
-    <string name="action_context_delete">ลบ</string>
-    <string name="action_context_rename">เปลี่ยนชื่อ</string>
-    <string name="converting_wait">กำลังแปลง JAR...</string>
-    <string name="START_CMD">เริ่ม</string>
-    <string name="CANCEL_CMD">ยกเลิก</string>
-    <string name="CLEAR_DATA_CMD">ล้างข้อมูล</string>
-    <string name="RESET_SETTINGS_CMD">ตั้งค่าใหม่</string>
-    <string name="RESET_LAYOUT_CMD">รีเซ็ต keylayout</string>
-    <string name="PREF_SCREEN_OPTIONS">ตัวเลือกหน้าจอ</string>
-    <string name="PREF_SCALE_RATIO">ขนาด(%)</string>
-    <string name="PREF_SCALE_TO_FIT">ปรับพอดี</string>
-    <string name="PREF_KEEP_ASPECT_RATIO">เก็บ ตามอัตราส่วน</string>
-    <string name="PREF_FILTER">ฟิลเตอร์</string>
-    <string name="PREF_IMMEDIATE">โหมดการประมวลผลทันที</string>
-    <string name="PREF_FONT_OPTIONS">ตัวเลือกฟอนต์</string>
-    <string name="PREF_WIDTH">กว้าง</string>
-    <string name="PREF_HEIGHT">สูง</string>
-    <string name="PREF_FONT_SMALL">เล็ก</string>
-    <string name="PREF_FONT_MEDIUM">ปานกลาง</string>
-    <string name="PREF_FONT_LARGE">ใหญ่</string>
-    <string name="PREF_FONT_SIZE_IN_SP">ค่าจะปรับตามพิกเซล</string>
-    <string name="PREF_BACKGROUND">พื้นหลัง</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
-    <string name="PREF_VK_SHOW">แสดงแป้นพิมพ์</string>
-    <string name="PREF_VK_FEEDBACK">สั่นเมื่อแตะ</string>
-    <string name="PREF_TOUCH_INPUT">Touch input</string>
-    <string name="PREF_HW_ACCELERATION">เร่งฮาร์ดแวร์ (ไม่เสถียร)</string>
-    <string name="PREF_VK_BACK">ปุ่ม</string>
-    <string name="PREF_VK_FORE">ป้ายชื่อ</string>
-    <string name="PREF_VK_OUTLINE">เค้าร่าง</string>
-    <string name="PREF_VK_ALPHA">ความทึบ: </string>
-    <string name="PREF_VK_HIDE_DELAY">Hide delay: </string>
-    <string name="PREF_UNIT_MS">ms</string>
-    <string name="PREF_VK_SEL_FORE">ป้ายชื่อ (P)</string>
-    <string name="PREF_VK_SEL_BACK">ปุ่ม (P)</string>
-    <string name="PREF_VK_KEY_SIZES">ขนาดปุ่ม</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
-    <string name="PREF_VK_SOFT_KEYS">ซอฟต์คีย์: </string>
-    <string name="PREF_VK_NUM_KEYS">ตัวเลข: </string>
-    <string name="PREF_VK_FIRE_KEY">Fire: </string>
-    <string name="PREF_VK_SIZE_HINT">ขนาด</string>
-    <string name="SIZE_PRESETS">ค่าที่ตั้งไว้</string>
-    <string name="SWAP_SIZES">ขนาด Swap</string>
-    <string name="PREF_SYS_PROPS">คุณสมบัติของระบบ</string>
-    <string name="PREF_ORIENTATION">การหมุนหน้าจอ</string>
-    <string name="pref_orientation_default">ค่าเริ่มต้น</string>
-    <string name="pref_orientation_auto">อัตโนมัติ</string>
-    <string name="pref_orientation_port">แนวตั้ง</string>
-    <string name="pref_orientation_land">แนวนอน</string>
-    <string name="error">ผิดพลาด</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">บังคับปิดแอพลิเคชันอาจทำให้สูญเสียข้อมูล หรือแม้แต่ทำลายอย่างสมบูรณ์! \nทำต่อ?</string>
-    <string name="CONFIRMATION_REQUIRED">ต้องการยืนยัน</string>
-    <string name="select_dialog_title">เลือก MIDlet</string>
-    <string name="crash_dialog_message">คุณต้องการส่งรายงานข้อผิดพลาดให้นักพัฒนาหรือไม่?</string>
-    <string name="crash_dialog_title">พบข้อผิดพลาด</string>
-    <string name="report_crash">ส่ง</string>
-    <string name="layout_edit_finished">เสร็จสิ้นโหมดแก้ไข</string>
-    <string name="layout_edit_finish">เสร็จสิ้นโหมดแก้ไข</string>
-    <string name="layout_edit_mode">แก้ไข keylayout</string>
-    <string name="layout_scale_mode">ปรับขนาด keylayout</string>
-    <string name="layout_switch">สลับ keylayout</string>
-    <string name="hide_buttons">ซ่อนปุ่ม</string>
-    <string name="pref_theme_light">สว่าง</string>
-    <string name="pref_theme_night">มืด</string>
-    <string name="pref_theme_title">ธีม</string>
-    <string name="pref_requires_restart_summary">ต้องเริ่มแอปฯใหม่</string>
-    <string name="pref_enable_actionbar_title">เปิดใช้ ActionBar</string>
-    <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
-    <string name="pref_button_shape_title">รูปร่างปุ่ม</string>
-    <string name="pref_app_sort_title">ลำดับการจัดเรียง app</string>
-    <string name="pref_app_sort_name">ชื่อ</string>
-    <string name="pref_app_sort_date">วันที่</string>
-    <string name="pref_map_keys">Key mappings</string>
-    <string name="mapping_dialog_message">Current mapping: %1$s</string>
-    <string name="mapping_dialog_title">กดปุ่ม</string>
-    <string name="reset_mapping">รีเซ็ต</string>
+    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">ออก</string>
+    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">เกี่ยวกับ</string>
+    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">ช่วยเหลือ</string>
+    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">อื่น ๆ</string>
+    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">ใบอนุญาต</string>
+    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226; การเปิดใช้งานการกรองข้อมูลอาจทำให้ลดประสิทธิภาพการทำงาน. ปิดใช้งานนี้ตัวเลือกถ้าเกมจะช้าเกินไป.&lt;BR&gt;&#8226; ภาพริบหรี่ปัญหาสามารถแก้ไขได้ โดยเปิดใช้ตัวเลือก \"โหมดการประมวลผลทันที\".</string>
+    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">ผู้เขียน: </string>
+    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">รุ่น: </string>
+    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">ไม่​มี​ข้อมูล</string>
+    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">ท่านต้องการลบแอปฯนี้หรือไม่?</string>
+    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">แอปฯนี้ต้องใช้สิทธิ์ในการเขียนที่เก็บข้อมูล</string>
+    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">แอปฯนี้ต้องใช้สิทธิ์ที่เก็บข้อมูลภายนอก</string>
+    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">เพิ่มทางลัด</string>
+    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">การตั้งค่า</string>
+    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">ลบ</string>
+    <string name="action_context_rename" comment="Long-press context menu item for an app and for a profile. Opens a dialog to change its display name.">เปลี่ยนชื่อ</string>
+    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">กำลังแปลง JAR...</string>
+    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">เริ่ม</string>
+    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">ยกเลิก</string>
+    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">ล้างข้อมูล</string>
+    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">ตั้งค่าใหม่</string>
+    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">รีเซ็ต keylayout</string>
+    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">ตัวเลือกหน้าจอ</string>
+    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">ขนาด(%)</string>
+    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">ปรับพอดี</string>
+    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">เก็บ ตามอัตราส่วน</string>
+    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">ฟิลเตอร์</string>
+    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">โหมดการประมวลผลทันที</string>
+    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">ตัวเลือกฟอนต์</string>
+    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">กว้าง</string>
+    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">สูง</string>
+    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">เล็ก</string>
+    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">ปานกลาง</string>
+    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">ใหญ่</string>
+    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">ค่าจะปรับตามพิกเซล</string>
+    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">พื้นหลัง</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">Virtual keyboard</string>
+    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">แสดงแป้นพิมพ์</string>
+    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">สั่นเมื่อแตะ</string>
+    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">Touch input</string>
+    <string name="PREF_HW_ACCELERATION" comment="Old combined hardware acceleration switch from earlier versions, replaced by the Graphics mode dropdown. Not shown in the current UI.">เร่งฮาร์ดแวร์ (ไม่เสถียร)</string>
+    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">ปุ่ม</string>
+    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">ป้ายชื่อ</string>
+    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">เค้าร่าง</string>
+    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">ความทึบ: </string>
+    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">Hide delay: </string>
+    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">ms</string>
+    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">ป้ายชื่อ (P)</string>
+    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">ปุ่ม (P)</string>
+    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">ขนาดปุ่ม</string>
+    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">Joystick: </string>
+    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">ซอฟต์คีย์: </string>
+    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">ตัวเลข: </string>
+    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">Fire: </string>
+    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">ขนาด</string>
+    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">ค่าที่ตั้งไว้</string>
+    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">ขนาด Swap</string>
+    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">คุณสมบัติของระบบ</string>
+    <string name="PREF_ORIENTATION" comment="Label of the screen-orientation dropdown in the Screen card. The values are pref_orientation_default, _auto, _port and _land.">การหมุนหน้าจอ</string>
+    <string name="pref_orientation_default" comment="Option in the screen-orientation dropdown: keep the orientation the MIDlet declares (JAD/MIDlet property), no override.">ค่าเริ่มต้น</string>
+    <string name="pref_orientation_auto" comment="Option in the screen-orientation dropdown: follow device rotation while the MIDlet runs. Short label in a spinner.">อัตโนมัติ</string>
+    <string name="pref_orientation_port" comment="Option in the screen-orientation dropdown: always run this MIDlet in portrait, ignoring device rotation.">แนวตั้ง</string>
+    <string name="pref_orientation_land" comment="Option in the screen-orientation dropdown: always run this MIDlet in landscape, ignoring device rotation.">แนวนอน</string>
+    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">ผิดพลาด</string>
+    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">บังคับปิดแอพลิเคชันอาจทำให้สูญเสียข้อมูล หรือแม้แต่ทำลายอย่างสมบูรณ์! \nทำต่อ?</string>
+    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">ต้องการยืนยัน</string>
+    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">เลือก MIDlet</string>
+    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">คุณต้องการส่งรายงานข้อผิดพลาดให้นักพัฒนาหรือไม่?</string>
+    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">พบข้อผิดพลาด</string>
+    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">ส่ง</string>
+    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">เสร็จสิ้นโหมดแก้ไข</string>
+    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">เสร็จสิ้นโหมดแก้ไข</string>
+    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">แก้ไข keylayout</string>
+    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">ปรับขนาด keylayout</string>
+    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">สลับ keylayout</string>
+    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">ซ่อนปุ่ม</string>
+    <string name="pref_theme_light" comment="Option in the Theme dropdown: light color scheme. The chosen theme is shown as the summary of the Theme settings row.">สว่าง</string>
+    <string name="pref_theme_night" comment="Option in the Theme dropdown: dark color scheme. English uses 'Dark', not 'Night'.">มืด</string>
+    <string name="pref_theme_title" comment="Settings row title. Opens the theme dropdown whose options are pref_theme_light, _night, _auto_time and _auto_battery; the chosen option is shown as the row summary.">ธีม</string>
+    <string name="pref_requires_restart_summary" comment="Generic preference summary 'Requires restart'. Not referenced by the current settings XML; kept as a reusable summary for options that need an app restart.">ต้องเริ่มแอปฯใหม่</string>
+    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">เปิดใช้ ActionBar</string>
+    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">In fullscreen applications</string>
+    <string name="pref_button_shape_title" comment="Label of the virtual key shape dropdown. Values are pref_button_shape_oval, _rect and _round.">รูปร่างปุ่ม</string>
+    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">ลำดับการจัดเรียง app</string>
+    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">ชื่อ</string>
+    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">วันที่</string>
+    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">Key mappings</string>
+    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">Current mapping: %1$s</string>
+    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">กดปุ่ม</string>
+    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">รีเซ็ต</string>
 </resources>
