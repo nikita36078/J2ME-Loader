@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">關閉</string>
-    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">退出</string>
-    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">關於</string>
-    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">幫助</string>
-    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">更多</string>
-    <string name="search" comment="Title and accessibility label of the search icon in the app list toolbar; tapping it opens an inline search field that filters installed apps by name as the user types. Single word.">搜尋</string>
-    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">授權</string>
-    <string name="profiles" comment="Overflow menu item and Settings row title. Opens the Profiles screen: named sets of per-app emulator settings that can be applied to other apps.">設定檔</string>
-    <string name="save_log" comment="Overflow menu item on the app list and in the in-game menu. Writes the emulator log to a file; the toast 'Log has been saved' follows.">儲存紀錄</string>
-    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226; • 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; •通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
-    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">作者: </string>
-    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">版本： </string>
-    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">暫無數據</string>
-    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">確定要刪除此應用？</string>
-    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">本應用需要穫取存儲讀寫權限</string>
-    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">該功能需要存儲權限，請去設置授予存儲權限，以便您繼續使用該功能。</string>
-    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">添加到桌面</string>
-    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">設置</string>
-    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">刪除</string>
-    <string name="action_context_rename" comment="Long-press context menu item for an app and for a profile. Opens a dialog to change its display name.">重命名</string>
-    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">正在安裝...</string>
-    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">啟動</string>
-    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">取消</string>
-    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">清除數據</string>
-    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">恢復默認設置</string>
-    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">重置按鍵佈挶</string>
-    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">屏幕選項</string>
-    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">比例(%)</string>
-    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">縮放以適應屏幕(建議開啟，會根據屏幕大小自動放大遊戲圖像)</string>
-    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">保持縱橫比(建議開啟，關閉會彊製拉伸圖像為全屏)</string>
-    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">畫質優化(在某些情況下啟用可能降低性能，如果運行卡頓，可關閉此項)</string>
-    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">即時處理模式(如果遊戲圖像運行閃爍，可以通過啟用此項解決)</string>
-    <string name="PREF_SHOW_FPS" comment="Switch label in the Screen card. Draws a frame-rate counter over the emulated screen.">顯示 FPS</string>
-    <string name="PREF_FORCE_FULLSCREEN" comment="Switch label in the Screen card. Hides the system status and navigation bars while the MIDlet runs.">Force fullsreen</string>
-    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">字體選項</string>
-    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">寬度</string>
-    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">高度</string>
-    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">小</string>
-    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">中</string>
-    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">大</string>
-    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">以屏幕分辨率為單位縮放</string>
-    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">背景</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">虛擬鍵盤</string>
-    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">顯示鍵盤</string>
-    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">觸覺反饋</string>
-    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">屏幕觸摸</string>
-    <string name="PREF_HW_ACCELERATION" comment="Old combined hardware acceleration switch from earlier versions, replaced by the Graphics mode dropdown. Not shown in the current UI.">硬件加速 (不穩定)</string>
-    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">按鍵</string>
-    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">標籤</string>
-    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">邊框</string>
-    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">透明度： </string>
-    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">隱藏延遲: </string>
-    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">ms</string>
-    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">標籤 (P)</string>
-    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">按鍵 (P)</string>
-    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">按鍵呎吋</string>
-    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">搖桿: </string>
-    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">軟按鍵 </string>
-    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">數字： </string>
-    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">火: </string>
-    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">大小</string>
-    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">預設</string>
-    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">交換呎吋</string>
-    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">系統屬性</string>
-    <string name="PREF_ORIENTATION" comment="Label of the screen-orientation dropdown in the Screen card. The values are pref_orientation_default, _auto, _port and _land.">螢幕方向</string>
-    <string name="pref_orientation_default" comment="Option in the screen-orientation dropdown: keep the orientation the MIDlet declares (JAD/MIDlet property), no override.">預設</string>
-    <string name="pref_orientation_auto" comment="Option in the screen-orientation dropdown: follow device rotation while the MIDlet runs. Short label in a spinner.">自動</string>
-    <string name="pref_orientation_port" comment="Option in the screen-orientation dropdown: always run this MIDlet in portrait, ignoring device rotation.">縱向顯示</string>
-    <string name="pref_orientation_land" comment="Option in the screen-orientation dropdown: always run this MIDlet in landscape, ignoring device rotation.">橫向顯示</string>
-    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">錯誤</string>
-    <string name="message_clear_data" comment="Confirmation dialog message for Clear data. OK deletes the app's data permanently. Question mark.">你確定要刪除所有的資料嗎？</string>
-    <string name="PREF_VK_TYPE" comment="Intended title 'Keyboard type' of the virtual keyboard type picker. The current dialog is titled 'Switch keylayout' and uses the pref_vk_type_* option strings.">鍵盤類型</string>
-    <string name="pref_vk_type_phone" comment="Option in the 'Switch keylayout' dialog: classic phone keypad layout with digits and letters.">手機</string>
-    <string name="pref_vk_type_phone_arrows" comment="Option in the 'Switch keylayout' dialog: phone keypad plus arrow keys. Parentheses are part of the layout name.">手機(arrows)</string>
-    <string name="PREF_LAYOUT" comment="Label of the hardware key layout dropdown in the Input devices card. The values (Nokia/SE, Siemens, Motorola, Custom, Nokia E62) are intentionally not translated.">佈挶</string>
-    <string name="parallel_screen_redrawing" comment="Switch label in the Screen card, visible in the software graphics mode. Draws the emulated screen in parallel with the MIDlet thread to improve speed; hidden for hardware modes.">同步畫面繪製</string>
-    <string name="saved" comment="Toast after a profile is saved or a screen-size preset is added. The code passes a profile name as an extra argument but the visible text has no placeholder; do not add one.">已儲存</string>
-    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
-    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">需要確認</string>
-    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">選擇程序結搆</string>
-    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">是否需要向開發者發送錯誤報告？</string>
-    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">檢測到錯誤</string>
-    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">發送</string>
-    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">編輯模式已完成</string>
-    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">按鍵佈挶編輯</string>
-    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">按鍵佈挶編輯</string>
-    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">調整按鍵大小</string>
-    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">切換按鍵佈挶</string>
-    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">隱藏按鍵</string>
-    <string name="take_screenshot" comment="In-game menu item with a camera icon. Saves a PNG of the emulated screen to the device pictures folder, then shows a toast with the file path.">屏幕截圖</string>
-    <string name="screenshot_saved" comment="Toast prefix: a space and the saved file path are appended by the app. Do not add a period or a placeholder.">屏幕截圖已保存到</string>
-    <string name="action_keyboard_ime" comment="In-game menu item. Shows the system on-screen keyboard (IME) so text can be typed into the MIDlet.">鍵盤類型)</string>
-    <string name="pref_theme_light" comment="Option in the Theme dropdown: light color scheme. The chosen theme is shown as the summary of the Theme settings row.">白色主題</string>
-    <string name="pref_theme_night" comment="Option in the Theme dropdown: dark color scheme. English uses 'Dark', not 'Night'.">深色主題</string>
-    <string name="pref_theme_title" comment="Settings row title. Opens the theme dropdown whose options are pref_theme_light, _night, _auto_time and _auto_battery; the chosen option is shown as the row summary.">主題</string>
-    <string name="pref_requires_restart_summary" comment="Generic preference summary 'Requires restart'. Not referenced by the current settings XML; kept as a reusable summary for options that need an app restart.">需要重新啟動</string>
-    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">啟用操作欄</string>
-    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">在應用中全屏</string>
-    <string name="pref_wakelock_title" comment="Switch title in Settings: keep the screen on while a MIDlet runs, so it does not dim or lock during play. No summary.">保持屏幕常亮</string>
-    <string name="pref_button_shape_title" comment="Label of the virtual key shape dropdown. Values are pref_button_shape_oval, _rect and _round.">按鈕形狀</string>
-    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">應用排序</string>
-    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">名稱</string>
-    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">日期</string>
-    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">按鍵映射</string>
-    <string name="pref_encoding_title" comment="Button in the System properties card and the title of the dialog listing available text encodings used by the MIDlet. Single noun.">字元編碼</string>
-    <string name="pref_default_settings" comment="Row title from earlier versions; the Settings row now reuses the 'Profiles' title. Not shown in the current UI.">預設</string>
-    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">當前映射: %1$s</string>
-    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">按任意按鍵</string>
-    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">重設</string>
+    <string name="close">關閉</string>
+    <string name="exit">退出</string>
+    <string name="about">關於</string>
+    <string name="help">幫助</string>
+    <string name="more">更多</string>
+    <string name="search">搜尋</string>
+    <string name="licenses">授權</string>
+    <string name="profiles">設定檔</string>
+    <string name="save_log">儲存紀錄</string>
+    <string name="help_message">&#8226; • 在某些情況下啟用過濾可能大大降低性能。如果遊戲太慢，請禁用此選項。&lt;BR&gt;&#8226; •通過啟用 \"立即處理模式\" 選項，可以脩復圖像閃爍問題。</string>
+    <string name="author">作者: </string>
+    <string name="version">版本： </string>
+    <string name="no_data_for_display">暫無數據</string>
+    <string name="message_delete">確定要刪除此應用？</string>
+    <string name="permission_request_failed">本應用需要穫取存儲讀寫權限</string>
+    <string name="external_storage_not_mounted">該功能需要存儲權限，請去設置授予存儲權限，以便您繼續使用該功能。</string>
+    <string name="action_context_shortcut">添加到桌面</string>
+    <string name="action_settings">設置</string>
+    <string name="action_context_delete">刪除</string>
+    <string name="action_context_rename">重命名</string>
+    <string name="converting_wait">正在安裝...</string>
+    <string name="START_CMD">啟動</string>
+    <string name="CANCEL_CMD">取消</string>
+    <string name="CLEAR_DATA_CMD">清除數據</string>
+    <string name="RESET_SETTINGS_CMD">恢復默認設置</string>
+    <string name="RESET_LAYOUT_CMD">重置按鍵佈挶</string>
+    <string name="PREF_SCREEN_OPTIONS">屏幕選項</string>
+    <string name="PREF_SCALE_RATIO">比例(%)</string>
+    <string name="PREF_SCALE_TO_FIT">縮放以適應屏幕(建議開啟，會根據屏幕大小自動放大遊戲圖像)</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">保持縱橫比(建議開啟，關閉會彊製拉伸圖像為全屏)</string>
+    <string name="PREF_FILTER">畫質優化(在某些情況下啟用可能降低性能，如果運行卡頓，可關閉此項)</string>
+    <string name="PREF_IMMEDIATE">即時處理模式(如果遊戲圖像運行閃爍，可以通過啟用此項解決)</string>
+    <string name="PREF_SHOW_FPS">顯示 FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Force fullsreen</string>
+    <string name="PREF_FONT_OPTIONS">字體選項</string>
+    <string name="PREF_WIDTH">寬度</string>
+    <string name="PREF_HEIGHT">高度</string>
+    <string name="PREF_FONT_SMALL">小</string>
+    <string name="PREF_FONT_MEDIUM">中</string>
+    <string name="PREF_FONT_LARGE">大</string>
+    <string name="PREF_FONT_SIZE_IN_SP">以屏幕分辨率為單位縮放</string>
+    <string name="PREF_BACKGROUND">背景</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虛擬鍵盤</string>
+    <string name="PREF_VK_SHOW">顯示鍵盤</string>
+    <string name="PREF_VK_FEEDBACK">觸覺反饋</string>
+    <string name="PREF_TOUCH_INPUT">屏幕觸摸</string>
+    <string name="PREF_HW_ACCELERATION">硬件加速 (不穩定)</string>
+    <string name="PREF_VK_BACK">按鍵</string>
+    <string name="PREF_VK_FORE">標籤</string>
+    <string name="PREF_VK_OUTLINE">邊框</string>
+    <string name="PREF_VK_ALPHA">透明度： </string>
+    <string name="PREF_VK_HIDE_DELAY">隱藏延遲: </string>
+    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_VK_SEL_FORE">標籤 (P)</string>
+    <string name="PREF_VK_SEL_BACK">按鍵 (P)</string>
+    <string name="PREF_VK_KEY_SIZES">按鍵呎吋</string>
+    <string name="PREF_VK_NAV_KEYS">搖桿: </string>
+    <string name="PREF_VK_SOFT_KEYS">軟按鍵 </string>
+    <string name="PREF_VK_NUM_KEYS">數字： </string>
+    <string name="PREF_VK_FIRE_KEY">火: </string>
+    <string name="PREF_VK_SIZE_HINT">大小</string>
+    <string name="SIZE_PRESETS">預設</string>
+    <string name="SWAP_SIZES">交換呎吋</string>
+    <string name="PREF_SYS_PROPS">系統屬性</string>
+    <string name="PREF_ORIENTATION">螢幕方向</string>
+    <string name="pref_orientation_default">預設</string>
+    <string name="pref_orientation_auto">自動</string>
+    <string name="pref_orientation_port">縱向顯示</string>
+    <string name="pref_orientation_land">橫向顯示</string>
+    <string name="error">錯誤</string>
+    <string name="message_clear_data">你確定要刪除所有的資料嗎？</string>
+    <string name="PREF_VK_TYPE">鍵盤類型</string>
+    <string name="pref_vk_type_phone">手機</string>
+    <string name="pref_vk_type_phone_arrows">手機(arrows)</string>
+    <string name="PREF_LAYOUT">佈挶</string>
+    <string name="parallel_screen_redrawing">同步畫面繪製</string>
+    <string name="saved">已儲存</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
+    <string name="CONFIRMATION_REQUIRED">需要確認</string>
+    <string name="select_dialog_title">選擇程序結搆</string>
+    <string name="crash_dialog_message">是否需要向開發者發送錯誤報告？</string>
+    <string name="crash_dialog_title">檢測到錯誤</string>
+    <string name="report_crash">發送</string>
+    <string name="layout_edit_finished">編輯模式已完成</string>
+    <string name="layout_edit_finish">按鍵佈挶編輯</string>
+    <string name="layout_edit_mode">按鍵佈挶編輯</string>
+    <string name="layout_scale_mode">調整按鍵大小</string>
+    <string name="layout_switch">切換按鍵佈挶</string>
+    <string name="hide_buttons">隱藏按鍵</string>
+    <string name="take_screenshot">屏幕截圖</string>
+    <string name="screenshot_saved">屏幕截圖已保存到</string>
+    <string name="action_keyboard_ime">鍵盤類型)</string>
+    <string name="pref_theme_light">白色主題</string>
+    <string name="pref_theme_night">深色主題</string>
+    <string name="pref_theme_title">主題</string>
+    <string name="pref_requires_restart_summary">需要重新啟動</string>
+    <string name="pref_enable_actionbar_title">啟用操作欄</string>
+    <string name="pref_enable_actionbar_summary">在應用中全屏</string>
+    <string name="pref_wakelock_title">保持屏幕常亮</string>
+    <string name="pref_button_shape_title">按鈕形狀</string>
+    <string name="pref_app_sort_title">應用排序</string>
+    <string name="pref_app_sort_name">名稱</string>
+    <string name="pref_app_sort_date">日期</string>
+    <string name="pref_map_keys">按鍵映射</string>
+    <string name="pref_encoding_title">字元編碼</string>
+    <string name="pref_default_settings">預設</string>
+    <string name="mapping_dialog_message">當前映射: %1$s</string>
+    <string name="mapping_dialog_title">按任意按鍵</string>
+    <string name="reset_mapping">重設</string>
 </resources>
