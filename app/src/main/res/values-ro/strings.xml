@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">Închide</string>
-    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">Ieșire</string>
-    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">Despre</string>
-    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">Ajutor</string>
-    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">Mai multe</string>
-    <string name="search" comment="Title and accessibility label of the search icon in the app list toolbar; tapping it opens an inline search field that filters installed apps by name as the user types. Single word.">Căutare</string>
-    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">Licențe</string>
-    <string name="save_log" comment="Overflow menu item on the app list and in the in-game menu. Writes the emulator log to a file; the toast 'Log has been saved' follows.">Salvează jurnal</string>
-    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226; Permitand filtrarea poate reduce cu mult performanta in unele cazuri. Dezactiveaza aceasta optiune daca jocul ruleaza incet.&lt;BR&gt;&#8226; Problemele legate de imagine pot fi reparate cu ajutorul optiunii \"Mod de procesare imediata\".</string>
-    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">Autor: </string>
-    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">Versiune: </string>
-    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">Nu există informații disponibile</string>
-    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">Chiar vrei sa ștergi această aplicație?</string>
-    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">Această aplicație are nevoie de permisiuni de stocare</string>
-    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">Aceasta aplicație are nevoie de stocare externă</string>
-    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">Adaugă scurtătură</string>
-    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">Setări</string>
-    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">Șterge</string>
-    <string name="action_context_rename" comment="Long-press context menu item for an app and for a profile. Opens a dialog to change its display name.">Renumeste</string>
-    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">Se convertește JAR...</string>
-    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">Start</string>
-    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">Anulare</string>
-    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">Curata date</string>
-    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">Resetează setările</string>
-    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">Resetează formatul tastaturii</string>
-    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">Opțiunile ecranului</string>
-    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">Redimensionare(%)</string>
-    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">Redimensionare pentru potrivire</string>
-    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">Păstrează raportul aspectului</string>
-    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">Filtru</string>
-    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">Modul de prelucrare imediată</string>
-    <string name="PREF_SHOW_FPS" comment="Switch label in the Screen card. Draws a frame-rate counter over the emulated screen.">Afișează FPS</string>
-    <string name="PREF_FORCE_FULLSCREEN" comment="Switch label in the Screen card. Hides the system status and navigation bars while the MIDlet runs.">Forțează pe tot ecranul</string>
-    <string name="PREF_LIMIT_FPS" comment="Label to the left of the numeric FPS limit field in the Screen card, and an in-game menu item that opens the same setting as a dialog. Leave room for the value field.">Limită FPS</string>
-    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">Opțiuni font</string>
-    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">Lățime</string>
-    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">Înălțime</string>
-    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">Mic</string>
-    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">Mediu</string>
-    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">Mare</string>
-    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">Valorile sunt redimensionate în pixeli</string>
-    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">Fundal</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">Tastatură virtuală</string>
-    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">Arată tastatura</string>
-    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">Vibratii</string>
-    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">Intrare atingere</string>
-    <string name="PREF_HW_ACCELERATION" comment="Old combined hardware acceleration switch from earlier versions, replaced by the Graphics mode dropdown. Not shown in the current UI.">Acceleratie HW (instabila)</string>
-    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">Butoane</string>
-    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">Etichete</string>
-    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">Contur</string>
-    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">Opacitate: </string>
-    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">Ascunde întârzierea: </string>
-    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">ms</string>
-    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">Etichete (P)</string>
-    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">Butoane (P)</string>
-    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">Dimensiune tastă</string>
-    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">Joystick: </string>
-    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">Taste moi: </string>
-    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">Cifre: </string>
-    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">Foc: </string>
-    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">Dimensiune</string>
-    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">Presetări</string>
-    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">Schimbă dimensiunea</string>
-    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">Proprietati sistem</string>
-    <string name="PREF_ORIENTATION" comment="Label of the screen-orientation dropdown in the Screen card. The values are pref_orientation_default, _auto, _port and _land.">Orientatie ecran</string>
-    <string name="pref_orientation_default" comment="Option in the screen-orientation dropdown: keep the orientation the MIDlet declares (JAD/MIDlet property), no override.">Implicit</string>
-    <string name="pref_orientation_auto" comment="Option in the screen-orientation dropdown: follow device rotation while the MIDlet runs. Short label in a spinner.">Automat</string>
-    <string name="pref_orientation_port" comment="Option in the screen-orientation dropdown: always run this MIDlet in portrait, ignoring device rotation.">Portret</string>
-    <string name="pref_orientation_land" comment="Option in the screen-orientation dropdown: always run this MIDlet in landscape, ignoring device rotation.">Peisaj</string>
-    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">Eroare</string>
-    <string name="message_clear_data" comment="Confirmation dialog message for Clear data. OK deletes the app's data permanently. Question mark.">Ești sigur că vrei să ștergi datele aplicației?</string>
-    <string name="PREF_VK_TYPE" comment="Intended title 'Keyboard type' of the virtual keyboard type picker. The current dialog is titled 'Switch keylayout' and uses the pref_vk_type_* option strings.">Tip tastatură</string>
-    <string name="pref_vk_type_phone" comment="Option in the 'Switch keylayout' dialog: classic phone keypad layout with digits and letters.">Telefon (numeric)</string>
-    <string name="pref_vk_type_phone_arrows" comment="Option in the 'Switch keylayout' dialog: phone keypad plus arrow keys. Parentheses are part of the layout name.">Telefon (D-pad)</string>
-    <string name="PREF_LAYOUT" comment="Label of the hardware key layout dropdown in the Input devices card. The values (Nokia/SE, Siemens, Motorola, Custom, Nokia E62) are intentionally not translated.">Dispunere</string>
-    <string name="parallel_screen_redrawing" comment="Switch label in the Screen card, visible in the software graphics mode. Draws the emulated screen in parallel with the MIDlet thread to improve speed; hidden for hardware modes.">Redesenarea ecranului în paralel</string>
-    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">Închiderea forțată a aplicației ar putea duce la pierderea datelor!\nVrei să continui?</string>
-    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">Confirmare necesară</string>
-    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">Selecteaza MIDlet</string>
-    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">Dorești să trimiți raportul erorii către programator?</string>
-    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">Eroare detectată</string>
-    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">Trimite</string>
-    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">Modul de editare a fost terminat</string>
-    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">Termină modul de editare</string>
-    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">Modul de editare al formatului tastaturii</string>
-    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">Modul de redimensionare al formatului tastaturii</string>
-    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">Schimbă formatul tastaturii</string>
-    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">Ascunde butoanele</string>
-    <string name="take_screenshot" comment="In-game menu item with a camera icon. Saves a PNG of the emulated screen to the device pictures folder, then shows a toast with the file path.">Creează o captură de ecran</string>
-    <string name="screenshot_saved" comment="Toast prefix: a space and the saved file path are appended by the app. Do not add a period or a placeholder.">Captura de ecran a fost salvată în</string>
-    <string name="log_saved" comment="Toast after the log file was written to storage. Shown briefly at the bottom of the screen; past tense, no placeholder, no period in English.">Jurnalul a fost salvat</string>
-    <string name="pref_theme_light" comment="Option in the Theme dropdown: light color scheme. The chosen theme is shown as the summary of the Theme settings row.">Luminata</string>
-    <string name="pref_theme_night" comment="Option in the Theme dropdown: dark color scheme. English uses 'Dark', not 'Night'.">Intunecata</string>
-    <string name="pref_theme_title" comment="Settings row title. Opens the theme dropdown whose options are pref_theme_light, _night, _auto_time and _auto_battery; the chosen option is shown as the row summary.">Tema</string>
-    <string name="pref_requires_restart_summary" comment="Generic preference summary 'Requires restart'. Not referenced by the current settings XML; kept as a reusable summary for options that need an app restart.">Este nevoie de restart</string>
-    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">Activează ActionBar</string>
-    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">În aplicațiile pe tot ecranul</string>
-    <string name="pref_wakelock_title" comment="Switch title in Settings: keep the screen on while a MIDlet runs, so it does not dim or lock during play. No summary.">Tine ecranul aprins</string>
-    <string name="pref_button_shape_title" comment="Label of the virtual key shape dropdown. Values are pref_button_shape_oval, _rect and _round.">Formă buton</string>
-    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">Ordine sortare aplicații</string>
-    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">Nume</string>
-    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">Data</string>
-    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">Mapari taste</string>
-    <string name="pref_encoding_title" comment="Button in the System properties card and the title of the dialog listing available text encodings used by the MIDlet. Single noun.">Codificare</string>
-    <string name="pref_default_settings" comment="Row title from earlier versions; the Settings row now reuses the 'Profiles' title. Not shown in the current UI.">Setări implicite</string>
-    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">Mapari curente: %1$s</string>
-    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">Apasă o tastă</string>
-    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">Resetare</string>
+    <string name="close">Închide</string>
+    <string name="exit">Ieșire</string>
+    <string name="about">Despre</string>
+    <string name="help">Ajutor</string>
+    <string name="more">Mai multe</string>
+    <string name="search">Căutare</string>
+    <string name="licenses">Licențe</string>
+    <string name="save_log">Salvează jurnal</string>
+    <string name="help_message">&#8226; Permitand filtrarea poate reduce cu mult performanta in unele cazuri. Dezactiveaza aceasta optiune daca jocul ruleaza incet.&lt;BR&gt;&#8226; Problemele legate de imagine pot fi reparate cu ajutorul optiunii \"Mod de procesare imediata\".</string>
+    <string name="author">Autor: </string>
+    <string name="version">Versiune: </string>
+    <string name="no_data_for_display">Nu există informații disponibile</string>
+    <string name="message_delete">Chiar vrei sa ștergi această aplicație?</string>
+    <string name="permission_request_failed">Această aplicație are nevoie de permisiuni de stocare</string>
+    <string name="external_storage_not_mounted">Aceasta aplicație are nevoie de stocare externă</string>
+    <string name="action_context_shortcut">Adaugă scurtătură</string>
+    <string name="action_settings">Setări</string>
+    <string name="action_context_delete">Șterge</string>
+    <string name="action_context_rename">Renumeste</string>
+    <string name="converting_wait">Se convertește JAR...</string>
+    <string name="START_CMD">Start</string>
+    <string name="CANCEL_CMD">Anulare</string>
+    <string name="CLEAR_DATA_CMD">Curata date</string>
+    <string name="RESET_SETTINGS_CMD">Resetează setările</string>
+    <string name="RESET_LAYOUT_CMD">Resetează formatul tastaturii</string>
+    <string name="PREF_SCREEN_OPTIONS">Opțiunile ecranului</string>
+    <string name="PREF_SCALE_RATIO">Redimensionare(%)</string>
+    <string name="PREF_SCALE_TO_FIT">Redimensionare pentru potrivire</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">Păstrează raportul aspectului</string>
+    <string name="PREF_FILTER">Filtru</string>
+    <string name="PREF_IMMEDIATE">Modul de prelucrare imediată</string>
+    <string name="PREF_SHOW_FPS">Afișează FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Forțează pe tot ecranul</string>
+    <string name="PREF_LIMIT_FPS">Limită FPS</string>
+    <string name="PREF_FONT_OPTIONS">Opțiuni font</string>
+    <string name="PREF_WIDTH">Lățime</string>
+    <string name="PREF_HEIGHT">Înălțime</string>
+    <string name="PREF_FONT_SMALL">Mic</string>
+    <string name="PREF_FONT_MEDIUM">Mediu</string>
+    <string name="PREF_FONT_LARGE">Mare</string>
+    <string name="PREF_FONT_SIZE_IN_SP">Valorile sunt redimensionate în pixeli</string>
+    <string name="PREF_BACKGROUND">Fundal</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Tastatură virtuală</string>
+    <string name="PREF_VK_SHOW">Arată tastatura</string>
+    <string name="PREF_VK_FEEDBACK">Vibratii</string>
+    <string name="PREF_TOUCH_INPUT">Intrare atingere</string>
+    <string name="PREF_HW_ACCELERATION">Acceleratie HW (instabila)</string>
+    <string name="PREF_VK_BACK">Butoane</string>
+    <string name="PREF_VK_FORE">Etichete</string>
+    <string name="PREF_VK_OUTLINE">Contur</string>
+    <string name="PREF_VK_ALPHA">Opacitate: </string>
+    <string name="PREF_VK_HIDE_DELAY">Ascunde întârzierea: </string>
+    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_VK_SEL_FORE">Etichete (P)</string>
+    <string name="PREF_VK_SEL_BACK">Butoane (P)</string>
+    <string name="PREF_VK_KEY_SIZES">Dimensiune tastă</string>
+    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
+    <string name="PREF_VK_SOFT_KEYS">Taste moi: </string>
+    <string name="PREF_VK_NUM_KEYS">Cifre: </string>
+    <string name="PREF_VK_FIRE_KEY">Foc: </string>
+    <string name="PREF_VK_SIZE_HINT">Dimensiune</string>
+    <string name="SIZE_PRESETS">Presetări</string>
+    <string name="SWAP_SIZES">Schimbă dimensiunea</string>
+    <string name="PREF_SYS_PROPS">Proprietati sistem</string>
+    <string name="PREF_ORIENTATION">Orientatie ecran</string>
+    <string name="pref_orientation_default">Implicit</string>
+    <string name="pref_orientation_auto">Automat</string>
+    <string name="pref_orientation_port">Portret</string>
+    <string name="pref_orientation_land">Peisaj</string>
+    <string name="error">Eroare</string>
+    <string name="message_clear_data">Ești sigur că vrei să ștergi datele aplicației?</string>
+    <string name="PREF_VK_TYPE">Tip tastatură</string>
+    <string name="pref_vk_type_phone">Telefon (numeric)</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (D-pad)</string>
+    <string name="PREF_LAYOUT">Dispunere</string>
+    <string name="parallel_screen_redrawing">Redesenarea ecranului în paralel</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">Închiderea forțată a aplicației ar putea duce la pierderea datelor!\nVrei să continui?</string>
+    <string name="CONFIRMATION_REQUIRED">Confirmare necesară</string>
+    <string name="select_dialog_title">Selecteaza MIDlet</string>
+    <string name="crash_dialog_message">Dorești să trimiți raportul erorii către programator?</string>
+    <string name="crash_dialog_title">Eroare detectată</string>
+    <string name="report_crash">Trimite</string>
+    <string name="layout_edit_finished">Modul de editare a fost terminat</string>
+    <string name="layout_edit_finish">Termină modul de editare</string>
+    <string name="layout_edit_mode">Modul de editare al formatului tastaturii</string>
+    <string name="layout_scale_mode">Modul de redimensionare al formatului tastaturii</string>
+    <string name="layout_switch">Schimbă formatul tastaturii</string>
+    <string name="hide_buttons">Ascunde butoanele</string>
+    <string name="take_screenshot">Creează o captură de ecran</string>
+    <string name="screenshot_saved">Captura de ecran a fost salvată în</string>
+    <string name="log_saved">Jurnalul a fost salvat</string>
+    <string name="pref_theme_light">Luminata</string>
+    <string name="pref_theme_night">Intunecata</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_requires_restart_summary">Este nevoie de restart</string>
+    <string name="pref_enable_actionbar_title">Activează ActionBar</string>
+    <string name="pref_enable_actionbar_summary">În aplicațiile pe tot ecranul</string>
+    <string name="pref_wakelock_title">Tine ecranul aprins</string>
+    <string name="pref_button_shape_title">Formă buton</string>
+    <string name="pref_app_sort_title">Ordine sortare aplicații</string>
+    <string name="pref_app_sort_name">Nume</string>
+    <string name="pref_app_sort_date">Data</string>
+    <string name="pref_map_keys">Mapari taste</string>
+    <string name="pref_encoding_title">Codificare</string>
+    <string name="pref_default_settings">Setări implicite</string>
+    <string name="mapping_dialog_message">Mapari curente: %1$s</string>
+    <string name="mapping_dialog_title">Apasă o tastă</string>
+    <string name="reset_mapping">Resetare</string>
 </resources>
