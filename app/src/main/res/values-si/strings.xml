@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">වසන්න</string>
-    <string name="exit">පිටවන්න</string>
-    <string name="about">පිලිබඳව</string>
-    <string name="help">උපකාර</string>
-    <string name="more">තව</string>
-    <string name="search">සොයන්න</string>
-    <string name="licenses">බලපත්‍ර</string>
-    <string name="profiles">පැතිකඩයන්</string>
-    <string name="version">අනුවාදය: </string>
-    <string name="action_settings">සැකසුම්</string>
-    <string name="CANCEL_CMD">අවලංගු කරන්න</string>
+    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">වසන්න</string>
+    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">පිටවන්න</string>
+    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">පිලිබඳව</string>
+    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">උපකාර</string>
+    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">තව</string>
+    <string name="search" comment="Title and accessibility label of the search icon in the app list toolbar; tapping it opens an inline search field that filters installed apps by name as the user types. Single word.">සොයන්න</string>
+    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">බලපත්‍ර</string>
+    <string name="profiles" comment="Overflow menu item and Settings row title. Opens the Profiles screen: named sets of per-app emulator settings that can be applied to other apps.">පැතිකඩයන්</string>
+    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">අනුවාදය: </string>
+    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">සැකසුම්</string>
+    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">අවලංගු කරන්න</string>
 </resources>
