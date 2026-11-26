@@ -1,123 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close" comment="Button in the installer dialog that closes it once installation has finished or failed. In the single-app installer it sits next to Start. Single short verb.">বন্ধ</string>
-    <string name="exit" comment="Overflow menu item on the app list screen and in the in-game menu. Closes the app; while a MIDlet is running it asks for confirmation before stopping it. Keep it short.">প্রস্থান করুন</string>
-    <string name="about" comment="Main screen overflow menu item. Opens the About dialog with version, links and licenses. One word, no trailing period.">সম্পর্কে</string>
-    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">সাহায্য</string>
-    <string name="more" comment="Button in the About dialog that expands the full column of links and credits. One short word.">আরও</string>
-    <string name="search" comment="Title and accessibility label of the search icon in the app list toolbar; tapping it opens an inline search field that filters installed apps by name as the user types. Single word.">অনুসন্ধান</string>
-    <string name="licenses" comment="Button in the About dialog that opens the list of open-source licenses bundled with the app. Plural noun.">লাইসেন্স</string>
-    <string name="save_log" comment="Overflow menu item on the app list and in the in-game menu. Writes the emulator log to a file; the toast 'Log has been saved' follows.">লগ সংগ্রহ</string>
-    <string name="about_message" comment="First paragraph of the About dialog: one-sentence description of the app and the games it supports. Ends with &lt;BR&gt; markup that makes a line break; keep the tag.">এই অ্যাপটি আপনাকে J2ME অ্যাপ এবং গ্যেম অ্যান্দ্রইদ এ চালাতে দেয়। এটি বেশিরভাগ 2D এবং 3D গ্যেম (Mascot Capsule 3D এর গুলা সহ) সমর্থন করে।&lt;BR&gt;</string>
-    <string name="help_message" comment="Body of the Help dialog: two bullet points separated by &lt;BR&gt;, mentioning the option 'Immediate processing mode' by name. Keep the bullet character (&amp;#8226;), the &lt;BR&gt; tags and keep the option name identical to the PREF_IMMEDIATE translation.">&#8226; ফিল্টারিং এর কিছু কিছু ক্ষেত্রে বিশেষভাবে কার্যক্ষমতা হ্রাস হতে পারে । গেম যদি খুব ধীরে চলে তাহল এটি নিষ্ক্রিয় 
+    <string name="close">বন্ধ</string>
+    <string name="exit">প্রস্থান করুন</string>
+    <string name="about">সম্পর্কে</string>
+    <string name="help">সাহায্য</string>
+    <string name="more">আরও</string>
+    <string name="search">অনুসন্ধান</string>
+    <string name="licenses">লাইসেন্স</string>
+    <string name="save_log">লগ সংগ্রহ</string>
+    <string name="about_message">এই অ্যাপটি আপনাকে J2ME অ্যাপ এবং গ্যেম অ্যান্দ্রইদ এ চালাতে দেয়। এটি বেশিরভাগ 2D এবং 3D গ্যেম (Mascot Capsule 3D এর গুলা সহ) সমর্থন করে।&lt;BR&gt;</string>
+    <string name="help_message">&#8226; ফিল্টারিং এর কিছু কিছু ক্ষেত্রে বিশেষভাবে কার্যক্ষমতা হ্রাস হতে পারে । গেম যদি খুব ধীরে চলে তাহল এটি নিষ্ক্রিয় 
 করে খেলুন । &lt;BR&gt;,&#8226;, \"Immediate processing mode\" অপশনটি সক্রিয় করে ছবির সমস্যা সংশোধন করা যেতে পারে।.</string>
-    <string name="author" comment="Prefix placed directly before the app author name in app details (the name is appended, so the trailing space is required). Leave the space after the colon.">লেখক: </string>
-    <string name="version" comment="Prefix placed directly before an app version number: in the About dialog and in app details. Leave the trailing space, the number is appended.">সংস্করণ: </string>
-    <string name="no_data_for_display" comment="Empty-state text centered in lists: app list with no installed apps, Profiles screen, shader/soundbank file manager. Short, neutral, no period.">কোন তথ্য-উপাত্ত নেই</string>
-    <string name="message_delete" comment="Confirmation dialog message when deleting an installed app from its long-press menu. The buttons are Delete and Cancel; 'app' means the installed game.">আপনি কি সত্যিই এই অ্যাপটি মুছে ফেলতে চান?</string>
-    <string name="permission_request_failed" comment="Message when the storage permission the emulator needs was denied. Used both as a dialog message (buttons Retry and Exit) and as a toast.">এই অ্যাপ্লিকেশনটি স্টোরেজে লেখার অনুমতি প্রয়োজন ।</string>
-    <string name="external_storage_not_mounted" comment="Error about missing external storage from earlier versions. Not referenced by the current code: storage checks now use a different flow. Low priority.">অ্যাপটির এক্সটার্নাল স্টোরেজ প্রয়োজন ।</string>
-    <string name="alert_msg_workdir_not_exists" comment="Startup dialog when the working directory where apps are stored does not exist. %1$s = full folder path, shown inside straight quotes on its own line. Buttons: Create, Change, Exit.">কার্যকারী ডাইরেক্টরি পথে বিদ্দমান নয়:\n\'%1$s\'।\nআপনি কি তা তইরি করবেন নাকি আরেকটা বাছাই করবেন?</string>
-    <string name="action_context_shortcut" comment="Long-press context menu item for an installed app. Adds a launcher shortcut that starts this MIDlet directly.">শর্টকাট যুক্ত করুন</string>
-    <string name="action_reinstall" comment="Long-press context menu item for an installed app. Runs the installer again for the same JAR/JAD and keeps app data.">পুনরায় ইনস্টল করুন</string>
-    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">সেটিংস</string>
-    <string name="action_context_delete" comment="Long-press context menu item for an app and for a profile, and accessibility label of the delete icon in the file manager. Removes that item.">মুছে ফেলুন</string>
-    <string name="action_context_rename" comment="Long-press context menu item for an app and for a profile. Opens a dialog to change its display name.">নাম পরিবর্তন করুন</string>
-    <string name="retry" comment="Lowercase negative button in the storage-permission dialog that asks for the permission again. Deliberately lowercase in English.">আবার চেষ্টা করুন</string>
-    <string name="error_disk_io" comment="Toast when the app list database fails with a disk I/O error, for example storage is full or was disconnected. Suggests checking free disk space; no period.">আর জায়গা নেই</string>
-    <string name="create_apps_dir_failed" comment="Error dialog when the working directory cannot be created. %s = folder path, placed inside straight quotes on its own line. Buttons: Choose and Exit.">পথে একটি ফলদার তইরি করতে ব্যর্থ:\n\'%s\'\nঅন্য একটি বাছাই করুন।</string>
-    <string name="change" comment="Button in the missing-working-directory dialog: opens a folder picker to choose another location for the working directory.">পরিবর্তন</string>
-    <string name="choose" comment="Positive button in the 'failed to create folder' dialog: opens the folder picker to pick a different working directory.">বেছে নিন</string>
-    <string name="warning" comment="Dialog title for warnings, for example when the working directory is in a location Android deletes on uninstall, or when no Menu key is assigned in the key mapper. Single short noun.">সাবধান</string>
-    <string name="scoped_storage_warning" comment="Startup warning when the working directory is in app-private storage that Android deletes on uninstall. Contains &lt;b&gt;...&lt;/b&gt; around 'will be deleted'; the folder path is appended right after the colon and the line break. Keep the tags and the trailing colon.">আপনার ব্যবহারিক তথ্য এমন স্থানে সংরক্ষিত আছে যে এই এপটি আনইন্সতল করলে <b>মুছে যাবে</b>:\n</string>
-    <string name="midlet_name" comment="Label before the MIDlet name in the app details shown by the installer (before installing). Contains &lt;b&gt;...&lt;/b&gt; markup and a trailing space; keep both. Not a sentence."><b>নাম: </b></string>
-    <string name="converting_wait" comment="Progress label shown while the JAR is converted to DEX before the first launch. Displayed next to a spinner; keep the ellipsis.">JAR রূপান্তর...</string>
-    <string name="START_CMD" comment="Primary toolbar action on the per-app config screen: starts the MIDlet with the current settings. Displayed as a normal verb, not in capitals.">শুরু</string>
-    <string name="CANCEL_CMD" comment="Positive button in the key mapper warning about an unassigned Menu key: goes back to the key mapper without saving. Displayed as a normal verb, not in capitals.">বাতিল</string>
-    <string name="CLEAR_DATA_CMD" comment="Overflow menu item on the per-app config screen. Deletes this app's saved data (records, files) after the confirmation message_clear_data.">উপাত্ত সাফ করুন</string>
-    <string name="RESET_SETTINGS_CMD" comment="Overflow menu item on the per-app config screen. Restores all settings of this app to their defaults.">সেটিংস রিসেট করুন</string>
-    <string name="RESET_LAYOUT_CMD" comment="Overflow menu item on the per-app config screen. Discards the custom virtual keyboard layout of this app and restores the default one. 'keylayout' is the in-app term for keyboard layout.">Keylayout রিসেট করুন</string>
-    <string name="PREF_SCREEN_OPTIONS" comment="Title of the first card on the per-app config screen. Card contains virtual screen size, scaling, orientation, graphics mode and FPS options.">স্ক্রীন অপশন</string>
-    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">স্কেল(%)</string>
-    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">ফিট করার জন্য স্কেল</string>
-    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">দৃশ্যরূপ অনুপাতে রাখুন</string>
-    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">ফিল্টার</string>
-    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">অবিলম্বে প্রক্রিয়াকরণ মোড</string>
-    <string name="PREF_SHOW_FPS" comment="Switch label in the Screen card. Draws a frame-rate counter over the emulated screen.">এফপিএস দেখুন</string>
-    <string name="PREF_LIMIT_FPS" comment="Label to the left of the numeric FPS limit field in the Screen card, and an in-game menu item that opens the same setting as a dialog. Leave room for the value field.">এফপিএস নিদ্রিষ্ট করুণ</string>
-    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">ফন্ট সংক্রান্ত অপশন</string>
-    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">প্রস্থ</string>
-    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">উচ্চতা</string>
-    <string name="PREF_FONT_SMALL" comment="Hint inside the first of three font-size fields (smallest text size). Disappears when a value is typed; single word.">ছোট</string>
-    <string name="PREF_FONT_MEDIUM" comment="Hint inside the second of three font-size fields (medium text size). Disappears when a value is typed; single word.">মাঝারি</string>
-    <string name="PREF_FONT_LARGE" comment="Hint inside the third of three font-size fields (largest text size). Disappears when a value is typed; single word.">বড়</string>
-    <string name="PREF_FONT_SIZE_IN_SP" comment="Switch label in the Font card: the three font sizes above are interpreted in scaled pixels (sp) instead of raw pixels. Sentence case; 'Scaled Pixels' is the unit name.">পিক্সেলের আকার পরিবর্তিত মান হল</string>
-    <string name="PREF_BACKGROUND" comment="Button next to a hex color field in the Screen card. Opens a color picker for the area around the emulated screen; the field itself uses the separate 'RGB' hint.">ব্যাকগ্রাউন্ড</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS" comment="Switch label in the Input devices card that shows or hides the on-screen keyboard, and title of the in-game submenu with layout and key-shape items.">ভার্চুয়াল কীবোর্ড</string>
-    <string name="PREF_VK_SHOW" comment="Switch label from earlier versions, replaced by 'Virtual keyboard' (PREF_VIRTUAL_KEYBOARD_OPTIONS). Not shown in the current UI.">কিবোর্ড দেখান</string>
-    <string name="PREF_VK_FEEDBACK" comment="Switch label in the Input devices card. Vibrates the device when a virtual key is pressed.">Haptic মতামত</string>
-    <string name="PREF_TOUCH_INPUT" comment="Switch label in the Input devices card. Sends touch events to the MIDlet as pointer input.">টার্চ ইনপুট</string>
-    <string name="PREF_HW_ACCELERATION" comment="Old combined hardware acceleration switch from earlier versions, replaced by the Graphics mode dropdown. Not shown in the current UI.">HW এক্সেলারেশন (অস্থায়ী)</string>
-    <string name="pref_graphics_software" comment="Option in the graphics-mode dropdown: software renderer, the most compatible mode.">সফটওয়্যার</string>
-    <string name="PREF_VK_BACK" comment="Button that opens the color picker for the background of keys in their normal (not pressed) state. Short, plural noun; pairs with 'Labels'.">বাটন</string>
-    <string name="PREF_VK_FORE" comment="Button that opens the color picker for the labels of keys in their normal (not pressed) state. Short, plural noun.">লেবেল</string>
-    <string name="PREF_VK_OUTLINE" comment="Button that opens the color picker for the outline drawn around virtual keys. Short noun.">রূপরেখা</string>
-    <string name="PREF_VK_ALPHA" comment="Label in front of the opacity slider for virtual keys, with a trailing colon and space. The slider range is 0 to 255.">স্বচ্ছতা: </string>
-    <string name="PREF_VK_HIDE_DELAY" comment="Label in front of the numeric delay field that hides the virtual keyboard after the last touch, with a trailing colon and space. The unit 'ms' follows the field.">বিলম্ব আড়াল করুন: </string>
-    <string name="PREF_UNIT_MS" comment="Unit label 'ms' shown after the hide-delay field. Abbreviation of milliseconds; usually kept as is in most languages.">ms</string>
-    <string name="PREF_VK_SEL_FORE" comment="Button that opens the color picker for the labels of pressed keys. '(P)' stands for pressed and must stay.">লেবেল (P)</string>
-    <string name="PREF_VK_SEL_BACK" comment="Button that opens the color picker for the background of pressed keys. '(P)' stands for pressed and must stay.">বাটন (P)</string>
-    <string name="PREF_VK_KEY_SIZES" comment="Heading of the old key-size editor, replaced by the Keyboard layout screen. Not shown in the current UI. Plural noun.">কি সাইজ</string>
-    <string name="PREF_VK_NAV_KEYS" comment="Label of the old key-size editor for the joystick group, with a trailing colon and space before the size value. Not shown in the current UI.">জয়স্টিক: </string>
-    <string name="PREF_VK_SOFT_KEYS" comment="Label of the old key-size editor for soft keys, with a trailing colon and space before the size value. Not shown in the current UI.">সফ্ট কী: </string>
-    <string name="PREF_VK_NUM_KEYS" comment="Label of the old key-size editor for the digit keys, with a trailing colon and space before the size value. Not shown in the current UI.">সংখ্যা: </string>
-    <string name="PREF_VK_FIRE_KEY" comment="Label of the old key-size editor for the fire key, with a trailing colon and space before the size value. Not shown in the current UI.">ফায়ার: </string>
-    <string name="PREF_VK_SIZE_HINT" comment="Hint of the numeric size field in the old key-size editor. Not shown in the current UI. Single word.">আকার</string>
-    <string name="SIZE_PRESETS" comment="Opens a list of saved screen-size presets: it is the tooltip and accessibility label of the list icon next to Width/Height, the text of the button in the Font card, and the dialog title in both cases. Plural noun.">প্রিসেটস</string>
-    <string name="SWAP_SIZES" comment="Tooltip and accessibility label of the icon button between the Width and Height fields. Swaps the two values; a verb phrase, no period.">মাপ অদলবদল</string>
-    <string name="PREF_SYS_PROPS" comment="Title of the System properties card on the per-app config screen. The card lets the user override the J2ME system properties the MIDlet sees.">সিস্টেম বৈশিষ্ট্যগুলো</string>
-    <string name="PREF_ORIENTATION" comment="Label of the screen-orientation dropdown in the Screen card. The values are pref_orientation_default, _auto, _port and _land.">স্ক্রিন ওরিয়েন্টেশন</string>
-    <string name="pref_orientation_default" comment="Option in the screen-orientation dropdown: keep the orientation the MIDlet declares (JAD/MIDlet property), no override.">ডিফল্ট</string>
-    <string name="pref_orientation_auto" comment="Option in the screen-orientation dropdown: follow device rotation while the MIDlet runs. Short label in a spinner.">স্বয়ংক্রিয়</string>
-    <string name="pref_orientation_port" comment="Option in the screen-orientation dropdown: always run this MIDlet in portrait, ignoring device rotation.">উলম্ব</string>
-    <string name="pref_orientation_land" comment="Option in the screen-orientation dropdown: always run this MIDlet in landscape, ignoring device rotation.">অনুভূমিক</string>
-    <string name="error" comment="Generic error title for dialogs and short error toasts across the app (failed file operation, invalid input, profile could not be saved). Single short noun.">ত্রুটি</string>
-    <string name="message_clear_data" comment="Confirmation dialog message for Clear data. OK deletes the app's data permanently. Question mark.">আপনি কি সত্যিই ক্যাশে মুছে ফেলতে চান?</string>
-    <string name="PREF_VK_TYPE" comment="Intended title 'Keyboard type' of the virtual keyboard type picker. The current dialog is titled 'Switch keylayout' and uses the pref_vk_type_* option strings.">কিবোর্ডের ধরণ</string>
-    <string name="pref_vk_type_numbers" comment="Option in the 'Switch keylayout' dialog that changes the virtual keyboard: digit keys only, without arrows. Shown in a single-choice list.">নম্বর</string>
-    <string name="pref_vk_type_phone" comment="Option in the 'Switch keylayout' dialog: classic phone keypad layout with digits and letters.">ফোন</string>
-    <string name="pref_vk_type_phone_arrows" comment="Option in the 'Switch keylayout' dialog: phone keypad plus arrow keys. Parentheses are part of the layout name.">ফোন (তীর)</string>
-    <string name="parallel_screen_redrawing" comment="Switch label in the Screen card, visible in the software graphics mode. Draws the emulated screen in parallel with the MIDlet thread to improve speed; hidden for hardware modes.">সমান্তরাল পর্দা পুনরায় আঁকানো</string>
-    <string name="FORCE_CLOSE_CONFIRMATION" comment="Message when the user force-closes the running app: warns that data may be lost or the app may break. Buttons OK and Settings; keep the line break.">ফোর্স বন্ধ করার ফলে ডাটা ক্ষতিগ্রস্ত অথবা সম্পূর্ণভাবে ভেঙ্গে যতে পারে\nপ্রোসেস্ট?</string>
-    <string name="CONFIRMATION_REQUIRED" comment="Dialog title for confirmations that can lose data: force-closing the MIDlet and replacing the custom keyboard layout.">অনুমোদন প্রয়োজন</string>
-    <string name="select_dialog_title" comment="Dialog title when one JAR contains several MIDlets: the user picks which one to run from a list of names.">MIDlet নির্বাচন করুন</string>
-    <string name="crash_dialog_message" comment="Message asking whether to send an error report to the developer. The report contains the crash log; question mark.">ডেভেলপারের করা ত্রুটির প্রতিবেদন পাঠাতে চান?</string>
-    <string name="crash_dialog_title" comment="Title of the dialog shown after the app has crashed. Short noun phrase; the dialog message asks whether to send a report.">ত্রুটি শনাক্ত হয়েছে</string>
-    <string name="report_crash" comment="Positive button of the crash dialog: sends the error report to the developer. One short verb.">প্রেরণ করুন</string>
-    <string name="layout_edit_finished" comment="Toast shown the moment edit mode ends, just before the 'save custom keyboard?' dialog. Past tense, short.">সম্পাদনা মোডে কাজ শেষ</string>
-    <string name="layout_edit_finish" comment="In-game menu item that leaves key edit or resize mode and offers to save the changed custom keyboard.">সম্পাদন মোড শেষ করুন</string>
-    <string name="layout_edit_mode" comment="In-game menu item (Virtual keyboard submenu) and Keyboard layout screen menu item. Enters key-position edit mode where virtual keys are dragged to move them. Also shown as a toast.">Keylayout সম্পাদন মোড</string>
-    <string name="layout_scale_mode" comment="In-game menu item and Keyboard layout screen menu item. Enters key-resize mode where virtual keys are dragged to resize them. Also shown as a toast.">Keylayout পুনঃআকৃতি মোড</string>
-    <string name="layout_switch" comment="In-game submenu item and Keyboard layout screen menu item; also the title of the dialog listing keyboard types (those options are pref_vk_type_*). Switches the virtual keyboard layout.">সুইচ keylayout</string>
-    <string name="hide_buttons" comment="Menu item and title of the multi-choice dialog listing virtual key names; checked keys become hidden on the keyboard. A plural noun works for both places.">বাটন আড়াল করুন</string>
-    <string name="take_screenshot" comment="In-game menu item with a camera icon. Saves a PNG of the emulated screen to the device pictures folder, then shows a toast with the file path.">স্ক্রীনশট নিন</string>
-    <string name="screenshot_saved" comment="Toast prefix: a space and the saved file path are appended by the app. Do not add a period or a placeholder.">স্ক্রিনসর্ট সংরক্ষণ করা হয়েছে</string>
-    <string name="log_saved" comment="Toast after the log file was written to storage. Shown briefly at the bottom of the screen; past tense, no placeholder, no period in English.">লগ সংরক্ষণ করা হয়েছে</string>
-    <string name="pref_theme_light" comment="Option in the Theme dropdown: light color scheme. The chosen theme is shown as the summary of the Theme settings row.">উজ্জ্বল</string>
-    <string name="pref_theme_night" comment="Option in the Theme dropdown: dark color scheme. English uses 'Dark', not 'Night'.">গাঢ়</string>
-    <string name="pref_theme_title" comment="Settings row title. Opens the theme dropdown whose options are pref_theme_light, _night, _auto_time and _auto_battery; the chosen option is shown as the row summary.">থিম</string>
-    <string name="pref_requires_restart_summary" comment="Generic preference summary 'Requires restart'. Not referenced by the current settings XML; kept as a reusable summary for options that need an app restart.">পুনরায় শুরু করা প্রয়োজন</string>
-    <string name="pref_enable_actionbar_title" comment="Switch title in Settings: show the emulator ActionBar (toolbar with the menu) while a MIDlet runs in fullscreen.">ActionBar সক্রিয় করুন</string>
-    <string name="pref_enable_actionbar_summary" comment="Shared summary under the ActionBar switch and under the status bar switch: those options apply only to fullscreen applications. Short phrase.">পর্দা জুড়ে প্রদর্শন</string>
-    <string name="pref_wakelock_title" comment="Switch title in Settings: keep the screen on while a MIDlet runs, so it does not dim or lock during play. No summary.">স্ক্রিন চালু রাখুন</string>
-    <string name="pref_button_shape_title" comment="Label of the virtual key shape dropdown. Values are pref_button_shape_oval, _rect and _round.">বাটনের আকৃতি</string>
-    <string name="pref_app_sort_title" comment="Title/tooltip of the sort button in the app list toolbar (icon only) and header of its popup menu with the sort orders Name, Date, Vendor.">অ্যাপ সর্ট আর্ডার</string>
-    <string name="pref_app_sort_name" comment="Option in the sort popup of the app list toolbar: sort installed apps alphabetically by display name. The active option is checkmarked.">নাম</string>
-    <string name="pref_app_sort_date" comment="Option in the sort popup of the app list toolbar: sort installed apps by installation date, newest first. The active option is checkmarked.">তারিখ</string>
-    <string name="pref_map_keys" comment="Full-width button in the Input devices card. Opens the screen where physical device keys are assigned to MIDlet keys (arrows, soft keys, digits).">কী মানচিত্রকরণ</string>
-    <string name="pref_encoding_title" comment="Button in the System properties card and the title of the dialog listing available text encodings used by the MIDlet. Single noun.">এনকোডিং</string>
-    <string name="pref_default_settings" comment="Row title from earlier versions; the Settings row now reuses the 'Profiles' title. Not shown in the current UI.">ডিফল্ট সেটিংস</string>
-    <string name="mapping_dialog_message" comment="Line under 'Press a key' in the key mapper popup. %1$s = the Android key name (for example KEYCODE_A) or the fallback 'not specified'. Keep the placeholder.">বর্তমান মানচিত্র: %1$s</string>
-    <string name="mapping_dialog_title" comment="Heading inside the key mapper popup that waits for the user to press a hardware key. Short imperative, no period.">কী চাপুন</string>
-    <string name="reset_mapping" comment="Toolbar action in the key mapper. Restores the default key assignments. Single verb.">রিসেট করুন</string>
+    <string name="author">লেখক: </string>
+    <string name="version">সংস্করণ: </string>
+    <string name="no_data_for_display">কোন তথ্য-উপাত্ত নেই</string>
+    <string name="message_delete">আপনি কি সত্যিই এই অ্যাপটি মুছে ফেলতে চান?</string>
+    <string name="permission_request_failed">এই অ্যাপ্লিকেশনটি স্টোরেজে লেখার অনুমতি প্রয়োজন ।</string>
+    <string name="external_storage_not_mounted">অ্যাপটির এক্সটার্নাল স্টোরেজ প্রয়োজন ।</string>
+    <string name="alert_msg_workdir_not_exists">কার্যকারী ডাইরেক্টরি পথে বিদ্দমান নয়:\n\'%1$s\'।\nআপনি কি তা তইরি করবেন নাকি আরেকটা বাছাই করবেন?</string>
+    <string name="action_context_shortcut">শর্টকাট যুক্ত করুন</string>
+    <string name="action_reinstall">পুনরায় ইনস্টল করুন</string>
+    <string name="action_settings">সেটিংস</string>
+    <string name="action_context_delete">মুছে ফেলুন</string>
+    <string name="action_context_rename">নাম পরিবর্তন করুন</string>
+    <string name="retry">আবার চেষ্টা করুন</string>
+    <string name="error_disk_io">আর জায়গা নেই</string>
+    <string name="create_apps_dir_failed">পথে একটি ফলদার তইরি করতে ব্যর্থ:\n\'%s\'\nঅন্য একটি বাছাই করুন।</string>
+    <string name="change">পরিবর্তন</string>
+    <string name="choose">বেছে নিন</string>
+    <string name="warning">সাবধান</string>
+    <string name="scoped_storage_warning">আপনার ব্যবহারিক তথ্য এমন স্থানে সংরক্ষিত আছে যে এই এপটি আনইন্সতল করলে <b>মুছে যাবে</b>:\n</string>
+    <string name="midlet_name"><b>নাম: </b></string>
+    <string name="converting_wait">JAR রূপান্তর...</string>
+    <string name="START_CMD">শুরু</string>
+    <string name="CANCEL_CMD">বাতিল</string>
+    <string name="CLEAR_DATA_CMD">উপাত্ত সাফ করুন</string>
+    <string name="RESET_SETTINGS_CMD">সেটিংস রিসেট করুন</string>
+    <string name="RESET_LAYOUT_CMD">Keylayout রিসেট করুন</string>
+    <string name="PREF_SCREEN_OPTIONS">স্ক্রীন অপশন</string>
+    <string name="PREF_SCALE_RATIO">স্কেল(%)</string>
+    <string name="PREF_SCALE_TO_FIT">ফিট করার জন্য স্কেল</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">দৃশ্যরূপ অনুপাতে রাখুন</string>
+    <string name="PREF_FILTER">ফিল্টার</string>
+    <string name="PREF_IMMEDIATE">অবিলম্বে প্রক্রিয়াকরণ মোড</string>
+    <string name="PREF_SHOW_FPS">এফপিএস দেখুন</string>
+    <string name="PREF_LIMIT_FPS">এফপিএস নিদ্রিষ্ট করুণ</string>
+    <string name="PREF_FONT_OPTIONS">ফন্ট সংক্রান্ত অপশন</string>
+    <string name="PREF_WIDTH">প্রস্থ</string>
+    <string name="PREF_HEIGHT">উচ্চতা</string>
+    <string name="PREF_FONT_SMALL">ছোট</string>
+    <string name="PREF_FONT_MEDIUM">মাঝারি</string>
+    <string name="PREF_FONT_LARGE">বড়</string>
+    <string name="PREF_FONT_SIZE_IN_SP">পিক্সেলের আকার পরিবর্তিত মান হল</string>
+    <string name="PREF_BACKGROUND">ব্যাকগ্রাউন্ড</string>
+    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">ভার্চুয়াল কীবোর্ড</string>
+    <string name="PREF_VK_SHOW">কিবোর্ড দেখান</string>
+    <string name="PREF_VK_FEEDBACK">Haptic মতামত</string>
+    <string name="PREF_TOUCH_INPUT">টার্চ ইনপুট</string>
+    <string name="PREF_HW_ACCELERATION">HW এক্সেলারেশন (অস্থায়ী)</string>
+    <string name="pref_graphics_software">সফটওয়্যার</string>
+    <string name="PREF_VK_BACK">বাটন</string>
+    <string name="PREF_VK_FORE">লেবেল</string>
+    <string name="PREF_VK_OUTLINE">রূপরেখা</string>
+    <string name="PREF_VK_ALPHA">স্বচ্ছতা: </string>
+    <string name="PREF_VK_HIDE_DELAY">বিলম্ব আড়াল করুন: </string>
+    <string name="PREF_UNIT_MS">ms</string>
+    <string name="PREF_VK_SEL_FORE">লেবেল (P)</string>
+    <string name="PREF_VK_SEL_BACK">বাটন (P)</string>
+    <string name="PREF_VK_KEY_SIZES">কি সাইজ</string>
+    <string name="PREF_VK_NAV_KEYS">জয়স্টিক: </string>
+    <string name="PREF_VK_SOFT_KEYS">সফ্ট কী: </string>
+    <string name="PREF_VK_NUM_KEYS">সংখ্যা: </string>
+    <string name="PREF_VK_FIRE_KEY">ফায়ার: </string>
+    <string name="PREF_VK_SIZE_HINT">আকার</string>
+    <string name="SIZE_PRESETS">প্রিসেটস</string>
+    <string name="SWAP_SIZES">মাপ অদলবদল</string>
+    <string name="PREF_SYS_PROPS">সিস্টেম বৈশিষ্ট্যগুলো</string>
+    <string name="PREF_ORIENTATION">স্ক্রিন ওরিয়েন্টেশন</string>
+    <string name="pref_orientation_default">ডিফল্ট</string>
+    <string name="pref_orientation_auto">স্বয়ংক্রিয়</string>
+    <string name="pref_orientation_port">উলম্ব</string>
+    <string name="pref_orientation_land">অনুভূমিক</string>
+    <string name="error">ত্রুটি</string>
+    <string name="message_clear_data">আপনি কি সত্যিই ক্যাশে মুছে ফেলতে চান?</string>
+    <string name="PREF_VK_TYPE">কিবোর্ডের ধরণ</string>
+    <string name="pref_vk_type_numbers">নম্বর</string>
+    <string name="pref_vk_type_phone">ফোন</string>
+    <string name="pref_vk_type_phone_arrows">ফোন (তীর)</string>
+    <string name="parallel_screen_redrawing">সমান্তরাল পর্দা পুনরায় আঁকানো</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">ফোর্স বন্ধ করার ফলে ডাটা ক্ষতিগ্রস্ত অথবা সম্পূর্ণভাবে ভেঙ্গে যতে পারে\nপ্রোসেস্ট?</string>
+    <string name="CONFIRMATION_REQUIRED">অনুমোদন প্রয়োজন</string>
+    <string name="select_dialog_title">MIDlet নির্বাচন করুন</string>
+    <string name="crash_dialog_message">ডেভেলপারের করা ত্রুটির প্রতিবেদন পাঠাতে চান?</string>
+    <string name="crash_dialog_title">ত্রুটি শনাক্ত হয়েছে</string>
+    <string name="report_crash">প্রেরণ করুন</string>
+    <string name="layout_edit_finished">সম্পাদনা মোডে কাজ শেষ</string>
+    <string name="layout_edit_finish">সম্পাদন মোড শেষ করুন</string>
+    <string name="layout_edit_mode">Keylayout সম্পাদন মোড</string>
+    <string name="layout_scale_mode">Keylayout পুনঃআকৃতি মোড</string>
+    <string name="layout_switch">সুইচ keylayout</string>
+    <string name="hide_buttons">বাটন আড়াল করুন</string>
+    <string name="take_screenshot">স্ক্রীনশট নিন</string>
+    <string name="screenshot_saved">স্ক্রিনসর্ট সংরক্ষণ করা হয়েছে</string>
+    <string name="log_saved">লগ সংরক্ষণ করা হয়েছে</string>
+    <string name="pref_theme_light">উজ্জ্বল</string>
+    <string name="pref_theme_night">গাঢ়</string>
+    <string name="pref_theme_title">থিম</string>
+    <string name="pref_requires_restart_summary">পুনরায় শুরু করা প্রয়োজন</string>
+    <string name="pref_enable_actionbar_title">ActionBar সক্রিয় করুন</string>
+    <string name="pref_enable_actionbar_summary">পর্দা জুড়ে প্রদর্শন</string>
+    <string name="pref_wakelock_title">স্ক্রিন চালু রাখুন</string>
+    <string name="pref_button_shape_title">বাটনের আকৃতি</string>
+    <string name="pref_app_sort_title">অ্যাপ সর্ট আর্ডার</string>
+    <string name="pref_app_sort_name">নাম</string>
+    <string name="pref_app_sort_date">তারিখ</string>
+    <string name="pref_map_keys">কী মানচিত্রকরণ</string>
+    <string name="pref_encoding_title">এনকোডিং</string>
+    <string name="pref_default_settings">ডিফল্ট সেটিংস</string>
+    <string name="mapping_dialog_message">বর্তমান মানচিত্র: %1$s</string>
+    <string name="mapping_dialog_title">কী চাপুন</string>
+    <string name="reset_mapping">রিসেট করুন</string>
 </resources>
