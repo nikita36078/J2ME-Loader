@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="help" comment="Overflow menu item on the app list screen, and toolbar button in the Shader/Soundbank file manager. Opens the Help dialog. Short noun.">Help</string>
-    <string name="action_settings" comment="Overflow menu item 'Settings' on the app list, in the per-app config and in the key mapper, and a neutral button in dialogs. Opens the Settings screen or the per-app config. Keep it a short noun.">הגדרות</string>
-    <string name="PREF_SCALE_RATIO" comment="Static label to the left of the numeric scaling field in the Screen card. Percent sign is part of the label; the field holds a number such as 100.">Scale(%)</string>
-    <string name="PREF_SCALE_TO_FIT" comment="Old scale-mode option from earlier versions, replaced by the Scale type dropdown (pref_screen_scale_type_fit). Not shown in the current UI.">Scale to fit</string>
-    <string name="PREF_KEEP_ASPECT_RATIO" comment="Checkbox label in the Screen card. Keeps the original screen proportions when the emulated screen is scaled to the device.">Keep aspect ratio</string>
-    <string name="PREF_FILTER" comment="Switch label in the Screen card. Enables texture filtering (smoothing) of the scaled emulated screen; disabling it can speed up slow games.">Filter</string>
-    <string name="PREF_IMMEDIATE" comment="Switch label in the Screen card: renders each frame immediately instead of buffering, which fixes image flickering in some games. The Help dialog refers to this option by name.">Immediate processing mode</string>
-    <string name="PREF_SHOW_FPS" comment="Switch label in the Screen card. Draws a frame-rate counter over the emulated screen.">Show FPS</string>
-    <string name="PREF_FORCE_FULLSCREEN" comment="Switch label in the Screen card. Hides the system status and navigation bars while the MIDlet runs.">Force fullscreen</string>
-    <string name="PREF_LIMIT_FPS" comment="Label to the left of the numeric FPS limit field in the Screen card, and an in-game menu item that opens the same setting as a dialog. Leave room for the value field.">Limit FPS</string>
-    <string name="PREF_FONT_OPTIONS" comment="Title of the second card on the per-app config screen, holding emulated font sizes, presets and anti-aliasing.">Font options</string>
-    <string name="PREF_WIDTH" comment="Hint inside the numeric field for the emulated screen width in pixels. Disappears once the field has a value; single word.">Width</string>
-    <string name="PREF_HEIGHT" comment="Hint inside the numeric field for the emulated screen height in pixels. Disappears once the field has a value; single word.">Height</string>
+    <string name="help">Help</string>
+    <string name="action_settings">הגדרות</string>
+    <string name="PREF_SCALE_RATIO">Scale(%)</string>
+    <string name="PREF_SCALE_TO_FIT">Scale to fit</string>
+    <string name="PREF_KEEP_ASPECT_RATIO">Keep aspect ratio</string>
+    <string name="PREF_FILTER">Filter</string>
+    <string name="PREF_IMMEDIATE">Immediate processing mode</string>
+    <string name="PREF_SHOW_FPS">Show FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Force fullscreen</string>
+    <string name="PREF_LIMIT_FPS">Limit FPS</string>
+    <string name="PREF_FONT_OPTIONS">Font options</string>
+    <string name="PREF_WIDTH">Width</string>
+    <string name="PREF_HEIGHT">Height</string>
 </resources>
